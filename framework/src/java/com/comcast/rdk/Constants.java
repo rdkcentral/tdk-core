@@ -274,6 +274,7 @@ public final class Constants
     private static final String  TESTSCRIPTS_RDKC="testscriptsRDKC";
     private static final String  TESTSCRIPTS_RDKV_ADV="testscriptsRDKVAdvanced";
     private static final String  TESTSCRIPTS_RDKB_ADV="testscriptsRDKBAdvanced";
+    private static final String  RIALTO="rialto";
     private static final String  RDKSERVICES="rdkservices";
     private static final String  RDKV_PERFORMANCE="rdkv_performance";
     private static final String  RDKV_STABILITY="rdkv_stability";    
@@ -282,7 +283,10 @@ public final class Constants
 	private static final String  RDKV_PROFILING="rdkv_profiling";
 	private static final String  RDKV_MEDIAVALIDATION="rdkv_mediavalidation";
 	private static final String  CURRENT_FW_VERSION="currentFWVersion";
-    
+	private static final String  RDKV_DOBBY="rdkv_dobby";
+	private static final String  RDKV_APPARMOR="rdkv_apparmor";
+	private static final String  RDKV_BASIC_SANITY="rdkv_basic_sanity";
+	
 	private static final String SUCCESS ="SUCCESS";
 	private static final String FAILED ="FAILED";
 	private static final String REMARKS ="Remarks";

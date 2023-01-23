@@ -2526,6 +2526,7 @@ class ExecutionController {
 		List columnWidthList = [0.08,0.4,0.15,0.2,0.15,0.8,0.2,0.2,0.2,0.8]
 		boolean isRDKServiceExecution
 		boolean isPatternPresent = false
+		boolean isRialtoModulePresent = false
 		Execution executionInstance = Execution.findById(params.id)
 		String executionInstanceStatus ;
 		executionInstanceStatus =executedbService?.isValidExecutionAvailable(executionInstance)
@@ -2538,17 +2539,22 @@ class ExecutionController {
 					String executionResultOutput = executionResultList[i]?.executionOutput
 					if(scriptfile){
 						if(scriptfile?.category?.toString()?.equals(RDKV_RDKSERVICE?.toString())){
-							if(scriptfile?.moduleName?.equals((RDKSERVICES?.toString()))) {
+							if((scriptfile?.moduleName?.equals(RDKSERVICES?.toString())) || (scriptfile?.moduleName?.equals(RDKV_DOBBY?.toString())) || (scriptfile?.moduleName?.equals(RDKV_APPARMOR?.toString())) || (scriptfile?.moduleName?.equals(RDKV_BASIC_SANITY?.toString()))) {
 								isPatternPresent = true
 							}
 							isRDKServiceExecution = true
+						}else if(scriptfile?.category?.toString()?.equals(RDKV?.toString())){
+							if(scriptfile?.moduleName?.equals(RIALTO?.toString())) {
+								isRialtoModulePresent = true
+							}
+							isRDKServiceExecution = false
 						}else{
 							isRDKServiceExecution = false
 							break;
 						}
 					}
 				}
-				if(isRDKServiceExecution && isPatternPresent){
+				if((isRDKServiceExecution && isPatternPresent) || isRialtoModulePresent){
 					columnWidthList = [0.08,0.4,0.15,0.15,0.9]
 					dataMap = executedbService.getDataForRDKServiceConsolidatedListExcelExport(executionInstance, getRealPath(),getApplicationUrl())
 					fieldMap = ["C1":" Sl.No ", "C2":" Test Case Name ","C3":"Status","C4":"Executed On","C5":" Log Data ","C6":"Jira #","C7":"Issue Type","C8":"Remarks"]
@@ -2569,7 +2575,7 @@ class ExecutionController {
 			def fileName = executionInstance.name
 			fileName = fileName?.replaceAll(" ","_")
 			response.setHeader("Content-disposition", "attachment; filename="+EXPORT_FILENAME+ fileName +".${params.extension}")
-			if(isRDKServiceExecution && isPatternPresent){
+			if((isRDKServiceExecution && isPatternPresent) || isRialtoModulePresent){
 				excelExportService.exportRDKService(params.format, response.outputStream,dataMap, null,fieldMap,[:], parameters)
 			}else{
 				excelExportService.export(params.format, response.outputStream,dataMap, null,fieldMap,[:], parameters)
