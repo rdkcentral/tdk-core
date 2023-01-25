@@ -176,6 +176,9 @@ public final class Constants
     public static final	int customAgentMonitorPort = 40000;
     public static final String CI_EXECUTION = "CI_";
     
+    public static final int CUSTOMTHUNDERENABLE = 1;
+	public static final int CUSTOMTHUNDERDISABLE = 0;
+	public static final int CUSTOMTHUNDERPORT = 9998;
     public static final String THUNDER_DEFAULT_PORT = "80";
     public static final String RDKSERVICE_DEFAULT_PORT = "9998";
     

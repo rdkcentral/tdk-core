@@ -302,8 +302,8 @@ $(document).ready(function() {
 					</div>
 					<div class="contextMenu" id="enable_menu">
 										<ul>
-											<li id="enable"  >EnableTDK</li>
-	          								<li id="disable" >DisableTDK</li>
+											<li id="thunderDisabled"  >EnableTDK</li>
+											<li id="thunderEnabled" >DisableTDK</li>
 	          								<li id="copyDeviceIp" >Copy Device IP</li>
 	        							</ul>
 	      			</div>									

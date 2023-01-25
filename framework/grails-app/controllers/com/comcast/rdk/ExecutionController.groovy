@@ -6315,4 +6315,39 @@ class ExecutionController {
 		}
 		render result
 	}
+	
+	/**
+	 * Method that enable the thunder from Execution Page	
+	 * 
+	 */
+	def thunderEnabled(){
+		def jsonObjMap = [:]
+		try{
+			
+			deviceStatusService.thunderEnabled(params?.deviceId)
+		}catch(Exception e){
+			e.printStackTrace()
+		}
+		jsonObjMap.put("status","Thunder enabled")
+		render jsonObjMap as JSON
+		}
+	/**
+	 * Method that disable the thunder from Execution Page
+	 *
+	 */
+	def thunderDisabled(){
+		def jsonObjMap = [:]
+		try{
+			//Integer deviceII
+			deviceStatusService.thunderDisabled(params?.deviceId)
+		}catch(Exception e){
+			e.printStackTrace()
+		}
+		
+		jsonObjMap.put("status","Thunder disabled")
+		render jsonObjMap as JSON
+	}
+	
+	
+	
 }

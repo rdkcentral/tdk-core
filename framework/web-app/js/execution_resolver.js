@@ -952,13 +952,13 @@ function callFunc(select) {
 	var option =""	
 		$('#root_menu').contextMenu('enable_menu', {
 			bindings : {
-				'enable' : function(node) {
-					option = "enable"
-					deviceEnabledStatus(node.id,option,select);
+				'thunderDisabled' : function(node) {
+					option = "thunderDisabled"
+						thunderDisabled(select);
 				},
-				'disable' : function(node) {
-					option = "disable"
-					deviceDisabledStatus(node.id,option,select);
+				'thunderEnabled' : function(node) {
+					option = "thunderEnabled"
+						thunderEnabled(select);
 				},
 				'copyDeviceIp' : function(node) {
 					copyDeviceIp(select);
@@ -1010,6 +1010,18 @@ function copyDeviceIp(deviceId){
 		}else{
 			alert("Sorry! Unable to copy device IP to clipboard. Please copy from here : "+data);
 		}
+	});
+}
+
+function thunderEnabled(deviceId){		
+	$.get('thunderEnabled', {deviceId:deviceId}, function() {
+		alert(" Thunder Enabled with Port Number 9998");
+	});
+}
+
+function thunderDisabled(deviceId){		
+	$.get('thunderDisabled', {deviceId:deviceId}, function() {
+		alert(" Thunder disabled");
 	});
 }
 

@@ -276,5 +276,36 @@ public class DeviceStatusService {
 			}
 		}
 	}
+	def thunderEnabled(final String deviceIdd){
+		try{
+				Device.withTransaction {
+					Device dev = Device.findById(deviceIdd)
+					if(dev?.isThunderEnabled!=1){
+					dev?.isThunderEnabled=Constants.CUSTOMTHUNDERENABLE
+					dev?.thunderPort=Constants.CUSTOMTHUNDERPORT
+					dev?.save(flush:true)
+				}
+				
+				
+		}}catch(Exception e){
+			e.printStackTrace()
+		}
+
+	}
 	
+	def thunderDisabled(final String deviceIdd){
+		try{
+				Device.withTransaction {
+					Device dev = Device.findById(deviceIdd)
+					if(dev?.isThunderEnabled==1){
+					dev?.isThunderEnabled=Constants.CUSTOMTHUNDERDISABLE
+					dev?.save(flush:true)
+				}
+				
+				
+		}}catch(Exception e){
+			e.printStackTrace()
+		}
+		
+	}
 }

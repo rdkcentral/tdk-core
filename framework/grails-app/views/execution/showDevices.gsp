@@ -79,12 +79,8 @@ $(document).ready(function() {
 		</tr>
 		<g:if test="${device?.isThunderEnabled == 1}">
 			<tr>
-				<td>Select Execution Type</td>
-				<td>
-					<input onclick="jsExecution();" id="javaScriptThunderRadio" type="radio" name="myGroupExecutionTypeThunder" checked="checked" value="JavascriptThunder" />Storm
-				    &emsp;<input onclick="pythonExecution();" id="pythonThunderRadio" type="radio" name="myGroupExecutionTypeThunder" value="PythonThunder" />RdkService
-				    
-				</td>
+			<td><input onclick="pythonExecution();" id="pythonThunderRadio" type="radio" name="myGroupExecutionTypeThunder" checked="checked" value="PythonThunder" style="display: none;"/>
+						<script>pythonExecution();</script></td>
 			</tr>
 		</g:if>
 		<tr>
