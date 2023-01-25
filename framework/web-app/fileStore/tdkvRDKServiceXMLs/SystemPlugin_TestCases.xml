@@ -955,4 +955,26 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
+       <testCase testCaseId="SYS_51" testCaseName= "Check_Time_Zones_Persist_After_Reboot" desc="Checks whether time zone setting is persist after reboot">
+            <testCaseInfo testCaseType="loop" />
+            <testStep testStepId="1" name="Get_Time_Zones" method="Get_Time_Zones" saveResult="true">
+                <resultGeneration useMethodTag="system_get_time_zones_list"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_And_Get_Time_Zones" testStepType="loop" >
+                <subtestStep subtestStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
+                    <params>
+                       <param tag="timeZone" usePreviousResult="true" Id="1" useMethodTag="system_get_formatted_time_zones" iteration="true"/>
+                    </params>
+                  <resultGeneration useMethodTag="system_check_set_operation" />
+                </subtestStep>
+                <subtestStep subtestStepId="2" name="System_reboot" method="Reboot" rebootStep="yes" >
+                    <resultGeneration useMethodTag="system_check_set_operation"  />
+                </subtestStep>
+                <subtestStep subtestStepId="3" name="Get_TimeZone_DST"  method="Get_TimeZone_DST" delay="1" >
+                    <resultGeneration useMethodTag="system_get_timezone_dst" arguments="check_timezone" >
+                       <expectedValues useIterableValue="true" />
+                    </resultGeneration>
+                </subtestStep>
+            </testStep>
+       </testCase>
 </testPlugin>

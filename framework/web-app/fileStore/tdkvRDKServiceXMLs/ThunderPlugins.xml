@@ -1870,6 +1870,16 @@
                <param tag="standbybehavior" defaultValue="null" />
             </params>
         </method>
+        <method name="Register_Applications" api="registerApplications" type="method" desc="Registers an application to whitelist the apps which support dial service" >
+            <params>
+               <param tag="applications" defaultValue="null"  />
+            </params>
+        </method>
+        <method name="UnRegister_Applications" api="unregisterApplications" type="method" desc="Unregisters an application to remove the specified applist from the XCast whitelist" >
+            <params>
+               <param tag="applications" defaultValue="null"  />
+            </params>
+        </method>
     </plugin>
 
     <!-- LightningApp Plugin Information -->

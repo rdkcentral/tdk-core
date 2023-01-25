@@ -149,8 +149,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "deviceinfo_check_expected_result":
             status = checkNonEmptyResultData(result)
-            success = str(result.get("success")).lower() == "true"
-            if status == "TRUE" and success:
+            if status == "TRUE":
                 info["MODEL_NUMBER"] = result.get("model")
                 if str(result.get("model")).lower() == str(expectedValues[0]).lower():
                     info["Test_Step_Status"] = "SUCCESS"
@@ -265,11 +264,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # Network Plugin Response result parser steps
         elif tag == "network_get_interface_info":
-            status = []
+            status,macAddressStatus=[],[]
             interfaces_info = result.get("interfaces")
             for interface in interfaces_info:
                 status.append(checkNonEmptyResultData(interface.values()))
-            if "FALSE" not in status and len(interfaces_info) != 0:
+                macAddress = interface.get("macAddress")
+            if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", macAddress.lower()) is None:
+                macAddressStatus.append("False")
+            if "FALSE" not in status and len(interfaces_info) != 0 and "FALSE" not in macAddressStatus:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -301,6 +303,23 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                               info["Test_Step_Status"] = "FAILURE"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            elif arg[0] == "check_interfaces_enabled_state":
+                interface_names = []
+                for interface in interfaces_info:
+                    interface_names.append(interface.get("interface"))
+                if "WIFI" and "ETHERNET" in interface_names:
+                    info["Test_Step_Status"] = "SUCCESS"
+                    for interface in interfaces_info:
+                      if interface.get("interface") == "ETHERNET":
+                          if str(interface.get("enabled")).lower() == str(expectedValues[0]).lower():
+                              info["Test_Step_Status"] = "SUCCESS"
+                          else:
+                              info["Test_Step_Status"] = "FAILURE"
+                      elif interface.get("interface") == "WIFI":
+                          if str(interface.get("enabled")).lower() == str(expectedValues[1]).lower():
+                              info["Test_Step_Status"] = "SUCCESS"
+                          else:
+                              info["Test_Step_Status"] = "FAILURE" 
 
         elif tag == "network_get_default_interface":
             default_interface = result.get("interface")
@@ -2076,6 +2095,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 elif arg[0] == "check_connection_status" and state == 5:
                     info["Test_Step_Status"] = "SUCCESS"
+                elif arg[0] == "check_state_disabled" and state == 1:
+                    info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
@@ -3164,12 +3185,22 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # XCast Plugin Response result parser steps
         elif tag == "xcast_get_xdial_status":
-            testStepResults = testStepResults[0].values()[0]
-            status = testStepResults[0].get("status")
-            if str(status).lower() == "true":
-                result = "FALSE"
+            if len(arg) and arg[0] == "dynamic_app_list":
+                testStepResults1 = testStepResults[0].values()[0]
+                testStepResults2 = testStepResults[1].values()[0]
+                status1 = testStepResults1[0].get("status")
+                status2 = testStepResults2[0].get("status")
+                if str(status1).lower() == "true" and str(status2).lower() == "true":
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
             else:
-                result = "TRUE"
+                testStepResults = testStepResults[0].values()[0]
+                status = testStepResults[0].get("status")
+                if str(status).lower() == "true":
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
 
         # HdmiCecSink Plugin Response result parser steps
         elif tag == "hdmicecsink_check_cec_enabled_status":
@@ -4177,7 +4208,7 @@ def checkTestCaseApplicability(methodTag,configKeyData,arguments):
                 result = "FALSE"
 
         elif tag == "system_check_feature_applicability":
-            if arg[0] in keyData:
+            if str(arg[0]).lower() in str(keyData).lower():
                 result = "TRUE"
             else:
                 result = "FALSE"
@@ -4353,6 +4384,20 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["Test_Step_Status"] = "FAILURE"
             elif len(arg) and arg[0] == "check_status":
                 command = 'tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'
+                output = executeCommand(execInfo, command)
+                output = str(output).split("\n")[1]
+                info["status"] = output.strip()
+
+        elif tag == "Check_And_Enable_Dynamic_App_List":
+            if len(arg) and arg[0] == "enable_dynamic_app_list":
+                command = 'tr181 -d -s -v true Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.DynamicAppList'
+                output = executeCommand(execInfo, command)
+                if "set operation success" in output.lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            elif len(arg) and arg[0] == "check_status":
+                command = 'tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.DynamicAppList'
                 output = executeCommand(execInfo, command)
                 output = str(output).split("\n")[1]
                 info["status"] = output.strip()

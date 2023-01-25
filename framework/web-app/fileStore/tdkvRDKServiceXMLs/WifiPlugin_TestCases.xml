@@ -1062,4 +1062,26 @@
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
        </testCase>
+       
+       <testCase testCaseId="WIFI_22" testCaseName="WIFI_Enable_Disable_Adapter_And_Check_Wifi_State" desc="Toggles WIFI Adapter state and checks for the Wifi state">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Set_WIFI_Adapter_Disabled" method="Set_Enabled">
+                <params>
+                  <param tag="enable" value="false" />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_Current_State_disabled" method="Get_Current_State" delay="1">
+                <resultGeneration useMethodTag="wifi_check_adapter_state" arguments="check_state_disabled"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_WIFI_Adapter_Enabled" method="Set_Enabled">
+                <params>
+                  <param tag="enable" value="true" />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_Current_State_Enabled" method="Get_Current_State" delay="1">
+                <resultGeneration useMethodTag="wifi_check_adapter_state" arguments="check_state_enabled"/>
+            </testStep>
+       </testCase>
 </testPlugin>

@@ -170,5 +170,44 @@
            </resultGeneration>
          </testStep>
         </testCase>
+        <testCase testCaseId="XCast_05" testCaseName="Register_UnRegister_Supported_Applications" desc="Registers and unregisters the supported applications" >
+         <testCaseInfo testCaseType="loop" />
+         <testCasePreRequisite>
+             <prerequisite requisiteId="1" requisiteName="Enable_XDial">
+               <testStep testStepId="1" name="Check_XDial_Status"  action="externalFnCall" saveResult="true">
+                  <resultGeneration useMethodTag="Check_And_Enable_XDial" arguments="check_status"/>
+               </testStep>
+               <testStep testStepId="2" name="Enable_XDial"  action="externalFnCall" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="xcast_get_xdial_status" />
+                  <resultGeneration useMethodTag="Check_And_Enable_XDial" arguments="enable_xdial" />
+               </testStep>
+               <testStep testStepId="3" name="Check_Dynamic_App_List_Status"  action="externalFnCall" saveResult="true">
+                  <resultGeneration useMethodTag="Check_And_Enable_Dynamic_App_List" arguments="check_status"/>
+               </testStep>
+               <testStep testStepId="4" name="Enable_Dynamic_App_List"  action="externalFnCall" >
+                  <conditionalExecution enable="true" Id="3" useMethodTag="xcast_get_xdial_status" />
+                  <resultGeneration useMethodTag="Check_And_Enable_Dynamic_App_List" arguments="enable_dynamic_app_list" />
+               </testStep>
+               <testStep testStepId="5" name="System_reboot" method="Reboot" rebootStep="yes" pluginName="System">
+                   <conditionalExecution enable="true" Id="1,3" useMethodTag="xcast_get_xdial_status" arguments="dynamic_app_list" />
+                   <resultGeneration useMethodTag="system_check_set_operation"  />
+               </testStep>
+             </prerequisite>
+         </testCasePreRequisite>
+         <testStep testStepId="1" name="Register_Unregister_Applications" testStepType="loop" >
+         <subtestStep subtestStepId="1" name="Register_Applications" method="Register_Applications" >
+           <params>
+              <param tag="applications" useConfigFile="true" key="XCAST_SUPPORTED_APPLICATIONS" iteration="true" />
+           </params>
+           <resultGeneration useMethodTag="xcast_check_set_operation"/>
+         </subtestStep>
+         <subtestStep subtestStepId="2" name="Unregister_Applications" method="UnRegister_Applications" >
+           <params>
+              <param tag="applications" useConfigFile="true" key="XCAST_SUPPORTED_APPLICATIONS" iteration="true"/>
+           </params>
+           <resultGeneration useMethodTag="xcast_check_set_operation"/>
+         </subtestStep>
+         </testStep>
+        </testCase>
 </testPlugin>
 
