@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2023 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<xml>
+  <module name="AAMP" testGroup="Component">
+    <primitiveTests>
+      <primitiveTest id="" name="Aamp_AampTune" version="1">
+        <function>TestMgr_Aamp_AampTune</function>
+        <parameters>
+          <parameter name="URL" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest id="" name="Aamp_AampStop" version="1">
+        <function>TestMgr_Aamp_AampStop</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest id=" " name="Aamp_AampSetRate" version="1">
+        <function>TestMgr_Aamp_AampSetRate</function>
+        <parameters>
+          <parameter name="rate" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest id="" name="Aamp_AampIsLive" version="1">
+        <function>TestMgr_Aamp_AampIsLive</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest id=" " name="Aamp_AampSetLanguage" version="1">
+        <function>TestMgr_Aamp_AampSetLanguage</function>
+        <parameters>
+          <parameter name="language" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetCurrentAudioLanguage" id="" version="1">
+        <function>TestMgr_Aamp_AampGetCurrentAudioLanguage</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest id="" name="Aamp_AampSeekLive" version="1">
+        <function>TestMgr_Aamp_AampSeekLive</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetRateAndSeek" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetRateAndSeek</function>
+        <parameters>
+          <parameter name="rate" value=""/>
+          <parameter name="seconds" value=""/>
+        </parameters>
+      </primitiveTest>      
+            <primitiveTest name="Aamp_AampGetPlaybackDuration" id=" " version="4">
+        <function>TestMgr_Aamp_AampGetPlaybackDuration</function>
+        <parameters>
+          <parameter name="URL" value="NULL"/>
+        </parameters>
+      </primitiveTest>     
+      <primitiveTest name="Aamp_AampProxy" id=" " version="1">
+        <function>TestMgr_Aamp_AampProxy</function>
+        <parameters>
+          <parameter name="http_proxy" value=""/>
+          <parameter name="no_proxy" value=""/>
+          <parameter name="set" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampPlayTillEof" id="" version="1">
+        <function>TestMgr_Aamp_AampPlayTillEof</function>
+        <parameters/>
+      </primitiveTest> 
+      <primitiveTest name="Aamp_AampGetAudioBitrates" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAudioBitrates</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetAvailableAudioTracks" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAvailableAudioTracks</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetAvailableTextTracks" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAvailableTextTracks</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetVideoBitrates" id="" version="1">
+        <function>TestMgr_Aamp_AampGetVideoBitrates</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetAudioVolume" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAudioVolume</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetAudioVolume" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetAudioVolume</function>
+        <parameters>
+          <parameter name="volume" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetVideoBitrate" id="" version="1">
+        <function>TestMgr_Aamp_AampGetVideoBitrate</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetPreferredLanguages" id="" version="1">
+        <function>TestMgr_Aamp_AampGetPreferredLanguages</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetVideoRectangle" id="" version="1">
+        <function>TestMgr_Aamp_AampGetVideoRectangle</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetVideoRectangle" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetVideoRectangle</function>
+        <parameters>
+          <parameter name="h" value="0"/>
+          <parameter name="w" value="0"/>
+          <parameter name="x" value="0"/>
+          <parameter name="y" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetVideoZoom" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetVideoZoom</function>
+        <parameters>
+          <parameter name="zoom" value="A-Z"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetPreferredLanguages" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetPreferredLanguages</function>
+        <parameters>
+          <parameter name="languages" value="A-Z"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetVideoMute" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetVideoMute</function>
+        <parameters>
+          <parameter name="mute" value="A-Z"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetAudioBitrate" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAudioBitrate</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetCurrentDRM" id="" version="1">
+        <function>TestMgr_Aamp_AampGetCurrentDRM</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetState" id="" version="1">
+        <function>TestMgr_Aamp_AampGetState</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetPlaybackPosition" id="" version="1">
+        <function>TestMgr_Aamp_AampGetPlaybackPosition</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetPlaybackRate" id="" version="1">
+        <function>TestMgr_Aamp_AampGetPlaybackRate</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetVideoBitrate" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetVideoBitrate</function>
+        <parameters>
+          <parameter name="bitRate" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetAudioBitrate" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetAudioBitrate</function>
+        <parameters>
+          <parameter name="bitRate" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetPreferredDRM" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetPreferredDRM</function>
+        <parameters>
+          <parameter name="preferredDrm" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetPreferredDRM" id=" " version="1">
+        <function>TestMgr_Aamp_AampGetPreferredDRM</function>
+        <parameters/>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>
+
