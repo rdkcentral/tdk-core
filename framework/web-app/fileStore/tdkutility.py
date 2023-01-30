@@ -1037,3 +1037,560 @@ def WiFiOffChannelScanEnable_Revert(obj, revert_flag_rfc, step):
 
     return;
 
+# getDNSParameterValue
+# Syntax      : getDNSParameterValue(obj, expectedresult, paramName)
+# Description : Function to get the current value of DNS Internet Connectivity check parameters
+# Parameters  : obj - tad object
+#               expectedresult - SUCCESS/FAILURE
+#               paramName - Name of the DNS Internet Connectivity check parameter to be queried
+# Return Value: tdkTestObj, actualresult, details
+
+def getDNSParameterValue(obj, expectedresult, paramName):
+    tdkTestObj = obj.createTestStep("TADstub_Get");
+    tdkTestObj.addParameter("paramName", paramName);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    return tdkTestObj, actualresult, details;
+
+# setDNSParameterValue
+# Syntax      : setDNSParameterValue(obj, expectedresult, ParamName, ParamValue, Type)
+# Description : Function to set a new value for DNS Internet Connectivity check and validate with get
+# Parameters  : obj - tad object
+#               expectedresult - SUCCESS/FAILURE
+#               ParamName - Name of the DNS Internet Connectivity check parameter to be set
+#               ParamValue - SET value
+#               Type - Parameter type
+# Return Value: tdkTestObj, actualresult, details
+
+def setDNSParameterValue(obj, expectedresult, ParamName, ParamValue, Type):
+    tdkTestObj = obj.createTestStep("TADstub_Set");
+    tdkTestObj.addParameter("ParamName", ParamName);
+    tdkTestObj.addParameter("ParamValue", ParamValue);
+    tdkTestObj.addParameter("Type", Type);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    return tdkTestObj, actualresult, details;
+
+# DNSInternetConnectivity_PreReq
+# Syntax      : DNSInternetConnectivity_PreReq(obj, step, expectedresult)
+# Description : Function to set the pre requisites for DNS Internet Connectivity check
+# Parameters  : obj - tad object
+#               step - current test step
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: tdkTestObj - test object
+#               preReqStatus - whether pre requiste is set successfully or not
+#             : revertStatus - whether revert operation is required or not
+#             : step - final test step count
+
+def DNSInternetConnectivity_PreReq(obj, step, expectedresult):
+    preReqStatus = 0;
+    revertStatus = 0;
+    print "\n****Pre Requisites for DNS Internet Connectivity Check Start****";
+
+    #Check the initial enable state of Device.Diagnostics.X_RDK_DNSInternet.Enable
+    print "\nTEST STEP %d : Get the initial enable state of Device.Diagnostics.X_RDK_DNSInternet.Enable" %step;
+    print "EXPECTED RESULT %d : The initial enable state of Device.Diagnostics.X_RDK_DNSInternet.Enable should be retrieved successfully" %step;
+    tdkTestObj, actualresult, initialEnable = getDNSParameterValue(obj, expectedresult, "Device.Diagnostics.X_RDK_DNSInternet.Enable");
+
+    if expectedresult in actualresult and initialEnable != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable : %s" %(step, initialEnable);
+        print "TEST EXECUTION RESULT : SUCCESS";
+
+        #Enable Device.Diagnostics.X_RDK_DNSInternet.Enable if not already in enabled state
+        if initialEnable == "false":
+            print "DNSInternet is disabled initially";
+            #Enabling Device.Diagnostics.X_RDK_DNSInternet.Enable and validating the SET
+            step = step + 1;
+            setEnable = "true";
+            print "\nTEST STEP %d : Enable Device.Diagnostics.X_RDK_DNSInternet.Enable" %step;
+            print "EXPECTED RESULT %d : Device.Diagnostics.X_RDK_DNSInternet.Enable should be enabled successfully" %step;
+            tdkTestObj, actualresult, details = setDNSParameterValue(obj, expectedresult, "Device.Diagnostics.X_RDK_DNSInternet.Enable", setEnable, "boolean")
+
+            if expectedresult in actualresult and details == "Set has been validated successfully":
+                revertStatus = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable set to %s successfully" %(step, setEnable);
+                print "TEST EXECUTION RESULT : SUCCESS";
+            else:
+                preReqStatus = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable was NOT set to %s successfully" %(step, setEnable);
+                print "TEST EXECUTION RESULT : FAILURE";
+        else:
+            print "Device.Diagnostics.X_RDK_DNSInternet.Enable is already in enabled state";
+    else:
+        preReqStatus = 1;
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable not retrieved" %step;
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    print "\n****Pre Requisites for DNS Internet Connectivity Check Completed****";
+    return tdkTestObj, preReqStatus, revertStatus, step;
+
+# DNSInternetConnectivity_Revert
+# Syntax      : DNSInternetConnectivity_Revert(obj, step, enable, expectedresult)
+# Description : Function to set the pre requisites for DNS Internet Connectivity check
+# Parameters  : obj - tad object
+#               step - current test step
+#               enable - enable status to be set for DNS Internet Connectivity check
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: None
+
+def DNSInternetConnectivity_Revert(obj, step, enable, expectedresult):
+    print "\nTEST STEP %d : Revert Device.Diagnostics.X_RDK_DNSInternet.Enable to %s" %(step, enable);
+    print "EXPECTED RESULT %d : Device.Diagnostics.X_RDK_DNSInternet.Enable should be reverted to %s successfully" %(step, enable);
+    tdkTestObj, actualresult, details = setDNSParameterValue(obj, expectedresult, "Device.Diagnostics.X_RDK_DNSInternet.Enable", enable, "boolean")
+
+    if expectedresult in actualresult and details == "Set has been validated successfully":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable reverted to %s successfully" %(step, enable);
+        print "TEST EXECUTION RESULT : SUCCESS";
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.Enable was NOT reverted to %s successfully" %(step, enable);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return;
+
+# getWanInterfaceEntries
+# Syntax      : getWanInterfaceEntries(obj, expectedresult, step)
+# Description : Function to get the number of available WAN interafces to carry out DNS Internet Connectivity check
+# Parameters  : obj - tad object
+#               step - current test step
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: numberOfEntries - Number of WAN interfaces available WAN interafces to carry out DNS Internet Connectivity check
+
+def getWanInterfaceEntries(obj, expectedresult, step):
+    numberOfInterfaces = 0;
+    #Check the number of WAN Interfaces for DNS Internet Connectivity Check
+    print "\nTEST STEP %d : Get the number of WAN Interfaces for DNS Internet Connectivity Check using Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries" %step;
+    print "EXPECTED RESULT %d : Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries should be retrieved successfully" %step;
+    tdkTestObj, actualresult, details = getDNSParameterValue(obj, expectedresult, "Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries");
+
+    if expectedresult in actualresult and details != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries : %s" %(step, details);
+        print "TEST EXECUTION RESULT : SUCCESS";
+
+        if details.isdigit():
+            numberOfInterfaces = int(details);
+            #Check if numberOfInterfaces is greater than 0
+            if numberOfInterfaces >= 1:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print "Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries is valid";
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print "Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries is NOT valid";
+        else:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+            print "Invalid value retrieved for Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries";
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: Device.Diagnostics.X_RDK_DNSInternet.WANInterfaceNumberOfEntries not successfully retrieved" %step;
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return numberOfInterfaces;
+
+# getWANInterface
+# Syntax      : getWANInterface(obj, step, paramName, expectedresult)
+# Description : Function to get the enable state of available WAN Interface
+# Parameters  : obj - tad object
+#               step - current test step
+#               paramName - WAN Interface parameter
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: tdkTestObj, actualresult, details
+
+def getWANInterface(obj, step, paramName, expectedresult):
+    #Check the initial enable state of the WAN Interface
+    print "\nTEST STEP %d : Get the current enable state of %s" %(step, paramName);
+    print "EXPECTED RESULT %d : The current enable state of %s should be retrieved successfully" %(step, paramName);
+    tdkTestObj, actualresult, details = getDNSParameterValue(obj, expectedresult, paramName);
+
+    if expectedresult in actualresult and details != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: %s : %s" %(step, paramName, details);
+        print "TEST EXECUTION RESULT : SUCCESS";
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: %s not retrieved" %(step, paramName);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return tdkTestObj, actualresult, details;
+
+# setWANInterface
+# Syntax      : setWANInterface(obj, step, paramName, enable, expectedresult)
+# Description : Function to set the available WAN Interface to the desired enable state
+# Parameters  : obj - tad object
+#               step - current test step
+#               paramName - WAN Interface parameter
+#               enable - enable or disable the WAN interface
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: tdkTestObj, actualresult, details
+
+def setWANInterface(obj, step, paramName, enable, expectedresult):
+    #Enable or disable the WAN Interface
+    print "\nTEST STEP %d : Set %s to %s" %(step, paramName, enable);
+    print "EXPECTED RESULT %d : %s should be set to %s successfully" %(step, paramName, enable);
+    tdkTestObj, actualresult, details = setDNSParameterValue(obj, expectedresult, paramName, enable, "boolean");
+
+    if expectedresult in actualresult and details == "Set has been validated successfully":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: %s set to %s successfully" %(step, paramName, enable);
+        print "TEST EXECUTION RESULT : SUCCESS";
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: %s was NOT set to %s successfully" %(step, paramName, enable);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return tdkTestObj, actualresult, details;
+
+# saveAndClearTestURLTable
+# Syntax      : saveAndClearTestURLTable(obj, tr181obj, step, expectedresult)
+# Description : Function to save the initial Test URL configuration table and then clear the table as pre-requisite
+# Parameters  : obj - tad object
+#               tr181obj - tdkb_tr181 object
+#               step - current test step
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: testURLPreReq - indicates whether the initial test URL config is saved and the table cleared as pre-requisite
+#               testURLStore - list of initial Test URLs
+#               step - final step count
+
+def saveAndClearTestURLTable(obj, tr181obj, step, expectedresult):
+    print "\n****Save existing URLs and clear Test URL Table Start****";
+    testURLStore = [];
+    testURLPreReq = 0;
+    #Get the initial number of Test URLs configured
+    paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURLNumberOfEntries";
+    tdkTestObj, actualresult, initialEntries = getDNSParameterValue(obj, expectedresult, paramName);
+
+    print "\nTEST STEP %d: Get the initial number of Test URLs configured using %s" %(step, paramName);
+    print "EXPECTED RESULT %d: Should get the initial number of Test URLs configured using %s" %(step, paramName);
+
+    if expectedresult in actualresult and initialEntries.isdigit():
+        initialEntries = int(initialEntries);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: Initial number of Test URLs configured retrieved : %d" %(step, initialEntries);
+        print "TEST EXECUTION RESULT : SUCCESS";
+
+        #Store the initial Test URLs if number of Entries > 0
+        if initialEntries > 0:
+            #Add a new table instance to know the last table instance configured
+            step = step + 1;
+            tdkTestObj = tr181obj.createTestStep("TDKB_TR181Stub_AddObject");
+            paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURL.";
+            tdkTestObj.addParameter("paramName",paramName);
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details = tdkTestObj.getResultDetails();
+
+            print "\nTEST STEP %d: Add a new Test URL Table instance" %step;
+            print "EXPECTED RESULT %d: Should add a new Test URL Table instance successfully" %step;
+
+            if expectedresult in actualresult and details != "":
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print "ACTUAL RESULT %d: Added a new Test URL Table instance successfully; Details : %s" %(step, details);
+                print "TEST EXECUTION RESULT : SUCCESS";
+                instance = details.split(':')[1];
+
+                if instance.isdigit():
+                    instance = int(instance);
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print "INSTANCE VALUE : %d" %instance;
+
+                    #We can assume that Test URLs may exist for some or all instances upto the last added instance
+                    #Loop through and check if URL exists for each instance, if so save the URL and delete the instance
+                    for entry in range(1, instance + 1):
+                        paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURL." + str(entry) + ".URL";
+                        tdkTestObj, actualresult, url = getDNSParameterValue(obj, expectedresult, paramName);
+
+                        #If table instance exists and it has a non empty URL, copy the URL
+                        if expectedresult in actualresult and url != "":
+                            testURLStore.append(url);
+                            print "\nSaved the URL %s at table instance %d" %(url, entry);
+                        else:
+                            print "\nEither Table instance %d does not exist or no URL found for the instance" %entry;
+
+                        #If table instance exists, delete it
+                        if expectedresult in actualresult:
+                            step = step + 1;
+                            instanceList = [entry];
+                            deleteStatus = deleteTestURLTable(tr181obj, step, expectedresult, instanceList)
+
+                            if deleteStatus == 0:
+                                #Set the result status of execution
+                                tdkTestObj.setResultStatus("SUCCESS");
+                                print "Instance %d deleted successfully" %entry;
+                            else:
+                                testURLPreReq = 1;
+                                #Set the result status of execution
+                                tdkTestObj.setResultStatus("FAILURE");
+                                print "Instance %d NOT deleted successfully" %entry;
+                                break;
+                        else:
+                            print "As Table instance does not exist, not deleting...";
+                else:
+                    testURLPreReq = 1;
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print "INSTANCE VALUE : %s is not a valid value" %instance;
+            else:
+                testURLPreReq = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print "ACTUAL RESULT %d: Unable to add a new Test URL Table instance successfully; Details : %s" %(step, details);
+                print "TEST EXECUTION RESULT : FAILURE";
+
+            #Get the current number of entries and check if it is 0 as all the existing entries are deleted
+            step = step + 1;
+            paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURLNumberOfEntries";
+            tdkTestObj, actualresult, currentEntries = getDNSParameterValue(obj, expectedresult, paramName);
+
+            print "\nTEST STEP %d: Get the current number of Test URLs configured using %s and check if it is 0" %(step, paramName);
+            print "EXPECTED RESULT %d: Should get the current number of Test URLs configured using %s and it should be 0" %(step, paramName);
+
+            if expectedresult in actualresult and currentEntries.isdigit():
+                currentEntries = int(currentEntries);
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print "ACTUAL RESULT %d: Current number of Test URLs configured retrieved : %d" %(step, currentEntries);
+                print "TEST EXECUTION RESULT : SUCCESS";
+
+                #Check if number of Entries = 0
+                if currentEntries == 0:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print "The current number of Test URLs configured is 0";
+                else:
+                    testURLPreReq = 1;
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print "The current number of Test URLs configured is NOT 0";
+            else:
+                testURLPreReq = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print "ACTUAL RESULT %d: Current number of Test URLs configured NOT retrieved : %s" %(step, currentEntries);
+                print "TEST EXECUTION RESULT : FAILURE";
+        else:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+            print "No Test URL entries configured initially";
+    else:
+        testURLPreReq = 1;
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: Initial number of Test URLs configured NOT retrieved : %s" %(step, initialEntries);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    print "\n****Save existing URLs and clear Test URL Table Complete****";
+    return testURLPreReq, testURLStore, step;
+
+# createTestURLTable
+# Syntax      : createTestURLTable(obj, tr181obj, step, expectedresult, numberOfURLs, testURLList)
+# Description : Function to create new Test URL table instances and set the required URLs
+# Parameters  : obj - tad object
+#               tr181obj - tdkb_tr181 object
+#               step - current test step
+#               expectedresult - SUCCESS/FAILURE
+#               numberOfURLs - number of URLs to be set
+#               testURLList - List of URLs to be set
+# Return Value: setTestURL - indicates whether the test URLs are set successfully
+#               newInstanceList - stores the newly added table instance numbers
+#               step - final step count
+
+def createTestURLTable(obj, tr181obj, step, expectedresult, numberOfURLs, testURLList):
+    #Add the required number of new instances and set the URLs
+    setTestURL = 0;
+    newInstanceList = [];
+    for newInstance in range(1, numberOfURLs + 1):
+        tdkTestObj = tr181obj.createTestStep("TDKB_TR181Stub_AddObject");
+        paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURL.";
+        tdkTestObj.addParameter("paramName",paramName);
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+
+        print "\nTEST STEP %d: Add a new Test URL Table instance" %step;
+        print "EXPECTED RESULT %d: Should add a new Test URL Table instance successfully" %step;
+
+        if expectedresult in actualresult and details != "":
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+            print "ACTUAL RESULT %d: Added a new Test URL Table instance successfully; Details : %s" %(step, details);
+            print "TEST EXECUTION RESULT : SUCCESS";
+            instance = details.split(':')[1];
+
+            if instance.isdigit():
+                instance = int(instance);
+                tdkTestObj.setResultStatus("SUCCESS");
+                print "INSTANCE VALUE : %d" %instance;
+                newInstanceList.append(instance);
+
+                #Set the URL to the newly created instance
+                step = step + 1;
+                paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURL." + str(instance) + ".URL";
+                tdkTestObj, actualresult, details = setDNSParameterValue(obj, expectedresult, paramName, testURLList[newInstance - 1], "string");
+
+                print "\nTEST STEP %d: Set %s to URL %s" %(step, paramName, testURLList[newInstance - 1]);
+                print "EXPECTED RESULT %d: Should successfully set %s to URL %s" %(step, paramName, testURLList[newInstance - 1]);
+
+                if expectedresult in actualresult and details != "":
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print "ACTUAL RESULT %d: Added a new Test URL successfully" %step;
+                    print "TEST EXECUTION RESULT : SUCCESS";
+                else:
+                    setTestURL = 1;
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print "ACTUAL RESULT %d: New Test URL NOT added successfully" %step;
+                    print "TEST EXECUTION RESULT : FAILURE";
+                    break;
+            else:
+                setTestURL = 1;
+                tdkTestObj.setResultStatus("FAILURE");
+                print "INSTANCE VALUE : %s is not a valid value" %instance;
+                break;
+        else:
+            setTestURL = 1;
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+            print "ACTUAL RESULT %d: Unable to add a new Test URL Table instance successfully; Details : %s" %(step, details);
+            print "TEST EXECUTION RESULT : FAILURE";
+        step = step + 1;
+    return setTestURL, newInstanceList, step;
+
+
+# deleteTestURLTable
+# Syntax      : deleteTestURLTable(tr181obj, step, expectedresult, instanceList)
+# Description : Function to delete Test URL table instances
+# Parameters  : tr181obj - tdkb_tr181 object
+#               step - current test step
+#               expectedresult - SUCCESS/FAILURE
+#               instanceList - List of newly created instances that needs to be deleted as part of revert operation
+# Return Value: deleteStatus - indicates whether the test URL table instances are deleted successfully
+
+def deleteTestURLTable(tr181obj, step, expectedresult, instanceList):
+    deleteStatus = 0;
+    for instance in instanceList:
+        paramName = "Device.Diagnostics.X_RDK_DNSInternet.TestURL." + str(instance) + ".";
+        tdkTestObj = tr181obj.createTestStep("TDKB_TR181Stub_DelObject");
+        tdkTestObj.addParameter("paramName",paramName);
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+
+        print "\nTEST STEP %d : Delete the instance %s" %(step, paramName);
+        print "EXPECTED RESULT %d: Should delete the instance %s successfully" %(step, paramName);
+
+        if expectedresult in actualresult:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+            print "ACTUAL RESULT %d : Instance deleted successfully; Details : %s" %(step, details);
+            print "[TEST EXECUTION RESULT] : SUCCESS";
+        else:
+            deleteStatus = 1;
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+            print "ACTUAL RESULT %d : Instance NOT deleted successfully; Details : %s" %(step, details);
+            print "[TEST EXECUTION RESULT] : FAILURE";
+            break;
+        step = step + 1;
+    return deleteStatus;
+
+# setQueryNow
+# Syntax      : setQueryNow(obj, step, paramName, enable, expectedresult)
+# Description : Function to start the DNS queries by setting the QueryNow parameter
+# Parameters  : obj - tad object
+#               step - current test step
+#               paramName - QueryNow parameter
+#               enable - to start the DNS queries
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: tdkTestObj, actualresult, details
+
+def setQueryNow(obj, step, paramName, enable, expectedresult):
+    #Start the DNS Queries
+    print "\nTEST STEP %d : Set %s to %s" %(step, paramName, enable);
+    print "EXPECTED RESULT %d : %s should be set to %s successfully" %(step, paramName, enable);
+    tdkTestObj = obj.createTestStep("TADstub_SetOnly");
+    tdkTestObj.addParameter("ParamName", paramName);
+    tdkTestObj.addParameter("ParamValue", enable);
+    tdkTestObj.addParameter("Type", "boolean");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+
+    if expectedresult in actualresult:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: %s set to %s successfully" %(step, paramName, enable);
+        print "TEST EXECUTION RESULT : SUCCESS";
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: %s was NOT set to %s successfully" %(step, paramName, enable);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return tdkTestObj, actualresult, details;
+
+# getQueryNowResult
+# Syntax      : getQueryNowResult(obj, step, paramName, expectedresult)
+# Description : Function to check the result status of DNS Queries
+# Parameters  : obj - tad object
+#               step - current test step
+#               paramName - QueryNowResult parameter
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: tdkTestObj, actualresult, details
+#               details - 1 (CONNECTED)
+#               details - 2 (DISCONNECTED)
+#               details - 3 (BUSY)
+
+def getQueryNowResult(obj, step, paramName, expectedresult):
+    #Check the result status of DNS Queries
+    print "\nTEST STEP %d : Get the DNS query result status using %s" %(step, paramName);
+    print "EXPECTED RESULT %d : The DNS query result status using %s should be retrieved successfully" %(step, paramName);
+    tdkTestObj, actualresult, details = getDNSParameterValue(obj, expectedresult, paramName);
+
+    if expectedresult in actualresult and details != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "ACTUAL RESULT %d: %s : %s" %(step, paramName, details);
+        print "TEST EXECUTION RESULT : SUCCESS";
+
+        if details == "1":
+            details = "CONNECTED";
+        elif details == "2":
+            details = "DISCONNECTED";
+        elif details == "3":
+            details = "BUSY";
+        else:
+            details = "INVALID";
+
+        print "The DNS Query Result is : %s" %details;
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "ACTUAL RESULT %d: %s not retrieved" %(step, paramName);
+        print "TEST EXECUTION RESULT : FAILURE";
+
+    return tdkTestObj, actualresult, details;
+

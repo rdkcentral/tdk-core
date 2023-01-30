@@ -570,7 +570,7 @@
                <writable>false</writable>
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>aa</defaultValue>
+               <defaultValue>https://www.broadband-forum.org/cwmp/tr-181-2-11-0.xml</defaultValue>
         </parameter>
  <parameter>
                 <!--the tr-181 parameter name -->
@@ -583,7 +583,7 @@
                <writable>false</writable>
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>bb</defaultValue>
+               <defaultValue>urn:broadband-forum-org:tr-181-2-11-0</defaultValue>
         </parameter>
  <parameter>
                 <!--the tr-181 parameter name -->
@@ -596,45 +596,6 @@
                <writable>false</writable>
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>bb</defaultValue>
-        </parameter>
- <parameter>
-                <!--the tr-181 parameter name -->
-               <name>Device.DeviceInfo.SupportedDataModel.2.URL</name>
-               <!--webpa param name of the above tr-181 parameter if available -->
-               <webpaName>Device.DeviceInfo.SupportedDataModel.2.URL</webpaName>
-               <!--type of the parameter -->
-               <type>string</type>
-               <!--whether set is applicable or not -->
-               <writable>false</writable>
-               <persistentSet>false</persistentSet>
-               <!--default value of the param after factory reset -->
-               <defaultValue>xx</defaultValue>
-        </parameter>
- <parameter>
-                <!--the tr-181 parameter name -->
-               <name>Device.DeviceInfo.SupportedDataModel.2.URN</name>
-               <!--webpa param name of the above tr-181 parameter if available -->
-               <webpaName>Device.DeviceInfo.SupportedDataModel.2.URN</webpaName>
-               <!--type of the parameter -->
-               <type>string</type>
-               <!--whether set is applicable or not -->
-               <writable>false</writable>
-               <persistentSet>false</persistentSet>
-               <!--default value of the param after factory reset -->
-               <defaultValue>yy</defaultValue>
-        </parameter>
- <parameter>
-                <!--the tr-181 parameter name -->
-               <name>Device.DeviceInfo.SupportedDataModel.2.Features</name>
-               <!--webpa param name of the above tr-181 parameter if available -->
-               <webpaName>Device.DeviceInfo.SupportedDataModel.2.Features</webpaName>
-               <!--type of the parameter -->
-               <type>string</type>
-               <!--whether set is applicable or not -->
-               <writable>false</writable>
-               <persistentSet>false</persistentSet>
-               <!--default value of the param after factory reset -->
-               <defaultValue>bb</defaultValue>
+               <defaultValue></defaultValue>
         </parameter>
 </parameters>
