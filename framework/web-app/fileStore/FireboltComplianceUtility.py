@@ -29,6 +29,7 @@ check_pts = ""
 check_fps = ""
 use_audioSink = ""
 use_autoVideoSink_for_fpsdisplaysink = ""
+ignore_warnings = ""
 
 #List consisting of HLS url
 HLS_URL = [MediaValidationVariables.video_src_url_short_duration_hls,MediaValidationVariables.video_src_url_hls,MediaValidationVariables.video_src_url_4k_hls,MediaValidationVariables.video_src_url_live_hls,MediaValidationVariables.video_src_url_hls_h264,MediaValidationVariables.video_src_url_hls_h264_iframe]
@@ -48,6 +49,7 @@ def getDeviceConfigValue (tdklibObj, configKey):
         global check_fps
         global use_audioSink
         global use_autoVideoSink_for_fpsdisplaysink
+        global ignore_warnings
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
         configValue = ""
@@ -73,14 +75,30 @@ def getDeviceConfigValue (tdklibObj, configKey):
             configParser.read(r'%s' % deviceConfigFile)
             #Retrieve the value of config key from device config file
             configValue = configParser.get('device.config', configKey)
-            use_aamp = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AAMP_FOR_HLS")
-            check_pts = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_PTS")
-            check_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_FPS")
-            use_audioSink = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AUDIO_SINK")
+            try:
+                use_aamp = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AAMP_FOR_HLS")
+            except:
+                use_aamp = "no"
+            try:
+                check_pts = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_PTS")
+            except:
+                check_pts = "yes"
+            try:
+                check_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_FPS")
+            except:
+                check_fps = "no"
+            try:
+                use_audioSink = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AUDIO_SINK")
+            except:
+                use_audioSink = ""
             try:
                 use_autoVideoSink_for_fpsdisplaysink = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AUTOVIDEO_FOR_FPSDISPLAYSINK")
             except:
                 use_autoVideoSink_for_fpsdisplaysink = "no"
+            try:
+                ignore_warnings = configParser.get('device.config',"FIREBOLT_COMPLIANCE_IGNORE_WARNINGS")
+            except:
+                ignore_warnings = "no"
         else:
             print "DeviceConfig file not available"
             result = "FAILURE"
@@ -158,6 +176,7 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
         command = "export FPSDISPLAYSINK_USE_AUTOVIDEO=1 ;" + command
     #Feature to modify hls url to aamp url based on configuration
     if (use_aamp == "yes"):
+        ignore_warnings = "yes"
         testUrl_list = testUrl.split();
         url_list = set()
         #Check if HLS URL is present in command
@@ -170,8 +189,9 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
                 #Change hls generic url to aamp url
                 url_updated = url.replace("https","aamps",1).replace("http","aamp",1);
                 command = command.replace(url,url_updated);
-            #Update GST_LOG_LEVEL to skip error statements check while using aamp for playback
-            command = "export GST_LOG_LEVEL=0;  " + command;
+    if (ignore_warnings == "yes"):
+        #Update GST_LOG_LEVEL to skip error statements check
+        command = "export GST_LOG_LEVEL=0;  " + command;
     return command
 
 #Function to check mediapipeline test execution status from output string
