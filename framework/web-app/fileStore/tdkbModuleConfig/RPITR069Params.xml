@@ -597,5 +597,7 @@
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
                <defaultValue></defaultValue>
+               <!--Expected values of the tr181 param-->
+               <expectedValues></expectedValues>
         </parameter>
 </parameters>
