@@ -616,7 +616,7 @@ def rdkvdobby_executeDobbyTest(containername,testCases):
                     print "DESCRIPTION   : ",testDesc
                     print "#==============================================================================#\n"
                     print(line)
-                    if "WARN" or "PASS" in testStatus:
+                    if "WARN" in testStatus or "PASS" in testStatus:
                         finalTestStatus="SUCCESS"
                         print "\nTEST STEP STATUS :  ",finalTestStatus
                         print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
