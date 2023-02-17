@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <module testGroup="Component" name="rdkv_basic_sanity">
+    <primitiveTests>
+      <primitiveTest name="rdkv_basic_sanity_getDeviceConfig" id=" " version="1">
+        <function>rdkv_basic_sanity_getDeviceConfig</function>
+        <parameters>
+          <parameter name="basePath" value=""/>
+          <parameter name="configKey" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkv_basic_sanity_executeInDUT" id=" " version="1">
+        <function>rdkv_basic_sanity_executeInDUT</function>
+        <parameters>
+          <parameter name="command" value=""/>
+          <parameter name="credentials" value=""/>
+          <parameter name="sshMethod" value=""/>
+        </parameters>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>
