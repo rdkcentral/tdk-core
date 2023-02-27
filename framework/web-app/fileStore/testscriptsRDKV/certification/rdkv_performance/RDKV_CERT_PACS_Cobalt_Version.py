@@ -17,28 +17,47 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version="1.0" encoding="UTF-8"?><xml>
-  <id/>
-  <version>1</version>
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <id></id>
+  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+  <version>4</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_CERT_PACS_Cobalt_Version</name>
-  <primitive_test_id/>
+  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
+  <primitive_test_id> </primitive_test_id>
+  <!-- Do not change primitive_test_id if you are editing an existing script. -->
   <primitive_test_name>rdkservice_getSSHParams</primitive_test_name>
+  <!--  -->
   <primitive_test_version>3</primitive_test_version>
+  <!--  -->
   <status>FREE</status>
-  <synopsis>The objective of this test is to check if the version of Cobalt is 21.</synopsis>
-  <groups_id/>
+  <!--  -->
+  <synopsis>The objective of this test is to check the version of Cobalt</synopsis>
+  <!--  -->
+  <groups_id />
+  <!--  -->
   <execution_time>10</execution_time>
+  <!--  -->
   <long_duration>false</long_duration>
+  <!--  -->
   <advanced_script>false</advanced_script>
-  <remarks/>
+  <!-- execution_time is the time out time for test execution -->
+  <remarks></remarks>
+  <!-- Reason for skipping the tests if marked to skip -->
   <skip>false</skip>
+  <!--  -->
   <box_types>
     <box_type>RPI-Client</box_type>
+    <!--  -->
     <box_type>RPI-HYB</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_PERFORMANCE_37</test_case_id>
@@ -50,23 +69,29 @@
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
     <automation_approch>1. Do SSH to DUT and execute 'cobalt_bin --version' command.
-2. Check the output to see whether Cobalt version is current version</automation_approch>
+2. Check the output to see whether Cobalt version is current version
+3. If the Cobalt version is not displayed using the command, launch the Cobalt
+4. Validate if the Cobalt version is available in wpeframework logs.
+5. Check the output to see whether Cobalt version is same as the version given in configuration file</automation_approch>
     <expected_output>Cobalt version should be current version</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_performance</test_stub_interface>
     <test_script>RDKV_CERT_PACS_Cobalt_Version</test_script>
     <skipped>No</skipped>
     <release_version>M88</release_version>
-    <remarks/>
+    <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
-
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import json
 from rdkv_performancelib import *
 from StabilityTestUtility import *
+import PerformanceTestVariables
+import rdkv_performancelib
+from web_socket_util import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
@@ -108,27 +133,74 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
-        if output != "EXCEPTION" and expectedResult in result:
-            if "Cobalt version" in output:
+        if output != "EXCEPTION" and "Cobalt version" in output:
                 print "\n Checking Cobalt version\n"
                 output = output.replace(command,"")
                 cobalt_version = (output.split('Cobalt version ')[1].split('\n')[0])
                 if (cobalt_version.__contains__(current_cobalt_version)):
-                    print "\n Cobalt version is same as the current version :{}  \n".format(cobalt_version)
+                    print "\n Cobalt version is the current version :{}  \n".format(cobalt_version)
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Cobalt version is not same current version: {}\n".format(cobalt_version)
+                    print "\n Cobalt version is not  current version: {}\n".format(cobalt_version)
                     tdkTestObj.setResultStatus("FAILURE")
+        elif output != "EXCEPTION":
+            status = "SUCCESS"
+            revert = "NO"
+            #event_listener = None
+            plugins_list = ["Cobalt","WebKitBrowser"]
+            plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
+            curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
+            if curr_plugins_status_dict != plugin_status_needed:
+        	revert = "YES"
+        	status = set_plugins_status(obj,plugin_status_needed)
+    	    cobal_launch_status = launch_cobalt(obj)
+    	    if status == "SUCCESS" and cobal_launch_status == "SUCCESS":
+        		time.sleep(10)
+        		print "\n Cobalt is launched \n "
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+                        tdkTestObj.addParameter("realpath",obj.realpath)
+                        tdkTestObj.addParameter("deviceIP",obj.IP)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+                        if ssh_param_dict != {} and expectedResult in result:
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            command = 'cat /opt/logs/wpeframework.log | grep "Cobalt" | grep "lts"'
+                            time.sleep(10)
+                            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                            tdkTestObj.addParameter("command",command)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            result = tdkTestObj.getResult()
+                            output = tdkTestObj.getResultDetails()
+                            if output != "EXCEPTION" and expectedResult in result:
+                                if "Cobalt/" in output:
+                                    index_value = output.split("Cobalt/")[1].index(" ")
+                                    cobalt_version = output.split("Cobalt/")[1][0:index_value]
+                                    if (cobalt_version.__contains__(current_cobalt_version)):
+                                        print "\n Cobalt version is the current version :{}  \n".format(cobalt_version)
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                    else:
+                                        print "\n Cobalt version is not  current version: {}\n".format(cobalt_version)
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    print "\n Cobalt version is not available\n"
+                                    tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command)
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            print "\n Cobalt has not been resumed successfully\n"
+                            tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Cobalt version is not available\n"
+                print "\n Error while launching the plugin\n"
                 tdkTestObj.setResultStatus("FAILURE")
-        else:
-            print "\n Error occurred during SSH, please check ssh details in configuration file\n"
-            tdkTestObj.setResultStatus("FAILURE")
     else:
         print "\n Please configure the SSH details in configuration file \n"
         tdkTestObj.setResultStatus("FAILURE")
-    obj.unloadModule("rdkv_performance");
+    obj.unloadModule("rdkv_performance")
 else:
-    obj.setLoadModuleStatus("FAILURE");
+    obj.setLoadModuleStatus("FAILURE")
     print "Failed to load module"
