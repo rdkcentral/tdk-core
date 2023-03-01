@@ -89,6 +89,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         if result == {} or result == [] or result == "":
             print "\n[INFO]: Received empty JSON response result"
             info["Test_Step_Status"] = "FAILURE"
+            if len(arg) and arg[0] == "exceptional_cases":
+                info["Test_Step_Status"] = "SUCCESS"
+                info["appStatus"] = "FALSE"
 
         # DeviceInfo Plugin Response result parser steps
         elif tag == "deviceinfo_get_system_info":
@@ -2716,10 +2719,10 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "xcast_check_result":
             info = checkAndGetAllResultInfo(result,result.get("success"))
 
-        elif tag == "xcast_check_api_version":
-            info["version"] = result.get("version")
+        elif tag == "xcast_check_version":
             success = str(result.get("success")).lower() == "true"
-            if success and result.get("version") == int(expectedValues[0]):
+            info["version"] = result.get("version")
+            if success and str(result.get("version")) == str(expectedValues[0]):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -2930,6 +2933,64 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # SecurityAgent Plugin Response result parser steps
+        elif tag == "securityagent_validate_token":
+            status = checkNonEmptyResultData(result)
+            info["valid"] = result.get("valid")
+            valid = result.get("valid")
+            if str(valid).lower() == str(expectedValues[0]).lower() and status == "TRUE":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        # LISA Plugin Response result parser steps
+        elif tag == "lisa_check_status":
+            info["Result"] = result
+            status = checkNonEmptyResultData(result)
+            if status == "TRUE" and result.isdigit():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "lisa_check_application_list":
+            status = checkNonEmptyResultData(result)
+            if not result:
+                appStatus = "FALSE"
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                appStatus = "FALSE"
+                for app in result.get("apps"):
+                    if str(app.get("id")).lower() == str(expectedValues[0]).lower():
+                        appName = app.get("installed")[0]
+                        if str(appName.get("appName")).lower() == str(expectedValues[0]).lower():
+                            appStatus = "TRUE"
+                            break;
+            info["appStatus"] = appStatus
+            if len(arg) > 2 and arg[1] == "check_app_exist":
+                if status == "TRUE" and appStatus == "TRUE":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            elif len(arg) > 2 and arg[1] == "check_app_not_exists":
+                if status == "TRUE" and appStatus == "TRUE":
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "SUCCESS"
+        elif tag == "lisa_check_error_message":
+            info = result
+            if len(arg) and arg[0] == "check_error_message":
+                status = checkNonEmptyResultData(result)
+                if status == "TRUE" and str(expectedValues[0]) in str(result.get("message")).lower() and str(result.get("success")).lower() == str(expectedValues[1]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                info = checkAndGetAllResultInfo(otherInfo)
+                error = otherInfo.get("error")
+                if str(expectedValues[0]) in str(otherInfo.get("message")).lower() and error.get("code") == int(expectedValues[1]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_state":
             if arg[0] == "check_status":
@@ -3178,10 +3239,16 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
         elif tag == "rdkshell_check_application_state":
             testStepResults = testStepResults[0].values()[0]
             clients = testStepResults[0].get("clients")
-            if arg[0] not in clients:
-                result = "TRUE"
+            if len(arg) and arg[0] == "check_app_not_exists":
+                if str(arg[1]).lower() in clients:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
             else:
-                result = "FALSE"
+                if arg[0] not in clients:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
 
         # XCast Plugin Response result parser steps
         elif tag == "xcast_get_xdial_status":
@@ -3243,6 +3310,20 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "TRUE"
             else:
                 result = "FALSE"
+
+        elif tag == "lisa_check_app_status":
+            testStepResults = testStepResults[0].values()[0]
+            appStatus = testStepResults[0].get("appStatus")
+            if len(arg) and arg[0] == "check_app_exists":
+                if appStatus == "TRUE":
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if appStatus == "TRUE":
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
 
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_check_device_pair_status":
@@ -4087,6 +4168,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = testStepResults[0].values()[0]
             info["defaultValue"] = testStepResults[0].get("defaultValue")
 
+        # Security Agent Plugin Response result parser steps
+        elif tag == "securityagent_get_token":
+            testStepResults = testStepResults[0].values()[0]
+            info["token"] = testStepResults[0].get("securityToken")
+
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_name":
             testStepResults = testStepResults[0].values()[0]
@@ -4823,6 +4909,57 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     imagePath = lines
                     break;
             info["imagepath"] = imagePath
+
+        elif tag == "securityagent_get_security_token":
+            command = "WPEFrameworkSecurityUtility |  cut -d '\"' -f 4"
+            output = executeCommand(execInfo, command)
+            print output
+            output = str(output).split("\n")[1]
+            output =  output.strip()
+            if len(arg) and arg[0] == "get_modified_token":
+                info["securityToken"] = output+'bsXs7xni0A'
+            else:    
+                info["securityToken"] = output
+
+        elif tag == "check_required_logs":
+            command = 'cat /opt/logs/wpeframework.log | grep -inr \"'+expectedValues[0]+'\"'
+            output = executeCommand(execInfo, command)
+            output = output.split('\n',1)[-1]
+            if str(expectedValues[0]).lower() in str(output).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_container_status":
+            container_status = "FAILURE"
+            command = 'DobbyTool list'
+            print "COMMAND : %s" %(command)
+            output = executeCommand(execInfo, command)
+            print output
+            result = output.splitlines()
+            if len(arg) and arg[0] == "check_empty_container":
+                container_status = "SUCCESS"
+                for line in result:
+                    if str(expectedValues[0]) in line.lower():
+                        container_status = "FAILURE"
+                        info["Test_Step_Message"] = expectedValues[0]+' container is running'
+                        info["Test_Step_Status"] =  "FAILURE"
+                        break;
+                print "container_status",container_status
+                if "SUCCESS" in container_status:
+                   info["Test_Step_Message"] = expectedValues[0]+' container is not running'
+                   info["Test_Step_Status"] =  "SUCCESS"
+            else:
+                container_status = "FAILURE"
+                for line in result:
+                   if str(expectedValues[0]) in line.lower() and str(expectedValues[1]).lower() in line.lower():
+                       container_status = "SUCCESS"
+                       info["Test_Step_Message"] = expectedValues[1]+' container is '+expectedValues[0]
+                       break;
+                print "container_status",container_status
+                if "FAILURE" in container_status:
+                   info["Test_Step_Message"] = expectedValues[1]+' container is not '+expectedValues[0]
+                   info["Test_Step_Status"] =  "FAILURE"
 
         elif tag == "Check_Environment_Variable_In_Service_File":
             command = 'grep -q '+str(expectedValues[0])+' /lib/systemd/system/wpeframework.service && echo 1 || echo 0'

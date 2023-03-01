@@ -1877,9 +1877,10 @@
         </method>
         <method name="UnRegister_Applications" api="unregisterApplications" type="method" desc="Unregisters an application to remove the specified applist from the XCast whitelist" >
             <params>
-               <param tag="applications" defaultValue="null"  />
+               <param tag="applications" defaultValue="null" type="list" />
             </params>
         </method>
+        <method name="Get_Protocol_Version" api="getProtocolVersion" type="method" desc="Gets the DIAL protocol version" />
     </plugin>
 
     <!-- LightningApp Plugin Information -->
@@ -2155,6 +2156,38 @@
         <method name="Request_Active_Source" api="requestActiveSource" type="method" desc="Requests the active source in the network"/>
         <event name="Event_On_Active_Source_Change" eventName="onActiveSourceChange" eventId="client.events.1" type="event" desc="Triggered with the active source device changes" />
         <event name="Event_Report_Cec_Enabled" eventName="reportCecEnabledEvent" eventId="client.events.1" type="event" desc="Triggered when the HDMI-CEC is enabled" />
+    </plugin>
+    
+    <!-- LISA Plugin Information -->
+    <plugin pluginName="LISA" serviceName="LISA" serviceVersion="1">
+        <method name="Install_Application" api="install" type="method" desc="Installs the specified application">
+            <params>
+                <param tag="id" defaultValue="null"/>
+                <param tag="url" defaultValue="null"/>
+                <param tag="version" defaultValue="null"/>
+                <param tag="appName" defaultValue="null"/>
+                <param tag="type" defaultValue="null"/>
+                <param tag="category" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Uninstall_Application" api="uninstall" type="method" desc="Uninstalls the specified application">
+            <params>
+                <param tag="id" defaultValue="null" />
+                <param tag="version" defaultValue="null"/>
+                <param tag="type" defaultValue="null"/>
+                <param tag="uninstallType" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Get_List" api="getList" type="method" desc="Gets the installed application list"/>
+    </plugin>
+    
+    <!-- SecurityAgent Plugin Information -->
+    <plugin pluginName="SecurityAgent" serviceName="SecurityAgent" serviceVersion="1">
+       <method name="SecurityAgent_Validate" api="validate" type="method" desc="Validates the token whether it is valid and properly signed">
+         <params>
+                <param tag="token" defaultValue="null" />
+            </params>
+        </method>
     </plugin>
 </thunderPlugins>
 
