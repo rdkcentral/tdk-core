@@ -59,3 +59,15 @@ video_src_url_ac3 = test_streams_base_path + "DASH_H264_AC3/atfms_291_dash_tdk_a
 
 #EC3 Codec Video URL
 video_src_url_ec3 = test_streams_base_path + "DASH_H264_EC3/atfms_291_dash_tdk_avc_eac3_fmp4.mpd"
+
+video_src_url_mp4_2160p = test_streams_base_path + "TDK_Asset_Sunrise_2160p.mp4"
+video_src_url_mp4_1080p = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4_1080p.mp4"
+video_src_url_mp4_720p = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4_720p.mp4"
+
+video_src_url_mp4_2160p_hevc = test_streams_base_path + "DASH_HEVC_AAC_4K_Only/atfms_291_dash_tdk_hevc_aac_fmp4_4konly_4K.mp4"
+video_src_url_mp4_1080p_hevc = test_streams_base_path + "DASH_HEVC_AAC/atfms_291_dash_tdk_hevc_aac_fmp4_1080p.mp4"
+video_src_url_mp4_720p_hevc = test_streams_base_path + "DASH_HEVC_AAC/atfms_291_dash_tdk_hevc_aac_fmp4_720p.mp4"
+
+video_src_url_mp4_2160p_av1 = test_streams_base_path + "TDK_Asset_Waterfall_4K_AV1.mp4"
+video_src_url_mp4_1080p_av1 = test_streams_base_path + "Waterfall_DASH_AV1_AAC/1080p.mp4"
+video_src_url_mp4_720p_av1 = test_streams_base_path + "Waterfall_DASH_AV1_AAC/720p.mp4"

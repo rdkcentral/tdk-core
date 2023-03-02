@@ -124,6 +124,11 @@ def ExecuteTest(obj,streamType,test,command):
     elif "rialto_play_pause" in test:
         description = "Perform Play-Pause operation for %s codec"%(streamType)
         test="Play Pause Operation Test"
+    elif "rialto_resolution" in test:
+        description = "Verify video height and width for the rendered %s video"%(streamType)
+        test="Resolution Verification Test"
+        resolution=streamType.split("_")[1]
+        command = command + " checkResolution=%s"%(resolution)
     print "\n#==============================================================================#"
     print "TEST CASE NAME   : %s %s"%(streamType,test)
     print "TEST CASE ID  : RIALTO_",testCase
@@ -168,8 +173,8 @@ def getConfigValue (tdklibObj, configKey):
         configValue = ""
         deviceDetails = tdklibObj.getDeviceDetails()
         deviceType = tdklibObj.getDeviceBoxType()
-        #Construct the RialtoModuleConfig path in TM
-        configPath = tdklibObj.realpath+ "/" + "fileStore/RialtoModuleConfig"
+        #Construct the tdkvRDKServiceConfig path in TM
+        configPath = tdklibObj.realpath+ "/" + "fileStore/tdkvRDKServiceConfig"
         #Construct the device configuration file path
         #The device configuration file can be either <device-name>.config or <box-type>.config, so we are checking for both
         deviceNameConfigFile = configPath + "/" + deviceDetails["devicename"] + ".config"
@@ -189,11 +194,11 @@ def getConfigValue (tdklibObj, configKey):
             #Retrieve the value of config key from device config file
             configValue = configParser.get('device.config', configKey)
             if True:
-                ignore_warnings = configParser.get('device.config',"IGNORE_WARNINGS")
+                ignore_warnings = configParser.get('device.config',"RIALTO_IGNORE_WARNINGS")
             else:
                 ignore_warnings = "no"
             try:
-                check_fps = configParser.get('device.config',"CHECK_FPS")
+                check_fps = configParser.get('device.config',"RIALTO_CHECK_FPS")
             except:
                 check_fps = "no"
         else:
@@ -207,7 +212,7 @@ def getConfigValue (tdklibObj, configKey):
 #Function to construct the mediapipelinetest command to be executed in the DUT
 def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     #First construct the command with mandatory arguments
-    command = "mediapipelinetests " + testName + " " + testUrl
+    command = "tdk_mediapipelinetests " + testName + " " + testUrl
     #Based on the test, the arguments can vary, parse through the variabled arguments
     #and add the available variables
     for name, value in arguments.items ():

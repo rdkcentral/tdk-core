@@ -111,6 +111,7 @@ sysUtilObj.configureTestCase(ip,port,'Rialto_Gstreamer_Playback_Test')
 checkAVStatus = "no"
 timeoutInSeconds = "10"
 test_urls={}
+resolution_test_urls={}
 test_results={}
 
 #Load the systemutil library
@@ -135,7 +136,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
     totalcases=0
     #Codecs supported by DUT
-    actual_result, supported_codecs = getConfigValue (sysUtilObj, 'SUPPORTED_CODECS')
+    actual_result, supported_codecs = getConfigValue (sysUtilObj, 'RIALTO_SUPPORTED_CODECS')
     if "EAC3" in supported_codecs:
         test_urls["EAC3"]=(RialtoMediaConfig.video_src_url_ec3)
         totalcases=totalcases+1
@@ -155,17 +156,37 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     test_urls["H264"]=(RialtoMediaConfig.video_src_url_dash_h264)
     test_urls["AC3"]=(RialtoMediaConfig.video_src_url_ac3)
     totalcases=totalcases+3
+    #All the above urls will be used for Generic Playback and Play Pause Operation test
+    totalcases=totalcases*2
+
+    #Resolution Check Test
+    actual_result, UHD_Supported = getConfigValue (sysUtilObj, 'RIALTO_UHD_SUPPORTED')
+    resolution_test = "test_rialto_resolution"
+    resolution_test_urls["H264_1080p"]=(RialtoMediaConfig.video_src_url_mp4_1080p)
+    resolution_test_urls["H264_720p"]=(RialtoMediaConfig.video_src_url_mp4_720p)
+    totalcases=totalcases+2
+    if "HEVC" in supported_codecs:
+        resolution_test_urls["HEVC_1080p"]=(RialtoMediaConfig.video_src_url_mp4_1080p_hevc)
+        resolution_test_urls["HEVC_720p"]=(RialtoMediaConfig.video_src_url_mp4_720p_hevc)
+        totalcases=totalcases+2
+    if "yes" in UHD_Supported:
+        resolution_test_urls["H264_4K"]=(RialtoMediaConfig.video_src_url_mp4_2160p)
+        totalcases=totalcases+1
+        if "HEVC" in supported_codecs:
+            resolution_test_urls["HEVC_2160p"]=(RialtoMediaConfig.video_src_url_mp4_2160p_hevc)
+            totalcases=totalcases+1
 
     print "PLUGIN TEST CASES: ",totalcases
 
     #Retrieve the value of configuration parameter 'MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
-    actualresult, timeoutConfigValue = getConfigValue (sysUtilObj, 'MEDIAPLAYBACK_TIMEOUT')
+    actualresult, timeoutConfigValue = getConfigValue (sysUtilObj, 'RIALTO_MEDIAPLAYBACK_TIMEOUT')
 
     #If the value of MEDIAPLAYBACK_TIMEOUT is retrieved correctly and its value is not empty, timeout value should be passed to the test application
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
+    #Loop for Generic Playabck Test and Play Pause Operation test
     for test in tests:
         url_iterator = 0
         for test_url in test_urls:
@@ -175,6 +196,14 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
             ExecuteTest(sysUtilObj,test_urls.keys()[url_iterator],test,command)
             url_iterator=url_iterator+1
+
+    #Loop for Resolution test
+    url_iterator = 0
+    for test_url in resolution_test_urls:
+        command = getMediaPipelineTestCommand (resolution_test,resolution_test_urls[test_url],checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
+
+        ExecuteTest(sysUtilObj,resolution_test_urls.keys()[url_iterator],resolution_test,command)
+        url_iterator=url_iterator+1
 
     ExecutePostRequisite(sysUtilObj)
     #Unload the modules
