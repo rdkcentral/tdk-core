@@ -33,6 +33,7 @@
   <skip>false</skip>
   <box_types>
     <box_type>IPClient-3</box_type>
+    <box_type>Video_Accelerator</box_type>
     <box_type>IPClient-4</box_type>
   </box_types>
   <rdk_versions>

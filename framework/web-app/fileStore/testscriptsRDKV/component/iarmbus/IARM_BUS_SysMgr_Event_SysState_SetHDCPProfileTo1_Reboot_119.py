@@ -35,6 +35,7 @@ Test case Id - CT_IARMBUS_119</synopsis>
   <box_types>
     <box_type>RPI-HYB</box_type>
     <box_type>IPClient-3</box_type>
+    <box_type>Video_Accelerator</box_type>
     <box_type>Hybrid-1</box_type>
     <box_type>Emulator-HYB</box_type>
     <box_type>Terminal-RNG</box_type>

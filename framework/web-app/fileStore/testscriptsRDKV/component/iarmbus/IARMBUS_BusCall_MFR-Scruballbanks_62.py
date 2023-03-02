@@ -34,6 +34,7 @@ Test case ID - CT_IARMBUS_62</synopsis>
   <skip>true</skip>
   <box_types>
     <box_type>IPClient-3</box_type>
+    <box_type>Video_Accelerator</box_type>
     <box_type>Terminal-RNG</box_type>
     <box_type>IPClient-4</box_type>
     <box_type>Emulator-Client</box_type>

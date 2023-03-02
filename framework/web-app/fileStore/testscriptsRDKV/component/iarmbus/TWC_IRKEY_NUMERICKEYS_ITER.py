@@ -79,6 +79,7 @@ IRKEY_NUMERICKEYS_ITER_TC_30</synopsis>
     <box_type>RPI-Client</box_type>
     <box_type>RPI-HYB</box_type>
     <box_type>IPClient-3</box_type>
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
     <box_type>Hybrid-1</box_type>
     <!--  -->
