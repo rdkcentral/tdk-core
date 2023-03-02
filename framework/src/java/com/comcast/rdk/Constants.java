@@ -283,7 +283,7 @@ public final class Constants
 	private static final String  RDKV_PROFILING="rdkv_profiling";
 	private static final String  RDKV_MEDIAVALIDATION="rdkv_mediavalidation";
 	private static final String  CURRENT_FW_VERSION="currentFWVersion";
-	private static final String  RDKV_DOBBY="rdkv_dobby";
+	private static final String  RDKV_DOBBY="containerization";
 	private static final String  RDKV_APPARMOR="rdkv_apparmor";
 	private static final String  RDKV_BASIC_SANITY="rdkv_basic_sanity";
 	
