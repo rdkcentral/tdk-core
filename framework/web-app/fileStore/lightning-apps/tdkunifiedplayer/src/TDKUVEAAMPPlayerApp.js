@@ -245,10 +245,6 @@ export default class App extends Lightning.Component {
       this.actualTextIndex = this.getTextTrack()
       logMsg("Text Tracks: "  + this.textLanguages)
       logMsg("Current Text Index: " + this.actualTextIndex)
-      if(this.actualTextIndex < 0){
-          this.errorFlag = 1
-          logMsg("[ERROR]: Text Track index obtained is invalid")
-      }
       if(this.textLanguages.length){
           logMsg("Current Text Language: " + this.textLanguages[this.actualTextIndex])
           this.textIndexes.splice(this.actualTextIndex,1)
