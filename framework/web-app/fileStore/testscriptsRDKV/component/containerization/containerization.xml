@@ -1,7 +1,7 @@
 <!--
  If not stated otherwise in this file or this component's Licenses.txt file the
  following copyright and licenses apply:
- Copyright 2016 RDK Management
+ Copyright 2023 RDK Management
  Licensed under the Apache License, Version 2.0 (the "License");
  you may not use this file except in compliance with the License.
  You may obtain a copy of the License at
@@ -12,14 +12,74 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <module name='containerization' testGroup='Component'>
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <module name="containerization" testGroup="Component">
     <primitiveTests>
-      <primitiveTest name='Containerization_Donothing' id='' version='1'>
-        <function>Containerization_Do_Nothing</function>
-        <parameters />
+      <primitiveTest name="containerization_obtainCredentials" id="" version="1">
+        <function>containerization_obtainCredentials</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="containerization_cloneDobby" id=" " version="1">
+        <function>containerization_cloneDobby</function>
+        <parameters>
+          <parameter name="basePath" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_setPreRequisites" id=" " version="1">
+        <function>containerization_setPreRequisites</function>
+        <parameters>
+          <parameter name="datamodel" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_setPostRequisites" id=" " version="1">
+        <function>containerization_setPostRequisites</function>
+        <parameters>
+          <parameter name="datamodel" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_getDeviceConfig" id=" " version="1">
+        <function>containerization_getDeviceConfig</function>
+        <parameters>
+          <parameter name="basePath" value=""/>
+          <parameter name="configKey" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_launchApplication" id=" " version="1">
+        <function>containerization_launchApplication</function>
+        <parameters>
+          <parameter name="launch" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_checkContainerRunningState" id=" " version="2">
+        <function>containerization_checkContainerRunningState</function>
+        <parameters>
+          <parameter name="callsign" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_executeDobbyTest" id=" " version="1">
+        <function>containerization_executeDobbyTest</function>
+        <parameters>
+          <parameter name="containername" value=""/>
+          <parameter name="testCases" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_checkDevLoopPartition" id="" version="1">
+        <function>containerization_checkDevLoopPartition</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="containerization_checkDobbyVersion" id=" " version="1">
+        <function>containerization_checkDobbyVersion</function>
+        <parameters>
+          <parameter name="testID" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_executeInDUT" id="" version="1">
+	<function>containerization_executeInDUT</function>
+	<parameters>
+          <parameter name="sshMethod" value=""/>
+          <parameter name="credentials" value=""/>
+          <parameter name="command" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>

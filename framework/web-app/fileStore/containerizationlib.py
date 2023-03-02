@@ -16,7 +16,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #########################################################################
-
 import json
 import sys
 import re
@@ -31,7 +30,6 @@ import inspect
 import ConfigParser
 from time import sleep
 import pexpect
-
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------
@@ -53,7 +51,6 @@ def init_module (libobj, port, deviceInfo):
     except Exception as e:
        print "\nException Occurred while getting MAC \n"
        print e
-
 #-------------------------------------------------------------------
 # EXECUTE A COMMAND IN DUT SHELL AND GET THE OUTPUT
 # Description  : Execute a command in DUT through ssh_and_execute() from SSHUtility library and get the output
@@ -65,7 +62,7 @@ def init_module (libobj, port, deviceInfo):
 #                3. command - string to specify the command to be executed in DUT
 # Return Value : console output of the command executed on DUT
 #-------------------------------------------------------------------
-def rdkvdobby_executeInDUT (sshMethod, credentials, command):
+def containerization_executeInDUT (sshMethod, credentials, command):
     output = ""
     if sshMethod == "directSSH":
         credentialsList = credentials.split(',')
@@ -82,14 +79,13 @@ def rdkvdobby_executeInDUT (sshMethod, credentials, command):
         print "Exception occured during ssh session"
         print e
     return output
-
 #---------------------------------------------------------------
 # EXECUTE A COMMAND IN TM AND GET THE OUTPUT
 # Description  : Execute a command in the Test Manager and get the output back
 # Parameters   : command - a string to specify the
 # Return Value : console output of the 'command' in case of successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-def rdkvdobby_executeInTM (command):
+def containerization_executeInTM (command):
     outdata = ""
     try:
         if "" == command:
@@ -102,8 +98,6 @@ def rdkvdobby_executeInTM (command):
         outdata = "FAILURE"
         print "#TDK_@error-ERROR : Unable to execute %s successfully" %(command)
     return outdata
-
-
 #----------------------------------------------------------------------
 # GET DEVICE CONFIGURATION FROM THE DEVICE CONFIG FILE
 # Description  : Read the value of device configuration from the <device>.config file
@@ -111,7 +105,7 @@ def rdkvdobby_executeInTM (command):
 #                configKey - a string to specify the configuration whose value needs to be retrieved from the <device>.config file
 # Return Value : value of device configuration or error log in case of failure
 #----------------------------------------------------------------------
-def rdkvdobby_getDeviceConfig (basePath, configKey):
+def containerization_getDeviceConfig (basePath, configKey):
     deviceConfigFile=""
     configValue = ""
     output = ""
@@ -119,7 +113,7 @@ def rdkvdobby_getDeviceConfig (basePath, configKey):
     deviceNameConfigFile = configPath + "/" + deviceName + ".config"
     deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
     # Check whether device / platform config files required for
-    # executing the test are present
+    # executing the test are present  
     if os.path.exists (deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
     elif os.path.exists (deviceTypeConfigFile) == True:
@@ -142,20 +136,18 @@ def rdkvdobby_getDeviceConfig (basePath, configKey):
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
         print output
     return output;
-
-
 #------------------------------------------------------------------
 # REBOOT THE DEVICE
 #------------------------------------------------------------------
-def rdkvdobby_rebootDevice(waitTime):
-    status = rdkvdobby_getPluginStatus("org.rdk.System")
+def containerization_rebootDevice(waitTime):
+    status = containerization_getPluginStatus("org.rdk.System")
     timeout = time.time() + 30*5
     deviceStatus = "DOWN"
     if status != "activated":
         print "[INFO] Activating System plugin for rebooting the device"
         params = '{"callsign":"org.rdk.System"}'
-        status = rdkvdobby_setValue("Controller.1.activate",params)
-        status = rdkvdobby_getPluginStatus("org.rdk.System")
+        status = containerization_setValue("Controller.1.activate",params)
+        status = containerization_getPluginStatus("org.rdk.System")
     if status == "activated":
         print "[INFO] System plugin is activated"
         data = '"method": "org.rdk.System.1.reboot","params": {"rebootReason": "TDK_TESTING"}'
@@ -164,7 +156,7 @@ def rdkvdobby_rebootDevice(waitTime):
             print "\n[INFO] Waiting for the device to come up..."
             time.sleep(waitTime)
             while True:
-                status = rdkvdobby_getTestDeviceStatus()
+                status = containerization_getTestDeviceStatus()
                 if status == "FREE":
                     deviceStatus = "UP"
                     break;
@@ -183,12 +175,11 @@ def rdkvdobby_rebootDevice(waitTime):
     else:
         print "FAILURE: Unable to activate System plugin"
         return "EXCEPTION OCCURED"
-   
 
 #------------------------------------------------------------------
 # Check Device Status
 #------------------------------------------------------------------
-def rdkvdobby_getTestDeviceStatus():
+def containerization_getTestDeviceStatus():
     try:
         data = '{"jsonrpc":"2.0","id":"2","method": "Controller.1.status@Controller"}'
         headers = {'content-type': 'text/plain;'}
@@ -200,9 +191,7 @@ def rdkvdobby_getTestDeviceStatus():
         else:
             return "NOT_FOUND"
     except Exception as e:
-        return "NOT_FOUND"    
-
-
+        return "NOT_FOUND"
 #---------------------------------------------------------------
 # EXECUTE CURL REQUESTS
 # Description  : Execute curl request in DUT
@@ -224,28 +213,24 @@ def execute_step(Data):
         print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
         print "Error message received :\n",e;
         return "EXCEPTION OCCURRED"
-
-
 #-------------------------------------------------------------------
 # GET THE VALUE OF A METHOD
 #-------------------------------------------------------------------
-def rdkvdobby_getValue(method):
+def containerization_getValue(method):
     data = '"method": "'+method+'"'
     result = execute_step(data)
     return result
-
 #------------------------------------------------------------------
 # SET VALUE FOR A METHOD
 #------------------------------------------------------------------
-def rdkvdobby_setValue(method,value):
+def containerization_setValue(method,value):
     data = '"method": "'+method+'","params": '+value
     result = execute_step(data)
     return result
-
 #-----------------------------------------------------------------
 # GET PLUGIN STATUS
 #-----------------------------------------------------------------
-def rdkvdobby_getPluginStatus(plugin):
+def containerization_getPluginStatus(plugin):
     data = '"method": "Controller.1.status@'+plugin+'"'
     result = execute_step(data)
     if result != None and result != "EXCEPTION OCCURRED":
@@ -254,14 +239,12 @@ def rdkvdobby_getPluginStatus(plugin):
         return PluginStatus
     else:
         return result;
-
 #---------------------------------------------------------------
 # GET THE REQUIRED CONFIGURATIONS TO SSH INTO THE DUT
 # Description  : To get the required configurations to SSH into the DUT
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_obtainCredentials():
+def containerization_obtainCredentials():
     config_status = "SUCCESS"
     result = "SUCCESS"
     print "[INFO] Retrieving Configuration values from config file......."
@@ -272,16 +255,16 @@ def rdkvdobby_obtainCredentials():
     global ssh_method
     #Get each configuration from device config file
     for configKey in configKeyList:
-        rdkvdobby_getDeviceConfig(libObj.realpath,configKey)
-        configValues[configKey] = rdkvdobby_getDeviceConfig(libObj.realpath,configKey)
+        containerization_getDeviceConfig(libObj.realpath,configKey)
+        configValues[configKey] = containerization_getDeviceConfig(libObj.realpath,configKey)
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
             print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
         else:
             print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
             if configValues[configKey] == "":
                 print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
-            result = "FAILURE"
-            break
+                result = "FAILURE"
+                break
     if "FAILURE" != result:
         if "directSSH" == configValues["SSH_METHOD"]:
             ssh_method = configValues["SSH_METHOD"]
@@ -293,12 +276,9 @@ def rdkvdobby_obtainCredentials():
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             config_status = "FAILURE"
-
     else:
         config_status = "FAILURE"
     return config_status
-
-
 #---------------------------------------------------------------
 # COPY THE DOBBY SECURITY TOOL IN THE DUT
 # Description  : copy the dobby security tool in the DUT
@@ -308,7 +288,7 @@ def rdkvdobby_obtainCredentials():
 #                4.destPath - destination path to copy the dobby security tool
 # Return Value : console output of the 'command' in case of successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-def rdkvdobby_copyToolToDUT(fileName,hostname,username,password,destPath):
+def containerization_copyToolToDUT(fileName,hostname,username,password,destPath):
     try:
         outdata = "SUCCESS"
         command_to_scp = 'scp -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ' + fileName + ' ' + username + '@' + hostname + ':' + destPath
@@ -323,53 +303,48 @@ def rdkvdobby_copyToolToDUT(fileName,hostname,username,password,destPath):
         print e
         outdata = "FAILURE"
     return outdata
-
 #---------------------------------------------------------------
 # CLONE THE DOBBY SECURITY TOOL IN THE TM AND COPY THE TAR FILE TO DUT
 # Description  : clone the dobby security tool in the TM and copy the security tool in the DUT
 # Parameters   : basePath - basepath, To clone the dobby security tool
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_cloneDobby(basePath):
+def containerization_cloneDobby(basePath):
     clone_dobby_status = "SUCCESS"
     #Obatin credentials for DUT
-    config_status = rdkvdobby_obtainCredentials()
+    config_status = containerization_obtainCredentials()
     if "FAILURE" not in config_status:
         #Check if dobby test tool is downloaded  in TM
         command = '[ -d '+basePath+'/fileStore/dobby-security-tool ] && echo 1 || echo 0'
-        output = rdkvdobby_executeInTM(command)
+        output = containerization_executeInTM(command)
         if int(output) == 0 or "FAILURE" in output:
             #gitclone and obtain dobby security directory in fileStore
             command = "cd " + basePath + "/fileStore;git clone https://github.com/rdkcentral/dobby-security-tool.git"
-            output = rdkvdobby_executeInTM(command)
+            output = containerization_executeInTM(command)
             sleep(2);
             command = '[ -d '+basePath+'/fileStore/dobby-security-tool ] && echo 1 || echo 0'
-            output = rdkvdobby_executeInTM(command)
-
+            output = containerization_executeInTM(command)
         #if Dobby  is successfully downloaded in fileStore
         if "FAILURE" not in output and int(output) == 1:
             print "SUCCESS: Dobby is installed in TM\n"
-
             #Create tar ball to run in DUT
             #Command = remove existing result files ; make directory for dobby result files ; tar the whole dobby directory ; check whether tar file is created by ls command
             print "[INFO] Creating tar ball to run in DUT"
             command = "rm -rf " + basePath + "/fileStore/dobby-security-tool/files ; mkdir -p " + basePath + "/fileStore/dobby-security-tool/files; cd " + basePath + "/fileStore/;tar czfP dobby-security-tool/files/dobby-security-tool-remote.tar.gz --exclude=/dobby-security-tool/files/dobby-security-tool-remote.tar.gz dobby-security-tool; ls dobby-security-tool/files"
-            result = rdkvdobby_executeInTM(command)
+            result = containerization_executeInTM(command)
             if "FAILURE" not in result and "dobby-security-tool-remote.tar.gz" in result:
                 print "SUCCESS: Tar ball was created successfully\n"
-
                 #Copy dobby tool tar ball into DUT
                 fileToTransfer = basePath + "/fileStore/dobby-security-tool/files/dobby-security-tool-remote.tar.gz"
                 destPath = "/home/root"
-                result = rdkvdobby_copyToolToDUT(fileToTransfer,deviceIP,user_name,password,destPath)
+                result = containerization_copyToolToDUT(fileToTransfer,deviceIP,user_name,password,destPath)
                 if "FAILURE" in result:
                     print "FAILURE: Could not copy the files to the DUT"
                     clone_dobby_status = "FAILURE"
                 else:
                     credentials = deviceIP + ',' + user_name + ',' + password
                     command = '[ -f /home/root/dobby-security-tool-remote.tar.gz ] && echo 1 || echo 0'
-                    result = rdkvdobby_executeInDUT(ssh_method,credentials,command)
+                    result = containerization_executeInDUT(ssh_method,credentials,command)
             else:
                 print "FAILURE: Error while creating the Tar ball"
                 clone_dobby_status = "FAILURE"
@@ -378,13 +353,12 @@ def rdkvdobby_cloneDobby(basePath):
                 clone_dobby_status = "FAILURE"
             elif int(str(result).split("\n")[1]) == 1:
                 print "SUCCESS: Dobby security tool tar ball has been copied to DUT in as /home/root/dobby-security-tool-remote.tar.gz successfully\n"
-
                 #Untar the dobby tar ball
                 #Command = untar dobby tar ball;
                 print "\n[INFO] Untaring Dobby security tool in DUT...."
                 command = "cd /home/root; tar xzf dobby-security-tool-remote.tar.gz; [ -d /home/root/dobby-security-tool ] && echo 1 || echo 0"
                 #SSH and execute command
-                result = rdkvdobby_executeInDUT(ssh_method,credentials,command)
+                result = containerization_executeInDUT(ssh_method,credentials,command)
                 if int(str(result).split("\n")[1]) == 1:
                     print "SUCCESS: Dobby test tool moved to DUT"
                 else:
@@ -398,236 +372,432 @@ def rdkvdobby_cloneDobby(basePath):
             clone_dobby_status = "FAILURE"
     else:
         clone_dobby_status = "FAILURE"
-
     return clone_dobby_status
-
 #---------------------------------------------------------------
 # ENABLE THE REQUIRED DATA MODEL IN THE DUT
 # Description  : To enable the required data model in the DUT
-# Parameters   : datamodel - Data model which needs to be enabled
+# Parameters   : datamodel - Data model list which needs to be enabled
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_setPreRequisites(datamodel):
+def containerization_setPreRequisites(datamodel):
     pre_requisite_status = "SUCCESS"
-    status = rdkvdobby_obtainCredentials()
+    rebootFlag = 0
+    status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
-        command =  'tr181 '+datamodel
-        print "COMMAND : %s" %(command)
-        output = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-        if "FAILURE" not in output:
-            output = str(output).split("\n")[1]
-            if str(output).strip() == "true":
-                print 'SUCCESS: The '+datamodel+' parameter is already enabled'
-            elif str(output).strip() == "false" or str(output).strip() == "":
-                command =  'tr181 -d -s -t boolean -v true '+datamodel
-                print "COMMAND : %s" %(command)
-                enableStatus = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-                enableStatus = enableStatus.strip()
-                if "set operation success" in enableStatus.lower():
-                    print 'SUCCESS: Successfully set the '+datamodel+' parameter'
-                else:
-                    print 'FAILURE: Could not able to set the '+datamodel+' parameter'
-                    pre_requisite_status = "FAILURE"
-                print '[INFO] Rebooting the Device................'
-                status = rdkvdobby_rebootDevice(60)
-                if "SUCCESS" in status:
-                    command =  'tr181 '+datamodel
+        for datamodels in datamodel:
+            command =  'tr181 -d '+str(datamodels)
+            print "COMMAND : %s" %(command)
+            output = containerization_executeInDUT(ssh_method,credentials,command)
+            if "FAILURE" not in output:
+                output = str(output).split("\n")[1]
+                if "true" in output.lower():
+                    print 'SUCCESS: The '+datamodels+' parameter is already enabled'
+                elif "false" in output.lower() or "empty" in output.lower():
+                    command =  'tr181 -d -s -t boolean -v true '+datamodels
                     print "COMMAND : %s" %(command)
-                    enableStatus = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-                    enableStatus = str(enableStatus).split("\n")[1]
-                    if enableStatus.strip() == "true":
-                        print 'SUCCESS: Successfully enabled the '+datamodel+' parameter'
+                    enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
+                    enableStatus = enableStatus.strip()
+                    if "set operation success" in enableStatus.lower():
+                        rebootFlag = 1
+                        print 'SUCCESS: Successfully set the '+datamodels+' parameter'
                     else:
-                        print 'FAILURE: '+datamodel+' parameter not enabled'
+                        print 'FAILURE: Could not able to set the '+datamodels+' parameter'
                         pre_requisite_status = "FAILURE"
                 else:
-                    print 'FAILURE: Error while rebooting the device'
+                    print 'FAILURE: Failed to retrieve '+datamodels+' enabled status'
                     pre_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Failed to retrieve '+datamodel+' enabled status'
+                print 'FAILURE: Error while executing the command'
                 pre_requisite_status = "FAILURE"
-        else:
-            print 'FAILURE: Error while executing the command'
-            pre_requisite_status = "FAILURE"
+
+
+        if "FAILURE" not in pre_requisite_status and rebootFlag == 1:
+            print '[INFO] Rebooting the Device................'
+            status = containerization_rebootDevice(60)
+            if "SUCCESS" in status:
+                for datamodels in datamodel:
+                    command =  'tr181 -d '+datamodels
+                    print "COMMAND : %s" %(command)
+                    enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
+                    enableStatus = str(enableStatus).split("\n")[1]
+                    if "true" in enableStatus.lower():
+                        print 'SUCCESS: Successfully enabled the '+datamodels+' parameter'
+                    else:
+                        print 'FAILURE: '+datamodels+' parameter not enabled'
+                        pre_requisite_status = "FAILURE"
+            else:
+                print 'FAILURE: Error while rebooting the device'
+                pre_requisite_status = "FAILURE"
+
     else:
         print 'FAILURE: Failed to retrieve required configurations'
         pre_requisite_status = "FAILURE"
-
     return pre_requisite_status
 
 #---------------------------------------------------------------
 # LAUNCH THE REQUIRED APPLICATION IN THE DUT USING RDKSHELL PLUGIN
 # Description  : To launch the required application
-# Parameters   : 1.callsign - The application callsign
-#                2.uri      - The URI of the application
+# Parameters   : launch - The callsign and URI of the application
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_launchApplication(callsign,uri):
+def containerization_launchApplication(launch):
      launch_status = "SUCCESS"
-     state = rdkvdobby_getPluginStatus("org.rdk.RDKShell")
+     result=[]
+     state = containerization_getPluginStatus("org.rdk.RDKShell")
      if state == "deactivated":
          print "[INFO] RDKShell plugin is deactivated"
          print "[INFO] Activating RDKShell plugin"
          params = '{"callsign":"org.rdk.RDKShell"}'
-         status = rdkvdobby_setValue("Controller.1.activate",params)
-         state = rdkvdobby_getPluginStatus("org.rdk.RDKShell")
+         status = containerization_setValue("Controller.1.activate",params)
+         state = containerization_getPluginStatus("org.rdk.RDKShell")
      if state == "activated":
          print 'SUCCESS: RDKShell Plugin in Activated State'
-         params = '{"callsign": "'+callsign+'", "type":"'+callsign+'", "uri":"'+uri+'","visible":true}'
-         status = rdkvdobby_setValue("org.rdk.RDKShell.1.launch",params)
-         if "EXCEPTION OCCURRED" not in status:
-             status = json.dumps(status)
-             status = json.loads(status)
-             if str(status.get("launchType")) == "resume" or str(status.get("launchType")) == "activate" and  str(status.get("success")) == "True":
-                 print 'SUCCESS: Successfully Launched the '+callsign+' Application'
-             else:
-                 launch_status = "FAILURE"
-                 print 'FAILURE: Issue Launching the '+callsign+' Application'
+         launch = launch.split(",")
+         for test in launch:
+                callsign,uri=test.split("-")
+                params = '{"callsign": "'+callsign+'","type":"'+callsign+'", "uri":"'+uri+'","visible":true}'
+                status = containerization_setValue("org.rdk.RDKShell.1.launch",params)
+                if "EXCEPTION OCCURRED" not in status:
+                        status = json.dumps(status)
+                        status = json.loads(status)
+                        if str(status.get("launchType")) == "resume" or str(status.get("launchType")) == "activate" and  str(status.get("success")) == "True":
+                                print 'SUCCESS: Successfully Launched the '+callsign+' Application'
+                        else:
+                                launch_status = "FAILURE"
+                                print 'FAILURE: Issue Launching the '+callsign+' Application'
+                else:
+                        launch_status = "FAILURE"
+                        print 'FAILURE: Issue Launching the '+callsign+' Application'
+
+                result.append(launch_status)
+
+         if "FAILURE" not in result:
+            launch_status = "SUCCESS"
+            return launch_status
          else:
-             launch_status = "FAILURE"
-             print 'FAILURE: Issue Launching the '+callsign+' Application'       
+            launch_status = "FAILURE"
+            return launch_status
      else:
           launch_status = "FAILURE"
           print "FAILURE: RDKShell is not in activated state"
      return launch_status
-
 #---------------------------------------------------------------
 # CHECK REQUIRED CONTAINER IS RUNNING IN DUT
 # Description  : To check the required container is running in the DUT
-# Parameters   : callsign - container name 
+# Parameters   : callsign - container name
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_checkContainerRunningState(callsign):
+def containerization_checkContainerRunningState(callsign):
     container_status = "SUCCESS"
-    appstate = 0
-    status = rdkvdobby_obtainCredentials()
+    result=[]
+    status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
         command =  'DobbyTool list'
         print "COMMAND : %s" %(command)
-        output = rdkvdobby_executeInDUT(ssh_method,credentials,command)
+        output = containerization_executeInDUT(ssh_method,credentials,command)
         print output
-        result = output.splitlines()
-        for line in result:
-            if "running" in line.lower() and callsign.lower() in line.lower():
-                appstate = 1
-                print 'SUCCESS: '+callsign+' container is running'
-                break;
-        if appstate == 0:
-            print 'FAILURE: '+callsign+' container is not running'
-            container_status = "FAILURE"
+        callsign = callsign.split(",")
+        for container in callsign:
+                container,uri = container.split("-")
+                if "running" in output.lower() and container.lower() in output.lower():
+                    print 'SUCCESS: '+container+' container is running'
+                else:
+                    print 'FAILURE: '+container+' container is not running'
+                    container_status = "FAILURE"
+
     else:
+        print 'FAILURE: Failed to retrieve the required configuration'
         container_status = "FAILURE"
     return container_status
-
-
 #---------------------------------------------------------------
 # DISABLE THE REQUIRED DATA MODEL IN THE DUT
 # Description  : To disable the required data model in the DUT
-# Parameters   : datamodel - Data model which needs to be disabled
+# Parameters   : datamodel - Data model list which needs to be disabled
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
 
-def rdkvdobby_setPostRequisites(datamodel):
+def containerization_setPostRequisites(datamodel):
     post_requisite_status = "SUCCESS"
-    status = rdkvdobby_obtainCredentials()
+    result=[]
+    rebootFlag = 0
+    status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
-        command =  'tr181 '+datamodel
-        print "COMMAND : %s" %(command)
-        output = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-        if "FAILURE" not in output:
-            output = str(output).split("\n")[1]
-            output = output.strip()
-            if output == "false":
-                print 'SUCCESS: The '+datamodel+' parameter is in disabled state'
-            elif output == "true" or output == "":
-                command =  'tr181 -d -s -t boolean -v false '+datamodel
-                print "COMMAND : %s" %(command)
-                enableStatus = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-                enableStatus = enableStatus.strip()
-                if "set operation success" in enableStatus.lower():
-                    print 'SUCCESS: Successfully set the '+datamodel+' parameter'
-                else:
-                    print 'FAILURE: Could not able to set the '+datamodel+' parameter'
-                    post_requisite_status = "FAILURE"
-                print '[INFO] Rebooting the Device................'
-                status = rdkvdobby_rebootDevice(60)
-                if "SUCCESS" in status:
-                    command =  'tr181 '+datamodel
+        for datamodels in datamodel:
+            command =  'tr181 -d '+str(datamodels)
+            print "COMMAND : %s" %(command)
+            output = containerization_executeInDUT(ssh_method,credentials,command)
+            if "FAILURE" not in output:
+                output = str(output).split("\n")[1]
+                if "false" in output.lower():
+                    print 'SUCCESS: The '+datamodels+' parameter is in disabled state'
+                elif "true" in output.lower() or "empty" in output.lower():
+                    command =  'tr181 -d -s -t boolean -v false '+datamodels
                     print "COMMAND : %s" %(command)
-                    enableStatus = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-                    enableStatus = str(enableStatus).split("\n")[1]
-                    if enableStatus.strip() == "false":
-                        print 'SUCCESS: Successfully disabled the '+datamodel+' parameter'
+                    enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
+                    enableStatus = enableStatus.strip()
+                    if "set operation success" in enableStatus.lower():
+                        rebootFlag = 1
+                        print 'SUCCESS: Successfully set the '+datamodels+' parameter'
                     else:
-                        print 'FAILURE: '+datamodel+' parameter not disabled'
+                        print 'FAILURE: Could not able to set the '+datamodels+' parameter'
                         post_requisite_status = "FAILURE"
                 else:
-                    print 'FAILURE: Error while rebooting the device'
+                    print 'FAILURE: Failed to retrieve '+datamodels+' enabled status'
                     post_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Failed to retrieve '+datamodel+' enabled status'
-                post_requisite_status = "FAILURE"    
-        else:
-            print 'FAILURE: Error while executing the command'
-            post_requisite_status = "FAILURE"
+                print 'FAILURE: Error while executing the command'
+                post_requisite_status = "FAILURE"
+
+        if "FAILURE" not in post_requisite_status and rebootFlag == 1:
+            print '[INFO] Rebooting the Device................'
+            status = containerization_rebootDevice(60)
+            if "SUCCESS" in status:
+                for datamodels in datamodel:
+                    command =  'tr181 -d '+datamodels
+                    print "COMMAND : %s" %(command)
+                    enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
+                    enableStatus = str(enableStatus).split("\n")[1]
+                    if "false" in enableStatus.lower():
+                        print 'SUCCESS: Successfully disabled the '+datamodels+' parameter'
+                    else:
+                        print 'FAILURE: '+datamodels+' parameter not disabled'
+                        post_requisite_status = "FAILURE"
+            else:
+                print 'FAILURE: Error while rebooting the device'
+                post_requisite_status = "FAILURE"
+
     else:
         print 'FAILURE: Failed to retrieve required configurations'
         post_requisite_status = "FAILURE"
-
     return post_requisite_status
-
 #---------------------------------------------------------------
 # EXECUTE THE DOBBY SECURITY TOOL TESTS
 # Description  : To execute the dobby tool tests in the DUT
-# Parameters   : containername - To perform tests in the container
+# Parameters   : containername - Container name to perform tests in the container
+#                testCases - Testcase details
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
-
-def rdkvdobby_executeDobbyTest(containername,testCases):
-    dobby_test_status = "SUCCESS"
-    execStatus = 0
-    status = rdkvdobby_obtainCredentials()
+def containerization_executeDobbyTest(containername,testCases):
+    dobby_test_status= "SUCCESS"
+    dobbyToolResult={}
+    status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
-        command = 'cd dobby-security-tool/; ./dobby_security.sh -c '+containername
-        print "COMMAND : %s" %(command)
-        result = rdkvdobby_executeInDUT(ssh_method,credentials,command)
-        reaesc = re.compile(r'\x1b[^m]*m')
-        result = reaesc.sub('',result)
-        result = result.splitlines()
+        containername = containername.split(",")
+        for container in containername:
+            callsign,uri = container.split("-")
+            command = 'cd dobby-security-tool/; ./dobby_security.sh -c '+callsign
+            print "COMMAND : %s" %(command)
+            result = containerization_executeInDUT(ssh_method,credentials,command)
+            reaesc = re.compile(r'\x1b[^m]*m')
+            result = reaesc.sub('',result)
+            dobbyToolResult[callsign] = result
+
         for test in testCases:
             key,testName,value = test.split("-")
             testName = str(testName).strip()
-            for line in result:
-                if value in line:
-                    execStatus = 1
-                    testStatus=line.split()[0]
-                    testStatus=testStatus.replace('[','').replace(']','')
-                    testDesc=line.replace('-','').replace(value,'').replace('   ','').replace(testStatus,'').replace('[','').replace(']','')
-                    print "\n#==============================================================================#"
-                    print "TEST CASE NAME   : ",testName
-                    print "TEST CASE ID   : DOBBY_%s"%(key)
-                    print "DESCRIPTION   : ",testDesc
-                    print "#==============================================================================#\n"
-                    print(line)
-                    if "WARN" in testStatus or "PASS" in testStatus:
-                        finalTestStatus="SUCCESS"
-                        print "\nTEST STEP STATUS :  ",finalTestStatus
-                        print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
-                    else:
-                        finalTestStatus="FAILURE"
-                        print "\nTEST STEP STATUS :  ",finalTestStatus
-                        print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
-                        dobby_test_status = "FAILURE"
-                    break;
+            print "#==============================================================================#"
+            print "TEST CASE NAME   : ",testName
+            print "TEST CASE ID   : DOBBY_%s"%(key)
+            print "#==============================================================================#"
+            key=float(key)
+            containerAppResults=[]
+            for app in containername:
+                app,uri = app.split("-")
+                testResult=dobbyToolResult[app]
+                testResult=str(testResult).splitlines()
+                for line in testResult:
+                    if value in line:
+                        execStatus = 1
+                        testStatus=line.split()[0]
+                        testStatus=testStatus.replace('[','').replace(']','')
+                        testDesc=line.replace('-','').replace(value,'').replace('   ','').replace(testStatus,'').replace('[','').replace(']','')
+                        print "TEST STEP NAME   : ",testName,"_",app
+                        count= key + 0.10
+                        count=round(count,2)
+                        print "TEST STEP ID   :",count
+                        key = count
+                        if("WARN" in testStatus or "PASS" in testStatus):
+                            testStatus="SUCCESS"
+                            print "TEST STEP STATUS   :",testStatus
+                        else:
+                            testStatus="FAILURE"
+                            print "TEST STEP STATUS   :",testStatus
+                        print "#---------------------------------- Result ------------------------------------#"
+                        print line,"\n"
+                        containerAppResults.append(testStatus)
+                        break
+
+            if "FAILURE" not in containerAppResults:
+                finalTestStatus = "SUCCESS"
+                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
+            else:
+                finalTestStatus = "FAILURE"
+                dobby_test_status = "FAILURE"
+                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
+
             if execStatus == 1:
                 execStatus = 0
             elif execStatus == 0:
                 dobby_test_status = "FAILURE"
+    else:
+        print 'FAILURE: Failed to retrieve the required configuration'
+        dobby_test_status = "FAILURE"
     return dobby_test_status
+
+#---------------------------------------------------------------
+# TO CHECK THE DOBBY VERSION
+# Description  : To check the dobby and crun versions are up-to date
+# Parameters   : testCase - Testcase details
+# Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
+#---------------------------------------------------------------
+def containerization_checkDobbyVersion(testCase):
+    dobby_version_status="SUCCESS"
+    dobbyVersion=['DOBBY_DAEMON_VERSION','DOBBY_CRUN_VERSION']
+    dobbyVersionList=["DobbyDaemon --version","crun --version"]
+    versionsvalue=[]
+    result=[]
+    key,testName = testCase.split("-")
+    testName = str(testName).strip()
+    print "#==============================================================================#"
+    print "TEST CASE NAME   : ",testName
+    print "TEST CASE ID   : DOBBY_%s"%(key)
+    print "#==============================================================================#"
+    config_status = containerization_obtainCredentials()
+    if "FAILURE" not in config_status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        for version in dobbyVersion:
+            containerization_getDeviceConfig(libObj.realpath,version)
+            value = containerization_getDeviceConfig(libObj.realpath,version)
+            if "FAILURE" not in versionsvalue and versionsvalue != "":
+                print "SUCCESS: Successfully retrieved %s configuration from device config file" %(version)
+                versionsvalue.append(value)
+            else:
+                print "FAILURE: Failed to retrieve %s configuration from device config file" %(version)
+                dobby_version_status="FAILURE"
+                break
+        if "FAILURE" != dobby_version_status:
+            print "\n[INFO] Configured DobbyDaemon version :%s"%(versionsvalue[0])
+            print "[INFO] Configured Crun version :%s"%(versionsvalue[1])
+            #To get the current DobbyDaemon version
+            command = dobbyVersionList[0]
+            print "COMMAND : %s" %(command)
+            output = containerization_executeInDUT(ssh_method,credentials,command)
+            if not output:
+                print "FAILURE: Failed to execute %s" %(command)
+                dobby_version_status="FAILURE"
+            else:   
+                output = output.split('\n',1)[-1]
+                currentDobbyVersion = output.split("-")[0].split(":")[1].strip()
+                print "[INFO] Current DobbyDaemon version :%s"%(currentDobbyVersion)      
+
+            #To get the current Crun version
+            command = dobbyVersionList[1]
+            print "COMMAND : %s" %(command)
+            output = containerization_executeInDUT(ssh_method,credentials,command)
+            if not output:
+                print "FAILURE: Failed to execute %s" %(command)
+                dobby_version_status="FAILURE"
+            else:
+                currentCrunVersion = output.split("\n")[1].split("crun version")[1].strip() 
+                print "[INFO] Current Crun version :%s"%(currentCrunVersion)
+            if "FAILURE" != dobby_version_status and str(versionsvalue[0]).lower() == str(currentDobbyVersion).lower() and str(versionsvalue[1]).lower() == str(currentCrunVersion).lower():
+                print "[PASS] 1.2.2 - Dobby Daemon and Crun versions are up to date"
+                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+            else:
+                dobby_version_status="FAILURE"
+                print "[FAIL] 1.2.2 - Dobby Daemon and Crun versions are not up to date"
+                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+        else:
+            dobby_version_status="FAILURE"
+            print "FAILURE: Failed to retrieve required configuration from device config file"
+            print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+    else:
+        dobby_version_status="FAILURE"
+        print "FAILURE: Failed to retrieve required configuration from device config file"
+    return dobby_version_status
+
+#---------------------------------------------------------------
+# TO CHECK THE DEV LOOP PARTITION STATUS
+# Description  : To check the dev loop partition status
+# Parameters   : testCase - Testcase details
+# Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
+#---------------------------------------------------------------
+def containerization_checkDevLoopPartition(testCase):
+    check_partition_status="SUCCESS"
+    containerAppResults = []
+    partitionStatus = containerization_getDeviceConfig(libObj.realpath,"DOBBY_DEV_LOOP_PARTITION_STATUS")
+    if len (partitionStatus) != 0:
+        containernames = partitionStatus.split(",")
+        key,testName = testCase.split("-")
+        testName = str(testName).strip()
+        print "#==============================================================================#"
+        print "TEST CASE NAME   : ",testName
+        print "TEST CASE ID   : DOBBY_%s"%(key)
+        print "#==============================================================================#"
+        config_status = containerization_obtainCredentials()
+        if "FAILURE" not in config_status:
+          credentials = deviceIP + ',' + user_name + ',' + password  
+          for container in containernames:
+            container,partitionStatus = container.split("-")
+            #command = 'ps -ef | awk \/'+container+'\/ && \/DobbyInit\/ | grep -v awk | '
+            command = 'ps -ef | grep '+container+' | grep DobbyInit | awk \'NR==1 {print $2}\''
+            print "COMMAND : %s" %(command)
+            DobbyInit_PID = containerization_executeInDUT(ssh_method,credentials,command)
+            DobbyInit_PID = DobbyInit_PID.split('\n',1)[-1]
+            if DobbyInit_PID:
+                command = 'cat /proc/'+DobbyInit_PID+'/mountinfo | grep /dev/loop'
+                print "COMMAND : %s" %(command)
+                output = containerization_executeInDUT(ssh_method,credentials,command)
+                print "TEST STEP NAME   : ",testName,"_",container
+                key = float(key)
+                count = key + 0.10
+                count = round(count,2)
+                print "TEST STEP ID   :",count
+                if  partitionStatus.lower() == "yes":
+                    if '/dev/loop' in output.lower():
+                        line = "[PASS] 5.5.1 Partition is present in the device"
+                        testStatus="SUCCESS"
+                        print "TEST STEP STATUS   :",testStatus
+                    else:
+                        line = "[FAIL] 5.5.1 partition is not present in the device"
+                        check_partition_status="FAILURE"
+                        testStatus="FAILURE"
+                        print "TEST STEP STATUS   :",testStatus
+                elif partitionStatus.lower() == "no":
+                    if '/dev/loop' not in output.lower():
+                        line = "[PASS] 5.5.1 Partition is not present in the device"
+                        testStatus="SUCCESS"
+                        print "TEST STEP STATUS   :",testStatus
+                    else:
+                        line = "[FAIL] 5.5.1 Partition is present in the device but configured as not present"
+                        check_partition_status="FAILURE"
+                        testStatus="FAILURE"
+                        print "TEST STEP STATUS   :",testStatus
+                print "#---------------------------------- Result ------------------------------------#"
+                print line,"\n"
+                containerAppResults.append(testStatus)        
+            else:
+                print "FAILURE: Failed to retrieve the process ID"
+                testStatus = "FAILURE"
+                check_partition_status="FAILURE"
+                containerAppResults.append(testStatus)
+
+          if "FAILURE" not in containerAppResults:
+              finalTestStatus = "SUCCESS"
+              print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
+          else:
+              finalTestStatus = "FAILURE"
+              dobby_test_status = "FAILURE"
+              print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)    
+        else:
+            print "FAILURE: Failed to retrieve the process ID"
+            check_partition_status="FAILURE"
+    else:
+        "FAILURE : %s key should not be empty"%(partitionStatus)   
+        check_partition_status="FAILURE"
+    return check_partition_status            
+                
