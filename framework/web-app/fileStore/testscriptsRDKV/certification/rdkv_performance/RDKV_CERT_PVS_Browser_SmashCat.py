@@ -161,7 +161,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     print "URL(",new_url,") is set successfully"
                     tdkTestObj.setResultStatus("SUCCESS")
-                    time.sleep(20)
+                    time.sleep(10)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_Smashcat')
                     tdkTestObj.executeTestCase(expectedResult)
                     browser_score_dict = json.loads(tdkTestObj.getResultDetails())
