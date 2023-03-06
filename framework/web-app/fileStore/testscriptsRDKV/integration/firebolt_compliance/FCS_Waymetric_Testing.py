@@ -118,6 +118,18 @@ if "SUCCESS" in sysutilLoadStatus.upper():
         print "Not Proceeding with test case"
         exit()
 
+    print "\nStopping wpeframework\n"
+    tdkTestObj = obj.createTestStep('ExecuteCommand');
+    #Test to be executed
+    cmd = "systemctl stop wpeframework";
+    tdkTestObj.addParameter("command", cmd);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase("SUCCESS");
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print "[TEST EXECUTION RESULT] : %s" %actualResult;
+
     print "\nStarting Test Execution\n"
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     #Test to be executed
@@ -184,6 +196,18 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     else:
         print "Waymetric Testing Failed"
         FCS_GraphicsValidation_utility.deleteLogFile(obj,Waymetric_log,"FAILURE");
+
+    print "\nResetting wpeframework\n"
+    tdkTestObj = obj.createTestStep('ExecuteCommand');
+    #Test to be executed
+    cmd = "systemctl start wpeframework";
+    tdkTestObj.addParameter("command", cmd);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase("SUCCESS");
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print "[TEST EXECUTION RESULT] : %s" %actualResult;
 
     obj.unloadModule("systemutil");
 else:

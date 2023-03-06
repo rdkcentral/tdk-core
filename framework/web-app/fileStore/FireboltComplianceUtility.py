@@ -153,10 +153,10 @@ def getOperations ():
 def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     global ignore_warnings
     #First construct the command with mandatory arguments
-    command = "mediapipelinetests " + testName + " " + testUrl
+    command = "tdk_mediapipelinetests " + testName + " " + testUrl
     #For trickplay scenrios use another app instead
     if "trickplay" in testName:
-        command = "mediapipelinetests_trickplay" + " " + testUrl
+        command = "tdk_mediapipelinetests_trickplay" + " " + testUrl
         if "latency" in testName.lower():
             command += " checkLatency "
     #Based on the test, the arguments can vary, parse through the variabled arguments
