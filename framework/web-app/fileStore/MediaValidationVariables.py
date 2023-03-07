@@ -126,7 +126,7 @@ video_src_url_hevc_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_50f
 video_src_url_hevc_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_60fps.mp4"
 
 #Stream to simulate underflow
-video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_underflow_stream.mp4"
+video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_underflow_stream_v2.mp4"
 
 #Stream with known number of frames for frame Drop test
 video_src_url_mp4_frameDrop = test_streams_base_path + "TDK_Asset_Sunrise_30fps_30secs.mp4"

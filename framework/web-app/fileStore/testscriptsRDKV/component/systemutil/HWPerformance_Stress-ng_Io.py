@@ -97,7 +97,7 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
     # Execute Stress-ng and get the result
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
     App_with_args="stress-ng --io 0 -t 30 --metrics-brief --log-file /tmp/stressng-report.txt;"
-    Parse_log="sh $TDK_PATH/HWPerf_metric_parser.sh stress-ng_io;"
+    Parse_log="sh $TDK_PATH/HWPerf_metric_parser.sh stress-ng_Io;"
     Display_metric="cat $TDK_PATH/logs/logparser-results.txt"
     final_cmd = App_with_args + Parse_log + Display_metric
     print final_cmd;
@@ -130,5 +130,5 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
         tdkTestObj.setResultStatus("FAILURE");
         print "[TEST EXECUTION RESULT] : FAILURE"
 
-        #Unload systemutil module
-        sysUtilObj.unloadModule("systemutil");
+    #Unload systemutil module
+    sysUtilObj.unloadModule("systemutil");
