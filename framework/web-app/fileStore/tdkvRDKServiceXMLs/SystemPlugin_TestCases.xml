@@ -223,12 +223,12 @@
            <testCaseInfo testCaseType="direct"  />
             <testStep testStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
                 <params>
-                  <param tag="timeZone" value="UTC-5" />
+                  <param tag="timeZone" value="America/New_York" />
                 </params>
                 <resultGeneration useMethodTag="system_check_set_operation" />
             </testStep>
             <testStep testStepId="2" name="Get_TimeZone_DST" method="Get_TimeZone_DST" >
-                <resultGeneration useMethodTag="system_get_timezone_dst" arguments="check_timezone" expectedValues="UTC-5" />
+                <resultGeneration useMethodTag="system_get_timezone_dst" arguments="check_timezone" expectedValues="America/New_York" />
             </testStep>
         </testCase>
         

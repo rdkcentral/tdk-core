@@ -399,7 +399,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             flag = 0
             for fps_data in result:
                 fps_info.append(fps_data)
-                if fps_data.get("average") <= 0 and fps_data.get("min") <= 0 and fps_data.get("max") <= 0:
+                if fps_data.get("average") <= 0 or fps_data.get("min") <= 0 or fps_data.get("max") <= 0:
                     flag = 1
             info["fps_info"] = fps_info
             if flag==1:

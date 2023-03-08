@@ -950,6 +950,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 message = "Selecting 5 timezones out of %d zone info" %(len(timeZones))
                 info["Test_Step_Message"] = message
                 info["zoneinfo"] = random.sample(timeZones,5)
+                del timeZones[:]
             else:
                 info["Test_Step_Status"] = "FAILURE"
         # User Preferces Plugin Response result parser steps
@@ -5101,10 +5102,12 @@ def getcountofelements(dictionary):
     global timeZones
     for key,value in dictionary.items():
          if isinstance(value, dict):
+             for continent,country in value.items():
+                zoneinfo = key+"/"+continent
+                timeZones.append(str(zoneinfo))
              getcountofelements(value)
-         else:
-             timeZones.append(str(key))
     return timeZones
+
 
 
 # Other External Functions can be added below
