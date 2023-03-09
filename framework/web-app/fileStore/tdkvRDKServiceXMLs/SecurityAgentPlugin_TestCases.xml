@@ -52,9 +52,12 @@
         </testCase>
         <testCase testCaseId="SA_02" testCaseName="SecurityAgent_Check_Invalid_Token"  desc="Passes the invalid token and checks the status">
             <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Check_Invalid_Token" method="SecurityAgent_Validate">
+            <testStep testStepId="1" name="Get_Invalid_Security_Token" action="externalFnCall" saveResult="true">
+                 <resultGeneration useMethodTag="securityagent_get_invalid_security_token"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_Invalid_Token" method="SecurityAgent_Validate">
                <params>
-                  <param tag="token" value="asdnkl77cCHB567dcKDHQWI674Kfsmc67gUFNJsdkjdkKdHN9.djkdkjKSGCBTsd3567D" />
+                  <param tag="token" usePreviousResult="true" Id="1" useMethodTag="securityagent_get_token" />
                 </params>
               <resultGeneration useMethodTag="securityagent_validate_token" expectedValues="false"/>
             </testStep>

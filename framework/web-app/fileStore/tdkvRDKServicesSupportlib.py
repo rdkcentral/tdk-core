@@ -34,7 +34,7 @@ import re
 import subprocess
 import requests
 import random
-
+import string
 
 timeZones = []
 
@@ -4918,9 +4918,15 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = str(output).split("\n")[1]
             output =  output.strip()
             if len(arg) and arg[0] == "get_modified_token":
-                info["securityToken"] = output+'bsXs7xni0A'
-            else:    
+                letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+                invalidToken = ''.join(random.choice(letters) for i in range(10))
+                info["securityToken"] = output + invalidToken
+            else:
                 info["securityToken"] = output
+
+        elif tag == "securityagent_get_invalid_security_token":
+            letters = string.ascii_lowercase + string.ascii_uppercase + string.digits
+            info["securityToken"] = ''.join(random.choice(letters) for i in range(90))
 
         elif tag == "check_required_logs":
             command = 'cat /opt/logs/wpeframework.log | grep -inr \"'+expectedValues[0]+'\"'
