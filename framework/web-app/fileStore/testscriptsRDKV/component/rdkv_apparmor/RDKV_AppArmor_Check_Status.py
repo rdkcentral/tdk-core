@@ -1,4 +1,4 @@
-			##########################################################################
+##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -51,6 +51,8 @@
     <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
