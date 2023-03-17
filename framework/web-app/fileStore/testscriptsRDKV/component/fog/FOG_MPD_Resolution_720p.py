@@ -49,12 +49,12 @@
   <!--  -->
   <box_types>
     <box_type>Hybrid-1</box_type>
-    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <box_type>RPI-HYB</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
-    <box_type>Video_Accelerator</box_type>
+    <!--  -->
+    <!--  -->
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -65,7 +65,7 @@
     <test_case_id>TC_FOG_30</test_case_id>
     <test_objective>Validate resolution in FOG with respect to set resolution to 720p</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Xg1v3</test_setup>
+    <test_setup>Xg1v3,Video Accelerator, RPI</test_setup>
     <pre_requisite>1.configure Aamp_Tune_Config.ini with proper tuning URLs
 2.Initialize devicesetting manager
 3.display device should be connected</pre_requisite>
