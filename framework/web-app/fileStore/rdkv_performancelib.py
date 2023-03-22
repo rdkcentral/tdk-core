@@ -290,6 +290,26 @@ def openChromeBrowser(url):
    return driver;
 
 #-------------------------------------------------------------------
+#GET URL FROM WEBINSPECT PAGE
+#-------------------------------------------------------------------
+def rdkservice_getBrowserURL(webinspect_port):
+   try:
+       webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/'
+       print (webinspectURL)
+       driver = openChromeBrowser(webinspectURL);
+       if driver != "EXCEPTION OCCURRED":
+            time.sleep(20)
+            target_url = driver.find_element_by_xpath('/html/body/table/tbody/tr/td[1]/div[2]').text
+            print (target_url)
+            driver.quit()
+   except Exception as error:
+        print "Got exception while opening the browser"
+        print error
+        driver.quit()
+        target_url=json.dumps(target_url)
+   return target_url
+
+#-------------------------------------------------------------------
 #GET THE BROWSER SCORE FROM CSS3 TEST
 #-------------------------------------------------------------------
 def rdkservice_getBrowserScore_CSS3():
