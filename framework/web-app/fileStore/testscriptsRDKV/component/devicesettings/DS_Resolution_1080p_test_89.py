@@ -126,50 +126,36 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print "FAILURE :Failed to get the list of supported resolutions";
                 #calling DS_SetResolution to set and get the display resolution as 1080i50    
                 resolution="1080p";
-                print "Resolution value set to:%s" %resolution;
-				
-		mylist1 = resolutiondetails.split(":");
-
-		
-		mylist2 = mylist1[1].split(",");
-
-		
-		count=0;
-		for word in mylist2:
-		   count=count+1;
-		   if (resolution == word):
-		      flag=1;
-		      break;
-		   else:
-		      if(count == len(mylist2)):
-		           flag=0;
-		      continue;
-					
-                if flag==1:				
-				
-                        tdkTestObj = obj.createTestStep('DS_SetResolution');
-                        tdkTestObj.addParameter("resolution",resolution);
-                        tdkTestObj.addParameter("port_name","HDMI0");
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        resolutiondetails = tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of DS_SetResolution
-                        if expectedresult in actualresult:
-                                print "SUCCESS:set and get resolution Success";
-                                print "getresolution %s" %resolutiondetails;
-                                #comparing the resolution before and after setting
-                                if resolution in resolutiondetails :
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "SUCCESS: Both the resolutions are same";
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "FAILURE: Both the resolutions are not same";
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE:set and get resolution fails";
+                res = resolutiondetails.replace('Supported Resolutions:','')
+                res_list = res.split(",")
+                for i in range (0,len(res_list)):
+                    if resolution in res_list[i]:
+                        resolutionToBeSet = res_list[i]
+                if resolution in resolutiondetails:		    
+                    print "Resolution value set to:%s" %resolutionToBeSet;	
+                    tdkTestObj = obj.createTestStep('DS_SetResolution');
+                    tdkTestObj.addParameter("resolution",resolutionToBeSet);
+                    tdkTestObj.addParameter("port_name","HDMI0");
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    resolutiondetails = tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value of DS_SetResolution
+                    if expectedresult in actualresult:
+                            print "SUCCESS:set and get resolution Success";
+                            print "getresolution %s" %resolutiondetails;
+                            #comparing the resolution before and after setting
+                            if resolution in resolutiondetails :
+                                    tdkTestObj.setResultStatus("SUCCESS");
+                                    print "SUCCESS: Both the resolutions are same";
+                            else:
+                                    tdkTestObj.setResultStatus("FAILURE");
+                                    print "FAILURE: Both the resolutions are not same";
+                    else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print "FAILURE:set and get resolution fails";
                 else:
-                        print "FAILURE:Requested resolution are not supported by this device";
+                    print "FAILURE:Requested resolution are not supported by this device";
                 #calling DS_ManagerDeInitialize to DeInitialize API
                 tdkTestObj = obj.createTestStep('DS_ManagerDeInitialize');
                 expectedresult="SUCCESS"

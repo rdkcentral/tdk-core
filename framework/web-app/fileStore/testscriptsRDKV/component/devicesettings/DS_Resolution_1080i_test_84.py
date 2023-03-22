@@ -136,10 +136,15 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print "FAILURE :Failed to get the list of supported resolutions";
                     #calling DS_SetResolution to set and get the display resolution as 1080i50    
                     resolution="1080i";
-                    print "Resolution value set to:%s" %resolution;
+                    res = resolutiondetails.replace('Supported Resolutions:','')
+                    res_list = res.split(",")
+                    for i in range (0,len(res_list)):
+                        if resolution in res_list[i]:
+                            resolutionToBeSet = res_list[i]
                     if resolution in resolutiondetails:
+                        print "Resolution value set to:%s" %resolutionToBeSet;
                         tdkTestObj = obj.createTestStep('DS_SetResolution');
-                        tdkTestObj.addParameter("resolution",resolution);
+                        tdkTestObj.addParameter("resolution",resolutionToBeSet);
                         tdkTestObj.addParameter("port_name","HDMI0");
                         expectedresult="SUCCESS"
                         tdkTestObj.executeTestCase(expectedresult);

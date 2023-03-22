@@ -140,8 +140,13 @@ if "SUCCESS" in loadmodulestatus.upper():
                     #calling DS_SetResolution to set and get the display resolution with invalid port
                     tdkTestObj = obj.createTestStep('DS_SetResolution');
                     resolution="1080i";
-                    print "Resolution value set to:%s" %resolution;
-                    tdkTestObj.addParameter("resolution",resolution);
+                    res = resolutiondetails.replace('Supported Resolutions:','')
+                    res_list = res.split(",")
+                    for i in range (0,len(res_list)):
+                        if resolution in res_list[i]:
+                            resolutionToBeSet = res_list[i]
+                    print "Resolution value set to:%s" %resolutionToBeSet;
+                    tdkTestObj.addParameter("resolution",resolutionToBeSet);
                     tdkTestObj.addParameter("port_name","HDMI8");
                     expectedresult="FAILURE"
                     tdkTestObj.executeTestCase(expectedresult);
