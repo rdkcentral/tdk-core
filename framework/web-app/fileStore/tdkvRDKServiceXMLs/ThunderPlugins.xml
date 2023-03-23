@@ -91,6 +91,11 @@
           </params>
         </method>
         <method name="DeviceInfo_Get_Default_Resolution" api="defaultresolution" type="method" desc="Default resolution on the selected video display port"/>
+        <method name="DeviceInfo_Get_Supported_HDCP" api="supportedhdcp" type="method" desc="Supported HDCP version on the selected video display port">
+            <params>
+                <param tag="videoDisplay" defaultValue="null" />
+           </params>
+        </method>
     </plugin>
 
 
@@ -935,6 +940,28 @@
                 <param tag="framerate" defaultValue="null" type="int"/>
             </params>
         </method>
+        <method name="Create_Display" api="createDisplay" type="method" desc="Creates a display for the specified client" >
+            <params>
+                <param tag="client" defaultValue="null" />
+                <param tag="callsign" defaultValue="null" />
+                <param tag="displayName" defaultValue="null" />
+                <param tag="displayWidth" defaultValue="null" type="int" />
+                <param tag="displayHeight" defaultValue="null" type="int" />
+                <param tag="virtualDisplay" type="bool"/>
+                <param tag="virtualWidth"  type="int" />
+                <param tag="virtualHeight" type="int" />
+                <param tag="topmost" type="bool"/>
+                <param tag="focus" type="bool"/>
+            </params>
+        </method>
+        <method name="AddKeyIntercepts" api="addKeyIntercepts" type="method" desc="Adds the list of key intercepts" >
+            <params paramType="userGenerate" useMethodTag="rdkshell_add_key_intercepts" >
+                <param tag="keyCode" type="int"/>
+                <param tag="modifiers" defaultValue="alt,shift" type="list" />
+                <param tag="client" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="RemoveKeyIntercepts" api="removeAllKeyIntercepts" type="method" desc="Removes all key intercepts" />
         <event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
         <event name="Event_On_Launched" eventName="onLaunched" eventId="client.events.1" type="event" desc="Fired on launching the client" />
         <event name="Event_On_Suspended" eventName="onSuspended" eventId="client.events.1" type="event" desc="Fired on Suspending the client" />
@@ -2179,6 +2206,7 @@
             </params>
         </method>
         <method name="Get_List" api="getList" type="method" desc="Gets the installed application list"/>
+        <event name="Event_Operation_Status" eventName="operationStatus" eventId="client.events.1" type="event" desc="LISA plugin on operation status" />
     </plugin>
     
     <!-- SecurityAgent Plugin Information -->
@@ -2188,6 +2216,39 @@
                 <param tag="token" defaultValue="null" />
             </params>
         </method>
+    </plugin>
+     
+    <!-- OCIContainer Plugin Information -->
+    <plugin pluginName="OCIContainer" serviceName="org.rdk.OCIContainer" serviceVersion="1">
+        <method name="Get_Container_Info" api="getContainerInfo" type="method" desc="Gets information about a running container">
+            <params>
+                <param tag="containerId" defaultValue="null" />
+            </params>
+        </method>
+        <method name="Get_Container_State" api="getContainerState" type="method" desc="Gets the state of a currently running container">
+            <params>
+                <param tag="containerId" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="List_Containers" api="listContainers" type="method" desc="Lists all running OCI containers Dobby knows about"/>
+        <method name="Pause_Container" api="pauseContainer" type="method" desc="Pauses a currently running container">
+            <params>
+                <param tag="containerId" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Resume_Container" api="resumeContainer" type="method" desc="Resumes a previously paused container">
+            <params>
+                <param tag="containerId" defaultValue="null"/>
+            </params>
+        </method>
+        <method name="Stop_Container" api="stopContainer" type="method" desc="Stops a currently running container">
+            <params>
+                <param tag="containerId" defaultValue="null" />
+                <param tag="force" type="bool"/>
+            </params>
+        </method>
+        <event name="Event_On_Container_Started" eventName="onContainerStarted" eventId="client.events.1" type="event" desc="Triggered when a new container has started running" />
+        <event name="Event_On_Container_Stopped" eventName="onContainerStopped" eventId="client.events.1" type="event" desc="Triggered when the container has stopped running" />
     </plugin>
 </thunderPlugins>
 

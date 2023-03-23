@@ -835,6 +835,35 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # LISA Events response result parser steps
+        elif tag == "lisa_check_operation_status_event":
+            expectedValues = [ value.lower() for value in expectedValues ]
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if arg[0] == "install":
+                    if str(eventResult.get("operation")).lower() in expectedValues and str(eventResult.get("id")).lower() in expectedValues and str(eventResult.get("handle")) in arg and expectedValues[2] in str(eventResult.get("details")).lower().replace(" ","") and str(eventResult.get("status")).lower() in expectedValues:
+                        status = checkNonEmptyResultData(eventResult.values())
+                        if status == "TRUE" and str(eventResult.get("type")).lower() in arg and str(eventResult.get("version")) in arg:
+                           info = eventResult
+                           info["Test_Step_Status"] = "SUCCESS"
+                           break;
+                elif arg[0] == "uninstall":
+                    if str(eventResult.get("operation")).lower() in expectedValues and str(eventResult.get("id")).lower() in expectedValues and str(eventResult.get("handle")) in arg and str(eventResult.get("status")).lower() in expectedValues:
+                        status = checkNonEmptyResultData(eventResult.values())
+                        if status == "TRUE" and str(eventResult.get("type")).lower() in arg and str(eventResult.get("version")) in arg:
+                           info = eventResult
+                           info["Test_Step_Status"] = "SUCCESS"
+                           break;
+
+        # OCIContainer Events response result parser steps
+        elif tag == "ocicontainer_check_container_events":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if str(eventResult.get("name")).lower() in expectedValues:
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
+
         # FirmwareControl Events response result parser steps
         elif tag == "fwc_check_upgrade_progress_event":
             print "Events list :",result

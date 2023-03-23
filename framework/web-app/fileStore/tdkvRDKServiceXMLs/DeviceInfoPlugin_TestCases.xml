@@ -126,7 +126,7 @@
                     </resultGeneration>
             </testStep>
             <testStep testStepId="2" name="Get_Model_Name" method="Get_Model_Name">
-                <resultGeneration useMethodTag="deviceinfo_check_expected_result" >
+                <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="model" >
                   <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
                 </resultGeneration>
             </testStep>
@@ -184,6 +184,21 @@
             <testStep testStepId="3" name="Get_Default_Resolution" method="DeviceInfo_Get_Default_Resolution" >
                 <resultGeneration useMethodTag="deviceinfo_check_default_resolution" >
                   <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_supported_resolutions" />
+                </resultGeneration>
+            </testStep>
+       </testCase>
+
+       <testCase testCaseId="DI_12" testCaseName="DeviceInfo_Check_Supported_HDCP_Version" desc="Checks the supported HDCP version" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+                <resultGeneration useMethodTag="display_connected_status"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Supported_HDCP" method="DeviceInfo_Get_Supported_HDCP" >
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+                <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="supportedHDCPVersion">
+                        <expectedValues useConfigFile="true" key="DEVICEINFO_SUPPORTED_HDCP_VERSION" />
                 </resultGeneration>
             </testStep>
        </testCase>

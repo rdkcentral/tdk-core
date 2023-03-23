@@ -153,8 +153,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "deviceinfo_check_expected_result":
             status = checkNonEmptyResultData(result)
             if status == "TRUE":
-                info["MODEL_NUMBER"] = result.get("model")
-                if str(result.get("model")).lower() == str(expectedValues[0]).lower():
+                info[arg[0]] = result.get(arg[0])
+                if str(result.get(arg[0])).lower() == str(expectedValues[0]).lower():
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -1067,6 +1067,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "rdkshell_check_multiple_application":
+            info["clients"] = result.get("clients")
+            clients = result.get("clients")
+            appStatus = 0
+            if len(arg) and arg[0] == "check_if_exists":
+                for app in expectedValues:
+                    if app not in clients:
+                        appStatus = 1
+                if appStatus == 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "rdkshell_get_state":
             success = str(result.get("success")).lower() == "true"
             result = result.get("state")
@@ -1184,6 +1197,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "FAILURE"
                 elif len(arg) and arg[0] == "validate_move_to_behind":
                     if str(clients[1]).lower() == str(expectedValues[0]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "validate_front_app_order":
+                    if str(clients[0]).lower() != str(expectedValues[0]).lower():
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
@@ -2992,6 +3010,77 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+        elif tag == "lisa_check_multiple_request_error_message":
+            info = result
+            sleep(1)
+            info = checkAndGetAllResultInfo(otherInfo)
+            error = otherInfo.get("error")
+            if str(expectedValues[0]) in str(otherInfo.get("message")).lower() and error.get("code") == int(expectedValues[1]):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        # OCIContainer Plugin Response result parser steps
+        elif tag == "ocicontainer_list_container":
+            info = result
+            containers = result.get("containers")
+            success = str(result.get("success")).lower() == "true"
+            expectedResult = 0
+            for app in containers:
+               if str(app.get("Id")).lower() == expectedValues[0]:
+                   expectedResult = 1
+            if success:
+               if len(arg) and arg[0] == "check_if_exists":
+                   if expectedResult == 1:
+                       info["Test_Step_Status"] = "SUCCESS"
+                   else:
+                       info["Test_Step_Status"] = "FAILURE"
+               elif len(arg) and arg[0] == "check_not_exists":
+                  if expectedResult == 0:
+                      info["Test_Step_Status"] = "SUCCESS"
+                  else:
+                      info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "ocicontainer_check_container_status":
+            info = result
+            success = str(result.get("success")).lower() == "true"
+            if success and result.get("state").lower() == expectedValues[0] and result.get("containerId").lower() == expectedValues[1]: 
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "ocicontainer_check_for_results":
+            info = result
+            status = checkNonEmptyResultData(result)
+            success = str(result.get("success")).lower() == "true"
+            if success and status == "TRUE":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "ocicontainer_check_container_info":
+            info = result
+            status = checkNonEmptyResultData(result)
+            success = str(result.get("success")).lower() == "true"
+            containerInfo = result.get("info")
+            if success and status == "TRUE" and containerInfo.get("id").lower() == expectedValues[0] and containerInfo.get("state").lower() == expectedValues[1]:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "ocicontainer_check_process_id":
+            status = checkNonEmptyResultData(result)
+            success = str(result.get("success")).lower() == "true"
+            result = result.get("info")
+            pids = result.get("pids")
+            info["pids"] = pids
+            if success and status == "TRUE" and int(expectedValues[0]) in pids:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_state":
             if arg[0] == "check_status":
@@ -3325,6 +3414,15 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
                 else:
                     result = "TRUE"
+ 
+        # OCI Container Plugin Response result parser steps
+        elif tag == "get_data_model_status":
+            testStepResults = testStepResults[0].values()[0]
+            status = testStepResults[0].get("status")
+            if str(status).lower() == "true":
+                result = "FALSE"
+            else:
+                result = "TRUE"
 
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_check_device_pair_status":
@@ -4174,6 +4272,16 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = testStepResults[0].values()[0]
             info["token"] = testStepResults[0].get("securityToken")
 
+        # LISA Plugin Response result parser steps
+        elif tag == "lisa_get_handle":
+            testStepResults = testStepResults[0].values()[0]
+            info["handle"] = testStepResults[0].get("Result")
+
+        # OCIContainer Plugin Response result parser steps
+        elif tag == "ocicontainer_get_process_id":
+            testStepResults = testStepResults[0].values()[0]
+            info["processID"] = testStepResults[0].get("processID")
+
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_name":
             testStepResults = testStepResults[0].values()[0]
@@ -4369,6 +4477,8 @@ def generateComplexTestInputParam(methodTag,testParams):
             userGeneratedParam = {"keys": [newtestParams],"client": testParams.get("client") }
         elif tag == "rdkshell_set_animations_params":
             userGeneratedParam = {"animations":[testParams]}
+        elif tag == "rdkshell_add_key_intercepts":
+            userGeneratedParam = {"intercepts": [{"client":testParams.get("client1"),"keys":[{"keyCode":testParams.get("keyCode1")}]},{"client":testParams.get("client2"),"keys":[{"keyCode":testParams.get("keyCode2")}]}]}
         elif tag == "cobalt_set_accessibility_params":
             newtestParams = testParams.copy()
             newtestParams.pop("ishighcontrasttextenabled")
@@ -4486,6 +4596,21 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             elif len(arg) and arg[0] == "check_status":
                 command = 'tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.DynamicAppList'
                 output = executeCommand(execInfo, command)
+                output = str(output).split("\n")[1]
+                info["status"] = output.strip()
+
+        elif tag == "check_and_enable_data_model":
+            if len(arg) and arg[1] == "enable_data_model":
+                command = "tr181 -d -s -v true "+arg[0]
+                output = executeCommand(execInfo,command)
+                if "set operation success" in output.lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+            elif len(arg) and arg[1] == "check_status":
+                command = "tr181 "+arg[0]
+                output = executeCommand(execInfo,command)
                 output = str(output).split("\n")[1]
                 info["status"] = output.strip()
  
@@ -4910,6 +5035,11 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     imagePath = lines
                     break;
             info["imagepath"] = imagePath
+
+        elif tag == "get_process_id":
+            command = 'ps -ef | grep DobbyInit | grep '+arg[0]+' | awk \'NR==1 {print $2}\''
+            output = executeCommand(execInfo, command)
+            info["processID"] = output.split("\n")[1].strip()
 
         elif tag == "securityagent_get_security_token":
             command = "WPEFrameworkSecurityUtility |  cut -d '\"' -f 4"
