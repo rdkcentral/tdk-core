@@ -800,4 +800,51 @@ def containerization_checkDevLoopPartition(testCase):
         "FAILURE : %s key should not be empty"%(partitionStatus)   
         check_partition_status="FAILURE"
     return check_partition_status            
-                
+
+
+#------------------------------------------------------------------
+# Calculate Resource Usage
+#------------------------------------------------------------------
+def containerization_validateResourceUsage():
+    resource_usage = ""
+    high_cpu = False
+    high_memory = False
+    data = '"method": "DeviceInfo.1.systeminfo"'
+    result = execute_step(data)
+    if result != "EXCEPTION OCCURRED":
+        cpuload = result["cpuload"]
+        if float(cpuload) > float(90):
+            high_cpu = True
+            high_resource = "CPU"
+            #Command to get the top 5 processes with high CPU usage
+            command = 'top -o %CPU -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $9); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
+            print "\n CPU load is high : {}".format(float(cpuload))
+        else:
+            print "\n CPU load : {}".format(float(cpuload))
+        totalram = result["totalram"]
+        freeram = result["freeram"]
+        memory_usage = round(float(totalram-freeram)/float(totalram)* 100,2)
+        if memory_usage > float(90):
+            high_memory = True
+            high_resource = "MEM"
+            #Command to get the top 5 processes with high MEM usage
+            command = 'top -o %MEM -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $10); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
+            print "\n Memory usage is high: {}".format(memory_usage)
+        else:
+            print "\n Memory usage : {}".format(memory_usage)
+        if high_cpu and high_memory:
+            high_resource = "CPU and MEM"
+            command = 'top -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s : [cpu-%s][mem-%s],\\n",$12, $10, $9); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
+        if high_cpu or high_memory:
+            resource_usage = "ERROR"
+            #List top 5 processes with high resource usage
+            print "COMMAND : %s" %(command)
+            output = containerization_executeInDUT(ssh_method,credentials,command)
+            print "\n<b>Top 5 process with high {} usage:</b>\n".format(high_resource)
+            output = output.split("\n")[1]
+            print '\n\n'.join(output.split(","))
+        else:
+            resource_usage = cpuload +","+str(memory_usage)
+        return resource_usage
+    else:
+        return result

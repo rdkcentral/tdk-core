@@ -260,3 +260,6 @@ if expectedResult in actualresult.upper():
 else:
     print "Set Post Requisites Failed"
     tdkTestObj.setResultStatus("FAILURE")
+
+obj.unloadModule("containerization");
+

@@ -263,7 +263,7 @@ else:
     print "Set Post Requisites Failed"
     tdkTestObj.setResultStatus("FAILURE")
 
-obj.unloadModule("rdkv_containerization");
+obj.unloadModule("containerization");
     
 
 
