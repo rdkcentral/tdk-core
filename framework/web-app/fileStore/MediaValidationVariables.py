@@ -125,6 +125,14 @@ video_src_url_hevc_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_30f
 video_src_url_hevc_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_50fps.mp4"
 video_src_url_hevc_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_60fps.mp4"
 
+#AV1 Video URL
+video_src_url_av1_23fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_23fps.mp4"
+video_src_url_av1_24fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_24fps.mp4"
+video_src_url_av1_25fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_25fps.mp4"
+video_src_url_av1_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_30fps.mp4"
+video_src_url_av1_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_50fps.mp4"
+video_src_url_av1_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_60fps.mp4"
+
 #Stream to simulate underflow
 video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_underflow_stream_v2.mp4"
 
