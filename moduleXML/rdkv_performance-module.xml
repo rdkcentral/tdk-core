@@ -24,7 +24,7 @@
   <!-- Excecution time out of module -->
     <testGroup>Certification</testGroup>
   <!-- Logs File Names of module -->
-    <logFileNames>[]</logFileNames>
+    <logFileNames>[/opt/logs/nlmon.log, /opt/logs/netsrvmgr.log, /opt/logs/wpeframework.log]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
   <!-- Total functions corresponding module  -->
@@ -43,13 +43,16 @@
       <function name='rdkservice_getBrowserScore_SunSpider' />
       <function name='rdkservice_getRequiredLog' />
       <function name='rdkservice_getSSHParams' />
-      <function name='rdkservice_getBluetoothMac' />
       <function name='rdkservice_getSupportedPlugins' />
+      <function name='rdkservice_getBluetoothMac' />
       <function name='rdkservice_validatePluginFunctionality' />
       <function name='rdkservice_getValueWithParams' />
       <function name='rdkservice_getBrowserScore_AnimationBenchmark' />
       <function name='rdkservice_getBrowserScore_Speedometer' />
       <function name='rdkservice_getBrowserScore_MotionMark' />
+      <function name='rdkservice_getBrowserScore_Kraken' />
+      <function name='rdkservice_getBrowserScore_Smashcat' />
+      <function name='rdkservice_getBrowserURL' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -69,13 +72,14 @@
       <parameter funName='rdkservice_getRequiredLog' parameterName='command' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_getSSHParams' parameterName='realpath' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_getSSHParams' parameterName='deviceIP' parameterType='STRING' range='a-z' />
-      <parameter funName='rdkservice_getSupportedPlugins' parameterName='plugins' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_getSupportedPlugins' parameterName='realpath' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_getSupportedPlugins' parameterName='plugins' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_validatePluginFunctionality' parameterName='plugin' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_validatePluginFunctionality' parameterName='operations' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_validatePluginFunctionality' parameterName='validation_details' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_getValueWithParams' parameterName='method' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_getValueWithParams' parameterName='params' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_getBrowserURL' parameterName='webinspect_port' parameterType='STRING' range='0-9' />
     </parameters>
   </module>
 </xml>
