@@ -17,8 +17,8 @@
 <xml>
   <module name='containerization-lxc' testGroup='Component'>
     <primitiveTests>
-      <primitiveTest name='Containerization_Donothing' id='' version='1'>
-        <function>Containerization_Do_Nothing</function>
+      <primitiveTest name='containerization-lxc_Donothing' id='' version='1'>
+        <function>containerization-lxc_Do_Nothing</function>
         <parameters />
       </primitiveTest>
     </primitiveTests>
