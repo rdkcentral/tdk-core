@@ -120,7 +120,7 @@ def getURLFromMultiStreamIndex(index):
 #
 #######################################################################################
 
-def searchAampEvents(Obj, pattern):
+def searchAampEvents(Obj, pattern,test_step=1):
     expectedresult = "SUCCESS"
 
     ####### Whenever checking for AAMP_EVENT_TUNED event, internally checking for AAMP TUNE FAILURE event for additional validation
@@ -144,15 +144,15 @@ def searchAampEvents(Obj, pattern):
     actualresult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if pattern in details:
-        print "TEST STEP 1:  Validate the events are logged or not"
-        print "EXPECTED RESULT 3: The events are logged"
-        print "ACTUAL RESULT 3: Status: %s " %details
+        print "\nTEST STEP %s:  Validate the events are logged or not"%(test_step)
+        print "EXPECTED RESULT : The events are logged"
+        print "ACTUAL RESULT : Status: %s " %details
         print "[TEST EXECUTION RESULT] : SUCCESS";
         actualresult = "SUCCESS";
     else:
-        print "TEST STEP 1:  Validate the events are logged or not"
-        print "EXPECTED RESULT 3: the events are not logged"
-        print "ACTUAL RESULT 3: Status: %s " %details
+        print "\nTEST STEP %s:  Validate the events are logged or not"%(test_step)
+        print "EXPECTED RESULT : the events are not logged"
+        print "ACTUAL RESULT : Status: %s " %details
         print "[TEST EXECUTION RESULT] : FAILURE";
         actualresult = "FAILURE";
     return actualresult;

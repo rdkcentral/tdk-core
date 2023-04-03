@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To check that discoverable status ON is persisting after reboot</synopsis>
+  <synopsis>To check that discoverable staus ON is not persisting after reboot</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -57,7 +57,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>CT_BLUETOOTH_HAL_17</test_case_id>
-    <test_objective>To check that discoverable status ON is persisting after reboot</test_objective>
+    <test_objective>To check that discoverable staus ON is not persisting after reboot</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. Initialize the BTRCore module using BTRCore_Init()</pre_requisite>
@@ -71,10 +71,10 @@
 3. Set the discoverable status for the adapter as 1(discoverable).
 4. Get the discoverable status for the adapter and check if its 1.
 5. Reboot the DUT.
-6. Get the discoverable status for the adapter after reboot and check if it is not reset to 0.
+6. Get the discoverable status for the adapter after reboot and check if it is reset to 0.
 7. Based on the API call return code and the adapter discoverable status, TM return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1. Verify the API call is success
-Checkpoint 2. Verify that the discoverable status for the bluetooth adapter is not reset to 0 (OFF) after reboot.</expected_output>
+Checkpoint 2. Verify that the discoverable status for the bluetooth adapter is reset to 0 (OFF) after reboot.</expected_output>
     <priority>High</priority>
     <test_stub_interface>libbluetoothhalstub.so.0</test_stub_interface>
     <test_script>BluetoothHAL_Set_Get_DiscoverableStatus_ON_Persist</test_script>
@@ -178,57 +178,11 @@ if "SUCCESS" in result.upper():
                             print "BluetoothHal_GetAdapterDiscoverableStatus executed successfully"
                             discoverableStatus = int(tdkTestObj.getResultDetails())
 		                	   
-		            if (1 == discoverableStatus):
-		                print ("Adapter %s is still discoverable after reboot" %(adapterPath))
+		            if (0 == discoverableStatus):
+		                print ("Adapter %s is not discoverable after reboot" %(adapterPath))
 		                tdkTestObj.setResultStatus("SUCCESS");
-
-                                #Reset to 0
-                                tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterDiscoverable');
-                                #Set the adapter path to the default adapter path
-                                tdkTestObj.addParameter("adapter_path", adapterPath)
-                                #Set the discoverable status to be 0(non-discoverable)
-                                tdkTestObj.addParameter("discoverable_status", 1)
-
-                                #Execute the test case in DUT
-                                tdkTestObj.executeTestCase(expectedresult);
-
-                                #Get the result of execution
-                                actualresult = tdkTestObj.getResult();
-
-                                if (actualresult == expectedresult):
-                                    print "BluetoothHal_SetAdapterDiscoverable executed successfully"
-                                    tdkTestObj.setResultStatus("SUCCESS");
-
-                                    #Check if the adapter is discoverable by retrieving the discoverable status
-                                    #Primitive to get the discoverable status
-                                    tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapterDiscoverableStatus');
-                                    #Set the adapter path to the default adapter path
-                                    tdkTestObj.addParameter("adapter_path", adapterPath)
-
-                                    #Execute the test case in DUT
-                                    tdkTestObj.executeTestCase(expectedresult);
-
-                                    #Get the result of execution
-                                    actualresult = tdkTestObj.getResult();
-
-                                    if (actualresult == expectedresult):
-                                        print "BluetoothHal_GetAdapterDiscoverableStatus executed successfully"
-                                        discoverableStatus = int(tdkTestObj.getResultDetails())
-
-                                        if (0 == discoverableStatus):
-                                            print ("Adapter %s is reset to non-discoverable" %(adapterPath))
-                                            tdkTestObj.setResultStatus("SUCCESS");
-                                        else:
-                                            print ("Adapter %s is not reset to 0" %(adapterPath))
-                                            tdkTestObj.setResultStatus("FAILURE");
-                                    else:
-                                        print "BluetoothHal_GetAdapterDiscoverableStatus: failed"
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                else:
-                                    print "BluetoothHal_SetAdapterDiscoverable: failed"
-                                    tdkTestObj.setResultStatus("FAILURE");
                             else:
-                                print ("Discoverable status of adapter %s is reset to 0 after reboot" %(adapterPath))
+                                print ("Discoverable status of adapter %s is not reset to 0 after reboot" %(adapterPath))
 			        tdkTestObj.setResultStatus("FAILURE");
                         else:
                             print "BluetoothHal_GetAdapterDiscoverableStatus: failed"
