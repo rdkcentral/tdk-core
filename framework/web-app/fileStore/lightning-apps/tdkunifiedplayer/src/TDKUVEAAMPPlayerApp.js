@@ -86,6 +86,7 @@ export default class App extends Lightning.Component {
   createAAMPObject(){
       this.player = new AAMPMediaPlayer();
       logMsg("AAMP Player object created !!!")
+      logMsg("AAMP version is " + AAMP.version)
   }
 
   load(url,autoplay) {
