@@ -186,6 +186,10 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
             if URL_TYPE.get(url, "not available").lower() == "hls":
                 url_list.add(url);
         if url_list:
+            if "trickplay" in testName:
+                url_list.clear()
+                url_list.add(MediaValidationVariables.video_src_url_hls_h264_iframe);
+                command = command.replace(testUrl,MediaValidationVariables.video_src_url_hls_h264_iframe)
             for url in url_list:
                 #Change hls generic url to aamp url
                 url_updated = url.replace("https","aamps",1).replace("http","aamp",1);
