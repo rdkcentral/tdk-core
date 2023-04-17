@@ -1704,7 +1704,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "check_connected_audio_ports":
             if len(arg) and arg[0] == "check_value":
                 info["connected_audio_port"] = result.get('connectedAudioPorts')
-                if json.dumps(result.get('success')) == "true":
+                status = checkNonEmptyResultData(result)
+                if "FALSE" not in status and json.dumps(result.get('success')) == "true":
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -3698,11 +3699,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["standbyMode"] = testStepResults[0].get("supportedStandbyModes")
   
         elif tag == "system_generate_new_temperature_thresholds":
-            testStepResults_list = testStepResults[0].values()[0]
+            testStepResults = testStepResults[0].values()[0]
             if str(arg[0]) == "warn":
-                info["WARN"] = float(testStepResults_list[0].get("WARN")) - 10
+                info["WARN"] = float(testStepResults[0].get("temperature")) - 10
             if str(arg[1]) == "max":
-                info["MAX"] = float(testStepResults_list[0].get("MAX")) - 10
+                info["MAX"] = float(testStepResults[0].get("temperature")) - 10
 
         elif tag == "system_get_bluetooth_mac":
             testStepResults = testStepResults[0].values()[0]
@@ -3715,6 +3716,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "system_get_estb_mac":
             testStepResults = testStepResults[0].values()[0]
             info["estb_mac"] = testStepResults[0].get("estb_mac")
+        
+        elif tag == "system_get_core_temperature":
+            testStepResults = testStepResults[0].values()[0]
+            info["temperature"] = testStepResults[0].get("temperature")
 
         elif tag == "system_get_current_image_name":
             testStepResults = testStepResults[0].values()[0]
