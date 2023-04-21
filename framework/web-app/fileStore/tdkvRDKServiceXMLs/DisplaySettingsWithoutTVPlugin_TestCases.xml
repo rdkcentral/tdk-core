@@ -39,7 +39,7 @@
         </prerequisite>
     </pluginPreRequisite>
 
-    <testCase testCaseId="DSWTV_1" testCaseName= "Read_EDID_Without_TV" desc="Check the EDID status when TV is disconnected">
+    <testCase testCaseId="DSWTV_1" testCaseName="Read_EDID_Without_TV" desc="Check the EDID status when TV is disconnected">
         <testCaseInfo testCaseType="direct"/>
         <testCasePreRequisite>
             <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
@@ -53,10 +53,30 @@
         </testStep>
     </testCase>
 
-    <testCase testCaseId="DSWTV_2" testCaseName= "Check_Connected_Video_Displays_Without_TV_Connected"  desc="Checks whether getConnectedVideoDisplays API is returning empty list when TV is not connected">
+    <testCase testCaseId="DSWTV_2" testCaseName="Check_Connected_Video_Displays_Without_TV_Connected"  desc="Checks whether getConnectedVideoDisplays API is returning empty list when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Check_Display_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_VideoDisplays" saveResult="true" >
+        <testStep testStepId="1" name="Check_Display_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_VideoDisplays" >
             <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_not_connected" />
+        </testStep>
+    </testCase>
+
+    <testCase testCaseId="DSWTV_3" testCaseName="Check_Active_Input_Status_Without_TV_Connected"  desc="Checks active input status with and without passing video port name when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
+                <testStep testStepId="1" name="Check_Display_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_VideoDisplays" >
+                    <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+        <testStep testStepId="2" name="Check_Active_Input_Status_With_Video_Port" method="Get_Active_Input" pluginName="DisplaySettings">
+            <params>
+                <param tag="videoDisplay" value="HDMI0"/>
+            </params>
+            <resultGeneration useMethodTag="check_active_input" expectedValues="False"/>
+        </testStep>
+        <testStep testStepId="3" name="Check_Active_Input_Status_Without_Video_Port" method="Get_Active_Input" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="check_active_input" expectedValues="False"/>
         </testStep>
     </testCase>
 </testPlugin>

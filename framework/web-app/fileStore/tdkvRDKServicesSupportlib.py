@@ -1222,6 +1222,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "rdkshell_check_launchtype":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if str(result.get("launchType")).lower() == expectedValues[0]:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+                
         # DisplayInfo Plugin Response result parser steps
         elif tag == "displayinfo_get_general_info":
             if arg[0] == "get_all_info":
@@ -3021,6 +3028,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "lisa_check_storage_info":
+            info = result
+            apps = result.get("apps")
+            persistent = result.get("persistent")
+            status1 = checkNonEmptyResultData(apps.values())
+            status2 = checkNonEmptyResultData(persistent.values())
+            if status1 == "TRUE" and status2 == "TRUE":
+                if str(expectedValues[0]).lower() in str(apps.get("path")).lower() and str(expectedValues[0]).lower() in str(persistent.get("path")).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
         # OCIContainer Plugin Response result parser steps
         elif tag == "ocicontainer_list_container":
             info = result
@@ -3029,13 +3049,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             expectedResult = 0
             for app in containers:
                if str(app.get("Id")).lower() == expectedValues[0]:
+                   descriptor = app.get("Descriptor")
                    expectedResult = 1
+                   break;
             if success:
                if len(arg) and arg[0] == "check_if_exists":
                    if expectedResult == 1:
                        info["Test_Step_Status"] = "SUCCESS"
+                       if len(arg) > 2 and arg[1] == "check_container_info":
+                           if descriptor == arg[2]:
+                               info["Test_Step_Status"] = "SUCCESS"
+                           else:
+                               info["Test_Step_Status"] = "FAILURE"
                    else:
                        info["Test_Step_Status"] = "FAILURE"
+
                elif len(arg) and arg[0] == "check_not_exists":
                   if expectedResult == 0:
                       info["Test_Step_Status"] = "SUCCESS"
@@ -3081,6 +3109,42 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
+        # Parser Code for HdmiCec2 plugin
+        elif tag == "hdmicec2_get_enabled_status":
+            info["enabled"] = result.get("enabled")
+            success = str(result.get("success")).lower() == "true"
+            if success and str(result.get("enabled")) in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "hdmicec2_validate_boolean_result":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if str(result.get("status")) in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "hdmicec2_check_result":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+
+        elif tag == "hdmicec2_get_osd_name":
+            success = str(result.get("success")).lower() == "true"
+            info["OSDNAME"] = result.get("name")
+            status = checkNonEmptyResultData(result.get("name"))
+            if status == "TRUE":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "hdmicec2_get_vendor_id":
+            success = str(result.get("success")).lower() == "true"
+            vendorID = result.get("vendorid")
+            info["vendorID"] = vendorID
+            status = checkNonEmptyResultData(vendorID)
+            if status == "TRUE" and str(vendorID).lower() != "000":
+                info["Test_Step_Status"] = "SUCCESS"
 
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_state":
@@ -4286,6 +4350,19 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "ocicontainer_get_process_id":
             testStepResults = testStepResults[0].values()[0]
             info["processID"] = testStepResults[0].get("processID")
+
+        elif tag == "ocicontainer_get_container_details":
+            testStepResults = testStepResults[0].values()[0]
+            info["descriptor"] = testStepResults[0].get("descriptor")
+
+        # HdmiCec2 Plugin Response result parser steps
+        elif tag == "hdmicec2_toggle_enabled_status":
+            testStepResults = testStepResults[0].values()[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower() == "true":
+                info["enabled"] = False
+            else:
+                info["enabled"] = True
 
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_name":

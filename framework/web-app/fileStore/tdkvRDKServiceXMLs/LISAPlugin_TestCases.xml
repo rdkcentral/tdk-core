@@ -890,6 +890,85 @@
                     </resultGeneration>
             </testStep>
         </testCase>
+
+        <testCase testCaseId="LISA_15" testCaseName="LISA_Pass_Non-Existent_Application" desc="Check if able to get the error message on giving non-existent application to query storage details">
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                  <prerequisite requisiteId="1" requisiteName="UnInstall_Test_Application" >
+                   <testStep testStepId="1" name="Check_Application_List" method="Get_List" saveResult="true">
+                           <resultGeneration useMethodTag="lisa_check_application_list" arguments="exceptional_cases" >
+                                   <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+                   </testStep>
+                   <testStep testStepId="2" name="UnInstall_Application" method="Uninstall_Application">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status" arguments="check_app_exists" />
+                    <params>
+                       <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                       <param tag="version" value="1.0"/>
+                       <param tag="type" value="dac"/>
+                       <param tag="uninstallType" value="full"/>
+                    </params>
+                    <resultGeneration useMethodTag="lisa_check_status" />
+                   </testStep>
+                   <testStep testStepId="3" name="Check_Application_List" method="Get_List" delay="1">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status" arguments="check_app_exists" />
+                    <resultGeneration useMethodTag="lisa_check_application_list" arguments="exceptional_cases,check_app_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+                   </testStep>
+                 </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Storage_Details" method="Get_Storage_Details" >
+                    <params>
+                       <param tag="id" value="invalid"/>
+                       <param tag="version" value="1.0"/>
+                       <param tag="type" value="dac"/>
+                    </params>
+                    <resultGeneration useMethodTag="lisa_check_error_message" expectedValues="request not accepted,1001" />
+            </testStep>
+        </testCase>
+
+        <testCase testCaseId="LISA_16" testCaseName="LISA_Check_Installed_Application_Storage_Details" desc="To check the running test application storage information">
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Install_Test_Application" >
+                   <testStep testStepId="1" name="Check_Application_List" method="Get_List" saveResult="true">
+                           <resultGeneration useMethodTag="lisa_check_application_list" arguments="exceptional_cases" >
+                                   <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+                   </testStep>
+                   <testStep testStepId="2" name="Install_Application" method="Install_Application">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status"/>
+                    <params>
+                       <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                       <param tag="url" useConfigFile="true" key="LISA_APPLICATION_SERVER_URL"/>
+                       <param tag="version" value="1.0"/>
+                       <param tag="appName" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                       <param tag="type" value="dac"/>
+                       <param tag="category" value="category"/>
+                    </params>
+                    <resultGeneration useMethodTag="lisa_check_status" />
+                   </testStep>
+                   <testStep testStepId="3" name="Check_Application_List" method="Get_List" delay="1">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status"/>
+                    <resultGeneration useMethodTag="lisa_check_application_list" arguments="check_app_exist" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+                   </testStep>
+                 </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Storage_Details" method="Get_Storage_Details" >
+                    <params>
+                       <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                       <param tag="version" value="1.0"/>
+                       <param tag="type" value="dac"/>
+                    </params>
+                    <resultGeneration useMethodTag="lisa_check_storage_info" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                    </resultGeneration>
+            </testStep>
+        </testCase>                
+
         <pluginPostRequisite>
           <postrequisite requisiteId="1" requisiteName="Uninstall Test Application">
                 <testStep testStepId="1" name="Check_Application_List" method="Get_List" saveResult="true">

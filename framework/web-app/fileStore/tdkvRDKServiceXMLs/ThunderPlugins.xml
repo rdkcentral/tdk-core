@@ -2206,6 +2206,13 @@
             </params>
         </method>
         <method name="Get_List" api="getList" type="method" desc="Gets the installed application list"/>
+        <method name="Get_Storage_Details" api="getStorageDetails" type="method" desc="Returns information on the storage usage">
+            <params>
+                <param tag="id" defaultValue="null" />
+                <param tag="version" defaultValue="null"/>
+                <param tag="type" defaultValue="null"/>
+            </params>
+        </method>
         <event name="Event_Operation_Status" eventName="operationStatus" eventId="client.events.1" type="event" desc="LISA plugin on operation status" />
     </plugin>
     
@@ -2247,8 +2254,46 @@
                 <param tag="force" type="bool"/>
             </params>
         </method>
+        <method name="Start_Container" api="startContainer" type="method" desc="Starts a new container from an existing OCI bundle" >
+            <params>
+                <param tag="containerId" defaultValue="null"/>
+                <param tag="bundlePath" defaultValue="null"/>
+                <param tag="command" defaultValue="null"/>
+                <param tag="westerosSocket" defaultValue="null"/>
+                <param tag="envvar" defaultValue="null" type="list" />
+            </params>
+        </method>
+        <method name="Start_Container_From_DobbySpec" api="startContainerFromDobbySpec" type="method" desc="Starts a new container from a legacy Dobby JSON specification" >
+            <params>
+                <param tag="containerId" defaultValue="null"/>
+                <param tag="dobbySpec" defaultValue="null"/>
+                <param tag="command" defaultValue="null"/>
+                <param tag="westerosSocket" defaultValue="null"/>
+            </params>
+        </method>
         <event name="Event_On_Container_Started" eventName="onContainerStarted" eventId="client.events.1" type="event" desc="Triggered when a new container has started running" />
         <event name="Event_On_Container_Stopped" eventName="onContainerStopped" eventId="client.events.1" type="event" desc="Triggered when the container has stopped running" />
+    </plugin>
+
+    <!-- HdmiCec2 Plugin Information -->
+    <plugin pluginName="HdmiCec_2" serviceName="org.rdk.HdmiCec_2" serviceVersion="1">
+        <method name="HdmiCec2_Get_Enabled" api="getEnabled" type="method" desc="Returns if CEC is enabled">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCec2_Set_Enabled" api="setEnabled" type="method" desc="Enables or disables CEC">
+            <params>
+                <param tag="enabled" defaultValue="null" type="bool" />
+            </params>
+        </method>
+        <method name="HdmiCec2_Get_Vendor_ID" api="getVendorId" type="method" desc="Gets the current vendor ID used by host device"/>
+         <method name="HdmiCec2_Get_Active_Source_Status" api="getActiveSourceStatus" type="method" desc="Gets the active source status of the device">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCec2_Get_OSD_Name" api="getOSDName" type="method" desc="Gets the OSD name used by host device"/>
+        <method name="HdmiCec2_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
+                <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCec2_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option"/>
     </plugin>
 </thunderPlugins>
 
