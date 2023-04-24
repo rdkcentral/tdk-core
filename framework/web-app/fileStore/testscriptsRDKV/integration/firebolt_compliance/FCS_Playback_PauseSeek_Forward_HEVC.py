@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2022 RDK Management
+# Copyright 2023 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>18</version>
+  <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>FCS_Playback_PlayPause_24Fps</name>
+  <name>FCS_Playback_PauseSeek_Forward_HEVC</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To test the play-pause scenario of pipeline for 24 Fps stream through playbin gst element and westerossink</synopsis>
+  <synopsis>Test to do forward seek with pause on a stream with HEVC video codec</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,11 +48,8 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
@@ -61,41 +58,40 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_120</test_case_id>
-    <test_objective>To test the play-pause scenario of pipeline for 24 Fps stream through 'playbin', 'fpsdisplaysink' and 'westerossink' gst elements</test_objective>
+    <test_case_id>FCS_PLAYBACK_172</test_case_id>
+    <test_objective>Test to do forward seek with pause on a stream with HEVC audio codec</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDK TV,Video Accelerator, RPI</test_setup>
+    <test_setup>RDK TV,Video Accelerator</test_setup>
     <pre_requisite>1.TDK Agent should be up and running in the DUT
-2. Test stream url for an HLS stream should be updated in the config variable video_src_url_mp4_24fps inside MediaValidationVariables.py library inside filestore
+2. Test stream url for a stream with HEVC audio codec should be updated in the config variable video_src_url_hevc inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
-4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time to wait before checking for AV playback</pre_requisite>
+4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time in seconds for which the playback should be carried out
+5. FIREBOLT_COMPLIANCE_SEEK_POSITION configuration should be set to duration in seconds to which the seek operation should be carried out</pre_requisite>
     <api_or_interface_used>Execute the mediapipelinetests application in DUT</api_or_interface_used>
-    <input_parameters>testcasename - "test_playback_fps"
-test_url - hls url from MediaValidationVariables library (MediaValidationVariables.video_src_url_mp4_24fps)
-"checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
-timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file</input_parameters>
-    <automation_approch>1.Load the systemutil module 
-2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
-3.Retrieve the video_src_url_mp4_24fps variable from MediaValidationVariables library
-4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout value.
-5.Execute the command in DUT. During the execution, the DUT will playback av for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds, then av is paused for 5 seconds then application exits by closing the pipeline
+    <input_parameters>1.testcasename - "test_trickplay"
+2.test_url - HEVC url from MediaValidationVariables library (MediaValidationVariables.video_src_url_hevc)
+3."checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
+4.operations=seek:&lt;timeout&gt;:&lt;seekposition&gt; - a ":" seperated string to specify the seek operation to be executed , the time in seconds for which the operation should be performed and seekposition in seconds to which the seek operation should be performed. The timeout should be configured in the device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file The seekposition should also be configured in device configuration(FIREBOLT_COMPLIANCE_SEEK_POSITION)</input_parameters>
+    <automation_approch>1.Load the systemutil module
+2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS, FIREBOLT_COMPLIANCE_SEEK_POSITION, FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
+3.Retrieve the video_src_url_hevc variable from MediaValidationVariables library
+4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value, operation, seekposition and timeout
+5.Execute the command in DUT. During the execution, the DUT will start av playback, then pipeline seeks to FIREBOLT_COMPLIANCE_SEEK_POSITION and then av playback is performed for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds.Then application exits by closing the pipeline
 6.Verify the output from the execute command and check if the  "Failures: 0" and "Errors: 0" string exists or "failed: 0" string exists in the returned output
-7.Based on the ExecuteCommand() return value and the output returned from the mediapipelinetests application, TM return SUCCESS/FAILURE status.
-8.Verify if video is playing at 24 Frames per second on average using fpsdisplaysink</automation_approch>
+7.Based on the ExecuteCommand() return value and the output returned from the mediapipelinetests application, TM return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1. Verify the API call is success
 Checkpoint 2. Verify that the output returned from mediapipelinetests contains the strings "Failures: 0" and "Errors: 0" or it contains the string "failed: 0"</expected_output>
     <priority>High</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
-    <test_script>FCS_Playback_PlayPause_24Fps</test_script>
+    <test_script>FCS_Playback_PauseSeek_Forward_HEVC</test_script>
     <skipped>No</skipped>
-    <release_version>M100</release_version>
+    <release_version>M112</release_version>
     <remarks></remarks>
   </test_cases>
-  <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import MediaValidationVariables
 from FireboltComplianceUtility import *
 
@@ -108,50 +104,59 @@ sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1")
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-sysUtilObj.configureTestCase(ip,port,'FCS_Playback_PlayPause_24Fps')
+sysUtilObj.configureTestCase(ip,port,'FCS_Playback_PauseSeek_Forward_HEVC');
 
 #Set device configurations to default values
 checkAVStatus = "no"
 timeoutInSeconds = "10"
-fps = 24
+seekPositionInSeconds = "20"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
 print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
-
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
-    
+
     #Construct the command with the url and execute the command in DUT
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-    
+
     #The test name specifies the test case to be executed from the mediapipeline test suite
-    test_name = "test_playback_fps"
-
+    test_name = "test_trickplay"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_mp4_24fps
-
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not 
+    test_url = MediaValidationVariables.video_src_url_hevc
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
         print "Video Decoder proc check is added"
         checkAVStatus = check_av_status_flag
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds 
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_SEEK_POSITION' that specifies the video position in seconds to which the pipeline should seek
+    actualresult, seek_position = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_SEEK_POSITION')
+
+    #If the value of FIREBOLT_COMPLIANCE_SEEK_POSITION is retrieved correctly and its value is not empty, seek_position value should be passed to the test application
+    #if the device config value is empty, default seek position(20sec) is passed
+    if expectedResult in actualresult.upper() and seek_position != "":
+        seekPositionInSeconds = seek_position
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
-        
+
     #If the value of FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT is retrieved correctly and its value is not empty, timeout value should be passed to the test application
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
-
-    #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
-    #Sample command = "mediapipelinetests test_playback_fps <HLS_STREAM_URL> checkavstatus=yes timeout=30"
-    command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
-    command = command + " fps=" + str(fps)
-    print "Executing command in DUT: ", command
+    #Contruct the trickplay operations string
+    #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
+    #Sample oprations strings is "operations=pause:10,seek:10:20,play:10" where 10 is time for which pause should happen and 20 is seek position/duration
+    setOperations ("pause", timeoutInSeconds)
+    setOperations ("seek", timeoutInSeconds, seekPositionInSeconds)
+    setOperations ("play", timeoutInSeconds)
     
+    #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
+    #Sample command = "mediapipelinetests test_trickplay <HEVC_STREAM_URL> checkavstatus=yes operations=seek:20:30"
+    command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, operations = getOperations ())
+    print "Executing command in DUT: ", command
+
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
@@ -160,22 +165,22 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
-        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully 
+        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully
         executionStatus = checkMediaPipelineTestStatus (output)
-        
+
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "24Fps video playback  using 'playbin' and 'westeros-sink' was successfull"
+            print "Forward seek with pause on stream with HEVC audio codec was successfull"
             print "Mediapipeline test executed successfully"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "24Fps video playback using 'playbin' and 'westeros-sink' failed"
+            print "Forward seek on stream with HEVC audio codec failed"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print "Mediapipeline test execution failed"
-
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
-
 else:
     print "Module load failed"
+
+

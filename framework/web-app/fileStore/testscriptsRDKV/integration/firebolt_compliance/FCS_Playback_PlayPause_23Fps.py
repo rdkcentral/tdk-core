@@ -61,7 +61,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_122</test_case_id>
+    <test_case_id>FCS_PLAYBACK_166</test_case_id>
     <test_objective>To test the play-pause scenario of pipeline for 23 Fps stream through 'playbin', 'fpsdisplaysink' and 'westerossink' gst elements</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator, RPI</test_setup>

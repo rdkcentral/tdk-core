@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>10</execution_time>
+  <execution_time>3</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -61,7 +61,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_73</test_case_id>
+    <test_case_id>FCS_PLAYBACK_76</test_case_id>
     <test_objective>Test to do multiple backward seek on a HLS stream</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator, RPI</test_setup>

@@ -57,7 +57,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_117</test_case_id>
+    <test_case_id>FCS_PLAYBACK_90</test_case_id>
     <test_objective>To test the video playback of AV1 stream through 'playbin' and 'westerossink' gst elements</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator, RPI</test_setup>

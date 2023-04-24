@@ -58,7 +58,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_109</test_case_id>
+    <test_case_id>FCS_PLAYBACK_111</test_case_id>
     <test_objective>Switch to different audio codec present in the same stream without changing the video</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator</test_setup>
