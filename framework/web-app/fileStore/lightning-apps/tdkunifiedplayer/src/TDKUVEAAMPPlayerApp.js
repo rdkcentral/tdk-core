@@ -113,6 +113,7 @@ export default class App extends Lightning.Component {
       this.expectedEvents = ["playing"]
       logMsg("Expected Event: " + this.expectedEvents)
       this.player.play();
+
   }
   pause() {
       this.expectedEvents = ["paused"]
@@ -309,6 +310,95 @@ export default class App extends Lightning.Component {
 	  this.setVideoBitrate(this.expectedVideoBitrate)
       }
   }
+  currentAudioBitrate(){
+     var currAudioBitrate = 0
+     currAudioBitrate = this.getCurrentAudioBitrate()
+     logMsg("Current Audio Bitrate: " + currAudioBitrate)
+     this.updatePosValidationInfo(1)
+     if(currAudioBitrate <= 0){
+          this.errorFlag = 1
+          logMsg("[ERROR]: Current Audio Bitrate  obtained is invalid")
+      }
+  }
+  setVideoTrack(){
+     logMsg("Available Video Tracks "+ this.getAvailableVideoTracks())
+     this.availableVideoTrack = JSON.parse(this.getAvailableVideoTracks())
+     if(this.availableVideoTrack.length !=0){
+	  this.stop()
+	  var index = parseInt(getRandomInt(this.availableVideoTrack.length))
+	  this.expectedVideoTrack = this.availableVideoTrack[index].bandwidth
+	  logMsg("Expected track " + this.expectedVideoTrack)
+	  this.SetVideoTrackFlag = 1
+	  this.loadAAMPPlayer();
+	  this.setVideoTracks(this.expectedVideoTrack)
+	  this.updatePosValidationInfo(1)
+     }else{
+	  this.SetVideoTrackFlag = 0
+	  logMsg("Available Video Tracks List is empty")
+     }
+  }
+  setThumbnail(){
+     logMsg("Available Thumbnail Tracks "+ this.getAvailableThumbnailTracks())
+     this.availableThumbnailTrack = JSON.parse(this.getAvailableThumbnailTracks())
+     if(this.availableThumbnailTrack.length !=0){
+          var index = parseInt(getRandomInt(this.availableThumbnailTrack.length))
+          this.expectedThumbnailTrack = this.availableThumbnailTrack[index]
+          logMsg("Set Thumbnail Track")
+          var result = this.setThumbnailTrack(this.availableThumbnailTrack[index])
+	  logMsg("Set Thumbnail Result " + result)
+	  this.updatePosValidationInfo(1)
+	  if(result == true){
+	      logMsg("Set Thumbnail Track successful")
+	  }else{
+	     this.SetThumbnailTrackFlag = 1
+          }
+     }else{
+	  this.SetThumbnailTrackFlag = 1
+          logMsg("Available Thumbnail Tracks List is empty")
+     }
+  }
+  AudioTrackInfo(){
+	logMsg("Audio Track Info " + this.getAudioTrackInfo())
+	var TrackInfo = JSON.parse(this.getAudioTrackInfo())
+	this.updatePosValidationInfo(1)
+	if(TrackInfo.length !=0){
+	   if((TrackInfo.name == "") && (TrackInfo.language == "") && (TrackInfo.codec == "")){
+	      logMsg("Audio Track Info Details is incomplete")
+	   }else{
+	       logMsg("Audio Track Info Details is Retrieved")
+           }
+        }else{
+            this.SetAudioInfoFlag = 1
+        }
+  }
+  TextTrackInfo(){
+        logMsg("Text Track Info " + this.getTextTrackInfo())
+        var TrackInfo = JSON.parse(this.getTextTrackInfo())
+	this.updatePosValidationInfo(1)
+        if(TrackInfo.length !=0){
+           if((TrackInfo.name == "") && (TrackInfo.language == "") && (TrackInfo.rendition == "")){
+              logMsg("Text Track Info Details is incomplete")
+           }else{
+               logMsg("Text Track Info Details is Retrieved")
+           }
+	}else{
+            this.SetTextInfoFlag = 1
+        }
+  }
+  PlaybackStatistics(){
+      logMsg("Playback Statistics  " + this.getPlaybackStatistics())
+        var PlaybackInfo = JSON.parse(this.getPlaybackStatistics())
+	this.updatePosValidationInfo(1)
+        if(PlaybackInfo.length !=0){
+           if((PlaybackInfo.duration == "") && (PlaybackInfo.mediaType == "") && (PlaybackInfo.playbackMode == "")){
+              logMsg("PlayBack Statistics Info Details is incomplete")
+           }else{
+               logMsg("PlayBack Statistics Info Details is Retrieved")
+           }
+	}else{
+            this.SetPlaybackFlag = 1
+        }
+  }
   getPlaybackRate() {
      return this.player.getPlaybackRate();
   }
@@ -369,6 +459,30 @@ export default class App extends Lightning.Component {
   }
   setVideoBitrate(bitrate) {
       this.player.setVideoBitrate(bitrate);
+  }
+  getCurrentAudioBitrate(){
+      return this.player.getCurrentAudioBitrate();
+  }
+  getAvailableVideoTracks(){
+      return this.player.getAvailableVideoTracks();
+  }
+  setVideoTracks(bandwidth){
+     this.player.setVideoTracks(bandwidth);
+  }
+  getAvailableThumbnailTracks(){
+      return this.player.getAvailableThumbnailTracks();
+  }
+  setThumbnailTrack(index){
+      return this.player.setThumbnailTrack(index);
+  }
+  getAudioTrackInfo(){
+      return this.player.getAudioTrackInfo();
+  }
+  getTextTrackInfo(){
+      return this.player.getTextTrackInfo();
+  }
+  getPlaybackStatistics(){
+      return this.player.getPlaybackStatistics();
   }
 
   // AAMP Event Listerner and Handlers
@@ -720,13 +834,49 @@ export default class App extends Lightning.Component {
                     this.changeVideoBitrate();
                 },actionInterval);
             }
+	    else if (action == "curraudiobitrate"){
+		setTimeout(()=> {
+                    this.clearEvents()
+                    this.currentAudioBitrate();
+                },actionInterval);
+            }
+	    else if (action == "setvideotrack"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.setVideoTrack();
+                },actionInterval);
+            }
+	    else if (action == "setthumbnail"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.setThumbnail();
+                },actionInterval);
+            }
+	    else if (action == "audiotrackinfo"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.AudioTrackInfo();
+		},actionInterval);
+            }
+	    else if (action == "texttrackinfo"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.TextTrackInfo();
+                },actionInterval);
+	    }
+	    else if (action == "statistics"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.PlaybackStatistics();
+                },actionInterval);
+            }
             else if (action == "close"){
                 setTimeout(()=> {
                     this.updatePrevPosValidationResult()
                     logMsg("**************** Going to close ****************")
                     this.stop()
                 },actionInterval);
-            }
+	    }
             if (action != "close"){
                 setTimeout(()=> {
                     this.updateEventFlowFlag();
@@ -883,6 +1033,44 @@ export default class App extends Lightning.Component {
 	      Status = "FAILURE"
               logMsg("Failure Reason: Unable to select new video bitrate")
           }
+	  else if (this.SetVideoTrackFlag == 1){
+	      this.availableVideoTrack = JSON.parse(this.getAvailableVideoTracks())
+	      for (var i = 0; i < this.availableVideoTrack.length; i++){
+		  if(this.expectedVideoTrack == this.availableVideoTrack[i].bandwidth){
+		     if(this.availableVideoTrack[i].enabled == 1){
+			 logMsg("Expected Video Track is set")
+		     }else{
+			this.eventFlowFlag = 0
+			Status = "FAILURE"
+			logMsg("Expected Video Track is not set")
+		     }
+	          }else if(this.availableVideoTrack[i].enabled == 1){
+                     this.eventFlowFlag = 0
+		     Status = "FAILURE"
+                     logMsg("Expected Video Track is not set")
+	          }
+	      }
+          }
+	  else if (this.SetThumbnailTrackFlag == 1){
+	      this.eventFlowFlag = 0
+              Status = "Failure"
+	      logMsg("Failure Reason: Unable to set Thumbnail")
+	  }
+	  else if (this.SetAudioInfoFlag == 1){
+	      this.eventFlowFlag = 0
+              Status = "Failure"
+              logMsg("Failure Reason: Audio Track Info is Empty")
+	  }
+	  else if (this.SetTextInfoFlag == 1){
+	      this.eventFlowFlag = 0
+              Status = "Failure"
+              logMsg("Failure Reason: Text Track Info is Empty")
+          }
+	  else if (this.SetPlaybackFlag == 1){
+	      this.eventFlowFlag = 0
+              Status = "Failure"
+              logMsg("Failure Reason: Playback Info is Empty")
+          }
       }
       logMsg("Test step status: " + Status)
   }
@@ -1029,6 +1217,14 @@ export default class App extends Lightning.Component {
     this.expectedVideoBitrate= 0
     this.videoBitratesAvailability = 1
     this.VideoBitrateChangeFlag = 0
+    this.expectedVideoTrack = 0
+    this.SetVideoTrack = 0
+    this.availableThumbnailTrack = []
+    this.expectedThumbnail = 0
+    this.SetThumbnailTrackFlag = 0
+    this.SetAudioInfoFlag = 0
+    this.SetTextInfoFlag = 0
+    this.SetPlaybackFlag = 0
     logMsg("URL Info: " + this.videoURL )
 
     tag = this;

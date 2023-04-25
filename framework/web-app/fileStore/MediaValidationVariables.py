@@ -240,6 +240,7 @@ video_src_url_dash_segement_template = ""
 # Streams with multiple audio languages & subtitle text tracks
 video_src_url_multi_audio_tracks = ""
 video_src_url_multi_text_tracks  = ""
+video_src_url_multi_thumbnail_tracks = ""
 
 # Streams with multiple audio codecs
 #Video URL with AC3 and AAC codec audio
