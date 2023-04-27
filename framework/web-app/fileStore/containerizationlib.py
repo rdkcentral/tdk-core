@@ -30,6 +30,11 @@ import inspect
 import ConfigParser
 from time import sleep
 import pexpect
+import PerformanceTestVariables
+from rdkv_performancelib import *
+
+excluded_process_list = PerformanceTestVariables.excluded_process_list
+graphical_plugins_list = PerformanceTestVariables.graphical_plugins_list
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------
@@ -79,6 +84,47 @@ def containerization_executeInDUT (sshMethod, credentials, command):
         print "Exception occured during ssh session"
         print e
     return output
+#-------------------------------------------------------------------
+#GET THE SSH DETAILS FROM CONFIGURATION FILE
+#-------------------------------------------------------------------
+def containerization_getSSHParams(realpath,deviceIP):
+    ssh_dict = {}
+    print "\n getting ssh params from conf file"
+    conf_file,result = getConfigFileName(realpath)
+    if result == "SUCCESS":
+        result,ssh_method = getDeviceConfigKeyValue(conf_file,"SSH_METHOD")
+        result,user_name = getDeviceConfigKeyValue(conf_file,"SSH_USERNAME")
+        result,password = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
+        if any(value == "" for value in (ssh_method,user_name,password)):
+            print "please configure values before test"
+            ssh_dict = {}
+        else:
+            ssh_dict["ssh_method"] = ssh_method
+            if password.upper() == "NONE":
+                password = ""
+            ssh_dict["credentials"] = deviceIP +","+ user_name +","+ password
+    else:
+        print "Failed to find the device specific config file"
+    ssh_dict = json.dumps(ssh_dict)
+    return ssh_dict
+
+#-------------------------------------------------------------------
+#VALIDATE PROC ENTRY TO FIND WHETHER PLAYBACK IS HAPPENING
+#-------------------------------------------------------------------
+def containerization_validateProcEntry(sshmethod,credentials,video_validation_script):
+    result = "SUCCESS"
+    video_validation_script = video_validation_script.split('.py')[0]
+    try:
+        lib = importlib.import_module(video_validation_script)
+        method = "check_video_status"
+        method_to_call = getattr(lib, method)
+        result = method_to_call(sshmethod,credentials)
+    except Exception as e:
+        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        result = "FAILURE"
+    finally:
+        return result
+
 #---------------------------------------------------------------
 # EXECUTE A COMMAND IN TM AND GET THE OUTPUT
 # Description  : Execute a command in the Test Manager and get the output back
@@ -239,6 +285,47 @@ def containerization_getPluginStatus(plugin):
         return PluginStatus
     else:
         return result;
+
+#------------------------------------------------------------------
+#SET PLUGIN STATUS
+#------------------------------------------------------------------
+def containerization_setPluginStatus(plugin,status,uri=''):
+    data = ''
+    if plugin in graphical_plugins_list:
+        rdkshell_activated = check_status_of_rdkshell()
+        if rdkshell_activated:
+            if status in "activate":
+                data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'"}'
+            else:
+                data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'"}'
+    else:
+        data = '"method": "Controller.1.'+status+'", "params": {"callsign": "'+plugin+'"}'
+    if data != '':
+        result = execute_step(data)
+    else:
+        result = "EXCEPTION OCCURRED"
+    return result
+
+#-------------------------------------------------------------------
+#CHECK THE STATUS OF RDKSHELL PLUGIN AND ACTIVATE IF NEEDED
+#-------------------------------------------------------------------
+def check_status_of_rdkshell():
+    activated = False
+    rdkshell_status = containerization_getPluginStatus("org.rdk.RDKShell")
+    if "activated" == rdkshell_status:
+        activated = True
+    elif "deactivated" == rdkshell_status:
+        set_status = containerization_setPluginStatus("org.rdk.RDKShell","activate")
+        time.sleep(2)
+        rdkshell_status = containerization_getPluginStatus("org.rdk.RDKShell")
+        if "activated" in rdkshell_status:
+            activated = True
+        else:
+            print "\n Unable to activate RDKShell plugin"
+    else:
+        print "\n RDKShell status in DUT:",rdkshell_status
+    return activated
+
 #---------------------------------------------------------------
 # GET THE REQUIRED CONFIGURATIONS TO SSH INTO THE DUT
 # Description  : To get the required configurations to SSH into the DUT
@@ -386,7 +473,7 @@ def containerization_setPreRequisites(datamodel):
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
         for datamodels in datamodel:
-            command =  'tr181 -d '+str(datamodels)
+            command =  'tr181 -d/ '+str(datamodels)
             print "COMMAND : %s" %(command)
             output = containerization_executeInDUT(ssh_method,credentials,command)
             if "FAILURE" not in output:
@@ -469,9 +556,7 @@ def containerization_launchApplication(launch):
                 else:
                         launch_status = "FAILURE"
                         print 'FAILURE: Issue Launching the '+callsign+' Application'
-
                 result.append(launch_status)
-
          if "FAILURE" not in result:
             launch_status = "SUCCESS"
             return launch_status
@@ -497,15 +582,14 @@ def containerization_checkContainerRunningState(callsign):
         command =  'DobbyTool list'
         print "COMMAND : %s" %(command)
         output = containerization_executeInDUT(ssh_method,credentials,command)
-        print output
         callsign = callsign.split(",")
         for container in callsign:
-                container,uri = container.split("-")
-                if "running" in output.lower() and container.lower() in output.lower():
-                    print 'SUCCESS: '+container+' container is running'
-                else:
-                    print 'FAILURE: '+container+' container is not running'
-                    container_status = "FAILURE"
+            container,uri = container.split("-")
+            if "running" in output.lower() and container.lower() in output.lower():
+                print 'SUCCESS: '+container+' container is running'
+            else:
+                print 'FAILURE: '+container+' container is not running'
+                container_status = "FAILURE"
 
     else:
         print 'FAILURE: Failed to retrieve the required configuration'
@@ -848,3 +932,193 @@ def containerization_validateResourceUsage():
         return resource_usage
     else:
         return result
+
+#-------------------------------------------------------------------
+#VALIDATE VIDEO PLAYBACK IN PREMIUM APPS
+#-------------------------------------------------------------------
+def containerization_validateVideoPlayback(sshmethod,credentials,video_validation_script):
+    result = "SUCCESS"
+    video_validation_script = video_validation_script.split('.py')[0]
+    try:
+        lib = importlib.import_module(video_validation_script)
+        method = "check_video_status"
+        method_to_call = getattr(lib, method)
+        result = method_to_call(sshmethod,credentials)
+    except Exception as e:
+        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        result = "FAILURE"
+    finally:
+        return result
+
+#-------------------------------------------------------------------
+#REMOVE UNWANTED PROCESSES FROM ZORDER AND RETURN UPDATED ZORDER
+#-------------------------------------------------------------------
+def exclude_from_zorder(zorder):
+   new_zorder = [ element for element in zorder if element not in excluded_process_list ] 
+   return new_zorder
+
+#--------------------------------------------------------------------
+#EXECUTE COMPLETE LIFECYCLE METHODS OF A PLUGIN
+#--------------------------------------------------------------------
+def containerization_executeLifeCycle(plugin,operations,validation_details):
+    result = "FAILURE"
+    #Dictionary to store the method and parameter to be passed for that method
+    suspend_resume_dict = {"suspend":{"method":"org.rdk.RDKShell.1.suspend","param":'{"callsign":"'+plugin+'"}'},"resume":{"method":"org.rdk.RDKShell.1.launch","param":'{"callsign":"'+plugin+'", "type":"", "uri":""}'}}
+    #Dictionary to store the expected values for suspend and resume operations
+    expected_status_dict = {"suspend":["suspended"],"resume":["activated","resumed"]}
+    #Parameter used for move to front and move to back
+    param_val = '{"client": "'+plugin+'"}'
+    #Dictionary to store the index values to be checked in move to back and front operations
+    check_zorder_dict = {"moveToBack":-1,"moveToFront":0}
+    status = containerization_validatePluginFunctionality(plugin,operations,validation_details)
+    sys.stdout.flush()
+    if status == "SUCCESS":
+        #Suspend and resume operations
+        for operation in ["suspend","resume"]:
+            method = suspend_resume_dict[operation]["method"]
+            value = suspend_resume_dict[operation]["param"]
+            operation_status = containerization_setValue(method,value)
+            if operation_status != "EXCEPTION OCCURRED":
+                time.sleep(5)
+                curr_status = containerization_getPluginStatus(plugin)
+                sys.stdout.flush()
+                if curr_status in expected_status_dict[operation]:
+                    print "\n Successfully set {} plugin to {} status".format(plugin,curr_status)
+                else:
+                    print "\n Error while setting {} plugin to {} status, current status: {}".format(plugin,operation,curr_status)
+                    break
+            else:
+                print "\n Error while setting {} plugin to {}".format(plugin,operation)
+                break
+        #On successfull completion of the loop for suspend and resume, below block will get executed
+        else:
+            print "\n Successfully completed suspend and resume for {} plugin".format(plugin)
+            #Do move to front and back operations
+            for move_to_method in ["moveToBack","moveToFront"]:
+                move_to_status = containerization_setValue("org.rdk.RDKShell.1."+move_to_method,param_val)
+                if move_to_status != "EXCEPTION OCCURRED":
+                    time.sleep(5)
+                    zorder_result = containerization_getValue("org.rdk.RDKShell.1.getZOrder")
+                    sys.stdout.flush()
+                    if zorder_result != "EXCEPTION OCCURRED":
+                        print zorder_result
+                        zorder = zorder_result["clients"]
+                        zorder = exclude_from_zorder(zorder)
+                        if zorder[check_zorder_dict[move_to_method]].lower() == plugin.lower():
+                            print "\n {} operation is success ".format(move_to_method)
+                        else:
+                            print "\n Error while doing {} operation ".format(move_to_method)
+                            break
+                    else:
+                        print "\n Error while getting the zorder"
+                        break
+                else:
+                    print "\n Error while doing {} operation ".format(move_to_method)
+                    break
+            else:
+                print "\n Successfully completed move to back and move to front for the {} plugin".format(plugin)
+                result = "SUCCESS"
+    else:
+        print "\n Error occurred while lauching and checking the plugin functionality"
+    #Destroy the plugin
+    print "\n Deactivate {} plugin".format(plugin)
+    status = containerization_setPluginStatus(plugin,"deactivate")
+    if status != "EXCEPTION OCCURRED":
+        #Get the status
+        time.sleep(10)
+        plugin_status = containerization_getPluginStatus(plugin)
+        if plugin_status != 'deactivated':
+            print "\n {} plugin is not in deactivated state, current status:{}".format(plugin,plugin_status)
+            result = "FAILURE"
+        else:
+            print "\n Successfully deactivated {} plugin".format(plugin)
+    else:
+        print "\n Error while deactivating {} plugin".format(plugin)
+        result = "FAILURE"
+    return result
+
+#-------------------------------------------------------------------
+#VALIDATE PLUGIN FUNCTIONALITY
+#The function will launch the plugin and validate the functionality
+#of the plugin. eg: launch Cobalt, set video URL and validate video
+#playback
+#-------------------------------------------------------------------
+def containerization_validatePluginFunctionality(plugin,operations,validation_details):
+    result = "FAILURE"
+    operations = json.loads(operations)
+    validation_details = json.loads(validation_details)
+    movedToFront = False
+    #Activate plugin
+    print "\n Activating plugin : {}".format(plugin)
+    if plugin == "ResidentApp":
+        status = containerization_setPluginStatus(plugin,"activate",validation_details[1])
+    else:
+        status = containerization_setPluginStatus(plugin,"activate")
+    time.sleep(5)
+    #Check status
+    if status != "EXCEPTION OCCURRED":
+        curr_status = containerization_getPluginStatus(plugin)
+        time.sleep(10)
+        if curr_status in ("activated","resumed"):
+            zorder_result = containerization_getValue("org.rdk.RDKShell.1.getZOrder")
+            if zorder_result != "EXCEPTION OCCURRED":
+                zorder = zorder_result["clients"]
+                zorder = exclude_from_zorder(zorder)
+                if plugin.lower() in zorder:
+                    if zorder[0].lower() != plugin.lower():
+                        param = '{"client": "'+plugin+'"}'
+                        movetofront_result = containerization_setValue("org.rdk.RDKShell.1.moveToFront",param)
+                        if movetofront_result != "EXCEPTION OCCURRED":
+                            movedToFront = True
+                    else:
+                        movedToFront = True
+                else:
+                    print "\n {} is not present in the zorder: {}".format(plugin,zorder)
+                if movedToFront:
+                    for operation in operations:
+                        method = [plugin_method for plugin_method in operation][0]
+                        value = [operation[plugin_method] for plugin_method in operation][0]
+                        response = containerization_setValue(method,value)
+                        sys.stdout.flush()
+                        if response == "EXCEPTION OCCURRED":
+                            print "\n Error while executing {} method".format(method)
+                            break
+                        time.sleep(20)
+                    else:
+                        print "\n Successfully completed launching and setting the operations for {} plugin".format(plugin)
+                        validation_check = validation_details[0]
+                        if validation_check == "video_validation":
+                            time.sleep(20)
+                            sshmethod = validation_details[1]
+                            credentials = validation_details[2]
+                            video_validation_script = validation_details[3]
+                            video_status =  containerization_validateVideoPlayback(sshmethod,credentials,video_validation_script)
+                            sys.stdout.flush()
+                            if video_status != "SUCCESS":
+                                print "\n Video is not playing"
+                                return result
+                            else:
+                                print "\n Video is playing"
+                                result = "SUCCESS"
+                        elif validation_check == "no_validation":
+                            print "\n Validation is not needed, proceeding the test"
+                            result = "SUCCESS"
+                        else:
+                            method = validation_check
+                            expected_value = validation_details[1]
+                            value = containerization_getValue(method)
+                            if value not in ("EXCEPTION OCCURRED", None) and expected_value in value:
+                                print "\n The value:{} set for {} plugin".format(value,plugin)
+                                result = "SUCCESS"
+                            else:
+                                print "\n Expected Value is not present, Current value: {}".format(value)
+                                return result
+                else:
+                    print "\n Error while moving {} plugin to front ".format(plugin)
+            else:
+                print "\n Error while getting the zorder result"
+        else:
+            print "\n Plugin is not activated, current status: {}".format(curr_status)
+    else:
+        print "\n Error while activating the plugin"
+    return result
