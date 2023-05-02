@@ -111,6 +111,33 @@ def rdkv_basic_sanity_executeInDUT (sshMethod, credentials, command):
         print "Exception occured during ssh session"
         print e
     return output
-
+#-------------------------------------------------------------------
+#EXECUTE A COMMAND IN DUT SHELL AND GET THE OUTPUT
+# Description  : Execute a command in DUT through ssh_and_execute() from SSHUtility library and get the output
+# Parameters   : 1. sshMethod -  string to specify the SSH method to be used
+#                2. credentials - a coma ceparated string to specify the parameters for ssh_and_execute() method. Values are retrieved from <device>.config
+#                       a. credentials[0] - string to specify the DUT IP
+#                       b. credentials[1] - string to specify the username to ssh to DUT
+#                       c. credentials[2] - string to specify the password to ssh to DUT
+#                3. command - string to specify the command to be executed in DUT
+# Return Value : console output of the command executed on DUT
+#-------------------------------------------------------------------
+def rdkv_basic_sanity_rebootexecution (sshMethod, credentials, command):
+    output = ""
+    if sshMethod == "directSSH":
+        credentialsList = credentials.split(',')
+        host_name = credentialsList[0]
+        user_name = credentialsList[1]
+        password = credentialsList[2]
+    else:
+        #TODO
+        print "Secure ssh to CPE"
+        pass
+    try:
+        output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
+    except Exception as e:
+        #Here exception is passed to avoid exception error because device will be offline when reboot is triggered from shellscript.
+        pass
+    return output
 
 
