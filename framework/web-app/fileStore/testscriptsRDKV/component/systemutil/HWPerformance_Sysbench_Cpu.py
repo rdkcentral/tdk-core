@@ -46,10 +46,10 @@
     <test_objective>To execute Sysbench opensource performance tool and capture the cpu metrics</test_objective>
     <test_type>Positive</test_type>
     <test_setup>XG, Video Accelerator</test_setup>
-    <pre_requisite>1. TDK Agent should be up and running 2. sysbench binary should be available in DUT 3. Log parsing script HWPerf_metric_parser.sh and xml file HWPerf_metric_details.xml should be available at $TDK_PATH</pre_requisite>
-    <api_or_interface_used>Execute sysbench binary</api_or_interface_used>
-    <input_parameters>--test=cpu --cpu-max-prime=200 run</input_parameters>
-    <automation_approch>1. Execute the sysbench binary with the required parameters and save the log in $TDK_PATH/logs/performance.log 2. Parse the sysbench log using HWPerf_metric_parser.sh script and save the metrices value as Json response in logparser-results.txt. 3. Return the metrices as Json response. Note. More details on sysbench is given in the corresponding manual</automation_approch>
+    <pre_requisite>1. TDK Agent should be up and running 2. sysbench binary should be available in DUT 3. Shell script file TDK_HWPerfTools_Executor.sh, Log parsing script HWPerf_metric_parser.sh and xml file HWPerf_metric_details.xml should be available at $TDK_PATH</pre_requisite>
+    <api_or_interface_used>Executes the sysbench binary</api_or_interface_used>
+    <input_parameters>sh TDK_HWPerfTools_Executor.sh Sysbench_Cpu</input_parameters>
+    <automation_approch>1. Execute the TDK_HWPerfTools_Executor.sh file with the required parameters and save the log in $TDK_PATH/logs/performance.log 2. Parse the sysbench log using HWPerf_metric_parser.sh script and save the metrices value as Json response in logparser-results.txt. 3. Return the metrices as Json response. Note. More details on sysbench is given in the corresponding manual</automation_approch>
     <expected_output>The command should execute successfully</expected_output>
     <priority>Low</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
@@ -80,42 +80,31 @@ sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
          # Execute Sysbench and get the result
-         tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
-         App_with_args="sysbench --test=cpu --cpu-max-prime=200 run > $TDK_PATH/logs/performance.log;"
-         Parse_log="sh $TDK_PATH/HWPerf_metric_parser.sh sysbench_cpu_metric;"
-         Display_metric="cat $TDK_PATH/logs/logparser-results.txt"
-         final_cmd = App_with_args + Parse_log + Display_metric
-         print final_cmd;
-         tdkTestObj.addParameter("command", final_cmd);
+         tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
+         command = "sh TDK_HWPerfTools_Executor.sh Sysbench_Cpu"
+         print "Executor Command : %s" %command
+         tdkTestObj.addParameter("command",command)
          tdkTestObj.executeTestCase("SUCCESS");
          actualresult = tdkTestObj.getResult();
          details = tdkTestObj.getResultDetails().strip();
          expectedresult = "SUCCESS"
-         print "Json reponse: %s" %details
          if expectedresult in actualresult:
-                 tdkTestObj.setResultStatus("SUCCESS");
-                 print "transfer log file"
-                 filepath = tdkTestObj.transferLogs( "/opt/TDK/logs/logparser-results.txt", "false" );
-                 try:
-                   data = open(filepath,'r');
-                   message = data.read()
-                   print "\n**************HW Performance tools Execution Log - Begin**********\n"
-                   print(message)
-                   #for SysBench CPU test ==>reverserscheck="true"
-                   result=hardwarePerformanceThresholdComparison(sysUtilObj,message,unit=" seconds",reverserscheck="true")
-                   tdkTestObj.setResultStatus(result);
-                   print "\n**************HW Performance tools Execution - End*************\n"
-                   data.close()
-                 except IOError:
-                   print "ERROR : Unable to open execution log file"
-                   tdkTestObj.setResultStatus("FAILURE");
-                   sysUtilObj.unloadModule("systemutil");
-                   exit()
-                 print "[TEST EXECUTION RESULT] :  %s" %result
+             if details:
+                 details=details.replace(r'\"','\"').replace(r'\n', '\n')
+                 print "\n******************** HW Performance tools Execution Log - Begin ****************************"
+                 print "\n" +  details
+                 print "********************** HW Performance tools Execution Log - End ****************************\n"
+                 result=hardwarePerformanceThresholdComparison(sysUtilObj,details,unit=" MB/s",reverserscheck="false")
+                 tdkTestObj.setResultStatus(result);
+                 print "\n[TEST EXECUTION RESULT] :  %s\n" %result
+             else:
+                 tdkTestObj.setResultStatus("FAILURE");
+                 print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
          else:
                  tdkTestObj.setResultStatus("FAILURE");
-                 print "[TEST EXECUTION RESULT] : FAILURE"
+                 print "\n[TEST EXECUTION RESULT] : FAILURE\n"
+else:
+    print "System Module Loading Status:FAILURE"
 
-         #Unload systemutil module
-         sysUtilObj.unloadModule("systemutil");
-
+#Unload systemutil module
+sysUtilObj.unloadModule("systemutil");

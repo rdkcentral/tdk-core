@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>HWPerformance_Stress-ng_Io</name>
+  <name>HWPerformance_Stress-ng_Diskinandout</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,11 +33,11 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Stress-ng is tool to execute HWPerformance_Stress-ng_Io component</synopsis>
+  <synopsis>Execute the stress level of the system</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>1</execution_time>
+  <execution_time>5</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -48,10 +48,11 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>Video_Accelerator</box_type>
-   <box_type>RPI-HYB</box_type>
+    <box_type>RPI-HYB</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
-    <box_type>Hybrid-1</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -59,35 +60,35 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_HWPerformance_12</test_case_id>
-    <test_objective>Execute Stress-ng opensource performance tool it will test io stress in the system</test_objective>
+    <test_case_id>TC_HWPerformance_14</test_case_id>
+    <test_objective>Execute Stress-ng opensource performance tool will test disk I/O aio, hdd, revio, seek, sync-file stress in the system</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>XG, Video Accelerator</test_setup>
+    <test_setup>Video Accelerator</test_setup>
     <pre_requisite>1. TDK Agent should be up and running 2. stress-ng binary should be available in DUT 3. Shell script file TDK_HWPerfTools_Executor.sh, Log parsing script HWPerf_metric_parser.sh and xml file HWPerf_metric_details.xml should be available at $TDK_PATH</pre_requisite>
     <api_or_interface_used>Executes the stress-ng binary</api_or_interface_used>
-    <input_parameters>sh TDK_HWPerfTools_Executor.sh Stress-ng_Io</input_parameters>
+    <input_parameters>sh TDK_HWPerfTools_Executor.sh DiskinAndOut</input_parameters>
     <automation_approch>1. Execute the TDK_HWPerfTools_Executor.sh file with the required parameters and save the log in $TDK_PATH/logs/performance.log 2. Parse the stress-ng log using HWPerf_metric_parser.sh script and save the metrices value as Json response in logparser-results.txt. 3. Return the metrices as Json response. Note. More details on stress-ng is given in corresponding manual page</automation_approch>
     <expected_output>The command should execute successfully</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
-    <test_script>HWPerformance_Stress-ng_Io</test_script>
+    <test_script>HWPerformance_Stress-ng_Diskinandout</test_script>
     <skipped>No</skipped>
-    <release_version>M110</release_version>
+    <release_version>M112</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from rdkv_performancelib import * ;
 
-sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 
-sysUtilObj.configureTestCase(ip,port,'HWPerformance_Stress-ng_Io');
+sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
+sysUtilObj.configureTestCase(ip,port,'HWPerformance__Stress-ng_Diskinandout');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
 print "System module loading status : %s" %sysUtilLoadStatus;
 #Set the module loading status
@@ -96,7 +97,7 @@ sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
          # Execute Stress-ng and get the result
          tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-         command = "sh TDK_HWPerfTools_Executor.sh Stress-ng_Io"
+         command = "sh TDK_HWPerfTools_Executor.sh DiskInAndOut"
          print "Executor Command : %s" %command
          tdkTestObj.addParameter("command",command)
          tdkTestObj.executeTestCase("SUCCESS");
@@ -104,7 +105,7 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
          details = tdkTestObj.getResultDetails().strip();
          expectedresult = "SUCCESS"
          if expectedresult in actualresult:
-             if details:
+             if  details:
                  details=details.replace(r'\"','\"').replace(r'\n', '\n')
                  print "\n******************** HW Performance tools Execution Log - Begin ****************************"
                  print "\n" +  details
@@ -115,6 +116,7 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
              else:
                  tdkTestObj.setResultStatus("FAILURE");
                  print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
+
          else:
                  tdkTestObj.setResultStatus("FAILURE");
                  print "\n[TEST EXECUTION RESULT] : FAILURE\n"
@@ -123,4 +125,3 @@ else:
 
 #Unload systemutil module
 sysUtilObj.unloadModule("systemutil");
-
