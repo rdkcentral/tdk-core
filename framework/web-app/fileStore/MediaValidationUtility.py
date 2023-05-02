@@ -25,6 +25,7 @@ from rdkv_performancelib import *
 from rdkv_medialib import *
 from web_socket_util import *
 from MediaValidationVariables import *
+from StabilityTestUtility import *
 
 # Device specific config file
 deviceConfigFile = ""
@@ -144,7 +145,7 @@ def setProcCheckMode(mode):
 
 def setLoggingMethod(obj):
     global logging_method
-    config_file,result = getDeviceConfigFile(obj.realpath)
+    config_file,result = get_configfile_name(obj)
     result,logging_method = getDeviceConfigKeyValue(config_file,"LOGGING_METHOD")
 
 def updateOptions(val):

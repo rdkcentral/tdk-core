@@ -48,12 +48,6 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +57,7 @@
     <test_case_id>RDKV_PERFORMANCE_130</test_case_id>
     <test_objective>The objective of this script is to get the Resource usage while going back from vimeo to home screen</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI, Accelerator</test_setup>
+    <test_setup></test_setup>
     <pre_requisite>None</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>1. The URL of the application to be launched.</input_parameters>

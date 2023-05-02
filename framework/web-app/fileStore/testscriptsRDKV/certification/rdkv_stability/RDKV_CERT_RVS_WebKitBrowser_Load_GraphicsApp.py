@@ -193,6 +193,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                     else:
                         print "\n Unable to set the video URL in WebkitBrowser, current URL: ",webkit_url
                         tdkTestObj.setResultStatus("FAILURE")
+			break
                 else:
                     print "\n Successfully completed {} iterations in {} minutes".format(iteration,test_time_in_mins)
                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list

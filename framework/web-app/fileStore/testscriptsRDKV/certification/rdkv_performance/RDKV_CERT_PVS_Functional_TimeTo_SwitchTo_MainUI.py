@@ -48,12 +48,6 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +57,7 @@
     <test_case_id>RDKV_PERFORMANCE_30</test_case_id>
     <test_objective>The objective of this test is to get time required to launch main UI from another window.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup></test_setup>
     <pre_requisite>1. Time in Test manager and DUT should be in sync with UTC.
 2. wpeframework process must be running in DUT.</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
