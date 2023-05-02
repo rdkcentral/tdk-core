@@ -556,7 +556,7 @@
             <testStep testStepId="3" name="Resume_WebKitBrowser" method="LaunchApplication" delay="3" >
               <params>
                 <param tag="callsign" value="WebKitBrowser" />
-                <param tag="type" value="HtmlApp"  />
+                <param tag="type" value="WebKitBrowser"  />
                 <param tag="uri"  useConfigFile="true" key="RDKSHELL_WEBKIT_LAUNCH_URL"  />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
@@ -685,7 +685,7 @@
             <testStep testStepId="4" name="Resume_WebKitBrowser" method="LaunchApplication" delay="3" >
               <params>
                 <param tag="callsign" value="WebKitBrowser" />
-                <param tag="type" value="HtmlApp"  />
+                <param tag="type" value="WebKitBrowser"  />
                 <param tag="uri"  useConfigFile="true" key="RDKSHELL_WEBKIT_LAUNCH_URL"  />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
@@ -874,7 +874,7 @@
             <testStep testStepId="4" name="Resume_WebKitBrowser" method="LaunchApplication" delay="3" >
               <params>
                 <param tag="callsign" value="WebKitBrowser" />
-                <param tag="type" value="HtmlApp"  />
+                <param tag="type" value="WebKitBrowser"  />
                 <param tag="uri"  useConfigFile="true" key="RDKSHELL_WEBKIT_LAUNCH_URL"  />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
