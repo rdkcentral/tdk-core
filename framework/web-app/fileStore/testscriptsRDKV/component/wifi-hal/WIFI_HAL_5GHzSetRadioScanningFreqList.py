@@ -72,6 +72,7 @@ freqList : list of frequency to be set</input_parameters>
 import tdklib;
 import tdkvWifiUtility;
 from tdkvWifiUtility import *;
+from time import *;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("wifihal","1");
@@ -143,6 +144,21 @@ if "SUCCESS" in loadmodulestatus.upper():
                     tdkTestObj.setResultStatus("FAILURE");
                     print "ACTUAL RESULT : ",details
                     print "[TEST EXECUTION RESULT] : FAILURE";
+                print "Restoring default configuration"
+                tdkTestObj = obj.createTestStep("WIFI_HAL_SetRadioScanningFreqList");
+                tdkTestObj.addParameter("radioIndex",0);
+                freq_list = tdkvWifiUtility.set_2ghz_freq_list + " "  + tdkvWifiUtility.set_5ghz_freq_list
+                tdkTestObj.addParameter("freqList",freq_list);
+                tdkTestObj.executeTestCase(expectedresult);
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print "Default configuration restored"
+                    sleep(60)
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print "Unable to set to default configuration"
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 print "ACTUAL RESULT : ",details

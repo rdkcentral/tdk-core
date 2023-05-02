@@ -86,6 +86,11 @@ loadmodulestatus =obj.getLoadModuleResult();
 if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     radioIndex = 1
+    connectresult = isConnectedtoSSID(obj,radioIndex);
+    if "TRUE" not in connectresult:
+        print "Connecting to SSID operation failed"
+        obj.unloadModule("wifihal");
+        exit()
     #Script to load the configuration file of the component
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
     #Giving the method name to invoke the api for radio operating channel bandwidth. ie,wifi_getRadioOperatingChannelBandwidth()
@@ -99,7 +104,7 @@ if "SUCCESS" in loadmodulestatus.upper():
     #Expected operating bandwidth list:NULL if not connected
     ExpectedList = ["20MHz", "40MHz", "80MHz", "80+80", "160", "NULL"];
     if expectedresult in actualresult :
-        Bandwidth= details.split(":")[1].strip(" ");
+        Bandwidth= details.split(":")[1].strip(" ").strip("\\n");
         print Bandwidth;
         if Bandwidth in ExpectedList:
             #Set the result status of execution
