@@ -1594,3 +1594,45 @@ def getQueryNowResult(obj, step, paramName, expectedresult):
 
     return tdkTestObj, actualresult, details;
 
+# wait_for_namespace
+# Syntax      : wait_for_namespace(obj, maxwait, sleeptime, namespace, expectedresult)
+# Description : Function to check the availability of a namespace
+# Parameters  : obj - wifiagent object
+#               maxwait - number of iterations to wait
+#               sleeptime - sleep time in seconds
+#               namespace - the namespace for which availability needs to be checked
+#               expectedresult - SUCCESS/FAILURE
+# Return Value: found, tdkTestObj
+#               found - 0 (Namespace not available)
+#               found - 1 (Namespace available)
+
+def wait_for_namespace(obj, maxwait, sleeptime, namespace, expectedresult):
+    #Wait for the required namespace to be available upto a maximum wait time
+    found = 0;
+    print "Waiting for %s namespace to be available..." %namespace;
+
+    for iteration in range(1, maxwait + 1):
+        print "Iteration %d" %iteration;
+        tdkTestObj = obj.createTestStep('WIFIAgent_GetNames')
+        tdkTestObj.addParameter("pathname",namespace)
+        tdkTestObj.addParameter("brecursive",0)
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+
+        if expectedresult in actualresult and "Can't find destination component" not in details:
+            found = 1;
+            break;
+        else:
+            print "Sleeping for %ds..." %sleeptime;
+            sleep(sleeptime);
+
+    if found == 1:
+        #Set the result sitatus of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print "%s namepsace is available" %namespace;
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print "%s namepsace is NOT available" %namespace;
+    return found, tdkTestObj;
