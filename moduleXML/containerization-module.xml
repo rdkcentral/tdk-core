@@ -29,9 +29,59 @@
     <crashFileNames>[]</crashFileNames>
   <!-- Total functions corresponding module  -->
     <functions>
-      <function name='Containerization_Do_Nothing' />
+      <function name='containerization_obtainCredentials' />
+      <function name='containerization_cloneDobby' />
+      <function name='containerization_setPreRequisites' />
+      <function name='containerization_setPostRequisites' />
+      <function name='containerization_getDeviceConfig' />
+      <function name='containerization_launchApplication' />
+      <function name='containerization_checkContainerRunningState' />
+      <function name='containerization_executeDobbyTest' />
+      <function name='containerization_checkDobbyVersion' />
+      <function name='containerization_checkDevLoopPartition' />
+      <function name='containerization_executeInDUT' />
+      <function name='containerization_rebootDevice' />
+      <function name='containerization_executeLifeCycle' />
+      <function name='containerization_validatePluginFunctionality' />
+      <function name='containerization_setValue' />
+      <function name='containerization_getSSHParams' />
+      <function name='containerization_validateProcEntry' />
+      <function name='containerization_validateResourceUsage' />
+      <function name='containerization_getValue' />
+      <function name='containerization_getPluginStatus' />
     </functions>
   <!-- Total parameters corresponding module  -->
-    <parameters />
+    <parameters>
+      <parameter funName='containerization_cloneDobby' parameterName='basePath' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setPreRequisites' parameterName='datamodel' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setPostRequisites' parameterName='datamodel' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getDeviceConfig' parameterName='basePath' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getDeviceConfig' parameterName='configKey' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_launchApplication' parameterName='launch' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_checkContainerRunningState' parameterName='callsign' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_executeDobbyTest' parameterName='containername' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_executeDobbyTest' parameterName='testCases' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_checkDobbyVersion' parameterName='testCase' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_checkDevLoopPartition' parameterName='testCase' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_executeInDUT' parameterName='sshMethod' parameterType='STRING' range='a-z' />
+      <parameter funName='containerization_executeInDUT' parameterName='credentials' parameterType='STRING' range='a-z' />
+      <parameter funName='containerization_executeInDUT' parameterName='command' parameterType='STRING' range='a-z' />
+      <parameter funName='containerization_rebootDevice' parameterName='waitTime' parameterType='STRING' range='0-9' />
+      <parameter funName='containerization_executeLifeCycle' parameterName='plugin' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_executeLifeCycle' parameterName='operations' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_executeLifeCycle' parameterName='validation_details' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_validatePluginFunctionality' parameterName='plugin' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_validatePluginFunctionality' parameterName='operations' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_validatePluginFunctionality' parameterName='validation_details' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setValue' parameterName='method' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setValue' parameterName='value' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getSSHParams' parameterName='realpath' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getSSHParams' parameterName='deviceIP' parameterType='STRING' range='0-9' />
+      <parameter funName='containerization_validateProcEntry' parameterName='ssh_method' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_validateProcEntry' parameterName='credentials' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_validateProcEntry' parameterName='video_validation_script' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getValue' parameterName='method' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_getPluginStatus' parameterName='plugin' parameterType='STRING' range='A-Z' />
+    </parameters>
   </module>
 </xml>
