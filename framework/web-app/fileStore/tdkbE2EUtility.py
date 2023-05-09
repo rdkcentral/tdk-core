@@ -2335,7 +2335,7 @@ def ftpToClient_File_Download(dest,dest_ip,src,src_ip):
 
 ########## End of Function ##########
 
-def sshToClient(dest_ip,dest_inteface,source,dest):
+def sshToClient(dest_ip,dest_inteface,source,dest,dest_inet_address):
 # sshToClient
 # Syntax      : sshToClient()
 # Description : Function to ssh from one client to other client
@@ -2343,6 +2343,7 @@ def sshToClient(dest_ip,dest_inteface,source,dest):
 #               dest_inteface - interface of the dest client ip
 #               source - Client from which ssh to be done
 #		dest - Client to which ss to be done
+#               dest_inet_address - destination address
 # Return Value: Returns the status of ping operation
         try:
                 status = clientConnect(source)
@@ -2355,11 +2356,11 @@ def sshToClient(dest_ip,dest_inteface,source,dest):
                                 else:
                                     script_name = wan_script;
                                 if dest == "WLAN":
-                                    command="sudo sh %s ssh_to_client %s %s %s %s" %(script_name,wlan_password,wlan_username,dest_ip,dest_inteface)
+                                    command="sudo sh %s ssh_to_client %s %s %s %s %s" %(script_name,wlan_password,wlan_username,dest_ip,dest_inteface, dest_inet_address)
                                 if dest == "LAN":
-                                    command="sudo sh %s ssh_to_client %s %s %s %s" %(script_name,lan_password,lan_username,dest_ip,dest_inteface)
+                                    command="sudo sh %s ssh_to_client %s %s %s %s %s" %(script_name,lan_password,lan_username,dest_ip,dest_inteface, dest_inet_address)
                                 if dest == "WAN":
-                                    command="sudo sh %s ssh_to_client %s %s %s %s" %(script_name,wan_password,wan_username,dest_ip,dest_inteface)
+                                    command="sudo sh %s ssh_to_client %s %s %s %s %s" %(script_name,wan_password,wan_username,dest_ip,dest_inteface, dest_inet_address)
                                 value = executeCommand(command)
                                 if value == dest_ip:
                                     status = "SUCCESS"

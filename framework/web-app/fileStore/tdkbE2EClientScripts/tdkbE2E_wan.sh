@@ -123,9 +123,17 @@ kill_iperf()
 start_node()
 {
         export DISPLAY=:0
-        java -jar $var2 -role node -host $var5 -hub http://$var3:4444/grid/register/ > $var4 2>&1 &
+#       Uncomment the lines L1 and comment out L2 if using Selenium version = 3.141.59
+#       Uncomment the lines L2 and comment out L1 if using Selenium version = 4.9.0
+#       L1 below
+#       java -jar $var2 -role node -host $var5 -hub http://$var3:4444/grid/register/ > $var4 2>&1 &
+#       L2 below
+        java -jar $var2 node --hub http://$var3:4444/grid/register/ > $var4 2>&1 &
         sleep 20
-        value="$(cat $var4 | grep "The node is registered to the hub and ready to use" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L1 below
+#       value="$(cat $var4 | grep "The node is registered to the hub and ready to use" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L2 below
+        value="$(cat $var4 | grep "Node has been added" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
 #To kill the selenium hub and node

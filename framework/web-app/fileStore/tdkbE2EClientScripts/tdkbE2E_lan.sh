@@ -22,7 +22,12 @@
 # Get the IP address of the LAN after connecting to it
 get_lan_ip_address()
 {
-        value="$(ifconfig $var2 | grep "$var3" | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+#       Uncomment the line L1 and comment out L2 if using Ubuntu version = 16.04
+#       Uncomment the line L2 and comment out L1 if using Ubuntu version = 18.04
+#       L1 below
+#       value="$(ifconfig $var2 | grep "$var3" | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+#       L2 below
+        value="$(ifconfig $var2 | grep "$var3" | tr -s ' ' | cut -d ' ' -f 3 | head -1)"
         echo "OUTPUT:$value"
 }
 
@@ -167,7 +172,12 @@ nslookup_in_client()
 # Get the subnet mask of the LAN client
 get_lan_subnet_mask()
 {
-        value="$(ifconfig $var2 | grep "$var3" | cut -d ':' -f 4 | cut -d ' ' -f 1)"
+#       Uncomment the line L1 and comment out L2 if using Ubuntu version = 16.04
+#       Uncomment the line L2 and comment out L1 if using Ubuntu version = 18.04
+#       L1 below
+#       value="$(ifconfig $var2 | grep "$var3" | cut -d ':' -f 4 | cut -d ' ' -f 1)"
+#       L2 below
+        value="$(ifconfig $var2 | grep "$var3" | tr -s ' ' | cut -d ' ' -f 5)"
         echo "OUTPUT:$value"
 }
 
@@ -313,24 +323,42 @@ remove_File()
 # To get the MAC address of the lan client
 get_lan_mac()
 {
-        value="$(ifconfig $var2 | grep HWaddr | awk '{ print $5 }')"
+#       Uncomment the line L1 and comment out L2 if using Ubuntu version = 16.04
+#       Uncomment the line L2 and comment out L1 if using Ubuntu version = 18.04
+#       L1 below
+#       value="$(ifconfig $var2 | grep HWaddr | awk '{ print $5 }')"
+#       L2 below
+        value="$(ifconfig $var2 | grep ether | tr -s ' ' | cut -d ' ' -f 3)"
         echo "OUTPUT:$value"
 }
 
 #To do ssh to client machines
 ssh_to_client()
 {
-        value="$(sshpass -p$var2 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeychecking=no $var3@$var4 ifconfig $var5 | grep "inet add" | cut -d ':' -f 2 | cut -d ' ' -f 1)"
-        echo "OUTPUT:$value"
+#      Uncomment the line L1 and comment out L2 if using Ubuntu version = 16.04
+#      Uncomment the line L2 and comment out L1 if using Ubuntu version = 18.04
+#      L1 below
+#      value="$(sshpass -p$var2 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeychecking=no $var3@$var4 ifconfig $var5 | grep $var6 | cut -d ':' -f 2 | cut -d ' ' -f 1)"
+#      L2 below
+       value="$(sshpass -p$var2 ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeychecking=no $var3@$var4 ifconfig $var5 | grep -m1 $var6 | tr -s ' ' | cut -d ' ' -f 3)"
+       echo "OUTPUT:$value"
 }
 
 #To start node in client machine
 start_node()
 {
         export DISPLAY=:0
-        java -jar $var2 -role node -host $var5 -hub http://$var3:4444/grid/register/ > $var4 2>&1 &
+#       Uncomment the lines L1 and comment out L2 if using Selenium version = 3.141.59
+#       Uncomment the lines L2 and comment out L1 if using Selenium version = 4.9.0
+#       L1 below
+#       java -jar $var2 -role node -host $var5 -hub http://$var3:4444/grid/register/ > $var4 2>&1 &
+#       L2 below
+        java -jar $var2 node --hub http://$var3:4444/grid/register/ > $var4 2>&1 &
         sleep 20
-        value="$(cat $var4 | grep "The node is registered to the hub and ready to use" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L1 below
+#       value="$(cat $var4 | grep "The node is registered to the hub and ready to use" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L2 below
+        value="$(cat $var4 | grep "Node has been added" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
 #To kill the selenium hub and node

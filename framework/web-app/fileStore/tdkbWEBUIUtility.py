@@ -217,7 +217,12 @@ def openLocalWebUI(GridUrl,tdkTestObj,LoginStatus):
     try:
         print "Opening the requested URL in browser"
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
-        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # Uncomment the below line if there is a physical display unit for UI 
+        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
+        options = Options()
+        options.headless = True
+        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
 	#Uncomment below line and comment next line if UI page has changed
 	#checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/h1").text 
@@ -271,7 +276,12 @@ def openCaptivePortal(GridUrl,tdkTestObj):
     try:
         print "Opening the requested URL in browser"
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
-        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # Uncomment the below line if there is a physical display unit for UI
+        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
+        options = Options()
+        options.headless = True
+        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
         checkUI = driver.find_element_by_xpath('//*[@id="get_set_up"]').text
         if "Let's Get Set Up" == checkUI:
@@ -303,7 +313,12 @@ def isUIAvailable(GridUrl,tdkTestObj):
     try:
         print "Opening the requested URL in browser"
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
-        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # Uncomment the below line if there is a physical display unit for UI
+        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
+        options = Options()
+        options.headless = True
+        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
         Status = "FAILURE"
         driver.quit()

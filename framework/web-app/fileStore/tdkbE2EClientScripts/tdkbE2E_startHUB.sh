@@ -26,9 +26,17 @@
 start_hub()
 {
         export DISPLAY=:0
-        java -jar $var2 -role hub -host $var4 > $var3 2>&1 &
+#       Uncomment lines L1 and comment lines L2 if selenium version = 3.141.59
+#       Uncomment lines L2 and comment lines L1 if selenium version = 4.9.0
+#       L1 below
+#       java -jar $var2 -role hub -host $var4 > $var3 2>&1 &
+#       L2 below
+        java -jar $var2 hub > $var3 2>&1 &
         sleep 10
-        value="$(cat $var3 | grep "Selenium Grid hub is up and running" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L1 below
+#       value="$(cat $var3 | grep "Selenium Grid hub is up and running" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+#       L2 below
+        value="$(cat $var3 | grep "Started Selenium Hub" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
 #To kill the selenium hub in the machine
