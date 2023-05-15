@@ -2698,9 +2698,26 @@
               <resultGeneration useMethodTag="rdkshell_get_result_status"/>
             </testStep>
         </testCase>
+
         <!-- Test case 95 -->
         <testCase testCaseId="RDKShell_95" testCaseName="RDKShell_Launch_WesterosTest_Application_Check_Sate" desc="Checks the state on launching,suspend,resume westeros app" >
             <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Destroy_HtmlApp_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues="htmlapp" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_HtmlApp_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="HtmlApp" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                   <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_not_exists" expectedValues="htmlapp" />
+                   </testStep>
+                 </prerequisite>
+            </testCasePreRequisite>
             <testStep testStepId="1" name="Launch_Westeros_Application" method="LaunchApplication">
                 <params>
                       <param tag="callsign"  value="HtmlApp" />
@@ -2741,23 +2758,32 @@
             <testStep testStepId="9" name="Is_Westeros_App_Resumed" method="Get_Application_State" >
               <resultGeneration useMethodTag="rdkshell_get_state" arguments="HtmlApp" expectedValues="resumed" />
             </testStep>
-        <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Destroy_Westros_Application">
-            <testStep testStepId="1" name="Check_On_Destroyed_Event" method="DestroyApplication"  >
+            <testStep testStepId="10" name="Destroy_Application" method="DestroyApplication"  >
               <params>
                 <param tag="callsign"  value="HtmlApp" />
               </params>
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
-            <testStep testStepId="2" name="Check_On_Destroyed_Event" event="Event_On_Destroyed" action="eventListener"  delay="2">
+            <testStep testStepId="11" name="Check_On_Destroyed_Event" event="Event_On_Destroyed" action="eventListener"  delay="2">
                 <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="HtmlApp"/>
             </testStep>
-            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+            <testStep testStepId="12" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" expectedValues="htmlapp" />
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Launch_HtmlApp_Application">
+            <testStep testStepId="1" name="Launch_Application" method="LaunchApplication">
+              <params>
+                <param tag="callsign" value="HtmlApp" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" expectedValues="htmlapp" />
             </testStep>
          </postrequisite>
         </testCasePostRequisite>
-        </testCase> 
+        </testCase>
         
         <!-- Test case 96 -->
         <testCase testCaseId="RDKShell_96" testCaseName="RDKShell_Set_And_Get_Graphics_FrameRate" desc="Check whether graphics frameRates are able to set and get" >
@@ -3026,7 +3052,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="6" name="Is_Cobalt_Resumed" method="Get_Application_State"  >
+            <testStep testStepId="6" name="Is_Cobalt_Resumed" method="Get_Application_State" delay="2" >
               <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="resumed" />
             </testStep>
             <testStep testStepId="7" name="getvisibility" method="GetVisibility" >
@@ -3096,7 +3122,6 @@
               <resultGeneration useMethodTag="rdkshell_check_for_visibility_result" expectedValues="true" />
             </testStep>
         </testCase>
-
 
         <!-- Test case 104 -->
         <testCase testCaseId="RDKShell_104" testCaseName="RDKShell_Check_LaunchType_on_Launching_Cobalt_Suspended_State" desc="Checks the Launch type in onLaunched event on launching cobalt in suspended state" >
@@ -3232,7 +3257,7 @@
               </resultGeneration>
             </testStep>
         </testCase>
-
+        
         <!-- Test case 107 -->
         <testCase testCaseId="RDKShell_107" testCaseName="RDKShell_Check_LaunchType_on_Launching_WebKitBrowser_Suspended_State" desc="Checks the Launch type in onLaunched event on launching webkitbrowser in suspended state" >
             <testCaseInfo testCaseType="direct"/>

@@ -95,7 +95,7 @@
                     </params>
                     <resultGeneration useMethodTag="lisa_check_status" />
             </testStep>
-	    <testStep testStepId="3" name="Check_Application_List" method="Get_List" delay="1" pluginName="LISA">
+	    <testStep testStepId="3" name="Check_Application_List" method="Get_List" pluginName="LISA" delayKey="LISA_APPLICATION_INSTALLATION_UNINSTALLATION_TIME" >
 		    <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status"/>
                     <resultGeneration useMethodTag="lisa_check_application_list" arguments="check_app_exist" >
                      <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
@@ -1020,7 +1020,7 @@
                     </params>
                     <resultGeneration useMethodTag="lisa_check_status" />
                    </testStep>
-                   <testStep testStepId="3" name="Check_Application_List" method="Get_List" delay="1" pluginName="LISA">
+                   <testStep testStepId="3" name="Check_Application_List" method="Get_List"  pluginName="LISA" delayKey="LISA_APPLICATION_INSTALLATION_UNINSTALLATION_TIME" >
                     <conditionalExecution enable="true" Id="1" useMethodTag="lisa_check_app_status" arguments="check_app_exists" />
                     <resultGeneration useMethodTag="lisa_check_application_list" arguments="exceptional_cases,check_app_not_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>

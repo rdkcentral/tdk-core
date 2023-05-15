@@ -270,19 +270,23 @@
 
         <testCase testCaseId="WEB_07" testCaseName="WebkitBrowser_SetAndGet_Invalid_URL" desc="Launch Invalid URL in the browser and check loadfailed Event">
             <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Set_Browser_Test_URL" method="Set_Browser_URL">
+            <testStep testStepId="1" name="Get_Browser_Test_URL" method="Get_Browser_URL" saveResult="true">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" arguments="check_loaded_url" >
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Browser_Test_URL" method="Set_Browser_URL">
               <params>
                 <param tag="url" useConfigFile="true" key="WEBKIT_TEST_INVALID_URL" />
               </params>
             </testStep>
-            <testStep testStepId="2" name="Check_Load_Failed_Event" event="Event_Load_Failed" action="eventListener" delay="10">
+            <testStep testStepId="3" name="Check_Load_Failed_Event" event="Event_Load_Failed" action="eventListener" delay="10">
               <resultGeneration useMethodTag="webkitbrowser_check_load_failed_event" >
                 <expectedValues useConfigFile="true" key="WEBKIT_TEST_INVALID_URL" />
               </resultGeneration>
             </testStep>
-            <testStep testStepId="3" name="Get_Browser_Test_URL" method="Get_Browser_URL">
+            <testStep testStepId="4" name="Get_Browser_Test_URL" method="Get_Browser_URL">
               <resultGeneration useMethodTag="webkitbrowser_check_url" >
-                <expectedValues useConfigFile="true" key="WEBKIT_TEST_INVALID_URL" />
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="webkitbrowser_get_loaded_url"/>
               </resultGeneration>
             </testStep>
         </testCase>

@@ -551,14 +551,6 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
-        elif tag == "webkitbrowser_check_url":
-            info["url"] = result
-            status = compareURLs(result,expectedValues[0])
-            if status == "TRUE":
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
-                info["Test_Step_Status"] = "FAILURE"
-
         elif tag == "webkitbrowser_get_visibility":
             info["visibility"] = result
             if result in expectedValues:
@@ -626,7 +618,21 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+        
+        elif tag == "webkitbrowser_check_url":
+            info["url"] = result
+            if len(arg) and arg[0] == "check_loaded_url":
+                status = checkNonEmptyResultData(result)
+            else:
+                status = compareURLs(result,expectedValues[0])
+            if status == "TRUE":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+                
+        elif tag == "webkitbrowser_get_fps":
+            testStepResults = testStepResults[0].values()[0]
+            info["newFpsValue"] = int(testStepResults[0].get("fps"))        
 
         # Cobalt Plugin Response result parser steps
         elif tag == "cobalt_get_state":
@@ -1055,7 +1061,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "rdkshell_check_application":
             result = result.get("clients")
             clients = [ str(name) for name in result if str(name).strip() ]
-            if arg[0] == "check_not_exists":
+            info["clients"] = clients
+            if arg[0] == "check_not_exists" or arg[0] == "check_if_not_exists":
                 if expectedValues[0] not in clients:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
@@ -3739,7 +3746,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 fpsValues += int(result.get("fps"))
             average= fpsValues/count
             info["Average"] = average
-
+       
+        elif tag == "webkitbrowser_get_loaded_url":
+            testStepResults = testStepResults[0].values()[0]
+            info["url"] = testStepResults[0].get("url")
 
         # System plugin result parser steps
         elif tag == "system_toggle_gz_enabled_status":
@@ -4960,7 +4970,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwareRuleDownloadLocation = output['applicableAction']['properties']["firmwareDownloadProtocol"]
                                 if str(firmwareRuleMacAddress).lower() != str(deviceMAC).lower() or str(firmwareRuleLocation).lower() != str(firmwareLocation).lower() or str(firmwareRuleDownloadLocation).lower() != str(firmwareDownloadProtocol).lower():
                                      firmwareRuleId = output['id']
-                                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
                                      output = executeCommandInTM(command)
                                      info["new_firmware_local_server_rule_status"] = output
                                      output = json.loads(output)
