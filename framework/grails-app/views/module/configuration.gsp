@@ -24,6 +24,7 @@
 <meta name="layout" content="main" />
 <title>RDK Test Suite</title>
 <style type="text/css" media="screen"></style>
+<g:javascript library="chartview" />
 <%--<g:javascript library="jquery-1.6.1.min" />
 <g:javascript library="jquery.simplemodal" />
 <g:javascript library="config_resolver" />
@@ -390,6 +391,53 @@ function display(val) {
 			</table>
 			</div>
 		</g:if>
+	</div>
+	<div style="padding-top:40px;">
+	
+	<form method="POST" controller="module" action="upload"
+            enctype="multipart/form-data">
+		
+		<div style="float: left; padding-left: 10%; ">
+			<h2 style="color: #A24C15;">
+			<center><label> <b> Upgrade TM Version </b>
+			</label></center>
+			</h2>
+		
+		</div>
+		
+		<div style="width: 40%; margin: 0 auto; align: center;">
+		<table style="max-width: 60%;">
+		<tr>
+		<td>
+		<span style="color: #A24C15;">Upload database file(optional)</span>
+		<input type="file" name="dbFile" id="dbFile">
+		</td>
+		<td>
+		<span style="color: #A24C15;" >Enter DB Password</span>
+		<input type="password" name="dbpassword" id="dbpassword" style="height:17px;width:120px">
+		</td>
+		<tr>
+		<td>
+		<span style="color: #A24C15;">Upload War File</span>
+		<input type="file" name="warFile" id="warFile">
+		</td>
+		</tr>
+		<tr>
+		<td><label for="backupCheckbox" style="color: #A24C15;">Create Backup(optional)</label>
+ 		<input type="checkbox" id="backupCheckbox" name="takeBackup" onclick="toggleBackupPath()" checked>
+        <input type="text" name="backupDir" id="backupDir"  style="display: block;height:20px;width:180px" placeholder="Enter the backup location(ex: /mnt)" title="This will take a copy of current version war file and entire rdk-test-tool floder in the mentioned path" required/></td>
+		</tr>
+		<tr>
+		<td>
+		<button type="button" onclick="uploadFile()" style="height:20px;width:100px" >Deploy WAR</button>
+		<p id="status"></p>
+		<p id="progressBar"></p>
+		</td>
+		</tr>
+		</table>
+		</div>
+	</form>
+	
 	</div>
 </body>
 </html>

@@ -3058,3 +3058,76 @@ function getBenchMarkChartData(){
 		} );
 	}
 }
+function uploadFile() {
+	// Get the file input element
+	  var fileInput = document.getElementById('warFile');
+	  var dbFileInput = document.getElementById('dbFile');
+	  var backupDir = document.getElementById('backupDir').value;
+	  var dbpassword = document.getElementById('dbpassword').value;
+	  // Make sure a file was selected
+	  if (fileInput.files.length == 0) {
+	    alert('Please select a WAR file to upload.');
+	    return;
+	  }
+	  
+	  
+	  if (backupDir.value === "") {
+	      alert("Please add the tool backup path.");
+	      return ; // prevent form submission
+	    }
+	  if (dbFileInput.files.length > 0) {
+		    setTimeout(function() {
+		      alert("Database is getting updated...");
+		    }, 2000); // 3 minutes = 3 * 60 * 1000 milliseconds
+		    
+		  }
+	
+	  // Create a new FormData object
+	  var formData = new FormData();
+	  // Add the file to the form data
+	  formData.append('warFile', fileInput.files[0]);
+	  formData.append('backupDir', backupDir);
+	  formData.append('dbFile', dbFileInput.files[0]);
+	  formData.append('dbpassword', dbpassword);
+	  // Create a new XMLHttpRequest object
+	  var xhr = new XMLHttpRequest();
+	  // Set the request method and URL
+	  xhr.open('POST', '/rdk-test-tool/module/upload');
+	  // Set the request headers
+	  xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+	  // Set the response type to JSON
+	  xhr.responseType = 'json';	
+	  
+	  
+	  // Set the upload progress callback
+	  xhr.upload.addEventListener("progress", function (evt) {	
+          if (evt.lengthComputable) {
+              var percentComplete = evt.loaded / evt.total * 100;
+              document.getElementById('progressBar').innerHTML = "Uploading..." + percentComplete.toFixed(2) + '%';
+              if (percentComplete === 100 && dbFileInput.files.length == 0) {
+            	  document.getElementById('status').innerHTML = 'Upload completed successfully.';
+			        alert("Deployment has started.please wait  5 minutes");
+			        //window.open(url)
+			      }else if(percentComplete === 100){
+					   document.getElementById('status').innerHTML = 'Upload completed successfully.';
+						alert("Deployment has started.please wait  15 minutes");
+					  
+				  }
+
+          }
+      }, false);
+	  
+	  // Send the form data
+	  xhr.send(formData);
+	
+	}
+function toggleBackupPath() {
+    var backupCheckbox = document.getElementById("backupCheckbox");
+    var backupDir = document.getElementById('backupDir')
+     if (backupCheckbox.checked) {
+    	 backupDir.style.display = "block";
+    } else {
+    	backupDir.style.display = "none";
+    }
+
+  }

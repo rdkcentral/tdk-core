@@ -19,7 +19,9 @@
 package com.comcast.rdk
 
 import static com.comcast.rdk.Constants.*
-
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.Paths
 import java.util.List;
 import java.util.zip.ZipOutputStream
 
@@ -32,6 +34,8 @@ import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.util.StringUtils;
 import org.apache.shiro.SecurityUtils
 import com.comcast.rdk.Category
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 /**
  * Class to create Modules, Functions and Parameters
@@ -1083,8 +1087,135 @@ class ModuleController {
 			}
 			render new Gson().toJson(true)
 		} else{
-		    render new Gson().toJson(false)
+			render new Gson().toJson(false)
 		}
 	}
-	
+
+
+	def upload() {
+
+		try{
+
+			def command
+			Process process
+			def warFile = params.warFile
+			def backupDir=params.backupDir
+			def dbFile=params.dbFile
+			def dbPassword=params.dbpassword
+			def	now = LocalDateTime.now()
+			def	formatter = DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss")
+			def	dateTimeString = now.format(formatter)
+			def	 baseWebappsDir = System.getProperty("catalina.base")
+			def	 warFloderDir =baseWebappsDir + "/webapps/rdk-test-tool"
+			def	 oldWarFile = baseWebappsDir + "/webapps/rdk-test-tool.war"
+			def	 warFilePath=baseWebappsDir + "/${dateTimeString}"
+			def	 warFolder = new File("${baseWebappsDir}/" + dateTimeString)
+			warFolder.mkdirs()
+			def realPath = request.getSession().getServletContext().getRealPath(FILE_SEPARATOR)
+			File shellDeploy = new File( "${realPath}//fileStore//deploy.sh")
+			File shellDBDeploy = new File( "${realPath}//fileStore//dbmigrate.sh")
+			def dir = new File(backupDir)
+			if(backupDir?.trim()){
+				println " dir "+dir.toString()
+				if (!dir.exists()) {
+					boolean success = dir.mkdirs()
+					if (!success) {
+						// Handle error if directory creation failed
+						render "Failed to create backup directory."
+						return
+					}
+				}}
+			def filename = warFile.getOriginalFilename()
+			def backupWarFile = new File(warFolder, filename)
+			def warBytes = warFile.getBytes()
+			def warInputStream = new ByteArrayInputStream(warBytes)
+			Files.copy(warInputStream, backupWarFile.toPath())
+			warFile.getInputStream().close()
+			if(dbFile == "undefined"){
+				if (backupDir?.trim()) {
+
+
+					def warFileSize = new File(oldWarFile).length() / 1024 / 1024 // War file size in MB
+					def extractedFolderSize = calculateFolderSize("${warFloderDir}") // Extracted folder size in MB
+					def requiredSpace = warFileSize + extractedFolderSize
+					def backupDirectoryFreeSpace = dir.freeSpace / 1024 / 1024 // Free space in backup directory in MB
+					if (backupDirectoryFreeSpace < requiredSpace) {
+						// Notify the user if there's not enough space in the backup directory
+						render "Not enough space in backup directory."
+						return
+					
+					}else{
+
+						
+						command = "sh ${shellDeploy} ${baseWebappsDir} ${warFilePath} ${dir} &"
+						process = command.execute()
+
+					}
+
+				}else{
+					command = "sh ${shellDeploy} ${baseWebappsDir} ${warFilePath} ${dir} &"
+					process = command.execute()
+
+				}
+
+			}else{
+				def dbFileName = dbFile.getOriginalFilename()
+				def dbBackupWarFile = new File(warFolder, dbFileName)
+				def warDbBytes = dbFile.getBytes()
+				def warDbInputStream = new ByteArrayInputStream(warDbBytes)
+				Files.copy(warDbInputStream, dbBackupWarFile.toPath())
+				dbFile.getInputStream().close()
+				if (backupDir?.trim()) {
+					def warFileSize = new File(oldWarFile).length() / 1024 / 1024 // War file size in MB
+					def extractedFolderSize = calculateFolderSize("${warFloderDir}") // Extracted folder size in MB
+					def requiredSpace = warFileSize + extractedFolderSize
+					def backupDirectoryFreeSpace = dir.freeSpace / 1024 / 1024 // Free space in backup directory in MB
+					if (backupDirectoryFreeSpace < requiredSpace) {
+						// Notify the user if there's not enough space in the backup directory
+						render "Not enough space in backup directory."
+						return
+					}else{
+
+						//dbupgrade
+
+						command = "sh ${shellDBDeploy} ${warFilePath} ${dbPassword} ${dir}"
+						process=command.execute()
+
+
+						command = "sh ${shellDeploy} ${baseWebappsDir} ${warFilePath} ${dir} &"
+						process=command.execute()
+
+					
+
+					}
+
+				}else{
+						
+				
+
+					command = "sh ${shellDBDeploy} ${warFilePath} ${dbPassword} ${dir}"
+					process=command.execute()
+
+					command = "sh ${shellDeploy} ${baseWebappsDir} ${warFilePath} ${dir} &"
+					process = command.execute()
+
+				}
+
+
+			}}catch(Exception e){
+			e.printStackTrace()
+		}
+	}
+	def calculateFolderSize(String folderPath) {
+		def folderSize = 0
+		def folder = new File(folderPath)
+		if (folder.exists() && folder.isDirectory()) {
+			folder.eachFileRecurse { file ->
+				folderSize += file.length()
+			}
+		}
+		return folderSize / 1024 / 1024 // Convert to MB
+	}
+
+
 }
