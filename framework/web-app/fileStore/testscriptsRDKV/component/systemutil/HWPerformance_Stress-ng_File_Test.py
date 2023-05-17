@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>HWPerformance_Stress-ng_Signals</name>
+  <name>HWPerformance_Stress-ng_File_Test</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
@@ -60,25 +60,25 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_HWPerformance_19</test_case_id>
-    <test_objective>Execute Stress-ng opensource performance tool will test signals stress in the system</test_objective>
+    <test_case_id>TC_HWPerformance_20</test_case_id>
+    <test_objective>Execute Stress-ng opensource performance tool will test file stress in the system</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator</test_setup>
     <pre_requisite>1. TDK Agent should be up and running 2. stress-ng binary should be available in DUT 3. Shell script file TDK_HWPerfTools_Executor.sh, Log parsing script HWPerf_metric_parser.sh and xml file HWPerf_metric_details.xml should be available at $TDK_PATH</pre_requisite>
     <api_or_interface_used>Executes the stress-ng binary</api_or_interface_used>
-    <input_parameters>sh TDK_HWPerfTools_Executor.sh Signals</input_parameters>
+    <input_parameters>sh TDK_HWPerfTools_Executor.sh File</input_parameters>
     <automation_approch>1. Execute the TDK_HWPerfTools_Executor.sh file with the required parameters and save the log in $TDK_PATH/logs/performance.log 2. Parse the stress-ng log using HWPerf_metric_parser.sh script and save the metrices value as Json response in logparser-results.txt. 3. Return the metrices as Json response. Note. More details on stress-ng is given in corresponding manual page</automation_approch>
     <expected_output>The command should execute successfully</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
-    <test_script>HWPerformance_Stress-ng_Signals</test_script>
+    <test_script>HWPerformance_Stress-ng_File_Test</test_script>
     <skipped>No</skipped>
-    <release_version>M112</release_version>
+    <release_version>M113</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import tdkvutility;
@@ -90,37 +90,37 @@ ip = <ipaddress>
 port = <port>
 
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
-sysUtilObj.configureTestCase(ip,port,'HWPerformance__Stress-ng_Signals');
+sysUtilObj.configureTestCase(ip,port,'HWPerformance_Stress-ng_File_Test');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
 print "System module loading status : %s" %sysUtilLoadStatus;
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
-         # Execute Stress-ng and get the result
+         # Execute file test and get the result
          tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-         command = "sh TDK_HWPerfTools_Executor.sh Signals"
+         command = "sh TDK_HWPerfTools_Executor.sh File"
          print "Executor Command : %s" %command
          tdkTestObj.addParameter("command",command)
          tdkTestObj.executeTestCase("SUCCESS");
          actualresult = tdkTestObj.getResult();
-         details = tdkTestObj.getResultDetails().strip();
          expectedresult = "SUCCESS"
          if expectedresult in actualresult:
-             output = tdkvutility.readBigFile(sysUtilObj ,"/opt/TDK/logs/logparser-results.txt")
-	     if output:
-                  print "\n******************** HW Performance tools Execution Log - Begin *****************\n"
+            output = tdkvutility.readBigFile(sysUtilObj ,"/opt/TDK/logs/logparser-results.txt")
+            if output:
+                  print "\n**************HW Performance tools Execution Log - Begin**********\n"
                   print output
-                  print "\n********************* HW Performance tools Execution - End *********************\n"
+                  print "\n**************HW Performance tools Execution - End*************\n"
                   result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" MB/s",reverserscheck="false")
                   tdkTestObj.setResultStatus(result);
                   print "[TEST EXECUTION RESULT] :  %s" %result
-             else:
+            else:
                  tdkTestObj.setResultStatus("FAILURE");
+                 print "\n[Error] - Failed to get the result from the log file\n"
                  print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
          else:
                  tdkTestObj.setResultStatus("FAILURE");
-                 print "\n[TEST EXECUTION RESULT] : FAILURE\n"
+                 print "Stress-ng command execution failed"
 else:
     print "System Module Loading Status:FAILURE"
 

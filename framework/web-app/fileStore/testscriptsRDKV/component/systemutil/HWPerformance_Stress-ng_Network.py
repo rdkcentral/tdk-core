@@ -79,6 +79,7 @@
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
+import tdkvutility;
 from rdkv_performancelib import * ;
 
 #IP and Port of box, No need to change,
@@ -104,14 +105,14 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
          details = tdkTestObj.getResultDetails().strip();
          expectedresult = "SUCCESS"
          if expectedresult in actualresult:
-             if  details:
-                 details=details.replace(r'\"','\"').replace(r'\n', '\n')
-                 print "\n******************** HW Performance tools Execution Log - Begin ****************************"
-                 print "\n" +  details
-                 print "********************** HW Performance tools Execution Log - End ****************************\n"
-                 result=hardwarePerformanceThresholdComparison(sysUtilObj,details,unit=" MB/s",reverserscheck="false")
-                 tdkTestObj.setResultStatus(result);
-                 print "\n[TEST EXECUTION RESULT] :  %s\n" %result
+             output = tdkvutility.readBigFile(sysUtilObj ,"/opt/TDK/logs/logparser-results.txt")
+	     if output:
+                  print "\n***************** HW Performance tools Execution Log - Begin ******************\n"
+                  print output
+                  print "\n************** HW Performance tools Execution - End ***********************\n"
+                  result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" MB/s",reverserscheck="false")
+                  tdkTestObj.setResultStatus(result);
+                  print "\n[TEST EXECUTION RESULT] :  %s\n" %result
              else:
                  tdkTestObj.setResultStatus("FAILURE");
                  print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
