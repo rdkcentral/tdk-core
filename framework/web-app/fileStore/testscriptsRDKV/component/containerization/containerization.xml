@@ -65,12 +65,14 @@
       </primitiveTest>
       <primitiveTest name="containerization_checkDevLoopPartition" id="" version="1">
         <function>containerization_checkDevLoopPartition</function>
-        <parameters/>
+        <parameters>
+                <parameter name="testCase" value=""/>
+        </parameters>
       </primitiveTest>
       <primitiveTest name="containerization_checkDobbyVersion" id=" " version="1">
         <function>containerization_checkDobbyVersion</function>
         <parameters>
-          <parameter name="testID" value=""/>
+          <parameter name="testCase" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="containerization_executeInDUT" id="" version="1">
@@ -79,6 +81,13 @@
           <parameter name="sshMethod" value=""/>
           <parameter name="credentials" value=""/>
           <parameter name="command" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="containerization_setValue" id=" " version="1">
+        <function>containerization_setValue</function>
+        <parameters>
+          <parameter name="method" value=""/>
+          <parameter name="value" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>

@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Containerization_App_Test</name>
+  <name>RDKV_Container_Dobby_Tests</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -76,7 +76,7 @@
     <expected_output>Tests ran using dobby security tool on Cobalt container should get PASS</expected_output>
     <priority>High</priority>
     <test_stub_interface>containerization</test_stub_interface>
-    <test_script>RDKV_Contanerization_App_Test</test_script>
+    <test_script>RDKV_Container_Dobby_Tests</test_script>
     <skipped>No</skipped>
     <release_version>M109</release_version>
     <remarks></remarks>
@@ -91,14 +91,14 @@ obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Containerization_App_Test');
+obj.configureTestCase(ip,port,'RDKV_Container_Dobby_Tests');
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result.upper());
 expectedResult = "SUCCESS"
 
 print "\n####################################################################################"
-print "            PLUGIN NAME :  CONTAINERIZATION_APP_TEST"
+print "            PLUGIN NAME :  CONTAINERIZATION_DOBBY_TESTS"
 print "####################################################################################"
 
 
@@ -177,7 +177,7 @@ if expectedResult in actualresult.upper():
                          else:
                              tdkTestObj.setResultStatus("FAILURE")
                      else:
-                         tdkTestObj.setResultStatus("FAILUE")
+                         tdkTestObj.setResultStatus("FAILURE")
                          print "\n#--------- [Pre-requisite Status] : %s ----------#"%(actualresult)
                          print "Plugin Pre-requisite Status: %s \n\n"%(actualresult)
             else:

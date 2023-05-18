@@ -251,6 +251,10 @@ def execute_step(Data):
     try:
         response = requests.post(url, headers=headers, data=data, timeout=20)
         json_response = json.loads(response.content)
+        print "\n---------------------------------------------------------------------------------------------------"
+        print "Json command : ", data
+        print "\n Response : ", json_response, "\n"
+        print "----------------------------------------------------------------------------------------------------\n"
         result = json_response.get("result")
         if result != None and "'success': False" in str(result):
             result = "EXCEPTION OCCURRED"
@@ -538,12 +542,17 @@ def containerization_launchApplication(launch):
          params = '{"callsign":"org.rdk.RDKShell"}'
          status = containerization_setValue("Controller.1.activate",params)
          state = containerization_getPluginStatus("org.rdk.RDKShell")
+	 start_launch = ""
      if state == "activated":
          print 'SUCCESS: RDKShell Plugin in Activated State'
          launch = launch.split(",")
          for test in launch:
                 callsign,uri=test.split("-")
-                params = '{"callsign": "'+callsign+'","type":"'+callsign+'", "uri":"'+uri+'","visible":true}'
+                if str(callsign).lower() == "cobalt":
+                    params = '{"callsign": "'+callsign+'","type":"'+callsign+'","visible":true,"configuration": {"url":"'+uri+'"}}'
+                else:
+                    params = '{"callsign": "'+callsign+'","type":"'+callsign+'","uri":"'+uri+'","visible":true}'
+		start_launch = str(datetime.utcnow()).split()[1]
                 status = containerization_setValue("org.rdk.RDKShell.1.launch",params)
                 if "EXCEPTION OCCURRED" not in status:
                         status = json.dumps(status)
@@ -559,14 +568,14 @@ def containerization_launchApplication(launch):
                 result.append(launch_status)
          if "FAILURE" not in result:
             launch_status = "SUCCESS"
-            return launch_status
+            return launch_status,start_launch
          else:
             launch_status = "FAILURE"
             return launch_status
      else:
           launch_status = "FAILURE"
           print "FAILURE: RDKShell is not in activated state"
-     return launch_status
+     return launch_status,start_launch
 #---------------------------------------------------------------
 # CHECK REQUIRED CONTAINER IS RUNNING IN DUT
 # Description  : To check the required container is running in the DUT
@@ -1122,3 +1131,23 @@ def containerization_validatePluginFunctionality(plugin,operations,validation_de
     else:
         print "\n Error while activating the plugin"
     return result
+
+#------------------------------------------------------------------
+#SET PLUGIN STATUS
+#------------------------------------------------------------------
+def containerization_setPluginStatus(plugin,status,uri=''):
+    data = ''
+    if plugin:
+            #if rdkshell_activated:
+            if status in "activate":
+                data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'"}'
+            else:
+                data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'"}'
+    else:
+        data = '"method": "Controller.1.'+status+'", "params": {"callsign": "'+plugin+'"}'
+    if data != '':
+        result = execute_step(data)
+    else:
+        result = "EXCEPTION OCCURRED"
+    return result
+
