@@ -985,4 +985,16 @@
                 </subtestStep>
             </testStep>
        </testCase>
+       <testCase testCaseId="SYS_52" testCaseName="System_Reboot_And_Check_System_Uptime" desc="To reboot and check the system uptime">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_System_Uptime" method="Get_System_Uptime">
+                <resultGeneration useMethodTag="system_get_api_info"/>
+            </testStep>
+            <testStep testStepId="2" name="System_reboot" method="Reboot" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="3" name="Get_System_Uptime" method="Get_System_Uptime">
+                <resultGeneration useMethodTag="system_check_uptime"/>
+            </testStep>
+       </testCase>
 </testPlugin>

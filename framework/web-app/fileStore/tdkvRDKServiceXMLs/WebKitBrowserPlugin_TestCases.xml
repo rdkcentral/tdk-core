@@ -433,5 +433,28 @@
               </resultGeneration>
             </testStep>
         </testCase>
+
+        <testCase testCaseId="WEB_13" testCaseName="WebkitBrowser_Check_URL_Change_Event_For_Invalid_URL" desc="Verifies url change event by launching invalid URL in the browser">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Browser_Test_URL" method="Get_Browser_URL" saveResult="true">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" arguments="check_loaded_url" >
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Browser_Test_URL" method="Set_Browser_URL">
+              <params>
+                <param tag="url" useConfigFile="true" key="WEBKIT_TEST_INVALID_URL" />
+              </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_URL_Change_Event" event="Event_URL_Change" action="eventListener" delay="10">
+              <resultGeneration useMethodTag="webkitbrowser_check_url_change_event" arguments="check_for_invalid_url">
+                <expectedValues useConfigFile="true" key="WEBKIT_TEST_INVALID_URL" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Get_Browser_Test_URL" method="Get_Browser_URL">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" >
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="webkitbrowser_get_loaded_url"/>
+              </resultGeneration>
+            </testStep>
+        </testCase>
 </testPlugin>
 

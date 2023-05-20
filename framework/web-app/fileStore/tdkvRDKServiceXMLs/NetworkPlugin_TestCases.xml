@@ -692,5 +692,81 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
+       <testCase testCaseId="NW_26" testCaseName="Network_Trace_Invalid_Endpoint"  desc="To Trace the specified invalid endpoint with the specified number of packets
+using traceroute" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Trace_Host" method="Trace" timeoutKey="CUSTOM_TIMEOUT_FOR_PING_AND_TRACE">
+                <params>
+                  <param tag="endpoint"  value="" />
+                  <param tag="packets"   useDefault="true" />
+                </params>
+                <resultGeneration useMethodTag="network_get_ping_response" arguments="validate_error_message" expectedValues=",Invalid endpoint"/>
+            </testStep>
+       </testCase>
+       <testCase testCaseId="NW_27" testCaseName="Network_Enable_Disable_WIFI_Adapter_And_Check_Interfaces_Status" desc="To Enable and disable Wifi Adapter state and check the wifi enabled status" >
+           <testCaseInfo testCaseType="loop" />
+             <testStep testStepId="1" name="Check_Wifi_Interfaces" method="Get_Interfaces" >
+                <resultGeneration useMethodTag="network_get_interface_info" arguments="check_interfaces_enabled_state" >
+                    <expectedValues value="True,True"/>
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="2" name="Set_WIFI_Interface_Enabled"  testStepType="loop" >
+               <subtestStep subtestStepId="1" name="Set_WIFI_Interface_Enabled" method="Set_Enabled" pluginName="Wifi" >
+                <params>
+                  <param tag="enable" value="False,True" iteration="true"  />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
+               </subtestStep>
+               <subtestStep subtestStepId="2" name="Check_Wifi_Interfaces" method="Get_Interfaces" delay="1" >
+                <resultGeneration useMethodTag="network_get_interface_info" arguments="check_interfaces_enabled_state" >
+                    <expectedValues value="True" useIterableValue="true"/>
+                </resultGeneration>
+               </subtestStep>
+            </testStep>
+       </testCase>
+       <testCase testCaseId="NW_28" testCaseName="Network_Check_WIFI_Interface_Status_With_Persist_False" desc="To check whether wifi interface enabled status not persisting after reboot with persist as False" >
+           <testCaseInfo testCaseType="setandget" revert="true" />
+            <testStep testStepId="1" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" >
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_WIFI_Interface_Enabled" method="Set_Interface_Enabled" >
+                <params>
+                  <param tag="interface"  value="WIFI" />
+                  <param tag="enabled"  value="False" />
+                  <param tag="persist"  value="False"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
+            </testStep>
+            <testStep testStepId="3" name="System_reboot" method="Reboot" rebootStep="yes" pluginName="System">
+                  <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="4" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" >
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status">
+                    <expectedValues value="True" />
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Set_WIFI_Interface_Enabled" method="Set_Interface_Enabled" >
+                <params>
+                  <param tag="interface"  value="WIFI" />
+                  <param tag="enabled"  value="True" />
+                  <param tag="persist"  value="False"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
+            </testStep>
+            <testStep testStepId="6" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" >
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status">
+                    <expectedValues value="True" />
+                </resultGeneration>
+            </testStep>
+       </testCase>
 </testPlugin>
 

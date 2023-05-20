@@ -59,6 +59,7 @@
             <event pluginName="Wifi" eventName="Event_On_WIFI_State_Changed" />
             <event pluginName="Wifi" eventName="Event_On_Available_SSIDs" />
 	    <event pluginName="Wifi" eventName="Event_On_Error" /> 
+            <event pluginName="Network" eventName="Event_Interface_Status_Changed" />
 	    <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
           </prerequisite>
           <prerequisite requisiteId="3" requisiteName="Enable_Preferred_network_parameter" >
@@ -1083,5 +1084,85 @@
             <testStep testStepId="4" name="Check_Current_State_Enabled" method="Get_Current_State" delay="1">
                 <resultGeneration useMethodTag="wifi_check_adapter_state" arguments="check_state_enabled"/>
             </testStep>
+         <testCasePostRequisite>
+          <postrequisite requisiteId="1" requisiteName="Enabling_Wifi_Interface">
+            <testStep testStepId="1" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" pluginName="Network" saveResult="true" >
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_WIFI_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="wifi_check_interface_state"  />
+                <params>
+                  <param tag="interface"  value="WIFI" />
+                  <param tag="enabled"   value="true" />
+                  <param tag="persist"   useDefault="true"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
+            </testStep>
+            <testStep testStepId="3" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" pluginName="Network" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="wifi_check_interface_state"  />
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status" expectedValues="True" >
+                </resultGeneration>
+            </testStep>
+          </postrequisite>
+        </testCasePostRequisite>
        </testCase>
+
+       <testCase testCaseId="WIFI_23" testCaseName="WIFI_Enable_Disable_Adapter_And_Check_Interface_Status_Change_Event" desc="Toggles WIFI Adapter state and checks for the interface status change event">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Set_WIFI_Adapter_Disabled" method="Set_Enabled">
+                <params>
+                  <param tag="enable" value="false" />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_Interface_Status_Change_Event" event="Event_Interface_Status_Changed" action="eventListener" pluginName="Network" delay="3"  >
+                <resultGeneration useMethodTag="network_check_interface_status_change_event" >
+                    <expectedValues value="Wifi,False" />
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Set_WIFI_Adapter_Enabled" method="Set_Enabled">
+                <params>
+                  <param tag="enable" value="true" />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_Interface_Status_Change_Event" event="Event_Interface_Status_Changed" action="eventListener" pluginName="Network" delay="3"  >
+                <resultGeneration useMethodTag="network_check_interface_status_change_event" >
+                    <expectedValues value="Wifi,True" />
+                </resultGeneration>
+            </testStep>
+         <testCasePostRequisite>
+          <postrequisite requisiteId="1" requisiteName="Enabling_Wifi_Interface">
+            <testStep testStepId="1" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" pluginName="Network" saveResult="true" >
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_WIFI_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="wifi_check_interface_state"  />
+                <params>
+                  <param tag="interface"  value="WIFI" />
+                  <param tag="enabled"   value="true" />
+                  <param tag="persist"   useDefault="true"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
+            </testStep>
+            <testStep testStepId="3" name="Is_WIFI_Interface_Enabled" method="Is_Interface_Enabled" pluginName="Network" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="wifi_check_interface_state"  />
+                <params>
+                  <param tag="interface" value="WIFI" />
+                </params>
+                <resultGeneration useMethodTag="network_get_interface_status" expectedValues="True" >
+                </resultGeneration>
+            </testStep>
+          </postrequisite>
+        </testCasePostRequisite>
+       </testCase>       
 </testPlugin>

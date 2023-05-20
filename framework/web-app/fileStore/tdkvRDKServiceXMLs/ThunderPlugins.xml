@@ -756,6 +756,7 @@
 
         <method name="GenerateKey" api="generateKey" type="method" desc="Triggers key events like key press and release" >
             <params paramKey="keys" paramType="userGenerate" useMethodTag="rdkshell_set_keys_params">
+                <param tag="callsign" defaultValue="null"/>
                 <param tag="keyCode" defaultValue="" type="list" />
                 <param tag="modifiers" defaultValue="" type="list" />
                 <param tag="delay" defaultValue="0.0" type="float"/>

@@ -278,7 +278,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+            
+            info["interfaces"] = interfaces_info
             if arg[0] == "get_all_info":
                 info["interfaces"] = interfaces_info
             elif arg[0] == "get_interface_names":
@@ -314,15 +315,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                     for interface in interfaces_info:
                       if interface.get("interface") == "ETHERNET":
-                          if str(interface.get("enabled")).lower() == str(expectedValues[0]).lower():
-                              info["Test_Step_Status"] = "SUCCESS"
-                          else:
+                          if str(interface.get("enabled")).lower() != str(expectedValues[0]).lower():
                               info["Test_Step_Status"] = "FAILURE"
                       elif interface.get("interface") == "WIFI":
-                          if str(interface.get("enabled")).lower() == str(expectedValues[1]).lower():
-                              info["Test_Step_Status"] = "SUCCESS"
-                          else:
-                              info["Test_Step_Status"] = "FAILURE" 
+                          if str(interface.get("enabled")).lower() != str(expectedValues[1]).lower():
+                              info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "network_get_default_interface":
             default_interface = result.get("interface")
@@ -692,6 +689,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "system_get_xconf_info":
             info = checkAndGetAllResultInfo(result.get("xconfParams"),result.get("success"))
+
+        elif tag == "system_check_uptime":
+            info["systemUptime"] = result.get("systemUptime")
+            success = str(result.get("success")).lower() == "true"
+            if success and int(float(result.get("systemUptime"))) < 60:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "system_get_rfc_info":
             info = checkAndGetAllResultInfo(result.get("RFCConfig"),result.get("success"))
@@ -2320,6 +2325,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     if str(connectedDevice.get("name")) in expectedValues[0]:
                         status = True
                         info = connectedDevice
+                        break
+                if len(arg) > 1 and arg[1] == "check_active_state":
+                    if int(connectedDevice.get("activeState")) in [0,1,2]:
+                        status = True
+                    else:
+                        status = False
+
                 if success and status:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
@@ -3090,11 +3102,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "ocicontainer_check_for_results":
             info = result
             status = checkNonEmptyResultData(result)
-            success = str(result.get("success")).lower() == "true"
+            if len(arg) and arg[0] == "check_negative_scenario":
+                success = str(result.get("success")).lower() == "false"
+            else:
+                success = str(result.get("success")).lower() == "true"
             if success and status == "TRUE":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
 
         elif tag == "ocicontainer_check_container_info":
             info = result
@@ -3396,6 +3412,14 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "TRUE"
                 else:
                     result = "FALSE"
+
+        elif tag == "wifi_check_interface_state":
+            testStepResults = testStepResults[0].values()[0]
+            state = str(testStepResults[0].get("enabled"))
+            if str(state).lower() == "false":
+                result = "TRUE"
+            else:
+                result = "FALSE"
 
         # RDKShell Plugin Response result parser steps
         elif tag == "rdkshell_check_application_state":
@@ -4558,7 +4582,10 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rdkshell_set_keys_params":
             newtestParams = []
             for value in testParams.get("keyCode"):
-                keysValue = {"keyCode" : int(value),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay")}
+                if "callsign" in testParams and len(testParams.get("callsign")) > 0:
+                    keysValue = {"callsign": testParams.get("callsign"),"keyCode" : int(value),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay")}
+                else:
+                    keysValue = {"keyCode" : int(value),"modifiers": testParams.get("modifiers"),"delay": testParams.get("delay")}
                 newtestParams.append(keysValue)
             userGeneratedParam = {"keys":newtestParams}
         elif tag == "rdkshell_set_launch_params":

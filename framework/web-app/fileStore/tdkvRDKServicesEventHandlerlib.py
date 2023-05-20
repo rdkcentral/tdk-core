@@ -275,16 +275,25 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
 
         elif tag == "webkitbrowser_check_url_change_event":
             url_change = "FALSE"
-            for eventResult in result:
-                status = compareURLs(eventResult.get("url"),expectedValues[0])
-                if str(eventResult.get("loaded")).lower() == "true" and status == "TRUE":
-                    info = eventResult
-                    url_change = "TRUE"
-                    break;
+            if len(arg) and arg[0] == "check_for_invalid_url":
+                for eventResult in result:
+                    status = compareURLs(eventResult.get("url"),expectedValues[0])
+                    if str(eventResult.get("loaded")).lower() == "false" and status == "TRUE":
+                        info = eventResult
+                        url_change = "TRUE"
+                        break;
+            else:
+                for eventResult in result:
+                    status = compareURLs(eventResult.get("url"),expectedValues[0])
+                    if str(eventResult.get("loaded")).lower() == "true" and status == "TRUE":
+                        info = eventResult
+                        url_change = "TRUE"
+                        break;
             if url_change == "TRUE":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
 
         elif tag == "webkitbrowser_check_visibility_change_event":
             result = result[0]
