@@ -30,6 +30,7 @@ check_fps = ""
 use_audioSink = ""
 use_autoVideoSink_for_fpsdisplaysink = ""
 ignore_warnings = ""
+check_audio_fps = ""
 
 #List consisting of HLS url
 HLS_URL = [MediaValidationVariables.video_src_url_short_duration_hls,MediaValidationVariables.video_src_url_hls,MediaValidationVariables.video_src_url_4k_hls,MediaValidationVariables.video_src_url_live_hls,MediaValidationVariables.video_src_url_hls_h264,MediaValidationVariables.video_src_url_hls_h264_iframe]
@@ -50,6 +51,7 @@ def getDeviceConfigValue (tdklibObj, configKey):
         global use_audioSink
         global use_autoVideoSink_for_fpsdisplaysink
         global ignore_warnings
+        global check_audio_fps
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
         configValue = ""
@@ -99,6 +101,10 @@ def getDeviceConfigValue (tdklibObj, configKey):
                 ignore_warnings = configParser.get('device.config',"FIREBOLT_COMPLIANCE_IGNORE_WARNINGS")
             except:
                 ignore_warnings = "no"
+            try:
+                check_audio_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_AUDIO")
+            except:
+                check_audio_fps = "no"
         else:
             print "DeviceConfig file not available"
             result = "FAILURE"
@@ -172,6 +178,9 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     #Use audioSink
     if (use_audioSink):
         command = command + " audioSink=" + use_audioSink;
+    #Check Audio fps
+    if (check_audio_fps == "no"):
+        command = command + " checkAudioFPS=no ";
     #Use autovideosink for fpsdisplaysink
     if  "checkfps=no" not in command.lower() and use_autoVideoSink_for_fpsdisplaysink == "yes":
         command = "export FPSDISPLAYSINK_USE_AUTOVIDEO=1 ;" + command

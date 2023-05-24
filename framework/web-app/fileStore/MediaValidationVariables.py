@@ -140,6 +140,9 @@ video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_und
 #Stream with known number of frames for frame Drop test
 video_src_url_mp4_frameDrop = test_streams_base_path + "TDK_Asset_Sunrise_30fps_30secs.mp4"
 
+#Audio underflow stream
+video_src_url_audio_underflow = test_streams_base_path + "TDK_Asset_Audio_underflow_v2.mp4"
+
 #Streams with different resolutions
 video_src_url_mp4_2160p = test_streams_base_path + "TDK_Asset_Sunrise_2160p.mp4"
 video_src_url_mp4_1080p = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4_1080p.mp4"
