@@ -34,7 +34,7 @@ import tdklib;
 # Parameters  : obj - module object
 #             : testcase - primitve test to be executed
 #             : params - parameters to be added to primitve test
-#             : returnObject - True/False based on whether to return the tdkTestObj
+#             : returnObject - True/False based on whether to return the tdkTestObj  
 # Return Value: True,details,tdkTestObj(on success), False,details,tdkTestObj(on failure)
 
 def executeTest(obj, testcase , params="", returnObject = False):
@@ -60,3 +60,41 @@ def executeTest(obj, testcase , params="", returnObject = False):
         if returnObject:
             return False,details,tdkTestObj
         return False,details
+
+# Method to read a larger file and display in script log
+# readBigFile
+
+# Syntax      : readBigFile(obj, fileName)
+# Description : Function to generically execute testcase for any module object
+# Parameters  : obj - module object
+#             : filename - file to be read
+#             : returnObject - message based on whether to return the tdkTestObj  
+# Return Value: message
+
+def readBigFile(obj, fileName):
+    message = ""
+    bufferlength = 490
+    readbyte = bufferlength
+    cutbyte = 0
+    tdkTestObj = obj.createTestStep('ExecuteCommand')
+    expectedResult = "SUCCESS"
+    print " Reading File ",str(fileName)
+    while (True):
+        command = "dd if=" + str(fileName) + " bs=1 skip=" + str(cutbyte) + " count=" + str(readbyte) + " > /tmp/output.txt; cat /tmp/output.txt "
+        tdkTestObj.addParameter("command", command)
+        tdkTestObj.executeTestCase(expectedResult)
+        actualResult = tdkTestObj.getResult()
+        details = tdkTestObj.getResultDetails()
+        if actualResult == expectedResult:
+            message = message + details
+            cutbyte = cutbyte + bufferlength
+            if len(details) < bufferlength:
+                break;
+        else:
+            print "File Read FAILURE"
+            tdkTestObj.setResultStatus("FAILURE")
+            return message;
+    print "File Read SUCCESS"
+    message = message.replace(r'\n', '\n');
+    tdkTestObj.setResultStatus("SUCCESS");
+    return message
