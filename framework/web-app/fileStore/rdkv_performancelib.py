@@ -1225,10 +1225,12 @@ def open_write_logfile(obj,filename,script_name,data=""):
             buf = the_file.readlines()
         with open(output_file, 'w') as the_file:
             for line in buf:
-                if script_name in line:
-                    data = line.strip() + " ::: " + data.split(" ::: ")[-1]
-                elif line.split(" ::: ")[0] != script_name:
-                    print "Writing existing line"
+                if script_name in line :
+                    if data.split(" ::: ")[1] == line.split(" ::: ")[1]:
+                        data = line.strip() + " ::: " + data.split(" ::: ")[-1]
+                    else:
+                        the_file.write(line)
+                else:
                     the_file.write(line)
 
     print "\nWriting performance data to file ", output_file
