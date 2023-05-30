@@ -168,14 +168,14 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
             print "Launch LightningApp"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
-            tdkTestObj.addParameter("launch",lightningApp_details)
+            tdkTestObj.addParameter("launch",lightningapp_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                tdkTestObj.addParameter("callsign","LightningApp")
+                tdkTestObj.addParameter("callsign",lightningapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
                 actualresult = tdkTestObj.getResultDetails()
                 if expectedResult in actualresult.upper():

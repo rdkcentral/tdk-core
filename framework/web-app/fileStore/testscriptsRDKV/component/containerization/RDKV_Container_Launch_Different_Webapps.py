@@ -179,7 +179,7 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                tdkTestObj.addParameter("callsign","HtmlApp")
+                tdkTestObj.addParameter("callsign",htmlapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
                 actualresult = tdkTestObj.getResultDetails()
                 if expectedResult in actualresult.upper():
@@ -208,7 +208,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             print "Check container is running"
                             tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                            tdkTestObj.addParameter("callsign","LightningApp")
+                            tdkTestObj.addParameter("callsign",lightningapp_details)
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
                             if expectedResult in actualresult.upper():

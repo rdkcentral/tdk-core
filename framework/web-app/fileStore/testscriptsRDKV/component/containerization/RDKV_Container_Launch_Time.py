@@ -200,7 +200,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             print "Check container is running"
                             tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                            tdkTestObj.addParameter("callsign","Cobalt")
+                            tdkTestObj.addParameter("callsign",cobalt_details)
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
                             if expectedResult in actualresult.upper():

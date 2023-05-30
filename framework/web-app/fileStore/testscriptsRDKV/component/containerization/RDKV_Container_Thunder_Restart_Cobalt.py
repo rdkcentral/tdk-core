@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Container_Launch_Multiple_Webapps</name>
+  <name>RDKV_Container_Thunder_Restart_Cobalt</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,11 +33,11 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Launch 2 htmlapps parallelly in container</synopsis>
+  <synopsis>Cobalt should play video in container mode and launch after thunder restart</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>5</execution_time>
+  <execution_time>10</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -60,37 +60,39 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>Containerization_05</test_case_id>
-    <test_objective>Launch 2 htmlapps parallelly in container</test_objective>
+    <test_case_id>Containerization_27</test_case_id>
+    <test_objective>Cobalt should play video in container mode and launch after thunder restart</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Accelerator</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
-    <api_or_interface_used></api_or_interface_used>
-    <input_parameters></input_parameters>
+    <api_or_interface_used>None</api_or_interface_used>
+    <input_parameters>COBALT_DETAILS=
+COBALT_PLAYBACK_URL=</input_parameters>
     <automation_approch>1.  After start on the device, ensure that Dobby is running
 2. Enable datamodel values
 3. Reboot the device or restart WPEFramework service
 4. Verify datamodel values
-5. Launch HtmlApp
-6. Verify that HtmlApp is running in container mode
+5. Launch Cobalt
+6. Verify that Cobalt is running in container mode
 7. Check wpeframework.log
-8. Launch HtmlApp with different parameter
-9. Verify that HtmlApp is running in container mode
-10. Check wpeframework.log</automation_approch>
-    <expected_output>Both the instances must be running parallely in container mode</expected_output>
+8. Start playback
+9.Restart thunder
+10. Launch Cobalt
+11. Verify that youtube is running in container mode.</automation_approch>
+    <expected_output>Cobalt should play video in container mode and launch after thunder restart</expected_output>
     <priority>High</priority>
     <test_stub_interface>containerization</test_stub_interface>
-    <test_script>RDKV_Container_Launch_Multiple_Webapps</test_script>
+    <test_script>RDKV_Container_Thunder_Restart_Cobalt</test_script>
     <skipped>No</skipped>
-    <release_version>M110</release_version>
+    <release_version>M113</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
-
-# use tdklib library,which provides a wrapper for tdk testcase script 
+ # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
-from rdkv_apparmorlib import *
+from containerizationlib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
@@ -99,7 +101,7 @@ obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Container_Launch_Multiple_Webapps');
+obj.configureTestCase(ip,port,'RDKV_Container_Thunder_Restart_Cobalt');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -109,7 +111,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "HTMLAPP_DETAILS", "HTMLAPP1_DETAILS"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -130,8 +132,8 @@ if expectedResult in result.upper():
         if "directSSH" == configValues["SSH_METHOD"]:
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
-            htmlapp_details = configValues["HTMLAPP_DETAILS"]
-            htmlapp1_details = configValues["HTMLAPP1_DETAILS"]
+            cobalt_details = configValues["COBALT_DETAILS"]
+            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -140,7 +142,8 @@ if expectedResult in result.upper():
             print "FAILURE: Currently only supports directSSH ssh method"
             config_status = "FAILURE"
     else:
-        config_status = "FAILURE" 
+        config_status = "FAILURE"
+
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
     print "\nTo Ensure Dobby service is running"
     command = 'systemctl status dobby | grep active | grep -v inactive'
@@ -161,31 +164,30 @@ if expectedResult in result.upper():
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
         print "Dobby is running %s" %(output)
-
         #To enable datamodel
-        datamodel = ["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
+        datamodel=["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.Cobalt.Enable"]
         tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
         tdkTestObj.addParameter("datamodel",datamodel)
         tdkTestObj.executeTestCase(expectedResult)
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launch HtmlApp"
+            print "Launch Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
-            tdkTestObj.addParameter("launch",htmlapp_details)
+            tdkTestObj.addParameter("launch",cobalt_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                tdkTestObj.addParameter("callsign",htmlapp_details)
+                tdkTestObj.addParameter("callsign",cobalt_details)
                 tdkTestObj.executeTestCase(expectedResult)
                 actualresult = tdkTestObj.getResultDetails()
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
-                    command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode"'
+                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
                     print "COMMAND : %s" %(command)
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -197,26 +199,28 @@ if expectedResult in result.upper():
                     #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
-                    if "launching HtmlApp in container mode" in output:
-                        print "HtmlApp launched successfully in container mode"
-                        print "Launch another HtmlApp"
-                        tdkTestObj = obj.createTestStep('containerization_launchApplication')
-                        tdkTestObj.addParameter("launch",htmlapp1_details)
+                    if "launching Cobalt in container mode" in output:
+                        print "Cobalt launched successfully in container mode"
+                        print "\n Set the URL : {} using Cobalt deeplink method"
+                        tdkTestObj = obj.createTestStep('containerization_setValue')
+                        tdkTestObj.addParameter("method","Cobalt.1.deeplink")
+                        tdkTestObj.addParameter("value",cobalt_playback_url)
                         tdkTestObj.executeTestCase(expectedResult)
-                        actualresult = tdkTestObj.getResultDetails()
-                        if expectedResult in actualresult.upper():
+                        cobalt_result = tdkTestObj.getResult()
+                        time.sleep(10)
+                        if(cobalt_result in expectedResult):
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "Check container is running"
-                            tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                            tdkTestObj.addParameter("callsign",htmlapp1_details)
+                            print "Clicking OK to play video"
+                            params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                            tdkTestObj = obj.createTestStep('containerization_setValue')
+                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                            tdkTestObj.addParameter("value",params)
                             tdkTestObj.executeTestCase(expectedResult)
-                            actualresult = tdkTestObj.getResultDetails()
-                            if expectedResult in actualresult.upper():
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                #Check for Container launch logs
-                                command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode"'
-                                print "COMMAND : %s" %(command)
-                                #Primitive test case which associated to this Script
+                            result1 = tdkTestObj.getResult()
+                            time.sleep(50)
+                            if "SUCCESS" == result1:
+                                print "\n Check video is started \n"
+                                command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 #Add the parameters to ssh to the DUT and execute the command
                                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
@@ -226,25 +230,86 @@ if expectedResult in result.upper():
                                 #Execute the test case in DUT
                                 tdkTestObj.executeTestCase(expectedResult);
                                 output = tdkTestObj.getResultDetails()
-                                if "launching HtmlApp in container mode" in output:
-                                    print "HtmlApp launched successfully in container mode"
+                                if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                    print "Video play Started"
+                                    command = 'kill -11 $(pgrep WPEFramework)'
+                                    tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                                    tdkTestObj.addParameter("credentials", credentials);
+                                    tdkTestObj.addParameter("command", command);
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    if expectedResult in result:
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        print "\n Thunder Restarted successfully \n"
+                                        print "Check container is running"
+                                        tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
+                                        tdkTestObj.addParameter("callsign",cobalt_details)
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        actualresult = tdkTestObj.getResultDetails()
+                                        if expectedResult not in actualresult.upper():
+                                            print "Cobalt is not running after Thunder Restart"
+                                            print "Launch Cobalt"
+                                            tdkTestObj = obj.createTestStep('containerization_launchApplication')
+                                            tdkTestObj.addParameter("launch",cobalt_details)
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            actualresult = tdkTestObj.getResultDetails()
+                                            if expectedResult in actualresult.upper():
+                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                print "Check container is running"
+                                                tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
+                                                tdkTestObj.addParameter("callsign",cobalt_details)
+                                                tdkTestObj.executeTestCase(expectedResult)
+                                                actualresult = tdkTestObj.getResultDetails()
+                                                if expectedResult in actualresult.upper():
+                                                    tdkTestObj.setResultStatus("SUCCESS")
+                                                    #Check for Container launch logs
+                                                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
+                                                    print "COMMAND : %s" %(command)
+                                                    #Primitive test case which associated to this Script
+                                                    tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                                                    #Add the parameters to ssh to the DUT and execute the command
+                                                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                                                    tdkTestObj.addParameter("credentials", credentials);
+                                                    tdkTestObj.addParameter("command", command);
+
+                                                    #Execute the test case in DUT
+                                                    tdkTestObj.executeTestCase(expectedResult);
+                                                    output = tdkTestObj.getResultDetails()
+                                                    if "launching Cobalt in container mode" in output:
+                                                        print "Cobalt launched successfully in container mode"
+                                                    else:
+                                                        print "Unable to get the Containerization Cobalt launch logs"
+                                                        tdkTestObj.setResultStatus("FAILURE")
+                                                else:
+                                                    print "Cobalt is not running in container mode"
+                                                    tdkTestObj.setResultStatus("FAILURE")
+                                            else:
+                                                print "Cobalt launch failed"
+                                                tdkTestObj.setResultStatus("FAILURE")
+                                        else:
+                                            print "Cobalt is still running after Thunder Restart"
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                    else:
+                                        print "Thunder Restart failed"
+                                        tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "Unable to get the required logs related to container"
+                                    print "Video play related logs not available"
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "HtmlApp is not running in container mode"
+                                print "Generate key method failed"
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Failed to launch HtmlApp1"
+                            print "Unable to launch the url"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         print "Unable to get the required logs"
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "HtmlApp is not running in container mode"
+                    print "Cobalt is not running in container mode"
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Failed to launch HtmlApp"
+                print "Failed to launch Cobalt"
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             print "Failed to enable data model value"
@@ -264,11 +329,3 @@ else:
     tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("containerization");
-    
-
-
-
-
-
-
-     

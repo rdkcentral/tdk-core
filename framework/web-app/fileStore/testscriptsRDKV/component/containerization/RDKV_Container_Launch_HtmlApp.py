@@ -17,7 +17,7 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version="1.0" encoding="UTF-8"?><xml>
+<?xml version="1.0" encoding="UTF-8"?>
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
@@ -177,7 +177,7 @@ if expectedResult in result.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                tdkTestObj.addParameter("callsign","HtmlApp")
+                tdkTestObj.addParameter("callsign",htmlapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
                 actualresult = tdkTestObj.getResultDetails()
                 if expectedResult in actualresult.upper():
