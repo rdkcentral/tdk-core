@@ -1172,8 +1172,19 @@ def executeTestStepRepeat(testCaseInfo,testStep,repeatMax):
             subTestStepInfo = getTestStepInfo(subTestStep).copy()
             subTestStepInfo["testStepId"] = str(testStepId) + "." + str(repeatCounter)
             setTestStepDelay(subTestStepInfo)
-
             testParams = subTestStepInfo.get("params")
+
+            # Some parameters takes value from previous test step & to
+            # get that previous result we may need iterable. Here, iterable
+            # passed to the previous result parser, test param gets updated
+            # & parseStatus is captured
+            for parserInfos in subTestStepInfo.get("dynamicParamInfo"):
+                parserInfo = parserInfos.copy()
+                parserInfo = updatePreviousResultParserInfo(parserInfo,repeatCounter).copy()
+                status,result = getPreviousTestStepResult(testStepResults,parserInfo)
+                subTestStepInfo["parseStatus"] = status if status == "FAILURE" else ""
+                testParams[parserInfo.get("tag")] = result.get(parserInfo.get("tag"))
+
             testMethod = getTestStepAPI(subTestStepInfo)
             subTestStepInfo["pluginAPI"] = testMethod
 

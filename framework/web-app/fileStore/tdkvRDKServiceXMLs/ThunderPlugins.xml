@@ -1110,6 +1110,11 @@
                 <param tag="framerate" defaultValue="null"/>
             </params>
         </method>
+        <method name="Update_FPS_Value"  api="updateFps"  type="method" desc="Updates Fps values" >
+            <params>
+                <param tag="newFpsValue" defaultValue="null" type="int"/>
+            </params>
+        </method>
         <event name="Event_On_FPS" eventName="onFpsEvent" eventId="client.events.1" type="event" desc="Fired at given interval and after stopFpsCollection" />
         <event name="Event_On_Display_FrameRate_Changed" eventName="onDisplayFrameRateChanged" eventId="client.events.1" type="event" desc="Triggered when the user changes the framerate" />
     </plugin>

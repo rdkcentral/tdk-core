@@ -93,10 +93,10 @@
         </pluginPreRequisite>
         <testCase testCaseId="FR_01" testCaseName="FrameRate_Collect_FPS" desc="Launches graphics url using lightning app and gets fps using onFpsEvent Event">
             <testCaseInfo testCaseType="stress" configurableRepeat="true" repeatKey="WEBKIT_FPS_REPEAT_COUNT"/>
-	    <testStep testStepId="1" name="Set_Collection_Frequency" method="Set_Collection_Frequency" >
-	      <params>
+            <testStep testStepId="1" name="Set_Collection_Frequency" method="Set_Collection_Frequency" >
+              <params>
                 <param tag="frequency" value="10000" />
-              </params>	    
+              </params>
               <resultGeneration useMethodTag="framerate_check_set_operation" />
             </testStep>
             <testStep testStepId="2" name="Set_Test_URL" method="Set_LightningApp_URL" pluginName="LightningApp">
@@ -115,8 +115,15 @@
               </resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Get_FPS_Value"  delay="60" testStepType="repeat" >
-              <subtestStep subtestStepId="1" name="Get_FPS_Value" method="Get_FPS_Value" saveResult="true" pluginName="LightningApp" delay="2">
+              <subtestStep subtestStepId="1" name="Get_FPS_Value" method="Get_FPS_Value" saveResult="true" pluginName="LightningApp" delay="2" >
                 <resultGeneration useMethodTag="webkitbrowser_check_fps" >
+                </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Update_FPS_Value" method="Update_FPS_Value" >
+                <params>
+                   <param tag="newFpsValue" usePreviousResult="true" subId="1" useMethodTag="webkitbrowser_get_fps" />
+                </params>
+                <resultGeneration useMethodTag="framerate_check_set_operation" >
                 </resultGeneration>
               </subtestStep>
             </testStep>
