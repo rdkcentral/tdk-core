@@ -23,8 +23,8 @@
 
 # The default browser instance used for launching the video test apps
 # webkit_instance can be "WebKitBrowser" or "LightningApp" plugin
-webkit_instance = "WebKitBrowser"
-#webkit_instance = "LightningApp"
+#webkit_instance = "WebKitBrowser"
+webkit_instance = "LightningApp"
 
 
 # The default browser instance used for launching html video test app
@@ -36,8 +36,8 @@ webkit_instance_html = "HtmlApp"
 # If the webkit_instance is "WebKitBrowser", then preferable web-inspect
 # page port is 9998 for thunder builds and 9224 for rdkservice builds.
 # If the webkit_instance is "LightningApp", then preferable port is 10002
-webinspect_port = "9224"
-#webinspect_port = "10002"
+#webinspect_port = "9224"
+webinspect_port = "10002"
 
 
 # If the webkit_instance_html is "WebKitBrowser", then preferable web-inspect
