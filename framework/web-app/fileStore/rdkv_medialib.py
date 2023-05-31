@@ -86,7 +86,7 @@ def rdkv_media_getProcCheckInfo(realpath):
     validation_dict = {}
     print "\n Reading proc validation params from conf file..."
     conf_file,result = getDeviceConfigFile(realpath)
-    result, proc_check = getDeviceConfigKeyValue(conf_file,"VALIDATION_REQ")
+    result, proc_check = getDeviceConfigKeyValue(conf_file,"PROC_VALIDATION")
     if result == "SUCCESS":
         if proc_check == "NO":
             validation_dict["proc_check"] = False
