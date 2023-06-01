@@ -39,12 +39,18 @@ def getAampTuneURL(stream):
     # Fetching the stream details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
     print "Parsing Aamp streams ..."
-    if stream =="hlsstream":
+    if stream == "multiaudiohls":
+        hlsstreamURL = parser.get('streams','MULTI_AUDIO_HLS_stream')
+        return hlsstreamURL
+    elif stream =="hlsstream":
         hlsstreamURL = parser.get('streams','HLS_stream')
         return hlsstreamURL
     elif stream =="livestream":
 	livestreamURL = parser.get('streams','LIVE_stream')
 	return livestreamURL
+    elif stream == "multiaudiompd":
+        mpdstreamURL = parser.get('streams', 'MULTI_AUDIO_MPD_stream')
+        return mpdstreamURL
     elif stream =="mpdstream":
         mpdstreamURL = parser.get('streams','MPD_stream')
         return mpdstreamURL

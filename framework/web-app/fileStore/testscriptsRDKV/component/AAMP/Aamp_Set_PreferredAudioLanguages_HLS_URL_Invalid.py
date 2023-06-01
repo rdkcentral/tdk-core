@@ -169,7 +169,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         sysObj.setLoadModuleStatus("SUCCESS");
 
         getLangCodesStatus = "SUCCESS"
-        streamType="hlsstream"
+        streamType="multiaudiohls"
         #pattern to be searched for event validation
         pattern="AAMP_EVENT_TUNED"
         #fetch Aamp stream from config file

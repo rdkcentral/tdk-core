@@ -16,27 +16,27 @@
 <xml>
   <module name="AAMP" testGroup="Component">
     <primitiveTests>
-      <primitiveTest id="" name="Aamp_AampTune" version="1">
+      <primitiveTest name="Aamp_AampTune" id="" version="1">
         <function>TestMgr_Aamp_AampTune</function>
         <parameters>
           <parameter name="URL" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="Aamp_AampStop" version="1">
+      <primitiveTest name="Aamp_AampStop" id="" version="1">
         <function>TestMgr_Aamp_AampStop</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="Aamp_AampSetRate" version="1">
+      <primitiveTest name="Aamp_AampSetRate" id=" " version="1">
         <function>TestMgr_Aamp_AampSetRate</function>
         <parameters>
           <parameter name="rate" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="Aamp_AampIsLive" version="1">
+      <primitiveTest name="Aamp_AampIsLive" id="" version="1">
         <function>TestMgr_Aamp_AampIsLive</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="Aamp_AampSetLanguage" version="1">
+      <primitiveTest name="Aamp_AampSetLanguage" id=" " version="1">
         <function>TestMgr_Aamp_AampSetLanguage</function>
         <parameters>
           <parameter name="language" value=""/>
@@ -46,7 +46,7 @@
         <function>TestMgr_Aamp_AampGetCurrentAudioLanguage</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="Aamp_AampSeekLive" version="1">
+      <primitiveTest name="Aamp_AampSeekLive" id="" version="1">
         <function>TestMgr_Aamp_AampSeekLive</function>
         <parameters/>
       </primitiveTest>
@@ -56,13 +56,13 @@
           <parameter name="rate" value=""/>
           <parameter name="seconds" value=""/>
         </parameters>
-      </primitiveTest>      
-            <primitiveTest name="Aamp_AampGetPlaybackDuration" id=" " version="4">
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetPlaybackDuration" id=" " version="4">
         <function>TestMgr_Aamp_AampGetPlaybackDuration</function>
         <parameters>
           <parameter name="URL" value="NULL"/>
         </parameters>
-      </primitiveTest>     
+      </primitiveTest>
       <primitiveTest name="Aamp_AampProxy" id=" " version="1">
         <function>TestMgr_Aamp_AampProxy</function>
         <parameters>
@@ -74,7 +74,7 @@
       <primitiveTest name="Aamp_AampPlayTillEof" id="" version="1">
         <function>TestMgr_Aamp_AampPlayTillEof</function>
         <parameters/>
-      </primitiveTest> 
+      </primitiveTest>
       <primitiveTest name="Aamp_AampGetAudioBitrates" id="" version="1">
         <function>TestMgr_Aamp_AampGetAudioBitrates</function>
         <parameters/>
@@ -182,7 +182,28 @@
         <function>TestMgr_Aamp_AampGetPreferredDRM</function>
         <parameters/>
       </primitiveTest>
+      <primitiveTest name="Aamp_AampEnableVideoRectangle" id=" " version="1">
+        <function>TestMgr_Aamp_AampEnableVideoRectangle</function>
+        <parameters>
+          <parameter name="enable" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetWesterosSinkConfig" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetWesterosSinkConfig</function>
+        <parameters>
+          <parameter name="enable" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetAudioTrack" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetAudioTrack</function>
+        <parameters>
+          <parameter name="track_index" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetAudioTrack" id="" version="1">
+        <function>TestMgr_Aamp_AampGetAudioTrack</function>
+        <parameters/>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
-

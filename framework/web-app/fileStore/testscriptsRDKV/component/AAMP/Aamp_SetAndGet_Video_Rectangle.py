@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test script to get and set ideo display rectangle co-ordinates</synopsis>
+  <synopsis>Test script to get and set video display rectangle co-ordinates</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -145,7 +145,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         if expectedResult in actualResult:
                             #Set the result status of execution
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "SUCCESS : Empty co-ordinates is retunred as expected before setting videoRectangle\n"
+                            print "SUCCESS : Empty co-ordinates is returned as expected before setting videoRectangle\n"
 
                             tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoRectangle');
                             x=0

@@ -106,7 +106,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         aampObj.setLoadModuleStatus("SUCCESS");
         sysObj.setLoadModuleStatus("SUCCESS");
 
-        streamType="livestream"
+        streamType="mpdstream"
         #pattern to be searched for event validation
         pattern="AAMP_EVENT_TUNED"
         #fetch Aamp stream from config file

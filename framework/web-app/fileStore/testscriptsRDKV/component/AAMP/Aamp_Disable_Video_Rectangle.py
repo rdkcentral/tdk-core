@@ -21,19 +21,19 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>6</version>
+  <version>2</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>Aamp_Get_AvailableAudioTracks_HLS_URL</name>
+  <name>Aamp_Disable_Video_Rectangle</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>Aamp_AampGetAvailableAudioTracks</primitive_test_name>
+  <primitive_test_name>Aamp_AampGetVideoRectangle</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test script to get available audio tracks</synopsis>
+  <synopsis>Test script to get and set video display rectangle co-ordinates while EnableVideoRectangle is disabled</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -59,32 +59,38 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_Aamp_40</test_case_id>
-    <test_objective>Test script to get available audio tracks</test_objective>
+    <test_case_id>CT_Aamp_74</test_case_id>
+    <test_objective>Test script to get and set video display rectangle co-ordinates while EnableVideoRectangle is disabled</test_objective>
     <test_type>Positive</test_type>
     <test_setup>XG1V3,XI3</test_setup>
-    <pre_requisite>configure Aamp_Tune_Config.ini with proper HLS tuning URL</pre_requisite>
-    <api_or_interface_used>HLS URL</api_or_interface_used>
-    <input_parameters>AampTune
+    <pre_requisite>configure Aamp_Tune_Config.ini with proper Live tuning URL</pre_requisite>
+    <api_or_interface_used>AampTune
+AampSetWesterosConfig
 AampStop
-AampGetAvailableAudioTracks</input_parameters>
+AampGetVideoRectangle
+AampDisableVideoRectangle
+AampSetVideoRectangle</api_or_interface_used>
+    <input_parameters>Live URL</input_parameters>
     <automation_approch>1. TM loads the Aamp Agent and systemutil Agent.
-2. Aamp Agent invokes Tune API with HLS URL
-3. Aamp Agent invokes GetAvailableAudioTracks API
-4. TM checks if API returns a non empty value and returns SUCCESS/FAILURE
-5. TM unloads the Aamp Agent and systemutil Agent.</automation_approch>
-    <expected_output>Should get the available audio tracks</expected_output>
+2. Aamp Agent invokes SetWesterosConfig to make AAMP use westerossink as video-sink.
+3. Aamp Agent invokes Tune API with MPD URL
+4. Aamp Agent invokes DisableVideoRectangle API
+5. Aamp Agent invokes SetVideoRectangle API with valid co-ordinates
+6. Checks if GetVideoRectangle API  returns the co-ordinates set and set SUCCESS/FAILURE
+7. TM unloads the Aamp Agent and systemutil Agent.</automation_approch>
+    <expected_output>Should set the new video rectangle co-ordinates</expected_output>
     <priority>High</priority>
     <test_stub_interface>libaampstub.so.0.0.0
 libsystemutilstub.so.0.0.0</test_stub_interface>
-    <test_script>Aamp_Get_AvailableAudioTracks_HLS_URL</test_script>
+    <test_script>Aamp_Disable_Video_Rectangle</test_script>
     <skipped>No</skipped>
-    <release_version>M78</release_version>
+    <release_version>M113</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
 </xml>
 '''
+
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import aampUtilitylib;
@@ -95,8 +101,8 @@ port = <port>
 #Test component to be tested
 aampObj = tdklib.TDKScriptingLibrary("aamp","2.0");
 sysObj = tdklib.TDKScriptingLibrary("systemutil","2.0");
-aampObj.configureTestCase(ip,port,'Aamp_Get_AvailableAudioTracks_HLS_URL');
-sysObj.configureTestCase(ip,port,'Aamp_Get_AvailableAudioTracks_HLS_URL');
+aampObj.configureTestCase(ip,port,'Aamp_Disable_Video_Rectangle');
+sysObj.configureTestCase(ip,port,'Aamp_Disable_Video_Rectangle');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
 print "AAMP module loading status : %s" %aampLoadStatus ;
@@ -106,11 +112,20 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         aampObj.setLoadModuleStatus("SUCCESS");
         sysObj.setLoadModuleStatus("SUCCESS");
 
-        streamType="multiaudiohls"
+        streamType="mpdstream"
         #pattern to be searched for event validation
         pattern="AAMP_EVENT_TUNED"
         #fetch Aamp stream from config file
         tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+
+        tdkTestObj = aampObj.createTestStep('Aamp_AampSetWesterosSinkConfig');
+        expectedResult = "SUCCESS";
+        tdkTestObj.addParameter("enable","true");
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+        print details
+
 
         #Prmitive test case which associated to this Script
         tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
@@ -131,8 +146,9 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         #Set the result status of execution
                         tdkTestObj.setResultStatus("SUCCESS");
 
-                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetAvailableAudioTracks');
-                        expectedResult = "SUCCESS";
+                        #GetVideoRectangle must return empty co-ordinates before setting videoRectangle DELIA-45366
+                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
+                        expectedResult = "FAILURE";
                         #Execute the test case in STB
                         tdkTestObj.executeTestCase(expectedResult);
                         #Get the result of execution
@@ -140,13 +156,62 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         print actualResult;
                         details = tdkTestObj.getResultDetails();
                         if expectedResult in actualResult:
-                                #Set the result status of execution
+                            #Set the result status of execution
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            print "SUCCESS : Empty co-ordinates is returned as expected before setting videoRectangle\n"
+
+                            tdkTestObj = aampObj.createTestStep('Aamp_AampEnableVideoRectangle');
+                            expectedResult = "SUCCESS";
+                            tdkTestObj.addParameter("enable","false");
+                            tdkTestObj.executeTestCase(expectedResult);
+                            actualResult = tdkTestObj.getResult();
+                            details = tdkTestObj.getResultDetails();
+                            print details
+                            tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoRectangle');
+                            x=0
+                            y=0
+                            w=1920
+                            h=1080
+                            expectedResult = "SUCCESS";
+                            tdkTestObj.addParameter("x", x);
+                            tdkTestObj.addParameter("y", y);
+                            tdkTestObj.addParameter("w", w);
+                            tdkTestObj.addParameter("h", h);
+                            print "Setting video rectangle co-ordinates in x,y,w,h format : ",x,y,w,h
+                            tdkTestObj.executeTestCase(expectedResult);
+                            actualResult = tdkTestObj.getResult();
+                            print actualResult;
+                            details = tdkTestObj.getResultDetails();
+                            if expectedResult in actualResult :
                                 tdkTestObj.setResultStatus("SUCCESS");
-                                print "Result :", details
-                        else:
-                                #Set the result status of execution
+                                print "Result :", details;
+                                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+
+                                tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
+                                expectedResult = "FAILURE";
+                                tdkTestObj.executeTestCase(expectedResult);
+                                actualResult = tdkTestObj.getResult();
+                                details = tdkTestObj.getResultDetails();
+                                if details:
+                                    x1 = int(str(details).split(":")[1].split(",")[0].strip())
+                                    y1 = int(str(details).split(":")[1].split(",")[1].strip())
+                                    w1 = int(str(details).split(":")[1].split(",")[2].strip())
+                                    h1 = int(str(details).split(":")[1].split(",")[3].strip())
+                                if expectedResult not in actualResult:
+                                    print "Able to Get Video Rectangle as ",details
+                                    print "FAILURE : EnableVideoRectangle is set to false, GetVideoRectangle shouldn't be able to retrive\n"
+                                    tdkTestObj.setResultStatus("FAILURE");
+                                else:
+                                    print "SUCCESS : Unable to fetch Video Rectangle as config was disabled\n"
+                                    tdkTestObj.setResultStatus("SUCCESS");
+                            else:
                                 tdkTestObj.setResultStatus("FAILURE");
                                 print details;
+                                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print details;
+                            print "[TEST EXECUTION RESULT] : FAILURE\n"
                 else:
                         print "No AAMP tune event received"
                         #Set the result status of execution
@@ -176,4 +241,3 @@ else:
     print "Failed to load aamp/systemutil module";
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");
-
