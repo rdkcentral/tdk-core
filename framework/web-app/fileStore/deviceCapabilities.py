@@ -40,10 +40,15 @@ def getconfig(obj,capability,key = ""):
     configFile = os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/"+ deviceConfig;
     sampleFile = os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/"+ "sample_deviceCapability.ini";
     if not os.path.exists(configFile):
-        print "\n\nConfiguration file not present under tdkvDeviceCapabilities \nCreated %s"%deviceConfig;
-        shutil.copyfile(sampleFile,configFile)
-        print "Please populate the deviceCapabilites in %s in order to proceed with the execution\n\n"%deviceConfig;
-        return False;
+        deviceType = obj.getDeviceBoxType()
+        CommonConfigFile = os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/" + str(deviceType) +"_deviceCapability.ini";
+        if not os.path.exists(CommonConfigFile):
+            print "\n\nConfiguration file not present under tdkvDeviceCapabilities \nCreated %s"%deviceConfig;
+            shutil.copyfile(sampleFile,configFile)
+            print "Please populate the deviceCapabilites in %s in order to proceed with the execution\n\n"%deviceConfig;
+            return False;
+        print "Using config file tdkvDeviceCapabilities/Video_Accelerator_deviceCapability.ini"
+        deviceConfig = "Video_Accelerator_deviceCapability.ini"
 
     # Fetching the config details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/"+ deviceConfig)
