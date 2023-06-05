@@ -207,8 +207,10 @@ def getConsoleMessage(log):
 
 # Function to get the time string from the console message
 def getTimeFromMsg(message):
-    match = re.search(r"\[\s([0-9:]+)\s\]", message)
-    return match.group(1)
+    pattern = r"\d{2}:\d{2}:\d{2}:\d{3}"
+    matches = re.findall(pattern, message)
+    match = matches[len(matches)-1]
+    return match
 
 # Function to get the time in milliseconds if the input is in HH:MM:SS:sss
 def getTimeInMilliSeconds(time_str):
