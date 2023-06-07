@@ -61,6 +61,10 @@
       <function name='TestMgr_Aamp_AampSetAudioBitrate' />
       <function name='TestMgr_Aamp_AampSetPreferredDRM' />
       <function name='TestMgr_Aamp_AampGetPreferredDRM' />
+      <function name='TestMgr_Aamp_AampEnableVideoRectangle' />
+      <function name='TestMgr_Aamp_AampSetWesterosSinkConfig' />
+      <function name='TestMgr_Aamp_AampSetAudioTrack' />
+      <function name='TestMgr_Aamp_AampGetAudioTrack' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -84,6 +88,9 @@
       <parameter funName='TestMgr_Aamp_AampSetPreferredLanguages' parameterName='languages' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetAudioBitrate' parameterName='bitRate' parameterType='INTEGER' range='0-9' />
       <parameter funName='TestMgr_Aamp_AampSetPreferredDRM' parameterName='preferredDrm' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampEnableVideoRectangle' parameterName='enable' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampSetWesterosSinkConfig' parameterName='enable' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampSetAudioTrack' parameterName='track_index' parameterType='INTEGER' range='1-10' />
     </parameters>
   </module>
 </xml>
