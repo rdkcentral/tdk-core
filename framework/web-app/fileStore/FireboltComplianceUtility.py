@@ -31,6 +31,7 @@ use_audioSink = ""
 use_autoVideoSink_for_fpsdisplaysink = ""
 ignore_warnings = ""
 check_audio_fps = ""
+test_streams_base_path =""
 
 #List consisting of HLS url
 HLS_URL = [MediaValidationVariables.video_src_url_short_duration_hls,MediaValidationVariables.video_src_url_hls,MediaValidationVariables.video_src_url_4k_hls,MediaValidationVariables.video_src_url_live_hls,MediaValidationVariables.video_src_url_hls_h264,MediaValidationVariables.video_src_url_hls_h264_iframe]
@@ -52,6 +53,7 @@ def getDeviceConfigValue (tdklibObj, configKey):
         global use_autoVideoSink_for_fpsdisplaysink
         global ignore_warnings
         global check_audio_fps
+        global test_streams_base_path
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
         configValue = ""
@@ -105,6 +107,10 @@ def getDeviceConfigValue (tdklibObj, configKey):
                 check_audio_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_AUDIO")
             except:
                 check_audio_fps = "no"
+            try:
+                test_streams_base_path = configParser.get('device.config',"TEST_STREAMS_BASE_PATH")
+            except:
+                test_streams_base_path = ""
         else:
             print "DeviceConfig file not available"
             result = "FAILURE"
@@ -158,6 +164,8 @@ def getOperations ():
 #Function to construct the mediapipelinetest command to be executed in the DUT
 def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     global ignore_warnings
+    if test_streams_base_path:
+        testUrl = testUrl.replace(MediaValidationVariables.test_streams_base_path,test_streams_base_path);
     #First construct the command with mandatory arguments
     command = "tdk_mediapipelinetests " + testName + " " + testUrl
     #For trickplay scenrios use another app instead

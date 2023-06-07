@@ -273,6 +273,12 @@ def setPluginState(obj,plugin,state):
 def launchPlugin(obj,plugin,url):
     print "\nLaunching %s using RDKShell..." %(plugin)
     url = url.replace('\"',"")
+    try:
+        result,base_path_from_config = getDeviceConfigKeyValue(deviceConfigFile,"TEST_STREAMS_BASE_PATH")
+    except:
+        base_path_from_config = ""
+    if base_path_from_config :
+        url = url.replace(test_streams_base_path,base_path_from_config);
     tdkTestObj = obj.createTestStep('rdkservice_setValue')
     params = '{"callsign":"'+plugin+'", "type":"'+plugin+'", "uri":"'+url+'"}'
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
