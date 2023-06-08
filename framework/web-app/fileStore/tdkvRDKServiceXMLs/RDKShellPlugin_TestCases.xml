@@ -3114,7 +3114,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="8" name="Is_Cobalt_Resumed" method="Get_Application_State"  >
+            <testStep testStepId="8" name="Is_Cobalt_Resumed" method="Get_Application_State" delay="2" >
               <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="resumed" />
             </testStep>
             <testStep testStepId="9" name="getvisibility" method="GetVisibility" >
@@ -3433,7 +3433,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="8" name="Is_WebKitBrowser_Resumed" method="Get_Application_State"  >
+            <testStep testStepId="8" name="Is_WebKitBrowser_Resumed" method="Get_Application_State"  delay="2" >
               <resultGeneration useMethodTag="rdkshell_get_state" arguments="WebKitBrowser" expectedValues="resumed" />
             </testStep>
             <testStep testStepId="9" name="getvisibility" method="GetVisibility" >

@@ -627,9 +627,6 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
                 
-        elif tag == "webkitbrowser_get_fps":
-            testStepResults = testStepResults[0].values()[0]
-            info["newFpsValue"] = int(testStepResults[0].get("fps"))        
 
         # Cobalt Plugin Response result parser steps
         elif tag == "cobalt_get_state":
@@ -1397,20 +1394,17 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             elif arg[0] == "get_physical_address":
                  physical_address = cec_addresses.get("physicalAddress")
                  status = checkNonEmptyResultData(cec_addresses.get("physicalAddress"))
-                 hex_codes = {"\x00":"0","\x01":"1","\x02":"2","\x03":"3","\x04":"4","\x05":"5","\x06":"6","\x07":"7","\x08":"8","\x09":"9","\x0a":"a","\x0b":"b","\x0c":"c","\x0d":"d","\x0e":"e","\x0f":"f"}
-                 for code in hex_codes.keys():
-                    physical_address = physical_address.replace(code,hex_codes.get(code))
+                 physical_address_hex_format = hex(physical_address)
                  info["physicalAddress"] = physical_address
+                 info["physical_address_hex_format"] = physical_address_hex_format
+                 physical_address_hex_format = physical_address_hex_format[2:]
                  if status == "TRUE" and str(result.get("success")).lower() == "true":
-                    if expectedValues[0] == "true" and  physical_address != "ffff":
-                            info["Test_Step_Status"] = "SUCCESS"
-
-                    elif expectedValues[0] == "false" and  physical_address == "ffff":
+                    if expectedValues[0] == "true" and  str(physical_address_hex_format) != "ffff":
                             info["Test_Step_Status"] = "SUCCESS"
                     else:
-                            info["Test_Step_Status"] = "FAILURE"
+                        info["Test_Step_Status"] = "FAILURE"
                  else:
-                    info["Test_Step_Status"] = "FAILURE"
+                     info["Test_Step_Status"] = "FAILURE"
         #Parser code for HdmiCecSink plugin
         elif tag == "hdmicecsink_check_active_source_and_route_details":
            info["AVAILABLE"] = result.get("available")
@@ -3774,6 +3768,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "webkitbrowser_get_loaded_url":
             testStepResults = testStepResults[0].values()[0]
             info["url"] = testStepResults[0].get("url")
+
+        elif tag == "webkitbrowser_get_fps":
+            testStepResults = testStepResults[0].values()[0]
+            info["newFpsValue"] = int(testStepResults[0].get("fps"))
 
         # System plugin result parser steps
         elif tag == "system_toggle_gz_enabled_status":
