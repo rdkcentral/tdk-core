@@ -147,39 +147,39 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
-    #Contruct the trickplay operations string
-    #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
-    #Sample oprations strings is "operations=seek:20:0" where 20 is time for which playback should happen and 0 is seek position/duration
-    setOperations ("play", playtimeAtStart)
-    setOperations ("pause", timeoutInSeconds)
-    setOperations ("seek", timeoutInSeconds, seekPositionInSeconds)
-    setOperations ("play", timeoutInSeconds)
-    #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
-    #Sample command = "mediapipelinetests test_trickplay <AV1_STREAM_URL> checkavstatus=yes operations=seek:20:0"
-    command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, operations = getOperations ())
-    print "Executing command in DUT: ", command
+        #Construct the trickplay operations string
+        #The operations specifies the operation(fastforward/rewind/seek/play/pause) to be executed from the mediapipeline trickplay test
+        #Sample oprations strings is "operations=seek:20:0" where 20 is time for which playback should happen and 0 is seek position/duration
+        setOperations ("play", playtimeAtStart)
+        setOperations ("pause", timeoutInSeconds)
+        setOperations ("seek", timeoutInSeconds, seekPositionInSeconds)
+        setOperations ("play", timeoutInSeconds)
+        #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
+        #Sample command = "mediapipelinetests test_trickplay <AV1_STREAM_URL> checkavstatus=yes operations=seek:20:0"
+        command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, operations = getOperations ())
+        print "Executing command in DUT: ", command
 
-    tdkTestObj.addParameter("command", command)
-    tdkTestObj.executeTestCase(expectedResult)
-    actualresult = tdkTestObj.getResult()
-    output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
-    output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+        tdkTestObj.addParameter("command", command)
+        tdkTestObj.executeTestCase(expectedResult)
+        actualresult = tdkTestObj.getResult()
+        output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
+        output = output[output.find('\n'):]
+        print "OUTPUT: ...\n", output
 
-    #Check if the command executed successfully
-    if expectedResult in actualresult.upper() and output:
-        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully
-        executionStatus = checkMediaPipelineTestStatus (output)
+        #Check if the command executed successfully
+        if expectedResult in actualresult.upper() and output:
+            #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully
+            executionStatus = checkMediaPipelineTestStatus (output)
 
-        if expectedResult in executionStatus:
-            tdkTestObj.setResultStatus("SUCCESS")
-            print "Pause with Backward seek on AV1 stream was successfull"
-            print "Mediapipeline test executed successfully"
+            if expectedResult in executionStatus:
+                tdkTestObj.setResultStatus("SUCCESS")
+                print "Pause with Backward seek on AV1 stream was successfull"
+                print "Mediapipeline test executed successfully"
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                print "Pause with Backward seek on AV1 stream failed"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pause with Backward seek on AV1 stream failed"
-    else:
-        tdkTestObj.setResultStatus("FAILURE")
             print "Pause with Backward seek on AV1 stream failed"
     else:
         tdkTestObj.setResultStatus("FAILURE")

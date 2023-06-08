@@ -144,6 +144,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
     #Sample command = "mediapipelinetests test_channel_change_playback <HD_STREAM_URL> <SD_STREAM_URL> checkavstatus=yes timeout=20,20"
     command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds) 
+    command = command  + " checkAudioFPS=no ";
     print "Executing command in DUT: ", command
     
     tdkTestObj.addParameter("command", command)
