@@ -90,6 +90,12 @@
           <parameter name="value" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="containerization_rebootDevice" id=" " version="1">
+        <function>containerization_rebootDevice</function>
+        <parameters>
+          <parameter name="waitTime" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>

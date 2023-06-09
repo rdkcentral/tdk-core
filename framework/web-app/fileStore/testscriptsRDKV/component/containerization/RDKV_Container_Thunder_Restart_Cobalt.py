@@ -111,7 +111,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -133,7 +133,7 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
-            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL"]
+            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -187,7 +187,7 @@ if expectedResult in result.upper():
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
-                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
+                    command = 'cat /opt/logs/wpeframework.log | grep "launching cobalt in container mode"'
                     print "COMMAND : %s" %(command)
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -199,7 +199,7 @@ if expectedResult in result.upper():
                     #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
-                    if "launching Cobalt in container mode" in output:
+                    if "launching cobalt in container mode" in output:
                         print "Cobalt launched successfully in container mode"
                         print "\n Set the URL : {} using Cobalt deeplink method"
                         tdkTestObj = obj.createTestStep('containerization_setValue')
@@ -264,7 +264,7 @@ if expectedResult in result.upper():
                                                 if expectedResult in actualresult.upper():
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     #Check for Container launch logs
-                                                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
+                                                    command = 'cat /opt/logs/wpeframework.log | grep "launching cobalt in container mode"'
                                                     print "COMMAND : %s" %(command)
                                                     #Primitive test case which associated to this Script
                                                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -276,7 +276,7 @@ if expectedResult in result.upper():
                                                     #Execute the test case in DUT
                                                     tdkTestObj.executeTestCase(expectedResult);
                                                     output = tdkTestObj.getResultDetails()
-                                                    if "launching Cobalt in container mode" in output:
+                                                    if "launching cobalt in container mode" in output:
                                                         print "Cobalt launched successfully in container mode"
                                                     else:
                                                         print "Unable to get the Containerization Cobalt launch logs"

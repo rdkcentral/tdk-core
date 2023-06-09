@@ -182,7 +182,7 @@ if expectedResult in result.upper():
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
-                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
+                    command = 'cat /opt/logs/wpeframework.log | grep "launching cobalt in container mode"'
                     print "COMMAND : %s" %(command)
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -194,7 +194,7 @@ if expectedResult in result.upper():
                     #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
-                    if "launching Cobalt in container mode" in output:
+                    if "launching cobalt in container mode" in output:
                         print "Cobalt launched successfully in container mode"
                     else:
                         print "Unable to get the required logs"
