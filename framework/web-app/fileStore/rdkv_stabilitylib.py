@@ -266,13 +266,13 @@ def compare_images(images_list):
 def rdkservice_setDefaultInterface(new_interface):
     result_status = status = "SUCCESS"
     if new_interface == "WIFI":
-        wifi_connect_status,plugins_status_dict,revert_plugins = switch_to_wifi(test_obj)
+        wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(test_obj)
         if wifi_connect_status != "SUCCESS":
             result_status = "FAILURE"
         else:
             status = close_lightning_app(test_obj)
     else:
-        interface_status = set_default_interface(test_obj,"ETHERNET")
+        interface_status,deviceAvailability = set_default_interface(test_obj,"ETHERNET")
         if interface_status  == "SUCCESS":
             print "\n Successfully Set ETHERNET as default interface \n"
             status = close_lightning_app(test_obj)
@@ -281,7 +281,7 @@ def rdkservice_setDefaultInterface(new_interface):
             result_status = "FAILURE"
     if status == "FAILURE":
         result_status = "FAILURE"
-    return result_status
+    return result_status,deviceAvailability
 
 #-------------------------------------------------------------------
 #SEND KEYCODES TO DUT CORRESPONDING TO THE KEYWORD INPUT

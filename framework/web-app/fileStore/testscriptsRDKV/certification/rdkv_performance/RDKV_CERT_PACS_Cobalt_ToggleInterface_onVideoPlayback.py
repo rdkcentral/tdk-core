@@ -90,6 +90,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PACS_Cobalt_ToggleInterface_onVideoPlay
 pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult()
 print "[LIB LOAD STATUS]  :  %s" %result
 obj.setLoadModuleStatus(result);
@@ -171,8 +172,8 @@ if expectedResult in result.upper():
                                 print "\n Video playback is not happening"
                                 tdkTestObj.setResultStatus("FAILURE")
                         if result_val == "SUCCESS":
-                            connect_status, revert_dict, revert_plugin_status = connect_to_interface(obj,new_interface)
-                            if connect_status == "SUCCESS":
+                            connect_status, revert_dict, revert_plugin_status,deviceAvailability = connect_to_interface(obj,new_interface)
+                            if connect_status == "SUCCESS" and deviceAvailability == "Yes":
                                 movetofront_result = move_plugin(obj,"Cobalt","moveToFront")
                                 if movetofront_result == "SUCCESS":
                                     if validation_dict["validation_required"]:
@@ -201,8 +202,8 @@ if expectedResult in result.upper():
                                 print "\n Error while setting interface as :{}".format(new_interface)
                                 tdkTestObj.setResultStatus("FAILURE")
                             movetofront_result = move_plugin(obj,"WebKitBrowser","moveToFront")
-                            result_status, revert_dict_new, revert_plugins = connect_to_interface(obj, current_interface) 
-                            if result_status == "SUCCESS":
+                            result_status, revert_dict_new, revert_plugins,deviceAvailability = connect_to_interface(obj, current_interface) 
+                            if result_status == "SUCCESS" and deviceAvailability == "Yes":
                                 print "\n Successfully reverted the interface to: {}".format(current_interface)
                             else:
                                 print "\n Error while reverting the interface to: {}".format(current_interface)
@@ -231,9 +232,12 @@ if expectedResult in result.upper():
     else:
         print "\n[Error] Preconditions are not met \n"
         obj.setLoadModuleStatus("FAILURE")
-    if revert == "YES":
-        print "\n Revert the values before exiting"
-        status = set_plugins_status(obj,curr_plugins_status_dict)
+    if deviceAvailability == "Yes":
+        if revert == "YES":
+            print "\n Revert the values before exiting"
+            status = set_plugins_status(obj,curr_plugins_status_dict)
+    else:
+        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")

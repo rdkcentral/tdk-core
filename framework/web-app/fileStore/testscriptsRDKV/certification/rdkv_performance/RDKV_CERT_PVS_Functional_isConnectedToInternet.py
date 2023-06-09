@@ -107,6 +107,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_isConnectedToInternet');
 pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result);
@@ -118,7 +119,7 @@ if expectedResult in result.upper():
     revert_plugins_dict = {}
     connections_list = ["WIFI","WIFI_5GHZ","ETHERNET"]
     for connection in connections_list:
-        connect_status, revert_dict, revert_plugin_status = connect_to_interface(obj, connection)
+        connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, connection)
         if connect_status == "SUCCESS":
             if initial_connection == "":
                 initial_connection = revert_dict.pop("current_if")
@@ -146,10 +147,13 @@ if expectedResult in result.upper():
             print "\n Error while setting {} as default interface".format(connection)
             obj.setLoadModuleStatus("FAILURE")
             break
-    if initial_connection != "":
-        reconnect_status, revert_dict, revert_plugin_status = connect_to_interface(obj,initial_connection )
-    if revert_plugins_dict != {}:
-        status = set_plugins_status(obj,revert_plugins_dict)
+    if deviceAvailability == "Yes":
+        if initial_connection != "":
+            reconnect_status, revert_dict, revert_plugin_status,deviceAvailability = connect_to_interface(obj,initial_connection )
+        if revert_plugins_dict != {}:
+            status = set_plugins_status(obj,revert_plugins_dict)
+    else:
+        "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");

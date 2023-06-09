@@ -103,6 +103,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable 
 Summ_list=[]
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result)
@@ -124,7 +125,7 @@ if expectedResult in result.upper():
         status = "FAILURE"
     elif current_interface == "ETHERNET":
         revert_if = "YES"
-        wifi_connect_status,plugins_status_dict,revert_plugins = switch_to_wifi(obj,"5",False)
+        wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj,"5",False)
         if revert_plugins == "YES":
             revert_plugins_dict.update(plugins_status_dict)
         time.sleep(20)
@@ -148,7 +149,7 @@ if expectedResult in result.upper():
             status = launch_lightning_app(obj,complete_url)
             time.sleep(20)
             if "SUCCESS" == (url_status and status):
-                connect_wifi_status = connect_wifi(obj,"5")
+                connect_wifi_status,deviceAvailability = connect_wifi(obj,"5")
                 if connect_wifi_status == "FAILURE":
                     connected_to_5ghz = False
             else:
@@ -257,7 +258,7 @@ if expectedResult in result.upper():
                     print "\n Reconnecting to 2.4 GHZ SSID"
                     plugin_status,plugins_status_dict,revert = set_plugins(obj)
                     time.sleep(5)
-                    connect_wifi_status = connect_wifi(obj,"2.4")
+                    connect_wifi_status,deviceAvailability = connect_wifi(obj,"2.4")
                     if connect_wifi_status == "FAILURE":
                         print "\n Error while reconnecting to 2.4 GHZ SSID"
                         tdkTestObj.setResultStatus("FAILURE")
@@ -270,24 +271,27 @@ if expectedResult in result.upper():
     else:
         print "\n Preconditions are not met"
         obj.setLoadModuleStatus("FAILURE")
-    if revert_if == "YES" and status == "SUCCESS":
-        activate_status = set_plugins_status(obj,plugins_status_needed)
-        url_status,complete_url = get_lightning_app_url(obj)
-        lauch_app_status = launch_lightning_app(obj,complete_url)
-        time.sleep(60)
-        if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
-            interface_status = set_default_interface(obj,"ETHERNET")
-            if interface_status  == "SUCCESS":
-                print "\n Successfully reverted to ETHERNET"
-                status = close_lightning_app(obj)
+    if deviceAvailability == "Yes":
+        getSummary(Summ_list,obj)
+	if revert_if == "YES" and status == "SUCCESS":
+            activate_status = set_plugins_status(obj,plugins_status_needed)
+            url_status,complete_url = get_lightning_app_url(obj)
+            lauch_app_status = launch_lightning_app(obj,complete_url)
+            time.sleep(60)
+            if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
+                interface_status = set_default_interface(obj,"ETHERNET")
+                if interface_status  == "SUCCESS":
+                    print "\n Successfully reverted to ETHERNET"
+                    status = close_lightning_app(obj)
+                else:
+                    print "\n Error while reverting to ETHERNET"
             else:
-                print "\n Error while reverting to ETHERNET"
-        else:
-            print "\n Error while launching Lightning App"
-    if revert_plugins_dict != {}:
-        status = set_plugins_status(obj,revert_plugins_dict)
+                print "\n Error while launching Lightning App"
+        if revert_plugins_dict != {}:
+            status = set_plugins_status(obj,revert_plugins_dict)
+    else:
+        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance");
-    getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
     print "Failed to load module"

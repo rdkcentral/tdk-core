@@ -84,6 +84,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_WiFi_PersistenceOnBoot')
 pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result)
@@ -106,7 +107,7 @@ if expectedResult in result.upper():
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
-    connect_status, revert_dict, revert_plugin_status = connect_to_interface(obj, "WIFI")
+    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "WIFI")
     if connect_status == "SUCCESS" and status == "SUCCESS":
         #get the connected SSID
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
@@ -201,15 +202,18 @@ if expectedResult in result.upper():
     else:
         print "\n Preconditions are not met"
         obj.setLoadModuleStatus("FAILURE")
-    revert_if = revert_dict.pop("revert_if")
-    current_connection = revert_dict.pop("current_if")
-    if revert_if:
-        result_status, revert_dict_new, revert_plugins = connect_to_interface(obj, current_connection)
-        time.sleep(30)
-        if result_status == "FAILURE":
-            obj.setLoadModuleStatus("FAILURE")
-    if revert_plugin_status == "YES":
-        status = set_plugins_status(obj,revert_dict)
+    if deviceAvailability == "Yes":
+        revert_if = revert_dict.pop("revert_if")
+        current_connection = revert_dict.pop("current_if")
+        if revert_if:
+            result_status, revert_dict_new, revert_plugins = connect_to_interface(obj, current_connection)
+            time.sleep(30)
+            if result_status == "FAILURE":
+                obj.setLoadModuleStatus("FAILURE")
+        if revert_plugin_status == "YES":
+            status = set_plugins_status(obj,revert_dict)
+    else:
+        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");

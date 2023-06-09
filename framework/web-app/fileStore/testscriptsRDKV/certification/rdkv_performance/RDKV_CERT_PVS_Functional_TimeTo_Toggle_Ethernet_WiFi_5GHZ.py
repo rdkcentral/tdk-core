@@ -115,6 +115,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable 
 Summ_list=[]
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result);
@@ -151,7 +152,7 @@ if expectedResult in result.upper():
             status = launch_lightning_app(obj,complete_url)
             time.sleep(20)
             if "SUCCESS" == (url_status and status):
-                connect_wifi_status = connect_wifi(obj,"5")
+                connect_wifi_status,deviceAvailability = connect_wifi(obj,"5")
                 if connect_wifi_status == "FAILURE":
                     status = "FAILURE"
                 else:
@@ -172,7 +173,7 @@ if expectedResult in result.upper():
                     new_interface = "WIFI"
                     command = "cat /opt/logs/netsrvmgr.log | grep -inr set_interface_state:.*wlan0.*up | tail -1"
                     keyword = "ip link set dev wlan0 up"
-                    wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface] = switch_to_wifi(obj,"5",True)
+                    wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface],deviceAvailability = switch_to_wifi(obj,"5",True)
                     if wifi_connect_status == "SUCCESS":
                         print "\n Successfully Set WIFI as default interface"
                         result_status = "SUCCESS"
@@ -185,7 +186,7 @@ if expectedResult in result.upper():
                     keyword = "ip link set dev eth0 up"
                     status = launch_lightning_app(obj,complete_url)
                     time.sleep(30)
-                    interface_status,start_time_dict[new_interface] = set_default_interface(obj,"ETHERNET",True)
+                    interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"ETHERNET",True)
                     if interface_status  == "SUCCESS":
                         print "\n Successfully set ETHERNET as default interface"
                         result_status = close_lightning_app(obj)
@@ -244,45 +245,48 @@ if expectedResult in result.upper():
         else:
             print "\n Please configure the SSH details and threshold values in the device config file"
             tdkTestObj.setResultStatus("FAILURE")
-        #Revert interface
-        if current_interface != initial_interface:
-            print "\n Revert network interface to {}\n".format(initial_interface)
-            if initial_interface == "ETHERNET":
+        if deviceAvailability == "Yes":
+	    getSummary(Summ_list,obj)
+            #Revert interface
+            if current_interface != initial_interface:
+                print "\n Revert network interface to {}\n".format(initial_interface)
+                if initial_interface == "ETHERNET":
+                    status = launch_lightning_app(obj,complete_url)
+                    time.sleep(30)
+                    interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
+                    if interface_status == "SUCCESS":
+                        print "\n Successfully reverted ETHERNET as default interface"
+                    else:
+                        print "\n Error while reverting ETHERNET as default interface"
+                        status = "FAILURE"
+                else:
+                    wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
+                    if wifi_connect_status == "SUCCESS":
+                        print "\n Successfully reverted WIFI as default interface"
+                    else:
+                        print "\n Error while reverting WIFI as default interface"
+                        status = "FAILURE"
+            if revert_wifi_ssid:
                 status = launch_lightning_app(obj,complete_url)
-                time.sleep(30)
-                interface_status = set_default_interface(obj,"ETHERNET")
-                if interface_status == "SUCCESS":
-                    print "\n Successfully reverted ETHERNET as default interface"
+                time.sleep(20)
+                if "SUCCESS" == (url_status and status):
+                    connect_wifi_status,deviceAvailability = connect_wifi(obj,"5")
+                    if connect_wifi_status == "FAILURE":
+                        status = "FAILURE"
+                    else:
+                        status = close_lightning_app(obj)
                 else:
-                    print "\n Error while reverting ETHERNET as default interface"
                     status = "FAILURE"
-            else:
-                wifi_connect_status,plugins_status_dict,revert_plugins = switch_to_wifi(obj)
-                if wifi_connect_status == "SUCCESS":
-                    print "\n Successfully reverted WIFI as default interface"
-                else:
-                    print "\n Error while reverting WIFI as default interface"
-                    status = "FAILURE"
-        if revert_wifi_ssid:
-            status = launch_lightning_app(obj,complete_url)
-            time.sleep(20)
-            if "SUCCESS" == (url_status and status):
-                connect_wifi_status = connect_wifi(obj,"5")
-                if connect_wifi_status == "FAILURE":
-                    status = "FAILURE"
-                else:
-                    status = close_lightning_app(obj)
-            else:
-                status = "FAILURE"
-        if status == "FAILURE":
+            if status == "FAILURE":
+                obj.setLoadModuleStatus("FAILURE")
+        else:
+            print "\n Preconditions are not met "
             obj.setLoadModuleStatus("FAILURE")
+        if revert_plugins_dict != {}:
+            status = set_plugins_status(obj,revert_plugins_dict)
     else:
-        print "\n Preconditions are not met "
-        obj.setLoadModuleStatus("FAILURE")
-    if revert_plugins_dict != {}:
-        status = set_plugins_status(obj,revert_plugins_dict)
+     	print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance");
-    getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
     print "Failed to load module"

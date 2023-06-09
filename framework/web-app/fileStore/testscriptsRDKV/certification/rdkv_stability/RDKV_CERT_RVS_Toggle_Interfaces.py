@@ -118,6 +118,7 @@ result_dict_list = []
 cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result);
@@ -168,7 +169,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                if details == "SUCCESS" and expectedResult in result:
+                if details == "SUCCESS" and expectedResult in result and deviceAvailability == "Yes":
                     tdkTestObj.setResultStatus("SUCCESS")
                     current_interface = new_interface
                     print "\n ##### Validating CPU load and memory usage #####\n"
@@ -202,7 +203,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
         #Revert interface
-        if current_interface != initial_interface:
+        if current_interface != initial_interface and deviceAvailability == "Yes":
             print "\n Revert network interface to {}\n".format(initial_interface)
             if initial_interface == "ETHERNET":
                 status = launch_lightning_app(obj,complete_url)
@@ -221,9 +222,12 @@ if expectedResult in (result.upper() and pre_condition_status):
     else:
         print "\n Preconditions are not met "
         obj.setLoadModuleStatus("FAILURE")
-    if revert_plugins_dict != {}:
-        status = set_plugins_status(obj,revert_plugins_dict)
-    post_condition_status = check_device_state(obj)
+    if deviceAvailability == "Yes":
+        if revert_plugins_dict != {}:
+            status = set_plugins_status(obj,revert_plugins_dict)
+        post_condition_status = check_device_state(obj)
+    else:
+        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");

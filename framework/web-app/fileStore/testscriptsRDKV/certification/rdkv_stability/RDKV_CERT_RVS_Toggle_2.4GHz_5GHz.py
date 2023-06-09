@@ -111,7 +111,7 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_RVS_Toggle_2.4GHz_5GHz');
 
 #The device will reboot before starting the stability testing if "pre_req_reboot" is
-#configured as "Yes".
+#configured as "Yes"
 pre_requisite_reboot(obj)
 
 output_file = '{}{}_{}_{}_CPUMemoryInfo.json'.format(obj.logpath,str(obj.execID),str(obj.execDevId),str(obj.resultId))
@@ -120,6 +120,7 @@ result_dict_list = []
 cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result);
@@ -157,7 +158,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         revert_plugins_dict["org.rdk.Network"] = "deactivated"
     if current_interface == "ETHERNET":
         revert_if = "YES"
-        wifi_connect_status,plugins_status_dict,revert_plugins = switch_to_wifi(obj)
+        wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
         if wifi_connect_status == "SUCCESS":
             current_interface = "WIFI"
         else:
@@ -176,7 +177,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 else:
                     new_ssid_freq = "2.4"
                 print "\n Connecting to {}GHZ SSID".format(new_ssid_freq)
-                connect_wifi_status = connect_wifi(obj,new_ssid_freq)
+                connect_wifi_status,deviceAvailability = connect_wifi(obj,new_ssid_freq)
                 if connect_wifi_status == "SUCCESS":
                     ssid_freq = new_ssid_freq
                     time.sleep(10)
@@ -210,22 +211,25 @@ if expectedResult in (result.upper() and pre_condition_status):
         else:
             print "\n Preconditions are not met"
             completed = False
-        if revert_if == "YES" and status == "SUCCESS":
-            time.sleep(40)
-            interface_status = set_default_interface(obj,"ETHERNET")
-            if interface_status == "SUCCESS":
-                print "\n Successfully reverted to ETHERNET \n"
-                status = close_lightning_app(obj)
-            else:
-                print "\n Error while reverting to ETHERNET \n"
-        if not completed:
+        if deviceAvailability == "Yes":
+            if revert_if == "YES" and status == "SUCCESS":
+                time.sleep(40)
+                interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
+                if interface_status == "SUCCESS":
+                    print "\n Successfully reverted to ETHERNET \n"
+                    status = close_lightning_app(obj)
+                else:
+                    print "\n Error while reverting to ETHERNET \n"
+            if not completed:
+                obj.setLoadModuleStatus("FAILURE")
+        else:
+            print "\n Preconditions are not met "
             obj.setLoadModuleStatus("FAILURE")
-    else:
-        print "\n Preconditions are not met "
-        obj.setLoadModuleStatus("FAILURE")
-    if revert_plugins_dict != {}:
-        status = set_plugins_status(obj,revert_plugins_dict)
-    post_condition_status = check_device_state(obj)
+        if revert_plugins_dict != {}:
+            status = set_plugins_status(obj,revert_plugins_dict)
+            post_condition_status = check_device_state(obj)
+        else:
+            print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");

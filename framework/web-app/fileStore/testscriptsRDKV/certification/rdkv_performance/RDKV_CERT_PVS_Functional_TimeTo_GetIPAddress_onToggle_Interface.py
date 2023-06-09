@@ -93,6 +93,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable 
 Summ_list=[]
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult()
 print "[LIB LOAD STATUS]  :  %s" %result
 
@@ -133,8 +134,8 @@ if expectedResult in result.upper():
             current_interface,revert_nw = check_current_interface(obj)
             if current_interface != "EMPTY":
                 new_interface = inverse_dict[current_interface]
-                connect_status,revert_dict, revert_plugin_status,start_time_dict[new_interface],wifi_connect_dict[new_interface] = connect_to_interface(obj,new_interface,True,True)
-                if connect_status == "SUCCESS":
+                connect_status,revert_dict, revert_plugin_status,start_time_dict[new_interface],wifi_connect_dict[new_interface],deviceAvailability = connect_to_interface(obj,new_interface,True,True)
+                if connect_status == "SUCCESS" and deviceAvailability =="Yes":
                     if event_time_dict == {}:
                         revert = "YES"
                         revert_dict.pop("current_if")
@@ -203,11 +204,14 @@ if expectedResult in result.upper():
     else:
         print "\n[Error] Preconditions are not met \n"
         obj.setLoadModuleStatus("FAILURE")
-    if revert == "YES":
-        print "\n Revert the values before exiting"
-        status = set_plugins_status(obj,curr_plugins_status_dict)
+    if deviceAvailability == "Yes":
+        getSummary(Summ_list,obj)
+        if revert == "YES":
+            print "\n Revert the values before exiting"
+            status = set_plugins_status(obj,curr_plugins_status_dict)
+    else:
+        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance")
-    getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
     print "Failed to load module"

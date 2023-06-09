@@ -30,7 +30,9 @@ import sys
 # Global variable to store the initial URL in WebKit
 current_url = None
 # Global variable to store DUT name in TM
+device_type = ""
 device_name = ""
+
 
 # Function to check the current interface of DUT
 def check_current_interface(obj):
@@ -70,8 +72,10 @@ def get_lightning_app_url(obj):
     status = "SUCCESS"
     complete_url = ""
     global device_name
+    global device_type
     ip_change_app_url = IPChangeDetectionVariables.ip_change_app_url
     device_name = rdkv_performancelib.deviceName
+    device_type = rdkv_performancelib.deviceType
     user_name = IPChangeDetectionVariables.tm_username
     password = IPChangeDetectionVariables.tm_password
     conf_file,file_status = getConfigFileName(obj.realpath)
@@ -140,18 +144,26 @@ def launch_lightning_app(obj,url):
         tdkTestObj.setResultStatus("FAILURE")
     return status
 
-# Function to get the IP of DUT from TM
-def get_curr_device_ip(tm_url):
-    url = tm_url + '/deviceGroup/getDeviceDetails?deviceName='+device_name
+#-------------------------------------------------------------------
+#GET THE DEVICE IP AND STATUS FROM TM
+#-------------------------------------------------------------------
+def getDeviceIP_and_Status(tm_url):
+    url = tm_url+"/execution/getDeviceStatus?stbName="+device_name+"&boxType="+device_type
+    print (url)
+    response = []
+    time.sleep(5)
     try:
         response = urllib.urlopen(url).read()
-        deviceDetails = json.loads(response)
-        device_ip = deviceDetails["deviceip"]
+        devicePattern=r'\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)'
+        matches=re.search(devicePattern, response)
+        device_ip = matches.group(1)
+        device_status = response.split(":")[1]
     except:
-        print "Unable to get Device Details from REST !!!"
+        print "Unable to get the response from REST"
         exit()
     sys.stdout.flush()
-    return device_ip
+    return device_ip,device_status
+
 
 # Function to enable WIFI interface and set it as default interface
 def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_needed = False):
@@ -159,6 +171,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
     wifi_connect_start_time = ""
     expectedResult =  "SUCCESS"
     start_time = ""
+    deviceAvailability = ""
     complete_app_url_status,complete_app_url = get_lightning_app_url(obj)
     plugin_status,plugin_status_dict,revert = set_plugins(obj)
     if plugin_status == "SUCCESS" and complete_app_url_status == "SUCCESS":
@@ -225,15 +238,15 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                         if expectedResult in app_status:
                                             time.sleep(40)
                                             if wifi_connect_needed:
-                                                wifi_connect_status,wifi_connect_start_time = connect_wifi(obj,ap_freq,True)
+                                                wifi_connect_status,wifi_connect_start_time,deviceAvailability = connect_wifi(obj,ap_freq,True)
                                             else:
-                                                wifi_connect_status = connect_wifi(obj,ap_freq)
-                                            if expectedResult in wifi_connect_status:
+                                                wifi_connect_status,deviceAvailability = connect_wifi(obj,ap_freq)
+                                            if expectedResult in wifi_connect_status and deviceAvailability == "Yes":
                                                 time.sleep(20)
                                                 if start_time_needed:
-                                                    result,start_time = set_default_interface(obj,"WIFI",start_time_needed)
+                                                    result,start_time,deviceAvailability = set_default_interface(obj,"WIFI",start_time_needed)
                                                 else:
-                                                    result = set_default_interface(obj,"WIFI")
+                                                    result,deviceAvailability = set_default_interface(obj,"WIFI")
                                                 if expectedResult in result:
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     status = "SUCCESS"
@@ -273,11 +286,11 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
         print "\n Please check the preconditions before test \n"
     if start_time_needed:
         if wifi_connect_needed:
-            return status,plugin_status_dict,revert,start_time,wifi_connect_start_time
+            return status,plugin_status_dict,revert,start_time,wifi_connect_start_time,deviceAvailability
         else:
-            return status,plugin_status_dict,revert,start_time
+            return status,plugin_status_dict,revert,start_time,deviceAvailability
     else:
-        return status,plugin_status_dict,revert
+        return status,plugin_status_dict,revert,deviceAvailability
 
 # Function to connect to a SSID given in the Device configuration file               
 def connect_wifi(obj,ap_freq,start_time_needed=False):
@@ -330,32 +343,49 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                         if result == "SUCCESS":
                             tdkTestObj.setResultStatus("SUCCESS")
                             time.sleep(30)
-                            device_ip = get_curr_device_ip(obj.url)
-                            if obj.IP != device_ip:
+                            device_ip,device_status = getDeviceIP_and_Status(obj.url)
+                            if obj.IP == device_ip and ("BUSY" in device_status):
+                                print ("Device is in available status in TM")
+                                deviceAvailability = "Yes"
+                                status = "SUCCESS"
+                            elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
+                                print ("TM has been updated with the new IP after interface change. But the device is down")
+                                status = "FAILURE"
+                                deviceAvailability = "No"
+                            elif (obj.IP != device_ip) and ("BUSY" in device_status):
+                                print ("TM has been updated with new IP after interface change. And device is available")
                                 obj.IP = device_ip
-                                time.sleep(30)
-                            #check wthether connected
-                            print "\n Checking whether DUT is connected to SSID \n"
-                            tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                            tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
-                            tdkTestObj.addParameter("reqValue","ssid")
-                            tdkTestObj.executeTestCase(expectedResult)
-                            result = tdkTestObj.getResult()
-                            if result == "SUCCESS":
-                                connected_ssid = tdkTestObj.getResultDetails()
-                                print " \n Connected SSID Name: {}\n ".format(connected_ssid)
-                                if ssid == connected_ssid:
-                                    print "Successfully Connected to SSID \n "
-                                    status = "SUCCESS"
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print "DUT is not connected to SSID"
-                                    tdkTestObj.setResultStatus("FAILURE")
-                            else:
-                                print "\n Error while executing org.rdk.Wifi.1.getConnectedSSID method \n"
-                                tdkTestObj.setResultStatus("FAILURE")
+                                status = "SUCCESS"
+                            time.sleep(30)
+                            if status == "SUCCESS":
+                                    print "Validate whether the device is available with the new IP:"
+                                    #check wthether connected
+                                    print "\n Checking whether DUT is connected to SSID \n"
+                                    tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                                    tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+                                    tdkTestObj.addParameter("reqValue","ssid")
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    if result == "SUCCESS":
+                                        deviceAvailability = "Yes"
+                                        connected_ssid = tdkTestObj.getResultDetails()
+                                        print " \n Connected SSID Name: {}\n ".format(connected_ssid)
+                                        if ssid == connected_ssid:
+                                            print "Successfully Connected to SSID \n "
+                                            status = "SUCCESS"
+                                            deviceAvailability = "Yes"
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                        else:
+                                            print "DUT is not connected to SSID"
+                                            deviceAvailability = "No"
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                    else:
+                                    	print "\n Error while executing org.rdk.Wifi.1.getConnectedSSID method \n"
+                                        deviceAvailability = "No"
+                                    	tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print "\n Error while executing org.rdk.Wifi.1.connect method \n"
+                            deviceAvailability = "No"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         print "\n Error while executing org.rdk.Wifi.1.startScan method \n"
@@ -369,9 +399,9 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
     else:
         print "\n Device specific configuration file is missing \n"
     if start_time_needed:
-        return status,start_time
+        return status,start_time,deviceAvailability
     else:
-        return status
+        return status,deviceAvailability
 
 # Function to set default interface
 def set_default_interface(obj,interface,start_time_needed = False):
@@ -388,21 +418,49 @@ def set_default_interface(obj,interface,start_time_needed = False):
         print "\n Set default interface method executed successfuly for {} interfce \n".format(interface)
         tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(40)
-        device_ip = get_curr_device_ip(obj.url)
-        if obj.IP != device_ip:
-            obj.IP = device_ip
-        new_interface,revert = check_current_interface(obj)
-        if interface not in new_interface:
-            print "\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface)
+        device_ip,device_status = getDeviceIP_and_Status(obj.url)
+        if obj.IP == device_ip:
+            print ("Device IP not updated after the change in Interface")
+            deviceAvailability = "No"
             status = "FAILURE"
+        elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
+            print ("TM has been updated with the new IP after interface change. But the device is down")
+            deviceAvailability = "No"
+            status = "FAILURE"
+        elif (obj.IP != device_ip) and ("BUSY" in device_status):
+            print ("TM has been updated with new IP after interface change. And device is available")
+            obj.IP = device_ip
+        time.sleep(30)
+        if status == "SUCCESS":
+            print "Validate whether the device is available with the new IP:"
+            try:
+                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                tdkTestObj.addParameter("method","org.rdk.Network.1.getDefaultInterface")
+                tdkTestObj.addParameter("reqValue","interface")
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                if result == "SUCCESS":
+                    deviceAvailability = "Yes"
+                    new_interface,revert = check_current_interface(obj)
+                    if interface not in new_interface:
+                        print "\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface)
+                        status = "FAILURE"
+                        deviceAvailability = "No"
+            except Exception as e:
+                status = "FAILURE"
+                deviceAvailability = "No"
+                print "Error :"
+                print (e)
+                if "ConnectTimeoutError" in e:
+                    print "Unable to connect to the device as it is not in available status with the new IP"
     else:
         status = "FAILURE"
         print "\n Unable to set {} as Default interface \n".format(interface)
         tdkTestObj.setResultStatus("FAILURE")
     if start_time_needed:
-        return status,start_time
+        return status,start_time,deviceAvailability
     else:
-        return status
+        return status,deviceAvailability
 
 # Function to close the Lightning App by setting the initial URL in WebKit
 def close_lightning_app(obj):
@@ -468,6 +526,7 @@ def check_cur_ssid_freq(obj):
 def connect_to_interface(obj, required_connection,start_time_needed = False, wifi_connect_needed = False):
     revert_dict = {"revert_if":False}
     start_time = ""
+    deviceAvailability = ""
     wifi_start_time = ""
     result_status = "FAILURE"
     wifi_ssid_dict = {"WIFI":"2.4", "WIFI_5GHZ":"5"}
@@ -479,22 +538,22 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
     if current_connection == "EMPTY":
         if start_time_needed:
             if wifi_connect_needed:
-                return result_status, revert_dict, revert_plugins, start_time, wifi_start_time
+                return result_status, revert_dict, revert_plugins, start_time, wifi_start_time, deviceAvailability
             else:
-                return result_status, revert_dict, revert_plugins, start_time
+                return result_status, revert_dict, revert_plugins, start_time,deviceAvailability
         else:
-            return result_status, revert_dict, revert_plugins
+            return result_status, revert_dict, revert_plugins,deviceAvailability
     elif current_connection == "WIFI":
         #Check the frequency of SSID
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
             if start_time_needed:
                 if wifi_connect_needed: 
-                    return result_status, revert_dict, revert_plugins, start_time, wifi_start_time
+                    return result_status, revert_dict, revert_plugins, start_time, wifi_start_time,deviceAvailability
                 else:
-                    return result_status, revert_dict, revert_plugins, start_time
+                    return result_status, revert_dict, revert_plugins, start_time, deviceAvailability
             else:
-                return result_status, revert_dict, revert_plugins
+                return result_status, revert_dict, revert_plugins, deviceAvailability
         elif ssid_freq == "5":
             current_connection = "WIFI_5GHZ"
     if current_connection == required_connection:
@@ -503,11 +562,11 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
         revert_dict["revert_if"] = True
         if start_time_needed:
             if wifi_connect_needed:
-                result_status, plugins_status_dict, revert_plugins, start_time, wifi_start_time = switch_to_wifi(obj, wifi_ssid_dict[required_connection], True, True)
+                result_status, plugins_status_dict, revert_plugins, start_time, wifi_start_time,deviceAvailability = switch_to_wifi(obj, wifi_ssid_dict[required_connection], True, True)
             else:
-                result_status, plugins_status_dict, revert_plugins, start_time = switch_to_wifi(obj, wifi_ssid_dict[required_connection], True)
+                result_status, plugins_status_dict, revert_plugins, start_time,deviceAvailability = switch_to_wifi(obj, wifi_ssid_dict[required_connection], True)
         else:
-            result_status, plugins_status_dict, revert_plugins = switch_to_wifi(obj, wifi_ssid_dict[required_connection], False)
+            result_status, plugins_status_dict, revert_plugins, deviceAvailability = switch_to_wifi(obj, wifi_ssid_dict[required_connection], False)
     else:
         revert_dict["revert_if"] = True
         plugin_status, plugins_status_dict, revert_plugins = set_plugins(obj)
@@ -517,9 +576,9 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
         if all(status == "SUCCESS" for status in (plugin_status, url_status, launch_app_status)):
             if required_connection == "ETHERNET":
                 if start_time_needed:
-                    result_status,start_time = set_default_interface(obj, "ETHERNET", True)
+                    result_status,start_time,deviceAvailability = set_default_interface(obj, "ETHERNET", True)
                 else:
-                    result_status = set_default_interface(obj, "ETHERNET")
+                    result_status,deviceAvailability = set_default_interface(obj, "ETHERNET")
         else:
             print "\n Error while launching Lightning App"
     revert_dict["current_if"] = current_connection
@@ -528,8 +587,8 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
     time.sleep(30)
     if start_time_needed:
         if wifi_connect_needed:
-            return result_status,revert_dict,revert_plugins,start_time,wifi_start_time
+            return result_status,revert_dict,revert_plugins,start_time,wifi_start_time,deviceAvailability
         else:
-            return result_status,revert_dict,revert_plugins,start_time
+            return result_status,revert_dict,revert_plugins,start_time,deviceAvailability
     else:
-        return result_status,revert_dict,revert_plugins
+        return result_status,revert_dict,revert_plugins,deviceAvailability

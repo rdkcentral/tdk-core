@@ -108,6 +108,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable 
 Summ_list=[]
 #Get the result of connection with test component and DUT
+deviceAvailability = "No"
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result)
@@ -115,7 +116,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     rebootwaitTime = StabilityTestVariables.rebootwaitTime
-    connect_status, revert_dict, revert_plugin_status = connect_to_interface(obj, "ETHERNET")
+    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "ETHERNET")
     if connect_status == "SUCCESS":
         reboot_time = []
         count = 0
@@ -238,16 +239,19 @@ if expectedResult in result.upper():
     else:
         print "\n Preconditions are not met \n"
         obj.setLoadModuleStatus("FAILURE")
-    revert_if = revert_dict.pop("revert_if")
-    current_connection = revert_dict.pop("current_if")
-    if revert_if:
-        result_status, revert_dict_new, revert_plugins = connect_to_interface(obj, current_connection)
-        time.sleep(30)
-        if result_status == "FAILURE":
-            obj.setLoadModuleStatus("FAILURE")
-    if revert_plugin_status == "YES":
-        status = set_plugins_status(obj,revert_dict)
+    if deviceAvailability == "Yes":
+	getSummary(Summ_list,obj)
+        revert_if = revert_dict.pop("revert_if")
+        current_connection = revert_dict.pop("current_if")
+        if revert_if:
+            result_status, revert_dict_new, revert_plugins,deviceAvailability = connect_to_interface(obj, current_connection)
+            time.sleep(30)
+            if result_status == "FAILURE":
+                obj.setLoadModuleStatus("FAILURE")
+        if revert_plugin_status == "YES":
+            status = set_plugins_status(obj,revert_dict)
+    else:
+        "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
     obj.unloadModule("rdkv_performance");
-    getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
