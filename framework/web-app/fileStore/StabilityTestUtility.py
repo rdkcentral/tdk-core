@@ -122,7 +122,7 @@ def get_validation_params(obj):
     validation_dict = {}
     print "\n getting validation params from conf file"
     conf_file,result = getConfigFileName(obj.realpath)
-    result, validation_required = getDeviceConfigKeyValue(conf_file,"VALIDATION_REQ")
+    result, validation_required = getDeviceConfigKeyValue(conf_file,"PROC_VALIDATION")
     if result == "SUCCESS":
         if validation_required == "NO":
             validation_dict["validation_required"] = False
