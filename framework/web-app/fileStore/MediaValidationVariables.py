@@ -175,6 +175,11 @@ video_src_url_h263 = test_streams_base_path + "TDK_Asset_Sunrise_H263_AAC.mov"
 #AAC Codec Video URL
 video_src_url_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4.mpd"
 
+#Sampling rate URL
+video_src_url_96khz_aac = test_streams_base_path + "TDK_Asset_Sunrise_AAC_96kHz.mp4"
+video_src_url_96khz_opus = test_streams_base_path + "TDK_Asset_Sunrise_OPUS_96kHz.mp4"
+video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz.mp4"
+
 #VP9 Codec Video URL
 # By default VP9_OPUS stream is used, if we need to test with VP9_OGG stream
 # then comment VP9_OPUS stream and uncomment VP9_OGG stream urls below
