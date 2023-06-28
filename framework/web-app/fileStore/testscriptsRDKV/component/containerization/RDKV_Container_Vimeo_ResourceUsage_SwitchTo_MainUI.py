@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</name>
+  <name>RDKV_Container_Vimeo_ResourceUsage_SwitchTo_MainUI</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>The objective of this script is to calculate the resource usage during video playback in Vimeo app in container mode.</synopsis>
+  <synopsis>The objective of this script is to calculate the resource usage while launching Vimeo app in container mode.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -60,8 +60,8 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>Containerization_17</test_case_id>
-    <test_objective>The objective of this script is to calculate the resource usage during video playback in Vimeo app in containerization mode. </test_objective>
+    <test_case_id>Containerization_37</test_case_id>
+    <test_objective>The objective of this script is to calculate the resource usage while switching Vimeo from videoplayback to main UI in containerization mode.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Accelerator</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
@@ -73,15 +73,16 @@
 4. Verify datamodel values
 5. Launch Vimeo
 6. Verify that Vimeo is running in container mode
-7. Check wpeframework.log
-8. Start playback
-9. Calculate resource usage</automation_approch>
-    <expected_output>Resource usage while video playback in Vimeo app should not be higher than the threshold value.</expected_output>
+7. Set a vimeo url to play a video
+8. Return back to home screen UI. 
+7. Check wpeframework.log for "moveToFront" log
+8. Calculate resource usage</automation_approch>
+    <expected_output>Resource usage while switching from videoplayback from main UI in Vimeo app should not be higher than the threshold value.</expected_output>
     <priority>High</priority>
     <test_stub_interface>containerization</test_stub_interface>
-    <test_script>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</test_script>
+    <test_script>RDKV_Container_Vimeo_ResourceUsage_SwitchTo_MainUI</test_script>
     <skipped>No</skipped>
-    <release_version>M112</release_version>
+    <release_version>M114</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
@@ -91,16 +92,13 @@
 import tdklib;
 from containerizationlib import *
 import PerformanceTestVariables
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack');
-
+obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_SwitchTo_MainUI');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
@@ -204,70 +202,108 @@ if expectedResult in result.upper():
                         time.sleep(10)
                         if(vimeo_result in expectedResult):
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "Clicking OK to play video"
+                            print "\n Clicking OK to play video"
                             params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
-                            tdkTestObj = obj.createTestStep('containerization_setValue')
-                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                            tdkTestObj.addParameter("value",params)
+                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                            tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
+                            tdkTestObj.addParameter("value", params)
                             tdkTestObj.executeTestCase(expectedResult)
                             result1 = tdkTestObj.getResult()
-                            time.sleep(50)
-                            if "SUCCESS" == result1:
-                                print "\n Check video is started \n"
+                            time.sleep(40)
+                            if "SUCCESS" == (result1):
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                tdkTestObj = obj.createTestStep('containerization_getSSHParams')
-                                tdkTestObj.addParameter("realpath",obj.realpath)
-                                tdkTestObj.addParameter("deviceIP",obj.IP)
+                                print "\n Pressing Home button \n"
+                                params = '{"keys":[ {"keyCode": 36,"modifiers": [],"delay":1.0}]}'
+                                tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
+                                tdkTestObj.addParameter("value", params)
                                 tdkTestObj.executeTestCase(expectedResult)
-                                result = tdkTestObj.getResult()
-                                ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-                                if ssh_param_dict != {} and expectedResult in result:
+                                rdkshell_result = tdkTestObj.getResult()
+                                time.sleep(20)
+                                if expectedResult in rdkshell_result:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    if validation_dict["validation_required"]:
-                                        if validation_dict["password"] == "None":
-                                            password = ""
-                                    else:
-                                        password = validation_dict["password"]
-                                        tdkTestObj = obj.createTestStep('containerization_validateProcEntry')
+                                    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+                                    tdkTestObj.addParameter("realpath",obj.realpath)
+                                    tdkTestObj.addParameter("deviceIP",obj.IP)
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+                                    if ssh_param_dict != {} and expectedResult in result:
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        command = 'cat /opt/logs/wpeframework.log | grep -inr ResidentApp.*moveToFront.*Success| tail -1'
+                                        # get the log line containing the main UI loaded info from wpeframework log
+                                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                         tdkTestObj.addParameter("ssh_method", ssh_param_dict["ssh_method"])
                                         tdkTestObj.addParameter("credentials", ssh_param_dict["credentials"])
-                                        tdkTestObj.addParameter("video_validation_script", validation_dict["video_validation_script"])
+                                        tdkTestObj.addParameter("command", command)
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result = tdkTestObj.getResult()
-                                        output = tdkTestObj.getResultDetails()
+                                        output = tdkTestObj.getResultDetails()  
+                                        if output != "EXCEPTION" and expectedResult in result:
+                                            if "ResidentApp moveToFront Success" in output:
+                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                tdkTestObj = obj.createTestStep('rdkservice_getValue')
+                                                tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
+                                                tdkTestObj.executeTestCase(expectedResult)
+                                                zorder = tdkTestObj.getResultDetails()
+                                                zorder_status = tdkTestObj.getResult()
+                                                if expectedResult in zorder_status :
+                                                    zorder = ast.literal_eval(zorder)["clients"]
+                                                    print "zorder: ",zorder
+                                                    resident_app = "ResidentApp"
+                                                    zorder = exclude_from_zorder(zorder)
+                                                    if zorder[0].lower() == resident_app.lower():
+                                                        print "\n Home screen is reached"
+                                                        tdkTestObj.setResultStatus("SUCCESS")
+                                                        print "\n Validate Resource Usage"
+                                                        tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
+                                                        tdkTestObj.executeTestCase(expectedResult)
+                                                        resource_usage = tdkTestObj.getResultDetails()
+                                                        result = tdkTestObj.getResult()
+                                                        if expectedResult in result and resource_usage != "ERROR":
+                                                            print "\n Successfully validated Resource usage"
+                                                            print "\n Resource usage is within the expected limit"
+                                                            tdkTestObj.setResultStatus("SUCCESS")
+                                                        else:
+                                                            print "\n Error while validating Resource usage"
+                                                            tdkTestObj.setResultStatus("FAILURE")
+                                                    else:
+                                                        print "\n Error in switching to home screen"
+                                                        tdkTestObj.setResultStatus("FAILURE")
+                                                else:
+                                                    print "\n Error in getting the zorder status"
+                                                    tdkTestObj.setResultStatus("FAILURE")
+                                        else:
+                                            print "\n Required logs are not present in wpeframework.log"
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                    else:
+                                        print "\n Error in sshing to the device"
+                                        tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Skipped the proc entry validation as this device is not configured for this validation"
-                                print "\n Validate Resource Usage"
-                                tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
-                                tdkTestObj.executeTestCase(expectedResult)
-                                resource_usage = tdkTestObj.getResultDetails()
-                                result = tdkTestObj.getResult()
-                                if expectedResult in result and resource_usage != "ERROR":
-                                    print "\n Successfully validated Resource usage"
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print "\n Error while validating Resource usage"
+                                    print "\n Error in reaching home screen"
                                     tdkTestObj.setResultStatus("FAILURE")
+                            
                             else:
-                                print "Error while generating key code"
+                                print "\n Error in playing the video"
                                 tdkTestObj.setResultStatus("FAILURE")
+                            
                         else:
-                            print "Unable to launch the url"
+                            print "\n Unable to launch the url"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Unable to get the required logs"
+                        print "\n Unable to get the required logs"
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "LightningApp is not running in container mode"
+                    print "\n LightningApp is not running in container mode"
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Failed to launch LightningApp"
+                print "\n Failed to launch LightningApp"
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Failed to enable data model value"
+            print "\n Failed to enable data model value"
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Dobby service is not running"
+        print "\n Dobby service is not running"
         tdkTestObj.setResultStatus("FAILURE")
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
 tdkTestObj.addParameter("datamodel",datamodel)
@@ -276,6 +312,6 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print "\n Set Post Requisites Failed"
     tdkTestObj.setResultStatus("FAILURE")
 obj.unloadModule("containerization");

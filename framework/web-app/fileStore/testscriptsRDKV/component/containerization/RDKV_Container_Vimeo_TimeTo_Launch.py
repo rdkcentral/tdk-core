@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>4</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</name>
+  <name>RDKV_Container_Vimeo_TimeTo_Launch</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>The objective of this script is to calculate the resource usage during video playback in Vimeo app in container mode.</synopsis>
+  <synopsis>The objective of this script is to calculate the time taken to launch Vimeo app in container mode.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -60,8 +60,8 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>Containerization_17</test_case_id>
-    <test_objective>The objective of this script is to calculate the resource usage during video playback in Vimeo app in containerization mode. </test_objective>
+    <test_case_id>Containerization_35</test_case_id>
+    <test_objective>The objective of this script is to calculate the resource usage while launching in Vimeo app in containerization mode. </test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Accelerator</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
@@ -75,13 +75,13 @@
 6. Verify that Vimeo is running in container mode
 7. Check wpeframework.log
 8. Start playback
-9. Calculate resource usage</automation_approch>
-    <expected_output>Resource usage while video playback in Vimeo app should not be higher than the threshold value.</expected_output>
+9. Calculate the time taken to launch Vimeo app in container mode</automation_approch>
+    <expected_output>Time taken to launch Vimeo app in container mode should not be higher than the threshold value.</expected_output>
     <priority>High</priority>
     <test_stub_interface>containerization</test_stub_interface>
-    <test_script>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</test_script>
+    <test_script>RDKV_Container_Vimeo_TimeTo_Launch</test_script>
     <skipped>No</skipped>
-    <release_version>M112</release_version>
+    <release_version>M114</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
@@ -91,16 +91,15 @@
 import tdklib;
 from containerizationlib import *
 import PerformanceTestVariables
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack');
-
+obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_TimeTo_Launch');
+#Execution summary variable 
+Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
@@ -201,21 +200,12 @@ if expectedResult in result.upper():
                         tdkTestObj.addParameter("value",vimeo_playback_url)
                         tdkTestObj.executeTestCase(expectedResult)
                         vimeo_result = tdkTestObj.getResult()
+                        start_time = str(datetime.utcnow()).split()[1]
                         time.sleep(10)
                         if(vimeo_result in expectedResult):
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            print "Clicking OK to play video"
-                            params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
-                            tdkTestObj = obj.createTestStep('containerization_setValue')
-                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                            tdkTestObj.addParameter("value",params)
-                            tdkTestObj.executeTestCase(expectedResult)
-                            result1 = tdkTestObj.getResult()
-                            time.sleep(50)
-                            if "SUCCESS" == result1:
-                                print "\n Check video is started \n"
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                tdkTestObj = obj.createTestStep('containerization_getSSHParams')
+                                tdkTestObj.setResultStatus("SUCCESS");
+                                print "\n URL is set successfully"
+                                tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                                 tdkTestObj.addParameter("realpath",obj.realpath)
                                 tdkTestObj.addParameter("deviceIP",obj.IP)
                                 tdkTestObj.executeTestCase(expectedResult)
@@ -223,42 +213,62 @@ if expectedResult in result.upper():
                                 ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
                                 if ssh_param_dict != {} and expectedResult in result:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    if validation_dict["validation_required"]:
-                                        if validation_dict["password"] == "None":
-                                            password = ""
+                                    command = 'cat /opt/logs/wpeframework.log | grep -inr URLChanged.*url.*'+vimeo_playback_url+'| tail -1'
+                                    #Primitive test case which associated to this Script
+                                    tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                                    #Add the parameters to ssh to the DUT and execute the command
+                                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                                    tdkTestObj.addParameter("credentials", credentials);
+                                    tdkTestObj.addParameter("command", command);
+                                    #Execute the test case in DUT
+                                    tdkTestObj.executeTestCase(expectedResult);
+                                    output = tdkTestObj.getResultDetails()
+                                    if output != "EXCEPTION" and expectedResult in result:
+                                        url_changed_line = output.split('\n')[1]
+                                        if url_changed_line != "":
+                                            url_changed_time = getTimeStampFromString(url_changed_line)
+                                            print "\n Vimeo URL set at :{}".format(start_time)
+                                            print "\n Vimeo launched at: {} (UTC)".format(url_changed_time)
+                                            start_time_millisec = getTimeInMilliSec(start_time)
+                                            url_changed_time_millisec = getTimeInMilliSec(url_changed_time)
+                                            launch_time = url_changed_time_millisec - start_time_millisec
+                                            print "\n Time taken to launch the application: {} milliseconds \n".format(launch_time)
+                                            conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                                            result1, vimeo_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"VIMEO_LAUNCH_THRESHOLD_VALUE")
+                                            Summ_list.append('VIMEO_LAUNCH_THRESHOLD_VALUE :{}ms'.format(vimeo_launch_threshold_value))
+                                            result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                                            Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
+                                            Summ_list.append('Application Initiated  at :{}'.format(start_time))
+                                            Summ_list.append('Application launched at :{}'.format(url_changed_time))
+                                            Summ_list.append('Time taken to launch the application :{}ms'.format(launch_time))
+                                            if all (value != "" for value in (vimeo_launch_threshold_value,offset)):
+                                                print "\n Threshold value for time taken to launch the vimeo: {} ms".format(vimeo_launch_threshold_value)
+                                                if 0 < int(launch_time) < (int(vimeo_launch_threshold_value) + int(offset)):
+                                                    tdkTestObj.setResultStatus("SUCCESS");
+                                                    print "\n The time taken to launch the vimeo is within the expected limit\n"
+                                                else:
+                                                    tdkTestObj.setResultStatus("FAILURE");
+                                                    print "\n The time taken to launch the vimeo is not within the expected limit \n"
+                                            else:
+                                                tdkTestObj.setResultStatus("FAILURE");
+                                                print "\n Failed to get the threshold value from config file"
+                                        else:
+                                            print "\n URL is not loaded in DUT"
+                                            tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        password = validation_dict["password"]
-                                        tdkTestObj = obj.createTestStep('containerization_validateProcEntry')
-                                        tdkTestObj.addParameter("ssh_method", ssh_param_dict["ssh_method"])
-                                        tdkTestObj.addParameter("credentials", ssh_param_dict["credentials"])
-                                        tdkTestObj.addParameter("video_validation_script", validation_dict["video_validation_script"])
-                                        tdkTestObj.executeTestCase(expectedResult)
-                                        result = tdkTestObj.getResult()
-                                        output = tdkTestObj.getResultDetails()
+                                        print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command)
+                                        tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Skipped the proc entry validation as this device is not configured for this validation"
-                                print "\n Validate Resource Usage"
-                                tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
-                                tdkTestObj.executeTestCase(expectedResult)
-                                resource_usage = tdkTestObj.getResultDetails()
-                                result = tdkTestObj.getResult()
-                                if expectedResult in result and resource_usage != "ERROR":
-                                    print "\n Successfully validated Resource usage"
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print "\n Error while validating Resource usage"
+                                    print "\n Error in setting up the url"
                                     tdkTestObj.setResultStatus("FAILURE")
-                            else:
-                                print "Error while generating key code"
-                                tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Unable to launch the url"
+                            "\n Error in setting up the vimeo url"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Unable to get the required logs"
+                        print "\n Error while launching lightningApp in container"
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "LightningApp is not running in container mode"
+                    print "\n Unable to check the container running state"
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 print "Failed to launch LightningApp"
@@ -275,7 +285,9 @@ tdkTestObj.executeTestCase(expectedResult)
 actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
+    getSummary(Summ_list,obj)
 else:
     print "Set Post Requisites Failed"
     tdkTestObj.setResultStatus("FAILURE")
-obj.unloadModule("containerization");
+obj.unloadModule("containerization");                         
+                            

@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</name>
+  <name>RDKV_Container_Vimeo_ResourceUsage_Launch</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>The objective of this script is to calculate the resource usage during video playback in Vimeo app in container mode.</synopsis>
+  <synopsis>The objective of this script is to calculate the resource usage while launching Vimeo app in container mode.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -60,8 +60,8 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>Containerization_17</test_case_id>
-    <test_objective>The objective of this script is to calculate the resource usage during video playback in Vimeo app in containerization mode. </test_objective>
+    <test_case_id>Containerization_34</test_case_id>
+    <test_objective>The objective of this script is to calculate the resource usage while launching in Vimeo app in containerization mode. </test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Accelerator</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
@@ -74,33 +74,29 @@
 5. Launch Vimeo
 6. Verify that Vimeo is running in container mode
 7. Check wpeframework.log
-8. Start playback
-9. Calculate resource usage</automation_approch>
+8. Calculate resource usage</automation_approch>
     <expected_output>Resource usage while video playback in Vimeo app should not be higher than the threshold value.</expected_output>
     <priority>High</priority>
     <test_stub_interface>containerization</test_stub_interface>
-    <test_script>RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack</test_script>
+    <test_script>RDKV_Container_Vimeo_ResourceUsage_Launch</test_script>
     <skipped>No</skipped>
-    <release_version>M112</release_version>
+    <release_version>M114</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
 </xml>
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script
+  # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from containerizationlib import *
 import PerformanceTestVariables
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_VideoPlayBack');
-
+obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_Launch');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
@@ -204,52 +200,17 @@ if expectedResult in result.upper():
                         time.sleep(10)
                         if(vimeo_result in expectedResult):
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "Clicking OK to play video"
-                            params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
-                            tdkTestObj = obj.createTestStep('containerization_setValue')
-                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                            tdkTestObj.addParameter("value",params)
+                            print "\n Validate Resource Usage"
+                            tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
                             tdkTestObj.executeTestCase(expectedResult)
-                            result1 = tdkTestObj.getResult()
-                            time.sleep(50)
-                            if "SUCCESS" == result1:
-                                print "\n Check video is started \n"
+                            resource_usage = tdkTestObj.getResultDetails()
+                            result = tdkTestObj.getResult()
+                            if expectedResult in result and resource_usage != "ERROR":
+                                print "\n Successfully validated Resource usage"
+                                print "\n Resource usage is within the expected limit"
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                tdkTestObj = obj.createTestStep('containerization_getSSHParams')
-                                tdkTestObj.addParameter("realpath",obj.realpath)
-                                tdkTestObj.addParameter("deviceIP",obj.IP)
-                                tdkTestObj.executeTestCase(expectedResult)
-                                result = tdkTestObj.getResult()
-                                ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-                                if ssh_param_dict != {} and expectedResult in result:
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                    if validation_dict["validation_required"]:
-                                        if validation_dict["password"] == "None":
-                                            password = ""
-                                    else:
-                                        password = validation_dict["password"]
-                                        tdkTestObj = obj.createTestStep('containerization_validateProcEntry')
-                                        tdkTestObj.addParameter("ssh_method", ssh_param_dict["ssh_method"])
-                                        tdkTestObj.addParameter("credentials", ssh_param_dict["credentials"])
-                                        tdkTestObj.addParameter("video_validation_script", validation_dict["video_validation_script"])
-                                        tdkTestObj.executeTestCase(expectedResult)
-                                        result = tdkTestObj.getResult()
-                                        output = tdkTestObj.getResultDetails()
-                                else:
-                                    print "\n Skipped the proc entry validation as this device is not configured for this validation"
-                                print "\n Validate Resource Usage"
-                                tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
-                                tdkTestObj.executeTestCase(expectedResult)
-                                resource_usage = tdkTestObj.getResultDetails()
-                                result = tdkTestObj.getResult()
-                                if expectedResult in result and resource_usage != "ERROR":
-                                    print "\n Successfully validated Resource usage"
-                                    tdkTestObj.setResultStatus("SUCCESS")
-                                else:
-                                    print "\n Error while validating Resource usage"
-                                    tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "Error while generating key code"
+                                print "\n Error while validating Resource usage"
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print "Unable to launch the url"
