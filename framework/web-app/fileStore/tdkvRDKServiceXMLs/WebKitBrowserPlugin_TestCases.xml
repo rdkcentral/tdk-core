@@ -456,5 +456,40 @@
               </resultGeneration>
             </testStep>
         </testCase>
+    
+        <testCase testCaseId="WEB_14" testCaseName="WebkitBrowser_Check_Loaded_URL" desc="Change plugin state and check the loaded url">
+            <testStep testStepId="1" name="Set_Browser_Test_URL" method="Set_Browser_URL">
+              <params>
+                <param tag="url" useConfigFile="true" key="WEBKIT_TEST_URL" />
+              </params>
+            </testStep>
+            <testStep testStepId="2" name="Suspend_WebKitBrowser" method="Set_WebKitBrowser_State" >
+                <params>
+                  <param tag="state" value="suspended" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_State_Change_Event" event="Event_State_Change" action="eventListener" delay="5">
+              <resultGeneration useMethodTag="webkitbrowser_check_statechange_event" expectedValues="true" />
+            </testStep>
+            <testStep testStepId="4" name="Is_WebKitBrowser_Suspended" method="Get_WebKitBrowser_State">
+                <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="suspended" />
+            </testStep>
+            <testStep testStepId="5" name="Resume_WebKitBrowser" method="Set_WebKitBrowser_State" >
+                <params>
+                  <param tag="state" useDefault="true" />
+                </params>
+            </testStep>
+            <testStep testStepId="6" name="Check_State_Change_Event" event="Event_State_Change" action="eventListener" delay="5">
+              <resultGeneration useMethodTag="webkitbrowser_check_statechange_event" expectedValues="false" />
+            </testStep>
+            <testStep testStepId="7" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State">
+                <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="resumed" />
+            </testStep>
+            <testStep testStepId="8" name="Get_Browser_Test_URL" method="Get_Browser_URL">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" >
+                <expectedValues useConfigFile="true" key="WEBKIT_TEST_URL" />
+              </resultGeneration>
+            </testStep>
+        </testCase>
 </testPlugin>
 

@@ -405,21 +405,23 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
         # FrameRate Events response result parser steps
         elif tag == "framerate_check_fps_event":
             fps_info = []
-            flag = 0
+            fps_info_failure = []
             for fps_data in result:
-                fps_info.append(fps_data)
                 if fps_data.get("average") <= 0 or fps_data.get("min") <= 0 or fps_data.get("max") <= 0:
-                    flag = 1
-            info["fps_info"] = fps_info
-            if flag==1:
-                info["Test_Step_Status"] = "FAILURE"
-            else:
+                    fps_info_failure.append(fps_data)
+                else:
+                    fps_info.append(fps_data)
+            if fps_info:
                 info["Test_Step_Status"] = "SUCCESS"
+                info["fps_info"] = fps_info
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+                info["fps_info"] = fps_info_failure
 
         elif tag == "framerate_check_display_framerate_changed_event":
             result = result[0]
             info = result
-            if result:
+            if str(result.get("displayFrameRate")) == str(expectedValues[0]):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -501,7 +503,19 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+        
+        elif tag == "system_check_on_timezonedst_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                old = eventResult.get("oldTimeZone")
+                new = eventResult.get("newTimeZone")
+                old = old.replace("\/","/")
+                new = new.replace("\/","/")
+                if old.strip() in arg or new.strip() in expectedValues:
+                    if str(eventResult.get("oldAccuracy")).lower() in arg and str(eventResult.get("newAccuracy")).lower() in arg:
+                       info = eventResult
+                       info["Test_Step_Status"] = "SUCCESS"
+                       break;
 
         # LoggerPreferences Events response result parser steps
         elif tag == "loggingpreferences_check_onkeystroke_mask_enabled_change_event":

@@ -38,6 +38,67 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DeviceDiagnostics" expectedValues="activated"/>
             </testStep>
           </prerequisite>
+           
+          <prerequisite requisiteId="2" requisiteName="Activate_System_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="callsign" value="org.rdk.System" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+
+          <prerequisite requisiteId="3" requisiteName="Activate_WebKitBrowser_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="callsign" value="WebKitBrowser" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="4" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" saveResult="true" >
+                <resultGeneration useMethodTag="webkitbrowser_get_state" />
+            </testStep>
+            <testStep testStepId="5" name="Resume_WebKitBrowser" method="Set_WebKitBrowser_State" pluginName="WebKitBrowser" >
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <params>
+                  <param tag="state" useDefault="true" />
+                </params>
+            </testStep>
+            <testStep testStepId="6" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" delay="5">
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="resumed" />
+            </testStep>
+          </prerequisite>
+
+          <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="WebKitBrowser" eventName="Event_Load_Finished" />
+          </prerequisite>
         </pluginPreRequisite>
 
         <testCase testCaseId="DD_01" testCaseName="DeviceDiagnostics_Get_Configurations" desc="Gets value of provided property names" >
@@ -99,7 +160,47 @@
                   <resultGeneration useMethodTag="deviceinfo_get_system_info" arguments="check_cpu_load" />
               </subtestStep>
             </testStep>
-    </testCase>
-
+       </testCase>
+    
+       <testCase testCaseId="DD_03" testCaseName="DeviceDiagnostics_Check_AVDecoder_Status" desc="Checks the AV Decoder status">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="2" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+            <testStep testStepId="3" name="Set_Browser_Test_URL" method="Set_Browser_URL" pluginName="WebKitBrowser">
+              <params>
+                <param tag="url" useConfigFile="true" key="WEBKIT_PLAYBACK_URL" />
+              </params>
+            </testStep>
+            <testStep testStepId="4" name="Check_Load_Finished_Event" event="Event_Load_Finished" action="eventListener" delay="30" pluginName="WebKitBrowser" >
+              <resultGeneration useMethodTag="webkitbrowser_check_load_finished_event" >
+                <expectedValues useDefault="true" useConfigFile="true" key="WEBKIT_PLAYBACK_URL" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_Browser_Test_URL" method="Get_Browser_URL" pluginName="WebKitBrowser">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" >
+                <expectedValues useConfigFile="true" key="WEBKIT_PLAYBACK_URL" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="active" />
+            </testStep>
+            <testStep testStepId="7" name="Set_Browser_Test_URL" method="Set_Browser_URL" pluginName="WebKitBrowser">
+              <params>
+                <param tag="url" value="about:blank" />
+              </params>
+            </testStep>
+            <testStep testStepId="8" name="Get_Browser_Test_URL" method="Get_Browser_URL" pluginName="WebKitBrowser">
+              <resultGeneration useMethodTag="webkitbrowser_check_url" >
+                <expectedValues value="about:blank"/>
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="9" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" delay="3" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+       </testCase>
 </testPlugin>
 

@@ -2880,7 +2880,13 @@
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_multiple_application" arguments="check_if_exists" expectedValues="cobalt,webkitbrowser" />
             </testStep>
-            <testStep testStepId="2" name="Add_Key_Intercepts" method="AddKeyIntercepts" >
+            <testStep testStepId="2" name="Set_Log_Level" method="Set_Log_Level" >
+                  <params>
+                    <param tag="logLevel" value="DEBUG" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Add_Key_Intercepts" method="AddKeyIntercepts" >
               <params>
                 <param tag="client1"  value="cobalt" />
                 <param tag="keyCode1" value="50"/>
@@ -2889,7 +2895,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
-            <testStep testStepId="3"   name="Generate_Key" method="GenerateKey" >
+            <testStep testStepId="4"   name="Generate_Key" method="GenerateKey" >
               <params paramKey="keys">
                 <param tag="keyCode" value="50" />
                 <param tag="modifiers" useDefault="true" />
@@ -2897,10 +2903,10 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="4" name="Check_Required_Log" action="externalFnCall" delay="2" >
+            <testStep testStepId="5" name="Check_Required_Log" action="externalFnCall" delay="2" >
                     <resultGeneration useMethodTag="check_required_logs"  expectedValues="intercepted by client cobalt" />
             </testStep>
-            <testStep testStepId="5"   name="Generate_Key" method="GenerateKey" >
+            <testStep testStepId="6"   name="Generate_Key" method="GenerateKey" >
               <params paramKey="keys">
                 <param tag="keyCode" value="51" />
                 <param tag="modifiers" useDefault="true" />
@@ -2908,10 +2914,10 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="6" name="Check_Required_Log" action="externalFnCall" delay="2" >
+            <testStep testStepId="7" name="Check_Required_Log" action="externalFnCall" delay="2" >
                  <resultGeneration useMethodTag="check_required_logs"  expectedValues="intercepted by client webkitbrowser"/>
             </testStep>
-            <testStep testStepId="7" name="Remove_Key_Intercepts" method="RemoveKeyIntercepts">
+            <testStep testStepId="8" name="Remove_Key_Intercepts" method="RemoveKeyIntercepts">
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
         </testCase>
@@ -3583,5 +3589,153 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to move back" />
             </testStep>
+        </testCase>
+
+        <!-- Test case 115 -->
+        <testCase testCaseId="RDKShell_115" testCaseName="RDKShell_Move_Invalid_Application_To_Front" desc="Moves the invalid client to the front and validates the error message">
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="getZorder" method="GetZOrder" saveResult="true" >
+                <resultGeneration useMethodTag="rdkshell_check_zorder" >
+                     <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="movefront" method="MoveToFront">
+              <params>
+                <param tag="client"  value=""/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to move front"/>
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_zorder" arguments="0" />
+              </resultGeneration>
+            </testStep>
+        </testCase>
+
+        <!-- Test case 116 -->
+        <testCase testCaseId="RDKShell_116" testCaseName="RDKShell_Move_Invalid_Application_Behind" desc="Moves the invalid client behind the specified target">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="getZorder" method="GetZOrder" saveResult="true" >
+                <resultGeneration useMethodTag="rdkshell_check_zorder" >
+                     <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="movebehind" method="MoveBehind">
+              <params>
+                <param tag="client"  value="" />
+                <param tag="target"  usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_zorder" arguments="1,target" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to move behind" />
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_behind" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_zorder" arguments="1" />
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_zorder" arguments="0" />
+              </resultGeneration>
+            </testStep>
+        </testCase>
+
+        <!-- Test case 117 -->
+        <testCase testCaseId="RDKShell_117" testCaseName="RDKShell_Launch_Westeros_Application_With_Empty_MimeType" desc="Checks if able to launch westeros app with empty mime type" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Launch_Application" method="Launch_Application">
+              <params>
+                 <param tag="client" value="WesterosTest" />
+                 <param tag="uri" value="file:///usr/bin/westeros_test" />
+                 <param tag="mimeType" value="" />
+                 <param tag="topmost" value="true" />
+                 <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="unsupported mime type" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="2">
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_not_exists" expectedValues= "westerostest" />
+            </testStep>
+        </testCase>
+
+        <!-- Test case 118 -->
+        <testCase testCaseId="RDKShell_118" testCaseName="RDKShell_Launch_Westeros_Application_Twice" desc="Launches westeros application twice and validates the error message" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Launch_Application" method="Launch_Application">
+              <params>
+                      <param tag="client" value="WesterosTest" />
+                      <param tag="uri" value="file:///usr/bin/westeros_test" />
+                      <param tag="mimeType" value="application/native" />
+                      <param tag="topmost" value="true" />
+                      <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues="westerostest" />
+            </testStep>
+            <testStep testStepId="3" name="Check_On_Application_Launched_Event" event="Event_On_Application_Launched" action="eventListener"  >
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="4" name="Launch_Application" method="Launch_Application">
+              <params>
+                      <param tag="client" value="WesterosTest" />
+                      <param tag="uri" value="file:///usr/bin/westeros_test" />
+                      <param tag="mimeType" value="application/native" />
+                      <param tag="topmost" value="true" />
+                      <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to launch application"/>
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Destroy_Westros_Application">
+            <testStep testStepId="1" name="Kill_Application" method="Kill"  >
+              <params>
+                <param tag="callsign"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" expectedValues="westerostest" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+        </testCase>
+
+        <!-- Test case 119 -->
+        <testCase testCaseId="RDKShell_119" testCaseName="RDKShell_Destroy_Westeros_Application" desc="Checks if able to destroy the westeros application and validates the error message" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Launch_Application" method="Launch_Application">
+              <params>
+                      <param tag="client" value="WesterosTest" />
+                      <param tag="uri" value="file:///usr/bin/westeros_test" />
+                      <param tag="mimeType" value="application/native" />
+                      <param tag="topmost" value="true" />
+                      <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues="westerostest" />
+            </testStep>
+            <testStep testStepId="3" name="Check_On_Application_Launched_Event" event="Event_On_Application_Launched" action="eventListener"  >
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="4" name="Destroy_Application" method="DestroyApplication" >
+              <params>
+                <param tag="callsign"  value="WesterosTest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to destroy application" />
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Destroy_Westros_Application">
+            <testStep testStepId="1" name="Kill_Application" method="Kill"  >
+              <params>
+                <param tag="callsign"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" expectedValues="westerostest" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
         </testCase>
 </testPlugin>

@@ -550,6 +550,7 @@
 	<event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
 	<event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
         <event name="Event_On_Network_Standby_Mode_Changed" eventName="onNetworkStandbyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the network standby mode setting changes" />
+        <event name="Event_On_TimeZoneDST_Changed" eventName="onTimeZoneDSTChanged" eventId="client.events.1" type="event" desc="Triggered when device timezone changed" />
     </plugin>
 
 
@@ -598,6 +599,7 @@
                 <param tag="names" defaultValue="null" type="list" />
             </params>
         </method>
+        <method name="Get_AVDecoder_Status" api="getAVDecoderStatus" type="method" desc="Gets the most active status of audio/video decoder/pipeline"/>
     </plugin>
 
     <!-- HDCP Profile Plugin Information -->

@@ -665,6 +665,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+        elif tag == "devicediagnostics_get_avdecoder_status":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if str(result.get("avDecoderStatus")).lower() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         # HDCP Profile Plugin Response result parser steps
         elif tag == "hdcpprofile_get_general_info":
@@ -694,13 +700,20 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+        
         elif tag == "system_get_rfc_info":
             info = checkAndGetAllResultInfo(result.get("RFCConfig"),result.get("success"))
-            rfc_values = result.get("RFCConfig").values()
-            for rfc_data in rfc_values:
-                if "ERROR" in rfc_data or "error" in rfc_data:
+            if len(arg) and arg[0] == "check_expected_value":
+                rfc_value = result.get("RFCConfig").values()[0]
+                if str(rfc_value).lower() == str(expectedValues[0]).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
                     info["Test_Step_Status"] = "FAILURE"
+            else:
+                rfc_values = result.get("RFCConfig").values()
+                for rfc_data in rfc_values:
+                    if "ERROR" in rfc_data or "error" in rfc_data:
+                        info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "system_get_gz_enabled_status":
             info["enabled"] = result.get("enabled")
@@ -1161,11 +1174,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "rdkshell_check_error_message":
             success = str(result.get("success")).lower() == "false"
             info["message"] = result.get("message")
-            if success and result.get("message") in expectedValues:
+            if success and str(result.get("message")).lower() in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-  
+ 
         elif tag == "rdkshell_check_zorder":
             success = str(result.get("success")).lower() == "true"
             status = checkNonEmptyResultData(result)
@@ -3347,6 +3360,17 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
                 else:
                     result = "FALSE"
+            elif arg[0] == "isUnavailable":
+                if state == "activated":
+                    result = "FALSE"
+                elif state == "resumed":
+                    result = "FALSE"
+                elif state == "deactivated":
+                    result = "FALSE"
+                elif state == "unavailable":
+                    result = "TRUE"
+                else:
+                    result = "TRUE"
 
         # TraceControl Plugin Response result parser steps
         elif tag == "tracecontrol_get_state":
@@ -3846,6 +3870,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = testStepResults[0].values()[0]
             zoneInfo = testStepResults[0].get("zoneinfo")
             info["timeZone"] = ",".join(zoneInfo)
+
+        elif tag == "system_get_time_zone":
+            testStepResults = testStepResults[0].values()[0]
+            info["timeZone"] = testStepResults[0].get("timeZone")
 
         elif tag == "system_toggle_network_standby_mode_status":
             testStepResults = testStepResults[0].values()[0]
@@ -4696,6 +4724,11 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            elif len(arg) and arg[0] == "disable_xdial":
+                command = 'tr181 -d -s -v 0 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'
+                output = executeCommand(execInfo, command)
+                if "set operation success" in output.lower():
+                    info["Test_Step_Status"] = "SUCCESS"
             elif len(arg) and arg[0] == "check_status":
                 command = 'tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'
                 output = executeCommand(execInfo, command)
@@ -5104,7 +5137,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 mapping_details = arg[values].split(":")
                 width = mapping_details[1].split('|')[0].strip('[]')
                 height = mapping_details[1].split('|')[1].strip('[]')
-                DisplayFrameRate = width+'x'+height+'x40'
+                DisplayFrameRate = width+'x'+height+'x60'
                 DisplayFrameRate_values.append(DisplayFrameRate)
             info["DisplayFrameRate"] = DisplayFrameRate_values
         
