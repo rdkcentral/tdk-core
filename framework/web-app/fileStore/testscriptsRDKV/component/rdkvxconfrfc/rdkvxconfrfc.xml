@@ -1,0 +1,79 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2023 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <module name="rdkvxconfrfc" testGroup="Component">
+    <primitiveTests>
+      <primitiveTest name="rfc_updateserverurl" id="" version="1">
+        <function>rfc_updateserverurl</function>
+        <parameters>
+          <parameter name="RFC_XCONF_URL" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_parodusstatuscheck" id="" version="1">
+        <function>rfc_parodusstatuscheck</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rfc_datamodelcheck" id=" " version="1">
+        <function>rfc_datamodelcheck</function>
+        <parameters>
+          <parameter name="rfcparameter" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_initializefeatures" id=" " version="1">
+        <function>rfc_initializefeatures</function>
+        <parameters>
+          <parameter name="expectedvalue" value=""/>
+          <parameter name="feature_name" value=""/>
+          <parameter name="rfcparameter" value=""/>
+          <parameter name="xconfdomainname" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_checkconfiguredata" id=" " version="1">
+        <function>rfc_checkconfiguredata</function>
+        <parameters>
+          <parameter name="expectedvalue" value=""/>
+          <parameter name="feature_name" value=""/>
+          <parameter name="rfcparameter" value=""/>
+          <parameter name="xconfdomainname" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_restartservice" id="" version="1">
+        <function>rfc_restartservice</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rfc_check_setornot_configdata" id=" " version="1">
+        <function>rfc_check_setornot_configdata</function>
+        <parameters>
+          <parameter name="expectedvalue" value=""/>
+          <parameter name="rfcparameter" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_rollbackdatamodelvalue" id=" " version="1">
+        <function>rfc_rollbackdatamodelvalue</function>
+        <parameters>
+          <parameter name="actualvalue" value=""/>
+          <parameter name="rfcparameter" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_getDeviceConfig" id=" " version="2">
+        <function>rfc_getDeviceConfig</function>
+        <parameters>
+          <parameter name="basePath" value=""/>
+          <parameter name="configKey" value=""/>
+        </parameters>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>

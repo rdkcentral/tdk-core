@@ -1,0 +1,62 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2023 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <module>
+  <!-- Module Name  -->
+    <moduleName>rdkvxconfrfc</moduleName>
+  <!-- Category of the module  -->
+    <category>RDKV</category>
+  <!-- Excecution time out of module -->
+    <executionTimeOut>1</executionTimeOut>
+  <!-- Excecution time out of module -->
+    <testGroup>Component</testGroup>
+  <!-- Logs File Names of module -->
+    <logFileNames>[]</logFileNames>
+  <!-- Crash File Names of the module -->
+    <crashFileNames>[]</crashFileNames>
+  <!-- Total functions corresponding module  -->
+    <functions>
+      <function name='rfc_updateserverurl' />
+      <function name='rfc_parodusstatuscheck' />
+      <function name='rfc_datamodelcheck' />
+      <function name='rfc_initializefeatures' />
+      <function name='rfc_checkconfiguredata' />
+      <function name='rfc_restartservice' />
+      <function name='rfc_check_setornot_configdata' />
+      <function name='rfc_rollbackdatamodelvalue' />
+      <function name='rfc_getDeviceConfig' />
+    </functions>
+  <!-- Total parameters corresponding module  -->
+    <parameters>
+      <parameter funName='rfc_updateserverurl' parameterName='RFC_XCONF_URL' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_datamodelcheck' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='feature_name' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_checkconfiguredata' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_checkconfiguredata' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_checkconfiguredata' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_checkconfiguredata' parameterName='feature_name' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_check_setornot_configdata' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_check_setornot_configdata' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='actualvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_getDeviceConfig' parameterName='basePath' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_getDeviceConfig' parameterName='configKey' parameterType='STRING' range='A-Z' />
+    </parameters>
+  </module>
+</xml>
