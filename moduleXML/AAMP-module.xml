@@ -65,6 +65,7 @@
       <function name='TestMgr_Aamp_AampSetWesterosSinkConfig' />
       <function name='TestMgr_Aamp_AampSetAudioTrack' />
       <function name='TestMgr_Aamp_AampGetAudioTrack' />
+      <function name='TestMgr_Aamp_AampCheckPlaybackRate' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>

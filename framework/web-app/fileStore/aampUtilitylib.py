@@ -333,3 +333,41 @@ def Writetofile(Obj,text,filename):
 
 ######### End of function ##########
 
+##################################################################################
+#
+# To check whether pipeline is playing at expected playback rate
+#
+# Syntax       : CheckPlayBackRate(Obj,PlaybackRate)
+#
+# Parameters   : Obj,PlaybackRate
+#
+# Return Value : SUCCESS/FAILURE
+#
+####################################################################################
+
+def CheckPlayBackRate(obj,rate):
+    Expected_Result = "SUCCESS"
+    acceptable_threshold = 0.05
+    tdkTestObj = obj.createTestStep('Aamp_AampCheckPlaybackRate');
+    tdkTestObj.executeTestCase(Expected_Result);
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print "Result :", details;
+    if "Average Playback Rate obtained" not in details:
+        tdkTestObj.setResultStatus("FAILURE");
+        print "Aamp Checkplaybackrate failure"
+    else:
+        details=details.split(" ")
+        details=details[5]
+        threshold=float(details) - rate
+        threshold=abs(threshold)
+        if float(details) == 0:
+            print "PLAYBACK is PAUSED"
+        if threshold < acceptable_threshold:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print "Verified Aamp checkplayback rate successfully for rate:",rate
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print "Aamp Checkplaybackrate failure for rate : ",rate
+
+######### End of function ##########

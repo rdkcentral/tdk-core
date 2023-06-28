@@ -204,6 +204,10 @@
         <function>TestMgr_Aamp_AampGetAudioTrack</function>
         <parameters/>
       </primitiveTest>
+      <primitiveTest name="Aamp_AampCheckPlaybackRate" id="" version="1">
+        <function>TestMgr_Aamp_AampCheckPlaybackRate</function>
+        <parameters/>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
