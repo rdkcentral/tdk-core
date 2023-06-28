@@ -150,11 +150,14 @@ if expectedResult in result.upper():
         output = tdkTestObj.getResultDetails();
         output = str(output)
         print "[RESPONSE FROM DEVICE]: %s" %(output)
-        if output:
+        if "FAILURE" not in output and expectedResult in output:
             print "SUCCESS: Script Execution Successful"
             tdkTestObj.setResultStatus("SUCCESS");
-        else:
+        elif "FAILURE" in output or expectedResult not in output:
             print "FAILURE: Script Execution was not Successful"
+            tdkTestObj.setResultStatus("FAILURE");
+        else:
+            print "Error: Error execution of the script"
             tdkTestObj.setResultStatus("FAILURE");
     else:
         print "AppArmor is not active"
