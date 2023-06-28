@@ -399,6 +399,35 @@ export default class App extends Lightning.Component {
             this.SetPlaybackFlag = 1
         }
   }
+  Manifest(){
+     var manifestValue = ""
+     manifestValue = this.getManifest()
+     logMsg("Manifest file " + manifestValue)
+     this.updatePosValidationInfo(1)
+     if((manifestValue == "") || (manifestValue == undefined)){
+          this.errorFlag = 1
+          logMsg("[ERROR]: Manifest file is not available")
+     }else{
+	logMsg("Manifest file is available")
+     }
+  }
+  GetPrefAudio(){
+      var audioTracks = []
+      logMsg("Available Audio tracks: " + this.getAvailableAudioTracks())
+      audioTracks = JSON.parse(this.getAvailableAudioTracks())
+      var len = audioTracks.length
+      logMsg("length " + len)
+      if(len > 0){
+          var index = parseInt(getRandomInt(audioTracks.length))
+          this.expectedPrefAudio = audioTracks[index].language
+          logMsg("Expected preferred audio language " + this.expectedPrefAudio)
+          this.SetPrefAudio = 1
+          this.setPreferredAudioLanguage(this.expectedPrefAudio)
+          this.updatePosValidationInfo(1)
+      }else{
+           logMsg("Available Audio Tracks List is empty")
+      }
+  }
   getPlaybackRate() {
      return this.player.getPlaybackRate();
   }
@@ -483,6 +512,15 @@ export default class App extends Lightning.Component {
   }
   getPlaybackStatistics(){
       return this.player.getPlaybackStatistics();
+  }
+  getManifest(){
+      return this.player.getManifest();
+  }
+  setPreferredAudioLanguage(language){
+      this.player.setPreferredAudioLanguage(language);
+  }
+  getPreferredAudioProperties(){
+      return this.player.getPreferredAudioProperties();
   }
 
   // AAMP Event Listerner and Handlers
@@ -870,6 +908,18 @@ export default class App extends Lightning.Component {
                     this.PlaybackStatistics();
                 },actionInterval);
             }
+	    else if (action == "manifest"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.Manifest();
+                },actionInterval);
+            }
+	    else if (action == "prefaudio"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.GetPrefAudio()
+                },actionInterval);
+	    }
             else if (action == "close"){
                 setTimeout(()=> {
                     this.updatePrevPosValidationResult()
@@ -1071,6 +1121,18 @@ export default class App extends Lightning.Component {
               Status = "Failure"
               logMsg("Failure Reason: Playback Info is Empty")
           }
+	  else if (this.SetPrefAudio == 1){
+	      var currPrefAudio = []
+	      currPrefAudio = this.getPreferredAudioProperties()
+	      logMsg("Current Prefered Audio " + currPrefAudio)
+	      if(currPrefAudio.includes(this.expectedPrefAudio)){
+		  logMsg("Preferred Audio is set successfully")
+	      }else{
+		  logMsg("Preferred Audio is not set successfully")
+		  this.eventFlowFlag = 0
+		  Status = "FAILURE"
+	      }
+      }
       }
       logMsg("Test step status: " + Status)
   }
@@ -1225,6 +1287,8 @@ export default class App extends Lightning.Component {
     this.SetAudioInfoFlag = 0
     this.SetTextInfoFlag = 0
     this.SetPlaybackFlag = 0
+    this.SetPrefAudio = 0
+    this.expectedPrefAudio = 0
     logMsg("URL Info: " + this.videoURL )
 
     tag = this;
