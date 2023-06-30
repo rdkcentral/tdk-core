@@ -2539,7 +2539,7 @@ class ExecutionController {
 					String executionResultOutput = executionResultList[i]?.executionOutput
 					if(scriptfile){
 						if(scriptfile?.category?.toString()?.equals(RDKV_RDKSERVICE?.toString())){
-							if((scriptfile?.moduleName?.equals(RDKSERVICES?.toString())) || (scriptfile?.moduleName?.equals(RDKV_DOBBY?.toString())) || (scriptfile?.moduleName?.equals(RDKV_APPARMOR?.toString())) || (scriptfile?.moduleName?.equals(RDKV_BASIC_SANITY?.toString()))) {
+							if((scriptfile?.moduleName?.equals(RDKSERVICES?.toString())) || (scriptfile?.moduleName?.equals(RDKV_DOBBY?.toString())) || (scriptfile?.moduleName?.equals(RDKV_APPARMOR?.toString())) || (scriptfile?.moduleName?.equals(RDKV_BASIC_SANITY?.toString())) || (scriptfile?.moduleName?.equals(RDKVXCONFRFC?.toString()))) {
 								isPatternPresent = true
 							}
 							isRDKServiceExecution = true
