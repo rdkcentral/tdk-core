@@ -170,6 +170,7 @@ bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
     expectedresult="SUCCESS"
+    registered = False
     #Primitive test case which associated to this Script
     tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapter');
 
@@ -235,6 +236,8 @@ if "SUCCESS" in result.upper():
                                 print "Client device is discovered inspite of not being  Audioout/AudioIn type, which is unexpected"
                                 tdkTestObj.setResultStatus("FAILURE")
                             if True == deviceDiscovered:
+                                HandleRegisterAgent(bluetoothhalObj,True)
+                                registered = True
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 #Pair the bluetooth client device from DUT
                                 print "Pairing %s from DUT" %(bluetoothhallib.deviceName)
@@ -370,6 +373,8 @@ if "SUCCESS" in result.upper():
         print "BluetoothHal_GetAdapter: failed"
         tdkTestObj.setResultStatus("FAILURE");
 
+    if registered:
+        HandleRegisterAgent(bluetoothhalObj,False)
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
         

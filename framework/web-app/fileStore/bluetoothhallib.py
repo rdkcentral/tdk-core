@@ -23,6 +23,7 @@ import json
 from pexpect import pxssh
 from time import sleep
 import bluetoothhallib;
+import os
 
 ##################################################################
 # Methods
@@ -95,11 +96,32 @@ def executeBluetoothCtl(bluetoothObj,commands):
 
     try :
 
-        #Get Bluetooth configuration file
-        bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
+        #Get the device name configured in test manager
+        deviceDetails = bluetoothObj.getDeviceDetails()
+        deviceName = deviceDetails["devicename"]
+        #Get the device configuration file name
+        deviceConfig = deviceName + ".config"
+
+        #Get the current directory path
+        configFilePath = os.path.dirname(os.path.realpath(__file__))
+        configFilePath = configFilePath + "/tdkvDeviceConfig"
+
+
+        #Parse the device configuration file
+        bluetoothConfigFile = configFilePath+'/'+deviceConfig
+        #if device specific config file doesn't exist use global config file
+        if not os.path.exists(bluetoothConfigFile):
+            bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
+
         configParser = ConfigParser.ConfigParser()
         configParser.read(r'%s' % bluetoothConfigFile)
         ip = configParser.get('bluetooth-config', 'ip')
+        if not ip:
+            print "Using global config file bluetoothcredential.config"
+            bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
+            configParser.read(r'%s' % bluetoothConfigFile)
+            ip = configParser.get('bluetooth-config', 'ip')
+
         username = configParser.get('bluetooth-config', 'username')
         password = configParser.get('bluetooth-config', 'password')
         global deviceName;
@@ -164,8 +186,24 @@ def closeSSHSession ():
 def DeviceType (bluetoothObj):
     try :
 
-        #Get Bluetooth configuration file
-        bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
+        #Get the device name configured in test manager
+        deviceDetails = bluetoothObj.getDeviceDetails()
+        deviceName = deviceDetails["devicename"]
+        #Get the device configuration file name
+        deviceConfig = deviceName + ".config"
+
+        #Get the current directory path
+        configFilePath = os.path.dirname(os.path.realpath(__file__))
+        configFilePath = configFilePath + "/tdkvDeviceConfig"
+
+
+        #Parse the device configuration file
+        bluetoothConfigFile = configFilePath+'/'+deviceConfig
+        #if device specific config file doesn't exist use global config file
+        if not os.path.exists(bluetoothConfigFile):
+            bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
+
+        print "Using config ",bluetoothConfigFile
         configParser = ConfigParser.ConfigParser()
         configParser.read(r'%s' % bluetoothConfigFile)
         deviceType = configParser.get('bluetooth-config', 'deviceType')
@@ -274,3 +312,45 @@ def Unpair_if_paired(bluetoothhalObj):
     else:
         print "BluetoothHal_GetListOfPairedDevices: failed"
         tdkTestObj.setResultStatus("FAILURE")
+
+#######################################################################################
+#
+# Method for exit from script gracefully
+#
+#######################################################################################
+def exitFromScript(tdkTestObj,bluetoothhalObj):
+    tdkTestObj.setResultStatus("FAILURE")
+    print "Sending the quit command to client device before closing the session"
+    commandList = ['quit']
+    bluetoothctlResult = executeBluetoothCtl(bluetoothhalObj,commandList)
+    if "FAILURE" not in bluetoothctlResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        #Close the client device session after use
+        closeSSHSession()
+    bluetoothhalObj.unloadModule("bluetoothhal");
+    exit()
+
+#######################################################################################
+#
+# Method to regiter and unregister agent for NoInputNoOutput
+#
+#######################################################################################
+
+def HandleRegisterAgent(bluetoothhalObj,register):
+    expectedresult = "SUCCESS"
+    if register:
+        tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_RegisterAgent');
+        #3 - NoInputNoOutput
+        tdkTestObj.addParameter("capabilities", 3)
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        print "BluetoothHal_RegisterAgent : ", actualresult
+        if (actualresult not in expectedresult):
+             exitFromScript(tdkTestObj,bluetoothhalObj)
+    else:
+        tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_UnregisterAgent');
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        print "BluetoothHal_UnregisterAgent : ", actualresult
+        if actualresult not in expectedresult:
+             exitFromScript(tdkTestObj,bluetoothhalObj)

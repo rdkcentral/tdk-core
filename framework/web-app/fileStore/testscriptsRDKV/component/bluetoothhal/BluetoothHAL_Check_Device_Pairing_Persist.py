@@ -136,6 +136,7 @@ if "SUCCESS" in result.upper():
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
 	
+    registered = False
     #Check the result of execution
     if (actualresult == expectedresult):
         print "BluetoothHal_GetAdapter executed successfully"
@@ -225,6 +226,10 @@ if "SUCCESS" in result.upper():
                                         tdkTestObj.setResultStatus("FAILURE")
                                     if True == deviceDiscovered:
                                         tdkTestObj.setResultStatus("SUCCESS")
+
+                                        HandleRegisterAgent(bluetoothhalObj,True)
+                                        registered = True;
+
                                         #Pair the bluetooth client device from DUT
                                         print "Pairing %s from DUT" %(bluetoothhallib.deviceName)
                                         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_PairDevice');
@@ -247,10 +252,14 @@ if "SUCCESS" in result.upper():
                                                 print "Client device is successfully paired with DUT"
                                                 tdkTestObj.setResultStatus("SUCCESS")
 
+                                                if registered:
+                                                    HandleRegisterAgent(bluetoothhalObj,False)
+                                                    registered = False
                                                 #Reboot the STB
                                                 bluetoothhalObj.initiateReboot(); 
                                                 time.sleep(60);
-                                                
+                                                HandleRegisterAgent(bluetoothhalObj,True)
+                                                registered = True
                                                 #Set the bluetooth client device as discoverable prior to starting device discovery in DUT
                                                 print "Setting client device as discoverable after rebooting DUT"
                                                 commandList = ['discoverable on'] 
@@ -345,6 +354,8 @@ if "SUCCESS" in result.upper():
         print "BluetoothHal_GetAdapter: failed"
         tdkTestObj.setResultStatus("FAILURE");
 
+    if registered:
+        HandleRegisterAgent(bluetoothhalObj,False)
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
         

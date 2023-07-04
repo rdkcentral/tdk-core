@@ -170,6 +170,7 @@ print "[LIB LOAD STATUS]  :  %s" %result;
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
+    registered = False
     expectedresult="SUCCESS"
     #Primitive test case which associated to this Script
     tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapter');
@@ -233,6 +234,8 @@ if "SUCCESS" in result.upper():
                                     deviceID = str(device["deviceID"])
                                     deviceDiscovered = True
                             if True == deviceDiscovered:
+                                HandleRegisterAgent(bluetoothhalObj,True)
+                                registered = True
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 #Pair the bluetooth client device from DUT
                                 print "Pairing %s from DUT" %(bluetoothhallib.deviceName)
@@ -362,6 +365,8 @@ if "SUCCESS" in result.upper():
         print "BluetoothHal_GetAdapter: failed"
         tdkTestObj.setResultStatus("FAILURE");
 
+    if registered:
+        HandleRegisterAgent(bluetoothhalObj,False)
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
         
