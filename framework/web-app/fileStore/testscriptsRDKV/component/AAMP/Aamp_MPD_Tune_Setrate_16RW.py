@@ -131,7 +131,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
 	if expectedResult in result:
 		print "AAMP Tune is success"
 		#Search events in Log	
-		result=aampUtilitylib.searchAampEvents(sysObj, pattern);
+                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 		if expectedResult in result:
 			print "AAMP Tune events are verified"
 			print "[TEST EXECUTION RESULT] : %s" %result;
@@ -149,7 +149,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         if expectedResult in result:
                                 pattern="AAMP_EVENT_SPEED_CHANGED"
                                 #Search events in Log
-                                result=aampUtilitylib.searchAampEvents(sysObj, pattern);
+                                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
                                 if expectedResult in result:
                                         print "RW success for MPD Url"
                                         print "[TEST EXECUTION RESULT] : SUCCESS";

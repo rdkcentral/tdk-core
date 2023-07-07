@@ -134,12 +134,13 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
 		print "AAMP Tune is success"
                 time.sleep(30);
 		#Search events in Log	
-		result=aampUtilitylib.searchAampEvents(sysobj, pattern);
+                #result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 		if Expected_Result in result:
 			print "AAMP Tune events are verified"
 			print "[TEST EXECUTION RESULT] : %s" %result;
 			#Set the result status of execution
 			tdkTestObj.setResultStatus("SUCCESS");
+                        time.sleep(15)
 			#AampTuneStop call
                         tdkTestObj = aampobj.createTestStep('Aamp_AampStop');
                         #Execute the test case in STB

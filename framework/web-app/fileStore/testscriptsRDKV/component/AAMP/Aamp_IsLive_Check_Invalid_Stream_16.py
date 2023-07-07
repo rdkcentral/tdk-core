@@ -126,7 +126,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
 		print "AAMP Tune call is success";
 		expectedResult = "FAILURE";
 		#Search events in Log	
-		actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 		if expectedResult in actualResult:
 			print "AAMP Tune event not recieved"
 			#Set the result status of execution

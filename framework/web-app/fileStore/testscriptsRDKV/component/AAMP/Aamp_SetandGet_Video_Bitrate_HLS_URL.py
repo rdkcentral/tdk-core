@@ -120,9 +120,15 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     #pattern to be searched for event validation
     pattern="AAMP_EVENT_TUNED"
     #fetch Aamp stream from config file
-    tuneURL=aampUtilitylib.getAampTuneURL(streamType);	
-    result,details = executeTest(aampObj, 'Aamp_AampTune', {"URL":tuneURL});
-    if result and aampUtilitylib.searchAampEvents(sysObj, pattern) == "SUCCESS":
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    #Primitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    result = tdkTestObj.getResult();
+    if result and aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern) == "SUCCESS":
         print "AAMP Tune call is success"	
         result,details,tdkTestObj = executeTest(aampObj, 'Aamp_AampGetVideoBitrates', "no parameters", True)
         if result:

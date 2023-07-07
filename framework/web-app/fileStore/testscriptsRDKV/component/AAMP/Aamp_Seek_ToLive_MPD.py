@@ -113,7 +113,7 @@ sysObj.setLoadModuleStatus(sysLoadStatus);
 
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
 
-	streamType = "mpdstream";
+	streamType = "livestream";
 	#pattern to be searched for event validation
 	pattern="AAMP_EVENT_TUNED"
 	#fetch Aamp stream from config file
@@ -131,7 +131,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
 	if expectedResult in actualResult:
 		print "AAMP Tune call is success"
 		#Search events in Log	
-		actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 		if expectedResult in actualResult:
 			print "AAMP Tune event recieved"
 			print "[TEST EXECUTION RESULT] : %s" %actualResult;

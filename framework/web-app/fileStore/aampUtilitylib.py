@@ -116,6 +116,32 @@ def getURLFromMultiStreamIndex(index):
 
 #####################################################################################
 #
+# Validate the events are captured or not
+#
+# Syntax       : SearchAampPlayerEvents(tdkTestObj, event)
+#
+# Parameters   : tdkTestObj , event
+#
+# Return Value : Event status
+#
+####################################################################################
+
+def SearchAampPlayerEvents(tdkTestObj, event):
+    details = tdkTestObj.getResultDetails();
+
+    if event in details:
+        print "Received ",event
+        actualresult = 'SUCCESS'
+    else:
+        print "Didn't Receive ",event
+        actualresult = 'FAILURE'
+
+    return actualresult;
+
+########## End of Function ##########
+
+#####################################################################################
+#
 # Validate the events are logged or not
 #
 # Syntax       : searchAampEvents(obj,pattern)
