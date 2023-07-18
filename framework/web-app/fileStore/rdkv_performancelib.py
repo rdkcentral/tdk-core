@@ -26,6 +26,7 @@ import BrowserPerformanceVariables
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common import exceptions
+from selenium.webdriver.common.keys import Keys
 from SSHUtility import *
 import SSHUtility
 import re
