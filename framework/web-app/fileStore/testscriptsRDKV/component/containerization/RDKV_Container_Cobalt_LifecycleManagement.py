@@ -170,7 +170,7 @@ if expectedResult in result.upper():
             tdkTestObj.addParameter("launch",cobalt_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
-            if expectedResult in actualresult.upper(): 
+            if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
@@ -180,7 +180,7 @@ if expectedResult in result.upper():
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
-                    command = 'cat /opt/logs/wpeframework.log | grep "launching Cobalt in container mode"'
+                    command = 'cat /opt/logs/wpeframework.log | grep "launching cobalt in container mode"'
                     print "COMMAND : %s" %(command)
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -191,7 +191,7 @@ if expectedResult in result.upper():
                     #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
-                    if "launching Cobalt in container mode" in output
+                    if "launching cobalt in container mode" in output:
                         print "Cobalt launched successfully in container mode"
 			enterkey_keycode = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
 			generatekey_method = 'org.rdk.RDKShell.1.generateKey'

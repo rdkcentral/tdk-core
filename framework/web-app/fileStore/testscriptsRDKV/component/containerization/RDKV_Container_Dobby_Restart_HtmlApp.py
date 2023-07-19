@@ -276,6 +276,7 @@ if expectedResult in result.upper():
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         print "HtmlApp is running even after Dobby Restart"
+                                        tdkTestObj.setResultStatus("FAILURE")
                                 else:
                                     print "Dobby Restart failed"
                                     tdkTestObj.setResultStatus("FAILURE")
