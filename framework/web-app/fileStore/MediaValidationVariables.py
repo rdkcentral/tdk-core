@@ -56,9 +56,6 @@ webinspect_port_lightning = "10002"
 #                  MVS TEST APPS URLs CONFIGURATIONS
 #************************************************************************
 
-# Lightning apps location url
-# Eg. lightning_apps_loc = "http://<TM_IP>:8080/rdk-test-tool/fileStore/lightning-apps/"
-lightning_apps_loc = ""
 
 #lightning application url
 lightning_video_test_app_url     = lightning_apps_loc + "tdkunifiedplayer/build/index.html?player=sdk"
@@ -73,15 +70,6 @@ lightning_objects_animation_test_app_url = lightning_apps_loc + "tdkobjectanimat
 #HTML player application url
 html_video_test_app_url = lightning_apps_loc + "tdkhtmlplayer.html"
 
-# Test Streams Base URL
-# This is the location under webapps directory in TDK Test Manager Machine where the test streams zip is extracted
-# If zip is extracted in some other server machine (not in TDK Test Manager Machine), then use the corresponding
-# server URL with the directory path of the test streams folder TDK_Clear_Test_Streams_Sunrise
-# (or)
-# If zip is copied to /opt/apache-tomcat-7.0.96/webapps/ folder in TDK Test Manager Machine and extracted,then
-# use the below test streams base URL after updating TM IP
-#test_streams_base_path = "http://<TM_IP>:8080/TDK_Clear_Test_Streams_Sunrise/"
-test_streams_base_path = ""
 
 
 #************************************************************************
@@ -449,15 +437,6 @@ element_expand_xpath = ""
 # XPath of the display fps element from where actual data to be read from UI
 ui_data_xpath = ""
 
-# Display parameter for opening browser
-display_variable = ""
-#Give the path where the chromedriver executable is available
-#Eg. path_of_browser_executable = ":/home/testing/webui"
-path_of_browser_executable = ""
-
-#The directory to which CGI server will upload the images,same as given in the CGI script
-image_upload_dir = ""
-
 
 #************************************************************************
 #            CONFIGURATIONS FOR MSE/EME TESTS
@@ -497,4 +476,32 @@ codec_audio_mp3 = "sdk"
 codec_audio_dts = "sdk"
 codec_audio_m4a = "sdk"
 codec_audio_wav_pcm = "sdk"
+
+##########################Test Environment Dependent Variables############
+
+# Lightning apps location url
+# Eg. lightning_apps_loc = "http://<TM_IP>:8080/rdk-test-tool/fileStore/lightning-apps/"
+lightning_apps_loc = ""
+
+
+# Test Streams Base URL
+# This is the location under webapps directory in TDK Test Manager Machine where the test streams zip is extracted
+# If zip is extracted in some other server machine (not in TDK Test Manager Machine), then use the corresponding
+# server URL with the directory path of the test streams folder TDK_Clear_Test_Streams_Sunrise
+# (or)
+# If zip is copied to /opt/apache-tomcat-7.0.96/webapps/ folder in TDK Test Manager Machine and extracted,then
+# use the below test streams base URL after updating TM IP
+#test_streams_base_path = "http://<TM_IP>:8080/TDK_Clear_Test_Streams_Sunrise/"
+test_streams_base_path = ""
+
+# Display parameter for opening browser
+display_variable = ""
+#Give the path where the chromedriver executable is available
+#Eg. path_of_browser_executable = ":/home/testing/webui"
+path_of_browser_executable = ""
+
+#The directory to which CGI server will upload the images,same as given in the CGI script
+image_upload_dir = ""
+
+#####################END OF Test Environment Dependent Variables##########
 

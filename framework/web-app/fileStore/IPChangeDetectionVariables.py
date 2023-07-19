@@ -17,9 +17,12 @@
 # limitations under the License.
 #########################################################################
 
+##########################Test Environment Dependent Variables############
+
 # URL of Lightning application used to detect the IP address change of DUT during execution
 ip_change_app_url = ""
 
 # Below are the Test manager user name and password
 tm_username = ""
 tm_password = ""
+#####################END OF Test Environment Dependent Variables##########

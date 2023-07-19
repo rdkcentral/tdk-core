@@ -33,6 +33,9 @@ kraken_test_url = "https://mozilla.github.io/krakenbenchmark.mozilla.org/kraken-
 #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
 display_variable=":0"
 #Give the path where the chromedriver executable is available
+
+##########################Test Environment Dependent Variables############
 path_of_browser_executable=""
 #The port must be 9998 for thunder builds and 9224 for rdkservice builds
 webinspect_port=""
+#####################END OF Test Environment Dependent Variables##########
