@@ -108,7 +108,7 @@ if expectedResult in result.upper():
             command = "sh " + configValues["FilePath"] + "/system_sanity_check_eth_wifi_toggle_functionality.sh"
             print("COMMAND: %s" % command)
             #Primitive test case associated with this Script
-            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_rebootexecution');
+            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
             tdkTestObj.addParameter("credentials", credentials);
@@ -116,28 +116,22 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             output = tdkTestObj.getResultDetails();
-            # View log file after 180 seconds
-            print("Waiting for 180 seconds before checking log file to finish reboot process...")
-            time.sleep(180)
-            command = "cat " + configValues["FilePath"] + "/system_sanity_check_eth_wifi_toggle_functionality.log"
-            print("COMMAND: %s" % command)
-            # Primitive test case which associated to this Script
-            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
-            tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-            tdkTestObj.addParameter("credentials", credentials);
-            tdkTestObj.addParameter("command", command);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult()
-            # Get the result of execution
-            output = tdkTestObj.getResultDetails();
             output = str(output)
             print("[RESPONSE FROM DEVICE]: %s" % output)
-            if "FAILURE" not in output and expectedResult in result:
+            if "FAILURE" in output or expectedResult not in output:
+                #Check if the file exists or not
+                if "No such file or directory" in output:
+                  print "FAILURE: File not found"
+                  tdkTestObj.setResultStatus("FAILURE")
+                else:
+                  print "FAILURE: Script Execution was not Successful"
+                  tdkTestObj.setResultStatus("FAILURE")
+            elif "FAILURE" not in output and expectedResult in output:
                 print "SUCCESS: Script Execution Successful"
-                tdkTestObj.setResultStatus("SUCCESS");
+                tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "FAILURE: Script Execution was not Successful"
-                tdkTestObj.setResultStatus("FAILURE");
+                print "Error: Error in the Script Execution"
+                tdkTestObj.setResultStatus("FAILURE")              
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             tdkTestObj.setResultStatus("FAILURE");
@@ -145,11 +139,12 @@ if expectedResult in result.upper():
         print "FAILURE: Failed to get configuration values"
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
-    obj.unloadModule("rdkv_basic_sanity_executeInDUT");
+    obj.unloadModule("rdkv_basic_sanity");
 
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
     print "FAILURE: Failed to load module"
+
 
 

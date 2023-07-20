@@ -132,12 +132,20 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             output = str(output)
             print("[RESPONSE FROM DEVICE]: %s" % output)
-            if "FAILURE" not in output and expectedResult in result:
+            if "FAILURE" in output or expectedResult not in output:
+                #Check if the file exists or not
+                if "No such file or directory" in output:
+                  print "FAILURE: File not found"
+                  tdkTestObj.setResultStatus("FAILURE")
+                else:
+                  print "FAILURE: Script Execution was not Successful"
+                  tdkTestObj.setResultStatus("FAILURE")
+            elif "FAILURE" not in output and expectedResult in output:
                 print "SUCCESS: Script Execution Successful"
-                tdkTestObj.setResultStatus("SUCCESS");
+                tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "FAILURE: Script Execution was not Successful"
-                tdkTestObj.setResultStatus("FAILURE");
+                print "Error: Error in the Script Execution"
+                tdkTestObj.setResultStatus("FAILURE")           
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             tdkTestObj.setResultStatus("FAILURE");
@@ -151,3 +159,4 @@ else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
     print "FAILURE: Failed to load module"
+

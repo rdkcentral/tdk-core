@@ -27,7 +27,7 @@
   <status>FREE</status>
   <synopsis>To perform various system sanity checks</synopsis>
   <groups_id/>
-  <execution_time>5</execution_time>
+  <execution_time>10</execution_time>
   <long_duration>false</long_duration>
   <advanced_script>false</advanced_script>
   <remarks/>
@@ -104,7 +104,7 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            command = "sh " + configValues["FilePath"] + "/system_sanity_check.sh"
+            command = "sh " + configValues["FilePath"] + "/system_sanity_check.sh 1 2 3 4 5 6 7 8 12 13"
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
@@ -116,12 +116,20 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             output = str(output)
             print "[RESPONSE FROM DEVICE]: %s" %(output)
-            if "FAILURE" not in output and expectedResult in result:
+            if "FAILURE" in output or expectedResult not in output:
+                #Check if the file exists or not
+                if "No such file or directory" in output:
+                  print "FAILURE: File not found"
+                  tdkTestObj.setResultStatus("FAILURE")
+                else:
+                  print "FAILURE: Script Execution was not Successful"
+                  tdkTestObj.setResultStatus("FAILURE")
+            elif "FAILURE" not in output and expectedResult in output:
                 print "SUCCESS: Script Execution Successful"
-                tdkTestObj.setResultStatus("SUCCESS");
+                tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "FAILURE: Script Execution was not Successful"
-                tdkTestObj.setResultStatus("FAILURE");
+                print "Error: Error in the Script Execution"
+                tdkTestObj.setResultStatus("FAILURE")  
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             tdkTestObj.setResultStatus("FAILURE");
@@ -135,3 +143,4 @@ else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
     print "FAILURE: Failed to load module"
+

@@ -105,7 +105,7 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            command = "sh " + configValues["FilePath"] + "/system_device_details_check.sh"
+            command = "sh " + configValues["FilePath"] + "/system_sanity_check.sh 10"
             #Primitive test case associated with this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
@@ -117,12 +117,20 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             output = str(output)
             print "[RESPONSE FROM DEVICE]: %s"%(output)
-            if expectedResult in output and expectedResult in result:
-                 print "SUCCESS: Script Execution Successful"
-                 tdkTestObj.setResultStatus("SUCCESS");
+            if "FAILURE" in output or expectedResult not in output:
+                print "FAILURE: Script Execution was not Successful"
+                tdkTestObj.setResultStatus("FAILURE")
+            elif "FAILURE" not in output and expectedResult in output:
+                #Check if the file exists or not
+                if "No such file or directory" in output:
+                    print "FAILURE: File not found"
+                    tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print "SUCCESS: Script Execution Successful"
+                    tdkTestObj.setResultStatus("SUCCESS")
             else:
-                  print "FAILURE: Script Execution was not Successful"
-                  tdkTestObj.setResultStatus("FAILURE");
+                print "Error: Error in the Script Execution"
+                tdkTestObj.setResultStatus("FAILURE")
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             tdkTestObj.setResultStatus("FAILURE");
@@ -136,3 +144,4 @@ else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
     print "FAILURE: Failed to load module"
+
