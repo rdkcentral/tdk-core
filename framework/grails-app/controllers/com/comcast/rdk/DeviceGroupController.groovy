@@ -425,6 +425,8 @@ class DeviceGroupController {
      */
     def editDevice(Long id, final String flag) {
 		def deviceInstance = Device.get(id)
+		File boxTypeConfigFile
+		File deviceConfigFile
 		if (!deviceInstance) {
 			return
 		}
@@ -447,14 +449,29 @@ class DeviceGroupController {
 		def realPath = request.getSession().getServletContext().getRealPath(FILE_SEPARATOR)
 		String finalConfigFile = ""
 		def deviceConfigFilePresent = false		
-		File deviceConfigFile = new File( "${realPath}//fileStore//tdkvRDKServiceConfig//"+deviceInstance?.stbName+".config")
-		File boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvRDKServiceConfig//"+deviceInstance?.boxType?.name+".config")
+		
+		if(deviceInstance?.isThunderEnabled == 1){
+		 deviceConfigFile = new File( "${realPath}//fileStore//tdkvRDKServiceConfig//"+deviceInstance?.stbName+".config")
+		 boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvRDKServiceConfig//"+deviceInstance?.boxType?.name+".config")
 		if(deviceConfigFile?.exists()){
+			
 			finalConfigFile = deviceInstance?.stbName+".config"
 			deviceConfigFilePresent = true
 		}else if(boxTypeConfigFile?.exists()){
 			finalConfigFile = deviceInstance?.boxType?.name+".config"
 		}
+		}else{
+		deviceConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+deviceInstance?.stbName+".config")
+			boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+deviceInstance?.boxType?.name+".config")
+		if(deviceConfigFile?.exists()){
+		finalConfigFile = deviceInstance?.stbName+".config"
+			deviceConfigFilePresent = true
+			
+		}else if(boxTypeConfigFile?.exists()){
+			finalConfigFile = deviceInstance?.boxType?.name+".config"
+		}
+		}
+		
         [url : getApplicationUrl(),deviceInstance: deviceInstance, flag : flag, showBlankRadio:showBlankRadio,blankList:blankList,gateways : devices, deviceStreams : deviceStream,radiodeviceStreams:radiodeviceStream, editPage : true, uploadBinaryStatus: deviceInstance.uploadBinaryStatus, id: id, category:deviceInstance?.category, streamingDetailsInstanceTotal: StreamingDetails.count(),radioStreamingDetailsInstanceTotal: RadioStreamingDetails.count(),isThunderEnabledCheck: isThunderEnabledCheck,finalConfigFile:finalConfigFile,deviceConfigFilePresent:deviceConfigFilePresent]
     }
 
@@ -2694,7 +2711,7 @@ class DeviceGroupController {
 			boxTypeConfigFileExists = true
 			finalConfigFile = boxTypeName
 		}else{
-			finalConfigFile = "sample.config"
+			finalConfigFile = "sampleThunderEnabled.config"
 		}
 		File fileToDelete = new File( "${realPath}//fileStore//tdkvRDKServiceConfig//"+params?.fileName)
 		def fileDelete = false
@@ -2768,7 +2785,7 @@ class DeviceGroupController {
 				boxTypeConfigFileExists = true
 				finalConfigFile = boxTypeName
 			}else{
-				finalConfigFile = "sample.config"
+				finalConfigFile = "sampleThunderEnabled.config"
 			}
 			render(template: "updateDeviceConfigDiv", model: [deleteDiv:'deleteDiv',boxTypeConfigFileExists:boxTypeConfigFileExists,finalConfigFile:finalConfigFile,stbName:params?.stbName,bTypeId:params?.boxId])
 		}
@@ -2776,6 +2793,192 @@ class DeviceGroupController {
 			render(template: "updateDeviceConfigDiv", model: [finalConfigFile:params?.stbName+".config"])
 		}
 	}
+	
+	/**
+	 * Method to show the contents of device/box type configuration file in a popup for thunderDisabled device
+	 * @return
+	 */
+	def editDeviceThunderDisableConfigFile(){
+		def realPath = request.getRealPath("/")
+		def configFileContent = []
+		String content = ""
+		if(params?.fileName){
+			String configFileName = params?.fileName
+			File configFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+configFileName)
+			if(configFile?.exists()){
+				configFileContent = configFile?.readLines()
+			}
+		}
+		int counter = 0;
+		int startingIndex = 0
+		for (int index = 0; index < configFileContent?.size(); index++) {
+			if(configFileContent[index].contains("################")){
+				counter ++
+			}
+			if(counter == 2){
+				startingIndex = index
+				break;
+			}
+		}
+		for (int index = startingIndex+1; index < configFileContent?.size(); index++) {
+			content = content + configFileContent[index]+"\r\n"
+
+		}
+
+		String createConfigFileName = ""
+		String boxTypeName = ""
+		boolean boxTypeConfigFileExists = false
+		if(!params?.editFlagForDeviceConfigForm && params?.stbName && params?.boxType){
+			createConfigFileName = params?.stbName+".config"
+			def boxType = BoxType.findById(params?.boxType)
+			boxTypeName = boxType?.name+".config"
+			File boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+boxTypeName)
+			if(boxTypeConfigFile?.exists()){
+				boxTypeConfigFileExists = true
+			}
+		}
+		render(template: "editDeviceConfigForm", model: [fileName:params?.fileName , content:content,editFlagForDeviceConfigForm:params?.editFlagForDeviceConfigForm,createConfigFileName:createConfigFileName,boxTypeConfigFileExists:boxTypeConfigFileExists,boxTypeName:boxTypeName ])
+	}
+
+	/**
+	 * Method to update/create a device/boxtype configuration file for thunderDisabled device
+	 * @return
+	 */
+
+	def updateThunderDisabledDeviceConfigContent(){
+		def realPath = request.getRealPath("/")
+		boolean updateConfigFile
+		String fileName = ""
+		String messageDiv = ""
+		if(params?.configFileName){
+			try{
+				fileName = params?.configFileName
+				File configFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+fileName)
+				File pyHeader = new File( "${realPath}//fileStore//pyHeader.txt")
+				def pyHeaderContentList = pyHeader?.readLines()
+				String pyHeaderContent = ""
+				pyHeaderContentList?.each {
+					pyHeaderContent += it?.toString()+"\n"
+				}
+				String data =pyHeaderContent+"\n"+params?.configAreaEdit
+				configFile.write(data)
+				updateConfigFile = true
+			}catch (Exception e) {
+				e.printStackTrace()
+			}
+		}
+		if(updateConfigFile){
+			if(params?.updateOrCreate?.equals('update')){
+				messageDiv = "Config File Updated"
+			}else{
+				messageDiv = "Config File Created"
+			}
+		}else{
+			if(params?.updateOrCreate?.equals('update')){
+				messageDiv = "Error updating config File"
+			}else{
+				messageDiv = "Error creating config File"
+			}
+		}
+		render messageDiv
+	}
+	/**
+	 * Method to delete device configuration file for thunderDisabled device
+	 * @return
+	 */
+	def deleteThunderDisableDeviceConfigFile(){
+		def realPath = request.getRealPath("/")
+		def deleteDiv = "deleteDiv"
+		String deleteMessage = ""
+		String boxTypeName = ""
+		String finalConfigFile = ""
+		boolean boxTypeConfigFileExists = false
+		def boxType = BoxType.findById(params?.boxType)
+		boxTypeName = boxType?.name+".config"
+		File boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+boxTypeName)
+		if(boxTypeConfigFile?.exists()){
+			boxTypeConfigFileExists = true
+			finalConfigFile = boxTypeName
+		}else{
+			finalConfigFile = "sampleThunderDisabled.config"
+		}
+		File fileToDelete = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+params?.fileName)
+		def fileDelete = false
+		if(fileToDelete != null && fileToDelete?.exists()){
+			try {
+				fileDelete = fileToDelete?.delete()
+			} catch (Exception e) {
+				e.printStackTrace()
+			}
+		}
+		if(fileDelete){
+			deleteMessage = "Config File Deleted"
+
+		}else{
+			deleteMessage = "Failed to delete the config file"
+		}
+		render(template: "updateDeviceConfigDiv", model: [deleteDiv:deleteDiv,boxTypeConfigFileExists:boxTypeConfigFileExists,finalConfigFile:finalConfigFile,stbName:params?.stbName,bTypeId:params?.boxType,deleteMessage:deleteMessage])
+	}
+	/**
+	 * Method to download device/boxtype configuration file for thunderDisabled device
+	 * @return
+	 */
+	def downloadThunderDisableDeviceConfigFile(){
+		def downloadConfigFile
+		String fileName = ""
+		def realPath = request.getRealPath("/")
+		if(params?.configFileName){
+			fileName = params?.configFileName?.replace(".config","")
+			try{
+				File configFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+fileName+ ".config")
+				if(configFile?.exists()){
+					params.format = "text"
+					params.extension = "config"
+					String data = new String(configFile.getBytes())
+					response.setHeader("Content-Type", "application/octet-stream;")
+					response.setHeader("Content-Disposition", "attachment; filename=\""+ fileName+".config\"")
+					response.outputStream << data.getBytes()
+					downloadConfigFile = true
+				}
+			}catch(Exception e){
+				e.printStackTrace()
+			}
+			if(!downloadConfigFile){
+				flash.message = "Download failed. No valid config file is available for download."
+			}
+		}else{
+			flash.message = "Download failed. No valid config file is available for download."
+		}
+	}
+	/**
+	 * Method to update device/boxtype config div when boxtype is changed during device create or edit for thunderDisabled device
+	 * @return
+	 */
+	def updateThunderDisabledConfigDivOnBoxTypeChange(){
+		def realPath = request.getSession().getServletContext().getRealPath(FILE_SEPARATOR)
+		String boxTypeName = params?.boxType+".config"
+		boolean boxTypeConfigFileExists
+		boolean deviceConfigFileExists
+		String finalConfigFile = ""
+		File deviceConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+params?.stbName+".config")
+		if(deviceConfigFile?.exists()){
+			deviceConfigFileExists =  true
+		}
+		if(!deviceConfigFileExists){
+			File boxTypeConfigFile = new File( "${realPath}//fileStore//tdkvDeviceConfig//"+boxTypeName)
+			if(boxTypeConfigFile?.exists()){
+				boxTypeConfigFileExists = true
+				finalConfigFile = boxTypeName
+			}else{
+				finalConfigFile = "sampleThunderDisabled.config"
+			}
+			render(template: "updateDeviceConfigDiv", model: [deleteDiv:'deleteDiv',boxTypeConfigFileExists:boxTypeConfigFileExists,finalConfigFile:finalConfigFile,stbName:params?.stbName,bTypeId:params?.boxId])
+		}
+		else{
+			render(template: "updateDeviceConfigDiv", model: [finalConfigFile:params?.stbName+".config"])
+		}
+	}
+
 }
 
 

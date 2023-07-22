@@ -319,7 +319,7 @@ eg : ABCDEFGHIJKL or AB:CD:EF:GH:IJ:KL " />
 				<a href="#" onclick="createDeviceConfigFile('${finalConfigFile}',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 			</g:elseif>		
 			<g:else>
-			    <a href="#" onclick="createDeviceConfigFile('sample.config',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+			    <a href="#" onclick="createDeviceConfigFile('sampleThunderEnabled.config',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 			</g:else>	
 		</div>
 		<div id="deviceConfigFileUpdatedDiv" class="fieldcontain ${hasErrors(bean: deviceInstance, field: 'thunderPort', 'error')} required"></div>
@@ -333,7 +333,7 @@ eg : ABCDEFGHIJKL or AB:CD:EF:GH:IJ:KL " />
 			<g:textField name="thunderPortValue" id="thunderPort"
 				value="80" class="textwidth" />
 		</div>
-		<div id="deviceConfigFile" style="display: none;" class="fieldcontain ${hasErrors(bean: deviceInstance, field: 'thunderPort', 'error')} required">
+		<div id="deviceConfigFile" class="fieldcontain ${hasErrors(bean: deviceInstance, field: 'thunderPort', 'error')} required">
 			<label for="deviceConfigFileLabel"> <g:message
 					code="device.thunderPort.label" default="Device Config File" /><span
 					class="required-indicator">*</span>
@@ -346,7 +346,7 @@ eg : ABCDEFGHIJKL or AB:CD:EF:GH:IJ:KL " />
 				<a href="#" onclick="createDeviceConfigFile('${finalConfigFile}',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 			</g:elseif>		
 			<g:else>
-			    <a href="#" onclick="createDeviceConfigFile('sample.config',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+			    <a href="#" onclick="createDeviceConfigFile('sampleThunderDisabled.config',document.getElementById('stbName').value,document.getElementById('boxType').value)" id="createDeviceConfigFile">Create New Device Config File</a>&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
 			</g:else>	
 		</div>
 		<div id="deviceConfigFileUpdatedDiv" class="fieldcontain ${hasErrors(bean: deviceInstance, field: 'thunderPort', 'error')} required"></div>

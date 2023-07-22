@@ -97,7 +97,12 @@ function showFields(){
 			$("#deviceConfigFile").html(""); 
 			$("#deviceConfigFileUpdatedDiv").html(data); 
 		});		
-	}
+	}else{
+		$.get('updateThunderDisabledConfigDivOnBoxTypeChange', {stbName:stbName,editFlag:$("#editFlag").val(),boxType:boxType,boxId:boxId}, function(data) {
+			$("#deviceConfigFile").html(""); 
+			$("#deviceConfigFileUpdatedDiv").html(data); 
+		});
+		}
 	$.get('getBoxType', {id: boxId }, function(data) {
 		if((data[0].type == 'gateway' || data[0].type == 'stand-alone-client') && data[0].category==='RDKV' && !isThunderEnabled){
 			var xmlhttp;	
@@ -360,10 +365,16 @@ function showThunderPortDiv(){
 		}
 	}else{
 		$("#thunderPortConfigure").hide();
-		$("#deviceConfigFile").hide();
-		$("#deviceConfigFileUpdatedDiv").hide();
+		$("#deviceConfigFile").show();
+		$("#deviceConfigFileUpdatedDiv").show();
 		var boxId = $("#boxType").find('option:selected').val();
+		var boxType = $("#boxType").find('option:selected').text();
+		var stbName = document.getElementById('stbName').value
 		var url = $("#url").val();
+		$.get('updateThunderDisabledConfigDivOnBoxTypeChange', {stbName:stbName,editFlag:editPage,boxType:boxType,boxId:boxId}, function(data) {
+			$("#deviceConfigFile").html(""); 
+			$("#deviceConfigFileUpdatedDiv").html(data); 
+		});	
 		$.get('getBoxType', {id: boxId }, function(data) {
 			if((data[0].type == 'gateway' || data[0].type == 'stand-alone-client') && data[0].category==='RDKV'){
 				$('#deviceTemplate').prop('selectedIndex',0);
@@ -430,9 +441,19 @@ function showThunderPortDiv(){
  */
 function showDeviceConfigContent(fileName){
 	var editFlagForDeviceConfigForm = true
+	if(document.getElementById('isThunderEnabled').checked) {
 	$.get('editDeviceConfigFile', {fileName: fileName,editFlagForDeviceConfigForm:editFlagForDeviceConfigForm}, function(data) {
 		$("#deviceConfigPopup").html(data); 
 	});		
+	}else{
+		
+		$.get('editDeviceThunderDisableConfigFile', {fileName: fileName,editFlagForDeviceConfigForm:editFlagForDeviceConfigForm}, function(data) {
+			$("#deviceConfigPopup").html(data); 
+		});
+		
+		
+	}
+
 	$("#deviceConfigPopup").modal({ opacity : 40, overlayCss : {
 		  backgroundColor : "#c4c4c4" }, containerCss: {
 			  	width: ($(window).width() - 50),
@@ -452,6 +473,7 @@ function showDeviceConfigContent(fileName){
  * @param stbName
  */
 function updateDeviceConfigContent(fileName,configAreaContent,updateOrCreate,boxTypeConfigFileExists,finalDeviceConfigFileType,boxType,stbName){
+	if(document.getElementById('isThunderEnabled').checked) {
 	$.post('updateDeviceConfigContent', {configFileName: fileName,configAreaEdit:configAreaContent,updateOrCreate:updateOrCreate}, function(data) {
 		if(data == "Config File Created"){
 			$.get('updateDeviceConfigDiv', {fileName: fileName,finalDeviceConfigFileType:finalDeviceConfigFileType,boxType:boxType,stbName:stbName}, function(result) {
@@ -465,6 +487,22 @@ function updateDeviceConfigContent(fileName,configAreaContent,updateOrCreate,box
 			$.modal.close();
 		}
 	});
+	}else{
+		$.post('updateThunderDisabledDeviceConfigContent', {configFileName: fileName,configAreaEdit:configAreaContent,updateOrCreate:updateOrCreate}, function(data) {
+			if(data == "Config File Created"){
+				$.get('updateDeviceConfigDiv', {fileName: fileName,finalDeviceConfigFileType:finalDeviceConfigFileType,boxType:boxType,stbName:stbName}, function(result) {
+					$("#deviceConfigFile").html(""); 
+					$("#deviceConfigFileUpdatedDiv").html(result); 
+					alert(data)
+					$.modal.close();
+				});		
+			}else{
+				alert(data)
+				$.modal.close();
+			}
+		});
+		
+	}
 }
 
 /**
@@ -474,9 +512,18 @@ function updateDeviceConfigContent(fileName,configAreaContent,updateOrCreate,box
  * @param boxType
  */
 function createDeviceConfigFile(configfile,stbName,boxType){
+	if(document.getElementById('isThunderEnabled').checked) {
 	$.get('editDeviceConfigFile', {fileName: configfile,stbName:stbName,boxType:boxType}, function(data) {
 		$("#deviceConfigPopup").html(data); 
 	});		
+	}
+	else{
+		$.get('editDeviceThunderDisableConfigFile', {fileName: configfile,stbName:stbName,boxType:boxType}, function(data) {
+			$("#deviceConfigPopup").html(data); 
+		});			
+		
+		
+	}
 	$("#deviceConfigPopup").modal({ opacity : 40, overlayCss : {
 		  backgroundColor : "#c4c4c4" }, containerCss: {	
 			  	width: ($(window).width() - 50),
@@ -490,7 +537,11 @@ function createDeviceConfigFile(configfile,stbName,boxType){
  * @param configFileName
  */
 function downloadDeviceConfigFile(configFileName){
-	window.location = "downloadDeviceConfigFile?configFileName="+ configFileName
+	if(document.getElementById('isThunderEnabled').checked) {
+		window.location = "downloadDeviceConfigFile?configFileName="+ configFileName
+	}else{
+		window.location = "downloadThunderDisableDeviceConfigFile?configFileName="+ configFileName
+	}
 }
 
 /**
@@ -501,6 +552,7 @@ function downloadDeviceConfigFile(configFileName){
  */
 function deleteDeviceConfigFile(configFileName,boxTypeId,stbName){
 	var url = $("#url").val();
+	if(document.getElementById('isThunderEnabled').checked) {
 	$.get(url+'/boxType/getBoxType', {id: boxTypeId}, function(data) {
 		var boxTypeName = data[0]+'.config'
 		if(configFileName == boxTypeName){
@@ -513,6 +565,23 @@ function deleteDeviceConfigFile(configFileName,boxTypeId,stbName){
 			});
 		}
 	});
+	}
+	else{
+		
+		$.get(url+'/boxType/getBoxType', {id: boxTypeId}, function(data) {
+			var boxTypeName = data[0]+'.config'
+			if(configFileName == boxTypeName){
+				alert("Cannot delete box type config file")
+			}else{
+				$.get('deleteThunderDisableDeviceConfigFile', {fileName: configFileName,boxType:boxTypeId,stbName:stbName}, function(result) {
+					$("#deviceConfigFile").html(""); 
+					$("#deviceConfigFileUpdatedDiv").html(""); 
+					$("#deviceConfigFileUpdatedDiv").html(result); 
+				});
+			}
+		});
+		
+	}
 }
 
 /**

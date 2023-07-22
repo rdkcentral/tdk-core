@@ -4892,13 +4892,21 @@ class ScriptGroupController {
 	def displayCertificationSuiteConfigFile(){
 		def realPath = request.getRealPath("/")
 		def configFileContent = []
+		File configFilee
 		String content = ""
 		if(params?.fileName){
-			String configFileName = params?.fileName + ".py"
-			File configFile = new File( "${realPath}//fileStore//"+configFileName)
-			if(configFile?.exists()){
-				configFileContent = configFile?.readLines()
-			}
+			String baseFileName = params?.fileName 
+			List<String> extensions = ['.py', '.config']
+			List<String> filenames = extensions.collect { ext -> baseFileName + ext }
+			for (String filename : filenames) {
+				 configFilee = new File( "${realPath}//fileStore//"+filename)
+				 if(configFilee?.exists()){
+					 configFileContent = configFilee?.readLines()
+				 }
+				 
+		}
+			
+			
 		}
 		int counter = 0;
 		int startingIndex = 0
@@ -4925,8 +4933,11 @@ class ScriptGroupController {
 		boolean updateConfigFile
 		String fileName = ""
 		try{
-			fileName = params?.configFileName
-			File configFile = new File( "${realPath}//fileStore//"+fileName+ ".py")
+			def baseFileName = params?.configFileName
+			List<String> extensions = ['.py', '.config']
+			List<String> filenames = extensions.collect { ext -> baseFileName + ext }
+			for (String filename : filenames) {
+			File configFile = new File( "${realPath}//fileStore//"+filename)
 			File pyHeader = new File( "${realPath}//fileStore//pyHeader.txt")
 			def pyHeaderContentList = pyHeader?.readLines()
 			String pyHeaderContent = ""
@@ -4936,6 +4947,7 @@ class ScriptGroupController {
 			String data =pyHeaderContent+"\r\n"+params?.configArea		
 			configFile.write(data)
 			updateConfigFile = true
+			}
 		}catch (Exception e) {
 			e.printStackTrace()
 		}	 
