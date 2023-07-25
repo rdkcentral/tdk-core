@@ -2322,7 +2322,7 @@ def testStepResultGeneration(testStepResponse,resultGenerationInfo, action="exec
         if action in ["eventListener","eventRegister","eventUnRegister"]:
             info = CheckAndGenerateEventResult(result,tag,arg,expectedValues)
         elif action == "externalFnCall":
-            execInfo = [ basePathLoc, deviceConfigFile, deviceIP, deviceMac, execMethod]
+            execInfo = [ basePathLoc, deviceConfigFile, deviceIP, deviceMac, execMethod, tmURL, deviceName, deviceType ]
             info = ExecExternalFnAndGenerateResult(tag,arg,expectedValues,execInfo)
         else:
             info = CheckAndGenerateTestStepResult(result,tag,arg,expectedValues,otherInfo)

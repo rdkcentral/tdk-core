@@ -35,6 +35,8 @@ import subprocess
 import requests
 import random
 import string
+import IPChangeDetectionVariables
+import os
 
 timeZones = []
 
@@ -700,7 +702,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "system_get_rfc_info":
             info = checkAndGetAllResultInfo(result.get("RFCConfig"),result.get("success"))
             if len(arg) and arg[0] == "check_expected_value":
@@ -3409,6 +3411,14 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 else:
                     result = "FALSE"
 
+        #network plugin
+        elif tag =="check_test_status":
+            testStepResults = testStepResults[0].values()[0]
+            configValue = testStepResults[0].get("configvalue")
+            if configValue == "yes":
+                result = "TRUE"
+            else:
+                result = "FALSE"
 
 
         # Cobalt Plugin Response result parser steps
@@ -3793,6 +3803,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = testStepResults[0].values()[0]
             info["url"] = testStepResults[0].get("url")
 
+        elif tag == "webkitbrowser_lightningapp_get_loaded_url":
+            testStepResults = testStepResults[0].values()[0]
+            info["url"] = testStepResults[0].get("url")
+
         elif tag == "webkitbrowser_get_fps":
             testStepResults = testStepResults[0].values()[0]
             info["newFpsValue"] = int(testStepResults[0].get("fps"))
@@ -3866,14 +3880,14 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             else:
                 info["value"] = testStepResults[0].get("details")
 
+        elif tag == "system_get_time_zone":
+            testStepResults = testStepResults[0].values()[0]
+            info["timeZone"] = testStepResults[0].get("timeZone")
+
         elif tag == "system_get_formatted_time_zones":
             testStepResults = testStepResults[0].values()[0]
             zoneInfo = testStepResults[0].get("zoneinfo")
             info["timeZone"] = ",".join(zoneInfo)
-
-        elif tag == "system_get_time_zone":
-            testStepResults = testStepResults[0].values()[0]
-            info["timeZone"] = testStepResults[0].get("timeZone")
 
         elif tag == "system_toggle_network_standby_mode_status":
             testStepResults = testStepResults[0].values()[0]
@@ -4668,6 +4682,9 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
     basePath = execInfo[0]
     deviceConfigFile = execInfo[1]
     deviceIP = execInfo[2]
+    tm_url = execInfo[5]
+    deviceName = execInfo[6]
+    deviceType=execInfo[7]
 
     # Input Variables:
     # a. methodTag - string
@@ -4714,6 +4731,29 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             if "set operation success" in output.lower():
                 info["Test_Step_Status"] = "SUCCESS"
             else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag =="get_configfile_value":
+            info["configvalue"] = arg[0]
+
+        elif tag == "webkitbrowser_get_url":
+            #Get Values from IPChangeDetectionVariables file
+            ip_change_app_url = IPChangeDetectionVariables.ip_change_app_url
+            user_name = IPChangeDetectionVariables.tm_username
+            password = IPChangeDetectionVariables.tm_password
+            #Remove the extra slash from basepath at the end
+            if basePath.endswith('/'):
+                basePath = basePath[:-1]
+            ip_address_type = getDeviceConfig(basePath,'DEVICE_IP_ADDRESS_TYPE',deviceName,deviceType)
+            #Lightningapp url formation
+            if ip_change_app_url and tm_url and deviceName and user_name and password and ip_address_type:
+                url = ip_change_app_url+'?tmURL='+tm_url+'&deviceName='+deviceName+'&tmUserName='+user_name+'&tmPassword='+password+'&ipAddressType='+ip_address_type
+                print url
+                info["url"] = url
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "Please configure values in IPChangeDetectionVariables and device specific configuration file"
+                info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":
@@ -5519,4 +5559,36 @@ def executeCommandInTM(command):
         print e
         status = "FAILURE"
         print "Unable to execute %s successfully" %(command)
+    return output
+
+#Get value from device config file
+def getDeviceConfig (basePath, configKey,deviceName,deviceType):
+    deviceConfigFile=""
+    configValue = ""
+    output = ""
+    configPath = basePath + "/"   + "fileStore/tdkvRDKServiceConfig"
+    deviceNameConfigFile = configPath + "/" + deviceName + ".config"
+    deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
+    # Check whether device / platform config files required for
+    # executing the test are present
+    if os.path.exists (deviceNameConfigFile) == True:
+        deviceConfigFile = deviceNameConfigFile
+    elif os.path.exists (deviceTypeConfigFile) == True:
+        deviceConfigFile = deviceTypeConfigFile
+    else:
+        output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
+        print output
+    try:
+        if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
+            config = ConfigParser.ConfigParser ()
+            config.read (deviceConfigFile)
+            deviceConfig = config.sections ()[0]
+            configValue =  config.get (deviceConfig, configKey)
+            output = configValue
+        else:
+            output = "FAILURE : DeviceConfig file or key cannot be empty"
+            print output
+    except Exception as e:
+        output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
+        print output
     return output
