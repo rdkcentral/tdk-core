@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To test for crash during coablt video playback when launched in container mode</synopsis>
+  <synopsis>To test for crash during cobalt video playback when launched in container mode</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -63,7 +63,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>Containerization_06</test_case_id>
-    <test_objective>To test for crash during coablt video playback when launched in container mode</test_objective>
+    <test_objective>To test for crash during cobalt video playback when launched in container mode</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
