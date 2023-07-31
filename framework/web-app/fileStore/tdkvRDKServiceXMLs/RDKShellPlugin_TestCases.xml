@@ -3738,4 +3738,196 @@
          </postrequisite>
         </testCasePostRequisite>
         </testCase>
+        
+        <!-- Test case 120 -->
+        <testCase testCaseId="RDKShell_120" testCaseName="RDKShell_Suspend_Resume_WesterosTest_Application_And_Check_Visibility" desc="Checks if able to suspend/resume westeros app and check its visibility" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Launch_Application" method="Launch_Application">
+              <params>
+                      <param tag="client" value="WesterosTest" />
+                      <param tag="uri" value="file:///usr/bin/westeros_test" />
+                      <param tag="mimeType" value="application/native" />
+                      <param tag="topmost" value="true" />
+                      <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "westerostest" />
+            </testStep>
+            <testStep testStepId="3" name="getvisibility" method="GetVisibility" >
+              <params>
+                <param tag="client" value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_visibility_result" expectedValues="true" />
+            </testStep>
+            <testStep testStepId="4" name="Check_On_Application_Launched_Event" event="Event_On_Application_Launched" action="eventListener"  >
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="5" name="Suspend_Application" method="Suspend_Application" >
+              <params>
+                <param tag="client"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="6" name="Check_On_Application_Suspended_Event" event="Event_On_Application_Suspended" action="eventListener"  delay="2">
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="7" name="getvisibility" method="GetVisibility" >
+              <params>
+                <param tag="client" value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_visibility_result" expectedValues="false" />
+            </testStep>
+            <testStep testStepId="8" name="Resume_Application" method="Resume_Application" >
+              <params>
+                <param tag="client" value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="8" name="Check_On_Application_Resumed_Event" event="Event_On_Application_Resumed" action="eventListener"  delay="3">
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="9" name="getvisibility" method="GetVisibility" >
+              <params>
+                <param tag="client" value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_visibility_result" expectedValues="true" />
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Destroy_Westros_Application">
+            <testStep testStepId="1" name="Kill_Application" method="Kill"  >
+              <params>
+                <param tag="callsign"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="2" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" expectedValues="westerostest" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 121 -->
+       <testCase testCaseId="RDKShell_121" testCaseName="RDKShell_Launch_Westeros_Application_And_Kill" desc="Checks the error message on killing the westeros application" >
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Launch_Application" method="Launch_Application">
+              <params>
+                      <param tag="client" value="WesterosTest" />
+                      <param tag="uri" value="file:///usr/bin/westeros_test" />
+                      <param tag="mimeType" value="application/native" />
+                      <param tag="topmost" value="true" />
+                      <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues="westerostest" />
+            </testStep>
+            <testStep testStepId="3" name="Check_On_Application_Launched_Event" event="Event_On_Application_Launched" action="eventListener"  >
+                <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="westerostest"/>
+            </testStep>
+            <testStep testStepId="4" name="Kill_Application" method="Kill"  >
+              <params>
+                <param tag="callsign"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="5" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" expectedValues="westerostest" />
+            </testStep>
+            <testStep testStepId="6" name="Kill_Application_Again" method="Kill"  >
+              <params>
+                <param tag="callsign"  value="westerostest" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="failed to kill client"/>
+            </testStep>
+        </testCase>
+
+       <!-- Test case 122 -->
+        <testCase testCaseId="RDKShell_122" testCaseName="RDKShell_Suspend_Destroy_Cobalt_Application" desc="Checks if able to suspend and destroy cobalt application">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
+            </testStep>
+            <testStep testStepId="2" name="Suspend_Application" method="SuspendApplication" >
+              <params>
+                <param tag="callsign"  value="Cobalt" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Is_Cobalt_Suspended" method="Get_Application_State" delay="3" >
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="suspended" />
+            </testStep>
+            <testStep testStepId="4" name="Destroy_Application" method="DestroyApplication" >
+              <params>
+                <param tag="callsign"  value="Cobalt" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="5" name="Get_connected_clients" method="GetClients" delay="2">
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments= "check_not_exists" expectedValues= "cobalt" />
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Resuming_Cobalt_Application">
+            <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+              <resultGeneration useMethodTag="rdkshell_get_connected_client_list"/>
+            </testStep>
+            <testStep testStepId="2" name="Launch_Cobalt" method="LaunchApplication" >
+              <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="cobalt" />
+              <params>
+                <param tag="callsign" value="Cobalt" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" expectedValues="cobalt" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+        </testCase>
+
+        <!-- Test case 123 -->
+        <testCase testCaseId="RDKShell_123" testCaseName="RDKShell_Suspend_Destroy_WebKitBrowser_Application" desc="Checks if able to suspend and destroy webkitbrowser application">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "webkitbrowser" />
+            </testStep>
+            <testStep testStepId="2" name="Suspend_Application" method="SuspendApplication" >
+              <params>
+                <param tag="callsign"  value="WebKitBrowser" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Is_WebKitBrowser_Suspended" method="Get_Application_State" delay="3" >
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="WebKitBrowser" expectedValues="suspended" />
+            </testStep>
+            <testStep testStepId="4" name="Destroy_Application" method="DestroyApplication" >
+              <params>
+                <param tag="callsign"  value="WebKitBrowser" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="5" name="Get_connected_clients" method="GetClients" delay="2">
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments= "check_not_exists" expectedValues= "webkitbrowser" />
+            </testStep>
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Resuming_WebKitBrowser_Application">
+            <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+              <resultGeneration useMethodTag="rdkshell_get_connected_client_list"/>
+            </testStep>
+            <testStep testStepId="2" name="Launch_WebKitBrowser" method="LaunchApplication" >
+              <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="webkitbrowser" />
+              <params>
+                <param tag="callsign" value="WebKitBrowser" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" expectedValues="webkitbrowser" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+        </testCase>
 </testPlugin>

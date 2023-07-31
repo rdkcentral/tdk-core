@@ -600,6 +600,7 @@
             </params>
         </method>
         <method name="Get_AVDecoder_Status" api="getAVDecoderStatus" type="method" desc="Gets the most active status of audio/video decoder/pipeline"/>
+        <event name="Event_OnAVDecoder_Status_Changed" eventName="onAVDecoderStatusChanged" eventId="client.events.1" type="event" desc="Triggered when the most active status of audio/video decoder/pipeline changes"/>
     </plugin>
 
     <!-- HDCP Profile Plugin Information -->

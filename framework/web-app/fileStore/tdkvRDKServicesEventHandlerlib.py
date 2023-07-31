@@ -888,6 +888,15 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
                     break;
+        
+        #DeviceDiagnostics Events response result parser steps
+        elif tag == "devicediagnostics_onavdecoder_status_changed_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if str(eventResult.get("avDecoderStatusChange")).lower() == str(expectedValues[0]).lower():
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
 
         # FirmwareControl Events response result parser steps
         elif tag == "fwc_check_upgrade_progress_event":
