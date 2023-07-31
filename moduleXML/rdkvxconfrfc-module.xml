@@ -55,6 +55,8 @@
       <parameter funName='rfc_check_setornot_configdata' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='actualvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='feature_name' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_getDeviceConfig' parameterName='basePath' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_getDeviceConfig' parameterName='configKey' parameterType='STRING' range='A-Z' />
     </parameters>

@@ -180,7 +180,7 @@ def rfc_getmacaddress():
         deviceMAC=deviceMAC[1]
         deviceMAC=deviceMAC.strip()
         if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$",str(deviceMAC).lower()):
-            print "\nSUCCESS : Successfully get the MAC addresss"
+            print "\nSUCCESS : Successfully get the MAC address"
         else:
             print "\nFAILURE : Failed to get the MAC address"
             getmacaddressstatus="FAILURE"
@@ -278,6 +278,7 @@ def rfc_datamodelcheck(rfcparameter):
 #---------------------------------------------------------------
 def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedvalue):
     initializefeaturestatus="SUCCESS"
+    global feature_id
     deviceMACstatus=rfc_getmacaddress()
     if "FAILURE" not in deviceMACstatus:
         config_status=rfc_obtainCredentials()
@@ -304,7 +305,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                  if result:
                      print "SUCCESS : "+feature_name+" "+"feature rule retrieved successfully"
                      #Update feature
-                     command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
+                     command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
                      print "Executing Command : %s" %command
                      #execute in DUT function
                      result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -331,7 +332,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
             else:
                 print feature_name+" : "+"feature already not present.Creating this feature please wait...."
                 #Create feature
-                command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
+                command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
                 print "Executing Command : %s" %command
                 #execute in DUT function
                 result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -375,6 +376,8 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
             print "Executing Command : %s" %command
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
+            reaesc = re.compile(r'\x1b[^m]*m')
+            result = reaesc.sub('',result)
             if feature_name in result and rfcparameter in result and expectedvalue in result:
                 print result
                 print "\nSUccess : Retrieved RFC details match with configure data"
@@ -446,11 +449,11 @@ def rfc_check_setornot_configdata(rfcparameter,expectedvalue):
 #----------------------------------------------------------------------------------------------
 # IF XCONF SERVER SETTING APPLIED SUCCESSFULLY THEN ROLLBACK THE RFC PARAMETER TO ACTUALVALUE
 #----------------------------------------------------------------------------------------------
-def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue):
+def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_name):
     revertrfcstatus="SUCCESS"
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
-        if "" in actualvalue:
+        if len(actualvalue) == 0:
             actualvalue="false"
         credentials = deviceIP + ',' + user_name + ',' + password
         #rollback the rfc parameter
@@ -469,13 +472,25 @@ def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue):
             result=str(result[2])
             if actualvalue in result:
                 print result
-                print "\nSuCCESS : Rollback the RFC parameter successfully"
+                print "\nSUCCESS : Rollback the RFC parameter successfully"
+
+                print "\nSetting the dummy RFC parameter value"
+                #set the dummy RFC parameter value
+                command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature":"null"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
+                print "Executing Command : %s" %command
+                #execute in DUT function
+                result=rfc_executeInDUT (sshMethod, credentials, command)
+                if "IMPORTED" in result:
+                    print "\nSUCCESS : Successfully updated dummy RFC parameter Value"
+                else:
+                    print "\nFAILURE : Updating dummy RFC parameter value failed"
+                    revertrfcstatus="FAILURE"
             else:
                 print result
                 print "\nFAILURE : Rollback the RFC parameter failed"
                 revertrfcstatus="FAILURE"
         else:
-            print "FAILURE : Set command for "+rfcparameter+" execution  failed"
+            print "\nFAILURE : Set command for "+rfcparameter+" execution  failed"
             revertrfcstatus="FAILURE"
     else:
         print "\nFAILURE : Failed to get the device credentials"

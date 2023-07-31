@@ -60,11 +60,13 @@
           <parameter name="rfcparameter" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_rollbackdatamodelvalue" id=" " version="1">
+      <primitiveTest name="rfc_rollbackdatamodelvalue" id=" " version="2">
         <function>rfc_rollbackdatamodelvalue</function>
         <parameters>
-          <parameter name="actualvalue" value=""/>
           <parameter name="rfcparameter" value=""/>
+          <parameter name="actualvalue" value=""/>
+          <parameter name="xconfdomainname" value=""/>
+          <parameter name="feature_name" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="rfc_getDeviceConfig" id=" " version="2">

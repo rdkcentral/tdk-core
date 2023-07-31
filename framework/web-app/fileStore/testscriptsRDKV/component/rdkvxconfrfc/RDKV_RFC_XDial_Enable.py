@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -174,6 +176,8 @@ if "SUCCESS" in result.upper():
                                      print "\nNeed to revert the RFC datamodel into actualvalue\n"
                                      tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
                                      tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                     tdkTestObj.addParameter("feature_name",feature_name)
+                                     tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                                      tdkTestObj.addParameter("actualvalue",actualvalue)
                                      tdkTestObj.executeTestCase(expectedResult)
                                      actualresult = tdkTestObj.getResultDetails()

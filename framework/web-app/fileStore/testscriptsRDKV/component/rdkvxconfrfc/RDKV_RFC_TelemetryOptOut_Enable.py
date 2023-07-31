@@ -1,4 +1,4 @@
-##########################################################################
+#########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_RFC_ThunderSecurity_Enable</name>
+  <name>RDKV_RFC_TelemetryOptOut_Enable</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -61,9 +61,9 @@
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
-  <test_cases>
-    <test_case_id>rdkvxconfrfc_06</test_case_id>
-    <test_objective>Verify whether the given xconf server setting for Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.ThunderSecurity.Enable is reflected in the box</test_objective>
+  <test_cases>i
+    <test_case_id>rdkvxconfrfc_14</test_case_id>
+    <test_objective>Verify whether the given xconf server setting for Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.TelemetryOptOut.Enable is reflected in the box</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <test_setup>RPI-Client</test_setup>
@@ -74,9 +74,9 @@
     <expected_output>All the steps should execute successfully</expected_output>
     <priority>Medium</priority>
     <test_stub_interface></test_stub_interface>
-    <test_script>RDKV_RFC_ThunderSecurity_Enable</test_script>
+    <test_script>RDKV_RFC_TelemetryOptOut_Enable</test_script>
     <skipped>No</skipped>
-    <release_version>M114</release_version>
+    <release_version>M115</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -91,7 +91,7 @@ obj = tdklib.TDKScriptingLibrary("rdkvxconfrfc","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_RFC_ThunderSecurity_Enable');
+obj.configureTestCase(ip,port,'RDKV_RFC_TelemetryOptOut_Enable');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -105,7 +105,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.addParameter("basePath",obj.realpath)
     tdkTestObj.addParameter("configKey","RFC_XCONF_URL")
     tdkTestObj.executeTestCase(expectedResult)
-    RFC_XCONF_URL= tdkTestObj.getResultDetails()
+    RFC_XCONF_URL = tdkTestObj.getResultDetails()
     tdkTestObj = obj.createTestStep('rfc_updateserverurl')
     tdkTestObj.addParameter("RFC_XCONF_URL",RFC_XCONF_URL)
     tdkTestObj.executeTestCase(expectedResult)
@@ -120,7 +120,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
 
             tdkTestObj = obj.createTestStep('rfc_datamodelcheck')
-            rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.ThunderSecurity.Enable"
+            rfcparameter="Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.TelemetryOptOut.Enable"
             tdkTestObj.addParameter("rfcparameter",rfcparameter)
             tdkTestObj.executeTestCase(expectedResult)
             actualvalue = tdkTestObj.getResultDetails()
@@ -154,41 +154,41 @@ if "SUCCESS" in result.upper():
                     tdkTestObj.executeTestCase(expectedResult)
                     actualresult = tdkTestObj.getResultDetails()
                     if expectedResult in actualresult.upper():
-                      tdkTestObj.setResultStatus("SUCCESS")
+                        tdkTestObj.setResultStatus("SUCCESS")
 
-                      tdkTestObj = obj.createTestStep('rfc_restartservice')
-                      tdkTestObj.executeTestCase(expectedResult)
-                      actualresult = tdkTestObj.getResultDetails()
-                      if expectedResult in actualresult.upper():
-                          tdkTestObj.setResultStatus("SUCCESS")
+                        tdkTestObj = obj.createTestStep('rfc_restartservice')
+                        tdkTestObj.executeTestCase(expectedResult)
+                        actualresult = tdkTestObj.getResultDetails()
+                        if expectedResult in actualresult.upper():
+                            tdkTestObj.setResultStatus("SUCCESS")
 
-                          tdkTestObj = obj.createTestStep('rfc_check_setornot_configdata')
-                          tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                          tdkTestObj.addParameter("expectedvalue",expectedvalue)
-                          tdkTestObj.executeTestCase(expectedResult)
-                          actualresult = tdkTestObj.getResultDetails()
-                          if "FAILURE" not in actualresult:
-                              tdkTestObj.setResultStatus("SUCCESS")
+                            tdkTestObj = obj.createTestStep('rfc_check_setornot_configdata')
+                            tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                            tdkTestObj.addParameter("expectedvalue",expectedvalue)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            actualresult = tdkTestObj.getResultDetails()
+                            if "FAILURE" not in actualresult:
+                                 tdkTestObj.setResultStatus("SUCCESS")
 
-                              if actualresult in actualvalue:
-                                  print "\nNo need to revert the RFC datamodel value\n"
-                              else:
-				  print "\nNeed to revert the RFC datamodel into actualvalue\n"
-                                  tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
-                                  tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                                  tdkTestObj.addParameter("actualvalue",actualvalue)
-                                  tdkTestObj.addParameter("feature_name",feature_name)
-                                  tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
-                                  tdkTestObj.executeTestCase(expectedResult)
-                                  actualresult = tdkTestObj.getResultDetails()
-                                  if expectedResult in actualresult.upper():
-                                      tdkTestObj.setResultStatus("SUCCESS")
-                                  else:
-                                      tdkTestObj.setResultStatus("FAILURE")
-                          else:
-                              tdkTestObj.setResultStatus("FAILURE")
-                      else:
-                          tdkTestObj.setResultStatus("FAILURE")
+                                 if actualresult in actualvalue:
+                                     print "\nNo need to revert the RFC datamodel value\n"
+                                 else:
+                                     print "\nNeed to revert the RFC datamodel into actualvalue\n"
+                                     tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
+                                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                     tdkTestObj.addParameter("actualvalue",actualvalue)
+                                     tdkTestObj.addParameter("feature_name",feature_name)
+                                     tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                     tdkTestObj.executeTestCase(expectedResult)
+                                     actualresult = tdkTestObj.getResultDetails()
+                                     if expectedResult in actualresult.upper():
+                                         tdkTestObj.setResultStatus("SUCCESS")
+                                     else:
+                                         tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
