@@ -290,6 +290,7 @@ public final class Constants
 	private static final String  RDKV_APPARMOR="rdkv_apparmor";
 	private static final String  RDKV_BASIC_SANITY="rdkv_basic_sanity";
 	private static final String  RDKVXCONFRFC="rdkvxconfrfc";
+	private static final String  RIALTO_CONTAINER="rialto_container";
 	
 	private static final String SUCCESS ="SUCCESS";
 	private static final String FAILED ="FAILED";
