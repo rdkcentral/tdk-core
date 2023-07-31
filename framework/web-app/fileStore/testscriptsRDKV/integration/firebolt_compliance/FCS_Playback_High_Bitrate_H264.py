@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>FCS_Playback_Audio_Underflow_PlayWithoutAudio_Test</name>
+  <name>FCS_Playback_High_Bitrate_H264</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To verify only video is played if audio buffer is empty</synopsis>
+  <synopsis>To verify whether the video is playing with High bitrate</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,6 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
@@ -57,34 +60,33 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_PLAYBACK_173</test_case_id>
-    <test_objective>To verify only video is played if audio buffer is empty</test_objective>
+    <test_case_id>FCS_PLAYBACK_187</test_case_id>
+    <test_objective>To verify whether the video is playing with High bitrate</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video Accelerator,RPI</test_setup>
+    <test_setup>Video Accelerator</test_setup>
     <pre_requisite>1.TDK Agent should be up and running in the DUT
-2. Test stream url for a stream with audio underrun should be updated in the config variable video_src_url_audio_underflow inside MediaValidationVariables.py library inside filestore
+2. Test stream url for an AAC stream should be updated in the config variable video_src_url_bitrate_h264 inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
-4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time to wait before checking for AV playback
-5. FIREBOLT_COMPLIANCE_AUDIO_END_POINT configuration should be set to notify the point where audio underrun happens </pre_requisite>
+4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time to wait before checking for AV playback</pre_requisite>
     <api_or_interface_used>Execute the mediapipelinetests application in DUT</api_or_interface_used>
-    <input_parameters>testcasename - "test_audio_underflow_playback_test"
-test_url - underflow stream from MediaValidationVariables library (MediaValidationVariables.video_src_url_audio_underflow)
+    <input_parameters>testcasename - "test_video_bitrate"
+test_url - aac url from MediaValidationVariables library (MediaValidationVariables.video_src_url_bitrate_h264)
 "checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
-timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file
-"audioEnd" - time in seconds to specify the point where audio is ended and only video plays.</input_parameters>
+timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file</input_parameters>
     <automation_approch>1.Load the systemutil module
-2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT and FIREBOLT_COMPLIANCE_UNDERFLOW_AUDIO_END_POINT config values from Device config file.
-3.Retrieve the video_src_url_audio_underflow variable from MediaValidationVariables library
-4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value, FIREBOLT_COMPLIANCE_UNDERFLOW_AUDIO_END_POINT deviceconfig value and timeout
-5.Execute the command in DUT. During the execution, the DUT will playback av for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds and waits for few seconds after FIREBOLT_COMPLIANCE_UNDERFLOW_AUDIO_END_POINT upon which audio underflow signal must be received. Pipeline still continues in PLAYING and verifies stream is played with only video even thoughaudio isn't available.
-6.Verify the output from the execute command and check if the strings "Failures: 0" and "Errors: 0", or "failed: 0" exists in the returned output
+2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
+3.Retrieve the video_src_url_bitrate_h264 variable from MediaValidationVariables library
+4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout value.
+5.Execute the command in DUT. During the execution, the DUT will playback av for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds, then av is paused for 5 seconds then application exits by closing the pipeline
+6.Verify the output from the execute command and check if the  "Failures: 0" and "Errors: 0" string exists or "failed: 0" string exists in the returned output
 7.Based on the ExecuteCommand() return value and the output returned from the mediapipelinetests application, TM return SUCCESS/FAILURE status.</automation_approch>
-    <expected_output>pipeline should continue playing only video after audio underrun has occurred</expected_output>
+    <expected_output>Checkpoint 1. Verify the API call is success
+Checkpoint 2. Verify that the output returned from mediapipelinetests contains the strings "Failures: 0" and "Errors: 0" or it contains the string "failed: 0"</expected_output>
     <priority>High</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
-    <test_script>FCS_Playback_Audio_Underflow_PlayWithoutAudio_Test</test_script>
-    <skipped></skipped>
-    <release_version>M113</release_version>
+    <test_script>FCS_Playback_High_Bitrate_H264</test_script>
+    <skipped>No</skipped>
+    <release_version>M115</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -103,11 +105,14 @@ sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1")
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-sysUtilObj.configureTestCase(ip,port,'FCS_Playback_Audio_Underflow_PlayWithoutAudio_Test')
+sysUtilObj.configureTestCase(ip,port,'FCS_Playback_High_Bitrate_H264')
 
 #Set device configurations to default values
 checkAVStatus = "no"
 timeoutInSeconds = "10"
+connection_speed = "15000"
+height = "2160"
+
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
@@ -117,14 +122,19 @@ sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
 
+    deviceType = sysUtilObj.getDeviceBoxType()
+    if "RPI" in deviceType:
+        connection_speed = "10000"
+        height = "1080"
+
     #Construct the command with the url and execute the command in DUT
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
 
     #The test name specifies the test case to be executed from the mediapipeline test suite
-    test_name = "test_audio_underflow_playback"
+    test_name = "test_video_bitrate"
 
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_audio_underflow
+    test_url = MediaValidationVariables.video_src_url_bitrate_h264
 
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
@@ -135,28 +145,21 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
 
-    #Get audioEnd point from config file
-    actualresult, audioEnd = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_UNDERFLOW_AUDIO_END_POINT')
-
     #If the value of FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT is retrieved correctly and its value is not empty, timeout value should be passed to the test application
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
     #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
-    #Sample command = "mediapipelinetests test_generic_playback <H264_STREAM_URL> checkavstatus=yes timeout=20"
+    #Sample command = "mediapipelinetests test_video_bitrate <H264_bitrate_STREAM_URL> checkavstatus=yes timeout=30"
     command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
-    #Add audioEnd point to command line argument
-    command = command + " audioEnd=" + audioEnd;
-    #Add 'playWithoutAudio' option
-    command = command + " playWithoutAudio ";
+    command = command + " connection_speed="  + connection_speed + " height=" + height
     print "Executing command in DUT: ", command
 
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
-    output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
-    output = output[output.find('\n'):]
+    output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
     print "OUTPUT: ...\n", output
 
     #Check if the command executed successfully
@@ -166,11 +169,11 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Pipeline was able to run with only video after audio underrun occured using 'playbin' and 'audiosink'"
+            print "High bitrate video playback was successfull"
             print "Mediapipeline test executed successfully"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pipeline was not able to run with only video after audio underrun occured using 'playbin' and 'audiosink'"
+            print "High bitarte video playback was failed"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print "Mediapipeline test execution failed"
@@ -180,5 +183,6 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
 else:
     print "Module load failed"
+
 
 

@@ -170,11 +170,11 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Pipeline was able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'westerossink'"
+            print "Pipeline was able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'"
             print "Mediapipeline test executed successfully"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pipeline was not able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'westerossink'"
+            print "Pipeline was not able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print "Mediapipeline test execution failed"

@@ -162,11 +162,11 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
         executionStatus = checkMediaPipelineTestStatus (output)
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Received buffer underflow signal upon audio underrun from 'westeros-sink'"
+            print "Received buffer underflow signal upon audio underrun from 'audio-sink'"
             print "Mediapipeline test executed successfully"
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Audio underflow signal was not received from 'westeros-sink' upon audio underrun"
+            print "Audio underflow signal was not received from 'audio-sink' upon audio underrun"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print "Mediapipeline test execution failed"

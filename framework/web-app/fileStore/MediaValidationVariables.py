@@ -168,6 +168,10 @@ video_src_url_96khz_aac = test_streams_base_path + "TDK_Asset_Sunrise_AAC_96kHz.
 video_src_url_96khz_opus = test_streams_base_path + "TDK_Asset_Sunrise_OPUS_96kHz.mp4"
 video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz.mp4"
 
+#Video bitrate URL
+video_src_url_bitrate_h264 = ""
+video_src_url_bitrate_hevc = ""
+
 #VP9 Codec Video URL
 # By default VP9_OPUS stream is used, if we need to test with VP9_OGG stream
 # then comment VP9_OPUS stream and uncomment VP9_OGG stream urls below
