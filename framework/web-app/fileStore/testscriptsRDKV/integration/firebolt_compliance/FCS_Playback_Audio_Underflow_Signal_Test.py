@@ -50,6 +50,8 @@
   <box_types>
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -59,7 +61,7 @@
     <test_case_id>FCS_PLAYBACK_175</test_case_id>
     <test_objective>To test if buffer underflow callback is received upon audio underrun from westerossink</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video Accelerator</test_setup>
+    <test_setup>Video Accelerator,RDKTV</test_setup>
     <pre_requisite>1.TDK Agent should be up and running in the DUT
 2. Test stream url for a stream with audio underrun should be updated in the config variable video_src_url_audio_underflow inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
