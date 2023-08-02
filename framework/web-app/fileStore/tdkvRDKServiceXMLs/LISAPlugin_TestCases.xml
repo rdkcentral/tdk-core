@@ -703,7 +703,8 @@
                  <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LISA" expectedValues="activated"/>
             </testStep>
 	</testCase>
-        <testCase testCaseId="LISA_12" testCaseName="LISA_Check_Multiple_Installation_Request" desc="Checks the error message on multiple installation request">
+
+        <testCase testCaseId="LISA_12" testCaseName="LISA_Install_Application_With_Empty_Version" desc="Checks the error message on installing application with empty version">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="UnInstall_Test_Application" >
@@ -733,37 +734,17 @@
              <testStep testStepId="1" name="Install_Test_Application" method="Install_Application" >
                     <params>
                        <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                       <param tag="url" useConfigFile="true" key="LISA_APPLICATION_SERVER_URL"/>
-                       <param tag="version" value="1.0"/>
+                       <param tag="url" useConfigFile="true" key="LISA_APPLICATION_SERVER_URL" />
+                       <param tag="version" value=""/>
                        <param tag="appName" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                        <param tag="type" value="dac"/>
                        <param tag="category" value="category"/>
                     </params>
-                    <resultGeneration useMethodTag="lisa_check_status" />
+                    <resultGeneration useMethodTag="lisa_check_error_message" expectedValues="request not accepted,1001"/>
             </testStep>
-            <testStep testStepId="2" name="Install_Test_Application_Again" method="Install_Application" >
-                    <params>
-                       <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                       <param tag="url" useConfigFile="true" key="LISA_APPLICATION_SERVER_URL"/>
-                       <param tag="version" value="1.0"/>
-                       <param tag="appName" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                       <param tag="type" value="dac"/>
-                       <param tag="category" value="category"/>
-                    </params>
-                    <resultGeneration useMethodTag="lisa_check_multiple_request_error_message" expectedValues="too many requests,1002" />
-            </testStep>
-	<testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Check_Test_Application" >
-            <testStep testStepId="1" name="Check_Application_List" method="Get_List" delayKey="LISA_APPLICATION_INSTALLATION_UNINSTALLATION_TIME" >
-                    <resultGeneration useMethodTag="lisa_check_application_list" arguments="check_app_exist" >
-                     <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </resultGeneration>
-            </testStep>
-	 </postrequisite>
-        </testCasePostRequisite>   
         </testCase>
-
-        <testCase testCaseId="LISA_13" testCaseName="LISA_Check_Multiple_UnInstallation_Request" desc="Checks the error message on multiple installation/uninstallation request">
+        
+        <testCase testCaseId="LISA_13" testCaseName="LISA_Uninstall_Application_With_Unavailable_Version" desc="Checks the error message on uninstalling application with unavailable version">
             <testCaseInfo testCaseType="direct"/>
             <testCasePreRequisite>
                   <prerequisite requisiteId="1" requisiteName="Install_Test_Application" >
@@ -792,36 +773,30 @@
                    </testStep>
                  </prerequisite>
             </testCasePreRequisite>
-            <testStep testStepId="1" name="Install_Test_Application_Version2" method="Install_Application" >
+            <testStep testStepId="1" name="UnInstall_Test_Application_Version2" method="Uninstall_Application">
                     <params>
                        <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                       <param tag="url" useConfigFile="true" key="LISA_APPLICATION_SERVER_URL"/>
                        <param tag="version" value="2.0"/>
-                       <param tag="appName" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                        <param tag="type" value="dac"/>
-                       <param tag="category" value="category"/>
+                       <param tag="uninstallType" value="full"/>
                     </params>
-                    <resultGeneration useMethodTag="lisa_check_status" />
+                    <resultGeneration useMethodTag="lisa_check_error_message" expectedValues="request not accepted,1001" />
             </testStep>
-            <testStep testStepId="2" name="UnInstall_Test_Application_Version1" method="Uninstall_Application">
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Uninstall_Test_Application_Version1" >
+            <testStep testStepId="1" name="UnInstall_Test_Application_Version1" method="Uninstall_Application" >
                     <params>
                        <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                        <param tag="version" value="1.0"/>
                        <param tag="type" value="dac"/>
                        <param tag="uninstallType" value="full"/>
                     </params>
-                    <resultGeneration useMethodTag="lisa_check_multiple_request_error_message" expectedValues="too many requests,1002"/>
-            </testStep>
-        <testCasePostRequisite>
-         <postrequisite requisiteId="1" requisiteName="Uninstall_Test_Application_Version2" >
-            <testStep testStepId="1" name="UnInstall_Test_Application_Version2" method="Uninstall_Application" delayKey="LISA_APPLICATION_INSTALLATION_UNINSTALLATION_TIME" >
-                    <params>
-                       <param tag="id" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                       <param tag="version" value="2.0"/>
-                       <param tag="type" value="dac"/>
-                       <param tag="uninstallType" value="full"/>
-                    </params>
                     <resultGeneration useMethodTag="lisa_check_status" />
+            </testStep>
+            <testStep testStepId="2" name="Check_Application_List" method="Get_List" delayKey="LISA_APPLICATION_INSTALLATION_UNINSTALLATION_TIME" >
+                    <resultGeneration useMethodTag="lisa_check_application_list" arguments="exceptional_cases,check_app_not_exists" >
+                     <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
             </testStep>
          </postrequisite>
         </testCasePostRequisite>

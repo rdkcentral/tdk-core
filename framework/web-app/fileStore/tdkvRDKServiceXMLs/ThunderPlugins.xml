@@ -2147,7 +2147,8 @@
         <method name="Reset_Sharpness" api="resetSharpness" type="method" desc="Resets the TV sharpness to the factory default" />
         <method name="Reset_Hue" api="resetHue" type="method" desc="Resets the TV hue to the factory default" />       
         <method name="Reset_HDR10_Mode" api="resetHDR10Mode" type="method" desc="Resets the HDR10 mode to the factory default" />
-        <method name="Reset_HLG_Mode" api="resetHLGMode" type="method" desc="Resets the HLG mode to the factory default" /> 
+        <method name="Reset_HLG_Mode" api="resetHLGMode" type="method" desc="Resets the HLG mode to the factory default" />
+        <method name="Reset_Color_Temperature" api="resetColorTemperature" type="method" version="1" desc="Reset ColorTemp to factory default" /> 
         <method name="TV_Get_Video_Format" api="getVideoFormat" type="method" desc="Returns the currently set video format" />
         <method name="TV_Get_Video_FrameRate" api="getVideoFrameRate" type="method" desc="Returns the currently set video frame rate" />
         <method name="TV_Get_Video_Resolution" api="getVideoResolution" type="method" desc="Returns the currently set video resolution" />
