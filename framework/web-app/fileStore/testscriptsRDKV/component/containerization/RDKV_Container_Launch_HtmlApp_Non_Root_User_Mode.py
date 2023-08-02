@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>5</execution_time>
+  <execution_time>8</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +65,7 @@
     <test_case_id>Containerization_10</test_case_id>
     <test_objective>To launch HtmlApp and verify if its in non-root user mode</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>HTMLAPP_DETAILS=</input_parameters>
@@ -197,7 +199,7 @@ if expectedResult in result.upper():
                     if "launching HtmlApp in container mode" in output:
                         print "HtmlApp launched successfully in container mode"
                         print "Verify if HtmlApp is launched in non-root user mode"
-                        command = 'ps -aux | grep htmlapp'
+                        command = 'ps -aux | grep htmlapp | grep -v root'
                         print "COMMAND : %s" %(command)
                         #Primitive test case which associated to this Script^M
                         tdkTestObj = obj.createTestStep('containerization_executeInDUT');

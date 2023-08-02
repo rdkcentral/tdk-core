@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +65,7 @@
     <test_case_id>Containerization_18</test_case_id>
     <test_objective>The objective of this test is to do lifecycle management of LightningApp plugin in container mode.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>LIGHTNINGAPP_DETAILS</input_parameters>

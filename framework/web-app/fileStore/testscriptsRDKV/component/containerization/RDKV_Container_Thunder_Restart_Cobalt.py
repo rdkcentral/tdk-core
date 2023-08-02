@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +65,7 @@
     <test_case_id>Containerization_27</test_case_id>
     <test_objective>Cobalt should play video in container mode and launch after thunder restart</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>COBALT_DETAILS=

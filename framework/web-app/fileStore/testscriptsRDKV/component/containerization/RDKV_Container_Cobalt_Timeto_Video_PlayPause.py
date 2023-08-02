@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +65,7 @@
     <test_case_id>Containerization_13</test_case_id>
     <test_objective>Start playback in youtube then calculate time to play and pause video</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>COBALT_DETAILS=</input_parameters>
@@ -109,7 +111,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL_CONTAINER", "COBALT_PAUSE_TIME_THRESHOLD_VALUE", "COBALT_PLAY_TIME_THRESHOLD_VALUE", "THRESHOLD_OFFSET"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL_CONTAINER", "COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER", "COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -132,9 +134,9 @@ if expectedResult in result.upper():
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
             cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
-            cobalt_pause_threshold = configValues["COBALT_PAUSE_TIME_THRESHOLD_VALUE"]
-            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE"]
-            offset = configValues["THRESHOLD_OFFSET"]
+            cobalt_pause_threshold = configValues["COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER"]
+            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
+            offset = configValues["THRESHOLD_OFFSET_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -304,9 +306,9 @@ if expectedResult in result.upper():
                                                             time_for_video_play = video_playedtime_in_millisec - play_starttime_in_millisec
                                                             #Get threshold values from device config file
                                                             conf_file,file_status = getConfigFileName(obj.realpath)
-                                                            result1,cobalt_pause_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PAUSE_TIME_THRESHOLD_VALUE")
-                                                            result2,cobalt_play_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PLAY_TIME_THRESHOLD_VALUE")
-                                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                                                            result1,cobalt_pause_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER")
+                                                            result2,cobalt_play_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER")
+                                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET_CONTAINER")
                                                             if all(value != "" for value in (cobalt_pause_threshold,cobalt_play_threshold,offset)):
                                                                 print "\n play initiated at {} ".format(play_start_time)
                                                                 print "\n play happend at {} ".format(video_playedtime)

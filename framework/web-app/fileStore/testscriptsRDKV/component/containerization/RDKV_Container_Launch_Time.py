@@ -21,11 +21,11 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>5</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_Container_Launch_Time</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
+  <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
   <primitive_test_name>containerization_executeInDUT</primitive_test_name>
   <!--  -->
@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>5</execution_time>
+  <execution_time>8</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -63,7 +65,7 @@
     <test_case_id>Containerization_07</test_case_id>
     <test_objective>Calculate launch time for cobalt in container and non-container mode</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>RPI,Accelerator,RDKTV</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
@@ -82,9 +84,9 @@
     <release_version>M110</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from containerizationlib import *
@@ -159,8 +161,11 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         #Get the result of execution
         output = tdkTestObj.getResultDetails()
+        output = tdkTestObj.getResultDetails().replace(r'\n', '\n')
+        output = output[output.find('\n'):]
         if output != "EXCEPTION" and expectedResult in result:
             if "Application:Cobalt took" in output:
+                print "output ", output
                 launch_time = (output.split('took',2)[1].split('milliseconds',2)[0])
                 print "Time taken to launch cobalt in non-container mode: ", launch_time
                 print "Launch cobalt in container mode"
@@ -217,14 +222,19 @@ if expectedResult in result.upper():
 
                                 #Execute the test case in DUT
                                 tdkTestObj.executeTestCase(expectedResult);
+                                output = tdkTestObj.getResultDetails().replace(r'\n', '\n')
+                                output = output[output.find('\n'):]
                                 output = tdkTestObj.getResultDetails()
                                 if "Application:Cobalt took" in output:
-                                    container_launch_time = (output.split('took',2)[1].split('milliseconds',2)[0])
+                                    print "output ",output
+                                    container_launch_time = (output.split('took',2)[2].split('milliseconds',2)[0])
                                     print "Time taken to launch cobalt in container mode: ", container_launch_time
-                                    if container_launch_time < (launch_time + threshold_offset):
-                                        print "Container mode launch time is same as non container mode launch time"
+                                    print "Time taken to launch cobalt in non-container mode: ", launch_time
+                                    print "Threshold offset value: ",threshold_offset    
+                                    if float(container_launch_time) < (float(launch_time) + float(threshold_offset)):
+                                        print "Container mode launch time is within the limit in comparision with non-container mode launch"
                                     else:
-                                        print "Container mode launch time is greater than non container mode launch time"
+                                        print "Container mode launch time is not within the limit in comparision with non-container mode launch"
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
                                     print "Launch related logs not available"
