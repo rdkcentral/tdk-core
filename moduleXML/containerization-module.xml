@@ -24,11 +24,12 @@
   <!-- Excecution time out of module -->
     <testGroup>Component</testGroup>
   <!-- Logs File Names of module -->
-    <logFileNames>[]</logFileNames>
+    <logFileNames>[/opt/logs/wpeframework.log]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
   <!-- Total functions corresponding module  -->
     <functions>
+      <function name='Containerization_Do_Nothing' />
       <function name='containerization_obtainCredentials' />
       <function name='containerization_cloneDobby' />
       <function name='containerization_setPreRequisites' />
@@ -49,6 +50,9 @@
       <function name='containerization_validateResourceUsage' />
       <function name='containerization_getValue' />
       <function name='containerization_getPluginStatus' />
+      <function name='containerization_setPluginStatus' />
+      <function name='get_validation_params' />
+      <function name='containerization_suspend_plugin' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -82,6 +86,11 @@
       <parameter funName='containerization_validateProcEntry' parameterName='video_validation_script' parameterType='STRING' range='A-Z' />
       <parameter funName='containerization_getValue' parameterName='method' parameterType='STRING' range='A-Z' />
       <parameter funName='containerization_getPluginStatus' parameterName='plugin' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setPluginStatus' parameterName='plugin' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setPluginStatus' parameterName='status' parameterType='STRING' range='A-Z' />
+      <parameter funName='containerization_setPluginStatus' parameterName='uri' parameterType='STRING' range='A-Z' />
+      <parameter funName='get_validation_params' parameterName='realpath' parameterType='STRING' range='A-Z' />
+      <parameter funName='get_validation_params' parameterName='deviceIP' parameterType='STRING' range='0-9' />
     </parameters>
   </module>
 </xml>

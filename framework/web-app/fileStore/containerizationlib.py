@@ -576,6 +576,30 @@ def containerization_launchApplication(launch):
           launch_status = "FAILURE"
           print "FAILURE: RDKShell is not in activated state"
      return launch_status,start_launch
+#-------------------------------------------------------------------
+# SUSPEND THE REQUIRED APPLICATION IN THE DUT USING RDKSHELL PLUGIN
+# Description  : To suspend the required application
+# Parameters   : plugin - The plugin which should be suspended
+# Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
+#-------------------------------------------------------------------
+def containerization_suspend_plugin(obj,plugin):
+    status = expectedResult = "SUCCESS"
+    print "\n Suspending {} \n".format(plugin)
+    params = '{"callsign":"'+plugin+'"}'
+    tdkTestObj = obj.createTestStep('containerization_setValue')
+    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.suspend")
+    tdkTestObj.addParameter("value",params)
+    start_suspend = str(datetime.utcnow()).split()[1]
+    tdkTestObj.executeTestCase(expectedResult);
+    result = tdkTestObj.getResult();
+    if result == "SUCCESS":
+        print "\n Suspended {} plugin \n".format(plugin)
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        print "\n Unable to Suspend {} plugin \n".format(plugin)
+        tdkTestObj.setResultStatus("FAILURE")
+        status = "FAILURE"
+    return status,start_suspend
 #---------------------------------------------------------------
 # CHECK REQUIRED CONTAINER IS RUNNING IN DUT
 # Description  : To check the required container is running in the DUT

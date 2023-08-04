@@ -54,8 +54,6 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
-    <box_type>RDKTV</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -65,7 +63,7 @@
     <test_case_id>Containerization_15</test_case_id>
     <test_objective>The objective of this test is to validate the time taken to start a new video after playing a given video in Cobalt.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI, Accelerator, RDKTV</test_setup>
+    <test_setup>RPI, Accelerator</test_setup>
     <pre_requisite>1. Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/device.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>COBALT_DETAILS</input_parameters>
@@ -114,7 +112,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAYBACK_URL_CONTAINER","COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER","THRESHOLD_OFFSET_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAYBACK_URL","COBALT_PLAY_TIME_THRESHOLD_VALUE","THRESHOLD_OFFSET"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -136,9 +134,9 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
-            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
-            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
-            offset = configValues["THRESHOLD_OFFSET_CONTAINER"]
+            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL"]
+            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE"]
+            offset = configValues["THRESHOLD_OFFSET"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -177,8 +175,7 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
             print "Launch Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
-            #tdkTestObj.addParameter("launch",cobalt_details)
-            tdkTestObj.addParameter("launch",configValues["COBALT_DETAILS"])
+            tdkTestObj.addParameter("launch",cobalt_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult == "SUCCESS":
@@ -204,7 +201,7 @@ if expectedResult in result.upper():
                     output = tdkTestObj.getResultDetails()
                     if "launching cobalt in container mode" in output:
                         print "Cobalt launched successfully in container mode"
-                        print "\n Set the URL : {} using Cobalt deeplink method"
+                        print "\n Set the URL using Cobalt deeplink method"
                         tdkTestObj = obj.createTestStep('containerization_setValue')
                         tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                         tdkTestObj.addParameter("value",cobalt_playback_url)
@@ -242,9 +239,9 @@ if expectedResult in result.upper():
                                 time.sleep(25)
                                 print "\n Check the logs from DUT"
                                 command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
-                                tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-                                tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-                                tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                                tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                                tdkTestObj.addParameter("credentials", credentials);
                                 tdkTestObj.addParameter("command",command)
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()

@@ -55,6 +55,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -64,7 +66,7 @@
     <test_case_id>Containerization_16</test_case_id>
     <test_objective>The objective of this test is to validate time taken to launch Cobalt immediately after reboot.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator, RDKTV</test_setup>
+    <test_setup>RPI,Accelerator</test_setup>
     <pre_requisite>Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
@@ -90,6 +92,8 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from containerizationlib import *
+import rdkv_performancelib
+from web_socket_util import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("containerization","1",standAlone=True);
@@ -100,6 +104,9 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_Container_Cobalt_Timeto_Launch_AfterReboot');
 
+#Execution summary variable
+Summ_list=[]
+
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
@@ -107,7 +114,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","THRESHOLD_OFFSET_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","THRESHOLD_OFFSET"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -129,7 +136,7 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
-            offset = configValues["THRESHOLD_OFFSET_CONTAINER"]
+            offset = configValues["THRESHOLD_OFFSET"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -154,8 +161,6 @@ if expectedResult in result.upper():
     result = tdkTestObj.getResult()
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
-    #event_listener = None
-    #rebootwaitTime = 160
     if "Active: active" in output and expectedResult in result:
         print "Dobby is running %s" %(output)
         #To enable datamodel
@@ -181,22 +186,9 @@ if expectedResult in result.upper():
                 if expectedResult in result:
                     uptime = int(tdkTestObj.getResultDetails())
                     if uptime < 240:
-                        print "\n Device is rebooted and uptime is: {}\n".format(uptime)
-                        time.sleep(30)
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-                        if initial_plugins_status_dict != curr_plugins_status_dict:
-                            revert = "YES"
-                        if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-                            print "\n Error while getting status of plugins"
-                            status = "FAILURE"
-                        elif curr_plugins_status_dict != plugin_status_needed:
-                            status = set_plugins_status(obj,plugin_status_needed)
-                            time.sleep(10)
-                            new_plugins_status_dict = get_plugins_status(obj,plugins_list)
-                            if new_plugins_status_dict != plugin_status_needed:
-                                status = "FAILURE"
-                        if status == "SUCCESS":
+                            print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                            time.sleep(30)
+                            tdkTestObj.setResultStatus("SUCCESS")
                             thunder_port = rdkv_performancelib.devicePort
                             event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 6,"method": "org.rdk.RDKShell.1.register","params": {"event": "onLaunched", "id": "client.events.1" }}'],"/jsonrpc",False)
                             time.sleep(10)
@@ -205,6 +197,7 @@ if expectedResult in result.upper():
                             tdkTestObj.addParameter("launch",cobalt_details)
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
+                            launch_start_time = actualresult.split(",")[1][2:17]
                             if expectedResult in actualresult.upper():
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print "Check container is running"
@@ -247,9 +240,9 @@ if expectedResult in result.upper():
                                                 break
                                         if launched_time:
                                             conf_file,file_status = getConfigFileName(obj.realpath)
-                                            config_status,cobalt_launch_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_LAUNCH_AFTER_BOOT_THRESHOLD_VALUE_CONTAINER")
-                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET_CONTAINER")
-                                            Summ_list.append('THRESHOLD_OFFSET_CONTAINER :{}ms'.format(offset))
+                                            config_status,cobalt_launch_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_LAUNCH_AFTER_BOOT_THRESHOLD_VALUE")
+                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                                            Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                             if all(value != "" for value in (cobalt_launch_threshold,offset)):
                                                 launch_start_time_in_millisec = getTimeInMilliSec(launch_start_time)
                                                 launched_time_in_millisec = getTimeInMilliSec(launched_time)
@@ -283,9 +276,9 @@ if expectedResult in result.upper():
                             else:
                                 print "\n Error in launching Cobalt"
                                 tdkTestObj.setResultStatus("FAILURE")  
-                        else:
-                            print "\n Error in setting up the plugin"
-                            tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print "\n Error in setting up the plugin"
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print "\n Error in gettingt the uptime of the device"
                     tdkTestObj.setResultStatus("FAILURE")

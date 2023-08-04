@@ -65,7 +65,7 @@
     <test_case_id>Containerization_17</test_case_id>
     <test_objective>The objective of this test is to do lifecycle management of Cobalt plugin.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator,RDKTV</test_setup>
+    <test_setup>RPI,Accelerator</test_setup>
     <pre_requisite>Configure the values SSH Method (variable $SSH_METHOD), DUT username (variable $SSH_USERNAME)and password of the DUT (variable $SSH_PASSWORD)  available in fileStore/Containerization.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
@@ -109,7 +109,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","PROC_VALIDATION", "VIDEO_VALIDATION_SCRIPT_FILE"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -120,9 +120,11 @@ if expectedResult in result.upper():
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
             print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+        elif "FAILURE" not in configValues[configKey] and  configValues["PROC_VALIDATION"] == "NO" and configValues["VIDEO_VALIDATION_SCRIPT_FILE"] == "":
+            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
         else:
             print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
-            if configValues[configKey] == "":
+            if configValues[configKey] == "" and configValues["PROC_VALIDATION"] == "YES":
                 print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
                 result = "FAILURE"
                 break
@@ -135,6 +137,16 @@ if expectedResult in result.upper():
                 password = ""
             else:
                 password = configValues["SSH_PASSWORD"]
+            if configValues["PROC_VALIDATION"] == "YES":
+                if configValues["SSH_PASSWORD"] == "None":
+                    password = ""
+                else:
+                    password = configValues["SSH_PASSWORD"]
+                credentials = configValues["host_name"]+','+user_name+','+password
+                plugin_validation_details = ["video_validation",configValues["SSH_METHOD"], credentials, configValues["VIDEO_VALIDATION_SCRIPT_FILE"]]
+            else:
+                plugin_validation_details = ["no_validation"]
+
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             config_status = "FAILURE"
@@ -148,8 +160,8 @@ if expectedResult in result.upper():
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
     #Add the parameters to ssh to the DUT and execute the command
-    #tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-    tdkTestObj.addParameter("sshMethod", ssh_method);
+    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+    #tdkTestObj.addParameter("sshMethod", ssh_method);
     tdkTestObj.addParameter("credentials", credentials);
     tdkTestObj.addParameter("command", command);
     #Execute the test case in DUT
@@ -172,7 +184,7 @@ if expectedResult in result.upper():
             tdkTestObj.addParameter("launch",cobalt_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
-            if expectedResult in actualresult.upper():
+            if expectedResult in actualresult.upper(): 
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "Check container is running"
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
@@ -199,18 +211,9 @@ if expectedResult in result.upper():
 			generatekey_method = 'org.rdk.RDKShell.1.generateKey'
 			plugin_operations_list = [{'Cobalt.1.deeplink':cobalt_test_url},{generatekey_method:enterkey_keycode},{generatekey_method:enterkey_keycode}]
                         plugin_operations = json.dumps(plugin_operations_list)
-                        if validation_dict["validation_required"]:
-                            if validation_dict["password"] == "None":
-                                password = ""
-                            else:
-                                password = validation_dict["password"]
-                            credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-                            plugin_validation_details = ["video_validation", validation_dict["ssh_method"], credentials, validation_dict["video_validation_script"]]
-                        else:
-                            plugin_validation_details = ["no_validation"]                        
                         plugin_validation_details = json.dumps(plugin_validation_details)
                         tdkTestObj = obj.createTestStep('containerization_executeLifeCycle')
-                        tdkTestObj.addParameter("plugin",plugin)
+                        tdkTestObj.addParameter("plugin", "Cobalt")
                         tdkTestObj.addParameter("operations",plugin_operations)
                         tdkTestObj.addParameter("validation_details",plugin_validation_details)
                         tdkTestObj.executeTestCase(expectedResult)
@@ -221,7 +224,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
                             print "\n Error while executing life cycle methods"
-                            tdkTestObj.setResultStatus("FAILURE")						
+                            tdkTestObj.setResultStatus("FAILURE")			
                     else:
                         print "Unable to get the required logs"
                         tdkTestObj.setResultStatus("FAILURE")
