@@ -30,8 +30,10 @@ DUT_Mode_Primary_Priority_OnBootup = 0;
 DUT_Mode_Primary_Priority= 0;
 #log file location for VLAN MANAGER
 VLANLOG ="/rdklogs/logs/VLANIFACEMGRLog.txt.0"
-#The Expected Wan Manager Policies
+#The Expected Wan Manager Policies for non-unified platforms
 ExpectedPolicyList = "FIXED_MODE_ON_BOOTUP, FIXED_MODE, PRIMARY_PRIORITY, PRIMARY_PRIORITY_ON_BOOTUP, MULTIWAN_MODE";
+#The Expected Wan Manager Policies for unified platforms
+ExpectedPolicyList_Unified = "FIXED_MODE_ON_BOOTUP, FIXED_MODE, PRIMARY_PRIORITY, PRIMARY_PRIORITY_ON_BOOTUP, MULTIWAN_MODE, AUTOWAN_MODE, PARALLEL_SCAN";
 #The Expected Wan Manager interface names
 interfaceName = ["dsl0", "eth3", "veip0"];
 #The Expected Wan Manager interface name for RPI
