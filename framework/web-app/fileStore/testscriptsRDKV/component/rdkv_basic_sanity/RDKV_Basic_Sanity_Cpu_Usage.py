@@ -20,14 +20,14 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_Basic_Sanity_Before_After_Reboot</name>
+  <name>RDKV_Basic_Sanity_Cpu_Usage</name>
   <primitive_test_id/>
   <primitive_test_name>rdkv_basic_sanity_executeInDUT</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To Validate Sanity Scenarios where reboot is involved as a test step</synopsis>
+  <synopsis>To Monitor CPU USage of DUT for given time</synopsis>
   <groups_id/>
-  <execution_time>10</execution_time>
+  <execution_time>120</execution_time>
   <long_duration>false</long_duration>
   <advanced_script>false</advanced_script>
   <remarks/>
@@ -41,29 +41,29 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKV_Basic_Sanity_04</test_case_id>
-    <test_objective>To Initiate the shell scripts where reboot is involved as a test step</test_objective>
+    <test_case_id>RDKV_Basic_Sanity_11</test_case_id>
+    <test_objective>To Initiate the shell scripts which Monitor Cpu usage for given time</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI-HYB,RPI-Client,Video_Accelerator</test_setup>
     <pre_requisite>1. Configure the location of shell scripts in FilePath available in fileStore/Basic_Sanity_Config.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>FilePath</input_parameters>
-    <automation_approch>1. Check the status of the device before reboot
-    2. Validate if the scripts are executed after reboot</automation_approch>
-    <expected_output>Respective Scripts are executed where reboot is involved and results are available in Logfile</expected_output>
+    <automation_approch>Monitor the cpu usage in the background and list highest 3 cpu usages at the end of the script and kill the script after timeout.</automation_approch>
+    <expected_output>List the 3 processes with highest cpu usage.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_basic_sanity</test_stub_interface>
-    <test_script>RDKV_Basic_Sanity_Before_After_Reboot</test_script>
+    <test_script>RDKV_Basic_Sanity_Cpu_Usage</test_script>
     <skipped>No</skipped>
-    <release_version>M113</release_version>
+    <release_version>M116</release_version>
     <remarks/>
   </test_cases>
 </xml>
-'''
+
+''' 
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from rdkv_basic_sanitylib import *
-import time
+import sys
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
@@ -72,7 +72,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_basic_sanity","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_Before_After_Reboot');
+obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_Cpu_Usage');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -105,47 +105,37 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            command = "sh " + configValues["FilePath"] + "/system_sanity_check_before_reboot.sh"
+            command = (
+                    "sh " + configValues["FilePath"] + "/system_sanity_check.sh 15" +
+                    " && " +
+                    "timeout $(($(grep '^total_duration=' " + configValues["FilePath"] + "/sanity_check.config | cut -d '=' -f 2) + 10)) tail -f -n 0 $(find / -name 'cpu_monitor.log' 2>/dev/null | head -n 1)"
+            )
+            # Print the command and execute it
             print("COMMAND: %s" % command)
-            #Primitive test case associated with this Script
-            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_rebootexecution');
-            #Add the parameters to ssh to the DUT and execute the command
-            tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-            tdkTestObj.addParameter("credentials", credentials);
-            tdkTestObj.addParameter("command", command);
-            tdkTestObj.executeTestCase(expectedResult);
-            result = tdkTestObj.getResult();
-            output = tdkTestObj.getResultDetails();
-            # View log file after 300 seconds
-            print("Waiting for 300 seconds before checking log file to finish reboot process...")
-            time.sleep(300)
-            command = "cat " + configValues["FilePath"] + "/sanity_test_post_reboot_status.log"
-            print("COMMAND: %s" % command)
-            # Primitive test case which associated to this Script
-            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
-            tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-            tdkTestObj.addParameter("credentials", credentials);
-            tdkTestObj.addParameter("command", command);
-            tdkTestObj.executeTestCase(expectedResult);
+            tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT')
+            tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"])
+            tdkTestObj.addParameter("credentials", credentials)
+            tdkTestObj.addParameter("command", command)
+            tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResult()
-            # Get the result of execution
-            output = tdkTestObj.getResultDetails();
+            output = tdkTestObj.getResultDetails()
             output = str(output)
-            print("[RESPONSE FROM DEVICE]: %s" % output)
+            print "[RESPONSE FROM DEVICE]: %s" %(output)
+            sys.stdout.flush()
             if "FAILURE" in output or expectedResult not in output:
                 #Check if the file exists or not
                 if "No such file or directory" in output:
-                  print "FAILURE: File not found"
-                  tdkTestObj.setResultStatus("FAILURE")
+                    print "FAILURE: File not found"
+                    tdkTestObj.setResultStatus("FAILURE")
                 else:
-                  print "FAILURE: Script Execution was not Successful"
-                  tdkTestObj.setResultStatus("FAILURE")
+                    print "FAILURE: Script Execution was not Successful"
+                    tdkTestObj.setResultStatus("FAILURE")
             elif "FAILURE" not in output and expectedResult in output:
                 print "SUCCESS: Script Execution Successful"
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 print "Error: Error in the Script Execution"
-                tdkTestObj.setResultStatus("FAILURE")                                              
+                tdkTestObj.setResultStatus("FAILURE")
         else:
             print "FAILURE: Currently only supports directSSH ssh method"
             tdkTestObj.setResultStatus("FAILURE");
@@ -153,8 +143,7 @@ if expectedResult in result.upper():
         print "FAILURE: Failed to get configuration values"
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
-    obj.unloadModule("rdkv_basic_sanity_executeInDUT");
-
+    obj.unloadModule("rdkv_basic_sanity");
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");

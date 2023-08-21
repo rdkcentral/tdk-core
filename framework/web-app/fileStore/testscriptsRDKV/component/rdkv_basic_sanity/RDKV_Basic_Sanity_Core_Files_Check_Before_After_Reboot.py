@@ -118,8 +118,7 @@ if expectedResult in result.upper():
             # View log file after 180 seconds
             print("Waiting for 180 seconds before checking log file to finish reboot process...")
             time.sleep(180)
-            command = "cat " + configValues["FilePath"] + "/sanity_test_reboot_testcase.log"
-            print("COMMAND: %s" % command)
+            command = "cat $(find / -name 'system_sanity_test_reboot_testcase.log' 2>/dev/null | head -n1)"
             # Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);

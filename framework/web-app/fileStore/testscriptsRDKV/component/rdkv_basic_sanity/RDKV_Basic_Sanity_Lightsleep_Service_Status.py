@@ -106,7 +106,6 @@ if expectedResult in result.upper():
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
             command = "sh " + configValues["FilePath"] + "/system_sanity_lightsleep_service_status.sh"
-            print("COMMAND: %s" % command)
             #Primitive test case associated with this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_rebootexecution');
             #Add the parameters to ssh to the DUT and execute the command
@@ -119,7 +118,7 @@ if expectedResult in result.upper():
             # View log file after 300 seconds
             print("Waiting for 300 seconds before checking log file to finish reboot process...")
             time.sleep(300)
-            command = "cat " + configValues["FilePath"] + "/system_sanity_lightsleep_service_status.log"
+            command = "cat $(find / -name 'system_sanity_lightsleep_service_status.log' 2>/dev/null | head -n1)"
             print("COMMAND: %s" % command)
             # Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_executeInDUT');
