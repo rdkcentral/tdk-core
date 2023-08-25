@@ -1771,6 +1771,7 @@ class DeviceGroupController {
 							List<String> ocapId= new ArrayList<String>()
 							def deviceName =  node?.device?.stb_name?.text()?.trim()
 							def  deviceIp =node?.device?.stb_ip?.text()?.trim()
+							def serialNo=node?.device?.mac_addr?.text()?.trim()
 							String boxType = node?.device?.box_type?.text()?.trim()
 							def recorderId = node?.device?.recorder_id?.text()?.trim()
 							def socVendor = node?.device?.soc_vendor?.text()?.trim()
@@ -1849,6 +1850,7 @@ class DeviceGroupController {
 										Device deviceInstance = new Device()
 										deviceInstance.stbName = deviceName
 										deviceInstance.stbIp = deviceIp
+										deviceInstance.serialNo = serialNo
 										deviceInstance.soCVendor = socVendorObj
 										deviceInstance.boxType=boxTypeObj
 										deviceInstance.boxManufacturer =boxManufactureObj
