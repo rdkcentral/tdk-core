@@ -163,6 +163,45 @@ def rfc_executeInDUT (sshMethod, credentials, command):
     return output
 
 #---------------------------------------------------------------
+# Validate the RFC URL
+#---------------------------------------------------------------
+def rfc_urlvalidate(basePath, configKey):
+    rfc_urlvalidatestatus="SUCCESS"
+    configValue = rfc_getDeviceConfig (basePath, configKey)
+    if "FAILURE" not in configValue:
+        if len(configValue) == 0:
+            output = "[INFO] - Please configure the XCONF server URL in device config file"
+            print output
+            rfc_urlvalidatestatus="FAILURE"
+        else:
+            config_status=rfc_obtainCredentials()
+            if "FAILURE" not in config_status:
+                credentials = deviceIP + ',' + user_name + ',' + password
+                #validate the given URl by CURL command under DUT
+                command="curl -is "+configValue+" | head -n 1"
+                print "Executing Command : %s" %command
+                result=rfc_executeInDUT (sshMethod, credentials, command)
+                result=result.split("\n")
+                result=str(result[1])
+                if "200" in result:
+                    output = configValue
+                    print "SUCCESS : Configured XCONF server URL "+output
+                else:
+                    output = configValue
+                    output = "FAILURE : Please configure accessible URL "+output
+                    print output
+                    rfc_urlvalidatestatus="FAILURE"
+            else:
+                output="FAILURE : Failed to get the device credentials"
+                print output
+                rfc_urlvalidatestatus="FAILURE"
+    else:
+        output="FAILURE : Failed to get the XCONF server URL"
+        print output
+        rfc_urlvalidatestatus="FAILURE"
+    return rfc_urlvalidatestatus,output
+
+#---------------------------------------------------------------
 # GET DEVICE MAC ADDRESS
 #---------------------------------------------------------------
 def rfc_getmacaddress():
@@ -401,14 +440,14 @@ def rfc_restartservice():
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
         #restart rfc services
-        command='systemctl restart rfc-config ; sleep 5s ; systemctl status rfc-config | grep active  | cut -d ";" -f 2 | cut -d " " -f 2'
+        command='systemctl restart rfc-config ; sleep 25s ; systemctl status rfc-config | grep active  | cut -d ";" -f 2 | cut -d " " -f 2'
         print "Executing Command : %s" %command
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result=result.split("\n")
 	result=result[1]
 	result=result.replace("s","").strip()
-        if int(result) <= 7:
+        if int(result) <= 27:
             print result
             print "\nSUCCESS : Successfully restarted RFC service"
         else:

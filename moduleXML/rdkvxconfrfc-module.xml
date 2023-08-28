@@ -29,36 +29,36 @@
     <crashFileNames>[]</crashFileNames>
   <!-- Total functions corresponding module  -->
     <functions>
-      <function name='rfc_updateserverurl' />
-      <function name='rfc_parodusstatuscheck' />
+      <function name='rfc_checkconfiguredata' />
+      <function name='rfc_check_setornot_configdata' />
       <function name='rfc_datamodelcheck' />
       <function name='rfc_initializefeatures' />
-      <function name='rfc_checkconfiguredata' />
+      <function name='rfc_parodusstatuscheck' />
       <function name='rfc_restartservice' />
-      <function name='rfc_check_setornot_configdata' />
       <function name='rfc_rollbackdatamodelvalue' />
-      <function name='rfc_getDeviceConfig' />
+      <function name='rfc_updateserverurl' />
+      <function name='rfc_urlvalidate' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
-      <parameter funName='rfc_updateserverurl' parameterName='RFC_XCONF_URL' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_datamodelcheck' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_initializefeatures' parameterName='feature_name' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_initializefeatures' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_initializefeatures' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_initializefeatures' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_checkconfiguredata' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_checkconfiguredata' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_checkconfiguredata' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_checkconfiguredata' parameterName='feature_name' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_check_setornot_configdata' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_check_setornot_configdata' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_datamodelcheck' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='feature_name' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_initializefeatures' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='actualvalue' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_rollbackdatamodelvalue' parameterName='feature_name' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_getDeviceConfig' parameterName='basePath' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_getDeviceConfig' parameterName='configKey' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_updateserverurl' parameterName='RFC_XCONF_URL' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_urlvalidate' parameterName='basePath' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_urlvalidate' parameterName='configKey' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

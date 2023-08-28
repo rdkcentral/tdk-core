@@ -61,7 +61,7 @@
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
-  <test_cases>i
+  <test_cases>
     <test_case_id>rdkvxconfrfc_13</test_case_id>
     <test_objective>Verify whether the given xconf server setting for Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Enable is reflected in the box</test_objective>
     <test_type>Positive</test_type>
@@ -96,16 +96,26 @@ obj.configureTestCase(ip,port,'RDKV_RFC_Telemetry_Enable');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
-
 obj.setLoadModuleStatus(result.upper());
+
 expectedResult = "SUCCESS"
 
 if "SUCCESS" in result.upper():
-    tdkTestObj = obj.createTestStep('rfc_getDeviceConfig')
+    tdkTestObj = obj.createTestStep('rfc_urlvalidate')
     tdkTestObj.addParameter("basePath",obj.realpath)
     tdkTestObj.addParameter("configKey","RFC_XCONF_URL")
     tdkTestObj.executeTestCase(expectedResult)
-    RFC_XCONF_URL = tdkTestObj.getResultDetails()
+    detail = tdkTestObj.getResultDetails()
+    if "FAILURE" in detail:
+        tdkTestObj.setResultStatus("FAILURE")
+        obj.unloadModule('rdkvxconfrfc');
+        exit()
+    detail=detail.replace("(","").replace("'","").replace(")","")
+    detail = detail.split(",")
+    detail = detail[1]
+    RFC_XCONF_URL=detail.strip()
+    tdkTestObj.setResultStatus("SUCCESS")
+
     tdkTestObj = obj.createTestStep('rfc_updateserverurl')
     tdkTestObj.addParameter("RFC_XCONF_URL",RFC_XCONF_URL)
     tdkTestObj.executeTestCase(expectedResult)
@@ -169,7 +179,6 @@ if "SUCCESS" in result.upper():
                             actualresult = tdkTestObj.getResultDetails()
                             if "FAILURE" not in actualresult:
                                  tdkTestObj.setResultStatus("SUCCESS")
-
                                  if actualresult in actualvalue:
                                      print "\nNo need to revert the RFC datamodel value\n"
                                  else:
@@ -201,6 +210,5 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 else:
     print "\nFAILURE : Module Loading Status Failure\n"
-
 #unload module
 obj.unloadModule('rdkvxconfrfc');

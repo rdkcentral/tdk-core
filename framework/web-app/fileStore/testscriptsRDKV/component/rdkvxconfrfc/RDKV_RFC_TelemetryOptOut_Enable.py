@@ -61,7 +61,7 @@
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
-  <test_cases>i
+  <test_cases>
     <test_case_id>rdkvxconfrfc_14</test_case_id>
     <test_objective>Verify whether the given xconf server setting for Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.TelemetryOptOut.Enable is reflected in the box</test_objective>
     <test_type>Positive</test_type>
@@ -101,11 +101,22 @@ obj.setLoadModuleStatus(result.upper());
 expectedResult = "SUCCESS"
 
 if "SUCCESS" in result.upper():
-    tdkTestObj = obj.createTestStep('rfc_getDeviceConfig')
+    tdkTestObj = obj.createTestStep('rfc_urlvalidate')
     tdkTestObj.addParameter("basePath",obj.realpath)
     tdkTestObj.addParameter("configKey","RFC_XCONF_URL")
     tdkTestObj.executeTestCase(expectedResult)
-    RFC_XCONF_URL = tdkTestObj.getResultDetails()
+    detail = tdkTestObj.getResultDetails()
+    if "FAILURE" in detail:
+        tdkTestObj.setResultStatus("FAILURE")
+        obj.unloadModule('rdkvxconfrfc');
+        exit()
+
+    detail=detail.replace("(","").replace("'","").replace(")","")
+    detail = detail.split(",")
+    detail = detail[1]
+    RFC_XCONF_URL=detail.strip()
+    tdkTestObj.setResultStatus("SUCCESS")
+
     tdkTestObj = obj.createTestStep('rfc_updateserverurl')
     tdkTestObj.addParameter("RFC_XCONF_URL",RFC_XCONF_URL)
     tdkTestObj.executeTestCase(expectedResult)

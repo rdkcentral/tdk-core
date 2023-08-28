@@ -69,8 +69,8 @@
           <parameter name="feature_name" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_getDeviceConfig" id=" " version="2">
-        <function>rfc_getDeviceConfig</function>
+      <primitiveTest name="rfc_urlvalidate" id=" " version="3">
+        <function>rfc_urlvalidate</function>
         <parameters>
           <parameter name="basePath" value=""/>
           <parameter name="configKey" value=""/>
