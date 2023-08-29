@@ -161,7 +161,7 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 new_url = tdkTestObj.getResultDetails();
-                if new_url in vimeo_test_url and expectedResult in result:
+                if vimeo_test_url in new_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
                     print "\n Clicking OK to play video"
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
@@ -236,7 +236,7 @@ if expectedResult in result.upper():
         if revert == "YES":
             print "\n Revert the values before exiting"
             status = set_plugins_status(obj, curr_plugins_status_dict)
-        obj.unloadModule("rdkv_performance");
+    obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
     print "\n Failed to load module"

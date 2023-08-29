@@ -182,6 +182,11 @@ if flag >0:
                     if expectedResult in result:
                         result_val = "SUCCESS"
                         if validation_dict["validation_required"]:
+                            if validation_dict["password"] == "None":
+                                password = ""
+                            else:
+                                password = validation_dict["password"]
+                            credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password                            
                             tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                             tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                             tdkTestObj.addParameter("credentials",credentials)

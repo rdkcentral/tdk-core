@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_CERT_PVS_Functional_ResourceUsage_WebKitBrowser_Launch_StandbyToOn</name>
+  <name>RDKV_CERT_PVS_Functional_ResourceUsage_WebkitBrowser_Launch_StandbyToOn</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -78,7 +78,7 @@
 Resource usage should be within the expected range.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_performance</test_stub_interface>
-    <test_script>RDKV_CERT_PVS_Functional_ResourceUsage_WebKitBrowser_Launch_StandbyToOn</test_script>
+    <test_script>RDKV_CERT_PVS_Functional_ResourceUsage_WebkitBrowser_Launch_StandbyToOn</test_script>
     <skipped>No</skipped>
     <release_version>M115</release_version>
     <remarks></remarks>
@@ -100,7 +100,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_ResourceUsage_WebKitBrowser_Launch_StandbyToOn');
+obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_ResourceUsage_WebkitBrowser_Launch_StandbyToOn');
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
