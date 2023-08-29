@@ -110,7 +110,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "HTMLAPP_DETAILS","HTMLAPP_SUSPEND_TIME_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER","HTMLAPP_RESUME_TIME_THRESHOLD_VALUE_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "HTMLAPP_DETAILS","HTMLAPP_SUSPEND_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER","HTMLAPP_RESUME_THRESHOLD_VALUE_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -132,8 +132,8 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             htmlapp_details = configValues["HTMLAPP_DETAILS"]
-            htmlapp_resume_threshold = configValues["HTMLAPP_RESUME_TIME_THRESHOLD_VALUE_CONTAINER"]
-            htmlapp_suspend_threshold = configValues["HTMLAPP_SUSPEND_TIME_THRESHOLD_VALUE_CONTAINER"]
+            htmlapp_resume_threshold = configValues["HTMLAPP_RESUME_THRESHOLD_VALUE_CONTAINER"]
+            htmlapp_suspend_threshold = configValues["HTMLAPP_SUSPEND_THRESHOLD_VALUE_CONTAINER"]
             threshold_offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""

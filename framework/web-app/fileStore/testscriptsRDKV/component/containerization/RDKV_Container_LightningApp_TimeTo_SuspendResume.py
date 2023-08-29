@@ -110,7 +110,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "LIGHTNINGAPP_DETAILS","LIGHTNINGAPP_SUSPEND_TIME_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER","LIGHTNINGAPP_RESUME_TIME_THRESHOLD_VALUE_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "LIGHTNINGAPP_DETAILS","LIGHTNINGAPP_SUSPEND_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER","LIGHTNINGAPP_RESUME_THRESHOLD_VALUE_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -132,8 +132,8 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             Lightningapp_details = configValues["LIGHTNINGAPP_DETAILS"]
-            Lightningapp_resume_threshold = configValues["LIGHTNINGAPP_RESUME_TIME_THRESHOLD_VALUE_CONTAINER"]
-            Lightningapp_suspend_threshold = configValues["LIGHTNINGAPP_SUSPEND_TIME_THRESHOLD_VALUE_CONTAINER"]
+            Lightningapp_resume_threshold = configValues["LIGHTNINGAPP_RESUME_THRESHOLD_VALUE_CONTAINER"]
+            Lightningapp_suspend_threshold = configValues["LIGHTNINGAPP_SUSPEND_THRESHOLD_VALUE_CONTAINER"]
             threshold_offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""

@@ -1,4 +1,4 @@
-##########################################################################
+	##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -112,7 +112,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAYBACK_URL","COBALT_PLAY_TIME_THRESHOLD_VALUE","THRESHOLD_OFFSET"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAYBACK_URL_CONTAINER","COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER","THRESHOLD_OFFSET_IN_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -134,9 +134,9 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
-            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL"]
-            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE"]
-            offset = configValues["THRESHOLD_OFFSET"]
+            cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
+            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
+            offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:

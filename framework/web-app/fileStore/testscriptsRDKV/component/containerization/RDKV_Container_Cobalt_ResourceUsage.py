@@ -200,7 +200,7 @@ if expectedResult in result.upper():
                     if "launching cobalt in container mode" in output:
                         print "Cobalt launched successfully in container mode"
                         print "\n Set the URL : {} using Cobalt deeplink method"
-                        tdkTestObj = obj.createTestStep('containerizatio_setValue')
+                        tdkTestObj = obj.createTestStep('containerization_setValue')
                         tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                         tdkTestObj.addParameter("value",cobalt_playback_url)
                         tdkTestObj.executeTestCase(expectedResult)
