@@ -163,7 +163,7 @@ if expectedResult in result.upper():
         print "Dobby is running %s" %(output)
 
         #To enable datamodel
-        datamodel = ["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
+        datamodel = ["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.Cobalt.Enable"]
         tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
         tdkTestObj.addParameter("datamodel",datamodel)
         tdkTestObj.executeTestCase(expectedResult)

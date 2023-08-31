@@ -254,6 +254,7 @@ ec3_url_type  = "dash"
 hevc_url_type = "dash"
 ogg_url_type  = "dash"
 dolby_url_type = "dash"
+av1_url_type_fps = "mp4"
 
 # direct ogg & webm container streams without ABR (not hls/dash)
 video_src_url_direct_ogg  = test_streams_base_path + "TDK_Asset_Sunrise_OGG.webm"

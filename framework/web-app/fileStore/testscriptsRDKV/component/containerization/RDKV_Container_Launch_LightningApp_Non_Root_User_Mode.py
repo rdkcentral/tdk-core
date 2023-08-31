@@ -170,7 +170,7 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launch HtmlApp"
+            print "Launch LightningApp"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",lightningapp_details)
             tdkTestObj.executeTestCase(expectedResult)
@@ -200,7 +200,7 @@ if expectedResult in result.upper():
                     if "launching LightningApp in container mode" in output:
                         print "LightningApp launched successfully in container mode"
                         print "Verify if LightningApp is launched in non-root user mode"
-                        command = 'ps -aux | grep lightningapp | grep -v root'
+                        command = 'ps -aux | grep LightningApp | grep -v root'
                         print "COMMAND : %s" %(command)
                         #Primitive test case which associated to this Script
                         tdkTestObj = obj.createTestStep('containerization_executeInDUT');

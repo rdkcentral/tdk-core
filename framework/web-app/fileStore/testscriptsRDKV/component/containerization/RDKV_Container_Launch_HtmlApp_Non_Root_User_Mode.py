@@ -199,7 +199,7 @@ if expectedResult in result.upper():
                     if "launching HtmlApp in container mode" in output:
                         print "HtmlApp launched successfully in container mode"
                         print "Verify if HtmlApp is launched in non-root user mode"
-                        command = 'ps -aux | grep htmlapp | grep -v root'
+                        command = 'ps -aux | grep HtmlApp | grep -v root'
                         print "COMMAND : %s" %(command)
                         #Primitive test case which associated to this Script^M
                         tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -211,7 +211,8 @@ if expectedResult in result.upper():
                         #Execute the test case in DUT^M
                         tdkTestObj.executeTestCase(expectedResult);
                         output = tdkTestObj.getResultDetails()
-                        if "htmlapp" in output:
+                        print "output ", output 
+                        if "HtmlApp" in output:
                             print "HtmlApp launched in non-root user mode"
                         else:
                             print "HtmlApp not launched in non-root user mode"

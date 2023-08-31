@@ -150,7 +150,7 @@ if expectedResult in result.upper():
         setURLArgument("options","collectfps("+webkit_instance+"),deviceport("+str(rdkv_medialib.devicePort)+"),"+"expectedfps("+str(minfps)+")")
         setURLArgument("operations",operations)
         setURLArgument("autotest","true")
-        setURLArgument("type",av1_url_type)
+        setURLArgument("type",av1_url_type_fps)
         appArguments = getURLArguments()
 
         # Getting the complete test app URL for selected players
