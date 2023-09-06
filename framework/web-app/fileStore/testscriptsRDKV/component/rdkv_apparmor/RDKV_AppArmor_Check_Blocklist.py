@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>4</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_AppArmor_Check_Blocklist</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -80,8 +80,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
+# use tdklib library,which provides a wrapper for tdk testcase script 
+import tdklib; 
 from rdkv_apparmorlib import *
 
 #Test component to be tested
@@ -96,13 +96,14 @@ obj.configureTestCase(ip,port,'RDKV_AppArmor_Check_Blocklist');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
-obj.setLoadModuleStatus(result.upper());
+obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["FilePath", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["AppArmor_Profiles", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = obtainCredentials(obj,configKeyList)
+    AppArmor_Profiles = configValues["AppArmor_Profiles"]
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
     print "\nTo Ensure Apparmor service is running"
     command = 'systemctl status apparmor.service | grep active | grep -v inactive'
@@ -123,9 +124,9 @@ if expectedResult in result.upper():
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
         print "Apparmor is running %s" %(output)
-
+        
         #To check Apparmor is enabled
-        command = "sh " + configValues["FilePath"] + "/tdk_apparmor_tests.sh aptest03"
+        command = 'aa-enabled'
         print "COMMAND : %s" %(command)
         #Primitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
@@ -138,26 +139,124 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult()
 
-        #Get the result of execution
+        #Getthe result of execution
         output = tdkTestObj.getResultDetails();
-        output = str(output)
-        print "[RESPONSE FROM DEVICE]: %s" %(output)
-        if "FAILURE" not in output and expectedResult in output:
-            print "SUCCESS: Script Execution Successful"
-            tdkTestObj.setResultStatus("SUCCESS");
-        elif "FAILURE" in output or expectedResult not in output:
-            print "FAILURE: Script Execution was not Successful"
-            tdkTestObj.setResultStatus("FAILURE");
+        if 'Yes' in output and expectedResult in result:
+            print "Apparmor is enabled"
+            
+            #Set Apparmor profile mode into enforce with tr181 command
+            print (AppArmor_Profiles)
+            AppArmor_Profiles=AppArmor_Profiles.split(',')
+            count = len(AppArmor_Profiles)
+            print(count)
+            for i in range(count):
+                command = 'tr181 -s -v "'+AppArmor_Profiles[i]+':enforce" Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NonRootSupport.ApparmorBlocklist'
+                print "COMMAND : %s" %(command)
+                #Primitive test case which associated to this Script
+                tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
+                #Add the parameters to ssh to the DUT and execute the command
+                tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                tdkTestObj.addParameter("credentials", credentials);
+                tdkTestObj.addParameter("command", command);
+
+                #Execute the test case in DUT
+                tdkTestObj.executeTestCase(expectedResult);
+                result = tdkTestObj.getResult()
+            if expectedResult in result:
+                print "tr181 is set"
+                #Reboot the device
+                tdkTestObj = obj.createTestStep('rdkvapparmor_rebootDevice')
+                tdkTestObj.addParameter("waitTime",50)
+                #Execute the test case in DUT
+                tdkTestObj.executeTestCase(expectedResult);
+                result = tdkTestObj.getResult()
+                if expectedResult in result:
+                    print "Device is rebooted"
+                    
+                    #check status from /opt/secure/Apparmor_blocklist
+                    command = 'cat /opt/secure/Apparmor_blocklist'
+                    print "COMMAND : %s" %(command)
+                    #Primitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
+                    #Add the parameters to ssh to the DUT and execute the command
+                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                    tdkTestObj.addParameter("credentials", credentials);
+                    tdkTestObj.addParameter("command", command);
+
+                    #Execute the test case in DUT
+                    tdkTestObj.executeTestCase(expectedResult);
+                    result = tdkTestObj.getResult()
+                    output = tdkTestObj.getResultDetails()
+                    for i in range(count):
+                        if ''+AppArmor_Profiles[i]+':enforce' in output:
+                            enforced = "Success"
+                        else:
+                            enforced = "Failure"
+                    if enforced == "Success":
+                        print "Status is valid in Apparmor_blocklist"
+
+                        #To check if profiles are loaded into kernel
+                        command = 'cat /sys/kernel/security/apparmor/profiles'
+                        print "COMMAND : %s" %(command)
+                        #Primitive test case which associated to this Script
+                        tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
+                        #Add the parameters to ssh to the DUT and execute the command
+                        tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                        tdkTestObj.addParameter("credentials", credentials);
+                        tdkTestObj.addParameter("command", command);
+
+                        #Execute the test case in DUT
+                        tdkTestObj.executeTestCase(expectedResult);
+                        result = tdkTestObj.getResult()
+                        output = tdkTestObj.getResultDetails()
+                        for i in range(count):
+                            if ''+AppArmor_Profiles[i]+' (enforce)' in output:
+                                kernel = "Success"
+                            else:
+                                kernel = "Failure"
+                        if kernel == "Success":
+                            print "apparmor profiles are loaded in to kernel space"
+
+                            #Check for AppArmor initialization logs
+                            command = 'cat /opt/logs/startup_stdout_log.txt | grep "Starting AppArmor initialization"'
+                            print "COMMAND : %s" %(command)
+                            #Primitive test case which associated to this Script
+                            tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
+                            #Add the parameters to ssh to the DUT and execute the command
+                            tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                            tdkTestObj.addParameter("credentials", credentials);
+                            tdkTestObj.addParameter("command", command);
+
+                            #Execute the test case in DUT
+                            tdkTestObj.executeTestCase(expectedResult);
+                            result = tdkTestObj.getResult()
+                            output = tdkTestObj.getResultDetails()
+                            if "Starting AppArmor initialization" in output:
+                                print "AppArmor initialized successfully"
+                            else:
+                                print "Unable to get the required logs"
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            print "apparmor profiles are not loaded in to kernel space"
+                            tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print "Status is valid in Apparmor_blocklist"
+                        tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print "Device is not rebooted"
+                    tdkTestObj.setResultStatus("FAILURE")
+            else:
+                print "tr181 is not set"
+                tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error: Error execution of the script"
-            tdkTestObj.setResultStatus("FAILURE");
+            print "Apparmor is not enabled"
+            tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "AppArmor is not active"
+        print "AppArmor is not supported"
         tdkTestObj.setResultStatus("FAILURE")
 
     #Unload the module
     obj.unloadModule("rdkv_apparmor");
-
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");

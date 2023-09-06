@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         print "Apparmor is running %s" %(output)
 
         #To check Apparmor is enabled
-        command = "sh " + configValues["FilePath"] + "/tdk_apparmor_tests.sh aptest18"
+        command = "sh " + configValues["FilePath"] + "/tdk_apparmor_tests.sh aptest17"
         print "COMMAND : %s" %(command)
         #Primitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');

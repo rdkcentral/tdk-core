@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>4</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_AppArmor_Default_Enforce_Check</name>
+  <name>RDKV_AppArmor_Default_Enforce</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Check Default Enforce mode</synopsis>
+  <synopsis>Check the services are in default enforce mode</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -61,7 +61,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_APPARMOR_14</test_case_id>
-    <test_objective> To Check the profiles are in enforce mode</test_objective>
+    <test_objective> To Check if the services are running in enforce mode by default</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI-HYB,RPI-Client</test_setup>
     <pre_requisite>1. Latest image on DUT
@@ -69,14 +69,14 @@
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>FilePath</input_parameters>
     <automation_approch>1. SSH to device 
-2. Validate All the Profiles are default to enforce
-3. Pass if all profiles are enforce</automation_approch>
-    <expected_output>Profile should be enforce</expected_output>
+2. Validate the services are by default in Enforce mode
+3. Pass if services irMgrMain, Lighttpd, audiocapturemgr are in Enforce mode</automation_approch>
+    <expected_output>Services mentioned above should be in enforce mode</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_apparmor</test_stub_interface>
-    <test_script>RDKV_AppArmor_Default_Enforce_Check</test_script>
+    <test_script>RDKV_AppArmor_Default_Enforce</test_script>
     <skipped>No</skipped>
-    <release_version>M113</release_version>
+    <release_version>M115</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
@@ -93,7 +93,7 @@ obj = tdklib.TDKScriptingLibrary("rdkv_apparmor","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_AppArmor_Default_Enforce_Check');
+obj.configureTestCase(ip,port,'RDKV_AppArmor_Default_Enforce');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
