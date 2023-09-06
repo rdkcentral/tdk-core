@@ -200,6 +200,10 @@ video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz
 video_src_url_bitrate_h264 = ""
 video_src_url_bitrate_hevc = ""
 
+#25Fps H264 URL
+video_src_url_dash_h264_25fps = test_streams_base_path + "DASH_H264_25fps/master.mpd"
+
+
 #VP9 Codec Video URL
 # By default VP9_OPUS stream is used, if we need to test with VP9_OGG stream
 # then comment VP9_OPUS stream and uncomment VP9_OGG stream urls below
