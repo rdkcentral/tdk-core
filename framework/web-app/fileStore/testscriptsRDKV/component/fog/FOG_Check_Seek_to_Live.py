@@ -143,14 +143,13 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         print "AAMP Tune call is success"
         #Search events in Log
         test_step=2
-        actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
         if expectedResult in actualResult:
             print "AAMP Tune event recieved"
             print "[TEST EXECUTION RESULT] : %s" %actualResult;
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
 
-            sleep(10)
             print "\nTEST STEP 3:Acquire position before seek"
             tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackPosition');
             #Execute the test case in STB
@@ -166,11 +165,12 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
             previous_position = (float)(details.split(":")[1])
             print "Initial Position :",previous_position
 
+            sleep(10)
             #AampSetRate call
             print "\nTEST STEP 4:Seeking to Beginning"
             tdkTestObj = aampObj.createTestStep('Aamp_AampSetRateAndSeek');
             tdkTestObj.addParameter("rate",1.0);
-            tdkTestObj.addParameter("seconds",0.0);
+            tdkTestObj.addParameter("seconds",previous_position);
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             #Get the result of execution
@@ -179,7 +179,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                 pattern="AAMP_EVENT_BITRATE_CHANGED"
                 test_step=5
                 #Search events in Log
-                result=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
                 if expectedResult in result:
                     print "Verified AampSetRate"
                     #Set the result status of execution
@@ -210,7 +210,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
             print "Position after seek to beg :",position
 
             print "Check Position of pipeline after seek is valid or not"
-            if (previous_position > position):
+            if (position - previous_position) < 2:
                 print "SUCCESS : FOG Seek to beginning was successfull";
                 tdkTestObj.setResultStatus("SUCCESS")
                 print "[TEST EXECUTION RESULT] : %s" %result;

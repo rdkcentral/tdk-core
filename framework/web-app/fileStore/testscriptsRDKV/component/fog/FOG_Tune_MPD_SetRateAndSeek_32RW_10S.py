@@ -131,7 +131,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     	if expectedResult in actualResult:
         	print "AAMP Tune call is success"
         	#Search events in Log
-        	actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+        	actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         	if expectedResult in actualResult:
             		print "AAMP Tune event recieved"
             		print "[TEST EXECUTION RESULT] : %s" %actualResult;
@@ -148,18 +148,9 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         result = tdkTestObj.getResult();
 			sleep(40);
                         if expectedResult in result:
-                                pattern="AAMP_EVENT_SPEED_CHANGED";
-				logName = "/opt/TDK/logs/AgentConsole.log";
-				tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-				cmd = "sed -n '/AampSetRateAndSeek Entry/,/AampSetRateAndSeek Exit/p' " + logName + " | grep " + pattern + " |grep -v grep";
-                                print cmd;
-                                tdkTestObj.addParameter("command", cmd);
-                                tdkTestObj.executeTestCase("SUCCESS");
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-				print "OUTPUT:", details;				
-
-                                if pattern in details:
+                                pattern="AAMP_EVENT_BITRATE_CHANGED"
+                                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+                                if expectedResult in actualResult:
                                         print "SetRateAndSeek success for FOG Url"
                                         print "[TEST EXECUTION RESULT] : %s" %result;
                                         #Set the result status of execution

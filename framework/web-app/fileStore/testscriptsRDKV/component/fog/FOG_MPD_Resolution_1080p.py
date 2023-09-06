@@ -242,7 +242,7 @@ if resolution_set == "True":
 		if expectedResult in actualResult:
 			print "AAMP Tune call is success"
 			#Search events in Log
-			actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+			actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 			if expectedResult in actualResult:
 				print "AAMP Tune event recieved"
 				print "[TEST EXECUTION RESULT] : %s" %actualResult;

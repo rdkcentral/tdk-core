@@ -141,15 +141,30 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         print "AAMP Tune call is success"
         #Search events in Log
         test_step=2
-        actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
         if expectedResult in actualResult:
             print "AAMP Tune event recieved"
             print "[TEST EXECUTION RESULT] : %s" %actualResult;
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
 
+            print "\nTEST STEP 3:Acquire initial position"
+            tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackPosition');
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            details = tdkTestObj.getResultDetails();
+            print "Result :", details;
+            if expectedResult not in actualResult:
+                print "GetPlaybackPosition failed"
+                tdkTestObj.setResultStatus("FAILURE")
+                exitFromScript()
+            initial_position = (float)(details.split(":")[1])
+            print "Initial Position :",initial_position
+
             sleep(10)
-            print "\nTEST STEP 3:Acquire position before seek"
+            print "\nTEST STEP 4:Acquire position before seek"
             tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackPosition');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
@@ -162,22 +177,22 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                 tdkTestObj.setResultStatus("FAILURE")
                 exitFromScript()
             previous_position = (float)(details.split(":")[1])
-            print "Initial Position :",previous_position
+            print "Position before seek :",previous_position
 
             #AampSetRate call
-            print "\nTEST STEP 4:Seeking to Beginning"
+            print "\nTEST STEP 5:Seeking to Beginning"
             tdkTestObj = aampObj.createTestStep('Aamp_AampSetRateAndSeek');
             tdkTestObj.addParameter("rate",1.0);
-            tdkTestObj.addParameter("seconds",0.0);
+            tdkTestObj.addParameter("seconds",initial_position);
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             #Get the result of execution
             result = tdkTestObj.getResult();
             if expectedResult in result:
                 pattern="AAMP_EVENT_BITRATE_CHANGED"
-                test_step=5
+                test_step=6
                 #Search events in Log
-                result=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
                 if expectedResult in result:
                     print "Verified AampSetRate"
                     #Set the result status of execution
@@ -192,7 +207,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                 tdkTestObj.setResultStatus("FAILURE")
                 exitFromScript()
                         
-            print "\nTEST STEP 6:Acquire Position after seek"
+            print "\nTEST STEP 7:Acquire Position after seek"
             tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackPosition');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
@@ -219,7 +234,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                 exitFromScript()
 
             sleep(10)
-            print "\nTEST STEP 7:Check if playback is fine after seeking"
+            print "\nTEST STEP 8:Check if playback is fine after seeking"
             tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackPosition');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);

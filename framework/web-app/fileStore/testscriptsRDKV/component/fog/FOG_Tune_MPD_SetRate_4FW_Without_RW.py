@@ -133,7 +133,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     	if expectedResult in actualResult:
         	print "AAMP Tune call is success"
         	#Search events in Log
-        	actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+        	actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         	if expectedResult in actualResult:
             		print "AAMP Tune event recieved"
             		print "[TEST EXECUTION RESULT] : %s" %actualResult;
@@ -151,7 +151,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         if expectedResult in result:
                                 pattern="AAMP_EVENT_SPEED_CHANGED"
                                 #Search events in Log
-                                result=aampUtilitylib.searchAampEvents(sysObj, pattern);
+                                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
                                 expectedResult = "FAILURE";
                                 if expectedResult in result:
                                         print "FF without RW failed for live FOG Url"

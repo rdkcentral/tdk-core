@@ -53,6 +53,8 @@
     <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>RPI-Client</box_type>
+    <box_type>Video_Accelerator</box_type>
+    <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -100,8 +102,8 @@ def FindTSBLocation(obj, fileName, pattern):
         value = "";
         tdkTestObj = obj.createTestStep('ExecuteCommand');
         expectedResult="SUCCESS";
-        cmd = "grep " + pattern + " " + fileName + " | cut -d \" \" -f 6 | sed -e 's/\"//g; s/,//g; s/\\r//g' ";
-        #cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
+        #cmd = "grep " + pattern + " " + fileName + " | cut -d \" \" -f 6 | sed -e 's/\"//g; s/,//g; s/\\r//g' ";
+        cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
         print cmd;
 
         #configre the command
@@ -134,7 +136,7 @@ pattern = "AAMP_EVENT_TUNED";
 expectedResult = "SUCCESS";
 fogLog = "/opt/logs/fog.log";
 fogConfig = "/etc/fogPrefs.json";
-locationPattern = "tsbLocation";
+locationPattern = "\"TSB storage-path\"";
 
 #Test component to be tested
 sysObj = tdklib.TDKScriptingLibrary("systemutil","2.0");
@@ -176,7 +178,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         print "AAMP Tune call is success"
         #Search events in Log
         test_step=2
-        actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern,test_step);
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern,test_step);
         if expectedResult in actualResult:
             print "AAMP Tune event recieved"
             print "[TEST EXECUTION RESULT] : %s" %actualResult;
@@ -184,7 +186,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
             tdkTestObj.setResultStatus("SUCCESS");
 
             print "\nTEST STEP 3: Obtain recordingID from fog curl command"
-            tsbLocation = FindTSBLocation(sysObj, fogConfig, locationPattern);
+            tsbLocation = FindTSBLocation(sysObj, fogLog, locationPattern);
             if tsbLocation != "":
                 tdkTestObj = sysObj.createTestStep('ExecuteCommand');
                 cmd = "curl -L \"http://127.0.0.1:9080/recordings\" | grep recordingId" ;
@@ -234,7 +236,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         pattern="AAMP_EVENT_SPEED_CHANGED"
                         test_step=7
                         #Search events in Log
-                        result=aampUtilitylib.searchAampEvents(sysObj, pattern,test_step);
+                        result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern,test_step);
                         if expectedResult in result:
                             print "Verified SetRate for pause"
                             #Set the result status of execution

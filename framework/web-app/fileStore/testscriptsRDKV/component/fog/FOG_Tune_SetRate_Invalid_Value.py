@@ -17,30 +17,51 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version="1.0" encoding="UTF-8"?><xml>
-  <id/>
-  <version>3</version>
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <id></id>
+  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+  <version>4</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>FOG_Tune_SetRate_Invalid_Value</name>
-  <primitive_test_id/>
+  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
+  <primitive_test_id></primitive_test_id>
+  <!-- Do not change primitive_test_id if you are editing an existing script. -->
   <primitive_test_name>Fog_Do_Nothing</primitive_test_name>
+  <!--  -->
   <primitive_test_version>1</primitive_test_version>
+  <!--  -->
   <status>FREE</status>
+  <!--  -->
   <synopsis>check if setrate is success for invalid value of rate</synopsis>
-  <groups_id/>
+  <!--  -->
+  <groups_id />
+  <!--  -->
   <execution_time>3</execution_time>
+  <!--  -->
   <long_duration>false</long_duration>
+  <!--  -->
   <advanced_script>false</advanced_script>
-  <remarks/>
+  <!-- execution_time is the time out time for test execution -->
+  <remarks></remarks>
+  <!-- Reason for skipping the tests if marked to skip -->
   <skip>false</skip>
+  <!--  -->
   <box_types>
-    <box_type>IPClient-3</box_type>
     <box_type>Hybrid-1</box_type>
-    <box_type>Video_Accelerator</box_type>
-    <box_type>RPI-HYB</box_type>
+    <!--  -->
+    <box_type>IPClient-3</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>RPI-HYB</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>TC_FOG_27</test_case_id>
@@ -58,19 +79,18 @@ SetRate</api_or_interface_used>
 4. Aamp Agent invokes SetRate API with value -1000.0
 5. TM checks if  the event is not received and returns SUCCESS/FAILURE 
 6. TM unloads the Aamp Agent and systemutil Agent.</automation_approch>
-    <except_output>Checkpoint 1. Event is received for Fog URL tune
-Checkpoint 2. Event is received for Fog URL setrate</except_output>
+    <expected_output>Checkpoint 1. Event is received for Fog URL tune
+Checkpoint 2. Event is received for Fog URL setrate</expected_output>
     <priority>High</priority>
     <test_stub_interface>libaampstub.so.0.0.0
 libsystemutilstub.so.0.0.0</test_stub_interface>
     <test_script>FOG_Tune_SetRate_Invalid_Value</test_script>
     <skipped>No</skipped>
-    <release_version/>
-    <remarks/>
+    <release_version></release_version>
+    <remarks></remarks>
   </test_cases>
-  <script_tags/>
+  <script_tags />
 </xml>
-
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib;
@@ -118,7 +138,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     	if expectedResult in actualResult:
         	print "AAMP Tune call is success"
         	#Search events in Log
-        	actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+        	actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         	if expectedResult in actualResult:
             		print "AAMP Tune event recieved"
             		print "[TEST EXECUTION RESULT] : %s" %actualResult;
@@ -126,7 +146,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
             		tdkTestObj.setResultStatus("SUCCESS");
 
                         #AampSetRate call
-			rates = [100.0,-50.0]
+			rates = [100.0,-100.0]
 			for rate in rates:
 				print "Testing for rate :%s"%rate;
 				tdkTestObj = aampObj.createTestStep('Aamp_AampSetRate');
@@ -139,7 +159,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
 	                        if expectedResult in result:
 	                                pattern="AAMP_EVENT_SPEED_CHANGED"
 	                                #Search events in Log
-	                                result=aampUtilitylib.searchAampEvents(sysObj, pattern);
+	                                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 	                                if expectedResult in result:
 	                                        print "Setrate success for rate: %s"%rate;
 	                                        print "[TEST EXECUTION RESULT] : FAILURE";

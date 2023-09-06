@@ -159,8 +159,14 @@ if "SUCCESS" in loadmodulestatus.upper():
                         print "FAILURE :Failed to get the list of supported resolutions";
                     #calling DS_SetResolution to set and get the display resolution as 720p    
                     resolution="720p";
-                    print "Resolution value set to:%s" %resolution;
+                    res = resolutiondetails.replace('Supported Resolutions:','')
+                    res_list = res.split(",")
+                    for i in range (0,len(res_list)):
+                        if resolution in res_list[i]:
+                            resolutionToBeSet = res_list[i]
+                    print "Resolution value set to:%s" %resolutionToBeSet;
                     if resolution in resolutiondetails:
+                        resolution = resolutionToBeSet
                         tdkTestObj = obj.createTestStep('DS_SetResolution');
                         tdkTestObj.addParameter("resolution",resolution);
                         tdkTestObj.addParameter("port_name","HDMI0");
@@ -242,7 +248,7 @@ if resolution_set == "True":
 		if expectedResult in actualResult:
 			print "AAMP Tune call is success"
 			#Search events in Log
-			actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern);
+			actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
 			if expectedResult in actualResult:
 				print "AAMP Tune event recieved"
 				print "[TEST EXECUTION RESULT] : %s" %actualResult;

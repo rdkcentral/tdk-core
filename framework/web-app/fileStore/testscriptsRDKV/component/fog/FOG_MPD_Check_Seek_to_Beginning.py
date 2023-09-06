@@ -141,7 +141,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         print "AAMP Tune call is success"
         #Search events in Log
         test_step=2
-        actualResult=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
         if expectedResult in actualResult:
             print "AAMP Tune event recieved"
             print "[TEST EXECUTION RESULT] : %s" %actualResult;
@@ -177,7 +177,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                 pattern="AAMP_EVENT_BITRATE_CHANGED"
                 test_step=5
                 #Search events in Log
-                result=aampUtilitylib.searchAampEvents(sysObj, pattern, test_step);
+                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern, test_step);
                 if expectedResult in result:
                     print "Verified AampSetRate"
                     #Set the result status of execution
