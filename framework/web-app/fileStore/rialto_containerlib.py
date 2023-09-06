@@ -352,13 +352,8 @@ def checkProcEntry(sshMethod,credentials,validation_script,mode):
 #-------------------------------------------------------------------
 # Function to read the proc validation parameters from device config file
 #-------------------------------------------------------------------
-def checkPROC():
+def checkPROC(check_pause):
     proc_check = getDeviceConfig ('RIALTO_PROC_VALIDATION')
-    if True:
-        method = "org.rdk.DeviceDiagnostics.1.getAVDecoderStatus"
-        params ='{}'
-        result = executeCurlCommand(method,params);
-        print "getAVDecoderStatus",result
     if "YES" in proc_check:
         rdkv_performancelib.deviceName = deviceName
         rdkv_performancelib.deviceType = deviceType
@@ -367,10 +362,31 @@ def checkPROC():
         sshMethod = ssh_param_dict["ssh_method"]
         credentials = ssh_param_dict['credentials']
         validation_script = getDeviceConfig ('VIDEO_VALIDATION_SCRIPT_FILE')
+        if not os.path.exists(validation_script) :
+            print " PROC entry file is missing from fileStore "
+            return "FAILURE"
         mode = getDeviceConfig ('PROC_CHECK_MODE')
+        if check_pause == "True":
+             mode = mode + "-paused"
         av_status = checkProcEntry(sshMethod,credentials,validation_script,mode)
         return av_status
     else:
         print "PROC Entry validation is disabled"
         return "NOT_ENABLED"
- 
+
+def ChangeContainerStatus(operation):
+    if operation == "pause":
+        method = "org.rdk.OCIContainer.pauseContainer"
+    elif operation == "resume":
+        method = "org.rdk.OCIContainer.resumeContainer"
+    else:
+        return "FAILURE"
+    params =' { "containerId": "com.rdk.cobalt" } }'
+    result = executeCurlCommand(method,params);
+    print "Container status change result",result
+    status="FAILURE"
+    if "True" in str(result):
+        status="SUCCESS"
+    else:
+        print "Container status change failed"
+    return status

@@ -52,9 +52,17 @@
         <function>KillApplication</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest name="checkPROC" id="" version="1">
+      <primitiveTest name="checkPROC" id=" " version="2">
         <function>checkPROC</function>
-        <parameters/>
+        <parameters>
+          <parameter name="check_pause" value="False"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="ChangeContainerStatus" id=" " version="2">
+        <function>ChangeContainerStatus</function>
+        <parameters>
+          <parameter name="operation" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>

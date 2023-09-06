@@ -38,13 +38,18 @@
       <function name='executeInDUT' />
       <function name='KillApplication' />
       <function name='checkPROC' />
+      <function name='ChangeContainerStatus' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
+      <parameter funName='executeCurlCommand' parameterName='method' parameterType='STRING' range='A-Z' />
+      <parameter funName='executeCurlCommand' parameterName='value' parameterType='STRING' range='A-Z' />
       <parameter funName='getSSHParams' parameterName='realpath' parameterType='STRING' range='A-Z' />
       <parameter funName='getSSHParams' parameterName='deviceIP' parameterType='STRING' range='A-Z' />
       <parameter funName='Press_key' parameterName='key_code' parameterType='STRING' range='A-Z' />
       <parameter funName='executeInDUT' parameterName='command' parameterType='STRING' range='A-Z' />
+      <parameter funName='checkPROC' parameterName='check_pause' parameterType='STRING' range='A-Z' />
+      <parameter funName='ChangeContainerStatus' parameterName='operation' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

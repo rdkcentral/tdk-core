@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>Rialto_Generic_Playback_Test</name>
+  <name>Rialto_Play_Pause_Test</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To verify cobalt playback using rialto source</synopsis>
+  <synopsis>To verify cobalt play pause operations using rialto source</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,10 +48,8 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-Client</box_type>
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-HYB</box_type>
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
@@ -60,10 +58,10 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RIALTO_CONTAINER_02</test_case_id>
-    <test_objective>To verify cobalt playback using rialto source</test_objective>
+    <test_case_id>RIALTO_CONTAINER_03</test_case_id>
+    <test_objective>To verify cobalt play pause operations using rialto source</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video Accelerator, RPI, RDKTV</test_setup>
+    <test_setup>Video Accelerator, RDKTV</test_setup>
     <pre_requisite>Cobalt dac bundle must be hosted in a server and COBALT_DAC_BUNDLE_PATH configuration must be set</pre_requisite>
     <api_or_interface_used>LISA.1.install,LISA.1.getList, org.rdk.RDKShell.1.launchApplication, org.rdk.RDKShell.1.generateKey, org.rdk.RDKShell.1.setFocus, org.rdk.RDKShell.1.kill</api_or_interface_used>
     <input_parameters>COBALT_DAC_BUNDLE_PATH</input_parameters>
@@ -73,15 +71,15 @@
     4. setFocus to com.rdk.cobalt.
     5. check if rialto server is running.
     6. using generateKey method press down arrow and OK button to select and play a video.
-    7. verify video playback using PROC validation script configured.
-    8. if PROC validation isn't supported verify playback using wpeframework logs.
+    7. pause the playback using spacebar key press
+    8. verify video playback using PROC validation script configured.
     9. kill the cobalt application</automation_approch>
-    <expected_output>Video playback must be proper after aunching cobalt application</expected_output>
+    <expected_output>Video playback must be proper after launching cobalt application</expected_output>
     <priority>High</priority>
     <test_stub_interface>LISA, RDKShell</test_stub_interface>
-    <test_script>Rialto_Generic_Playback_Test</test_script>
+    <test_script>Rialto_Play_Pause_Test</test_script>
     <skipped></skipped>
-    <release_version>M115</release_version>
+    <release_version>M116</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -97,7 +95,7 @@ obj = tdklib.TDKScriptingLibrary("rialto_container","1",standAlone=True)
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Rialto_Generic_Playback_Test');
+obj.configureTestCase(ip,port,'Rialto_Play_Pause_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -175,7 +173,18 @@ if "SUCCESS" in result.upper():
                 tdkTestObj.setResultStatus("FAILURE")
             else:
                 tdkTestObj.setResultStatus("SUCCESS")
-                launch_video = "SUCCESS"
+                #Wait for Video to Start
+                sleep(20)
+                #At this point video is playing,pressing "spacebar" to pause the video
+                key=32
+                tdkTestObj.addParameter("key_code",key)
+                tdkTestObj.executeTestCase(expectedResult);
+                result = tdkTestObj.getResultDetails();
+                if result != "SUCCESS":
+                    tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    launch_video = "SUCCESS"
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
@@ -183,11 +192,12 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
     if launch_video == "SUCCESS":
-        #Wait for Video to Start
-        sleep(20)
+        #Wait for Pause
+        sleep(2)
 
         log_verification = False
         tdkTestObj = obj.createTestStep('checkPROC')
+        tdkTestObj.addParameter("check_pause","True")
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
         print "AV status result",result
