@@ -104,7 +104,7 @@ def postCURLRequest(data,securityEnabled):
 #---------------------------------------------------------------
 #EXECUTE CURL REQUESTS
 #---------------------------------------------------------------
-def execute_step(Data):
+def execute_step(Data,IsPerformanceSelected="false"):
     status = "SUCCESS"
     global securityEnabled
     try:
@@ -144,7 +144,10 @@ def execute_step(Data):
             result = json_response.get("result")
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
-
+	    if IsPerformanceSelected == "YES":
+                time_taken = response.elapsed.total_seconds()
+                print "Time taken for",Data,"is :", time_taken
+		return time_taken;
             IsPerformanceSelected = libObj.parentTestCase.performanceBenchMarkingEnabled
             if IsPerformanceSelected == "true":
                 conf_file,result = getConfigFileName(libObj.realpath)
@@ -196,6 +199,13 @@ def rdkservice_getAllPluginStatus():
     else:
         return result;
 
+#------------------------------------------------------------------
+#GET MAX RESPONSE TIME
+#------------------------------------------------------------------
+def rdkservice_getMaxResponseTime(method):
+    data = '"method": "'+method+'"'
+    result = execute_step(data,"YES")
+    return result
 #------------------------------------------------------------------
 #SET PLUGIN STATUS
 #------------------------------------------------------------------

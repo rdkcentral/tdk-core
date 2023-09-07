@@ -17,7 +17,7 @@
  limitations under the License.
 -->
 <?xml version="1.0" encoding="UTF-8"?><xml>
-  <module testGroup="Certification" name="rdkv_performance">
+  <module name="rdkv_performance" testGroup="Certification">
     <primitiveTests>
       <primitiveTest name="rdkservice_getAllPluginStatus" id="" version="1">
         <function>rdkservice_getAllPluginStatus</function>
@@ -58,8 +58,8 @@
         <function>rdkservice_setPluginStatus</function>
         <parameters>
           <parameter name="plugin" value=""/>
-	  <parameter name="status" value=""/>
-	  <parameter name="uri" value=""/>
+          <parameter name="status" value=""/>
+          <parameter name="uri" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="rdkservice_setValue" id=" " version="1">
@@ -135,7 +135,7 @@
       </primitiveTest>
       <primitiveTest name="rdkservice_getBrowserScore_Speedometer" id="" version="1">
         <function>rdkservice_getBrowserScore_Speedometer</function>
-	<parameters/>
+        <parameters/>
       </primitiveTest>
       <primitiveTest name="rdkservice_getBrowserScore_Smashcat" id="" version="1">
         <function>rdkservice_getBrowserScore_Smashcat</function>
@@ -144,6 +144,12 @@
       <primitiveTest name="rdkservice_getBrowserScore_Kraken" id="" version="1">
         <function>rdkservice_getBrowserScore_Kraken</function>
         <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkservice_getMaxResponseTime" id=" " version="1">
+        <function>rdkservice_getMaxResponseTime</function>
+        <parameters>
+          <parameter name="method" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>

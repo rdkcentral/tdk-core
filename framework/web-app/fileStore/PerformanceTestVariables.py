@@ -29,6 +29,9 @@ channel_change_url = "http://TM-IP/rdk-test-tool/fileStore/lightning-apps/Channe
 #The url used for testing cobalt
 cobalt_test_url = ""
 
+#Api to get the maximum response time
+method = "ResidentApp.1.url"
+
 # webkit_instance can be "WebKitBrowser" or "LightningApp" or "HtmlApp" plugin
 webkit_instance = "LightningApp"
 
