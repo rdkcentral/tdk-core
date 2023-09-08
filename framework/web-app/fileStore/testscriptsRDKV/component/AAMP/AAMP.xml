@@ -208,6 +208,12 @@
         <function>TestMgr_Aamp_AampCheckPlaybackRate</function>
         <parameters/>
       </primitiveTest>
+      <primitiveTest name="Aamp_AampPauseAtPosition" id=" " version="1">
+        <function>TestMgr_Aamp_AampPauseAtPosition</function>
+        <parameters>
+          <parameter name="position" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
