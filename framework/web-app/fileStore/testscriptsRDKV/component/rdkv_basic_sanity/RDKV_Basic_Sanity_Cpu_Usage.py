@@ -25,7 +25,7 @@
   <primitive_test_name>rdkv_basic_sanity_executeInDUT</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To Monitor CPU USage of DUT for given time</synopsis>
+  <synopsis>To Monitor CPU Usage of DUT for given time</synopsis>
   <groups_id/>
   <execution_time>120</execution_time>
   <long_duration>false</long_duration>
@@ -45,9 +45,9 @@
     <test_objective>To Initiate the shell scripts which Monitor Cpu usage for given time</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI-HYB,RPI-Client,Video_Accelerator</test_setup>
-    <pre_requisite>1. Configure the location of shell scripts in FilePath available in fileStore/Basic_Sanity_Config.config file</pre_requisite>
+    <pre_requisite>1. Configure the location of shell scripts in SANITY_SCRIPT_PATH available in fileStore/Basic_Sanity_Config.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>FilePath</input_parameters>
+    <input_parameters>SANITY_SCRIPT_PATH</input_parameters>
     <automation_approch>Monitor the cpu usage in the background and list highest 3 cpu usages at the end of the script and kill the script after timeout.</automation_approch>
     <expected_output>List the 3 processes with highest cpu usage.</expected_output>
     <priority>High</priority>
@@ -59,7 +59,7 @@
   </test_cases>
 </xml>
 
-''' 
+'''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from rdkv_basic_sanitylib import *
@@ -81,7 +81,7 @@ obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    configKeyList = ["FilePath","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["SANITY_SCRIPT_PATH","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues={}
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
     #Get each configuration from device config file
@@ -106,9 +106,9 @@ if expectedResult in result.upper():
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
             command = (
-                    "sh " + configValues["FilePath"] + "/system_sanity_check.sh 15" +
+                    "sh " + configValues["SANITY_SCRIPT_PATH"] + "/system_sanity_check.sh 15" +
                     " && " +
-                    "timeout $(($(grep '^total_duration=' " + configValues["FilePath"] + "/sanity_check.config | cut -d '=' -f 2) + 10)) tail -f -n 0 $(find / -name 'cpu_monitor.log' 2>/dev/null | head -n 1)"
+                    "timeout $(($(grep '^total_duration=' " + configValues["SANITY_SCRIPT_PATH"] + "/sanity_check.config | cut -d '=' -f 2) + 10)) tail -f -n 0 $(find / -name 'cpu_monitor.log' 2>/dev/null | head -n 1)"
             )
             # Print the command and execute it
             print("COMMAND: %s" % command)

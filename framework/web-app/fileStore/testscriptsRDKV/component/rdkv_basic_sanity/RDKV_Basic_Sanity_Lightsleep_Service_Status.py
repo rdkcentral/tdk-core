@@ -45,9 +45,9 @@
     <test_objective>To Initiate the shell scripts which check status of service before and after lightsleep.If status vary reboot the dut and check the status.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI-HYB,RPI-Client,Video_Accelerator</test_setup>
-    <pre_requisite>1. Configure the location of shell scripts in FilePath available in fileStore/Basic_Sanity_Config.config file</pre_requisite>
+    <pre_requisite>1. Configure the location of shell scripts in SANITY_SCRIPT_PATH available in fileStore/Basic_Sanity_Config.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
-    <input_parameters>FilePath</input_parameters>
+    <input_parameters>SANITY_SCRIPT_PATH</input_parameters>
     <automation_approch>1. Check the status of services before lighstsleep.
     2.If services are not same after lightsleep reboot</automation_approch>
     <expected_output>Respective Scripts are executed and Validating status of services before and after lightsleep</expected_output>
@@ -81,7 +81,7 @@ obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    configKeyList = ["FilePath","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["SANITY_SCRIPT_PATH","SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues={}
     tdkTestObj = obj.createTestStep('rdkv_basic_sanity_getDeviceConfig')
     #Get each configuration from device config file
@@ -105,7 +105,7 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            command = "sh " + configValues["FilePath"] + "/system_sanity_lightsleep_service_status.sh"
+            command = "sh " + configValues["SANITY_SCRIPT_PATH"] + "/system_sanity_lightsleep_service_status.sh"
             #Primitive test case associated with this Script
             tdkTestObj = obj.createTestStep('rdkv_basic_sanity_rebootexecution');
             #Add the parameters to ssh to the DUT and execute the command
