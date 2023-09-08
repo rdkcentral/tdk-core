@@ -2164,12 +2164,26 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+
         elif tag == "wifi_check_signal_threshold_change_status":
-            info = checkAndGetAllResultInfo(result,result.get("success"))
-            if str(result.get("success")).lower() == "true" and str(result.get("result")) in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if result.get('result') == 0:
+                Enabled = True
+                message = "Enabled => True-0"
+            elif result.get('result') == 1:
+                Enabled = False
+                message = "Enabled => False-1"
+            info["enabled"] = Enabled
+            info["Test_Step_Message"] = message
+            if len(arg) and arg[0] == "validate_signal_threshold":
+                if str(result.get("success")).lower() == "true" and str(Enabled).lower() == str(expectedValues[0]).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if str(result.get("success")).lower() == "true" and str(result.get('result')) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "wifi_get_connected_ssid":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -4218,17 +4232,12 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         elif tag == "wifi_toggle_signal_threshold_status":
             testStepResults = testStepResults[0].values()[0]
-            status = testStepResults[0].get("result")
+            status = testStepResults[0].get("enabled")
             if len(arg) and arg[0] == "get_toggle_value":
-                if int(status) == 1:
+                if str(status).lower() == "false":
                     info["enabled"] = True
                 else:
                     info["enabled"] = False
-            else:
-                if int(status) == 1:
-                    info["result"] = 0
-                else:
-                    info["result"] = 1
 
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_toggle_discoverable_status":

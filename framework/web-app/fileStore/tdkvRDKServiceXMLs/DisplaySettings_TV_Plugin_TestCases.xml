@@ -254,22 +254,29 @@
         <testCase testCaseId="DS_12" testCaseName= "Set_And_Get_MS12_Audio_Compression" desc="Check whether MS12 audio compression values are able to set and get" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioCompression" />
             <testStep testStepId="1" name="Get_MS12_Audio_Compression" method="Get_MS12_Audio_Compression" saveResult="true" revertGet="yes" >
+              <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+              </params>
               <resultGeneration useMethodTag="check_MS12_audio_compression" />
             </testStep>
             <testStep testStepId="2" name="Set_MS12_Audio_Compression" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Set_MS12_Audio_Compression" method="Set_MS12_Audio_Compression" revertSet="yes">
                   <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
                     <param tag="compresionLevel" value="0,5,10" iteration="true" revertParam="yes" />
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
               <subtestStep subtestStepId="2" name="Get_MS12_Audio_Compression" method="Get_MS12_Audio_Compression" revertFlag="yes" >
+                  <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                   </params>
                   <resultGeneration useMethodTag="check_MS12_audio_compression" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>              
+        </testCase>
 
         <testCase testCaseId="DS_13" testCaseName= "Check_Current_Output_Settings" desc="Check the current output settings of device">
             <testCaseInfo testCaseType="direct"/>
@@ -330,17 +337,24 @@
         <testCase testCaseId="DS_16" testCaseName= "Enable_And_Disable_Dolby_Volume_Mode"  desc="Check whether dolby volume mode can enable and disable ">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DolbyVolume"/>
             <testStep testStepId="1" name="Get_Dolby_Volume_Mode" method="Get_Dolby_Volume_Mode" saveResult="true" revertGet="yes" >
+              <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
               <resultGeneration useMethodTag="check_dolby_volume_mode" >
               </resultGeneration>
             </testStep>
             <testStep testStepId="2" name="Enable_And_Disable_Dolby_Volume_Mode" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Enable_Dolby_Volume_Mode" method="Set_Dolby_Volume_Mode" revertSet="yes">
                   <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
                     <param tag="dolbyVolumeMode" value="True,False" iteration="true" revertParam="yes" />
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
               <subtestStep subtestStepId="2" name="Get_Dolby_Volume_Mode" method="Get_Dolby_Volume_Mode" revertFlag="yes" >
+                      <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
                   <resultGeneration useMethodTag="check_dolby_volume_mode" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
@@ -351,16 +365,23 @@
         <testCase testCaseId="DS_17" testCaseName= "Set_And_Get_Dialog_Enhancement" desc="Check whether dialog enhancement values are able to set and get" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DialogEnhancement" />
             <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement" saveResult="true" revertGet="yes" >
+                    <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
               <resultGeneration useMethodTag="check_dialog_enhancement" />
             </testStep>
             <testStep testStepId="2" name="Set_Dialog_Enhancement" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Set_Dialog_Enhancement" method="Set_Dialog_Enhancement" revertSet="yes">
                   <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
                     <param tag="enhancerlevel" value="0,8,12" iteration="true" revertParam="yes" />
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
               <subtestStep subtestStepId="2" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement" revertFlag="yes" >
+                      <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
                   <resultGeneration useMethodTag="check_dialog_enhancement" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
@@ -371,22 +392,29 @@
         <testCase testCaseId="DS_18" testCaseName= "Set_And_Get_Intelligent_Equalizer_Mode" desc="Check whether intelligent equalizer mode values are able to set and get" >
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="IntelligentEqualizer" />
             <testStep testStepId="1" name="Get_Intelligent_Equalizer_Mode" method="Get_Intelligent_Equalizer_Mode" saveResult="true" revertGet="yes" >
+                    <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
               <resultGeneration useMethodTag="check_intelligent_equalizer_mode" />
             </testStep>
             <testStep testStepId="2" name="Set_Intelligent_Equalizer_Mode" testStepType="loop" >
               <subtestStep subtestStepId="1" name="Set_Intelligent_Equalizer_Mode" method="Set_Intelligent_Equalizer_Mode" revertSet="yes">
                   <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
                     <param tag="intelligentEqualizerMode" value="1,2,3" iteration="true" revertParam="yes" />
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
               <subtestStep subtestStepId="2" name="Get_Intelligent_Equalizer_Mode" method="Get_Intelligent_Equalizer_Mode" revertFlag="yes" >
+                  <params>
+                    <param tag="audioPort" value="SPEAKER0"/>
+                  </params>
                   <resultGeneration useMethodTag="check_intelligent_equalizer_mode" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase>
+        </testCase>        
 
         <testCase testCaseId="DS_19" testCaseName= "Set_And_Get_Volume_Leveller_HDMI0" desc="Check whether volume values are able to set and get for HDMI0 port" >
             <testCaseInfo testCaseType="loop" revert="true"  configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES,CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="VolumeLeveller,HDMI0" />

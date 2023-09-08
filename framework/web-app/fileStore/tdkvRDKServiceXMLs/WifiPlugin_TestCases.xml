@@ -459,8 +459,8 @@
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
             <testStep testStepId="3" name="Is_Signal_Threshold_Change_Enabled" method="Is_Signal_Threshold_Change_Enabled" revertFlag="yes">
-                <resultGeneration useMethodTag="wifi_check_signal_threshold_change_status">
-                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="wifi_toggle_signal_threshold_status" />
+                <resultGeneration useMethodTag="wifi_check_signal_threshold_change_status" arguments="validate_signal_threshold" >
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="wifi_toggle_signal_threshold_status" arguments="get_toggle_value" />
                 </resultGeneration>
             </testStep>
        </testCase>
