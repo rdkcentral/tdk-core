@@ -219,7 +219,8 @@ def checkApplicationInstalled():
     print "getList Result",result
 
     installed = "FAILURE"
-    if "com.rdk.cobalt" in str(result):
+    cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
+    if cobalt_app_id in str(result):
         print "Application is installed"
         print "Proceeding to launching"
         installed="SUCCESS"
@@ -242,10 +243,11 @@ def executeCurlCommand(method,value):
 #-------------------------------------------------------------------
 def InstallApplication():
     method = "LISA.1.install"
-    params ='{"id":"com.rdk.cobalt","url":"'
+    cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
+    params ='{"id":"' + cobalt_app_id + '","url":"'
     cobalt_bundle = getDeviceConfig ('COBALT_DAC_BUNDLE_PATH')
     params  = params + cobalt_bundle
-    params = params + '","version":"1.0.0","appName":"com.rdk.cobalt","type":"dac","category":"category"}'
+    params = params + '","version":"1.0.0","appName":"' + cobalt_app_id + '","type":"dac","category":"category"}'
     result = executeCurlCommand(method,params);
     print "LISA install result",result
     status="FAILURE"
@@ -263,9 +265,10 @@ def InstallApplication():
 # Function to launch cobalt application and set it to Front
 #-------------------------------------------------------------------
 def LaunchApplication():
-    print "Launching com.rdk.cobalt application"
+    cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
+    print "Launching %s application"%(cobalt_app_id)
     method = "org.rdk.RDKShell.1.launchApplication"
-    params ='{"client":"com.rdk.cobalt","mimeType":"application/dac.native","uri":"com.rdk.cobalt;1.0.0"}'
+    params ='{"client":"' + cobalt_app_id + '","mimeType":"application/dac.native","uri":"' + cobalt_app_id +';1.0.0"}'
     result = executeCurlCommand(method,params);
     print "launchApplication Result",result
 
@@ -275,11 +278,11 @@ def LaunchApplication():
         result = executeCurlCommand(method,params);
         print "getClients Result",result
 
-        if "True" in str(result) and "com.rdk.cobalt" in str(result):
+        if "True" in str(result) and cobalt_app_id in str(result):
             print "Cobalt is successfully launched"
             print "SetFocus of cobalt to front"
             method = "org.rdk.RDKShell.1.setFocus"
-            params = '{"client":"com.rdk.cobalt"}'
+            params = '{"client":"' + cobalt_app_id + '"}'
             result = executeCurlCommand(method,params);
             print "setFocus result",result
 
@@ -321,7 +324,8 @@ def Press_key(key_code):
 #-------------------------------------------------------------------
 def KillApplication():
     method = "org.rdk.RDKShell.1.kill"
-    params ='{"client":"com.rdk.cobalt"}'
+    cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
+    params ='{"client":"' + cobalt_app_id + '"}'
     result = executeCurlCommand(method,params);
     print "Kill Application result",result
     status="FAILURE"
@@ -381,7 +385,8 @@ def ChangeContainerStatus(operation):
         method = "org.rdk.OCIContainer.resumeContainer"
     else:
         return "FAILURE"
-    params =' { "containerId": "com.rdk.cobalt" } }'
+    cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
+    params =' { "containerId": "' + cobalt_app_id + '" } }'
     result = executeCurlCommand(method,params);
     print "Container status change result",result
     status="FAILURE"
