@@ -151,14 +151,14 @@ function display(val) {
 						</g:link></td>
 					<td>Option to configure device templates</td>
 				</tr>
-				<tr>
+				<%--<tr>
 					<td><g:link controller="module" action="stormConfiguration"
 							params="[category:com.comcast.rdk.Category.RDKV ]">
 							<span>Storm JSON RPC Server</span>
 						</g:link></td>
 					<td>Option to configure Storm JSON RPC Server</td>
 				</tr>
-				<tr>
+				--%><tr>
 					<td><g:link controller="scriptGroup" action="listCertificationSuiteConfigFiles"
 							params="[category:com.comcast.rdk.Category.RDKV ]">
 							<span>RDK Certification</span>

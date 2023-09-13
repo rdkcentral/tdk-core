@@ -142,7 +142,7 @@
 									</g:each>
 									</div>
 									</ul>
-									<ul>
+									<%-- <ul>
 										<div class="" style="max-height: 150px;overflow: auto;vertical-align: top;">
 											<li class="closed"><span class="folder" id="firebolt">THUNDER</span>
 												<ul>
@@ -160,7 +160,7 @@
 												</ul>
 											</li>
 										</div>
-									</ul> 
+									</ul> --%>
 								</li>
 								<li>
 									<span class="folder" id="scriptTypeB" style="overflow: auto;">RDK-B</span>
@@ -245,7 +245,7 @@
 															</g:each>
 															</div>
 													</ul>
-													<ul>
+													<%-- <ul>
 														<div class="" style="max-height: 150px;overflow: auto;vertical-align: top;">
 															<li class="closed"><span class="folder" id="firebolt">THUNDER</span>
 																<ul>
@@ -264,7 +264,7 @@
 																</ul>
 															</li>
 														</div>
-													</ul> 
+													</ul> --%>
 													</li>
 													<li><span class="folder" id="u">RDK-B</span>
 													<ul>
@@ -698,7 +698,7 @@
 	          		<li id="add_scriptgrpV"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-V Test Suite</li>
 	          		<li id="add_scriptgrpB"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-B Test Suite</li>
 					<li id="add_scriptgrpC"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-C Test Suite</li>
-	          		<li id="add_scriptgrpThunder"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-V Thunder Test Suite</li>
+	          		<%-- <li id="add_scriptgrpThunder"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-V Thunder Test Suite</li> --%>
 	          		<li id="add_scriptgrpTCL"><img src="../images/add_new.png" height="15px" width="15px"/>Add New RDK-B Test Suite(TCL)</li>
 	          		<li id="upload_scriptGroup"><img src="../images/reorder_up.png"
 					height="15px" width="15px" /> Upload script group XML</li>
