@@ -497,7 +497,7 @@ $(document).ready(function() {
 			<tr>
 				<td>Category</td>
 				<td>
-					<g:select id="categoryId" name="category" from="${['RDKV','RDKB', 'RDKV_THUNDER']}" value="${params?.category}"/>
+					<g:select id="categoryId" name="category" from="${['RDKV','RDKB', 'RDKV_THUNDER','RDKC']}" value="${params?.category}"/>
 				</td>
 				<td>Box Type</td>
 				<td id="boxTypeId">
