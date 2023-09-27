@@ -1281,6 +1281,8 @@ def executeTest(testMethod,testParams,testStepInfo,saveResultInfo):
             testParams,execStatus,response = newEventHandler(testMethod,testStepInfo)
         elif testStepInfo.get("action") == "externalFnCall":
             execStatus,response = "SUCCESS",None
+        elif testStepInfo.get("action") == "PluginAPIValidation":
+            execStatus,response = ValidateHttpStatusCode(testMethod,testParams)
         else:
             execStatus,response = executeCommand(testMethod,testParams)
 
@@ -2780,4 +2782,74 @@ def dispPerformanceSummary():
     return performanceStatus
 
 #-----------------------------------------------------------------------------------------------
+# ValidateHttpStatusCode
+#-----------------------------------------------------------------------------------------------
+# Syntax      : ValidateHttpStatusCode(testMethod,testParams)
+# Description : Method to send JSON command and receive the http exit code response
+# Parameter   : testMethod  - Plugin API
+#             : testParams  - API params
+# Return Value: Http exit code response
+#-----------------------------------------------------------------------------------------------
+def ValidateHttpStatusCode(testMethod, testParams):
+    PluginAPI = testMethod.split('@')[1] if '@' in testMethod else ""
+
+    if PluginAPI == "":
+        executeStatus = "FAILURE"
+        print("\nError Occurred:  Plugin_API_EXIT_CODE_STATUS is empty in config file")
+        return executeStatus,{}
+    # JSON request formation
+    jsonCmd = { "jsonrpc" : "2.0" , "id" : 2 , "method" : testMethod}
+
+    if testParams != {} and testParams != [] and testParams != "":
+        jsonCmd["params"] = testParams
+
+    jsonCmd = json.dumps(jsonCmd)
+    requestURL = "http://" + deviceIP + ":" + portNo + "/jsonrpc"
+
+    global testStepJSONCmd
+    testStepJSONCmd = jsonCmd
+    executeStatus = "SUCCESS"
+    jsonResponse = {}
+
+    try:
+        if execMethod.upper() == "CURL":
+            # Define the JSON payload
+            json_payload = {
+                "jsonrpc": "2.0",
+                "id": 3,
+                "method": testMethod
+            }
+
+            # Define the headers
+            headers = {
+                "Content-Type": "application/json"
+            }
+            PluginAPI = testMethod.split('@')[1]
+            # Send the POST request using requests library
+            response = requests.post(requestURL, json=json_payload, headers=headers)
+            if response.status_code == 200:
+                print PluginAPI, "IS REACHABLE, HTTP Response Code:", response.status_code
+                jsonResponse = response.json()
+                jsonResponse["HttpStatusCode"] = response.status_code
+                jsonResponse['result'][0]['HttpStatusCode'] = jsonResponse['HttpStatusCode']
+            elif response.status_code == 202:
+                print "ERROR:", PluginAPI, "NOT FOUND, HTTP RESPONSE Code:", response.status_code
+                jsonResponse = response.json()
+            elif response.status_code == 404:
+                print PluginAPI, "ENDPOINT NOT FOUND, HTTP RESPONSE Code:", response.status_code
+                jsonResponse = response.json()
+            elif response.status_code == 500:
+                print PluginAPI, "ENCOUNTERED AN INTERNAL SERVER ERROR, HTTP RESPONSE Code:", response.status_code
+                jsonResponse = response.json()
+            else:
+                print "UNKNOWN RESPONSE CODE:, HTTP RESPONSE Code:", response.status_code
+                jsonResponse = response.json()
+        else:
+            executeStatus = "FAILURE"
+            print("\nError Occurred: Unknown method type for sending JSON Request")
+    except Exception as e:
+        executeStatus = "FAILURE"
+        print("\nException Occurred : %s" % e)
+        print("\nJSON Command Sent : %s" % jsonCmd)
+    return executeStatus, jsonResponse
 

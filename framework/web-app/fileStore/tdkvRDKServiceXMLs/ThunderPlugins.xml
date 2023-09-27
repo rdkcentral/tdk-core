@@ -2305,6 +2305,13 @@
         </method>
         <method name="HdmiCec2_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option"/>
     </plugin>
+    
+    <!-- ValidatePluginAPIHttpResponseCode Information -->
+    <plugin pluginName="ValidatePluginAPI" serviceName="Controller"  serviceVersion="1">
+	<method name="Get_Http_exit_code_status" api="status"  type="property" desc="Provides the information validating http exit code status response" >
+                <expectedValues>200</expectedValues>
+        </method>
+    </plugin>
 </thunderPlugins>
 
 

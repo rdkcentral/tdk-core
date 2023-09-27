@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2023 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="ValidatePluginAPI" pluginVersion="1">
+    <testCase testCaseId="VPA_01" testCaseName="GetHttpExitCodeStatus"  desc="Get the Api exit code status and Validate">
+      <testCaseInfo testCaseType="loop" />
+      <testStep testStepId="1" name="Check_Api_Plugin_Exit_Code_Status" testStepType="loop">
+        <subtestStep subtestStepId="1" name="Validate_Api_Plugin_Exit_Code_Status" method="Get_Http_exit_code_status" action="PluginAPIValidation">
+          <params>
+            <param tag="httpstatuscode"  iteration="true" useConfigFile="true" key="Plugin_API_EXIT_CODE_STATUS"  indexOnly="true" />
+          </params>
+          <resultGeneration useMethodTag="validate_http_exit_code">
+            <arguments value="check_status" useIterableArg="true"/>
+          </resultGeneration>
+        </subtestStep>
+      </testStep>
+    </testCase>
+</testPlugin>
+

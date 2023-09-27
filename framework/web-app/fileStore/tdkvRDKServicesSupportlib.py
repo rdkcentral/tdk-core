@@ -3293,7 +3293,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
-
+        #Validate_http Response result parser steps
+        elif tag == "validate_http_exit_code":
+            if arg[0] == "check_status":
+                for plugin in result:
+                    status_code = plugin.get("HttpStatusCode")
+                    if status_code is not None:
+                        info["HttpStatusCode"] = status_code
+                        break  
+                if status_code == 200:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         else:
             print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
