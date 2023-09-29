@@ -262,6 +262,12 @@ class ModuleController {
 		}else{
 			def moduleInstance = new Module(params)
 			moduleInstance.groups = utilityService.getGroup()
+			def thunderEnablee=params?.thunderEnabled.toString()
+			if(thunderEnablee=='on'){
+			moduleInstance.isThunderEnabled=1
+			}else{
+			moduleInstance.isThunderEnabled=0
+			}
 			if (!moduleInstance.save(flush: true)) {
 				flash.message = message(code: 'default.not.created.message', args: [message(code: 'module.label', default: 'Module'), moduleInstance.name])
 			}else{
@@ -876,6 +882,13 @@ class ModuleController {
 				mkp.yield "\r\n  "
 				mkp.comment "Crash File Names of the module"
 				xml.crashFileNames(moduleObj?.logFileNames)
+				mkp.yield "\r\n  "
+				mkp.comment "Module is thundeEnabled or not"
+				if(moduleObj?.isThunderEnabled == 1){
+				xml.moduleThunder("Enable")
+				}else if(moduleObj?.isThunderEnabled == 0 || moduleObj?.isThunderEnabled == null){
+				xml.moduleThunder("Disable")
+				}			
 				def functions = Function.findAllByModuleAndCategory(moduleObj,category)
 				if(functions){
 					mkp.yield "\r\n  "
@@ -925,6 +938,7 @@ class ModuleController {
 					String moduleXmlContent = ""
 					def logFileNames
 					def crashFileName
+					int isThunderEnabled = 0
 					List crashFile = []
 					List logFile =[]
 					def node
@@ -945,6 +959,7 @@ class ModuleController {
 							def testGrpStatus = com.comcast.rdk.TestGroup?.values()?.toString()?.contains(testGroup)
 							logFileNames = node?.module?.logFileNames?.text()?.trim()
 							crashFileName = node?.module?.crashFileNames?.text()?.trim()
+							String checkThunder= node?.module?.moduleThunder?.text()?.trim()							
 							if(!moduleName){
 								flash.message = "Module name is blank"
 							}else if(!category){
@@ -996,6 +1011,11 @@ class ModuleController {
 									newModuleInstance?.category = category
 									newModuleInstance?.executionTime = newExcutionTimeOut
 									newModuleInstance?.testGroup = testGroup
+									if((checkThunder != null) && (checkThunder.equals("enable"))){
+									newModuleInstance?.isThunderEnabled = 1
+									}else if((checkThunder != null) && (checkThunder.equals("disable"))){
+									newModuleInstance?.isThunderEnabled = 0
+									}
 									newModuleInstance?.logFileNames = crashFile
 									newModuleInstance?.stbLogFiles = logFile
 									newModuleInstance.groups = utilityService.getGroup()

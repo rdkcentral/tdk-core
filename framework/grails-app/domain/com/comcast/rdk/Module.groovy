@@ -50,6 +50,11 @@ class Module{
 	Groups groups
 	
 	/**
+	 * Flag to identify whether a Module thunder enabled or not.
+	 */
+	Integer isThunderEnabled = 0
+	
+	/**
 	 * Indicates the category to which the device belongs - RDK-V or RDK-B
 	 */
 	Category category = Category.RDKV
@@ -64,6 +69,7 @@ class Module{
 		executionTime(nullable:true, blank:true)
 		category(nullable:false, blank:false)
 		name(blank:false, nullable:false,unique:'category' )
+		isThunderEnabled(nullable:true, blank:true)
     }
 
 	static mapping = {
