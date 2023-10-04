@@ -203,6 +203,9 @@ video_src_url_bitrate_hevc = ""
 #25Fps H264 URL
 video_src_url_dash_h264_25fps = test_streams_base_path + "DASH_H264_25fps/master.mpd"
 
+#60Fps H264 URL
+video_src_url_dash_h264_60fps = test_streams_base_path + "DASH_H264_60fps/atfms_291_dash_tdk_avc_aac_fmp4.mpd"
+
 
 #VP9 Codec Video URL
 # By default VP9_OPUS stream is used, if we need to test with VP9_OGG stream
