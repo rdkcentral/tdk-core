@@ -374,7 +374,7 @@
         </testCase>
 
         <!-- Test case 25 -->
-        <testCase testCaseId="SYS_25" testCaseName= "System_SetAndGet_Temperature_Thresholds" desc="Set and get temperature thresholds">
+	<testCase testCaseId="SYS_25" testCaseName= "System_SetAndGet_Temperature_Thresholds" desc="Set and get temperature thresholds">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="SYSTEM_DEVICE_FEATURES" useMethodTag="system_check_feature_applicability" arguments="TemperatureThreshold"/>
             <testStep testStepId="1" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="system_verify_thresholds_params"  />
@@ -389,12 +389,12 @@
                 </params>
                 <resultGeneration useMethodTag="system_get_state_info"  />
             </testStep>
-            <testStep testStepId="4" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds"  revertFlag="yes" >
-                <resultGeneration useMethodTag="system_verify_thresholds_params" arguments="validate_thresholds_params" >
+            <testStep testStepId="4" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds"  revertFlag="yes" delay="60">
+                <resultGeneration useMethodTag="system_verify_thresholds_params" arguments="validate_threshold_params" >
                   <expectedValues  usePreviousResult="true" Id="2" useMethodTag="system_generate_new_temperature_thresholds" arguments="warn,max"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="5" name="Get_Core_Temperature" method="Get_Core_Temperature" saveResult="true" delay="31">
+            <testStep testStepId="5" name="Get_Core_Temperature" method="Get_Core_Temperature" saveResult="true">
               <resultGeneration useMethodTag="system_validate_core_temperature"/>
             </testStep>
             <testStep testStepId="6" name="Check_Temperature_Thresholds_Change_Event" event="Event_Temperature_Threshold_Changed" action="eventListener" >

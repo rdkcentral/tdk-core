@@ -3856,13 +3856,13 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "system_get_available_standby_modes":
             testStepResults = testStepResults[0].values()[0]
             info["standbyMode"] = testStepResults[0].get("supportedStandbyModes")
-  
+        
         elif tag == "system_generate_new_temperature_thresholds":
             testStepResults = testStepResults[0].values()[0]
             if str(arg[0]) == "warn":
                 info["WARN"] = float(testStepResults[0].get("temperature")) - 10
             if str(arg[1]) == "max":
-                info["MAX"] = float(testStepResults[0].get("temperature")) - 10
+                info["MAX"] = float(testStepResults[0].get("temperature")) + 10
 
         elif tag == "system_get_bluetooth_mac":
             testStepResults = testStepResults[0].values()[0]
@@ -4650,6 +4650,8 @@ def generateComplexTestInputParam(methodTag,testParams):
             userGeneratedParam = {"keys":newtestParams}
         elif tag == "rdkshell_set_launch_params":
             userGeneratedParam = { "callsign": testParams.get("callsign"), "configuration": { "closurepolicy": testParams.get("closurepolicy") } }
+        elif tag == "rdkshell_set_launch_app_params":
+             userGeneratedParam = { "callsign": testParams.get("callsign"),"type": testParams.get("type"),"visible": testParams.get("visible"),"configuration": { "url": testParams.get("url") } }
         elif tag == "rdkshell_set_keylistener_params":
             newtestParams = testParams.copy()
             newtestParams.pop("client")

@@ -765,10 +765,27 @@
                 <param tag="delay" defaultValue="0.0" type="float"/>
             </params>
         </method>
-
-
-        <method name="LaunchApplication" api="launch" type="method" desc="Launches an application" >
+	
+	<method name="LaunchApplication" api="launch" type="method" desc="Launches an application" >
             <params>
+                <param tag="callsign"  />
+                <param tag="type" defaultValue="HtmlApp" />
+                <param tag="uri" defaultValue="null" />
+                <param tag="x" defaultValue="0" type="int" />
+                <param tag="y" defaultValue="0" type="int" />
+                <param tag="w" defaultValue="0" type="int" />
+                <param tag="h" defaultValue="0" type="int" />
+                <param tag="closurepolicy" defaultValue="null" />
+                <param tag="suspend" type="bool" />
+                <param tag="visible" type="bool" />
+                <param tag="focused" type="bool" />
+                <param tag="holePunch" type="bool" />
+                <param tag="behind" defaultValue="null" />
+            </params>
+        </method>
+	
+	<method name="LaunchApplicationCobalt" api="launch" type="method" desc="Launches an application" >
+            <params paramKey="configuration"  paramType="userGenerate" useMethodTag="rdkshell_set_launch_app_params" >
                 <param tag="callsign"  />
                 <param tag="type" defaultValue="HtmlApp" />
                 <param tag="uri" defaultValue="null" />

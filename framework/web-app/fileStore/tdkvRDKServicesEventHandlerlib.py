@@ -476,7 +476,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
         elif tag == "system_check_temperature_threshold_change_event":
             info["Test_Step_Status"] = "FAILURE"
             for eventResult in result:
-                if str(eventResult.get("temperature")) == str(expectedValues[0]) and str(eventResult.get("exceeded")).lower() == "true" and str(eventResult.get("thresholdType")).lower() == "max":
+                if str(eventResult.get("temperature")) > str(expectedValues[0]) and str(eventResult.get("exceeded")).lower() == "true" and str(eventResult.get("thresholdType")).lower() == "warn":
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
                     break;

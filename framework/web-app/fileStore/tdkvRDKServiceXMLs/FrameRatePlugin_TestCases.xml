@@ -114,7 +114,10 @@
                 <expectedValues useConfigFile="true" key="WEBKIT_GRAPHICS_URL" />
               </resultGeneration>
             </testStep>
-            <testStep testStepId="5" name="Get_FPS_Value"  delay="60" testStepType="repeat" >
+	    <testStep testStepId="5" name="Start_FPS_Collection" method="Start_FPS_Collection" >
+              <resultGeneration useMethodTag="framerate_check_set_operation" />
+            </testStep>
+            <testStep testStepId="6" name="Get_FPS_Value"  delay="60" testStepType="repeat" >
               <subtestStep subtestStepId="1" name="Get_FPS_Value" method="Get_FPS_Value" saveResult="true" pluginName="LightningApp" delay="2" >
                 <resultGeneration useMethodTag="webkitbrowser_check_fps" >
                 </resultGeneration>
@@ -127,14 +130,11 @@
                 </resultGeneration>
               </subtestStep>
             </testStep>
-            <testStep testStepId="6" name="Get_Browser_FPS_Average_Value"  action="externalFnCall"  >
+            <testStep testStepId="7" name="Get_Browser_FPS_Average_Value"  action="externalFnCall"  >
               <resultGeneration useMethodTag="check_fps_value" >
-                <arguments usePreviousResult="true" Id="5" useMethodTag="webkitbrowser_check_average_fps" />
+                <arguments usePreviousResult="true" Id="6" useMethodTag="webkitbrowser_check_average_fps" />
                 <expectedValues useConfigFile="true" key="WEBKIT_EXPECTED_FPS,WEBKIT_THRESHOLD_FPS" />
               </resultGeneration>
-            </testStep>
-            <testStep testStepId="7" name="Start_FPS_Collection" method="Start_FPS_Collection" >
-              <resultGeneration useMethodTag="framerate_check_set_operation" />
             </testStep>
             <testStep testStepId="8" name="Stop_FPS_Collection" method="Stop_FPS_Collection" delay="30">
               <resultGeneration useMethodTag="framerate_check_set_operation" />
