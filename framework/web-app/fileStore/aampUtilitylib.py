@@ -60,9 +60,43 @@ def getAampTuneURL(stream):
     elif stream =="fogmpdstream":
         fogmpdstreamURL = parser.get('streams','FOG_MPD_stream')
         return fogmpdstreamURL
+    elif stream =="playreadystream":
+        playreadystream = parser.get('streams','PLAYREADY_stream')
+        return playreadystream
+    elif stream =="widevinestream":
+        widevinestream = parser.get('streams','WIDEVINE_stream')
+        return widevinestream
     else:
 	return "no valid streams are available"
 	
+
+########## End of Function ##########
+
+##################################################################################
+#
+# To fetch the license server url from configuration file
+#
+# Syntax       : getAampLicenseServerURL(obj,DRM)
+#
+# Parameters   : obj, stream. (where DRM  is the type of the DRM license to be fetcehd)
+#
+# Return Value : License Server URL for AAMP
+#
+####################################################################################
+
+def getAampLicenseServerURL(DRM):
+    parser = SafeConfigParser()
+    # Fetching the stream details from configuration file
+    parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
+    print "Parsing Aamp License Server URLs ..."
+    if DRM == "widevine":
+        license_server_url = parser.get('licenseservers','WIDEVINE_licenseServerUrl')
+        return license_server_url
+    elif DRM == "playready":
+        license_server_url = parser.get('licenseservers','PLAYREADY_licenseServerUrl')
+        return license_server_url
+    else:
+        return "no valid license servers are available"
 
 ########## End of Function ##########
 
@@ -126,7 +160,7 @@ def getURLFromMultiStreamIndex(index):
 #
 ####################################################################################
 
-def SearchAampPlayerEvents(tdkTestObj, event):
+def SearchAampPlayerEvents(tdkTestObj, event, test_step=1):
     details = tdkTestObj.getResultDetails();
 
     if event in details:

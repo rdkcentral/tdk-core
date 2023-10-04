@@ -67,11 +67,13 @@
       <function name='TestMgr_Aamp_AampGetAudioTrack' />
       <function name='TestMgr_Aamp_AampCheckPlaybackRate' />
       <function name='TestMgr_Aamp_AampPauseAtPosition' />
+      <function name='TestMgr_Aamp_AampSetLicenseServerURL' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
       <parameter funName='TestMgr_Aamp_AampTune' parameterName='URL' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetRate' parameterName='rate' parameterType='FLOAT' range='-1000-1000' />
+      <parameter funName='TestMgr_Aamp_AampSetRate' parameterName='check_rate_value' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetVideoMute' parameterName='mute' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetAudioVolume' parameterName='volume' parameterType='INTEGER' range='0-200' />
       <parameter funName='TestMgr_Aamp_AampSetLanguage' parameterName='language' parameterType='STRING' range='a-z' />
@@ -94,6 +96,8 @@
       <parameter funName='TestMgr_Aamp_AampSetWesterosSinkConfig' parameterName='enable' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetAudioTrack' parameterName='track_index' parameterType='INTEGER' range='1-10' />
       <parameter funName='TestMgr_Aamp_AampPauseAtPosition' parameterName='position' parameterType='DOUBLE' range='1-1000' />
+      <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='DRM' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='license_server_url' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

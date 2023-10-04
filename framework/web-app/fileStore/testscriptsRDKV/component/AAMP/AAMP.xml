@@ -30,6 +30,7 @@
         <function>TestMgr_Aamp_AampSetRate</function>
         <parameters>
           <parameter name="rate" value=""/>
+          <parameter name="check_rate_value" value="false"/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="Aamp_AampIsLive" id="" version="1">
@@ -212,6 +213,13 @@
         <function>TestMgr_Aamp_AampPauseAtPosition</function>
         <parameters>
           <parameter name="position" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampSetLicenseServerURL" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetLicenseServerURL</function>
+        <parameters>
+          <parameter name="DRM" value=""/>
+          <parameter name="license_server_url" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>

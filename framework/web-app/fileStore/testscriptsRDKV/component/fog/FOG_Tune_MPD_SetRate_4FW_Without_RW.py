@@ -144,6 +144,7 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
                         #AampSetRate call
                         tdkTestObj = aampObj.createTestStep('Aamp_AampSetRate');
                         tdkTestObj.addParameter("rate",4.0);
+                        tdkTestObj.addParameter("check_rate_value","true");
                         #Execute the test case in STB
                         tdkTestObj.executeTestCase(expectedResult);
                         #Get the result of execution
