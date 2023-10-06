@@ -95,8 +95,30 @@
                 <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="resumed" />
             </testStep>
           </prerequisite>
+	  
+	  <prerequisite requisiteId="4" requisiteName="Activate_RDKShell_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="callsign" value="org.rdk.RDKShell" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
 
-          <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+          <prerequisite requisiteId="5" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="WebKitBrowser" eventName="Event_Load_Finished" />
             <event pluginName="DeviceDiagnostics" eventName="Event_OnAVDecoder_Status_Changed" />
           </prerequisite>

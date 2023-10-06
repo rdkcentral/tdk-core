@@ -139,6 +139,7 @@
             <event pluginName="Network" eventName="Event_Connection_Status_Changed" />
 	    <event pluginName="Network" eventName="Event_IPAddress_Status_Changed" />
 	    <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+	    <event pluginName="Network" eventName="Event_Internet_Status_Change" />
 	    <event pluginName="WebKitBrowser" eventName="Event_Load_Finished" />
           </prerequisite>
 
