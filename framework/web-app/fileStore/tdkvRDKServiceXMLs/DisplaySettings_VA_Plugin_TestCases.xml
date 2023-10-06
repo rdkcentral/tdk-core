@@ -62,7 +62,9 @@
           <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" >
             <event pluginName="DisplaySettings" eventName="Event_Zoom_Settings_Updated" />
 	    <event pluginName="DisplaySettings" eventName="Event_Resolution_Changed" />
-            <event pluginName="DisplaySettings" eventName="Event_Resolution_PreChange" />
+	    <event pluginName="DisplaySettings" eventName="Event_Resolution_PreChange" />   
+            <event pluginName="DisplaySettings" eventName="Event_MuteStatus_Changed"/>
+            <event pluginName="DisplaySettings" eventName="Event_VolumeLevel_Changed"/>
           </prerequisite>
         </pluginPreRequisite>
        
@@ -1031,6 +1033,93 @@
                   </resultGeneration>
               </subtestStep>
             </testStep>
-        </testCase> 
+       </testCase> 
+       <testCase testCaseId="DS_46" testCaseName= "Check_Mute_Status_Changed_Event_HDMI0" desc="Check whether audio is able to mute and unmute  for HDMI0 port and check Mute status changed event" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
+                <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true" revertGet="yes" >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+              <resultGeneration useMethodTag="check_muted" arguments="check_state"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted" testStepType="loop" >
+              <subtestStep subtestStepId="1" name="Set_Muted"  method="Set_Muted" revertSet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="True,False" iteration="true" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Muted" method="Get_Muted" revertFlag="yes" >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Check_MuteStatus_Changed_Event" event="Event_MuteStatus_Changed" action="eventListener" delay="3" >
+                  <resultGeneration useMethodTag="displaysettings_check_mute_status_changed_event" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        <testCase testCaseId="DS_47" testCaseName= "Check_Volume_Level_Changed_Event_HDMI0" desc="Check whether volume level values are able to set and get for HDMI0 port and check for volume level changed event" >
+            <testCaseInfo testCaseType="loop"   configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0" />
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Volume_Level" testStepType="loop" >
+              <subtestStep subtestStepId="1" name="Set_Volume_Level"  method="Set_Volume_Level" >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="0,25,50,100" iteration="true"  />
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Volume_Level" method="Get_Volume_Level"  >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Check_VolumeLevel_Changed_Event" event="Event_VolumeLevel_Changed" action="eventListener" delay="3" >
+                  <resultGeneration useMethodTag="displaysettings_check_volume_level_changed_event" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        <testCase testCaseId="DS_48" testCaseName="Set_And_Get_Negative_Volume_Level_HDMI0" desc="Check whether negative volume level values are able to set and get for HDMI0 port" >
+            <testCaseInfo testCaseType="loop"   configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0" />
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="HDMI0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Volume_Level" testStepType="loop" >
+              <subtestStep subtestStepId="1" name="Set_Volume_Level"  method="Set_Volume_Level" >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="-10,-25,-50,-100" iteration="true"  />
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed"/>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Volume_Level" method="Get_Volume_Level"  >
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range">
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
 </testPlugin>  
 

@@ -547,6 +547,19 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+        elif tag == "displaysettings_check_mute_status_changed_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if str(eventResult.get("muted")) in  expectedValues:
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
+        elif tag == "displaysettings_check_volume_level_changed_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if str(eventResult.get("volumeLevel")) in  expectedValues:
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
 
         # Timer Events response result parser steps
         elif tag == "timer_check_timer_expired_event":
@@ -581,6 +594,13 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
                     break; 
+        elif tag == "network_check_internet_status_change_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if int(eventResult.get("state")) == int(expectedValues[0]) and str(eventResult.get("status")).lower() == str(expectedValues[1]):
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
         # DataCapture Events response result parser steps
         elif tag == "datacapture_check_on_audioclip_ready_event":
             result = result[0]

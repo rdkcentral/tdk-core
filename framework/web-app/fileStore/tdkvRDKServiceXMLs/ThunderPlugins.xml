@@ -245,6 +245,14 @@
                 <param tag="ipv6" type="bool"/>
             </params>
         </method>
+        <method name="Start_Connectivity_Monitoring" api="startConnectivityMonitoring" type="method" desc="Enable a continuous monitoring of internet connectivity with heart beat interval thats given" >
+            <params>
+                <param tag="interval"   defaultValue="null" type="int" />
+            </params>
+        </method>
+        <method name="Stop_Connectivity_Monitoring" api="stopConnectivityMonitoring" type="method" desc="Stops the connectivity monitoring" />
+        <method name="Get_Internet_Connection_State" api="getInternetConnectionState" type="method" desc="Returns the internet connection state" />
+        <event name="Event_Internet_Status_Change" eventName="onInternetStatusChange" eventId="client.events.1" type="event" desc="Triggered when internet connection state changed" />
         <event name="Event_Interface_Status_Changed" eventName="onInterfaceStatusChanged" eventId="client.events.1" type="event" desc="Interface status changed  event" />
         <event name="Event_Connection_Status_Changed" eventName="onConnectionStatusChanged" eventId="client.events.1" type="event" desc="Connection status changed event" />
         <event name="Event_IPAddress_Status_Changed" eventName="onIPAddressStatusChanged" eventId="client.events.1" type="event" desc="IPAddress status changed event" />
@@ -1674,6 +1682,8 @@
                 <param tag="persist" type="bool" />
             </params>
         </method>
+        <event name="Event_MuteStatus_Changed" eventName="muteStatusChanged" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
+        <event name="Event_VolumeLevel_Changed" eventName="volumeLevelChanged" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
         <event name="Event_Resolution_PreChange" eventName="resolutionPreChange" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
         <event name="Event_Zoom_Settings_Updated" eventName="zoomSettingUpdated" eventId="client.events.1" type="event" desc="Zoom settings updated event "/>
 	<event name="Event_Resolution_Changed" eventName="resolutionChanged" eventId="client.events.1" type="event" desc="Fires on changing resolution"/>

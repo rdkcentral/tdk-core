@@ -265,5 +265,127 @@
               <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
             </testStep>
        </testCase>
+       <testCase testCaseId="DD_05" testCaseName="DeviceDiagnostics_Check_WebKitBrowser_AVDecoder_Status" desc="Checks the AV Decoder status of the webkitbrowser launched through RDKShell">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="2" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+            <testStep testStepId="3" pluginName="RDKShell" name="Launch_WebKitBrowser" method="LaunchApplication" >
+              <params>
+                <param tag="callsign" value="WebKitBrowser" />
+                <param tag="type" value="WebKitBrowser"  />
+                <param tag="uri"  useConfigFile="true" key="WEBKIT_PLAYBACK_URL"  />
+                <param tag="x"  value="0" />
+                <param tag="y"   value="0" />
+                <param tag="w"   value="1920" />
+                <param tag="h"   value="1080" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" delay="30" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="active" />
+            </testStep>
+            <testStep testStepId="5" name="Destroy_WebKitBrowser_Application" method="DestroyApplication" pluginName="RDKShell" >
+                <params>
+                      <param tag="callsign" value="WebKitBrowser" />
+                </params>
+                <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="6" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" delay="3" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+            <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Launch_WebKitBrowser">
+            <testStep testStepId="1" name="Launch_WebKitBrowser" method="LaunchApplication" pluginName="RDKShell" PluginOnStep="yes" >
+              <params>
+                <param tag="callsign" value="WebKitBrowser" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+       </testCase>
+       <testCase testCaseId="DD_06" testCaseName="DeviceDiagnostics_Pause_Play_And_Check_AVDecoder_Status" desc="Checks the AV Decoder status on play pause">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="2" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+            <testStep testStepId="3" pluginName="RDKShell" name="Launch_WebKitBrowser" method="LaunchApplication" >
+              <params>
+                <param tag="callsign" value="WebKitBrowser" />
+                <param tag="type" value="WebKitBrowser"  />
+                <param tag="uri"  useConfigFile="true" key="WEBKIT_PLAYBACK_URL"  />
+                <param tag="x"  value="0" />
+                <param tag="y"   value="0" />
+                <param tag="w"   value="1920" />
+                <param tag="h"   value="1080" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" delay="30" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="active" />
+            </testStep>
+            <testStep testStepId="5"   name="Generate_Key" method="GenerateKey" pluginName="RDKShell" >
+              <params paramKey="keys">
+                <param tag="callsign" value="WebKitBrowser" />
+                <param tag="keyCode" value="32" />
+                <param tag="modifiers" useDefault="true" />
+                <param tag="delay" value="1.0"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="6" name="Check_OnAVDecoder_Status_Changed_Event" event="Event_OnAVDecoder_Status_Changed" action="eventListener" delay="3" >
+              <resultGeneration useMethodTag="devicediagnostics_onavdecoder_status_changed_event" expectedValues="paused" >
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status"  >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="paused" />
+            </testStep>
+            <testStep testStepId="8"   name="Generate_Key" method="GenerateKey" pluginName="RDKShell" >
+              <params paramKey="keys">
+                <param tag="callsign" value="WebKitBrowser" />
+                <param tag="keyCode" value="32" />
+                <param tag="modifiers" useDefault="true" />
+                <param tag="delay" value="1.0"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="9" name="Check_OnAVDecoder_Status_Changed_Event" event="Event_OnAVDecoder_Status_Changed" action="eventListener" delay="3" >
+              <resultGeneration useMethodTag="devicediagnostics_onavdecoder_status_changed_event" expectedValues="paused" >
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="10" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="active" />
+            </testStep>
+            <testStep testStepId="11" name="Destroy_WebKitBrowser_Application" method="DestroyApplication" pluginName="RDKShell" >
+                <params>
+                      <param tag="callsign" value="WebKitBrowser" />
+                </params>
+                <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="12" name="Check_OnAVDecoder_Status_Changed_Event" event="Event_OnAVDecoder_Status_Changed" action="eventListener" delay="3" >
+              <resultGeneration useMethodTag="devicediagnostics_onavdecoder_status_changed_event" expectedValues="idle" >
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="13" name="Get_AVDecoder_Status" method="Get_AVDecoder_Status" >
+              <resultGeneration useMethodTag="devicediagnostics_get_avdecoder_status" expectedValues="idle" />
+            </testStep>
+            <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Launch_WebKitBrowser">
+            <testStep testStepId="1" name="Launch_WebKitBrowser" method="LaunchApplication" pluginName="RDKShell" PluginOnStep="yes" >
+              <params>
+                <param tag="callsign" value="WebKitBrowser" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+       </testCase>	    
 </testPlugin>
 

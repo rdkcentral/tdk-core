@@ -432,10 +432,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "network_check_connectedto_internet":
             info["ConnectedToInternet"] = result.get("connectedToInternet")
             status = checkNonEmptyResultData(result)
-            if status and str(result.get("connectedToInternet")).lower() == "true":
+            if status and str(result.get("connectedToInternet")).lower() == expectedValues[0]:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
 
         elif tag == "network_check_device_ip_changed":
             info["Device_IP"] = result.get("ip")
@@ -452,6 +453,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
            if str(result.get("public_ip")).lower() == str(expectedValues[0]).lower():
                info["Test_Step_Status"] = "SUCCESS"
            else:
+               info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "network_check_internet_connection_state":
+            info = result
+            success = str(result.get("success")).lower() == "true"
+            status = checkNonEmptyResultData(result)
+            if success and status == "TRUE" and int(result.get("state")) == int(expectedValues[0]):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
                info["Test_Step_Status"] = "FAILURE"
 
         # Front Panel Response result parser steps

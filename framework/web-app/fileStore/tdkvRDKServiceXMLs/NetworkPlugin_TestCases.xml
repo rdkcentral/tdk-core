@@ -835,5 +835,136 @@ using traceroute" >
                 </resultGeneration>
             </testStep>
        </testCase>
+
+       <testCase testCaseId="NW_29" testCaseName="Check_Internet_Connectivity_With_Invalid_Endpoint" desc="Checks the internet connectivity for the invalid endpoint">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="http://www.tdk-page-test.com/" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_ConnectedTo_Internet" method="Is_ConnectedTo_Internet" >
+                <resultGeneration useMethodTag="network_check_connectedto_internet" expectedValues="false"/>
+            </testStep>
+       </testCase>
+       
+       <testCase testCaseId="NW_30" testCaseName="Check_Internet_Connectivity_Monitoring" desc="Checks the internet connectivity monitoring process for valid endpoint">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="Start_Connectivity_Monitoring" >
+                <params>
+                        <param tag="interval" value="7" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="3" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" delay="7">
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="3"/>
+            </testStep>
+            <testStep testStepId="4" name="Stop_Connectivity_Monitoring" method="Stop_Connectivity_Monitoring" >
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+       </testCase>
+       
+       <testCase testCaseId="NW_31" testCaseName="Check_Internet_Connectivity_Monitoring_With_Invalid_Endpoint" desc="Checks the internet connectivity monitoring process for invalid endpoint">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="http://www.tdk-page-test.com/"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="Start_Connectivity_Monitoring" >
+                <params>
+                        <param tag="interval" value="7" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="3" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" delay="7">
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="0" />
+            </testStep>
+            <testStep testStepId="4" name="Stop_Connectivity_Monitoring" method="Stop_Connectivity_Monitoring" >
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+      </testCase>
+
+      <testCase testCaseId="NW_32" testCaseName="Check_Internet_Connectivity_Monitoring_With_Limited_Endpoint" desc="Checks the internet connectivity monitoring process for limited endpoint">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="http://www.google.com"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="Start_Connectivity_Monitoring" >
+                <params>
+                        <param tag="interval" value="7" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="3" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" delay="7">
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="1" />
+            </testStep>
+            <testStep testStepId="4" name="Stop_Connectivity_Monitoring" method="Stop_Connectivity_Monitoring" >
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+       </testCase>
+
+       <testCase testCaseId="NW_33" testCaseName="Check_Internet_Status_Change_Event" desc="Checks the internet status changed event">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="http://www.tdk-page-test.com/"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="Start_Connectivity_Monitoring" >
+                <params>
+                        <param tag="interval" value="7" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Internet_Status_Change_Event" event="Event_Internet_Status_Change" action="eventListener" delay="10"  >
+                <resultGeneration useMethodTag="network_check_internet_status_change_event" expectedValues="0,no_internet" >
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="4" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" >
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="0" />
+            </testStep>
+            <testStep testStepId="5" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" value="http://www.google.com"/>
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_Internet_Status_Change_Event" event="Event_Internet_Status_Change" action="eventListener" delay="10"  >
+                <resultGeneration useMethodTag="network_check_internet_status_change_event" expectedValues="1,limited_internet" >
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" >
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="1" />
+            </testStep>
+            <testStep testStepId="8" name="Set_Connectivity_Endpoints" method="Set_Connectivity_Test_Endpoints">
+                <params>
+                        <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+            <testStep testStepId="9" name="Check_Internet_Status_Change_Event" event="Event_Internet_Status_Change" action="eventListener" delay="10"  >
+                <resultGeneration useMethodTag="network_check_internet_status_change_event" expectedValues="3,fully_connected" >
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="10" name="Get_Internet_Connection_State" method="Get_Internet_Connection_State" >
+                <resultGeneration useMethodTag="network_check_internet_connection_state" expectedValues="3" />
+            </testStep>
+            <testStep testStepId="11" name="Stop_Connectivity_Monitoring" method="Stop_Connectivity_Monitoring" >
+                <resultGeneration useMethodTag="network_check_results"/>
+            </testStep>
+       </testCase>
 </testPlugin>
 
