@@ -188,7 +188,7 @@ if expectedResult in result.upper():
                                 print "\n onSystemPowerStateChanged event is not triggered for power state: {} \n".format(power_states[i])
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
-                            elif "LIGHT_SLEEP" in event_log:
+                            elif "LIGHT_SLEEP" in event_log or "STANDBY" in event_log:
                                 power_on_time = event_log.split('$$$')[0]
                             tdkTestObj.setResultStatus("SUCCESS")
                             print "\n Verify the Power state \n"
