@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>2</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_Container_LightningApp_Timeto_Video_PlayPause</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -48,13 +48,13 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-HYB</box_type>
+    <box_type>RDKTV</box_type>
     <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
-    <box_type>Video_Accelerator</box_type>
+    <box_type>RPI-HYB</box_type>
     <!--  -->
-    <box_type>RDKTV</box_type>
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -91,6 +91,7 @@
     <release_version>M117</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
  # use tdklib library,which provides a wrapper for tdk testcase script 
@@ -283,7 +284,7 @@ if expectedResult in result.upper():
                                                     if result == "SUCCESS":
                                                         print "\n Check video is playing \n"
                                                         time.sleep(20)
-                                                        command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                                        command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                                         tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
                                                         tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])

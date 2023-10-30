@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>3</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_Container_Cobalt_Playback</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>8</execution_time>
+  <execution_time>10</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -48,13 +48,13 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
     <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
-    <!--  -->
-    <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -88,9 +88,9 @@
     <release_version>M110</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
 from containerizationlib import *
@@ -173,6 +173,7 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(15)
             print "Launch Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",cobalt_details)
@@ -221,7 +222,7 @@ if expectedResult in result.upper():
                             time.sleep(50)
                             if "SUCCESS" == result1:
                                 print "\n Check video is started \n"
-                                command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 #Add the parameters to ssh to the DUT and execute the command
                                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
@@ -240,6 +241,7 @@ if expectedResult in result.upper():
                                     if expectedResult in result:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         print "\n Rebooted device successfully \n"
+                                        time.sleep(15)
                                         print "Launch Cobalt"
                                         tdkTestObj = obj.createTestStep('containerization_launchApplication')
                                         tdkTestObj.addParameter("launch",cobalt_details)

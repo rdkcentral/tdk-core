@@ -169,6 +169,7 @@ if expectedResult in result.upper():
         time.sleep(20)
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(15)
             print "Launching Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",cobalt_details)

@@ -1,4 +1,4 @@
-	##########################################################################
+##########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>5</version>
+  <version>6</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_Container_Cobalt_TimeTo_PlayNextVideo</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
@@ -173,6 +173,7 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(15)
             print "Launch Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",cobalt_details)
@@ -238,7 +239,7 @@ if expectedResult in result.upper():
                             else:
                                 time.sleep(25)
                                 print "\n Check the logs from DUT"
-                                command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
                                 tdkTestObj.addParameter("credentials", credentials);
@@ -257,14 +258,14 @@ if expectedResult in result.upper():
                                     conf_file,file_status = getConfigFileName(obj.realpath)
                                     result2,cobalt_play_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PLAY_NEXT_VIDEO_TIME_THRESHOLD_VALUE")
                                     offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
-                                    Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
+                                    #Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                     if all(value != "" for value in (cobalt_play_threshold,offset)):
                                         print "\n Play initiated at {}".format(play_start_time)
-                                        Summ_list.append('Play initiated at :{}'.format(play_start_time))
+                                        #Summ_list.append('Play initiated at :{}'.format(play_start_time))
                                         print "\n Play happend at {}".format(video_playedtime)
-                                        Summ_list.append('Play happend at :{}'.format(video_playedtime))
+                                        #Summ_list.append('Play happend at :{}'.format(video_playedtime))
                                         print "\n Time taken for play operation: {} milliseconds \n".format(time_for_video_play)
-                                        Summ_list.append('Time taken for play operation :{}ms'.format(time_for_video_play))
+                                        #Summ_list.append('Time taken for play operation :{}ms'.format(time_for_video_play))
                                         print "\n Threshold value for Time taken for playing next video: {} milliseconds \n".format(cobalt_play_threshold)
                                         if 0 < int(time_for_video_play) < (int(cobalt_play_threshold) + int(offset)):
                                             print "\n Time taken for play operation is within the expected limit"

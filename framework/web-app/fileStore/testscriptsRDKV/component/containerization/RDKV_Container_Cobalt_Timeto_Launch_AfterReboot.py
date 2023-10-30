@@ -191,7 +191,7 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             thunder_port = rdkv_performancelib.devicePort
                             event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 6,"method": "org.rdk.RDKShell.1.register","params": {"event": "onLaunched", "id": "client.events.1" }}'],"/jsonrpc",False)
-                            time.sleep(10)
+                            time.sleep(15)
                             print "Launch Cobalt"
                             tdkTestObj = obj.createTestStep('containerization_launchApplication')
                             tdkTestObj.addParameter("launch",cobalt_details)

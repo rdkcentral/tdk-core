@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>2</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_Container_Cobalt_Timeto_Video_PlayPause</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -48,13 +48,13 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RPI-HYB</box_type>
+    <box_type>RDKTV</box_type>
     <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
-    <box_type>Video_Accelerator</box_type>
+    <box_type>RPI-HYB</box_type>
     <!--  -->
-    <box_type>RDKTV</box_type>
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -88,6 +88,7 @@
     <release_version>M111</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
@@ -111,7 +112,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL_CONTAINER", "COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER", "COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS", "COBALT_PLAYBACK_URL_CONTAINER", "COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER", "COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -136,7 +137,7 @@ if expectedResult in result.upper():
             cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
             cobalt_pause_threshold = configValues["COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER"]
             cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
-            offset = configValues["THRESHOLD_OFFSET_CONTAINER"]
+            offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:
@@ -175,6 +176,7 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
+            time.sleep(15)
             print "Launch Cobalt"
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",cobalt_details)
@@ -230,7 +232,7 @@ if expectedResult in result.upper():
                             time.sleep(50)
                             if "SUCCESS" == (result1 and result2):
                                 print "\n Check video is started \n"
-                                command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 #Add the parameters to ssh to the DUT and execute the command
                                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
@@ -260,7 +262,7 @@ if expectedResult in result.upper():
                                             time.sleep(20)
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             print "\n Check video is paused \n"
-                                            command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
+                                            command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
                                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                             tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
                                             tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
@@ -289,7 +291,7 @@ if expectedResult in result.upper():
                                                     if result == "SUCCESS":
                                                         print "\n Check video is playing \n"
                                                         time.sleep(20)
-                                                        command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                                        command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                                         tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
                                                         tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
