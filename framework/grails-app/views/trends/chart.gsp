@@ -287,6 +287,16 @@
 						<td><span id="scriptLabelBaseId" style="display:none;">Script/ScriptGroup</span></td>
 						<td><span id="scriptFieldBaseId" style="display:none;"><g:textField id="scriptValueBaseId" name="scriptValueBasicExec"/></span>									
 						</td>
+						
+					</tr>
+					<tr>
+					<td>For multiple execution comparison, Please check 'generateComparisionCombinedReport'</td>
+					</tr>
+					<tr>
+					<td>
+						<input type="radio" name="generateCompareBaseReport" value="generateComparisionReport" checked="checked"/>generateComparisionReport
+						<input type="radio" name="generateCompareBaseReport" value="generateComparisionCombinedReport"/>generateComparisionCombinedReport
+					</td>
 					</tr>
 					<g:hiddenField name = "validate" id = "validate" value = ""/>
 				</table>
@@ -346,6 +356,17 @@
 						<td><span id="scriptFieldComparisonId" style="display:none;"><g:textField id="scriptValueComparisonId" name="scriptValueComparisonExec"/></span>									
 						</td>
 					</tr>
+					<tr>
+					<td>For multiple execution comparison, Please check 'generateComparisionCombinedReport'</td>
+					</tr>
+					<tr>
+					<td>
+						<input type="radio" name="generateCompareReport" value="generateComparisionReport" checked="checked"/>generateComparisionReport
+						<input type="radio" name="generateCompareReport" value="generateComparisionCombinedReport"/>generateComparisionCombinedReport
+					</td>
+					</tr>
+					
+					
 					<g:hiddenField id="finalBaseExecName" name="finalBaseExecName" value=""/>
 					<g:hiddenField name = "validateComparison" id = "validateComparison" value = ""/>
 				</table>

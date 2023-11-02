@@ -490,7 +490,7 @@ class ExcelExporter extends AbstractExporter {
 	 * @param dataMap
 	 * @return
 	 */
-	def exportComparisonData(OutputStream outputStream, Map dataMap){
+	def exportComparisonData(OutputStream outputStream, Map dataMap,def excelReport){
 		try {
 			def builder = new ExcelBuilder()
 
@@ -555,8 +555,11 @@ class ExcelExporter extends AbstractExporter {
 									Set kSet = resultMap?.keySet()
 									kSet?.eachWithIndex { field, index ->
 										String value = getLabel(field)
-										cell(row: rowIndex, column: 1+index, value: value, format: "header")
-									}
+										if(excelReport.equals(Constants.EXPORT_REPORT)){
+											cell(row: rowIndex, column: 1+index, value: value, format: "header")
+										}else{
+											cell(row: rowIndex-1, column: index+1, value: value, format: "header")
+										}}
 								}
 								
 

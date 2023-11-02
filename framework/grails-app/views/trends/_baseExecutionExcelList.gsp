@@ -51,7 +51,7 @@
 							var="executionInstance">
 							<tr class="${(i % 2) == 0 ? 'evenForCombined' : 'oddForCombined'}">
 								<td style="width: 5%;">
-									<input id="baseExecutionRadio_${executionInstance?.id}" type="radio" name="baseExecutionRadio" value="" onclick="showSelectedBaseExecution(this.id)"/>	
+									<g:checkBox name="comparisonExecutionsCheckbox" id="comparisonExecutionsCheckbox_${executionInstance?.id}" />
 								</td>
 								<td align="center"
 									style="width: 35%; overflow: hidden; word-wrap: break-word;">

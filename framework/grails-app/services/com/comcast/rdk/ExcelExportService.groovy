@@ -107,7 +107,7 @@ class ExcelExportService {
 	 * @param parameters
 	 * @throws ExportingException
 	 */
-	public void exportComparison(String type, OutputStream outputStream, Map dataMap, List fields, Map labels, Map formatters, Map parameters) throws ExportingException {
+	public void exportComparison(String type, OutputStream outputStream, Map dataMap, List fields, Map labels, Map formatters, Map parameters, def exportReport) throws ExportingException {
 		ExcelExporter exporter = new ExcelExporter()
 		if(labels){
 			exporter.setLabels(labels)
@@ -115,7 +115,7 @@ class ExcelExportService {
 		if(parameters){
 			exporter.setParameters(parameters)
 		}
-		exporter.exportComparisonData(outputStream, dataMap)
+		exporter.exportComparisonData(outputStream, dataMap,exportReport)
 	}
 	
 	/**
@@ -161,6 +161,5 @@ class ExcelExportService {
 		}
 		exporter.exportProfilingMetricsData(outputStream, dataMap)
 	}
-	
 	
 }

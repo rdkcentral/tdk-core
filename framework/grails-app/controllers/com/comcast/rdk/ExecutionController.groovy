@@ -3000,8 +3000,9 @@ class ExecutionController {
 				params.extension = EXPORT_EXCEL_EXTENSION
 				response.contentType = grailsApplication.config.grails.mime.types[params.format]
 				def fileName = baseExecutionName
+				def exportReport=Constants.EXPORT_REPORT
 				response.setHeader("Content-disposition", "attachment; filename="+COMPARISON_EXPORT_FILENAME+ fileName +".${params.extension}")
-				excelExportService.exportComparison(params.format, response.outputStream,dataMap, null,fieldMap,[:], parameters)
+				excelExportService.exportComparison(params.format, response.outputStream,dataMap, null,fieldMap,[:], parameters,exportReport)
 				log.info "Completed excel export............. "
 			}
 			else{
@@ -5217,6 +5218,8 @@ class ExecutionController {
 		def selectedRows = []
 		def selectedRowsDefined = []
 		def executionNameList = ""
+		def seletedOption=params.checkCondition
+		def outputFinalList= []
 		if(params?.checkedRows != UNDEFINED && params?.checkedRows != BLANK_SPACE && params?.checkedRows != null){
 			selectedRows = params?.checkedRows.split(COMMA_SEPERATOR)
 			for(int i=0;i<selectedRows.size();i++){
@@ -5228,10 +5231,24 @@ class ExecutionController {
 		for(int i=0;i<selectedRowsDefined.size();i++){
 			Execution executionInstance = Execution.findById(selectedRowsDefined[i])
 			executionNameList = executionInstance?.name + "," + executionNameList
+			outputFinalList.add(executionInstance?.name)
 		}
 		executionNameList = executionNameList.substring(0, executionNameList.length() - 1);
+		if(seletedOption.toString().equals("generateComparisionCombinedReport")){
+			executionNameList = outputFinalList[0]
+			for (int i = 1; i < outputFinalList.size(); i++) {
+				if (i % 2 == 1) {
+					executionNameList += ","
+				} else {
+					executionNameList += ":"
+				}
+				executionNameList += outputFinalList[i]
+			}
+			executionNameList += ":"
+		}
 		render executionNameList
 	}
+
 	
 	/**
 	 * Function to check if the list of executions are valid
@@ -5239,17 +5256,34 @@ class ExecutionController {
 	 */
 	def checkValidMultipleExecutions(){
 		def execNames = params?.execNames
-		List executionNameList = execNames?.split(",")
 		def validCheck
+		List executionNameList
+		Execution executionInstance
+		if(execNames.toString().contains(":")){
+			execNames.split(":").each {execution ->
+				executionNameList = execution?.split(",")
+				for(int i=0;i<executionNameList.size();i++){
+					 executionInstance = Execution.findByName(executionNameList[i])
+					if(executionInstance){
+						validCheck =  true
+					}else{
+						validCheck =  false
+						break
+					}
+				}				
+			}
+			
+		}else{
+		 executionNameList = execNames?.split(",")
 		for(int i=0;i<executionNameList.size();i++){
-			Execution executionInstance = Execution.findByName(executionNameList[i])
+			 executionInstance = Execution.findByName(executionNameList[i])
 			if(executionInstance){
 				validCheck =  true
 			}else{
 				validCheck =  false
 				break
 			}
-		}
+		}}
 		if(validCheck){
 			render "valid"
 		}else{
@@ -6363,7 +6397,65 @@ class ExecutionController {
 		jsonObjMap.put("status","Thunder disabled")
 		render jsonObjMap as JSON
 	}
-	
-	
+	/**
+	 * Method to export the combined comparison report of the selected executions in excel format.
+	 *
+	 */
+	def comparisonCombinedExcelReportGeneration = {
+		Map dataMap = [:]
+		Map fieldMap = [:]
+		Map parameters = [:]
+		List fieldLabels = []
+		List columnWidthList = [
+			0.08,
+			0.2,
+			0.4,
+			0.08,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2,
+			0.2
+		]
+		try{
+
+			if(params?.comparisonExecutionNames != UNDEFINED && params?.comparisonExecutionNames != BLANK_SPACE && params?.comparisonExecutionNames != null && params?.baseExecutionNames != null ){
+				def baseExecutionNames = params?.baseExecutionNames
+				def comparisonExecutionNames = params?.comparisonExecutionNames
+
+				def fileName
+				List baseExecutionNamesList = params?.baseExecutionNames?.split(",")
+				dataMap = executedbService.getDataForCombinedComparisionExcelReportGeneration(baseExecutionNamesList, comparisonExecutionNames,getApplicationUrl(), getRealPath())
+				for(int i = 0; i < baseExecutionNamesList.size() - 1; i++){
+					fileName = baseExecutionNamesList.get(i);
+				}
+
+
+				if(!(dataMap.isEmpty())){
+					parameters = [ title: EXPORT_SHEET_NAME, "column.widths": columnWidthList]
+
+					params.format = EXPORT_EXCEL_FORMAT
+					params.extension = EXPORT_EXCEL_EXTENSION
+					def excelReport
+					response.contentType = grailsApplication.config.grails.mime.types[params.format]
+					response.setHeader("Content-disposition", "attachment; filename="+COMPARISON_EXPORT_FILENAME+ fileName +".${params.extension}")
+					excelExportService.exportComparison(params.format, response.outputStream,dataMap, null,fieldMap,[:], parameters,excelReport)
+					log.info "Completed excel export............. "
+				}
+				else{
+					redirect(controller:'trends' , action:'chart');
+					flash.message= "No valid execution reports are available."
+					return
+				}
+			}}catch(Exception e){
+			e.printStackTrace();
+		}
+	}
 	
 }

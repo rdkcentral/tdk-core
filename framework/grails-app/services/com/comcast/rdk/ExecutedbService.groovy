@@ -484,7 +484,7 @@ class ExecutedbService {
 	 * @param realPath
 	 * @return
 	 */
-	def getExecutionDetailsAsMap(Execution baseExecution,Execution comparisonExecution,def counter,String realPath){
+	def getExecutionDetailsAsMap(Execution baseExecution,Execution comparisonExecution,List baseExecutionList,List comparisonExecutionList,def counter,String realPath){
 		String realPathFromFile = executionService.getRealPathForLogsFromTMConfig()
 		if(realPathFromFile?.equals(Constants.NO_LOCATION_SPECIFIED)){
 			realPathFromFile = realPath
@@ -503,35 +503,110 @@ class ExecutedbService {
 		def newTimedOutCount = 0;
 		int rate = 0;
 		def image = "Image name not available"
-		def baseExecutionResultList = ExecutionResult.findAllByExecution(baseExecution)
-		baseExecutionResultList.each {executionResult ->
-			def moduleName
-			def scriptName = executionResult?.script
-			def sMap = scriptService.getScriptNameModuleNameMapping(realPath)
-			moduleName = sMap.get(scriptName)
-			if(moduleName){
-				baseExecutionScriptList.add(scriptName)
+		def comparisonExecutionResultList=[]
+		def baseExecutionResultList;
+		def baseAllExecutionResultList=[]
+		def comparisonAllExecutionResultList=[]
+		ExecutionDevice comparisonExecutionDevice
+		def comparisonAllExecutionResultDeviceList=[]
+		def baseExecModulesList= []
+		def compareExecModulesList= []
+		def compareImagesList=[]
+		Execution exec
+		if(!comparisonExecutionList){
+			baseExecutionResultList = ExecutionResult.findAllByExecution(baseExecution)
+			baseExecutionResultList.each {executionResult ->
+				def moduleName
+				def scriptName = executionResult?.script
+				def sMap = scriptService.getScriptNameModuleNameMapping(realPath)
+				moduleName = sMap.get(scriptName)
+				if(moduleName){
+					baseExecutionScriptList.add(scriptName)
+				}
 			}
-		}
-		def comparisonExecutionResultList = ExecutionResult.findAllByExecution(comparisonExecution)
-		ExecutionDevice comparisonExecutionDevice = ExecutionDevice.findByExecution(comparisonExecution)
-		if(comparisonExecutionDevice?.buildName && !comparisonExecutionDevice?.buildName?.isEmpty() && !comparisonExecutionDevice?.buildName?.equals("Image name not available")){
-			image = comparisonExecutionDevice?.buildName
-		}else if(realPathFromFile && comparisonExecution?.id && comparisonExecutionDevice?.id){
-			String imageNameFromVersionFile = getImageNameFromVersionFile(realPathFromFile,comparisonExecution?.id,comparisonExecutionDevice?.id)
-			if(imageNameFromVersionFile != null && !imageNameFromVersionFile.isEmpty()){
-				image = imageNameFromVersionFile
+			comparisonExecutionResultList = ExecutionResult.findAllByExecution(comparisonExecution)
+			comparisonExecutionDevice = ExecutionDevice.findByExecution(comparisonExecution)
+			if(comparisonExecutionDevice?.buildName && !comparisonExecutionDevice?.buildName?.isEmpty() && !comparisonExecutionDevice?.buildName?.equals("Image name not available")){
+				image = comparisonExecutionDevice?.buildName
+			}else if(realPathFromFile && comparisonExecution?.id && comparisonExecutionDevice?.id){
+				String imageNameFromVersionFile = getImageNameFromVersionFile(realPathFromFile,comparisonExecution?.id,comparisonExecutionDevice?.id)
+				if(imageNameFromVersionFile != null && !imageNameFromVersionFile.isEmpty()){
+					image = imageNameFromVersionFile
+				}
 			}
-		}
-		def scriptNameList = []
-		executionMap.put("Sl No", counter)
-		executionMap.put("Execution Name", comparisonExecution?.name)
-		if(comparisonExecution?.script){
-			executionMap.put("Test Suite", comparisonExecution?.script)
+			def scriptNameList = []
+			executionMap.put("Sl No", counter)
+			executionMap.put("Execution Name", comparisonExecution?.name)
+			if(comparisonExecution?.script){
+				executionMap.put("Test Suite", comparisonExecution?.script)
+			}else{
+				executionMap.put("Test Suite", comparisonExecution?.scriptGroup)
+			}
+			executionMap.put("Image Name", image)
+
 		}else{
-			executionMap.put("Test Suite", comparisonExecution?.scriptGroup)
+			for(int i=0;i<baseExecutionList.size();i++){
+				exec=Execution.findByName(baseExecutionList[i])
+				baseExecutionResultList = ExecutionResult.findAllByExecution(exec)
+				baseAllExecutionResultList.addAll(baseExecutionResultList)
+			}
+			baseAllExecutionResultList.each {executionResult ->
+				def moduleName
+				def scriptName = executionResult?.script
+				def sMap = scriptService.getScriptNameModuleNameMapping(realPath)
+
+				moduleName = sMap.get(scriptName)
+				if(moduleName){
+					baseExecutionScriptList.add(scriptName)
+				}
+			}
+			for(int i=0;i<comparisonExecutionList.size();i++){
+				exec=Execution.findByName(comparisonExecutionList[i])
+				comparisonAllExecutionResultList = ExecutionResult.findAllByExecution(exec)
+				comparisonExecutionDevice = ExecutionDevice.findByExecution(exec)
+				if(exec?.script){
+					compareExecModulesList.add(exec?.script)
+				}else{
+					compareExecModulesList.add(exec?.scriptGroup)
+				}
+				comparisonExecutionResultList.addAll(comparisonAllExecutionResultList)
+				comparisonAllExecutionResultDeviceList.add(comparisonExecutionDevice)
+			}
+
+			comparisonAllExecutionResultDeviceList.each{execDevice ->
+				ExecutionDevice comparisonExecutionDevicee=ExecutionDevice.findById(execDevice?.id)
+				if(comparisonExecutionDevicee?.buildName && !comparisonExecutionDevicee?.buildName?.isEmpty() && !comparisonExecutionDevicee?.buildName?.equals("Image name not available")){
+					image = comparisonExecutionDevice?.buildName
+					compareImagesList.add(comparisonExecutionDevicee?.buildName.toString())
+				}else if(realPathFromFile && exec?.id && comparisonExecutionDevicee?.id){
+					String imageNameFromVersionFile = getImageNameFromVersionFile(realPathFromFile,exec?.id,comparisonExecutionDevicee?.id)
+					if(imageNameFromVersionFile != null && !imageNameFromVersionFile.isEmpty()){
+						compareImagesList.add(comparisonExecutionDevicee?.buildName.toString())
+						image = imageNameFromVersionFile
+					}
+				}
+			}
+			def scriptNameList = []
+			executionMap.put("Sl No", counter)
+			executionMap.put("Execution Name",comparisonExecutionList)
+
+			if(compareExecModulesList!=null){
+
+				def filterList=compareExecModulesList.findAll{ it !=null}
+				executionMap.put("Test Suite", filterList)
+			}else{
+				def filterListtt=compareExecModulesList.findAll{ it !=null}
+				executionMap.put("Test Suite",filterListtt)
+			}
+
+			if(compareImagesList.isEmpty()){
+
+				executionMap.put("Image Name"," Image name not available")
+			}else{
+				executionMap.put("Image Name", compareImagesList)
+			}
+			counter=counter-4
 		}
-		executionMap.put("Image Name", image)
 		comparisonExecutionResultList.each {executionResult ->
 			def moduleName
 			def scriptName = executionResult?.script
@@ -601,6 +676,8 @@ class ExecutedbService {
 		Map detailsMap = [:]
 		Map coverPageMap = [:]
 		Map coverPageExecutionMap = [:]
+		List baseExecutionsList=null
+		List compareExecutionsList=null
 		Execution baseExecution = Execution.findByName(baseExecutionName)
 		allexecutionsList.add(baseExecution)
 		if(baseExecution){			
@@ -609,7 +686,7 @@ class ExecutedbService {
 			coverPageMap.put("Details",detailsMap)
 			int counter = 1
 			//setting the base execution details as the 1st row in cover page
-			coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution, baseExecution,counter,realPath)
+			coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution, baseExecution,baseExecutionsList,compareExecutionsList,counter,realPath)
 			coverPageMap.put(baseExecutionName,coverPageExecutionMap)
 			//getting the comparison execution details as a map to be displayed in cover page
 			for(int i=0;i<comparisonExecutionNames.size();i++){
@@ -617,7 +694,7 @@ class ExecutedbService {
 				counter ++ 
 				Execution comparisonExecution = Execution.findByName(comparisonExecutionNames[i])
 				if(comparisonExecution){
-					coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution, comparisonExecution,counter,realPath)
+					coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution, comparisonExecution,baseExecutionsList,compareExecutionsList,counter,realPath)
 					coverPageMap.put(comparisonExecutionNames[i],coverPageExecutionMap)
 					allexecutionsList.add(comparisonExecution)
 				}
@@ -2679,4 +2756,218 @@ class ExecutedbService {
 		}
 		return image
 	}
+
+/**
+ * Method to generate the data for creating the comparison report in excel format.
+ * @param baseExecutionName
+ * @param comparisonExecutionNames
+ * @param appUrl
+ * @param realPath
+ * @return
+ */
+def getDataForCombinedComparisionExcelReportGeneration(List  baseExecutionNamesList, String comparisonExecutionNames ,String appUrl, String realPath) {
+	Map detailDataMap = [:]
+	List allexecutionsList = []
+	List totalScriptList = []
+	Map summaryLabels = ["Sl No":"", "Execution Name":"", "Test Suite":"","Image Name":"" ,"Executed":"", "SUCCESS":"", "FAILURE":"", "SCRIPT TIME OUT":"", "N/A":"", "SKIPPED":"", "Pass %":"", "New Failure Script Count":"", "New Timedout Script Count":"", "New Script Count":""]
+	Map detailsMap = [:]
+	Map coverPageMap = [:]
+	Map coverPageExecutionMap = [:]
+
+		Execution baseExecution
+		Execution exction
+		List totalComparisonExecSplitList = []
+		def outputSubList = []
+		List subList = []
+		List	subbList=[]
+		List comparisonExecutionNameList =[]
+		List executionResultBySplittList =[]
+		List comparisonExecutionNameSplitList =[]
+		List baseExecDeviceList =[]
+		List subbComparList =[]
+		for(int i = 0; i < baseExecutionNamesList.size() - 1; i++){
+			baseExecution = Execution.findByName(baseExecutionNamesList[i])
+			
+			
+		}
+		
+
+		if(baseExecution!=null){
+			int counter = 1
+			def resultBaseExecutions = baseExecutionNamesList.join(",")
+			
+			
+			resultBaseExecutions.split(":").each { execution ->
+				subbList = execution.split(",")
+				coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution,exction,subbList, subbList,counter,realPath)
+				coverPageMap.put(subbList,coverPageExecutionMap)
+				
+				for(int i=0;i<subbList.size();i++){
+				
+				
+					baseExecution = Execution.findByName(subbList[i])
+					baseExecDeviceList.add(baseExecution?.device)
+				}
+			
+			}
+			
+			
+			comparisonExecutionNames.split(":").each { execution ->
+				
+				counter++
+				subbComparList = execution.split(",")
+				coverPageExecutionMap = getExecutionDetailsAsMap(baseExecution,exction,subbList, subbComparList,counter,realPath)
+				coverPageMap.put(subbComparList,coverPageExecutionMap)
+				
+				
+			}
+		
+			detailsMap.put("Base Execution Name ",baseExecutionNamesList.toString())
+			detailsMap.put("Device", baseExecDeviceList)
+			coverPageMap.put("Details",detailsMap)
+			
+			def result = baseExecutionNamesList.join(",")
+			result=result+" "+comparisonExecutionNames
+		
+			result.split(":").each { execution ->
+				 subList = execution.split(",")
+			
+				if (subList) {
+						comparisonExecutionNameList << subList
+						
+					}
+			
+				
+				}
+				comparisonExecutionNameList.each {executionlist ->
+				def i=0
+				comparisonExecutionNameSplitList  << executionlist[i]	
+				i++
+			}
+	
+			 outputSubList = comparisonExecutionNameList.flatten()
+			 for(int i=0;i<outputSubList.size();i++){
+				 
+					  exction= Execution.findByName(outputSubList[i].toString().trim())
+				 executionResultBySplittList=ExecutionResult.findAllByExecution(exction)
+				 executionResultBySplittList.each {executionResult ->
+					 totalComparisonExecSplitList.add(executionResult?.script)
+					
+				 }
+			 
+				 }
+			
+			for(int i=0;i<comparisonExecutionNameSplitList.size();i++){
+				counter ++
+				Execution comparisonExecution = Execution.findByName(comparisonExecutionNameSplitList[i])
+			
+			}
+			coverPageMap.put("Labels",summaryLabels)
+			detailDataMap.put("CoverPage", coverPageMap)
+		
+		int scriptCounter = 1
+		List dataList = []
+		Map dataMapList = [:]
+		int countt = 0;
+		List fieldsList = []
+		
+		
+		fieldsList.add("Sl No")
+		fieldsList.add("Module Name")
+		fieldsList.add("Script Name")
+		fieldsList.add("Pass %")
+	
+		totalComparisonExecSplitList.each {scriptNaame ->
+				int rate=0;
+				def successCount = 0;
+				def naCount = 0;
+				def totalCount = 0;
+				Map dataMap = [:]
+				def moduleName
+				dataMap.put("Sl No",scriptCounter)
+				def sMap = scriptService.getScriptNameModuleNameMapping(realPath)
+				moduleName = sMap.get(scriptNaame)
+				dataMap.put("Module Name",moduleName)
+				dataMap.put("Script Name",scriptNaame)
+				
+				def executionResullt
+				result.split(":").each {execusstion ->
+					
+					subList = execusstion.split(",")
+					if(!fieldsList.contains(execusstion.toString())){
+						fieldsList.add("-"+execusstion.toString() + "-")
+					
+					}
+
+					if (subList) {
+						
+						
+						def	myString = "-"+execusstion.toString() + "-"
+							boolean isDataObtained =false;
+							boolean onSuccessStatus = false;
+						for(int i=0;i<subList.size();i++){
+							
+							def myStringg=subList[i].toString()
+							Execution comparisonExeecution = Execution.findByName(subList[i].toString().trim())
+							
+							executionResullt = ExecutionResult.findByExecutionAndScript(comparisonExeecution,scriptNaame)
+							
+							if(executionResullt){
+						
+									if(executionResullt?.status == SUCCESS_STATUS){
+										
+										
+											dataMap.put(myString,executionResullt?.status)
+											successCount++
+											break;
+									
+	
+									}
+									else if(executionResullt?.status == FAILURE_STATUS ){
+										
+											isDataObtained=true
+											
+											dataMap.put(myString,executionResullt?.status)
+										
+									}else if(executionResullt?.status == NOT_APPLICABLE_STATUS ){
+									naCount++
+									}
+								
+									
+							}
+							
+							else{
+							
+								 if(!isDataObtained){
+									
+									dataMap.put(myString,"Not Executed")
+								}
+							}
+							
+
+						}
+						
+					}
+					totalCount++
+					
+				}
+				scriptCounter++
+				if(totalCount!=naCount){
+					
+							rate =successCount*100/(totalCount-naCount)
+					}
+				dataMap.put("Pass %",rate)
+					dataList.add(dataMap)
+
+			}
+			dataMapList.put("dataList",dataList)
+			dataMapList.put("fieldsList",fieldsList.unique())
+			detailDataMap.put("Comparison Results",dataMapList)
+		}
+
+
+	return detailDataMap
+
+}
+	
 }

@@ -416,4 +416,6 @@ public final class Constants
 	public static final String RDKV_PROFILING_ACTUAL_UNIT = "RDKV_PROFILING_ACTUAL_UNIT_";
 	public static final String RDKV_PROFILING_PREFERRED_UNIT = "RDKV_PROFILING_PREFERRED_UNIT_";
 	public static final String TDKV_RDKSERVICE_CONFIG_FOLDER_LOCATION = "//fileStore//tdkvRDKServiceConfig//";
+	
+	public static final String EXPORT_REPORT= "generateComparisionReport";
 }

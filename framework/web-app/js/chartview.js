@@ -2395,15 +2395,23 @@ function helpDivToggle(){
 function baseExecutionSelection(executionIdList) {
 	var notChecked = [];
 	var baseExecId = "";
+	var checkedRows = "";
+	var selectedRows = [];
 	var url = $("#url").val();
 	var executionIdArray = JSON.parse(executionIdList);
+	const  seletedOption = document.querySelector('input[name="generateCompareBaseReport"]:checked');
+	var checkCondition=seletedOption.value
+	if(seletedOption.value == "generateComparisionReport"){
 	for(i=0;i<=executionIdArray.length;i++){
-		if ($('#baseExecutionRadio_'+executionIdArray[i]).is(":checked"))
+		if ($('#comparisonExecutionsCheckbox_'+executionIdArray[i]).is(":checked"))
 		{
-			baseExecId =  executionIdArray[i];
+			baseExecId =  executionIdArray[0];
+			checkedRows =  executionIdArray[0] + "," + checkedRows
 		}
 	}
-	if (baseExecId == "") {
+	checkedRows = checkedRows.slice(0, -1)
+	selectedRows = checkedRows.split(",")
+	if (baseExecId == "" || selectedRows.length > 1) {
 	    alert("Please select any one execution");
 	}
 	else{
@@ -2421,6 +2429,39 @@ function baseExecutionSelection(executionIdList) {
 			$.modal.close();
 		});
 	}
+	}else if(seletedOption.value == "generateComparisionCombinedReport"){
+		
+		for(i=0;i<=executionIdArray.length;i++){
+			if ($('#comparisonExecutionsCheckbox_'+executionIdArray[i]).is(":checked"))
+			{
+				checkedRows =  executionIdArray[i] + "," + checkedRows
+			}
+			
+		}
+		checkedRows = checkedRows.slice(0, -1)
+		selectedRows = checkedRows.split(",")
+		if((selectedRows.length > 10) || (checkedRows  == "")){
+			alert("Maximum number of executions that can be compared is 10 and minimum number is 1")
+			document.getElementById("baseExecutionName").value = ""
+		}else if(selectedRows.length > 2 || selectedRows.length == 1){
+			
+			alert("Please select any two executions");
+			
+		}
+		
+		else{
+			$.get(url+'/execution/getExecutionNamesAsList', {checkedRows: checkedRows,checkCondition :checkCondition}, function(data) {
+				document.getElementById("baseExecutionName").value = data;
+				//closing the current modal
+				$.modal.close();
+			});
+		
+		
+	}
+		
+		
+	}
+	
 }
 
 /**
@@ -2447,24 +2488,63 @@ function comparisonExecutionSelection(executionIdList) {
 	var checkedRows = "";
 	var url = $("#url").val();
 	var executionIdArray = JSON.parse(executionIdList);
-	for(i=0;i<=executionIdArray.length;i++){
-		if ($('#comparisonExecutionsCheckbox_'+executionIdArray[i]).is(":checked"))
-		{
-			checkedRows =  executionIdArray[i] + "," + checkedRows;
+	const  seletedOption = document.querySelector('input[name="generateCompareReport"]:checked');
+	var checkCondition=seletedOption.value
+	if(seletedOption){
+		if(seletedOption.value == "generateComparisionReport"){
+			
+			for(i=0;i<=executionIdArray.length;i++){
+				if ($('#comparisonExecutionsCheckbox_'+executionIdArray[i]).is(":checked"))
+				{
+					checkedRows =  executionIdArray[i] + "," + checkedRows
+				}
+			}
+			checkedRows = checkedRows.slice(0, -1)
+			selectedRows = checkedRows.split(",")
+			if((selectedRows.length > 10) || (checkedRows  == "")){
+				alert("Maximum number of executions that can be compared is 10 and minimum number is 1")
+				document.getElementById("comparisonExecutionName").value = ""
+			}else{
+				$.get(url+'/execution/getExecutionNamesAsList', {checkedRows: checkedRows,checkCondition :checkCondition}, function(data) {
+					document.getElementById("comparisonExecutionName").value = data;
+					//closing the current modal
+					$.modal.close();
+				});
+			
+			
 		}
+				
+			
+			
+			
+		}else if(seletedOption.value == "generateComparisionCombinedReport"){
+			
+			for(i=0;i<=executionIdArray.length;i++){
+				if ($('#comparisonExecutionsCheckbox_'+executionIdArray[i]).is(":checked"))
+				{
+					checkedRows =  executionIdArray[i] + "," + checkedRows
+				}
+			}
+			checkedRows = checkedRows.slice(0, -1)
+			selectedRows = checkedRows.split(",")
+			if((selectedRows.length > 10) || (checkedRows  == "")){
+				alert("Maximum number of executions that can be compared is 10 and minimum number is 1")
+				document.getElementById("comparisonExecutionName").value = ""
+			}else{
+				$.get(url+'/execution/getExecutionNamesAsList', {checkedRows: checkedRows,checkCondition :checkCondition}, function(data) {
+					document.getElementById("comparisonExecutionName").value = data;
+					//closing the current modal
+					$.modal.close();
+				});
+			
+			
+		}
+			
+			
+		}		
 	}
-	checkedRows = checkedRows.slice(0, -1)
-	selectedRows = checkedRows.split(",")
-	if((selectedRows.length > 10) || (checkedRows  == "")){
-		alert("Maximum number of executions that can be compared is 10 and minimum number is 1")
-		document.getElementById("comparisonExecutionName").value = ""
-	}else{
-		$.get(url+'/execution/getExecutionNamesAsList', {checkedRows: checkedRows}, function(data) {
-			document.getElementById("comparisonExecutionName").value = data;
-			//closing the current modal
-			$.modal.close();
-		});
-	}
+		
+	
 }
 
 /**
@@ -2612,6 +2692,21 @@ function comparisonExcelReportGeneration(){
 	var url = $("#url").val();
 	if(baseExecution == "" || comparisonExecList == ""){
 		alert("Base execution and comparison execution fields should not be empty")
+	}else if(comparisonExecList.includes(':')){
+		$.get(url+'/execution/checkValidMultipleExecutions', {execNames: baseExecution}, function(data) {
+			if(data == "valid"){
+				$.get(url+'/execution/checkValidMultipleExecutions', {execNames: comparisonExecList}, function(dataList) {
+					if(dataList == "valid"){
+					alert("Please wait, Report generation may take few minutes...")
+					window.open(url+"/execution/comparisonCombinedExcelReportGeneration/?comparisonExecutionNames="+comparisonExecList+"&baseExecutionNames="+baseExecution,'_self');
+					}else{
+						alert("Valid Comparison Execution not found to generate report")
+					}
+				});
+			}else {
+				alert("Valid Base Execution not found to generate report")
+			}
+		});
 	}else{
 		$.get(url+'/execution/checkValidMultipleExecutions', {execNames: baseExecution}, function(data) {
 			if(data == "valid"){
