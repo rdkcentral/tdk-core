@@ -45,8 +45,11 @@ import logging
 import random
 import select
 import StringIO
+import ConfigParser
+import inspect
 from xml.dom.minidom import Document,parseString
 from mySQLConfig import *
+from SSHUtility import *
 
 #------------------------------------------------------------------------------
 # Initialization
@@ -1120,6 +1123,14 @@ class TDKScriptingLibrary:
 			message=result["result"]
 			if "Success" in message:
 				self.uiLogData=self.uiLogData+ "<br/> Opensource test module successfully loaded\n"
+                        	configKey = ["CRASH_MONITOR"]
+				configValue = getDeviceConfigElements(self, configKey)
+				crash_monitor = configValue[0]
+				#Call the function only if crash_monitor is set to "yes"
+				if crash_monitor.lower() == "yes":
+					global wpe_pid
+					#If yes, obtain the process ID (WPEFramework)
+					wpe_pid = ssh_fetch_wpe_pid(self)
 			else:
 				self.uiLogData=self.uiLogData+ "<br/> Failed to load Opensource test module \n"
 
@@ -1425,6 +1436,11 @@ class TDKScriptingLibrary:
 
 		sys.stdout.flush()
 		self.tcpClient.close()
+                #Call the function only if crash_monitor is set to "yes"
+                if self.crash_monitor_status:
+                  #If yes, monitor crash and print summary
+                  check_core_files(self,wpe_pid)
+                  print_crash_summary()
                 #resetAgent(self.IP,8087,"true")
 		return
 
@@ -2026,6 +2042,113 @@ def Create_ExecuteTestcase(obj,primitivetest,expectedresult,verifyList, **kwargs
 
     return (actualresult,tdkTestObj,details);
 
+#To decide crash monitor is started or not
+crash_monitor_status = False
 
+def getDeviceConfigElements(self, configKeys):
+    url = self.url + '/deviceGroup/getDeviceDetails?deviceIp=' + self.IP
+    try:
+        response = urllib.urlopen(url).read()
+        deviceDetails = json.loads(response)
+    except:
+        print "Unable to get Device Details from REST !!!"
+        exit()
 
+    sys.stdout.flush()
+
+    deviceName = deviceDetails['devicename']
+    deviceType = deviceDetails['boxtype']
+    configPath = self.realpath + "/"   + "fileStore/tdkvRDKServiceConfig"
+    deviceNameConfigFile = configPath + "/" + deviceName + ".config"
+    deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
+
+    deviceConfigFile = ""
+    configValue = ""
+    output = []
+
+    if os.path.exists(deviceNameConfigFile):
+        deviceConfigFile = deviceNameConfigFile
+    elif os.path.exists(deviceTypeConfigFile):
+        deviceConfigFile = deviceTypeConfigFile
+    else:
+        output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
+        print output
+
+    try:
+        if deviceConfigFile and configKeys:
+            config = ConfigParser.ConfigParser()
+            config.read(deviceConfigFile)
+            deviceConfig = config.sections()[0]
+            for key in configKeys:
+                configValue = config.get(deviceConfig, key)
+                output.append(configValue)
+        else:
+            output = "FAILURE : DeviceConfig file or key cannot be empty"
+    except Exception as e:
+        output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + str(e)
+
+    return output
+
+#Variable to keep track of the number of core dump files generated
+corefile_count = 0
+
+#Variable to store the process ID of WPEFramework
+wpe_pid = 0
+
+#Function to ssh to DUT and fetch wpeframework Process ID
+def ssh_fetch_wpe_pid(self):
+    global start_time
+    configKeys = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configValues = getDeviceConfigElements(self, configKeys)
+    hostname = self.IP
+    #Execute command to get WPE PID
+    command = "pgrep WPEFramework"
+    result = ssh_and_execute(configValues[0], hostname, configValues[1], configValues[2], command)
+    output = result.strip().split('\n')
+    if len(output) >= 2:
+      pid = int(output[1])
+      start_time = int(time.time())
+      print "Crash monitor is started..."
+      #Set the flag to True
+      self.crash_monitor_status = True
+      return pid
+    else:
+      print("Unable to retrieve output PID")
+      return None
+
+#Function to Monitor crash files in DUT
+def check_core_files(self,wpe_pid):
+    global corefile_count
+    configKeys = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configValues = getDeviceConfigElements(self, configKeys)
+    hostname = self.IP
+    try:
+        end_time = int(time.time())
+        find_command = 'find / ~ -type f -name "core.*" 2>/dev/null'
+        result = ssh_and_execute(configValues[0], hostname, configValues[1], configValues[2], find_command)
+        output = result.strip().split('\n')
+        if len(output) >= 2:
+            core_files = result.strip().split('\n')
+            unique_core_files = set(core_files)
+            for core_file in unique_core_files:
+                if 'WPEFramework' in core_file:
+                    core_pid = int(core_file.split('.')[-3])
+                    if core_pid == wpe_pid:
+                        core_timestamp = int(core_file.split('.')[-1])
+                        if start_time <= core_timestamp <= end_time:
+                            print("Crash detected! Core file %s corresponds to wpe_pid %s" % (core_file, wpe_pid))
+                            corefile_count += 1
+    except Exception as e:
+        print("Error in monitoring crash: %s" % str(e))
+
+#Function to print_summary if crash is detected
+def print_crash_summary():
+  print("\n--- Crash Monitor Summary ---")
+  if corefile_count is not None and corefile_count > 0:
+    print("Core files generated: %s" % corefile_count)
+  else:
+    print("No signs of a crash have been detected during the execution of current test")     
+    
+    
+    
 ########## End of tdklib ##########
