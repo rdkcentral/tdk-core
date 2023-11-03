@@ -788,6 +788,7 @@
                 <param tag="visible" type="bool" />
                 <param tag="focused" type="bool" />
                 <param tag="holePunch" type="bool" />
+		<param tag="topmost" type="bool" />
                 <param tag="behind" defaultValue="null" />
             </params>
         </method>
@@ -986,11 +987,10 @@
         <method name="AddKeyIntercepts" api="addKeyIntercepts" type="method" desc="Adds the list of key intercepts" >
             <params paramType="userGenerate" useMethodTag="rdkshell_add_key_intercepts" >
                 <param tag="keyCode" type="int"/>
-                <param tag="modifiers" defaultValue="alt,shift" type="list" />
+                <param tag="modifiers" defaultValue="" type="list" />
                 <param tag="client" defaultValue="null"/>
             </params>
         </method>
-        <method name="RemoveKeyIntercepts" api="removeAllKeyIntercepts" type="method" desc="Removes all key intercepts" />
         <event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
         <event name="Event_On_Launched" eventName="onLaunched" eventId="client.events.1" type="event" desc="Fired on launching the client" />
         <event name="Event_On_Suspended" eventName="onSuspended" eventId="client.events.1" type="event" desc="Fired on Suspending the client" />
@@ -2330,7 +2330,11 @@
         <method name="HdmiCec2_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
                 <expectedValues>True,False</expectedValues>
         </method>
-        <method name="HdmiCec2_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option"/>
+        <method name="HdmiCec2_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option">
+		<params>
+                <param tag="enabled" defaultValue="null" type="bool" />
+            </params>
+        </method>
     </plugin>
     
     <!-- ValidatePluginAPIHttpResponseCode Information -->

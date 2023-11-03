@@ -4162,6 +4162,8 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             audioPorts = testStepResults[0].get("connected_audio_port")
             if "HDMI0" in audioPorts:
                 info["audioPort"] = "HDMI0"
+            elif "SPEAKER0" in audioPorts:
+                info["audioPort"] = "SPEAKER0"
             else:
                 info["audioPort"] = audioPorts[0]
 
@@ -4669,7 +4671,8 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rdkshell_set_animations_params":
             userGeneratedParam = {"animations":[testParams]}
         elif tag == "rdkshell_add_key_intercepts":
-            userGeneratedParam = {"intercepts": [{"client":testParams.get("client1"),"keys":[{"keyCode":testParams.get("keyCode1")}]},{"client":testParams.get("client2"),"keys":[{"keyCode":testParams.get("keyCode2")}]}]}
+            print testParams,"testParams"
+            userGeneratedParam = {"intercepts": [{"client":testParams.get("client1"),"keys":[{"keyCode":int(testParams.get("keyCode1")),"modifiers": testParams.get("modifiers")}]},{"client":testParams.get("client2"),"keys":[{"keyCode":int(testParams.get("keyCode2")),"modifiers": testParams.get("modifiers")}]}]}
         elif tag == "cobalt_set_accessibility_params":
             newtestParams = testParams.copy()
             newtestParams.pop("ishighcontrasttextenabled")

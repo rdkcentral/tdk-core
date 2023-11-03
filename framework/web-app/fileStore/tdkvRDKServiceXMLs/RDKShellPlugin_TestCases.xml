@@ -2846,16 +2846,43 @@
                       <resultGeneration useMethodTag="rdkshell_get_result_status" />
                    </testStep>
                  </prerequisite>
+		 <prerequisite requisiteId="2" requisiteName="Destroy_WebKitBrowser_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "webkitbrowser" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_WebKitBrowser_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="WebKitBrowser" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                 </prerequisite>
             </testCasePreRequisite>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" delay="1" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues= "cobalt" />
             </testStep>
-            <testStep testStepId="2" name="getZorder" method="GetZOrder" >
+	    <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues="webkitbrowser" />
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
                 <resultGeneration useMethodTag="rdkshell_check_zorder" >
                      <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="3" name="Launch_Application" method="LaunchApplication" >
+	    <testStep testStepId="4" name="Launch_Application" method="LaunchApplication" >
+              <params>
+                  <param tag="callsign" value="WebKitBrowser" />
+                  <param tag="topmost" value="true"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+	    <testStep testStepId="5" name="getZorder" method="GetZOrder" delay="2" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues value="webkitbrowser" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Launch_Application" method="LaunchApplication" >
               <params>
                   <param tag="callsign" value="Cobalt" />
                   <param tag="suspend" value="true"/>
@@ -2864,16 +2891,16 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="4" name="Is_Cobalt_Suspended" method="Get_Application_State"  delay="2">
+            <testStep testStepId="7" name="Is_Cobalt_Suspended" method="Get_Application_State"  delay="2">
               <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="suspended" />
             </testStep>
-            <testStep testStepId="5" name="getZorder" method="GetZOrder" >
+            <testStep testStepId="8" name="getZorder" method="GetZOrder" >
               <resultGeneration useMethodTag="rdkshell_validate_zorder"  expectedValues="cobalt" >
                  <arguments  value="validate_front_app_order" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
               </resultGeneration>
             </testStep>
         </testCase>
-
+        
         <!-- Test case 99 -->
         <testCase testCaseId="RDKShell_99" testCaseName="RDKShell_Add_Remove_Multiple_Key_Intercepts" desc="Checks if able to add multiple key intercepts and remove it">
             <testCaseInfo testCaseType="direct"/>
@@ -2890,6 +2917,7 @@
               <params>
                 <param tag="client1"  value="cobalt" />
                 <param tag="keyCode1" value="50"/>
+                <param tag="modifiers" useDefault="true" />
                 <param tag="client2"  value="webkitbrowser" />
                 <param tag="keyCode2" value="51"/>
               </params>
@@ -2917,11 +2945,24 @@
             <testStep testStepId="7" name="Check_Required_Log" action="externalFnCall" delay="2" >
                  <resultGeneration useMethodTag="check_required_logs"  expectedValues="intercepted by client webkitbrowser"/>
             </testStep>
-            <testStep testStepId="8" name="Remove_Key_Intercepts" method="RemoveKeyIntercepts">
+            <testStep testStepId="8" name="removekeyintercept" method="RemoveKeyIntercept">
+              <params>
+                <param tag="client"  value="cobalt" />
+                <param tag="keyCode"   value="50" />
+                <param tag="modifiers"   value="" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="9" name="removekeyintercept" method="RemoveKeyIntercept">
+              <params>
+                <param tag="client"  value="webkitbrowser"/>
+                <param tag="keyCode"   value="51" />
+                <param tag="modifiers"   value="" />
+              </params>
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
         </testCase>
-
+        
         <!-- Test case 100 -->
         <testCase testCaseId="RDKShell_100" testCaseName="RDKShell_Check_Zorder_On_Launching_Cobalt_TopMost" desc="Checks the zorder sequence on launching the cobalt application with topmost parameter" >
             <testCaseInfo testCaseType="direct"/>
@@ -2937,38 +2978,52 @@
                       <resultGeneration useMethodTag="rdkshell_get_result_status" />
                    </testStep>
                  </prerequisite>
+		 <prerequisite requisiteId="2" requisiteName="Destroy_WebKitBrowser_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "webkitbrowser" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_WebKitBrowser_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="WebKitBrowser" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                 </prerequisite>
             </testCasePreRequisite>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" delay="1" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues= "cobalt" />
             </testStep>
-            <testStep testStepId="2" name="getZorder" method="GetZOrder" >
+	    <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues="webkitbrowser" />
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
                 <resultGeneration useMethodTag="rdkshell_check_zorder" >
                      <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="3" name="Launch_Application" method="LaunchApplication" >
+            <testStep testStepId="4" name="Launch_Application" method="LaunchApplication" >
+              <params>
+                  <param tag="callsign" value="WebKitBrowser" />
+                  <param tag="topmost" value="true"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+	    <testStep testStepId="5" name="getZorder" method="GetZOrder" delay="2" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues value="webkitbrowser" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Launch_Application" method="LaunchApplication" >
               <params>
                   <param tag="callsign" value="Cobalt" />
                   <param tag="topmost" value="false"/>
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="4" name="getZorder" method="GetZOrder" delay="2" >
+	    <testStep testStepId="7" name="getZorder" method="GetZOrder" delay="2" >
               <resultGeneration useMethodTag="rdkshell_validate_zorder"  expectedValues="cobalt" >
                  <arguments  value="validate_front_app_order" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
-              </resultGeneration>
-            </testStep>
-            <testStep testStepId="5" name="Launch_Application" method="LaunchApplication" >
-              <params>
-                  <param tag="callsign" value="Cobalt" />
-                  <param tag="topmost" value="true"/>
-              </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
-            </testStep>
-            <testStep testStepId="6" name="getZorder" method="GetZOrder" delay="2" >
-              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
-                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
-                <expectedValues value="cobalt" />
               </resultGeneration>
             </testStep>
         </testCase> 
@@ -2976,15 +3031,44 @@
         <!-- Test case 101 -->
         <testCase testCaseId="RDKShell_101" testCaseName="RDKShell_Check_Zorder_On_Launching_WesterosTest_TopMost_False" desc="Checks the zorder sequence on launching the Westeros application topmost as False" >
             <testCaseInfo testCaseType="direct"/>
+	    <testCasePreRequisite>
+	    <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="Cobalt" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+            </prerequisite>
+	    </testCasePreRequisite>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" delay="1" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues= "cobalt" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="1" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues="westerostest" />
             </testStep>
-            <testStep testStepId="2" name="getZorder" method="GetZOrder" >
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
                 <resultGeneration useMethodTag="rdkshell_check_zorder" >
                      <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
                 </resultGeneration>
             </testStep>
-             <testStep testStepId="3" name="Launch_Application" method="Launch_Application">
+            <testStep testStepId="4" name="Launch_Application" method="LaunchApplication" >
+              <params>
+                  <param tag="callsign" value="Cobalt" />
+                  <param tag="topmost" value="true"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="5" name="getZorder" method="GetZOrder" delay="2" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues value="cobalt" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Launch_Application" method="Launch_Application">
               <params>
                       <param tag="client" value="WesterosTest" />
                       <param tag="uri" value="file:///usr/bin/westeros_test" />
@@ -2994,10 +3078,10 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" delay="3">
+            <testStep testStepId="7" name="Get_connected_clients" method="GetClients" delay="3">
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="westerostest" />
             </testStep>
-            <testStep testStepId="5" name="getZorder" method="GetZOrder" >
+            <testStep testStepId="8" name="getZorder" method="GetZOrder" >
               <resultGeneration useMethodTag="rdkshell_validate_zorder"  expectedValues="westerostest" >
                  <arguments  value="validate_front_app_order" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
               </resultGeneration>
@@ -3242,38 +3326,52 @@
                       <resultGeneration useMethodTag="rdkshell_get_result_status" />
                    </testStep>
                  </prerequisite>
+                 <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="Cobalt" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                 </prerequisite>
             </testCasePreRequisite>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" delay="1" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues= "webkitbrowser" />
             </testStep>
-            <testStep testStepId="2" name="getZorder" method="GetZOrder" >
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="1" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues= "cobalt" />
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" >
                 <resultGeneration useMethodTag="rdkshell_check_zorder" >
                      <arguments useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="3" name="Launch_Application" method="LaunchApplication" >
+            <testStep testStepId="4" name="Launch_Application" method="LaunchApplication" >
+              <params>
+                  <param tag="callsign" value="Cobalt" />
+                  <param tag="topmost" value="true"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="5" name="getZorder" method="GetZOrder" delay="3" >
+              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
+                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
+                <expectedValues value="cobalt" />
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Launch_Application" method="LaunchApplication" >
               <params>
                   <param tag="callsign" value="WebKitBrowser" />
                   <param tag="topmost" value="false"/>
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="4" name="getZorder" method="GetZOrder" delay="2" >
+            <testStep testStepId="7" name="getZorder" method="GetZOrder" delay="2" >
               <resultGeneration useMethodTag="rdkshell_validate_zorder"  expectedValues="webkitbrowser" >
                  <arguments  value="validate_front_app_order" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
-              </resultGeneration>
-            </testStep>
-            <testStep testStepId="5" name="Launch_Application" method="LaunchApplication" >
-              <params>
-                  <param tag="callsign" value="WebKitBrowser" />
-                  <param tag="topmost" value="true"/>
-              </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
-            </testStep>
-            <testStep testStepId="6" name="getZorder" method="GetZOrder" delay="2" >
-              <resultGeneration useMethodTag="rdkshell_validate_zorder" >
-                <arguments value="validate_move_to_front" useConfigFile="true" key="RDKSHELL_EXCLUDED_PROCESS_LIST" />
-                <expectedValues value="webkitbrowser" />
               </resultGeneration>
             </testStep>
         </testCase>

@@ -389,7 +389,7 @@
                 </params>
                 <resultGeneration useMethodTag="system_get_state_info"  />
             </testStep>
-            <testStep testStepId="4" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds"  revertFlag="yes" delay="60">
+            <testStep testStepId="4" name="Get_Temperature_Thresholds" method="Get_Temperature_Thresholds"  revertFlag="yes" delay="30">
                 <resultGeneration useMethodTag="system_verify_thresholds_params" arguments="validate_threshold_params" >
                   <expectedValues  usePreviousResult="true" Id="2" useMethodTag="system_generate_new_temperature_thresholds" arguments="warn,max"/>
                 </resultGeneration>
