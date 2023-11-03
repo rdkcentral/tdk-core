@@ -55,6 +55,7 @@ resolution_revert = False
 # Global variables to store sound modes
 current_mode = None
 mode_revert = False
+auto_mode = 0
 # Global variable to store proc validation mode
 proc_check_mode = None
 # Global variable to store process to be excluded
@@ -549,6 +550,7 @@ def getConnectedAudioPorts(obj):
     return conn_status
 
 def checkSupportedAudioModes(obj,mode):
+    global auto_mode
     print "\nChecking Supported Audio modes..."
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
@@ -569,6 +571,7 @@ def checkSupportedAudioModes(obj,mode):
                     mode_match = True
                     if "AUTO" in mode_value:
                         mode = mode_value.split("(")[1].split(")")[0]
+                        auto_mode = 1
                     else:
                         mode = mode_value;
                     break;
@@ -694,6 +697,7 @@ def setCurrentSoundMode(obj,mode):
         return status
     global current_mode
     global mode_revert
+    global auto_mode
     if "AUTO" in curr_mode:
         current_mode = curr_mode.split("(")[1].split(")")[0]
     else:
@@ -702,10 +706,14 @@ def setCurrentSoundMode(obj,mode):
     if mode.lower() in curr_mode.lower():
         set_status = "SUCCESS"
         print "Required sound mode is set already"
-    else:
+    else:    
         print "\nSetting %s sound mode...." %(mode)
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
-        params = '{"audioPort":"'+audio_port+'","soundMode":"'+mode+'", "persist":false}'
+        if auto_mode == 1:
+            params = '{"audioPort":"'+audio_port+'","soundMode":"AUTO", "persist":false}'
+            auto_mode = 0
+        else:
+            params = '{"audioPort":"'+audio_port+'","soundMode":"'+mode+'", "persist":false}'
         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setSoundMode");
         tdkTestObj.addParameter("value",params)
         tdkTestObj.executeTestCase("SUCCESS");
@@ -713,6 +721,7 @@ def setCurrentSoundMode(obj,mode):
         details = tdkTestObj.getResultDetails();
         if "SUCCESS" in result:
             status,new_mode = getCurrentSoundMode(obj)
+            new_mode = new_mode.replace(" ","")
             if mode.lower() in new_mode.lower():
                 mode_revert = True
                 set_status = "SUCCESS"
