@@ -784,6 +784,11 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             info = result
             if str(result.get("room")).lower() == str(expectedValues[0]) and str(result.get("action")).lower() == str(expectedValues[1]):
                 info["Test_Step_Status"] = "SUCCESS"
+                if len(arg) and arg[0] == "check_room_security":
+                    if str(result.get("secure")).lower() == str(expectedValues[2]):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
