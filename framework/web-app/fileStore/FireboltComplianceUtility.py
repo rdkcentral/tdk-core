@@ -32,6 +32,7 @@ use_autoVideoSink_for_fpsdisplaysink = ""
 ignore_warnings = ""
 check_audio_fps = ""
 test_streams_base_path =""
+avsync_enabled = ""
 
 #List consisting of HLS url
 HLS_URL = [MediaValidationVariables.video_src_url_short_duration_hls,MediaValidationVariables.video_src_url_hls,MediaValidationVariables.video_src_url_4k_hls,MediaValidationVariables.video_src_url_live_hls,MediaValidationVariables.video_src_url_hls_h264,MediaValidationVariables.video_src_url_hls_h264_iframe]
@@ -54,6 +55,7 @@ def getDeviceConfigValue (tdklibObj, configKey):
         global ignore_warnings
         global check_audio_fps
         global test_streams_base_path
+        global avsync_enabled
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
         configValue = ""
@@ -107,6 +109,10 @@ def getDeviceConfigValue (tdklibObj, configKey):
                 check_audio_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_AUDIO")
             except:
                 check_audio_fps = "no"
+            try:
+                avsync_enabled = configParser.get('device.config',"FIREBOLT_COMPLIANCE_AVSYNC_ENABLED")
+            except:
+                avsync_enabled = "yes"
             try:
                 test_streams_base_path = configParser.get('device.config',"TEST_STREAMS_BASE_PATH")
             except:
@@ -189,6 +195,9 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     #Check Audio fps
     if (check_audio_fps == "no"):
         command = command + " checkAudioFPS=no ";
+    #Check AVSync
+    if (avsync_enabled == "yes"):
+        command = command + " avsync_enabled ";
     #Use autovideosink for fpsdisplaysink
     if  "checkfps=no" not in command.lower() and use_autoVideoSink_for_fpsdisplaysink == "yes":
         command = "export FPSDISPLAYSINK_USE_AUTOVIDEO=1 ;" + command
