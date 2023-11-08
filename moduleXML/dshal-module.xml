@@ -111,6 +111,8 @@
       <function name='TestMgr_DSHal_GetVolumeLeveller' />
       <function name='TestMgr_DSHal_SetBassEnhancer' />
       <function name='TestMgr_DSHal_GetBassEnhancer' />
+      <function name='TestMgr_DSHal_SetDRCMode' />
+      <function name='TestMgr_DSHal_GetDRCMode' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -172,6 +174,7 @@
       <parameter funName='TestMgr_DSHal_SetVolumeLeveller' parameterName='mode' parameterType='INTEGER' range='0-14' />
       <parameter funName='TestMgr_DSHal_SetVolumeLeveller' parameterName='level' parameterType='INTEGER' range='0-14' />
       <parameter funName='TestMgr_DSHal_SetBassEnhancer' parameterName='boost' parameterType='INTEGER' range='0-100' />
+      <parameter funName='TestMgr_DSHal_SetDRCMode' parameterName='mode' parameterType='INTEGER' range='1-10' />
     </parameters>
   </module>
 </xml>
