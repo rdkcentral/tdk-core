@@ -207,7 +207,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
 
         #Wait for container to pause
-        sleep(2)
+        sleep(20)
 
         tdkTestObj = obj.createTestStep('checkPROC')
         tdkTestObj.addParameter("check_pause","True")
@@ -233,7 +233,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
 
         #Wait for container to resume
-        sleep(30)
+        sleep(60)
 
         tdkTestObj = obj.createTestStep('checkPROC')
         tdkTestObj.executeTestCase(expectedResult);

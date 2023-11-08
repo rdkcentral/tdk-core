@@ -192,6 +192,9 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print "Seek position failure"
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print "Playback position not retrieved";
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print "AampSetRate failed to speed change"

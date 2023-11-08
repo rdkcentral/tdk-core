@@ -366,7 +366,9 @@ def checkPROC(check_pause):
         sshMethod = ssh_param_dict["ssh_method"]
         credentials = ssh_param_dict['credentials']
         validation_script = getDeviceConfig ('VIDEO_VALIDATION_SCRIPT_FILE')
-        if not os.path.exists(validation_script) :
+        proc_file_path = libObj.realpath + "/"   + "fileStore/" + validation_script
+        print "proc validation file: ",proc_file_path
+        if not os.path.exists(proc_file_path) :
             print " PROC entry file is missing from fileStore "
             return "FAILURE"
         mode = getDeviceConfig ('PROC_CHECK_MODE')

@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>7</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>Aamp_SetSlowMotionRate_Seek_MPD</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -48,10 +48,11 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>Hybrid-1</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
     <box_type>RPI-HYB</box_type>
-    <box_type>Hybrid-1</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
@@ -131,7 +132,7 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
     if Expected_Result in result:
         print "AAMP Tune call is success"
         #Search events in Log
-        result=aampUtilitylib.SearchAampPlayerEvents(aampobj,pattern);
+        result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         if Expected_Result in result:
             tdkTestObj.setResultStatus("SUCCESS");
             print "AAMP Tune events are verified"
@@ -166,7 +167,7 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                 if Expected_Result in result:
                     pattern="AAMP_EVENT_BITRATE_CHANGED"
                     #Search events in Log
-                    result=aampUtilitylib.SearchAampPlayerEvents(aampobj,pattern);
+                    result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
                     if Expected_Result in result:
                         tdkTestObj.setResultStatus("SUCCESS")
                         print "Verified AampSetRate"
@@ -192,6 +193,10 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print "Seek position failure"
+
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print "Playback position not retrieved";
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
                         print "AampSetRate failed to speed change"
