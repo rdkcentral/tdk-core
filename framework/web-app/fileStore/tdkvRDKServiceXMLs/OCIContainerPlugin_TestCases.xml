@@ -122,7 +122,7 @@
                     </resultGeneration>
             </testStep>
           </prerequisite>
-          <prerequisite requisiteId="6" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="true">
+          <prerequisite requisiteId="6" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="OCIContainer" eventName="Event_On_Container_Started" />
             <event pluginName="OCIContainer" eventName="Event_On_Container_Stopped" />
             <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
@@ -307,7 +307,7 @@
                     </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="OCIContainer_05" testCaseName="OCIContainer_Verify_Test_Application_Container_Events" desc="To verify the container events of the test application by changing application state">
+	<testCase testCaseId="OCIContainer_05" testCaseName="OCIContainer_Verify_Test_Application_Container_Events" desc="To verify the container events of the test application by changing application state">
            <testCaseInfo testCaseType="direct"/>
            <testCasePreRequisite>
            <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
@@ -334,40 +334,59 @@
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Launch_Application" method="Launch_Application" pluginName="RDKShell">
-              <params>
-                  <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                  <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
-                  <param tag="mimeType" value="application/dac.native" />
-              </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+	    <testStep testStepId="2" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="3" name="Check_On_Container_Started_Event" event="Event_On_Container_Started" action="eventListener" delay="1">
+            <testStep testStepId="3" name="Create_Display" method="Create_Display" pluginName="RDKShell" >
+	      <conditionalExecution enable="true" Id="2" useMethodTag="check_test_status" />
+              <params>
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Start_Container" method="Start_Container" saveResult="true" >
+              <params>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_CONTAINER_BUNDLE_PATH" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="5" name="Check_On_Container_Started_Event" event="Event_On_Container_Started" action="eventListener" delay="3">
                 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
                    <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="4" name="Stop_Container" method="Stop_Container">
+            <testStep testStepId="6" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="false" value="false" />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="5" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="1">
+            <testStep testStepId="7" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="3">
                 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
                    <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-	    <testStep testStepId="1" name="Kill_Application" method="Kill" pluginName="RDKShell">
-                    <params>
-                       <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </params>
-                    <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Launch_Application" method="Launch_Application" pluginName="RDKShell">
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+	      <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" /> 
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>  
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
               <params>
                   <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                   <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
@@ -375,7 +394,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
@@ -383,6 +402,7 @@
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
+
         <testCase testCaseId="OCIContainer_06" testCaseName="OCIContainer_Verify_Cobalt_Application_Container_Events" desc="To verify the container events of the Cobalt application by changing application state">
            <testCaseInfo testCaseType="direct"/>
            <testCasePreRequisite>
@@ -455,34 +475,82 @@
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
+        
         <testCase testCaseId="OCIContainer_07" testCaseName="OCIContainer_Stop_And_List_Test_Application_Container" desc="To stop and list the Test Application container">
            <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
+            <testCasePreRequisite>
+           <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
+             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+             </testStep>
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+             </testStep>
+             <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+             </testStep>
+            </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Create_Display" method="Create_Display" pluginName="RDKShell" >
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="3" name="Start_Container" method="Start_Container" saveResult="true" >
+              <params>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_CONTAINER_BUNDLE_PATH" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Containers_List" method="List_Containers" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Stop_Container" method="Stop_Container">
+            <testStep testStepId="5" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_Containers_List" method="List_Containers" delay="1" >
+            <testStep testStepId="6" name="Get_Containers_List" method="List_Containers" delay="2" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-            <testStep testStepId="1" name="Kill_Application" method="Kill" pluginName="RDKShell">
-                    <params>
-                       <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </params>
-                    <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Launch_Application" method="Launch_Application" pluginName="RDKShell">
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
               <params>
                   <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                   <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
@@ -490,7 +558,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
@@ -498,6 +566,7 @@
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
+
         <testCase testCaseId="OCIContainer_08" testCaseName="OCIContainer_Stop_And_List_Cobalt_Application_Container" desc="To stop and list the Cobalt Application container">
            <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
@@ -564,7 +633,7 @@
                   <param tag="containerId" value="Cobalt" />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_container_info" >
-                      <expectedValues value="cobalt,running"/>
+                      <expectedValues value="running,cobalt"/>
               </resultGeneration>
             </testStep>
         </testCase>
@@ -592,6 +661,24 @@
                      <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.OCIContainer" expectedValues="activated"/>
                    </testStep>
                 </prerequisite>
+		<prerequisite requisiteId="2" requisiteName="Destroy_Test_Application" >
+              <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+              </testStep>
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+               <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+               </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+              </testStep>
+              <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+              </testStep>
+             </prerequisite>
             </testCasePreRequisite>
             <testStep testStepId="1" name="Deactivate_OCIContainer_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
                   <params>
@@ -643,32 +730,79 @@
         </testCase>
         <testCase testCaseId="OCIContainer_13" testCaseName="OCIContainer_Stop_And_List_Test_Application_Container_Force_True" desc="To stop and list the Test Application container with force as true">
            <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
+            <testCasePreRequisite>
+           <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
+             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+             </testStep>
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+             </testStep>
+             <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+             </testStep>
+            </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Create_Display" method="Create_Display" pluginName="RDKShell" >
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="3" name="Start_Container" method="Start_Container" saveResult="true" >
+              <params>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_CONTAINER_BUNDLE_PATH" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Containers_List" method="List_Containers" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Stop_Container" method="Stop_Container">
+            <testStep testStepId="5" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="true" />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_Containers_List" method="List_Containers" delay="1" >
+            <testStep testStepId="6" name="Get_Containers_List" method="List_Containers" delay="1" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-	    <testStep testStepId="1" name="Kill_Application" method="Kill" pluginName="RDKShell">
-                    <params>
-                       <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </params>
-                    <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Launch_Application" method="Launch_Application" pluginName="RDKShell">
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
               <params>
                   <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                   <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
@@ -676,7 +810,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
@@ -684,7 +818,6 @@
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
-
         <testCase testCaseId="OCIContainer_14" testCaseName="OCIContainer_Stop_And_List_Cobalt_Container_Force_True" desc="To stop and list the Cobalt Application container with force as true">
            <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
@@ -904,124 +1037,147 @@
         </testCasePostRequisite>
         </testCase>
 
-        <testCase testCaseId="OCIContainer_17" testCaseName="OCIContainer_Start_Pause_Resume_Cobalt_Container" desc="Check if able to start the cobalt container by specifying bundle path and to suspend/resume the running container">
+        <testCase testCaseId="OCIContainer_17" testCaseName="OCIContainer_Start_Pause_Resume_Test_Application_Container" desc="Check if able to start the test application container by specifying bundle path and to suspend/resume the running container">
            <testCaseInfo testCaseType="direct"/>
            <testCasePreRequisite>
-            <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application" >
+           <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
              <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
              </testStep>
-             <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" pluginName="RDKShell" >
-                      <params>
-                          <param tag="callsign" value="Cobalt" />
-                      </params>
-                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
              </testStep>
              <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
              </testStep>
             </prerequisite>
-            </testCasePreRequisite>
+           </testCasePreRequisite>
             <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Start_Container" method="Start_Container" saveResult="true" >
-              <params>
-                 <param tag="containerId" value="Cobalt" />
-                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_COBALT_CONTAINER_PATH" />
-              </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
-            </testStep>
-            <testStep testStepId="3" name="Check_On_Container_Started_Event" event="Event_On_Container_Started" action="eventListener" delay="2">
-                <resultGeneration useMethodTag="ocicontainer_check_container_events" >
-                   <expectedValues value="cobalt"/>
+            <testStep testStepId="2" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="4" name="Get_Containers_List" method="List_Containers" >
-                    <resultGeneration useMethodTag="ocicontainer_list_container" >
-                        <arguments value="check_if_exists,check_container_info" usePreviousResult="true" Id="2" useMethodTag="ocicontainer_get_container_details" />
-                        <expectedValues value="cobalt" />
-                    </resultGeneration>
-            </testStep>
-            <testStep testStepId="5" name="Check_Container_Status" method="Get_Container_State">
-                    <params>
-                      <param tag="containerId"  value="Cobalt"/>
-                    </params>
-                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
-                             <expectedValues value="running,cobalt" />
-                    </resultGeneration>
-            </testStep>
-            <testStep testStepId="6" name="Pause_Container" method="Pause_Container">
+            <testStep testStepId="3" name="Create_Display" method="Create_Display" pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="2" useMethodTag="check_test_status" />
               <params>
-                <param tag="containerId"  value="Cobalt"/>
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_for_results" />
             </testStep>
-            <testStep testStepId="7" name="Check_Container_Status" method="Get_Container_State" >
-                    <params>
-                      <param tag="containerId"  value="Cobalt"/>
-                    </params>
-                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
-                             <expectedValues value="paused,cobalt" />
-                    </resultGeneration>
-            </testStep>
-            <testStep testStepId="8" name="Resume_Container" method="Resume_Container" >
+            <testStep testStepId="4" name="Start_Container" method="Start_Container" saveResult="true" >
               <params>
-                <param tag="containerId" value="Cobalt"/>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_CONTAINER_BUNDLE_PATH" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET" />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_for_results" />
             </testStep>
-            <testStep testStepId="9" name="Check_Container_Status" method="Get_Container_State">
-                    <params>
-                      <param tag="containerId"  value="Cobalt"/>
-                    </params>
-                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
-                             <expectedValues value="running,cobalt" />
+            <testStep testStepId="5" name="Get_Containers_List" method="List_Containers" clear="false" delay="2">
+                    <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_if_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="10" name="Stop_Container" method="Stop_Container" >
+            <testStep testStepId="6" name="Check_On_Container_Started_Event" event="Event_On_Container_Started" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="ocicontainer_check_container_events" >
+                   <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Check_Container_Status" method="Get_Container_State">
+                    <params>
+                      <param tag="containerId"  useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
+                             <expectedValues value="running" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="8" name="Pause_Container" method="Pause_Container">
               <params>
-                   <param tag="containerId" value="Cobalt" />
-                   <param tag="force" value="false" />
+                <param tag="containerId"  useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="9" name="Check_Container_Status" method="Get_Container_State" >
+                    <params>
+                      <param tag="containerId"  useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
+                             <expectedValues value="paused" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="10" name="Resume_Container" method="Resume_Container" >
+              <params>
+                <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="11" name="Check_Container_Status" method="Get_Container_State">
+                    <params>
+                      <param tag="containerId"  useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </params>
+                    <resultGeneration useMethodTag="ocicontainer_check_container_status" >
+                             <expectedValues value="running" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="12" name="Stop_Container" method="Stop_Container">
+              <params>
+                   <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                   <param tag="false" value="false" />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="11" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="2">
+            <testStep testStepId="13" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="3">
                 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
-                   <expectedValues value="cobalt"/>
+                   <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="12" name="Get_Containers_List" method="List_Containers"  >
-                    <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
-                            <expectedValues value="cobalt"/>
+            <testStep testStepId="14" name="Get_Containers_List" method="List_Containers" >
+                    <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-            <testStep testStepId="1" name="Launch_Cobalt_Application" method="LaunchApplicationCobalt" pluginName="RDKShell">
-                  <params>
-                    <param tag="callsign" value="Cobalt"  />
-                    <param tag="type" value="Cobalt"  />
-                    <param tag="visible" value="true"  />
-                    <param tag="url" value="https://youtube.com"  />
-                  </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
+              <params>
+                  <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                  <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
+                  <param tag="mimeType" value="application/dac.native" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
-
         <testCase testCaseId="OCIContainer_18" testCaseName="OCIContainer_Start_Pause_Resume_Cobalt_Container_From_Dobby_Spec" desc="Check if able to start the cobalt container from dobby spec by specifying bundle path and to suspend/resume the running container">
            <testCaseInfo testCaseType="direct"/>
            <testCasePreRequisite>
@@ -1143,51 +1299,76 @@
         <testCase testCaseId="OCIContainer_19" testCaseName="OCIContainer_Start_Cobalt_Container_With_Empty_Path" desc="To start the cobalt container by specifying empty path">
            <testCaseInfo testCaseType="direct"/>
            <testCasePreRequisite>
-            <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application" >
+           <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
              <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
              </testStep>
-             <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" pluginName="RDKShell" >
-                      <params>
-                          <param tag="callsign" value="Cobalt" />
-                      </params>
-                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
              </testStep>
              <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
              </testStep>
             </prerequisite>
-            </testCasePreRequisite>
-            <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
-                    <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
-                            <expectedValues value="cobalt"/>
+           </testCasePreRequisite>
+           <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
+                    <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Start_Container" method="Start_Container" saveResult="true" >
+            <testStep testStepId="2" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Create_Display" method="Create_Display" pluginName="RDKShell"  >
+              <conditionalExecution enable="true" Id="2" useMethodTag="check_test_status" />
               <params>
-                 <param tag="containerId" value="Cobalt" />
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Start_Container" method="Start_Container" saveResult="true" >
+              <params>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                  <param tag="bundlePath" value="" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET"  />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_for_results" arguments="check_negative_scenario"/>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-            <testStep testStepId="1" name="Launch_Cobalt_Application" method="LaunchApplicationCobalt" pluginName="RDKShell">
-                  <params>
-                    <param tag="callsign" value="Cobalt"  />
-                    <param tag="type" value="Cobalt"  />
-                    <param tag="visible" value="true"  />
-                    <param tag="url" value="https://youtube.com"  />
-                  </params>
-                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
+              <params>
+                  <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                  <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
+                  <param tag="mimeType" value="application/dac.native" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
-                            <expectedValues value="cobalt"/>
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
           </postrequisite>
@@ -1301,39 +1482,86 @@
 
         <testCase testCaseId="OCIContainer_22" testCaseName="OCIContainer_Stop_Test_Application_Container" desc="To stop and list the Test Application container which is already stopped">
            <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Get_Containers_List" method="List_Containers" >
+           <testCasePreRequisite>
+           <prerequisite requisiteId="1" requisiteName="Destroy_Test_Application" >
+              <testStep testStepId="1" name="Get_connected_clients" method="GetClients" pluginName="RDKShell">
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+              </testStep>
+             <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+               <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+               </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+              </testStep>
+              <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="1" >
+                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_not_exists" >
+                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+                    </resultGeneration>
+              </testStep>
+             </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Create_Display" method="Create_Display" pluginName="RDKShell" >
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                <param tag="displayName" useConfigFile="true" key="OCICONTAINER_CONTAINER_DISPLAY_NAME" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="3" name="Start_Container" method="Start_Container" saveResult="true" >
+              <params>
+                 <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
+                 <param tag="bundlePath" useConfigFile="true" key="OCICONTAINER_CONTAINER_BUNDLE_PATH" />
+                 <param tag="westerosSocket" useConfigFile="true" key="OCICONTAINER_WESTEROS_SOCKET" />
+              </params>
+              <resultGeneration useMethodTag="ocicontainer_check_for_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Containers_List" method="List_Containers" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments= "check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Stop_Container" method="Stop_Container">
+            <testStep testStepId="5" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Stop_Container" method="Stop_Container">
+            <testStep testStepId="6" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_for_results" arguments="check_negative_scenario"/>
             </testStep>
-            <testStep testStepId="4" name="Get_Containers_List" method="List_Containers" delay="1" >
+            <testStep testStepId="7" name="Get_Containers_List" method="List_Containers" delay="1" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
             </testStep>
         <testCasePostRequisite>
           <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-	    <testStep testStepId="1" name="Kill_Application" method="Kill" pluginName="RDKShell">
-                    <params>
-                       <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </params>
-                    <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
+                </resultGeneration>
             </testStep>
-            <testStep testStepId="2" name="Launch_Application" method="Launch_Application" pluginName="RDKShell">
+            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <params>
+                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
               <params>
                   <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                   <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
@@ -1341,7 +1569,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="3" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
+            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
                     <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
                             <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                     </resultGeneration>
@@ -1349,6 +1577,7 @@
           </postrequisite>
         </testCasePostRequisite>
         </testCase>
+
         <pluginPostRequisite>
           <postrequisite requisiteId="1" requisiteName="Kill_Test_Application">
                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true" pluginName="RDKShell">

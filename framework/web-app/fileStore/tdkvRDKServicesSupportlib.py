@@ -3150,10 +3150,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status = checkNonEmptyResultData(result)
             success = str(result.get("success")).lower() == "true"
             containerInfo = result.get("info")
-            if success and status == "TRUE" and containerInfo.get("id").lower() == expectedValues[0] and containerInfo.get("state").lower() == expectedValues[1]:
+            if success and status == "TRUE" and containerInfo.get("id").lower() == expectedValues[1] and containerInfo.get("state").lower() == expectedValues[0]:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
+
 
         elif tag == "ocicontainer_check_process_id":
             status = checkNonEmptyResultData(result)

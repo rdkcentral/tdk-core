@@ -45,7 +45,7 @@
   <!-- execution_time is the time out time for test execution -->
   <remarks>Not applicable for rpi and accelerator</remarks>
   <!-- Reason for skipping the tests if marked to skip -->
-  <skip>true</skip>
+  <skip>false</skip>
   <!--  -->
   <box_types>
     <box_type>RDKTV</box_type>
