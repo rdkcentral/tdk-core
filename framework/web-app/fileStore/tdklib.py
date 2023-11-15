@@ -857,6 +857,7 @@ class TDKScriptingLibrary:
 		self.startTime=0;
 		self.timeTaken=0
 		self.infoDict=None
+                self.crash_monitor_status=False
 		return
 
 	def __del__(self):
