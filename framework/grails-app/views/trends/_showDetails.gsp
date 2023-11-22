@@ -589,6 +589,7 @@ function showMintextDeviceDetails(k){
 			<tbody id="allmessages${k}_${i}"  style="display: none;">
 			</tbody>
 			<tbody id="alllogs${k}_${i}"  style="display: none;">
+			<g:if test="${!scriptCategory.toString().equals("RDKV_RDKSERVICE")}">
 				<tr>
 					<td>Agent Console Log</td>	
 					<td colspan="4">
@@ -601,6 +602,7 @@ function showMintextDeviceDetails(k){
 						<div id="consoleLog${k}_${i}"></div>	
 					</td>					
 				</tr>
+				</g:if>
 				<tr>
 					<td>Log	Files</td>	
 					<td colspan="4">

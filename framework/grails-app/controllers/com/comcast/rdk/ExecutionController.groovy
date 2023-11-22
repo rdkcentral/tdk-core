@@ -1643,10 +1643,17 @@ class ExecutionController {
 	def showAgentLogFiles(){
 		def consoleFileData = executionService.getAgentConsoleLogData( request.getRealPath('/'), params?.execId, params?.execDeviceId,params?.execResId)
 		ExecutionDevice execDeviceInstance = ExecutionDevice.findById(params?.execDeviceId)
+		ExecutionResult executionResultInstance =  ExecutionResult.findById(params?.execResId)
+		ScriptFile scriptFileInstance=ScriptFile.findByScriptName(executionResultInstance?.script.toString())
+		def scriptCategory=scriptFileInstance?.category
+		if(scriptCategory.toString().equals(Constants.RDKV_RDKSERVICE)){
+			consoleFileData = "Agent logs disabled for Thunder Enabled Modules"
+		}else{
 		if(consoleFileData.isEmpty() && !(execDeviceInstance?.category?.toString().equals(RDKV_THUNDER))){
 			consoleFileData = "Unable to fetch Agent Console Log"
 		}else if(consoleFileData.isEmpty() && (execDeviceInstance?.category?.toString().equals(RDKV_THUNDER))){
 		    consoleFileData = "Server Console Log Empty"
+		}
 		}
 		render(template: "agentConsoleLog", model: [agentConsoleFileData : consoleFileData])
 	}
@@ -1915,6 +1922,7 @@ class ExecutionController {
         def repeatCount
         def repeatCountInt
 		String repeatExecution = "false"
+		ScriptFile scriptFileInstance
 		def statusListForPopUpExecution = []
         if(executionNameCheck.contains("(R")){
 	        def executionNameCheckList = executionNameCheck.split("\\(R")
@@ -1933,7 +1941,7 @@ class ExecutionController {
 		def executionDeviceList = ExecutionDevice.findAllByExecution(executionInstance)
 		def device = Device.findByStbName(executionInstance?.device)
 		def testGroup
-
+		def scriptCategory
 		def executionResultMap = [:]
 		def statusResultMap = [:]
 
@@ -2034,8 +2042,10 @@ class ExecutionController {
 		List alertList = []
 		executionResultList.each{ executionResult ->
 			List performanceList = Performance.findAllByExecutionResultAndPerformanceType(executionResult,GRAFANA_DATA)
-			if(!performanceList.isEmpty()){
-				isProfilingDataPresent = true
+			scriptFileInstance=ScriptFile.findByScriptName(executionResult?.script.toString())
+			scriptCategory=scriptFileInstance?.category
+		if(!performanceList.isEmpty()){
+				isProfilingDataPresent = true	
 			}
 			
 			def executionDeviceId = executionResult.executionDevice.id
@@ -2055,7 +2065,7 @@ class ExecutionController {
 				}
 			}
 		}		
-		[repeatExecution: repeatExecution, repeatCount: repeatCountInt, tDataMap : tDataMap, statusResults : statusResultMap, executionInstance : executionInstance, executionDeviceInstanceList : executionDeviceList, testGroup : testGroup,executionresults:executionResultMap , statusList: totalStatus, statusListForPopUpExecution : statusListForPopUpExecution,isProfilingDataPresent:isProfilingDataPresent,profilingFileList:profilingFileList,alertList:alertList, realPathForLogs : realPathForLogs]
+		[repeatExecution: repeatExecution, repeatCount: repeatCountInt, tDataMap : tDataMap, statusResults : statusResultMap, executionInstance : executionInstance, executionDeviceInstanceList : executionDeviceList, testGroup : testGroup,executionresults:executionResultMap , statusList: totalStatus, statusListForPopUpExecution : statusListForPopUpExecution,isProfilingDataPresent:isProfilingDataPresent,profilingFileList:profilingFileList,alertList:alertList, realPathForLogs : realPathForLogs,scriptCategory : scriptCategory]
 	}
 
 	/**
@@ -3106,20 +3116,26 @@ class ExecutionController {
 	def getAgentConsoleLog(final String execResId){
 
 		ExecutionResult executionResult = ExecutionResult.findById(execResId)
-
+		ScriptFile scriptFileInstance=ScriptFile.findByScriptName(executionResult?.script)
+		def scriptCategory=scriptFileInstance?.category
 		def agentConsoleFileData = "No AgentConsoleLog available"
 
 		if(executionResult){
 
 			try {
 				agentConsoleFileData = executionService.getAgentConsoleLogData( request.getRealPath('/'), executionResult?.execution?.id?.toString(), executionResult?.executionDevice?.id?.toString(),executionResult?.id?.toString())
-				if(agentConsoleFileData){
-					agentConsoleFileData =agentConsoleFileData.trim()
-					if(agentConsoleFileData.length() == 0){
+				
+				if(scriptCategory.toString().equals(Constants.RDKV_RDKSERVICE)){
+					agentConsoleFileData = "Agent logs disabled for Thunder Enabled Modules"
+				}else{
+					if(agentConsoleFileData){
+						agentConsoleFileData =agentConsoleFileData.trim()	
+					 if(agentConsoleFileData.length() == 0){
+							agentConsoleFileData = "No AgentConsoleLog available"
+						}
+					}else{
 						agentConsoleFileData = "No AgentConsoleLog available"
 					}
-				}else{
-					agentConsoleFileData = "No AgentConsoleLog available"
 				}
 			} catch (Exception e) {
 				e.printStackTrace()

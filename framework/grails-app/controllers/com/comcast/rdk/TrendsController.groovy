@@ -1244,7 +1244,8 @@ class TrendsController {
 		def executionDeviceList = ExecutionDevice.findAllByExecution(executionInstance)
 		def device = Device.findByStbName(executionInstance?.device)
 		def testGroup
-
+		def scriptCategory
+		
 		def executionResultMap = [:]
 		def statusResultMap = [:]
 		def listStatusCount = [:]
@@ -1261,7 +1262,11 @@ class TrendsController {
 		}
 
 		def analysisData = executedbService.getDefectAnalysisDetails(executionInstance)
-
+		List executionResultList =  ExecutionResult.findAllByExecution(executionInstance)
+		executionResultList.each{ executionResult ->
+		ScriptFile scriptFileInstance=ScriptFile.findByScriptName(executionResult?.script.toString())
+		scriptCategory=scriptFileInstance?.category
+		}
 		def totalAnalyzedData = analysisData[TOTAL_ANALYZED_DATA]
 		def moduleData = analysisData.get(MODULE_DATA)
 		def defectData = analysisData.get(DEFECT_DATA)
@@ -1350,7 +1355,7 @@ class TrendsController {
 
 		def data = [statusResults : statusResultMap, executionInstance : executionInstance, executionDeviceInstanceList : executionDeviceList,
 			testGroup : testGroup, tDataMap: tDataMap, executionresults:executionResultMap, boxType: device?.boxType, defectData: defectData,
-			detailDataMap:detailDataMap, moduleDataMap: moduleData, realPathForLogs: realPathForLogs]
+			detailDataMap:detailDataMap, moduleDataMap: moduleData, realPathForLogs: realPathForLogs,scriptCategory: scriptCategory]
 		render(template:"showDetails", model:data)
 		return data
 	}

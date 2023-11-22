@@ -56,7 +56,21 @@ class LogZipService {
 						String moduleName = getModuleName(realPath,scriptName)
 						scriptName = scriptName.replaceAll("[^a-zA-Z0-9.-]", "_");
 						moduleName = moduleName.replaceAll("[^a-zA-Z0-9.-]", "_");
-
+						ScriptFile scriptFileInstance=ScriptFile.findByScriptName(executionResult?.script)
+						 def scriptCategory=scriptFileInstance?.category
+					if(scriptCategory.toString().equals(Constants.RDKV_RDKSERVICE)){
+						/* writing the agent console log*/
+						writeZipEntry(executionResult?.executionOutput , "${moduleName}\\${scriptName}\\${scriptName}_ScriptLog.txt" , zos)
+						/* handling the stb logs associates with the execution if any */
+						def logFiles = executionService.getLogFileNames(realPath ,exec?.id?.toString() , exDevice?.id?.toString(), executionResult?.id?.toString() )
+						logFiles?.keySet().each { key ->
+							def logFile = logFiles.get(key)
+							if(logFile){
+								String stbLog = getStbLogs(realPath, executionId,  exDevice?.id, executionResult?.id, logFile)
+								writeZipEntry(stbLog , "${moduleName}\\${scriptName}\\${scriptName}_DeviceLog_${logFile}.txt" , zos)
+							}
+						}
+						}else{
 						/* writing the agent console log*/
 						String agentConsoleFileData = executionService.getAgentConsoleLogData( realPath , executionResult?.execution?.id?.toString(), executionResult?.executionDevice?.id?.toString(),executionResult?.id?.toString())
 						writeZipEntry(agentConsoleFileData , "${moduleName}\\${scriptName}\\${scriptName}_AgentConsoleLog.txt" , zos)
@@ -71,6 +85,7 @@ class LogZipService {
 								String stbLog = getStbLogs(realPath, executionId,  exDevice?.id, executionResult?.id, logFile)
 								writeZipEntry(stbLog , "${moduleName}\\${scriptName}\\${scriptName}_DeviceLog_${logFile}.txt" , zos)
 							}
+						}
 						}
 					}
 				} catch (Exception e) {

@@ -583,6 +583,9 @@ function triggerExecutionFromPopUp(){
 			<tbody id="allmessages${k}_${i}"  style="display: none;">
 			</tbody>
 			<tbody id="alllogs${k}_${i}"  style="display: none;">
+			<g:if test="${!scriptCategory.toString().equals("RDKV_RDKSERVICE")}">
+			
+			
 			<tr>
 			<td colspan="2">
 			<g:if test="${executionDeviceInstance?.category != 'RDKV_THUNDER'}">
@@ -605,6 +608,7 @@ function triggerExecutionFromPopUp(){
 						<div id="consoleLog${k}_${i}"></div>	
 					</td>					
 				</tr>
+				</g:if>
 				<%--<tr>
 					<td></td>
 					<td colspan="4">
