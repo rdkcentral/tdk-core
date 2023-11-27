@@ -35,6 +35,7 @@ from rdkv_performancelib import *
 
 excluded_process_list = PerformanceTestVariables.excluded_process_list
 graphical_plugins_list = PerformanceTestVariables.graphical_plugins_list
+default_state = "SUCCESS"
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
 #---------------------------------------------------------------
@@ -473,6 +474,7 @@ def containerization_cloneDobby(basePath):
 def containerization_setPreRequisites(datamodel):
     pre_requisite_status = "SUCCESS"
     rebootFlag = 0
+    global default_state
     status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
@@ -485,6 +487,7 @@ def containerization_setPreRequisites(datamodel):
                 if "true" in output.lower():
                     print 'SUCCESS: The '+datamodels+' parameter is already enabled'
                 elif "false" in output.lower() or "empty" in output.lower():
+                    default_state = "FAILURE"
                     command =  'tr181 -d -s -t boolean -v true '+datamodels
                     print "COMMAND : %s" %(command)
                     enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
@@ -615,6 +618,7 @@ def containerization_checkContainerRunningState(callsign):
         command =  'DobbyTool list'
         print "COMMAND : %s" %(command)
         output = containerization_executeInDUT(ssh_method,credentials,command)
+        print (output)
         callsign = callsign.split(",")
         for container in callsign:
             container,uri = container.split("-")
@@ -639,6 +643,7 @@ def containerization_setPostRequisites(datamodel):
     post_requisite_status = "SUCCESS"
     result=[]
     rebootFlag = 0
+    global default_state
     status = containerization_obtainCredentials()
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
@@ -651,16 +656,21 @@ def containerization_setPostRequisites(datamodel):
                 if "false" in output.lower():
                     print 'SUCCESS: The '+datamodels+' parameter is in disabled state'
                 elif "true" in output.lower() or "empty" in output.lower():
-                    command =  'tr181 -d -s -t boolean -v false '+datamodels
-                    print "COMMAND : %s" %(command)
-                    enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
-                    enableStatus = enableStatus.strip()
-                    if "set operation success" in enableStatus.lower():
-                        rebootFlag = 1
-                        print 'SUCCESS: Successfully set the '+datamodels+' parameter'
-                    else:
-                        print 'FAILURE: Could not able to set the '+datamodels+' parameter'
-                        post_requisite_status = "FAILURE"
+                    print 'going to execute logic'
+                    if default_state == "SUCCESS":
+		       print ' parameter is in enabled state '
+                    else:   
+                        command =  'tr181 -d -s -t boolean -v false '+datamodels
+                        print "COMMAND : %s" %(command)
+                        enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
+                        enableStatus = enableStatus.strip()
+                        print "enableStatus : %s" %(enableStatus)
+                        if "set operation success" in enableStatus.lower():
+                           rebootFlag = 1
+                           print 'SUCCESS: Successfully set the '+datamodels+' parameter'
+                        else:
+                            print 'FAILURE: Could not able to set the '+datamodels+' parameter'
+                            post_requisite_status = "FAILURE"
                 else:
                     print 'FAILURE: Failed to retrieve '+datamodels+' enabled status'
                     post_requisite_status = "FAILURE"

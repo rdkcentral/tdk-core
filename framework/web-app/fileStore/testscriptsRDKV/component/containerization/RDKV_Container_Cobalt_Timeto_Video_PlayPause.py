@@ -264,8 +264,8 @@ if expectedResult in result.upper():
                                             print "\n Check video is paused \n"
                                             command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
                                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-                                            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-                                            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                            tdkTestObj.addParameter("ssh_method",configValues["SSH_METHOD"])
+                                            tdkTestObj.addParameter("credentials", credentials)
                                             tdkTestObj.addParameter("command",command)
                                             tdkTestObj.executeTestCase(expectedResult)
                                             result = tdkTestObj.getResult()
@@ -293,8 +293,8 @@ if expectedResult in result.upper():
                                                         time.sleep(20)
                                                         command = 'cat /opt/logs/dobby.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-                                                        tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-                                                        tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                                        tdkTestObj.addParameter("ssh_method",configValues["SSH_METHOD"])
+                                                        tdkTestObj.addParameter("credentials",credentials)
                                                         tdkTestObj.addParameter("command",command)
                                                         tdkTestObj.executeTestCase(expectedResult)
                                                         result = tdkTestObj.getResult()
@@ -310,7 +310,7 @@ if expectedResult in result.upper():
                                                             conf_file,file_status = getConfigFileName(obj.realpath)
                                                             result1,cobalt_pause_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PAUSE_TIME_THRESHOLD_VALUE_CONTAINER")
                                                             result2,cobalt_play_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER")
-                                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET_CONTAINER")
+                                                            offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET_IN_CONTAINER")
                                                             if all(value != "" for value in (cobalt_pause_threshold,cobalt_play_threshold,offset)):
                                                                 print "\n play initiated at {} ".format(play_start_time)
                                                                 print "\n play happend at {} ".format(video_playedtime)

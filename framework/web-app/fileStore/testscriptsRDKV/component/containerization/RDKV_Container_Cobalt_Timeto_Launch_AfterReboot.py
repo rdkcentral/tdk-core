@@ -114,7 +114,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","THRESHOLD_OFFSET"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","THRESHOLD_OFFSET_IN_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -136,7 +136,7 @@ if expectedResult in result.upper():
             ssh_method = configValues["SSH_METHOD"]
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
-            offset = configValues["THRESHOLD_OFFSET"]
+            offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
             else:

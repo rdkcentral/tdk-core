@@ -112,7 +112,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print "Retrieving Configuration values from config file......."
-    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAYBACK_URL_CONTAINER","COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER","THRESHOLD_OFFSET_IN_CONTAINER"]
+    configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS","COBALT_PLAY_NEXT_VIDEO_TIME_THRESHOLD_VALUE","COBALT_PLAYBACK_URL_CONTAINER","COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER","THRESHOLD_OFFSET_IN_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
     for configKey in configKeyList:
@@ -135,7 +135,8 @@ if expectedResult in result.upper():
             user_name = configValues["SSH_USERNAME"]
             cobalt_details = configValues["COBALT_DETAILS"]
             cobalt_playback_url = configValues["COBALT_PLAYBACK_URL_CONTAINER"]
-            cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
+            cobalt_play_threshold = configValues["COBALT_PLAY_NEXT_VIDEO_TIME_THRESHOLD_VALUE"]
+            #cobalt_play_threshold = configValues["COBALT_PLAY_TIME_THRESHOLD_VALUE_CONTAINER"]
             offset = configValues["THRESHOLD_OFFSET_IN_CONTAINER"]
             if configValues["SSH_PASSWORD"] == "None":
                 password = ""
@@ -257,7 +258,7 @@ if expectedResult in result.upper():
                                     #Get threshold values from device config file
                                     conf_file,file_status = getConfigFileName(obj.realpath)
                                     result2,cobalt_play_threshold = getDeviceConfigKeyValue(conf_file,"COBALT_PLAY_NEXT_VIDEO_TIME_THRESHOLD_VALUE")
-                                    offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
+                                    offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET_IN_CONTAINER")
                                     #Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                     if all(value != "" for value in (cobalt_play_threshold,offset)):
                                         print "\n Play initiated at {}".format(play_start_time)

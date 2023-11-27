@@ -245,6 +245,7 @@ if expectedResult in result.upper():
                                     if expectedResult in result:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         print "\n Thunder Restarted successfully \n"
+                                        time.sleep(20)
                                         print "Check container is running"
                                         tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                                         tdkTestObj.addParameter("callsign",cobalt_details)
