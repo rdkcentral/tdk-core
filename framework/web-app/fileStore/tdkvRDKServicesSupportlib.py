@@ -986,6 +986,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 del timeZones[:]
             else:
                 info["Test_Step_Status"] = "FAILURE"
+        elif tag == "system_check_negative_scenario":
+            if str(result.get("success")).lower() == "false":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+        elif tag == "system_check_friendly_name":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if len(arg) and arg[0] == "check_name":
+                if result.get("friendlyName") in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         # User Preferces Plugin Response result parser steps
         elif tag == "userpreferences_get_ui_language":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -2495,7 +2507,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # Timer Plugin Response result parser steps
         elif tag == "timer_check_results":
-            info = checkAndGetAllResultInfo (result,result.get("success"))
+            info = result
+            status = checkNonEmptyResultData(result)
+            if len(arg) and arg[0] == "check_negative_scenario":
+                success = str(result.get("success")).lower() == "false"
+            else:
+                success = str(result.get("success")).lower() == "true"
+            if success and status == "TRUE":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "timer_check_timer_status":
             info["state"] = result.get("state")
@@ -5341,7 +5362,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             command = 'grep '+str(arg[0])+' '+str(arg[1])+' | cut -d\'=\' -f2- | xargs'
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")[1]
-            info["details"] = output.strip()
+            info["details"] = output.replace('"','').strip()
             info["Test_Step_Status"] =  "SUCCESS"
         
         elif tag == "system_check_swupdate_file_status":

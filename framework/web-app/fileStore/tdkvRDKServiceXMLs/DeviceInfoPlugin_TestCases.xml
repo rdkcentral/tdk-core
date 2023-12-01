@@ -117,7 +117,7 @@
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
         </testCase>
-        
+       
         <testCase testCaseId="DI_06" testCaseName= "DeviceInfo_Check_Model_Name" desc="Checks the model name of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
@@ -131,7 +131,7 @@
                 </resultGeneration>
             </testStep>
        </testCase>
-
+  
        <testCase testCaseId="DI_07" testCaseName="DeviceInfo_Check_Firmware_Version" desc="Checks the firmware version of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Current_Image_Version" action="externalFnCall" saveResult="true">
@@ -199,6 +199,34 @@
                 </params>
                 <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="supportedHDCPVersion">
                         <expectedValues useConfigFile="true" key="DEVICEINFO_SUPPORTED_HDCP_VERSION" />
+                </resultGeneration>
+            </testStep>
+       </testCase>
+
+       <testCase testCaseId="DI_13" testCaseName="DeviceInfo_Check_Model_ID" desc="Checks the model id of the DUT">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="system_get_device_details_from_file" >
+                         <arguments value="^MODEL_NUM" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Model_ID" method="Get_Model_ID">
+                <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="sku" >
+                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
+                </resultGeneration>
+            </testStep>
+       </testCase>
+
+       <testCase testCaseId="DI_14" testCaseName="DeviceInfo_Check_Device_Type" desc="Checks the device type of the DUT">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
+                    <resultGeneration useMethodTag="system_get_device_details_from_file" >
+                         <arguments value="^DEVICE_TYPE" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
+                    </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Device_Type" method="Get_Device_Type">
+                <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="devicetype" >
+                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
                 </resultGeneration>
             </testStep>
        </testCase>

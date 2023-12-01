@@ -89,6 +89,7 @@
             <event pluginName="FrameRate"     eventName="Event_On_FPS" />
             <event pluginName="LightningApp" eventName="Event_LightningApp_Load_Finished" />
             <event pluginName="FrameRate" eventName="Event_On_Display_FrameRate_Changed" />
+            <event pluginName="FrameRate" eventName="Event_On_Display_FrameRate_Changing" />
           </prerequisite>
         </pluginPreRequisite>
         <testCase testCaseId="FR_01" testCaseName="FrameRate_Collect_FPS" desc="Launches graphics url using lightning app and gets fps using onFpsEvent Event">
@@ -186,6 +187,35 @@
               </subtestStep>
               <subtestStep subtestStepId="3" name="Check_Display_FrameRate_Changed_Event" event="Event_On_Display_FrameRate_Changed" action="eventListener" delay="3" >
                   <resultGeneration useMethodTag="framerate_check_display_framerate_changed_event" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        <testCase testCaseId="FR_04" testCaseName="FrameRate_Check_Display_FrameRate_Changing_Event"  desc="Checks for display framerate changing event on changing display framerate">
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="FRAMERATE_SUPPORTED_FEATURES" useMethodTag="frontpanel_check_feature_applicability" arguments="DisplayFramerate"/>
+            <testStep testStepId="1" name="Get_Display_FrameRate" method="Get_Display_FrameRate"  saveResult="true" revertGet="yes">
+              <resultGeneration useMethodTag="framerate_check_display_framerate" />
+            </testStep>
+            <testStep testStepId="2" name="Framerate_Get_Width_And_Height" action="externalFnCall" saveResult="true">
+              <resultGeneration useMethodTag="Framerate_Get_Width_And_Height" >
+                 <arguments useConfigFile="true" key="RESOLUTION_WIDTH_HEIGHT_MAPPING"/>
+              </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Set_and_Get_DisplayFramerate" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Display_FrameRate" method="Set_Display_FrameRate" revertSet="yes">
+                  <params>
+                      <param tag="framerate" usePreviousResult="true" Id="2" useMethodTag="framerate_set_display_framerate" iteration="true" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="framerate_check_set_operation" />
+              </subtestStep>
+              <subtestStep testStepId="2" name="Get_Display_FrameRate" method="Get_Display_FrameRate" revertFlag="yes">
+                  <resultGeneration useMethodTag="framerate_check_display_framerate" arguments="check_framerate_value">
+                     <expectedValues useIterableValue="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Check_Display_FrameRate_Changing_Event" event="Event_On_Display_FrameRate_Changing" action="eventListener" delay="3" >
+                  <resultGeneration useMethodTag="framerate_check_display_framerate_event" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>

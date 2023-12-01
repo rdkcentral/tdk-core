@@ -552,6 +552,12 @@
                 <param tag="nwStandby" type="bool" />
             </params>
         </method>
+        <method name="System_Get_Friendly_Name" api="getFriendlyName" type="method" desc="Returns the friendly name set by setFriendlyName API or default value" />
+        <method name="System_Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets the friendly name of the device" >
+            <params>
+               <param tag="friendlyName" defaultValue="null" />
+            </params>
+        </method>
         <event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
@@ -559,6 +565,7 @@
 	<event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
         <event name="Event_On_Network_Standby_Mode_Changed" eventName="onNetworkStandbyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the network standby mode setting changes" />
         <event name="Event_On_TimeZoneDST_Changed" eventName="onTimeZoneDSTChanged" eventId="client.events.1" type="event" desc="Triggered when device timezone changed" />
+        <event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
     </plugin>
 
 
@@ -871,6 +878,7 @@
             <params>
                 <param tag="client" defaultValue="null"/>
                 <param tag="topmost" type="bool"/>
+                <param tag="focus" type="bool"/>
             </params>
         </method>
         <method name="Remove_Animation" api="removeAnimation" type="method" desc="Removes the current animation for the specified client" >
@@ -1146,6 +1154,7 @@
         </method>
         <event name="Event_On_FPS" eventName="onFpsEvent" eventId="client.events.1" type="event" desc="Fired at given interval and after stopFpsCollection" />
         <event name="Event_On_Display_FrameRate_Changed" eventName="onDisplayFrameRateChanged" eventId="client.events.1" type="event" desc="Triggered when the user changes the framerate" />
+        <event name="Event_On_Display_FrameRate_Changing" eventName="onDisplayFrameRateChanging" eventId="client.events.1" type="event" desc="Triggered when the user changes the framerate" />
     </plugin>
 
 

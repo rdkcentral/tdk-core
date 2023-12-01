@@ -4028,4 +4028,25 @@
          </postrequisite>
         </testCasePostRequisite>
         </testCase>
+
+        <!-- Test case 124 -->
+        <testCase testCaseId="RDKShell_124" testCaseName="Set_Client_TopMost_With_Focus_Parameter"  desc="Sets the last client to top most client with focus parameter" >
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="getZorder" method="GetZOrder" saveResult="true" >
+              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Set_TopMost" method="Set_TopMost" >
+              <params>
+                  <param tag="client" usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_last_client_zorder"  />
+                  <param tag="topmost" value="true" />
+                  <param tag="focus" value="true" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_get_result_status"/>
+            </testStep>
+            <testStep testStepId="3" name="getZorder" method="GetZOrder" saveResult="true" >
+              <resultGeneration useMethodTag="rdkshell_validate_topmost_client" >
+                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_last_client_zorder" />
+              </resultGeneration>
+            </testStep>
+        </testCase>
 </testPlugin>

@@ -45,6 +45,7 @@
 	    <event pluginName="System" eventName="Event_Reboot_Request" />
             <event pluginName="System" eventName="Event_On_Network_Standby_Mode_Changed" />
             <event pluginName="System" eventName="Event_On_TimeZoneDST_Changed"/>
+            <event pluginName="System" eventName="Event_On_Friendly_Name_Changed"/>
           </prerequisite>
 
         </pluginPreRequisite>
@@ -1066,4 +1067,51 @@
                 <resultGeneration useMethodTag="system_get_rfc_info" arguments="check_expected_value" expectedValues="true"/>
             </testStep>
        </testCase>
+       <testCase testCaseId="SYS_55" testCaseName="System_SetandGet_Friendly_Name" desc="Check whether able to set and get friendly name" >
+            <testCaseInfo testCaseType="setandget" revert="true"  />
+            <testStep testStepId="1" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  saveResult="true" revertGet="yes" >
+                <resultGeneration useMethodTag="system_check_friendly_name" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Friendly_Name" method="System_Set_Friendly_Name" revertSet="yes" >
+                <params>
+                  <param tag="friendlyName" value="Test_Value" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="3" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  revertFlag="yes">
+                <resultGeneration useMethodTag="system_check_friendly_name" expectedValues="Test_Value" arguments="check_name"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_On_Friendly_Name_Changed_Event" event="Event_On_Friendly_Name_Changed" action="eventListener" delay="2">
+                <resultGeneration useMethodTag="system_check_friendly_name_changed_event" >
+                   <expectedValues value="Test_Value"/>
+                </resultGeneration>
+            </testStep>
+       </testCase>
+       <testCase testCaseId="SYS_56" testCaseName="System_Check_Friendly_Name_Persist" desc="Check friendly name is persisting on reboot" >
+            <testCaseInfo testCaseType="setandget" revert="true"  />
+            <testStep testStepId="1" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  saveResult="true" revertGet="yes" >
+                <resultGeneration useMethodTag="system_check_friendly_name" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Friendly_Name" method="System_Set_Friendly_Name" revertSet="yes" >
+                <params>
+                  <param tag="friendlyName" value="Test_Value" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="3" name="System_reboot" method="Reboot" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="4" name="Get_Friendly_Name" method="System_Get_Friendly_Name"  revertFlag="yes">
+                <resultGeneration useMethodTag="system_check_friendly_name" expectedValues="Test_Value" arguments="check_name"/>
+            </testStep>
+       </testCase>
+       <testCase testCaseId="SYS_57" testCaseName="System_Set_Invalid_TimeZone_DST" desc="Checks whether able to set invalid timezone" >
+           <testCaseInfo testCaseType="direct"  />
+            <testStep testStepId="1" name="Set_TimeZone_DST" method="Set_TimeZone_DST" >
+                <params>
+                  <param tag="timeZone" value="TestValue1/TestValue2" />
+                </params>
+                <resultGeneration useMethodTag="system_check_negative_scenario" />
+            </testStep>
+        </testCase>
 </testPlugin>

@@ -516,7 +516,13 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                        info = eventResult
                        info["Test_Step_Status"] = "SUCCESS"
                        break;
-
+        elif tag == "system_check_friendly_name_changed_event":
+            info["Test_Step_Status"] = "FAILURE"
+            for eventResult in result:
+                if str(eventResult.get("friendlyName")) == str(expectedValues[0]):
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
         # LoggerPreferences Events response result parser steps
         elif tag == "loggingpreferences_check_onkeystroke_mask_enabled_change_event":
             result = result[0]

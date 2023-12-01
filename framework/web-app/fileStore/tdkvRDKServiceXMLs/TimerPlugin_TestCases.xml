@@ -210,5 +210,107 @@
               <resultGeneration useMethodTag="timer_check_timer_expired_event"  expectedValues="0" />
             </testStep>
         </testCase>
+        <testCase testCaseId="TIME_07" testCaseName="Start_And_Suspend_Timer_Twice" desc="check if able to suspend timer twice">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Start_Timer" method="Start_Timer" saveResult="true"  >
+              <params>
+                <param tag="interval" useDefault="true"  />
+                <param tag="mode" useDefault="true" />
+                <param tag="repeatInterval" useDefault="true" />
+                <param tag="remindBefore" useDefault="true" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Timers_Status" method="Get_Timers_Status"  >
+              <resultGeneration useMethodTag="timer_check_results"  />
+            </testStep>
+            <testStep testStepId="3"  name="Suspend_Timer" method="Suspend_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="SUSPENDED" />
+            </testStep>
+            <testStep testStepId="5"  name="Suspend_Timer" method="Suspend_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" arguments="check_negative_scenario" />
+            </testStep>
+            <testStep testStepId="6"  name="Resume_Timer" method="Resume_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="RUNNING" />
+            </testStep>
+            <testStep testStepId="8" name="Get_Timer_Status" method="Get_Timer_Status" delay="15">
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="EXPIRED" />
+            </testStep>
+        </testCase>
+        <testCase testCaseId="TIME_08" testCaseName="Start_And_Resume_Timer_Twice" desc="check if able to resume timer twice">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Start_Timer" method="Start_Timer" saveResult="true"  >
+              <params>
+                <param tag="interval" useDefault="true"  />
+                <param tag="mode" useDefault="true" />
+                <param tag="repeatInterval" useDefault="true" />
+                <param tag="remindBefore" useDefault="true" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Timers_Status" method="Get_Timers_Status"  >
+              <resultGeneration useMethodTag="timer_check_results"  />
+            </testStep>
+            <testStep testStepId="3"  name="Suspend_Timer" method="Suspend_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="SUSPENDED" />
+            </testStep>
+            <testStep testStepId="5"  name="Resume_Timer" method="Resume_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="6" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="RUNNING" />
+            </testStep>
+            <testStep testStepId="7"  name="Resume_Timer" method="Resume_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" arguments="check_negative_scenario" />
+            </testStep>
+            <testStep testStepId="8" name="Get_Timer_Status" method="Get_Timer_Status" delay="15">
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="EXPIRED" />
+            </testStep>
+        </testCase>
 </testPlugin>
 

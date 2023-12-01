@@ -967,5 +967,51 @@ using traceroute" >
                 <resultGeneration useMethodTag="network_check_results"/>
             </testStep>
        </testCase>
+       <testCase testCaseId="NW_34" testCaseName="Network_Validate_Public_IP_Adddress_With_Invalid_Stun_Endpoint" desc="Validates the Public IP Address with invalid stun endpoint" >
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Get_Public_IP_Address" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="system_check_public_ip_address" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Public_IP_Default_Endpoint" method="Get_Public_IP">
+                <params>
+                     <param tag="iface"  value="ETHERNET" />
+                     <param tag="ipv6" value="false" />
+                </params>
+                <resultGeneration useMethodTag="network_validate_public_ip_address" >
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details" arguments="get_public_ip_address"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Set_Stun_End_Point" method="Set_Stun_End_Point" >
+                <params>
+                    <param tag="server" value="https://invalid-tdk.com"/>
+                    <param tag="port"  useConfigFile="true" key="NETWORK_STUN_SERVER_PORT"/>
+                    <param tag="sync"  value="true" />
+                    <param tag="timeout" value="30" />
+                    <param tag="cache_timeout" value="0" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Public_IP" method="Get_Public_IP">
+                <params>
+                     <param tag="iface"  value="ETHERNET" />
+                     <param tag="ipv6" value="false" />
+                </params>
+                <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="false"  />
+            </testStep>
+            <testCasePostRequisite>
+          <postrequisite requisiteId="1" requisiteName="Set_Stun_End_Point" >
+            <testStep testStepId="1" name="Set_Stun_End_Point" method="Set_Stun_End_Point" >
+                <params>
+                    <param tag="server" useConfigFile="true" key="NETWORK_STUN_SERVER" />
+                    <param tag="port"  useConfigFile="true" key="NETWORK_STUN_SERVER_PORT"/>
+                    <param tag="sync"  value="true" />
+                    <param tag="timeout" value="30" />
+                    <param tag="cache_timeout" value="0" />
+                </params>
+                <resultGeneration useMethodTag="network_check_results" />
+            </testStep>
+          </postrequisite>
+        </testCasePostRequisite>
+       </testCase>
 </testPlugin>
 
