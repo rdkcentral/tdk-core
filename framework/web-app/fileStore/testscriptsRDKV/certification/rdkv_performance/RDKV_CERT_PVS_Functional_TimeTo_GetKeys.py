@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2022 RDK Management
+# Copyright 2023 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>5</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_CERT_PVS_Functional_TimeTo_GetKeys</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -70,7 +70,7 @@
     <automation_approch>1. Enable WebKitInstance plugin.
 2. Set URL for keytest in WebKitInstance.
 3. In a loop of minimum 15 iterations send a key using generatekey method of RDKShell to the system.
-4. Validate the key press using webinspect console logs.
+4. Validate the key press using logs from wpeframework logs.
 5. Validate the time taken to get keys from RDK Shell.
 6. Revert plugins status after completing the test</automation_approch>
     <expected_output>The time taken to get keys from RDK Shell must be within the expected limit</expected_output>
@@ -81,6 +81,7 @@
     <release_version>M98</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
@@ -89,32 +90,25 @@ from StabilityTestUtility import *
 from web_socket_util import *
 from rdkv_performancelib import *
 import PerformanceTestVariables
-
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_performance","1",standAlone=True);
-
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_GetKeys');
-
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
-
 #Execution summary variable
 Summ_list=[]
-
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 obj.setLoadModuleStatus(result);
-
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     key_test_url = obj.url+'/fileStore/lightning-apps/KeyStressTest.html'
-    webkit_console_socket = None
     print "Check Pre conditions"
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
@@ -141,8 +135,13 @@ if expectedResult in result.upper():
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
-    if status == "SUCCESS" :
-        webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
         print "\nPre conditions for the test are set successfully"
         print "\nGet the URL "
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -185,21 +184,40 @@ if expectedResult in result.upper():
                             if expectedResult in result:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 time.sleep(10)
-                                if (len(webkit_console_socket.getEventsBuffer())== 0):
-                                    print "\n No events occurred corresponding to key press\n"
+                                print "checking for Keycode log"
+                                command = 'cat /opt/logs/wpeframework.log | grep -inr KeyCode | tail -1'
+                                print "COMMAND : %s" %(command)
+                                #Primitive test case which associated to this Script
+                                tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
+                                #Add the parameters to ssh to the DUT and execute the command
+                                tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                tdkTestObj.addParameter("command",command)
+                                #Execute the test case in DUT
+                                tdkTestObj.executeTestCase(expectedResult);
+                                result = tdkTestObj.getResult()
+                                output = tdkTestObj.getResultDetails()
+                                output = output[output.find('\n'):]
+                                if "KeyCode" in output:
+                                    print "\n Keycode logs are present in wpelogs"
+                                    end_get_key_time = output.split('\n')[1].split(' ')[2]
+                                    if result in expectedResult and end_get_key_time != {}:
+                                        print "\n key codes are received successfully \n"
+                                        print "end time",end_get_key_time
+                                        start_get_key_time_in_millisec = getTimeInMilliSec(start_get_key_time)
+                                        end_get_key_time_in_millisec = getTimeInMilliSec(end_get_key_time)
+                                        time_taken = end_get_key_time_in_millisec - start_get_key_time_in_millisec
+                                        print "time taken",time_taken
+                                        total_time = total_time + time_taken
+                                        count = count + 1
+                                    else:
+                                        print "\n Error in getting the keycode time"
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        break
+                                else:
+                                    print "\n Keycode logs are not present in wpelogs"
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
-                                else:
-                                    event_log = webkit_console_socket.getEventsBuffer().pop(0)
-                                    print "\n key codes are received successfully \n"
-                                    end_get_key_time = event_log.split('$$$')[0]
-                                    print "end time",end_get_key_time
-                                    start_get_key_time_in_millisec = getTimeInMilliSec(start_get_key_time)
-                                    end_get_key_time_in_millisec = getTimeInMilliSec(end_get_key_time)
-                                    time_taken = end_get_key_time_in_millisec - start_get_key_time_in_millisec
-                                    print "time taken",time_taken
-                                    total_time = total_time + time_taken
-                                    count = count + 1
                             else:
                                 print "\nError while executing generate key method\n"
                                 tdkTestObj.setResultStatus("FAILURE")
@@ -217,7 +235,7 @@ if expectedResult in result.upper():
                             Summ_list.append('Time taken to get keys :{}ms'.format(avg_get_key_time))
                             print "\n Threshold value to get keys: {}(ms)".format(get_key_threshold)
                             print "\n Validate the time:"
-                            if avg_get_key_time  < get_key_threshold:
+                            if avg_get_key_time < get_key_threshold:
                                 print "\n Time taken for getting the keys is within the expected range \n"
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
@@ -262,7 +280,3 @@ if expectedResult in result.upper():
 else:
     obj.setLoadModuleStatus("FAILURE");
     print "Failed to load module"
-                                                         
-
-
-
