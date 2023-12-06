@@ -13,7 +13,7 @@
  limitations under the License.
 -->
 <?xml version="1.0" encoding="UTF-8"?><xml>
-  <module name="rdkvxconfrfc" testGroup="Component">
+  <module testGroup="Component" name="rdkvxconfrfc">
     <primitiveTests>
       <primitiveTest name="rfc_updateserverurl" id="" version="1">
         <function>rfc_updateserverurl</function>
@@ -75,6 +75,20 @@
           <parameter name="basePath" value=""/>
           <parameter name="configKey" value=""/>
         </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_formfeaturename" id=" " version="1">
+        <function>rfc_formfeaturename</function>
+        <parameters>
+          <parameter name="feature_name" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_deletefeature" id="" version="1">
+        <function>rfc_deletefeature</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rfc_deletefeaturerule" id="" version="1">
+        <function>rfc_deletefeaturerule</function>
+        <parameters/>
       </primitiveTest>
     </primitiveTests>
   </module>

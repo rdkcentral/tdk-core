@@ -99,6 +99,7 @@ print "[LIB LOAD STATUS]  :  %s" %result;
 
 obj.setLoadModuleStatus(result.upper());
 expectedResult = "SUCCESS"
+feature_rule_created="FAILURE"
 
 if "SUCCESS" in result.upper():
     tdkTestObj = obj.createTestStep('rfc_urlvalidate')
@@ -110,7 +111,8 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
         obj.unloadModule('rdkvxconfrfc');
         exit()
-
+    
+    ##remove special characters by replace command
     detail=detail.replace("(","").replace("'","").replace(")","")
     detail = detail.split(",")
     detail = detail[1]
@@ -135,13 +137,30 @@ if "SUCCESS" in result.upper():
             tdkTestObj.addParameter("rfcparameter",rfcparameter)
             tdkTestObj.executeTestCase(expectedResult)
             actualvalue = tdkTestObj.getResultDetails()
-            if "true" in actualvalue or "false" in actualvalue or "" in actualvalue:
+            if "true" in actualvalue or "false" in actualvalue or len(actualvalue)==0:
+                tdkTestObj.setResultStatus("SUCCESS")
+
+                tdkTestObj = obj.createTestStep('rfc_formfeaturename')
+                feature_name="AutoReboot.Enable"
+                tdkTestObj.addParameter("feature_name",feature_name)
+                tdkTestObj.executeTestCase(expectedResult)
+                detail=tdkTestObj.getResultDetails()
+                if "FAILURE" in detail:
+                    tdkTestObj.setResultStatus("FAILURE")
+                    obj.unloadModule('rdkvxconfrfc');
+                    exit()
+
+                #remove special characters and unicode by replace command
+                detail= detail.replace("(","").replace(")","").replace("u'","'").replace("'","")
+                detail = detail.split(",")
+                detail = detail[1]
+                feature_name=detail.strip()
+                print "Feature name : "+feature_name
                 tdkTestObj.setResultStatus("SUCCESS")
 
                 tdkTestObj = obj.createTestStep('rfc_initializefeatures')
                 slashparts = RFC_XCONF_URL.split('/')
                 xconfdomainname='/'.join(slashparts[:3]) + '/'
-                feature_name="TDKV_XCONF_RFC_VALIDATION_FEATURE_NAME"
                 if  "true" in actualvalue:
                     expectedvalue="false"
                 elif "false" in actualvalue:
@@ -157,6 +176,7 @@ if "SUCCESS" in result.upper():
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
 
+                    feature_rule_created="SUCCESS"
                     tdkTestObj = obj.createTestStep('rfc_checkconfiguredata')
                     tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
@@ -180,28 +200,43 @@ if "SUCCESS" in result.upper():
                             actualresult = tdkTestObj.getResultDetails()
                             if "FAILURE" not in actualresult:
                                  tdkTestObj.setResultStatus("SUCCESS")
+                                 
+                                 print "\nNeed to revert the RFC datamodel into actualvalue\n"
+                                 tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
+                                 tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                 tdkTestObj.addParameter("actualvalue",actualvalue)
+                                 tdkTestObj.addParameter("feature_name",feature_name)
+                                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                 tdkTestObj.executeTestCase(expectedResult)
+                                 actualresult = tdkTestObj.getResultDetails()
+                                 if expectedResult in actualresult.upper():
+                                     tdkTestObj.setResultStatus("SUCCESS")
 
-                                 if actualresult in actualvalue:
-                                     print "\nNo need to revert the RFC datamodel value\n"
                                  else:
-                                     print "\nNeed to revert the RFC datamodel into actualvalue\n"
-                                     tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
-                                     tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                                     tdkTestObj.addParameter("actualvalue",actualvalue)
-                                     tdkTestObj.addParameter("feature_name",feature_name)
-                                     tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
-                                     tdkTestObj.executeTestCase(expectedResult)
-                                     actualresult = tdkTestObj.getResultDetails()
-                                     if expectedResult in actualresult.upper():
-                                         tdkTestObj.setResultStatus("SUCCESS")
-                                     else:
-                                         tdkTestObj.setResultStatus("FAILURE")
+                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
+
+                    if feature_rule_created=="SUCCESS":
+                        tdkTestObj = obj.createTestStep('rfc_deletefeaturerule')
+                        tdkTestObj.executeTestCase(expectedResult)
+                        actualresult = tdkTestObj.getResultDetails()
+                        if expectedResult in actualresult:
+                            tdkTestObj.setResultStatus("SUCCESS")
+
+                            tdkTestObj = obj.createTestStep('rfc_deletefeature')
+                            tdkTestObj.executeTestCase(expectedResult)
+                            actualresult = tdkTestObj.getResultDetails()
+                            if expectedResult in actualresult:
+                                tdkTestObj.setResultStatus("SUCCESS")
+                            else:
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                                tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
             else:
@@ -210,6 +245,7 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("FAILURE")
     else:
         tdkTestObj.setResultStatus("FAILURE")
+
 else:
     print "\nFAILURE : Module Loading Status Failure\n"
 

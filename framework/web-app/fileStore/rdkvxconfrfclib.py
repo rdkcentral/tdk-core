@@ -202,6 +202,18 @@ def rfc_urlvalidate(basePath, configKey):
     return rfc_urlvalidatestatus,output
 
 #---------------------------------------------------------------
+# Form FEATURE NAME
+#---------------------------------------------------------------
+def rfc_formfeaturename(feature_name):
+    formfeaturenamestatus="SUCCESS"
+    deviceMACstatus=rfc_getmacaddress()
+    if "FAILURE" not in deviceMACstatus:
+            feature_name = "TDKV_RFC_"+feature_name+"_"+deviceMAC
+    else:
+        formfeaturenamestatus="FAILURE"
+    return formfeaturenamestatus,feature_name
+
+#---------------------------------------------------------------
 # GET DEVICE MAC ADDRESS
 #---------------------------------------------------------------
 def rfc_getmacaddress():
@@ -212,8 +224,8 @@ def rfc_getmacaddress():
         #get the MAC address from device
         command="ifconfig | awk '/eth0/ {print $5}'"
         print "Executing Command : %s" %command
-        global deviceMAC
         #execute in DUT function
+        global deviceMAC
         deviceMAC=rfc_executeInDUT (sshMethod, credentials, command)
         deviceMAC=deviceMAC.split("\n")
         deviceMAC=deviceMAC[1]
@@ -318,6 +330,7 @@ def rfc_datamodelcheck(rfcparameter):
 def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedvalue):
     initializefeaturestatus="SUCCESS"
     global feature_id
+    global feature_rule_id
     deviceMACstatus=rfc_getmacaddress()
     if "FAILURE" not in deviceMACstatus:
         config_status=rfc_obtainCredentials()
@@ -330,9 +343,10 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
             result=rfc_executeInDUT (sshMethod, credentials, command)
             result=str(result).split("\n")
             result=str(result[1])
-            if "[]" not in result:
-                 feature_id=result.replace('"','').strip()
-                 print "SUCCESS : "+feature_name+" "+"feature retrieved successfully"
+            feature_id=result.replace('"','').strip()
+            if "[]" not in feature_id:
+                 print "Feature is already present"
+                 print "\nSUCCESS : "+feature_name+" "+"feature retrieved successfully"
                  #check feature rule already present or not
                  command='curl -sX  GET '+"'"+xconfdomainname+'featurerule/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
                  print "Executing Command : %s" %command
@@ -341,8 +355,9 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                  result=str(result).split("\n")
                  result=str(result[1])
                  feature_rule_id=result.replace('"','').strip()
-                 if result:
-                     print "SUCCESS : "+feature_name+" "+"feature rule retrieved successfully"
+                 if "[]" not in feature_rule_id:
+                     print "Feature rule is already present"
+                     print "\nSUCCESS : "+feature_name+" "+"feature rule retrieved successfully"
                      #Update feature
                      command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
                      print "Executing Command : %s" %command
@@ -366,28 +381,34 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                          print "Failed to update feature"
                          initializefeaturestatus="FAILURE"
                  else:
-                        print "Failed to retreive specific feature rule"
+                        print "Feature rule is not present"
+                        print "\nFAILURE : "+feature_name+" "+"failed to retrieve feature rule"
                         initializefeaturestatus="FAILURE"
             else:
-                print feature_name+" : "+"feature already not present.Creating this feature please wait...."
+                print feature_name+" : "+"Creating this feature please wait...."
                 #Create feature
                 command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
                 print "Executing Command : %s" %command
                 #execute in DUT function
                 result=rfc_executeInDUT (sshMethod, credentials, command)
-                if "id" in result:
-                    result=str(result).split("\n")
-                    result= str(result[1])
-                    feature_id=json.loads(result)
-                    feature_id=feature_id["id"]
+                result=str(result).split("\n")
+                result= str(result[1])
+                feature_id=json.loads(result)
+                feature_id=feature_id["id"]
+                if len(feature_id)!=0:
                     print feature_name+" : feature created Successfully"
                     #Create feature rule
+                    print feature_name+" : "+"Creating this feature rule please wait...."
                     command='curl -sX POST '+xconfdomainname+'featurerule -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}\''
                     print "Executing Command : %s" %command
                     #execute in DUT function
                     result=rfc_executeInDUT (sshMethod, credentials, command)
-                    if "id" in result:
-                        print "Feature rule successfully created"
+                    result=str(result).split("\n")
+                    result= str(result[1])
+                    feature_rule_id=json.loads(result)
+                    feature_rule_id=feature_rule_id["id"]
+                    if len(feature_rule_id)!=0:
+                        print feature_name+" : feature rule successfully created"
                     else:
                         print "Failed to create feature rule"
                         initializefeaturestatus="FAILURE"
@@ -419,7 +440,7 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
             result = reaesc.sub('',result)
             if feature_name in result and rfcparameter in result and expectedvalue in result:
                 print result
-                print "\nSUccess : Retrieved RFC details match with configure data"
+                print "\nSUCCESS : Retrieved RFC details match with configure data"
             else:
                 print result
                 print "\nFAILURE : Retrieved RFC details not match with configure data"
@@ -448,11 +469,9 @@ def rfc_restartservice():
 	result=result[1]
 	result=result.replace("s","").strip()
         if int(result) <= 27:
-            print result
-            print "\nSUCCESS : Successfully restarted RFC service"
+            print "\nSUCCESS : Successfully restarted RFC service with the delay of "+result+" seconds"
         else:
-            print result
-            print "\nFAILURE : Failed to restart RFC service"
+            print "\nFAILURE : Failed to restart RFC service with the delay of "+result+" seconds"
             restartrfcstatus="FAILURE"
     else:
         print "\nFAILURE : Failed to get the device credentials"
@@ -512,18 +531,6 @@ def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_
             if actualvalue in result:
                 print result
                 print "\nSUCCESS : Rollback the RFC parameter successfully"
-
-                print "\nSetting the dummy RFC parameter value"
-                #set the dummy RFC parameter value
-                command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature":"null"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
-                print "Executing Command : %s" %command
-                #execute in DUT function
-                result=rfc_executeInDUT (sshMethod, credentials, command)
-                if "IMPORTED" in result:
-                    print "\nSUCCESS : Successfully updated dummy RFC parameter Value"
-                else:
-                    print "\nFAILURE : Updating dummy RFC parameter value failed"
-                    revertrfcstatus="FAILURE"
             else:
                 print result
                 print "\nFAILURE : Rollback the RFC parameter failed"
@@ -535,3 +542,59 @@ def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_
         print "\nFAILURE : Failed to get the device credentials"
         revertrfcstatus="FAILURE"
     return revertrfcstatus
+
+#---------------------------------------------------------------
+# DELETE THE FEATURE
+#---------------------------------------------------------------
+def rfc_deletefeature():
+    deletefeaturestatus="SUCCESS"
+    config_status=rfc_obtainCredentials()
+    if "FAILURE" not in config_status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        print "\nInitialized deleting the feature"
+        command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/feature/"+feature_id
+        print "Executing Command : %s" %command
+        #execute in DUT function
+        result=rfc_executeInDUT (sshMethod, credentials, command)
+        reaesc = re.compile(r'\x1b[^m]*m')
+        result = reaesc.sub('',result)
+        result = result.strip()
+        if "204" in result:
+            print result
+            print "\nSUCCESS : Deleted the feature successfully"
+        else:
+            print result
+            print "\nFAILURE : Failed to delete the feature"
+            deletefeaturestatus="FAILURE"
+    else:
+        print "\nFAILURE : Failed to get the device credentials"
+        deletefeaturestatus="FAILUR"
+    return  deletefeaturestatus
+
+#---------------------------------------------------------------
+# DELETE THE FEATURE RULE
+#---------------------------------------------------------------
+def rfc_deletefeaturerule():
+    deletefeaturerulestatus="SUCCESS"
+    config_status=rfc_obtainCredentials()
+    if "FAILURE" not in config_status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        print "\nInitialized deleting the feature rule"
+        command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/featurerule/"+feature_rule_id
+        print "Executing Command : %s" %command
+        #execute in DUT function
+        result=rfc_executeInDUT (sshMethod, credentials, command)
+        reaesc = re.compile(r'\x1b[^m]*m')
+        result = reaesc.sub('',result)
+        result = result.strip()
+        if "204" in result:
+            print result
+            print "\nSUCCESS : Deleted the feature rule successfully"
+        else:
+            print result
+            print "\nFAILURE : Failed to delete the feature rule"
+            deletefeaturerulestatus="FAILURE"
+    else:
+        print "\nFAILURE : Failed to get the device credentials"
+        deletefeaturerulestatus="FAILUR"
+    return deletefeaturerulestatus

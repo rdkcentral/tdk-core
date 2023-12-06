@@ -38,6 +38,9 @@
       <function name='rfc_rollbackdatamodelvalue' />
       <function name='rfc_updateserverurl' />
       <function name='rfc_urlvalidate' />
+      <function name='rfc_formfeaturename' />
+      <function name='rfc_deletefeature' />
+      <function name='rfc_deletefeaturerule' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -59,6 +62,7 @@
       <parameter funName='rfc_updateserverurl' parameterName='RFC_XCONF_URL' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_urlvalidate' parameterName='basePath' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_urlvalidate' parameterName='configKey' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_formfeaturename' parameterName='feature_name' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>
