@@ -111,7 +111,7 @@ if "SUCCESS" in loadModuleStatus.upper():
     # PLAT_API_GetClockSpeed
     #   Default Frequency=%d
 
-    print "\nTEST STEP1 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
+    print "\nTEST STEP 1 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
     print "EXEPECTED OUTPUT : Should get the default clock speed of CPU"
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetClockSpeed');
     tdkTestObj.executeTestCase(expectedResult);
@@ -123,9 +123,22 @@ if "SUCCESS" in loadModuleStatus.upper():
         print "Value Returned : ",details
         print "ACTUAL RESULT  : PLAT_API_GetClockSpeed call is success"
 
+        print "\nTEST STEP 2 : Retreive the clock speeds"
+        tdkTestObj = obj.createTestStep('PowerMgrHal_DetemineClockSpeeds');
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        clock_speeds = tdkTestObj.getResultDetails();
+        if expectedResult in actualResult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print "Value Returned : ",clock_speeds
+            print "ACTUAL RESULT  : PLAT_API_DetemineClockSpeeds call is success"
+
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print "ACTUAL RESULT  : ",details
 
         # PLAT_API_SetClockSpeed  API is applicable for ARM platform only. Not supposed to execute on MIPS platform
-        print "\nTEST STEP2 : Set the CPU clock speed using PLAT_API_SetClockSpeed API"
+        print "\nTEST STEP 3 : Set the CPU clock speed using PLAT_API_SetClockSpeed API"
         print "EXPECTED RESULT : Should set the invalid cpu speed value"
         tdkTestObj = obj.createTestStep('PowerMgrHal_SetClockSpeed');
         expectedResult = "FAILURE"
@@ -139,7 +152,7 @@ if "SUCCESS" in loadModuleStatus.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             print "ACTUAL RESULT  : ",details
 
-            print "\nTEST STEP3 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
+            print "\nTEST STEP 4 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
             print "EXEPECTED OUTPUT : Should get the current clock speed of CPU"
             tdkTestObj = obj.createTestStep('PowerMgrHal_GetClockSpeed');
             expectedResult = "SUCCESS"
@@ -148,9 +161,9 @@ if "SUCCESS" in loadModuleStatus.upper():
             details = tdkTestObj.getResultDetails();
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                cpu_speed_actual = int(str(str(details).split("=")[1]))
-                print "Vailue Returned : ",details
-                if cpu_speed_actual == cpu_speed_default:
+                cpu_speed_actual = str(str(details).split("=")[1])
+                print "Value Returned : ",details
+                if cpu_speed_actual in clock_speeds:
                     print "ACTUAL RESULT  : Invalid CPU speed is not set"
                     print "[TEST EXECUTION RESULT] : SUCCESS\n"
                 else:

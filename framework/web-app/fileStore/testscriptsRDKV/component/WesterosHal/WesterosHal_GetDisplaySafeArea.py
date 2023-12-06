@@ -90,6 +90,7 @@
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
 from tdkvutility import *
+from westeroshallib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("westeroshal","1");
@@ -100,8 +101,6 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'WesterosHal_GetDisplaySafeArea');
 expectedresult = "SUCCESS"
-width = 1280
-height = 720
 
 #Calculate Safe Area
 #The safe area is the region that is less likely to be non-visible due to overscan.
@@ -118,6 +117,7 @@ def CalculateSafeArea(resolution_width,resolution_height):
 result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 if result.upper() == "SUCCESS":
+    width,height = getDefaultDisplaySize(obj)
     #Prmitive test case which associated to this Script
     result,details = executeTest(obj, 'WesterosHal_CreateNativeWindow', {"width":width,"height":height});
     if result:

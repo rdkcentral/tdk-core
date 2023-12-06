@@ -85,7 +85,8 @@ CheckPoint 2. DisplayInfo must return 720p resolution size for the native window
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+import tdklib;
+from westeroshallib import *
 from tdkvutility import *
 
 #Test component to be tested
@@ -104,8 +105,7 @@ result =obj.getLoadModuleResult();
 print "[LIB LOAD STATUS]  :  %s" %result;
 
 if result.upper() == "SUCCESS":
-    width = 1280
-    height = 720
+    width,height = getDefaultDisplaySize(obj)
     #Prmitive test case which associated to this Script
     result,details = executeTest(obj, 'WesterosHal_CreateNativeWindow', {"width":width,"height":height});
     if result:

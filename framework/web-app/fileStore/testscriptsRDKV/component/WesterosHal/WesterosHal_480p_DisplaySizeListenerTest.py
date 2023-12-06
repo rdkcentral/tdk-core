@@ -84,6 +84,7 @@
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib; 
 from tdkvutility import *
+from westeroshallib import *
 
 #Test component to be tested
 wsObj = tdklib.TDKScriptingLibrary("westeroshal","1");
@@ -115,8 +116,7 @@ if result == "FAILURE":
 
 dsObj.setLoadModuleStatus(result);
 resolution = "480p"
-width = 1280
-height = 720
+width,height = getDefaultDisplaySize(wsObj)
 notApplicable = False
 result,details = executeTest(wsObj, 'WesterosHal_CreateNativeWindow', {"width":width,"height":height});
 if result:
