@@ -118,11 +118,11 @@
             </testStep>
         </testCase>
        
-        <testCase testCaseId="DI_06" testCaseName= "DeviceInfo_Check_Model_Name" desc="Checks the model name of the DUT">
+ 	<testCase testCaseId="DI_06" testCaseName= "DeviceInfo_Check_Model_Name" desc="Checks the model name of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
                     <resultGeneration useMethodTag="system_get_device_details_from_file" >
-                         <arguments value="model_number" useConfigFile="true" key="SYSTEM_DEVICE_DETAILS_FILE_PATH"/>
+                         <arguments value="FRIENDLY_ID" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
                     </resultGeneration>
             </testStep>
             <testStep testStepId="2" name="Get_Model_Name" method="Get_Model_Name">
@@ -130,8 +130,8 @@
                   <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
                 </resultGeneration>
             </testStep>
-       </testCase>
-  
+       </testCase> 
+       
        <testCase testCaseId="DI_07" testCaseName="DeviceInfo_Check_Firmware_Version" desc="Checks the firmware version of the DUT">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Current_Image_Version" action="externalFnCall" saveResult="true">
