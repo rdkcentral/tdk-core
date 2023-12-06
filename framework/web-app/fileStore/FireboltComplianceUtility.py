@@ -33,6 +33,7 @@ ignore_warnings = ""
 check_audio_fps = ""
 test_streams_base_path =""
 avsync_enabled = ""
+validateFullPlayback = ""
 
 #List consisting of HLS url
 HLS_URL = [MediaValidationVariables.video_src_url_short_duration_hls,MediaValidationVariables.video_src_url_hls,MediaValidationVariables.video_src_url_4k_hls,MediaValidationVariables.video_src_url_live_hls,MediaValidationVariables.video_src_url_hls_h264,MediaValidationVariables.video_src_url_hls_h264_iframe]
@@ -56,6 +57,7 @@ def getDeviceConfigValue (tdklibObj, configKey):
         global check_audio_fps
         global test_streams_base_path
         global avsync_enabled
+        global validateFullPlayback
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
         configValue = ""
@@ -112,11 +114,15 @@ def getDeviceConfigValue (tdklibObj, configKey):
             try:
                 avsync_enabled = configParser.get('device.config',"FIREBOLT_COMPLIANCE_AVSYNC_ENABLED")
             except:
-                avsync_enabled = "yes"
+                avsync_enabled = "no"
             try:
                 test_streams_base_path = configParser.get('device.config',"TEST_STREAMS_BASE_PATH")
             except:
                 test_streams_base_path = ""
+            try:
+                validateFullPlayback = configParser.get('device.config',"FIREBOLT_COMPLIANCE_VALIDATE_FULL_PLAYBACK")
+            except:
+                validateFullPlayback = "no"
         else:
             print "DeviceConfig file not available"
             result = "FAILURE"
@@ -198,6 +204,9 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     #Check AVSync
     if (avsync_enabled == "yes"):
         command = command + " avsync_enabled ";
+    #Validate playback to milliseconds
+    if (validateFullPlayback == "yes"):
+        command = command + " validateFullPlayback ";
     #Use autovideosink for fpsdisplaysink
     if  "checkfps=no" not in command.lower() and use_autoVideoSink_for_fpsdisplaysink == "yes":
         command = "export FPSDISPLAYSINK_USE_AUTOVIDEO=1 ;" + command
