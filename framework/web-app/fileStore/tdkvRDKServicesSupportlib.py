@@ -5358,6 +5358,23 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "check_time_sync":
+            command = 'date'
+            output = executeCommand(execInfo, command)
+            output = str(output).split("\n")[1].strip()
+            current_utc_time_DUT = datetime.datetime.strptime(output, "%a %b %d %H:%M:%S %Z %Y")
+            current_utc_time_DUT = current_utc_time_DUT.replace(second=0)
+            current_utc_time_DUT = current_utc_time_DUT.strftime("%Y-%m-%d %H:%M")
+            info["current_utc_time_DUT"] = current_utc_time_DUT
+            current_utc_time = datetime.datetime.utcnow()
+            current_utc_time = current_utc_time.replace(second=0)
+            current_utc_time = current_utc_time.strftime("%Y-%m-%d %H:%M")
+            info["current_utc_time"] = current_utc_time
+            if current_utc_time_DUT.strip() == current_utc_time.strip():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "system_get_device_details_from_file":
             command = 'grep '+str(arg[0])+' '+str(arg[1])+' | cut -d\'=\' -f2- | xargs'
             output = executeCommand(execInfo, command)
