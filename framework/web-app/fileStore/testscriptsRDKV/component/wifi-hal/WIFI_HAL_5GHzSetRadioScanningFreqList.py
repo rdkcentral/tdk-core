@@ -92,8 +92,8 @@ if "SUCCESS" in loadmodulestatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     parseStatus = parseDeviceConfig(obj);
     #Getting Supported Frequency Bands
-    print "\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands";
-    print "EXPECTED RESULT : Should get details of supported frequency bands";
+    print("\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands");
+    print("EXPECTED RESULT : Should get details of supported frequency bands");
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
     tdkTestObj.addParameter("methodName","getRadioSupportedFrequencyBands");
     tdkTestObj.addParameter("radioIndex",1);
@@ -104,11 +104,11 @@ if "SUCCESS" in loadmodulestatus.upper():
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
         SupportedFrequencyBands = details.split(":")[1].strip(" ");
-        print "ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands;
+        print("ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands);
         if "5GHz" in SupportedFrequencyBands:
             #Setting the radio scanning frequency list
-            print "\nTEST STEP 2: To invoke the api wifi_setRadioScanningFreqList() to set the radio scanning frequency list";
-            print "EXPECTED RESULT : Should set the radio scanning frequency list successfully";
+            print("\nTEST STEP 2: To invoke the api wifi_setRadioScanningFreqList() to set the radio scanning frequency list");
+            print("EXPECTED RESULT : Should set the radio scanning frequency list successfully");
             tdkTestObj = obj.createTestStep("WIFI_HAL_SetRadioScanningFreqList");
             tdkTestObj.addParameter("radioIndex",1);
             tdkTestObj.addParameter("freqList",tdkvWifiUtility.set_5ghz_freq_list);
@@ -116,14 +116,14 @@ if "SUCCESS" in loadmodulestatus.upper():
             tdkTestObj.executeTestCase(expectedresult);
             actualresult = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
-            print "FREQ LIST TO BE SET : ",tdkvWifiUtility.set_5ghz_freq_list
+            print("FREQ LIST TO BE SET : ",tdkvWifiUtility.set_5ghz_freq_list)
             if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT : ",details
-                print "[TEST EXECUTION RESULT]: SUCCESS"
+                print("ACTUAL RESULT : ",details)
+                print("[TEST EXECUTION RESULT]: SUCCESS")
                 #Getting Neighboring Access Points with the channel set
-                print "\nTEST STEP 3: To invoke the api wifi_getNeighboringWiFiDiagnosticResult() to get Neighboring APs";
-                print "EXPECTED RESULT : Should get the neighbor wifi diagnostic";
+                print("\nTEST STEP 3: To invoke the api wifi_getNeighboringWiFiDiagnosticResult() to get Neighboring APs");
+                print("EXPECTED RESULT : Should get the neighbor wifi diagnostic");
                 tdkTestObj = obj.createTestStep('WIFI_HAL_GetNeighboringWiFiDiagnosticResult');
                 tdkTestObj.addParameter("radioIndex",1);
                 expectedresult="SUCCESS";
@@ -132,20 +132,20 @@ if "SUCCESS" in loadmodulestatus.upper():
                 details = tdkTestObj.getResultDetails();
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "ACTUAL RESULT : Gets the neighbor wifi diagnostic successfully"
+                    print("ACTUAL RESULT : Gets the neighbor wifi diagnostic successfully")
                     if "SSID" in details and "Band" in details:
                         neighborAPInfo = details.split("|")
-                        print "Neighboring AP Info:"
+                        print("Neighboring AP Info:")
                         for AP in neighborAPInfo:
-                            print AP
+                            print(AP)
                     else:
-                        print "Neighboring AP Info : %s" %details;
-                    print "[TEST EXECUTION RESULT] : SUCCESS";
+                        print("Neighboring AP Info : %s" %details);
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "ACTUAL RESULT : ",details
-                    print "[TEST EXECUTION RESULT] : FAILURE";
-                print "Restoring default configuration"
+                    print("ACTUAL RESULT : ",details)
+                    print("[TEST EXECUTION RESULT] : FAILURE");
+                print("Restoring default configuration")
                 tdkTestObj = obj.createTestStep("WIFI_HAL_SetRadioScanningFreqList");
                 tdkTestObj.addParameter("radioIndex",0);
                 freq_list = tdkvWifiUtility.set_2ghz_freq_list + " "  + tdkvWifiUtility.set_5ghz_freq_list
@@ -155,28 +155,28 @@ if "SUCCESS" in loadmodulestatus.upper():
                 details = tdkTestObj.getResultDetails();
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Default configuration restored"
+                    print("Default configuration restored")
                     sleep(60)
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Unable to set to default configuration"
+                    print("Unable to set to default configuration")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT : ",details
-                print "[TEST EXECUTION RESULT]: FAILURE"
+                print("ACTUAL RESULT : ",details)
+                print("[TEST EXECUTION RESULT]: FAILURE")
         else:
-            print "Frequency band 5GHz not supported : Skipping setRadioScanningFreqList validation"
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("Frequency band 5GHz not supported : Skipping setRadioScanningFreqList validation")
+            print("[TEST EXECUTION RESULT] : SUCCESS");
             tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "wifi_getRadioSupportedFrequencyBands() operation failed"
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("wifi_getRadioSupportedFrequencyBands() operation failed")
+        print("[TEST EXECUTION RESULT] : FAILURE")
         tdkTestObj.setResultStatus("FAILURE");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 
 

@@ -93,7 +93,7 @@ opcode - cec frame opcode</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
 #Test component to be tested
@@ -109,18 +109,18 @@ def checkCECSupportedTVConnection(tdkTestObj):
     expectedResult = "SUCCESS"
     CECSupported = "FALSE"
 
-    print "Check whether CEC enabled TV by transmitting a frame"
+    print("Check whether CEC enabled TV by transmitting a frame")
     version_opcode = "9F"
     version_operand = "9E"
-    print "Opcode to be sent: GET_CEC_VERSION: ",version_opcode
-    print "Operand to be received: CEC_VERSION: ",version_operand
+    print("Opcode to be sent: GET_CEC_VERSION: ",version_opcode)
+    print("Operand to be received: CEC_VERSION: ",version_operand)
     tdkTestObj.addParameter("opcode",version_opcode);
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print str(details).split(";")[0]
+        print(str(details).split(";")[0])
         version_operand_received = str(details).split(";")[0].split(":")[1].strip()
         if version_operand in version_operand_received:
             CECSupported = "TRUE"
@@ -137,7 +137,7 @@ def getSrcLogicalAddress(tdkTestObj):
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print details
+        print(details)
         logicalAddress = int(str(details).split(":",1)[1].split(",")[1].split(":")[1].strip())
         # Decimal value of 0x0F = 15
         logicalAddressClosed = 15
@@ -150,7 +150,7 @@ def getSrcLogicalAddress(tdkTestObj):
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -161,8 +161,8 @@ if "SUCCESS" in loadModuleStatus.upper():
     # Here, CEC frame is transmitted with invalid destination logical
     # address,expecting packets not to be acknowledged.
 
-    print "\nTEST STEP : Register HdmiCec Tx & Rx call back"
-    print "EXEPECTED RESULT : Functions should get registered"
+    print("\nTEST STEP : Register HdmiCec Tx & Rx call back")
+    print("EXEPECTED RESULT : Functions should get registered")
     tdkTestObj = obj.createTestStep('HdmicecHal_SetTxCallback');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult1 = tdkTestObj.getResult();
@@ -173,9 +173,9 @@ if "SUCCESS" in loadModuleStatus.upper():
     details2 = tdkTestObj.getResultDetails();
     if expectedResult in actualResult1 and expectedResult in actualResult2:
         tdkTestObj.setResultStatus("SUCCESS");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n")
 
         tdkTestObj1 = obj.createTestStep('HdmicecHal_GetLogicalAddress');
         tdkTestObj2 = obj.createTestStep('HdmicecHal_Tx');
@@ -183,14 +183,14 @@ if "SUCCESS" in loadModuleStatus.upper():
         CECSupport = checkCECSupportedTVConnection(tdkTestObj2)
         if CECSupport == "TRUE" and ConnStatus == "TRUE":
 
-            print "\nTEST STEP : Transmit CEC Frame to invalid destination"
-            print "EXEPECTED RESULT : Should receive not acknowledged send status"
+            print("\nTEST STEP : Transmit CEC Frame to invalid destination")
+            print("EXEPECTED RESULT : Should receive not acknowledged send status")
             tdkTestObj = obj.createTestStep('HdmicecHal_Tx');
             expectedResult = "FAILURE"
             # Logical address of TV is 0, but using invalid address as 1
             header = str(logicalAddress) + "1"
             version_opcode = "9F"
-            print "Frame to be sent: %s %s" %(header,version_opcode)
+            print("Frame to be sent: %s %s" %(header,version_opcode))
             tdkTestObj.addParameter("header",header);
             tdkTestObj.addParameter("opcode",version_opcode);
             tdkTestObj.executeTestCase(expectedResult);
@@ -199,31 +199,29 @@ if "SUCCESS" in loadModuleStatus.upper():
             if expectedResult in actualResult and "HDMI_CEC_IO_SENT_BUT_NOT_ACKD" in details:
                 tdkTestObj.setResultStatus("SUCCESS");
                 txInfo  = str(details).split(";")
-                print "Value Retuned :",details
-                print "ACTUAL RESULT : CEC frame transmitted but no destination to acknowledge"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("Value Retuned :",details)
+                print("ACTUAL RESULT : CEC frame transmitted but no destination to acknowledge")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print details
-                print "ACTUAL RESULT : CEC frame transmitted & acknowledged"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print(details)
+                print("ACTUAL RESULT : CEC frame transmitted & acknowledged")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             if CECSupport == "FALSE":
-                print "Please test with CEC Enabled TV connected device"
+                print("Please test with CEC Enabled TV connected device")
                 tdkTestObj1.setResultStatus("FAILURE");
             else:
-                print "No HdmiCec driver instance"
+                print("No HdmiCec driver instance")
                 tdkTestObj2.setResultStatus("FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("hdmicechal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

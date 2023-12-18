@@ -106,27 +106,27 @@ if "SUCCESS" in loadmodulestatus.upper():
             if len(SSIDName) <= 32 and SSIDName == tdkvWifiUtility.ssid_5ghz_name:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "TEST STEP 1 : Validate the wifi_getSSIDName Function";
-                print "EXPECTED RESULT 1 : wifigetSSIDName should return a string value of SSID";
-                print "SSIDName = ",SSIDName;
+                print("TEST STEP 1 : Validate the wifi_getSSIDName Function");
+                print("EXPECTED RESULT 1 : wifigetSSIDName should return a string value of SSID");
+                print("SSIDName = ",SSIDName);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : SUCCESS";
+                print("[TEST EXECUTION RESULT] : SUCCESS");
             else:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
-                print "TEST STEP 1 : Validate the wifi_getSSIDName Function";
-                print "EXPECTED RESULT 1 : wifigetSSIDName should return a string value of SSID";
-                print "SSIDName = ",SSIDName;
+                print("TEST STEP 1 : Validate the wifi_getSSIDName Function");
+                print("EXPECTED RESULT 1 : wifigetSSIDName should return a string value of SSID");
+                print("SSIDName = ",SSIDName);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : FAILURE";
+                print("[TEST EXECUTION RESULT] : FAILURE");
         else:
-            print "wifi_getSSIDName function failed";
+            print("wifi_getSSIDName function failed");
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

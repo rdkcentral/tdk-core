@@ -102,7 +102,7 @@ expectedresult = "SUCCESS"
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS] : %s" %result))
 
 if result.upper() == "SUCCESS":
     width,height = getDefaultDisplaySize(obj)
@@ -115,23 +115,23 @@ if result.upper() == "SUCCESS":
         details = tdkTestObj.getResultDetails();
         if actualResult == expectedresult:
             if str(width) in details and str(height) in details:
-                print "DisplayInfo returns correct size";
+                print ("DisplayInfo returns correct size");
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "DisplayInfo returns wrong size";
+                print ("DisplayInfo returns wrong size");
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "GetDisplayInfo FAILURE";
+            print ("GetDisplayInfo FAILURE");
             tdkTestObj.setResultStatus("FAILURE");
         result,details = executeTest(obj, 'WesterosHal_DestroyNativeWindow');
 
     if result:
-        print "[TEST EXECUTION RESULT] : SUCCESS";    
+        print ("[TEST EXECUTION RESULT] : SUCCESS");    
     else:
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print ("[TEST EXECUTION RESULT] : FAILURE");
 
     #UNload Module
     obj.unloadModule("westeroshal");
 
 else:
-     print "Module load failed";
+     print ("Module load failed");

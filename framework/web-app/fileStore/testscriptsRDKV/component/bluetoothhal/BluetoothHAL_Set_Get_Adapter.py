@@ -67,7 +67,7 @@
     <input_parameters>adapter_number - using the default adapter 0</input_parameters>
     <automation_approch>1. TM loads the BluetoothHal agent via the test agent.
 2 . BluetoothHal agent will invoke the api BTRCore_SetAdapter to set the current bluetooth adapters to be used in the DUT.
-3. The adapter path is read back using api BTRCore_GetAdapter 
+3. The adapter path is read back using api BTRCore_GetAdapter
 4. TM checks if the API call is success and checks if the bluetooth adapter path is not empty and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1. Verify the API call is success
 Checkpoint 2. Verify the bluetooth adapter path by reading it back using BTRCore_GetAdapter .</expected_output>
@@ -95,7 +95,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Set_Get_Adapter');
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -110,42 +110,42 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-    print "BluetoothHal_SetAdapter : ", actualresult
+    print(("BluetoothHal_SetAdapter : ", actualresult))
 
     if (actualresult == expectedresult) :
-        print "Adapter Set succesfully"
+        print("Adapter Set succesfully")
         tdkTestObj.setResultStatus("SUCCESS");
         #Retrieve the adapter path using BluetoothHal_GetAdapter
         #Primitive test case which associated to this Script
         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapter');
-        
+
         #Execute the test case in DUT
         tdkTestObj.executeTestCase(expectedresult);
 
         #Get the result of execution
         actualresult = tdkTestObj.getResult();
-        print "BluetoothHal_GetAdapter : ", actualresult
-	
+        print(("BluetoothHal_GetAdapter : ", actualresult))
+
         #Check the result of execution
         if (actualresult == expectedresult):
             adapterPath = tdkTestObj.getResultDetails();
-	    if (adapterPath):
-                print "Current adapter path : ", adapterPath
+            if (adapterPath):
+                print(("Current adapter path : ", adapterPath))
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "Adapter path should not be empty"
+                print("Adapter path should not be empty")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "BluetoothHal_GetAdapter : failed"
+            print("BluetoothHal_GetAdapter : failed")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "BluetoothHal_SetAdapter : failed"
+        print("BluetoothHal_SetAdapter : failed")
         tdkTestObj.setResultStatus("FAILURE");
-	        
+
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
-	
+
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

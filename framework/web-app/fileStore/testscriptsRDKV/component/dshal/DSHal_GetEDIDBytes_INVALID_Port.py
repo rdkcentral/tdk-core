@@ -83,14 +83,14 @@ obj.configureTestCase(ip,port,'DSHal_GetEDIDBytes_INVALID_Port');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
     isDisplayConnected = "FALSE"
-    print "\nTEST STEP1 : Get the video port handle for HDMI using dsGetVideoPort API"
-    print "EXPECTED RESULT : Should get the handle for HDMI"
+    print("\nTEST STEP1 : Get the video port handle for HDMI using dsGetVideoPort API")
+    print("EXPECTED RESULT : Should get the handle for HDMI")
     tdkTestObj = obj.createTestStep('DSHal_GetVideoPort');
     #Port 6 - VIDEOPORT_TYPE_HDMI
     tdkTestObj.addParameter("portType", 6);
@@ -99,11 +99,11 @@ if "SUCCESS" in loadModuleStatus.upper():
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetVideoPort call is success";
-        print "Value Returned : ",details
+        print("ACTUAL RESULT  : dsGetVideoPort call is success");
+        print("Value Returned : ",details)
 
-        print "\nTEST STEP2 : Check whether device is connected to TV using dsIsDisplayConnected API"
-        print "EXPECTED RESULT : Should get the connection status & device should be connected to HDMI"
+        print("\nTEST STEP2 : Check whether device is connected to TV using dsIsDisplayConnected API")
+        print("EXPECTED RESULT : Should get the connection status & device should be connected to HDMI")
         tdkTestObj = obj.createTestStep('DSHal_IsDisplayConnected');
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
@@ -111,12 +111,12 @@ if "SUCCESS" in loadModuleStatus.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
             isDisplayConnected = str(details).upper();
-            print "ACTUAL RESULT : [DisplayConnection Status : %s]" %(isDisplayConnected)
+            print("ACTUAL RESULT : [DisplayConnection Status : %s]" %(isDisplayConnected))
 
             #Check for display connection status
             if isDisplayConnected == "TRUE":
-                print "\nTEST STEP3: Get EDID bytes without setting the display handle using dsGetEDIDBytes API"
-                print "EXPECTED RESULT : Should not get the EDID bytes details"
+                print("\nTEST STEP3: Get EDID bytes without setting the display handle using dsGetEDIDBytes API")
+                print("EXPECTED RESULT : Should not get the EDID bytes details")
                 expectedResult="FAILURE";
                 tdkTestObj = obj.createTestStep('DSHal_GetEDIDBytes');
                 tdkTestObj.executeTestCase(expectedResult);
@@ -124,34 +124,33 @@ if "SUCCESS" in loadModuleStatus.upper():
                 if expectedResult in actualResult:
                     tdkTestObj.setResultStatus("SUCCESS");
                     details = tdkTestObj.getResultDetails();
-                    print "Value Returned : ",details
-                    print "ACTUAL RESULT  : EDID bytes not retrieved"
-                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                    print("Value Returned : ",details)
+                    print("ACTUAL RESULT  : EDID bytes not retrieved")
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
                     details = tdkTestObj.getResultDetails();
-                    print "Value Returned : ",details
-                    print "ACTUAL RESULT  : EDID bytes retrieved"
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print("Value Returned : ",details)
+                    print("ACTUAL RESULT  : EDID bytes retrieved")
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "\nPlease test with HDMI connected device. Exiting....!!!\n"
+                print("\nPlease test with HDMI connected device. Exiting....!!!\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
             details = tdkTestObj.getResultDetails();
-            print "ACTUAL RESULT  : dsIsDisplayConnected call failed"
-            print "Value Returned : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT  : dsIsDisplayConnected call failed")
+            print("Value Returned : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetVideoPort call failed"
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : dsGetVideoPort call failed")
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus(loadModuleStatus.upper());
-

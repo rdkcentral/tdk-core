@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the coefficient value is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetMatrixCoefficients_RF');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if RF port is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"videoPort","RF")
@@ -116,43 +116,43 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
         tdkTestObj = dshalObj.createTestStep('DSHal_GetMatrixCoefficients');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetMatrixCoefficients result: ", actualResult;
+        print("DSHal_GetMatrixCoefficients result: ", actualResult);
         if expectedResult in actualResult:
             coefficient = tdkTestObj.getResultDetails();
-            print "Matrix coefficient: ", coefficient;
+            print("Matrix coefficient: ", coefficient);
             #Checking if matrix coefficient value is valid
-            if int(coefficient) in matrixCoefficients.values():
+            if int(coefficient) in list(matrixCoefficients.values()):
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "Matrix Coefficient is valid";
+                print("Matrix Coefficient is valid");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Matrix Coefficient is not valid";
+                print("Matrix Coefficient is not valid");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get Matrix coefficient";
+            print("Failed to get Matrix coefficient");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

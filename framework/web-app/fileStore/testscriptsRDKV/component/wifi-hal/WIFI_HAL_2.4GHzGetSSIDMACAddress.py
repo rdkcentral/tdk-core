@@ -104,15 +104,15 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
-        print "details:",details
+        print("details:",details)
 
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
             MacAddress = details.split(": ")[1].strip(" ");
-            print "TEST STEP 1: Get the SSIDMACAddress"
-            print "EXPECTED RESULT 1: Should get the SSIDMACAddress"
-            print "ACTUAL RESULT 1: SSIDMACAddress = ",MacAddress
-            print "TEST EXECUTION RESULT : SUCCESS"
+            print("TEST STEP 1: Get the SSIDMACAddress")
+            print("EXPECTED RESULT 1: Should get the SSIDMACAddress")
+            print("ACTUAL RESULT 1: SSIDMACAddress = ",MacAddress)
+            print("TEST EXECUTION RESULT : SUCCESS")
             #Script to load the configuration file of the component
             tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
             #Giving the method name to invoke the api for getting Base BSSID ie,wifi_getBaseBSSID()
@@ -123,44 +123,44 @@ if "SUCCESS" in loadmodulestatus.upper():
             tdkTestObj.executeTestCase(expectedresult);
             actualresult = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
-            print "details:",details
+            print("details:",details)
 
             if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 BSSID = details.split(": ")[1].strip(" ");
-                print "TEST STEP 2: Get the BaseBSSID"
-                print "EXPECTED RESULT 2: Should get the BaseBSSID"
-                print "ACTUAL RESULT 2: BaseBSSID = ",BSSID
+                print("TEST STEP 2: Get the BaseBSSID")
+                print("EXPECTED RESULT 2: Should get the BaseBSSID")
+                print("ACTUAL RESULT 2: BaseBSSID = ",BSSID)
                 if BSSID == MacAddress:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "TEST STEP: Comparing the values of SSID Mac Address and BSSID";
-                    print "EXECUTION RESULT : SSID Mac Address and BSSID values should be the same";
-                    print "ACTUAL RESULT : SSID Mac Address and BSSID values are the same";
-                    print "SSID Mac Address is :%s"%MacAddress;
-                    print "BSSID is :%s"%BSSID
+                    print("TEST STEP: Comparing the values of SSID Mac Address and BSSID");
+                    print("EXECUTION RESULT : SSID Mac Address and BSSID values should be the same");
+                    print("ACTUAL RESULT : SSID Mac Address and BSSID values are the same");
+                    print("SSID Mac Address is :%s"%MacAddress);
+                    print("BSSID is :%s"%BSSID)
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "TEST STEP: Comparing the values of SSID Mac Address and BSSID";
-                    print "EXECUTION RESULT : SSID Mac Address and BSSID values should be the same";
-                    print "ACTUAL RESULT : SSID Mac Address and BSSID values are NOT the same";
-                    print "SSID Mac Address is :%s"%MacAddress;
-                    print "BSSID is :%s"%BSSID
+                    print("TEST STEP: Comparing the values of SSID Mac Address and BSSID");
+                    print("EXECUTION RESULT : SSID Mac Address and BSSID values should be the same");
+                    print("ACTUAL RESULT : SSID Mac Address and BSSID values are NOT the same");
+                    print("SSID Mac Address is :%s"%MacAddress);
+                    print("BSSID is :%s"%BSSID)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "TEST STEP 2: Get the BaseBSSID"
-                print "EXPECTED RESULT 2: Should get the BaseBSSID"
-                print "ACTUAL RESULT 2: ",details
+                print("TEST STEP 2: Get the BaseBSSID")
+                print("EXPECTED RESULT 2: Should get the BaseBSSID")
+                print("ACTUAL RESULT 2: ",details)
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1: Get the SSIDMACAddress"
-            print "EXPECTED RESULT 1: Should get the SSIDMACAddress"
-            print "ACTUAL RESULT 1: ",details
-            print "TEST EXECUTION RESULT : FAILED"
+            print("TEST STEP 1: Get the SSIDMACAddress")
+            print("EXPECTED RESULT 1: Should get the SSIDMACAddress")
+            print("ACTUAL RESULT 1: ",details)
+            print("TEST EXECUTION RESULT : FAILED")
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

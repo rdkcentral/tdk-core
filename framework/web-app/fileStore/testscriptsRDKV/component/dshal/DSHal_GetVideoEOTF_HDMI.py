@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the eotf is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -105,7 +105,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetVideoEOTF_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -117,51 +117,51 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsDisplayConnected result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "Display connection status: ", details
+            print("Display connection status: ", details)
             if details == "true":
                 tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoEOTF');
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetVideoEOTF result: ", actualResult;
+                print("DSHal_GetVideoEOTF result: ", actualResult);
                 if expectedResult in actualResult:
                     details = tdkTestObj.getResultDetails();
-                    print "Video EOTF: ", details
-                    if int(details) in eotf.values():
+                    print("Video EOTF: ", details)
+                    if int(details) in list(eotf.values()):
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "Video EOTF retrieved is valid";
+                        print("Video EOTF retrieved is valid");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Video EOTF retrieved is not valid ";
+                        print("Video EOTF retrieved is not valid ");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DSHal_GetVideoEOTF call failed";
+                    print("DSHal_GetVideoEOTF call failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Please test connecting a display device";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get display connection status";
+            print("Failed to get display connection status");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

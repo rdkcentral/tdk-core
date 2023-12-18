@@ -53,7 +53,7 @@ uBlinkDuration - time duration
 uBlinkIteration - number of times the LED should blink</input_parameters>
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsSetFPBlink with parameter LED indicator 3 [REMOTE LED]
-3.Check the API return status 
+3.Check the API return status
 4.Update the test result as SUCCESS/FAILURE , based on API return status
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success</expected_output>
@@ -83,15 +83,15 @@ obj.configureTestCase(ip,port,'DSHal_SetFPBlink_REMOTE_Indicator');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 #Check if device supports Blink and Remote indicator
 capable = deviceCapabilities.getconfig(obj,"SetBlink") and deviceCapabilities.getconfig(obj,"Indicator","Remote");
 if "SUCCESS" in loadModuleStatus.upper() and capable:
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : To set the Remote indicator in Front Panel to Blink"
-    print "EXEPECTED RESULT : Should set the Remote led to blink for given number of time for given duration"
+    print("\nTEST STEP1 : To set the Remote indicator in Front Panel to Blink")
+    print("EXEPECTED RESULT : Should set the Remote led to blink for given number of time for given duration")
     tdkTestObj = obj.createTestStep('DSHal_SetFPBlink');
     # REMOTE LED
     led = "REMOTE"
@@ -106,24 +106,22 @@ if "SUCCESS" in loadModuleStatus.upper() and capable:
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : Set %s led [Indicator-%d] to Blink %d times for duration %d" %(led,indicator,iteration,duration)
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("ACTUAL RESULT  : Set %s led [Indicator-%d] to Blink %d times for duration %d" %(led,indicator,iteration,duration))
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in loadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

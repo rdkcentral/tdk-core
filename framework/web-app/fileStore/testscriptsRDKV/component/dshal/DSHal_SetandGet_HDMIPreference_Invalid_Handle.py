@@ -87,8 +87,8 @@ Checkpoint 2 Verify that the HDCP protocol version is not set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_HDMIPreference_Invalid_Handl
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -113,52 +113,52 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
-    print "Getting audio port handle instead of video port handle";
+    print("Getting audio port handle instead of video port handle");
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         tdkTestObj = dshalObj.createTestStep('DSHal_SetHdmiPreference');
         tdkTestObj.addParameter("hdcpProtocol", hdcpProtocolVersion["VERSION_2X"]);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetHdmiPreference result: ", actualResult;
+        print("DSHal_SetHdmiPreference result: ", actualResult);
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         if expectedResult in actualResult:
             tdkTestObj = dshalObj.createTestStep('DSHal_GetHdmiPreference');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetHdmiPreference result: ", actualResult
+            print("DSHal_GetHdmiPreference result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "HdmiPreference retrieved", details
+                print("HdmiPreference retrieved", details)
                 if int(details) != hdcpProtocolVersion["VERSION_2X"]:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "HdmiPreference not set for invalid handle";
+                    print("HdmiPreference not set for invalid handle");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "HdmiPreference set for invalid handle";
+                    print("HdmiPreference set for invalid handle");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get HdmiPreference";
+                print("Failed to get HdmiPreference");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_SetHdmiPreference call Failed";
+            print("DSHal_SetHdmiPreference call Failed");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

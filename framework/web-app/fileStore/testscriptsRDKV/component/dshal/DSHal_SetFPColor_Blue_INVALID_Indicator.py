@@ -52,7 +52,7 @@
 eColor - Blue</input_parameters>
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsSetFPColor with parameter LED indicator 6 [INVALID LED] and color Blue
-3.Check the API return status 
+3.Check the API return status
 4.Update the test result as SUCCESS/FAILURE , based on API return status
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.API return value should be invalid-param</expected_output>
@@ -82,7 +82,7 @@ obj.configureTestCase(ip,port,'DSHal_SetFPColor_Blue_INVALID_Indicator');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 #Check if SetColor is supported by DUT
 capable = deviceCapabilities.getconfig(obj,"SetColor");
@@ -90,8 +90,8 @@ capable = deviceCapabilities.getconfig(obj,"SetColor");
 if "SUCCESS" in loadModuleStatus.upper() and capable:
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="FAILURE";
-    print "\nTEST STEP1 : To set color of Invalid indicator in Front Panel to Blue"
-    print "EXEPECTED RESULT : Should get the response as invalid LED"
+    print("\nTEST STEP1 : To set color of Invalid indicator in Front Panel to Blue")
+    print("EXEPECTED RESULT : Should get the response as invalid LED")
     tdkTestObj = obj.createTestStep('DSHal_SetFPColor');
     # INVALID LED
     indicator = 6;
@@ -103,24 +103,22 @@ if "SUCCESS" in loadModuleStatus.upper() and capable:
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult and "Invalid LED Indicator" in details:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "ACTUAL RESULT  : dsSetFPColor API returned dsERR_INVALID_PARAM for LED Indicator-%d" %(indicator)
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("ACTUAL RESULT  : dsSetFPColor API returned dsERR_INVALID_PARAM for LED Indicator-%d" %(indicator))
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in loadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

@@ -101,14 +101,14 @@ expectedresult="SUCCESS"
 
 #Get the result of connection with test component and DUT
 result = wsObj.getLoadModuleResult().upper();
-print "[WESTEROS HAL LIB LOAD STATUS]  :  %s" %result;
+print("[WESTEROS HAL LIB LOAD STATUS]  :  %s" %result);
 
 if result == "FAILURE":
     exit()
 
 wsObj.setLoadModuleStatus(result);
 result = dsObj.getLoadModuleResult().upper();
-print "[DEVICESETTING LIB LOAD STATUS]  :  %s" %result;
+print("[DEVICESETTING LIB LOAD STATUS]  :  %s" %result);
 
 if result == "FAILURE":
     wsObj.unloadModule("westeroshal");
@@ -126,18 +126,18 @@ if result:
         if result:
             result,details = executeTest(dsObj, 'DS_IsDisplayConnectedStatus');
             if result and "TRUE" not in details:
-                print "TV is not connected\nPlease connect display device to DUT to proceed testing";
+                print("TV is not connected\nPlease connect display device to DUT to proceed testing");
                 exit()
             elif not result:
                 exit()
             result,details = executeTest(dsObj, 'DS_Resolution');
             if result:
                 if "480p" not in details:
-                    print "480p is not supported by the DUT \nTestcase not applicable for DUT"
+                    print("480p is not supported by the DUT \nTestcase not applicable for DUT")
                     result = False
                     notApplicable = True
             if result:
-                print "Setting Resolution to %s"%resolution
+                print("Setting Resolution to %s"%resolution)
                 result,details = executeTest(dsObj, 'DS_SetResolution', {"resolution":resolution,"port_name":"HDMI0"});
             if result:
                 tdkTestObj = wsObj.createTestStep('WesterosHal_GetCallBackData');
@@ -146,17 +146,17 @@ if result:
                 details = tdkTestObj.getResultDetails();
                 height = resolution.split('p', 1)[0]
                 if actualResult == expectedresult and height in details:
-                    print "CallBack returns correct resolution size";
-                    print details
+                    print("CallBack returns correct resolution size");
+                    print(details)
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "CallBack returning wrong resolution";
-                    print details
+                    print("CallBack returning wrong resolution");
+                    print(details)
                     tdkTestObj.setResultStatus("FAILURE")
             result,details = executeTest(dsObj, 'DS_ManagerDeInitialize');
             result,details = executeTest(wsObj, 'WesterosHal_DestroyNativeWindow');
     else:
-        print "DS Manager Connection FAILED";
+        print("DS Manager Connection FAILED");
  
 wsObj.unloadModule("westeroshal");
 if notApplicable:

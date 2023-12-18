@@ -101,8 +101,8 @@ obj.configureTestCase(ip,port,'DSHal_SetSurroundVirtualizer_AutoMode');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Check if SurroundVirtualizer is supported by the DUT
 capable = deviceCapabilities.getconfig(obj,"SurroundVirtualizer")
@@ -115,11 +115,11 @@ if "SUCCESS" in result.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
 
         #Valid Mode values  : 0-Disable, 1-Normal, 2-AUTO
         Mode = 2;
@@ -127,29 +127,29 @@ if "SUCCESS" in result.upper() and capable:
         Boost_test1 = 50;
         Boost_test2 = 1;
         Boost_expected_value = 0;
-        print "\nWhen Mode is set to AUTO mode , boost must be returned as 0"
+        print("\nWhen Mode is set to AUTO mode , boost must be returned as 0")
         for boost in [Boost_test1,Boost_test2]:
-            print " "
+            print(" ")
             tdkTestObj = obj.createTestStep('DSHal_SetSurroundVirtualizer');
             tdkTestObj.addParameter("mode",Mode);
             tdkTestObj.addParameter("boost",boost);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_SetSurroundVirtualizer result: " , actualResult
+            print("DSHal_SetSurroundVirtualizer result: " , actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "SetSurroundVirtualizer result : " , details
+                print("SetSurroundVirtualizer result : " , details)
 
                 #Prmitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('DSHal_GetSurroundVirtualizer');
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetSurroundVirtualizer result: " , actualResult
+                print("DSHal_GetSurroundVirtualizer result: " , actualResult)
                 if expectedResult in actualResult:
                     tdkTestObj.setResultStatus("SUCCESS");
                     details = tdkTestObj.getResultDetails();
-                    print "GetSurroundVirtualizer Result : " , details
+                    print("GetSurroundVirtualizer Result : " , details)
                     settings = details.split(",");
                     parameters = [Mode,Boost_expected_value];
                     iteration = 0;
@@ -157,38 +157,38 @@ if "SUCCESS" in result.upper() and capable:
                     for data in settings:
                         item = data.split(':');
                         if (int(item[1]) == parameters[iteration]):
-                            print "Expected %s is obtained"%(item[0]);
+                            print("Expected %s is obtained"%(item[0]));
                         else:
-                            print "Expected %s : %s"%(item[0],parameters[iteration]);
-                            print "%s obtained : %s"%(item[0],item[1]);
+                            print("Expected %s : %s"%(item[0],parameters[iteration]));
+                            print("%s obtained : %s"%(item[0],item[1]));
                             fail_params = item[0];
                             tdkTestObj.setResultStatus("FAILURE");
                         iteration += 1;
-                    print " "
+                    print(" ")
                     if fail_params:
-                        print "\n\nTEST FAILED due to unexpected %s"%(fail_params);
+                        print("\n\nTEST FAILED due to unexpected %s"%(fail_params));
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
                     details = tdkTestObj.getResultDetails();
-                    print "GetSurroundVirtualizer Result : " , details
+                    print("GetSurroundVirtualizer Result : " , details)
 
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 details = tdkTestObj.getResultDetails();
-                print "SetSurroundVirtualizer Result : " , details
+                print("SetSurroundVirtualizer Result : " , details)
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
 
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in result.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 else:
-    print "Module load failed"
+    print("Module load failed")

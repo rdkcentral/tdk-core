@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the audio delay offset is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_AudioDelayOffset_LR');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if LR port is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioPort","LR")
@@ -116,60 +116,60 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         offset = 15;
 
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioDelayOffset');
-        print "Trying to set Audio delay offset to ", offset 
+        print("Trying to set Audio delay offset to ", offset)
         tdkTestObj.addParameter("offset", offset);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetAudioDelayOffset result: ", actualResult
+        print("DSHal_SetAudioDelayOffset result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetAudioDelayOffset: ", details
-        
+            print("DSHal_SetAudioDelayOffset: ", details)
+
             tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioDelayOffset');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetAudioDelayOffset result: ", actualResult
+            print("DSHal_GetAudioDelayOffset result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "AudioDelayOffset retrieved", details
+                print("AudioDelayOffset retrieved", details)
                 if int(details) == offset:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "AudioDelayOffset set successfully";
+                    print("AudioDelayOffset set successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "AudioDelayOffset setting failed";
+                    print("AudioDelayOffset setting failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get audio delay offset";
+                print("Failed to get audio delay offset");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_SetAudioDelayOffset failed";
+            print("DSHal_SetAudioDelayOffset failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

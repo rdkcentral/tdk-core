@@ -103,26 +103,26 @@ if "SUCCESS" in loadmodulestatus.upper():
         if RegulatoryDomain !="":
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1 : Get the Access Point regulatory domain";
-            print "EXPECTED RESULT 1 : Should get the Access Point regulatory domain";
-            print "Access Point Regulatory Domain = ",RegulatoryDomain;
+            print("TEST STEP 1 : Get the Access Point regulatory domain");
+            print("EXPECTED RESULT 1 : Should get the Access Point regulatory domain");
+            print("Access Point Regulatory Domain = ",RegulatoryDomain);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1 : Get the Access Point regulatory domain";
-            print "EXPECTED RESULT 1 : Should get the Access Point regulatory domain";
-            print "Access Point Regulatory Domain = ",RegulatoryDomain;
+            print("TEST STEP 1 : Get the Access Point regulatory domain");
+            print("EXPECTED RESULT 1 : Should get the Access Point regulatory domain");
+            print("Access Point Regulatory Domain = ",RegulatoryDomain);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wifi_getRegulatoryDomain() operation failed";
+        print("wifi_getRegulatoryDomain() operation failed");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 

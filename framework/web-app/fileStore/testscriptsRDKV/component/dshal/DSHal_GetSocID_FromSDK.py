@@ -85,8 +85,8 @@ Checkpoint 2 Verify that the soc id is retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -100,7 +100,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetSocID_FromSDK');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -111,23 +111,23 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetSocIDFromSDK result: ", actualResult
+    print("DSHal_GetSocIDFromSDK result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         id = tdkTestObj.getResultDetails();
-        print "Soc Id", id;
+        print("Soc Id", id);
         if id:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "SOC Id from SDK retrieved";
+            print("SOC Id from SDK retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "SOC Id from SDK retrieved";
+            print("SOC Id from SDK retrieved");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "DSHal_GetSocIDFromSDK call failed";
+        print("DSHal_GetSocIDFromSDK call failed");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

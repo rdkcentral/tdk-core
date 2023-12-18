@@ -81,8 +81,8 @@ Checkpoint 2 Verify that the hdmiiin status is retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -97,7 +97,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_HdmiIn_GetCurrentVideoMode');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if HDMIIn is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"HdmiIn");
@@ -110,12 +110,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_HdmiInCurrentVideoMode result: ", actualResult
+    print("DSHal_HdmiInCurrentVideoMode result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "HdmiInCurrentVideoMode: ", details;
+        print("HdmiInCurrentVideoMode: ", details);
 
         settings = details.split(',');
         status = "success";
@@ -124,45 +124,45 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
             if item[0] == "isPresented":
                 if not (item[1]):
                     status = "failure";
-                    print "Invalid isPresented value";
+                    print("Invalid isPresented value");
                 else:
-                    print "isPresented value: ", item[1]
+                    print("isPresented value: ", item[1])
             if item[0] == "activePort":
                 if not (item[1]):
                     status = "failure";
-                    print "Invalid activePort value";
+                    print("Invalid activePort value");
                 else:
-                    print "activePort value: ", item[1]
+                    print("activePort value: ", item[1])
             if item[0] == "isPortConnected_Port0":
                 if not (item[1]):
                     status = "failure";
-                    print "Invalid isPortConnected_Port0 value";
+                    print("Invalid isPortConnected_Port0 value");
                 else:
-                    print "isPortConnected_Port0 value: ", item[1]
+                    print("isPortConnected_Port0 value: ", item[1])
             if item[0] == "isPortConnected_Port1":
                 if not (item[1]):
                     status = "failure";
-                    print "Invalid isPortConnected_Port1 value";
+                    print("Invalid isPortConnected_Port1 value");
                 else:
-                    print "isPortConnected_Port1 value: ", item[1]
+                    print("isPortConnected_Port1 value: ", item[1])
 
 
         if status == "success":
             tdkTestObj.setResultStatus("SUCCESS");
-            print "HdmiInCurrentVideoMode values retrieved";
+            print("HdmiInCurrentVideoMode values retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "HdmiInCurrentVideoMode values not retrieved";
+            print("HdmiInCurrentVideoMode values not retrieved");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "HdmiInCurrentVideoMode call failure";
+        print("HdmiInCurrentVideoMode call failure");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

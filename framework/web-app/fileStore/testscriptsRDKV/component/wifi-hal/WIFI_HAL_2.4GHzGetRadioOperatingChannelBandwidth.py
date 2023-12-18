@@ -89,7 +89,7 @@ if "SUCCESS" in loadmodulestatus.upper():
     radioIndex = 0
     connectresult = isConnectedtoSSID(obj,radioIndex);
     if "TRUE" not in connectresult:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
         obj.unloadModule("wifihal");
         exit()
     #Script to load the configuration file of the component
@@ -106,29 +106,29 @@ if "SUCCESS" in loadmodulestatus.upper():
     ExpectedList = ["20MHz", "40MHz", "80MHz", "80+80", "160", "NULL"];
     if expectedresult in actualresult :
         Bandwidth= details.split(":")[1].strip(" ").strip("\\n");
-        print Bandwidth;
+        print(Bandwidth);
         if Bandwidth in ExpectedList:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the Radio operating channel bandwidth for 2.4GHz";
-            print "EXPECTED RESULT 1: Should get the Radio operating channel bandwidth for 2.4GHz";
-            print "ACTUAL RESULT 1: %s" %Bandwidth;
+            print("TEST STEP 1: Get the Radio operating channel bandwidth for 2.4GHz");
+            print("EXPECTED RESULT 1: Should get the Radio operating channel bandwidth for 2.4GHz");
+            print("ACTUAL RESULT 1: %s" %Bandwidth);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Operating Channel bandwidth is not from the expected list for 2.4GHz"
+            print("Operating Channel bandwidth is not from the expected list for 2.4GHz")
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the Radio operating channel bandwidth for 2.4GHz";
-        print "EXPECTED RESULT 1: Should get the Radio operating channel bandwidth for 2.4GHz";
-        print "ACTUAL RESULT 1: %s" %details;
+        print("TEST STEP 1: Get the Radio operating channel bandwidth for 2.4GHz");
+        print("EXPECTED RESULT 1: Should get the Radio operating channel bandwidth for 2.4GHz");
+        print("ACTUAL RESULT 1: %s" %details);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

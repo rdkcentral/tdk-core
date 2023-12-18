@@ -74,7 +74,7 @@ audioCompression- Audio compression</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsSetAudioCompression with invalid value
 3. TM checks if the value is set and return SUCCESS/FAILURE status.</automation_approch>
-    <expected_output>Checkpoint 1.Verify the API call is failure 
+    <expected_output>Checkpoint 1.Verify the API call is failure
 Checkpoint 2 Verify that the value is not set</expected_output>
     <priority>High</priority>
     <test_stub_interface>libdshalstub.so.0.0.0</test_stub_interface>
@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the value is not set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetAudioCompression_InvalidValue');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if audioCompression is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioCompression")
@@ -117,12 +117,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         expectedResult = "FAILURE";
         #Valid range for compression is [0-10]
@@ -133,25 +133,25 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetAudioCompression result: ", actualResult
+        print("DSHal_SetAudioCompression result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "AudioCompression not set for invalid value which is expected";
+            print("AudioCompression not set for invalid value which is expected");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "SetAudioCompression success for invalid value which is not expected";
-    
+            print("SetAudioCompression success for invalid value which is not expected");
+
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

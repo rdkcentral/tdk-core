@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the handle is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,39 +102,39 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetAudioPortHandle_SPDIF_Invalid_PortI
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if SPDIFport is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioPort","SPDIF");
 
 if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
-	dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
-        expectedResult="FAILURE";
-        invalidIndex = 8;
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
-        tdkTestObj.addParameter("portType", audioPortType["INVALID"]);
-        tdkTestObj.addParameter("index", invalidIndex);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedResult);
-        actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioPort result: ", actualResult
+    dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
+    expectedResult="FAILURE";
+    invalidIndex = 8;
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
+    tdkTestObj.addParameter("portType", audioPortType["INVALID"]);
+    tdkTestObj.addParameter("index", invalidIndex);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetAudioPort result: ", actualResult)
 
-        if expectedResult in actualResult:
-            tdkTestObj.setResultStatus("SUCCESS");
-            details = tdkTestObj.getResultDetails();
-            print details;
-            print "AudioPort handle not retrieved for invalid port index for SPDIF";
-        else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print "AudioPort handle retrieved for invalid port index for SPDIF";
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+        print("AudioPort handle not retrieved for invalid port index for SPDIF");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle retrieved for invalid port index for SPDIF");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

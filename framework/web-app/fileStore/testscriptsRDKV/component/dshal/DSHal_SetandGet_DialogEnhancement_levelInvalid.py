@@ -87,8 +87,8 @@ level - level</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -103,7 +103,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_DialogEnhancement_levelInval
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if dialogenhancement is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"DialogEnhancement")
@@ -117,42 +117,42 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         level = 17;
-        print "Trying to set DialogEnhancement to ", level;
+        print("Trying to set DialogEnhancement to ", level);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetDialogEnhancement');
         tdkTestObj.addParameter("level", level);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetDialogEnhancement result: ", actualResult
+        print("DSHal_SetDialogEnhancement result: ", actualResult)
         expectedResult = "FAILURE";
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_DialogEnhancement failed for invalid level";
+            print("DSHal_DialogEnhancement failed for invalid level");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_DialogEnhancement success for invalid level";
+            print("DSHal_DialogEnhancement success for invalid level");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

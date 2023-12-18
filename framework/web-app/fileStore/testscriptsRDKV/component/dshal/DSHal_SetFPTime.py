@@ -54,7 +54,7 @@ hours - hour
 mins - minutes</input_parameters>
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsSetFPTime
-3.Check the API return status 
+3.Check the API return status
 4.Update the test result as SUCCESS/FAILURE , based on API return status
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success</expected_output>
@@ -83,7 +83,7 @@ obj.configureTestCase(ip,port,'DSHal_SetFPTime');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 #Check if TextDispaly is supported by DUT
 capable = deviceCapabilities.getconfig(obj,"TextDisplay");
@@ -91,8 +91,8 @@ capable = deviceCapabilities.getconfig(obj,"TextDisplay");
 if "SUCCESS" in loadModuleStatus.upper() and capable:
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : To set the time in specified format (24/12) in Front Panel"
-    print "EXEPECTED RESULT : Should set the 7-segment display LEDs to show the time"
+    print("\nTEST STEP1 : To set the time in specified format (24/12) in Front Panel")
+    print("EXEPECTED RESULT : Should set the 7-segment display LEDs to show the time")
     tdkTestObj = obj.createTestStep('DSHal_SetFPTime');
     format = "24_HOUR";
     hours  = 13
@@ -106,26 +106,24 @@ if "SUCCESS" in loadModuleStatus.upper() and capable:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
         if "Operation not supported" in details:
-            print "ACTUAL RESULT  : Cannot set time in specified format (24/12) in Front Panel"
-            print "Value Returned : ",details
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT  : Cannot set time in specified format (24/12) in Front Panel")
+            print("Value Returned : ",details)
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
         else:
-            print "ACTUAL RESULT  : Time set in FP display in %s format is %d:%d" %(format,hours,minutes)
-            print "Value Returned : ",details
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT  : Time set in FP display in %s format is %d:%d" %(format,hours,minutes))
+            print("Value Returned : ",details)
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 elif not capable and "SUCCESS" in loadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

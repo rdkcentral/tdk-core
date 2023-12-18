@@ -93,8 +93,8 @@ if "SUCCESS" in loadmodulestatus.upper():
     #Script to load the configuration file of the component
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamBoolValue");
     #Giving the method name to invoke the api for getting radio Enable value ie,wifi_getRadioEnable()
-    print "\nTEST STEP 1: To invoke the api wifi_getRadioEnable() for radio 0";
-    print "EXPECTED RESULT : Should get the radio enable value";
+    print("\nTEST STEP 1: To invoke the api wifi_getRadioEnable() for radio 0");
+    print("EXPECTED RESULT : Should get the radio enable value");
     tdkTestObj.addParameter("methodName","getRadioEnable");
     tdkTestObj.addParameter("radioIndex",0);
     expectedresult="SUCCESS";
@@ -105,17 +105,17 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj.setResultStatus("SUCCESS");
         enable_value = details.split(":")[1].strip(" ");
         if int(enable_value) == 1:
-            print "ACTUAL RESULT  : RADIO ENABLED";
-            print "Value returned : ",enable_value;
+            print("ACTUAL RESULT  : RADIO ENABLED");
+            print("Value returned : ",enable_value);
         else:
-            print "ACTUAL RESULT  : RADIO NOT ENABLED";
-            print "Value returned : ",enable_value;
+            print("ACTUAL RESULT  : RADIO NOT ENABLED");
+            print("Value returned : ",enable_value);
 
         #Script to load the configuration file of the component
         tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
         #Giving the method name to invoke the api for getting radio status  value ie,wifi_getRadioStatus()
-        print "\nTEST STEP 2: To invoke the api wifi_getRadioStatus() for radio 0";
-        print "EXPECTED RESULT : Should get the radio status value";
+        print("\nTEST STEP 2: To invoke the api wifi_getRadioStatus() for radio 0");
+        print("EXPECTED RESULT : Should get the radio status value");
         tdkTestObj.addParameter("methodName","getRadioStatus");
         tdkTestObj.addParameter("radioIndex",0);
         expectedresult="SUCCESS";
@@ -126,35 +126,35 @@ if "SUCCESS" in loadmodulestatus.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             enable_status = details.split(":")[1].strip(" ");
             if enable_status == "UP":
-                print "ACTUAL RESULT  : UP";
-                print "Value returned : ",enable_status;
+                print("ACTUAL RESULT  : UP");
+                print("Value returned : ",enable_status);
             else:
-                print "ACTUAL RESULT  : DOWN";
-                print "Value returned : ",enable_status;
+                print("ACTUAL RESULT  : DOWN");
+                print("Value returned : ",enable_status);
 
             #Validating Radio Enable Value by checking Radio status
-            print "\nTEST STEP 3: Validate Radio Enable value by checking Radio status"
-            print "EXPECTED RESULT : Radio Status should be UP if RADIO ENABLED or DOWN if RADIO NOT ENABLED"
+            print("\nTEST STEP 3: Validate Radio Enable value by checking Radio status")
+            print("EXPECTED RESULT : Radio Status should be UP if RADIO ENABLED or DOWN if RADIO NOT ENABLED")
             if int(enable_value) == 1 and enable_status == "UP":
-                print "ACTUAL RESULT  : RADIO ENABLED : RADIO STATUS UP"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : RADIO ENABLED : RADIO STATUS UP")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
                 tdkTestObj.setResultStatus("SUCCESS");
             elif int(enable_value) == 0 and enable_status == "DOWN":
-                print "ACTUAL RESULT  : RADIO NOT ENABLED : RADIO STATUS DOWN"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : RADIO NOT ENABLED : RADIO STATUS DOWN")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "wifi_getRadioStatus() operation failed for radio 0";
+            print("wifi_getRadioStatus() operation failed for radio 0");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wifi_getRadioEnable() operation failed for radio 0";
+        print("wifi_getRadioEnable() operation failed for radio 0");
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 

@@ -94,8 +94,8 @@ if "SUCCESS" in loadmodulestatus.upper():
     parseStatus = parseDeviceConfig(obj);
 
     #Getting Supported Frequency Bands
-    print "\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands";
-    print "EXPECTED RESULT : Should get details of supported frequency bands";
+    print("\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands");
+    print("EXPECTED RESULT : Should get details of supported frequency bands");
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
     tdkTestObj.addParameter("methodName","getRadioSupportedFrequencyBands");
     tdkTestObj.addParameter("radioIndex",1);
@@ -106,7 +106,7 @@ if "SUCCESS" in loadmodulestatus.upper():
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
         SupportedFrequencyBands = details.split(":")[1].strip(" ");
-        print "ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands;
+        print("ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands);
 
         if "5GHz" in SupportedFrequencyBands:
             ssid = tdkvWifiUtility.ssid_5ghz_name;
@@ -123,11 +123,11 @@ if "SUCCESS" in loadmodulestatus.upper():
             preSharedKey = tdkvWifiUtility.ap_2ghz_preshared_key;
             keyPassPhrase = tdkvWifiUtility.ap_2ghz_key_passphrase;
 
-        print "End Point Chosen based on Frequency Band : %s\n" %(ssid)
+        print("End Point Chosen based on Frequency Band : %s\n" %(ssid))
 
         #Connect ans save the SSID details
-        print "TEST STEP 2 : Initiate connection to Access Point A using wifi_connectEndpoint()"
-        print "EXPECTED RESULT : Connection initiation should be success"
+        print("TEST STEP 2 : Initiate connection to Access Point A using wifi_connectEndpoint()")
+        print("EXPECTED RESULT : Connection initiation should be success")
         tdkTestObj = obj.createTestStep("WIFI_HAL_ConnectEndpoint");
         tdkTestObj.addParameter("radioIndex",radioIndex);
         tdkTestObj.addParameter("ssid",ssid);
@@ -142,13 +142,13 @@ if "SUCCESS" in loadmodulestatus.upper():
         details = tdkTestObj.getResultDetails();
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT  : Connection to %s initiated successfully" %(ssid)
-            print "Value Returned : %s\n" %(details)
+            print("ACTUAL RESULT  : Connection to %s initiated successfully" %(ssid))
+            print("Value Returned : %s\n" %(details))
 
             # Getting current station connection status after 15 seconds
             sleep(15);
-            print "TEST STEP 3 : Invoke wifi_getStats to get the connection status"
-            print "EXPECTED RESULT : Should get the details of connected station"
+            print("TEST STEP 3 : Invoke wifi_getStats to get the connection status")
+            print("EXPECTED RESULT : Should get the details of connected station")
             tdkTestObj = obj.createTestStep("WIFI_HAL_GetStats");
             tdkTestObj.addParameter("radioIndex",radioIndex);
             tdkTestObj.executeTestCase(expectedresult);
@@ -158,11 +158,11 @@ if "SUCCESS" in loadmodulestatus.upper():
                 SSID_GET = details.split(":")[1].split(",")[0].split("=")[1];
                 if SSID_GET == ssid:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "ACTUAL RESULT  : Connected to %s successfully" %(ssid)
-                    print "Value Returned : %s\n" %(details)
+                    print("ACTUAL RESULT  : Connected to %s successfully" %(ssid))
+                    print("Value Returned : %s\n" %(details))
 
-                    print "TEST STEP 4 : Initiate connection to Access Point A using wifi_connectEndpoint()"
-                    print "EXPECTED RESULT : Connection initiation should be success"
+                    print("TEST STEP 4 : Initiate connection to Access Point A using wifi_connectEndpoint()")
+                    print("EXPECTED RESULT : Connection initiation should be success")
                     tdkTestObj = obj.createTestStep("WIFI_HAL_ConnectEndpoint");
                     tdkTestObj.addParameter("radioIndex",radioIndex);
                     tdkTestObj.addParameter("ssid",ssid);
@@ -177,13 +177,13 @@ if "SUCCESS" in loadmodulestatus.upper():
                     details = tdkTestObj.getResultDetails();
                     if expectedresult in actualresult:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "ACTUAL RESULT  : Connection to %s initiated successfully" %(ssid)
-                        print "Value Returned : %s\n" %(details)
+                        print("ACTUAL RESULT  : Connection to %s initiated successfully" %(ssid))
+                        print("Value Returned : %s\n" %(details))
 
                         # Getting current station connection status after 15 seconds
                         sleep(15);
-                        print "TEST STEP 5 : Invoke wifi_getStats to get the connection status"
-                        print "EXPECTED RESULT : Should get the details of connected station"
+                        print("TEST STEP 5 : Invoke wifi_getStats to get the connection status")
+                        print("EXPECTED RESULT : Should get the details of connected station")
                         tdkTestObj = obj.createTestStep("WIFI_HAL_GetStats");
                         tdkTestObj.addParameter("radioIndex",radioIndex);
                         tdkTestObj.executeTestCase(expectedresult);
@@ -193,44 +193,44 @@ if "SUCCESS" in loadmodulestatus.upper():
                             SSID_GET = details.split(":")[1].split(",")[0].split("=")[1];
                             if SSID_GET == ssid:
                                 tdkTestObj.setResultStatus("SUCCESS");
-                                print "ACTUAL RESULT  : Re-associated to %s successfully" %(ssid)
-                                print "Value Returned : %s\n" %(details)
-                                print "[TEST EXECUTION RESULT] : SUCCESS"
+                                print("ACTUAL RESULT  : Re-associated to %s successfully" %(ssid))
+                                print("Value Returned : %s\n" %(details))
+                                print("[TEST EXECUTION RESULT] : SUCCESS")
 
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "ACTUAL RESULT  : Re-association to %s Failed" %(ssid)
-                                print "Value Returned : %s\n" %(details)
-                                print "[TEST EXECUTION RESULT] : FAILURE"
+                                print("ACTUAL RESULT  : Re-association to %s Failed" %(ssid))
+                                print("Value Returned : %s\n" %(details))
+                                print("[TEST EXECUTION RESULT] : FAILURE")
                         else:
                            tdkTestObj.setResultStatus("FAILURE");
-                           print "ACTUAL RESULT : wifi_getStats operation failed"
-                           print "[TEST EXECUTION RESULT] : FAILURE"
+                           print("ACTUAL RESULT : wifi_getStats operation failed")
+                           print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "ACTUAL RESULT : ",details
-                        print "[TEST EXECUTION RESULT] : FAILURE"
+                        print("ACTUAL RESULT : ",details)
+                        print("[TEST EXECUTION RESULT] : FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "ACTUAL RESULT  : Connection to %s Failed" %(ssid)
-                    print "Value Returned : %s\n" %(details)
-                    print "[TEST EXECUTION RESULT] : FAILURE"
+                    print("ACTUAL RESULT  : Connection to %s Failed" %(ssid))
+                    print("Value Returned : %s\n" %(details))
+                    print("[TEST EXECUTION RESULT] : FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT : wifi_getStats operation failed"
-                print "[TEST EXECUTION RESULT] : FAILURE"
+                print("ACTUAL RESULT : wifi_getStats operation failed")
+                print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE"
+            print("ACTUAL RESULT : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE")
     else:
-        print "wifi_getRadioSupportedFrequencyBands() operation failed"
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("wifi_getRadioSupportedFrequencyBands() operation failed")
+        print("[TEST EXECUTION RESULT] : FAILURE")
         tdkTestObj.setResultStatus("FAILURE");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 

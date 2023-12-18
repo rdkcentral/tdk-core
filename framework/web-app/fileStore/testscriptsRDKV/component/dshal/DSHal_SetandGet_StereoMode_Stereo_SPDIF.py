@@ -76,7 +76,7 @@ mode - Audio port stereo mode to set
 stereoMode - Audio port stereo mode retrieved</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsSetStereoMode to set the stereo mode to "STEREO"
-3 . DSHAL agent will invoke the api dsGetStereoMode to get the stereo mode 
+3 . DSHAL agent will invoke the api dsGetStereoMode to get the stereo mode
 4. TM checks if the stereo mode is same as that set and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the stereo mode is set</expected_output>
@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the stereo mode is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -106,73 +106,73 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_StereoMode_Stereo_SPDIF');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if SPDIF port is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioPort","SPDIF");
 
 
 if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
-	dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
-        expectedResult="SUCCESS";
+    dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
+    tdkTestObj.addParameter("portType", audioPortType["SPDIF"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetAudioPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
         #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
-        tdkTestObj.addParameter("portType", audioPortType["SPDIF"]);
+        tdkTestObj = dshalObj.createTestStep('DSHal_SetStereoMode');
+        tdkTestObj.addParameter("stereoMode", stereoModeType["STEREO"]);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioPort result: ", actualResult
+        print("DSHal_SetStereoMode result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
+            print("DSHal_SetStereoMode: ", details)
 
-            #Prmitive test case which associated to this Script
-            tdkTestObj = dshalObj.createTestStep('DSHal_SetStereoMode');
-            tdkTestObj.addParameter("stereoMode", stereoModeType["STEREO"]);
+            tdkTestObj = dshalObj.createTestStep('DSHal_GetStereoMode');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_SetStereoMode result: ", actualResult
-
+            print("DSHal_GetStereoMode result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "DSHal_SetStereoMode: ", details
-            
-                tdkTestObj = dshalObj.createTestStep('DSHal_GetStereoMode');
-                #Execute the test case in STB
-                tdkTestObj.executeTestCase(expectedResult);
-                actualResult = tdkTestObj.getResult();
-                print "DSHal_GetStereoMode result: ", actualResult
-                if expectedResult in actualResult:
+                print("StereoMode retrieved", details)
+                if int(details) == stereoModeType["STEREO"]:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    details = tdkTestObj.getResultDetails();
-                    print "StereoMode retrieved", details
-                    if int(details) == stereoModeType["STEREO"]:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "StereoMode set to STEREO successfully";
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "StereoMode not set to STEREO";
+                    print("StereoMode set to STEREO successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Failed to get stereo mode";
+                    print("StereoMode not set to STEREO");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "DSHal_SetStereoMode failed";
-
+                print("Failed to get stereo mode");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AudioPort handle not retrieved";
+            print("DSHal_SetStereoMode failed");
 
-        dshalObj.unloadModule("dshal");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle not retrieved");
+
+    dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

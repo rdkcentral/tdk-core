@@ -83,8 +83,8 @@ handle - Audio port handle</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -98,7 +98,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_IsAudioPortEnabled_InvalidHandle');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -110,31 +110,31 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         tdkTestObj = dshalObj.createTestStep('DSHal_IsAudioPortEnabled');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsAudioPortEnabled result: ", actualResult;
+        print("DSHal_IsAudioPortEnabled result: ", actualResult);
         details = tdkTestObj.getResultDetails();
-        print "Audio port enable status: ", details
+        print("Audio port enable status: ", details)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Audio port enable status not retrieved for invalid hanle which is expected";
+            print("Audio port enable status not retrieved for invalid hanle which is expected");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Audio port enable status retrieved for invalid handle which is not expected";
+            print("Audio port enable status retrieved for invalid handle which is not expected");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Audio port handle retrieved for invalid port type";
+        print("Audio port handle retrieved for invalid port type");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

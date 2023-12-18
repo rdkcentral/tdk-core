@@ -94,7 +94,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Register_Unregister_Cust
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -109,35 +109,35 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-    print "BluetoothHal_RegisterAgent : ", actualresult
+    print(("BluetoothHal_RegisterAgent : ", actualresult))
 
     if (actualresult == expectedresult):
-        print "Bluetooth Agent registered successfully"
+        print("Bluetooth Agent registered successfully")
         tdkTestObj.setResultStatus("SUCCESS");
         #Primitive to unregister the agent
         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_UnregisterAgent');
-        
+
         #Execute the test case in DUT
         tdkTestObj.executeTestCase(expectedresult);
 
         #Get the result of execution
         actualresult = tdkTestObj.getResult();
-        print "BluetoothHal_UnregisterAgent : ", actualresult
+        print(("BluetoothHal_UnregisterAgent : ", actualresult))
 
         if (actualresult == expectedresult):
-            print "Bluetooth Agent unregistered successfully"
+            print("Bluetooth Agent unregistered successfully")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Failed to unregister bluetooth agent"
+            print("Failed to unregister bluetooth agent")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Failed to register bluetooth agent"
+        print("Failed to register bluetooth agent")
         tdkTestObj.setResultStatus("FAILURE");
 
-    #Unload the module   
+    #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
 
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

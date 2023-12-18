@@ -69,7 +69,7 @@ index- Video port index
 handle - Video port handle
 matrix_coefficients - matrix coefficient value</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsGetVideoPort to get the video handle for InvalidHandle 
+2 . DSHAL agent will invoke the api dsGetVideoPort to get the video handle for InvalidHandle
 3 . DSHAL agent will invoke the api dsGetMatrixCoefficients to get the matrix coefficient value
 4. TM checks if the coefficient value is retrieved and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is FAILURE
@@ -84,8 +84,8 @@ Checkpoint 2 Verify that the coefficient value is not retrieved</expected_output
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -99,46 +99,46 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetMatrixCoefficients_InvalidHandle');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
     expectedResult="SUCCESS";
     #Prmitive test case which associated to this Script
-    #Getting audioport handle instead of videoport handle 
+    #Getting audioport handle instead of videoport handle
     tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
     tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     print("Getting audioport handle instead of videoport handle as invalid handle");
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         expectedResult = "FAILURE";
         tdkTestObj.setResultStatus("SUCCESS");
         tdkTestObj = dshalObj.createTestStep('DSHal_GetMatrixCoefficients');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetMatrixCoefficients result: ", actualResult;
+        print("DSHal_GetMatrixCoefficients result: ", actualResult);
         details = tdkTestObj.getResultDetails();
-        print "DSHal_GetMatrixCoefficients output: ", details;
+        print("DSHal_GetMatrixCoefficients output: ", details);
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Matrix Coefficient value not retrieved for invalid handle which is expected";
+            print("Matrix Coefficient value not retrieved for invalid handle which is expected");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "GetMatrixCoefficients call success which is not expected";
+            print("GetMatrixCoefficients call success which is not expected");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

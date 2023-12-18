@@ -88,15 +88,15 @@ sysObj.configureTestCase(ip,port,'PowerMgrHal_Reset');
 #Get the result of connection with test component and STB
 loadModuleStatus1 = obj.getLoadModuleResult();
 loadModuleStatus2 = sysObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus1;
-print "[SYS UTIL LIB LOAD STATUS]  :  %s" %loadModuleStatus2;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus1);
+print("[SYS UTIL LIB LOAD STATUS]  :  %s" %loadModuleStatus2);
 
 if "SUCCESS" in loadModuleStatus1.upper() and "SUCCESS" in loadModuleStatus2.upper():
     obj.setLoadModuleStatus("SUCCESS");
     sysObj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : Reset the power state of the device using PLAT_Reset API"
-    print "EXEPECTED OUTPUT : API should reboot the device"
+    print("\nTEST STEP1 : Reset the power state of the device using PLAT_Reset API")
+    print("EXEPECTED OUTPUT : API should reboot the device")
     tdkTestObj = obj.createTestStep('PowerMgrHal_Reset');
     sysObj.saveCurrentState();
     tdkTestObj.executeTestCaseReboot(expectedResult);
@@ -104,11 +104,11 @@ if "SUCCESS" in loadModuleStatus1.upper() and "SUCCESS" in loadModuleStatus2.upp
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     tdkTestObj.setResultStatus("SUCCESS");
-    print "PLAT_Reset API Invocation : ",actualResult
+    print("PLAT_Reset API Invocation : ",actualResult)
 
 
-    print "\nTEST STEP2 : Check the device uptime"
-    print "EXPECTED RESULT : Should get the uptime less than or equal to 3 minutes"
+    print("\nTEST STEP2 : Check the device uptime")
+    print("EXPECTED RESULT : Should get the uptime less than or equal to 3 minutes")
     tdkTestObj = sysObj.createTestStep('ExecuteCommand');
     tdkTestObj.addParameter("command", "uptime");
     tdkTestObj.executeTestCase(expectedResult);
@@ -118,20 +118,18 @@ if "SUCCESS" in loadModuleStatus1.upper() and "SUCCESS" in loadModuleStatus2.upp
     time = int(float(uptime.split(" ")[0]))
     if expectedResult in actualResult and time <= 3:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned : ",details
-        print "Device Uptime  : ",uptime
-        print "ACTUAL RESULT  : PLAT_Reset call success"
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("Value Returned : ",details)
+        print("Device Uptime  : ",uptime)
+        print("ACTUAL RESULT  : PLAT_Reset call success")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
     obj.unloadModule("systemutil");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");
-
-

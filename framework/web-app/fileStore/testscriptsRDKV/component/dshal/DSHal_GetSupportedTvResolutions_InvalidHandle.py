@@ -70,8 +70,8 @@ index- Video port index
 handle - Video port handle
 resolutions - Resolutions</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsGetVideoPort to get the display handle for invalid handle 
-3 . DSHAL agent will invoke the api dsSupportedTvResolutions to get the resolutions 
+2 . DSHAL agent will invoke the api dsGetVideoPort to get the display handle for invalid handle
+3 . DSHAL agent will invoke the api dsSupportedTvResolutions to get the resolutions
 4. TM checks if the resolutions is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is failure
 Checkpoint 2 Verify that the resolutions is not retrieved</expected_output>
@@ -85,8 +85,8 @@ Checkpoint 2 Verify that the resolutions is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -100,7 +100,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetSupportedTvResolutions_InvalidHandl
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -114,12 +114,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     tdkTestObj.executeTestCase(expectedResult);
     print("Getting audio pport handle instead of video port handle");
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         expectedResult = "FAILURE";
         expectedOutput = "INVALID HANDLE";
 
@@ -127,20 +127,20 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetSupportedTvResolutions result: ", actualResult;
+        print("DSHal_GetSupportedTvResolutions result: ", actualResult);
         resolutions = tdkTestObj.getResultDetails();
-        print "Supported Tv Resolutions: ", resolutions;
+        print("Supported Tv Resolutions: ", resolutions);
         if expectedResult in actualResult and expectedOutput in resolutions:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Supported Tv Resolutions not retrieved which is expected for invalid handle";
+            print("Supported Tv Resolutions not retrieved which is expected for invalid handle");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Supported Tv Resolutions retrieved which is not expected for invalid handle";
+            print("Supported Tv Resolutions retrieved which is not expected for invalid handle");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

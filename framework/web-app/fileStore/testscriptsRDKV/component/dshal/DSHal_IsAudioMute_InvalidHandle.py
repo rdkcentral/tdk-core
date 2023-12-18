@@ -71,7 +71,7 @@ handle - Audio port handle</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsIsAudioMute with invalid handle
 3. TM checks if the value is set and return SUCCESS/FAILURE status.</automation_approch>
-    <expected_output>Checkpoint 1.Verify the API call is failure 
+    <expected_output>Checkpoint 1.Verify the API call is failure
 Checkpoint 2 Verify that the status is not retrieved</expected_output>
     <priority>High</priority>
     <test_stub_interface>libdshalstub.so.0.0.0</test_stub_interface>
@@ -83,8 +83,8 @@ Checkpoint 2 Verify that the status is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -98,7 +98,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_IsAudioMute_InvalidHandle');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -112,12 +112,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     tdkTestObj.executeTestCase(expectedResult);
     print("Getting video port handle instead of audio port handle to get invalid handle");
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         expectedResult = "FAILURE";
         expectedOutput = "Audio mute status not retrieved";
@@ -126,23 +126,23 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsAudioMute result: ", actualResult
+        print("DSHal_IsAudioMute result: ", actualResult)
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "DSHal_IsAudioMute output: ", details;
+        print("DSHal_IsAudioMute output: ", details);
 
         if expectedResult in actualResult and expectedOutput in details :
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Audiomute status not retrieved for invalid handle which is expected";
+            print("Audiomute status not retrieved for invalid handle which is expected");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Audomute status retrieved for invalid handle which is not expected";
-    
+            print("Audomute status retrieved for invalid handle which is not expected");
+
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

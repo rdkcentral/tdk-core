@@ -74,7 +74,7 @@ handle - Audio port handle
 enabled - LEConfig enable status</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsEnableLEConfig to enable/disable the SPDIF audio port LEConfig status
-3 . DSHAL agent will invoke the api dsGetLEConfig to get the enable status 
+3 . DSHAL agent will invoke the api dsGetLEConfig to get the enable status
 4. TM checks if the value is set and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the status is set</expected_output>
@@ -88,8 +88,8 @@ Checkpoint 2 Verify that the status is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -104,7 +104,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_EnableDisable_LEConfig_SPDIF');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if LoudnessEquivalence and SPDIF is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"LEConfig") and deviceCapabilities.getconfig(dshalObj,"audioPort","SPDIF")
@@ -118,36 +118,36 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_GetLEConfig');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetLEConfig result: ", actualResult
+        print("DSHal_GetLEConfig result: ", actualResult)
         valueMap = {"true":1, "false":0};
         reverseMap = {"true":0, "false":1};
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             origStatus = tdkTestObj.getResultDetails();
-            print "Original LEConfig status: ", origStatus;
+            print("Original LEConfig status: ", origStatus);
             enableVal = reverseMap[origStatus]
-            print "Trying to change status to ", enableVal;
+            print("Trying to change status to ", enableVal);
             tdkTestObj = dshalObj.createTestStep('DSHal_EnableLEConfig');
             tdkTestObj.addParameter("enable", enableVal);
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_EnableLEConfig result: ", actualResult
+            print("DSHal_EnableLEConfig result: ", actualResult)
             details = tdkTestObj.getResultDetails();
-            print details;
+            print(details);
 
             #Check if new status set
             if expectedResult in actualResult:
@@ -155,64 +155,64 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetLEConfig result: ", actualResult
+                print("DSHal_GetLEConfig result: ", actualResult)
                 newStatus = tdkTestObj.getResultDetails();
-                print newStatus;
+                print(newStatus);
                 if expectedResult in actualResult and valueMap[newStatus] == enableVal:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "LEConfig enable status set to ", newStatus;
+                    print("LEConfig enable status set to ", newStatus);
 
                     #Reverting Audio port status to original value
-                    print "Trying to change status to original value", origStatus;
+                    print("Trying to change status to original value", origStatus);
 
                     tdkTestObj = dshalObj.createTestStep('DSHal_EnableLEConfig');
                     tdkTestObj.addParameter("enable", valueMap[origStatus]);
                     #Execute the test case in STB
                     tdkTestObj.executeTestCase(expectedResult);
                     actualResult = tdkTestObj.getResult();
-                    print "DSHal_EnableLEConfig result: ", actualResult;
+                    print("DSHal_EnableLEConfig result: ", actualResult);
                     details = tdkTestObj.getResultDetails();
-                    print details;
+                    print(details);
 
                     if expectedResult in actualResult:
                         tdkTestObj = dshalObj.createTestStep('DSHal_GetLEConfig');
                         #Execute the test case in STB
                         tdkTestObj.executeTestCase(expectedResult);
                         actualResult = tdkTestObj.getResult();
-                        print "DSHal_GetLEConfig result: ", actualResult
+                        print("DSHal_GetLEConfig result: ", actualResult)
                         revertedStatus = tdkTestObj.getResultDetails();
-                        print revertedStatus;
+                        print(revertedStatus);
                         if expectedResult in actualResult and revertedStatus == origStatus:
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "LEConfig enable status reverted to original value ", origStatus;
+                            print("LEConfig enable status reverted to original value ", origStatus);
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "LEConfig enable status not reverted to original value";
+                            print("LEConfig enable status not reverted to original value");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "DSHal_EnableLEConfig call failed";
+                        print("DSHal_EnableLEConfig call failed");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "LEConfig enable status not set to new value";
+                    print("LEConfig enable status not set to new value");
 
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "DSHal_EnableLEConfig call failed";
+                print("DSHal_EnableLEConfig call failed");
 
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_GetLEConfig call failed";
+            print("DSHal_GetLEConfig call failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -98,7 +98,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_SetClockSpeed_Invalid');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -111,8 +111,8 @@ if "SUCCESS" in loadModuleStatus.upper():
     # PLAT_API_GetClockSpeed
     #   Default Frequency=%d
 
-    print "\nTEST STEP 1 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
-    print "EXEPECTED OUTPUT : Should get the default clock speed of CPU"
+    print("\nTEST STEP1 : Get the CPU clock speed using PLAT_API_GetClockSpeed")
+    print("EXEPECTED OUTPUT : Should get the default clock speed of CPU")
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetClockSpeed');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
@@ -120,40 +120,27 @@ if "SUCCESS" in loadModuleStatus.upper():
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         cpu_speed_default = int(str(str(details).split("=")[1]))
-        print "Value Returned : ",details
-        print "ACTUAL RESULT  : PLAT_API_GetClockSpeed call is success"
+        print("Value Returned : ",details)
+        print("ACTUAL RESULT  : PLAT_API_GetClockSpeed call is success")
 
-        print "\nTEST STEP 2 : Retreive the clock speeds"
-        tdkTestObj = obj.createTestStep('PowerMgrHal_DetemineClockSpeeds');
-        tdkTestObj.executeTestCase(expectedResult);
-        actualResult = tdkTestObj.getResult();
-        clock_speeds = tdkTestObj.getResultDetails();
-        if expectedResult in actualResult:
-            tdkTestObj.setResultStatus("SUCCESS");
-            print "Value Returned : ",clock_speeds
-            print "ACTUAL RESULT  : PLAT_API_DetemineClockSpeeds call is success"
-
-        else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT  : ",details
 
         # PLAT_API_SetClockSpeed  API is applicable for ARM platform only. Not supposed to execute on MIPS platform
-        print "\nTEST STEP 3 : Set the CPU clock speed using PLAT_API_SetClockSpeed API"
-        print "EXPECTED RESULT : Should set the invalid cpu speed value"
+        print("\nTEST STEP2 : Set the CPU clock speed using PLAT_API_SetClockSpeed API")
+        print("EXPECTED RESULT : Should set the invalid cpu speed value")
         tdkTestObj = obj.createTestStep('PowerMgrHal_SetClockSpeed');
         expectedResult = "FAILURE"
         cpu_speed_invalid = -10
-        print "CPU invalid speed to be set : %d" %(cpu_speed_invalid)
+        print("CPU invalid speed to be set : %d" %(cpu_speed_invalid))
         tdkTestObj.addParameter("speed",int(cpu_speed_invalid));
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT  : ",details
+            print("ACTUAL RESULT  : ",details)
 
-            print "\nTEST STEP 4 : Get the CPU clock speed using PLAT_API_GetClockSpeed"
-            print "EXEPECTED OUTPUT : Should get the current clock speed of CPU"
+            print("\nTEST STEP3 : Get the CPU clock speed using PLAT_API_GetClockSpeed")
+            print("EXEPECTED OUTPUT : Should get the current clock speed of CPU")
             tdkTestObj = obj.createTestStep('PowerMgrHal_GetClockSpeed');
             expectedResult = "SUCCESS"
             tdkTestObj.executeTestCase(expectedResult);
@@ -161,31 +148,29 @@ if "SUCCESS" in loadModuleStatus.upper():
             details = tdkTestObj.getResultDetails();
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                cpu_speed_actual = str(str(details).split("=")[1])
-                print "Value Returned : ",details
-                if cpu_speed_actual in clock_speeds:
-                    print "ACTUAL RESULT  : Invalid CPU speed is not set"
-                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                cpu_speed_actual = int(str(str(details).split("=")[1]))
+                print("Vailue Returned : ",details)
+                if cpu_speed_actual == cpu_speed_default:
+                    print("ACTUAL RESULT  : Invalid CPU speed is not set")
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "ACTUAL RESULT  : Invalid CPU speed is set"
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print("ACTUAL RESULT  : Invalid CPU speed is set")
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : ",details
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : ",details)
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT  : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT  : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

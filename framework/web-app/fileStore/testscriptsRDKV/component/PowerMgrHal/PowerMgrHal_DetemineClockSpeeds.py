@@ -99,7 +99,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_DetemineClockSpeeds');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -109,26 +109,24 @@ if "SUCCESS" in loadModuleStatus.upper():
     # PLAT_API_DetemineClockSpeeds
     #   CPU_SPEED_NORMAL=%d, CPU_SPEED_SCALED=%d, CPU_SPEED_MINIMAL=%d
 
-    print "\nTEST STEP1 : Get the clock speed using PLAT_API_DetemineClockSpeeds  API"
-    print "EXEPECTED OUTPUT : Should get the clock speed at normal,scaled and minimal states"
+    print("\nTEST STEP1 : Get the clock speed using PLAT_API_DetemineClockSpeeds  API")
+    print("EXEPECTED OUTPUT : Should get the clock speed at normal,scaled and minimal states")
     tdkTestObj = obj.createTestStep('PowerMgrHal_DetemineClockSpeeds');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned : ",details
-        print "ACTUAL RESULT  : PLAT_API_DetemineClockSpeeds call is success"
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("Value Returned : ",details)
+        print("ACTUAL RESULT  : PLAT_API_DetemineClockSpeeds call is success")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

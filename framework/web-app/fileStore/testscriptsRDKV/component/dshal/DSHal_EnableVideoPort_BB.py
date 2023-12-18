@@ -85,8 +85,8 @@ enabled - enable status to set</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -101,7 +101,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_EnableVideoPort_BB');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if BaseBand port is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"videoPort","BB")
@@ -115,12 +115,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         expectedResult = "SUCCESS";
 
         tdkTestObj = dshalObj.createTestStep('DSHal_EnableVideoPort');
@@ -128,38 +128,38 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_EnableVideoPort result: ", actualResult;
+        print("DSHal_EnableVideoPort result: ", actualResult);
         details = tdkTestObj.getResultDetails();
-        print "Video port enable status: ", details
+        print("Video port enable status: ", details)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "SUCCESS: BB port enable call is successfull as expected";
+            print("SUCCESS: BB port enable call is successfull as expected");
             tdkTestObj = dshalObj.createTestStep('DSHal_IsVideoPortEnabled');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_IsVideoPortEnabled result: ", actualResult;
+            print("DSHal_IsVideoPortEnabled result: ", actualResult);
             details = tdkTestObj.getResultDetails();
-            print "Video port enable status: ", details
+            print("Video port enable status: ", details)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "BaseBand Video port enable status retrieved";
+                print("BaseBand Video port enable status retrieved");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "BaseBand Video port enable status not retrieved";
+                print("BaseBand Video port enable status not retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Video port enable status not set for BB port type which is not expected";
+            print("Video port enable status not set for BB port type which is not expected");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Video port handle retrieved for invalid port type";
+        print("Video port handle retrieved for invalid port type");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

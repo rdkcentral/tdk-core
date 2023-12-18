@@ -50,7 +50,7 @@
     <api_or_interface_used>wifi_getRadioNumberOfEntries()</api_or_interface_used>
     <input_parameters>methodName : getRadioNumberOfEntries</input_parameters>
     <automation_approch>1.Load the module.
-2.Check if the DUT is connected to the required SSID, if not do the connection using wifi_connectEndpoint(). 
+2.Check if the DUT is connected to the required SSID, if not do the connection using wifi_connectEndpoint().
 3.Invoke wifi_getRadioNumberOfEntries() api to get the radio number of entries.
 4.If the value returned is greater than 0,return SUCCESS,else FAILURE.
 5.Unload the module.</automation_approch>
@@ -94,32 +94,32 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
- 
+
         if expectedresult in actualresult:
-    	    outputValue = details.split(":")[1].strip();
-    	    if int(outputValue) > 0:
+            outputValue = details.split(":")[1].strip();
+            if int(outputValue) > 0:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "TEST STEP 1 : Get the SSID number of entries";
-                print "EXPECTED RESULT 1 : Should get the SSID number of entries greater than 0";
-    	        print "ACTUAL RESULT 1 : Obtained the SSID number of entries as a value greater than 0";
-                print "details",details;
+                print("TEST STEP 1 : Get the SSID number of entries");
+                print("EXPECTED RESULT 1 : Should get the SSID number of entries greater than 0");
+                print("ACTUAL RESULT 1 : Obtained the SSID number of entries as a value greater than 0");
+                print("details",details);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : SUCCESS";
+                print("[TEST EXECUTION RESULT] : SUCCESS");
             else:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
-                print "TEST STEP 1 : Get the SSID Name";
-                print "EXPECTED RESULT 1 : Should get the SSID number of entries greater than 0";
-	        print "ACTUAL RESULT 1 : Obtained the SSID number of entries as a value less than 0";
-                print "details",details;
+                print("TEST STEP 1 : Get the SSID Name");
+                print("EXPECTED RESULT 1 : Should get the SSID number of entries greater than 0");
+                print("ACTUAL RESULT 1 : Obtained the SSID number of entries as a value less than 0");
+                print("details",details);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : FAILURE";
+                print("[TEST EXECUTION RESULT] : FAILURE");
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

@@ -89,8 +89,8 @@ resolution - resolution</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -104,7 +104,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetAndSetResolution_HDMI_InvalidStereo
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -116,22 +116,22 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsDisplayConnected result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "Display connection status: ", details
+            print("Display connection status: ", details)
             if details == "true":
                 resolution = "576i";
                 expectedResult = "FAILURE";
@@ -143,24 +143,24 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_SetResolution result: ", actualResult;
+                print("DSHal_SetResolution result: ", actualResult);
                 if expectedResult in actualResult:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "DSHal_SetResolution call failed for invalid stereoscopic mode which is expected";
+                    print("DSHal_SetResolution call failed for invalid stereoscopic mode which is expected");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DSHal_SetResolution call success for invalid stereoscopic mode which is not expected";
+                    print("DSHal_SetResolution call success for invalid stereoscopic mode which is not expected");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Please test connecting a display device";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get display connection status";
+            print("Failed to get display connection status");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

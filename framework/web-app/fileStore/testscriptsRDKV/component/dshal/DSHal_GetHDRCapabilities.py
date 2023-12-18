@@ -80,14 +80,14 @@ def check_hdr_capability():
     sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
     sysUtilObj.configureTestCase(ip,port,'DSHal_GetHDRCapabilities');
     sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-    print "System module loading status : %s" %sysUtilLoadStatus;
+    print("System module loading status : %s" %sysUtilLoadStatus);
     #Set the module loading status
     sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
     if "SUCCESS" in sysUtilLoadStatus.upper():
         tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
         cmd = "cat /etc/device.properties | grep HDR_CAPABILITY"
-        print cmd;
+        print(cmd);
         tdkTestObj.addParameter("command", cmd);
         expectedResult="SUCCESS"
         tdkTestObj.executeTestCase(expectedResult);
@@ -95,13 +95,13 @@ def check_hdr_capability():
         details = tdkTestObj.getResultDetails()
         if expectedResult in actualResult:
             if details:
-                print "Device has HDR capability"
+                print("Device has HDR capability")
                 return True
             else:
-                print "Device doesnot have HDR capability"
+                print("Device doesnot have HDR capability")
                 return False
         else:
-            print "check_hdr_capability failed";
+            print("check_hdr_capability failed");
     sysUtilObj.unloadModule("systemutil");
 
 #IP and Port of box, No need to change,
@@ -113,7 +113,7 @@ imagename= tdklib.getImageName(ip,port);
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -126,27 +126,26 @@ if "SUCCESS" in loadModuleStatus.upper():
     actualResult = tdkTestObj.getResult();
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetHDRCapabilities call is success"
-        print "Value Returned : STB HDR Capabilities : ",details
-     
+        print("ACTUAL RESULT  : dsGetHDRCapabilities call is success")
+        print("Value Returned : STB HDR Capabilities : ",details)
+
         if (HDR_CAPABILITY and (int(details) > 0)):
-            print "HDR standard retrieved as expected";
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("HDR standard retrieved as expected");
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
             tdkTestObj.setResultStatus("SUCCESS");
         elif((not(HDR_CAPABILITY)) and (int(details) == 0)):
-            print "No HDR standard retrieved as expected";
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("No HDR standard retrieved as expected");
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
             tdkTestObj.setResultStatus("SUCCESS");
-       
+
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetHDRCapabilities call failed"
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : dsGetHDRCapabilities call failed")
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-

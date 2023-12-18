@@ -103,7 +103,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_SetTempThresholds');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -113,8 +113,8 @@ if "SUCCESS" in loadModuleStatus.upper():
     # PLAT_API_GetTempThresholds
     #   Thermal threshold : high=%f, critical=%f
 
-    print "\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API"
-    print "EXEPECTED OUTPUT : Should get the current temperature thresholds"
+    print("\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API")
+    print("EXEPECTED OUTPUT : Should get the current temperature thresholds")
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetTempThresholds');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
@@ -123,15 +123,15 @@ if "SUCCESS" in loadModuleStatus.upper():
         tdkTestObj.setResultStatus("SUCCESS");
         actual_high     = float(str(str(details).split(":")[1].split(",")[0].split("=")[1]))
         actual_critical = float(str(str(details).split(":")[1].split(",")[1].split("=")[1]))
-        print "Value Returned : ",details
-        print "ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success"
+        print("Value Returned : ",details)
+        print("ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success")
 
-        print "\nTEST STEP2 : Set the high & critical temperature threshold using PLAT_API_SetTempThresholds API"
-        print "EXEPECTED OUTPUT : Should set the new temperature thresholds"
+        print("\nTEST STEP2 : Set the high & critical temperature threshold using PLAT_API_SetTempThresholds API")
+        print("EXEPECTED OUTPUT : Should set the new temperature thresholds")
         tdkTestObj = obj.createTestStep('PowerMgrHal_SetTempThresholds');
         new_high     = int(actual_high)     + 10
         new_critical = int(actual_critical) + 10
-        print "New Thermal threshold : high=%f, critical=%f" %(new_high,new_critical)
+        print("New Thermal threshold : high=%f, critical=%f" %(new_high,new_critical))
         tdkTestObj.addParameter("high",int(new_high));
         tdkTestObj.addParameter("critical",int(new_critical));
         tdkTestObj.executeTestCase(expectedResult);
@@ -139,10 +139,10 @@ if "SUCCESS" in loadModuleStatus.upper():
         details = tdkTestObj.getResultDetails();
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT  :",details
+            print("ACTUAL RESULT  :",details)
 
-            print "\nTEST STEP3 : Get the latest high & critical temperature threshold using PLAT_API_GetTempThresholds API"
-            print "EXEPECTED OUTPUT : Should get the updated temperature thresholds"
+            print("\nTEST STEP3 : Get the latest high & critical temperature threshold using PLAT_API_GetTempThresholds API")
+            print("EXEPECTED OUTPUT : Should get the updated temperature thresholds")
             tdkTestObj = obj.createTestStep('PowerMgrHal_GetTempThresholds');
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
@@ -151,15 +151,15 @@ if "SUCCESS" in loadModuleStatus.upper():
                 tdkTestObj.setResultStatus("SUCCESS");
                 updated_high     = float(str(str(details).split(":")[1].split(",")[0].split("=")[1]))
                 updated_critical = float(str(str(details).split(":")[1].split(",")[1].split("=")[1]))
-                print "Value Returned : ",details
+                print("Value Returned : ",details)
                 if updated_high == float(new_high) and updated_critical == float(new_critical):
-                    print "ACTUAL RESULT : Thermal thresholds set operation success"
-                    print "[TEST EXECUTION RESULT] : SUCCESS"
+                    print("ACTUAL RESULT : Thermal thresholds set operation success")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                    print "\nTEST STEP4 : Revert the high & critical temperature threshold using PLAT_API_SetTempThresholds API"
-                    print "EXEPECTED OUTPUT : Should set the actual temperature thresholds"
+                    print("\nTEST STEP4 : Revert the high & critical temperature threshold using PLAT_API_SetTempThresholds API")
+                    print("EXEPECTED OUTPUT : Should set the actual temperature thresholds")
                     tdkTestObj = obj.createTestStep('PowerMgrHal_SetTempThresholds');
-                    print "Actual Thermal threshold : high=%f, critical=%f" %(actual_high,actual_critical)
+                    print("Actual Thermal threshold : high=%f, critical=%f" %(actual_high,actual_critical))
                     tdkTestObj.addParameter("high",int(actual_high));
                     tdkTestObj.addParameter("critical",int(actual_critical));
                     tdkTestObj.executeTestCase(expectedResult);
@@ -167,32 +167,30 @@ if "SUCCESS" in loadModuleStatus.upper():
                     details = tdkTestObj.getResultDetails();
                     if expectedResult in actualResult:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "ACTUAL RESULT : Thermal thresholds revert operation success"
-                        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                        print("ACTUAL RESULT : Thermal thresholds revert operation success")
+                        print("[TEST EXECUTION RESULT] : SUCCESS\n")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "ACTUAL RESULT : Thermal thresholds revert operation failed"
-                        print "[TEST EXECUTION RESULT] : FAILURE\n"
+                        print("ACTUAL RESULT : Thermal thresholds revert operation failed")
+                        print("[TEST EXECUTION RESULT] : FAILURE\n")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "ACTUAL RESULT : Thermal thresholds set operation failed"
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print("ACTUAL RESULT : Thermal thresholds set operation failed")
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : ",details
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : ",details)
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT  :",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT  :",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

@@ -111,7 +111,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Get_ListOf_ScannedDevice
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -124,71 +124,71 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-	
+
     #Check the result of execution
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetAdapter executed successfully"
+        print("BluetoothHal_GetAdapter executed successfully")
         adapterPath = tdkTestObj.getResultDetails();
-	print "BluetoothHal_GetAdapter : Default adapter path : ", adapterPath
-	if (adapterPath):
+        print(("BluetoothHal_GetAdapter : Default adapter path : ", adapterPath))
+        if (adapterPath):
             tdkTestObj.setResultStatus("SUCCESS");
-     
+
             #Set the bluetooth adapter power to ON state
             actualresult = setAdapterPowerON (bluetoothhalObj, adapterPath)
             if (actualresult == expectedresult):
-                print "Successfully powered ON bluetooth adapter"
-          
+                print("Successfully powered ON bluetooth adapter")
+
                 #Set the bluetooth client device as discoverable prior to starting device discovery in DUT
-                print "Setting client device as discoverable before starting device discovery in DUT"
-                commandList = ['bluetoothctl','discoverable on','quit'] 
+                print("Setting client device as discoverable before starting device discovery in DUT")
+                commandList = ['bluetoothctl','discoverable on','quit']
                 bluetoothctlResult = executeBluetoothCtl(bluetoothhalObj,commandList)
-                if "FAILURE" not in bluetoothctlResult:
+                if "FAILURE" not in str(bluetoothctlResult):
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Client Device %s set as discoverable" %(bluetoothhallib.deviceName)
+                    print(("Client Device %s set as discoverable" %(bluetoothhallib.deviceName)))
                     Unpair_if_paired(bluetoothhalObj);
                     if "LE" in  DeviceType(bluetoothhalObj):
                         LowEnergy = True;
                     else:
                         LowEnergy = False;
                     #Start device discovery in DUT
-                    print "Starting the device discovery in DUT"
+                    print("Starting the device discovery in DUT")
                     tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_StartDiscovery');
-	            #Set the adapter path to the default adapter path
-	            tdkTestObj.addParameter("adapter_path", adapterPath)
+                    #Set the adapter path to the default adapter path
+                    tdkTestObj.addParameter("adapter_path", adapterPath)
                     #Set the discovery timeout as 0, for no timeout
-	            tdkTestObj.addParameter("timeout", 0)
+                    tdkTestObj.addParameter("timeout", 0)
                     #Set the device type as 4 - LE
                     tdkTestObj.addParameter("device_type", 4)
 
                     #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedresult);
-			
-	            #Get the result of execution
+
+                    #Get the result of execution
                     actualresult = tdkTestObj.getResult();
-			   
-	            if (actualresult == expectedresult):
-	                print "BluetoothHal_StartDiscovery executed successfully"
-	                tdkTestObj.setResultStatus("SUCCESS")
+
+                    if (actualresult == expectedresult):
+                        print("BluetoothHal_StartDiscovery executed successfully")
+                        tdkTestObj.setResultStatus("SUCCESS")
 
                         #Waiting for 30 seconds to scan available devices
                         time.sleep (30)
-                        
+
                         #Stop device discovery in DUT
-                        print "Stoping the device discovery in DUT"
+                        print("Stoping the device discovery in DUT")
                         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_StopDiscovery');
-	                #Set the adapter path to the default adapter path
-	                tdkTestObj.addParameter("adapter_path", adapterPath)
+                        #Set the adapter path to the default adapter path
+                        tdkTestObj.addParameter("adapter_path", adapterPath)
                         #Set the device type as 4 - LE
                         tdkTestObj.addParameter("device_type", 4)
 
                         #Execute the test case in DUT
                         tdkTestObj.executeTestCase(expectedresult);
-			
-	                #Get the result of execution
+
+                        #Get the result of execution
                         actualresult = tdkTestObj.getResult();
-			   
-	                if (actualresult == expectedresult):
-	                    print "BluetoothHal_StopDiscovery executed successfully"
+
+                        if (actualresult == expectedresult):
+                            print("BluetoothHal_StopDiscovery executed successfully")
                             tdkTestObj.setResultStatus("SUCCESS")
 
                             #Retrieve the list of scanned devices
@@ -196,12 +196,12 @@ if "SUCCESS" in result.upper():
                             tdkTestObj.addParameter("DeviceName",bluetoothhallib.deviceName);
                             #Execute the test case in DUT
                             tdkTestObj.executeTestCase(expectedresult);
-			
-	                    #Get the result of execution
+
+                            #Get the result of execution
                             actualresult = tdkTestObj.getResult();
-			  
-	                    if (actualresult == expectedresult):
-	                        print "BluetoothHal_GetListOfScannedDevices executed successfully"
+
+                            if (actualresult == expectedresult):
+                                print("BluetoothHal_GetListOfScannedDevices executed successfully")
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 result = tdkTestObj.getResultDetails()
                                 deviceDiscovered = False
@@ -210,51 +210,51 @@ if "SUCCESS" in result.upper():
                                     #Traverse the scanned devices list to check if the client device is present
                                     for device in scannedDevices:
                                         if (device["deviceName"] == bluetoothhallib.deviceName):
-                                            deviceDiscovered = True 
+                                            deviceDiscovered = True
                                     if True == deviceDiscovered and LowEnergy:
-                                        print "Client device is an LE device, and it is discovered in DUT" 
+                                        print("Client device is an LE device, and it is discovered in DUT")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     elif True == deviceDiscovered and not LowEnergy:
-                                        print "Client device is not an LE device, but it is discovered in DUT"
+                                        print("Client device is not an LE device, but it is discovered in DUT")
                                         tdkTestObj.setResultStatus("FAILURE")
                                     elif False == deviceDiscovered and not LowEnergy:
-                                        print "Client device is not an LE device and not discovered in DUT"
+                                        print("Client device is not an LE device and not discovered in DUT")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     elif False == deviceDiscovered and LowEnergy:
-                                        print "Client device is an LE device, but it is not discovered in DUT"
+                                        print("Client device is an LE device, but it is not discovered in DUT")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "Client device is not an LE device, so it is NOT discovered in DUT"
-                                    tdkTestObj.setResultStatus("SUCCESS") 
+                                    print("Client device is not an LE device, so it is NOT discovered in DUT")
+                                    tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "BluetoothHal_GetListOfScannedDevices: failed"
+                                print("BluetoothHal_GetListOfScannedDevices: failed")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "BluetoothHal_StopDiscovery: failed"
+                            print("BluetoothHal_StopDiscovery: failed")
                             tdkTestObj.setResultStatus("FAILURE")
-		    else:
-	                print "BluetoothHal_StartDiscovery: failed"
-	                tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print("BluetoothHal_StartDiscovery: failed")
+                        tdkTestObj.setResultStatus("FAILURE")
 
                     #Close the client device session after use
                     closeSSHSession()
                 else:
-                    print "Failed to connect to client device"
+                    print("Failed to connect to client device")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-		print "Failed to power ON bluetooth adapter"
-		tdkTestObj.setResultStatus("FAILURE");
+                print("Failed to power ON bluetooth adapter")
+                tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "Default adapter path is empty"
+            print("Default adapter path is empty")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "BluetoothHal_GetAdapter: failed"
+        print("BluetoothHal_GetAdapter: failed")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
-        
+
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

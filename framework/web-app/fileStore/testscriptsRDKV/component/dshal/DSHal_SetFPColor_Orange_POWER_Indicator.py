@@ -52,7 +52,7 @@
 eColor - Orange</input_parameters>
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsSetFPColor with parameter LED indicator 1 [POWER LED] and color Orange
-3.Check the API return status 
+3.Check the API return status
 4.Update the test result as SUCCESS/FAILURE , based on API return status
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success</expected_output>
@@ -81,7 +81,7 @@ obj.configureTestCase(ip,port,'DSHal_SetFPColor_Orange_POWER_Indicator');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 #Check whether the device supports SetColor and Power LED
 capable = deviceCapabilities.getconfig(obj,"SetColor") and deviceCapabilities.getconfig(obj,"Indicator","Power");
@@ -89,8 +89,8 @@ capable = deviceCapabilities.getconfig(obj,"SetColor") and deviceCapabilities.ge
 if "SUCCESS" in loadModuleStatus.upper() and capable:
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : To set color of Power indicator in Front Panel to Orange"
-    print "EXEPECTED RESULT : Should set the power led colour to Orange"
+    print("\nTEST STEP1 : To set color of Power indicator in Front Panel to Orange")
+    print("EXEPECTED RESULT : Should set the power led colour to Orange")
     tdkTestObj = obj.createTestStep('DSHal_SetFPColor');
     # POWER LED
     led = "POWER"
@@ -103,23 +103,23 @@ if "SUCCESS" in loadModuleStatus.upper() and capable:
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : %s led [Indicator-%d] color is set to %s" %(led,indicator,color)
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("ACTUAL RESULT  : %s led [Indicator-%d] color is set to %s" %(led,indicator,color))
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in loadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");

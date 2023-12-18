@@ -88,8 +88,8 @@ Checkpoint 2 Verify that the handle is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -103,30 +103,30 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetDisplayHandle_INVALID');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="FAILURE";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetDisplay');
-        tdkTestObj.addParameter("portType", videoPortType["INVALID"]);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedResult);
-        actualResult = tdkTestObj.getResult();
-        print "DSHal_GetDisplay result: ", actualResult
+    expectedResult="FAILURE";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetDisplay');
+    tdkTestObj.addParameter("portType", videoPortType["INVALID"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetDisplay result: ", actualResult)
 
-        if expectedResult in actualResult:
-            tdkTestObj.setResultStatus("SUCCESS");
-            details = tdkTestObj.getResultDetails();
-            print details;
-            print "Display handle not retrieved for invalid port type";
-        else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print "Display handle retrieved for invalid port type";
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+        print("Display handle not retrieved for invalid port type");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Display handle retrieved for invalid port type");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -59,7 +59,7 @@ dsSetVersion(version)</api_or_interface_used>
 4.DSHAL agent will invoke the API dsGetVersion to get the latest version.
 5.Version number set and latest version number should be same
 6.Revert to actual version number using dsSetVersion  API
-7.Update the test result as SUCCESS/FAILURE 
+7.Update the test result as SUCCESS/FAILURE
 8.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2.Version number set and version number obtained using dsGetVersion should be same</expected_output>
@@ -87,13 +87,13 @@ obj.configureTestCase(ip,port,'DSHal_SetVersion');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : Get the DSHAL version number using dsGetVersion"
-    print "EXPECTED RESULT : Should get the current DSHAL version"
+    print("\nTEST STEP1 : Get the DSHAL version number using dsGetVersion")
+    print("EXPECTED RESULT : Should get the current DSHAL version")
     tdkTestObj = obj.createTestStep('DSHal_GetVersion');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
@@ -102,14 +102,14 @@ if "SUCCESS" in loadModuleStatus.upper():
         details = tdkTestObj.getResultDetails();
         prevVersion = details
         prevVersionNo = int(prevVersion)//(2**16)
-        print "ACTUAL RESULT  : dsGetVersion call is SUCCESS"
-        print "Value Returned : DSHAL Version Number : %s or %.2f" %(prevVersion,round(prevVersionNo,2))
-    
-        print "\nTEST STEP2 : Set new DSHAL version number using dsSetVersion"
-        print "EXPECTED RESULT : Able to set new DSHAL version number"
+        print("ACTUAL RESULT  : dsGetVersion call is SUCCESS")
+        print("Value Returned : DSHAL Version Number : %s or %.2f" %(prevVersion,round(prevVersionNo,2)))
+
+        print("\nTEST STEP2 : Set new DSHAL version number using dsSetVersion")
+        print("EXPECTED RESULT : Able to set new DSHAL version number")
         expectedResult="SUCCESS";
         # Version number 2.0
-        setVersion = 131072  
+        setVersion = 131072
         if int(prevVersion) == int(setVersion):
             # Version number 1.0
             setVersion = 65536
@@ -120,11 +120,11 @@ if "SUCCESS" in loadModuleStatus.upper():
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "ACTUAL RESULT : ",details
-            print "DSHAL Version Number Set  : %d or %.2f" %(setVersion,round((setVersion//(2**16)),2))
+            print("ACTUAL RESULT : ",details)
+            print("DSHAL Version Number Set  : %d or %.2f" %(setVersion,round((setVersion//(2**16)),2)))
 
-            print "\nTEST STEP3 : Get the DSHAL version number using dsGetVersion"
-            print "EXPECTED RESULT : Should get the DSHAL version set"
+            print("\nTEST STEP3 : Get the DSHAL version number using dsGetVersion")
+            print("EXPECTED RESULT : Should get the DSHAL version set")
             tdkTestObj = obj.createTestStep('DSHal_GetVersion');
             expectedResult="SUCCESS";
             tdkTestObj.executeTestCase(expectedResult);
@@ -133,28 +133,28 @@ if "SUCCESS" in loadModuleStatus.upper():
                 details = tdkTestObj.getResultDetails();
                 currVersion = details
                 currVersionNo = int(currVersion)//(2**16)
-                print "ACTUAL RESULT  : dsGetVersion call is SUCCESS"
-                print "Value Returned : DSHAL Version Number : %s or %.2f" %(currVersion,round(currVersionNo,2))
+                print("ACTUAL RESULT  : dsGetVersion call is SUCCESS")
+                print("Value Returned : DSHAL Version Number : %s or %.2f" %(currVersion,round(currVersionNo,2)))
 
-                print "\nTEST STEP4 : Compare DSHAL version set and current version"
-                print "EXPECTED RESULT : DSHAL version set and current version should be same"
+                print("\nTEST STEP4 : Compare DSHAL version set and current version")
+                print("EXPECTED RESULT : DSHAL version set and current version should be same")
                 if int(setVersion) == int(currVersion):
-                    print "ACTUAL RESULT : Able to set DSHAL version successfully"
-                    print "[TEST EXECUTION RESULT] : SUCCESS"
+                    print("ACTUAL RESULT : Able to set DSHAL version successfully")
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "ACTUAL RESULT : Not Able to set DSHAL version"
-                    print "[TEST EXECUTION RESULT] : FAILURE"
+                    print("ACTUAL RESULT : Not Able to set DSHAL version")
+                    print("[TEST EXECUTION RESULT] : FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 details = tdkTestObj.getResultDetails();
-                print "ACTUAL RESULT : dsGetVersion call failed"
-                print "Value Retuned : ",details
-                print "[TEST EXECUTION RESULT] : FAILURE"
+                print("ACTUAL RESULT : dsGetVersion call failed")
+                print("Value Retuned : ",details)
+                print("[TEST EXECUTION RESULT] : FAILURE")
 
-            print "\nTEST STEP5 : Revert DSHAL version number"
-            print "EXPECTED RESULT : Able to set previous DSHAL version number"
+            print("\nTEST STEP5 : Revert DSHAL version number")
+            print("EXPECTED RESULT : Able to set previous DSHAL version number")
             expectedResult="SUCCESS";
             tdkTestObj = obj.createTestStep('DSHal_SetVersion');
             tdkTestObj.addParameter("version", int(prevVersion));
@@ -163,30 +163,28 @@ if "SUCCESS" in loadModuleStatus.upper():
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "ACTUAL RESULT  : DSHAL version number reverted successfully"
-                print "DSHAL Version Number Set  : %s or %.2f" %(prevVersion,round((int(prevVersion)//(2**16)),2))
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : DSHAL version number reverted successfully")
+                print("DSHAL Version Number Set  : %s or %.2f" %(prevVersion,round((int(prevVersion)//(2**16)),2)))
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 details = tdkTestObj.getResultDetails();
-                print "ACTUAL RESULT  : DSHAL version number revert failed"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : DSHAL version number revert failed")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
             details = tdkTestObj.getResultDetails();
-            print "ACTUAL RESULT : dsSetVersion call failed"
-            print "Value Retuned : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT : dsSetVersion call failed")
+            print("Value Retuned : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT : dsGetVersion call failed"
-        print "Value Retuned : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT : dsGetVersion call failed")
+        print("Value Retuned : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

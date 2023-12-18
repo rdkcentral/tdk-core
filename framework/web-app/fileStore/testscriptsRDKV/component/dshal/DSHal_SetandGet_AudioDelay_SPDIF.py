@@ -73,7 +73,7 @@ index- Audio port index
 audioDelayMs - Audio delay in Ms</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsSetAudioDelay to set the audio delay
-3 . DSHAL agent will invoke the api dsGetAudioDelay to get the audio delay 
+3 . DSHAL agent will invoke the api dsGetAudioDelay to get the audio delay
 4. TM checks if the audio delay is same as that set and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the audio delay is set</expected_output>
@@ -87,8 +87,8 @@ Checkpoint 2 Verify that the audio delay is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -103,7 +103,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_AudioDelay_SPDIF');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if SPDIF is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioPort","SPDIF")
@@ -117,60 +117,60 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
-	audioDelay = 50;
-        print "Trying to set audio delay to ", audioDelay;
+        audioDelay = 50;
+        print("Trying to set audio delay to ", audioDelay);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioDelay');
         tdkTestObj.addParameter("audioDelay", audioDelay);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetAudioDelay result: ", actualResult
+        print("DSHal_SetAudioDelay result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetAudioDelay: ", details
-        
+            print("DSHal_SetAudioDelay: ", details)
+
             tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioDelay');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetAudioDelay result: ", actualResult
+            print("DSHal_GetAudioDelay result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "AudioDelay retrieved", details
+                print("AudioDelay retrieved", details)
                 if int(details) == audioDelay:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "AudioDelay set successfully";
+                    print("AudioDelay set successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "AudioDelay setting failed";
+                    print("AudioDelay setting failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get audio delay";
+                print("Failed to get audio delay");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_SetAudioDelay failed";
+            print("DSHal_SetAudioDelay failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

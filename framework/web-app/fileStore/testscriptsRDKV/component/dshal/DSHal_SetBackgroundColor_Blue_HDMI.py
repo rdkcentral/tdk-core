@@ -87,8 +87,8 @@ Checkpoint 2 Verify that the BG color is set to Blue</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -104,9 +104,9 @@ sysObj.configureTestCase(ip,port,'DSHal_SetBackgroundColor_Blue_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 sysloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %sysloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 sysObj.setLoadModuleStatus(sysloadModuleStatus);
@@ -119,68 +119,68 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and "SUCCESS" in sysloadModuleStat
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsDisplayConnected result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "Display connection status: ", details
+            print("Display connection status: ", details)
             colorId = {"Blue":0, "Black":1, "None":2, "Invalid":5};
             colorMap = {"Blue":"ff0000ff", "Black":"ff000000", "Invalid":"0", "None":"0"};
-    
+
             if details == "true":
-                print "Trying to set BGColor to Blue";	
+                print("Trying to set BGColor to Blue");
                 tdkTestObj = dshalObj.createTestStep('DSHal_SetBackgroundColor');
                 tdkTestObj.addParameter("color", colorId["Blue"]);
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_SetBackgroundColor result: ", actualResult;
+                print("DSHal_SetBackgroundColor result: ", actualResult);
                 if expectedResult in actualResult:
                     details = tdkTestObj.getResultDetails();
-                    print details;
+                    print(details);
                     logName = "/opt/TDK/logs/AgentConsole.log";
                     tdkTestObj = sysObj.createTestStep('ExecuteCommand');
                     cmd = "grep dsSetBackgroundColor " + logName + " | grep '" + str(colorMap["Blue"]) + "$\|" + str(colorId["Blue"]) + "$'"
-                    print cmd;
+                    print(cmd);
                     tdkTestObj.addParameter("command", cmd);
                     tdkTestObj.executeTestCase("SUCCESS");
                     actualresult = tdkTestObj.getResult();
                     color = tdkTestObj.getResultDetails();
-                    print "OUTPUT:", color;
+                    print("OUTPUT:", color);
                     if colorMap["Blue"] in color or str(colorId["Blue"]) in color:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "BGColor set to Blue";
+                        print("BGColor set to Blue");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "BGColor not set to Blue";
+                        print("BGColor not set to Blue");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Failed to set BGColor";
+                    print("Failed to set BGColor");
 
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Please test connecting a display device";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get display connection status";
+            print("Failed to get display connection status");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
     sysObj.unloadModule("systemutil");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

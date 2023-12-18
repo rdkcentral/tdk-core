@@ -74,7 +74,7 @@ index- Audio port index
 handle - Audio port handle
 capability - atmos capability</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsGetSinkDeviceAtmosCapability to get the SinkDeviceAtmosCapability 
+2 . DSHAL agent will invoke the api dsGetSinkDeviceAtmosCapability to get the SinkDeviceAtmosCapability
 3. TM checks if the encoding type is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the SinkDeviceAtmosCapability is valid</expected_output>
@@ -88,8 +88,8 @@ Checkpoint 2 Verify that the SinkDeviceAtmosCapability is valid</expected_output
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -103,50 +103,50 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetSinkDeviceAtmosCapability_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
-        tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
+    tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetAudioPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        atmosCapability = {"NOTSUPPORTED":0, "DDPLUSSTREAM":1, "ATMOSMETADATA":2};
+        tdkTestObj = dshalObj.createTestStep('DSHal_GetSinkDeviceAtmosCapability');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioPort result: ", actualResult
-
+        print("DSHal_GetSinkDeviceAtmosCapability result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
-
-            atmosCapability = {"NOTSUPPORTED":0, "DDPLUSSTREAM":1, "ATMOSMETADATA":2};
-            tdkTestObj = dshalObj.createTestStep('DSHal_GetSinkDeviceAtmosCapability');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_GetSinkDeviceAtmosCapability result: ", actualResult
-            if expectedResult in actualResult:
+            print("SinkDeviceAtmosCapability retrieved", details)
+            if int(details) in list(atmosCapability.values()):
                 tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "SinkDeviceAtmosCapability retrieved", details
-                if int(details) in atmosCapability.values():
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print "SinkDeviceAtmosCapability has valid value for HDMI";
-                else:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print "SinkDeviceAtmosCapability value is not valid for HDMI";
+                print("SinkDeviceAtmosCapability has valid value for HDMI");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get SinkDeviceAtmosCapability value";
-
+                print("SinkDeviceAtmosCapability value is not valid for HDMI");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AudioPort handle not retrieved";
+            print("Failed to get SinkDeviceAtmosCapability value");
 
-        dshalObj.unloadModule("dshal");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle not retrieved");
+
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

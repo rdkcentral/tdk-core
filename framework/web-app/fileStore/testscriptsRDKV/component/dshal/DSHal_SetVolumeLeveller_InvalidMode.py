@@ -103,96 +103,96 @@ obj.configureTestCase(ip,port,'DSHal_SetVolumeLeveller_InvalidMode');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Check if VolumeLeveller is supported by the DUT
 capable = deviceCapabilities.getconfig(obj,"VolumeLeveller");
 
 if "SUCCESS" in result.upper() and capable:
     expectedResult="SUCCESS";
- 
+
     #Execute the test case in DUT
     tdkTestObj = obj.createTestStep('DSHal_GetAudioPort');
     tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
 
         #Valid range for level : 0-10
         Level_test = 5;
- 
+
         #Prmitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('DSHal_GetVolumeLeveller');
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVolumeLeveller result: " , actualResult
+        print("DSHal_GetVolumeLeveller result: " , actualResult)
         Getdetails = tdkTestObj.getResultDetails();
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "GetVolumeLeveller Result : " , Getdetails
+            print("GetVolumeLeveller Result : " , Getdetails)
         else:
-            print "GetVolumeLeveller Failure " , Getdetails
+            print("GetVolumeLeveller Failure " , Getdetails)
             obj.unloadModule("dshal");
 
-        print "\n Trying to set Invalid mode"
+        print("\n Trying to set Invalid mode")
         #Trying to set invalid mode with valid level
         #Valid Mode values  : 0-Disable, 1-Normal, 2-AUTO
         for Mode in [-1,3]:
-            print "\n Mode = ", Mode
+            print("\n Mode = ", Mode)
             tdkTestObj = obj.createTestStep('DSHal_SetVolumeLeveller');
             tdkTestObj.addParameter("mode",Mode);
             tdkTestObj.addParameter("level",Level_test);
             expectedResult="FAILURE";
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_SetVolumeLeveller result: " , actualResult
+            print("DSHal_SetVolumeLeveller result: " , actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "SetVolumeLeveller result : " , details
- 
+                print("SetVolumeLeveller result : " , details)
+
                 #Prmitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('DSHal_GetVolumeLeveller');
                 expectedResult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetVolumeLeveller result: " , actualResult
+                print("DSHal_GetVolumeLeveller result: " , actualResult)
                 if expectedResult in actualResult:
                     tdkTestObj.setResultStatus("SUCCESS");
                     details = tdkTestObj.getResultDetails();
-                    print "GetVolumeLeveller Result : " , details
+                    print("GetVolumeLeveller Result : " , details)
                     if details == Getdetails:
-                        print "Result obtained as expected";
+                        print("Result obtained as expected");
                     else:
-                        print "Unexpected result obtained", details
+                        print("Unexpected result obtained", details)
                         tdkTestObj.setResultStatus("FAILURE");
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
                     details = tdkTestObj.getResultDetails();
-                    print "GetVolumeLeveller Result : " , details
+                    print("GetVolumeLeveller Result : " , details)
 
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 details = tdkTestObj.getResultDetails();
-                print "SetVolumeLeveller Result : " , details
+                print("SetVolumeLeveller Result : " , details)
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print details
- 
+        print(details)
+
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in result.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 else:
-    print "Module load failed"
+    print("Module load failed")

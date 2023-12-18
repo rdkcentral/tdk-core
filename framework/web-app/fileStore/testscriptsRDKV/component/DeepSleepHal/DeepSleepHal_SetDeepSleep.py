@@ -67,9 +67,8 @@
   </test_cases>
   <script_tags/>
 </xml>
-
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
 #Test component to be tested
@@ -83,15 +82,15 @@ obj.configureTestCase(ip,port,'DeepSleepHal_SetDeepSleep');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : Set deep sleep for 60 seconds using PLAT_DS_SetDeepSleep API"
-    print "EXPECTED RESULT : Should set the deep sleep & cpu should be freezed for given timeout duration"
+    print("\nTEST STEP1 : Set deep sleep for 60 seconds using PLAT_DS_SetDeepSleep API")
+    print("EXPECTED RESULT : Should set the deep sleep & cpu should be freezed for given timeout duration")
     timeout = 60;
-    print "Timeout for deep sleep : %d (secs)" %(timeout)
+    print("Timeout for deep sleep : %d (secs)" %(timeout))
     tdkTestObj = obj.createTestStep('DeepSleepHal_SetDeepSleep');
     tdkTestObj.addParameter("timeout", timeout);
     tdkTestObj.executeTestCase(expectedResult);
@@ -102,45 +101,43 @@ if "SUCCESS" in loadModuleStatus.upper():
         if "GPIOWakeup" in str(details):
             freezeDuration = int(str(details).split(";")[0].split(":")[1].strip())
             GPIOWakeup = int(str(details).split(";")[1].split(":")[1].strip())
-            print "Value Returned : %s secs (approx), %s" %(str(details).split(";")[0],str(details).split(";")[1])
-            print "ACTUAL RESULT  : %s" %(str(details).split(";")[2])
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("Value Returned : %s secs (approx), %s" %(str(details).split(";")[0],str(details).split(";")[1]))
+            print("ACTUAL RESULT  : %s" %(str(details).split(";")[2]))
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
-            print "\nTEST STEP2: Check CPU freeze duration & GPIO Wakeup status and reboot the device"
-            print "EXPECTED RESULT : Reboot if freeze duration is >= timeout & GPIO Wakeup status should be 0"
+            print("\nTEST STEP2: Check CPU freeze duration & GPIO Wakeup status and reboot the device")
+            print("EXPECTED RESULT : Reboot if freeze duration is >= timeout & GPIO Wakeup status should be 0")
             if int(freezeDuration) >= int(timeout) and int(GPIOWakeup) == 0:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT  : CPU freeze duration & GPIO Wakeup status are as expected"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : CPU freeze duration & GPIO Wakeup status are as expected")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : CPU freeze duration & GPIO Wakeup status are not as expected"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : CPU freeze duration & GPIO Wakeup status are not as expected")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             freezeDuration = int(str(details).split(";")[0].split(":")[1].strip())
-            print "Value Returned : %s secs (approx)" %(str(details).split(";")[0])
-            print "ACTUAL RESULT  : %s" %(str(details).split(";")[1])
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("Value Returned : %s secs (approx)" %(str(details).split(";")[0]))
+            print("ACTUAL RESULT  : %s" %(str(details).split(";")[1]))
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
-            print "\nTEST STEP2: Check CPU freeze duration and reboot the device"
-            print "EXPECTED RESULT : Reboot if freeze duration is >= timeout"
+            print("\nTEST STEP2: Check CPU freeze duration and reboot the device")
+            print("EXPECTED RESULT : Reboot if freeze duration is >= timeout")
             if int(freezeDuration) >= int(timeout):
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT  : CPU freeze duration is as expected"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : CPU freeze duration is as expected")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : CPU freeze duration is not as expected"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : CPU freeze duration is not as expected")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("deepsleephal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

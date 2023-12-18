@@ -76,7 +76,7 @@ index- Audio port index
 audioCompression - Audio compression</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsSetAudioCompression to set the audio compression
-3 . DSHAL agent will invoke the api dsGetAudioCompression to get the audio compression 
+3 . DSHAL agent will invoke the api dsGetAudioCompression to get the audio compression
 4. TM checks if the audio compression is same as that set and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the audio compression is set</expected_output>
@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the audio compression is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -106,7 +106,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_AudioCompression_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if audioCompression is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioCompression")
@@ -120,76 +120,76 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         #Check current AudioMS12Decode status
         tdkTestObj = dshalObj.createTestStep('DSHal_IsAudioMS12Decode');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsAudioMS12Decode result: ", actualResult
+        print("DSHal_IsAudioMS12Decode result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             ms12Decode = tdkTestObj.getResultDetails();
-            print "AudioMS12Decode status retrieved", ms12Decode;
-            
+            print("AudioMS12Decode status retrieved", ms12Decode);
+
             audioCompression = 4;
-            print "Trying to set audio compression to ", audioCompression;
+            print("Trying to set audio compression to ", audioCompression);
             #Prmitive test case which associated to this Script
             tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioCompression');
             tdkTestObj.addParameter("audioCompression", audioCompression);
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_SetAudioCompression result: ", actualResult
+            print("DSHal_SetAudioCompression result: ", actualResult)
 
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "DSHal_SetAudioCompression: ", details
-        
+                print("DSHal_SetAudioCompression: ", details)
+
                 tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioCompression');
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetAudioCompression result: ", actualResult
+                print("DSHal_GetAudioCompression result: ", actualResult)
                 if expectedResult in actualResult:
                     tdkTestObj.setResultStatus("SUCCESS");
                     details = tdkTestObj.getResultDetails();
-                    print "AudioCompression retrieved", details
+                    print("AudioCompression retrieved", details)
                     if int(details) == audioCompression:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "AudioCompression set successfully";
+                        print("AudioCompression set successfully");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "AudioCompression setting failed";
+                        print("AudioCompression setting failed");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Failed to get audio compression";
+                    print("Failed to get audio compression");
             else:
-		if (ms12Decode == "false"):
+                if (ms12Decode == "false"):
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "DSHal_SetAudioCompression failed which is expected as ms12 is disabled";
-		else:
+                    print("DSHal_SetAudioCompression failed which is expected as ms12 is disabled");
+                else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DSHal_SetAudioCompression failed";
+                    print("DSHal_SetAudioCompression failed");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get AudioMS12Decode status";
+            print("Failed to get AudioMS12Decode status");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

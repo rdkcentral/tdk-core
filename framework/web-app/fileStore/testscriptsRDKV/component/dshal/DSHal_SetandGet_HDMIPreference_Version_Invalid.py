@@ -92,8 +92,8 @@ Checkpoint 2 Verify that the HDCP protocol version is not set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -107,7 +107,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_HDMIPreference_Version_Inval
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -119,24 +119,24 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         #Checking if display is connected
         tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsDisplayConnected result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "Display connection status: ", details
+            print("Display connection status: ", details)
             if details == "true":
                 tdkTestObj = dshalObj.createTestStep('DSHal_SetHdmiPreference');
                 tdkTestObj.addParameter("hdcpProtocol", hdcpProtocolVersion["VERSION_INVALID"]);
@@ -146,41 +146,41 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
                 actualResult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
                 if expectedResult in actualResult:
-                    print "DSHal_SetHdmiPreference failed for invalid version as expected";
-                    print details;
+                    print("DSHal_SetHdmiPreference failed for invalid version as expected");
+                    print(details);
                     tdkTestObj = dshalObj.createTestStep('DSHal_GetHdmiPreference');
                     expectedResult="SUCCESS";
                     #Execute the test case in STB
                     tdkTestObj.executeTestCase(expectedResult);
                     actualResult = tdkTestObj.getResult();
-                    print "DSHal_GetHdmiPreference result: ", actualResult
+                    print("DSHal_GetHdmiPreference result: ", actualResult)
                     if expectedResult in actualResult:
                         tdkTestObj.setResultStatus("SUCCESS");
                         details = tdkTestObj.getResultDetails();
-                        print "HdmiPreference retrieved", details
+                        print("HdmiPreference retrieved", details)
                         if int(details) != hdcpProtocolVersion["VERSION_INVALID"]:
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "HdmiPreference not set to invalid value";
+                            print("HdmiPreference not set to invalid value");
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "HdmiPreference set to invalid value";
+                            print("HdmiPreference set to invalid value");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Failed to get HdmiPreference";
+                        print("Failed to get HdmiPreference");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DSHal_SetHdmiPreference passed for invalid version which is not expected";
+                    print("DSHal_SetHdmiPreference passed for invalid version which is not expected");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Please test connecting a display device";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get display connection status";
+            print("Failed to get display connection status");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

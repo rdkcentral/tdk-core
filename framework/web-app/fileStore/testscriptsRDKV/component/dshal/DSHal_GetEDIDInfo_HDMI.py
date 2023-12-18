@@ -77,7 +77,7 @@ handle - Video port handle
 edid - edid info</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsGetDisplay to get the display handle for HDMI port
-3 . DSHAL agent will invoke the api dsGetEDID to get the edid 
+3 . DSHAL agent will invoke the api dsGetEDID to get the edid
 4. TM checks if the edid is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the edid is valid</expected_output>
@@ -91,8 +91,8 @@ Checkpoint 2 Verify that the edid is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -106,87 +106,87 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetEDIDInfo_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
-        tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
+    tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetVideoPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        #Checking if display is connected
+        tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVideoPort result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
+            print("Display connection status: ", details)
+            if details == "true":
+                #Getting display handle
+                tdkTestObj = dshalObj.createTestStep('DSHal_GetDisplay');
+                tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print("DSHal_GetDisplay result: ", actualResult)
 
-            #Checking if display is connected
-            tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_IsDisplayConnected result: ", actualResult
-
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "Display connection status: ", details
-                if details == "true":
-                    #Getting display handle
-                    tdkTestObj = dshalObj.createTestStep('DSHal_GetDisplay');
-                    tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+                if expectedResult in actualResult:
+                    details = tdkTestObj.getResultDetails();
+                    print(details)
+                    tdkTestObj = dshalObj.createTestStep('DSHal_GetEDID');
                     #Execute the test case in STB
                     tdkTestObj.executeTestCase(expectedResult);
                     actualResult = tdkTestObj.getResult();
-                    print "DSHal_GetDisplay result: ", actualResult
-
+                    print("DSHal_GetEDID result: ", actualResult);
                     if expectedResult in actualResult:
                         details = tdkTestObj.getResultDetails();
-                        print details
-                        tdkTestObj = dshalObj.createTestStep('DSHal_GetEDID');
-                        #Execute the test case in STB
-                        tdkTestObj.executeTestCase(expectedResult);
-                        actualResult = tdkTestObj.getResult();
-                        print "DSHal_GetEDID result: ", actualResult;
-                        if expectedResult in actualResult:
-                            details = tdkTestObj.getResultDetails();
-                            print details;
-                            edidInfo = details.split(',');
-                            print edidInfo;
-                            status = "success";
-                            for info in edidInfo:
-                                print info;
-                                data = info.split(':');
-                                if not data[1]:
-                                    status = "failure";
-                            if "success" in status:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "EDID info is valid";
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "EDID info is not valid";
+                        print(details);
+                        edidInfo = details.split(',');
+                        print(edidInfo);
+                        status = "success";
+                        for info in edidInfo:
+                            print(info);
+                            data = info.split(':');
+                            if not data[1]:
+                                status = "failure";
+                        if "success" in status:
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            print("EDID info is valid");
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "Failed to get EDID info";
+                            print("EDID info is not valid");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Failed to get display handle";
+                        print("Failed to get EDID info");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Please test connecting a display device";
+                    print("Failed to get display handle");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get display connection status";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "VideooPort handle not retrieved";
+            print("Failed to get display connection status");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("VideooPort handle not retrieved");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -98,25 +98,25 @@ if "SUCCESS" in loadmodulestatus.upper():
         if int(Num_Entries) > 0:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the Radio number of entries";
-            print "EXPECTED RESULT 1: Should get the Radio number of entries greater than 0";
-            print "ACTUAL RESULT 1: Radio Number Of Entries = ",Num_Entries;
+            print("TEST STEP 1: Get the Radio number of entries");
+            print("EXPECTED RESULT 1: Should get the Radio number of entries greater than 0");
+            print("ACTUAL RESULT 1: Radio Number Of Entries = ",Num_Entries);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1: Get the Radio number of entries";
-            print "EXPECTED RESULT 1: Should get the Radio number of entries greater than 0";
-            print "ACTUAL RESULT 1: Radio Number of Entries = ",Num_Entries;
+            print("TEST STEP 1: Get the Radio number of entries");
+            print("EXPECTED RESULT 1: Should get the Radio number of entries greater than 0");
+            print("ACTUAL RESULT 1: Radio Number of Entries = ",Num_Entries);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wifi_getRadioNumberOfEntries() operation failed";
+        print("wifi_getRadioNumberOfEntries() operation failed");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

@@ -72,7 +72,7 @@ handle - Video port handle
 resolutions - Resolutions</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsGetVideoPort to get the display handle for non HDMI port
-3 . DSHAL agent will invoke the api dsSupportedTvResolutions to get the resolutions 
+3 . DSHAL agent will invoke the api dsSupportedTvResolutions to get the resolutions
 4. TM checks if the resolutions is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is failure
 Checkpoint 2 Verify that the resolutions is not retrieved</expected_output>
@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the resolutions is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,71 +102,71 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetSupportedTvResolutions_NonHDMIPort'
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 capable = deviceCapabilities.getconfig(dshalObj,"videoPort","RF");
 
 if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
-        dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
-        tdkTestObj.addParameter("portType", videoPortType["RF"]);
+    dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
+    tdkTestObj.addParameter("portType", videoPortType["RF"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetVideoPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        #Checking if display is connected
+        tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVideoPort result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
-
-            #Checking if display is connected
-            tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_IsDisplayConnected result: ", actualResult
-
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
+            print("Display connection status: ", details)
+            if details == "true":
                 details = tdkTestObj.getResultDetails();
-                print "Display connection status: ", details
-                if details == "true":
-                    details = tdkTestObj.getResultDetails();
-                    print details
-                    expectedResult = "FAILURE";
-                    expectedOutput = "INVALID HANDLE";
-                    tdkTestObj = dshalObj.createTestStep('DSHal_GetSupportedTvResolutions');
-                    #Execute the test case in STB
-                    tdkTestObj.executeTestCase(expectedResult);
-                    actualResult = tdkTestObj.getResult();
-                    print "DSHal_GetSupportedTvResolutions result: ", actualResult;
-                    resolutions = tdkTestObj.getResultDetails();
-                    print "Supported Tv Resolutions: ", resolutions;
-                    if expectedResult in actualResult and expectedOutput in resolutions:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "Supported Tv Resolutions not retrieved which is expected for non HDMI port";
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "Supported Tv Resolutions retrieved which is not expected for non HDMI port";
+                print(details)
+                expectedResult = "FAILURE";
+                expectedOutput = "INVALID HANDLE";
+                tdkTestObj = dshalObj.createTestStep('DSHal_GetSupportedTvResolutions');
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print("DSHal_GetSupportedTvResolutions result: ", actualResult);
+                resolutions = tdkTestObj.getResultDetails();
+                print("Supported Tv Resolutions: ", resolutions);
+                if expectedResult in actualResult and expectedOutput in resolutions:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Supported Tv Resolutions not retrieved which is expected for non HDMI port");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Please test connecting a display device";
+                    print("Supported Tv Resolutions retrieved which is not expected for non HDMI port");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get display connection status";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "VideoPort handle not retrieved";
+            print("Failed to get display connection status");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("VideoPort handle not retrieved");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

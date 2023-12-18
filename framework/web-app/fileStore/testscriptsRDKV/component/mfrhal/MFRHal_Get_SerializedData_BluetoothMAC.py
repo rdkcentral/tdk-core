@@ -80,8 +80,8 @@ Checkpoint 2. Verify that the serialized data retrieved is not empty</expected_o
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import re;
 
 #Test component to be tested
@@ -94,7 +94,7 @@ port = <port>
 mfrhalObj.configureTestCase(ip,port,'MFRHal_Get_SerializedData_BluetoothMAC');
 
 def checkIfValidMac (mac):
-    #Regular expression to check if its a valid mac 
+    #Regular expression to check if its a valid mac
     regex = ("^([0-9A-Fa-f]{2}[:-])" +
              "{5}([0-9A-Fa-f]{2})|" +
              "([0-9a-fA-F]{4}\\." +
@@ -107,7 +107,7 @@ def checkIfValidMac (mac):
 
 #Get the result of connection with test component and DUT
 result =mfrhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 mfrhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -126,22 +126,22 @@ if "SUCCESS" in result.upper():
 
     #Set the result status of execution
     if (actualresult == expectedresult):
-        print "Successfully executed MfrHal_GetSerializedData"
+        print("Successfully executed MfrHal_GetSerializedData")
         bluetoothMAC = str(tdkTestObj.getResultDetails())
         if (bluetoothMAC and checkIfValidMac(bluetoothMAC)):
-            print "MfrHal_GetSerializedData: Bluetooth MAC : ", bluetoothMAC
+            print("MfrHal_GetSerializedData: Bluetooth MAC : ", bluetoothMAC)
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Bluetooth MAC data retrieved is empty or incorrect"
+            print("Bluetooth MAC data retrieved is empty or incorrect")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Failed to execute MfrHal_GetSerializedData"
+        print("Failed to execute MfrHal_GetSerializedData")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     mfrhalObj.unloadModule("mfrhal");
 
 else:
-    print "Failed to load mfrhal module\n";
+    print("Failed to load mfrhal module\n");
     #Set the module loading status
     mfrhalObj.setLoadModuleStatus("FAILURE");

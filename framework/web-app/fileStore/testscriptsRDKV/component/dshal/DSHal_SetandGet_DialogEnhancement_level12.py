@@ -88,8 +88,8 @@ Checkpoint 2 Verify that the level is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -104,7 +104,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_DialogEnhancement_level12');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if dialogenhancement is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"DialogEnhancement")
@@ -118,60 +118,60 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         level = 12;
-        print "Trying to set DialogEnhancement to ", level;
+        print("Trying to set DialogEnhancement to ", level);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetDialogEnhancement');
         tdkTestObj.addParameter("level", level);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetDialogEnhancement result: ", actualResult
+        print("DSHal_SetDialogEnhancement result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetDialogEnhancement: ", details
-        
+            print("DSHal_SetDialogEnhancement: ", details)
+
             tdkTestObj = dshalObj.createTestStep('DSHal_GetDialogEnhancement');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetDialogEnhancement result: ", actualResult
+            print("DSHal_GetDialogEnhancement result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "DialogEnhancement retrieved", details
+                print("DialogEnhancement retrieved", details)
                 if int(details) == level:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "DialogEnhancement set successfully";
+                    print("DialogEnhancement set successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DialogEnhancement setting failed";
+                    print("DialogEnhancement setting failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get DialogEnhancement";
+                print("Failed to get DialogEnhancement");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_DialogEnhancement failed";
+            print("DSHal_DialogEnhancement failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

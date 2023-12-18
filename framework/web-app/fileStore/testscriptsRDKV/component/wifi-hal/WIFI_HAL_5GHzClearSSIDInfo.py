@@ -94,8 +94,8 @@ if "SUCCESS" in loadmodulestatus.upper():
     connectresult = isConnectedtoSSID(obj,radioIndex);
     ssid = tdkvWifiUtility.ssid_5ghz_name;
     if "TRUE" in connectresult:
-        print "TEST STEP 1 : To invoke wifi_clearSSIDInfo api to clear configuration";
-        print "EXPECTED RESULT : Should clear ssid info from wpa_supplicant.conf";
+        print("TEST STEP 1 : To invoke wifi_clearSSIDInfo api to clear configuration");
+        print("EXPECTED RESULT : Should clear ssid info from wpa_supplicant.conf");
         tdkTestObj = obj.createTestStep("WIFI_HAL_ClearSSIDInfo");
         tdkTestObj.addParameter("radioIndex",1);
         expectedresult="SUCCESS";
@@ -104,11 +104,11 @@ if "SUCCESS" in loadmodulestatus.upper():
         details = tdkTestObj.getResultDetails();
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT  : wpa_supplicant.conf file cleared successfully"
-            print "Value Returned : %s\n" %(details)
+            print("ACTUAL RESULT  : wpa_supplicant.conf file cleared successfully")
+            print("Value Returned : %s\n" %(details))
 
-            print "TEST STEP 2 : To invoke wifi_lastConnected_Endpoint to get the Access point details";
-            print "EXPECTED RESULT : Should return end point details";
+            print("TEST STEP 2 : To invoke wifi_lastConnected_Endpoint to get the Access point details");
+            print("EXPECTED RESULT : Should return end point details");
             tdkTestObj = obj.createTestStep("WIFI_HAL_LastConnected_Endpoint");
             #Expected to get FIALURE since last cnnected ssid info is cleared.
             expectedresult = "FAILURE";
@@ -117,31 +117,31 @@ if "SUCCESS" in loadmodulestatus.upper():
             details = tdkTestObj.getResultDetails();
             if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT  : last connected end point info received"
-                print "Value Returned : %s\n" %(details)
+                print("ACTUAL RESULT  : last connected end point info received")
+                print("Value Returned : %s\n" %(details))
 
-                print "TEST STEP 3 : Check wifi_lastConnected_Endpoint results"
-                print "EXPECTED RESULT : wifi_lastConnected_Endpoint results should not have connected ssid info"
+                print("TEST STEP 3 : Check wifi_lastConnected_Endpoint results")
+                print("EXPECTED RESULT : wifi_lastConnected_Endpoint results should not have connected ssid info")
                 if ssid not in details:
-                    print "ACTUAL RESULT : clearSSIDInfo cleared configuration successfully"
-                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                    print("ACTUAL RESULT : clearSSIDInfo cleared configuration successfully")
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "ACTUAL RESULT : clearSSIDInfo failed to clear configuration"
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print("ACTUAL RESULT : clearSSIDInfo failed to clear configuration")
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "ACTUAL RESULT : ",details
-                print "[TEST EXECUTION RESULT] : FAILURE"
+                print("ACTUAL RESULT : ",details)
+                print("[TEST EXECUTION RESULT] : FAILURE")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "ACTUAL RESULT : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE"
+            print("ACTUAL RESULT : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE")
             tdkTestObj.setResultStatus("FAILURE");
 
         # Disconnecting from the connected End Point, since conf file is cleared as
         # part of this test
-        print "Disconnect from the End Point : SSID : ",ssid
+        print("Disconnect from the End Point : SSID : ",ssid)
         tdkTestObj = obj.createTestStep("WIFI_HAL_DisconnectEndpoint")
         tdkTestObj.addParameter("radioIndex",1);
         tdkTestObj.addParameter("ssid",ssid);
@@ -149,21 +149,21 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
         else:
             tdkTestObj.setResultStatus("FAILURE");
 
     else:
-        print "Connecting to SSID operation failed"
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("Connecting to SSID operation failed")
+        print("[TEST EXECUTION RESULT] : FAILURE")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 
 
 

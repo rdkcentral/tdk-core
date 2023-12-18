@@ -93,7 +93,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Get_ListOf_Adapters');
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -109,22 +109,22 @@ if "SUCCESS" in result.upper():
 
     #Set the result status of execution
     if (actualresult == expectedresult):
-        print "Successfully executed BluetoothHal_GetListOfAdapters"
+        print("Successfully executed BluetoothHal_GetListOfAdapters")
         numOfAdapters = tdkTestObj.getResultDetails();
-        print "BluetoothHal_GetListOfAdapters: Number of adapters : ", numOfAdapters
-        if (0 < numOfAdapters):
+        print(("BluetoothHal_GetListOfAdapters: Number of adapters : ", numOfAdapters))
+        if (0 < int(numOfAdapters)):
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Atleast default adapter should be present in the device"
+            print("Atleast default adapter should be present in the device")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Failed to execute BluetoothHal_GetListOfAdapters"
+        print("Failed to execute BluetoothHal_GetListOfAdapters")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
 
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

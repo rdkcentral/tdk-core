@@ -86,8 +86,8 @@ enable - enable</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -101,46 +101,46 @@ dshalObj.configureTestCase(ip,port,'DSHal_EnableAudioAtmosOutputMode_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
-        tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
+    tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetAudioPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        enable = 1;
+        tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioAtmosOutputMode');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
+        tdkTestObj.addParameter("enable",1);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioPort result: ", actualResult
-
+        print("DSHal_SetAudioAtmosOutputMode result: ", actualResult)
+        details = tdkTestObj.getResultDetails();
+        print(details);
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            details = tdkTestObj.getResultDetails();
-            print details;
-
-            enable = 1;
-            tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioAtmosOutputMode');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            tdkTestObj.addParameter("enable",1);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_SetAudioAtmosOutputMode result: ", actualResult
-            details = tdkTestObj.getResultDetails();
-            print details;
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print "SetAudioAtmosOutputMode call success"
-            else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "SetAudioAtmosOutputMode call Failed";
-
+            print("SetAudioAtmosOutputMode call success")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AudioPort handle not retrieved";
+            print("SetAudioAtmosOutputMode call Failed");
 
-        dshalObj.unloadModule("dshal");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle not retrieved");
+
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

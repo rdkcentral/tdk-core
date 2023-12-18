@@ -83,8 +83,8 @@ Checkpoint 2 Verify that the hdmi number of inputs is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -99,7 +99,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetNumOfInputs_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if HdmiIn is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"HdmiIn")
@@ -112,28 +112,28 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_HdmiInGetNumberOfInputs result: ", actualResult
+    print("DSHal_HdmiInGetNumberOfInputs result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "HdmiInNumberOfInputs: ", details;
+        print("HdmiInNumberOfInputs: ", details);
         if details:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "HdmiInGetNumberOfInputs retrieves valid value";
+            print("HdmiInGetNumberOfInputs retrieves valid value");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "HdmiInGetNumberOfInputs not valid";
+            print("HdmiInGetNumberOfInputs not valid");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "HdmiInGetNumberOfInputs not retrieved";
+        print("HdmiInGetNumberOfInputs not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

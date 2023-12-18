@@ -91,8 +91,8 @@ Checkpoint 2 Verify that the mute status is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -106,7 +106,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetAndGetAudioMuteDisable_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -118,16 +118,16 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         muted = 0;
         muteMap = {"true":1, "false":0};
 
-        print "Trying to set the audio mute status to false";
+        print("Trying to set the audio mute status to false");
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetAudioMute');
         #Set AudioMute status to false
@@ -135,42 +135,42 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetAudioMute result: ", actualResult
+        print("DSHal_SetAudioMute result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetAudioMute: ", details
-        
+            print("DSHal_SetAudioMute: ", details)
+
             #Check current AudioMute status
             tdkTestObj = dshalObj.createTestStep('DSHal_IsAudioMute');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_IsAudioMute result: ", actualResult
+            print("DSHal_IsAudioMute result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "AudioMute status retrieved", details
+                print("AudioMute status retrieved", details)
                 #Check if AudioMute status is set to false
                 if muteMap[details] == muted:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "AudioMute status set successfully to false";
+                    print("AudioMute status set successfully to false");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "AudioMute status not set to false";
+                    print("AudioMute status not set to false");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get AudioMute status";
+                print("Failed to get AudioMute status");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_SetAudioMute failed";
+            print("DSHal_SetAudioMute failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

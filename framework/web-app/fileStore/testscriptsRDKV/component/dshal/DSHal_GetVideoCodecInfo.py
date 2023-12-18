@@ -88,13 +88,13 @@ imagename= tdklib.getImageName(ip,port);
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : Get the video codec information using dsGetVideoCodecInfo API"
-    print "EXEPECTED RESULT : Should get the codec profile and level info for the supported platforms XG1V4,XI5 & XI6"
+    print("\nTEST STEP1 : Get the video codec information using dsGetVideoCodecInfo API")
+    print("EXEPECTED RESULT : Should get the codec profile and level info for the supported platforms XG1V4,XI5 & XI6")
     tdkTestObj = obj.createTestStep('DSHal_GetVideoCodecInfo');
     codingFormat = "MPEGH"
     tdkTestObj.addParameter("format",codingFormat);
@@ -106,28 +106,26 @@ if "SUCCESS" in loadModuleStatus.upper():
         if ("AX014" or "PX051" or "AX061") in imagename:
             if ("Profile" and "level") in details:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT  : dsGetVideoCodecInfo call is success";
-                print "Value Returned : ",details.split("|")
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : dsGetVideoCodecInfo call is success");
+                print("Value Returned : ",details.split("|"))
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT : Not Supported Codec";
-                print "Value Returned : ",details
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT : Not Supported Codec");
+                print("Value Returned : ",details)
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT  : dsGetVideoCodecInfo call returned dsERR_OPERATION_NOT_SUPPORTED"
-            print "Value Returned : ",details
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT  : dsGetVideoCodecInfo call returned dsERR_OPERATION_NOT_SUPPORTED")
+            print("Value Returned : ",details)
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

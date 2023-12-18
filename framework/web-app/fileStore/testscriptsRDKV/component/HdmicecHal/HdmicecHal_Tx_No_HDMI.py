@@ -64,7 +64,7 @@
     <test_type>Positive</test_type>
     <test_setup>XG,XI3,XI6,Video_Accelerator</test_setup>
     <pre_requisite>1. TDK Agent should be up and running
-2. Required a setup without TV connection or setup with non CEC enabled TV 
+2. Required a setup without TV connection or setup with non CEC enabled TV
 3.  HdmiCecOpen should open a CEC driver instance successfully and iarmbus event should be obtained from device ready call back.
 </pre_requisite>
     <api_or_interface_used>int HdmiCecOpen(int *handle)
@@ -92,8 +92,8 @@ opcode - cec frame opcode</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("hdmicechal","1");
@@ -106,7 +106,7 @@ obj.configureTestCase(ip,port,'HdmicecHal_Tx_No_HDMI');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -119,8 +119,8 @@ if "SUCCESS" in loadModuleStatus.upper():
     # and expecting not acknowledged sent status, since there is no target
     # device or no CEC feature in target device
 
-    print "\nTEST STEP : Register HdmiCec Tx & Rx call back"
-    print "EXEPECTED RESULT : Functions should get registered"
+    print("\nTEST STEP : Register HdmiCec Tx & Rx call back")
+    print("EXEPECTED RESULT : Functions should get registered")
     tdkTestObj = obj.createTestStep('HdmicecHal_SetTxCallback');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult1 = tdkTestObj.getResult();
@@ -131,39 +131,38 @@ if "SUCCESS" in loadModuleStatus.upper():
     details2 = tdkTestObj.getResultDetails();
     if expectedResult in actualResult1 and expectedResult in actualResult2:
         tdkTestObj.setResultStatus("SUCCESS");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n")
 
-        print "\nTEST STEP : Transmit CEC Frame to get CEC Version"
-        print "EXEPECTED RESULT : Should receive not acknowledged send status"
+        print("\nTEST STEP : Transmit CEC Frame to get CEC Version")
+        print("EXEPECTED RESULT : Should receive not acknowledged send status")
         tdkTestObj = obj.createTestStep('HdmicecHal_Tx');
         expectedResult = "FAILURE"
         version_opcode = "9F"
-        print "Opcode to be sent: GET_CEC_VERSION: ",version_opcode
+        print("Opcode to be sent: GET_CEC_VERSION: ",version_opcode)
         tdkTestObj.addParameter("opcode",version_opcode);
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if expectedResult in actualResult and "HDMI_CEC_IO_SENT_BUT_NOT_ACKD" in details:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Value Retuned  :",details
-            print "ACTUAL RESULT  : CEC Version frame transmitted but not acknowledged"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("Value Retuned  :",details)
+            print("ACTUAL RESULT  : CEC Version frame transmitted but not acknowledged")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Value Retuned  :",details
-            print "ACTUAL RESULT  : CEC Version frame transmitted & acknowledged"
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("Value Retuned  :",details)
+            print("ACTUAL RESULT  : CEC Version frame transmitted & acknowledged")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("hdmicechal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-

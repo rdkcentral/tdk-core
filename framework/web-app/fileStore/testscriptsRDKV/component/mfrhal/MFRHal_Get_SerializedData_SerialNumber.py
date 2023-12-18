@@ -80,8 +80,8 @@ Checkpoint 2. Verify that the serialized data retrieved is not empty</expected_o
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 mfrhalObj = tdklib.TDKScriptingLibrary("mfrhal","1");
@@ -94,7 +94,7 @@ mfrhalObj.configureTestCase(ip,port,'MFRHal_Get_SerializedData_SerialNumber');
 
 #Get the result of connection with test component and DUT
 result =mfrhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 mfrhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -113,22 +113,22 @@ if "SUCCESS" in result.upper():
 
     #Set the result status of execution
     if (actualresult == expectedresult):
-        print "Successfully executed MfrHal_GetSerializedData"
+        print("Successfully executed MfrHal_GetSerializedData")
         serialNumber = str(tdkTestObj.getResultDetails())
         if (serialNumber):
-            print "MfrHal_GetSerializedData: Serial Number : ", serialNumber
+            print("MfrHal_GetSerializedData: Serial Number : ", serialNumber)
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Serial Number data retrieved is empty or incorrect"
+            print("Serial Number data retrieved is empty or incorrect")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Failed to execute MfrHal_GetSerializedData"
+        print("Failed to execute MfrHal_GetSerializedData")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     mfrhalObj.unloadModule("mfrhal");
 
 else:
-    print "Failed to load mfrhal module\n";
+    print("Failed to load mfrhal module\n");
     #Set the module loading status
     mfrhalObj.setLoadModuleStatus("FAILURE");

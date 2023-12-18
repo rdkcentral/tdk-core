@@ -67,7 +67,7 @@
     <api_or_interface_used>dsHdmiInSelectZoomMode (dsVideoZoom_t requestedZoomMode)</api_or_interface_used>
     <input_parameters>requestedZoomMode - Zoom mode</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsHdmiInSelectZoomMode 
+2 . DSHAL agent will invoke the api dsHdmiInSelectZoomMode
 3. TM checks if the api call is success and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success</expected_output>
     <priority>High</priority>
@@ -80,8 +80,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -96,7 +96,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_HdmiIn_SelectZoomMode_Full');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if HDMIIn is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"HdmiIn");
@@ -110,22 +110,22 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_HdmiInSelectZoomMode result: ", actualResult;
+    print("DSHal_HdmiInSelectZoomMode result: ", actualResult);
     details = tdkTestObj.getResultDetails();
-    print details
+    print(details)
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Zoom mode selected";
+        print("Zoom mode selected");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "DSHal_HdmiInSelectZoomMode call failed";
+        print("DSHal_HdmiInSelectZoomMode call failed");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -103,7 +103,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Set_Get_AdapterPowerStat
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -116,52 +116,52 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-	
+
     #Check the result of execution
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetAdapter executed successfully"
+        print("BluetoothHal_GetAdapter executed successfully")
         adapterPath = tdkTestObj.getResultDetails();
-	print "BluetoothHal_GetAdapter : Default adapter path : ", adapterPath
-	if (adapterPath):
+        print(("BluetoothHal_GetAdapter : Default adapter path : ", adapterPath))
+        if (adapterPath):
             tdkTestObj.setResultStatus("SUCCESS");
-	    #Set the power status to OFF
+            #Set the power status to OFF
             powerOFF = 0
-	    tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterPower');
-	    #Set the adapter path to the default adapter path
-	    tdkTestObj.addParameter("adapter_path", adapterPath)
-	    tdkTestObj.addParameter("power_status", powerOFF)
-				
-	    #Execute the test case in DUT
-            print "Setting bluetooth adapter power OFF"
+            tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterPower');
+            #Set the adapter path to the default adapter path
+            tdkTestObj.addParameter("adapter_path", adapterPath)
+            tdkTestObj.addParameter("power_status", powerOFF)
+
+            #Execute the test case in DUT
+            print("Setting bluetooth adapter power OFF")
             tdkTestObj.executeTestCase(expectedresult);
-			
-	    #Get the result of execution
+
+            #Get the result of execution
             actualresult = tdkTestObj.getResult();
-			   
-	    if (actualresult == expectedresult):
-	        print "BluetoothHal_SetAdapterPower executed successfully"
-	        tdkTestObj.setResultStatus("SUCCESS");	   
-	        #Check if the value is powered OFF by retrieving the power
+
+            if (actualresult == expectedresult):
+                print("BluetoothHal_SetAdapterPower executed successfully")
+                tdkTestObj.setResultStatus("SUCCESS");
+                #Check if the value is powered OFF by retrieving the power
                 #Primitive to get the adapter power
                 tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapterPower');
-		#Set the adapter path to the default adapter path
-		tdkTestObj.addParameter("adapter_path", adapterPath)
-			
-		#Execute the test case in DUT
+                #Set the adapter path to the default adapter path
+                tdkTestObj.addParameter("adapter_path", adapterPath)
+
+                #Execute the test case in DUT
                 tdkTestObj.executeTestCase(expectedresult);
-			
-		#Get the result of execution
+
+                #Get the result of execution
                 actualresult = tdkTestObj.getResult();
-			
-		if (actualresult == expectedresult):
-                    print "BluetoothHal_GetAdapterPower executed successfully"
+
+                if (actualresult == expectedresult):
+                    print("BluetoothHal_GetAdapterPower executed successfully")
                     currentPowerStatus = int(tdkTestObj.getResultDetails())
-		    print ("BluetoothHal_GetAdapterPower : Current power status of default adapter(%s) is : %d" %(adapterPath, currentPowerStatus))
-				   
-		    if (powerOFF == currentPowerStatus):
-	                print ("%s adapter powered OFF successfully" %(adapterPath))
-			tdkTestObj.setResultStatus("SUCCESS");
-		        
+                    print(("BluetoothHal_GetAdapterPower : Current power status of default adapter(%s) is : %d" %(adapterPath, currentPowerStatus)))
+
+                    if (powerOFF == currentPowerStatus):
+                        print(("%s adapter powered OFF successfully" %(adapterPath)))
+                        tdkTestObj.setResultStatus("SUCCESS");
+
                         #Reboot the DUT
                         bluetoothhalObj.initiateReboot()
                         time.sleep(120)
@@ -169,56 +169,56 @@ if "SUCCESS" in result.upper():
                         #Check the bluetooth adapter power is reset to ON after reboot
                         #Primitive to get the adapter power
                         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapterPower');
-		        #Set the adapter path to the default adapter path
-		        tdkTestObj.addParameter("adapter_path", adapterPath)
-			
-		        #Execute the test case in DUT
+                        #Set the adapter path to the default adapter path
+                        tdkTestObj.addParameter("adapter_path", adapterPath)
+
+                        #Execute the test case in DUT
                         tdkTestObj.executeTestCase(expectedresult);
-			
-		        #Get the result of execution
+
+                        #Get the result of execution
                         actualresult = tdkTestObj.getResult();
-			
-		        if (actualresult == expectedresult):
-                            print "BluetoothHal_GetAdapterPower executed successfully"
+
+                        if (actualresult == expectedresult):
+                            print("BluetoothHal_GetAdapterPower executed successfully")
                             currentPowerStatus = int(tdkTestObj.getResultDetails())
                             #Verify that bluetooth adapter power is 1 (ON) after reboot
-			    if (1 == currentPowerStatus):
-			        print ("%s adapter powered ON successfully after reboot" %(adapterPath))
-			        tdkTestObj.setResultStatus("SUCCESS");
+                            if (1 == currentPowerStatus):
+                                print(("%s adapter powered ON successfully after reboot" %(adapterPath)))
+                                tdkTestObj.setResultStatus("SUCCESS");
                             else:
-			        print "Adapter not powered ON correctly after reboot"
-			        tdkTestObj.setResultStatus("FAILURE");
-				#Reset the bluetooth adapter power to ON state
+                                print("Adapter not powered ON correctly after reboot")
+                                tdkTestObj.setResultStatus("FAILURE");
+                                #Reset the bluetooth adapter power to ON state
                                 actualresult = setAdapterPowerON (bluetoothhalObj, adapterPath)
 
                                 if (actualresult == expectedresult):
-                                    print "Successfully reset adapter power"							  
+                                    print("Successfully reset adapter power")
                                 else:
-				    print "Failed to power ON adapter"
-				    tdkTestObj.setResultStatus("FAILURE");
+                                    print("Failed to power ON adapter")
+                                    tdkTestObj.setResultStatus("FAILURE");
                         else:
-		            print "BluetoothHal_GetAdapterPower: failed"
-			    tdkTestObj.setResultStatus("FAILURE");
+                            print("BluetoothHal_GetAdapterPower: failed")
+                            tdkTestObj.setResultStatus("FAILURE");
                     else:
-		        print "Adapter not powered OFF correctly"
-			tdkTestObj.setResultStatus("FAILURE");
-		else:
-		    print "BluetoothHal_GetAdapterPower: failed"
-		    tdkTestObj.setResultStatus("FAILURE");
-	    else:
-		print "BluetoothHal_SetAdapterPower: failed"
-		tdkTestObj.setResultStatus("FAILURE");
-	else:
-	    print "Default adapter path is empty"
-	    tdkTestObj.setResultStatus("FAILURE");
+                        print("Adapter not powered OFF correctly")
+                        tdkTestObj.setResultStatus("FAILURE");
+                else:
+                    print("BluetoothHal_GetAdapterPower: failed")
+                    tdkTestObj.setResultStatus("FAILURE");
+            else:
+                print("BluetoothHal_SetAdapterPower: failed")
+                tdkTestObj.setResultStatus("FAILURE");
+        else:
+            print("Default adapter path is empty")
+            tdkTestObj.setResultStatus("FAILURE");
     else:
-	print "BluetoothHal_GetAdapter: failed"
-	tdkTestObj.setResultStatus("FAILURE");
+        print("BluetoothHal_GetAdapter: failed")
+        tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
-	
+
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

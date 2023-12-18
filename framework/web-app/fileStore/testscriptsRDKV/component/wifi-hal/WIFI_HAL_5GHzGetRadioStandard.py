@@ -105,15 +105,15 @@ if "SUCCESS" in loadmodulestatus.upper():
         actualresult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if expectedresult in actualresult:
-	    print details
-	    output = details.split(":")[1].split(",gOnly")[0].split("=")[1].split(",");
-	    radioStds = [s.strip() for s in output];
+            print(details)
+            output = details.split(":")[1].split(",gOnly")[0].split("=")[1].split(",");
+            radioStds = [s.strip() for s in output];
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the Radio Standards for 5GHz";
-            print "EXPECTED RESULT 1: Should get the Radio Standards for 5GHz";
-            print "ACTUAL RESULT 1: %s" %output
+            print("TEST STEP 1: Get the Radio Standards for 5GHz");
+            print("EXPECTED RESULT 1: Should get the Radio Standards for 5GHz");
+            print("ACTUAL RESULT 1: %s" %output)
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
 
             #Script to load the configuration file of the component
             tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
@@ -125,54 +125,53 @@ if "SUCCESS" in loadmodulestatus.upper():
             tdkTestObj.executeTestCase(expectedresult);
             actualresult = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
-	    print "details:",details
+            print("details:",details)
             if expectedresult in actualresult:
                 List = details.split(":")[1].split(",");
                 SupportedStds = [s.strip() for s in List];
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "TEST STEP 2: Get the Radio Supported Standards for 5GHz";
-                print "EXPECTED RESULT 2: Should get the Radio Supported Standards for 5GHz";
-                print "ACTUAL RESULT 2: %s" %SupportedStds;
+                print("TEST STEP 2: Get the Radio Supported Standards for 5GHz");
+                print("EXPECTED RESULT 2: Should get the Radio Supported Standards for 5GHz");
+                print("ACTUAL RESULT 2: %s" %SupportedStds);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : SUCCESS";
+                print("[TEST EXECUTION RESULT] : SUCCESS");
 
-		if set(radioStds).issubset(SupportedStds):
-		    tdkTestObj.setResultStatus("SUCCESS");
-		    print "TEST STEP 3: Check if the current radio standard is present in supported radio standard list"
-		    print "EXPECTED RESULT 3 :The current radio standard should be present in supported standard list"
-		    print "ACTUAL RESULT 3 : Radio standard is present in supported standard list"
-		    print "Radio Standards: %s"%radioStds
-		    print"Supported Radio Standards :%s"%SupportedStds
-		    #Get the result of execution
-                    print "[TEST EXECUTION RESULT] : SUCCESS";
-		else:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print "TEST STEP 3: Check if the current radio standard is present in supported radio standard list"
-                    print "EXPECTED RESULT 3 :The current radio standard should be present in supported standard list"
-                    print "ACTUAL RESULT 3 : Radio standard is not present in supported standard list"
-                    print "Radio Standards: %s"%radioStds
-                    print"Supported Radio Standards :%s"%SupportedStds
+                if set(radioStds).issubset(SupportedStds):
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("TEST STEP 3: Check if the current radio standard is present in supported radio standard list")
+                    print("EXPECTED RESULT 3 :The current radio standard should be present in supported standard list")
+                    print("ACTUAL RESULT 3 : Radio standard is present in supported standard list")
+                    print("Radio Standards: %s"%radioStds)
+                    print("Supported Radio Standards :%s"%SupportedStds)
                     #Get the result of execution
-                    print "[TEST EXECUTION RESULT] : FAILURE";
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("TEST STEP 3: Check if the current radio standard is present in supported radio standard list")
+                    print("EXPECTED RESULT 3 :The current radio standard should be present in supported standard list")
+                    print("ACTUAL RESULT 3 : Radio standard is not present in supported standard list")
+                    print("Radio Standards: %s"%radioStds)
+                    print("Supported Radio Standards :%s"%SupportedStds)
+                    #Get the result of execution
+                    print("[TEST EXECUTION RESULT] : FAILURE");
             else:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
-                print "TEST STEP 1: Get the Radio Supported Standards for 5GHz";
-                print "EXPECTED RESULT 1: Should get the Radio Supported Standards for 5GHz";
-                print "ACTUAL RESULT 1: %s" %SupportedStds;
+                print("TEST STEP 1: Get the Radio Supported Standards for 5GHz");
+                print("EXPECTED RESULT 1: Should get the Radio Supported Standards for 5GHz");
+                print("ACTUAL RESULT 1: %s" %SupportedStds);
                 #Get the result of execution
-                print "[TEST EXECUTION RESULT] : FAILURE";
+                print("[TEST EXECUTION RESULT] : FAILURE");
         else:
-	    print "wifi_getRadioStandards() api call failed"
+            print("wifi_getRadioStandards() api call failed")
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
-
+    print("Module loading failed");

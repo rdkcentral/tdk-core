@@ -76,7 +76,7 @@ index- Audio port index
 handle - Audio port handle
 encoding - Audio port encoding</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsSetAudioEncoding to get the encoding type 
+2 . DSHAL agent will invoke the api dsSetAudioEncoding to get the encoding type
 3. TM checks if the encoding type is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the encoding type is valid</expected_output>
@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the encoding type is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -105,49 +105,49 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetAudioEncoding_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
-        tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioPort');
+    tdkTestObj.addParameter("portType", audioPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetAudioPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioEncoding');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioPort result: ", actualResult
-
+        print("DSHal_GetAudioEncoding result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
-
-            tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioEncoding');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_GetAudioEncoding result: ", actualResult
-            if expectedResult in actualResult:
+            print("AudioEncoding retrieved", details)
+            if int(details) == audioEncodingType["PCM"] or int(details) == audioEncodingType["AC3"] or int(details) == audioEncodingType["EAC3"] or int(details) == audioEncodingType["DISPLAY"]:
                 tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "AudioEncoding retrieved", details
-                if int(details) == audioEncodingType["PCM"] or int(details) == audioEncodingType["AC3"] or int(details) == audioEncodingType["EAC3"] or int(details) == audioEncodingType["DISPLAY"]:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    print "AudioEncoding has valid value for HDMI";
-                else:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print "AudioEncoding value is not valid for HDMI";
+                print("AudioEncoding has valid value for HDMI");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get AudioEncoding value";
-
+                print("AudioEncoding value is not valid for HDMI");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AudioPort handle not retrieved";
+            print("Failed to get AudioEncoding value");
 
-        dshalObj.unloadModule("dshal");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle not retrieved");
+
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

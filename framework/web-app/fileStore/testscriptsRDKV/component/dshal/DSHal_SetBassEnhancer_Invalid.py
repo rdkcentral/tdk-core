@@ -98,7 +98,7 @@ port = <port>
 dshalObj.configureTestCase(ip,port,'DSHal_SetBassEnhancer_Invalid');
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 #Check if BassEnhancer is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"BassEnhancer");
 if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
@@ -110,37 +110,36 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
         boost = 120;
-        print "Trying to set Bass Enhancer to", boost;
+        print("Trying to set Bass Enhancer to", boost);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetBassEnhancer');
         tdkTestObj.addParameter("boost", boost);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetBassEnhancer result: ", actualResult
+        print("DSHal_SetBassEnhancer result: ", actualResult)
         expectedResult="FAILURE";
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetBassEnhancer failed for invalid boost";
+            print("DSHal_SetBassEnhancer failed for invalid boost");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_DialogEnhancement success for invalid boost";
+            print("DSHal_DialogEnhancement success for invalid boost");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
     dshalObj.unloadModule("dshal");
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 else:
-    print "Module load failed";
-
+    print("Module load failed");

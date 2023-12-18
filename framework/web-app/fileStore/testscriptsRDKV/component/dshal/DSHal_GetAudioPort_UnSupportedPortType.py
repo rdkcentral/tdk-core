@@ -92,7 +92,7 @@ dshalObj = tdklib.TDKScriptingLibrary("dshal","1");
 
 def getList(dict):
     list = []
-    for key in dict.keys():
+    for key in list(dict.keys()):
         list.append(key)
     return list
 
@@ -110,7 +110,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetAudioPort_UnSupportedPortType');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 UnSupportedPortType = Get_UnsupportedPortType();
 
@@ -123,18 +123,18 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Audio port handle retrieved for invalid port type";
+        print("Audio port handle retrieved for invalid port type");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

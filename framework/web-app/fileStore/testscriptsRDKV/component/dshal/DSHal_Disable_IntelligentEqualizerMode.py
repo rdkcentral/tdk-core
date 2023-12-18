@@ -71,7 +71,7 @@ dsGetIntelligentEqualizerMode(int handle, int *mode)</api_or_interface_used>
 index- Audio port index
 mode - mode</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsSetIntelligentEqualizerMode to set the mode to 0 
+2 . DSHAL agent will invoke the api dsSetIntelligentEqualizerMode to set the mode to 0
 3 . DSHAL agent will invoke the api dsGetIntelligentEqualizerMode to get the mode
 4. TM checks if the mode is same as that set and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
@@ -86,8 +86,8 @@ Checkpoint 2 Verify that the mode is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_Disable_IntelligentEqualizerMode');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if HDMI port and IntelligentEqualizerMode is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"audioPort","HDMI") and deviceCapabilities.getconfig(dshalObj,"IntelligentEqualizerMode");
@@ -116,60 +116,60 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         mode = 0;
-        print "Trying to set IntelligentEqualizerMode to ", mode;
+        print("Trying to set IntelligentEqualizerMode to ", mode);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetIntelligentEqualizerMode');
         tdkTestObj.addParameter("mode", mode);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetIntelligentEqualizerMode result: ", actualResult
+        print("DSHal_SetIntelligentEqualizerMode result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetIntelligentEqualizerMode: ", details
-        
+            print("DSHal_SetIntelligentEqualizerMode: ", details)
+
             tdkTestObj = dshalObj.createTestStep('DSHal_GetIntelligentEqualizerMode');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetIntelligentEqualizerMode result: ", actualResult
+            print("DSHal_GetIntelligentEqualizerMode result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "IntelligentEqualizerMode retrieved", details
+                print("IntelligentEqualizerMode retrieved", details)
                 if int(details) == mode:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "IntelligentEqualizerMode set successfully";
+                    print("IntelligentEqualizerMode set successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "IntelligentEqualizerMode setting failed";
+                    print("IntelligentEqualizerMode setting failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get IntelligentEqualizerMode";
+                print("Failed to get IntelligentEqualizerMode");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_IntelligentEqualizerMode failed";
+            print("DSHal_IntelligentEqualizerMode failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -107,8 +107,8 @@ if "SUCCESS" in loadmodulestatus.upper():
     expectedresult="SUCCESS";
     obj.setLoadModuleStatus("SUCCESS");
     #Getting Supported Frequency Bands
-    print "\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands";
-    print "EXPECTED RESULT : Should get details of supported frequency bands";
+    print("\nTEST STEP 1: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands");
+    print("EXPECTED RESULT : Should get details of supported frequency bands");
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
     tdkTestObj.addParameter("methodName","getRadioSupportedFrequencyBands");
     tdkTestObj.addParameter("radioIndex",1);
@@ -119,12 +119,12 @@ if "SUCCESS" in loadmodulestatus.upper():
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
         SupportedFrequencyBands = details.split(":")[1].strip(" ");
-        print "ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands;
+        print("ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands);
         #If 5GHz is supported, Getting the info of all the Neighboring Access Points
         if "5GHz" in SupportedFrequencyBands:
             #Getting the list of Access Points
-            print "\nTEST STEP 2: To invoke the api wifi_getNeighboringWiFiDiagnosticResult() to get list of Neighboring AP";
-            print "EXPECTED RESULT : Should get the list of neighboring ssid";
+            print("\nTEST STEP 2: To invoke the api wifi_getNeighboringWiFiDiagnosticResult() to get list of Neighboring AP");
+            print("EXPECTED RESULT : Should get the list of neighboring ssid");
             tdkTestObj = obj.createTestStep('WIFI_HAL_GetNeighboringWiFiDiagnosticResult');
             tdkTestObj.addParameter("radioIndex",1);
             expectedresult="SUCCESS";
@@ -134,16 +134,16 @@ if "SUCCESS" in loadmodulestatus.upper():
             if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 neighborAPInfo = details.split("|")
-                print "List of SSIDs and Details:", neighborAPInfo
+                print("List of SSIDs and Details:", neighborAPInfo)
                 neighborSSID=[];
                 for neighbor in neighborAPInfo:
                     if str(neighbor.split(",")[1].split("=")[1]) == "5GHz":
                         neighborSSID.append(neighbor.split(",")[0].split("=")[1])
                 neighborSSID = [ ssid for ssid in neighborSSID if str(ssid).strip()]
-                print "ACTUAL RESULT : No of Neighboring SSIDs  : ",len(neighborSSID)
-                print "List of Neighboring SSID matching with 5GHz : ",neighborSSID
-                print "\nTEST STEP 3: To invoke the api wifi_getSpecificSSIDInfo() to get info for all the neighbor ssid";
-                print "EXPECTED RESULT : Should get details of Neighbor AP whose ssid matches with provided ssid";
+                print("ACTUAL RESULT : No of Neighboring SSIDs  : ",len(neighborSSID))
+                print("List of Neighboring SSID matching with 5GHz : ",neighborSSID)
+                print("\nTEST STEP 3: To invoke the api wifi_getSpecificSSIDInfo() to get info for all the neighbor ssid");
+                print("EXPECTED RESULT : Should get details of Neighbor AP whose ssid matches with provided ssid");
                 ssidCount = 0
                 for ssid in neighborSSID:
                     tdkTestObj = obj.createTestStep("WIFI_HAL_GetSpecificSSIDInfo");
@@ -156,39 +156,39 @@ if "SUCCESS" in loadmodulestatus.upper():
                     ssidCount += 1
                     if expectedresult in actualresult:
                         if ssid in details:
-                            print "SSID COUNT : ",ssidCount
-                            print "ACTUAL RESULT  : SSID match for ",ssid;
-                            print "Value returned : ",details;
-                            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                            print("SSID COUNT : ",ssidCount)
+                            print("ACTUAL RESULT  : SSID match for ",ssid);
+                            print("Value returned : ",details);
+                            print("[TEST EXECUTION RESULT] : SUCCESS\n")
                             tdkTestObj.setResultStatus("SUCCESS");
                         else:
-                            print "SSID COUNT : ",ssidCount
-                            print "ACTUAL RESULT  : No SSID match for ",ssid;
-                            print "Value returned : ",details;
-                            print "[TEST EXECUTION RESULT] : FAILURE\n"
+                            print("SSID COUNT : ",ssidCount)
+                            print("ACTUAL RESULT  : No SSID match for ",ssid);
+                            print("Value returned : ",details);
+                            print("[TEST EXECUTION RESULT] : FAILURE\n")
                             tdkTestObj.setResultStatus("FAILURE");
                             break;
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "wifi_getSpecificSSIDInfo() operation failed";
-                        print "[TEST EXECUTION RESULT] : FAILURE\n"
+                        print("wifi_getSpecificSSIDInfo() operation failed");
+                        print("[TEST EXECUTION RESULT] : FAILURE\n")
                         break;
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "wifi_getNeighboringWiFiDiagnosticResult() operation failed"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("wifi_getNeighboringWiFiDiagnosticResult() operation failed")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
-            print "Frequency band 5GHz not supported : Skipping wifi_getSpecificSSIDInfo() validation"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("Frequency band 5GHz not supported : Skipping wifi_getSpecificSSIDInfo() validation")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wifi_getRadioSupportedFrequencyBands() operation failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("wifi_getRadioSupportedFrequencyBands() operation failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 
 

@@ -53,7 +53,7 @@ uBlinkDuration - time duration
 uBlinkIteration - number of times the LED should blink</input_parameters>
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsSetFPBlink with parameter LED indicator 6 [INVALID LED]
-3.Check the API return status 
+3.Check the API return status
 4.Update the test result as SUCCESS/FAILURE , based on API return status
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.API return value should be invalid-param</expected_output>
@@ -82,7 +82,7 @@ obj.configureTestCase(ip,port,'DSHal_SetFPBlink_INVALID_Indicator');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 #Check if  SetBlink is supported by DUT
 capable = deviceCapabilities.getconfig(obj,"SetBlink");
@@ -90,10 +90,10 @@ capable = deviceCapabilities.getconfig(obj,"SetBlink");
 if "SUCCESS" in loadModuleStatus.upper() and capable:
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="FAILURE";
-    print "\nTEST STEP1 : To set the invalid indicator in Front Panel to Blink"
-    print "EXEPECTED RESULT : Should get the response as invalid LED"
+    print("\nTEST STEP1 : To set the invalid indicator in Front Panel to Blink")
+    print("EXEPECTED RESULT : Should get the response as invalid LED")
     tdkTestObj = obj.createTestStep('DSHal_SetFPBlink');
-    # INVALID LED 
+    # INVALID LED
     indicator = 6
     iteration = 5
     duration  = 10
@@ -105,22 +105,21 @@ if "SUCCESS" in loadModuleStatus.upper() and capable:
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult and "Invalid LED Indicator" in details:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "ACTUAL RESULT  : dsSetFPBlink API returned dsERR_INVALID_PARAM for LED Indicator-%d" %(indicator)
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("ACTUAL RESULT  : dsSetFPBlink API returned dsERR_INVALID_PARAM for LED Indicator-%d" %(indicator))
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in loadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-

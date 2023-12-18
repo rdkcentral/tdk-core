@@ -84,45 +84,43 @@ obj.configureTestCase(ip,port,'DSHal_GetSupportedVideoCodingFormats');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : To check video formats the SoC supports using dsGetSupportedVideoCodingFormats API"
-    print "EXPECTED RESULT : Should get the OR-ed value of Video formats supported"
+    print("\nTEST STEP1 : To check video formats the SoC supports using dsGetSupportedVideoCodingFormats API")
+    print("EXPECTED RESULT : Should get the OR-ed value of Video formats supported")
     tdkTestObj = obj.createTestStep('DSHal_GetSupportedVideoCodingFormats');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetSupportedVideoCodingFormats call is success"
-        print "Value Returned : Supported video coding : ",details
+        print("ACTUAL RESULT  : dsGetSupportedVideoCodingFormats call is success")
+        print("Value Returned : Supported video coding : ",details)
 
-        print "\nTEST STEP2 : Check whether STB supports minimum video coding formats"
-        print "EXPECTED RESULT : STB should have minimum compression formats, value >=6"
+        print("\nTEST STEP2 : Check whether STB supports minimum video coding formats")
+        print("EXPECTED RESULT : STB should have minimum compression formats, value >=6")
         if int(details) == 6:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT : STB supports MPEG2,MPEG4 formats"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT : STB supports MPEG2,MPEG4 formats")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
         elif int(details) >= 6:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "ACTUAL RESULT : STB supports MPEG2,MPEG4,MPEGH(HEVC codec) formats"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT : STB supports MPEG2,MPEG4,MPEGH(HEVC codec) formats")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT : STB's expected minimum formats MPEG2,MPEG4 not retrieved"
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT : STB's expected minimum formats MPEG2,MPEG4 not retrieved")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetSupportedVideoCodingFormats call failed"
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : dsGetSupportedVideoCodingFormats call failed")
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

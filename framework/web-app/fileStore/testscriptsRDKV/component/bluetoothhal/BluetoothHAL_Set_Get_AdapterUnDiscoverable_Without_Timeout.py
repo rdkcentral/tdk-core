@@ -103,7 +103,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Set_Get_AdapterUnDiscove
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -116,120 +116,120 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-	
+
     #Check the result of execution
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetAdapter executed successfully"
+        print("BluetoothHal_GetAdapter executed successfully")
         adapterPath = tdkTestObj.getResultDetails();
-	print "BluetoothHal_GetAdapter : Default adapter path : ", adapterPath
-	if (adapterPath):
+        print(("BluetoothHal_GetAdapter : Default adapter path : ", adapterPath))
+        if (adapterPath):
             tdkTestObj.setResultStatus("SUCCESS");
-	    #Primitive to set the discoverable timeout
+            #Primitive to set the discoverable timeout
             tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterDiscoverableTimeout');
-	    #Set the adapter path to the default adapter path
-	    tdkTestObj.addParameter("adapter_path", adapterPath)
+            #Set the adapter path to the default adapter path
+            tdkTestObj.addParameter("adapter_path", adapterPath)
             #Set the discoverable timeout as 0(for no timeout)
-	    tdkTestObj.addParameter("timeout", 0)
-			
-	    #Execute the test case in DUT
+            tdkTestObj.addParameter("timeout", 0)
+
+            #Execute the test case in DUT
             tdkTestObj.executeTestCase(expectedresult);
-			
-	    #Get the result of execution
+
+            #Get the result of execution
             actualresult = tdkTestObj.getResult();
-			
+
             if (actualresult == expectedresult):
-                print "BluetoothHal_SetAdapterDiscoverableTimeout executed successfully.\nSet no timeout"
+                print("BluetoothHal_SetAdapterDiscoverableTimeout executed successfully.\nSet no timeout")
                 tdkTestObj.setResultStatus("SUCCESS");
                 #Set the adapter to be discoverable
-		tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterDiscoverable');
-		#Set the adapter path to the default adapter path
-		tdkTestObj.addParameter("adapter_path", adapterPath)
+                tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterDiscoverable');
+                #Set the adapter path to the default adapter path
+                tdkTestObj.addParameter("adapter_path", adapterPath)
                 #Set the discoverable status to be 0(undiscoverable)
-		tdkTestObj.addParameter("discoverable_status", 0)
-				
-		#Execute the test case in DUT
+                tdkTestObj.addParameter("discoverable_status", 0)
+
+                #Execute the test case in DUT
                 tdkTestObj.executeTestCase(expectedresult);
-			
-		#Get the result of execution
+
+                #Get the result of execution
                 actualresult = tdkTestObj.getResult();
-			   
-		if (actualresult == expectedresult):
-	            print "BluetoothHal_SetAdapterDiscoverable executed successfully"
-		    tdkTestObj.setResultStatus("SUCCESS");
-                    
+
+                if (actualresult == expectedresult):
+                    print("BluetoothHal_SetAdapterDiscoverable executed successfully")
+                    tdkTestObj.setResultStatus("SUCCESS");
+
                     #Check if the adapter is discoverable by retrieving the discoverable status
-		    #Primitive to get the discoverable status
+                    #Primitive to get the discoverable status
                     tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapterDiscoverableStatus');
-		    #Set the adapter path to the default adapter path
-		    tdkTestObj.addParameter("adapter_path", adapterPath)
-			
-		    #Execute the test case in DUT
+                    #Set the adapter path to the default adapter path
+                    tdkTestObj.addParameter("adapter_path", adapterPath)
+
+                    #Execute the test case in DUT
                     tdkTestObj.executeTestCase(expectedresult);
-			
-		    #Get the result of execution
+
+                    #Get the result of execution
                     actualresult = tdkTestObj.getResult();
-			
-		    if (actualresult == expectedresult):
-                        print "BluetoothHal_GetAdapterDiscoverableStatus executed successfully"
+
+                    if (actualresult == expectedresult):
+                        print("BluetoothHal_GetAdapterDiscoverableStatus executed successfully")
                         discoverableStatus = int(tdkTestObj.getResultDetails())
-			print ("BluetoothHal_GetAdapterDiscoverableStatus : Current discoverable status of default adapter(%s) is : %d" %(adapterPath, discoverableStatus ))
-				   
-			if (0 == discoverableStatus):
-			    print ("Adapter %s is not discoverable" %(adapterPath))
-			    tdkTestObj.setResultStatus("SUCCESS");
-                            
+                        print(("BluetoothHal_GetAdapterDiscoverableStatus : Current discoverable status of default adapter(%s) is : %d" %(adapterPath, discoverableStatus )))
+
+                        if (0 == discoverableStatus):
+                            print(("Adapter %s is not discoverable" %(adapterPath)))
+                            tdkTestObj.setResultStatus("SUCCESS");
+
                             #Wait for 60 seconds and then check discoverable status again
                             time.sleep(60)
-  
+
                             #Check if the adapter is discoverable again
-		            #Primitive to get the discoverable status
+                            #Primitive to get the discoverable status
                             tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_GetAdapterDiscoverableStatus');
-		            #Set the adapter path to the default adapter path
-		            tdkTestObj.addParameter("adapter_path", adapterPath)
-		                
-		            #Execute the test case in DUT
+                            #Set the adapter path to the default adapter path
+                            tdkTestObj.addParameter("adapter_path", adapterPath)
+
+                            #Execute the test case in DUT
                             tdkTestObj.executeTestCase(expectedresult);
-		                
-		            #Get the result of execution
+
+                            #Get the result of execution
                             actualresult = tdkTestObj.getResult();
-		                
-		            if (actualresult == expectedresult):
-                                print "BluetoothHal_GetAdapterDiscoverableStatus executed successfully"
+
+                            if (actualresult == expectedresult):
+                                print("BluetoothHal_GetAdapterDiscoverableStatus executed successfully")
                                 discoverableStatus = int(tdkTestObj.getResultDetails())
-		                print ("BluetoothHal_GetAdapterDiscoverableStatus : Current discoverable status of default adapter(%s) is : %d" %(adapterPath, discoverableStatus ))
-		                	   
-		                if (0 == discoverableStatus):
-		                    print ("Adapter %s is not discoverable after 60 seconds" %(adapterPath))
-		                    tdkTestObj.setResultStatus("SUCCESS");
+                                print(("BluetoothHal_GetAdapterDiscoverableStatus : Current discoverable status of default adapter(%s) is : %d" %(adapterPath, discoverableStatus )))
+
+                                if (0 == discoverableStatus):
+                                    print(("Adapter %s is not discoverable after 60 seconds" %(adapterPath)))
+                                    tdkTestObj.setResultStatus("SUCCESS");
                                 else:
-                                    print ("Adapter %s is discoverable after 60 seconds" %(adapterPath))
-			            tdkTestObj.setResultStatus("FAILURE");
+                                    print(("Adapter %s is discoverable after 60 seconds" %(adapterPath)))
+                                    tdkTestObj.setResultStatus("FAILURE");
                             else:
-                                print "BluetoothHal_GetAdapterDiscoverableStatus: failed"
+                                print("BluetoothHal_GetAdapterDiscoverableStatus: failed")
                                 tdkTestObj.setResultStatus("FAILURE");
                         else:
-                            print ("Adapter %s is discoverable" %(adapterPath))
+                            print(("Adapter %s is discoverable" %(adapterPath)))
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
-                        print "BluetoothHal_GetAdapterDiscoverableStatus: failed"
+                        print("BluetoothHal_GetAdapterDiscoverableStatus: failed")
                         tdkTestObj.setResultStatus("FAILURE");
                 else:
-                    print "BluetoothHal_SetAdapterDiscoverable: failed"
+                    print("BluetoothHal_SetAdapterDiscoverable: failed")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "BluetoothHal_SetAdapterDiscoverableTimeout: failed"
+                print("BluetoothHal_SetAdapterDiscoverableTimeout: failed")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "Default adapter path is empty"
+            print("Default adapter path is empty")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "BluetoothHal_GetAdapter: failed"
+        print("BluetoothHal_GetAdapter: failed")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
-        
+
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

@@ -70,7 +70,7 @@ index- Audio port index
 handle - Audio port handle
 enabled - LEConfig enable status</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
-2 . DSHAL agent will invoke the api dsGetLEConfig to get the enable status 
+2 . DSHAL agent will invoke the api dsGetLEConfig to get the enable status
 3. TM checks if the value is retrieved and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is failure
 Checkpoint 2 Verify that the status is not retrieved</expected_output>
@@ -84,8 +84,8 @@ Checkpoint 2 Verify that the status is not retrieved</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -99,7 +99,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetLEConfig_InvalidHandle');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -113,12 +113,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     tdkTestObj.executeTestCase(expectedResult);
     print("Getting video port handle instead of audio port handle to get invalid handle");
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         expectedResult = "FAILURE";
         expectedOutput = "INVALID HANDLE";
@@ -127,23 +127,23 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetLEConfig result: ", actualResult
+        print("DSHal_GetLEConfig result: ", actualResult)
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print "DSHal_GetLEConfig output: ", details;
+        print("DSHal_GetLEConfig output: ", details);
 
         if expectedResult in actualResult and expectedOutput in details :
             tdkTestObj.setResultStatus("SUCCESS");
-            print "LEConfig status not retrieved for invalid handle which is expected";
+            print("LEConfig status not retrieved for invalid handle which is expected");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "LEConfig status retrieved for invalid handle which is not expected";
-    
+            print("LEConfig status retrieved for invalid handle which is not expected");
+
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

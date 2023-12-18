@@ -103,25 +103,25 @@ if "SUCCESS" in loadmodulestatus.upper():
         if 'n' and 'ac' and 'a' in SupportedStandards:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the Radio Supported Standards for 5GHz";
-            print "EXPECTED RESULT 1: Should get the Radio Supported Standards as 'n,ac,a' for 5GHz";
-            print "ACTUAL RESULT 1: %s" %SupportedStandards;
+            print("TEST STEP 1: Get the Radio Supported Standards for 5GHz");
+            print("EXPECTED RESULT 1: Should get the Radio Supported Standards as 'n,ac,a' for 5GHz");
+            print("ACTUAL RESULT 1: %s" %SupportedStandards);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1: Get the Radio Supported Standards for 5GHz";
-            print "EXPECTED RESULT 1: Should get the Radio Supported Standards as 'n,ac,a' for 5GHz";
-            print "ACTUAL RESULT 1: %s" %SupportedStandards;
+            print("TEST STEP 1: Get the Radio Supported Standards for 5GHz");
+            print("EXPECTED RESULT 1: Should get the Radio Supported Standards as 'n,ac,a' for 5GHz");
+            print("ACTUAL RESULT 1: %s" %SupportedStandards);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wifi_getRadioSupportedStandards() operation failed";
+        print("wifi_getRadioSupportedStandards() operation failed");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

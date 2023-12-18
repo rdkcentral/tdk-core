@@ -87,8 +87,8 @@ devType - device type
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("hdmicechal","1");
@@ -101,7 +101,7 @@ obj.configureTestCase(ip,port,'HdmicecHal_Get_LogicalAddress');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -111,7 +111,7 @@ if "SUCCESS" in loadModuleStatus.upper():
 
     # Hdmicec hal initializes logical address with value 15. After opening a instance of
     # CEC driver using HdmiCecOpen API, should be able to get the non 0F logical address
-    # obtained by the driver. After closing the CEC driver handle logical address is again 
+    # obtained by the driver. After closing the CEC driver handle logical address is again
     # set to 15(0x0F).
 
     # Should be able to get the logical address obtained by the driver irrespective of
@@ -121,38 +121,36 @@ if "SUCCESS" in loadModuleStatus.upper():
     # HdmiCecGetLogicalAddress
     #   LogicalAddress: hex:0x%X, dec: %u
 
-    print "\nTEST STEP : Get the STB logical address using HdmiCecGetLogicalAddress API"
-    print "EXEPECTED RESULT : Should get the non 0F logical address obtained by the driver"
+    print("\nTEST STEP : Get the STB logical address using HdmiCecGetLogicalAddress API")
+    print("EXEPECTED RESULT : Should get the non 0F logical address obtained by the driver")
     tdkTestObj = obj.createTestStep('HdmicecHal_GetLogicalAddress');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned: ",details
+        print("Value Returned: ",details)
         logicalAddress = int(str(details).split(":",1)[1].split(",")[1].split(":")[1].strip())
         # Decimal value of 0x0F = 15
         logicalAddressClosed = 15
         if logicalAddress != logicalAddressClosed and logicalAddress != 0:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Logical address obtained is as expected"
-            print "ACTUAL RESULt: HdmiCecGetLogicalAddress call success"
-            print "[TEST EXECUTION RESULT]: SUCCESS\n"
+            print("Logical address obtained is as expected")
+            print("ACTUAL RESULt: HdmiCecGetLogicalAddress call success")
+            print("[TEST EXECUTION RESULT]: SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Logical address obtained is not as expected"
-            print "ACTUAL RESULt: HdmiCecGetLogicalAddress call success"
-            print "[TEST EXECUTION RESULT]: FAILURE\n"
+            print("Logical address obtained is not as expected")
+            print("ACTUAL RESULt: HdmiCecGetLogicalAddress call success")
+            print("[TEST EXECUTION RESULT]: FAILURE\n")
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print details
-        print "ACTUAL RESULT: HdmiCecGetLogicalAddress call failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print(details)
+        print("ACTUAL RESULT: HdmiCecGetLogicalAddress call failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("hdmicechal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

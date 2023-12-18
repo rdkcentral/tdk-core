@@ -88,8 +88,8 @@ loadmodulestatus =obj.getLoadModuleResult();
 if "SUCCESS" in loadmodulestatus.upper():
     expectedresult="SUCCESS";
     obj.setLoadModuleStatus("SUCCESS");
-    print "\nTEST STEP 1: To invoke the api wif_getDualBandSupport() to check whether device supports dual band";
-    print "EXPECTED RESULT : Should get dual band support status";
+    print("\nTEST STEP 1: To invoke the api wif_getDualBandSupport() to check whether device supports dual band");
+    print("EXPECTED RESULT : Should get dual band support status");
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetDualBandSupport");
     tdkTestObj.executeTestCase(expectedresult);
     actualresult = tdkTestObj.getResult();
@@ -98,17 +98,17 @@ if "SUCCESS" in loadmodulestatus.upper():
         tdkTestObj.setResultStatus("SUCCESS");
         dualBandSupport = details.split(":")[1].strip(" ");
         if int(dualBandSupport) == 1:
-            print "ACTUAL RESULT  : TRUE";
-            print "Value returned : ",details;
-            print "[TEST EXECUTION RESULT] : SUCCESS"
+            print("ACTUAL RESULT  : TRUE");
+            print("Value returned : ",details);
+            print("[TEST EXECUTION RESULT] : SUCCESS")
         else:
-            print "ACTUAL RESULT  : FALSE";
-            print "Value returned : ",details;
-            print "[TEST EXECUTION RESULT] : SUCCESS"
+            print("ACTUAL RESULT  : FALSE");
+            print("Value returned : ",details);
+            print("[TEST EXECUTION RESULT] : SUCCESS")
 
         #Getting Supported Frequency Bands
-        print "\nTEST STEP 2: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands";
-        print "EXPECTED RESULT : Should get details of supported frequency bands";
+        print("\nTEST STEP 2: To invoke the wifi_getRadioSupportedFrequencyBands() to get frequency bands");
+        print("EXPECTED RESULT : Should get details of supported frequency bands");
         tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
         tdkTestObj.addParameter("methodName","getRadioSupportedFrequencyBands");
         tdkTestObj.addParameter("radioIndex",0);
@@ -119,34 +119,34 @@ if "SUCCESS" in loadmodulestatus.upper():
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
             SupportedFrequencyBands = details.split(":")[1].strip(" ");
-            print "ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands;
+            print("ACTUAL RESULT : Supported Frequency Bands = ",SupportedFrequencyBands);
 
-            print "\nTEST STEP 3: Validate getDualBandSupport using getRadioSupportedFrequencyBands";
-            print "EXPECTED RESULT : supported bands should be both 2.4 & 5 GHz if dual band or either 2.4 or 5 GHz"
+            print("\nTEST STEP 3: Validate getDualBandSupport using getRadioSupportedFrequencyBands");
+            print("EXPECTED RESULT : supported bands should be both 2.4 & 5 GHz if dual band or either 2.4 or 5 GHz")
             if int(dualBandSupport) == 1 and "2.4GHz" in SupportedFrequencyBands and "5GHz" in SupportedFrequencyBands:
-                print "ACTUAL RESULT : DUAL BAND : Supported Bands : ",SupportedFrequencyBands
-                print "[TEST EXECUTION RESULT] : SUCCESS"
+                print("ACTUAL RESULT : DUAL BAND : Supported Bands : ",SupportedFrequencyBands)
+                print("[TEST EXECUTION RESULT] : SUCCESS")
                 tdkTestObj.setResultStatus("SUCCESS");
             elif int(dualBandSupport) == 0 and ("2.4GHz" in SupportedFrequencyBands or "5GHz" in SupportedFrequencyBands):
-                print "ACTUAL RESULT : NO DUAL BAND : Supported Band : ",SupportedFrequencyBands
-                print "[TEST EXECUTION RESULT] : SUCCESS"
+                print("ACTUAL RESULT : NO DUAL BAND : Supported Band : ",SupportedFrequencyBands)
+                print("[TEST EXECUTION RESULT] : SUCCESS")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "ACTUAL RESULT : Dual Band Support validation failed"
-                print "[TEST EXECUTION RESULT] : FAILURE"
+                print("ACTUAL RESULT : Dual Band Support validation failed")
+                print("[TEST EXECUTION RESULT] : FAILURE")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "wifi_getRadioSupportedFrequencyBands() operation failed"
-            print "[TEST EXECUTION RESULT] : FAILURE"
+            print("wifi_getRadioSupportedFrequencyBands() operation failed")
+            print("[TEST EXECUTION RESULT] : FAILURE")
             tdkTestObj.setResultStatus("FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "wif_getDualBandSupport() operation failed";
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("wif_getDualBandSupport() operation failed");
+        print("[TEST EXECUTION RESULT] : FAILURE")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");
 

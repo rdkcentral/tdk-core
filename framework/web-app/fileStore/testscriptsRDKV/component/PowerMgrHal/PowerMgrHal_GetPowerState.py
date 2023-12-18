@@ -102,7 +102,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_GetPowerState');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -110,26 +110,24 @@ if "SUCCESS" in loadModuleStatus.upper():
 
     # As far as Broadcom is concerned, PLAT_API_GetPowerState API reads the
     # power state from the global variable only
-    print "\nTEST STEP1 : Get the CPE power state using PLAT_API_GetPowerState"
-    print "EXEPECTED OUTPUT : Should get the current power state"
+    print("\nTEST STEP1 : Get the CPE power state using PLAT_API_GetPowerState")
+    print("EXEPECTED OUTPUT : Should get the current power state")
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetPowerState');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned : ",details
-        print "ACTUAL RESULT  : PLAT_API_GetPowerState call is success"
-        print "[TEST EXECUTION RESULT] : SUCCESS\n"
+        print("Value Returned : ",details)
+        print("ACTUAL RESULT  : PLAT_API_GetPowerState call is success")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

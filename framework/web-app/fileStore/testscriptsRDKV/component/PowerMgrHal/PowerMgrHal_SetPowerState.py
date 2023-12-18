@@ -102,7 +102,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_SetPowerState');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -110,78 +110,76 @@ if "SUCCESS" in loadModuleStatus.upper():
 
     # As far as Broadcom is concerned, PLAT_API_SetPowerState API updates the
     # global variable only but not the devices's actual state
-    print "\nTEST STEP1 : Set the power state using PLAT_API_SetPowerState"
-    print "EXEPECTED OUTPUT : Should set the power state"
+    print("\nTEST STEP1 : Set the power state using PLAT_API_SetPowerState")
+    print("EXEPECTED OUTPUT : Should set the power state")
     tdkTestObj = obj.createTestStep('PowerMgrHal_SetPowerState');
     state = "STANDBY";
-    print "Setting power state as %s" %(state)
+    print("Setting power state as %s" %(state))
     tdkTestObj.addParameter("state",state);
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : SUCCESS")
 
-        print "\nTEST STEP2 : Get the CPE power state using PLAT_API_GetPowerState"
-        print "EXEPECTED OUTPUT : Should get the updated power state"
+        print("\nTEST STEP2 : Get the CPE power state using PLAT_API_GetPowerState")
+        print("EXEPECTED OUTPUT : Should get the updated power state")
         tdkTestObj = obj.createTestStep('PowerMgrHal_GetPowerState');
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if expectedResult in actualResult and state in details:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Value Returned : ",details
-            print "ACTUAL RESULT  : Power state set operation success"
-            print "[TEST EXECUTION RESULT] : SUCCESS"
+            print("Value Returned : ",details)
+            print("ACTUAL RESULT  : Power state set operation success")
+            print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            print "\nTEST STEP3 : Revert power state to ON using PLAT_API_SetPowerState"
-            print "EXPECTED RESULT : Should set the power state as ON"
+            print("\nTEST STEP3 : Revert power state to ON using PLAT_API_SetPowerState")
+            print("EXPECTED RESULT : Should set the power state as ON")
             tdkTestObj = obj.createTestStep('PowerMgrHal_SetPowerState');
             state = "ON"
-            print "Setting power state as %s" %(state)
+            print("Setting power state as %s" %(state))
             tdkTestObj.addParameter("state",state);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "ACTUAL RESULT  : ",details
-                print "[TEST EXECUTION RESULT] : SUCCESS"
+                print("ACTUAL RESULT  : ",details)
+                print("[TEST EXECUTION RESULT] : SUCCESS")
 
-                print "\nTEST STEP4 : Get the reverted power state using PLAT_API_GetPowerState"
-                print "EXEPECTED OUTPUT : Should get the power state as ON"
+                print("\nTEST STEP4 : Get the reverted power state using PLAT_API_GetPowerState")
+                print("EXEPECTED OUTPUT : Should get the power state as ON")
                 tdkTestObj = obj.createTestStep('PowerMgrHal_GetPowerState');
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
                 if expectedResult in actualResult and state in details:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Value Returned : ",details
-                    print "ACTUAL RESULT  : Power state revert  operation success"
-                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                    print("Value Returned : ",details)
+                    print("ACTUAL RESULT  : Power state revert  operation success")
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "ACTUAL RESULT  : ",details
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print("ACTUAL RESULT  : ",details)
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : ",details
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : ",details)
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT  : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT  : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

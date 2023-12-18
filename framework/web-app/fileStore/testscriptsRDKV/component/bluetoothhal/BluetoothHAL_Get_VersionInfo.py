@@ -94,7 +94,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Get_VersionInfo');
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -110,23 +110,23 @@ if "SUCCESS" in result.upper():
 
     #Set the result status of execution
     if (actualresult == expectedresult):
-        print "Successfully executed BluetoothHal_GetVersionInfo"
+        print("Successfully executed BluetoothHal_GetVersionInfo")
         versionInfo = tdkTestObj.getResultDetails();
         #Check if the version info retrieved is a valid value
         if not versionInfo or re.search("^\s*$", versionInfo):
-            print "The version info retrieved is an invalid data"
+            print("The version info retrieved is an invalid data")
             tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "BluetoothHal_GetVersionInfo: Bluetooth version : ", versionInfo
-            tdkTestObj.setResultStatus("SUCCESS");            
+            print(("BluetoothHal_GetVersionInfo: Bluetooth version : ", versionInfo))
+            tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "Failed to execute BluetoothHal_GetVersionInfo"
+        print("Failed to execute BluetoothHal_GetVersionInfo")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
 
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

@@ -80,8 +80,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -96,7 +96,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_HdmiIn_SelectPort');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if HDMIIn is supported by the DUT
 capable = deviceCapabilities.getconfig(dshalObj,"HdmiIn");
@@ -110,23 +110,23 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_HdmiInSelectPort result: ", actualResult
+    print("DSHal_HdmiInSelectPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
-        print "HdmiInSelectPort call success";
+        print(details);
+        print("HdmiInSelectPort call success");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "HdmiInSelectPort call failure";
+        print("HdmiInSelectPort call failure");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

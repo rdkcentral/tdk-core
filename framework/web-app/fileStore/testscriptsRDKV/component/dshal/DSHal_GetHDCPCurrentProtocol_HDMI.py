@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the HDCP protocol is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -105,65 +105,65 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetHDCPCurrentProtocol_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
-        tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
+    tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetVideoPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVideoPort result: ", actualResult
-
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
-
-            tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_IsDisplayConnected result: ", actualResult
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "Display connection status: ", details
-                if details == "true":
-                    tdkTestObj = dshalObj.createTestStep('DSHal_GetHDCPCurrentProtocol');
-                    #Execute the test case in STB
-                    tdkTestObj.executeTestCase(expectedResult);
-                    actualResult = tdkTestObj.getResult();
-                    print "DSHal_GetHDCPCurrentProtocol result: ", actualResult;
-                    if expectedResult in actualResult:
-                        protocol = tdkTestObj.getResultDetails();
-                        print "Current protocol: ", protocol;
-                        if int(protocol) == hdcpProtocolVersion["VERSION_1X"] or int(protocol) == hdcpProtocolVersion["VERSION_2X"]:
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            print "HDCPCurrentProtocol is valid";
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE");
-                            print "HDCPCurrentProtocol is not valid";
+            print("Display connection status: ", details)
+            if details == "true":
+                tdkTestObj = dshalObj.createTestStep('DSHal_GetHDCPCurrentProtocol');
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print("DSHal_GetHDCPCurrentProtocol result: ", actualResult);
+                if expectedResult in actualResult:
+                    protocol = tdkTestObj.getResultDetails();
+                    print("Current protocol: ", protocol);
+                    if int(protocol) == hdcpProtocolVersion["VERSION_1X"] or int(protocol) == hdcpProtocolVersion["VERSION_2X"]:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("HDCPCurrentProtocol is valid");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Failed to get HDCPCurrentProtocol";
-
+                        print("HDCPCurrentProtocol is not valid");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Please test connecting a display device";
+                    print("Failed to get HDCPCurrentProtocol");
+
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get display connection status";
-
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "VideooPort handle not retrieved";
+            print("Failed to get display connection status");
 
-        dshalObj.unloadModule("dshal");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("VideooPort handle not retrieved");
+
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

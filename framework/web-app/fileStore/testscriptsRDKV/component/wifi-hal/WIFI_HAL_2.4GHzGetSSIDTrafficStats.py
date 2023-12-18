@@ -100,26 +100,26 @@ if "SUCCESS" in loadmodulestatus.upper():
         if expectedresult in actualresult:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the SSID traffic information"
-            print "EXPECTED RESULT 1: Should get the ssid traffic information"
-            print "ACTUAL RESULT 1: Gets the ssid traffic information successfully"
-            print "Details : %s"%details;
+            print("TEST STEP 1: Get the SSID traffic information")
+            print("EXPECTED RESULT 1: Should get the ssid traffic information")
+            print("ACTUAL RESULT 1: Gets the ssid traffic information successfully")
+            print("Details : %s"%details);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1: Get the SSID traffic information"
-            print "EXPECTED RESULT 1: Should get the ssid traffic information"
-            print "ACTUAL RESULT 1: Failed to get the ssid traffic information"
-            print "Details : %s"%details;
+            print("TEST STEP 1: Get the SSID traffic information")
+            print("EXPECTED RESULT 1: Should get the ssid traffic information")
+            print("ACTUAL RESULT 1: Failed to get the ssid traffic information")
+            print("Details : %s"%details);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

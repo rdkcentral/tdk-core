@@ -76,7 +76,7 @@ color_depth - Color depth</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsGetVideoPort to get the handle for HDMI port
 3 . DSHAL agent will invoke the api dsGetColorDepth to get the color depth value
-4 . Using systemutil ExecuteCmd command get the color depth from system file 
+4 . Using systemutil ExecuteCmd command get the color depth from system file
 5 . TM checks if the color depth value is same in both cases and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the color depth value is correct</expected_output>
@@ -90,8 +90,8 @@ Checkpoint 2 Verify that the color depth value is correct</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -105,64 +105,64 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetColorDepth_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
-        tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
+    tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetVideoPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVideoPort result: ", actualResult
-
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
+            print("Display connection status: ", details)
+            if details == "true":
+                tdkTestObj = dshalObj.createTestStep('DSHal_GetColorDepth');
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print("DSHal_GetColorDepth result: ", actualResult);
 
-            tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_IsDisplayConnected result: ", actualResult
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "Display connection status: ", details
-                if details == "true":
-                    tdkTestObj = dshalObj.createTestStep('DSHal_GetColorDepth');
-                    #Execute the test case in STB
-                    tdkTestObj.executeTestCase(expectedResult);
-                    actualResult = tdkTestObj.getResult();
-                    print "DSHal_GetColorDepth result: ", actualResult;
+                if expectedResult in actualResult:
+                    depth = tdkTestObj.getResultDetails();
+                    print("Color depth value using DSHAL API: ", depth);
 
-                    if expectedResult in actualResult:
-                        depth = tdkTestObj.getResultDetails();
-                        print "Color depth value using DSHAL API: ", depth;
-
-                        if depth:
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            print "Color depth value retrieved";
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE");
-                            print "Color depth value not retrieved";
+                    if depth:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("Color depth value retrieved");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Failed to get color depth";
+                        print("Color depth value not retrieved");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Please test connecting a display device";
+                    print("Failed to get color depth");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get display connection status";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "VideoPort handle not retrieved";
+            print("Failed to get display connection status");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("VideoPort handle not retrieved");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 else:
-    print "Module load failed";
+    print("Module load failed");

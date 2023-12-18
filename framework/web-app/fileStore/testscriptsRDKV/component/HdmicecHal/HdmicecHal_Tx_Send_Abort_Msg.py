@@ -104,7 +104,7 @@ obj.configureTestCase(ip,port,'HdmicecHal_Tx_Send_Abort_Msg');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS")
@@ -119,8 +119,8 @@ if "SUCCESS" in loadModuleStatus.upper():
     # HdmiCecTx
     #  Received CEC Frame: %s;Header: %s;Result: %s
 
-    print "\nTEST STEP : Register HdmiCec Tx & Rx call back"
-    print "EXEPECTED RESULT : Functions should get registered"
+    print("\nTEST STEP : Register HdmiCec Tx & Rx call back")
+    print("EXEPECTED RESULT : Functions should get registered")
     tdkTestObj = obj.createTestStep('HdmicecHal_SetTxCallback');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult1 = tdkTestObj.getResult();
@@ -131,17 +131,17 @@ if "SUCCESS" in loadModuleStatus.upper():
     details2 = tdkTestObj.getResultDetails();
     if expectedResult in actualResult1 and expectedResult in actualResult2:
         tdkTestObj.setResultStatus("SUCCESS");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback & HdmiCecSetRxCallback calls success\n")
 
-        print "\nTEST STEP : Transmit Abort message to target device"
-        print "EXEPECTED RESULT : Should receive the feature abort message from target"
+        print("\nTEST STEP : Transmit Abort message to target device")
+        print("EXEPECTED RESULT : Should receive the feature abort message from target")
         tdkTestObj = obj.createTestStep('HdmicecHal_Tx');
         version_opcode  = "FF"
         version_operand = "00"
-        print "Opcode to be sent: GET_CEC_VERSION: ",version_opcode
-        print "Operand to be received: CEC_VERSION: ",version_operand
+        print("Opcode to be sent: GET_CEC_VERSION: ",version_opcode)
+        print("Operand to be received: CEC_VERSION: ",version_operand)
         tdkTestObj.addParameter("opcode",version_opcode);
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
@@ -150,30 +150,29 @@ if "SUCCESS" in loadModuleStatus.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             txInfo  = str(details).split(";")
             version_operand_received = str(details).split(";")[0].split(":")[1].strip()
-            print "Value Retuned:"
+            print("Value Retuned:")
             for info in txInfo:
-                print info
+                print(info)
             if version_operand in version_operand_received:
-                print "ACTUAL RESULT  : Feature Abort frame received"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("ACTUAL RESULT  : Feature Abort frame received")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "ACTUAL RESULT  : Feature Abort frame not received"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("ACTUAL RESULT  : Feature Abort frame not received")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print details
-            print "ACTUAL RESULT  : Feature Abort frame not received"
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print(details)
+            print("ACTUAL RESULT  : Feature Abort frame not received")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print details1
-        print details2
-        print "ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print(details1)
+        print(details2)
+        print("ACTUAL RESULT  : HdmiCecSetTxCallback / HdmiCecSetRxCallback call failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("hdmicechal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-

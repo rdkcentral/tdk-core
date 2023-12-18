@@ -55,7 +55,7 @@
     <automation_approch>1.TM loads the DSHAL agent via the test agent.
 2.DSHAL agent will invoke the API dsGetCPUTemperature
 3.Check whether the obtained CPU temperature is within the expected range
-4.Update the test result as SUCCESS/FAILURE 
+4.Update the test result as SUCCESS/FAILURE
 5.Unload the module</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2.CPU temperature should be greater than 0 and less than 125C.</expected_output>
@@ -69,8 +69,8 @@ Checkpoint 2.CPU temperature should be greater than 0 and less than 125C.</expec
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("dshal","1");
@@ -83,40 +83,39 @@ obj.configureTestCase(ip,port,'DSHal_GetCPUTemperature');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
-    print "\nTEST STEP1 : Get the CPU Temperature using dsGetCPUTemperature API"
-    print "EXEPECTED OUTPUT : Should get the temperature in centigrade"
+    print("\nTEST STEP1 : Get the CPU Temperature using dsGetCPUTemperature API")
+    print("EXEPECTED OUTPUT : Should get the temperature in centigrade")
     tdkTestObj = obj.createTestStep('DSHal_GetCPUTemperature');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetCPUTemperature call is success"
-        print "Value Returned : CPU Temperature in centigrade : +%sC" %(details)
+        print("ACTUAL RESULT  : dsGetCPUTemperature call is success")
+        print("Value Returned : CPU Temperature in centigrade : +%sC" %(details))
 
-        print "\nTEST STEP2 : Check whether CPU temperature is within expected range"
-        print "EXEPECTED OUTPUT : CPU Temperature should be in 0-125C range"
+        print("\nTEST STEP2 : Check whether CPU temperature is within expected range")
+        print("EXEPECTED OUTPUT : CPU Temperature should be in 0-125C range")
         if float(details) > float(0) and float(details) < float(125):
-            print "ACTUAL RESULT : CPU temperature lies in expected range"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("ACTUAL RESULT : CPU temperature lies in expected range")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "ACTUAL RESULT : CPU temperature not in expected range"
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT : CPU temperature not in expected range")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
             tdkTestObj.setResultStatus("FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print "ACTUAL RESULT  : dsGetCPUTemperature call failed"
-        print "Value Returned : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : dsGetCPUTemperature call failed")
+        print("Value Returned : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("dshal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-

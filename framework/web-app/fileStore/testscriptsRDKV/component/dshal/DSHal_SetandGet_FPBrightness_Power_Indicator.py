@@ -70,8 +70,8 @@ Checkpoint 2 Verify that the brightness is set</expected_output>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 #Test component to be tested
 dshalObj = tdklib.TDKScriptingLibrary("dshal","1");
@@ -84,7 +84,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_SetandGet_FPBrightness_Power_Indicator
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if devicesupports PowerIndicator
 capable = deviceCapabilities.getconfig(dshalObj,"Indicator","Power");
@@ -95,7 +95,7 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #for power indicator the value is 1
     indicator_dict = {"Message":0,"Power":1,"Record":2,"Remote":3,"RFBypass":4}
     indicator_name = "Power"
-    indicator = indicator_dict[indicator_name] 
+    indicator = indicator_dict[indicator_name]
     tdkTestObj = dshalObj.createTestStep('DSHal_GetFPBrightness');
     tdkTestObj.addParameter("indicator",indicator)
     tdkTestObj.executeTestCase(expectedResult);
@@ -103,22 +103,22 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails()
-	print "initial brightness of {} indicator: {} ".format(indicator_name,details)
+        print("initial brightness of {} indicator: {} ".format(indicator_name,details))
         brightness = (int(details)+ 10)%100
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetFPBrightness');
         tdkTestObj.addParameter("indicator",indicator)
         tdkTestObj.addParameter("brightness",brightness)
-    
+
         #Execute the test case in STB
-	print "trying to set brightness to:",brightness
+        print("trying to set brightness to:",brightness)
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHAL_SetFPBrightness result: ",actualResult
+        print("DSHAL_SetFPBrightness result: ",actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
+            print(details);
             #Prmitive test case which associated to this Script
             tdkTestObj = dshalObj.createTestStep('DSHal_GetFPBrightness');
             tdkTestObj.addParameter("indicator",indicator)
@@ -128,28 +128,28 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
                 details = tdkTestObj.getResultDetails();
                 if int(details)== brightness:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Brightness of {} indicator is: {}".format(indicator_name,str(details))
-		    print "Both values are same"
+                    print("Brightness of {} indicator is: {}".format(indicator_name,str(details)))
+                    print("Both values are same")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Brightness of {} indicator not set to : {}".format(indicator_name,str(brightness))
-                    print "Brightness of {} indicator : {} ".format(str(details))
+                    print("Brightness of {} indicator not set to : {}".format(indicator_name,str(brightness)))
+                    print("Brightness of {} indicator : {} ".format(str(details)))
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "DSHal_GetFPBrightness failed"
+                print("DSHal_GetFPBrightness failed")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_SetFPBrightness failed"
+            print("DSHal_SetFPBrightness failed")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "DSHal_GetFPBrightness failed"
+        print("DSHal_GetFPBrightness failed")
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

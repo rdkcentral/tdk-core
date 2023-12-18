@@ -101,7 +101,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetAudioCompression_MS12_disabled');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if DUT is cpable of MS12 funcationalities
 capable = deviceCapabilities.getconfig(dshalObj,"MS12")
@@ -116,66 +116,66 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and not capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         #Check current AudioMS12Decode status
         tdkTestObj = dshalObj.createTestStep('DSHal_IsAudioMS12Decode');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsAudioMS12Decode result: ", actualResult
+        print("DSHal_IsAudioMS12Decode result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             ms12Decode = tdkTestObj.getResultDetails();
-            print "AudioMS12Decode status retrieved", ms12Decode;
+            print("AudioMS12Decode status retrieved", ms12Decode);
 
             if ms12Decode:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "AudioMS12Decode status retrieved"
+                print("AudioMS12Decode status retrieved")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "AudioMS12Decode status not retrieved";
+                print("AudioMS12Decode status not retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get AudioMS12Decode status";
+            print("Failed to get AudioMS12Decode status");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
-    
+        print("AudioPort handle not retrieved");
+
     if "false" in ms12Decode:
-        print "MS12 is disabled in the device, proceeding to execute testcase";
+        print("MS12 is disabled in the device, proceeding to execute testcase");
 
         tdkTestObj = dshalObj.createTestStep('DSHal_GetAudioCompression');
         #Execute the test case in STB
         expectedResult="FAILURE";
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetAudioCompression result: ", actualResult
+        print("DSHal_GetAudioCompression result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details
-            print "Failed to get audio compression as expected"
+            print(details)
+            print("Failed to get audio compression as expected")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Audio compression is retrieved for ms12 disabled device";
+            print("Audio compression is retrieved for ms12 disabled device");
 
     else:
-        print "Testcase not applicable as MS12 is enabled in this device";
+        print("Testcase not applicable as MS12 is enabled in this device");
         tdkTestObj.setResultStatus("FAILURE");
 
     dshalObj.unloadModule("dshal");
 
 elif capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

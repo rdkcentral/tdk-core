@@ -105,23 +105,23 @@ if "SUCCESS" in loadmodulestatus.upper():
         if expectedresult in actualresult:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the possible radio channels"
-            print "EXPECTED RESULT 1: Should get the possible radio channels for 5GHz"
-            print "ACTUAL RESULT 1: %s" %details
+            print("TEST STEP 1: Get the possible radio channels")
+            print("EXPECTED RESULT 1: Should get the possible radio channels for 5GHz")
+            print("ACTUAL RESULT 1: %s" %details)
 
             if details.split(":")[1].strip() != "":
                 #if possible channels are given as 1-11
                 if "-" in details:
                     #get the possible channels as a list of integers
                     PossibleChannelRange = [int(x) for x in details.split(":")[1].split("-")];
-                    print PossibleChannelRange
-                    PossibleChannels = range(PossibleChannelRange[0],PossibleChannelRange[1]+1);
-                    print "Possible channels are ", PossibleChannels;
+                    print(PossibleChannelRange)
+                    PossibleChannels = list(range(PossibleChannelRange[0],PossibleChannelRange[1]+1));
+                    print("Possible channels are ", PossibleChannels);
                 #if possible channels are given as values eg:1,2,3,4,5
                 else:
                     #get the possible channels as a list of integers
                     PossibleChannels = [int(x) for x in details.split(":")[1].split(",")];
-                    print "Possible channels are ", PossibleChannels;
+                    print("Possible channels are ", PossibleChannels);
 
                 #Prmitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('WIFI_HAL_GetOrSetParamULongValue');
@@ -133,39 +133,39 @@ if "SUCCESS" in loadmodulestatus.upper():
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
-                print details
+                print(details)
                 if expectedresult in actualresult:
                     radioCh = details.split(":")[1].strip();
                     if int(radioCh) in PossibleChannels:
                         #Set the result status of execution
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "TEST STEP 2: Get the Radio channel present in possible channel list"
-                        print "EXPECTED RESULT 2: Should get the Radio channel present in possible channel list"
-                        print "ACTUAL RESULT 2: %s" %details
+                        print("TEST STEP 2: Get the Radio channel present in possible channel list")
+                        print("EXPECTED RESULT 2: Should get the Radio channel present in possible channel list")
+                        print("ACTUAL RESULT 2: %s" %details)
                         #Get the result of execution
-                        print "[TEST EXECUTION RESULT] : SUCCESS";
+                        print("[TEST EXECUTION RESULT] : SUCCESS");
                     else:
                         #Set the result status of execution
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "TEST STEP 2: Get the Radio channel present in possible channel list"
-                        print "EXPECTED RESULT 2: Should get the Radio channel present in possible channel list"
-                        print "ACTUAL RESULT 2: %s" %details
+                        print("TEST STEP 2: Get the Radio channel present in possible channel list")
+                        print("EXPECTED RESULT 2: Should get the Radio channel present in possible channel list")
+                        print("ACTUAL RESULT 2: %s" %details)
                         #Get the result of execution
-                        print "[TEST EXECUTION RESULT] : FAILURE";
+                        print("[TEST EXECUTION RESULT] : FAILURE");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "wifi_getRadioChannel() call failed"
+                    print("wifi_getRadioChannel() call failed")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "wifi_getRadioPossibleChannels() returned NULL instead of channel list"
+                print("wifi_getRadioPossibleChannels() returned NULL instead of channel list")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "wifi_getRadioPossibleChannels() call failed"
+            print("wifi_getRadioPossibleChannels() call failed")
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

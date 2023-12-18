@@ -100,22 +100,22 @@ if "SUCCESS" in loadmodulestatus.upper():
     if expectedresult in actualresult and "wlan0" in details:
         #Set the result status of execution
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Get the Radio interface name";
-        print "EXPECTED RESULT 1: Should get the interface name as wlan0";
-        print "ACTUAL RESULT 1: %s" %details;
+        print("TEST STEP 1: Get the Radio interface name");
+        print("EXPECTED RESULT 1: Should get the interface name as wlan0");
+        print("ACTUAL RESULT 1: %s" %details);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the Radio interface name";
-        print "EXPECTED RESULT 1: Should get the interface name as wlan0";
-        print "ACTUAL RESULT 1: %s" %details;
+        print("TEST STEP 1: Get the Radio interface name");
+        print("EXPECTED RESULT 1: Should get the interface name as wlan0");
+        print("ACTUAL RESULT 1: %s" %details);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

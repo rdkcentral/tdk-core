@@ -89,7 +89,7 @@ int PLAT_API_GetTempThresholds(float *tempHigh, float *tempCritical)</api_or_int
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 import os
 
 #Test component to be tested
@@ -117,19 +117,19 @@ def getconfig(threshold):
     parser = SafeConfigParser()
     # Fetching the config details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+"/temperatureThresholds.ini")
-    print "Parsing Temperature Thresholds config file ..."
+    print("Parsing Temperature Thresholds config file ...")
     ConfigValue = parser.get('threshold',threshold);
     if ConfigValue:
-        print "Obtained %s for %s from config File"%(ConfigValue,threshold);
+        print("Obtained %s for %s from config File"%(ConfigValue,threshold));
         return ConfigValue;
     else:
-        print "%s not configured in Config File\nProceeding with execution with default %s"%(threshold,threshold);
+        print("%s not configured in Config File\nProceeding with execution with default %s"%(threshold,threshold));
         return Default_Temperature_Thresholds[threshold];
 
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -138,35 +138,33 @@ if "SUCCESS" in loadModuleStatus.upper():
     default_high_level = getconfig("thermal_concern_threshold");
     default_critical_level = getconfig("thermal_critical_threshold");
 
-    print "\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API"
-    print "EXEPECTED OUTPUT : Should get the default temperature thresholds"
+    print("\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API")
+    print("EXEPECTED OUTPUT : Should get the default temperature thresholds")
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetTempThresholds');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned : ",details
+        print("Value Returned : ",details)
         actual_high_level     = float(str(str(details).split(":")[1].split(",")[0].split("=")[1]))
         actual_critical_level = float(str(str(details).split(":")[1].split(",")[1].split("=")[1]))
         if actual_high_level == float(default_high_level) and  actual_critical_level == float(default_critical_level):
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Thermal Threshold levels are same as that of expected default levels"
-            print "ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success"
-            print "[TEST EXECUTION RESULT] : SUCCESS\n"
+            print("Thermal Threshold levels are same as that of expected default levels")
+            print("ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Thermal Threshold levels are not same as that of expected default levels"
-            print "ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success"
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("Thermal Threshold levels are not same as that of expected default levels")
+            print("ACTUAL RESULT  : PLAT_API_GetTempThresholds call is success")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

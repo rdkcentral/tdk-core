@@ -89,8 +89,8 @@ Checkpoint 2 Verify that the values are valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -104,7 +104,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetVideoOutputSettings_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -116,80 +116,80 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetVideoPort result: ", actualResult
+    print("DSHal_GetVideoPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsDisplayConnected result: ", actualResult
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "Display connection status: ", details
+            print("Display connection status: ", details)
             if details == "true":
                 tdkTestObj = dshalObj.createTestStep('DSHal_GetCurrentOutputSettings');
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print "DSHal_GetCurrentOutputSettings result: ", actualResult;
+                print("DSHal_GetCurrentOutputSettings result: ", actualResult);
                 if expectedResult in actualResult:
                     details = tdkTestObj.getResultDetails();
-                    print "DSHal_GetCurrentOutputSettings: ", details
+                    print("DSHal_GetCurrentOutputSettings: ", details)
                     settings = details.split(',');
                     status = "success";
                     for data in settings:
                         item = data.split(':');
                         if item[0] == "eotf" and item[1]:
-                            if int(item[1]) not in eotf.values():
+                            if int(item[1]) not in list(eotf.values()):
                                 status = "failure";
-                                print "Invalid eotf value";
+                                print("Invalid eotf value");
                             else:
-                                print "eotf value: ", item[1]
+                                print("eotf value: ", item[1])
                         if item[0] == "coefficients" and item[1]:
-                            if int(item[1]) not in matrixCoefficients.values():
+                            if int(item[1]) not in list(matrixCoefficients.values()):
                                 status = "failure";
-                                print "Invalid coefficients value";
+                                print("Invalid coefficients value");
                             else:
-                                print "coefficients value: ", item[1]
+                                print("coefficients value: ", item[1])
                         if item[0] == "colorSpace":
-                            if int(item[1]) not in colorSpace.values():
+                            if int(item[1]) not in list(colorSpace.values()):
                                 status = "failure";
-                                print "Invalid colorSpace value";
+                                print("Invalid colorSpace value");
                             else:
-                                print "colorSpace value: ", item[1]
+                                print("colorSpace value: ", item[1])
                         if item[0] == "colorDepth":
                             if not item[1]:
                                 status = "failure";
-                                print "Invalid colorDepth value";
+                                print("Invalid colorDepth value");
                             else:
-                                print "colorDepth value: ", item[1]
+                                print("colorDepth value: ", item[1])
                     if "success" in status:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "Video CurrentOutputSettings is valid";
+                        print("Video CurrentOutputSettings is valid");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Video CurrentOutputSettings retrieved is not valid ";
+                        print("Video CurrentOutputSettings retrieved is not valid ");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DSHal_CurrentOutputSettings call failed";
- 
+                    print("DSHal_CurrentOutputSettings call failed");
+
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Please test connecting a display device";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get display connection status";
+            print("Failed to get display connection status");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "VideoPort handle not retrieved";
+        print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

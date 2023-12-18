@@ -99,26 +99,26 @@ if "SUCCESS" in loadmodulestatus.upper():
         if halVersion != "":
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: To invoke the api wifi_getHalVersion()";
-            print "EXPECTED RESULT 1: Should get the wifi hal version and it should not be a NULL value";
-            print "ACTUAL RESULT 1: HAL VERSION =",halVersion;
+            print("TEST STEP 1: To invoke the api wifi_getHalVersion()");
+            print("EXPECTED RESULT 1: Should get the wifi hal version and it should not be a NULL value");
+            print("ACTUAL RESULT 1: HAL VERSION =",halVersion);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "wifi_getHalVersion() api is returning HalVersion as NULL value";
+            print("wifi_getHalVersion() api is returning HalVersion as NULL value");
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: To invoke the api wifi_getHalVersion()";
-        print "EXPECTED RESULT 1: Should get the wifi hal version and it should not be a NULL value";
-        print "ACTUAL RESULT 1: ",details;
+        print("TEST STEP 1: To invoke the api wifi_getHalVersion()");
+        print("EXPECTED RESULT 1: Should get the wifi hal version and it should not be a NULL value");
+        print("ACTUAL RESULT 1: ",details);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

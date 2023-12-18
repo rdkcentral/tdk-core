@@ -77,7 +77,7 @@ handle - Video port handle
 surround - Surround mode</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via the test agent.
 2 . DSHAL agent will invoke the api dsGetVideoPort to get the handle for HDMI port
-3 . DSHAL agent will invoke the api dsGetSurroundMode to get the surround mode 
+3 . DSHAL agent will invoke the api dsGetSurroundMode to get the surround mode
 4. TM checks if the surround mode is valid and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
 Checkpoint 2 Verify that the surround mode is valid</expected_output>
@@ -91,8 +91,8 @@ Checkpoint 2 Verify that the surround mode is valid</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -106,78 +106,78 @@ dshalObj.configureTestCase(ip,port,'DSHal_GetVideoDeviceSurroundMode_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
 if "SUCCESS" in dshalloadModuleStatus.upper():
-        expectedResult="SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
-        tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    expectedResult="SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
+    tdkTestObj.addParameter("portType", videoPortType["HDMI"]);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_GetVideoPort result: ", actualResult)
+
+    if expectedResult in actualResult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = tdkTestObj.getResultDetails();
+        print(details);
+
+        tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVideoPort result: ", actualResult
-
+        print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print details;
-
-            tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplayConnected');
-            #Execute the test case in STB
-            tdkTestObj.executeTestCase(expectedResult);
-            actualResult = tdkTestObj.getResult();
-            print "DSHal_IsDisplayConnected result: ", actualResult
-            if expectedResult in actualResult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                details = tdkTestObj.getResultDetails();
-                print "Display connection status: ", details
-                if details == "true":
-                    tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplaySurround');
-                    #Execute the test case in STB
-                    tdkTestObj.executeTestCase(expectedResult);
-                    actualResult = tdkTestObj.getResult();
-                    print "DSHal_IsDisplaySurround result: ", actualResult;
-                    if expectedResult in actualResult:
-                        details = tdkTestObj.getResultDetails();
-                        print "Display Surround status: ", details
-                        if details == "true":
-                            tdkTestObj = dshalObj.createTestStep('DSHal_GetSurroundMode');
-                            #Execute the test case in STB
-                            tdkTestObj.executeTestCase(expectedResult);
-                            actualResult = tdkTestObj.getResult();
-                            print "DSHal_GetSurroundMode result: ", actualResult;
-                            if expectedResult in actualResult:
-                                mode = tdkTestObj.getResultDetails();
-                                print "Surround mode: ", mode;
-                                if int(mode) == surroundMode["DD"] or int(mode) == surroundMode["DDPLUS"] or int(mode) == surroundMode["DD|DDPLUS"]:
-                                    tdkTestObj.setResultStatus("SUCCESS");
-                                    print "Surround mode is valid";
-                                else:
-                                    tdkTestObj.setResultStatus("FAILURE");
-                                    print "Surround mode is not valid";
+            print("Display connection status: ", details)
+            if details == "true":
+                tdkTestObj = dshalObj.createTestStep('DSHal_IsDisplaySurround');
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print("DSHal_IsDisplaySurround result: ", actualResult);
+                if expectedResult in actualResult:
+                    details = tdkTestObj.getResultDetails();
+                    print("Display Surround status: ", details)
+                    if details == "true":
+                        tdkTestObj = dshalObj.createTestStep('DSHal_GetSurroundMode');
+                        #Execute the test case in STB
+                        tdkTestObj.executeTestCase(expectedResult);
+                        actualResult = tdkTestObj.getResult();
+                        print("DSHal_GetSurroundMode result: ", actualResult);
+                        if expectedResult in actualResult:
+                            mode = tdkTestObj.getResultDetails();
+                            print("Surround mode: ", mode);
+                            if int(mode) == surroundMode["DD"] or int(mode) == surroundMode["DDPLUS"] or int(mode) == surroundMode["DD|DDPLUS"]:
+                                tdkTestObj.setResultStatus("SUCCESS");
+                                print("Surround mode is valid");
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "Failed to get surround mode";
+                                print("Surround mode is not valid");
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "Please test connecting a display device which supports Surround";
+                            print("Failed to get surround mode");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Failed to get surround support status";
+                        print("Please test connecting a display device which supports Surround");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Please test connecting a display device";
+                    print("Failed to get surround support status");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get display connection status";
+                print("Please test connecting a display device");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "VideooPort handle not retrieved";
+            print("Failed to get display connection status");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("VideooPort handle not retrieved");
 
-        dshalObj.unloadModule("dshal");
+    dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

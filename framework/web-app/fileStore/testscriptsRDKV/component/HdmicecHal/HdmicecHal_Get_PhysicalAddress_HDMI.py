@@ -87,8 +87,8 @@ void HdmiCecGetPhysicalAddress(int handle,unsigned int *physicalAddress);</api_o
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("hdmicechal","1");
@@ -101,7 +101,7 @@ obj.configureTestCase(ip,port,'HdmicecHal_Get_PhysicalAddress_HDMI');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -113,44 +113,42 @@ if "SUCCESS" in loadModuleStatus.upper():
     # For a setup with TV connection, physical address obtained by driver should be something
     # like 1.0.0.0 or 2.0.0.0 based on the port on which TV is physically connected to.
 
-    # Should be able to get the physical address obtained by the driver irrespective of 
+    # Should be able to get the physical address obtained by the driver irrespective of
     # the CEC feature in TV connected to the setup
 
     # Sample stub output:
     # HdmiCecGetPhysicalAddress
     #   PhysicalAddress: hex: 0x%X, dec: %u
 
-    print "\nTEST STEP : Get the physical address using HdmiCecGetPhysicalAddress API"
-    print "EXEPECTED RESULT : Should get the physical address obtained by the driver as non F.F.F.F"
+    print("\nTEST STEP : Get the physical address using HdmiCecGetPhysicalAddress API")
+    print("EXEPECTED RESULT : Should get the physical address obtained by the driver as non F.F.F.F")
     tdkTestObj = obj.createTestStep('HdmicecHal_GetPhysicalAddress');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned: ",details
+        print("Value Returned: ",details)
         physicalAddress = int(str(details).split(":",1)[1].split(",")[1].split(":")[1].strip())
         # Decimal value of 0x0F0F0F0F = 252645135
         physicalAddressNoHdmi = 252645135
         if physicalAddress != physicalAddressNoHdmi and physicalAddress != 0:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Physical Address obtained is as expected"
-            print "ACTUAL RESULt: HdmiCecGetPhysicalAddress call success"
-            print "[TEST EXECUTION RESULT]: SUCCESS\n"
+            print("Physical Address obtained is as expected")
+            print("ACTUAL RESULt: HdmiCecGetPhysicalAddress call success")
+            print("[TEST EXECUTION RESULT]: SUCCESS\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Physical Address obtained is not as expected"
-            print "ACTUAL RESULt: HdmiCecGetPhysicalAddress call success"
-            print "[TEST EXECUTION RESULT]: FAILURE\n"
+            print("Physical Address obtained is not as expected")
+            print("ACTUAL RESULt: HdmiCecGetPhysicalAddress call success")
+            print("[TEST EXECUTION RESULT]: FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print details
-        print "ACTUAL RESULT: HdmiCecGetPhysicalAddress call failed"
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print(details)
+        print("ACTUAL RESULT: HdmiCecGetPhysicalAddress call failed")
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("hdmicechal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

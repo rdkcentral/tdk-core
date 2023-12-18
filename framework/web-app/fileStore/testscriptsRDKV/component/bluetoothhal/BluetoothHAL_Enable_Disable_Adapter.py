@@ -58,7 +58,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>CT_BLUETOOTH_HAL_07</test_case_id>
-    <test_objective>To disable the bluetooth adapter and then enable it	</test_objective>
+    <test_objective>To disable the bluetooth adapter and then enable it </test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. Initialize the BTRCore module using BTRCore_Init()</pre_requisite>
@@ -96,7 +96,7 @@ bluetoothhalObj.configureTestCase(ip,port,'BluetoothHAL_Enable_Disable_Adapter')
 
 #Get the result of connection with test component and DUT
 result =bluetoothhalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print(("[LIB LOAD STATUS]  :  %s" %result));
 bluetoothhalObj.setLoadModuleStatus(result.upper());
 
 if "SUCCESS" in result.upper():
@@ -109,10 +109,10 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     actualresult = tdkTestObj.getResult();
-	
+
     #Check the result of execution
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetAdapter executed successfully"
+        print("BluetoothHal_GetAdapter executed successfully")
         tdkTestObj.setResultStatus("SUCCESS");
 
         #Disable the bluetooth adapter
@@ -123,14 +123,14 @@ if "SUCCESS" in result.upper():
 
         #Get the result of execution
         actualresult = tdkTestObj.getResult();
-	
+
         #Check the result of execution
         if (actualresult == expectedresult):
             adapterStatus = int(tdkTestObj.getResultDetails())
             if (0 == adapterStatus):
-                print "BluetoothHal_DisableAdapter executed successfully.\nAdapter Status : %d" %(adapterStatus)
+                print(("BluetoothHal_DisableAdapter executed successfully.\nAdapter Status : %d" %(adapterStatus)))
                 tdkTestObj.setResultStatus("SUCCESS");
-                
+
                 #Enable the bluetooth adapter
                 tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_EnableAdapter');
 
@@ -139,33 +139,33 @@ if "SUCCESS" in result.upper():
 
                 #Get the result of execution
                 actualresult = tdkTestObj.getResult();
-	        
+
                 #Check the result of execution
                 if (actualresult == expectedresult):
                     adapterStatus = int(tdkTestObj.getResultDetails())
                     if (1 == adapterStatus):
-                        print "BluetoothHal_EnableAdapter executed successfully.\nAdapter Status : %d" %(adapterStatus)
+                        print(("BluetoothHal_EnableAdapter executed successfully.\nAdapter Status : %d" %(adapterStatus)))
                         tdkTestObj.setResultStatus("SUCCESS");
                     else:
-                        print "Failed to enable bluetooth adapter"
+                        print("Failed to enable bluetooth adapter")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "BluetoothHal_EnableAdapter: failed"
-                    tdkTestObj.setResultStatus("FAILURE")     
+                    print("BluetoothHal_EnableAdapter: failed")
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Failed to disable bluetooth adapter"
+                print("Failed to disable bluetooth adapter")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "BluetoothHal_DisableAdapter: failed"
+            print("BluetoothHal_DisableAdapter: failed")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-	print "BluetoothHal_GetAdapter: failed"
-	tdkTestObj.setResultStatus("FAILURE");
+        print("BluetoothHal_GetAdapter: failed")
+        tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
     bluetoothhalObj.unloadModule("bluetoothhal");
-	
+
 else:
-    print "Failed to load bluetoothhal module\n";
+    print("Failed to load bluetoothhal module\n");
     #Set the module loading status
     bluetoothhalObj.setLoadModuleStatus("FAILURE");

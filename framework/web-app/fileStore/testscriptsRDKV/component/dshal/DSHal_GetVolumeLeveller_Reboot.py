@@ -85,7 +85,7 @@ volLeveller - Audio port volume leveller</input_parameters>
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
@@ -101,13 +101,13 @@ obj.configureTestCase(ip,port,'DSHal_GetVolumeLeveller_Reboot');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Check if VolumeLeveller is supported by the DUT
 capable = deviceCapabilities.getconfig(obj,"VolumeLeveller");
 
 if "SUCCESS" in result.upper() and capable:
-    print "Rebooting the device\n\n";
+    print("Rebooting the device\n\n");
     obj.initiateReboot();
 
     expectedResult="SUCCESS";
@@ -117,21 +117,21 @@ if "SUCCESS" in result.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details
+        print(details)
 
         #Prmitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('DSHal_GetVolumeLeveller');
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_GetVolumeLeveller result: " , actualResult
+        print("DSHal_GetVolumeLeveller result: " , actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "VolumeLeveller Result : " , details
+            print("VolumeLeveller Result : " , details)
             settings = details.split(",");
             parameters = ["Mode","Level"];
             iteration = 0;
@@ -140,32 +140,32 @@ if "SUCCESS" in result.upper() and capable:
                 if "Level" in settings:
                     item = data.split(':');
                     if (int(item[1]) == 0):
-                        print "Expected %s is obtained"%(parameters[iteration]);
+                        print("Expected %s is obtained"%(parameters[iteration]));
                     else:
-                        print "Expected %s after Reboot : 0"%(parameters[iteration]);
-                        print "%s obtained : %s"%(parameters[iteration],item[1]);
+                        print("Expected %s after Reboot : 0"%(parameters[iteration]));
+                        print("%s obtained : %s"%(parameters[iteration],item[1]));
                         tdkTestObj.setResultStatus("FAILURE");
                         fail_params = parameters[iteration];
                 iteration += 1;
 
             if fail_params:
-                print "\n\nTEST FAILED due to unexpected %s"%(fail_params);
+                print("\n\nTEST FAILED due to unexpected %s"%(fail_params));
         else:
             tdkTestObj.setResultStatus("FAILURE");
             details = tdkTestObj.getResultDetails();
-            print "VolumeLeveller Result : " , details
+            print("VolumeLeveller Result : " , details)
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
         details = tdkTestObj.getResultDetails();
-        print details
-    
+        print(details)
+
     obj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in result.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     obj.setLoadModuleStatus("FAILURE");
     obj.unloadModule("dshal");
 
 else:
-    print "Module load failed"
+    print("Module load failed")

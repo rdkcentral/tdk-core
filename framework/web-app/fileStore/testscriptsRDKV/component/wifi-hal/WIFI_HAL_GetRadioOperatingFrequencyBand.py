@@ -109,11 +109,11 @@ if "SUCCESS" in loadmodulestatus.upper():
             SupportedFrequencyBands = details.split(":")[1].strip(" ");
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 1: Get the Radio Supported Frequency bands";
-            print "EXPECTED RESULT 1: Should get the Radio Supported Frequency bands";
-            print "ACTUAL RESULT 1: Supported Frequency Bands = ",SupportedFrequencyBands;
+            print("TEST STEP 1: Get the Radio Supported Frequency bands");
+            print("EXPECTED RESULT 1: Should get the Radio Supported Frequency bands");
+            print("ACTUAL RESULT 1: Supported Frequency Bands = ",SupportedFrequencyBands);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("[TEST EXECUTION RESULT] : SUCCESS");
             #Script to load the configuration file of the component
             tdkTestObj = obj.createTestStep("WIFI_HAL_GetOrSetParamStringValue");
             #Giving the method name to invoke the api for getting Operating Frequency band. ie,wifi_getRadioOperatingFrequencyBand()
@@ -129,37 +129,37 @@ if "SUCCESS" in loadmodulestatus.upper():
                 if OperatingFrequencyBand in SupportedFrequencyBands:
                     #Set the result status of execution
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "TEST STEP 2: Get the Radio Operating Frequency band";
-                    print "EXPECTED RESULT 2: The Radio Operating Frequency band must be from the list of Supported Frequency Bands";
-                    print "ACTUAL RESULT 2: The Radio Operating Frequency band is from the list of Supported Frequncy Bands"; 
-                    print "Operating Frequency Band = ",OperatingFrequencyBand;
+                    print("TEST STEP 2: Get the Radio Operating Frequency band");
+                    print("EXPECTED RESULT 2: The Radio Operating Frequency band must be from the list of Supported Frequency Bands");
+                    print("ACTUAL RESULT 2: The Radio Operating Frequency band is from the list of Supported Frequncy Bands"); 
+                    print("Operating Frequency Band = ",OperatingFrequencyBand);
                     #Get the result of execution
-                    print "[TEST EXECUTION RESULT] : SUCCESS";
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
                 else:
                     #Set the result status of execution
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "TEST STEP 2: Get the Radio Operating Frequency band";
-                    print "EXPECTED RESULT 2: The Radio Operating Frequency band must be from the list of Supported Frequency Bands";
-                    print "ACTUAL RESULT 2: The Radio Operating Frequency band is not from the list of Supported Frequncy Bands";
-                    print "Operating Frequency Band = ",OperatingFrequencyBand;
+                    print("TEST STEP 2: Get the Radio Operating Frequency band");
+                    print("EXPECTED RESULT 2: The Radio Operating Frequency band must be from the list of Supported Frequency Bands");
+                    print("ACTUAL RESULT 2: The Radio Operating Frequency band is not from the list of Supported Frequncy Bands");
+                    print("Operating Frequency Band = ",OperatingFrequencyBand);
                     #Get the result of execution
-                    print "[TEST EXECUTION RESULT] : FAILURE";
+                    print("[TEST EXECUTION RESULT] : FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "wifi_getRadioOperatingFrequencyBand() operation failed";
+                print("wifi_getRadioOperatingFrequencyBand() operation failed");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 1: Get the Radio Supported Frequency bands";
-            print "EXPECTED RESULT 1: Should get the Radio Supported Frequency bands";
-            print "ACTUAL RESULT 1:  Supported Frequency Bands = ",SupportedFrequencyBands;
+            print("TEST STEP 1: Get the Radio Supported Frequency bands");
+            print("EXPECTED RESULT 1: Should get the Radio Supported Frequency bands");
+            print("ACTUAL RESULT 1:  Supported Frequency Bands = ",SupportedFrequencyBands);
             #Get the result of execution
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
-        print "Connecting to SSID operation failed"
+        print("Connecting to SSID operation failed")
 
     obj.unloadModule("wifihal");
 else:
-    print "Failed to load the module";
+    print("Failed to load the module");
     obj.setLoadModuleStatus("FAILURE");
-    print "Module loading failed";
+    print("Module loading failed");

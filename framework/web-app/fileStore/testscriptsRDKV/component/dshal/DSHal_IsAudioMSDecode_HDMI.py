@@ -87,8 +87,8 @@ Checkpoint 2 Verify that the status is correct</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from dshalUtility import *;
 
 #Test component to be tested
@@ -102,7 +102,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_IsAudioMSDecode_HDMI');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
 
@@ -114,39 +114,39 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
-            
+        print(details);
+
         #Check current AudioMSDecode status
         tdkTestObj = dshalObj.createTestStep('DSHal_IsAudioMSDecode');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_IsAudioMSDecode result: ", actualResult
+        print("DSHal_IsAudioMSDecode result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             ms11Decode = tdkTestObj.getResultDetails();
-            print "AudioMSDecode status: ", ms11Decode;
+            print("AudioMSDecode status: ", ms11Decode);
 
             if ms11Decode:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "AudioMSDecode status retrieved";
+                print("AudioMSDecode status retrieved");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "AudioMSDecode status not retrieved";
+                print("AudioMSDecode status not retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get AudioMSDecode status";
+            print("Failed to get AudioMSDecode status");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");

@@ -101,7 +101,7 @@ obj.configureTestCase(ip,port,'PowerMgrHal_GetTemperature');
 
 #Get the result of connection with test component and STB
 loadModuleStatus = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %loadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
 
 if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
@@ -118,58 +118,56 @@ if "SUCCESS" in loadModuleStatus.upper():
     # PLAT_API_GetTemperature
     #   Current_Temp=%f, Wifi_Temp=%f, State=%s
 
-    print "\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API"
-    print "EXEPECTED RESULT : Should get the default temperature thresholds"
+    print("\nTEST STEP1 : Get the high & critical temperature threshold using PLAT_API_GetTempThresholds API")
+    print("EXEPECTED RESULT : Should get the default temperature thresholds")
     tdkTestObj = obj.createTestStep('PowerMgrHal_GetTempThresholds');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Value Returned : ",details
+        print("Value Returned : ",details)
         actual_high     = float(str(str(details).split(":")[1].split(",")[0].split("=")[1]))
         actual_critical = float(str(str(details).split(":")[1].split(",")[1].split("=")[1]))
 
-        print "\nTEST STEP2 : Get the Core Temperature using PLAT_API_GetTemperature"
-        print "EXEPECTED RESULT : Should get the temperature in centigrade"
+        print("\nTEST STEP2 : Get the Core Temperature using PLAT_API_GetTemperature")
+        print("EXEPECTED RESULT : Should get the temperature in centigrade")
         tdkTestObj = obj.createTestStep('PowerMgrHal_GetTemperature');
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Value Returned : ",details
+            print("Value Returned : ",details)
             core_temp  = float(str(str(details).split(",")[0].split("=")[1]))
             wifi_temp  = float(str(str(details).split(",")[1].split("=")[1]))
             temp_state = str(details).split(",")[2].split("=")[1]
             if core_temp != 0 and core_temp < float(actual_high) and core_temp < float(actual_critical) and "NORMAL" in temp_state:
-                print "Core temperature within thermal threshold levels"
-                print "ACTUAL RESULT  : PLAT_API_GetTemperature call is success"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("Core temperature within thermal threshold levels")
+                print("ACTUAL RESULT  : PLAT_API_GetTemperature call is success")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             elif core_temp != 0 and core_temp > float(actual_high) and core_temp < float(actual_critical) and "HIGH" in temp_state:
-                print "Core temperature greater than high level but less than critical level"
-                print "ACTUAL RESULT  : PLAT_API_GetTemperature call is success"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("Core temperature greater than high level but less than critical level")
+                print("ACTUAL RESULT  : PLAT_API_GetTemperature call is success")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             elif core_temp != 0 and core_temp > float(actual_high) and core_temp > float(actual_critical) and "CRITICAL" in temp_state:
-                print "Core temperature greater than high and critical threshold levels"
-                print "ACTUAL RESULT  : PLAT_API_GetTemperature call is success"
-                print "[TEST EXECUTION RESULT] : SUCCESS\n"
+                print("Core temperature greater than high and critical threshold levels")
+                print("ACTUAL RESULT  : PLAT_API_GetTemperature call is success")
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
-                print "Core temperature details are not as expected"
-                print "ACTUAL RESULT  : PLAT_API_GetTemperature call is failed"
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print("Core temperature details are not as expected")
+                print("ACTUAL RESULT  : PLAT_API_GetTemperature call is failed")
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "ACTUAL RESULT  : ",details
-            print "[TEST EXECUTION RESULT] : FAILURE\n"
+            print("ACTUAL RESULT  : ",details)
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "ACTUAL RESULT  : ",details
-        print "[TEST EXECUTION RESULT] : FAILURE\n"
+        print("ACTUAL RESULT  : ",details)
+        print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("pwrmgrhal");
 else:
-    print "Load module failed";
+    print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
-

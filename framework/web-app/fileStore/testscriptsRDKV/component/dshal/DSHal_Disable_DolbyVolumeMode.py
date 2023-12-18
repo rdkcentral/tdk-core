@@ -88,8 +88,8 @@ Checkpoint 2 Verify that the mode is set</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import deviceCapabilities;
 from dshalUtility import *;
 
@@ -104,7 +104,7 @@ dshalObj.configureTestCase(ip,port,'DSHal_Disable_DolbyVolumeMode');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus;
+print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
 
 #Check if Dolby Volume is supported by DUT
 capable = deviceCapabilities.getconfig(dshalObj,"DolbyVolumeMode")
@@ -118,61 +118,61 @@ if "SUCCESS" in dshalloadModuleStatus.upper() and capable:
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    print "DSHal_GetAudioPort result: ", actualResult
+    print("DSHal_GetAudioPort result: ", actualResult)
 
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
         details = tdkTestObj.getResultDetails();
-        print details;
+        print(details);
 
         mode = 0;
         expectedValue = "false";
-        print "Trying to set DolbyVolumeMode to ", mode;
+        print("Trying to set DolbyVolumeMode to ", mode);
         #Prmitive test case which associated to this Script
         tdkTestObj = dshalObj.createTestStep('DSHal_SetDolbyVolumeMode');
         tdkTestObj.addParameter("mode", mode);
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         actualResult = tdkTestObj.getResult();
-        print "DSHal_SetDolbyVolumeMode result: ", actualResult
+        print("DSHal_SetDolbyVolumeMode result: ", actualResult)
 
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
             details = tdkTestObj.getResultDetails();
-            print "DSHal_SetDolbyVolumeMode: ", details
-        
+            print("DSHal_SetDolbyVolumeMode: ", details)
+
             tdkTestObj = dshalObj.createTestStep('DSHal_GetDolbyVolumeMode');
             #Execute the test case in STB
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "DSHal_GetDolbyVolumeMode result: ", actualResult
+            print("DSHal_GetDolbyVolumeMode result: ", actualResult)
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
                 details = tdkTestObj.getResultDetails();
-                print "DolbyVolumeMode retrieved", details
+                print("DolbyVolumeMode retrieved", details)
                 if details == expectedValue:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "DolbyVolumeMode set successfully";
+                    print("DolbyVolumeMode set successfully");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "DolbyVolumeMode setting failed";
+                    print("DolbyVolumeMode setting failed");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to get DolbyVolumeMode";
+                print("Failed to get DolbyVolumeMode");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "DSHal_DolbyVolumeMode failed";
+            print("DSHal_DolbyVolumeMode failed");
 
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AudioPort handle not retrieved";
+        print("AudioPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
 
 elif not capable and "SUCCESS" in dshalloadModuleStatus.upper():
-    print "Exiting from script";
+    print("Exiting from script");
     dshalObj.setLoadModuleStatus("FAILURE");
     dshalObj.unloadModule("dshal");
 
 else:
-    print "Module load failed";
+    print("Module load failed");
