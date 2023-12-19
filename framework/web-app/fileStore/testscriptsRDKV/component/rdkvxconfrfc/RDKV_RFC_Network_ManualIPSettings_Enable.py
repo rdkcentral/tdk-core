@@ -95,7 +95,7 @@ obj.configureTestCase(ip,port,'RDKV_RFC_Network_ManualIPSettings_Enable');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 obj.setLoadModuleStatus(result.upper());
 expectedResult = "SUCCESS"
@@ -154,7 +154,7 @@ if "SUCCESS" in result.upper():
                 detail = detail.split(",")
                 detail = detail[1]
                 feature_name=detail.strip()
-                print "Feature name : "+feature_name
+                print("Feature name : "+feature_name)
                 tdkTestObj.setResultStatus("SUCCESS")
 
                 tdkTestObj = obj.createTestStep('rfc_initializefeatures')
@@ -198,21 +198,21 @@ if "SUCCESS" in result.upper():
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
                             if "FAILURE" not in actualresult:
-                                 tdkTestObj.setResultStatus("SUCCESS")
+                                tdkTestObj.setResultStatus("SUCCESS")
 
-                                 print "\nNeed to revert the RFC datamodel into actualvalue\n"
-                                 tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
-                                 tdkTestObj.addParameter("rfcparameter",rfcparameter)
-                                 tdkTestObj.addParameter("actualvalue",actualvalue)
-                                 tdkTestObj.addParameter("feature_name",feature_name)
-                                 tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
-                                 tdkTestObj.executeTestCase(expectedResult)
-                                 actualresult = tdkTestObj.getResultDetails()
-                                 if expectedResult in actualresult.upper():
-                                     tdkTestObj.setResultStatus("SUCCESS")
+                                print("\nNeed to revert the RFC datamodel into actualvalue\n")
+                                tdkTestObj = obj.createTestStep('rfc_rollbackdatamodelvalue')
+                                tdkTestObj.addParameter("rfcparameter",rfcparameter)
+                                tdkTestObj.addParameter("actualvalue",actualvalue)
+                                tdkTestObj.addParameter("feature_name",feature_name)
+                                tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
+                                tdkTestObj.executeTestCase(expectedResult)
+                                actualresult = tdkTestObj.getResultDetails()
+                                if expectedResult in actualresult.upper():
+                                    tdkTestObj.setResultStatus("SUCCESS")
 
-                                 else:
-                                     tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
@@ -235,7 +235,7 @@ if "SUCCESS" in result.upper():
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                                tdkTestObj.setResultStatus("FAILURE")
+                            tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
             else:
@@ -246,7 +246,7 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
 
 else:
-    print "\nFAILURE : Module Loading Status Failure\n"
+    print("\nFAILURE : Module Loading Status Failure\n")
 
 #unload module
 obj.unloadModule('rdkvxconfrfc');
