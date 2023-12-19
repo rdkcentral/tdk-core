@@ -150,8 +150,8 @@ def execute_step(Data,IsPerformanceSelected="false"):
 		return time_taken;
             IsPerformanceSelected = libObj.parentTestCase.performanceBenchMarkingEnabled
             if IsPerformanceSelected == "true":
-                conf_file,result = getConfigFileName(libObj.realpath)
-                result, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
+                conf_file,result_conf = getConfigFileName(libObj.realpath)
+                result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
                 time_taken = response.elapsed.total_seconds()
                 print "Time Taken for",Data,"is :", time_taken
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
