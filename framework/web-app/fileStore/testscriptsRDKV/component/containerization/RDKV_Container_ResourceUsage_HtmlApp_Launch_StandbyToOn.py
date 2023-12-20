@@ -102,11 +102,11 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_Container_ResourceUsage_HtmlApp_Launch_StandbyToOn');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "HTMLAPP_DETAILS"]
     configValues = {}
     #Get each configuration from device config file
@@ -117,11 +117,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -134,15 +134,15 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
-    
+
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nPre conditions for the test are set successfully"
-    print "\n Get the current StandByMode of the device:"
-    print "\n Invoke org.rdk.System.1.getPreferredStandbyMode \n"
+    print("\nPre conditions for the test are set successfully")
+    print("\n Get the current StandByMode of the device:")
+    print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
     tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
     tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
     tdkTestObj.addParameter("reqValue","preferredStandbyMode")
@@ -150,170 +150,170 @@ if expectedResult in result.upper():
     result = tdkTestObj.getResult();
     preferred_standby = tdkTestObj.getResultDetails()
     if expectedResult in result and preferred_standby != "LIGHT_SLEEP":
-	tdkTestObj.setResultStatus("SUCCESS")
-	print "\n Set standby mode as LIGHT_SLEEP \n"
-	params = '{"standbyMode":"LIGHT_SLEEP"}'
-	tdkTestObj = obj.createTestStep('rdkservice_setValue');
-	tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
-	tdkTestObj.addParameter("value",params)
-	tdkTestObj.executeTestCase(expectedResult);
-	result = tdkTestObj.getResult();
-	if expectedResult in result:
-		print "\n SetPreferredStandbyMode is success \n"
-		tdkTestObj.setResultStatus("SUCCESS")
-		print "\n Invoke org.rdk.System.1.getPreferredStandbyMode \n"
-		tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
-		tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
-		tdkTestObj.addParameter("reqValue","preferredStandbyMode")
-		tdkTestObj.executeTestCase(expectedResult);
-		result = tdkTestObj.getResult();
-		preferred_standby = tdkTestObj.getResultDetails()
-		if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-			print "\n Preferred standby mode is LIGHT_SLEEP \n"
-			tdkTestObj.setResultStatus("SUCCESS")
-		else:
-			print "\n Error in setting up the stand by mode as LIGHT_SLEEP"
-			tdkTestObj.setResultStatus("FAILURE")
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("\n Set standby mode as LIGHT_SLEEP \n")
+        params = '{"standbyMode":"LIGHT_SLEEP"}'
+        tdkTestObj = obj.createTestStep('rdkservice_setValue');
+        tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
+        tdkTestObj.addParameter("value",params)
+        tdkTestObj.executeTestCase(expectedResult);
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("\n SetPreferredStandbyMode is success \n")
+            tdkTestObj.setResultStatus("SUCCESS")
+            print("\n Invoke org.rdk.System.1.getPreferredStandbyMode \n")
+            tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
+            tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
+            tdkTestObj.addParameter("reqValue","preferredStandbyMode")
+            tdkTestObj.executeTestCase(expectedResult);
+            result = tdkTestObj.getResult();
+            preferred_standby = tdkTestObj.getResultDetails()
+            if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
+                print("\n Preferred standby mode is LIGHT_SLEEP \n")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("\n Error in setting up the stand by mode as LIGHT_SLEEP")
+                tdkTestObj.setResultStatus("FAILURE")
     if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-		print "Check the current power state"
-		tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-		tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
-		tdkTestObj.addParameter("reqValue","powerState")
-		tdkTestObj.executeTestCase(expectedResult)
-		result = tdkTestObj.getResult()
-		current_power_state = tdkTestObj.getResultDetails()
-		if expectedResult in result and current_power_state != "STANDBY":
-			print "\n The current power state is: ",current_power_state
-			print "\n Set the current power state mode to StandBy"
-			params = '{"powerState":"STANDBY", "standbyReason":"APIUnitTest"}'
-			tdkTestObj = obj.createTestStep('rdkservice_setValue')
-			tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
-			tdkTestObj.addParameter("value",params)
-			tdkTestObj.executeTestCase(expectedResult)
-			result = tdkTestObj.getResult()
-			if expectedResult in result:
-				print "\n Get the current power state: \n"
-				tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-				tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
-				tdkTestObj.addParameter("reqValue","powerState")
-				tdkTestObj.executeTestCase(expectedResult)
-				result = tdkTestObj.getResult()
-				current_power_state = tdkTestObj.getResultDetails()
-			else:
-				print "\n Error in setting up the power state to standby"
-				tdkTestObj.setResultStatus("FAILURE")        
-            	if expectedResult in result and current_power_state == "STANDBY":
-			print "\n Current power state : \n",current_power_state
-			print "\n Set the current power state mode to ON"
-			params = '{"powerState":"ON", "standbyReason":"APIUnitTest"}'
-			tdkTestObj = obj.createTestStep('rdkservice_setValue')
-			tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
-			tdkTestObj.addParameter("value",params)
-			tdkTestObj.executeTestCase(expectedResult)
-			result = tdkTestObj.getResult()
-			if expectedResult in result:
-				print "\n Get the current power state: \n"
-				tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-				tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
-				tdkTestObj.addParameter("reqValue","powerState")
-				tdkTestObj.executeTestCase(expectedResult)
-				result = tdkTestObj.getResult()
-				current_power_state = tdkTestObj.getResultDetails()
-				if expectedResult in result and current_power_state == "ON":
-					tdkTestObj.setResultStatus("SUCCESS")
-					print "\n Current power state : \n",current_power_state
-					tdkTestObj.setResultStatus("SUCCESS")
-                        		print "\nTo Ensure Dobby service is running"
-                        		command = 'systemctl status dobby | grep active | grep -v inactive'
-                        		print "COMMAND : %s" %(command)
-                        		#Primitive test case which associated to this Script
-                        		tdkTestObj = obj.createTestStep('containerization_executeInDUT');
-                        		#Add the parameters to ssh to the DUT and execute the command
-                        		tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-                        		#tdkTestObj.addParameter("sshMethod", ssh_method);
-                        		tdkTestObj.addParameter("credentials", credentials);
-                        		tdkTestObj.addParameter("command", command);
-                        		#Execute the test case in DUT
-                        		tdkTestObj.executeTestCase(expectedResult);
-                        		result = tdkTestObj.getResult()
-                        		#Get the result of execution
-                        		output = tdkTestObj.getResultDetails();
-                        		if "Active: active" in output and expectedResult in result:
-                            			print "Dobby is running %s" %(output)
-                            			#To enable datamodel
-                            			datamodel=["tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
-                            			tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
-                            			tdkTestObj.addParameter("datamodel",datamodel)
-                            			tdkTestObj.executeTestCase(expectedResult)
-                            			actualresult= tdkTestObj.getResultDetails()
-                            			if expectedResult in actualresult.upper():
-                                			tdkTestObj.setResultStatus("SUCCESS")                                                        
-                                                        print "Launch HtmlApp"
-                                			tdkTestObj = obj.createTestStep('containerization_launchApplication')
-                                			tdkTestObj.addParameter("launch",HtmlApp_details)
-                                			tdkTestObj.executeTestCase(expectedResult)
-                                			actualresult = tdkTestObj.getResultDetails()
-                                			if expectedResult == "SUCCESS":
-                                    				tdkTestObj.setResultStatus("SUCCESS")
-                                    				print "Check container is running"
-                                    				tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
-                                    				tdkTestObj.addParameter("callsign",HtmlApp_details)
-                                    				tdkTestObj.executeTestCase(expectedResult)
-                                    				actualresult = tdkTestObj.getResultDetails()
-                                    				if expectedResult in actualresult.upper():
-                                        				tdkTestObj.setResultStatus("SUCCESS")
-                                        				#Check for Container launch logs
-                                        				command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode"'
-                                        				print "COMMAND : %s" %(command)
-                                        				#Primitive test case which associated to this Script
-                                        				tdkTestObj = obj.createTestStep('containerization_executeInDUT');
-                                        				#Add the parameters to ssh to the DUT and execute the command
-                                        				tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
-                                        				tdkTestObj.addParameter("credentials", credentials);
-                                        				tdkTestObj.addParameter("command", command);
-                                        				#Execute the test case in DUT
-                                        				tdkTestObj.executeTestCase(expectedResult);
-                                        				output = tdkTestObj.getResultDetails()
-                                        				if "launching HtmlApp in container mode" in output:
-                                            					print "HtmlApp launched successfully in container mode"
-                                            					print "\n Validating resource usage:"
-                                            					tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
-                                            					tdkTestObj.executeTestCase(expectedResult)
-                                            					resource_usage = tdkTestObj.getResultDetails()
-                                            					result = tdkTestObj.getResult()
-                                            					if expectedResult in result and resource_usage != "ERROR":
-                                                					print "\n Resource usage is within the expected limit"
-                                                					tdkTestObj.setResultStatus("SUCCESS")
-                                            					else:
-                                                					print "\n Error while validating resource usage"
-                                                					tdkTestObj.setResultStatus("FAILURE")
-                                        				else:
-                                            					print "HtmlApp is not running in container mode"
-                                            					tdkTestObj.setResultStatus("FAILURE")
-                                    				else:
-                                        				print "Error in checking the container status"
-                                       					tdkTestObj.setResultStatus("FAILURE")
-                                			else:
-                                    				print "Failed to launch HtmlApp"
-                                    				tdkTestObj.setResultStatus("FAILURE")
-                            			else:
-                               				print "Failed to enable data model value"
-                                			tdkTestObj.setResultStatus("FAILURE")                        
-                        		else:
-                            			print "Dobby service is not running"
-                            			tdkTestObj.setResultStatus("FAILURE")                           
-                    		else:
-                        		print "Error in getting the current power state"
-                        		tdkTestObj.setResultStatus("FAILURE")
-                	else:
-                    		print "Error in setting the power state to ON"
-                    		tdkTestObj.setResultStatus("FAILURE")
-           	else:
-                	print "Error in setting the power state to StandBy"
-                	tdkTestObj.setResultStatus("FAILURE")
-    else:
-            print "Error in getting the current power state"
+        print("Check the current power state")
+        tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+        tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
+        tdkTestObj.addParameter("reqValue","powerState")
+        tdkTestObj.executeTestCase(expectedResult)
+        result = tdkTestObj.getResult()
+        current_power_state = tdkTestObj.getResultDetails()
+        if expectedResult in result and current_power_state != "STANDBY":
+            print("\n The current power state is: ",current_power_state)
+            print("\n Set the current power state mode to StandBy")
+            params = '{"powerState":"STANDBY", "standbyReason":"APIUnitTest"}'
+            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+            tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
+            tdkTestObj.addParameter("value",params)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if expectedResult in result:
+                print("\n Get the current power state: \n")
+                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
+                tdkTestObj.addParameter("reqValue","powerState")
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                current_power_state = tdkTestObj.getResultDetails()
+            else:
+                print("\n Error in setting up the power state to standby")
+                tdkTestObj.setResultStatus("FAILURE")
+        if expectedResult in result and current_power_state == "STANDBY":
+            print("\n Current power state : \n",current_power_state)
+            print("\n Set the current power state mode to ON")
+            params = '{"powerState":"ON", "standbyReason":"APIUnitTest"}'
+            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+            tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState")
+            tdkTestObj.addParameter("value",params)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            if expectedResult in result:
+                print("\n Get the current power state: \n")
+                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
+                tdkTestObj.addParameter("reqValue","powerState")
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                current_power_state = tdkTestObj.getResultDetails()
+                if expectedResult in result and current_power_state == "ON":
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print("\n Current power state : \n",current_power_state)
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    print("\nTo Ensure Dobby service is running")
+                    command = 'systemctl status dobby | grep active | grep -v inactive'
+                    print("COMMAND : %s" %(command))
+                    #Primitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                    #Add the parameters to ssh to the DUT and execute the command
+                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                    #tdkTestObj.addParameter("sshMethod", ssh_method);
+                    tdkTestObj.addParameter("credentials", credentials);
+                    tdkTestObj.addParameter("command", command);
+                    #Execute the test case in DUT
+                    tdkTestObj.executeTestCase(expectedResult);
+                    result = tdkTestObj.getResult()
+                    #Get the result of execution
+                    output = tdkTestObj.getResultDetails();
+                    if "Active: active" in output and expectedResult in result:
+                        print("Dobby is running %s" %(output))
+                        #To enable datamodel
+                        datamodel=["tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
+                        tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
+                        tdkTestObj.addParameter("datamodel",datamodel)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        actualresult= tdkTestObj.getResultDetails()
+                        if expectedResult in actualresult.upper():
+                            tdkTestObj.setResultStatus("SUCCESS")
+                            print("Launch HtmlApp")
+                            tdkTestObj = obj.createTestStep('containerization_launchApplication')
+                            tdkTestObj.addParameter("launch",HtmlApp_details)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            actualresult = tdkTestObj.getResultDetails()
+                            if expectedResult == "SUCCESS":
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print("Check container is running")
+                                tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
+                                tdkTestObj.addParameter("callsign",HtmlApp_details)
+                                tdkTestObj.executeTestCase(expectedResult)
+                                actualresult = tdkTestObj.getResultDetails()
+                                if expectedResult in actualresult.upper():
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    #Check for Container launch logs
+                                    command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode"'
+                                    print("COMMAND : %s" %(command))
+                                    #Primitive test case which associated to this Script
+                                    tdkTestObj = obj.createTestStep('containerization_executeInDUT');
+                                    #Add the parameters to ssh to the DUT and execute the command
+                                    tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
+                                    tdkTestObj.addParameter("credentials", credentials);
+                                    tdkTestObj.addParameter("command", command);
+                                    #Execute the test case in DUT
+                                    tdkTestObj.executeTestCase(expectedResult);
+                                    output = tdkTestObj.getResultDetails()
+                                    if "launching HtmlApp in container mode" in output:
+                                        print("HtmlApp launched successfully in container mode")
+                                        print("\n Validating resource usage:")
+                                        tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        resource_usage = tdkTestObj.getResultDetails()
+                                        result = tdkTestObj.getResult()
+                                        if expectedResult in result and resource_usage != "ERROR":
+                                            print("\n Resource usage is within the expected limit")
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                        else:
+                                            print("\n Error while validating resource usage")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                    else:
+                                        print("HtmlApp is not running in container mode")
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    print("Error in checking the container status")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                print("Failed to launch HtmlApp")
+                                tdkTestObj.setResultStatus("FAILURE")
+                        else:
+                            print("Failed to enable data model value")
+                            tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print("Dobby service is not running")
+                        tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print("Error in getting the current power state")
+                    tdkTestObj.setResultStatus("FAILURE")
+            else:
+                print("Error in setting the power state to ON")
+                tdkTestObj.setResultStatus("FAILURE")
+        else:
+            print("Error in setting the power state to StandBy")
             tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("Error in getting the current power state")
+        tdkTestObj.setResultStatus("FAILURE")
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
 tdkTestObj.addParameter("datamodel",datamodel)
 tdkTestObj.executeTestCase(expectedResult)
@@ -321,6 +321,6 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 obj.unloadModule("containerization");

@@ -87,8 +87,8 @@
 </xml>
 '''
 
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from containerizationlib import *
 
 #Test component to be tested
@@ -102,12 +102,12 @@ obj.configureTestCase(ip,port,'RDKV_Container_Launch_LightningApp');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "LIGHTNINGAPP_DETAILS"]
     configValues = {}
     #Get each configuration from device config file
@@ -118,11 +118,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -135,14 +135,14 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Dobby service is running"
+    print("\nTo Ensure Dobby service is running")
     command = 'systemctl status dobby | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
 
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -158,7 +158,7 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Dobby is running %s" %(output)
+        print("Dobby is running %s" %(output))
 
         #To enable datamodel
         datamodel = ["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
@@ -168,14 +168,14 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launch LightningApp"
+            print("Launch LightningApp")
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",lightningapp_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Check container is running"
+                print("Check container is running")
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                 tdkTestObj.addParameter("callsign",lightningapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -184,7 +184,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
                     command = 'cat /opt/logs/wpeframework.log | grep "launching LightningApp in container mode"'
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                     #Add the parameters to ssh to the DUT and execute the command
@@ -196,21 +196,21 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
                     if "launching LightningApp in container mode" in output:
-                        print "LightningApp launched successfully in container mode"
+                        print("LightningApp launched successfully in container mode")
                     else:
-                        print "Unable to get the required logs"
+                        print("Unable to get the required logs")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "LightningApp is not running in container mode"
+                    print("LightningApp is not running in container mode")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Failed to launch LightningApp"
+                print("Failed to launch LightningApp")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Failed to enable data model value"
+            print("Failed to enable data model value")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Dobby service is not running"
+        print("Dobby service is not running")
         tdkTestObj.setResultStatus("FAILURE")
 
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
@@ -220,15 +220,7 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("containerization");
-    
-
-
-
-
-
-
-        

@@ -102,14 +102,14 @@ obj.configureTestCase(ip,port,'RDKV_Container_Launch_Time');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     threshold_offset = 50
     datamodel = ["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.Cobalt.Enable"]
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "COBALT_DETAILS"]
     configValues = {}
     #Get each configuration from device config file
@@ -120,11 +120,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -137,12 +137,12 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "Launch Cobalt"
+    print("Launch Cobalt")
     tdkTestObj = obj.createTestStep('containerization_launchApplication')
     tdkTestObj.addParameter("launch",cobalt_details)
     tdkTestObj.executeTestCase(expectedResult)
@@ -165,13 +165,13 @@ if expectedResult in result.upper():
         output = output[output.find('\n'):]
         if output != "EXCEPTION" and expectedResult in result:
             if "Application:Cobalt took" in output:
-                print "output ", output
+                print("output ", output)
                 launch_time = (output.split('took',2)[1].split('milliseconds',2)[0])
-                print "Time taken to launch cobalt in non-container mode: ", launch_time
-                print "Launch cobalt in container mode"
-                print "\nTo Ensure Dobby service is running"
+                print("Time taken to launch cobalt in non-container mode: ", launch_time)
+                print("Launch cobalt in container mode")
+                print("\nTo Ensure Dobby service is running")
                 command = 'systemctl status dobby | grep active | grep -v inactive'
-                print "COMMAND : %s" %(command)
+                print("COMMAND : %s" %(command))
 
                 #Primitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
@@ -187,7 +187,7 @@ if expectedResult in result.upper():
                 #Get the result of execution
                 output = tdkTestObj.getResultDetails();
                 if "Active: active" in output and expectedResult in result:
-                    print "Dobby is running %s" %(output)
+                    print("Dobby is running %s" %(output))
 
                     #To enable datamodel
                     tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
@@ -197,14 +197,14 @@ if expectedResult in result.upper():
                     if expectedResult in actualresult.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(15)
-                        print "Launch Cobalt"
+                        print("Launch Cobalt")
                         tdkTestObj = obj.createTestStep('containerization_launchApplication')
                         tdkTestObj.addParameter("launch",cobalt_details)
                         tdkTestObj.executeTestCase(expectedResult)
                         actualresult = tdkTestObj.getResultDetails()
                         if expectedResult in actualresult.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "Check container is running"
+                            print("Check container is running")
                             tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                             tdkTestObj.addParameter("callsign",cobalt_details)
                             tdkTestObj.executeTestCase(expectedResult)
@@ -213,7 +213,7 @@ if expectedResult in result.upper():
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 #Check for Container launch logs
                                 command = 'cat /opt/logs/wpeframework.log | grep "Application:Cobalt took" | tail -1'
-                                print "COMMAND : %s" %(command)
+                                print("COMMAND : %s" %(command))
                                 #Primitive test case which associated to this Script
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 #Add the parameters to ssh to the DUT and execute the command
@@ -227,39 +227,39 @@ if expectedResult in result.upper():
                                 output = output[output.find('\n'):]
                                 output = tdkTestObj.getResultDetails()
                                 if "Application:Cobalt took" in output:
-                                    print "output ",output
+                                    print("output ",output)
                                     container_launch_time = (output.split('took',2)[2].split('milliseconds',2)[0])
-                                    print "Time taken to launch cobalt in container mode: ", container_launch_time
-                                    print "Time taken to launch cobalt in non-container mode: ", launch_time
-                                    print "Threshold offset value: ",threshold_offset    
+                                    print("Time taken to launch cobalt in container mode: ", container_launch_time)
+                                    print("Time taken to launch cobalt in non-container mode: ", launch_time)
+                                    print("Threshold offset value: ",threshold_offset)
                                     if float(container_launch_time) < (float(launch_time) + float(threshold_offset)):
-                                        print "Container mode launch time is within the limit in comparision with non-container mode launch"
+                                        print("Container mode launch time is within the limit in comparision with non-container mode launch")
                                     else:
-                                        print "Container mode launch time is not within the limit in comparision with non-container mode launch"
+                                        print("Container mode launch time is not within the limit in comparision with non-container mode launch")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "Launch related logs not available"
+                                    print("Launch related logs not available")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "Cobalt is not running in container mode"
+                                print("Cobalt is not running in container mode")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Failed to launch Cobalt"
+                            print("Failed to launch Cobalt")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Failed to enable data model value"
+                        print("Failed to enable data model value")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "Dobby service is not running"
+                    print("Dobby service is not running")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Launch related logs not available"
+                print("Launch related logs not available")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error occurred during SSH, please check ssh details in configuration file\n"
+            print("\n Error occurred during SSH, please check ssh details in configuration file\n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Cobalt launch failed"
+        print("Cobalt launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
@@ -269,8 +269,7 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 
 obj.unloadModule("containerization");
-

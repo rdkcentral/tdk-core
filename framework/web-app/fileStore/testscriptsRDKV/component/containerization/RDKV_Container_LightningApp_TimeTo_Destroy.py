@@ -107,11 +107,11 @@ obj.configureTestCase(ip,port,'RDKV_Container_LightningApp_TimeTo_Destroy');
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "LIGHTNINGAPP_DETAILS","LIGHTNINGAPP_DESTROY_THRESHOLD_VALUE_IN_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
@@ -122,11 +122,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -141,14 +141,14 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Dobby service is running"
+    print("\nTo Ensure Dobby service is running")
     command = 'systemctl status dobby | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
     #Add the parameters to ssh to the DUT and execute the command
@@ -161,7 +161,7 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Dobby is running %s" %(output)
+        print("Dobby is running %s" %(output))
         #To enable datamodel
         datamodel=["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
         tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
@@ -171,21 +171,21 @@ if expectedResult in result.upper():
         time.sleep(20)
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launching LightningApp"
+            print("Launching LightningApp")
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",lightningapp_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Check container is running"
+                print("Check container is running")
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                 tdkTestObj.addParameter("callsign",lightningapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
                 actualresult = tdkTestObj.getResultDetails()
                 if expectedResult in actualresult.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "Destroying LightningApp in container mode:"
+                    print("Destroying LightningApp in container mode:")
                     tdkTestObj = obj.createTestStep('containerization_setPluginStatus')
                     tdkTestObj.addParameter("plugin","LightningApp")
                     tdkTestObj.addParameter("status","deactivate")
@@ -200,10 +200,10 @@ if expectedResult in result.upper():
                         LightningApp_status = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if LightningApp_status == 'deactivated' and expectedResult in result:
-                            print "LightningApp is destroyed successfully"
+                            print("LightningApp is destroyed successfully")
                             #Check for Container launch logs
                             command = 'cat /opt/logs/wpeframework.log | grep "onDestroyed event received for LightningApp" | tail -1'
-                            print "COMMAND : %s" %(command)
+                            print("COMMAND : %s" %(command))
                             #Primitive test case which associated to this Script
                             tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                             #Add the parameters to ssh to the DUT and execute the command^M
@@ -217,44 +217,44 @@ if expectedResult in result.upper():
                             matches = re.findall(pattern, output)
                             destroyed_time = matches[len(matches)-1]
                             if destroyed_time:
-                                print "\n Validate the time taken to destroy LightningApp in container mode"
+                                print("\n Validate the time taken to destroy LightningApp in container mode")
                                 if all(value != "" for value in (lightningapp_destroy_threshold,threshold_offset)):
                                     destroy_start_time_in_millisec = getTimeInMilliSec(destroy_start_time)
                                     destroyed_time_in_millisec = getTimeInMilliSec(destroyed_time)
-                                    print "\n LightningApp destroy initiated at: ",destroy_start_time
+                                    print("\n LightningApp destroy initiated at: ",destroy_start_time)
                                     Summ_list.append('LightningApp destroy initiated at :{}'.format(destroy_start_time))
-                                    print "\n LightningApp destroyed at : ",destroyed_time
+                                    print("\n LightningApp destroyed at : ",destroyed_time)
                                     Summ_list.append('LightningApp destroyed at :{}'.format(destroyed_time))
                                     time_taken_for_destroy = destroyed_time_in_millisec - destroy_start_time_in_millisec
-                                    print "\n Time taken to destroy LightningApp: {}(ms)".format(time_taken_for_destroy)
+                                    print("\n Time taken to destroy LightningApp: {}(ms)".format(time_taken_for_destroy))
                                     Summ_list.append('Time taken to destroy LightningApp :{}'.format(time_taken_for_destroy))
-                                    print "\n Threshold value for time taken to destroy LightningApp after reboot: {}ms".format(lightningapp_destroy_threshold)
+                                    print("\n Threshold value for time taken to destroy LightningApp after reboot: {}ms".format(lightningapp_destroy_threshold))
                                     if 0 < time_taken_for_destroy < (int(lightningapp_destroy_threshold) + int(threshold_offset)) :
-                                        print "\n Time taken for destroying LightningApp is within the expected range \n"
+                                        print("\n Time taken for destroying LightningApp is within the expected range \n")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n Time taken for destroying LightningApp is not within the expected range \n"
+                                        print("\n Time taken for destroying LightningApp is not within the expected range \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Please configure the Threshold value in device configuration file \n"
+                                    print("\n Please configure the Threshold value in device configuration file \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error in gettin the status of the plugins"
+                                print("\n Error in gettin the status of the plugins")
                                 tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Error in destroying LightningApp in container mode"
+                        print("Error in destroying LightningApp in container mode")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "LightningApp is not running in container mode"
+                    print("LightningApp is not running in container mode")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Failed to destroy LightningApp"
+                print("Failed to destroy LightningApp")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Failed to enable data model value"
+            print("Failed to enable data model value")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Dobby service is not running"
+        print("Dobby service is not running")
         tdkTestObj.setResultStatus("FAILURE")
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
 tdkTestObj.addParameter("datamodel",datamodel)
@@ -263,6 +263,6 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 obj.unloadModule("containerization");

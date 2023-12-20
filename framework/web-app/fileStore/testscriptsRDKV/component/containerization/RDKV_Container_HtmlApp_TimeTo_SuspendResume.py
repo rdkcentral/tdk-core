@@ -79,7 +79,7 @@
 5. Save current system time and suspend HtmlApp using RDKShell.
 6. Launch Htmlapp using RDKShell
 7. Suspend the plugin and get the time from triggered event.
-8. After suspending successfully, resume the plugin by launching it and get the time from triggered event. 
+8. After suspending successfully, resume the plugin by launching it and get the time from triggered event.
 9. Validate the output with threshold value</automation_approch>
     <expected_output>The time taken to suspend and resume HtmlApp plugin in container mode should be within the expected limit. </expected_output>
     <priority>High</priority>
@@ -105,11 +105,11 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_Container_HtmlApp_TimeTo_SuspendResume');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "HTMLAPP_DETAILS","HTMLAPP_SUSPEND_THRESHOLD_VALUE_CONTAINER", "THRESHOLD_OFFSET_IN_CONTAINER","HTMLAPP_RESUME_THRESHOLD_VALUE_CONTAINER"]
     configValues = {}
     #Get each configuration from device config file
@@ -120,11 +120,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -140,14 +140,14 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Dobby service is running"
+    print("\nTo Ensure Dobby service is running")
     command = 'systemctl status dobby | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
     #Add the parameters to ssh to the DUT and execute the command
@@ -160,7 +160,7 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Dobby is running %s" %(output)
+        print("Dobby is running %s" %(output))
         #To enable datamodel
         datamodel=["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
         tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
@@ -169,14 +169,14 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launch HtmlApp"
+            print("Launch HtmlApp")
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",htmlapp_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Check container is running"
+                print("Check container is running")
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                 tdkTestObj.addParameter("callsign",htmlapp_details)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -185,7 +185,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
                     command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode" | tail -1'
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                     #Add the parameters to ssh to the DUT and execute the command
@@ -196,9 +196,9 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
                     if "launching HtmlApp in container mode" in output:
-                        print "HtmlApp launched successfully in container mode"
+                        print("HtmlApp launched successfully in container mode")
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "Suspend HtmlApp"
+                        print("Suspend HtmlApp")
                         suspend_status,start_suspend = containerization_suspend_plugin(obj,"HtmlApp")
                         time.sleep(10)
                         if suspend_status == expectedResult:
@@ -208,12 +208,12 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             htmlapp_status = tdkTestObj.getResultDetails()
                             if htmlapp_status == 'suspended' and expectedResult in result:
-                                print "\n HtmlApp suspended successfully"
-                                print "\n Check for onSuspended event from wpeframework logs"
+                                print("\n HtmlApp suspended successfully")
+                                print("\n Check for onSuspended event from wpeframework logs")
                                 command = 'cat /opt/logs/wpeframework.log | grep "RDKShell onSuspended event received for HtmlApp" | tail -1'
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 time.sleep(10)
-                                print "COMMAND : %s" %(command)
+                                print("COMMAND : %s" %(command))
                                 #Primitive test case which associated to this Script
                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                 #Add the parameters to ssh to the DUT and execute the command
@@ -227,8 +227,8 @@ if expectedResult in result.upper():
                                 suspended_time = output.split("tail -1")[1].split(" ")[2]
                                 print (suspended_time)
                                 if "RDKShell onSuspended event received for HtmlApp" in output:
-                                    print "\n HtmlApp suspended successfully and event recieved from wpeframework logs"
-                                    print "\n Resume HtmlApp"
+                                    print("\n HtmlApp suspended successfully and event recieved from wpeframework logs")
+                                    print("\n Resume HtmlApp")
                                     tdkTestObj = obj.createTestStep('containerization_launchApplication')
                                     tdkTestObj.addParameter("launch",htmlapp_details)
                                     tdkTestObj.executeTestCase(expectedResult)
@@ -244,8 +244,8 @@ if expectedResult in result.upper():
                                         htmlapp_status = tdkTestObj.getResultDetails()
                                         if htmlapp_status == 'resumed' and expectedResult in result:
                                             tdkTestObj.setResultStatus("SUCCESS")
-                                            print "\n The plugin status is received as 'resumed' successfully"
-                                            print "Check container is running"
+                                            print("\n The plugin status is received as 'resumed' successfully")
+                                            print("Check container is running")
                                             tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                                             tdkTestObj.addParameter("callsign",htmlapp_details)
                                             tdkTestObj.executeTestCase(expectedResult)
@@ -254,7 +254,7 @@ if expectedResult in result.upper():
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                 #Check for Container launch logs
                                                 command = 'cat /opt/logs/wpeframework.log | grep "launching HtmlApp in container mode" | tail -1'
-                                                print "COMMAND : %s" %(command)
+                                                print("COMMAND : %s" %(command))
                                                 #Primitive test case which associated to this Script
                                                 tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                                                 #Add the parameters to ssh to the DUT and execute the command
@@ -266,76 +266,76 @@ if expectedResult in result.upper():
                                                 output = tdkTestObj.getResultDetails()
                                                 resumed_time = output.split("tail -1")[1].split(" ")[2]
                                                 if "launching HtmlApp in container mode" in output:
-                                                    print "HtmlApp resumed successfully in container mode"
+                                                    print("HtmlApp resumed successfully in container mode")
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     if suspended_time and resumed_time:
                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                         start_suspend_in_millisec = getTimeInMilliSec(start_suspend)
                                                         suspended_time_in_millisec = getTimeInMilliSec(suspended_time)
-                                                        print "\n Suspended initiated at: ",start_suspend
-                                                        print "\n Suspended at : ",suspended_time
+                                                        print("\n Suspended initiated at: ",start_suspend)
+                                                        print("\n Suspended at : ",suspended_time)
                                                         time_taken_for_suspend = suspended_time_in_millisec - start_suspend_in_millisec
-                                                        print "\n Time taken to suspend HtmlApp Plugin: " + str(time_taken_for_suspend) + "(ms)"
-                                                        print "\n Threshold value for time taken to suspend HtmlApp plugin : {} ms".format(htmlapp_suspend_threshold)
-                                                        print "\n Validate the time taken for suspending the plugin"
+                                                        print("\n Time taken to suspend HtmlApp Plugin: " + str(time_taken_for_suspend) + "(ms)")
+                                                        print("\n Threshold value for time taken to suspend HtmlApp plugin : {} ms".format(htmlapp_suspend_threshold))
+                                                        print("\n Validate the time taken for suspending the plugin")
                                                         if 0 < time_taken_for_suspend < (int(htmlapp_suspend_threshold) + int(threshold_offset)) :
-                                                            print "\n Time taken for suspending HtmlApp plugin is within the expected range"
+                                                            print("\n Time taken for suspending HtmlApp plugin is within the expected range")
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                         else:
-                                                            print "\n Time taken for suspending HtmlApp plugin is greater than the expected range"
+                                                            print("\n Time taken for suspending HtmlApp plugin is greater than the expected range")
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                         start_resume_in_millisec = getTimeInMilliSec(start_resume)
                                                         resumed_time_in_millisec =  getTimeInMilliSec(resumed_time)
-                                                        print "\n Resume initiated at: ",start_resume
-                                                        print "\n Resumed at: ",resumed_time
+                                                        print("\n Resume initiated at: ",start_resume)
+                                                        print("\n Resumed at: ",resumed_time)
                                                         time_taken_for_resume = resumed_time_in_millisec - start_resume_in_millisec
-                                                        print "\n Time taken to resume HtmlApp Plugin: " + str(time_taken_for_resume) + "(ms)"
-                                                        print "\n Threshold value for time taken to resume HtmlApp plugin : {} ms".format(htmlapp_resume_threshold)
-                                                        print "\n Validate the time taken for resuming the plugin "
+                                                        print("\n Time taken to resume HtmlApp Plugin: " + str(time_taken_for_resume) + "(ms)")
+                                                        print("\n Threshold value for time taken to resume HtmlApp plugin : {} ms".format(htmlapp_resume_threshold))
+                                                        print("\n Validate the time taken for resuming the plugin ")
                                                         if 0 < time_taken_for_resume < (int(htmlapp_resume_threshold) + int(threshold_offset)) :
-                                                            print "\n Time taken for resuming HtmlApp plugin is within the expected range"
+                                                            print("\n Time taken for resuming HtmlApp plugin is within the expected range")
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                         else:
-                                                            print "\n Time taken for resuming HtmlApp plugin is greater than the expected range"
+                                                            print("\n Time taken for resuming HtmlApp plugin is greater than the expected range")
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                     else:
-                                                        print "\n Error in suspend and resume events"
+                                                        print("\n Error in suspend and resume events")
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                 else:
-                                                    print "\n Unable to get required logs"
+                                                    print("\n Unable to get required logs")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n HtmlApp is not running in container mode"
+                                                print("\n HtmlApp is not running in container mode")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "Error in getting the status of plugin"
+                                            print("Error in getting the status of plugin")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "Failed to launch HtmlApp"
+                                        print("Failed to launch HtmlApp")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n RDKShell onSuspended event not recieved in wpeframework logs"
+                                    print("\n RDKShell onSuspended event not recieved in wpeframework logs")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error in getting the status if plugin"
+                                print("\n Error in getting the status if plugin")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Unable to suspend the plugin"
+                            print("\n Unable to suspend the plugin")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Unable to get the required logs"
+                        print("\n Unable to get the required logs")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n HtmlApp is not running in container mode"
+                    print("\n HtmlApp is not running in container mode")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Failed to launch HtmlApp"
-                tdkTestObj.setResultStatus("FAILURE")                    
+                print("\n Failed to launch HtmlApp")
+                tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Failed to enable data model value"
+            print("Failed to enable data model value")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Dobby service is not running"
+        print("Dobby service is not running")
         tdkTestObj.setResultStatus("FAILURE")
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
 tdkTestObj.addParameter("datamodel",datamodel)
@@ -344,6 +344,6 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 obj.unloadModule("containerization");

@@ -76,7 +76,7 @@
 5. Launch Vimeo
 6. Verify that Vimeo is running in container mode
 7. Set a vimeo url to play a video
-8. Return back to home screen UI. 
+8. Return back to home screen UI.
 7. Check wpeframework.log for "moveToFront" log
 8. Calculate resource usage</automation_approch>
     <expected_output>Resource usage while switching from videoplayback from main UI in Vimeo app should not be higher than the threshold value.</expected_output>
@@ -103,11 +103,11 @@ port = <port>
 obj.configureTestCase(ip,port,'RDKV_Container_Vimeo_ResourceUsage_SwitchTo_MainUI');
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "LIGHTNINGAPP_DETAILS", "VIMEO_PLAYBACK_URL"]
     configValues = {}
     webkit_instance = PerformanceTestVariables.webkit_instance
@@ -120,11 +120,11 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase("SUCCESS")
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -138,14 +138,14 @@ if expectedResult in result.upper():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Dobby service is running"
+    print("\nTo Ensure Dobby service is running")
     command = 'systemctl status dobby | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
     #Add the parameters to ssh to the DUT and execute the command
@@ -158,7 +158,7 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Dobby is running %s" %(output)
+        print("Dobby is running %s" %(output))
         #To enable datamodel
         datamodel=["Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Dobby.WPE.Enable"]
         tdkTestObj = obj.createTestStep('containerization_setPreRequisites')
@@ -167,14 +167,14 @@ if expectedResult in result.upper():
         actualresult= tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper():
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Launch LightningApp"
+            print("Launch LightningApp")
             tdkTestObj = obj.createTestStep('containerization_launchApplication')
             tdkTestObj.addParameter("launch",lightningApp_details)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper():
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Check container is running"
+                print("Check container is running")
                 tdkTestObj = obj.createTestStep('containerization_checkContainerRunningState')
                 tdkTestObj.addParameter("callsign",lightningApp_details)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -183,7 +183,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check for Container launch logs
                     command = 'cat /opt/logs/wpeframework.log | grep "launching LightningApp in container mode"'
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('containerization_executeInDUT');
                     #Add the parameters to ssh to the DUT and execute the command
@@ -194,8 +194,8 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult);
                     output = tdkTestObj.getResultDetails()
                     if "launching LightningApp in container mode" in output:
-                        print "LightningApp launched successfully in container mode"
-                        print "\n Set the Vimeo URL"
+                        print("LightningApp launched successfully in container mode")
+                        print("\n Set the Vimeo URL")
                         tdkTestObj = obj.createTestStep('containerization_setValue')
                         tdkTestObj.addParameter("method",set_method)
                         tdkTestObj.addParameter("value",vimeo_playback_url)
@@ -204,7 +204,7 @@ if expectedResult in result.upper():
                         time.sleep(10)
                         if(vimeo_result in expectedResult):
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "\n Clicking OK to play video"
+                            print("\n Clicking OK to play video")
                             params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -214,7 +214,7 @@ if expectedResult in result.upper():
                             time.sleep(40)
                             if "SUCCESS" == (result1):
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n Pressing Home button \n"
+                                print("\n Pressing Home button \n")
                                 params = '{"keys":[ {"keyCode": 36,"modifiers": [],"delay":1.0}]}'
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                 tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -240,7 +240,7 @@ if expectedResult in result.upper():
                                         tdkTestObj.addParameter("command", command)
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result = tdkTestObj.getResult()
-                                        output = tdkTestObj.getResultDetails()  
+                                        output = tdkTestObj.getResultDetails()
                                         if output != "EXCEPTION" and expectedResult in result:
                                             if "ResidentApp moveToFront Success" in output:
                                                 tdkTestObj.setResultStatus("SUCCESS")
@@ -251,61 +251,61 @@ if expectedResult in result.upper():
                                                 zorder_status = tdkTestObj.getResult()
                                                 if expectedResult in zorder_status :
                                                     zorder = ast.literal_eval(zorder)["clients"]
-                                                    print "zorder: ",zorder
+                                                    print("zorder: ",zorder)
                                                     resident_app = "ResidentApp"
                                                     zorder = exclude_from_zorder(zorder)
                                                     if zorder[0].lower() == resident_app.lower():
-                                                        print "\n Home screen is reached"
+                                                        print("\n Home screen is reached")
                                                         tdkTestObj.setResultStatus("SUCCESS")
-                                                        print "\n Validate Resource Usage"
+                                                        print("\n Validate Resource Usage")
                                                         tdkTestObj = obj.createTestStep("containerization_validateResourceUsage")
                                                         tdkTestObj.executeTestCase(expectedResult)
                                                         resource_usage = tdkTestObj.getResultDetails()
                                                         result = tdkTestObj.getResult()
                                                         if expectedResult in result and resource_usage != "ERROR":
-                                                            print "\n Successfully validated Resource usage"
-                                                            print "\n Resource usage is within the expected limit"
+                                                            print("\n Successfully validated Resource usage")
+                                                            print("\n Resource usage is within the expected limit")
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                         else:
-                                                            print "\n Error while validating Resource usage"
+                                                            print("\n Error while validating Resource usage")
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                     else:
-                                                        print "\n Error in switching to home screen"
+                                                        print("\n Error in switching to home screen")
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                 else:
-                                                    print "\n Error in getting the zorder status"
+                                                    print("\n Error in getting the zorder status")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Required logs are not present in wpeframework.log"
+                                            print("\n Required logs are not present in wpeframework.log")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Error in sshing to the device"
+                                        print("\n Error in sshing to the device")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error in reaching home screen"
+                                    print("\n Error in reaching home screen")
                                     tdkTestObj.setResultStatus("FAILURE")
-                            
+
                             else:
-                                print "\n Error in playing the video"
+                                print("\n Error in playing the video")
                                 tdkTestObj.setResultStatus("FAILURE")
-                            
+
                         else:
-                            print "\n Unable to launch the url"
+                            print("\n Unable to launch the url")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Unable to get the required logs"
+                        print("\n Unable to get the required logs")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n LightningApp is not running in container mode"
+                    print("\n LightningApp is not running in container mode")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Failed to launch LightningApp"
+                print("\n Failed to launch LightningApp")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Failed to enable data model value"
+            print("\n Failed to enable data model value")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Dobby service is not running"
+        print("\n Dobby service is not running")
         tdkTestObj.setResultStatus("FAILURE")
 tdkTestObj = obj.createTestStep('containerization_setPostRequisites')
 tdkTestObj.addParameter("datamodel",datamodel)
@@ -314,6 +314,6 @@ actualresult = tdkTestObj.getResultDetails()
 if expectedResult in actualresult.upper():
     tdkTestObj.setResultStatus("SUCCESS")
 else:
-    print "\n Set Post Requisites Failed"
+    print("\n Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")
 obj.unloadModule("containerization");
