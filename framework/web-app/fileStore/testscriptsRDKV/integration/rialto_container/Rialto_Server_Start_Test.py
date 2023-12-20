@@ -83,8 +83,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from time import sleep
 
 #Test component to be tested
@@ -98,7 +98,7 @@ obj.configureTestCase(ip,port,'Rialto_Server_Start_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult="SUCCESS"
 
@@ -129,7 +129,7 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application installation failed"
+        print("Application installation failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     launch_video = "FAILURE"
@@ -141,15 +141,15 @@ if "SUCCESS" in result.upper():
         tdkTestObj.addParameter("command",command)
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print result
+        print(result)
         if "RialtoServer" in result:
-            print "SUCCESS : RialtoServer is running as expected"
+            print("SUCCESS : RialtoServer is running as expected")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE : RialtoServer is not running"
+            print("FAILURE : RialtoServer is not running")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application launch failed"
+        print("Application launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     if launched == "SUCCESS":
@@ -163,5 +163,5 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
 
-       
+
 obj.unloadModule("rialto_container");

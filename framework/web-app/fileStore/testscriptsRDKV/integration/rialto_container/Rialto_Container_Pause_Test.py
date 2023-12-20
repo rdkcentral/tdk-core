@@ -87,8 +87,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from time import sleep
 
 #Test component to be tested
@@ -102,7 +102,7 @@ obj.configureTestCase(ip,port,'Rialto_Container_Pause_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult="SUCCESS"
 
@@ -133,7 +133,7 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application installation failed"
+        print("Application installation failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     server_running = "FAILURE"
@@ -145,16 +145,16 @@ if "SUCCESS" in result.upper():
         tdkTestObj.addParameter("command",command)
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print result
+        print(result)
         if "RialtoServer" in result:
-            print "RialtoServer is running as expected"
+            print("RialtoServer is running as expected")
             server_running = "SUCCESS"
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "RialtoServer is not running"
+            print("RialtoServer is not running")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application launch failed"
+        print("Application launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     launch_video = "FAILURE"
@@ -181,9 +181,9 @@ if "SUCCESS" in result.upper():
                 tdkTestObj = obj.createTestStep('checkPROC')
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResultDetails();
-                print "AV status result",result
+                print("AV status result",result)
                 if "FAILURE" in result:
-                    print "AV status not proper as proc entry validation failed"
+                    print("AV status not proper as proc entry validation failed")
                     tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("SUCCESS")
@@ -191,7 +191,7 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application launch video failed"
+        print("Application launch video failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     containerPause = "FAILURE"
@@ -213,9 +213,9 @@ if "SUCCESS" in result.upper():
         tdkTestObj.addParameter("check_pause","True")
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print "AV status result",result
+        print("AV status result",result)
         if "FAILURE" in result:
-            print "AV status not proper as proc entry validation failed"
+            print("AV status not proper as proc entry validation failed")
             tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("SUCCESS")
@@ -238,9 +238,9 @@ if "SUCCESS" in result.upper():
         tdkTestObj = obj.createTestStep('checkPROC')
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print "AV status result",result
+        print("AV status result",result)
         if "FAILURE" in result:
-            print "AV status not proper as proc entry validation failed"
+            print("AV status not proper as proc entry validation failed")
             tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("SUCCESS")
@@ -255,5 +255,5 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-       
+
 obj.unloadModule("rialto_container");

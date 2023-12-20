@@ -86,8 +86,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from time import sleep
 
 #Test component to be tested
@@ -101,7 +101,7 @@ obj.configureTestCase(ip,port,'Rialto_Generic_Playback_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult="SUCCESS"
 
@@ -132,7 +132,7 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application installation failed"
+        print("Application installation failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     server_running = "FAILURE"
@@ -144,16 +144,16 @@ if "SUCCESS" in result.upper():
         tdkTestObj.addParameter("command",command)
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print result
+        print(result)
         if "RialtoServer" in result:
-            print "RialtoServer is running as expected"
+            print("RialtoServer is running as expected")
             server_running = "SUCCESS"
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "RialtoServer is not running"
+            print("RialtoServer is not running")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application launch failed"
+        print("Application launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     launch_video = "FAILURE"
@@ -179,7 +179,7 @@ if "SUCCESS" in result.upper():
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Application launch failed"
+        print("Application launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     if launch_video == "SUCCESS":
@@ -190,12 +190,12 @@ if "SUCCESS" in result.upper():
         tdkTestObj = obj.createTestStep('checkPROC')
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResultDetails();
-        print "AV status result",result
+        print("AV status result",result)
         if "NOT_ENABLED" in result:
-            print "PROC_ENTRY validation is disabled , checking wpeframeowrk.log for video validation"
+            print("PROC_ENTRY validation is disabled , checking wpeframeowrk.log for video validation")
             log_verification = True
         elif "FAILURE" in result:
-            print "AV status not proper as proc entry validation failed"
+            print("AV status not proper as proc entry validation failed")
             tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("SUCCESS")
@@ -207,24 +207,24 @@ if "SUCCESS" in result.upper():
             tdkTestObj.addParameter("command",command1)
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResultDetails();
-            print result
+            print(result)
             if "appsrc" in result:
-                print "Video is playing fine"
+                print("Video is playing fine")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Video is not playing"
+                print("Video is not playing")
                 tdkTestObj.setResultStatus("FAILURE")
 
             command2 = "journalctl --since \"2 minutes ago\" -x -u wpeframework | awk '/Audio/ && /Rialto/'"
             tdkTestObj.addParameter("command",command1)
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResultDetails();
-            print result
+            print(result)
             if "appsrc" in result:
-                print "Audio is playing fine"
+                print("Audio is playing fine")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Audio is not playing"
+                print("Audio is not playing")
                 tdkTestObj.setResultStatus("FAILURE")
 
     if launched == "SUCCESS":
@@ -237,5 +237,5 @@ if "SUCCESS" in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-       
+
 obj.unloadModule("rialto_container");
