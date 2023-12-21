@@ -90,38 +90,38 @@ port = <port>
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'HWPerformance_Stress-ng_ThermalZoneTest');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
-         # Execute thermalzone test and get the result
-         tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-         command = "sh TDK_HWPerfTools_Executor.sh ThermalZoneTest"
-         print "Executor Command : %s" %command
-         tdkTestObj.addParameter("command",command)
-         tdkTestObj.executeTestCase("SUCCESS");
-         actualresult = tdkTestObj.getResult();
-         details = tdkTestObj.getResultDetails().strip();
-         expectedresult = "SUCCESS"
-         if expectedresult in actualresult:
-             if details:
-                 details=details.replace(r'\"','\"').replace(r'\n', '\n')
-                 print "\n******************** HW Performance tools Execution Log - Begin ****************************"
-                 print "\n" +  details
-                 print "********************** HW Performance tools Execution Log - End ****************************\n"
-                 result=hardwarePerformanceThresholdComparison(sysUtilObj,details,unit=" MB/s",reverserscheck="false")
-                 tdkTestObj.setResultStatus(result);
-                 print "\n[TEST EXECUTION RESULT] :  %s\n" %result
-             else:
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "\n[Error] - Failed to get the result from the log file\n"
-                 print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
-         else:
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "Stress-ng command execution failed"
+    # Execute thermalzone test and get the result
+    tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
+    command = "sh TDK_HWPerfTools_Executor.sh ThermalZoneTest"
+    print("Executor Command : %s" %command)
+    tdkTestObj.addParameter("command",command)
+    tdkTestObj.executeTestCase("SUCCESS");
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails().strip();
+    expectedresult = "SUCCESS"
+    if expectedresult in actualresult:
+        if details:
+            details=details.replace(r'\"','\"').replace(r'\n', '\n')
+            print("\n******************** HW Performance tools Execution Log - Begin ****************************")
+            print("\n" +  details)
+            print("********************** HW Performance tools Execution Log - End ****************************\n")
+            result=hardwarePerformanceThresholdComparison(sysUtilObj,details,unit=" MB/s",reverserscheck="false")
+            tdkTestObj.setResultStatus(result);
+            print("\n[TEST EXECUTION RESULT] :  %s\n" %result)
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("\n[Error] - Failed to get the result from the log file\n")
+            print("\n[TEST EXECUTION RESULT] :  FAILURE\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Stress-ng command execution failed")
 else:
-    print "System Module Loading Status:FAILURE"
+    print("System Module Loading Status:FAILURE")
 
 #Unload systemutil module
 sysUtilObj.unloadModule("systemutil");

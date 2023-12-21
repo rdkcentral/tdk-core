@@ -91,37 +91,37 @@ port = <port>
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'HWPerformance_Stress-ng_SchedulerTest');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
-         # Execute schedular test and get the result
-         tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-         command = "sh TDK_HWPerfTools_Executor.sh SchedulerTest"
-         print "Executor Command : %s" %command
-         tdkTestObj.addParameter("command",command)
-         tdkTestObj.executeTestCase("SUCCESS");
-         actualresult = tdkTestObj.getResult();
-         expectedresult = "SUCCESS"
-         if expectedresult in actualresult:
-             output = tdkvutility.readBigFile(sysUtilObj ,"/opt/TDK/logs/logparser-results.txt")
-	     if output:
-                  print "\n************** HW Performance tools Execution Log - Begin **********************\n"
-                  print output
-                  print "\n********************* HW Performance tools Execution - End *********************\n"
-                  result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" MB/s",reverserscheck="false")
-                  tdkTestObj.setResultStatus(result);
-                  print "\n[TEST EXECUTION RESULT] :  %s\n" %result
-             else:
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "\n[Error] - Failed to get the result from the log file\n"
-                 print "\n[TEST EXECUTION RESULT] :  FAILURE\n"
-         else:
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "Stress-ng command execution failed"
+    # Execute schedular test and get the result
+    tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
+    command = "sh TDK_HWPerfTools_Executor.sh SchedulerTest"
+    print("Executor Command : %s" %command)
+    tdkTestObj.addParameter("command",command)
+    tdkTestObj.executeTestCase("SUCCESS");
+    actualresult = tdkTestObj.getResult();
+    expectedresult = "SUCCESS"
+    if expectedresult in actualresult:
+        output = tdkvutility.readBigFile(sysUtilObj ,"/opt/TDK/logs/logparser-results.txt")
+        if output:
+            print("\n************** HW Performance tools Execution Log - Begin **********************\n")
+            print(output)
+            print("\n********************* HW Performance tools Execution - End *********************\n")
+            result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" MB/s",reverserscheck="false")
+            tdkTestObj.setResultStatus(result);
+            print("\n[TEST EXECUTION RESULT] :  %s\n" %result)
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("\n[Error] - Failed to get the result from the log file\n")
+            print("\n[TEST EXECUTION RESULT] :  FAILURE\n")
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Stress-ng command execution failed")
 else:
-    print "System Module Loading Status:FAILURE"
+    print("System Module Loading Status:FAILURE")
 
 #Unload systemutil module
 sysUtilObj.unloadModule("systemutil");

@@ -94,8 +94,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
@@ -106,26 +106,25 @@ port = <port>
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'System_Services_Status_Check');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
     cmd = "systemctl -a --state=failed,activating | grep 'failed\|activating'"
-    print cmd;
+    print(cmd);
     tdkTestObj.addParameter("command", cmd);
     tdkTestObj.executeTestCase("SUCCESS");
     actualresult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails()
-    print "DETAILS" , details
-  
+    print("DETAILS" , details)
+
     if details:
-        print "A few systemd services are in failed or activating state"
+        print("A few systemd services are in failed or activating state")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "No systemd services are in failed or activating state"
+        print("No systemd services are in failed or activating state")
         tdkTestObj.setResultStatus("SUCCESS");
-  
-sysUtilObj.unloadModule("systemutil");
 
+sysUtilObj.unloadModule("systemutil");

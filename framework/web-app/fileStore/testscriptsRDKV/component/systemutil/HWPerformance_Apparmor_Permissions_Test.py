@@ -91,67 +91,67 @@ port = <port>
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'HWPerformance_Apparmor_Permissions_Test');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in sysUtilLoadStatus.upper()):
-     # Execute apparmor permission test and get the result
-     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-     command = "touch /tmp/foobar | apparmor_parser -r /opt/TDK/tdk_sample.profile && echo 1 || echo 0"
-     print "Executor Command : %s" %command
-     tdkTestObj.addParameter("command",command)
-     tdkTestObj.executeTestCase("SUCCESS");
-     details=tdkTestObj.getResultDetails();
-     if "1" in details :
-         command ="tdk_apparmoraccess /bin/ls r"
-         print "Executor Command : %s" %command
-         tdkTestObj.addParameter("command",command)
-         tdkTestObj.executeTestCase("SUCCESS");
-         details=tdkTestObj.getResultDetails();
-         details=details.replace(r'\"','\"').replace(r'\n', '\n')
-         if "Success" in  details and "error" not in details and "Fail: 0" in details:
-             print details
-             print "\n[TEST EXECUTION RESULT] : SUCCESS\n"
+    # Execute apparmor permission test and get the result
+    tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
+    command = "touch /tmp/foobar | apparmor_parser -r /opt/TDK/tdk_sample.profile && echo 1 || echo 0"
+    print("Executor Command : %s" %command)
+    tdkTestObj.addParameter("command",command)
+    tdkTestObj.executeTestCase("SUCCESS");
+    details=tdkTestObj.getResultDetails();
+    if "1" in details :
+        command ="tdk_apparmoraccess /bin/ls r"
+        print("Executor Command : %s" %command)
+        tdkTestObj.addParameter("command",command)
+        tdkTestObj.executeTestCase("SUCCESS");
+        details=tdkTestObj.getResultDetails();
+        details=details.replace(r'\"','\"').replace(r'\n', '\n')
+        if "Success" in  details and "error" not in details and "Fail: 0" in details:
+            print(details)
+            print("\n[TEST EXECUTION RESULT] : SUCCESS\n")
 
-             command = "tdk_apparmoraccess /tmp/foobar rw"
-             print "Executor Command : %s" %command
-             tdkTestObj.addParameter("command",command)
-             tdkTestObj.executeTestCase("SUCCESS");
-             details=tdkTestObj.getResultDetails();
-             details=details.replace(r'\"','\"').replace(r'\n', '\n')
-             if "Success" in details and "error" not in details and "Fail: 0" in details:
-                  print details
-                  print "\n[TEST EXECUTION RESULT] : SUCCESS\n"
+            command = "tdk_apparmoraccess /tmp/foobar rw"
+            print("Executor Command : %s" %command)
+            tdkTestObj.addParameter("command",command)
+            tdkTestObj.executeTestCase("SUCCESS");
+            details=tdkTestObj.getResultDetails();
+            details=details.replace(r'\"','\"').replace(r'\n', '\n')
+            if "Success" in details and "error" not in details and "Fail: 0" in details:
+                print(details)
+                print("\n[TEST EXECUTION RESULT] : SUCCESS\n")
 
-                  command = "tdk_apparmoraccess /bin/ls rw"
-                  print "Executor Command : %s" %command
-                  tdkTestObj.addParameter("command",command)
-                  tdkTestObj.executeTestCase("SUCCESS");
-                  details=tdkTestObj.getResultDetails();
-                  details=details.replace(r'\"','\"').replace(r'\n', '\n')
-                  if details and "error" in details:
-                      tdkTestObj.setResultStatus("SUCCESS");
-                      print details
-                      print "Failed as expected because /bin/ls is readonly as per tdk_sample.profile"
-                      print "\n[TEST EXECUTION RESULT] : SUCCESS\n"
-                  else:
-                      print details
-                      tdkTestObj.setResultStatus("FAILURE");
-                      print "\n[TEST EXECUTION RESULT] : FAILURE\n"
-             else:
-                 print details
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "\n[TEST EXECUTION RESULT] : FAILURE\n"
-         else:
-             print details
-             tdkTestObj.setResultStatus("FAILURE");
-             print "[TEST EXECUTION RESULT] : FAILURE\n"
-     else:
-         print "\nFile tdk_sample.profile not found\n"
-         tdkTestObj.setResultStatus("FAILURE");
+                command = "tdk_apparmoraccess /bin/ls rw"
+                print("Executor Command : %s" %command)
+                tdkTestObj.addParameter("command",command)
+                tdkTestObj.executeTestCase("SUCCESS");
+                details=tdkTestObj.getResultDetails();
+                details=details.replace(r'\"','\"').replace(r'\n', '\n')
+                if details and "error" in details:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print(details)
+                    print("Failed as expected because /bin/ls is readonly as per tdk_sample.profile")
+                    print("\n[TEST EXECUTION RESULT] : SUCCESS\n")
+                else:
+                    print(details)
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("\n[TEST EXECUTION RESULT] : FAILURE\n")
+            else:
+                print(details)
+                tdkTestObj.setResultStatus("FAILURE");
+                print("\n[TEST EXECUTION RESULT] : FAILURE\n")
+        else:
+            print(details)
+            tdkTestObj.setResultStatus("FAILURE");
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
+    else:
+        print("\nFile tdk_sample.profile not found\n")
+        tdkTestObj.setResultStatus("FAILURE");
 else:
-    print "System Module Loading Status:FAILURE"
+    print("System Module Loading Status:FAILURE")
 
 #Unload systemutil module
 sysUtilObj.unloadModule("systemutil");

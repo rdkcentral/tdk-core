@@ -81,7 +81,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
 #IP and Port of box, No need to change,
@@ -93,7 +93,7 @@ port = <port>
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'HWPerformance_glmark2');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
@@ -101,34 +101,34 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
     expectedResult="SUCCESS"
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
     cmd = "command -v glmark2-es2-wayland"
-    print cmd;
+    print(cmd);
     tdkTestObj.addParameter("command", cmd);
     tdkTestObj.executeTestCase("SUCCESS");
     actualresult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails()
 
     if details:
-        print "glmark2 is installed in device\nProceeding with the testcase"
-        print "\nTEST STEP NAME: Setup graphics testing environment"
+        print("glmark2 is installed in device\nProceeding with the testcase")
+        print("\nTEST STEP NAME: Setup graphics testing environment")
         command = "touch graphics_test; ls graphics_test"
         tdkTestObj.addParameter("command", command)
         tdkTestObj.executeTestCase(expectedResult)
         output = tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper() and "graphics_test" in output :
-            print "Rebooting the device......."
+            print("Rebooting the device.......")
             sysUtilObj.initiateReboot();
 
-        print "\nTEST STEP NAME: Check if westeros renderer is running"
+        print("\nTEST STEP NAME: Check if westeros renderer is running")
         cmd = "ps -ef | grep \"westeros --renderer\" | grep -v grep"
         tdkTestObj.addParameter("command", cmd)
         tdkTestObj.executeTestCase(expectedResult)
         output = tdkTestObj.getResultDetails()
         if expectedResult in actualresult.upper() and not output:
-            print "westeros renderer is not running\nExiting from testcase"
+            print("westeros renderer is not running\nExiting from testcase")
             tdkTestObj.setResultStatus("FAILURE");
 
         else:
-            print "\nTEST STEP NAME : Run glmark2 test"
+            print("\nTEST STEP NAME : Run glmark2 test")
             cmd = "glmark2-es2-wayland > glmark2_exec_log ; cat glmark2_exec_log"
             tdkTestObj.addParameter("command", cmd);
             tdkTestObj.executeTestCase("SUCCESS");
@@ -139,28 +139,28 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
                 try:
                     data = open(filepath,'r');
                     message = data.read()
-                    print "\n************** glmark2  Execution Log - Begin**********\n"
+                    print("\n************** glmark2  Execution Log - Begin**********\n")
                     print(message)
-                    print "\n************** glmark2  Execution - End*************\n"
+                    print("\n************** glmark2  Execution - End*************\n")
                     data.close()
                     tdkTestObj.setResultStatus("SUCCESS");
                 except IOError:
-                    print "ERROR : Unable to open execution log file"
+                    print("ERROR : Unable to open execution log file")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "glmark2 score is not obtained"
+                print("glmark2 score is not obtained")
                 tdkTestObj.setResultStatus("FAILURE");
 
-        print "\nTEST STEP NAME: Restore default Environment"
+        print("\nTEST STEP NAME: Restore default Environment")
         cmd = "rm graphics_test"
         tdkTestObj.addParameter("command", cmd)
         tdkTestObj.executeTestCase(expectedResult)
         sysUtilObj.initiateReboot();
 
     else:
-        print "glmark2 is not installed in DUT"
+        print("glmark2 is not installed in DUT")
         tdkTestObj.setResultStatus("FAILURE");
 
     sysUtilObj.unloadModule("systemutil");
 else:
-    print "Module load failed"
+    print("Module load failed")

@@ -84,7 +84,7 @@
     <pre_requisite></pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters></input_parameters>
-    <automation_approch>1.Read parameters from file /tmp/.deviceDetails.cache 
+    <automation_approch>1.Read parameters from file /tmp/.deviceDetails.cache
 2.Check using regex for each parameter
 3.TM will set result status based on regex result</automation_approch>
     <expected_output>All parameters must match the expected pattern</expected_output>
@@ -110,8 +110,8 @@ port = <port>
 def checkValue(parameter):
     return {
         'mac': bool(re.match("^([0-9A-Fa-f]{2}[:-]){5}([0-9A-Fa-f]){2}$", Value)),
-	'rf4ce_mac': bool(re.match("^([0-9A-Fa-f]{2}[:-]){7}([0-9A-Fa-f]){2}$", Value)),
-        'ip': bool(re.match("^([0-9a-f]*[:-])+([0-9a-f])*$", Value)),
+        'rf4ce_mac': bool(re.match("^([0-9A-Fa-f]{2}[:-]){7}([0-9A-Fa-f]){2}$", Value)),
+        'ip': bool(re.match(r"^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$", Value)),
         'build_type': bool(Value == 'VBN'),
         'DACInitTimestamp': bool(re.match("^[a-zA-Z]{3}:([0-9]+[:-])+[0-9]+$", Value)),
         'serial_number': bool((len(Value) == 12) & bool(re.match("[A-Z0-9]*", Value))),
@@ -125,14 +125,14 @@ def checkValue(parameter):
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'System_Device_Details_Check');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
     cmd = "cat /tmp/.deviceDetails.cache | wc -l"
-    print cmd;
+    print(cmd);
     tdkTestObj.addParameter("command", cmd);
     tdkTestObj.executeTestCase("SUCCESS");
     actualresult = tdkTestObj.getResult();
@@ -146,9 +146,9 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
     tdkTestObj.executeTestCase("SUCCESS");
     isWifipresent = tdkTestObj.getResultDetails().split("\\")[0];
     if not int(isWifipresent):
-        print "Device doesnot have wifi\n"
+        print("Device doesnot have wifi\n")
     else:
-        print "Device supports wifi\n"
+        print("Device supports wifi\n")
 
     #Get MANUFACTURER
     tdkTestObj.addParameter("command", "cat /etc/device.properties  | grep  MFG | cut -d \"=\" -f 2");
@@ -161,39 +161,39 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
         tdkTestObj.executeTestCase("SUCCESS");
         actualresult = tdkTestObj.getResult();
         Value = tdkTestObj.getResultDetails().split("\\")[0];
-        print Value
+        print(Value)
         parameterName = parameter = Value.split("=")[0];
         Value = Value.split("=")[1];
         if 'mac' in parameter.lower():
-                if parameter == 'wifi_mac':
-                        if not int(isWifipresent):
-                                print "wifi_mac should be empty for this device"
-                                result = not Value;
-                        else:
-                                result = checkValue('mac')
-                elif parameter == 'rf4ce_mac':
-                        result = checkValue('rf4ce_mac')
-		else:
-			result = checkValue('mac')
+            if parameter == 'wifi_mac':
+                if not int(isWifipresent):
+                    print("wifi_mac should be empty for this device")
+                    result = not Value;
+                else:
+                    result = checkValue('mac')
+            elif parameter == 'rf4ce_mac':
+                result = checkValue('rf4ce_mac')
+            else:
+                result = checkValue('mac')
         elif 'ip' in parameter.lower():
-                result = checkValue('ip')
+            result = checkValue('ip')
         elif 'model' in parameter:
-                result = checkValue('model')
+            result = checkValue('model')
         else :
-                result = checkValue(parameter)
+            result = checkValue(parameter)
 
         if result:
-                print "Verification of %s is SUCCESS\n Value = %s\n"%(parameterName,Value);
+            print("Verification of %s is SUCCESS\n Value = %s\n"%(parameterName,Value));
         else:
-                print "Verification of %s is FAILED\n Value = %s\n"%(parameterName,Value);
-                failedparams[parameterName]=Value;
+            print("Verification of %s is FAILED\n Value = %s\n"%(parameterName,Value));
+            failedparams[parameterName]=Value;
 
 
     if not failedparams:
-        print "SUCCESS:All parameters verified"
+        print("SUCCESS:All parameters verified")
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "FAILURE:Failed parameters :",failedparams;
+        print("FAILURE:Failed parameters :",failedparams);
         tdkTestObj.setResultStatus("FAILURE");
 
 sysUtilObj.unloadModule("systemutil");
