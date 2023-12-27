@@ -222,6 +222,16 @@
           <parameter name="license_server_url" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="Aamp_AampSetDisable4K" id=" " version="1">
+        <function>TestMgr_Aamp_AampSetDisable4K</function>
+        <parameters>
+          <parameter name="disable4K" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Aamp_AampGetBitrateDetails" id="" version="1">
+        <function>TestMgr_Aamp_AampGetBitrateDetails</function>
+        <parameters/>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>

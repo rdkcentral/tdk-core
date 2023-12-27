@@ -68,6 +68,8 @@
       <function name='TestMgr_Aamp_AampCheckPlaybackRate' />
       <function name='TestMgr_Aamp_AampPauseAtPosition' />
       <function name='TestMgr_Aamp_AampSetLicenseServerURL' />
+      <function name='TestMgr_Aamp_AampSetDisable4K' />
+      <function name='TestMgr_Aamp_AampGetBitrateDetails' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -98,6 +100,7 @@
       <parameter funName='TestMgr_Aamp_AampPauseAtPosition' parameterName='position' parameterType='DOUBLE' range='1-1000' />
       <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='DRM' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='license_server_url' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampSetDisable4K' parameterName='disable4K' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

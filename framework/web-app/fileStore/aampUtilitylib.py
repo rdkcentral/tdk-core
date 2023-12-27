@@ -54,6 +54,9 @@ def getAampTuneURL(stream):
     elif stream =="mpdstream":
         mpdstreamURL = parser.get('streams','MPD_stream')
         return mpdstreamURL
+    elif stream =="uhdstream":
+        uhdstreamURL = parser.get('streams','UHD_stream')
+        return uhdstreamURL
     elif stream =="fogstream":
         fogstreamURL = parser.get('streams','FOG_stream')
         return fogstreamURL
