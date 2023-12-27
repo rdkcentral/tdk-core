@@ -796,7 +796,8 @@
                 <param tag="focused" type="bool" />
                 <param tag="holePunch" type="bool" />
 		<param tag="topmost" type="bool" />
-                <param tag="behind" defaultValue="null" />
+		<param tag="behind" defaultValue="null" />
+		<param tag="scaleToFit" defaultValue="null" type="bool" />
             </params>
         </method>
 	
@@ -2352,6 +2353,19 @@
                 <expectedValues>200</expectedValues>
         </method>
     </plugin>
+
+    <!-- MessageControl Plugin Information -->
+    <plugin pluginName="MessageControl" serviceName="MessageControl" serviceVersion="1">
+        <method name="Get_Message_Controls" api="controls" type="method" desc="Provides access to retrieve a list of current message controls">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="Set_Message_Controls" api="enable" type="method" desc="Enables/disables a message control">
+            <params>
+                <param tag="type" defaultValue="Tracing" />
+                <param tag="category" defaultValue="null" />
+                <param tag="module" defaultValue="null" />
+                <param tag="enabled" defaultValue="null" type="bool" />
+            </params>
+        </method>
+    </plugin>
 </thunderPlugins>
-
-

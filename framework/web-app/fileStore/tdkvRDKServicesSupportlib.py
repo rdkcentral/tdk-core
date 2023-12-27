@@ -726,6 +726,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 for rfc_data in rfc_values:
                     if "ERROR" in rfc_data or "error" in rfc_data:
                         info["Test_Step_Status"] = "FAILURE"
+                        
+        elif tag == "system_validate_empty_rfclist":
+            if str(result.get("success")).lower() == "false":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "system_get_gz_enabled_status":
             info["enabled"] = result.get("enabled")
@@ -925,6 +931,10 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     deviceInfo = result.get("DeviceInfo")
                     info["MODEL_NUMBER"] = deviceInfo.get("model")
                     deviceDetail = deviceInfo.get("model")
+                elif len(arg) and arg[0] == "check_devicetype":
+                    deviceInfo = result.get("DeviceInfo")
+                    info["deviceType"] = deviceInfo.get("deviceType")
+                    deviceDetail = deviceInfo.get("deviceType")
                 elif len(arg) and arg[0] == "check_device_mac_address":
                     accountInfo = result.get("AccountInfo")
                     info["deviceMACAddress"] = accountInfo.get("deviceMACAddress")
@@ -2526,7 +2536,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                  info["Test_Step_Status"] = "FAILURE"
 
-
+        elif tag == "timer_check_negative_scenario":
+            if str(result.get("success")).lower() == "false":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         # Messenger Plugin Response result parser steps
         elif tag == "messenger_join_room":
@@ -3690,6 +3704,49 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = testStepResults[0].values()[0]
             info["category"] = testStepResults[0].get("category")
         
+        # MessageControl Plugin Response result parser steps
+        elif tag == "messagecontrol_get_controls":
+            for value in result:
+                if str(value.get("module")).lower() == arg[1] and str(value.get("type")).lower() == arg[2] and str(value.get("category")).lower() == arg[3].lower():
+                    info["enabled"] = value.get("enabled")
+                    info["module"]   = value.get("module")
+                    info["category"] = value.get("category")
+                    break;
+            if arg[0] == "check_state":
+                if str(value.get("enabled")) == expectedValues[0]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        # MessageControl Plugin Response result parser steps
+        elif tag == "messagecontrol_toggle_state":
+            state = ""
+            testStepResults = testStepResults[0].values()[0]
+            if len(arg) != 0:
+                for result in testStepResults:
+                    if arg[0] == result.get("category"):
+                        state = result.get("enabled")
+                        break;
+            else:
+                state = testStepResults[0].get("enabled")
+            if str(state).lower() == "true":
+                info["enabled"] = False
+            elif str(state ).lower() == "false":
+                info["enabled"] = True
+
+        # MessageControl Plugin Response result parser steps
+        elif tag == "messagecontrol_get_original_state":
+            state = ""
+            testStepResults = testStepResults[0].values()[0]
+            if len(arg) != 0:
+                for result in testStepResults:
+                    if arg[0] == result.get("category"):
+                        state = result.get("enabled")
+                        break;
+            else:
+                state = testStepResults[0].get("enabled")
+            info["enabled"] = state
+
         # DeviceInfo Plugin Response result parser steps
         elif tag == "deviceinfo_get_firmware_version_details":
             testStepResults = testStepResults[0].values()[0]
@@ -4811,6 +4868,22 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             else:
                 message = "Please configure values in IPChangeDetectionVariables and device specific configuration file"
                 info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_device_ssh_state":
+            #Get the MAC Address from the box below command
+            command = "ifconfig | awk '/eth0/ {print $5}'"
+            deviceMAC = executeCommand(execInfo,command)
+            deviceMAC = str(deviceMAC).split("\n")[1]
+            deviceMAC = deviceMAC.strip()
+            #Validate MAC Address
+            if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$",str(deviceMAC).lower()):
+                print "\nSUCCESS : Successfully get the MAC address of the box"
+                print "SUCCESS : Box is SSH able"
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print "\nFAILURE : Failed to get the MAC address"
+                print "Able to SSH the box, failed in get the MAC address of the box"
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":

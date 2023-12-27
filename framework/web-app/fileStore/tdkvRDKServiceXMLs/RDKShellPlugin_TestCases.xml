@@ -4049,4 +4049,66 @@
               </resultGeneration>
             </testStep>
         </testCase>
+
+	<!-- Test case 125 -->
+        <testCase testCaseId="RDKShell_125" testCaseName="RDKShell_Launch_Cobalt_with_Scaletofit_True" desc="Launch the cobalt application with scalefit to true" >
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="cobalt" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="Cobalt" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                   <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+                      <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues="cobalt" />
+                   </testStep>
+                 </prerequisite>
+            </testCasePreRequisite>
+              <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                <params>
+                        <param tag="callsign" value="Cobalt" />
+                        <param tag="scaletofit" value="true" />
+                </params>
+                <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              </testStep>
+              <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="cobalt" />
+              </testStep>
+        </testCase>
+
+	<!-- Test case 126 -->
+        <testCase testCaseId="RDKShell_126" testCaseName="RDKShell_Launch_Cobalt_with_Scaletofit_False" desc="Launch the cobalt application with scalefit to false" >
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
+                   <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="cobalt" />
+                   </testStep>
+                   <testStep testStepId="2" name="Destroy_Cobalt_Application" method="DestroyApplication" >
+                      <params>
+                          <param tag="callsign" value="Cobalt" />
+                      </params>
+                      <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                   </testStep>
+                   <testStep testStepId="3" name="Get_connected_clients" method="GetClients" >
+                      <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_not_exists" expectedValues="cobalt" />
+                   </testStep>
+                 </prerequisite>
+            </testCasePreRequisite>
+              <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                <params>
+                        <param tag="callsign" value="Cobalt" />
+                        <param tag="scaletofit" value="false" />
+                </params>
+                <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              </testStep>
+              <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+                        <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="cobalt" />
+              </testStep>
+        </testCase>
 </testPlugin>

@@ -1120,4 +1120,85 @@
                 <resultGeneration useMethodTag="system_check_negative_scenario" />
             </testStep>
         </testCase>
+	
+       <!-- Test case 58 -->
+       <testCase testCaseId="SYS_58" testCaseName= "System_Check_RFCList_with_Empty_Value" desc="Check RFC configurations list with empty value">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Check_RFC_Config_List_Empty" method="Get_RFC_Config">
+                <params>
+                  <param tag="rfcList" value=""/>
+                </params>
+                <resultGeneration useMethodTag="system_validate_empty_rfclist"/>
+            </testStep>
+       </testCase>		
+
+       <!-- Test case 59 -->
+       <testCase testCaseId="SYS_59" testCaseName= "System_Check_Device_Type" desc="Check the device type of the DUT with getPlatformConfiguration API">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="system_get_device_details_from_file" >
+                  <arguments value="^DEVICE_TYPE" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Platform_Configuration" method="Get_Platform_Configuration">
+                <params>
+                  <param tag="query" value="DeviceInfo.deviceType" />
+                </params>
+                <resultGeneration useMethodTag="system_check_platform_configurations"   arguments="check_devicetype">
+                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
+                </resultGeneration>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 60 -->
+       <testCase testCaseId="SYS_60" testCaseName="System_Check_Device_SSH_State_After_Reboot_On_Standby_State" desc="Check whether the box sshable or not in standbymode after reboot" >
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true">
+                <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" saveResult="true">
+                <resultGeneration useMethodTag="system_get_preferred_standby_mode" />
+            </testStep>
+            <testStep testStepId="3" name="Set_Preferred_StandBy_Mode" method="Set_Preferred_StandBy_Mode" >
+                <conditionalExecution enable="true" Id="2" useMethodTag="system_check_preferred_standby_mode" arguments="isNotEqual,LIGHT_SLEEP" />
+                <params>
+                  <param tag="standbyMode" value="LIGHT_SLEEP" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Power_State" method="Get_Power_State"  >
+                <resultGeneration useMethodTag="system_get_power_state"/>
+            </testStep>
+            <testStep testStepId="5" name="Set_Power_State" method="Set_Power_State" >
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="STANDBY"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="6" name="Get_Power_State" method="Get_Power_State" saveResult="true" >
+                <resultGeneration useMethodTag="system_get_power_state" expectedValues="LIGHT_SLEEP,STANDBY" />
+            </testStep>
+            <testStep testStepId="7" name="System_reboot" method="Reboot" rebootStep="yes" >
+              <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+            <testStep testStepId="8" name="Check_Device_SSH_State" action="externalFnCall">
+              <resultGeneration useMethodTag="check_device_ssh_state"/>
+            </testStep>
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+            <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true">
+                <resultGeneration useMethodTag="system_get_power_state" expectedValues="LIGHT_SLEEP,STANDBY" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
 </testPlugin>

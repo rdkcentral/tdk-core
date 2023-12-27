@@ -312,5 +312,80 @@
               <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="EXPIRED" />
             </testStep>
         </testCase>
-</testPlugin>
 
+	<!-- Test case 09 -->
+        <testCase testCaseId="TIME_09" testCaseName="Cancel_Expired_Timer_ID" desc="Cancel the expired timer ID">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Start_Timer" method="Start_Timer" saveResult="true"  >
+              <params>
+                <param tag="interval" useDefault="true"  />
+                <param tag="mode" useDefault="true" />
+                <param tag="repeatInterval" useDefault="true" />
+                <param tag="remindBefore" useDefault="true" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="2"  name="Get_Timer_Status" method="Get_Timer_Status" delay="5">
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="RUNNING"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Timer_Expired_Event" event="Event_Timer_Expired" action="eventListener" delay="20"  >
+              <resultGeneration useMethodTag="timer_check_timer_expired_event" expectedValues="0" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="EXPIRED" />
+            </testStep>
+            <testStep testStepId="5"  name="Cancel_Expired_Timer_ID" method="Cancel_Timer" delay="5">
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+        </testCase>
+
+	<!-- Test case 10 -->
+        <testCase testCaseId="TIME_10" testCaseName="Suspend_Resume_Expired_Timer_ID" desc="Suspend and resume the expired timer ID">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Start_Timer" method="Start_Timer" saveResult="true"  >
+              <params>
+                <param tag="interval" useDefault="true"  />
+                <param tag="mode" useDefault="true" />
+                <param tag="repeatInterval" useDefault="true" />
+                <param tag="remindBefore" useDefault="true" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_results" />
+            </testStep>
+            <testStep testStepId="2"  name="Get_Timer_Status" method="Get_Timer_Status" delay="5">
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="RUNNING"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_Timer_Expired_Event" event="Event_Timer_Expired" action="eventListener" delay="20"  >
+              <resultGeneration useMethodTag="timer_check_timer_expired_event" expectedValues="0" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Timer_Status" method="Get_Timer_Status" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1" useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_timer_status" expectedValues="EXPIRED" />
+            </testStep>
+            <testStep testStepId="5"  name="Suspend_Expired_Timer_ID" method="Suspend_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+            <testStep testStepId="6"  name="Resume_Expired_Timer_ID" method="Resume_Timer" >
+              <params>
+                <param tag="timerId" usePreviousResult="true" Id="1"  useMethodTag="timer_start_timer_result" />
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+        </testCase>
+</testPlugin>
