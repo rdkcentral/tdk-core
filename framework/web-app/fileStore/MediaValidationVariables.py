@@ -230,8 +230,9 @@ video_src_url_mpegts = test_streams_base_path + "HLS_H264_AAC/master.m3u8"
 video_src_url_mpeg = test_streams_base_path + "TDK_Asset_Sunrise_MPEGAV.mpeg"
 
 #AV1 Codec Video URL
-video_src_url_av1 = test_streams_base_path + "DASH_AV1_AAC/master.mpd"
+#video_src_url_av1 = test_streams_base_path + "DASH_AV1_AAC/master.mpd"
 #video_src_url_av1 = test_streams_base_path + "Waterfall_DASH_AV1_AAC/master.mpd"
+video_src_url_av1 = test_streams_base_path + "TDK_Asset_DASH_AV1_AAC/master.mpd"
 
 #AC3 Codec Video URL
 video_src_url_ac3 = test_streams_base_path + "DASH_H264_AC3/atfms_291_dash_tdk_avc_ac3_fmp4.mpd"

@@ -177,7 +177,13 @@ def getOperations ():
 def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     global ignore_warnings
     if test_streams_base_path:
-        testUrl = testUrl.replace(MediaValidationVariables.test_streams_base_path,test_streams_base_path);
+        if not MediaValidationVariables.test_streams_base_path:
+            testUrl_list = testUrl.split();
+            testUrl = ""
+            for url in testUrl_list:
+                testUrl += test_streams_base_path + url + " ";
+        else:
+            testUrl = testUrl.replace(MediaValidationVariables.test_streams_base_path,test_streams_base_path);
     #First construct the command with mandatory arguments
     command = "tdk_mediapipelinetests " + testName + " " + testUrl
     #For trickplay scenrios use another app instead
