@@ -19,7 +19,7 @@
 import time
 import websocket
 import threading
-import thread
+import _thread
 import requests
 import json,ast
 import inspect
@@ -34,7 +34,7 @@ class createEventListener(object):
         self.ip = deviceIP
         self.port = devicePort
         self.events = events
-	self.url = url
+        self.url = url
         self.trace = trace
         thread = threading.Thread(target=self.connect, args=())
         thread.daemon = True
@@ -45,8 +45,8 @@ class createEventListener(object):
         self.eventsbuffer = []
         self.eventsregisterinfo = []
         if not events:
-	    self.events = ['{"id":1,"method":"Inspector.enable"}','{"id":22,"method":"Console.enable"}','{"id":23,"method":"Inspector.initialized"}']
-	self.firstElement = None
+            self.events = ['{"id":1,"method":"Inspector.enable"}','{"id":22,"method":"Console.enable"}','{"id":23,"method":"Inspector.initialized"}']
+        self.firstElement = None
     def getEventsRegisterInfo(self):
         return self.eventsregisterinfo
     def getEventsBuffer(self):
@@ -60,38 +60,39 @@ class createEventListener(object):
     def getConnectionStatus(self):
         return self.connStatus
     def getFirstElement(self):
-	self.firstElement = self.eventsbuffer[0]
+        self.firstElement = self.eventsbuffer[0]
 
     def connect(self):
         try:
-            print "[INFO]: Opening websocket Connection"
+            print("[INFO]: Opening websocket Connection")
             websocket.enableTrace(self.trace)
-	    auth = "Authorization: Bearer " + str(deviceToken)
+            auth = "Authorization: Bearer " + str(deviceToken)
             # # # With Thunder Security Token
             if deviceToken != None and str(self.url)== "/jsonrpc":
                 websocketConnection = "ws://" + self.ip + ":" + str(self.port) + str(self.url)+"?token="+ str(deviceToken)
             # # # Without Thunder Security Token
             else:
                 websocketConnection = "ws://" + self.ip + ":" + str(self.port) + str(self.url)
-            self.ws = websocket.WebSocketApp(websocketConnection, header=[auth],
+                self.ws = websocket.WebSocketApp(websocketConnection, header=[auth],
                                              on_message = self.on_message,
                                              on_error   = self.on_error,
                                              on_close   = self.on_close,
                                              on_open    = self.on_open)
             self.ws.keep_running = True
-            print "[INFO]: Start Event Handler..."
+            print("[INFO]: Start Event Handler...")
             self.ws.run_forever()
         except Exception as e:
-            print "\nException Occurred while connecting to target device\n"
+            print("\nException Occurred while connecting to target device\n")
+            print(e)
 
-    def on_open(self):
+    def on_open(self,ws):
         def run(*args):
             registerResponse = ''
             print("[INFO]: Registering Events...")
             for event in self.events:
                 count = 0
                 if self.trace:
-                    print "\n Register Event %s" %(event)
+                    print("\n Register Event %s" %(event))
                 self.clearEventsBuffer()
                 self.ws.send(event)
                 while count < 3:
@@ -120,9 +121,9 @@ class createEventListener(object):
                 time.sleep(1)
             print ("[INFO]: Stopped Event listener...")
             self.ws.close()
-        thread.start_new_thread(run, ())
+        _thread.start_new_thread(run, ())
 
-    def on_message(self,message):
+    def on_message(self,ws,message):
         if ("method" in message) and "client.events" in json.loads(message).get("method"):
             message = str(datetime.utcnow()).split()[1] + '$$$' + message
         elif ("KeyCode" in message) and "KeyCode" in json.loads(message).get("params").get("message").get("text"):
@@ -130,16 +131,17 @@ class createEventListener(object):
         elif ("RepeatCountUpdated" in message) and "count" in json.loads(message).get("params"):
             message = str(datetime.utcnow()).split()[1] + '$$$' + message
         if self.trace:
-            print "\n Received Event Response: %s" %(message)
+            print("\n Received Event Response: %s" %(message))
         if "\\" in message:
             message = message.replace("\\","\\\\")
         self.eventsbuffer.append(message)
-    def on_error(self,error):
+    def on_error(self,ws,error):
         print(error)
         if "[Errno 111] Connection refused" in str(error):
             self.connStatus = False
-    def on_close(self):
+    def on_close(self,ws,close_status_code,close_msg):
         print("[INFO]: Closed websocket Connection")
+        print("message: %s" %close_msg)
 
     def disconnect(self):
         self.listen = False

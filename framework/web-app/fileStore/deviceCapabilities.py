@@ -18,7 +18,7 @@
 #########################################################################
 import os
 import shutil
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 #####################################################################################################################################
 #
 # To fetch the stream details from configuration file
@@ -43,30 +43,30 @@ def getconfig(obj,capability,key = ""):
         deviceType = obj.getDeviceBoxType()
         CommonConfigFile = os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/" + str(deviceType) +"_deviceCapability.ini";
         if not os.path.exists(CommonConfigFile):
-            print "\n\nConfiguration file not present under tdkvDeviceCapabilities \nCreated %s"%deviceConfig;
+            print("\n\nConfiguration file not present under tdkvDeviceCapabilities \nCreated %s"%deviceConfig);
             shutil.copyfile(sampleFile,configFile)
-            print "Please populate the deviceCapabilites in %s in order to proceed with the execution\n\n"%deviceConfig;
+            print("Please populate the deviceCapabilites in %s in order to proceed with the execution\n\n"%deviceConfig);
             return False;
-        print "Using config file tdkvDeviceCapabilities/Video_Accelerator_deviceCapability.ini"
+        print("Using config file tdkvDeviceCapabilities/Video_Accelerator_deviceCapability.ini")
         deviceConfig = "Video_Accelerator_deviceCapability.ini"
 
     # Fetching the config details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+"/tdkvDeviceCapabilities/"+ deviceConfig)
-    print "Parsing Device Capabilities ..."
+    print("Parsing Device Capabilities ...")
     ConfigValue = parser.get('deviceCapabilities',capability);
     # If getValue is passed , acquire the corresponding config and return the ConfigValue.
     if key == "getValue" and capability:
-        print "Get %s from config file"%(capability);
+        print("Get %s from config file"%(capability));
         if ConfigValue:
-            print "Obtained %s for %s from config File"%(ConfigValue,capability);
+            print("Obtained %s for %s from config File"%(ConfigValue,capability));
             return ConfigValue;
         else:
-            print "%s not configured in Config File\n Not Proceeding with the execution"%(capability);
+            print("%s not configured in Config File\n Not Proceeding with the execution"%(capability));
             exit();
     # If key is passed, check whether the key is supported by the device, if not setResult as Not Applicable.
     elif key and capability:
         if(key not in ConfigValue):
-            print "%s %s is not supported by the device\n"%(key,capability);
+            print("%s %s is not supported by the device\n"%(key,capability));
             obj.setAsNotApplicable();
             return False
         else:
@@ -76,15 +76,15 @@ def getconfig(obj,capability,key = ""):
         if "true" in ConfigValue:
             return True
         elif "false" in ConfigValue:
-            print "%s is not supported in the device\n"%capability;
+            print("%s is not supported in the device\n"%capability);
             obj.setAsNotApplicable();
             return False
         else:
-            print "%s capability is not configured , not proceeding with the execution"%capability;
+            print("%s capability is not configured , not proceeding with the execution"%capability);
             exit()
 
     else:
-        print "Capability not configured in config file,not proceeding with the testcase"
+        print("Capability not configured in config file,not proceeding with the testcase")
         exit()
 
 ########## End of Function ##########

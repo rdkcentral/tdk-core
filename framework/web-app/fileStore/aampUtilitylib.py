@@ -20,7 +20,7 @@
 
 #imports
 import os
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 Aamp_log_file='/opt/TDK/logs/AgentConsole.log'
 ##################################################################################
 #
@@ -38,7 +38,7 @@ def getAampTuneURL(stream):
     parser = SafeConfigParser()
     # Fetching the stream details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
-    print "Parsing Aamp streams ..."
+    print("Parsing Aamp streams ...")
     if stream == "multiaudiohls":
         hlsstreamURL = parser.get('streams','MULTI_AUDIO_HLS_stream')
         return hlsstreamURL
@@ -46,8 +46,8 @@ def getAampTuneURL(stream):
         hlsstreamURL = parser.get('streams','HLS_stream')
         return hlsstreamURL
     elif stream =="livestream":
-	livestreamURL = parser.get('streams','LIVE_stream')
-	return livestreamURL
+        livestreamURL = parser.get('streams','LIVE_stream')
+        return livestreamURL
     elif stream == "multiaudiompd":
         mpdstreamURL = parser.get('streams', 'MULTI_AUDIO_MPD_stream')
         return mpdstreamURL
@@ -70,8 +70,8 @@ def getAampTuneURL(stream):
         widevinestream = parser.get('streams','WIDEVINE_stream')
         return widevinestream
     else:
-	return "no valid streams are available"
-	
+        return "no valid streams are available"
+
 
 ########## End of Function ##########
 
@@ -113,14 +113,14 @@ def getAampLicenseServerURL(DRM):
 #
 ####################################################################################
 def getIPStreamsCounts():
-        count = 0
-        parser = SafeConfigParser()
-        parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
-        section_name="multistreams"
-        for name, value in parser.items(section_name):
-                if value:
-                        count += 1
-        return count
+    count = 0
+    parser = SafeConfigParser()
+    parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
+    section_name="multistreams"
+    for name, value in parser.items(section_name):
+        if value:
+            count += 1
+    return count
 ########## End of Function ##########
 
 ##################################################################################
@@ -137,17 +137,17 @@ def getIPStreamsCounts():
 
 
 def getURLFromMultiStreamIndex(index):
-        count = 0
-        parser = SafeConfigParser()
-        parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
-        section_name="multistreams"
-        for name, value in parser.items(section_name):
-                if index == (count + 1):
-                        if value:
-                                return value
-                else:
-                        count += 1
-        return "Failure: Invalid index... No URL is given in the specified index"
+    count = 0
+    parser = SafeConfigParser()
+    parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
+    section_name="multistreams"
+    for name, value in parser.items(section_name):
+        if index == (count + 1):
+            if value:
+                return value
+        else:
+            count += 1
+    return "Failure: Invalid index... No URL is given in the specified index"
 
 ########## End of Function ##########
 
@@ -167,10 +167,10 @@ def SearchAampPlayerEvents(tdkTestObj, event, test_step=1):
     details = tdkTestObj.getResultDetails();
 
     if event in details:
-        print "Received ",event
+        print("Received ",event)
         actualresult = 'SUCCESS'
     else:
-        print "Didn't Receive ",event
+        print("Didn't Receive ",event)
         actualresult = 'FAILURE'
 
     return actualresult;
@@ -194,7 +194,7 @@ def searchAampEvents(Obj, pattern,test_step=1):
 
     ####### Whenever checking for AAMP_EVENT_TUNED event, internally checking for AAMP TUNE FAILURE event for additional validation
     if pattern == "AAMP_EVENT_TUNED":
-        print "Internally checking for AAMP TUNE FAILURE event for additional validation"
+        print("Internally checking for AAMP TUNE FAILURE event for additional validation")
         temp_pattern = "AAMP_EVENT_TUNE_FAILED";
         tdkTestObj = Obj.createTestStep('ExecuteCommand');
         tdkTestObj.addParameter("command","grep -inr " +temp_pattern+" "+Aamp_log_file+"| grep -v grep | tr \"\n\" \"  \"")
@@ -202,7 +202,7 @@ def searchAampEvents(Obj, pattern,test_step=1):
         actualresult = tdkTestObj.getResult();
         details = tdkTestObj.getResultDetails();
         if temp_pattern in details:
-            print "AAMP_EVENT_TUNE_FAILED event has occured due to AAMP Tune Failure"
+            print("AAMP_EVENT_TUNE_FAILED event has occured due to AAMP Tune Failure")
             actualresult = "FAILURE";
             return actualresult;
 
@@ -213,23 +213,23 @@ def searchAampEvents(Obj, pattern,test_step=1):
     actualresult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if pattern in details:
-        print "\nTEST STEP %s:  Validate the events are logged or not"%(test_step)
-        print "EXPECTED RESULT : The events are logged"
-        print "ACTUAL RESULT : Status: %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("\nTEST STEP %s:  Validate the events are logged or not"%(test_step))
+        print("EXPECTED RESULT : The events are logged")
+        print("ACTUAL RESULT : Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
         actualresult = "SUCCESS";
     else:
-        print "\nTEST STEP %s:  Validate the events are logged or not"%(test_step)
-        print "EXPECTED RESULT : the events are not logged"
-        print "ACTUAL RESULT : Status: %s " %details
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("\nTEST STEP %s:  Validate the events are logged or not"%(test_step))
+        print("EXPECTED RESULT : the events are not logged")
+        print("ACTUAL RESULT : Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : FAILURE");
         actualresult = "FAILURE";
     return actualresult;
 ######### End of function ##########
 
 ##################################################################################
 #
-# To fetch the hls/mpd url by specifying the section and key 
+# To fetch the hls/mpd url by specifying the section and key
 #
 # Syntax       : readFromConfig(section,key)
 #
@@ -267,10 +267,10 @@ def fileRename(Obj,path,filename):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "File rename is successful"
+        print("File rename is successful")
         actualresult = "SUCCESS";
     else:
-        print "File rename is failure"
+        print("File rename is failure")
         actualresult = "FAILURE";
 
     return actualresult;
@@ -296,10 +296,10 @@ def fileRemove(Obj,path,filename):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "File removal is successful"
+        print("File removal is successful")
         actualresult = "SUCCESS";
     else:
-        print "File removal is failure"
+        print("File removal is failure")
         actualresult = "FAILURE";
 
     return actualresult;
@@ -326,10 +326,10 @@ def fileRevert(Obj,path,filename):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "File name reverting is successful"
+        print("File name reverting is successful")
         actualresult = "SUCCESS";
     else:
-        print "Couldn't revert file name"
+        print("Couldn't revert file name")
         actualresult = "FAILURE";
 
     return actualresult;
@@ -356,10 +356,10 @@ def fileCreate(Obj,path,filename):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "File created reverting is successful"
+        print("File created reverting is successful")
         actualresult = "SUCCESS";
     else:
-        print "Couldn't revert file name"
+        print("Couldn't revert file name")
         actualresult = "FAILURE";
 
     return actualresult;
@@ -386,10 +386,10 @@ def Writetofile(Obj,text,filename):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "File writing is successful"
+        print("File writing is successful")
         actualresult = "SUCCESS";
     else:
-        print "Writing is failure"
+        print("Writing is failure")
         actualresult = "FAILURE";
 
     return actualresult;
@@ -415,22 +415,22 @@ def CheckPlayBackRate(obj,rate):
     tdkTestObj.executeTestCase(Expected_Result);
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Result :", details;
+    print("Result :", details);
     if "Average Playback Rate obtained" not in details:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Aamp Checkplaybackrate failure"
+        print("Aamp Checkplaybackrate failure")
     else:
         details=details.split(" ")
         details=details[5]
         threshold=float(details) - rate
         threshold=abs(threshold)
         if float(details) == 0:
-            print "PLAYBACK is PAUSED"
+            print("PLAYBACK is PAUSED")
         if threshold < acceptable_threshold:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Verified Aamp checkplayback rate successfully for rate:",rate
+            print("Verified Aamp checkplayback rate successfully for rate:",rate)
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Aamp Checkplaybackrate failure for rate : ",rate
+            print("Aamp Checkplaybackrate failure for rate : ",rate)
 
 ######### End of function ##########

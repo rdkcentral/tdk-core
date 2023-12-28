@@ -21,7 +21,7 @@ import time
 import os
 import inspect
 import importlib
-import ConfigParser
+import configparser
 import MediaValidationVariables
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -69,13 +69,13 @@ def getDeviceConfigFile(basePath):
     # executing the test are present
     if os.path.exists(deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceNameConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
     elif os.path.exists(deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceTypeConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
     else:
         status = "FAILURE"
-        print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+        print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
     return deviceConfigFile,status;
 
 
@@ -84,7 +84,7 @@ def getDeviceConfigFile(basePath):
 #-------------------------------------------------------------------
 def rdkv_media_getProcCheckInfo(realpath):
     validation_dict = {}
-    print "\n Reading proc validation params from conf file..."
+    print("\n Reading proc validation params from conf file...")
     conf_file,result = getDeviceConfigFile(realpath)
     result, proc_check = getDeviceConfigKeyValue(conf_file,"PROC_VALIDATION")
     if result == "SUCCESS":
@@ -104,9 +104,9 @@ def rdkv_media_getProcCheckInfo(realpath):
             credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
             validation_dict["credentials"] = credentials
     else:
-        print "Failed to get the validation parameters from config file, please configure values before test"
-    if any(value == "" for value in validation_dict.itervalues()):
-        print "please configure validation parameters before test"
+        print("Failed to get the validation parameters from config file, please configure values before test")
+    if any(value == "" for value in list(validation_dict.values())):
+        print("please configure validation parameters before test")
         validation_dict = {}
     return validation_dict
 
@@ -123,8 +123,8 @@ def rdkv_media_checkProcEntry(sshMethod,credentials,validation_script,mode):
         method_to_call = getattr(lib, method)
         result = method_to_call(sshMethod,credentials,mode)
     except Exception as e:
-        print e;
-        print "[ERROR]: Failed to import video validation script file, please check the configuration"
+        print(e);
+        print("[ERROR]: Failed to import video validation script file, please check the configuration")
         result = "FAILURE"
     finally:
         return result
@@ -134,28 +134,28 @@ def rdkv_media_checkProcEntry(sshMethod,credentials,validation_script,mode):
 #SET WEBDRIVER AND OPEN CHROME BROWSER
 #-------------------------------------------------------------------
 def openChromeBrowser(url):
-   #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
-   os.environ["DISPLAY"] = MediaValidationVariables.display_variable;
-   os.environ["PATH"] += MediaValidationVariables.path_of_browser_executable;
-   try:
+    #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
+    os.environ["DISPLAY"] = MediaValidationVariables.display_variable;
+    os.environ["PATH"] += MediaValidationVariables.path_of_browser_executable;
+    try:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
         driver = webdriver.Chrome(chrome_options=chrome_options) #Opening Chrome
         driver.get(url);
-   except Exception as error:
-        print "Got exception while opening the browser"
-        print error
+    except Exception as error:
+        print("Got exception while opening the browser")
+        print(error)
         driver = "EXCEPTION OCCURRED"
-   return driver;
+    return driver;
 
 #-------------------------------------------------------------------
 #GET THE DATA FROM UI
 #-------------------------------------------------------------------
 def rdkv_media_readUIData(elementExpandXpath,dataXpath,count):
-   try:
+    try:
         webinspectURL = 'http://' + deviceIP + ':' + MediaValidationVariables.webinspect_port_lightning + '/Main.html?ws=' + deviceIP + ':' + MediaValidationVariables.webinspect_port_lightning + '/socket/1/1/WebPage'
-        print "url:",webinspectURL
+        print("url:",webinspectURL)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -173,7 +173,7 @@ def rdkv_media_readUIData(elementExpandXpath,dataXpath,count):
                     for item in current_option:
                         if "Expand All" in item.text:
                             item.click()
-            except exceptions.StaleElementReferenceException,e:
+            except exceptions.StaleElementReferenceException as e:
                 pass
             time.sleep(10)
             ui_data_list = []
@@ -184,18 +184,14 @@ def rdkv_media_readUIData(elementExpandXpath,dataXpath,count):
                 time.sleep(2)
             ui_data_list = [ x for x in ui_data_list if x != None ]
             ui_data = str(",".join(ui_data_list))
-            print "\n Data read from web UI: ",ui_data
+            print("\n Data read from web UI: ",ui_data)
             time.sleep(5)
             driver.quit()
         else:
             ui_data = "Unable to get the data from the web UI"
-   except Exception as error:
-        print "Got exception while getting the data from the web UI"
-        print error
+    except Exception as error:
+        print("Got exception while getting the data from the web UI")
+        print(error)
         ui_data = "Unable to get the data from the web UI"
         driver.quit()
-   return ui_data
-
-
-
-
+    return ui_data

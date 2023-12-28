@@ -22,7 +22,7 @@ import time
 import os
 import subprocess
 import inspect
-import ConfigParser
+import configparser
 from SSHUtility import *
 
 deviceIP=""
@@ -66,28 +66,28 @@ def rdkvapparmor_getDeviceConfig (basePath, configKey):
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
         #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output;
 
 #-----------------------------------------------------------------
 #TO OBTAIN CREDENTIALS FROM CONFIG FILE
 #-----------------------------------------------------------------
 def obtainCredentials(obj,key_list):
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = key_list
     configValues = {}
     value_list = []
@@ -100,25 +100,25 @@ def obtainCredentials(obj,key_list):
             tdkTestObj.executeTestCase("SUCCESS")
             configValues[configKey] = tdkTestObj.getResultDetails()
             if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-                print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+                print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
                 tdkTestObj.setResultStatus("SUCCESS")
                 result = "SUCCESS"
             else:
-                print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+                print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
                 if configValues[configKey] == "":
-                    print "\n Please configure the %s key in the device config file" %(configKey)
+                    print("\n Please configure the %s key in the device config file" %(configKey))
                     tdkTestObj.setResultStatus("FAILURE")
                 result = "FAILURE"
                 break
     else:
-        print "Unable to get configuration values"
+        print("Unable to get configuration values")
         result = "FAILURE"
     if "FAILURE" not in result:
         if configValues["SSH_PASSWORD"] == "None":
-           configValues["SSH_PASSWORD"] = ""
+            configValues["SSH_PASSWORD"] = ""
         return configValues
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
         exit()
 
@@ -142,13 +142,13 @@ def rdkvapparmor_executeInDUT (sshMethod, credentials, command):
         password = credentialsList[2]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     return output
 
 #------------------------------------------------------------------
@@ -159,16 +159,16 @@ def rdkvapparmor_rebootDevice(waitTime):
     timeout = time.time() + 30*5
     deviceStatus = "DOWN"
     if status != "activated":
-        print "[INFO] Activating System plugin for rebooting the device"
+        print("[INFO] Activating System plugin for rebooting the device")
         params = '{"callsign":"org.rdk.System"}'
         status = rdkvapparmor_setValue("Controller.1.activate",params)
         status = rdkvapparmor_getPluginStatus("org.rdk.System")
     if status == "activated":
-        print "[INFO] System plugin is activated"
+        print("[INFO] System plugin is activated")
         data = '"method": "org.rdk.System.1.reboot","params": {"rebootReason": "TDK_TESTING"}'
         result = execute_step(data)
         if result != "EXCEPTION OCCURRED":
-            print "\n[INFO] Waiting for the device to come up..."
+            print("\n[INFO] Waiting for the device to come up...")
             time.sleep(waitTime)
             while True:
                 status = rdkvapparmor_getTestDeviceStatus()
@@ -177,18 +177,18 @@ def rdkvapparmor_rebootDevice(waitTime):
                     break;
                 elif time.time() > timeout:
                     deviceStatus = "DOWN"
-                    print "[INFO] Device is not coming up even after 2.5 mins"
+                    print("[INFO] Device is not coming up even after 2.5 mins")
                     break;
                 time.sleep(5)
             if deviceStatus == "UP":
-                print "[INFO] Device is UP"
+                print("[INFO] Device is UP")
                 return "SUCCESS"
             else:
                 return "FAILURE"
         else:
             return result
     else:
-        print "FAILURE: Unable to activate System plugin"
+        print("FAILURE: Unable to activate System plugin")
         return "EXCEPTION OCCURED"
 
 #------------------------------------------------------------------
@@ -206,7 +206,7 @@ def rdkvapparmor_getTestDeviceStatus():
         else:
             return "NOT_FOUND"
     except Exception as e:
-        return "NOT_FOUND"    
+        return "NOT_FOUND"
 
 #-----------------------------------------------------------------
 # GET PLUGIN STATUS
@@ -220,7 +220,7 @@ def rdkvapparmor_getPluginStatus(plugin):
         return PluginStatus
     else:
         return result;
-		
+
 #------------------------------------------------------------------
 # SET VALUE FOR A METHOD
 #------------------------------------------------------------------
@@ -247,7 +247,6 @@ def execute_step(Data):
             result = "EXCEPTION OCCURRED"
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
-

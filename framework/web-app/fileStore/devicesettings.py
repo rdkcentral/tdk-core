@@ -31,28 +31,28 @@ import tdklib;
 #
 def dsManagerInitialize(obj):
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_ManagerInitialize');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_ManagerInitialize');
 
-        expectedresult = "SUCCESS"
+    expectedresult = "SUCCESS"
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "Result: [%s] Details: [%s]"%(result,details)
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("Result: [%s] Details: [%s]"%(result,details))
 
-        #Set the result status of execution
-        if expectedresult in result:
-        	tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-		retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 ########## End of dsManagerInitialize Function ##########
 
@@ -64,28 +64,28 @@ def dsManagerInitialize(obj):
 #
 def dsManagerDeInitialize(obj):
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_ManagerDeInitialize');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_ManagerDeInitialize');
 
-        expectedresult = "SUCCESS"
+    expectedresult = "SUCCESS"
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "Result: [%s] Details: [%s]"%(result,details)
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("Result: [%s] Details: [%s]"%(result,details))
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 ########## End of dsManagerDeInitialize Function ##########
 
@@ -96,158 +96,158 @@ def dsManagerDeInitialize(obj):
 # Return Value : "TRUE"/"FALSE"
 #
 # Pre-condition: DSMgr should be initialized
-# 
+#
 def dsIsDisplayConnected(obj):
 
-	retValue = "FALSE"
+    retValue = "FALSE"
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_IsDisplayConnectedStatus');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_IsDisplayConnectedStatus');
 
-        expectedresult = "SUCCESS"
+    expectedresult = "SUCCESS"
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "Result: [%s] Details: [%s]"%(result,details)
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("Result: [%s] Details: [%s]"%(result,details))
 
-        #Set the result status of execution
-	if expectedresult in result:
-		if "FALSE" in details:
-			tdkTestObj.setResultStatus("FAILURE");
-			retValue = "FALSE"
-		else:
-			tdkTestObj.setResultStatus("SUCCESS");
-			retValue = "TRUE"
+    #Set the result status of execution
+    if expectedresult in result:
+        if "FALSE" in details:
+            tdkTestObj.setResultStatus("FAILURE");
+            retValue = "FALSE"
         else:
-                tdkTestObj.setResultStatus("FAILURE");
+            tdkTestObj.setResultStatus("SUCCESS");
+            retValue = "TRUE"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        return retValue
+    return retValue
 
 ########## End of dsIsDisplayConnected Function ##########
 ## Get Resolution ##
 def dsGetResolution(obj,expectedresult,kwargs={}):
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_SetResolution');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_SetResolution');
 
-        #Add parameters to test object
-        portName=str(kwargs["portName"])
-        tdkTestObj.addParameter("port_name",portName);
-        tdkTestObj.addParameter("get_only",1);
+    #Add parameters to test object
+    portName=str(kwargs["portName"])
+    tdkTestObj.addParameter("port_name",portName);
+    tdkTestObj.addParameter("get_only",1);
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        actualresult = tdkTestObj.getResult();
-        print "[Get Resolution RESULT] : %s" %actualresult;
-        resolution = tdkTestObj.getResultDetails();
-        print "[Get Resolution VALUE] : %s" %resolution;
+    #Get the result of execution
+    actualresult = tdkTestObj.getResult();
+    print("[Get Resolution RESULT] : %s" %actualresult);
+    resolution = tdkTestObj.getResultDetails();
+    print("[Get Resolution VALUE] : %s" %resolution);
 
-        #Set the result status of execution
-        if expectedresult in actualresult:
-                tdkTestObj.setResultStatus("SUCCESS");
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
+    #Set the result status of execution
+    if expectedresult in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        return resolution
+    return resolution
 
 ## End of Get Resolution ##
 
 ## Set Resolution ##
 def dsSetResolution(obj,expectedresult,kwargs={}):
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_SetResolution');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_SetResolution');
 
-        #Add parameters to test object
-        portName=str(kwargs["portName"])
-        resolution=str(kwargs["resolution"])
-        print "Setting resolution value to %s" %resolution;
-        tdkTestObj.addParameter("resolution",resolution);
-        tdkTestObj.addParameter("port_name",portName);
-        tdkTestObj.addParameter("get_only",0);
+    #Add parameters to test object
+    portName=str(kwargs["portName"])
+    resolution=str(kwargs["resolution"])
+    print("Setting resolution value to %s" %resolution);
+    tdkTestObj.addParameter("resolution",resolution);
+    tdkTestObj.addParameter("port_name",portName);
+    tdkTestObj.addParameter("get_only",0);
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        actualresult = tdkTestObj.getResult();
-        print "[Set Resolution RESULT] : %s" %actualresult;
-        getResolution = tdkTestObj.getResultDetails();
-        print "[Get Resolution VALUE] : %s" %getResolution;
+    #Get the result of execution
+    actualresult = tdkTestObj.getResult();
+    print("[Set Resolution RESULT] : %s" %actualresult);
+    getResolution = tdkTestObj.getResultDetails();
+    print("[Get Resolution VALUE] : %s" %getResolution);
 
-        #Set the result status of execution
-        if expectedresult in actualresult:
-                #Comparing the resolution before and after setting
-                if resolution in getResolution:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: Get resolution value same as Set resolution value";
-                else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: Get resolution value not same as Set resolution value";
+    #Set the result status of execution
+    if expectedresult in actualresult:
+        #Comparing the resolution before and after setting
+        if resolution in getResolution:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: Get resolution value same as Set resolution value");
         else:
-                tdkTestObj.setResultStatus("FAILURE");
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: Get resolution value not same as Set resolution value");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        return getResolution
+    return getResolution
 
 ## End of Set Resolution ##
 
 ## Get CPU Temperture ##
 def dsGetCPUTemp(obj,expectedresult):
 
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_GetCPUTemperature');
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_GetCPUTemperature');
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
 
-        #Get the result of execution
-        actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "Result : [%s] "%actualresult,
+    #Get the result of execution
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("Result : [%s] "%actualresult, end=' ')
 
-        #Set the result status of execution
-        if expectedresult in actualresult:
-		print "Details : [+%sC]" %details;
-		if ((float(details) <= float(0)) or (float(details) > float(125))):
-			print "Temperature out of range";
-			retValue = "FAILURE"
-		else:
-			retValue = "SUCCESS"
+    #Set the result status of execution
+    if expectedresult in actualresult:
+        print("Details : [+%sC]" %details);
+        if ((float(details) <= float(0)) or (float(details) > float(125))):
+            print("Temperature out of range");
+            retValue = "FAILURE"
         else:
-		print "Details : [%s]" %details;
-		retValue = "FAILURE"
+            retValue = "SUCCESS"
+    else:
+        print("Details : [%s]" %details);
+        retValue = "FAILURE"
 
-        tdkTestObj.setResultStatus(retValue);
-        return (retValue,details)
+    tdkTestObj.setResultStatus(retValue);
+    return (retValue,details)
 
 ## End of Get CPU Temperture ##
 
 ## Get supported resolutions ##
 def dsGetSupportedResolutions(obj):
-        #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('DS_Resolution');
-        tdkTestObj.addParameter("port_name","HDMI0");
-        expectedresult = "SUCCESS"
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        supportedResolutions = tdkTestObj.getResultDetails();
-        #Set the result status of execution
-        if expectedresult in result:
-            tdkTestObj.setResultStatus("SUCCESS");
-            list = supportedResolutions.split(":");
-	    resolutionList = list[1].split(",");
-            return resolutionList
-        else:
-            tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to get supported Resolutions";
-            return False
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('DS_Resolution');
+    tdkTestObj.addParameter("port_name","HDMI0");
+    expectedresult = "SUCCESS"
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    supportedResolutions = tdkTestObj.getResultDetails();
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        list = supportedResolutions.split(":");
+        resolutionList = list[1].split(",");
+        return resolutionList
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Unable to get supported Resolutions");
+        return False
 
 ## End of Get supported resolutions ##

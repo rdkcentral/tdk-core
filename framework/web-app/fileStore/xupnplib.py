@@ -24,7 +24,7 @@
 import os
 import json
 import re
-import ConfigParser
+import configparser
 
 # LogParser
 
@@ -36,15 +36,15 @@ import ConfigParser
 
 def LogParser(message,parameter) :
     output = json.loads(message);
-    values = output.values()[0];
+    values = list(output.values())[0];
     dictionary = {};
     for (index,value) in enumerate(values):
         key = value.get("bcastMacAddress");
         value = value.get(parameter);
         dictionary[key] = value;
-    print "\n\n\n**************XUPNP bcastMacAddress:%s MAPPING - BEGIN*************\n\n"%parameter
-    print "bcastMacAddress:%s parameters mapping retrieved after parsing: %s"%(parameter,dictionary);
-    print "\n\n\n**************XUPNP bcastMacAddress:%s MAPPING - END*************\n\n"%parameter
+    print("\n\n\n**************XUPNP bcastMacAddress:%s MAPPING - BEGIN*************\n\n"%parameter)
+    print("bcastMacAddress:%s parameters mapping retrieved after parsing: %s"%(parameter,dictionary));
+    print("\n\n\n**************XUPNP bcastMacAddress:%s MAPPING - END*************\n\n"%parameter)
     return dictionary;
 
 ########## End of Function ##########
@@ -65,7 +65,7 @@ def GetParsedParamsList(data,param,flag) :
         getVals = list([val for val in data if val.isalpha() or val.isdigit()])
         res = "".join(getVals).replace(param,"");
         res = " ".join(re.split("[^A-Z0-9]*",res)).split(" ");
-        params_list = list(filter(None, res));
+        params_list = list([_f for _f in res if _f]);
     else :
         getVals = list([val for val in data if val.isalpha() or val.isdigit() or val in punctuation]);
         params_list = "".join(getVals).split(param);
@@ -95,9 +95,9 @@ def TransferLogsParser(obj) :
     configFilePath = configFilePath + "/xupnpDeviceConfig"
     xupnpConfigFile = configFilePath+'/'+deviceConfig
 
-    print "Device config file:", xupnpConfigFile
+    print("Device config file:", xupnpConfigFile)
 
-    configParser = ConfigParser.ConfigParser()
+    configParser = configparser.ConfigParser()
     configParser.read(r'%s' % xupnpConfigFile)
 
     NO_OF_CLIENTS = configParser.get('xupnp-config', 'NO_OF_CLIENTS')
@@ -116,7 +116,7 @@ def TransferLogsParser(obj) :
         clients_ip = configParser.get('xupnp-config', IP_CLIENT);
         clients_ip_list.append(clients_ip)
         count +=1;
-    clientip_logfile_dic = dict(zip(clients_ip_list,xupnp_log_list));
+    clientip_logfile_dic = dict(list(zip(clients_ip_list,xupnp_log_list)));
     return clientip_logfile_dic,NO_OF_CLIENTS;
 
 ########## End of Function ##########

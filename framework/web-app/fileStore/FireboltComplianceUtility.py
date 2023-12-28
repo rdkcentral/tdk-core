@@ -19,7 +19,7 @@
 
 import tdklib
 import os
-import ConfigParser
+import configparser
 import MediaValidationVariables
 from devicesettings import *
 # Global variable to store the operations string and use_aamp configuration
@@ -75,11 +75,11 @@ def getDeviceConfigValue (tdklibObj, configKey):
         elif os.path.exists (deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
         else:
-            print "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
+            print("FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile)
             result = "FAILURE"
         #Continue only if the device config file exists
         if (len (deviceConfigFile) != 0):
-            configParser = ConfigParser.ConfigParser()
+            configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             #Retrieve the value of config key from device config file
             configValue = configParser.get('device.config', configKey)
@@ -124,10 +124,10 @@ def getDeviceConfigValue (tdklibObj, configKey):
             except:
                 validateFullPlayback = "no"
         else:
-            print "DeviceConfig file not available"
+            print("DeviceConfig file not available")
             result = "FAILURE"
     except Exception as e:
-        print "Exception occurred while retrieving device configuration  : " + e
+        print("Exception occurred while retrieving device configuration  : " + e)
         result = "FAILURE"
     return result, configValue
 
@@ -167,7 +167,7 @@ def setOperations (operation, *arguments):
         else:
             raise Exception("There are no operations to be repeated")
     except Exception as e:
-        print ("Exception occurred while updating the operations string  : " , e)
+        print("Exception occurred while updating the operations string  : " , e)
 
 # Function to retrieve the saved trickplay operation string
 def getOperations ():
@@ -193,7 +193,7 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
             command += " checkLatency "
     #Based on the test, the arguments can vary, parse through the variabled arguments
     #and add the available variables
-    for name, value in arguments.items ():
+    for name, value in list(arguments.items ()):
         command += " " + name + "=" + value
     #Feature to disable  video-pts check
     if (check_pts == "no"):
@@ -253,7 +253,7 @@ def checkMediaPipelineTestStatus (outputString):
         result = "FAILURE"
 
     if "No such testcase is present in app" in outputString:
-        print "App present in DUT doesnot have such test. Please update the app\n"
+        print("App present in DUT doesnot have such test. Please update the app\n")
         result = "FAILURE"
 
     return result
@@ -265,51 +265,51 @@ def ResolutionTestStart(dsObj, resolution):
     gotResolution = False
     #Check for SUCCESS/FAILURE return value of DS_ManagerInitialize
     if "SUCCESS" in result:
-         #Calling DS_IsDisplayConnectedStatus function to check for display connection status
-         result = dsIsDisplayConnected(dsObj)
-         if "TRUE" in result:
-             #Save a copy of current resolution
-             ResolutionBeforePlayback = dsGetResolution(dsObj,"SUCCESS",kwargs={'portName':"HDMI0"});
-             resolutionList = dsGetSupportedResolutions(dsObj)
-             if not resolutionList:
-                 print "Unable to retrieve SupportedResolutionList\n"
-             else:
-                 resolutionSet = set(resolutionList)
-                 #Check resolution is supported by the device
-                 for i in range(0,len(resolutionList)):
-                     if resolution in resolutionList[i]:
+        #Calling DS_IsDisplayConnectedStatus function to check for display connection status
+        result = dsIsDisplayConnected(dsObj)
+        if "TRUE" in result:
+            #Save a copy of current resolution
+            ResolutionBeforePlayback = dsGetResolution(dsObj,"SUCCESS",kwargs={'portName':"HDMI0"});
+            resolutionList = dsGetSupportedResolutions(dsObj)
+            if not resolutionList:
+                print("Unable to retrieve SupportedResolutionList\n")
+            else:
+                resolutionSet = set(resolutionList)
+                #Check resolution is supported by the device
+                for i in range(0,len(resolutionList)):
+                    if resolution in resolutionList[i]:
                         resolution = resolutionList[i]
                         gotResolution = True
                         break;
-                 if not gotResolution:
-                    print "%s is not supported by DUT\nTestcase not applicable for this platform"%resolution;
+                if not gotResolution:
+                    print("%s is not supported by DUT\nTestcase not applicable for this platform"%resolution);
                     return False,"Not Applicable"
-             if resolution != ResolutionBeforePlayback:
-                 result = dsSetResolution(dsObj,"SUCCESS",kwargs={'portName':"HDMI0",'resolution':resolution});
-                 if result != resolution:
-                    print "[TEST EXECUTION] : FAILURE";
-                 else:
+            if resolution != ResolutionBeforePlayback:
+                result = dsSetResolution(dsObj,"SUCCESS",kwargs={'portName':"HDMI0",'resolution':resolution});
+                if result != resolution:
+                    print("[TEST EXECUTION] : FAILURE");
+                else:
                     ResolutionSet = True
-             else:
-                 print "Resolution value already set to %s\n Proceeding with playback "%resolution;
-                 ResolutionSet = True
-         else:
-             print "\nTV not connected\nExiting from testcase";
+            else:
+                print("Resolution value already set to %s\n Proceeding with playback "%resolution);
+                ResolutionSet = True
+        else:
+            print("\nTV not connected\nExiting from testcase");
     else:
-        print "\nConnection Failed";
+        print("\nConnection Failed");
     return ResolutionSet,ResolutionBeforePlayback
 
 def ResolutionTestStop(dsObj, resolution, ResolutionBeforePlayback=""):
     if resolution and resolution != ResolutionBeforePlayback:
-        print "\nReverting resolution to %s"%ResolutionBeforePlayback
+        print("\nReverting resolution to %s"%ResolutionBeforePlayback)
         result = dsSetResolution(dsObj,"SUCCESS",kwargs={'portName':"HDMI0",'resolution':ResolutionBeforePlayback});
         if result != ResolutionBeforePlayback:
-            print "[TEST EXECUTION] : FAILURE\nResolution revert failed";
+            print("[TEST EXECUTION] : FAILURE\nResolution revert failed");
         else:
-            print "Resolution reverted";
+            print("Resolution reverted");
     result = dsManagerDeInitialize(dsObj)
     if "FAILURE" in result:
-        print "dsManagerDeInitialize FAILED" 
+        print("dsManagerDeInitialize FAILED")
     return result
 
 def parseLatency(tdkTestObj,latencyThreshold):
@@ -323,16 +323,16 @@ def parseLatency(tdkTestObj,latencyThreshold):
     output = tdkTestObj.getResultDetails()
     if expectedResult in actualresult.upper():
         if int(output.split(' ')[2]) < int(latencyThreshold):
-            print "Latency:",output.split()[2]
+            print("Latency:",output.split()[2])
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Latency retrieved was optimal"
+            print("Latency retrieved was optimal")
         else:
-            print "Latency retrieved was not optimal"
+            print("Latency retrieved was not optimal")
             tdkTestObj.setResultStatus("FAILURE")
-            print "Expected Latency :",latencyThreshold
-            print "Actual Latency:",output.split()[2]
+            print("Expected Latency :",latencyThreshold)
+            print("Actual Latency:",output.split()[2])
     else:
-        print "Unable to retrieve latency"
+        print("Unable to retrieve latency")
         tdkTestObj.setResultStatus("FAILURE")
 
 def checkifCodecPlayed(tdkTestObj,codec):
@@ -348,10 +348,10 @@ def checkifCodecPlayed(tdkTestObj,codec):
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails()
     if expectedResult in actualresult.upper() and output:
-        print "%s played successfully"%codec
+        print("%s played successfully"%codec)
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "%s audio playback failed"%codec
+        print("%s audio playback failed"%codec)
         tdkTestObj.setResultStatus("FAILURE")
 
 def checkFPS(tdkTestObj, fps):
@@ -371,10 +371,10 @@ def checkFPS(tdkTestObj, fps):
     else:
         FPS_THRESHOLD = 3
     if expectedResult in actualresult.upper() and (abs(fps - float(output)) < FPS_THRESHOLD):
-        print "Playback FrameRate is rendered as expected"
+        print("Playback FrameRate is rendered as expected")
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "Expected FrameRate : %s\nActual FrameRate : %s"%(fps,output)
+        print("Expected FrameRate : %s\nActual FrameRate : %s"%(fps,output))
         tdkTestObj.setResultStatus("FAILURE")
 
 def checkifLanguagePlayed(tdkTestObj,language):
@@ -386,8 +386,8 @@ def checkifLanguagePlayed(tdkTestObj,language):
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails()
     if expectedResult in actualresult.upper() and output:
-        print "%s played successfully"%language
+        print("%s played successfully"%language)
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "%s audio playback failed"%language
+        print("%s audio playback failed"%language)
         tdkTestObj.setResultStatus("FAILURE")

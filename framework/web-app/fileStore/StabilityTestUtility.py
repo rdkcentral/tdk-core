@@ -19,22 +19,22 @@
 from rdkv_performancelib import *
 import ast
 import json
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 expectedResult ="SUCCESS"
 
 def get_plugins_status(obj,plugins):
     cur_plugin_state_dict = {}
     for plugin in plugins:
-            plugin_obj = obj.createTestStep('rdkservice_getPluginStatus')
-            plugin_obj.addParameter("plugin",plugin)
-            plugin_obj.executeTestCase(expectedResult)
-            if expectedResult in plugin_obj.getResult():
-                cur_plugin_state_dict[plugin] = plugin_obj.getResultDetails()
-                plugin_obj.setResultStatus("SUCCESS")
-            else:
-                cur_plugin_state_dict[plugin] = "FAILURE";
-                plugin_obj.setResultStatus("FAILURE")
+        plugin_obj = obj.createTestStep('rdkservice_getPluginStatus')
+        plugin_obj.addParameter("plugin",plugin)
+        plugin_obj.executeTestCase(expectedResult)
+        if expectedResult in plugin_obj.getResult():
+            cur_plugin_state_dict[plugin] = plugin_obj.getResultDetails()
+            plugin_obj.setResultStatus("SUCCESS")
+        else:
+            cur_plugin_state_dict[plugin] = "FAILURE";
+            plugin_obj.setResultStatus("FAILURE")
     return cur_plugin_state_dict
 
 def set_plugins_status(obj,plugins_state_dict):
@@ -42,7 +42,7 @@ def set_plugins_status(obj,plugins_state_dict):
     plugin_status = ""
     for plugin in plugins_state_dict:
         if plugins_state_dict[plugin] != "deactivated" and plugins_state_dict[plugin] != "None":
-            print "{}  activating".format(plugin)
+            print("{}  activating".format(plugin))
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("status","activate")
@@ -53,7 +53,7 @@ def set_plugins_status(obj,plugins_state_dict):
             else:
                 tdkTestObj.setResultStatus("FAILURE")
         elif plugins_state_dict[plugin] == "deactivated":
-            print "{} disabling".format(plugin)
+            print("{} disabling".format(plugin))
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("status","deactivate")
@@ -79,7 +79,7 @@ def launch_cobalt(obj):
     result = tdkTestObj.getResult()
     if result == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS")
-        print "\n Checking Cobalt is in foreground"
+        print("\n Checking Cobalt is in foreground")
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
         tdkTestObj.executeTestCase(expectedResult)
@@ -91,7 +91,7 @@ def launch_cobalt(obj):
             if len(zorder) != 0 and "cobalt" in zorder:
                 tdkTestObj.setResultStatus("SUCCESS")
                 if zorder[0] == "cobalt":
-                    print "\n Cobalt is in the foreground"
+                    print("\n Cobalt is in the foreground")
                 else:
                     param_val = '{"client": "Cobalt"}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -102,15 +102,15 @@ def launch_cobalt(obj):
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "\n Unable to move Cobalt to foreground"
+                        print("\n Unable to move Cobalt to foreground")
                         return_val = "FAILURE"
                         tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Cobalt is not present in the zorder: ",zorder
+                print("\n Cobalt is not present in the zorder: ",zorder)
                 return_val = "FAILURE"
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to get getZOrder value"
+            print("\n Unable to get getZOrder value")
             return_val = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE")
     else:
@@ -120,7 +120,7 @@ def launch_cobalt(obj):
 
 def get_validation_params(obj):
     validation_dict = {}
-    print "\n getting validation params from conf file"
+    print("\n getting validation params from conf file")
     conf_file,result = getConfigFileName(obj.realpath)
     result, validation_required = getDeviceConfigKeyValue(conf_file,"PROC_VALIDATION")
     if result == "SUCCESS":
@@ -134,9 +134,9 @@ def get_validation_params(obj):
             result,validation_dict["password"] = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
             result,validation_dict["video_validation_script"] = getDeviceConfigKeyValue(conf_file,"VIDEO_VALIDATION_SCRIPT_FILE")
     else:
-        print "Failed to get the validation required value from config file, please configure values before test"
-    if any(value == "" for value in validation_dict.itervalues()):
-        print "please configure values before test"
+        print("Failed to get the validation required value from config file, please configure values before test")
+    if any(value == "" for value in list(validation_dict.values())):
+        print("please configure values before test")
         validation_dict = {}
     return validation_dict
 
@@ -146,7 +146,7 @@ def get_validation_params(obj):
 def get_configfile_name(obj):
     url = obj.url + '/deviceGroup/getDeviceDetails?deviceIp='+obj.IP
     try:
-        data = urllib.urlopen(url).read()
+        data = urllib.request.urlopen(url).read()
         deviceDetails = json.loads(data)
         deviceName = deviceDetails["devicename"]
         deviceType = deviceDetails["boxtype"]
@@ -161,15 +161,15 @@ def get_configfile_name(obj):
         # executing the test are present
         if os.path.exists(deviceNameConfigFile) == True:
             deviceConfigFile = deviceNameConfigFile
-            print "[INFO]: Using Device config file: %s" %(deviceNameConfigFile)
+            print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
         elif os.path.exists(deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
-            print "[INFO]: Using Device config file: %s" %(deviceTypeConfigFile)
+            print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
         else:
             status = "FAILURE"
-            print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+            print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
     except:
-        print "Unable to get Device Details from REST !!!"
+        print("Unable to get Device Details from REST !!!")
         status = "FAILURE"
 
     return deviceConfigFile,status;
@@ -187,17 +187,17 @@ def pre_requisite_reboot(obj,is_pvs = "no"):
 
     if reboot_required.lower() == "yes":
 
-        print "\nRebooting the device as a pre-requisite before starting the script\n"
+        print("\nRebooting the device as a pre-requisite before starting the script\n")
 
         #Get the required values to reboot the device
         url = obj.url + '/deviceGroup/getThunderDevicePorts?stbIp='+obj.IP
         try:
-            data = urllib.urlopen(url).read()
+            data = urllib.request.urlopen(url).read()
             thunderPortDetails = json.loads(data)
             devicePort= thunderPortDetails['thunderPort']
         except Exception as e:
-            print "Unable to get Thunder Port from REST to trigger the reboot !!!"
-            print "Error message received :\n",e;
+            print("Unable to get Thunder Port from REST to trigger the reboot !!!")
+            print("Error message received :\n",e);
             result = "FAILURE"
 
         #Reboot the device
@@ -205,15 +205,15 @@ def pre_requisite_reboot(obj,is_pvs = "no"):
             cmd = "curl --silent --data-binary '{\"jsonrpc\": \"2.0\", \"id\": 1234567890, \"method\": \"Controller.1.harakiri\" }' -H 'content-type:text/plain;' http://"+ str(obj.IP)+":"+str(devicePort)+ "/jsonrpc"
             os.system(cmd)
 
-            print "WAIT TO COMPLETE THE REBOOT PROCESS"
+            print("WAIT TO COMPLETE THE REBOOT PROCESS")
             time.sleep(150)
         except Exception as e:
-            print "ERROR!! \nEXCEPTION OCCURRED WHILE REBOOTING DEVICE!!"
-            print "Error message received :\n",e;
+            print("ERROR!! \nEXCEPTION OCCURRED WHILE REBOOTING DEVICE!!")
+            print("Error message received :\n",e);
             result = "FAILURE"
 
     if result == "FAILURE" or reboot_required != "Yes":
-        print "Device is not rebooted before starting the execution\n"
+        print("Device is not rebooted before starting the execution\n")
 
     return result;
 
@@ -222,7 +222,7 @@ def pre_requisite_reboot(obj,is_pvs = "no"):
 #----------------------------------------------------------------------------
 def check_device_state(obj):
     #get the resource usage and validate
-    print "\nGet CPU and Memory usage"
+    print("\nGet CPU and Memory usage")
     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
     tdkTestObj.addParameter("plugin","DeviceInfo")
     tdkTestObj.executeTestCase(expectedResult)
@@ -237,7 +237,7 @@ def check_device_state(obj):
             tdkTestObj.executeTestCase(expectedResult)
             plugin_status = tdkTestObj.getResult()
             if plugin_status == "SUCCESS":
-                print "\nActivated DeviceInfo plugin to get the resource usage details"
+                print("\nActivated DeviceInfo plugin to get the resource usage details")
                 result = "activated"
             else:
                 result = "deactivated"
@@ -247,12 +247,12 @@ def check_device_state(obj):
             status = tdkTestObj.getResult()
             result = tdkTestObj.getResultDetails()
             if expectedResult in status and "ERROR" not in result:
-                print "\nCPU and Memory usage is within expected range\n"
+                print("\nCPU and Memory usage is within expected range\n")
                 result = "SUCCESS"
             elif result == "EXCEPTION OCCURED":
-                print "\n Failed to get the resource usage"
+                print("\n Failed to get the resource usage")
             else:
-                print "\n CPU and/or Memory usage is higher than expected range\n"
+                print("\n CPU and/or Memory usage is higher than expected range\n")
             #Revert DeviceInfo Plugin status
             if curr_status == "deactivated":
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
@@ -261,14 +261,14 @@ def check_device_state(obj):
                 tdkTestObj.executeTestCase(expectedResult)
                 plugin_status = tdkTestObj.getResult()
                 if expectedResult in plugin_status:
-                    print "Reverted the plugin status"
+                    print("Reverted the plugin status")
                 else:
-                    print "Unable to revert the plugin status"
+                    print("Unable to revert the plugin status")
                     result = "FAILURE"
         else:
-            print "Unable to activate the DeviceInfo plugin"
+            print("Unable to activate the DeviceInfo plugin")
     else:
-        print "Unable to get the status of DeviceInfo plugin"
+        print("Unable to get the status of DeviceInfo plugin")
     time.sleep(5)
     return result;
 
@@ -289,7 +289,7 @@ def testUsingRestAPI(obj,result_dict_list):
         if error_flag:
             break;
         if file_check_count > 60:
-            print "\nREST API Logging is not happening properly. Exiting..."
+            print("\nREST API Logging is not happening properly. Exiting...")
             break;
         if os.path.exists(app_log_file):
             logging_flag = 1
@@ -300,7 +300,7 @@ def testUsingRestAPI(obj,result_dict_list):
     while logging_flag:
         if continue_count > 60:
             hang_detected = 1
-            print "\nApp not proceeding for 60 secs. Exiting..."
+            print("\nApp not proceeding for 60 secs. Exiting...")
             tdkTestObj.setResultStatus("FAILURE")
             break;
         with open(app_log_file,'r') as f:
@@ -313,7 +313,7 @@ def testUsingRestAPI(obj,result_dict_list):
                     print(lines[i])
                     if "Video Player CanPlay Through" in lines[i]:
                         #Validate resource usage
-                        print "\n Validate Resource usage for iteration: {}".format(count+1)
+                        print("\n Validate Resource usage for iteration: {}".format(count+1))
                         tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                         tdkTestObj.executeTestCase(expectedResult)
                         resource_usage = tdkTestObj.getResultDetails()
@@ -329,13 +329,13 @@ def testUsingRestAPI(obj,result_dict_list):
                             time.sleep(30)
                             count += 1
                         else:
-                            print "\n Error while validating Resource usage"
+                            print("\n Error while validating Resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
                             error_flag = 1
                             logging_flag = 0
                             break
                     if "TEST RESULT: SUCCESS" in lines[i]:
-                        print "\n Successfully completed video playback"
+                        print("\n Successfully completed video playback")
                         tdkTestObj.setResultStatus("SUCCESS")
                         test_result = lines[i]
                 lastIndex = len(lines)
@@ -356,31 +356,31 @@ def testUsingWebInspect(obj,webkit_console_socket,result_dict_list):
     while True:
         result_dict = {}
         if continue_count > 180:
-            print "\n Not able to play the video"
-            print "\n Current webkit console logs: ",webkit_console_socket.getEventsBuffer()
+            print("\n Not able to play the video")
+            print("\n Current webkit console logs: ",webkit_console_socket.getEventsBuffer())
             tdkTestObj.setResultStatus("FAILURE")
             break
         if (len(webkit_console_socket.getEventsBuffer())== 0):
-            print "\n Waiting for video plaback"
+            print("\n Waiting for video plaback")
             time.sleep(1)
             continue_count += 1
             continue
         else:
             if [True for element in webkit_console_socket.getEventsBuffer() if "VIDEO STARTED PLAYING" in str(element)]:
                 started = True
-                print "\n Video playback is started"
+                print("\n Video playback is started")
                 webkit_console_socket.clearEventsBuffer()
                 continue_count = 0
             elif [True for element in webkit_console_socket.getEventsBuffer() if "TEST RESULT:" in str(element)]:
                 if [True for element in webkit_console_socket.getEventsBuffer() if "TEST RESULT: SUCCESS" in str(element)] :
-                    print "\n Successfully completed video playback"
+                    print("\n Successfully completed video playback")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Error occurred while playing Video"
+                    print("\n Error occurred while playing Video")
                     tdkTestObj.setResultStatus("FAILURE")
                 break
             elif [True for element in webkit_console_socket.getEventsBuffer() if "Connection refused" in str(element)]:
-                print "\n Error occurred while playing video"
+                print("\n Error occurred while playing video")
                 tdkTestObj.setResultStatus("FAILURE")
                 break
             if started:
@@ -388,7 +388,7 @@ def testUsingWebInspect(obj,webkit_console_socket,result_dict_list):
                 if not [True for element in webkit_console_socket.getEventsBuffer() if "TEST RESULT:" in str(element)]:
                     webkit_console_socket.clearEventsBuffer()
                 #Validate resource usage
-                    print "\n Validate Resource usage for iteration: {}".format(count+1)
+                    print("\n Validate Resource usage for iteration: {}".format(count+1))
                     tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                     tdkTestObj.executeTestCase(expectedResult)
                     resource_usage = tdkTestObj.getResultDetails()
@@ -404,16 +404,14 @@ def testUsingWebInspect(obj,webkit_console_socket,result_dict_list):
                         time.sleep(30)
                         count += 1
                     else:
-                        print "\n Error while validating Resource usage"
+                        print("\n Error while validating Resource usage")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Video player is stopped"
+                    print("\n Video player is stopped")
                     continue
             else:
-                print "\n Video playback is not happening"
+                print("\n Video playback is not happening")
                 time.sleep(20)
                 continue_count += 5
     return result_dict_list
-
-

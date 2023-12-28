@@ -18,12 +18,13 @@
 # limitations under the License.
 ##########################################################################
 
-import ConfigParser
+import configparser
 import json
 from pexpect import pxssh
 from time import sleep
 import bluetoothhallib;
 import os
+deviceName =""
 
 ##################################################################
 # Methods
@@ -34,7 +35,7 @@ def setAdapterPowerON (bluetoothhalObj, adapterPath):
         expectedresult = "SUCCESS"
         powerON = 1
         #Set the power status to powerStatusToBeSet
-        print "Setting the bluetooth adapter power ON"
+        print("Setting the bluetooth adapter power ON")
         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_SetAdapterPower');
         #Set the adapter path to the default adapter path
         tdkTestObj.addParameter("adapter_path", adapterPath)
@@ -47,7 +48,7 @@ def setAdapterPowerON (bluetoothhalObj, adapterPath):
         actualresult = tdkTestObj.getResult();
 
         if (actualresult == expectedresult):
-            print "BluetoothHal_SetAdapterPower executed successfully"
+            print("BluetoothHal_SetAdapterPower executed successfully")
             tdkTestObj.setResultStatus("SUCCESS");
 
             #Check if the value is set by retrieving the power
@@ -63,24 +64,24 @@ def setAdapterPowerON (bluetoothhalObj, adapterPath):
             actualresult = tdkTestObj.getResult();
 
             if (actualresult == expectedresult):
-                print "BluetoothHal_GetAdapterPower executed successfully"
+                print("BluetoothHal_GetAdapterPower executed successfully")
                 currentPowerStatus = int (tdkTestObj.getResultDetails())
                 if (powerON == currentPowerStatus):
-                    print "Adapter powered ON successfully"
+                    print("Adapter powered ON successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Adapter could not be powered ON"
+                    print("Adapter could not be powered ON")
                     actualresult = "FAILURE"
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "Failed to get adapter power"
+                print("Failed to get adapter power")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "Failed to set adapter power"
+            print("Failed to set adapter power")
             tdkTestObj.setResultStatus("FAILURE");
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         actualresult = "FAILURE"
 
     return actualresult
@@ -98,6 +99,7 @@ def executeBluetoothCtl(bluetoothObj,commands):
 
         #Get the device name configured in test manager
         deviceDetails = bluetoothObj.getDeviceDetails()
+        global deviceName
         deviceName = deviceDetails["devicename"]
         #Get the device configuration file name
         deviceConfig = deviceName + ".config"
@@ -113,11 +115,11 @@ def executeBluetoothCtl(bluetoothObj,commands):
         if not os.path.exists(bluetoothConfigFile):
             bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
 
-        configParser = ConfigParser.ConfigParser()
+        configParser = configparser.ConfigParser()
         configParser.read(r'%s' % bluetoothConfigFile)
         ip = configParser.get('bluetooth-config', 'ip')
         if not ip:
-            print "Using global config file bluetoothcredential.config"
+            print("Using global config file bluetoothcredential.config")
             bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
             configParser.read(r'%s' % bluetoothConfigFile)
             ip = configParser.get('bluetooth-config', 'ip')
@@ -128,38 +130,38 @@ def executeBluetoothCtl(bluetoothObj,commands):
         deviceName = configParser.get('bluetooth-config','devicename')
         BT_Mac =  configParser.get('bluetooth-config','DUT_BT_controller_mac')
         #Executing the commands in device
-        print 'Number of commands:', len(commands)
-        print 'Commands List:', commands
-        print "Connecting to client device"
+        print('Number of commands:', len(commands))
+        print('Commands List:', commands)
+        print("Connecting to client device")
         global session
         session = pxssh.pxssh(options={
                             "StrictHostKeyChecking": "no",
                             "UserKnownHostsFile": "/dev/null"})
         session.login(ip,username,password,sync_multiplier=3)
-        print "Executing the bluetoothctl commands"
+        print("Executing the bluetoothctl commands")
         for parameters in range(0,len(commands)):
             if 'scan on' in commands[parameters]:
                 session.sendline(commands[parameters])
-                print "Scanning started"
+                print("Scanning started")
                 sleep(20);
             elif 'pair' in commands[parameters]:
                 commands[parameters] += ' '+ BT_Mac;
                 session.sendline(commands[parameters])
-                print "Paired with DUT"
+                print("Paired with DUT")
                 sleep(3);
             elif 'remove' in commands[parameters]:
                 commands[parameters] += ' '+ BT_Mac;
                 session.sendline(commands[parameters])
-                print "Un Paired with DUT"
+                print("Un Paired with DUT")
                 sleep(3);
             else:
                 session.sendline(commands[parameters])
         session.prompt()
         status = session.before
-        print "Successfully Executed bluetoothctl commands in client device"
+        print("Successfully Executed bluetoothctl commands in client device")
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         status = "FAILURE"
 
     return status
@@ -173,7 +175,7 @@ def executeBluetoothCtl(bluetoothObj,commands):
 def closeSSHSession ():
 
     if session:
-        print "Closing the ssh session with bluetooth client device"
+        print("Closing the ssh session with bluetooth client device")
         session.logout()
         session.close()
 
@@ -187,6 +189,7 @@ def DeviceType (bluetoothObj):
     try :
 
         #Get the device name configured in test manager
+        global deviceName
         deviceDetails = bluetoothObj.getDeviceDetails()
         deviceName = deviceDetails["devicename"]
         #Get the device configuration file name
@@ -203,8 +206,8 @@ def DeviceType (bluetoothObj):
         if not os.path.exists(bluetoothConfigFile):
             bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
 
-        print "Using config ",bluetoothConfigFile
-        configParser = ConfigParser.ConfigParser()
+        print("Using config ",bluetoothConfigFile)
+        configParser = configparser.ConfigParser()
         configParser.read(r'%s' % bluetoothConfigFile)
         deviceType = configParser.get('bluetooth-config', 'deviceType')
         if "AudioIn" in deviceType or "AudioOut" in deviceType:
@@ -214,12 +217,12 @@ def DeviceType (bluetoothObj):
         elif "LE" in deviceType:
             return "LE"
         else:
-            print "Configuration parameter missing for isDeviceLE in bluetoothcredential.config"
-            print "Please configure to execute the script"
+            print("Configuration parameter missing for isDeviceLE in bluetoothcredential.config")
+            print("Please configure to execute the script")
             exit()
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         exit()
 
 ###############################################################################################
@@ -239,7 +242,7 @@ def checkDeviceInPairedList(bluetoothhalObj,deviceID_check):
     actualresult = tdkTestObj.getResult();
 
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetListOfPairedDevices executed successfully"
+        print("BluetoothHal_GetListOfPairedDevices executed successfully")
         tdkTestObj.setResultStatus("SUCCESS")
         pairResult = tdkTestObj.getResultDetails()
         if pairResult and "NO_DEVICES_PAIRED" != pairResult :
@@ -249,9 +252,9 @@ def checkDeviceInPairedList(bluetoothhalObj,deviceID_check):
                 if (str(device["deviceID"]) == deviceID_check):
                     devicePaired = True
         else:
-            print "Paired devices list is empty"
+            print("Paired devices list is empty")
     else:
-        print "BluetoothHal_GetListOfPairedDevices: failed"
+        print("BluetoothHal_GetListOfPairedDevices: failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     return devicePaired
@@ -272,7 +275,7 @@ def Unpair_if_paired(bluetoothhalObj):
     actualresult = tdkTestObj.getResult();
 
     if (actualresult == expectedresult):
-        print "BluetoothHal_GetListOfPairedDevices executed successfully"
+        print("BluetoothHal_GetListOfPairedDevices executed successfully")
         tdkTestObj.setResultStatus("SUCCESS")
         pairResult = tdkTestObj.getResultDetails()
         if pairResult and "NO_DEVICES_PAIRED" != pairResult :
@@ -280,7 +283,7 @@ def Unpair_if_paired(bluetoothhalObj):
             #Traverse the paired devices list to check if the client device is present
             for device in pairedDevices :
                 if str(device["deviceName"]) == bluetoothhallib.deviceName:
-                    print "%s device with device Handle %s is Paired, unpairing from DUT"%(str(device["deviceName"]),str(device["deviceID"]))
+                    print("%s device with device Handle %s is Paired, unpairing from DUT"%(str(device["deviceName"]),str(device["deviceID"])))
                     tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_UnPairDevice');
                     #Set device ID as the bluetooth client device ID
                     deviceID = str(device["deviceID"])
@@ -292,25 +295,25 @@ def Unpair_if_paired(bluetoothhalObj):
                     actualresult = tdkTestObj.getResult();
 
                     if (actualresult == expectedresult):
-                        print "BluetoothHal_UnPairDevice executed successfully"
+                        print("BluetoothHal_UnPairDevice executed successfully")
                         tdkTestObj.setResultStatus("SUCCESS")
                         #Retrieve the list of paired devices
                         devicePaired = checkDeviceInPairedList(bluetoothhalObj,deviceID)
                         if True == devicePaired:
-                            print "Client device is not unpaired from DUT"
+                            print("Client device is not unpaired from DUT")
                             tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Client device is successfully unpaired from DUT"
+                            print("Client device is successfully unpaired from DUT")
                             tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "Unpair failed"
+                        print("Unpair failed")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "%s device is not paired with the DUT. Proceeding with the execution"%(bluetoothhallib.deviceName)
+                    print("%s device is not paired with the DUT. Proceeding with the execution"%(bluetoothhallib.deviceName))
         else:
-            print "Paired devices list is empty"
+            print("Paired devices list is empty")
     else:
-        print "BluetoothHal_GetListOfPairedDevices: failed"
+        print("BluetoothHal_GetListOfPairedDevices: failed")
         tdkTestObj.setResultStatus("FAILURE")
 
 #######################################################################################
@@ -320,7 +323,7 @@ def Unpair_if_paired(bluetoothhalObj):
 #######################################################################################
 def exitFromScript(tdkTestObj,bluetoothhalObj):
     tdkTestObj.setResultStatus("FAILURE")
-    print "Sending the quit command to client device before closing the session"
+    print("Sending the quit command to client device before closing the session")
     commandList = ['quit']
     bluetoothctlResult = executeBluetoothCtl(bluetoothhalObj,commandList)
     if "FAILURE" not in bluetoothctlResult:
@@ -344,13 +347,13 @@ def HandleRegisterAgent(bluetoothhalObj,register):
         tdkTestObj.addParameter("capabilities", 3)
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
-        print "BluetoothHal_RegisterAgent : ", actualresult
+        print("BluetoothHal_RegisterAgent : ", actualresult)
         if (actualresult not in expectedresult):
-             exitFromScript(tdkTestObj,bluetoothhalObj)
+            exitFromScript(tdkTestObj,bluetoothhalObj)
     else:
         tdkTestObj = bluetoothhalObj.createTestStep('BluetoothHal_UnregisterAgent');
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
-        print "BluetoothHal_UnregisterAgent : ", actualresult
+        print("BluetoothHal_UnregisterAgent : ", actualresult)
         if actualresult not in expectedresult:
-             exitFromScript(tdkTestObj,bluetoothhalObj)
+            exitFromScript(tdkTestObj,bluetoothhalObj)

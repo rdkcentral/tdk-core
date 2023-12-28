@@ -20,21 +20,21 @@ from rdkv_performancelib import *
 
 def get_ssh_params(obj):
     ssh_dict = {}
-    print "\n getting ssh params from conf file"
+    print("\n getting ssh params from conf file")
     conf_file,result = getConfigFileName(obj.realpath)
     if result == "SUCCESS":
         result,ssh_dict["ssh_method"] = getDeviceConfigKeyValue(conf_file,"SSH_METHOD")
         if ssh_dict["ssh_method"] == "directSSH":
             ssh_dict["host_name"] = obj.IP
             result,ssh_dict["user_name"] = getDeviceConfigKeyValue(conf_file,"SSH_USERNAME")
-	    result,ssh_dict["password"] = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
+            result,ssh_dict["password"] = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
         else:
             #TODO
-	    print "selected ssh method is {}".format(ssh_dict["ssh_method"])
+            print("selected ssh method is {}".format(ssh_dict["ssh_method"]))
             pass
     else:
-        print "Failed to find the device specific config file"
-    if any(value == "" for value in ssh_dict.itervalues()):
-	print "please configure values before test"
-	ssh_dict = {}
+        print("Failed to find the device specific config file")
+    if any(value == "" for value in list(ssh_dict.values())):
+        print("please configure values before test")
+        ssh_dict = {}
     return ssh_dict

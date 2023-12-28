@@ -19,8 +19,8 @@
 
 import os
 import json
-import ConfigParser
-from ConfigParser import SafeConfigParser
+import configparser
+from configparser import SafeConfigParser
 from SSHUtility import *
 
 
@@ -41,7 +41,7 @@ def get_WPE_ThunderSecurity_Token(deviceIP):
         else:
             status = "FAILURE"
     except Exception as e:
-        print "Exception Occurred: ",e
+        print("Exception Occurred: ",e)
         status = "FAILURE"
 
     return status,token
@@ -53,15 +53,15 @@ def create_token_config(token_config):
             fd = open(token_config,"w")
             fd.close()
             os.chmod(token_config,0o666)
-            print "[INFO]: Created DUT Token Config file"
+            print("[INFO]: Created DUT Token Config file")
         if os.path.exists(token_config):
             status = "SUCCESS"
-            print "[INFO]: DUT Token Config file available"
+            print("[INFO]: DUT Token Config file available")
         else:
             status = "FAILURE"
-            print "[ERROR]: DUT Token config file not available"
+            print("[ERROR]: DUT Token config file not available")
     except Exception as e:
-        print "Exception Occurred: ",e
+        print("Exception Occurred: ",e)
         status = "FAILURE"
     return status
 
@@ -81,12 +81,12 @@ def update_token_config(deviceIP,token_config):
                 parser.set("device_token.config","TOKEN",token)
             parser.write(fd)
             fd.close()
-            print "\n[INFO]: Updated Token in DUT Token config file"
+            print("\n[INFO]: Updated Token in DUT Token config file")
         else:
-            print "\n[ERROR]: Failed to get Token from the DUT"
+            print("\n[ERROR]: Failed to get Token from the DUT")
             status = "FAILURE"
     except Exception as e:
-        print "Exception Occurred: ",e
+        print("Exception Occurred: ",e)
         status = "FAILURE"
     return status
 
@@ -99,7 +99,7 @@ def check_token_config(deviceIP,token_config):
         if not parser.has_section("device_token.config"):
             status = update_token_config(deviceIP,token_config)
     except Exception as e:
-        print "Exception Occurred: ",e
+        print("Exception Occurred: ",e)
         status = "FAILURE"
     return status
 
@@ -114,7 +114,7 @@ def read_token_config(deviceIP,token_config):
                 parser.read(token_config)
                 token = parser.get("device_token.config","TOKEN")
             except Exception as e:
-                print "Exception Occurred: ",e
+                print("Exception Occurred: ",e)
                 token = "None"
                 status = "FAILURE"
         else:
@@ -131,13 +131,13 @@ def handleDeviceTokenChange(deviceIP,token_config):
         if status == "SUCCESS":
             status,token = read_token_config(deviceIP,token_config)
             if status == "SUCCESS":
-                print "[INFO]: Device token updated successfully !!!"
+                print("[INFO]: Device token updated successfully !!!")
             else:
-                print "[ERROR]: Device token update failed"
+                print("[ERROR]: Device token update failed")
         else:
-            print "[ERROR]: Device token update failed"
+            print("[ERROR]: Device token update failed")
     except Exception as e:
-        print "Exception Occurred: ",e
+        print("Exception Occurred: ",e)
         status = "FAILURE"
         token = "None"
     return status,token

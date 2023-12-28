@@ -36,14 +36,14 @@ def getMaxTuner(obj,expectedresult):
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('TRM_GetMaxTuners');
 
-    print "\n"
+    print("\n")
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedresult);
 
     #Get the result of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
     maxTuner = int(details)
 
     #Set the result status of execution
@@ -52,8 +52,8 @@ def getMaxTuner(obj,expectedresult):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "Max tuners supported: ",maxTuner
-    print "\n"
+    print("Max tuners supported: ",maxTuner)
+    print("\n")
     return maxTuner
 
 #######################################################
@@ -82,27 +82,27 @@ def reserveForLive(obj,expectedresult,kwargs={}):
     tdkTestObj.addParameter("locator",locator);
     tdkTestObj.addParameter("startTime", startTime);
 
-    print "\nDeviceNo:%d locator:%s duration:%d startTime:%d"%(deviceNo,locator,duration,startTime),
+    print("\nDeviceNo:%d locator:%s duration:%d startTime:%d"%(deviceNo,locator,duration,startTime), end=' ')
 
     if 'token' in kwargs:
         token = str(kwargs["token"])
         tdkTestObj.addParameter("token", token);
-        print " token:%s"%token,
+        print(" token:%s"%token, end=' ')
 
     if 'selectOnConflict' in kwargs:
         conflict = int(kwargs["selectOnConflict"])
         tdkTestObj.addParameter("selectOnConflict", conflict);
-        print " SelectOnConflict:%d"%conflict
+        print(" SelectOnConflict:%d"%conflict)
 
-    print "\n"
+    print("\n")
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedresult);
 
     #Get the result/details of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: ",details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: ",details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -110,7 +110,7 @@ def reserveForLive(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
     return details
 
 #######################################################
@@ -143,19 +143,19 @@ def reserveForRecord(obj,expectedresult,kwargs={}):
     tdkTestObj.addParameter("recordingId",recordingId);
     tdkTestObj.addParameter("hot",hot);
 
-    print "\nDeviceNo:%d locator:%s duration:%d startTime:%d recordingId:%s hot:%d"%(deviceNo,locator,duration,startTime,recordingId,hot),
+    print("\nDeviceNo:%d locator:%s duration:%d startTime:%d recordingId:%s hot:%d"%(deviceNo,locator,duration,startTime,recordingId,hot), end=' ')
 
     if 'token' in kwargs:
         token = str(kwargs["token"])
         tdkTestObj.addParameter("token", token);
-        print " token:%s"%token,
+        print(" token:%s"%token, end=' ')
 
     if 'selectOnConflict' in kwargs:
         conflict = int(kwargs["selectOnConflict"])
         tdkTestObj.addParameter("selectOnConflict", conflict);
-        print " SelectOnConflict:%d"%conflict
+        print(" SelectOnConflict:%d"%conflict)
 
-    print "\n"
+    print("\n")
 
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedresult);
@@ -163,8 +163,8 @@ def reserveForRecord(obj,expectedresult,kwargs={}):
     #Get the result/details of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: ",details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: ",details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -172,7 +172,7 @@ def reserveForRecord(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
     return details
 
 #######################################################
@@ -193,9 +193,9 @@ def cancelRecording(obj,expectedresult,kwargs={}):
     #Get the result/details of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Locator: %s"%(locator)
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("Locator: %s"%(locator))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -203,7 +203,7 @@ def cancelRecording(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
 
 #######################################################
 
@@ -232,9 +232,9 @@ def releaseReservation(obj,expectedresult,kwargs={}):
     #Get the result/details of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "activity:%s deviceNo:%d locator:%s"%(Activity,deviceNo,locator)
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("activity:%s deviceNo:%d locator:%s"%(Activity,deviceNo,locator))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -242,7 +242,7 @@ def releaseReservation(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
 
 #######################################################
 def validateReservation(obj,expectedresult,kwargs={}):
@@ -270,9 +270,9 @@ def validateReservation(obj,expectedresult,kwargs={}):
     #Get the result/details of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "activity:%s deviceNo:%d locator:%s"%(Activity,deviceNo,locator)
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("activity:%s deviceNo:%d locator:%s"%(Activity,deviceNo,locator))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -280,7 +280,7 @@ def validateReservation(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
 
 #######################################################
 
@@ -295,8 +295,8 @@ def getAllTunerStates(obj,expectedresult):
     #Get the result of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -304,7 +304,7 @@ def getAllTunerStates(obj,expectedresult):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
     return details
 
 #######################################################
@@ -317,9 +317,9 @@ def getAllReservations(obj,expectedresult,kwargs={}):
     if 'deviceNo' in kwargs:
         deviceNo = int(kwargs["deviceNo"])
         tdkTestObj.addParameter("deviceNo",deviceNo);
-        print "Fetching reservation info for deviceNo: ",deviceNo
+        print("Fetching reservation info for deviceNo: ",deviceNo)
     else:
-        print "Fetching all reservations"
+        print("Fetching all reservations")
 
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedresult);
@@ -327,8 +327,8 @@ def getAllReservations(obj,expectedresult,kwargs={}):
     #Get the result of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -336,7 +336,7 @@ def getAllReservations(obj,expectedresult,kwargs={}):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
 
 #######################################################
 
@@ -351,8 +351,8 @@ def getAllTunerIds(obj,expectedresult):
     #Get the result of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -360,7 +360,7 @@ def getAllTunerIds(obj,expectedresult):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
 
 #######################################################
 
@@ -375,8 +375,8 @@ def getVersion(obj,expectedresult):
     #Get the result of execution
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-    print "Details: [%s]"%details
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
     #Set the result status of execution
     if expectedresult in result.upper():
@@ -384,7 +384,7 @@ def getVersion(obj,expectedresult):
     else:
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\n"
+    print("\n")
     return details
 
 #######################################################

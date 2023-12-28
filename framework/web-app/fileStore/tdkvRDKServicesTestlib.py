@@ -25,10 +25,10 @@
 import os
 import sys
 import time
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import requests
 import json,ast
-import ConfigParser
+import configparser
 import xml.etree.ElementTree as ET
 from SecurityTokenUtility import *
 from tdkvRDKServicesSupportlib import *
@@ -53,16 +53,16 @@ def getDeviceConfigKeyValue(key):
         # will be thrown
         if key is None or key == "":
             status = "FAILURE"
-            print "\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3])
+            print("\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3]))
         # Parse the device configuration file and read the
         # data. But if the data is empty it is taken as such
         else:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(deviceConfigFile)
             value = str(config.get(deviceConfig,key))
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
     return status,value
 
@@ -83,7 +83,7 @@ def readDeviceConfigKeys(keys):
     # will be thrown
     if keys is None or keys == "":
         status = "FAILURE"
-        print "\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3])
+        print("\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3]))
     else:
         keys = keys.split(",")
         for key in keys:
@@ -122,26 +122,26 @@ def getCITestCases(plugin):
         deviceCIConfigFile = deviceTypeCIConfigFile
 
     if deviceCIConfigFile != None:
-        print "[INFO]: Using Device CI config file: %s" %(deviceCIConfigFile)
+        print("[INFO]: Using Device CI config file: %s" %(deviceCIConfigFile))
         # Parse the device CI configuration file and read the
         # data. But if the data is empty, error is thrown
         key = plugin + "Plugin_TestCases"
         try:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(deviceCIConfigFile)
             if config.has_option(deviceConfig,key):
                 pluginTestCases = str(config.get(deviceConfig,key))
                 if pluginTestCases.strip() == "":
                     status = "FAILURE"
-                    print "\n[ERROR]: Test Cases are not configured properly in CI config file"
+                    print("\n[ERROR]: Test Cases are not configured properly in CI config file")
             else:
-                print "[INFP]: No Plugin key in CI config file. Executing all plugin tests"
+                print("[INFP]: No Plugin key in CI config file. Executing all plugin tests")
 
         except Exception as e:
             status = "FAILURE"
-            print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+            print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
     else:
-        print "[INFO]: No CI Exec config file. Executing all plugin tests"
+        print("[INFO]: No CI Exec config file. Executing all plugin tests")
 
     return status,pluginTestCases
 
@@ -235,10 +235,10 @@ def executePluginTests(libobj, deviceIPAddress, devicePort, testDeviceName, test
     # the test are present
     status = "SUCCESS"
     if os.path.exists(pluginXML) == False:
-        print "Cannot proceed : File %s not found" %(pluginXML)
+        print("Cannot proceed : File %s not found" %(pluginXML))
         status = "FAILURE"
     if os.path.exists(pluginTestCaseXML) == False:
-        print "Cannot proceed : File %s not found" %(pluginTestCaseXML)
+        print("Cannot proceed : File %s not found" %(pluginTestCaseXML))
         status = "FAILURE"
 
 
@@ -251,45 +251,45 @@ def executePluginTests(libobj, deviceIPAddress, devicePort, testDeviceName, test
     # executing the test are present
     if os.path.exists(deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceNameConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
     elif os.path.exists(deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceTypeConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
     else:
         status = "FAILURE"
-        print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+        print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
 
     # If config file is found, then get the execMethod details.
     if status == "SUCCESS":
         status1,execMethod = getDeviceConfigKeyValue("EXEC_METHOD")
         if status1 == "SUCCESS" and execMethod != "":
             status = "SUCCESS"
-            print "[INFO]: Device Port No used for testing : ",portNo
-            print "[INFO]: Method for Sending JSON request : ",execMethod
+            print("[INFO]: Device Port No used for testing : ",portNo)
+            print("[INFO]: Method for Sending JSON request : ",execMethod)
             # Get the execType details and testCaseID if exec is CI
             status1,execType = getDeviceConfigKeyValue("EXEC_TYPE")
             if status1 == "SUCCESS" and execType in ["REGULAR","CI"]:
                 if execType == "CI":
-                    print "\n======================================"
-                    print "Execution Type: %s" %(execType)
-                    print "=======================================\n"
+                    print("\n======================================")
+                    print("Execution Type: %s" %(execType))
+                    print("=======================================\n")
                     status,testCaseID = getCITestCases(pluginName)
             else:
                 status = "FAILURE"
-                print "[ERROR]: No proper test EXEC_TYPE input"
+                print("[ERROR]: No proper test EXEC_TYPE input")
         else:
             status = "FAILURE"
-            print "[ERROR]: No proper test EXEC_METHOD input"
+            print("[ERROR]: No proper test EXEC_METHOD input")
 
 
     # If Performance measurement enabled, get the max response time
     if status == "SUCCESS" and IsPerformanceSelected == "true":
         status2,maxResponseTime = getDeviceConfigKeyValue("MAX_RESPONSE_TIME")
         if status2 == "SUCCESS" and str(maxResponseTime).strip() != "":
-            print "[INFO]: Performance measurement Enabled, MAX_RESPONSE_TIME : %s" %(maxResponseTime)
+            print("[INFO]: Performance measurement Enabled, MAX_RESPONSE_TIME : %s" %(maxResponseTime))
         else:
             status = "FAILURE"
-            print "[ERROR]: No proper MAX_RESPONSE_TIME input for performance measurement"
+            print("[ERROR]: No proper MAX_RESPONSE_TIME input for performance measurement")
 
     sys.stdout.flush()
     # Start the test execution and get the plugin test status
@@ -298,7 +298,7 @@ def executePluginTests(libobj, deviceIPAddress, devicePort, testDeviceName, test
         if "FAILURE" in pluginTestsStatus:
             status = "FAILURE"
 
-    print "\nFinal Plugin Tests Status: %s\n" %(status)
+    print("\nFinal Plugin Tests Status: %s\n" %(status))
     return status
 
 
@@ -332,15 +332,15 @@ def executeTestCases(testCaseID="all"):
         testPlugin = tree2.getroot()
 
     except Exception as e:
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
         return ["FAILURE"]
 
     # Get the testPlugin node information such as pluginName and PluginVersion
     testPluginInfo = getTestPluginInfo(testPlugin)
-    print "\n####################################################################################"
-    print "              PLUGIN NAME :  %s   " %(testPluginInfo.get("pluginName").upper())
-    print "####################################################################################"
-    print "PLUGIN TOTAL TEST CASES: %d\n" %(len(testPlugin.findall("testCase")))
+    print("\n####################################################################################")
+    print("              PLUGIN NAME :  %s   " %(testPluginInfo.get("pluginName").upper()))
+    print("####################################################################################")
+    print("PLUGIN TOTAL TEST CASES: %d\n" %(len(testPlugin.findall("testCase"))))
 
     global testStepJSONCmd
     global testStepResults
@@ -383,10 +383,10 @@ def executeTestCases(testCaseID="all"):
     # any of the plugin pre-requisite fails then none of the test cases will be executed.
 
     if testPlugin.find("pluginPreRequisite") is not None:
-        print "#---------------------------- Plugin Pre-requisite ----------------------------#"
+        print("#---------------------------- Plugin Pre-requisite ----------------------------#")
         pluginPreRequisiteStatus = executePrePostRequisite(testPlugin.find("pluginPreRequisite"),"Pre")
         if "FAILURE" in pluginPreRequisiteStatus:
-            print "\nPlugin Pre-requisite Status: FAILURE"
+            print("\nPlugin Pre-requisite Status: FAILURE")
             totalTests = len(testPlugin.findall("testCase"))
             dispTestSummary(testPluginInfo.get("pluginName").upper(),totalTests,0,0,0,0)
             # Log API Performance data if enabled
@@ -394,7 +394,7 @@ def executeTestCases(testCaseID="all"):
                 performanceStatus = dispPerformanceSummary()
             return pluginPreRequisiteStatus
         else:
-            print "\nPlugin Pre-requisite Status: SUCCESS"
+            print("\nPlugin Pre-requisite Status: SUCCESS")
 
 
     global pluginTestsSummary
@@ -410,12 +410,12 @@ def executeTestCases(testCaseID="all"):
         if testCaseID != "all" and testCaseInfo.get("testCaseId") not in str(testCaseID).split(","):
             continue;
 
-        print "\n\n"
-        print "#==============================================================================#"
-        print "TEST CASE NAME   : " ,testCaseInfo.get("testCaseName")
-        print "TEST CASE ID     : " ,testCaseInfo.get("testCaseId")
-        print "DESCRIPTION      : " ,testCaseInfo.get("desc")
-        print "#==============================================================================#"
+        print("\n\n")
+        print("#==============================================================================#")
+        print("TEST CASE NAME   : " ,testCaseInfo.get("testCaseName"))
+        print("TEST CASE ID     : " ,testCaseInfo.get("testCaseId"))
+        print("DESCRIPTION      : " ,testCaseInfo.get("desc"))
+        print("#==============================================================================#")
 
         # Check if the test case is configurable for a device/platform or a general one. If the test case
         # is configurable, then check its applicability for the current test device by checking the device
@@ -431,18 +431,18 @@ def executeTestCases(testCaseID="all"):
             if status == "SUCCESS":
                 status,testCaseApplicability = checkTestCaseApplicability(testCaseInfo.get("useMethodTag"),keyData,arg)
                 if status == "SUCCESS" and testCaseApplicability == "FALSE":
-                    print "\n This test case is N/A, proceeding to next test"
+                    print("\n This test case is N/A, proceeding to next test")
                     pluginTestsSummary.append({"testCaseName":testCaseInfo.get("testCaseName"), "testCaseId":testCaseInfo.get("testCaseId"), "status":"N/A"})
-                    print "\n##--------- [TEST EXECUTION STATUS] : N/A ----------##"
+                    print("\n##--------- [TEST EXECUTION STATUS] : N/A ----------##")
                     continue;
                 elif status == "FAILURE":
-                    print "\nError Occurred while checking test case applicability\n"
+                    print("\nError Occurred while checking test case applicability\n")
             else:
-                print "\nError Occurred while checking test case applicability\n"
+                print("\nError Occurred while checking test case applicability\n")
 
             if status == "FAILURE":
                 pluginTestsSummary.append({"testCaseName":testCaseInfo.get("testCaseName"), "testCaseId":testCaseInfo.get("testCaseId"), "status":"FAILURE"})
-                print "\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##"
+                print("\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##")
                 continue;
 
 
@@ -460,15 +460,15 @@ def executeTestCases(testCaseID="all"):
         # current test will not be executed and marked as failure
 
         if testCase.find("testCasePreRequisite") is not None:
-            print "\n#-------------- Test Case Pre-Requisite ---------------#"
+            print("\n#-------------- Test Case Pre-Requisite ---------------#")
             testCasePreRequisiteStatus = executePrePostRequisite(testCase.find("testCasePreRequisite"),"Pre")
             if "FAILURE" in testCasePreRequisiteStatus:
                 pluginTestsSummary.append({"testCaseName":testCaseInfo.get("testCaseName"), "testCaseId":testCaseInfo.get("testCaseId"), "status":"FAILURE"})
-                print "\nTest Case Pre-requisite Status: FAILURE\n"
-                print "\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##\n"
+                print("\nTest Case Pre-requisite Status: FAILURE\n")
+                print("\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##\n")
                 continue;
             else:
-                print "\nTest Case Pre-requisite Status: SUCCESS\n"
+                print("\nTest Case Pre-requisite Status: SUCCESS\n")
 
         testStepResults = []
         revertTestInfo  = {}
@@ -562,12 +562,12 @@ def executeTestCases(testCaseID="all"):
                     repeatMax = result
                 elif str(result).strip() == "":
                     repeatValError = 1
-                    print "\nException Occurred: No Repeat count provided in config file\n"
+                    print("\nException Occurred: No Repeat count provided in config file\n")
                 else:
                     repeatValError = 1
             elif repeatMax is None or str(repeatMax).strip() == "":
                 repeatValError = 1
-                print "\nException Occurred: No Repeat count provided\n"
+                print("\nException Occurred: No Repeat count provided\n")
 
             repeatStepStatus = []
             if repeatValError == 0:
@@ -615,18 +615,18 @@ def executeTestCases(testCaseID="all"):
         # current test will be marked as failure
 
         if testCase.find("testCasePostRequisite") is not None:
-            print "\n#-------------- Test Case Post-Requisite --------------#"
+            print("\n#-------------- Test Case Post-Requisite --------------#")
             testCasePostRequisiteStatus = executePrePostRequisite(testCase.find("testCasePostRequisite"),"Post")
             if "FAILURE" in testCasePostRequisiteStatus:
-                print "\nTest Case Post-requisite Status: FAILURE\n"
+                print("\nTest Case Post-requisite Status: FAILURE\n")
             else:
-                print "\nTest Case Post-requisite Status: SUCCESS\n"
+                print("\nTest Case Post-requisite Status: SUCCESS\n")
 
         # Give the overall test status based on test case & post-req status
         if "FAILURE" in allTestStepStatus or "FAILURE" in testCasePostRequisiteStatus:
-            print "\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##\n"
+            print("\n##--------- [TEST EXECUTION STATUS] : FAILURE ----------##\n")
         else:
-            print "\n##--------- [TEST EXECUTION STATUS] : SUCCESS ----------##\n"
+            print("\n##--------- [TEST EXECUTION STATUS] : SUCCESS ----------##\n")
 
 
         # Update the test case status by checking the status of each test steps executed
@@ -646,7 +646,7 @@ def executeTestCases(testCaseID="all"):
     combinedTestStatus = [ test.get("status") for test in pluginTestsSummary ]
     if combinedTestStatus == [] and testCaseID != "all":
         combinedTestStatus.append("FAILURE")
-        print "\nException Occurred: Provided Test Case ID(s) %s not found" %(testCaseID)
+        print("\nException Occurred: Provided Test Case ID(s) %s not found" %(testCaseID))
 
     testStepResults = []
     revertTestInfo  = {}
@@ -657,23 +657,23 @@ def executeTestCases(testCaseID="all"):
     # if any pos-requisite step fails then plugin execution status will be marked as failure
 
     if testPlugin.find("pluginPostRequisite") is not None or eventListener is not None:
-        print "\n#---------------------------- Plugin Post-requisite ----------------------------#"
+        print("\n#---------------------------- Plugin Post-requisite ----------------------------#")
         if eventListener is not None:
-            print "\nPost Requisite : UnRegister_Events"
-            print "Post Requisite No : 0"
-            print "------------- Event-Handling -------------"
+            print("\nPost Requisite : UnRegister_Events")
+            print("Post Requisite No : 0")
+            print("------------- Event-Handling -------------")
             eventListener.disconnect()
             unRegisterStatus = getEventsUnRegistrationInfo()
-            print "\n#--------- [Post-requisite Status] : %s ----------#" %(unRegisterStatus[0])
+            print("\n#--------- [Post-requisite Status] : %s ----------#" %(unRegisterStatus[0]))
         if testPlugin.find("pluginPostRequisite") is not None:
             pluginPostRequisiteStatus = executePrePostRequisite(testPlugin.find("pluginPostRequisite"),"Post")
         if eventListener is not None:
             pluginPostRequisiteStatus.extend(unRegisterStatus)
 
         if "FAILURE" in pluginPostRequisiteStatus:
-            print "\nPlugin Post-requisite Status: FAILURE"
+            print("\nPlugin Post-requisite Status: FAILURE")
         else:
-            print "\nPlugin Post-requisite Status: SUCCESS"
+            print("\nPlugin Post-requisite Status: SUCCESS")
 
 
     # Append the post-requisite step status along with test cases status
@@ -717,8 +717,8 @@ def executePrePostRequisite(prepostrequisite,node):
         testStepResults = []
         requisiteInfo = requisite.attrib.copy()
         if logDisplay:
-            print "\n%s Requisite : %s" %(node,requisiteInfo.get("requisiteName"))
-            print "%s Requisite No : %s" %(node,requisiteInfo.get("requisiteId"))
+            print("\n%s Requisite : %s" %(node,requisiteInfo.get("requisiteName")))
+            print("%s Requisite No : %s" %(node,requisiteInfo.get("requisiteId")))
 
         if requisiteInfo.get("type") == "eventRegister" and eventListener is None:
             global eventResgisterTag
@@ -729,9 +729,9 @@ def executePrePostRequisite(prepostrequisite,node):
 
         if logDisplay:
             if "FAILURE" in requisiteStepStatus:
-                print "\n#--------- [%s-requisite Status] : FAILURE ----------#" %(node)
+                print("\n#--------- [%s-requisite Status] : FAILURE ----------#" %(node))
             else:
-                print "\n#--------- [%s-requisite Status] : SUCCESS ----------#" %(node)
+                print("\n#--------- [%s-requisite Status] : SUCCESS ----------#" %(node))
 
         # If any of the pre/post requisites fails, then
         # execution will be broken
@@ -788,7 +788,7 @@ def executeEventHandlerRequisite(requisite):
 
     # Create Event listener Object
     global eventListener
-    print "------------- Event-Handling -------------"
+    print("------------- Event-Handling -------------")
     if requisite.attrib.get("trace") == "true":
         traceEnable = True
     else:
@@ -817,9 +817,9 @@ def executeEventHandlerRequisite(requisite):
 
     # Display details of the event(s) failed to register
     if len(registerIssues) != 0:
-        print "\n Failed to register below event(s)"
+        print("\n Failed to register below event(s)")
         for issue in registerIssues:
-            print issue.get("response")
+            print(issue.get("response"))
 
     # Display event register test step info
     eventtestStepInfo["name"] = requisite.attrib.get("requisiteName")
@@ -1027,7 +1027,7 @@ def executeTestStepLoop(testCaseInfo,testStep):
                 subTestStepInfo["parseStatus"] = status if status == "FAILURE" else ""
                 resultGenExpInfo = subTestStepInfo.get("resultGeneration").copy()
                 allexpectedValues = resultGenExpInfo["expectedValues"]
-                result = [ str(data) for data in result.values() ]
+                result = [ str(data) for data in list(result.values()) ]
                 if allexpectedValues != "null":
                     allexpectedValues = allexpectedValues + "," + ",".join(result)
                     resultGenExpInfo["expectedValues"] = allexpectedValues
@@ -1067,7 +1067,7 @@ def executeTestStepLoop(testCaseInfo,testStep):
                 subTestStepInfo["parseStatus"] = status if status == "FAILURE" else ""
                 resultGenArgInfo = subTestStepInfo.get("resultGeneration").copy()
                 allarguments = subTestStepInfo.get("resultGeneration").get("arguments")
-                result = [ str(data) for data in result.values() ]
+                result = [ str(data) for data in list(result.values()) ]
                 if allarguments != None:
                     allarguments =  allarguments + "," + ",".join(result)
                     resultGenArgInfo["arguments"] = allarguments
@@ -1268,9 +1268,9 @@ def executeTest(testMethod,testParams,testStepInfo,saveResultInfo):
         closeConnection = testStepInfo.get("closeConn")
         if (rebootStep == "yes" or IPChangeStep == "yes") and eventListener is not None and closeConnection != "false":
             if rebootStep == "yes":
-                print "\nClosing websocket connection before reboot..."
+                print("\nClosing websocket connection before reboot...")
             elif IPChangeStep == "yes":
-                print "\nClosing websocket connection before IP Change..."
+                print("\nClosing websocket connection before IP Change...")
             eventListener.disconnect()
             time.sleep(5)
             eventListener = None
@@ -1313,13 +1313,13 @@ def executeTest(testMethod,testParams,testStepInfo,saveResultInfo):
 
             # Invoking reboot handler to restore the device status
             if testStepInfo.get("rebootStep") == "yes":
-               setUpAfterReboot = handleDeviceReboot()
-               if setUpAfterReboot == "FAILURE":
-                   testStepStatus = "FAILURE"
+                setUpAfterReboot = handleDeviceReboot()
+                if setUpAfterReboot == "FAILURE":
+                    testStepStatus = "FAILURE"
             elif testStepInfo.get("ipChangeStep") == "yes":
-               newIPUpdateStatus = handleDeviceIPChange()
-               if newIPUpdateStatus == "FAILURE":
-                   testStepStatus = "FAILURE"
+                newIPUpdateStatus = handleDeviceIPChange()
+                if newIPUpdateStatus == "FAILURE":
+                    testStepStatus = "FAILURE"
             elif testStepInfo.get("PluginOnStep") == "yes":
                 setUpPluginOn = handlePluginOn()
                 if setUpPluginOn == "FAILURE":
@@ -1334,13 +1334,13 @@ def executeTest(testMethod,testParams,testStepInfo,saveResultInfo):
     elif conditionalExecStatus == "FALSE":
         return conditionalExecStatus,result
     elif methodNotFound is not None:
-        print "\nError Occurred: %s method not found in %s Plugin" %(methodNotFound.get("method"),methodNotFound.get("plugin"))
+        print("\nError Occurred: %s method not found in %s Plugin" %(methodNotFound.get("method"),methodNotFound.get("plugin")))
         return "FAILURE",result
     elif eventRegistration == "FAILURE":
-        print "\nError Occurred: No Events are Registered but Listeners are used"
+        print("\nError Occurred: No Events are Registered but Listeners are used")
         return "FAILURE",result
     else:
-        print "\nError Occurred: Undefined behaviour"
+        print("\nError Occurred: Undefined behaviour")
         return "FAILURE",result
 
 #-----------------------------------------------------------------------------------------------
@@ -1383,16 +1383,16 @@ def executeCommand(testMethod,testParams):
                 # If rdkservices API invocation failed due to token issue, then update the token in DUT Token config file
                 if jsonResponse.get("error") != None and "Missing or invalid token" in jsonResponse.get("error").get("message"):
                     #print jsonResponse
-                    print "\n[INFO]: Required Security Token for Authorization..."
+                    print("\n[INFO]: Required Security Token for Authorization...")
                     global deviceToken
                     global securityEnabled
                     if securityEnabled == None:
                         # Create the Device Token config file and update the token
                         status,deviceToken = read_token_config(deviceIP,tokenFile)
                         if status == "SUCCESS":
-                            print "[INFO]: Device Security Token obtained successfully"
+                            print("[INFO]: Device Security Token obtained successfully")
                         else:
-                            print "[ERROR]: Failed to get the device security token"
+                            print("[ERROR]: Failed to get the device security token")
                         securityEnabled = True
                     else:
                         # Update the token in the device token config file
@@ -1402,7 +1402,7 @@ def executeCommand(testMethod,testParams):
                         status,req_post,jsonResponse = postCURLRequest(requestURL,jsonCmd,responseTimeout)
                         if status == "SUCCESS":
                             if jsonResponse.get("error") != None and "Missing or invalid token" in jsonResponse.get("error").get("message"):
-                                print "\n[INFO]: Authorization issue occurred. Update Token & Re-try..."
+                                print("\n[INFO]: Authorization issue occurred. Update Token & Re-try...")
                                 status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
                                 if status == "SUCCESS":
                                     status,req_post,jsonResponse = postCURLRequest(requestURL,jsonCmd,responseTimeout)
@@ -1419,25 +1419,25 @@ def executeCommand(testMethod,testParams):
                 executeStatus = "FAILURE"
 
             if IsPerformanceSelected == "true" and executeStatus == "SUCCESS":
-                    responseTime = req_post.elapsed.total_seconds()
+                responseTime = req_post.elapsed.total_seconds()
         else:
             executeStatus = "FAILURE"
-            print "\nError Occurred: Unknown method type for sending JSON Request"
+            print("\nError Occurred: Unknown method type for sending JSON Request")
 
         #Getting the response time for performance metrics
         if IsPerformanceSelected == "true" and execMethod.upper() in ["CURL"] and executeStatus == "SUCCESS":
-            print "\n\nResponse Time of %s : %s" %(testMethod,responseTime)
+            print("\n\nResponse Time of %s : %s" %(testMethod,responseTime))
             responseCheckStatus = "OK"
             if (float(responseTime) <= 0 or float(responseTime) > float(maxResponseTime)):
-                print "Device took more than usual to respond"
+                print("Device took more than usual to respond")
                 responseCheckStatus = "HIGH"
             apiResponseInfo = {"API":testMethod,"RESPONSE_TIME":responseTime,"STATUS":responseCheckStatus}
             apiPerformanceInfo.append(apiResponseInfo)
 
     except Exception as e:
         executeStatus = "FAILURE"
-        print "\nException Occurred : %s" %(e)
-        print "\nJSON Command Sent : %s" %(jsonCmd)
+        print("\nException Occurred : %s" %(e))
+        print("\nJSON Command Sent : %s" %(jsonCmd))
 
     #print "Output: " , jsonResponse
 
@@ -1469,8 +1469,8 @@ def postCURLRequest(requestURL,jsonCmd,responseTimeout):
         jsonResponse = json.loads(req_post.content,strict=False)
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred : %s" %(e)
-        print "\nJSON Command Sent : %s" %(jsonCmd)
+        print("\nException Occurred : %s" %(e))
+        print("\nJSON Command Sent : %s" %(jsonCmd))
     return status,req_post,jsonResponse
 
 
@@ -1500,7 +1500,7 @@ def getListenedEvent(eventAPI,clearStatus):
                 eventJsonResponse = json.loads(eventResponse)
             except Exception as e:
                 status = "FAILURE"
-                print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+                print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
             listenedEvents.append(eventJsonResponse)
 
     if clearStatus is None or clearStatus == "true":
@@ -1531,9 +1531,9 @@ def getEventsUnRegistrationInfo():
 
     # Display details of the event(s) failed to unregister
     if len(unregisterIssues) != 0:
-        print "\n Failed to unregister below event(s)"
+        print("\n Failed to unregister below event(s)")
         for issue in unregisterIssues:
-            print issue.get("response")
+            print(issue.get("response"))
 
     # Display event register test step info
     eventtestStepInfo = {}
@@ -1551,7 +1551,7 @@ def getEventsUnRegistrationInfo():
 
 def newEventHandler(eventMethod,testStepInfo):
     if testStepInfo.get("params") != {}:
-        eventID = ".".join(testStepInfo.get("params").values()) + "." + testStepInfo.get("eventId")
+        eventID = ".".join(list(testStepInfo.get("params").values())) + "." + testStepInfo.get("eventId")
     else:
         eventID = testStepInfo.get("eventId")
     eventParams =  { "event" : testStepInfo.get("eventName") , "id" : eventID }
@@ -1568,7 +1568,7 @@ def newEventHandler(eventMethod,testStepInfo):
         response = eventListener.getNewEventResponse()
     else:
         execStatus = "FAILURE"
-        print "\n [ERROR]: Event Handler thread not started"
+        print("\n [ERROR]: Event Handler thread not started")
 
     #execStatus,response = executeCommand(eventMethod,eventParams)
     return eventParams,execStatus,response
@@ -1579,7 +1579,7 @@ def newEventHandler(eventMethod,testStepInfo):
 def handleDeviceReboot():
     #Reboot handling restore websocket & plugin status
     timeout = time.time() + 60*5   # 5 minutes from now
-    print "\nWaiting for the device to come up..."
+    print("\nWaiting for the device to come up...")
     time.sleep(30)
     deviceStatus = "DOWN"
     while True:
@@ -1589,12 +1589,12 @@ def handleDeviceReboot():
             break;
         elif time.time() > timeout:
             deviceStatus = "DOWN"
-            print "Device is not coming up event after 5 mins"
+            print("Device is not coming up event after 5 mins")
             break;
         time.sleep(5)
 
     if deviceStatus == "UP":
-        print "Device is UP. Setting back pre-requisites if any..."
+        print("Device is UP. Setting back pre-requisites if any...")
         setUpStatus = setUpPreRequisitesBack()
         return setUpStatus
     else:
@@ -1625,23 +1625,23 @@ def getTestDeviceStatus():
 
 
 def handlePluginOn():
-    print "\nTurning ON Plugin. Setting back pre-requisites if any..."
+    print("\nTurning ON Plugin. Setting back pre-requisites if any...")
     setUpStatus = setUpPreRequisitesBack()
     return setUpStatus
 
 def handleDeviceIPChange():
     #IP change handling, get the latest IP from TM and update here
-    print "\nWaiting for the device IP change..."
+    print("\nWaiting for the device IP change...")
     time.sleep(90)
     url = tmURL + '/deviceGroup/getDeviceDetails?deviceName=' + deviceName
     newIP = ""
     try:
-        response = urllib2.urlopen(url,timeout=5)
+        response = urllib.request.urlopen(url,timeout=5)
         deviceDetails = json.load(response)
         newIP = str(deviceDetails.get("deviceip"))
         global deviceIP
         deviceIP = newIP
-        print "NewIP is %s. Updated new device IP" %(newIP)
+        print("NewIP is %s. Updated new device IP" %(newIP))
         time.sleep(5)
         if eventResgisterTag != None:
             global logDisplay
@@ -1650,20 +1650,20 @@ def handleDeviceIPChange():
             if eventListener != None:
                 global eventsBufferBackup
                 eventsBufferBackup = eventListener.getEventsBuffer();
-                print "Storing events buffer",eventsBufferBackup
+                print("Storing events buffer",eventsBufferBackup)
                 eventListener = None
             requisiteStepStatus = executeEventHandlerRequisite(eventResgisterTag)
             logDisplay = True
             if "FAILURE" in requisiteStepStatus:
-                print "Event listener thread not started with new IP"
+                print("Event listener thread not started with new IP")
                 return "FAILURE"
             else:
-                print "Event listener thread started with new IP properly"
+                print("Event listener thread started with new IP properly")
                 return "SUCCESS"
         else:
             return "SUCCESS"
     except:
-        print "Unable to get Device Details from REST !!!"
+        print("Unable to get Device Details from REST !!!")
         sys.stdout.flush()
         return "FAILURE"
 
@@ -1679,17 +1679,17 @@ def setUpPreRequisitesBack():
         if eventListener != None:
             global eventsBufferBackup
             eventsBufferBackup = eventListener.getEventsBuffer();
-            print "Storing events buffer",eventsBufferBackup
+            print("Storing events buffer",eventsBufferBackup)
             eventListener = None
         time.sleep(1)
         setPreRequisiteStatus = executePrePostRequisite(testPlugin.find("pluginPreRequisite"),"Pre")
         logDisplay = True
         testStepResults = bktestStepResults
         if "FAILURE" in setPreRequisiteStatus:
-            print "Plugin pre-requisites are not set back properly"
+            print("Plugin pre-requisites are not set back properly")
             return "FAILURE"
         else:
-            print "Plugin pre-requisites are set back properly"
+            print("Plugin pre-requisites are set back properly")
             return "SUCCESS"
     else:
         return "SUCCESS"
@@ -1783,7 +1783,7 @@ def setTestStepDelay(testStepInfo):
                 delay = int(keyData)
                 time.sleep(delay)
         except Exception as e:
-            print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)        
+            print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
 #-----------------------------------------------------------------------------------------------
 # getTestStepAPI
@@ -1853,7 +1853,7 @@ def getTestStepInfo(testStep):
     # If not, use the default plugin info provide in testPlugin node
     # Based on the plugin details, get the test API details from template XML
     if apiType != None:
-        if "pluginName" in testStepInfo.keys():
+        if "pluginName" in list(testStepInfo.keys()):
             pluginAPIInfo = getTestPluginAPIInfo(testStepInfo.get("pluginName"),testStepInfo.get(apiType), apiType).copy()
         else:
             pluginAPIInfo = getTestPluginAPIInfo(testPlugin.attrib.get("pluginName"),testStepInfo.get(apiType), apiType).copy()
@@ -1893,7 +1893,7 @@ def getTestStepInfo(testStep):
             global customTimeout
             customTimeout = int(keyData)
         else:
-            print "Unable to get the custom timeout: %s, proceeding with default value" %(testStepInfo.get("timeoutKey"))
+            print("Unable to get the custom timeout: %s, proceeding with default value" %(testStepInfo.get("timeoutKey")))
 
     # Get the details of all the test params one by one
     if testStep.find("params") is not None:
@@ -1995,7 +1995,7 @@ def getTestStepInfo(testStep):
         # b. Use the provided expected value
         # c. Get iterable as expectedValue
         # d. Use previous result as argument
-        if "arguments" not in testStepInfo.get("resultGeneration").keys():
+        if "arguments" not in list(testStepInfo.get("resultGeneration").keys()):
             arguments = testStep.find("resultGeneration").find("arguments")
             if arguments is not None:
                 allarguments = ""
@@ -2020,7 +2020,7 @@ def getTestStepInfo(testStep):
                     if argumentInfo.get("useIterableArg") != "true" and argumentInfo.get("subId") is None:
                         status,result = getPreviousTestStepResult(testStepResults,parserInfo)
                         testStepInfo["parseStatus"] = status if status == "FAILURE" else ""
-                        result = [ str(data) for data in result.values() ]
+                        result = [ str(data) for data in list(result.values()) ]
                         if allarguments != "":
                             allarguments = allarguments + "," + ",".join(result)
                         elif result is not None:
@@ -2045,7 +2045,7 @@ def getTestStepInfo(testStep):
         # c. Get the from device config file if useConfigFile="true"
         # d. Use the provided expected value
         # e. Get iterable as expectedValue
-        if "expectedValues" not in testStepInfo.get("resultGeneration").keys():
+        if "expectedValues" not in list(testStepInfo.get("resultGeneration").keys()):
             expectedValues = testStep.find("resultGeneration").find("expectedValues")
             if expectedValues is not None:
                 allexpectedValues = ""
@@ -2072,7 +2072,7 @@ def getTestStepInfo(testStep):
                     if expectedValInfo.get("useIterableArg") != "true" and expectedValInfo.get("subId") is None:
                         status,result = getPreviousTestStepResult(testStepResults,parserInfo)
                         testStepInfo["parseStatus"] = status if status == "FAILURE" else ""
-                        result = [ str(data) for data in result.values() ]
+                        result = [ str(data) for data in list(result.values()) ]
                         if allexpectedValues != "":
                             allexpectedValues = allexpectedValues + "," + ",".join(result)
                         elif result is not None:
@@ -2137,8 +2137,8 @@ def getTestStepInputParam(paramTypeInfo,testParams):
     updatedParams = testParams.copy()
     individualParamsType = paramTypeInfo.get("individualparamsType")
     if individualParamsType is not None and individualParamsType != {}:
-        for param in individualParamsType.keys():
-            if param in updatedParams.keys():
+        for param in list(individualParamsType.keys()):
+            if param in list(updatedParams.keys()):
                 if updatedParams.get(param) is not None:
                     if individualParamsType.get(param) == "int":
                         updatedParams[param] = int(updatedParams.get(param))
@@ -2161,7 +2161,7 @@ def getTestStepInputParam(paramTypeInfo,testParams):
         testParams = updatedParams.copy()
 
     paramType = paramTypeInfo.get("type")
-    paramValues = testParams.values()
+    paramValues = list(testParams.values())
 
     # Parameter can be formed in below ways:
     # a. params:"1080i"                   // directString method
@@ -2197,7 +2197,7 @@ def getTestStepInputParam(paramTypeInfo,testParams):
 #-----------------------------------------------------------------------------------------------
 def getTestStepParamsInfo(params):
     paramsInfo = []
-    for param in params.keys():
+    for param in list(params.keys()):
         if params[param] is not None:
             info = param + " - " + str(params[param])
         else:
@@ -2218,14 +2218,14 @@ def getTestStepParamsInfo(params):
 def dispTestStepInfo(testStepInfo,testParams,result):
 
     testMethod = testStepInfo.get("pluginAPI")
-    print "\nTEST STEP NAME   : ", testStepInfo.get("name")
-    print "TEST STEP ID     : "  , testStepInfo.get("testStepId")
+    print("\nTEST STEP NAME   : ", testStepInfo.get("name"))
+    print("TEST STEP ID     : "  , testStepInfo.get("testStepId"))
     if testStepInfo.get("action") == "externalFnCall":
         resultGenInfo = testStepInfo.get("resultGeneration")
         testMethod = resultGenInfo.get("useMethodTag") if resultGenInfo != None else None
-        print "EXT METHOD NAME  : " , testMethod
+        print("EXT METHOD NAME  : " , testMethod)
     else:
-        print "PLUGIN API NAME  : "  , testMethod
+        print("PLUGIN API NAME  : "  , testMethod)
 
     paramType = testStepInfo.get("paramTypeInfo").get("type")
     if paramType == "userGenerate":
@@ -2241,40 +2241,40 @@ def dispTestStepInfo(testStepInfo,testParams,result):
     if testParams != {}:
         if paramType == "directDict" and testParams != {}:
             paramsInfo = getTestStepParamsInfo(testParams)
-            print "INPUT PARAMETER  : ", ", ".join(paramsInfo)
+            print("INPUT PARAMETER  : ", ", ".join(paramsInfo))
             #print "INPUT PARAMETERS : ", paramsInfo[0]
             #paramsInfo.pop(0)
             #for param in paramsInfo:
             #    print "%-16s    %s" %(" ",param)
         elif paramType == "directList" or paramType == "directString" or "directBool":
-            print "INPUT PARAMETER  : ", testParams
+            print("INPUT PARAMETER  : ", testParams)
 
     if testStepInfo.get("resultGeneration").get("expectedValues") != "null":
-        print "EXPECTED VALUES  : " , testStepInfo.get("resultGeneration").get("expectedValues")
+        print("EXPECTED VALUES  : " , testStepInfo.get("resultGeneration").get("expectedValues"))
 
-    print "TEST STEP STATUS :  %s"  %( result.get("Test_Step_Status"))
+    print("TEST STEP STATUS :  %s"  %( result.get("Test_Step_Status")))
     del result["Test_Step_Status"]
     message = result.get("Test_Step_Message")
     if result.get("Test_Step_Message") is not None:
         del result["Test_Step_Message"]
     if result:
-        print "----------------- Result -----------------"
-        for resultTag in result.keys():
+        print("----------------- Result -----------------")
+        for resultTag in list(result.keys()):
             if type(result[resultTag]) is list:
                 if len(result[resultTag]) != 0:
-                    print "%-16s :  " %(resultTag.upper())
-                    print "["
+                    print("%-16s :  " %(resultTag.upper()))
+                    print("[")
                     for resultData in result[resultTag]:
-                        print "%s" %(str(resultData))
-                    print "]\n"
+                        print("%s" %(str(resultData)))
+                    print("]\n")
                 else:
-                    print "%-16s :  []" %(resultTag.upper())
+                    print("%-16s :  []" %(resultTag.upper()))
             else:
-                print "%-16s :  %s" %(resultTag.upper(),result[resultTag])
+                print("%-16s :  %s" %(resultTag.upper(),result[resultTag]))
                 #print "%s :  %s" %((resultTag.upper()).ljust(16," "),result[resultTag])
 
     if message is not None and message.strip() != "":
-        print "\n[MESSAGE]: %s" %(message)
+        print("\n[MESSAGE]: %s" %(message))
 
     sys.stdout.flush()
 
@@ -2305,11 +2305,11 @@ def testStepResultGeneration(testStepResponse,resultGenerationInfo, action="exec
     elif action == "execution":
         result = testStepResponse.get("result")
         responseInfo = testStepResponse.copy()
-        for responseKey in responseInfo.keys():
+        for responseKey in list(responseInfo.keys()):
             if responseKey not in [ "jsonrpc","id","result" ]:
                 otherInfo[responseKey] = responseInfo[responseKey]
 
-    if "useMethodTag" in resultGenerationInfo.keys():
+    if "useMethodTag" in list(resultGenerationInfo.keys()):
         tag = resultGenerationInfo.get("useMethodTag")
         arg = resultGenerationInfo.get("arguments")
         if arg is not None and arg!= "":
@@ -2318,9 +2318,9 @@ def testStepResultGeneration(testStepResponse,resultGenerationInfo, action="exec
             arg = []
         expectedValues = resultGenerationInfo.get("expectedValues")
         if expectedValues != None and expectedValues != "null":
-             expectedValues = expectedValues.split(",")
+            expectedValues = expectedValues.split(",")
         else:
-             expectedValues = []
+            expectedValues = []
         if action in ["eventListener","eventRegister","eventUnRegister"]:
             info = CheckAndGenerateEventResult(result,tag,arg,expectedValues)
         elif action == "externalFnCall":
@@ -2329,8 +2329,8 @@ def testStepResultGeneration(testStepResponse,resultGenerationInfo, action="exec
         else:
             info = CheckAndGenerateTestStepResult(result,tag,arg,expectedValues,otherInfo)
         if info["Test_Step_Status"] == "FAILURE" and action != "eventListener" and action != "externalFnCall":
-            print "\nJSON Cmd : ",testStepJSONCmd
-            print "\nResponse : ",testStepResponse
+            print("\nJSON Cmd : ",testStepJSONCmd)
+            print("\nResponse : ",testStepResponse)
 
     else:
         if resultGenerationInfo.get("expectedValues") == "null" and result is None:
@@ -2550,7 +2550,7 @@ def revertTest(revertTestInfo):
     # The substitution takes place based on the param tags. So, user should maintain
     # same tag name in the result generation
 
-    print "\n\n--------------Revert operation--------------"
+    print("\n\n--------------Revert operation--------------")
     for GetResultInfo in revertTestInfo.get("revertGet").get("resultInfo"):
         revertOperation = "TRUE"
 
@@ -2570,7 +2570,7 @@ def revertTest(revertTestInfo):
             continue;
 
         if GetResultInfo.get("params") is not None:
-            for param in GetResultInfo.get("params").keys():
+            for param in list(GetResultInfo.get("params").keys()):
                 revertGetParams[param] = str(GetResultInfo.get("params").get(param))
 
         for param in revertTestInfo.get("revertSet").get("revertParams"):
@@ -2591,7 +2591,7 @@ def revertTest(revertTestInfo):
             # If the settings are not as expected, then revert operation takes place
             revertNeedStatus = checkAPICurrentValueBeforeRevert(revertTestInfo.get("revertGet"),revertGetMethod,revertGetParams,GetResultInfo.get("result"))
             if revertNeedStatus != "TRUE":
-                print "\n[INFO]: Feature setting is as expected. No revert operation, proceeding..."
+                print("\n[INFO]: Feature setting is as expected. No revert operation, proceeding...")
                 continue;
 
             execStatus,response = executeCommand(revertSetMethod,revertSetParams)
@@ -2610,7 +2610,7 @@ def revertTest(revertTestInfo):
                     if "FAILURE" in revertStatus or "FAILURE" in compareStatus:
                         revertTestStepStatus.append("FAILURE")
                     else:
-                       revertTestStepStatus.append("SUCCESS")
+                        revertTestStepStatus.append("SUCCESS")
                 else:
                     revertTestStepStatus.append("FAILURE")
             else:
@@ -2661,7 +2661,7 @@ def checkAPICurrentValueBeforeRevert(APIGetInfo,APIGetMethod,APIGetParams,APIChe
 #-----------------------------------------------------------------------------------------------
 def compareActualAndRevertResults(actualResults,revertResults):
     status = "SUCCESS"
-    for resultTag in actualResults.keys():
+    for resultTag in list(actualResults.keys()):
         if actualResults.get(resultTag) != revertResults.get(resultTag):
             status = "FAILURE"
     return status
@@ -2709,32 +2709,32 @@ def dispPluginTestsSummary(pluginName,pluginTestsSummary):
 
     counter = 0
     if len(passedTestCases):
-        print "\n\n------------------- PASSED TEST CASES LIST -------------------"
+        print("\n\n------------------- PASSED TEST CASES LIST -------------------")
         dispTestCaseList(passedTestCases)
     if len(failedTestCases):
-        print "\n\n------------------- FAILED TEST CASES LIST -------------------"
+        print("\n\n------------------- FAILED TEST CASES LIST -------------------")
         dispTestCaseList(failedTestCases)
     if len(notApplicableTestCases):
-        print "\n\n------------------- N/A TEST CASES LIST ----------------------"
+        print("\n\n------------------- N/A TEST CASES LIST ----------------------")
         dispTestCaseList(notApplicableTestCases)
 
     dispTestSummary(pluginName,totalTests,executedTests,passedTests,failedTests,notApplicableTests)
 
 
 def dispTestSummary(pluginName,totalTests,executedTests,passedTests,failedTests,notApplicableTests):
-    print "\n\n======================== PLUGIN TEST SUMMARY ======================"
-    print "PLUGIN NAME    : " ,pluginName
-    print "TOTAL TESTS    : " ,totalTests
-    print "EXECUTED TESTS : " ,executedTests
-    print "PASSED TESTS   : " ,passedTests
-    print "FAILED TESTS   : " ,failedTests
-    print "N/A TESTS      : " ,notApplicableTests
+    print("\n\n======================== PLUGIN TEST SUMMARY ======================")
+    print("PLUGIN NAME    : " ,pluginName)
+    print("TOTAL TESTS    : " ,totalTests)
+    print("EXECUTED TESTS : " ,executedTests)
+    print("PASSED TESTS   : " ,passedTests)
+    print("FAILED TESTS   : " ,failedTests)
+    print("N/A TESTS      : " ,notApplicableTests)
 
 
 def dispTestCaseList(testCaseList):
     counter = 0
     for test in testCaseList:
-        print "%d. %s" %((counter+1),test)
+        print("%d. %s" %((counter+1),test))
         counter += 1
 
 
@@ -2748,41 +2748,40 @@ def dispPerformanceSummary():
     performanceLogPath = destPath + "/" + performanceLogFile
     performanceStatus = "SUCCESS"
     try:
-        print "\n\n======================== PERFORMANCE SUMMARY ======================"
+        print("\n\n======================== PERFORMANCE SUMMARY ======================")
         # Set Performance status based on API response check status
         performanceCheckStatus = "SUCCESS"
         for api_info in apiPerformanceInfo:
             if api_info.get("STATUS") == "HIGH":
-                print api_info
+                print(api_info)
                 performanceCheckStatus = "FAILURE"
-        print "[PERPORMANCE CHECK STATUS]: ",performanceCheckStatus
+        print("[PERPORMANCE CHECK STATUS]: ",performanceCheckStatus)
 
         if not os.path.exists(destPath):
-            print "\nCreating log directory..."
+            print("\nCreating log directory...")
             os.makedirs(destPath)
         if os.path.exists(destPath):
-            print "Log directory available. Logging performance data..."
+            print("Log directory available. Logging performance data...")
             json_file = open(performanceLogPath,"w")
             performanceInfo = {}
             performanceInfo["RDKServices_API_ResponseTime"] = apiPerformanceInfo
             json.dump(performanceInfo,json_file)
             json_file.close()
-            print "Performance Log File: %s" %(performanceLogFile)
-            print "API Performance data logged successfully !!!"
+            print("Performance Log File: %s" %(performanceLogFile))
+            print("API Performance data logged successfully !!!")
         else:
             loggingStatus = "FAILURE"
-            print "[ERROR]: Dir path not available to log performance data"
+            print("[ERROR]: Dir path not available to log performance data")
 
         if performanceCheckStatus == "FAILURE" or loggingStatus == "FAILURE":
             performanceStatus = "FAILURE"
 
     except Exception as e:
         performanceStatus = "FAILURE"
-        print "\nException Occurred : %s" %(e)
+        print("\nException Occurred : %s" %(e))
     return performanceStatus
 
 #-----------------------------------------------------------------------------------------------
-# ValidateHttpStatusCode
 #-----------------------------------------------------------------------------------------------
 # Syntax      : ValidateHttpStatusCode(testMethod,testParams)
 # Description : Method to send JSON command and receive the http exit code response
@@ -2828,21 +2827,21 @@ def ValidateHttpStatusCode(testMethod, testParams):
             # Send the POST request using requests library
             response = requests.post(requestURL, json=json_payload, headers=headers)
             if response.status_code == 200:
-                print PluginAPI, "IS REACHABLE, HTTP Response Code:", response.status_code
+                print(PluginAPI, "IS REACHABLE, HTTP Response Code:", response.status_code)
                 jsonResponse = response.json()
                 jsonResponse["HttpStatusCode"] = response.status_code
                 jsonResponse['result'][0]['HttpStatusCode'] = jsonResponse['HttpStatusCode']
             elif response.status_code == 202:
-                print "ERROR:", PluginAPI, "NOT FOUND, HTTP RESPONSE Code:", response.status_code
+                print("ERROR:", PluginAPI, "NOT FOUND, HTTP RESPONSE Code:", response.status_code)
                 jsonResponse = response.json()
             elif response.status_code == 404:
-                print PluginAPI, "ENDPOINT NOT FOUND, HTTP RESPONSE Code:", response.status_code
+                print(PluginAPI, "ENDPOINT NOT FOUND, HTTP RESPONSE Code:", response.status_code)
                 jsonResponse = response.json()
             elif response.status_code == 500:
-                print PluginAPI, "ENCOUNTERED AN INTERNAL SERVER ERROR, HTTP RESPONSE Code:", response.status_code
+                print(PluginAPI, "ENCOUNTERED AN INTERNAL SERVER ERROR, HTTP RESPONSE Code:", response.status_code)
                 jsonResponse = response.json()
             else:
-                print "UNKNOWN RESPONSE CODE:, HTTP RESPONSE Code:", response.status_code
+                print("UNKNOWN RESPONSE CODE:, HTTP RESPONSE Code:", response.status_code)
                 jsonResponse = response.json()
         else:
             executeStatus = "FAILURE"
@@ -2852,4 +2851,3 @@ def ValidateHttpStatusCode(testMethod, testParams):
         print("\nException Occurred : %s" % e)
         print("\nJSON Command Sent : %s" % jsonCmd)
     return executeStatus, jsonResponse
-

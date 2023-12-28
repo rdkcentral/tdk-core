@@ -17,7 +17,7 @@
 # limitations under the License.
 #########################################################################
 import os
-import ConfigParser
+import configparser
 import tdklib
 from SSHUtility import *
 def executeTestCommand(sshinfo,command):
@@ -30,15 +30,15 @@ def executeTestCommand(sshinfo,command):
         password  = sshinfo[3]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshmethod, host_name, user_name, password, command)
         print("Kernel testing command execution success\n")
     except Exception as e:
-        print e
+        print(e)
         status = "FAILURE"
-        print "Exception occured during ssh session"
+        print("Exception occured during ssh session")
         print("Kernel testing command execution failed\n")
     return status,output
 def executeTestCommandUsingTDKAgent(tdkTestObj,command):
@@ -59,7 +59,7 @@ def getLTPTestStatusAndSummary(output):
     test_status=""
     test_result=""
     if output != "":
-        print "=================== Test Summary ===================="
+        print("=================== Test Summary ====================")
         output = output.replace(r'\n',"\n").split("\n")
         for info in output:
             print(info)
@@ -90,20 +90,20 @@ def getDeviceConfigValue (tdklibObj, configKey):
         elif os.path.exists (deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
         else:
-            print "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
+            print("FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile)
             result = "FAILURE"
         #Continue only if the device config file exists
         if (len (deviceConfigFile) != 0):
-            configParser = ConfigParser.ConfigParser()
+            configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             #Retrieve the value of config key from device config file
             configValue = configParser.get('device.config', configKey)
         else:
-            print "DeviceConfig file not available"
+            print("DeviceConfig file not available")
             result = "FAILURE"
     except Exception as e:
-        print e
-        print "Exception occurred while retrieving device configuration"
+        print(e)
+        print("Exception occurred while retrieving device configuration")
         result = "FAILURE"
     return result, configValue
 def getSSHInfo(obj,ip):
@@ -116,6 +116,5 @@ def getSSHInfo(obj,ip):
         sshinfo = [sshmethod,ip,user,password]
     else:
         status = "FAILURE"
-        print "Plz check the device ssh configurations"
+        print("Plz check the device ssh configurations")
     return status,sshinfo
-

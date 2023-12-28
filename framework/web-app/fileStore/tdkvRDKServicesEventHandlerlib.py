@@ -25,7 +25,7 @@
 import time
 import websocket
 import threading
-import thread
+import _thread
 import requests
 import json,ast,re
 import inspect
@@ -46,8 +46,8 @@ class createEventListener(object):
         self.trace = trace
         self.access_token = str(eventsInfo.get("token"))
         thread = threading.Thread(target=self.connect, args=())
-        thread.daemon = True
-        thread.start()
+        _thread.daemon = True
+        _thread.start()
         self.listen = True
         self.listenflag = False
         self.eventsbuffer = []
@@ -82,7 +82,7 @@ class createEventListener(object):
 
     def connect(self):
         try:
-            print "[INFO]: Opening websocket Connection"
+            print("[INFO]: Opening websocket Connection")
             websocket.enableTrace(self.trace)
             auth = "Authorization: Bearer " + str(self.access_token)
             # # # With Thunder Security Token
@@ -97,13 +97,13 @@ class createEventListener(object):
                                              on_close   = self.on_close,
                                              on_open    = self.on_open)
             self.ws.keep_running = True
-            print "[INFO]: Start Event Handler..."
+            print("[INFO]: Start Event Handler...")
             self.ws.run_forever()
         except Exception as e:
-            print e
-            print "\nException Occurred while connecting to target device\n"
+            print(e)
+            print("\nException Occurred while connecting to target device\n")
 
-    def on_open(self):
+    def on_open(self,ws):
         def run(*args):
             try:
                 print("[INFO]: Registering Events...")
@@ -128,8 +128,8 @@ class createEventListener(object):
                 else:
                     print("[ERROR]: Events Registration failed")
             except Exception as e:
-                print "\nException Occurred in EventListener thread: [%s] %s" %(inspect.stack()[0][3],e)
-        thread.start_new_thread(run, ())
+                print("\nException Occurred in EventListener thread: [%s] %s" %(inspect.stack()[0][3],e))
+        _thread.start_new_thread(run, ())
 
 
     def eventsRegisterAndUnRegister(self,action):
@@ -141,9 +141,9 @@ class createEventListener(object):
         for event in eventsjsoncmds:
             if self.trace:
                 if action == "register":
-                    print "\n Register Event %s" %(event)
+                    print("\n Register Event %s" %(event))
                 elif action == "unregister":
-                    print "\n UnRegister Event %s" %(event)
+                    print("\n UnRegister Event %s" %(event))
             self.clearEventsBuffer()
             self.ws.send(event)
             time.sleep(2)
@@ -160,7 +160,7 @@ class createEventListener(object):
                     status = "FAILURE"
             except Exception as e:
                 status = "FAILURE"
-                print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+                print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
             eventinfo = {}
             eventinfo["event"]  = json.loads(event).get("params").get("event")
@@ -177,9 +177,9 @@ class createEventListener(object):
         event = self.neweventcommand
         if self.trace:
             if self.neweventaction== "register":
-                print "\n Register Event %s" %(event)
+                print("\n Register Event %s" %(event))
             elif self.neweventaction == "unregister":
-                print "\n UnRegister Event %s" %(event)
+                print("\n UnRegister Event %s" %(event))
         self.clearEventsBuffer()
         self.ws.send(event)
         time.sleep(2)
@@ -188,15 +188,15 @@ class createEventListener(object):
         self.neweventflag = False
 
 
-    def on_message(self,message):
+    def on_message(self,ws,message):
         if self.trace:
-            print "\n Received Event Response: %s" %(message)
+            print("\n Received Event Response: %s" %(message))
         if "\\" in message:
             message = message.replace("\\","\\\\")
         self.eventsbuffer.append(message)
-    def on_error(self,error):
+    def on_error(self,ws,error):
         print(error)
-    def on_close(self):
+    def on_close(self,ws,close_status_code,message):
         print("[INFO]: Closed websocket Connection")
 
     def disconnect(self):
@@ -244,10 +244,10 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
         # Check whether the response result is empty
         if result == []:
             if len(arg) and arg[0] == "check_empty_event":
-                print "\n[INFO]: Not Received the event(s)"
+                print("\n[INFO]: Not Received the event(s)")
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                print "\n[INFO]: Not Received the expected event(s)"
+                print("\n[INFO]: Not Received the expected event(s)")
                 info["Test_Step_Status"] = "FAILURE"
 
         # WebKitBrowser Events response result parser steps
@@ -383,7 +383,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 if not ssids and "TRUE" not in status:
                     info["Test_Step_Status"] = "FAILURE"
                 else:
-                    info["result"] =  dict(zip(ssids,frequencies))
+                    info["result"] =  dict(list(zip(ssids,frequencies)))
                     resultStatus = "TRUE"
                     for frequency in frequencies:
                         if frequency not in expectedValues:
@@ -393,7 +393,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
- 
+
         elif tag == "wifi_check_on_error_event":
             result = result[0]
             info = result
@@ -490,10 +490,10 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "system_check_reboot_reason_event":
-             result=result[0]
-             info = result
-             info["Test_Step_Status"] = "FAILURE"
-             if str(result.get("rebootReason")) == str(expectedValues[0]) and str(result.get("requestedApp")).lower() == str(expectedValues[1]).lower():
+            result=result[0]
+            info = result
+            info["Test_Step_Status"] = "FAILURE"
+            if str(result.get("rebootReason")) == str(expectedValues[0]) and str(result.get("requestedApp")).lower() == str(expectedValues[1]).lower():
                 info["Test_Step_Status"] = "SUCCESS"
 
         elif tag == "system_check_network_standby_mode_changed_event":
@@ -503,7 +503,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "system_check_on_timezonedst_event":
             info["Test_Step_Status"] = "FAILURE"
             for eventResult in result:
@@ -513,9 +513,9 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 new = new.replace("\/","/")
                 if old.strip() in arg or new.strip() in expectedValues:
                     if str(eventResult.get("oldAccuracy")).lower() in arg and str(eventResult.get("newAccuracy")).lower() in arg:
-                       info = eventResult
-                       info["Test_Step_Status"] = "SUCCESS"
-                       break;
+                        info = eventResult
+                        info["Test_Step_Status"] = "SUCCESS"
+                        break;
         elif tag == "system_check_friendly_name_changed_event":
             info["Test_Step_Status"] = "FAILURE"
             for eventResult in result:
@@ -599,7 +599,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 if str(eventResult.get("interface")) == "WIFI" and str(eventResult.get("status")) in  expectedValues:
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
-                    break; 
+                    break;
         elif tag == "network_check_internet_status_change_event":
             info["Test_Step_Status"] = "FAILURE"
             for eventResult in result:
@@ -641,43 +641,43 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 if len(str(eventResult.get("message"))) > 0:
                     hex_code = DecodeBase64ToHex(str(eventResult.get("message")))
                     if arg[0] == "check_power_status":
-                       if "90" in str(hex_code):
-                           info["Hex_Code"] = hex_code
-                           Power_Status = {"00":"On","01":"Standby","10":"In transition Standby to On","11":"In transition On to Standby"}
-                           Oprand  = hex_code[-2:]
-                           Address = hex_code[0:2]
-                           info["From"] = Src_Dest_Address[Address[0]]
-                           info["To"] =  Src_Dest_Address[Address[1]]
-                           info["Power_Status"] = Power_Status[Oprand]
-                           info["Test_Step_Status"] = "SUCCESS"
+                        if "90" in str(hex_code):
+                            info["Hex_Code"] = hex_code
+                            Power_Status = {"00":"On","01":"Standby","10":"In transition Standby to On","11":"In transition On to Standby"}
+                            Oprand  = hex_code[-2:]
+                            Address = hex_code[0:2]
+                            info["From"] = Src_Dest_Address[Address[0]]
+                            info["To"] =  Src_Dest_Address[Address[1]]
+                            info["Power_Status"] = Power_Status[Oprand]
+                            info["Test_Step_Status"] = "SUCCESS"
 
                     elif arg[0] == "check_cec_version":
-                      if "9e" in str(hex_code).lower():
-                          Version = {"01":"Reserved","02":"Reserved","03":"Reserved","04":"Reserved","05":"Version 1.3a","06":"Version 1.4" }
-                          Oprand  = hex_code[-2:]
-                          Address = hex_code[0:2]
-                          info["From"] = Src_Dest_Address[Address[0]]
-                          info["To"] =  Src_Dest_Address[Address[1]]
-                          info["Version"] = Version[Oprand]
-                          info["Test_Step_Status"] = "SUCCESS"
+                        if "9e" in str(hex_code).lower():
+                            Version = {"01":"Reserved","02":"Reserved","03":"Reserved","04":"Reserved","05":"Version 1.3a","06":"Version 1.4" }
+                            Oprand  = hex_code[-2:]
+                            Address = hex_code[0:2]
+                            info["From"] = Src_Dest_Address[Address[0]]
+                            info["To"] =  Src_Dest_Address[Address[1]]
+                            info["Version"] = Version[Oprand]
+                            info["Test_Step_Status"] = "SUCCESS"
 
                     elif arg[0] == "check_menu_language":
-                      if "32" in str(hex_code):
-                          MenuLanguage  = hex_code[2:4]
-                          Address = hex_code[0:2]
-                          info["From"] = Src_Dest_Address[Address[0]]
-                          info["To"] =  Src_Dest_Address[Address[1]]
-                          info["Menu_Language"] = MenuLanguage
-                          info["Test_Step_Status"] = "SUCCESS"
+                        if "32" in str(hex_code):
+                            MenuLanguage  = hex_code[2:4]
+                            Address = hex_code[0:2]
+                            info["From"] = Src_Dest_Address[Address[0]]
+                            info["To"] =  Src_Dest_Address[Address[1]]
+                            info["Menu_Language"] = MenuLanguage
+                            info["Test_Step_Status"] = "SUCCESS"
 
                     elif arg[0] == "check_device_vendor_id":
-                      if "87" in str(hex_code):
-                          VendorID  = hex_code[2:4]
-                          Address = hex_code[0:2]
-                          info["From"] = Src_Dest_Address[Address[0]]
-                          info["To"] =  Src_Dest_Address[Address[1]]
-                          info["Device_Vendor_ID"] = VendorID
-                          info["Test_Step_Status"] = "SUCCESS"
+                        if "87" in str(hex_code):
+                            VendorID  = hex_code[2:4]
+                            Address = hex_code[0:2]
+                            info["From"] = Src_Dest_Address[Address[0]]
+                            info["To"] =  Src_Dest_Address[Address[1]]
+                            info["Device_Vendor_ID"] = VendorID
+                            info["Test_Step_Status"] = "SUCCESS"
 
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -758,7 +758,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-     
+
         # Cobalt Events response result parser steps
         elif tag == "cobalt_check_state_change_event":
             result = result[0]
@@ -767,14 +767,14 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "cobalt_check_closure_event":
             result = result[0]
             if result == "":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-                
+
         # DisplayInfo Events response result parser steps
         elif tag == "displayinfo_check_pre_post_resolution_change_event":
             info["Test_Step_Status"] = "FAILURE"
@@ -898,18 +898,18 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             for eventResult in result:
                 if arg[0] == "install":
                     if str(eventResult.get("operation")).lower() in expectedValues and str(eventResult.get("id")).lower() in expectedValues and str(eventResult.get("handle")) in arg and expectedValues[2] in str(eventResult.get("details")).lower().replace(" ","") and str(eventResult.get("status")).lower() in expectedValues:
-                        status = checkNonEmptyResultData(eventResult.values())
+                        status = checkNonEmptyResultData(list(eventResult.values()))
                         if status == "TRUE" and str(eventResult.get("type")).lower() in arg and str(eventResult.get("version")) in arg:
-                           info = eventResult
-                           info["Test_Step_Status"] = "SUCCESS"
-                           break;
+                            info = eventResult
+                            info["Test_Step_Status"] = "SUCCESS"
+                            break;
                 elif arg[0] == "uninstall":
                     if str(eventResult.get("operation")).lower() in expectedValues and str(eventResult.get("id")).lower() in expectedValues and str(eventResult.get("handle")) in arg and str(eventResult.get("status")).lower() in expectedValues:
-                        status = checkNonEmptyResultData(eventResult.values())
+                        status = checkNonEmptyResultData(list(eventResult.values()))
                         if status == "TRUE" and str(eventResult.get("type")).lower() in arg and str(eventResult.get("version")) in arg:
-                           info = eventResult
-                           info["Test_Step_Status"] = "SUCCESS"
-                           break;
+                            info = eventResult
+                            info["Test_Step_Status"] = "SUCCESS"
+                            break;
 
         # OCIContainer Events response result parser steps
         elif tag == "ocicontainer_check_container_events":
@@ -919,7 +919,7 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                     info = eventResult
                     info["Test_Step_Status"] = "SUCCESS"
                     break;
-        
+
         #DeviceDiagnostics Events response result parser steps
         elif tag == "devicediagnostics_onavdecoder_status_changed_event":
             info["Test_Step_Status"] = "FAILURE"
@@ -931,12 +931,12 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
 
         # FirmwareControl Events response result parser steps
         elif tag == "fwc_check_upgrade_progress_event":
-            print "Events list :",result
+            print("Events list :",result)
             expectedStatusList = ["none", "upgradestarted", "downloadstarted", "downloadaborted", "downloadcompleted", "installinitiated", "installnotstarted", "installaborted", "installstarted", "upgradecompleted", "upgradecancelled"]
             status = True
             for event in result:
                 info = event
-                if str(event.get("status")) not in expectedStatusList: 
+                if str(event.get("status")) not in expectedStatusList:
                     status = False
             if status:
                 info["Test_Step_Status"] = "SUCCESS"
@@ -944,11 +944,11 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "FAILURE"
 
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
 
     except Exception as e:
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
         info["Test_Step_Status"] = "FAILURE"
 
     return info

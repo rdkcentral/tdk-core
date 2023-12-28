@@ -26,10 +26,10 @@
 import os
 import sys
 #from pexpect import pxssh
-import ConfigParser
+import configparser
 import tdklib
 from time import sleep
-import commands
+import subprocess
 
 #Global variable to check whether login session is active
 isSessionActive = False
@@ -55,10 +55,10 @@ def parseDeviceConfig(obj):
         configFilePath = os.path.dirname(os.path.realpath(__file__))
         configFilePath = configFilePath + "/tdkvDeviceConfig"
 
-        print "Device config file:", configFilePath+'/'+device_Config
+        print("Device config file:", configFilePath+'/'+device_Config)
 
         #Parse the device configuration file
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(configFilePath+'/'+device_Config)
 
         #Parse the file and store the values in global variables
@@ -86,7 +86,7 @@ def parseDeviceConfig(obj):
             ssid_5ghz_index = config.get(wifi_config, "TDK_SSID_5GHZ_INDEX")
             radio_5ghz_index = config.get(wifi_config, "TDK_RADIO_5GHZ_INDEX")
         else:
-            print "SETUP TYPE IS NOT VALID";
+            print("SETUP TYPE IS NOT VALID");
         global ssid_5ghz_name
         ssid_5ghz_name = config.get(wifi_config, "SSID_5GHZ_NAME")
 
@@ -115,28 +115,28 @@ def parseDeviceConfig(obj):
         ssid_invalid_pwd = config.get(wifi_config, "SSID_INVALID_PWD")
 
         global ap_5ghz_preshared_key
-	ap_5ghz_preshared_key = config.get(wifi_config, "AP_5GHZ_PRESHARED_KEY")
+        ap_5ghz_preshared_key = config.get(wifi_config, "AP_5GHZ_PRESHARED_KEY")
 
         global ap_2ghz_preshared_key
-	ap_2ghz_preshared_key = config.get(wifi_config, "AP_2GHZ_PRESHARED_KEY")
+        ap_2ghz_preshared_key = config.get(wifi_config, "AP_2GHZ_PRESHARED_KEY")
 
-	global ap_5ghz_key_passphrase
-	ap_5ghz_key_passphrase = config.get(wifi_config, "AP_5GHZ_KEY_PASSPHRASE")
+        global ap_5ghz_key_passphrase
+        ap_5ghz_key_passphrase = config.get(wifi_config, "AP_5GHZ_KEY_PASSPHRASE")
 
-	global ap_2ghz_key_passphrase
-	ap_2ghz_key_passphrase = config.get(wifi_config, "AP_2GHZ_KEY_PASSPHRASE")
+        global ap_2ghz_key_passphrase
+        ap_2ghz_key_passphrase = config.get(wifi_config, "AP_2GHZ_KEY_PASSPHRASE")
 
-	global ap_5ghz_security_mode 
-	ap_5ghz_security_mode = config.get(wifi_config, "AP_5GHZ_SECURITY_MODE")
+        global ap_5ghz_security_mode
+        ap_5ghz_security_mode = config.get(wifi_config, "AP_5GHZ_SECURITY_MODE")
 
-	global ap_2ghz_security_mode 
-	ap_2ghz_security_mode = config.get(wifi_config, "AP_2GHZ_SECURITY_MODE")
+        global ap_2ghz_security_mode
+        ap_2ghz_security_mode = config.get(wifi_config, "AP_2GHZ_SECURITY_MODE")
 
-	global ap_5ghz_wep_key
-	ap_5ghz_wep_key = config.get(wifi_config, "AP_5GHZ_WEP_KEY")
+        global ap_5ghz_wep_key
+        ap_5ghz_wep_key = config.get(wifi_config, "AP_5GHZ_WEP_KEY")
 
-	global ap_2ghz_wep_key
-	ap_2ghz_wep_key = config.get(wifi_config, "AP_2GHZ_WEP_KEY")
+        global ap_2ghz_wep_key
+        ap_2ghz_wep_key = config.get(wifi_config, "AP_2GHZ_WEP_KEY")
 
         global ssid_5ghz_name_new
         ssid_5ghz_name_new = config.get(wifi_config, "SSID_5GHZ_NAME_NEW")
@@ -174,8 +174,8 @@ def parseDeviceConfig(obj):
         global ap_2ghz_wep_key_new
         ap_2ghz_wep_key_new = config.get(wifi_config, "AP_2GHZ_WEP_KEY_NEW")
 
-	global wifi_interface
-	wifi_interface = config.get(wifi_config, "WIFI_INTERFACE")
+        global wifi_interface
+        wifi_interface = config.get(wifi_config, "WIFI_INTERFACE")
 
         global set_5ghz_freq_list
         set_5ghz_freq_list = config.get(wifi_config, "SET_5GHZ_FREQ_LIST")
@@ -183,8 +183,8 @@ def parseDeviceConfig(obj):
         global set_2ghz_freq_list
         set_2ghz_freq_list = config.get(wifi_config, "SET_2GHZ_FREQ_LIST")
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         status = "Failed to parse the device specific configuration file"
     return status;
 ########## End of Function ##########
@@ -197,7 +197,7 @@ def isConnectedtoSSID(obj,radioIndex):
     # Getting current station connection status
     tdkTestObj = obj.createTestStep("WIFI_HAL_GetStats");
     if expectedresult in parseStatus:
-        print "==========PARSED THE DEVICE CONFIGURATION FILE SUCCESSFULLY==========";
+        print("==========PARSED THE DEVICE CONFIGURATION FILE SUCCESSFULLY==========");
         tdkTestObj.addParameter("radioIndex",radioIndex);
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
@@ -205,24 +205,24 @@ def isConnectedtoSSID(obj,radioIndex):
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
             SSID_GET = details.split(":")[1].split(",")[0].split("=")[1];
-            print "==========GET SSID NAME OPERATION SUCCESS==========";
+            print("==========GET SSID NAME OPERATION SUCCESS==========");
             if radioIndex == 0:
-                print "SSID of Current station:",SSID_GET;
-                print "SSID to be connected:",ssid_2ghz_name;
+                print("SSID of Current station:",SSID_GET);
+                print("SSID to be connected:",ssid_2ghz_name);
                 if SSID_GET == ssid_2ghz_name:
-                    print "==========CLIENT CONNECTED TO REQUIRED SSID==========";
+                    print("==========CLIENT CONNECTED TO REQUIRED SSID==========");
                     retValue = "TRUE"
             else:
-                print "SSID of Current station:",SSID_GET;
-                print "SSID to be connected:",ssid_5ghz_name;
+                print("SSID of Current station:",SSID_GET);
+                print("SSID to be connected:",ssid_5ghz_name);
                 if SSID_GET == ssid_5ghz_name:
-                    print "==========CLIENT CONNECTED TO REQUIRED SSID==========";
+                    print("==========CLIENT CONNECTED TO REQUIRED SSID==========");
                     retValue = "TRUE"
 
             if retValue == "FALSE":
                 expectedresult = "SUCCESS";
-                print "==========CLIENT IS NOT CONNECTED TO REQUIRED SSID==========";
-                print "Connecting to required SSID....."
+                print("==========CLIENT IS NOT CONNECTED TO REQUIRED SSID==========");
+                print("Connecting to required SSID.....")
                 tdkTestObj = obj.createTestStep("WIFI_HAL_ConnectEndpoint");
                 if radioIndex == 0:
                     tdkTestObj.addParameter("radioIndex",0);
@@ -247,7 +247,7 @@ def isConnectedtoSSID(obj,radioIndex):
                 details = tdkTestObj.getResultDetails();
                 if expectedresult in actualresult:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "==========CONNECTION INITIATION SUCCESS==========";
+                    print("==========CONNECTION INITIATION SUCCESS==========");
                     # Getting current station connection status after 15 seconds
                     sleep(15);
                     tdkTestObj = obj.createTestStep("WIFI_HAL_GetStats");
@@ -257,30 +257,29 @@ def isConnectedtoSSID(obj,radioIndex):
                     details = tdkTestObj.getResultDetails();
                     if expectedresult in actualresult:
                         SSID_GET = details.split(":")[1].split(",")[0].split("=")[1];
-                        print "SSID of Current station:",SSID_GET;
+                        print("SSID of Current station:",SSID_GET);
                         if radioIndex == 0 and SSID_GET == ssid_2ghz_name:
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "==========CONNECTION SUCCESS==========";
+                            print("==========CONNECTION SUCCESS==========");
                             retValue = "TRUE"
                         elif radioIndex == 1 and SSID_GET == ssid_5ghz_name:
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "==========CONNECTION SUCCESS==========";
+                            print("==========CONNECTION SUCCESS==========");
                             retValue = "TRUE"
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "==========CONNECTION FAILED==========";
+                            print("==========CONNECTION FAILED==========");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Get Current Station status operation failed";
+                        print("Get Current Station status operation failed");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "==========CONNECTION INITIATION FAILED==========";
+                    print("==========CONNECTION INITIATION FAILED==========");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Get Current Station status operation failed";
+            print("Get Current Station status operation failed");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Failed to parse the device configuration file";
+        print("Failed to parse the device configuration file");
     return retValue
 ########## End of Function ##########
-

@@ -83,7 +83,7 @@ def setURLArgument(key,val):
         if key == "drmconfigs":
             drm_config = ""
             for drm_info in val.split("|"):
-                print drm_info
+                print(drm_info)
                 drm_tag = drm_info.split("[",1)[0]
                 drm_val = drm_info.split("[",1)[1].rsplit("]",1)[0]
                 drm_val = drm_val.replace("(",":ob:").replace(")",":cb:").replace(",",":comma:")
@@ -137,12 +137,12 @@ def getTestURL(appURL,URLarguments):
     return url
 
 def setDeviceConfigFile(conf_file):
-     global deviceConfigFile
-     deviceConfigFile = conf_file
+    global deviceConfigFile
+    deviceConfigFile = conf_file
 
 def setProcCheckMode(mode):
-     global proc_check_mode
-     proc_check_mode = mode
+    global proc_check_mode
+    proc_check_mode = mode
 
 def setLoggingMethod(obj):
     global logging_method
@@ -173,32 +173,32 @@ def updateLibOptions(val):
 # console log
 def dispConsoleMessage(log):
     try:
-       log_info = log.split(",")
-       for data in log_info:
-          if "\"text\"" in data:
-            print(data.split("\"text\":")[1].replace("\"",""))
+        log_info = log.split(",")
+        for data in log_info:
+            if "\"text\"" in data:
+                print(data.split("\"text\":")[1].replace("\"",""))
     except:
-       print("An exception occurred")
-       print str(log).replace('\\n','\n').replace("\\","")
+        print("An exception occurred")
+        print(str(log).replace('\\n','\n').replace("\\",""))
 
 def dispConsoleLog(log):
-   console_methods = ["Console.messagesCleared","Console.messageRepeatCountUpdated"]
-   try:
+    console_methods = ["Console.messagesCleared","Console.messageRepeatCountUpdated"]
+    try:
 
-       #if "Console.messageAdded" in log:
-       #    dispConsoleMessage(log)
-       if "%" not in log:
-           log_data = json.loads(log)
-           if log_data.get("method") not in console_methods:
+        #if "Console.messageAdded" in log:
+        #    dispConsoleMessage(log)
+        if "%" not in log:
+            log_data = json.loads(log)
+            if log_data.get("method") not in console_methods:
                 if log_data.get("params") is not None:
                     text_from_message = log_data.get("params").get("message")
                     if text_from_message is not None:
                         text_from_message = text_from_message.get("text")
-                        print str(text_from_message).replace('\\n','\n').decode("unicode-escape")
+                        print(str(text_from_message).replace('\\n','\n').decode("unicode-escape"))
                         sys.stdout.flush()
-   except:
-       print("An exception occurred")
-       print str(log).replace('\\n','\n').replace("\\","")
+    except:
+        print("An exception occurred")
+        print(str(log).replace('\\n','\n').replace("\\",""))
 
 # Function to get the text message from web inspect json message
 def getConsoleMessage(log):
@@ -216,7 +216,7 @@ def getTimeFromMsg(message):
 # Function to get the time in milliseconds if the input is in HH:MM:SS:sss
 def getTimeInMilliSeconds(time_str):
     hours, minutes, seconds, millisec = time_str.split(':')
-    time_in_millisec = int(hours) * 3600000 + int(minutes) * 60000 + int(seconds)*1000 + int(millisec)
+    time_in_millisec = int(hours) * 3600000 + int(minutes) * 60000 + int(seconds)*1000 + int(float(millisec))
     return time_in_millisec
 
 # Function read the key value from device config file
@@ -236,7 +236,7 @@ def setWebKitSocketPort(port):
 
 # Function to create websocket connection to webki webinspect page
 def createWebKitSocket(obj):
-    print "\nInitiate Connection to Webinspect page (port:%s)..." %(webkit_socket_port)
+    print("\nInitiate Connection to Webinspect page (port:%s)..." %(webkit_socket_port))
     socket = createEventListener(obj.IP,webkit_socket_port,[],"/devtools/page/1",False)
     time.sleep(10)
     status = socket.getConnectionStatus()
@@ -246,33 +246,33 @@ def createWebKitSocket(obj):
 # Function to set Pre/Post requisites for executing media tests
 
 def checkPluginStatus(obj,plugin):
-    print "\nChecking %s Plugin Status..." %(plugin)
+    print("\nChecking %s Plugin Status..." %(plugin))
     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus');
     tdkTestObj.addParameter("plugin",plugin);
     tdkTestObj.executeTestCase("SUCCESS");
     result = tdkTestObj.getResult();
     status = tdkTestObj.getResultDetails();
-    print "%s Plugin Status: %s" %(plugin,status)
+    print("%s Plugin Status: %s" %(plugin,status))
     return result,status
 
 def setPluginState(obj,plugin,state):
-    print "\nActivating %s Plugin" %(plugin)
+    print("\nActivating %s Plugin" %(plugin))
     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus');
     tdkTestObj.addParameter("plugin",plugin);
     tdkTestObj.addParameter("status",state);
     tdkTestObj.executeTestCase("SUCESS");
     result = tdkTestObj.getResult();
     if "SUCCESS" in result:
-        print "%s plugin %sed" %(plugin,state)
+        print("%s plugin %sed" %(plugin,state))
         tdkTestObj.setResultStatus("SUCCESS");
         return "SUCCESS"
     else:
-        print "Unable to %s %s plugin" %(state,plugin)
+        print("Unable to %s %s plugin" %(state,plugin))
         tdkTestObj.setResultStatus("FAILURE");
         return "FAILURE"
 
 def launchPlugin(obj,plugin,url):
-    print "\nLaunching %s using RDKShell..." %(plugin)
+    print("\nLaunching %s using RDKShell..." %(plugin))
     url = url.replace('\"',"")
     try:
         result,base_path_from_config = getDeviceConfigKeyValue(deviceConfigFile,"TEST_STREAMS_BASE_PATH")
@@ -288,7 +288,7 @@ def launchPlugin(obj,plugin,url):
     result = tdkTestObj.getResult();
     info = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
-        print "Resumed %s plugin " %(plugin)
+        print("Resumed %s plugin " %(plugin))
         tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(3)
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -296,7 +296,7 @@ def launchPlugin(obj,plugin,url):
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult()
         new_url = tdkTestObj.getResultDetails();
-        print "%s Plugin current url: %s" %(plugin,new_url)
+        print("%s Plugin current url: %s" %(plugin,new_url))
         if "SUCCESS" in result and (new_url in url or url in new_url):
             tdkTestObj.setResultStatus("SUCCESS")
             return "SUCCESS"
@@ -304,12 +304,12 @@ def launchPlugin(obj,plugin,url):
             tdkTestObj.setResultStatus("FAILURE")
             return "FAILURE"
     else:
-        print "Unable to Resume %s plugin " %(plugin)
+        print("Unable to Resume %s plugin " %(plugin))
         tdkTestObj.setResultStatus("FAILURE")
         return result
 
 def checkRDKShellClients(obj,plugin):
-    print "\nChecking RDKShell Clients..."
+    print("\nChecking RDKShell Clients...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getClients");
     tdkTestObj.executeTestCase("SUCCESS");
@@ -318,7 +318,7 @@ def checkRDKShellClients(obj,plugin):
     check_client = ""
     if "SUCCESS" in result:
         clients_list = ast.literal_eval(details)["clients"]
-        print "RDKShell Clients: %s" %(clients_list)
+        print("RDKShell Clients: %s" %(clients_list))
         for client in clients_list:
             if client.lower() == plugin.lower():
                 check_client = client
@@ -328,13 +328,13 @@ def checkRDKShellClients(obj,plugin):
         else:
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Unable to get RDKShell Clients"
+        print("Unable to get RDKShell Clients")
         tdkTestObj.setResultStatus("FAILURE")
 
     return result,check_client
 
 def checkClientZOrder(obj,client):
-    print "\nChecking Clients Z-Order..."
+    print("\nChecking Clients Z-Order...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder");
     tdkTestObj.executeTestCase("SUCCESS");
@@ -347,7 +347,7 @@ def checkClientZOrder(obj,client):
         clients_list = ast.literal_eval(details)["clients"]
         # remove unwanted process from z-order list
         clients_list = exclude_from_zorder(clients_list)
-        print "Clients Z-Order: %s" %(clients_list)
+        print("Clients Z-Order: %s" %(clients_list))
         if len(clients_list) > 0:
             tdkTestObj.setResultStatus("SUCCESS")
             if clients_list[0] == client:
@@ -357,18 +357,18 @@ def checkClientZOrder(obj,client):
             else:
                 client_z_order_status = False
         else:
-            print "Clients Z-Order list is empty"
+            print("Clients Z-Order list is empty")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Unable to get Clients Z-Order"
+        print("Unable to get Clients Z-Order")
         tdkTestObj.setResultStatus("FAILURE")
 
     return result,client_z_order_status
 
 #remove unwanted processes from z-order list
 def exclude_from_zorder(zorder):
-   new_zorder = [ element for element in zorder if element not in excluded_process_list ]
-   return new_zorder
+    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
+    return new_zorder
 
 def checkWebkitReadyState(obj,result,webkit_client,webkit_z_order_status):
     if "SUCCESS" in result and not webkit_z_order_status:
@@ -410,7 +410,7 @@ def checkProcEntry(obj,validation_dict):
     return info
 
 def moveToFrontClient(obj,client):
-    print "\nMoving %s to front..." %(client)
+    print("\nMoving %s to front..." %(client))
     tdkTestObj = obj.createTestStep('rdkservice_setValue')
     params = '{"client":"'+client+'"}'
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.moveToFront")
@@ -420,11 +420,11 @@ def moveToFrontClient(obj,client):
     info = tdkTestObj.getResultDetails();
     time.sleep(3)
     if "SUCCESS" in result:
-        print "%s plugin moved to front" %(client)
+        print("%s plugin moved to front" %(client))
         tdkTestObj.setResultStatus("SUCCESS");
         return "SUCCESS"
     else:
-        print "Unable to move %s plugin to front" %(client)
+        print("Unable to move %s plugin to front" %(client))
         tdkTestObj.setResultStatus("FAILURE");
         return "FAILURE"
 
@@ -443,10 +443,10 @@ def sendKeysToClient(obj,client,key_sequence):
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult();
         if "SUCCESS" in result:
-            print "Key: %s KeyCode: %s sent successfully" %(key_name,key_code)
+            print("Key: %s KeyCode: %s sent successfully" %(key_name,key_code))
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Key: %s KeyCode: %s sending failed" %(key_name,key_code)
+            print("Key: %s KeyCode: %s sending failed" %(key_name,key_code))
             tdkTestObj.setResultStatus("FAILURE");
             status = "FAILURE"
     return status
@@ -460,7 +460,7 @@ def checkDRMSupported(obj,drm):
             time.sleep(3)
             result,ocdm_status = checkPluginStatus(obj,"OCDM");
         if "SUCCESS" in result and "activated" in ocdm_status:
-            print "\nChecking Supported DRMs..."
+            print("\nChecking Supported DRMs...")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","OCDM.1.drms");
             tdkTestObj.executeTestCase("SUCCESS");
@@ -471,28 +471,28 @@ def checkDRMSupported(obj,drm):
             if details != None:
                 for drm_info in details:
                     drm_list.append(drm_info.get("name"))
-                print "Supported DRMs : %s" %(drm_list)
+                print("Supported DRMs : %s" %(drm_list))
                 drm_list = [ drm_name.lower() for drm_name in drm_list ]
                 if drm.lower() in drm_list:
-                    print "%s DRM is supported" %(drm)
+                    print("%s DRM is supported" %(drm))
                     return "TRUE"
                 else:
-                    print "%s DRM not supported" %(drm)
+                    print("%s DRM not supported" %(drm))
                     return "NA"
             else:
-                print "Unable to get DRM info"
+                print("Unable to get DRM info")
                 return "FALSE"
         else:
-            print "Unable to activate OCDM plugin to check DRM info"
+            print("Unable to activate OCDM plugin to check DRM info")
             return "FALSE"
     else:
-        print "OCDM plugin not available. DRM not supported"
+        print("OCDM plugin not available. DRM not supported")
         return "NA"
 
 
 def getConnectedVideoDisplay(obj):
     global video_port
-    print "\nChecking Connected video displays..."
+    print("\nChecking Connected video displays...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getConnectedVideoDisplays");
     tdkTestObj.executeTestCase("SUCCESS");
@@ -500,7 +500,7 @@ def getConnectedVideoDisplay(obj):
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
         disp_list = ast.literal_eval(details)["connectedVideoDisplays"]
-        print "Connected displays: %s" %(disp_list)
+        print("Connected displays: %s" %(disp_list))
         if "HDMI0" in disp_list:
             video_port  = "HDMI0"
             conn_status = "SUCCESS"
@@ -509,18 +509,18 @@ def getConnectedVideoDisplay(obj):
             video_port  = "Internal0"
             conn_status = "SUCCESS"
         else:
-            print "Please test with TV connected setup"
+            print("Please test with TV connected setup")
             conn_status =  "FAILURE"
     else:
         conn_status =  "FAILURE"
-        print "Unable to get connected displays"
+        print("Unable to get connected displays")
 
     tdkTestObj.setResultStatus(conn_status)
     return conn_status
 
 def getConnectedAudioPorts(obj):
     global audio_port
-    print "\nChecking Connected audio ports..."
+    print("\nChecking Connected audio ports...")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getConnectedAudioPorts");
     tdkTestObj.executeTestCase("SUCCESS");
@@ -528,7 +528,7 @@ def getConnectedAudioPorts(obj):
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
         disp_list = ast.literal_eval(details)["connectedAudioPorts"]
-        print "Connected audio ports: %s" %(disp_list)
+        print("Connected audio ports: %s" %(disp_list))
         if "HDMI0" in disp_list:
             audio_port  = "HDMI0"
             conn_status = "SUCCESS"
@@ -540,18 +540,18 @@ def getConnectedAudioPorts(obj):
             audio_port  = "SPEAKER0"
             conn_status = "SUCCESS"
         else:
-            print "Please test with TV connected setup"
+            print("Please test with TV connected setup")
             conn_status =  "FAILURE"
     else:
         conn_status =  "FAILURE"
-        print "Unable to get connected audio ports"
+        print("Unable to get connected audio ports")
 
     tdkTestObj.setResultStatus(conn_status)
     return conn_status
 
 def checkSupportedAudioModes(obj,mode):
     global auto_mode
-    print "\nChecking Supported Audio modes..."
+    print("\nChecking Supported Audio modes...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedAudioModes");
@@ -562,7 +562,7 @@ def checkSupportedAudioModes(obj,mode):
     check_status = ""
     if "SUCCESS" in result:
         mode_list = ast.literal_eval(details)["supportedAudioModes"]
-        print "Supported Audio modes: %s" %(mode_list)
+        print("Supported Audio modes: %s" %(mode_list))
         mode_match = False
         mode_check = mode.split(",")
         for mode in mode_check:
@@ -578,18 +578,18 @@ def checkSupportedAudioModes(obj,mode):
         if mode_match:
             check_status = "SUCCESS"
         else:
-            print "%s audio mode is not supported" %(mode)
+            print("%s audio mode is not supported" %(mode))
             check_status = "FAILURE"
     else:
         check_status = "FAILURE"
-        print "Unable to get supported audio modes"
+        print("Unable to get supported audio modes")
 
     tdkTestObj.setResultStatus(check_status)
     return mode,check_status
 
 
 def checkSupportedAudioCapabilities(obj,mode):
-    print "\nChecking Supported Audio capabilities..."
+    print("\nChecking Supported Audio capabilities...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSettopAudioCapabilities");
@@ -600,7 +600,7 @@ def checkSupportedAudioCapabilities(obj,mode):
     check_status = ""
     if "SUCCESS" in result:
         mode_list = ast.literal_eval(details)["AudioCapabilities"]
-        print "Supported Audio capabilities: %s" %(mode_list)
+        print("Supported Audio capabilities: %s" %(mode_list))
         mode_match = False
         for mode_value in mode_list:
             if mode.lower() in mode_value.lower():
@@ -609,18 +609,18 @@ def checkSupportedAudioCapabilities(obj,mode):
         if mode_match:
             check_status = "SUCCESS"
         else:
-            print "%s audio capability is not supported" %(mode)
+            print("%s audio capability is not supported" %(mode))
             check_status = "FAILURE"
     else:
         check_status = "FAILURE"
-        print "Unable to get supported audio capabilities"
+        print("Unable to get supported audio capabilities")
 
     tdkTestObj.setResultStatus(check_status)
     return check_status
 
 
 def checkSupportedResolution(obj,res):
-    print "\nChecking Supported Resolutions..."
+    print("\nChecking Supported Resolutions...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"videoDisplay":"'+video_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedResolutions");
@@ -631,7 +631,7 @@ def checkSupportedResolution(obj,res):
     check_status = ""
     if "SUCCESS" in result:
         res_list = ast.literal_eval(details)["supportedResolutions"]
-        print "Supported Resolutions: %s" %(res_list)
+        print("Supported Resolutions: %s" %(res_list))
         if res in res_list:
             check_status = "SUCCESS"
         else:
@@ -644,17 +644,17 @@ def checkSupportedResolution(obj,res):
             if res_match:
                 check_status = "SUCCESS"
             else:
-                print "%s resolution is not supported" %(res)
+                print("%s resolution is not supported" %(res))
                 check_status = "FAILURE"
     else:
         check_status = "FAILURE"
-        print "Unable to get supported resolutions"
+        print("Unable to get supported resolutions")
 
     tdkTestObj.setResultStatus(check_status)
     return res,check_status
 
 def getCurrentSoundMode(obj):
-    print "\nGet Current Sound Mode..."
+    print("\nGet Current Sound Mode...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"audioPort":"'+audio_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSoundMode");
@@ -664,16 +664,16 @@ def getCurrentSoundMode(obj):
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
         curr_mode = ast.literal_eval(details)["soundMode"]
-        print "Current sound mode: %s" %(curr_mode)
+        print("Current sound mode: %s" %(curr_mode))
         tdkTestObj.setResultStatus("SUCCESS")
         return "SUCCESS",curr_mode
     else:
-        print "Unable to get current sound mode"
+        print("Unable to get current sound mode")
         tdkTestObj.setResultStatus("FAILURE")
         return "FAILURE",None
 
 def getCurrentResolution(obj):
-    print "\nGet Current Resolution..."
+    print("\nGet Current Resolution...")
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"videoDisplay":"'+video_port+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getCurrentResolution");
@@ -683,11 +683,11 @@ def getCurrentResolution(obj):
     details = tdkTestObj.getResultDetails();
     if "SUCCESS" in result:
         curr_res = ast.literal_eval(details)["resolution"]
-        print "Current Resolution: %s" %(curr_res)
+        print("Current Resolution: %s" %(curr_res))
         tdkTestObj.setResultStatus("SUCCESS")
         return "SUCCESS",curr_res
     else:
-        print "Unable to get current resolution"
+        print("Unable to get current resolution")
         tdkTestObj.setResultStatus("FAILURE")
         return "FAILURE",None
 
@@ -705,9 +705,9 @@ def setCurrentSoundMode(obj,mode):
     set_status = ""
     if mode.lower() in curr_mode.lower():
         set_status = "SUCCESS"
-        print "Required sound mode is set already"
-    else:    
-        print "\nSetting %s sound mode...." %(mode)
+        print("Required sound mode is set already")
+    else:
+        print("\nSetting %s sound mode...." %(mode))
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         if auto_mode == 1:
             params = '{"audioPort":"'+audio_port+'","soundMode":"AUTO", "persist":false}'
@@ -726,15 +726,15 @@ def setCurrentSoundMode(obj,mode):
                 mode_revert = True
                 set_status = "SUCCESS"
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Sound Mode %s set successfully" %(mode)
+                print("Sound Mode %s set successfully" %(mode))
             else:
                 set_status = "FAILURE"
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Sound Mode %s not set properly" %(mode)
+                print("Sound Mode %s not set properly" %(mode))
         else:
             set_status = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE")
-            print "Unable to set the sound mode"
+            print("Unable to set the sound mode")
 
     return set_status
 
@@ -748,9 +748,9 @@ def setCurrentResolution(obj,res):
     set_status = ""
     if res == curr_res:
         set_status = "SUCCESS"
-        print "Required resolution is set already"
+        print("Required resolution is set already")
     else:
-        print "\nSetting %s Resolution...." %(res)
+        print("\nSetting %s Resolution...." %(res))
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         params = '{"videoDisplay":"'+video_port+'","resolution":"'+res+'", "persist":false}'
         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution");
@@ -765,20 +765,20 @@ def setCurrentResolution(obj,res):
                 resolution_revert = True
                 set_status = "SUCCESS"
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Resolution %s set successfully" %(res)
+                print("Resolution %s set successfully" %(res))
             else:
                 set_status = "FAILURE"
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Resolution %s not set properly" %(res)
+                print("Resolution %s not set properly" %(res))
         else:
             set_status = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE")
-            print "Unable to set the resolution"
+            print("Unable to set the resolution")
 
     return set_status
 
 def setAudioAtmosOutputMode(obj,enable):
-    print "\nSetting Audio Atmos o/p mode %s" %(enable)
+    print("\nSetting Audio Atmos o/p mode %s" %(enable))
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     params = '{"enable":"'+str(enable)+'"}'
     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setAudioAtmosOutputMode");
@@ -786,11 +786,11 @@ def setAudioAtmosOutputMode(obj,enable):
     tdkTestObj.executeTestCase("SUCESS");
     result = tdkTestObj.getResult();
     if "SUCCESS" in result:
-        print "Audio Atmos o/p mode enable %s" %(enable)
+        print("Audio Atmos o/p mode enable %s" %(enable))
         tdkTestObj.setResultStatus("SUCCESS");
         return "SUCCESS"
     else:
-        print "Unable to set audio atmos o/p enable as %s" %(enable)
+        print("Unable to set audio atmos o/p enable as %s" %(enable))
         tdkTestObj.setResultStatus("FAILURE");
         return "FAILURE"
 
@@ -918,9 +918,9 @@ def setMediaTestPreRequisites(obj,webkit_browser_instance,get_proc_info=True):
     if "SUCCESS" in result and validation_dict != {}:
         config_status = "SUCCESS"
         if validation_dict["proc_check"]:
-            print "PROC entry validation for video player test: Enabled"
+            print("PROC entry validation for video player test: Enabled")
         else:
-            print "PROC entry validation for video player test: Skipped"
+            print("PROC entry validation for video player test: Skipped")
         if get_proc_info:
             tdkTestObj.setResultStatus("SUCCESS");
     else:
@@ -942,17 +942,17 @@ def setMediaTestPreRequisites(obj,webkit_browser_instance,get_proc_info=True):
                     result,webkit_z_order_status = checkClientZOrder(obj,webkit_client)
                     webkit_ready_state = checkWebkitReadyState(obj,result,webkit_client,webkit_z_order_status)
                     if webkit_ready_state:
-                          if webkit_socket_conn and logging_method == "WEB_INSPECT":
-                              websocket_conn_status,webkit_console_socket = createWebKitSocket(obj)
-                              if not websocket_conn_status:
-                                  print "Connection to web-inspect page failed. cannot proceed test"
-                                  pre_requisite_status = "FAILURE"
-                              else:
-                                  pre_requisite_status = "SUCCESS"
-                          elif webkit_socket_conn and logging_method == "REST_API":
-                              setURLArgument("tmUrl",str(obj.url)+"/")
-                              print "App logs are monitored and collected using REST API"
-                              pre_requisite_status = "SUCCESS"
+                        if webkit_socket_conn and logging_method == "WEB_INSPECT":
+                            websocket_conn_status,webkit_console_socket = createWebKitSocket(obj)
+                            if not websocket_conn_status:
+                                print("Connection to web-inspect page failed. cannot proceed test")
+                                pre_requisite_status = "FAILURE"
+                            else:
+                                pre_requisite_status = "SUCCESS"
+                        elif webkit_socket_conn and logging_method == "REST_API":
+                            setURLArgument("tmUrl",str(obj.url)+"/")
+                            print("App logs are monitored and collected using REST API")
+                            pre_requisite_status = "SUCCESS"
                     else:
                         pre_requisite_status = "FAILURE"
                 else:
@@ -1003,7 +1003,7 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
 
     while True:
         if file_check_count > 60:
-            print "\nREST API didnt receive logs from app. Plz check wpe log. Exiting..."
+            print("\nREST API didnt receive logs from app. Plz check wpe log. Exiting...")
             break;
         if os.path.exists(app_log_file):
             logging_flag = 1
@@ -1016,7 +1016,7 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
     while logging_flag:
         if continue_count > timeout:
             hang_detected = 1
-            print "\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time)
+            print("\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time))
             break;
 
         with open(app_log_file,'r') as f:
@@ -1031,7 +1031,7 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
                         play_status = "SUCCESS"
                     if  check_pattern.lower() in lines[i].lower() and validation_dict["proc_check"] and getEventCheckStatus(check_pattern,lines[i]) and (all(skip_events not in lines[i] for skip_events in skip_proc_check_events)):
                         #time.sleep(1);
-                        print "<------------Proc------------->"
+                        print("<------------Proc------------->")
                         info = checkProcEntry(obj,validation_dict)
                         proc_check_list.append(info)
                     if "AAMP Player loaded with video url:" in lines[i]:
@@ -1061,7 +1061,7 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
         video_test_result = "FAILURE"
 
     if os.path.exists(app_log_file):
-        print "Removing the temporary log file..."
+        print("Removing the temporary log file...")
         os.remove(app_log_file)
 
     return video_test_result,proc_check_list
@@ -1088,7 +1088,7 @@ def monitorVideoTestUsingWebInspect(obj,webkit_console_socket,validation_dict,ch
     while True:
         if continue_count > timeout:
             hang_detected = 1
-            print "\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time)
+            print("\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time))
             break
         if (len(webkit_console_socket.getEventsBuffer())== 0):
             time.sleep(1)
@@ -1102,7 +1102,7 @@ def monitorVideoTestUsingWebInspect(obj,webkit_console_socket,validation_dict,ch
             play_status = "SUCCESS"
         if  check_pattern.lower() in console_log.lower() and validation_dict["proc_check"] and getEventCheckStatus(check_pattern,console_log) and (all(skip_events not in console_log for skip_events in skip_proc_check_events)):
             #time.sleep(1);
-            print "<------------Proc------------->"
+            print("<------------Proc------------->")
             info = checkProcEntry(obj,validation_dict)
             proc_check_list.append(info)
         if "AAMP Player loaded with video url:" in console_log:
@@ -1149,7 +1149,7 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
 
     while True:
         if file_check_count > 60:
-            print "\nREST API didnt receive logs from app. Plz check wpe log. Exiting..."
+            print("\nREST API didnt receive logs from app. Plz check wpe log. Exiting...")
             break;
         if os.path.exists(app_log_file):
             logging_flag = 1
@@ -1161,7 +1161,7 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
     while logging_flag:
         if continue_count > timeout:
             hang_detected = 1
-            print "\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time)
+            print("\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time))
             break;
 
         with open(app_log_file,'r') as f:
@@ -1197,7 +1197,7 @@ def monitorAnimationTestUsingRestAPI(obj,check_pattern,timeout):
         animation_test_result = "FAILURE"
 
     if os.path.exists(app_log_file):
-        print "Removing the temporary log file..."
+        print("Removing the temporary log file...")
         os.remove(app_log_file)
 
     return animation_test_result,diagnosis_info
@@ -1215,7 +1215,7 @@ def monitorAnimationTestUsingWebInspect(obj,webkit_console_socket,check_pattern,
     while True:
         if continue_count > timeout:
             hang_detected = 1
-            print "\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time)
+            print("\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time))
             break
         if (len(webkit_console_socket.getEventsBuffer())== 0):
             time.sleep(1)
@@ -1260,7 +1260,7 @@ def monitorConformanceTest(obj,webkit_console_socket,timeout=60):
     while True:
         if continue_count > timeout:
             hang_detected = 1
-            print "\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time)
+            print("\nApp not proceeding for %d min. Plz check wpe log. Exiting..." %(wait_time))
             break
         if (len(webkit_console_socket.getEventsBuffer())== 0):
             time.sleep(1)
@@ -1289,29 +1289,29 @@ def monitorConformanceTest(obj,webkit_console_socket,timeout=60):
         if "Device Status:" in console_log or "Connection refused" in console_log:
             break;
     if len(failed_test_list) != 0:
-        print "\n\n====================== FAILED TESTS =========================="
+        print("\n\n====================== FAILED TESTS ==========================")
         dispTestCaseInfo(failed_test_list)
         test_result = "FAILURE"
     if len(timeout_test_list) != 0:
-        print "\n\n====================== TIME OUT TESTS =========================="
+        print("\n\n====================== TIME OUT TESTS ==========================")
         dispTestCaseInfo(timeout_test_list)
         test_result = "FAILURE"
     if len(optional_failed_test_list) != 0:
-        print "\n\n====================== OPTIONAL FAILED TESTS =========================="
+        print("\n\n====================== OPTIONAL FAILED TESTS ==========================")
         dispTestCaseInfo(optional_failed_test_list)
 
     if "SUCCESS" in test_result and hang_detected == 0:
         conformance_test_result = "SUCCESS"
     else:
         conformance_test_result = "FAILURE"
-    print "\n\n====================== SUMMARY  =========================="
-    print "Summary format is generated based on latest version MSE/EME (2021) test results"
-    print "TOTAL TESTS: %d"             %(total_test_count)
-    print "PASSED TEST(S): %d"          %(len(passed_test_list))
-    print "FAILED TEST(S): %d"          %(len(failed_test_list))
-    print "OPTIONAL FAILED TEST(S): %d" %(len(optional_failed_test_list))
-    print "TIMEOUT TEST(S): %d"         %(len(timeout_test_list))
-    print "TEST STATUS: %s\n"           %(conformance_test_result)
+    print("\n\n====================== SUMMARY  ==========================")
+    print("Summary format is generated based on latest version MSE/EME (2021) test results")
+    print("TOTAL TESTS: %d"             %(total_test_count))
+    print("PASSED TEST(S): %d"          %(len(passed_test_list)))
+    print("FAILED TEST(S): %d"          %(len(failed_test_list)))
+    print("OPTIONAL FAILED TEST(S): %d" %(len(optional_failed_test_list)))
+    print("TIMEOUT TEST(S): %d"         %(len(timeout_test_list)))
+    print("TEST STATUS: %s\n"           %(conformance_test_result))
     return conformance_test_result,failed_test_list
 
 # Function to display the EME/MSE list of failed test details
@@ -1320,7 +1320,7 @@ def dispTestCaseInfo(test_list):
         if "Console.messageAdded" in test_info:
             dispConsoleMessage(test_info)
         else:
-            print test_info
+            print(test_info)
 
 # Function to check whether proc check is applicable for observed event
 def getEventCheckStatus(check_pattern,line):
@@ -1374,31 +1374,24 @@ def setMediaTestPostRequisites(obj,webkit_browser_instance,webkit_console_socket
 # Function to validate the Latency time
 def validateLatency(obj):
     loaded_time = getTimeFromMsg(evt_lst[0])
-    print "\n Player Loaded at : {} (UTC)".format(loaded_time)
+    print("\n Player Loaded at : {} (UTC)".format(loaded_time))
     loaded_time_millisec = getTimeInMilliSeconds(loaded_time)
     play_start_time = getTimeFromMsg(evt_lst[1])
-    print "\n Playback Started at : {} (UTC)".format(play_start_time)
+    print("\n Playback Started at : {} (UTC)".format(play_start_time))
     play_start_time_millisec = getTimeInMilliSeconds(play_start_time)
     load_time = play_start_time_millisec - loaded_time_millisec
-    print "\n Time taken to load and play video: ",load_time
+    print("\n Time taken to load and play video: ",load_time)
     config_file,result = getDeviceConfigFile(obj.realpath)
     result,load_threshold_value = getDeviceConfigKeyValue(config_file,"PLAYBACK_START_THRESHOLD_VALUE")
-    print "\n Threshold value for load time: ", load_threshold_value
+    print("\n Threshold value for load time: ", load_threshold_value)
     if load_threshold_value != "":
         if 0 < int(load_time) < int(load_threshold_value):
-            print "\n Time taken for load operation is within the expected limit \n"
+            print("\n Time taken for load operation is within the expected limit \n")
             test_result = "SUCCESS"
         else:
-            print "\n Time taken for load operation is not within the expected limit \n"
+            print("\n Time taken for load operation is not within the expected limit \n")
             test_result = "FAILURE"
     else:
-        print "\n Please Configure the PLAYBACK_START_THRESHOLD_VALUE in config file \n"
+        print("\n Please Configure the PLAYBACK_START_THRESHOLD_VALUE in config file \n")
         test_result = "FAILURE"
     return test_result
-
-
-
-
-
-
-

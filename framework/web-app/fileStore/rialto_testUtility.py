@@ -18,7 +18,7 @@
 #########################################################################
 import tdklib;
 import os
-import ConfigParser
+import configparser
 
 prerequisite_done=False
 testCase=1
@@ -40,7 +40,7 @@ def checkMediaPipelineTestStatus (outputString):
         result = "FAILURE"
 
     if "No such testcase is present in app" in outputString:
-        print "App present in DUT doesnot have such test. Please update the app\n"
+        print("App present in DUT doesnot have such test. Please update the app\n")
         result = "FAILURE"
 
     return result
@@ -50,12 +50,12 @@ def setPreRequisite(obj):
     global prerequisite_done
     expectedResult="SUCCESS"
     if not prerequisite_done:
-        print "\n\n#---------------------------- Plugin Pre-requisite ----------------------------#"
-        print "Pre Requisite : Setup Rialto Environment\nPre Requisite No : 1"
+        print("\n\n#---------------------------- Plugin Pre-requisite ----------------------------#")
+        print("Pre Requisite : Setup Rialto Environment\nPre Requisite No : 1")
 
-    print "TEST STEP NAME   :  Check Rialto Server Manager running"
+    print("TEST STEP NAME   :  Check Rialto Server Manager running")
     command = "ps -ef | grep -inr RialtoServerManagerSim | grep -v grep"
-    print "Executing command in DUT: ", command
+    print("Executing command in DUT: ", command)
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
@@ -63,39 +63,39 @@ def setPreRequisite(obj):
     output = tdkTestObj.getResultDetails()
     if expectedResult in actualresult.upper() and "RialtoServerManagerSim" not in output :
         if prerequisite_done:
-            print  "Unable to set prerequsities"
+            print("Unable to set prerequsities")
             Status="FAILURE"
         else:
-            print "RialtoServerManagerSim is not running\n\nTEST STEP NAME: Setup environment for Rialto"
+            print("RialtoServerManagerSim is not running\n\nTEST STEP NAME: Setup environment for Rialto")
             command = "touch %s; ls %s"%(rialto_env_file,rialto_env_file)
             tdkTestObj.addParameter("command", command)
             tdkTestObj.executeTestCase(expectedResult)
             output = tdkTestObj.getResultDetails()
             if expectedResult in actualresult.upper() and "rialto_test" in output :
-                print "Rebooting the device......."
+                print("Rebooting the device.......")
                 obj.initiateReboot();
                 prerequisite_done=True
                 setPreRequisite(obj)
                 return
             else:
-                print "Unable to write in TDK_PATH"
+                print("Unable to write in TDK_PATH")
                 Status="FAILURE"
     else:
-        print "RialtoServerManagerSim is runnning\nRialto Test Setup Environment Completed Successfully"
+        print("RialtoServerManagerSim is runnning\nRialto Test Setup Environment Completed Successfully")
         Status="SUCCESS"
     tdkTestObj.setResultStatus(Status);
-    print "TEST STEP STATUS :",Status
-    print "#--------- [Pre-requisite Status] : %s ----------#"%(Status)
-    print "Plugin Pre-requisite Status: %s \n\n"%(Status)
+    print("TEST STEP STATUS :",Status)
+    print("#--------- [Pre-requisite Status] : %s ----------#"%(Status))
+    print("Plugin Pre-requisite Status: %s \n\n"%(Status))
     if Status == "FAILURE":
-        print "Pre-Requisites FAILED\n\n"
+        print("Pre-Requisites FAILED\n\n")
         exit
 
 #Function to reset the environment for rialto gstreamer testing to default environment
 def ExecutePostRequisite(obj):
     expectedResult="SUCCESS"
-    print "\n#---------------------------- Plugin Post-requisite ----------------------------#\n"
-    print "Post Requisite : Restore Default environment in DUT\nPost Requisite No : 1\n\nTEST STEP NAME   :  Restore Default environment"
+    print("\n#---------------------------- Plugin Post-requisite ----------------------------#\n")
+    print("Post Requisite : Restore Default environment in DUT\nPost Requisite No : 1\n\nTEST STEP NAME   :  Restore Default environment")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     command = "rm %s; ls %s"%(rialto_env_file,rialto_env_file)
     tdkTestObj.addParameter("command", command)
@@ -103,16 +103,16 @@ def ExecutePostRequisite(obj):
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails()
     if expectedResult in actualresult.upper() and "rialto_test" not in output :
-        print "Rebooting the device......."
+        print("Rebooting the device.......")
         obj.initiateReboot();
         Status="SUCCESS"
     else:
-        print "Unable to delete rialto_test environment file"
+        print("Unable to delete rialto_test environment file")
         Status="FAILURE"
     tdkTestObj.setResultStatus(Status);
-    print "TEST STEP STATUS :",Status
-    print "#--------- [Post-requisite Status] : %s  ----------#"%(Status)
-    print "Plugin Post-requisite Status:",Status
+    print("TEST STEP STATUS :",Status)
+    print("#--------- [Post-requisite Status] : %s  ----------#"%(Status))
+    print("Plugin Post-requisite Status:",Status)
 
 #Function to execute the testcase passed as argument
 def ExecuteTest(obj,streamType,test,command):
@@ -129,18 +129,18 @@ def ExecuteTest(obj,streamType,test,command):
         test="Resolution Verification Test"
         resolution=streamType.split("_")[1]
         command = command + " checkResolution=%s"%(resolution)
-    print "\n#==============================================================================#"
-    print "TEST CASE NAME   : %s %s"%(streamType,test)
-    print "TEST CASE ID  : RIALTO_",testCase
-    print "DESCRIPTION   : ",description
-    print "#==============================================================================#\n"
+    print("\n#==============================================================================#")
+    print("TEST CASE NAME   : %s %s"%(streamType,test))
+    print("TEST CASE ID  : RIALTO_",testCase)
+    print("DESCRIPTION   : ",description)
+    print("#==============================================================================#\n")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     tdkTestObj.addParameter("command", command)
-    print "\nExecuting command in DUT: ", command
+    print("\nExecuting command in DUT: ", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
@@ -149,18 +149,18 @@ def ExecuteTest(obj,streamType,test,command):
 
         if expectedResult in executionStatus:
             Status="SUCCESS"
-            print "Rialto %s for %s codec using 'playbin', 'rialtomsevideosink' and 'rialtomseaudiosink' was successfull"%(test,streamType)
-            print "Mediapipeline test executed successfully\n"
+            print("Rialto %s for %s codec using 'playbin', 'rialtomsevideosink' and 'rialtomseaudiosink' was successfull"%(test,streamType))
+            print("Mediapipeline test executed successfully\n")
         else:
             Status="FAILURE"
-            print "Rialto %s for %s codec using 'playbin', 'rialtomsevideosink' and 'rialtomseaudiosink' failed\n"%(test,streamType)
+            print("Rialto %s for %s codec using 'playbin', 'rialtomsevideosink' and 'rialtomseaudiosink' failed\n"%(test,streamType))
     else:
         Status="FAILURE"
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
 
     tdkTestObj.setResultStatus(Status)
-    print "\nTEST STEP STATUS :  ",Status
-    print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(Status)
+    print("\nTEST STEP STATUS :  ",Status)
+    print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(Status))
     testCase=testCase+1
 
 #Function to retrieve the device configuration from device config file
@@ -185,11 +185,11 @@ def getConfigValue (tdklibObj, configKey):
         elif os.path.exists (deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
         else:
-            print "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
+            print("FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile)
             result = "FAILURE"
         #Continue only if the device config file exists
         if (len (deviceConfigFile) != 0):
-            configParser = ConfigParser.ConfigParser()
+            configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             #Retrieve the value of config key from device config file
             configValue = configParser.get('device.config', configKey)
@@ -202,10 +202,10 @@ def getConfigValue (tdklibObj, configKey):
             except:
                 check_fps = "no"
         else:
-            print "DeviceConfig file not available"
+            print("DeviceConfig file not available")
             result = "FAILURE"
     except Exception as e:
-        print "Exception occurred while retrieving device configuration  : " + str(e)
+        print("Exception occurred while retrieving device configuration  : " + str(e))
         result = "FAILURE"
     return result, configValue
 
@@ -215,7 +215,7 @@ def getMediaPipelineTestCommand (testName, testUrl, **arguments):
     command = "tdk_mediapipelinetests " + testName + " " + testUrl
     #Based on the test, the arguments can vary, parse through the variabled arguments
     #and add the available variables
-    for name, value in arguments.items ():
+    for name, value in list(arguments.items ()):
         command += " " + name + "=" + value
     #Feature to disable video-fps check
     if (check_fps == "no") and "fps" not in command.lower():

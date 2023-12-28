@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 ##########################################################################
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import rdkv_performancelib
 from rdkv_performancelib import *
 from StabilityTestVariables import *
@@ -112,7 +112,7 @@ def getIFStatus(IF_name,validate):
         exitScript(StatusInterface,iter_no);
     elif output == "EXCEPTION":
         logger.info("Got exception while checking the interface status. Exiting the script")
-	exitScript(StatusInterface,iter_no);
+        exitScript(StatusInterface,iter_no);
     elif output == "FAILURE":
         StatusInterface.append(iter_no)
         output = "DISABLED";
@@ -185,19 +185,19 @@ def validatePluginStatus(statusBeforeReboot,statusAfterReboot,validate):
 #------------------------------------------------------
 def getUIStatus(validate):
     try:
-       url = 'http://'+str(rdkv_performancelib.deviceIP)+':'+str(rdkv_performancelib.devicePort)+'/Service/Controller/UI'
-       statusCode = urllib2.urlopen(url,timeout=3).getcode()
-       if statusCode == 200:
-           return "ACCESSIBLE"
-       elif validate == "Yes":
-           logger.info( "The controller UI is not up after reboot")
-           exitScript(StatusControllerUI,iter_no);
-       else:
-           StatusControllerUI.append(iter_no)
-           return "NOT ACCESSIBLE"
+        url = 'http://'+str(rdkv_performancelib.deviceIP)+':'+str(rdkv_performancelib.devicePort)+'/Service/Controller/UI'
+        statusCode = urllib.request.urlopen(url,timeout=3).getcode()
+        if statusCode == 200:
+            return "ACCESSIBLE"
+        elif validate == "Yes":
+            logger.info( "The controller UI is not up after reboot")
+            exitScript(StatusControllerUI,iter_no);
+        else:
+            StatusControllerUI.append(iter_no)
+            return "NOT ACCESSIBLE"
     except Exception as e:
-        print "ERROR!! Exception occurred"
-        print "Error message received: \n",e
+        print("ERROR!! Exception occurred")
+        print("Error message received: \n",e)
         return "FAILURE"
 
 #------------------------------------------------------
@@ -216,7 +216,7 @@ def checkPluginsActivated(statusList,validate):
     elif result == "FAILURE":
         StatusActivatedPlugins.append(iter_no)
     return result
-    
+
 #------------------------------------------------------
 #EXITING THE SCRIPT IF VALIDATION FAILS
 #------------------------------------------------------

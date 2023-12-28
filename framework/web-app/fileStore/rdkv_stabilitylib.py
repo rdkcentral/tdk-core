@@ -53,7 +53,7 @@ def init_module(libobj,port,deviceInfo):
     deviceName = deviceInfo["devicename"]
     deviceType = deviceInfo["boxtype"]
     libObj = libobj
-    
+
 #---------------------------------------------------------------
 #POST CURL REQUEST USING PYTHON REQUESTS
 #---------------------------------------------------------------
@@ -73,9 +73,9 @@ def postCURLRequest(data,securityEnabled):
             status = "INVALID TOKEN"
     except requests.exceptions.RequestException as e:
         status = "FAILURE"
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Command : ",data
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Command : ",data)
+        print("Error message received :\n",e);
         response = "EXCEPTION OCCURRED"
     return response,json_response,status
 
@@ -89,36 +89,36 @@ def execute_step(Data):
         data = '{"jsonrpc": "2.0", "id": 1234567890, '+Data+'}'
         response,json_response,status = postCURLRequest(data,securityEnabled)
         if status == "INVALID TOKEN":
-           print "\nAuthorization issue occurred. Update Token & Re-try..."
-           global deviceToken
-           tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
-           if not securityEnabled:
-               # Create the Device Token config file and update the token
-               token_status,deviceToken = read_token_config(deviceIP,tokenFile)
-               if token_status == "SUCCESS":
-                   print "Device Security Token obtained successfully"
-               else:
-                   print "Failed to get the device security token"
-               securityEnabled = True
-           else:
-               # Update the token in the device token config file
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-           if token_status == "SUCCESS":
-               response,json_response,status = postCURLRequest(data,securityEnabled)
-           else:
-               print "Failed to update the token in token config file"
-           if status == "INVALID TOKEN":
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-               if token_status == "SUCCESS":
-                   response,json_response,status = postCURLRequest(data,securityEnabled)
-               else:
-                   status = "FAILURE"
+            print("\nAuthorization issue occurred. Update Token & Re-try...")
+            global deviceToken
+            tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
+            if not securityEnabled:
+                # Create the Device Token config file and update the token
+                token_status,deviceToken = read_token_config(deviceIP,tokenFile)
+                if token_status == "SUCCESS":
+                    print("Device Security Token obtained successfully")
+                else:
+                    print("Failed to get the device security token")
+                securityEnabled = True
+            else:
+                # Update the token in the device token config file
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+            if token_status == "SUCCESS":
+                response,json_response,status = postCURLRequest(data,securityEnabled)
+            else:
+                print("Failed to update the token in token config file")
+            if status == "INVALID TOKEN":
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+                if token_status == "SUCCESS":
+                    response,json_response,status = postCURLRequest(data,securityEnabled)
+                else:
+                    status = "FAILURE"
         web_socket_util.deviceToken = deviceToken
         if status == "SUCCESS":
-            print "\n---------------------------------------------------------------------------------------------------"
-            print "Json command : ", data
-            print "\n Response : ", json_response, "\n"
-            print "----------------------------------------------------------------------------------------------------\n"
+            print("\n---------------------------------------------------------------------------------------------------")
+            print("Json command : ", data)
+            print("\n Response : ", json_response, "\n")
+            print("----------------------------------------------------------------------------------------------------\n")
             result = json_response.get("result")
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
@@ -128,17 +128,17 @@ def execute_step(Data):
                 conf_file,result_conf = getConfigFileName(libObj.realpath)
                 result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
                 time_taken = response.elapsed.total_seconds()
-                print "Time Taken for",Data,"is :", time_taken
+                print("Time Taken for",Data,"is :", time_taken)
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
-                    print "Device took more than usual to respond."
-                    print "Exiting the script"
+                    print("Device took more than usual to respond.")
+                    print("Exiting the script")
                     result = "EXCEPTION OCCURRED"
         else:
             result = response;
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
 
 #------------------------------------------------------------------
@@ -150,21 +150,21 @@ def rdkservice_rebootDevice(waitTime):
     rdkv_performancelib.libObj=libObj
     status = rdkservice_getPluginStatus("org.rdk.System")
     if status != "activated":
-        print "Activating System plugin for rebooting the device"
+        print("Activating System plugin for rebooting the device")
         status = rdkservice_setPluginStatus("org.rdk.System","activate")
         status = rdkservice_getPluginStatus("org.rdk.System")
     if status == "activated":
-        print "System plugin is activated"
+        print("System plugin is activated")
         data = '"method": "org.rdk.System.1.reboot","params": {"rebootReason": "TDK_TESTING"}'
         result = execute_step(data)
         if result != "EXCEPTION OCCURRED":
-            print "WAIT TO COMPLETE THE REBOOT PROCESS"
+            print("WAIT TO COMPLETE THE REBOOT PROCESS")
             time.sleep(waitTime)
             return "SUCCESS"
         else:
             return result
     else:
-        print "Unable to activate System plugin"
+        print("Unable to activate System plugin")
         return "EXCEPTION OCCURED"
 #-------------------------------------------------------------------
 #GET THE CPU LOAD VALUE FROM DEVICEINFO PLUGIN
@@ -176,7 +176,7 @@ def rdkservice_getCPULoad():
         value = result["cpuload"]
         return value
     else:
-        return result 
+        return result
 
 #-------------------------------------------------------------------
 #GET THE MEMORY USAGE VALUE IN BYTES FROM DEVICEINFO PLUGIN
@@ -229,14 +229,14 @@ def rdkservice_validateMemoryUsage(value,threshold):
 #-------------------------------------------------------------------
 def rdkservice_validateProcEntry(sshmethod,credentials,video_validation_script):
     result = "SUCCESS"
-    video_validation_script = video_validation_script.split('.py')[0] 
+    video_validation_script = video_validation_script.split('.py')[0]
     try:
         lib = importlib.import_module(video_validation_script)
         method = "check_video_status"
         method_to_call = getattr(lib, method)
         result = method_to_call(sshmethod,credentials)
     except Exception as e:
-        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        print("\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n")
         result = "FAILURE"
     finally:
         return result
@@ -274,10 +274,10 @@ def rdkservice_setDefaultInterface(new_interface):
     else:
         interface_status,deviceAvailability = set_default_interface(test_obj,"ETHERNET")
         if interface_status  == "SUCCESS":
-            print "\n Successfully Set ETHERNET as default interface \n"
+            print("\n Successfully Set ETHERNET as default interface \n")
             status = close_lightning_app(test_obj)
         else:
-            print "\n Error while setting to ETHERNET \n"
+            print("\n Error while setting to ETHERNET \n")
             result_status = "FAILURE"
     if status == "FAILURE":
         result_status = "FAILURE"
@@ -300,7 +300,7 @@ def rdkservice_sendKeyCodes(keyword):
     return result
 
 #---------------------------------------------------------------------
-#GET THE RESOURCE USAGE AND VALIDATE 
+#GET THE RESOURCE USAGE AND VALIDATE
 #---------------------------------------------------------------------
 def rdkservice_validateResourceUsage():
     resource_usage = ""
@@ -316,10 +316,10 @@ def rdkservice_validateResourceUsage():
             high_resource = "CPU"
             #Command to get the top 5 processes with high CPU usage
             command = 'top -o %CPU -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $9); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
-            print "\n CPU load is high : {}".format(float(cpuload))
+            print("\n CPU load is high : {}".format(float(cpuload)))
 
         else:
-            print "\n CPU load : {}".format(float(cpuload))
+            print("\n CPU load : {}".format(float(cpuload)))
 
         totalram = result["totalram"]
         freeram = result["freeram"]
@@ -330,10 +330,10 @@ def rdkservice_validateResourceUsage():
             high_resource = "MEM"
             #Command to get the top 5 processes with high MEM usage
             command = 'top -o %MEM -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $10); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
-            print "\n Memory usage is high: {}".format(memory_usage)
+            print("\n Memory usage is high: {}".format(memory_usage))
 
         else:
-            print "\n Memory usage : {}".format(memory_usage)
+            print("\n Memory usage : {}".format(memory_usage))
 
         if high_cpu and high_memory:
             high_resource = "CPU and MEM"
@@ -348,9 +348,9 @@ def rdkservice_validateResourceUsage():
             ssh_param = rdkv_performancelib.rdkservice_getSSHParams(libObj.realpath,deviceIP)
             ssh_param = json.loads(ssh_param)
             output = rdkv_performancelib.rdkservice_getRequiredLog(ssh_param["ssh_method"],ssh_param["credentials"],command)
-            print "\n<b>Top 5 process with high {} usage:</b>\n".format(high_resource)
+            print("\n<b>Top 5 process with high {} usage:</b>\n".format(high_resource))
             output = output.split("\n")[1]
-            print '\n\n'.join(output.split(","))
+            print('\n\n'.join(output.split(",")))
 
         else:
             resource_usage = cpuload +","+str(memory_usage)
@@ -386,16 +386,16 @@ def rdkservice_executeLifeCycle(plugin,operations,validation_details):
                 curr_status = rdkv_performancelib.rdkservice_getPluginStatus(plugin)
                 sys.stdout.flush()
                 if curr_status in expected_status_dict[operation]:
-                    print "\n Successfully set {} plugin to {} status".format(plugin,curr_status)
+                    print("\n Successfully set {} plugin to {} status".format(plugin,curr_status))
                 else:
-                    print "\n Error while setting {} plugin to {} status, current status: {}".format(plugin,operation,curr_status)
+                    print("\n Error while setting {} plugin to {} status, current status: {}".format(plugin,operation,curr_status))
                     break
             else:
-                print "\n Error while setting {} plugin to {}".format(plugin,operation)
+                print("\n Error while setting {} plugin to {}".format(plugin,operation))
                 break
         #On successfull completion of the loop for suspend and resume, below block will get executed
         else:
-            print "\n Successfully completed suspend and resume for {} plugin".format(plugin)
+            print("\n Successfully completed suspend and resume for {} plugin".format(plugin))
             #Do move to front and back operations
             for move_to_method in ["moveToBack","moveToFront"]:
                 move_to_status = rdkv_performancelib.rdkservice_setValue("org.rdk.RDKShell.1."+move_to_method,param_val)
@@ -404,39 +404,39 @@ def rdkservice_executeLifeCycle(plugin,operations,validation_details):
                     zorder_result = rdkv_performancelib.rdkservice_getValue("org.rdk.RDKShell.1.getZOrder")
                     sys.stdout.flush()
                     if zorder_result != "EXCEPTION OCCURRED":
-                        print zorder_result
+                        print(zorder_result)
                         zorder = zorder_result["clients"]
                         zorder = rdkv_performancelib.exclude_from_zorder(zorder)
                         if zorder[check_zorder_dict[move_to_method]].lower() == plugin.lower():
-                            print "\n {} operation is success ".format(move_to_method)
+                            print("\n {} operation is success ".format(move_to_method))
                         else:
-                            print "\n Error while doing {} operation ".format(move_to_method)
+                            print("\n Error while doing {} operation ".format(move_to_method))
                             break
                     else:
-                        print "\n Error while getting the zorder"
+                        print("\n Error while getting the zorder")
                         break
                 else:
-                    print "\n Error while doing {} operation ".format(move_to_method)
+                    print("\n Error while doing {} operation ".format(move_to_method))
                     break
             else:
-                print "\n Successfully completed move to back and move to front for the {} plugin".format(plugin)
+                print("\n Successfully completed move to back and move to front for the {} plugin".format(plugin))
                 result = "SUCCESS"
     else:
-        print "\n Error occurred while lauching and checking the plugin functionality"
+        print("\n Error occurred while lauching and checking the plugin functionality")
     #Destroy the plugin
-    print "\n Deactivate {} plugin".format(plugin)
+    print("\n Deactivate {} plugin".format(plugin))
     status = rdkv_performancelib.rdkservice_setPluginStatus(plugin,"deactivate")
     if status != "EXCEPTION OCCURRED":
         #Get the status
         time.sleep(10)
         plugin_status = rdkv_performancelib.rdkservice_getPluginStatus(plugin)
         if plugin_status != 'deactivated':
-            print "\n {} plugin is not in deactivated state, current status:{}".format(plugin,plugin_status)
+            print("\n {} plugin is not in deactivated state, current status:{}".format(plugin,plugin_status))
             result = "FAILURE"
         else:
-            print "\n Successfully deactivated {} plugin".format(plugin)
+            print("\n Successfully deactivated {} plugin".format(plugin))
     else:
-        print "\n Error while deactivating {} plugin".format(plugin)
+        print("\n Error while deactivating {} plugin".format(plugin))
         result = "FAILURE"
     return result
 
@@ -445,28 +445,28 @@ def rdkservice_executeLifeCycle(plugin,operations,validation_details):
 #-------------------------------------------------------------------
 def rdkservice_launchAndDestroy(plugin,uri=""):
     result = "FAILURE"
-    print "\n Launching {} plugin".format(plugin)
+    print("\n Launching {} plugin".format(plugin))
     launch_status = rdkv_performancelib.rdkservice_setPluginStatus(plugin,"activate",uri)
     time.sleep(5)
     if launch_status != "EXCEPTION OCCURRED":
         curr_status = rdkv_performancelib.rdkservice_getPluginStatus(plugin)
         if curr_status in ("activated","resumed"):
-            print "\n Successfully launched {} plugin".format(plugin)
+            print("\n Successfully launched {} plugin".format(plugin))
             time.sleep(5)
-            print "\n Destroying {} plugin".format(plugin)
+            print("\n Destroying {} plugin".format(plugin))
             destroy_status = rdkv_performancelib.rdkservice_setPluginStatus(plugin,"deactivate")
             if destroy_status != "EXCEPTION OCCURRED":
                 time.sleep(5)
                 new_status = rdkv_performancelib.rdkservice_getPluginStatus(plugin)
                 if new_status == "deactivated":
-                    print "\n Destroyed {} plugin".format(plugin)
+                    print("\n Destroyed {} plugin".format(plugin))
                     result = "SUCCESS"
                 else:
-                    print "\n Unable to destroy {} plugin, current status".format(plugin,new_status)
+                    print("\n Unable to destroy {} plugin, current status".format(plugin,new_status))
             else:
-                print "\n Error while destroying {} plugin".format(plugin)
+                print("\n Error while destroying {} plugin".format(plugin))
         else:
-            print "\n Unable to launch {} plugin, current status".format(plugin,curr_status)
+            print("\n Unable to launch {} plugin, current status".format(plugin,curr_status))
     else:
-        print "\n Error while launching {} plugin".format(plugin)
+        print("\n Error while launching {} plugin".format(plugin))
     return result

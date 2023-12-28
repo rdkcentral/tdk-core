@@ -18,7 +18,7 @@
 # limitations under the License.
 ##########################################################################
 
-import ConfigParser
+import configparser
 from pexpect import pxssh
 from time import sleep
 
@@ -28,7 +28,7 @@ def executeBluetoothCtl(bluetoothObj,commands):
 
         #Get Bluetooth configuration file
         bluetoothConfigFile = bluetoothObj.realpath+'fileStore/bluetoothcredential.config'
-        configParser = ConfigParser.ConfigParser()
+        configParser = configparser.ConfigParser()
         configParser.read(r'%s' % bluetoothConfigFile)
         ip = configParser.get('bluetooth-config', 'ip')
         username = configParser.get('bluetooth-config', 'username')
@@ -37,29 +37,29 @@ def executeBluetoothCtl(bluetoothObj,commands):
         deviceName = configParser.get('bluetooth-config','devicename')
         BT_Mac =  configParser.get('bluetooth-config','DUT_BT_controller_mac')
         #Executing the commands in device
-        print 'Number of commands:', len(commands)
-        print 'Commands List:', commands
-        print "Connecting to client device"
+        print('Number of commands:', len(commands))
+        print('Commands List:', commands)
+        print("Connecting to client device")
         global session
         session = pxssh.pxssh(options={
                             "StrictHostKeyChecking": "no",
                             "UserKnownHostsFile": "/dev/null"})
         session.login(ip,username,password,sync_multiplier=3)
-        print "Executing the bluetoothctl commands"
+        print("Executing the bluetoothctl commands")
         for parameters in range(0,len(commands)):
             if 'scan on' in commands[parameters]:
                 session.sendline(commands[parameters])
-                print "Scanning started"
+                print("Scanning started")
                 sleep(20);
             elif 'pair' in commands[parameters]:
                 commands[parameters] += ' '+ BT_Mac;
                 session.sendline(commands[parameters])
-                print "Paired with DUT"
+                print("Paired with DUT")
                 sleep(3);
             elif 'remove' in commands[parameters]:
                 commands[parameters] += ' '+ BT_Mac;
                 session.sendline(commands[parameters])
-                print "Un Paired with DUT"
+                print("Un Paired with DUT")
                 sleep(3);
             else:
                 session.sendline(commands[parameters])
@@ -68,10 +68,10 @@ def executeBluetoothCtl(bluetoothObj,commands):
         status=status.strip()
         session.logout()
         session.close()
-        print "Successfully Executed bluetoothctl commands in client device"
+        print("Successfully Executed bluetoothctl commands in client device")
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         status = "FAILURE"
 
     return status

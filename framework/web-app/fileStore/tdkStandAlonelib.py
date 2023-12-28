@@ -19,7 +19,7 @@
 
 import json
 import importlib
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys
 
 # Description : Get the details of the device configured in test manager
@@ -29,10 +29,10 @@ import sys
 def getDeviceDetails(self):
     url = self.url + '/deviceGroup/getDeviceDetails?deviceIp='+self.ip
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         deviceDetails = json.loads(response)
     except:
-        print "Unable to get Device Details from REST !!!"
+        print("Unable to get Device Details from REST !!!")
         exit()
 
     sys.stdout.flush()
@@ -45,10 +45,10 @@ def getDeviceDetails(self):
 def getThunderPortDetails(self):
     url = self.url + '/deviceGroup/getThunderDevicePorts?stbIp='+self.ip
     try:
-        data = urllib.urlopen(url).read()
+        data = urllib.request.urlopen(url).read()
         thunderPortDetails = json.loads(data)
     except:
-        print "Unable to get Thunder Port from REST !!!"
+        print("Unable to get Thunder Port from REST !!!")
         exit()
 
     sys.stdout.flush()
@@ -74,7 +74,7 @@ def executeTest (self) :
         try:
             deviceMac = deviceInfo["mac"]
         except Exception as e:
-            print "\nException Occurred while getting MAC \n"
+            print("\nException Occurred while getting MAC \n")
         testXMLName = params["params"]["xml_name"]
         details = "SUCCESS"
         lib = importlib.import_module("tdkvRDKServicesTestlib")
@@ -111,7 +111,8 @@ def executeTest (self) :
         if "params" in params:
             args = params["params"]
         details = method_to_call(**args)
+        if isinstance(details , bytes):
+            details = details.decode().encode('ascii','ignore').decode()
         if (details or details == None) and details != "EXCEPTION OCCURRED":
             result = "SUCCESS"
     return result,details;
-

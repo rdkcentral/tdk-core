@@ -33,315 +33,315 @@ import time;
 #
 def init(tdkTestObj,expectedresult):
 
-        print "\n"
-	fnName="DTCPMgrInitialize";
-	#Add parameters to test object
-	tdkTestObj.addParameter("funcName", fnName); 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	print "%s"%(fnName)
-	print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
- 	print "Details: [%s]"%details
+    print("\n")
+    fnName="DTCPMgrInitialize";
+    #Add parameters to test object
+    tdkTestObj.addParameter("funcName", fnName);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s"%(fnName))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-        	tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-		retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 ########## End of dtcpMgrInitialize Function ##########
 
 def startSource(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrStartSource";
-        #Add parameters to test object
-	ifName=str(kwargs["ifName"])
-        port=int(kwargs["port"])
-        tdkTestObj.addParameter("funcName", fnName);
-	tdkTestObj.addParameter("strParam1", ifName);
-	tdkTestObj.addParameter("intParam2", port);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	print "%s [ifName:%s port:%d]"%(fnName,ifName,port);
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
+    print("\n")
+    fnName="DTCPMgrStartSource";
+    #Add parameters to test object
+    ifName=str(kwargs["ifName"])
+    port=int(kwargs["port"])
+    tdkTestObj.addParameter("funcName", fnName);
+    tdkTestObj.addParameter("strParam1", ifName);
+    tdkTestObj.addParameter("intParam2", port);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s [ifName:%s port:%d]"%(fnName,ifName,port));
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def stopSource(tdkTestObj,expectedresult):
 
-        print "\n"
-        fnName="DTCPMgrStopSource"
-        #Add parameters to test object
-        tdkTestObj.addParameter("funcName", fnName)
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult)
-        #Get the result of execution
-        result = tdkTestObj.getResult()
-        details = tdkTestObj.getResultDetails()
-        print "%s"%(fnName)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
+    print("\n")
+    fnName="DTCPMgrStopSource"
+    #Add parameters to test object
+    tdkTestObj.addParameter("funcName", fnName)
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult)
+    #Get the result of execution
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    print("%s"%(fnName))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def createSourceSession(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrCreateSourceSession";
+    print("\n")
+    fnName="DTCPMgrCreateSourceSession";
 
-        #Add parameters to test object
-        sinkIp=str(kwargs["sinkIp"])
-        keyLabel=int(kwargs["keyLabel"])
-	pcpPacketSize=int(kwargs["pcpPacketSize"])
-	maxPacketSize=int(kwargs["maxPacketSize"])
+    #Add parameters to test object
+    sinkIp=str(kwargs["sinkIp"])
+    keyLabel=int(kwargs["keyLabel"])
+    pcpPacketSize=int(kwargs["pcpPacketSize"])
+    maxPacketSize=int(kwargs["maxPacketSize"])
 
-  	tdkTestObj.addParameter("funcName", fnName);
-  	tdkTestObj.addParameter("strParam1", sinkIp);
-  	tdkTestObj.addParameter("intParam2", keyLabel);
-  	tdkTestObj.addParameter("intParam3", pcpPacketSize);
-  	tdkTestObj.addParameter("intParam4", maxPacketSize);
+    tdkTestObj.addParameter("funcName", fnName);
+    tdkTestObj.addParameter("strParam1", sinkIp);
+    tdkTestObj.addParameter("intParam2", keyLabel);
+    tdkTestObj.addParameter("intParam3", pcpPacketSize);
+    tdkTestObj.addParameter("intParam4", maxPacketSize);
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	print "%s [sinkIp:%s keyLabel:%d pcpPacketSize:%d maxPacketSize:%d]"%(fnName,sinkIp,keyLabel,pcpPacketSize,maxPacketSize);
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s [sinkIp:%s keyLabel:%d pcpPacketSize:%d maxPacketSize:%d]"%(fnName,sinkIp,keyLabel,pcpPacketSize,maxPacketSize));
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def createSinkSession(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrCreateSinkSession";
+    print("\n")
+    fnName="DTCPMgrCreateSinkSession";
 
-        #Add parameters to test object
-        srcIp=str(kwargs["srcIp"])
-        srcPort=int(kwargs["srcPort"])
-        uniqueKey=int(kwargs["uniqueKey"])
-        maxPacketSize=int(kwargs["maxPacketSize"])
+    #Add parameters to test object
+    srcIp=str(kwargs["srcIp"])
+    srcPort=int(kwargs["srcPort"])
+    uniqueKey=int(kwargs["uniqueKey"])
+    maxPacketSize=int(kwargs["maxPacketSize"])
 
-        tdkTestObj.addParameter("funcName", fnName);
-        tdkTestObj.addParameter("strParam1", srcIp);
-        tdkTestObj.addParameter("intParam2", srcPort);
-        tdkTestObj.addParameter("intParam3", uniqueKey);
-        tdkTestObj.addParameter("intParam4", maxPacketSize);
+    tdkTestObj.addParameter("funcName", fnName);
+    tdkTestObj.addParameter("strParam1", srcIp);
+    tdkTestObj.addParameter("intParam2", srcPort);
+    tdkTestObj.addParameter("intParam3", uniqueKey);
+    tdkTestObj.addParameter("intParam4", maxPacketSize);
 
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	print "%s [srcIp:%s srcPort:%d uniqueKey:%d maxPacketSize:%d]"%(fnName,srcIp,srcPort,uniqueKey,maxPacketSize)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s [srcIp:%s srcPort:%d uniqueKey:%d maxPacketSize:%d]"%(fnName,srcIp,srcPort,uniqueKey,maxPacketSize))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def processPacket(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrProcessPacket"
+    print("\n")
+    fnName="DTCPMgrProcessPacket"
 
-        #Add parameters to test object
-        tdkTestObj.addParameter("funcName", fnName)
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult)
-        #Get the result of execution
-        result = tdkTestObj.getResult()
-        details = tdkTestObj.getResultDetails()
-	print "%s"%(fnName)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
-	time.sleep(10);
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Add parameters to test object
+    tdkTestObj.addParameter("funcName", fnName)
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult)
+    #Get the result of execution
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    print("%s"%(fnName))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
+    time.sleep(10);
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def releasePacket(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrReleasePacket"
-        #Add parameters to test object
-        tdkTestObj.addParameter("funcName", fnName)
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult)
-        #Get the result of execution
-        result = tdkTestObj.getResult()
-        details = tdkTestObj.getResultDetails()
-        print "%s"%(fnName)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    print("\n")
+    fnName="DTCPMgrReleasePacket"
+    #Add parameters to test object
+    tdkTestObj.addParameter("funcName", fnName)
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult)
+    #Get the result of execution
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    print("%s"%(fnName))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 
 def deleteSession(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrDeleteDTCPSession"
-        #Add parameters to test object
-        deviceType=int(kwargs["deviceType"])
-        tdkTestObj.addParameter("funcName", fnName)
-        tdkTestObj.addParameter("intParam3", deviceType);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult)
-        #Get the result of execution
-        result = tdkTestObj.getResult()
-        details = tdkTestObj.getResultDetails()
-        print "%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    print("\n")
+    fnName="DTCPMgrDeleteDTCPSession"
+    #Add parameters to test object
+    deviceType=int(kwargs["deviceType"])
+    tdkTestObj.addParameter("funcName", fnName)
+    tdkTestObj.addParameter("intParam3", deviceType);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult)
+    #Get the result of execution
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    print("%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 def getSessionInfo(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrGetSessionInfo"
+    print("\n")
+    fnName="DTCPMgrGetSessionInfo"
 
-        #Add parameters to test object
-        deviceType=int(kwargs["deviceType"])
-        tdkTestObj.addParameter("funcName", fnName)
-        tdkTestObj.addParameter("intParam3", deviceType);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult)
-        #Get the result of execution
-        result = tdkTestObj.getResult()
-        details = tdkTestObj.getResultDetails()
-        print "%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType)
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = details
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    #Add parameters to test object
+    deviceType=int(kwargs["deviceType"])
+    tdkTestObj.addParameter("funcName", fnName)
+    tdkTestObj.addParameter("intParam3", deviceType);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult)
+    #Get the result of execution
+    result = tdkTestObj.getResult()
+    details = tdkTestObj.getResultDetails()
+    print("%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType))
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = details
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue
 
 def getNumSessions(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrGetNumSessions";
-        #Add parameters to test object
-        deviceType=int(kwargs["deviceType"])
-        tdkTestObj.addParameter("funcName", fnName);
-        tdkTestObj.addParameter("intParam2", deviceType);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType);
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Num of type(%d) sessions: [%s]"%(deviceType,details)
+    print("\n")
+    fnName="DTCPMgrGetNumSessions";
+    #Add parameters to test object
+    deviceType=int(kwargs["deviceType"])
+    tdkTestObj.addParameter("funcName", fnName);
+    tdkTestObj.addParameter("intParam2", deviceType);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s [deviceType:%d (0-source 1-sink 2-all) ]"%(fnName,deviceType));
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Num of type(%d) sessions: [%s]"%(deviceType,details))
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        return details
+    return details
 
 
 def setLogLevel(tdkTestObj,expectedresult,kwargs={}):
 
-        print "\n"
-        fnName="DTCPMgrSetLogLevel";
-        #Add parameters to test object
-        level=int(kwargs["level"])
-        tdkTestObj.addParameter("funcName", fnName);
-        tdkTestObj.addParameter("intParam2", level);
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedresult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "%s [level:%d]"%(fnName,level);
-        print "Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result)
-        print "Details: [%s]"%details
+    print("\n")
+    fnName="DTCPMgrSetLogLevel";
+    #Add parameters to test object
+    level=int(kwargs["level"])
+    tdkTestObj.addParameter("funcName", fnName);
+    tdkTestObj.addParameter("intParam2", level);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("%s [level:%d]"%(fnName,level));
+    print("Expected Result: [%s] Actual Result: [%s]"%(expectedresult,result))
+    print("Details: [%s]"%details)
 
-        #Set the result status of execution
-        if expectedresult in result:
-                tdkTestObj.setResultStatus("SUCCESS");
-		retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-		retValue = "FAILURE"
+    #Set the result status of execution
+    if expectedresult in result:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue

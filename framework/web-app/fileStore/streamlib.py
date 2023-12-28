@@ -28,140 +28,140 @@ import json
 # module class
 #------------------------------------------------------------------------------
 class StreamingDetails:
-	
-	"""Class to hold Streaming details
 
-    	Syntax       : OBJ = StreamingDetails(url) 
-    	Parameters   : url - 
-    	Description  : This class stores the information of Stream.
-	"""	
+    """Class to hold Streaming details
 
-    	#------------------------------------------------------------------------------
-    	# __init__ and __del__ block
-    	#------------------------------------------------------------------------------
+    Syntax       : OBJ = StreamingDetails(url)
+    Parameters   : url -
+    Description  : This class stores the information of Stream.
+    """
 
-	def __init__(self, url):
-		try:
-			self.url = url
-			self.data = json.loads(self.url)
-		except :
-			print "#TDK_@error-Error occured in fetching stream details"
-			sys.stdout.flush()
-		else:
-			return 
+    #------------------------------------------------------------------------------
+    # __init__ and __del__ block
+    #------------------------------------------------------------------------------
 
-	def __del__(self):
-		return
-		
-	#------------------------------------------------------------------------------
-    	# Public methods
-    	#------------------------------------------------------------------------------
+    def __init__(self, url):
+        try:
+            self.url = url
+            self.data = json.loads(self.url)
+        except :
+            print("#TDK_@error-Error occured in fetching stream details")
+            sys.stdout.flush()
+        else:
+            return
 
-	def getGatewayIp(self):
+    def __del__(self):
+        return
 
-    	# Returns the Gateway IP of corresponding stream.
+    #------------------------------------------------------------------------------
+    # Public methods
+    #------------------------------------------------------------------------------
 
-    	# Syntax       : OBJ.getGatewayIp()
-    	# Description  : returns the Gateway IP of corresponding stream
-  	# Return Value : gateway IP 
+    def getGatewayIp(self):
+
+    # Returns the Gateway IP of corresponding stream.
+
+    # Syntax       : OBJ.getGatewayIp()
+    # Description  : returns the Gateway IP of corresponding stream
+    # Return Value : gateway IP
 
 
-		gateway = self.data['gatewayip']
-		if (gateway == "null"):
-			print "#TDK_@error-ERROR : Please make sure corresponding gateway device is selected in \"Devices\" page"
-			sys.stdout.flush()
-			sys.exit()
-		return gateway
-		
-	########## End of Function ##########
-   
-	def getChannelType(self):
+        gateway = self.data['gatewayip']
+        if (gateway == "null"):
+            print("#TDK_@error-ERROR : Please make sure corresponding gateway device is selected in \"Devices\" page")
+            sys.stdout.flush()
+            sys.exit()
+        return gateway
 
-	# Returns the Channel Type  of corresponding stream.
+    ########## End of Function ##########
 
-    	# Syntax       : OBJ.getChannelType()
-    	# Description  : returns the Channel Type of corresponding stream.
-  	# Return Value : Channel Type 
+    def getChannelType(self):
 
-		channeltype = self.data['channeltype']
-		if (channeltype == "null"):
-                        print "#TDK_@error-ERROR : Please make sure Channel type is selected for requested stream ID"
-                        sys.stdout.flush()
-                        sys.exit()
-		return channeltype
-		
-	########## End of Function ##########
-	
-	def getOCAPID(self):
+    # Returns the Channel Type  of corresponding stream.
 
-	# Returns the ocap id  of corresponding stream.
+    # Syntax       : OBJ.getChannelType()
+    # Description  : returns the Channel Type of corresponding stream.
+    # Return Value : Channel Type
 
-    	# Syntax       : OBJ.getOCAPID()
-    	# Description  : return the ocap id of corresponding stream.
-  	# Return Value : ocap id 
+        channeltype = self.data['channeltype']
+        if (channeltype == "null"):
+            print("#TDK_@error-ERROR : Please make sure Channel type is selected for requested stream ID")
+            sys.stdout.flush()
+            sys.exit()
+        return channeltype
 
-		ocapid = self.data['ocapid']
-		if (ocapid == "null"):
-			print "#TDK_@error-ERROR : Please make sure ocapID's are entered for corresponding gateway device in \"Devices\" page"
-                        sys.stdout.flush()
-                        sys.exit()
+    ########## End of Function ##########
 
-		return ocapid
-		
-	########## End of Function ##########
-	
-	def getRecorderID(self):
+    def getOCAPID(self):
 
-	# Returns the recorder id of corresponding stream.
+    # Returns the ocap id  of corresponding stream.
 
-    	# Syntax       : OBJ.getRecorderID()
-    	# Description  : return the recorder id of corresponding stream.
-  	# Return Value : recorder id 
+    # Syntax       : OBJ.getOCAPID()
+    # Description  : return the ocap id of corresponding stream.
+    # Return Value : ocap id
 
-		recorderid = self.data['recorderid']
-		if (recorderid == "null"):
-                        print "#TDK_@error-ERROR : Please make sure recorderID is entered for corresponding gateway device in \"Devices\" page"
-                        sys.stdout.flush()
-                        sys.exit()
+        ocapid = self.data['ocapid']
+        if (ocapid == "null"):
+            print("#TDK_@error-ERROR : Please make sure ocapID's are entered for corresponding gateway device in \"Devices\" page")
+            sys.stdout.flush()
+            sys.exit()
 
-		return recorderid
-		
-	########## End of Function ##########
-	
-	def getAudioFormat(self):
+        return ocapid
 
-	# Returns the audio format of corresponding stream.
+    ########## End of Function ##########
 
-    	# Syntax       : OBJ.getAudioFormat()
-    	# Description  : returns the audioformat of corresponding stream.
-  	# Return Value : audioformat
+    def getRecorderID(self):
 
-		audioformat = self.data['audioformat']
-		if (audioformat == "null"):
-                        print "#TDK_@error-ERROR : Please make sure Audio Format is selected for requested stream ID"
-                        sys.stdout.flush()
-                        sys.exit()
+    # Returns the recorder id of corresponding stream.
 
-		return audioformat
-		
-	########## End of Function ##########
-	
-	def getVideoFormat(self):
+    # Syntax       : OBJ.getRecorderID()
+    # Description  : return the recorder id of corresponding stream.
+    # Return Value : recorder id
 
-	# Returns the video format of corresponding stream.
+        recorderid = self.data['recorderid']
+        if (recorderid == "null"):
+            print("#TDK_@error-ERROR : Please make sure recorderID is entered for corresponding gateway device in \"Devices\" page")
+            sys.stdout.flush()
+            sys.exit()
 
-    	# Syntax       : OBJ.getVideoFormat()
-    	# Description  : returns the videoformat of corresponding stream.
-  	# Return Value : videoformat
+        return recorderid
 
-		videoformat = self.data['videoformat']
-		if (videoformat == "null"):
-                        print "#TDK_@error-ERROR : Please make sure Video Format is selected for requested stream ID"
-                        sys.stdout.flush()
-                        sys.exit()
+    ########## End of Function ##########
 
-		return videoformat
-		
-	########## End of Function ##########
+    def getAudioFormat(self):
+
+    # Returns the audio format of corresponding stream.
+
+    # Syntax       : OBJ.getAudioFormat()
+    # Description  : returns the audioformat of corresponding stream.
+    # Return Value : audioformat
+
+        audioformat = self.data['audioformat']
+        if (audioformat == "null"):
+            print("#TDK_@error-ERROR : Please make sure Audio Format is selected for requested stream ID")
+            sys.stdout.flush()
+            sys.exit()
+
+        return audioformat
+
+    ########## End of Function ##########
+
+    def getVideoFormat(self):
+
+    # Returns the video format of corresponding stream.
+
+    # Syntax       : OBJ.getVideoFormat()
+    # Description  : returns the videoformat of corresponding stream.
+    # Return Value : videoformat
+
+        videoformat = self.data['videoformat']
+        if (videoformat == "null"):
+            print("#TDK_@error-ERROR : Please make sure Video Format is selected for requested stream ID")
+            sys.stdout.flush()
+            sys.exit()
+
+        return videoformat
+
+    ########## End of Function ##########
 
 ########## End of Class ##########

@@ -34,7 +34,7 @@ import tdklib;
 # Parameters  : obj - module object
 #             : testcase - primitve test to be executed
 #             : params - parameters to be added to primitve test
-#             : returnObject - True/False based on whether to return the tdkTestObj  
+#             : returnObject - True/False based on whether to return the tdkTestObj
 # Return Value: True,details,tdkTestObj(on success), False,details,tdkTestObj(on failure)
 
 def executeTest(obj, testcase , params="", returnObject = False):
@@ -42,20 +42,20 @@ def executeTest(obj, testcase , params="", returnObject = False):
     expectedresult="SUCCESS"
     if len(params) and "no parameters" not in params:
         for i in range(0,len(params)):
-            element = params.keys()[i]
+            element = list(params.keys())[i]
             tdkTestObj.addParameter(element,params[element]);
     #Execute the test case in DUT
     tdkTestObj.executeTestCase("SUCCESS");
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if actualResult == expectedresult:
-        print "%s SUCCESS"%testcase
+        print("%s SUCCESS"%testcase)
         tdkTestObj.setResultStatus("SUCCESS");
         if returnObject:
             return True,details,tdkTestObj
         return True,details
     else:
-        print "%s FAILURE"%testcase
+        print("%s FAILURE"%testcase)
         tdkTestObj.setResultStatus("FAILURE")
         if returnObject:
             return False,details,tdkTestObj
@@ -68,7 +68,7 @@ def executeTest(obj, testcase , params="", returnObject = False):
 # Description : Function to generically execute testcase for any module object
 # Parameters  : obj - module object
 #             : filename - file to be read
-#             : returnObject - message based on whether to return the tdkTestObj  
+#             : returnObject - message based on whether to return the tdkTestObj
 # Return Value: message
 
 def readBigFile(obj, fileName):
@@ -78,7 +78,7 @@ def readBigFile(obj, fileName):
     cutbyte = 0
     tdkTestObj = obj.createTestStep('ExecuteCommand')
     expectedResult = "SUCCESS"
-    print " Reading File ",str(fileName)
+    print(" Reading File ",str(fileName))
     while (True):
         command = "dd if=" + str(fileName) + " bs=1 skip=" + str(cutbyte) + " count=" + str(readbyte) + " > /tmp/output.txt; cat /tmp/output.txt "
         tdkTestObj.addParameter("command", command)
@@ -91,10 +91,10 @@ def readBigFile(obj, fileName):
             if len(details) < bufferlength:
                 break;
         else:
-            print "File Read FAILURE"
+            print("File Read FAILURE")
             tdkTestObj.setResultStatus("FAILURE")
             return message;
-    print "File Read SUCCESS"
+    print("File Read SUCCESS")
     message = message.replace(r'\n', '\n');
     tdkTestObj.setResultStatus("SUCCESS");
     return message

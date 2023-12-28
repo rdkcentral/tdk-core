@@ -55,7 +55,7 @@ def check_pre_requisites(obj):
 #SET PRE_REQUISITES
 #---------------------------------------------------------------------
 def set_pre_requisites(obj):
-    print "\nDeactivating Cobalt"
+    print("\nDeactivating Cobalt")
     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus');
     tdkTestObj.addParameter("plugin","Cobalt");
     tdkTestObj.addParameter("status","deactivate");
@@ -63,7 +63,7 @@ def set_pre_requisites(obj):
     result1 = tdkTestObj.getResult();
     time.sleep(5)
 
-    print "\nActivate and resume WebKitBrowser"
+    print("\nActivate and resume WebKitBrowser")
     params = '{"callsign":"WebKitBrowser", "type":"", "uri":""}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue')
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
@@ -84,19 +84,19 @@ def set_pre_requisites(obj):
 def revert_value(curr_webkit_status,curr_cobalt_status,obj):
     webkit_status = "SUCCESS" if curr_webkit_status == "None" else 'FAILURE';
     if curr_webkit_status != "deactivated" and curr_webkit_status != "None":
-        print "WebKit was activated"
+        print("WebKit was activated")
     elif curr_webkit_status == "deactivated":
-        print "WebKit was deactivated"
+        print("WebKit was deactivated")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus');
         tdkTestObj.addParameter("plugin","WebKitBrowser");
         tdkTestObj.addParameter("status","deactivate");
         tdkTestObj.executeTestCase(expectedResult);
         webkit_status = tdkTestObj.getResult();
 
-    print "\nRevert Cobalt status"
+    print("\nRevert Cobalt status")
     cobalt_status = "SUCCESS" if curr_cobalt_status == "None" else "FAILURE";
     if curr_cobalt_status != "deactivated" and curr_cobalt_status != "None":
-        print "Cobalt was activated"
+        print("Cobalt was activated")
         params = '{"callsign":"Cobalt", "type":"", "uri":""}'
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
@@ -104,7 +104,7 @@ def revert_value(curr_webkit_status,curr_cobalt_status,obj):
         tdkTestObj.executeTestCase(expectedResult);
         cobalt_status = tdkTestObj.getResult();
     elif curr_cobalt_status == "deactivated":
-        print "Cobalt was deactivated"
+        print("Cobalt was deactivated")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus');
         tdkTestObj.addParameter("plugin","Cobalt");
         tdkTestObj.addParameter("status","deactivate");

@@ -22,7 +22,7 @@ import time
 import os
 import subprocess
 import inspect
-import ConfigParser
+import configparser
 from SSHUtility import *
 
 deviceIP=""
@@ -55,13 +55,13 @@ def rdkvsecurity_executeInTM (command):
     try:
         if "" == command:
             outdata = "FAILURE"
-            print "[ERROR]: Command to be executed cannot be empty"
+            print("[ERROR]: Command to be executed cannot be empty")
         else:
-            print "Going to execute %s..." %(command)
+            print("Going to execute %s..." %(command))
             outdata = subprocess.check_output (command, shell=True)
     except:
         outdata = "FAILURE"
-        print "#TDK_@error-ERROR : Unable to execute %s successfully" %(command)
+        print("#TDK_@error-ERROR : Unable to execute %s successfully" %(command))
     return outdata
 
 #-------------------------------------------------------------------
@@ -84,13 +84,13 @@ def rdkvsecurity_executeInDUT (sshMethod, credentials, command):
         password = credentialsList[2]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     return output
 
 #----------------------------------------------------------------------
@@ -115,21 +115,21 @@ def rdkvsecurity_getDeviceConfig (basePath, configKey):
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
         #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output;
 #---------------------------------------------------------------
 #EXECUTE CURL REQUESTS
@@ -149,8 +149,8 @@ def execute_step(Data):
             result = "EXCEPTION OCCURRED"
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
 
 #-------------------------------------------------------------------
@@ -193,4 +193,3 @@ def rdkvsecurity_getReqValueFromResult(method,reqValue):
         return value
     else:
         return result
-                              

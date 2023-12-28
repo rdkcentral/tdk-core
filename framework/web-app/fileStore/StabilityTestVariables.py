@@ -131,7 +131,7 @@ cobalt_trickplay_duration = 1440
 ssh_max_count = 30
 
 ##Cobalt video search and play test
-#name of the video to be searched in Cobalt 
+#name of the video to be searched in Cobalt
 cobalt_search_and_play_video_name = ""
 
 #Maximum number of video searches required
@@ -213,7 +213,7 @@ set_resolution_max_count = 1000
 #URL used to test vimeo videoplayback
 vimeo_test_url="https://widgets.metrological.com/lightning/rdk/d431ce8577be56e82630650bf701c57d#app:com.metrological.app.VimeoRelease"
 
-# Test duration in minutes till test should be performed, it should be less than the duration of test video 
+# Test duration in minutes till test should be performed, it should be less than the duration of test video
 vimeo_test_duration = 720
 
 #URL used to test encrypted videoplayback

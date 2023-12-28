@@ -27,7 +27,7 @@ import time
 import os
 import subprocess
 import inspect
-import ConfigParser
+import configparser
 from time import sleep
 import pexpect
 import PerformanceTestVariables
@@ -55,8 +55,8 @@ def init_module (libobj, port, deviceInfo):
         SSHUtility.deviceMAC = deviceMac
         SSHUtility.realpath = libobj.realpath
     except Exception as e:
-       print "\nException Occurred while getting MAC \n"
-       print e
+        print("\nException Occurred while getting MAC \n")
+        print(e)
 #-------------------------------------------------------------------
 # EXECUTE A COMMAND IN DUT SHELL AND GET THE OUTPUT
 # Description  : Execute a command in DUT through ssh_and_execute() from SSHUtility library and get the output
@@ -77,27 +77,27 @@ def containerization_executeInDUT (sshMethod, credentials, command):
         password = credentialsList[2]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     return output
 #-------------------------------------------------------------------
 #GET THE SSH DETAILS FROM CONFIGURATION FILE
 #-------------------------------------------------------------------
 def containerization_getSSHParams(realpath,deviceIP):
     ssh_dict = {}
-    print "\n getting ssh params from conf file"
+    print("\n getting ssh params from conf file")
     conf_file,result = getConfigFileName(realpath)
     if result == "SUCCESS":
         result,ssh_method = getDeviceConfigKeyValue(conf_file,"SSH_METHOD")
         result,user_name = getDeviceConfigKeyValue(conf_file,"SSH_USERNAME")
         result,password = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
         if any(value == "" for value in (ssh_method,user_name,password)):
-            print "please configure values before test"
+            print("please configure values before test")
             ssh_dict = {}
         else:
             ssh_dict["ssh_method"] = ssh_method
@@ -105,7 +105,7 @@ def containerization_getSSHParams(realpath,deviceIP):
                 password = ""
             ssh_dict["credentials"] = deviceIP +","+ user_name +","+ password
     else:
-        print "Failed to find the device specific config file"
+        print("Failed to find the device specific config file")
     ssh_dict = json.dumps(ssh_dict)
     return ssh_dict
 
@@ -121,7 +121,7 @@ def containerization_validateProcEntry(sshmethod,credentials,video_validation_sc
         method_to_call = getattr(lib, method)
         result = method_to_call(sshmethod,credentials)
     except Exception as e:
-        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        print("\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n")
         result = "FAILURE"
     finally:
         return result
@@ -137,13 +137,13 @@ def containerization_executeInTM (command):
     try:
         if "" == command:
             outdata = "FAILURE"
-            print "[ERROR]: Command to be executed cannot be empty"
+            print("[ERROR]: Command to be executed cannot be empty")
         else:
-            print "[INFO] Going to execute %s..." %(command)
+            print("[INFO] Going to execute %s..." %(command))
             outdata = subprocess.check_output (command, shell=True)
     except:
         outdata = "FAILURE"
-        print "#TDK_@error-ERROR : Unable to execute %s successfully" %(command)
+        print("#TDK_@error-ERROR : Unable to execute %s successfully" %(command))
     return outdata
 #----------------------------------------------------------------------
 # GET DEVICE CONFIGURATION FROM THE DEVICE CONFIG FILE
@@ -160,28 +160,28 @@ def containerization_getDeviceConfig (basePath, configKey):
     deviceNameConfigFile = configPath + "/" + deviceName + ".config"
     deviceTypeConfigFile = configPath + "/" + deviceType + ".config"
     # Check whether device / platform config files required for
-    # executing the test are present  
+    # executing the test are present
     if os.path.exists (deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
     elif os.path.exists (deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
         #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output;
 #------------------------------------------------------------------
 # REBOOT THE DEVICE
@@ -191,16 +191,16 @@ def containerization_rebootDevice(waitTime):
     timeout = time.time() + 30*5
     deviceStatus = "DOWN"
     if status != "activated":
-        print "[INFO] Activating System plugin for rebooting the device"
+        print("[INFO] Activating System plugin for rebooting the device")
         params = '{"callsign":"org.rdk.System"}'
         status = containerization_setValue("Controller.1.activate",params)
         status = containerization_getPluginStatus("org.rdk.System")
     if status == "activated":
-        print "[INFO] System plugin is activated"
+        print("[INFO] System plugin is activated")
         data = '"method": "org.rdk.System.1.reboot","params": {"rebootReason": "TDK_TESTING"}'
         result = execute_step(data)
         if result != "EXCEPTION OCCURRED":
-            print "\n[INFO] Waiting for the device to come up..."
+            print("\n[INFO] Waiting for the device to come up...")
             time.sleep(waitTime)
             while True:
                 status = containerization_getTestDeviceStatus()
@@ -209,18 +209,18 @@ def containerization_rebootDevice(waitTime):
                     break;
                 elif time.time() > timeout:
                     deviceStatus = "DOWN"
-                    print "[INFO] Device is not coming up even after 2.5 mins"
+                    print("[INFO] Device is not coming up even after 2.5 mins")
                     break;
                 time.sleep(5)
             if deviceStatus == "UP":
-                print "[INFO] Device is UP"
+                print("[INFO] Device is UP")
                 return "SUCCESS"
             else:
                 return "FAILURE"
         else:
             return result
     else:
-        print "FAILURE: Unable to activate System plugin"
+        print("FAILURE: Unable to activate System plugin")
         return "EXCEPTION OCCURED"
 
 #------------------------------------------------------------------
@@ -252,17 +252,17 @@ def execute_step(Data):
     try:
         response = requests.post(url, headers=headers, data=data, timeout=20)
         json_response = json.loads(response.content)
-        print "\n---------------------------------------------------------------------------------------------------"
-        print "Json command : ", data
-        print "\n Response : ", json_response, "\n"
-        print "----------------------------------------------------------------------------------------------------\n"
+        print("\n---------------------------------------------------------------------------------------------------")
+        print("Json command : ", data)
+        print("\n Response : ", json_response, "\n")
+        print("----------------------------------------------------------------------------------------------------\n")
         result = json_response.get("result")
         if result != None and "'success': False" in str(result):
             result = "EXCEPTION OCCURRED"
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
 #-------------------------------------------------------------------
 # GET THE VALUE OF A METHOD
@@ -326,9 +326,9 @@ def check_status_of_rdkshell():
         if "activated" in rdkshell_status:
             activated = True
         else:
-            print "\n Unable to activate RDKShell plugin"
+            print("\n Unable to activate RDKShell plugin")
     else:
-        print "\n RDKShell status in DUT:",rdkshell_status
+        print("\n RDKShell status in DUT:",rdkshell_status)
     return activated
 
 #---------------------------------------------------------------
@@ -339,7 +339,7 @@ def check_status_of_rdkshell():
 def containerization_obtainCredentials():
     config_status = "SUCCESS"
     result = "SUCCESS"
-    print "[INFO] Retrieving Configuration values from config file......."
+    print("[INFO] Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD","SSH_USERNAME", "SSH_PASSWORD"]
     configValues = {}
     global password
@@ -350,11 +350,11 @@ def containerization_obtainCredentials():
         containerization_getDeviceConfig(libObj.realpath,configKey)
         configValues[configKey] = containerization_getDeviceConfig(libObj.realpath,configKey)
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -366,7 +366,7 @@ def containerization_obtainCredentials():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
@@ -387,12 +387,12 @@ def containerization_copyToolToDUT(fileName,hostname,username,password,destPath)
         child = pexpect.spawn(command_to_scp)
         r=child.expect (['password:',pexpect.EOF])
         if r==0:
-           child.sendline ('password')
-           child.expect(pexpect.EOF)
+            child.sendline ('password')
+            child.expect(pexpect.EOF)
         child.close()
     except Exception as e:
-        print "[ERROR] basePath\nSCP failed"
-        print e
+        print("[ERROR] basePath\nSCP failed")
+        print(e)
         outdata = "FAILURE"
     return outdata
 #---------------------------------------------------------------
@@ -418,49 +418,49 @@ def containerization_cloneDobby(basePath):
             output = containerization_executeInTM(command)
         #if Dobby  is successfully downloaded in fileStore
         if "FAILURE" not in output and int(output) == 1:
-            print "SUCCESS: Dobby is installed in TM\n"
+            print("SUCCESS: Dobby is installed in TM\n")
             #Create tar ball to run in DUT
             #Command = remove existing result files ; make directory for dobby result files ; tar the whole dobby directory ; check whether tar file is created by ls command
-            print "[INFO] Creating tar ball to run in DUT"
+            print("[INFO] Creating tar ball to run in DUT")
             command = "rm -rf " + basePath + "/fileStore/dobby-security-tool/files ; mkdir -p " + basePath + "/fileStore/dobby-security-tool/files; cd " + basePath + "/fileStore/;tar czfP dobby-security-tool/files/dobby-security-tool-remote.tar.gz --exclude=/dobby-security-tool/files/dobby-security-tool-remote.tar.gz dobby-security-tool; ls dobby-security-tool/files"
             result = containerization_executeInTM(command)
             if "FAILURE" not in result and "dobby-security-tool-remote.tar.gz" in result:
-                print "SUCCESS: Tar ball was created successfully\n"
+                print("SUCCESS: Tar ball was created successfully\n")
                 #Copy dobby tool tar ball into DUT
                 fileToTransfer = basePath + "/fileStore/dobby-security-tool/files/dobby-security-tool-remote.tar.gz"
                 destPath = "/home/root"
                 result = containerization_copyToolToDUT(fileToTransfer,deviceIP,user_name,password,destPath)
                 if "FAILURE" in result:
-                    print "FAILURE: Could not copy the files to the DUT"
+                    print("FAILURE: Could not copy the files to the DUT")
                     clone_dobby_status = "FAILURE"
                 else:
                     credentials = deviceIP + ',' + user_name + ',' + password
                     command = '[ -f /home/root/dobby-security-tool-remote.tar.gz ] && echo 1 || echo 0'
                     result = containerization_executeInDUT(ssh_method,credentials,command)
             else:
-                print "FAILURE: Error while creating the Tar ball"
+                print("FAILURE: Error while creating the Tar ball")
                 clone_dobby_status = "FAILURE"
             if "FAILURE" in result:
-                print "FAILURE: Could not copy the tar file to the DUT"
+                print("FAILURE: Could not copy the tar file to the DUT")
                 clone_dobby_status = "FAILURE"
             elif int(str(result).split("\n")[1]) == 1:
-                print "SUCCESS: Dobby security tool tar ball has been copied to DUT in as /home/root/dobby-security-tool-remote.tar.gz successfully\n"
+                print("SUCCESS: Dobby security tool tar ball has been copied to DUT in as /home/root/dobby-security-tool-remote.tar.gz successfully\n")
                 #Untar the dobby tar ball
                 #Command = untar dobby tar ball;
-                print "\n[INFO] Untaring Dobby security tool in DUT...."
+                print("\n[INFO] Untaring Dobby security tool in DUT....")
                 command = "cd /home/root; tar xzf dobby-security-tool-remote.tar.gz; [ -d /home/root/dobby-security-tool ] && echo 1 || echo 0"
                 #SSH and execute command
                 result = containerization_executeInDUT(ssh_method,credentials,command)
                 if int(str(result).split("\n")[1]) == 1:
-                    print "SUCCESS: Dobby test tool moved to DUT"
+                    print("SUCCESS: Dobby test tool moved to DUT")
                 else:
-                    print "FAILURE: Could not untar the file in the DUT"
+                    print("FAILURE: Could not untar the file in the DUT")
                     clone_dobby_status = "FAILURE"
             else:
-                print "FAILURE: Could not copy the tar file to the DUT"
+                print("FAILURE: Could not copy the tar file to the DUT")
                 clone_dobby_status = "FAILURE"
         else:
-            print "FAILURE: Error Cloning the file in the TM"
+            print("FAILURE: Error Cloning the file in the TM")
             clone_dobby_status = "FAILURE"
     else:
         clone_dobby_status = "FAILURE"
@@ -480,52 +480,52 @@ def containerization_setPreRequisites(datamodel):
         credentials = deviceIP + ',' + user_name + ',' + password
         for datamodels in datamodel:
             command =  'tr181 -d/ '+str(datamodels)
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = containerization_executeInDUT(ssh_method,credentials,command)
             if "FAILURE" not in output:
                 output = str(output).split("\n")[1]
                 if "true" in output.lower():
-                    print 'SUCCESS: The '+datamodels+' parameter is already enabled'
+                    print('SUCCESS: The '+datamodels+' parameter is already enabled')
                 elif "false" in output.lower() or "empty" in output.lower():
                     default_state = "FAILURE"
                     command =  'tr181 -d -s -t boolean -v true '+datamodels
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
                     enableStatus = enableStatus.strip()
                     if "set operation success" in enableStatus.lower():
                         rebootFlag = 1
-                        print 'SUCCESS: Successfully set the '+datamodels+' parameter'
+                        print('SUCCESS: Successfully set the '+datamodels+' parameter')
                     else:
-                        print 'FAILURE: Could not able to set the '+datamodels+' parameter'
+                        print('FAILURE: Could not able to set the '+datamodels+' parameter')
                         pre_requisite_status = "FAILURE"
                 else:
-                    print 'FAILURE: Failed to retrieve '+datamodels+' enabled status'
+                    print('FAILURE: Failed to retrieve '+datamodels+' enabled status')
                     pre_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Error while executing the command'
+                print('FAILURE: Error while executing the command')
                 pre_requisite_status = "FAILURE"
 
 
         if "FAILURE" not in pre_requisite_status and rebootFlag == 1:
-            print '[INFO] Rebooting the Device................'
+            print('[INFO] Rebooting the Device................')
             status = containerization_rebootDevice(60)
             if "SUCCESS" in status:
                 for datamodels in datamodel:
                     command =  'tr181 -d '+datamodels
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
                     enableStatus = str(enableStatus).split("\n")[1]
                     if "true" in enableStatus.lower():
-                        print 'SUCCESS: Successfully enabled the '+datamodels+' parameter'
+                        print('SUCCESS: Successfully enabled the '+datamodels+' parameter')
                     else:
-                        print 'FAILURE: '+datamodels+' parameter not enabled'
+                        print('FAILURE: '+datamodels+' parameter not enabled')
                         pre_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Error while rebooting the device'
+                print('FAILURE: Error while rebooting the device')
                 pre_requisite_status = "FAILURE"
 
     else:
-        print 'FAILURE: Failed to retrieve required configurations'
+        print('FAILURE: Failed to retrieve required configurations')
         pre_requisite_status = "FAILURE"
     return pre_requisite_status
 
@@ -536,49 +536,49 @@ def containerization_setPreRequisites(datamodel):
 # Return Value : Returns 'SUCCESS' on successful execution or "FAILURE" in case of failure
 #---------------------------------------------------------------
 def containerization_launchApplication(launch):
-     launch_status = "SUCCESS"
-     result=[]
-     state = containerization_getPluginStatus("org.rdk.RDKShell")
-     if state == "deactivated":
-         print "[INFO] RDKShell plugin is deactivated"
-         print "[INFO] Activating RDKShell plugin"
-         params = '{"callsign":"org.rdk.RDKShell"}'
-         status = containerization_setValue("Controller.1.activate",params)
-         state = containerization_getPluginStatus("org.rdk.RDKShell")
-	 start_launch = ""
-     if state == "activated":
-         print 'SUCCESS: RDKShell Plugin in Activated State'
-         launch = launch.split(",")
-         for test in launch:
-                callsign,uri=test.split("-")
-                if str(callsign).lower() == "cobalt":
-                    params = '{"callsign": "'+callsign+'","type":"'+callsign+'","visible":true,"configuration": {"url":"'+uri+'"}}'
+    launch_status = "SUCCESS"
+    result=[]
+    state = containerization_getPluginStatus("org.rdk.RDKShell")
+    if state == "deactivated":
+        print("[INFO] RDKShell plugin is deactivated")
+        print("[INFO] Activating RDKShell plugin")
+        params = '{"callsign":"org.rdk.RDKShell"}'
+        status = containerization_setValue("Controller.1.activate",params)
+        state = containerization_getPluginStatus("org.rdk.RDKShell")
+        start_launch = ""
+    if state == "activated":
+        print('SUCCESS: RDKShell Plugin in Activated State')
+        launch = launch.split(",")
+        for test in launch:
+            callsign,uri=test.split("-")
+            if str(callsign).lower() == "cobalt":
+                params = '{"callsign": "'+callsign+'","type":"'+callsign+'","visible":true,"configuration": {"url":"'+uri+'"}}'
+            else:
+                params = '{"callsign": "'+callsign+'","type":"'+callsign+'","uri":"'+uri+'","visible":true}'
+            start_launch = str(datetime.utcnow()).split()[1]
+            status = containerization_setValue("org.rdk.RDKShell.1.launch",params)
+            if "EXCEPTION OCCURRED" not in status:
+                status = json.dumps(status)
+                status = json.loads(status)
+                if str(status.get("launchType")) == "resume" or str(status.get("launchType")) == "activate" and  str(status.get("success")) == "True":
+                    print('SUCCESS: Successfully Launched the '+callsign+' Application')
                 else:
-                    params = '{"callsign": "'+callsign+'","type":"'+callsign+'","uri":"'+uri+'","visible":true}'
-		start_launch = str(datetime.utcnow()).split()[1]
-                status = containerization_setValue("org.rdk.RDKShell.1.launch",params)
-                if "EXCEPTION OCCURRED" not in status:
-                        status = json.dumps(status)
-                        status = json.loads(status)
-                        if str(status.get("launchType")) == "resume" or str(status.get("launchType")) == "activate" and  str(status.get("success")) == "True":
-                                print 'SUCCESS: Successfully Launched the '+callsign+' Application'
-                        else:
-                                launch_status = "FAILURE"
-                                print 'FAILURE: Issue Launching the '+callsign+' Application'
-                else:
-                        launch_status = "FAILURE"
-                        print 'FAILURE: Issue Launching the '+callsign+' Application'
-                result.append(launch_status)
-         if "FAILURE" not in result:
+                    launch_status = "FAILURE"
+                    print('FAILURE: Issue Launching the '+callsign+' Application')
+            else:
+                launch_status = "FAILURE"
+                print('FAILURE: Issue Launching the '+callsign+' Application')
+            result.append(launch_status)
+        if "FAILURE" not in result:
             launch_status = "SUCCESS"
             return launch_status,start_launch
-         else:
+        else:
             launch_status = "FAILURE"
             return launch_status
-     else:
-          launch_status = "FAILURE"
-          print "FAILURE: RDKShell is not in activated state"
-     return launch_status,start_launch
+    else:
+        launch_status = "FAILURE"
+        print("FAILURE: RDKShell is not in activated state")
+    return launch_status,start_launch
 #-------------------------------------------------------------------
 # SUSPEND THE REQUIRED APPLICATION IN THE DUT USING RDKSHELL PLUGIN
 # Description  : To suspend the required application
@@ -587,7 +587,7 @@ def containerization_launchApplication(launch):
 #-------------------------------------------------------------------
 def containerization_suspend_plugin(obj,plugin):
     status = expectedResult = "SUCCESS"
-    print "\n Suspending {} \n".format(plugin)
+    print("\n Suspending {} \n".format(plugin))
     params = '{"callsign":"'+plugin+'"}'
     tdkTestObj = obj.createTestStep('containerization_setValue')
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.suspend")
@@ -596,10 +596,10 @@ def containerization_suspend_plugin(obj,plugin):
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();
     if result == "SUCCESS":
-        print "\n Suspended {} plugin \n".format(plugin)
+        print("\n Suspended {} plugin \n".format(plugin))
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "\n Unable to Suspend {} plugin \n".format(plugin)
+        print("\n Unable to Suspend {} plugin \n".format(plugin))
         tdkTestObj.setResultStatus("FAILURE")
         status = "FAILURE"
     return status,start_suspend
@@ -616,20 +616,20 @@ def containerization_checkContainerRunningState(callsign):
     if "FAILURE" not in status:
         credentials = deviceIP + ',' + user_name + ',' + password
         command =  'DobbyTool list'
-        print "COMMAND : %s" %(command)
+        print("COMMAND : %s" %(command))
         output = containerization_executeInDUT(ssh_method,credentials,command)
         print (output)
         callsign = callsign.split(",")
         for container in callsign:
             container,uri = container.split("-")
             if "running" in output.lower() and container.lower() in output.lower():
-                print 'SUCCESS: '+container+' container is running'
+                print('SUCCESS: '+container+' container is running')
             else:
-                print 'FAILURE: '+container+' container is not running'
+                print('FAILURE: '+container+' container is not running')
                 container_status = "FAILURE"
 
     else:
-        print 'FAILURE: Failed to retrieve the required configuration'
+        print('FAILURE: Failed to retrieve the required configuration')
         container_status = "FAILURE"
     return container_status
 #---------------------------------------------------------------
@@ -649,55 +649,55 @@ def containerization_setPostRequisites(datamodel):
         credentials = deviceIP + ',' + user_name + ',' + password
         for datamodels in datamodel:
             command =  'tr181 -d '+str(datamodels)
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = containerization_executeInDUT(ssh_method,credentials,command)
             if "FAILURE" not in output:
                 output = str(output).split("\n")[1]
                 if "false" in output.lower():
-                    print 'SUCCESS: The '+datamodels+' parameter is in disabled state'
+                    print('SUCCESS: The '+datamodels+' parameter is in disabled state')
                 elif "true" in output.lower() or "empty" in output.lower():
-                    print 'going to execute logic'
+                    print('going to execute logic')
                     if default_state == "SUCCESS":
-		       print ' parameter is in enabled state '
-                    else:   
+                        print(' parameter is in enabled state ')
+                    else:
                         command =  'tr181 -d -s -t boolean -v false '+datamodels
-                        print "COMMAND : %s" %(command)
+                        print("COMMAND : %s" %(command))
                         enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
                         enableStatus = enableStatus.strip()
-                        print "enableStatus : %s" %(enableStatus)
+                        print("enableStatus : %s" %(enableStatus))
                         if "set operation success" in enableStatus.lower():
-                           rebootFlag = 1
-                           print 'SUCCESS: Successfully set the '+datamodels+' parameter'
+                            rebootFlag = 1
+                            print('SUCCESS: Successfully set the '+datamodels+' parameter')
                         else:
-                            print 'FAILURE: Could not able to set the '+datamodels+' parameter'
+                            print('FAILURE: Could not able to set the '+datamodels+' parameter')
                             post_requisite_status = "FAILURE"
                 else:
-                    print 'FAILURE: Failed to retrieve '+datamodels+' enabled status'
+                    print('FAILURE: Failed to retrieve '+datamodels+' enabled status')
                     post_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Error while executing the command'
+                print('FAILURE: Error while executing the command')
                 post_requisite_status = "FAILURE"
 
         if "FAILURE" not in post_requisite_status and rebootFlag == 1:
-            print '[INFO] Rebooting the Device................'
+            print('[INFO] Rebooting the Device................')
             status = containerization_rebootDevice(60)
             if "SUCCESS" in status:
                 for datamodels in datamodel:
                     command =  'tr181 -d '+datamodels
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     enableStatus = containerization_executeInDUT(ssh_method,credentials,command)
                     enableStatus = str(enableStatus).split("\n")[1]
                     if "false" in enableStatus.lower():
-                        print 'SUCCESS: Successfully disabled the '+datamodels+' parameter'
+                        print('SUCCESS: Successfully disabled the '+datamodels+' parameter')
                     else:
-                        print 'FAILURE: '+datamodels+' parameter not disabled'
+                        print('FAILURE: '+datamodels+' parameter not disabled')
                         post_requisite_status = "FAILURE"
             else:
-                print 'FAILURE: Error while rebooting the device'
+                print('FAILURE: Error while rebooting the device')
                 post_requisite_status = "FAILURE"
 
     else:
-        print 'FAILURE: Failed to retrieve required configurations'
+        print('FAILURE: Failed to retrieve required configurations')
         post_requisite_status = "FAILURE"
     return post_requisite_status
 #---------------------------------------------------------------
@@ -717,7 +717,7 @@ def containerization_executeDobbyTest(containername,testCases):
         for container in containername:
             callsign,uri = container.split("-")
             command = 'cd dobby-security-tool/; ./dobby_security.sh -c '+callsign
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             result = containerization_executeInDUT(ssh_method,credentials,command)
             reaesc = re.compile(r'\x1b[^m]*m')
             result = reaesc.sub('',result)
@@ -726,10 +726,10 @@ def containerization_executeDobbyTest(containername,testCases):
         for test in testCases:
             key,testName,value = test.split("-")
             testName = str(testName).strip()
-            print "#==============================================================================#"
-            print "TEST CASE NAME   : ",testName
-            print "TEST CASE ID   : DOBBY_%s"%(key)
-            print "#==============================================================================#"
+            print("#==============================================================================#")
+            print("TEST CASE NAME   : ",testName)
+            print("TEST CASE ID   : DOBBY_%s"%(key))
+            print("#==============================================================================#")
             key=float(key)
             containerAppResults=[]
             for app in containername:
@@ -742,36 +742,36 @@ def containerization_executeDobbyTest(containername,testCases):
                         testStatus=line.split()[0]
                         testStatus=testStatus.replace('[','').replace(']','')
                         testDesc=line.replace('-','').replace(value,'').replace('   ','').replace(testStatus,'').replace('[','').replace(']','')
-                        print "TEST STEP NAME   : ",testName,"_",app
+                        print("TEST STEP NAME   : ",testName,"_",app)
                         count= key + 0.10
                         count=round(count,2)
-                        print "TEST STEP ID   :",count
+                        print("TEST STEP ID   :",count)
                         key = count
                         if("WARN" in testStatus or "PASS" in testStatus):
                             testStatus="SUCCESS"
-                            print "TEST STEP STATUS   :",testStatus
+                            print("TEST STEP STATUS   :",testStatus)
                         else:
                             testStatus="FAILURE"
-                            print "TEST STEP STATUS   :",testStatus
-                        print "#---------------------------------- Result ------------------------------------#"
-                        print line,"\n"
+                            print("TEST STEP STATUS   :",testStatus)
+                        print("#---------------------------------- Result ------------------------------------#")
+                        print(line,"\n")
                         containerAppResults.append(testStatus)
                         break
 
             if "FAILURE" not in containerAppResults:
                 finalTestStatus = "SUCCESS"
-                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus))
             else:
                 finalTestStatus = "FAILURE"
                 dobby_test_status = "FAILURE"
-                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus))
 
             if execStatus == 1:
                 execStatus = 0
             elif execStatus == 0:
                 dobby_test_status = "FAILURE"
     else:
-        print 'FAILURE: Failed to retrieve the required configuration'
+        print('FAILURE: Failed to retrieve the required configuration')
         dobby_test_status = "FAILURE"
     return dobby_test_status
 
@@ -789,10 +789,10 @@ def containerization_checkDobbyVersion(testCase):
     result=[]
     key,testName = testCase.split("-")
     testName = str(testName).strip()
-    print "#==============================================================================#"
-    print "TEST CASE NAME   : ",testName
-    print "TEST CASE ID   : DOBBY_%s"%(key)
-    print "#==============================================================================#"
+    print("#==============================================================================#")
+    print("TEST CASE NAME   : ",testName)
+    print("TEST CASE ID   : DOBBY_%s"%(key))
+    print("#==============================================================================#")
     config_status = containerization_obtainCredentials()
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
@@ -800,51 +800,51 @@ def containerization_checkDobbyVersion(testCase):
             containerization_getDeviceConfig(libObj.realpath,version)
             value = containerization_getDeviceConfig(libObj.realpath,version)
             if "FAILURE" not in versionsvalue and versionsvalue != "":
-                print "SUCCESS: Successfully retrieved %s configuration from device config file" %(version)
+                print("SUCCESS: Successfully retrieved %s configuration from device config file" %(version))
                 versionsvalue.append(value)
             else:
-                print "FAILURE: Failed to retrieve %s configuration from device config file" %(version)
+                print("FAILURE: Failed to retrieve %s configuration from device config file" %(version))
                 dobby_version_status="FAILURE"
                 break
         if "FAILURE" != dobby_version_status:
-            print "\n[INFO] Configured DobbyDaemon version :%s"%(versionsvalue[0])
-            print "[INFO] Configured Crun version :%s"%(versionsvalue[1])
+            print("\n[INFO] Configured DobbyDaemon version :%s"%(versionsvalue[0]))
+            print("[INFO] Configured Crun version :%s"%(versionsvalue[1]))
             #To get the current DobbyDaemon version
             command = dobbyVersionList[0]
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = containerization_executeInDUT(ssh_method,credentials,command)
             if not output:
-                print "FAILURE: Failed to execute %s" %(command)
+                print("FAILURE: Failed to execute %s" %(command))
                 dobby_version_status="FAILURE"
-            else:   
+            else:
                 output = output.split('\n',1)[-1]
                 currentDobbyVersion = output.split("-")[0].split(":")[1].strip()
-                print "[INFO] Current DobbyDaemon version :%s"%(currentDobbyVersion)      
+                print("[INFO] Current DobbyDaemon version :%s"%(currentDobbyVersion))
 
             #To get the current Crun version
             command = dobbyVersionList[1]
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = containerization_executeInDUT(ssh_method,credentials,command)
             if not output:
-                print "FAILURE: Failed to execute %s" %(command)
+                print("FAILURE: Failed to execute %s" %(command))
                 dobby_version_status="FAILURE"
             else:
-                currentCrunVersion = output.split("\n")[1].split("crun version")[1].strip() 
-                print "[INFO] Current Crun version :%s"%(currentCrunVersion)
+                currentCrunVersion = output.split("\n")[1].split("crun version")[1].strip()
+                print("[INFO] Current Crun version :%s"%(currentCrunVersion))
             if "FAILURE" != dobby_version_status and str(versionsvalue[0]).lower() == str(currentDobbyVersion).lower() and str(versionsvalue[1]).lower() == str(currentCrunVersion).lower():
-                print "[PASS] 1.2.2 - Dobby Daemon and Crun versions are up to date"
-                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+                print("[PASS] 1.2.2 - Dobby Daemon and Crun versions are up to date")
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status))
             else:
                 dobby_version_status="FAILURE"
-                print "[FAIL] 1.2.2 - Dobby Daemon and Crun versions are not up to date"
-                print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+                print("[FAIL] 1.2.2 - Dobby Daemon and Crun versions are not up to date")
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status))
         else:
             dobby_version_status="FAILURE"
-            print "FAILURE: Failed to retrieve required configuration from device config file"
-            print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status)
+            print("FAILURE: Failed to retrieve required configuration from device config file")
+            print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(dobby_version_status))
     else:
         dobby_version_status="FAILURE"
-        print "FAILURE: Failed to retrieve required configuration from device config file"
+        print("FAILURE: Failed to retrieve required configuration from device config file")
     return dobby_version_status
 
 #---------------------------------------------------------------
@@ -861,72 +861,72 @@ def containerization_checkDevLoopPartition(testCase):
         containernames = partitionStatus.split(",")
         key,testName = testCase.split("-")
         testName = str(testName).strip()
-        print "#==============================================================================#"
-        print "TEST CASE NAME   : ",testName
-        print "TEST CASE ID   : DOBBY_%s"%(key)
-        print "#==============================================================================#"
+        print("#==============================================================================#")
+        print("TEST CASE NAME   : ",testName)
+        print("TEST CASE ID   : DOBBY_%s"%(key))
+        print("#==============================================================================#")
         config_status = containerization_obtainCredentials()
         if "FAILURE" not in config_status:
-          credentials = deviceIP + ',' + user_name + ',' + password  
-          for container in containernames:
-            container,partitionStatus = container.split("-")
-            #command = 'ps -ef | awk \/'+container+'\/ && \/DobbyInit\/ | grep -v awk | '
-            command = 'ps -ef | grep '+container+' | grep DobbyInit | awk \'NR==1 {print $2}\''
-            print "COMMAND : %s" %(command)
-            DobbyInit_PID = containerization_executeInDUT(ssh_method,credentials,command)
-            DobbyInit_PID = DobbyInit_PID.split('\n',1)[-1]
-            if DobbyInit_PID:
-                command = 'cat /proc/'+DobbyInit_PID+'/mountinfo | grep /dev/loop'
-                print "COMMAND : %s" %(command)
-                output = containerization_executeInDUT(ssh_method,credentials,command)
-                print "TEST STEP NAME   : ",testName,"_",container
-                key = float(key)
-                count = key + 0.10
-                count = round(count,2)
-                print "TEST STEP ID   :",count
-                if  partitionStatus.lower() == "yes":
-                    if '/dev/loop' in output.lower():
-                        line = "[PASS] 5.5.1 Partition is present in the device"
-                        testStatus="SUCCESS"
-                        print "TEST STEP STATUS   :",testStatus
-                    else:
-                        line = "[FAIL] 5.5.1 partition is not present in the device"
-                        check_partition_status="FAILURE"
-                        testStatus="FAILURE"
-                        print "TEST STEP STATUS   :",testStatus
-                elif partitionStatus.lower() == "no":
-                    if '/dev/loop' not in output.lower():
-                        line = "[PASS] 5.5.1 Partition is not present in the device"
-                        testStatus="SUCCESS"
-                        print "TEST STEP STATUS   :",testStatus
-                    else:
-                        line = "[FAIL] 5.5.1 Partition is present in the device but configured as not present"
-                        check_partition_status="FAILURE"
-                        testStatus="FAILURE"
-                        print "TEST STEP STATUS   :",testStatus
-                print "#---------------------------------- Result ------------------------------------#"
-                print line,"\n"
-                containerAppResults.append(testStatus)        
-            else:
-                print "FAILURE: Failed to retrieve the process ID"
-                testStatus = "FAILURE"
-                check_partition_status="FAILURE"
-                containerAppResults.append(testStatus)
+            credentials = deviceIP + ',' + user_name + ',' + password
+            for container in containernames:
+                container,partitionStatus = container.split("-")
+                #command = 'ps -ef | awk \/'+container+'\/ && \/DobbyInit\/ | grep -v awk | '
+                command = 'ps -ef | grep '+container+' | grep DobbyInit | awk \'NR==1 {print $2}\''
+                print("COMMAND : %s" %(command))
+                DobbyInit_PID = containerization_executeInDUT(ssh_method,credentials,command)
+                DobbyInit_PID = DobbyInit_PID.split('\n',1)[-1]
+                if DobbyInit_PID:
+                    command = 'cat /proc/'+DobbyInit_PID+'/mountinfo | grep /dev/loop'
+                    print("COMMAND : %s" %(command))
+                    output = containerization_executeInDUT(ssh_method,credentials,command)
+                    print("TEST STEP NAME   : ",testName,"_",container)
+                    key = float(key)
+                    count = key + 0.10
+                    count = round(count,2)
+                    print("TEST STEP ID   :",count)
+                    if  partitionStatus.lower() == "yes":
+                        if '/dev/loop' in output.lower():
+                            line = "[PASS] 5.5.1 Partition is present in the device"
+                            testStatus="SUCCESS"
+                            print("TEST STEP STATUS   :",testStatus)
+                        else:
+                            line = "[FAIL] 5.5.1 partition is not present in the device"
+                            check_partition_status="FAILURE"
+                            testStatus="FAILURE"
+                            print("TEST STEP STATUS   :",testStatus)
+                    elif partitionStatus.lower() == "no":
+                        if '/dev/loop' not in output.lower():
+                            line = "[PASS] 5.5.1 Partition is not present in the device"
+                            testStatus="SUCCESS"
+                            print("TEST STEP STATUS   :",testStatus)
+                        else:
+                            line = "[FAIL] 5.5.1 Partition is present in the device but configured as not present"
+                            check_partition_status="FAILURE"
+                            testStatus="FAILURE"
+                            print("TEST STEP STATUS   :",testStatus)
+                    print("#---------------------------------- Result ------------------------------------#")
+                    print(line,"\n")
+                    containerAppResults.append(testStatus)
+                else:
+                    print("FAILURE: Failed to retrieve the process ID")
+                    testStatus = "FAILURE"
+                    check_partition_status="FAILURE"
+                    containerAppResults.append(testStatus)
 
-          if "FAILURE" not in containerAppResults:
-              finalTestStatus = "SUCCESS"
-              print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)
-          else:
-              finalTestStatus = "FAILURE"
-              dobby_test_status = "FAILURE"
-              print "\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus)    
+            if "FAILURE" not in containerAppResults:
+                finalTestStatus = "SUCCESS"
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus))
+            else:
+                finalTestStatus = "FAILURE"
+                dobby_test_status = "FAILURE"
+                print("\n##--------- [TEST EXECUTION STATUS] : %s ----------##\n\n"%(finalTestStatus))
         else:
-            print "FAILURE: Failed to retrieve the process ID"
+            print("FAILURE: Failed to retrieve the process ID")
             check_partition_status="FAILURE"
     else:
-        "FAILURE : %s key should not be empty"%(partitionStatus)   
+        "FAILURE : %s key should not be empty"%(partitionStatus)
         check_partition_status="FAILURE"
-    return check_partition_status            
+    return check_partition_status
 
 
 #------------------------------------------------------------------
@@ -945,9 +945,9 @@ def containerization_validateResourceUsage():
             high_resource = "CPU"
             #Command to get the top 5 processes with high CPU usage
             command = 'top -o %CPU -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $9); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
-            print "\n CPU load is high : {}".format(float(cpuload))
+            print("\n CPU load is high : {}".format(float(cpuload)))
         else:
-            print "\n CPU load : {}".format(float(cpuload))
+            print("\n CPU load : {}".format(float(cpuload)))
         totalram = result["totalram"]
         freeram = result["freeram"]
         memory_usage = round(float(totalram-freeram)/float(totalram)* 100,2)
@@ -956,20 +956,20 @@ def containerization_validateResourceUsage():
             high_resource = "MEM"
             #Command to get the top 5 processes with high MEM usage
             command = 'top -o %MEM -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s:%s,\\n",$12, $10); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
-            print "\n Memory usage is high: {}".format(memory_usage)
+            print("\n Memory usage is high: {}".format(memory_usage))
         else:
-            print "\n Memory usage : {}".format(memory_usage)
+            print("\n Memory usage : {}".format(memory_usage))
         if high_cpu and high_memory:
             high_resource = "CPU and MEM"
             command = 'top -bn 1 -w 512 | grep "^ " | awk \'{ printf("%s : [cpu-%s][mem-%s],\\n",$12, $10, $9); }\' | head -n 6 | tail -n +2 | tr -d \'\\n \''
         if high_cpu or high_memory:
             resource_usage = "ERROR"
             #List top 5 processes with high resource usage
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = containerization_executeInDUT(ssh_method,credentials,command)
-            print "\n<b>Top 5 process with high {} usage:</b>\n".format(high_resource)
+            print("\n<b>Top 5 process with high {} usage:</b>\n".format(high_resource))
             output = output.split("\n")[1]
-            print '\n\n'.join(output.split(","))
+            print('\n\n'.join(output.split(",")))
         else:
             resource_usage = cpuload +","+str(memory_usage)
         return resource_usage
@@ -988,7 +988,7 @@ def containerization_validateVideoPlayback(sshmethod,credentials,video_validatio
         method_to_call = getattr(lib, method)
         result = method_to_call(sshmethod,credentials)
     except Exception as e:
-        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        print("\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n")
         result = "FAILURE"
     finally:
         return result
@@ -997,8 +997,8 @@ def containerization_validateVideoPlayback(sshmethod,credentials,video_validatio
 #REMOVE UNWANTED PROCESSES FROM ZORDER AND RETURN UPDATED ZORDER
 #-------------------------------------------------------------------
 def exclude_from_zorder(zorder):
-   new_zorder = [ element for element in zorder if element not in excluded_process_list ] 
-   return new_zorder
+    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
+    return new_zorder
 
 #--------------------------------------------------------------------
 #EXECUTE COMPLETE LIFECYCLE METHODS OF A PLUGIN
@@ -1026,16 +1026,16 @@ def containerization_executeLifeCycle(plugin,operations,validation_details):
                 curr_status = containerization_getPluginStatus(plugin)
                 sys.stdout.flush()
                 if curr_status in expected_status_dict[operation]:
-                    print "\n Successfully set {} plugin to {} status".format(plugin,curr_status)
+                    print("\n Successfully set {} plugin to {} status".format(plugin,curr_status))
                 else:
-                    print "\n Error while setting {} plugin to {} status, current status: {}".format(plugin,operation,curr_status)
+                    print("\n Error while setting {} plugin to {} status, current status: {}".format(plugin,operation,curr_status))
                     break
             else:
-                print "\n Error while setting {} plugin to {}".format(plugin,operation)
+                print("\n Error while setting {} plugin to {}".format(plugin,operation))
                 break
         #On successfull completion of the loop for suspend and resume, below block will get executed
         else:
-            print "\n Successfully completed suspend and resume for {} plugin".format(plugin)
+            print("\n Successfully completed suspend and resume for {} plugin".format(plugin))
             #Do move to front and back operations
             for move_to_method in ["moveToBack","moveToFront"]:
                 move_to_status = containerization_setValue("org.rdk.RDKShell.1."+move_to_method,param_val)
@@ -1044,39 +1044,39 @@ def containerization_executeLifeCycle(plugin,operations,validation_details):
                     zorder_result = containerization_getValue("org.rdk.RDKShell.1.getZOrder")
                     sys.stdout.flush()
                     if zorder_result != "EXCEPTION OCCURRED":
-                        print zorder_result
+                        print(zorder_result)
                         zorder = zorder_result["clients"]
                         zorder = exclude_from_zorder(zorder)
                         if zorder[check_zorder_dict[move_to_method]].lower() == plugin.lower():
-                            print "\n {} operation is success ".format(move_to_method)
+                            print("\n {} operation is success ".format(move_to_method))
                         else:
-                            print "\n Error while doing {} operation ".format(move_to_method)
+                            print("\n Error while doing {} operation ".format(move_to_method))
                             break
                     else:
-                        print "\n Error while getting the zorder"
+                        print("\n Error while getting the zorder")
                         break
                 else:
-                    print "\n Error while doing {} operation ".format(move_to_method)
+                    print("\n Error while doing {} operation ".format(move_to_method))
                     break
             else:
-                print "\n Successfully completed move to back and move to front for the {} plugin".format(plugin)
+                print("\n Successfully completed move to back and move to front for the {} plugin".format(plugin))
                 result = "SUCCESS"
     else:
-        print "\n Error occurred while lauching and checking the plugin functionality"
+        print("\n Error occurred while lauching and checking the plugin functionality")
     #Destroy the plugin
-    print "\n Deactivate {} plugin".format(plugin)
+    print("\n Deactivate {} plugin".format(plugin))
     status = containerization_setPluginStatus(plugin,"deactivate")
     if status != "EXCEPTION OCCURRED":
         #Get the status
         time.sleep(10)
         plugin_status = containerization_getPluginStatus(plugin)
         if plugin_status != 'deactivated':
-            print "\n {} plugin is not in deactivated state, current status:{}".format(plugin,plugin_status)
+            print("\n {} plugin is not in deactivated state, current status:{}".format(plugin,plugin_status))
             result = "FAILURE"
         else:
-            print "\n Successfully deactivated {} plugin".format(plugin)
+            print("\n Successfully deactivated {} plugin".format(plugin))
     else:
-        print "\n Error while deactivating {} plugin".format(plugin)
+        print("\n Error while deactivating {} plugin".format(plugin))
         result = "FAILURE"
     return result
 
@@ -1092,7 +1092,7 @@ def containerization_validatePluginFunctionality(plugin,operations,validation_de
     validation_details = json.loads(validation_details)
     movedToFront = False
     #Activate plugin
-    print "\n Activating plugin : {}".format(plugin)
+    print("\n Activating plugin : {}".format(plugin))
     if plugin == "ResidentApp":
         status = containerization_setPluginStatus(plugin,"activate",validation_details[1])
     else:
@@ -1116,7 +1116,7 @@ def containerization_validatePluginFunctionality(plugin,operations,validation_de
                     else:
                         movedToFront = True
                 else:
-                    print "\n {} is not present in the zorder: {}".format(plugin,zorder)
+                    print("\n {} is not present in the zorder: {}".format(plugin,zorder))
                 if movedToFront:
                     for operation in operations:
                         method = [plugin_method for plugin_method in operation][0]
@@ -1124,11 +1124,11 @@ def containerization_validatePluginFunctionality(plugin,operations,validation_de
                         response = containerization_setValue(method,value)
                         sys.stdout.flush()
                         if response == "EXCEPTION OCCURRED":
-                            print "\n Error while executing {} method".format(method)
+                            print("\n Error while executing {} method".format(method))
                             break
                         time.sleep(20)
                     else:
-                        print "\n Successfully completed launching and setting the operations for {} plugin".format(plugin)
+                        print("\n Successfully completed launching and setting the operations for {} plugin".format(plugin))
                         validation_check = validation_details[0]
                         if validation_check == "video_validation":
                             time.sleep(20)
@@ -1138,32 +1138,32 @@ def containerization_validatePluginFunctionality(plugin,operations,validation_de
                             video_status =  containerization_validateVideoPlayback(sshmethod,credentials,video_validation_script)
                             sys.stdout.flush()
                             if video_status != "SUCCESS":
-                                print "\n Video is not playing"
+                                print("\n Video is not playing")
                                 return result
                             else:
-                                print "\n Video is playing"
+                                print("\n Video is playing")
                                 result = "SUCCESS"
                         elif validation_check == "no_validation":
-                            print "\n Validation is not needed, proceeding the test"
+                            print("\n Validation is not needed, proceeding the test")
                             result = "SUCCESS"
                         else:
                             method = validation_check
                             expected_value = validation_details[1]
                             value = containerization_getValue(method)
                             if value not in ("EXCEPTION OCCURRED", None) and expected_value in value:
-                                print "\n The value:{} set for {} plugin".format(value,plugin)
+                                print("\n The value:{} set for {} plugin".format(value,plugin))
                                 result = "SUCCESS"
                             else:
-                                print "\n Expected Value is not present, Current value: {}".format(value)
+                                print("\n Expected Value is not present, Current value: {}".format(value))
                                 return result
                 else:
-                    print "\n Error while moving {} plugin to front ".format(plugin)
+                    print("\n Error while moving {} plugin to front ".format(plugin))
             else:
-                print "\n Error while getting the zorder result"
+                print("\n Error while getting the zorder result")
         else:
-            print "\n Plugin is not activated, current status: {}".format(curr_status)
+            print("\n Plugin is not activated, current status: {}".format(curr_status))
     else:
-        print "\n Error while activating the plugin"
+        print("\n Error while activating the plugin")
     return result
 
 #------------------------------------------------------------------
@@ -1173,10 +1173,10 @@ def containerization_setPluginStatus(plugin,status,uri=''):
     data = ''
     if plugin:
             #if rdkshell_activated:
-            if status in "activate":
-                data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'"}'
-            else:
-                data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'"}'
+        if status in "activate":
+            data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'"}'
+        else:
+            data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'"}'
     else:
         data = '"method": "Controller.1.'+status+'", "params": {"callsign": "'+plugin+'"}'
     if data != '':
@@ -1184,4 +1184,3 @@ def containerization_setPluginStatus(plugin,status,uri=''):
     else:
         result = "EXCEPTION OCCURRED"
     return result
-

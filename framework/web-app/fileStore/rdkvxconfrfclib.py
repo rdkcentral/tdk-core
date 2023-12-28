@@ -27,7 +27,7 @@ import time
 import os
 import subprocess
 import inspect
-import ConfigParser
+import configparser
 from time import sleep
 import pexpect
 
@@ -50,8 +50,8 @@ def init_module (libobj, port, deviceInfo):
         SSHUtility.deviceMAC = deviceMac
         SSHUtility.realpath = libobj.realpath
     except Exception as e:
-       print "\nException Occurred while getting MAC \n"
-       print e
+        print("\nException Occurred while getting MAC \n")
+        print(e)
 
 #----------------------------------------------------------------------
 # GET DEVICE CONFIGURATION FROM THE DEVICE CONFIG FILE
@@ -75,21 +75,21 @@ def rfc_getDeviceConfig (basePath, configKey):
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
         #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output
 
 #---------------------------------------------------------------
@@ -100,7 +100,7 @@ def rfc_getDeviceConfig (basePath, configKey):
 def rfc_obtainCredentials():
     config_status = "SUCCESS"
     result = "SUCCESS"
-    print "[INFO] Retrieving Configuration values from config file......."
+    print("[INFO] Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_METHOD","SSH_USERNAME", "SSH_PASSWORD"]
     configValues = {}
     global password
@@ -111,11 +111,11 @@ def rfc_obtainCredentials():
         rfc_getDeviceConfig(libObj.realpath,configKey)
         configValues[configKey] = rfc_getDeviceConfig(libObj.realpath,configKey)
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n [INFO] Please configure the %s key in the device config file" %(configKey)
+                print("\n [INFO] Please configure the %s key in the device config file" %(configKey))
                 result = "FAILURE"
                 break
     if "FAILURE" != result:
@@ -127,7 +127,7 @@ def rfc_obtainCredentials():
             else:
                 password = configValues["SSH_PASSWORD"]
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             config_status = "FAILURE"
     else:
         config_status = "FAILURE"
@@ -153,13 +153,13 @@ def rfc_executeInDUT (sshMethod, credentials, command):
         password = credentialsList[2]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     return output
 
 #---------------------------------------------------------------
@@ -171,7 +171,7 @@ def rfc_urlvalidate(basePath, configKey):
     if "FAILURE" not in configValue:
         if len(configValue) == 0:
             output = "[INFO] - Please configure the XCONF server URL in device config file"
-            print output
+            print(output)
             rfc_urlvalidatestatus="FAILURE"
         else:
             config_status=rfc_obtainCredentials()
@@ -179,25 +179,25 @@ def rfc_urlvalidate(basePath, configKey):
                 credentials = deviceIP + ',' + user_name + ',' + password
                 #validate the given URl by CURL command under DUT
                 command="curl -is "+configValue+" | head -n 1"
-                print "Executing Command : %s" %command
+                print("Executing Command : %s" %command)
                 result=rfc_executeInDUT (sshMethod, credentials, command)
                 result=result.split("\n")
                 result=str(result[1])
                 if "200" in result:
                     output = configValue
-                    print "SUCCESS : Configured XCONF server URL "+output
+                    print("SUCCESS : Configured XCONF server URL "+output)
                 else:
                     output = configValue
                     output = "FAILURE : Please configure accessible URL "+output
-                    print output
+                    print(output)
                     rfc_urlvalidatestatus="FAILURE"
             else:
                 output="FAILURE : Failed to get the device credentials"
-                print output
+                print(output)
                 rfc_urlvalidatestatus="FAILURE"
     else:
         output="FAILURE : Failed to get the XCONF server URL"
-        print output
+        print(output)
         rfc_urlvalidatestatus="FAILURE"
     return rfc_urlvalidatestatus,output
 
@@ -208,7 +208,7 @@ def rfc_formfeaturename(feature_name):
     formfeaturenamestatus="SUCCESS"
     deviceMACstatus=rfc_getmacaddress()
     if "FAILURE" not in deviceMACstatus:
-            feature_name = "TDKV_RFC_"+feature_name+"_"+deviceMAC
+        feature_name = "TDKV_RFC_"+feature_name+"_"+deviceMAC
     else:
         formfeaturenamestatus="FAILURE"
     return formfeaturenamestatus,feature_name
@@ -223,7 +223,7 @@ def rfc_getmacaddress():
         credentials = deviceIP + ',' + user_name + ',' + password
         #get the MAC address from device
         command="ifconfig | awk '/eth0/ {print $5}'"
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         global deviceMAC
         deviceMAC=rfc_executeInDUT (sshMethod, credentials, command)
@@ -231,12 +231,12 @@ def rfc_getmacaddress():
         deviceMAC=deviceMAC[1]
         deviceMAC=deviceMAC.strip()
         if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$",str(deviceMAC).lower()):
-            print "\nSUCCESS : Successfully get the MAC address"
+            print("\nSUCCESS : Successfully get the MAC address")
         else:
-            print "\nFAILURE : Failed to get the MAC address"
+            print("\nFAILURE : Failed to get the MAC address")
             getmacaddressstatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         getmacaddressstatus="FAILURE"
     return getmacaddressstatus
 
@@ -250,29 +250,29 @@ def rfc_updateserverurl(RFC_XCONF_URL):
         credentials = deviceIP + ',' + user_name + ',' + password
         #check whether the rfc file updated or not
         command="grep -q "+RFC_XCONF_URL+" /etc/rfc.properties  && echo 1 || echo 0"
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result = str(result).split("\n")
-        print result
+        print(result)
         if int(result[1]) == 1:
-            print "\nAlready RFC file have updated xconf url"
+            print("\nAlready RFC file have updated xconf url")
         else:
-            print "\nRFC file not updated with xconfurl..Updating Xconfurl with RFC file Please wait....."
+            print("\nRFC file not updated with xconfurl..Updating Xconfurl with RFC file Please wait.....")
             modify_url=RFC_XCONF_URL.replace("/","\\/")
             command= "sed -i 's/^RFC_CONFIG_SERVER_URL=.*/RFC_CONFIG_SERVER_URL="+modify_url+"/' /etc/rfc.properties ; grep -q "+RFC_XCONF_URL+" /etc/rfc.properties && echo 1 || echo 0"
-            print "Executing Command : %s" %command
+            print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
             result = str(result).split("\n")
-            print result
+            print(result)
             if int(result[1]) == 1:
-                print "\nSUCCESS : Successfully updated xconfurl in RFC file"
+                print("\nSUCCESS : Successfully updated xconfurl in RFC file")
             else:
-                print "\nFAILURE: Failed to update the xconfurl in RFC file"
+                print("\nFAILURE: Failed to update the xconfurl in RFC file")
                 updatefilestatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         updatefilestatus="FAILURE"
     return updatefilestatus
 
@@ -286,21 +286,21 @@ def rfc_parodusstatuscheck():
         credentials = deviceIP + ',' + user_name + ',' + password
         #check parodus status
         command="systemctl status parodus | grep running"
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result=result.split("\n")
-        print result
+        print(result)
         result=str(result[1])
         if "active (running)" in result:
-            print result
-            print "\nSUCCESS : Successfully get the parodus status"
+            print(result)
+            print("\nSUCCESS : Successfully get the parodus status")
         else:
-            print result
-            print "\nFAILURE : Parodus Process not running"
+            print(result)
+            print("\nFAILURE : Parodus Process not running")
             parodusstatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         parodusstatus="FAILURE"
     return parodusstatus
 
@@ -313,14 +313,14 @@ def rfc_datamodelcheck(rfcparameter):
         credentials = deviceIP + ',' + user_name + ',' + password
         #check rfc parameter status
         command="tr181 -d "+str(rfcparameter)
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result=str(result).split("\n")[2]
         result=result.strip()
-        print result
+        print(result)
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         result="FAILURE"
     return result
 
@@ -338,57 +338,57 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
             credentials = deviceIP + ',' + user_name + ',' + password
             #check feature already present or not
             command='curl -sX  GET '+"'"+xconfdomainname+'feature/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
-            print "Executing Command : %s" %command
+            print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
             result=str(result).split("\n")
             result=str(result[1])
             feature_id=result.replace('"','').strip()
             if "[]" not in feature_id:
-                 print "Feature is already present"
-                 print "\nSUCCESS : "+feature_name+" "+"feature retrieved successfully"
-                 #check feature rule already present or not
-                 command='curl -sX  GET '+"'"+xconfdomainname+'featurerule/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
-                 print "Executing Command : %s" %command
-                 #execute in DUT function
-                 result=rfc_executeInDUT (sshMethod, credentials, command)
-                 result=str(result).split("\n")
-                 result=str(result[1])
-                 feature_rule_id=result.replace('"','').strip()
-                 if "[]" not in feature_rule_id:
-                     print "Feature rule is already present"
-                     print "\nSUCCESS : "+feature_name+" "+"feature rule retrieved successfully"
-                     #Update feature
-                     command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
-                     print "Executing Command : %s" %command
-                     #execute in DUT function
-                     result=rfc_executeInDUT (sshMethod, credentials, command)
-                     if "IMPORTED" in result:
-                         print "Successfully updated feature"
-                         feature_rule_id=feature_rule_id.strip()
-                         #Update feature rule
-                         command='curl -sX POST '+xconfdomainname+'featurerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_rule_id+'","name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}]\''
-                         print "Executing Command : %s" %command
-                         #execute in DUT function
-                         result=rfc_executeInDUT (sshMethod, credentials, command)
-                         print result
-                         if "IMPORTED" in result:
-                             print "Successfully updated featurerule"
-                         else:
-                             print "Failed to update feature rule"
-                             initializefeaturestatus="FAILURE"
-                     else:
-                         print "Failed to update feature"
-                         initializefeaturestatus="FAILURE"
-                 else:
-                        print "Feature rule is not present"
-                        print "\nFAILURE : "+feature_name+" "+"failed to retrieve feature rule"
+                print("Feature is already present")
+                print("\nSUCCESS : "+feature_name+" "+"feature retrieved successfully")
+                #check feature rule already present or not
+                command='curl -sX  GET '+"'"+xconfdomainname+'featurerule/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
+                print("Executing Command : %s" %command)
+                #execute in DUT function
+                result=rfc_executeInDUT (sshMethod, credentials, command)
+                result=str(result).split("\n")
+                result=str(result[1])
+                feature_rule_id=result.replace('"','').strip()
+                if "[]" not in feature_rule_id:
+                    print("Feature rule is already present")
+                    print("\nSUCCESS : "+feature_name+" "+"feature rule retrieved successfully")
+                    #Update feature
+                    command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
+                    print("Executing Command : %s" %command)
+                    #execute in DUT function
+                    result=rfc_executeInDUT (sshMethod, credentials, command)
+                    if "IMPORTED" in result:
+                        print("Successfully updated feature")
+                        feature_rule_id=feature_rule_id.strip()
+                        #Update feature rule
+                        command='curl -sX POST '+xconfdomainname+'featurerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_rule_id+'","name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}]\''
+                        print("Executing Command : %s" %command)
+                        #execute in DUT function
+                        result=rfc_executeInDUT (sshMethod, credentials, command)
+                        print(result)
+                        if "IMPORTED" in result:
+                            print("Successfully updated featurerule")
+                        else:
+                            print("Failed to update feature rule")
+                            initializefeaturestatus="FAILURE"
+                    else:
+                        print("Failed to update feature")
                         initializefeaturestatus="FAILURE"
+                else:
+                    print("Feature rule is not present")
+                    print("\nFAILURE : "+feature_name+" "+"failed to retrieve feature rule")
+                    initializefeaturestatus="FAILURE"
             else:
-                print feature_name+" : "+"Creating this feature please wait...."
+                print(feature_name+" : "+"Creating this feature please wait....")
                 #Create feature
                 command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
-                print "Executing Command : %s" %command
+                print("Executing Command : %s" %command)
                 #execute in DUT function
                 result=rfc_executeInDUT (sshMethod, credentials, command)
                 result=str(result).split("\n")
@@ -396,11 +396,11 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                 feature_id=json.loads(result)
                 feature_id=feature_id["id"]
                 if len(feature_id)!=0:
-                    print feature_name+" : feature created Successfully"
+                    print(feature_name+" : feature created Successfully")
                     #Create feature rule
-                    print feature_name+" : "+"Creating this feature rule please wait...."
+                    print(feature_name+" : "+"Creating this feature rule please wait....")
                     command='curl -sX POST '+xconfdomainname+'featurerule -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}\''
-                    print "Executing Command : %s" %command
+                    print("Executing Command : %s" %command)
                     #execute in DUT function
                     result=rfc_executeInDUT (sshMethod, credentials, command)
                     result=str(result).split("\n")
@@ -408,15 +408,15 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                     feature_rule_id=json.loads(result)
                     feature_rule_id=feature_rule_id["id"]
                     if len(feature_rule_id)!=0:
-                        print feature_name+" : feature rule successfully created"
+                        print(feature_name+" : feature rule successfully created")
                     else:
-                        print "Failed to create feature rule"
+                        print("Failed to create feature rule")
                         initializefeaturestatus="FAILURE"
                 else:
-                    print "Failed to create feature"
+                    print("Failed to create feature")
                     initializefeaturestatus="FAILURE"
         else:
-            print "\nFAILURE : Failed to get the device credentials"
+            print("\nFAILURE : Failed to get the device credentials")
             initializefeaturestatus="FAILURE"
     else:
         initializefeaturestatus="FAILURE"
@@ -433,20 +433,20 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
         if "FAILURE" not in config_status:
             credentials = deviceIP + ',' + user_name + ',' + password
             command="curl -si '"+xconfdomainname+"featureControl/getSettings?estbMacAddress="+deviceMAC+"&estbIP="+deviceIP+"'"
-            print "Executing Command : %s" %command
+            print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
             reaesc = re.compile(r'\x1b[^m]*m')
             result = reaesc.sub('',result)
             if feature_name in result and rfcparameter in result and expectedvalue in result:
-                print result
-                print "\nSUCCESS : Retrieved RFC details match with configure data"
+                print(result)
+                print("\nSUCCESS : Retrieved RFC details match with configure data")
             else:
-                print result
-                print "\nFAILURE : Retrieved RFC details not match with configure data"
+                print(result)
+                print("\nFAILURE : Retrieved RFC details not match with configure data")
                 checkconfiguredatastatus="FAILURE"
         else:
-            print "\nFAILURE : Failed to get the device credentials"
+            print("\nFAILURE : Failed to get the device credentials")
             checkconfiguredatastatus="FAILURE"
     else:
         checkconfiguredatastatus="FAILURE"
@@ -462,19 +462,19 @@ def rfc_restartservice():
         credentials = deviceIP + ',' + user_name + ',' + password
         #restart rfc services
         command='systemctl restart rfc-config ; sleep 25s ; systemctl status rfc-config | grep active  | cut -d ";" -f 2 | cut -d " " -f 2'
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result=result.split("\n")
-	result=result[1]
-	result=result.replace("s","").strip()
+        result=result[1]
+        result=result.replace("s","").strip()
         if int(result) <= 27:
-            print "\nSUCCESS : Successfully restarted RFC service with the delay of "+result+" seconds"
+            print("\nSUCCESS : Successfully restarted RFC service with the delay of "+result+" seconds")
         else:
-            print "\nFAILURE : Failed to restart RFC service with the delay of "+result+" seconds"
+            print("\nFAILURE : Failed to restart RFC service with the delay of "+result+" seconds")
             restartrfcstatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         restartrfcstatus="FAILURE"
     return restartrfcstatus
 
@@ -487,20 +487,20 @@ def rfc_check_setornot_configdata(rfcparameter,expectedvalue):
         credentials = deviceIP + ',' + user_name + ',' + password
         #check rfc parameter status
         command="tr181 -d "+str(rfcparameter)
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result=str(result).split("\n")
-	result=str(result[2])
+        result=str(result[2])
         if expectedvalue in result:
-            print result
-            print "\nSUCCESS : "+rfcparameter+" successfully set to "+expectedvalue
+            print(result)
+            print("\nSUCCESS : "+rfcparameter+" successfully set to "+expectedvalue)
         else:
-            print result
-            print "\nFAILURE : "+rfcparameter+" failed to set "+expectedvalue
+            print(result)
+            print("\nFAILURE : "+rfcparameter+" failed to set "+expectedvalue)
             result="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         result="FAILURE"
     return result
 
@@ -516,30 +516,30 @@ def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_
         credentials = deviceIP + ',' + user_name + ',' + password
         #rollback the rfc parameter
         command="tr181 -s -v "+actualvalue+" "+rfcparameter+" "+"&& echo 1 || echo 0"
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         result = str(result).split("\n")
         if int(result[1]) == 1:
-            print "SUCCESS : Set command for "+rfcparameter+" executed successfully"
+            print("SUCCESS : Set command for "+rfcparameter+" executed successfully")
             command="tr181 -d "+str(rfcparameter)
-            print "Executing Command : %s" %command
+            print("Executing Command : %s" %command)
             #execute in DUT function
             result=rfc_executeInDUT (sshMethod, credentials, command)
             result=str(result).split("\n")
             result=str(result[2])
             if actualvalue in result:
-                print result
-                print "\nSUCCESS : Rollback the RFC parameter successfully"
+                print(result)
+                print("\nSUCCESS : Rollback the RFC parameter successfully")
             else:
-                print result
-                print "\nFAILURE : Rollback the RFC parameter failed"
+                print(result)
+                print("\nFAILURE : Rollback the RFC parameter failed")
                 revertrfcstatus="FAILURE"
         else:
-            print "\nFAILURE : Set command for "+rfcparameter+" execution  failed"
+            print("\nFAILURE : Set command for "+rfcparameter+" execution  failed")
             revertrfcstatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         revertrfcstatus="FAILURE"
     return revertrfcstatus
 
@@ -551,23 +551,23 @@ def rfc_deletefeature():
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
-        print "\nInitialized deleting the feature"
+        print("\nInitialized deleting the feature")
         command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/feature/"+feature_id
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         reaesc = re.compile(r'\x1b[^m]*m')
         result = reaesc.sub('',result)
         result = result.strip()
         if "204" in result:
-            print result
-            print "\nSUCCESS : Deleted the feature successfully"
+            print(result)
+            print("\nSUCCESS : Deleted the feature successfully")
         else:
-            print result
-            print "\nFAILURE : Failed to delete the feature"
+            print(result)
+            print("\nFAILURE : Failed to delete the feature")
             deletefeaturestatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         deletefeaturestatus="FAILUR"
     return  deletefeaturestatus
 
@@ -579,22 +579,22 @@ def rfc_deletefeaturerule():
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
-        print "\nInitialized deleting the feature rule"
+        print("\nInitialized deleting the feature rule")
         command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/featurerule/"+feature_rule_id
-        print "Executing Command : %s" %command
+        print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
         reaesc = re.compile(r'\x1b[^m]*m')
         result = reaesc.sub('',result)
         result = result.strip()
         if "204" in result:
-            print result
-            print "\nSUCCESS : Deleted the feature rule successfully"
+            print(result)
+            print("\nSUCCESS : Deleted the feature rule successfully")
         else:
-            print result
-            print "\nFAILURE : Failed to delete the feature rule"
+            print(result)
+            print("\nFAILURE : Failed to delete the feature rule")
             deletefeaturerulestatus="FAILURE"
     else:
-        print "\nFAILURE : Failed to get the device credentials"
+        print("\nFAILURE : Failed to get the device credentials")
         deletefeaturerulestatus="FAILUR"
     return deletefeaturerulestatus

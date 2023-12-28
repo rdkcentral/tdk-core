@@ -21,7 +21,7 @@ import json
 import time
 import os
 import inspect
-import ConfigParser
+import configparser
 import BrowserPerformanceVariables
 from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
@@ -36,7 +36,7 @@ import PerformanceTestVariables
 import sys
 import socket
 import ast
-import urllib 
+import urllib.request, urllib.parse, urllib.error
 from SecurityTokenUtility import *
 import web_socket_util
 
@@ -73,8 +73,8 @@ def init_module(libobj,port,deviceInfo):
         SSHUtility.deviceMAC = deviceMac
         SSHUtility.realpath = libobj.realpath
     except Exception as e:
-       print "\nException Occurred while getting MAC \n"
-       print e
+        print("\nException Occurred while getting MAC \n")
+        print(e)
 
 #---------------------------------------------------------------
 #POST CURL REQUEST USING PYTHON REQUESTS
@@ -95,9 +95,9 @@ def postCURLRequest(data,securityEnabled):
             status = "INVALID TOKEN"
     except requests.exceptions.RequestException as e:
         status = "FAILURE"
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Command : ",data
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Command : ",data)
+        print("Error message received :\n",e);
         response = "EXCEPTION OCCURRED"
     return response,json_response,status
 
@@ -111,59 +111,59 @@ def execute_step(Data,IsPerformanceSelected="false"):
         data = '{"jsonrpc": "2.0", "id": 1234567890, '+Data+'}'
         response,json_response,status = postCURLRequest(data,securityEnabled)
         if status == "INVALID TOKEN":
-           print "\nAuthorization issue occurred. Update Token & Re-try..."
-           global deviceToken
-           tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
-           if not securityEnabled:
-               # Create the Device Token config file and update the token
-               token_status,deviceToken = read_token_config(deviceIP,tokenFile)
-               if token_status == "SUCCESS":
-                   print "\nDevice Security Token obtained successfully"
-               else:
-                   print "\nFailed to get the device security token"
-               securityEnabled = True
-           else:
-               # Update the token in the device token config file
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-           if token_status == "SUCCESS":
-               response,json_response,status = postCURLRequest(data,securityEnabled)
-           else:
-               print "\nFailed to update the token in token config file"
-           if status == "INVALID TOKEN":
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-               if token_status=="SUCCESS":
-                   response,json_response,status = postCURLRequest(data,securityEnabled)
-               else:
-                   status = "FAILURE"
+            print("\nAuthorization issue occurred. Update Token & Re-try...")
+            global deviceToken
+            tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
+            if not securityEnabled:
+                # Create the Device Token config file and update the token
+                token_status,deviceToken = read_token_config(deviceIP,tokenFile)
+                if token_status == "SUCCESS":
+                    print("\nDevice Security Token obtained successfully")
+                else:
+                    print("\nFailed to get the device security token")
+                securityEnabled = True
+            else:
+                # Update the token in the device token config file
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+            if token_status == "SUCCESS":
+                response,json_response,status = postCURLRequest(data,securityEnabled)
+            else:
+                print("\nFailed to update the token in token config file")
+            if status == "INVALID TOKEN":
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+                if token_status=="SUCCESS":
+                    response,json_response,status = postCURLRequest(data,securityEnabled)
+                else:
+                    status = "FAILURE"
         web_socket_util.deviceToken = deviceToken
         if status == "SUCCESS":
-            print "\n---------------------------------------------------------------------------------------------------"
-            print "Json command : ", data
-            print "\n Response : ", json_response, "\n"
-            print "----------------------------------------------------------------------------------------------------\n"
+            print("\n---------------------------------------------------------------------------------------------------")
+            print("Json command : ", data)
+            print("\n Response : ", json_response, "\n")
+            print("----------------------------------------------------------------------------------------------------\n")
             result = json_response.get("result")
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
-	    if IsPerformanceSelected == "YES":
+            if IsPerformanceSelected == "YES":
                 time_taken = response.elapsed.total_seconds()
-                print "Time taken for",Data,"is :", time_taken
-		return time_taken;
+                print("Time taken for",Data,"is :", time_taken)
+                return time_taken;
             IsPerformanceSelected = libObj.parentTestCase.performanceBenchMarkingEnabled
             if IsPerformanceSelected == "true":
                 conf_file,result_conf = getConfigFileName(libObj.realpath)
                 result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
                 time_taken = response.elapsed.total_seconds()
-                print "Time Taken for",Data,"is :", time_taken
+                print("Time Taken for",Data,"is :", time_taken)
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
-                    print "Device took more than usual to respond."
-                    print "Exiting the script"
+                    print("Device took more than usual to respond.")
+                    print("Exiting the script")
                     result = "EXCEPTION OCCURRED"
         else:
             result = response;
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
 
 #-----------------------------------------------------------------
@@ -190,7 +190,7 @@ def rdkservice_getAllPluginStatus():
         for x in result:
             plugin = x["callsign"]
             state = x["state"]
-            if "autostart" in x.keys():
+            if "autostart" in list(x.keys()):
                 autostart = x["autostart"]
             else:
                 autostart = "null"
@@ -285,46 +285,46 @@ def rdkservice_getNoOfPlugins():
 #SET WEBDRIVER AND OPEN CHROME BROWSER
 #-------------------------------------------------------------------
 def openChromeBrowser(url):
-   #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
-   os.environ["DISPLAY"] = BrowserPerformanceVariables.display_variable;
-   os.environ["PATH"] += BrowserPerformanceVariables.path_of_browser_executable;
-   try:
+    #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
+    os.environ["DISPLAY"] = BrowserPerformanceVariables.display_variable;
+    os.environ["PATH"] += BrowserPerformanceVariables.path_of_browser_executable;
+    try:
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
         driver = webdriver.Chrome(chrome_options=chrome_options) #Opening Chrome
         driver.get(url);
-   except Exception as error:
-        print "Got exception while opening the browser"
-        print error
+    except Exception as error:
+        print("Got exception while opening the browser")
+        print(error)
         driver = "EXCEPTION OCCURRED"
-   return driver;
+    return driver;
 
 #-------------------------------------------------------------------
 #GET URL FROM WEBINSPECT PAGE
 #-------------------------------------------------------------------
 def rdkservice_getBrowserURL(webinspect_port):
-   try:
-       webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/'
-       print (webinspectURL)
-       driver = openChromeBrowser(webinspectURL);
-       if driver != "EXCEPTION OCCURRED":
+    try:
+        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/'
+        print (webinspectURL)
+        driver = openChromeBrowser(webinspectURL);
+        if driver != "EXCEPTION OCCURRED":
             time.sleep(20)
             target_url = driver.find_element_by_xpath('/html/body/table/tbody/tr/td[1]/div[2]').text
             print (target_url)
             driver.quit()
-   except Exception as error:
-        print "Got exception while opening the browser"
-        print error
+    except Exception as error:
+        print("Got exception while opening the browser")
+        print(error)
         driver.quit()
         target_url=json.dumps(target_url)
-   return target_url
+    return target_url
 
 #-------------------------------------------------------------------
 #GET THE BROWSER SCORE FROM CSS3 TEST
 #-------------------------------------------------------------------
 def rdkservice_getBrowserScore_CSS3():
-   try:
+    try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
         conf_file,result = getConfigFileName(libObj.realpath)
@@ -339,9 +339,9 @@ def rdkservice_getBrowserScore_CSS3():
             time.sleep(10)
             browser_score= driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol/ol[1]/ol[1]/ol[1]/li[2]/span/span[2]').text
             browser_score_dict["main_score"] = browser_score.replace("%","")
-            print "\nThe Browser score using CSS3 test is : ",browser_score
-            print "\n Subcategory scores:\n"
-            print "===================================="
+            print("\nThe Browser score using CSS3 test is : ",browser_score)
+            print("\n Subcategory scores:\n")
+            print("====================================")
             for i in range(1,130):
                 sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol/ol[1]/ol[2]/ol['+str(i)+']/ol[1]/li[1]/span/span').text
 
@@ -351,25 +351,25 @@ def rdkservice_getBrowserScore_CSS3():
                 if sub_category in browser_subcategory_list:
                     new_score = score.replace("%","")
                     browser_score_dict[sub_category] = new_score
-                print sub_category + '  :  ' + score
-            print '\n'
+                print(sub_category + '  :  ' + score)
+            print('\n')
             time.sleep(5)
             driver.quit()
         else:
             browser_score_dict["main_score"]= "Unable to get the browser score"
-   except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+    except Exception as error:
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
-   browser_score_dict = json.dumps(browser_score_dict)
-   return browser_score_dict
+    browser_score_dict = json.dumps(browser_score_dict)
+    return browser_score_dict
 
 #-------------------------------------------------------------------
 #GET THE BROWSER SCORE FROM OCTANE TEST
 #-------------------------------------------------------------------
 def rdkservice_getBrowserScore_Octane():
-   try:
+    try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
         conf_file,result = getConfigFileName(libObj.realpath)
@@ -384,32 +384,32 @@ def rdkservice_getBrowserScore_Octane():
             time.sleep(10)
             browser_score= driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol/ol/li[1]/span/span[2]').text
             browser_score_dict["main_score"] = browser_score
-            print "\nThe Browser score using Octane test is : ",browser_score
-            print "\n Subcategory scores:\n"
-            print "===================================="
+            print("\nThe Browser score using Octane test is : ",browser_score)
+            print("\n Subcategory scores:\n")
+            print("====================================")
             for i in range(1,5):
                 for j in range(1,5):
                     sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[3]/ol['+str(i)+']/ol['+str(j)+']/ol/li[1]/span/span[2]').text
                     score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[3]/ol['+str(i)+']/ol['+str(j)+']/ol/li[2]/span/span[2]').text
                     if sub_category in browser_subcategory_list:
                         browser_score_dict[sub_category] = score
-                    print sub_category + '     :    ' + score
+                    print(sub_category + '     :    ' + score)
             sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[3]/ol[4]/ol[5]/ol/li[1]/span/span[2]').text
             score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[3]/ol[4]/ol[5]/ol/li[2]/span/span[2]').text
             if sub_category in browser_subcategory_list:
                 browser_score_dict[sub_category] = score
-            print sub_category + '     :    ' + score + '\n'
+            print(sub_category + '     :    ' + score + '\n')
             time.sleep(10)
             driver.quit()
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
-   except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+    except Exception as error:
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
-   browser_score_dict = json.dumps(browser_score_dict)
-   return browser_score_dict
+    browser_score_dict = json.dumps(browser_score_dict)
+    return browser_score_dict
 
 #----------------------------------------------------------------------
 #GET THE NAME OF DEVICE CONFIG FILE
@@ -425,13 +425,13 @@ def getConfigFileName(basePath):
     # executing the test are present
     if os.path.exists(deviceNameConfigFile) == True:
         deviceConfigFile = deviceNameConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceNameConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
     elif os.path.exists(deviceTypeConfigFile) == True:
         deviceConfigFile = deviceTypeConfigFile
-        print "[INFO]: Using Device config file: %s" %(deviceTypeConfigFile)
+        print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
     else:
         status = "FAILURE"
-        print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+        print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
     return deviceConfigFile,status;
 
 #-------------------------------------------------------------------------
@@ -446,16 +446,16 @@ def getDeviceConfigKeyValue(deviceConfigFile,key):
         # will be thrown
         if key is None or key == "":
             status = "FAILURE"
-            print "\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3])
+            print("\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3]))
         # Parse the device configuration file and read the
         # data. But if the data is empty it is taken as such
         else:
-            config = ConfigParser.ConfigParser()
+            config = configparser.ConfigParser()
             config.read(deviceConfigFile)
             value = str(config.get(deviceConfig,key))
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
     return status,value
 
@@ -463,13 +463,13 @@ def getDeviceConfigKeyValue(deviceConfigFile,key):
 #GET THE BROWSER SCORE FROM HTML5 TEST
 #-------------------------------------------------------------------
 def rdkservice_getBrowserScore_HTML5():
-   try:
+    try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.html5_test_subcategory_list
         conf_file,result = getConfigFileName(libObj.realpath)
         result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
         webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
-        print "url:",webinspectURL
+        print("url:",webinspectURL)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -481,36 +481,36 @@ def rdkservice_getBrowserScore_HTML5():
             max_browser_score_text = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[1]/ol[1]/ol/li[3]/span/span[2]').text
             browser_score = browser_score + ' ' + max_browser_score_text
             browser_score_dict["main_score"] = browser_score
-            print "\n Browser score from HTML5 test: {}".format(browser_score)
-            print "\n Subcategory scores:\n"
-            print "===================================="
+            print("\n Browser score from HTML5 test: {}".format(browser_score))
+            print("\n Subcategory scores:\n")
+            print("====================================")
             for i in range(1,3):
                 for j in range(1,5):
                     parent = driver.find_elements_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[2]/ol/ol['+str(i)+']/ol/ol['+str(j)+']/ol')
                     count = len(parent)
                     for k in range(2,count+1):
-                       sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[2]/ol/ol['+str(i)+']/ol/ol['+str(j)+']/ol['+str(k)+']/ol[1]/ol/ol/li[1]/span/span').text
-                       score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[2]/ol/ol['+str(i)+']/ol/ol['+str(j)+']/ol['+str(k)+']/ol[1]/ol/ol/ol/ol/li[1]/span/span[2]').text
-                       if sub_category in browser_subcategory_list:
-                           browser_score_dict[sub_category] = score.split('/')[0]
-                       print "{}   :{}".format(sub_category,score)
+                        sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[2]/ol/ol['+str(i)+']/ol/ol['+str(j)+']/ol['+str(k)+']/ol[1]/ol/ol/li[1]/span/span').text
+                        score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol[1]/ol[2]/ol[3]/ol[2]/ol/ol['+str(i)+']/ol/ol['+str(j)+']/ol['+str(k)+']/ol[1]/ol/ol/ol/ol/li[1]/span/span[2]').text
+                        if sub_category in browser_subcategory_list:
+                            browser_score_dict[sub_category] = score.split('/')[0]
+                        print("{}   :{}".format(sub_category,score))
             time.sleep(5)
             driver.quit()
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
-   except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+    except Exception as error:
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
-   browser_score_dict = json.dumps(browser_score_dict)
-   return browser_score_dict;
+    browser_score_dict = json.dumps(browser_score_dict)
+    return browser_score_dict;
 
 #-------------------------------------------------------------------
 #GET THE BROWSER SCORE FROM SUNSPIDER TEST
 #-------------------------------------------------------------------
 def rdkservice_getBrowserScore_SunSpider():
-   try:
+    try:
         browser_score = ''
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.sunspider_test_subcategory_list
@@ -545,16 +545,16 @@ def rdkservice_getBrowserScore_SunSpider():
                 if sub_category in browser_subcategory_list:
                     score = sub_category_list[1].split('ms')[0].strip()
                     browser_score_dict[sub_category] = score
-            print "Details of SunSider Test:\n",text_values
+            print("Details of SunSider Test:\n",text_values)
         else:
             browser_score_dict["main_score"] = "FAILURE"
-   except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+    except Exception as error:
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "FAILURE"
         driver.quit()
-   browser_score_dict = json.dumps(browser_score_dict)
-   return browser_score_dict;
+    browser_score_dict = json.dumps(browser_score_dict)
+    return browser_score_dict;
 
 #-------------------------------------------------------------------
 #GET THE TIMESTAMP FROM THE LOG STRING
@@ -570,7 +570,7 @@ def getTimeInMilliSec(time_string):
     microsec_frm_time_string = int(time_string.split(".")[-1])
     time_string = time_string.replace(time_string.split(".")[-1],"")
     time_string = time_string.replace(".",":")
-    time_string = time_string + str(microsec_frm_time_string/1000)
+    time_string = time_string + str(microsec_frm_time_string//1000)
     hours, minutes, seconds, millisec = time_string.split(':')
     time_in_millisec = int(hours) * 3600000 + int(minutes) * 60000 + int(seconds)*1000 + int(millisec)
     return time_in_millisec
@@ -596,8 +596,8 @@ def rdkservice_getRequiredLog(ssh_method,credentials,command):
         else:
             output = method_to_call(host_name,user_name,password,command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     finally:
         if output == "":
             output = "EXCEPTION"
@@ -608,14 +608,14 @@ def rdkservice_getRequiredLog(ssh_method,credentials,command):
 #-------------------------------------------------------------------
 def rdkservice_getSSHParams(realpath,deviceIP):
     ssh_dict = {}
-    print "\n getting ssh params from conf file"
+    print("\n getting ssh params from conf file")
     conf_file,result = getConfigFileName(realpath)
     if result == "SUCCESS":
         result,ssh_method = getDeviceConfigKeyValue(conf_file,"SSH_METHOD")
         result,user_name = getDeviceConfigKeyValue(conf_file,"SSH_USERNAME")
         result,password = getDeviceConfigKeyValue(conf_file,"SSH_PASSWORD")
         if any(value == "" for value in (ssh_method,user_name,password)):
-            print "please configure values before test"
+            print("please configure values before test")
             ssh_dict = {}
         else:
             ssh_dict["ssh_method"] = ssh_method
@@ -623,7 +623,7 @@ def rdkservice_getSSHParams(realpath,deviceIP):
                 password = ""
             ssh_dict["credentials"] = deviceIP +","+ user_name +","+ password
     else:
-        print "Failed to find the device specific config file"
+        print("Failed to find the device specific config file")
     ssh_dict = json.dumps(ssh_dict)
     return ssh_dict
 
@@ -632,7 +632,7 @@ def rdkservice_getSSHParams(realpath,deviceIP):
 #-------------------------------------------------------------------
 def suspend_plugin(obj,plugin):
     status = expectedResult = "SUCCESS"
-    print "\n Suspending {} \n".format(plugin)
+    print("\n Suspending {} \n".format(plugin))
     params = '{"callsign":"'+plugin+'"}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue')
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.suspend")
@@ -641,10 +641,10 @@ def suspend_plugin(obj,plugin):
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();
     if result == "SUCCESS":
-        print "\n Suspended {} plugin \n".format(plugin)
+        print("\n Suspended {} plugin \n".format(plugin))
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "\n Unable to Suspend {} plugin \n".format(plugin)
+        print("\n Unable to Suspend {} plugin \n".format(plugin))
         tdkTestObj.setResultStatus("FAILURE")
         status = "FAILURE"
     return status,start_suspend
@@ -657,19 +657,19 @@ def launch_plugin(obj,plugin,uri=''):
     start_launch = ""
     rdkshell_activated = check_status_of_rdkshell()
     if rdkshell_activated:
-        print "\n Resuming {} \n".format(plugin)
+        print("\n Resuming {} \n".format(plugin))
         params = '{"callsign":"'+plugin+'", "type":"", "uri":"' + uri + '"}'
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
         tdkTestObj.addParameter("value",params)
-        start_launch = str(datetime.utcnow()).split()[1] 
+        start_launch = str(datetime.utcnow()).split()[1]
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult();
         if result == "SUCCESS":
-            print "\n Resumed {} plugin \n".format(plugin)
+            print("\n Resumed {} plugin \n".format(plugin))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Unable to Resume {} plugin \n".format(plugin)
+            print("\n Unable to Resume {} plugin \n".format(plugin))
             tdkTestObj.setResultStatus("FAILURE")
             status = "FAILURE"
     else:
@@ -704,7 +704,7 @@ def rdkservice_getSupportedPlugins(realpath,plugins):
                 updated_plugins_list = [plugin for plugin in plugins_list if plugin in supported_plugins_list]
                 plugins = ','.join(plugin for plugin in updated_plugins_list)
         else:
-            print "\n Please configure the supported plugins in device configuration file \n"
+            print("\n Please configure the supported plugins in device configuration file \n")
             plugins = "FAILURE"
         return plugins
     else:
@@ -722,7 +722,7 @@ def rdkservice_validateVideoPlayback(sshmethod,credentials,video_validation_scri
         method_to_call = getattr(lib, method)
         result = method_to_call(sshmethod,credentials)
     except Exception as e:
-        print "\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n"
+        print("\n ERROR OCCURRED WHILE IMPORTING THE VIDEO VALIDATION SCRIPT FILE, PLEASE CHECK THE CONFIGURATION \n")
         result = "FAILURE"
     finally:
         return result
@@ -739,7 +739,7 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
     validation_details = json.loads(validation_details)
     movedToFront = False
     #Activate plugin
-    print "\n Activating plugin : {}".format(plugin)
+    print("\n Activating plugin : {}".format(plugin))
     if plugin == "ResidentApp":
         status = rdkservice_setPluginStatus(plugin,"activate",validation_details[1])
     else:
@@ -753,7 +753,7 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
             zorder_result = rdkservice_getValue("org.rdk.RDKShell.1.getZOrder")
             if zorder_result != "EXCEPTION OCCURRED":
                 zorder = zorder_result["clients"]
-                zorder = exclude_from_zorder(zorder) 
+                zorder = exclude_from_zorder(zorder)
                 if plugin.lower() in zorder:
                     if zorder[0].lower() != plugin.lower():
                         param = '{"client": "'+plugin+'"}'
@@ -763,7 +763,7 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
                     else:
                         movedToFront = True
                 else:
-                    print "\n {} is not present in the zorder: {}".format(plugin,zorder)
+                    print("\n {} is not present in the zorder: {}".format(plugin,zorder))
                 if movedToFront:
                     for operation in operations:
                         method = [plugin_method for plugin_method in operation][0]
@@ -771,11 +771,11 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
                         response = rdkservice_setValue(method,value)
                         sys.stdout.flush()
                         if response == "EXCEPTION OCCURRED":
-                            print "\n Error while executing {} method".format(method)
+                            print("\n Error while executing {} method".format(method))
                             break
                         time.sleep(20)
                     else:
-                        print "\n Successfully completed launching and setting the operations for {} plugin".format(plugin)
+                        print("\n Successfully completed launching and setting the operations for {} plugin".format(plugin))
                         validation_check = validation_details[0]
                         if validation_check == "video_validation":
                             time.sleep(20)
@@ -785,32 +785,32 @@ def rdkservice_validatePluginFunctionality(plugin,operations,validation_details)
                             video_status =  rdkservice_validateVideoPlayback(sshmethod,credentials,video_validation_script)
                             sys.stdout.flush()
                             if video_status != "SUCCESS":
-                                print "\n Video is not playing"
+                                print("\n Video is not playing")
                                 return result
                             else:
-                                print "\n Video is playing"
+                                print("\n Video is playing")
                                 result = "SUCCESS"
                         elif validation_check == "no_validation":
-                            print "\n Validation is not needed, proceeding the test"
+                            print("\n Validation is not needed, proceeding the test")
                             result = "SUCCESS"
                         else:
                             method = validation_check
                             expected_value = validation_details[1]
                             value = rdkservice_getValue(method)
                             if value not in ("EXCEPTION OCCURRED", None) and expected_value in value:
-                                print "\n The value:{} set for {} plugin".format(value,plugin)
+                                print("\n The value:{} set for {} plugin".format(value,plugin))
                                 result = "SUCCESS"
                             else:
-                                print "\n Expected Value is not present, Current value: {}".format(value)
+                                print("\n Expected Value is not present, Current value: {}".format(value))
                                 return result
                 else:
-                    print "\n Error while moving {} plugin to front ".format(plugin)
+                    print("\n Error while moving {} plugin to front ".format(plugin))
             else:
-                print "\n Error while getting the zorder result"
+                print("\n Error while getting the zorder result")
         else:
-            print "\n Plugin is not activated, current status: {}".format(curr_status)
+            print("\n Plugin is not activated, current status: {}".format(curr_status))
     else:
-        print "\n Error while activating the plugin"
+        print("\n Error while activating the plugin")
     return result
 
 #-------------------------------------------------------------------
@@ -871,13 +871,13 @@ def get_device_uptime(obj):
                 uptime = int(tdkTestObj.getResultDetails())
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print '\n Error while executing DeviceInfo.1.systeminfo method'
+                print('\n Error while executing DeviceInfo.1.systeminfo method')
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print '\n Unable to activate DeviceInfo plugin, current status: ',device_info_status
+            print('\n Unable to activate DeviceInfo plugin, current status: ',device_info_status)
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print '\n Error while activating DeviceInfo'
+        print('\n Error while activating DeviceInfo')
         tdkTestObj.setResultStatus("FAILURE")
     return uptime
 
@@ -895,7 +895,7 @@ def move_plugin(obj,plugin,method):
     result = tdkTestObj.getResult()
     if expectedResult in result:
         tdkTestObj.setResultStatus("SUCCESS")
-        print "\n Check whether {} is in front".format(plugin)
+        print("\n Check whether {} is in front".format(plugin))
         time.sleep(5)
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
@@ -905,19 +905,19 @@ def move_plugin(obj,plugin,method):
         if expectedResult in zorder_status :
             zorder = ast.literal_eval(zorder)["clients"]
             zorder = exclude_from_zorder(zorder)
-            print "zorder: ",zorder
+            print("zorder: ",zorder)
             if  plugin.lower() in zorder and plugin.lower() == zorder[0]:
                 result_val = "SUCCESS"
-                print "\n {} is in front".format(plugin)
+                print("\n {} is in front".format(plugin))
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n {} is not in front".format(plugin)
+                print("\n {} is not in front".format(plugin))
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to get zorder"
+            print("\n Unable to get zorder")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Error while executing {} method".format(method)
+        print("\n Error while executing {} method".format(method))
         tdkTestObj.setResultStatus("FAILURE")
     return result_val
 
@@ -925,8 +925,8 @@ def move_plugin(obj,plugin,method):
 #REMOVE UNWANTED PROCESSES FROM ZORDER AND RETURN UPDATED ZORDER
 #-------------------------------------------------------------------
 def exclude_from_zorder(zorder):
-   new_zorder = [ element for element in zorder if element not in excluded_process_list ] 
-   return new_zorder
+    new_zorder = [ element for element in zorder if element not in excluded_process_list ]
+    return new_zorder
 
 #-------------------------------------------------------------------------
 #Utility functions for Hardware Performance threshold validation - START
@@ -935,7 +935,7 @@ def hardwarePerformanceThresholdComparison(sysUtilObj,message,unit,reverserschec
     status=[]
     threshold_Check=thresholdCheck(sysUtilObj)
     if threshold_Check=="TRUE":
-        print "***************************User Enabled Threshold check*********************************************"
+        print("***************************User Enabled Threshold check*********************************************")
 
         transferLogDetails=json.loads(message)
         configParam=transferLogDetails["utility"].upper()
@@ -944,7 +944,7 @@ def hardwarePerformanceThresholdComparison(sysUtilObj,message,unit,reverserschec
         result,thresholdLimitConfig=getDeviceConfigValue(conf_file,configParam)
         thresholdValueConfig=json.loads(thresholdLimitConfig)
 
-        for(key1,Value1),(key2,Value2) in zip(thresholdValueDevice.items(),thresholdValueConfig.items()):
+        for(key1,Value1),(key2,Value2) in zip(list(thresholdValueDevice.items()),list(thresholdValueConfig.items())):
             hw_Device_pname=key1
             hw_Config_pname=key2
 
@@ -959,9 +959,9 @@ def hardwarePerformanceThresholdComparison(sysUtilObj,message,unit,reverserschec
         return "FAILURE" if "FAILURE" in status else "SUCCESS"
 
     else:
-         print "*********************************User Disable  Threshold check**********************************"
-         status="SUCCESS"
-         return status
+        print("*********************************User Disable  Threshold check**********************************")
+        status="SUCCESS"
+        return status
 
 #--------------------------------------------------------------------------
 #   Check ThresholdCheck User Input from Config File
@@ -979,7 +979,7 @@ def getDeviceConfigValue(conf_file,configParam):
     value=""
     status="SUCCESS"
     deviceConfig="device.config"
-    config=ConfigParser.ConfigParser()
+    config=configparser.ConfigParser()
     config.read(conf_file)
     value=str(config.get(deviceConfig,configParam))
     return status,value
@@ -989,7 +989,7 @@ def getDeviceConfigValue(conf_file,configParam):
 def getConfigFileNameDetail(obj):
     url = obj.url + '/deviceGroup/getDeviceDetails?deviceIp='+obj.IP
     try:
-        data = urllib.urlopen(url).read()
+        data = urllib.request.urlopen(url).read()
         deviceDetails = json.loads(data)
         device_Name = deviceDetails["devicename"]
         device_Type = deviceDetails["boxtype"]
@@ -1002,15 +1002,15 @@ def getConfigFileNameDetail(obj):
         # executing the test are present
         if os.path.exists(deviceNameConfigFile) == True:
             deviceConfigFile = deviceNameConfigFile
-            print "[INFO]: Using Device config file: %s" %(deviceNameConfigFile)
+            print("[INFO]: Using Device config file: %s" %(deviceNameConfigFile))
         elif os.path.exists(deviceTypeConfigFile) == True:
             deviceConfigFile = deviceTypeConfigFile
-            print "[INFO]: Using Device config file: %s" %(deviceTypeConfigFile)
+            print("[INFO]: Using Device config file: %s" %(deviceTypeConfigFile))
         else:
             status = "FAILURE"
-            print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
+            print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
     except:
-        print "Unable to get Device Details from REST !!!"
+        print("Unable to get Device Details from REST !!!")
         status = "FAILURE"
     return deviceConfigFile,status;
 
@@ -1033,9 +1033,9 @@ def check_status_of_rdkshell():
         if "activated" in rdkshell_status:
             activated = True
         else:
-            print "\n Unable to activate RDKShell plugin"
+            print("\n Unable to activate RDKShell plugin")
     else:
-        print "\n RDKShell status in DUT:",rdkshell_status
+        print("\n RDKShell status in DUT:",rdkshell_status)
     return activated
 
 #-------------------------------------------------------------------
@@ -1062,7 +1062,7 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
                     fps_list.append(float(fps_value))
                     time.sleep(1)
                 else:
-                    print "\n Error while getting FPS value"
+                    print("\n Error while getting FPS value")
                     browser_score_dict["main_score"] = "Unable to get the browser score"
                     break
             else:
@@ -1071,8 +1071,8 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
     except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
@@ -1086,7 +1086,7 @@ def get_graphical_plugins(conf_file):
     if graphical_plugins != "":
         plugins_list = graphical_plugins.split(',')
     else:
-        print "\n Please configure the available graphical plugins in device config file"
+        print("\n Please configure the available graphical plugins in device config file")
         plugins_list = []
     return plugins_list
 
@@ -1097,7 +1097,7 @@ def get_graphical_plugins(conf_file):
 def rdkservice_getBrowserScore_Speedometer():
     try:
         browser_score_dict = {}
-	conf_file,result = getConfigFileName(libObj.realpath)
+        conf_file,result = getConfigFileName(libObj.realpath)
         result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
         webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
         driver = openChromeBrowser(webinspectURL);
@@ -1112,8 +1112,8 @@ def rdkservice_getBrowserScore_Speedometer():
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
     except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
@@ -1140,15 +1140,15 @@ def rdkservice_getBrowserScore_MotionMark():
             for i in range(2,10):
                 sub_category = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[2]/ol[2]/ol[2]/ol[2]/ol[2]/ol['+str(i)+']/li[1]/span/span[2]').text
                 score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol/ol[2]/ol[2]/ol[2]/ol[1]/ol[1]/ol[2]/ol['+str(i)+']/li[1]/span/span[2]').text
-                print sub_category + '  :  ' + score
-            print '\n'
+                print(sub_category + '  :  ' + score)
+            print('\n')
             time.sleep(5)
             driver.quit()
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
     except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
@@ -1160,7 +1160,7 @@ def rdkservice_getBrowserScore_MotionMark():
 def rdkservice_getBrowserScore_Smashcat():
     try:
         browser_score_dict = {}
-	conf_file,result = getConfigFileName(libObj.realpath)
+        conf_file,result = getConfigFileName(libObj.realpath)
         result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
         webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
         driver = openChromeBrowser(webinspectURL);
@@ -1175,10 +1175,10 @@ def rdkservice_getBrowserScore_Smashcat():
             while (count<3):
                 try:
                     smashcat_score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol[1]/ol[1]/li[1]').text
-                except exceptions.StaleElementReferenceException,e:
+                except exceptions.StaleElementReferenceException as e:
                     smashcat_score = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol[1]/ol[1]/li[1]').text
                 smashcat_score = int(smashcat_score.split('f')[1].split('>')[1])
-                print "score =",smashcat_score
+                print("score =",smashcat_score)
                 time.sleep(2)
                 smashcat_score_list.append(smashcat_score)
                 count = count +1
@@ -1188,8 +1188,8 @@ def rdkservice_getBrowserScore_Smashcat():
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
     except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
@@ -1202,7 +1202,7 @@ def rdkservice_getBrowserScore_Smashcat():
 def rdkservice_getBrowserScore_Kraken():
     try:
         browser_score_dict = {}
-	conf_file,result = getConfigFileName(libObj.realpath)
+        conf_file,result = getConfigFileName(libObj.realpath)
         result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
         webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
         driver = openChromeBrowser(webinspectURL);
@@ -1219,8 +1219,8 @@ def rdkservice_getBrowserScore_Kraken():
         else:
             browser_score_dict["main_score"] = "Unable to get the browser score"
     except Exception as error:
-        print "Got exception while getting the browser score"
-        print error
+        print("Got exception while getting the browser score")
+        print(error)
         browser_score_dict["main_score"] = "Unable to get the browser score"
         driver.quit()
     browser_score_dict = json.dumps(browser_score_dict)
@@ -1244,7 +1244,7 @@ def open_write_logfile(obj,filename,script_name,data=""):
                 else:
                     the_file.write(line)
 
-    print "\nWriting performance data to file ", output_file
+    print("\nWriting performance data to file ", output_file)
     with open(output_file, 'a+') as out_file:
         out_file.write(data)
 #--------------------------------------------------------------
@@ -1273,15 +1273,15 @@ def getDataAndWriteInFile(Value,obj):
                 Value.remove(item)
                 break;
         data = data + "\n"
-        print data
+        print(data)
         open_write_logfile(libObj,filename,obj.execName,data)
 #---------------------------------------------------------------------------------------
 # PVS Execution Summary
 #---------------------------------------------------------------------------------------
 def getSummary(Summ_list,obj = False):
     if obj != False:
-       Value = [x for x in Summ_list]
-       getDataAndWriteInFile(Value,obj)
+        Value = [x for x in Summ_list]
+        getDataAndWriteInFile(Value,obj)
 
     print("############## Execution Summary #######################")
     for key in Summ_list:
@@ -1290,7 +1290,7 @@ def getSummary(Summ_list,obj = False):
         if 'ms' in value:
             value = value.split('m')[0]
         if float(value) < 0:
-            print "Check if VM and DUT time is synchronized OR Check if any previous steps got failed."
+            print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
@@ -1308,7 +1308,7 @@ def testusingRestAPI(obj):
     lastIndex = 0
     while True:
         if file_check_count > 60:
-            print "\nREST API Logging is not happening properly. Exiting..."
+            print("\nREST API Logging is not happening properly. Exiting...")
             break;
         if os.path.exists(app_log_file):
             logging_flag = 1
@@ -1319,7 +1319,7 @@ def testusingRestAPI(obj):
     while logging_flag:
         if continue_count > 60:
             hang_detected = 1
-            print "\nApp not proceeding for 60 secs. Exiting..."
+            print("\nApp not proceeding for 60 secs. Exiting...")
             break;
         with open(app_log_file,'r') as f:
             lines = f.readlines()
@@ -1360,7 +1360,7 @@ def testusingWebInspect(obj,webkit_console_socket):
     observed_pause_evt = ""
     while True:
         if continue_count > 60:
-            print "\n Application is not playing the content"
+            print("\n Application is not playing the content")
             break
         if (len(webkit_console_socket.getEventsBuffer())== 0):
             time.sleep(1)
@@ -1385,4 +1385,3 @@ def testusingWebInspect(obj,webkit_console_socket):
     webkit_console_socket.disconnect()
     time.sleep(5)
     return expected_pause_evt,observed_pause_evt,expected_play_evt,observed_play_evt,test_result
-

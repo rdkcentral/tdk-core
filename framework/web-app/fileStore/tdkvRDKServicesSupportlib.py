@@ -26,7 +26,7 @@ import inspect
 import json , ast
 import collections
 from pexpect import pxssh
-import ConfigParser
+import configparser
 from base64 import b64encode, b64decode
 import codecs
 from time import sleep
@@ -89,7 +89,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
     try:
         # Check whether the response result is empty
         if result == {} or result == [] or result == "":
-            print "\n[INFO]: Received empty JSON response result"
+            print("\n[INFO]: Received empty JSON response result")
             info["Test_Step_Status"] = "FAILURE"
             if len(arg) and arg[0] == "exceptional_cases":
                 info["Test_Step_Status"] = "SUCCESS"
@@ -112,14 +112,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info = result
                     newResult = result.copy()
                     if "esn" in newResult:
-                         newResult.pop("esn")
+                        newResult.pop("esn")
                     status = checkNonEmptyResultData(newResult)
                     if status == "TRUE":
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
                 else:
-                    info["Test_Step_Status"] = "FAILURE"            
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "deviceinfo_get_network_info":
             if arg[0] == "get_all_info":
@@ -168,7 +168,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if status == "TRUE":
                 info["imagename"] = result.get("imagename")
                 info["yocto"] = result.get("yocto")
-                if str(result.get("imagename")).lower() == str(expectedValues[1].strip()).lower() and str(result.get("yocto")).lower() == str(expectedValues[0].strip()).lower():
+                if str(result.get("imagename")).lower() == str(expectedValues[0].strip()).lower() and str(result.get("yocto")).lower() == str(expectedValues[1].strip()).lower():
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -181,7 +181,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-      
+
         elif tag == "deviceinfo_check_supported_resolutions":
             info["supportedResolutions"] = result.get('supportedResolutions')
             if result.get('supportedResolutions'):
@@ -248,7 +248,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         # DeviceIdentification Plugin Response result parser steps
         elif tag == "deviceidentification_get_platform_info":
             info = result.copy()
-            status = checkNonEmptyResultData(info.values())
+            status = checkNonEmptyResultData(list(info.values()))
             if status == "TRUE":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
@@ -272,7 +272,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status,macAddressStatus=[],[]
             interfaces_info = result.get("interfaces")
             for interface in interfaces_info:
-                status.append(checkNonEmptyResultData(interface.values()))
+                status.append(checkNonEmptyResultData(list(interface.values())))
                 macAddress = interface.get("macAddress")
             if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", macAddress.lower()) is None:
                 macAddressStatus.append("False")
@@ -280,7 +280,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-            
+
             info["interfaces"] = interfaces_info
             if arg[0] == "get_all_info":
                 info["interfaces"] = interfaces_info
@@ -297,16 +297,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 if "WIFI" and "ETHERNET" in interface_names:
                     info["Test_Step_Status"] = "SUCCESS"
                     for interface in interfaces_info:
-                      if interface.get("interface") == "ETHERNET":
-                          if str(interface.get("connected")).lower() == expectedValues[0]:
-                              info["Test_Step_Status"] = "SUCCESS"
-                          else:
-                              info["Test_Step_Status"] = "FAILURE"
-                      elif interface.get("interface") == "WIFI":
-                          if str(interface.get("connected")).lower() == expectedValues[1]:
-                              info["Test_Step_Status"] = "SUCCESS"
-                          else:
-                              info["Test_Step_Status"] = "FAILURE"
+                        if interface.get("interface") == "ETHERNET":
+                            if str(interface.get("connected")).lower() == expectedValues[0]:
+                                info["Test_Step_Status"] = "SUCCESS"
+                            else:
+                                info["Test_Step_Status"] = "FAILURE"
+                        elif interface.get("interface") == "WIFI":
+                            if str(interface.get("connected")).lower() == expectedValues[1]:
+                                info["Test_Step_Status"] = "SUCCESS"
+                            else:
+                                info["Test_Step_Status"] = "FAILURE"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             elif arg[0] == "check_interfaces_enabled_state":
@@ -316,12 +316,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 if "WIFI" and "ETHERNET" in interface_names:
                     info["Test_Step_Status"] = "SUCCESS"
                     for interface in interfaces_info:
-                      if interface.get("interface") == "ETHERNET":
-                          if str(interface.get("enabled")).lower() != str(expectedValues[0]).lower():
-                              info["Test_Step_Status"] = "FAILURE"
-                      elif interface.get("interface") == "WIFI":
-                          if str(interface.get("enabled")).lower() != str(expectedValues[1]).lower():
-                              info["Test_Step_Status"] = "FAILURE"
+                        if interface.get("interface") == "ETHERNET":
+                            if str(interface.get("enabled")).lower() != str(expectedValues[0]).lower():
+                                info["Test_Step_Status"] = "FAILURE"
+                        elif interface.get("interface") == "WIFI":
+                            if str(interface.get("enabled")).lower() != str(expectedValues[1]).lower():
+                                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "network_get_default_interface":
             default_interface = result.get("interface")
@@ -344,7 +344,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "network_get_ping_response":
             info = checkAndGetAllResultInfo(result)
             if len(arg) and arg[0] == "validate_error_message":
@@ -448,12 +448,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "network_validate_public_ip_address":
-           success = str(result.get("success")).lower() == "true"
-           info["public_ip"] = result.get("public_ip")
-           if str(result.get("public_ip")).lower() == str(expectedValues[0]).lower():
-               info["Test_Step_Status"] = "SUCCESS"
-           else:
-               info["Test_Step_Status"] = "FAILURE"
+            success = str(result.get("success")).lower() == "true"
+            info["public_ip"] = result.get("public_ip")
+            if str(result.get("public_ip")).lower() == str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "network_check_internet_connection_state":
             info = result
@@ -462,7 +462,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if success and status == "TRUE" and int(result.get("state")) == int(expectedValues[0]):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-               info["Test_Step_Status"] = "FAILURE"
+                info["Test_Step_Status"] = "FAILURE"
 
         # Front Panel Response result parser steps
         elif tag == "frontpanel_get_led_info":
@@ -476,7 +476,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status.append(checkNonEmptyResultData(supported_leds))
             success = str(result.get("success")).lower() == "true"
             for led_info in supported_leds_info:
-                status.append(checkNonEmptyResultData(led_info.values()))
+                status.append(checkNonEmptyResultData(list(led_info.values())))
             if arg[0] == "get_all_info":
                 info["supported_leds"] = supported_leds
                 info["supported_leds_info"] = supported_leds_info
@@ -614,7 +614,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if len(result) > 0:
                 status = []
                 for data in result:
-                    status.append(checkNonEmptyResultData(data.values()))
+                    status.append(checkNonEmptyResultData(list(data.values())))
                 if len(arg) and arg[0] == "check_header":
                     if "FAILURE" not in status and data.get("name") in expectedValues and data.get("value") in expectedValues:
                         info["Test_Step_Status"] = "SUCCESS"
@@ -627,7 +627,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "webkitbrowser_check_url":
             info["url"] = result
             if len(arg) and arg[0] == "check_loaded_url":
@@ -638,7 +638,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-                
+
 
         # Cobalt Plugin Response result parser steps
         elif tag == "cobalt_get_state":
@@ -652,7 +652,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status = checkNonEmptyResultData(result)
             closedcaptions = result.get("closedcaptions")
             textdisplay = result.get("textdisplay")
-            for key,value in closedcaptions.items():
+            for key,value in list(closedcaptions.items()):
                 info[key] = value
             info["ishighcontrasttextenabled"] = textdisplay.get("ishighcontrasttextenabled")
             if status and str(closedcaptions.get("isenabled")).lower() == str(expectedValues[0]).lower() and closedcaptions.get("backgroundcolor") == expectedValues[1] and closedcaptions.get("backgroundopacity") == expectedValues[2] and closedcaptions.get("characteredgestyle") == expectedValues[3] and closedcaptions.get("fontcolor") == expectedValues[4] and closedcaptions.get("fontfamily") == expectedValues[5] and closedcaptions.get("fontopacity") == expectedValues[6] and closedcaptions.get("fontsize") == expectedValues[7] and closedcaptions.get("windowcolor") == expectedValues[8] and closedcaptions.get("windowopacity") == expectedValues[9] and str(textdisplay.get("ishighcontrasttextenabled")).lower() == str(expectedValues[10]).lower():
@@ -716,17 +716,17 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "system_get_rfc_info":
             info = checkAndGetAllResultInfo(result.get("RFCConfig"),result.get("success"))
             if len(arg) and arg[0] == "check_expected_value":
-                rfc_value = result.get("RFCConfig").values()[0]
+                rfc_value = list(result.get("RFCConfig").values())[0]
                 if str(rfc_value).lower() == str(expectedValues[0]).lower():
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
             else:
-                rfc_values = result.get("RFCConfig").values()
+                rfc_values = list(result.get("RFCConfig").values())
                 for rfc_data in rfc_values:
                     if "ERROR" in rfc_data or "error" in rfc_data:
                         info["Test_Step_Status"] = "FAILURE"
-                        
+
         elif tag == "system_validate_empty_rfclist":
             if str(result.get("success")).lower() == "false":
                 info["Test_Step_Status"] = "SUCCESS"
@@ -1043,7 +1043,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "rdkshell_check_for_results":
             info = checkAndGetAllResultInfo(result,result.get("success"))
-            
+
         elif tag == "rdkshell_check_for_visibility_result":
             if len(expectedValues) > 1 :
                 if str(result.get("visible")).lower() in str(expectedValues[0]).lower() or str(result.get("visible")).lower() in str(expectedValues[1]).lower():
@@ -1075,18 +1075,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             info["w"]=str(result.get("w"))
             info["h"]=str(result.get("h"))
             if len(expectedValues)>0:
-                 x = str(result.get("x"))
-                 y = str(result.get("y"))
-                 w = str(result.get("w"))
-                 h = str(result.get("h"))
-                 expectedx = expectedValues[0]
-                 expectedy = expectedValues[1]
-                 expectedw = expectedValues[2]
-                 expectedh = expectedValues[3]
-                 if x == expectedx and  y == expectedy and  w == expectedw and  h == expectedh:
-                     info["Test_Step_Status"] = "SUCCESS"
-                 else:
-                     info["Test_Step_Status"] = "FAILURE"
+                x = str(result.get("x"))
+                y = str(result.get("y"))
+                w = str(result.get("w"))
+                h = str(result.get("h"))
+                expectedx = expectedValues[0]
+                expectedy = expectedValues[1]
+                expectedw = expectedValues[2]
+                expectedh = expectedValues[3]
+                if x == expectedx and  y == expectedy and  w == expectedw and  h == expectedh:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "rdkshell_validate_opacity":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -1148,7 +1148,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-         
+
         elif tag == "rdkshell_check_log_level":
             success = str(result.get("success")).lower() == "true"
             info["LogLevel"] = result.get("logLevel")
@@ -1180,7 +1180,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if success and str(result.get("keyRepeat")) in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                info["Test_Step_Status"] = "FAILURE"        
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "rdkshell_get_enabled_status":
             success = str(result.get("success")).lower() == "true"
@@ -1212,7 +1212,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
- 
+
         elif tag == "rdkshell_check_zorder":
             success = str(result.get("success")).lower() == "true"
             status = checkNonEmptyResultData(result)
@@ -1284,7 +1284,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-                
+
         # DisplayInfo Plugin Response result parser steps
         elif tag == "displayinfo_get_general_info":
             if arg[0] == "get_all_info":
@@ -1297,7 +1297,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "displayinfo_validate_results":
             info["Result"] = result
             if len(arg) and arg[0] == "check_width_height_in_centimeters":
@@ -1335,7 +1335,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             subdict=dict([(x,Resolution_Details[x]) for x in SupportingRes])
 
             #Get matching width_height pair for given width from the SupportingRes.
-            width_height_pair = [val for key, val in subdict.items() if search_key in val]
+            width_height_pair = [val for key, val in list(subdict.items()) if search_key in val]
             #List of matching width/height list based on index
             sub_list = [item[index] for item in width_height_pair]
             if search_key in sub_list :
@@ -1414,7 +1414,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "hdmicec_check_result":
             info = checkAndGetAllResultInfo(result,result.get("success"))
-      
+
         elif tag == "hdmicec_validate_boolean_result":
             if str(result.get("status")) in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
@@ -1439,97 +1439,97 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "FAILURE"
 
             elif arg[0] == "get_physical_address":
-                 physical_address = cec_addresses.get("physicalAddress")
-                 status = checkNonEmptyResultData(cec_addresses.get("physicalAddress"))
-                 physical_address_hex_format = hex(physical_address)
-                 info["physicalAddress"] = physical_address
-                 info["physical_address_hex_format"] = physical_address_hex_format
-                 physical_address_hex_format = physical_address_hex_format[2:]
-                 if status == "TRUE" and str(result.get("success")).lower() == "true":
+                physical_address = cec_addresses.get("physicalAddress")
+                status = checkNonEmptyResultData(cec_addresses.get("physicalAddress"))
+                physical_address_hex_format = hex(physical_address)
+                info["physicalAddress"] = physical_address
+                info["physical_address_hex_format"] = physical_address_hex_format
+                physical_address_hex_format = physical_address_hex_format[2:]
+                if status == "TRUE" and str(result.get("success")).lower() == "true":
                     if expectedValues[0] == "true" and  str(physical_address_hex_format) != "ffff":
-                            info["Test_Step_Status"] = "SUCCESS"
-                    else:
-                        info["Test_Step_Status"] = "FAILURE"
-                 else:
-                     info["Test_Step_Status"] = "FAILURE"
-        #Parser code for HdmiCecSink plugin
-        elif tag == "hdmicecsink_check_active_source_and_route_details":
-           info["AVAILABLE"] = result.get("available")
-           success = str(result.get("success")).lower() == "true"
-           if str(result.get("available")).lower() == "true" and success:
-            if arg[0] == "get_logical_address":
-                if len(arg) > 1 and arg[1] == "active_route":
-                    values = result.get("pathList")
-                    logicalAddress = values[0].get("logicalAddress")
-                    deviceType = values[0].get("deviceType")
-                else:
-                    logicalAddress = result.get("logicalAddress")
-                    deviceType = result.get("deviceType")
-                info["logicalAddress"] = logicalAddress
-                info["deviceType"] =  deviceType
-                if logicalAddress  not in [15,255] and logicalAddress == int(expectedValues[0]) and deviceType.lower() == expectedValues[1].lower() and  success:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            elif arg[0] == "get_physical_address":
-                 if len(arg) > 1 and arg[1] == "active_route":
-                     hdmiPort = str(result.get("ActiveRoute"))
-                     physical_address = result.get("pathList")
-                     physical_address = physical_address[0].get("physicalAddress")
-                 else:
-                     physical_address = result.get("physicalAddress")
-                     hdmiPort = str(result.get("port"))
-                 hdmiPort = int(hdmiPort[len(hdmiPort)-1])
-                 hdmiPort += 1
-                 status = checkNonEmptyResultData(result)
-                 info["physicalAddress"] = physical_address
-                 expectedAddress = str(hdmiPort)+'.0.0.0'
-                 if status == "TRUE":
-                    if  physical_address == expectedAddress and physical_address != "15.15.15.15":
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
-                 else:
-                    info["Test_Step_Status"] = "FAILURE"
-            elif arg[0] == "get_cec_version":
-                cecVersion = result.get("cecVersion")
-                info["cecVersion"] = cecVersion
-                status = checkNonEmptyResultData(cecVersion)
-                if status == "TRUE" and str(cecVersion).lower() != "unknown":
-                    info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-            elif arg[0] == "get_vendor_id":
-                if len(arg) > 1 and arg[1] == "active_route":
-                    vendorID = result.get("pathList")
-                    vendorID  = vendorID[0].get("vendorID")
-                else:
-                    vendorID = result.get("vendorID")
-                info["vendorID"] = vendorID
-                status = checkNonEmptyResultData(vendorID)
-                if status == "TRUE" and str(vendorID).lower() != "000":
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            elif arg[0] == "get_power_status":
-                info["powerStatus"] = result.get("powerStatus")
-                if str(result.get("powerStatus")).lower() == expectedValues[0].lower():
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-            elif arg[0] == "get_osd_name":
-                if len(arg) > 1 and arg[1] == "active_route":
-                    osdName = result.get("pathList")
-                    osdName = osdName[0].get("osdName")
-                else:
-                    osdName = result.get("osdName")
-                info["osdname"] = osdName
-                if str(osdName).lower() == expectedValues[0].lower():
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-           else:
-               info["Test_Step_Status"] = "FAILURE"
+        #Parser code for HdmiCecSink plugin
+        elif tag == "hdmicecsink_check_active_source_and_route_details":
+            info["AVAILABLE"] = result.get("available")
+            success = str(result.get("success")).lower() == "true"
+            if str(result.get("available")).lower() == "true" and success:
+                if arg[0] == "get_logical_address":
+                    if len(arg) > 1 and arg[1] == "active_route":
+                        values = result.get("pathList")
+                        logicalAddress = values[0].get("logicalAddress")
+                        deviceType = values[0].get("deviceType")
+                    else:
+                        logicalAddress = result.get("logicalAddress")
+                        deviceType = result.get("deviceType")
+                    info["logicalAddress"] = logicalAddress
+                    info["deviceType"] =  deviceType
+                    if logicalAddress  not in [15,255] and logicalAddress == int(expectedValues[0]) and deviceType.lower() == expectedValues[1].lower() and  success:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif arg[0] == "get_physical_address":
+                    if len(arg) > 1 and arg[1] == "active_route":
+                        hdmiPort = str(result.get("ActiveRoute"))
+                        physical_address = result.get("pathList")
+                        physical_address = physical_address[0].get("physicalAddress")
+                    else:
+                        physical_address = result.get("physicalAddress")
+                        hdmiPort = str(result.get("port"))
+                    hdmiPort = int(hdmiPort[len(hdmiPort)-1])
+                    hdmiPort += 1
+                    status = checkNonEmptyResultData(result)
+                    info["physicalAddress"] = physical_address
+                    expectedAddress = str(hdmiPort)+'.0.0.0'
+                    if status == "TRUE":
+                        if  physical_address == expectedAddress and physical_address != "15.15.15.15":
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif arg[0] == "get_cec_version":
+                    cecVersion = result.get("cecVersion")
+                    info["cecVersion"] = cecVersion
+                    status = checkNonEmptyResultData(cecVersion)
+                    if status == "TRUE" and str(cecVersion).lower() != "unknown":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif arg[0] == "get_vendor_id":
+                    if len(arg) > 1 and arg[1] == "active_route":
+                        vendorID = result.get("pathList")
+                        vendorID  = vendorID[0].get("vendorID")
+                    else:
+                        vendorID = result.get("vendorID")
+                    info["vendorID"] = vendorID
+                    status = checkNonEmptyResultData(vendorID)
+                    if status == "TRUE" and str(vendorID).lower() != "000":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif arg[0] == "get_power_status":
+                    info["powerStatus"] = result.get("powerStatus")
+                    if str(result.get("powerStatus")).lower() == expectedValues[0].lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif arg[0] == "get_osd_name":
+                    if len(arg) > 1 and arg[1] == "active_route":
+                        osdName = result.get("pathList")
+                        osdName = osdName[0].get("osdName")
+                    else:
+                        osdName = result.get("osdName")
+                    info["osdname"] = osdName
+                    if str(osdName).lower() == expectedValues[0].lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
         elif tag == "hdmicecsink_get_vendor_id":
             success = str(result.get("success")).lower() == "true"
             vendorID = result.get("vendorid")
@@ -1598,7 +1598,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status = []
             success = str(result.get("success")).lower() == "true"
             for property_data in property_info:
-                status.append(checkNonEmptyResultData(property_data.values()))
+                status.append(checkNonEmptyResultData(list(property_data.values())))
             info["properties"] = property_info
             if success and "FALSE" not in status:
                 info["Test_Step_Status"] = "SUCCESS"
@@ -1612,7 +1612,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status = "TRUE"
             for property_data in property_info:
                 if property_data not in expectedValues:
-                   status = "FALSE"
+                    status = "FALSE"
             info["properties"] = property_info
             if success and "FALSE" not in status:
                 info["Test_Step_Status"] = "SUCCESS"
@@ -1674,7 +1674,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-      
+
         elif tag == "check_supported_tv_resolutions":
             info["supportedTvResolutions"] = result.get('supportedTvResolutions')
             if json.dumps(result.get("success")) == "true" and any(item not in result.get('supportedTvResolutions') for item in ["none"]) :
@@ -1731,7 +1731,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-    
+
         elif tag == "check_TV_HDR_support":
             info["TVsupportsHDR"] = result.get('supportsHDR')
             if json.dumps(result.get('supportsHDR')) == "true" and any(item not in result.get('standards') for item in ["none"]) :
@@ -1760,7 +1760,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "check_connected_audio_ports":
             if len(arg) and arg[0] == "check_value":
                 info["connected_audio_port"] = result.get('connectedAudioPorts')
@@ -1817,7 +1817,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 if str(result.get("success")).lower() == "true" and result.get('soundMode') in expectedValues:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["Test_Step_Status"] = "FAILURE" 
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_zoom_settings":
             info["zoomSetting"] = result.get('zoomSetting');
@@ -1834,8 +1834,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if str(result.get("success")).lower() == "true" and result.get('colorSpace') in [0,1,2,3,4,5] and result.get('matrixCoefficients') in [0,1,2,3,4,5,6,7] :
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                info["Test_Step_Status"] = "FAILURE"    
-    
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "check_active_input":
             info ["activeInput"] = result.get('activeInput')
             info ["success"] = result.get('success')
@@ -2139,7 +2139,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "check_supported_color_depth_capabilities":
             status = checkNonEmptyResultData(result)
             supportedColorDepth = result.get('capabilities')
@@ -2260,7 +2260,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-                
+
         elif tag == "bluetooth_set_operation":
             if str(result.get("success")).lower() == "true":
                 info["Test_Step_Status"] = "SUCCESS"
@@ -2427,7 +2427,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "framerate_check_auto_framerate_mode":
             success = str(result.get("success")).lower() == "true"
             info["frmmode"] = result.get("auto-frm-mode")
@@ -2452,7 +2452,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
 
         # Warehouse Plugin Response result parser steps
-        
+
         elif tag == "warehouse_get_device_info":
             info = checkAndGetAllResultInfo(result,result.get("success"))
 
@@ -2555,7 +2555,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag =="messenger_check_error_message":
             info = otherInfo.get("error")
             error = otherInfo.get("error")
@@ -2598,7 +2598,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         #AVInput Plugin Response result parser
         elif tag == "avinput_check_inputs":
             info["numberOfInputs"] = result.get("numberOfInputs")
@@ -2749,7 +2749,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-     
+
         # PersistentStore Plugin Response result parser steps
         elif tag == "persistentstore_check_set_operation":
             if str(result.get("success")).lower() == "true":
@@ -2793,7 +2793,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             status = checkNonEmptyResultData(result)
             if "FALSE" not in status:
                 storage_size = []
-                for key,value in result.get("namespaceSizes").iteritems():
+                for key,value in list(result.get("namespaceSizes").items()):
                     storage_size.append(str(key)+": "+str(value))
                     info["storage_size"] =  storage_size
                     info["Test_Step_Status"] = "SUCCESS"
@@ -2879,7 +2879,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if len(result) > 0:
                 status = []
                 for data in result:
-                    status.append(checkNonEmptyResultData(data.values()))
+                    status.append(checkNonEmptyResultData(list(data.values())))
                 if "FAILURE" not in status:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
@@ -2937,7 +2937,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         # TVControlSettings Plugin Response result parser steps
         elif tag == "tvcontrolsettings_check_value":
             status = checkNonEmptyResultData(result)
@@ -2947,10 +2947,10 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 if len(arg) and arg[0] == "version1":
                     info[arg[1]] = valueDetails
                     if len(arg) > 2 and arg[2] == "check_expected_value":
-                         if str(valueDetails).lower() == str(expectedValues[0]).lower():
-                             info["Test_Step_Status"] = "SUCCESS"
-                         else:
-                             info["Test_Step_Status"] = "FAILURE"
+                        if str(valueDetails).lower() == str(expectedValues[0]).lower():
+                            info["Test_Step_Status"] = "SUCCESS"
+                        else:
+                            info["Test_Step_Status"] = "FAILURE"
                 elif len(arg) and arg[0] == "version2":
                     selectedValue = valueDetails.get("Selected")
                     info[arg[2]] = valueDetails.get("Selected")
@@ -2961,9 +2961,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         else:
                             info["Test_Step_Status"] = "FAILURE"
                 else:
-                    info["Test_Step_Status"] = "FAILURE"            
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE" 
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "tvcontrolsettings_check_set_operation":
             info["success"] = result.get("success")
@@ -3119,8 +3119,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             info = result
             apps = result.get("apps")
             persistent = result.get("persistent")
-            status1 = checkNonEmptyResultData(apps.values())
-            status2 = checkNonEmptyResultData(persistent.values())
+            status1 = checkNonEmptyResultData(list(apps.values()))
+            status2 = checkNonEmptyResultData(list(persistent.values()))
             if status1 == "TRUE" and status2 == "TRUE":
                 if str(expectedValues[0]).lower() in str(apps.get("path")).lower() and str(expectedValues[0]).lower() in str(persistent.get("path")).lower():
                     info["Test_Step_Status"] = "SUCCESS"
@@ -3135,34 +3135,34 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             success = str(result.get("success")).lower() == "true"
             expectedResult = 0
             for app in containers:
-               if str(app.get("Id")).lower() == expectedValues[0]:
-                   descriptor = app.get("Descriptor")
-                   expectedResult = 1
-                   break;
+                if str(app.get("Id")).lower() == expectedValues[0]:
+                    descriptor = app.get("Descriptor")
+                    expectedResult = 1
+                    break;
             if success:
-               if len(arg) and arg[0] == "check_if_exists":
-                   if expectedResult == 1:
-                       info["Test_Step_Status"] = "SUCCESS"
-                       if len(arg) > 2 and arg[1] == "check_container_info":
-                           if descriptor == arg[2]:
-                               info["Test_Step_Status"] = "SUCCESS"
-                           else:
-                               info["Test_Step_Status"] = "FAILURE"
-                   else:
-                       info["Test_Step_Status"] = "FAILURE"
+                if len(arg) and arg[0] == "check_if_exists":
+                    if expectedResult == 1:
+                        info["Test_Step_Status"] = "SUCCESS"
+                        if len(arg) > 2 and arg[1] == "check_container_info":
+                            if descriptor == arg[2]:
+                                info["Test_Step_Status"] = "SUCCESS"
+                            else:
+                                info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
 
-               elif len(arg) and arg[0] == "check_not_exists":
-                  if expectedResult == 0:
-                      info["Test_Step_Status"] = "SUCCESS"
-                  else:
-                      info["Test_Step_Status"] = "FAILURE"
+                elif len(arg) and arg[0] == "check_not_exists":
+                    if expectedResult == 0:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "ocicontainer_check_container_status":
             info = result
             success = str(result.get("success")).lower() == "true"
-            if success and result.get("state").lower() == expectedValues[0] and result.get("containerId").lower() == expectedValues[1]: 
+            if success and result.get("state").lower() == expectedValues[0] and result.get("containerId").lower() == expectedValues[1]:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -3346,18 +3346,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     status_code = plugin.get("HttpStatusCode")
                     if status_code is not None:
                         info["HttpStatusCode"] = status_code
-                        break  
+                        break
                 if status_code == 200:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
 
     except Exception as e:
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
         info["Test_Step_Status"] = "FAILURE"
 
     return info
@@ -3410,7 +3410,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
         # Controller Plugin Response result parser steps
         if tag == "controller_get_plugin_state":
             state = ""
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             for result in testStepResults:
                 if result.get("callsign") == arg[1]:
                     state = result.get("state")
@@ -3447,7 +3447,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # TraceControl Plugin Response result parser steps
         elif tag == "tracecontrol_get_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = testStepResults[0].get("state")
             if arg[0] == "isDisabled":
                 if state == "disabled":
@@ -3463,7 +3463,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # Front Panel Plugin Response result parser steps
         elif tag == "frontpanel_check_led_brightness":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             brightness = testStepResults[0].get("brightness")
             if arg[0] == "isBrigtnessZero":
                 if str(brightness) == "0":
@@ -3474,7 +3474,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # WebKitBrowser Plugin Response result parser steps
         elif tag == "webkitbrowser_check_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = testStepResults[0].get("state")
             if arg[0] == "isSuspended":
                 if state == "suspended":
@@ -3484,7 +3484,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         #network plugin
         elif tag =="check_test_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             configValue = testStepResults[0].get("configvalue")
             if configValue == "yes":
                 result = "TRUE"
@@ -3494,7 +3494,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # Cobalt Plugin Response result parser steps
         elif tag == "cobalt_check_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = testStepResults[0].get("state")
             if arg[0] == "isSuspended":
                 if state == "suspended":
@@ -3504,7 +3504,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # Wifi Plugin Response result parser steps
         elif tag == "wifi_check_adapter_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = str(testStepResults[0].get("state"))
             if arg[0] == "isDisabled":
                 if state == "1":
@@ -3513,7 +3513,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
 
         elif tag == "wifi_check_interface_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = str(testStepResults[0].get("enabled"))
             if str(state).lower() == "false":
                 result = "TRUE"
@@ -3522,7 +3522,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # RDKShell Plugin Response result parser steps
         elif tag == "rdkshell_check_application_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             clients = testStepResults[0].get("clients")
             if len(arg) and arg[0] == "check_app_not_exists":
                 if str(arg[1]).lower() in clients:
@@ -3538,8 +3538,8 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
         # XCast Plugin Response result parser steps
         elif tag == "xcast_get_xdial_status":
             if len(arg) and arg[0] == "dynamic_app_list":
-                testStepResults1 = testStepResults[0].values()[0]
-                testStepResults2 = testStepResults[1].values()[0]
+                testStepResults1 = list(testStepResults[0].values())[0]
+                testStepResults2 = list(testStepResults[1].values())[0]
                 status1 = testStepResults1[0].get("status")
                 status2 = testStepResults2[0].get("status")
                 if str(status1).lower() == "true" and str(status2).lower() == "true":
@@ -3547,7 +3547,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 else:
                     result = "TRUE"
             else:
-                testStepResults = testStepResults[0].values()[0]
+                testStepResults = list(testStepResults[0].values())[0]
                 status = testStepResults[0].get("status")
                 if str(status).lower() == "true":
                     result = "FALSE"
@@ -3556,7 +3556,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # HdmiCecSink Plugin Response result parser steps
         elif tag == "hdmicecsink_check_cec_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if str(testStepResults[0].get("enabled")).lower() != "true":
                 result = "TRUE"
             else:
@@ -3564,7 +3564,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # System Plugin Response result parser steps
         elif tag == "system_check_preferred_standby_mode":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             mode = testStepResults[0].get("preferredStandbyMode")
             if arg[0] == "isNotEqual":
                 if mode != arg[1]:
@@ -3573,7 +3573,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
 
         elif tag == "system_check_disk_partition":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             partition_count = testStepResults[0].get("partition_count")
             if int(partition_count) < int(arg[0]):
                 result = "TRUE"
@@ -3581,7 +3581,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "FALSE"
 
         elif tag == "system_check_power_state_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             powerState = testStepResults[0].get("powerState")
             if powerState in ("STANDBY","DEEP_SLEEP","LIGHT_SLEEP"):
                 result = "TRUE"
@@ -3589,7 +3589,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "FALSE"
 
         elif tag == "system_check_existing_rule":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             rule = testStepResults[0].get(arg[0])
             if len(rule) == 0:
                 result = "TRUE"
@@ -3597,7 +3597,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "FALSE"
 
         elif tag == "lisa_check_app_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             appStatus = testStepResults[0].get("appStatus")
             if len(arg) and arg[0] == "check_app_exists":
                 if appStatus == "TRUE":
@@ -3609,10 +3609,10 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "FALSE"
                 else:
                     result = "TRUE"
- 
+
         # OCI Container Plugin Response result parser steps
         elif tag == "get_data_model_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("status")
             if str(status).lower() == "true":
                 result = "FALSE"
@@ -3621,19 +3621,19 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
 
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_check_device_pair_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if testStepResults[0].get("name"):
                 result = "TRUE"
             else:
                 result = "FALSE"
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
 
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
-        print "Result: %s" %(result)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
+        print("Result: %s" %(result))
 
     return status,result
 
@@ -3686,7 +3686,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         # TraceControl Plugin Response result parser steps
         if tag == "tracecontrol_toggle_state":
             state = ""
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) != 0:
                 for result in testStepResults:
                     if arg[0] == result.get("category"):
@@ -3701,9 +3701,9 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["state"] = "enabled"
 
         elif tag == "tracecontrol_get_category":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["category"] = testStepResults[0].get("category")
-        
+ 
         # MessageControl Plugin Response result parser steps
         elif tag == "messagecontrol_get_controls":
             for value in result:
@@ -3749,13 +3749,13 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # DeviceInfo Plugin Response result parser steps
         elif tag == "deviceinfo_get_firmware_version_details":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["imagename"] = testStepResults[0].get("image")
             info["yocto"] = testStepResults[0].get("yocto")
 
         # OCDM Plugin Response result parser steps
         elif tag == "ocdm_get_all_drms":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             drm_info = testStepResults[0].get("drm_info")
             drms = []
             for drm in drm_info:
@@ -3763,7 +3763,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["drm"] = ",".join(drms)
 
         elif tag == "ocdm_get_drm_key":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             drm_info = testStepResults[0].get("drm_info")
             drm_key = ""
             for drm in drm_info:
@@ -3775,13 +3775,13 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # Network Plugin Response result parser steps
         elif tag == "network_get_interface_names":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             interface_names = testStepResults[0].get("interface_names")
             interface_names = [ name for name in interface_names if name.strip() ]
             info["interface_names"] = ",".join(interface_names)
 
         elif tag == "network_get_endpoint_name":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             endpoints = testStepResults[0].get("endpoints")
             if len(endpoints):
                 info["endpointName"] = endpoints[0]
@@ -3789,11 +3789,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["endpointName"] = ""
 
         elif tag == "network_get_default_interface_name":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["interface"] =  testStepResults[0].get("default_interface")
 
         elif tag == "network_toggle_interface_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("enabled")
             if str(status).lower() == "true":
                 info["enabled"] = False
@@ -3802,19 +3802,19 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         #Parse the previous results and update only URL value
         elif tag == "controller_parse_configuration_values":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             updatedConfiguration = testStepResults[0].get("configuration")
             updatedConfiguration['url'] = testStepResults[0].get("url")
             info["configuration"] = updatedConfiguration
 
         elif tag == "network_get_stb_ip":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["Device_IP"] = testStepResults[0].get("ip")
 
 
         # Front Panel Plugin Response result parser steps
         elif tag == "frontpanel_get_brightness_levels":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             range_type = testStepResults[0].get("range")
             step_value = str(testStepResults[0].get("step"))
             min_value  = str(testStepResults[0].get("min"))
@@ -3836,7 +3836,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                     info["brightness"] = min_value + "," + mid_value + "," + max_value
 
         elif tag == "frontpanel_get_clock_brightness":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             brightness = testStepResults[0].get("brightness")
             if str(brightness) == "100":
                 info["brightness"] = "50"
@@ -3844,7 +3844,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["brightness"] = "100"
 
         elif tag == "frontpanel_toggle_clock_mode":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             hr24clock_mode = testStepResults[0].get("is24Hour")
             if str(hr24clock_mode).lower() == "false":
                 info["is24Hour"] = True
@@ -3852,13 +3852,13 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["is24Hour"] = False
 
         elif tag == "frontpanel_set_led_info":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["preferences"] = json.dumps(testStepResults[0].get("supported_leds_info")[0])
 
         # FrameRate Plugin Response result parser steps
         elif tag == "framerate_set_display_framerate":
             FramerateList = []
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             test_list = testStepResults[0].get("DisplayFrameRate")
             for value in test_list:
                 if value not in FramerateList:
@@ -3867,7 +3867,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # WebkitBrowser Plugin Response result parser steps
         elif tag == "webkitbrowser_toggle_visibility":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             visibility = testStepResults[0].get("visibility")
             if visibility == "visible":
                 info["visibility"] = "hidden"
@@ -3875,7 +3875,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["visibility"] = "visible"
 
         elif tag == "webkitbrowser_toggle_local_storage_availability":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
             if str(enabled).lower() == "false":
                 info["enabled"] = True
@@ -3883,7 +3883,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["enabled"] = False
 
         elif tag == "webkitbrowser_change_cookie_policy":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             cookie_accept_policy = testStepResults[0].get("cookie_accept_policy")
             if cookie_accept_policy  == "always":
                 info["cookie_accept_policy"] = "never"
@@ -3891,11 +3891,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["cookie_accept_policy"] = "always"
 
         elif tag == "webkitbrowser_get_useragent_string":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["useragent"] = testStepResults[0].get("useragent")
 
         elif tag == "webkitbrowser_get_header":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             header = testStepResults[0].get("headers")[0]
             if len(arg) and arg[0] == "get_name":
                 info["name"] = header.get("name")
@@ -3905,29 +3905,29 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info = header
 
         elif tag == "webkitbrowser_check_average_fps":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             fpsValues = 0;count = 0
             for result in testStepResults:
                 count += 1
                 fpsValues += int(result.get("fps"))
-            average= fpsValues/count
+            average= fpsValues//count
             info["Average"] = average
-       
+
         elif tag == "webkitbrowser_get_loaded_url":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["url"] = testStepResults[0].get("url")
 
         elif tag == "webkitbrowser_lightningapp_get_loaded_url":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["url"] = testStepResults[0].get("url")
 
         elif tag == "webkitbrowser_get_fps":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["newFpsValue"] = int(testStepResults[0].get("fps"))
 
         # System plugin result parser steps
         elif tag == "system_toggle_gz_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
             if str(enabled).lower() == "true":
                 info["enabled"] = False
@@ -3935,7 +3935,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["enabled"] = True
 
         elif tag == "system_switch_power_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             powerState = testStepResults[0].get("powerState")
             if powerState in ("STANDBY","DEEP_SLEEP","LIGHT_SLEEP"):
                 info["powerState"] = "ON"
@@ -3943,38 +3943,38 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["powerState"] = "STANDBY"
 
         elif tag == "system_get_available_standby_modes":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["standbyMode"] = testStepResults[0].get("supportedStandbyModes")
-        
+
         elif tag == "system_generate_new_temperature_thresholds":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if str(arg[0]) == "warn":
                 info["WARN"] = float(testStepResults[0].get("temperature")) - 10
             if str(arg[1]) == "max":
                 info["MAX"] = float(testStepResults[0].get("temperature")) + 10
 
         elif tag == "system_get_bluetooth_mac":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["bluetooth_mac"] = testStepResults[0].get("bluetooth_mac")
 
         elif tag == "system_get_powerstate_before_reboot":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["powerState"] = testStepResults[0].get("powerState")
 
         elif tag == "system_get_estb_mac":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["estb_mac"] = testStepResults[0].get("estb_mac")
-        
+
         elif tag == "system_get_core_temperature":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["temperature"] = testStepResults[0].get("temperature")
 
         elif tag == "system_get_current_image_name":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["image_name"] = testStepResults[0].get("current_FW_version")
-        
+
         elif tag == "system_toggle_moca_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             value = testStepResults[0].get("mocaEnabled")
             if str(value).lower() == "true":
                 info["value"] = False
@@ -3982,11 +3982,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["value"] = True
 
         elif tag == "system_generate_new_temperature_grace_interval":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["graceInterval"] = int(testStepResults[0].get("graceInterval")) + 10
 
         elif tag == "system_get_device_details":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) and arg[0] == "get_swupdate_file_status":
                 info["FIRMWARE_UPGRADE_STATUS"] = testStepResults[0].get("FIRMWARE_UPGRADE_STATUS")
             elif len(arg) and arg[0] == "get_public_ip_address":
@@ -3995,35 +3995,35 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["value"] = testStepResults[0].get("details")
 
         elif tag == "system_get_time_zone":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["timeZone"] = testStepResults[0].get("timeZone")
 
         elif tag == "system_get_formatted_time_zones":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             zoneInfo = testStepResults[0].get("zoneinfo")
             info["timeZone"] = ",".join(zoneInfo)
 
         elif tag == "system_toggle_network_standby_mode_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             nwStandby = testStepResults[0].get("nwStandby")
             if str(nwStandby).lower() == "true":
                 info["nwStandby"] = False
             else:
                 info["nwStandby"] = True
-        
+
         elif tag == "system_get_firmware_rule_parameters":
-            testStepResults1 = testStepResults[0].values()[0]
+            testStepResults1 = list(testStepResults[0].values())[0]
             info["model"] = testStepResults1[0].get("details")
-            testStepResults2 = testStepResults[len(testStepResults)-1].values()[0]
+            testStepResults2 = list(testStepResults[len(testStepResults)-1].values())[0]
             info["estb_mac"] = testStepResults2[0].get("estb_mac")
             if len(testStepResults) == 4:
-                firmwareConfig = testStepResults[2].values()[0]
+                firmwareConfig = list(testStepResults[2].values())[0]
                 firmwareConfig = json.dumps(firmwareConfig[0])
                 firmwareConfig = json.loads(firmwareConfig)
                 firmwareConfig = firmwareConfig.get("new_firmware_configuration")
                 info["configId"] = firmwareConfig.get("id")
             else:
-                firmwareConfig = testStepResults[1].values()[0]
+                firmwareConfig = list(testStepResults[1].values())[0]
                 firmwareConfig = json.dumps(firmwareConfig[0])
                 firmwareConfig = json.loads(firmwareConfig)
                 firmwareConfig = firmwareConfig.get("existing_firmware_configuration")
@@ -4031,7 +4031,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # user Preferences result parser steps
         elif tag == "userpreferences_switch_ui_language":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             language = testStepResults[0].get("language")
             if "en" in str(language):
                 info["language"] = "es"
@@ -4040,14 +4040,14 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # HdmiCecSink plugin result parser steps
         elif tag =="hdmicecsink_get_physical_logical_address":
-            testStepResults1 = testStepResults[0].values()[0]
-            testStepResults2 = testStepResults[1].values()[0]
+            testStepResults1 = list(testStepResults[0].values())[0]
+            testStepResults2 = list(testStepResults[1].values())[0]
             info["logicalAddress"] = testStepResults1[0].get("logicalAddress")
             info["physicalAddress"] = testStepResults2[0].get("physicalAddress")
 
         # RDK Shell plugin result parser steps
         elif tag == "rdkshell_get_connected_client":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             clients = testStepResults[0].get("clients")
             if len(arg) and arg[0] == "get_all_clients":
                 info["client"] = ",".join(clients)
@@ -4056,22 +4056,22 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 if len(clients):
                     if len(arg) > 1:
                         if arg[1] == "target":
-                           info["target"] = clients[index]
+                            info["target"] = clients[index]
 
                     else:
                         info["client"] = clients[index]
                 else:
                     info["client"] = ""
-                    info["target"] = ""        
+                    info["target"] = ""
 
         elif tag == "rdkshell_get_clients_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             result = testStepResults[0].get("state")
-            print result
+            print(result)
             info["callsign"] = result[int(arg[0])].get("callsign")
 
         elif tag =="visibility_toggle_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("visible")
             if str(status).lower() == "true":
                 info["visible"] = False
@@ -4079,7 +4079,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["visible"] = True
 
         elif tag =="rdkshell_generate_new_opacity_value":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             opacity = str(testStepResults[0].get("opacity"))
             #Check if the current opacity is set to 75 if not set it to 75 for testing.
             #If curretnt value is 75 then set to 50 for testing.
@@ -4089,7 +4089,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["opacity"] = 50
 
         elif tag =="rdkshell_generate_new_scale_value":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             #Generate a new scaling values by incrementing 1 to the given value
             if len(arg) > 0:
                 if str(arg[0]) == "sx":
@@ -4101,35 +4101,35 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["sy"] = float(testStepResults[0].get("sy")) + 1
 
         elif tag =="rdkshell_get_last_client_zorder":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             clients = testStepResults[0].get("clients")
             info["client"] = str(clients[(len(clients)-1)])
-  
+
         elif tag == "rdkshell_get_zorder":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             clients = testStepResults[0].get("clients")
             if len(clients):
-                 index = int(arg[0])
-                 if len(arg) > 1 and arg[1] == "target":
-                     info["target"] = clients[index]
-                 elif len(arg)> 1 and arg[1] == "behind":
-                     info["behind"] = clients[index]
-                 else:
-                     info["client"] = clients[index]
+                index = int(arg[0])
+                if len(arg) > 1 and arg[1] == "target":
+                    info["target"] = clients[index]
+                elif len(arg)> 1 and arg[1] == "behind":
+                    info["behind"] = clients[index]
+                else:
+                    info["client"] = clients[index]
             else:
                 info["client"] = ""
                 info["target"] = ""
 
         elif tag == "rdkshell_toggle_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
             if str(enabled).lower() == "true":
                 info["enable"] = False
             else:
                 info["enable"] = True
-        
+
         elif tag == "rdkshell_set_virtual_resolution":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             width = testStepResults[0].get("width")
             height = testStepResults[0].get("height")
             if len(arg) and arg[0] == "set_screen_resolution":
@@ -4140,23 +4140,23 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["height"] = height
 
         elif tag == "rdkshell_get_image_path":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             imagePath = testStepResults[0].get("imagepath")
             info["path"] = imagePath
 
         #Display info plugin result parser steps
         elif tag == "display_info_get_supported_resolution_list":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             SupportingRes = testStepResults[0].get("supportedResolutions")
             info["resolution"] = ",".join(SupportingRes)
 
         elif tag == "displayinfo_get_connected_device_edid":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["connected_device_edid"] = testStepResults[0].get('connected_device_edid')
 
         # Parser Code for ActivityMonitor plugin
         elif tag == "activitymonitor_get_appPid":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             app_list=testStepResults[0].get("applicationMemory")
             if len(app_list) > 0:
                 pid=app_list[0].get("appPid")
@@ -4169,7 +4169,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # HDMI CEC plugin result parser steps
         elif tag == "hdmicec_toggle_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
             if str(enabled).lower() == "true":
                 info["enabled"] = False
@@ -4177,49 +4177,49 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["enabled"] = True
 
         elif tag == "hdmicec_get_base64_data":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             message  = testStepResults[0].get("message")
             info["message"] = message
 
 
         #Parser code for State Observer plugin
         elif tag == "StateObserver_change_version":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             version = testStepResults[0].get("version")
             if int(float(version)) == 1:
                 info["version"] = 2
             else:
                 info["version"] = 1
-        
+
         #Parser code for FirmwareController plugin
         elif tag == "change_image_version":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["image"] = testStepResults[0].get("image")
 
         # Display Settings Plugin result parser steps
         elif tag == "display_get_isconnected_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             is_connected = testStepResults[0].get("is_connected")
             info["is_connected"] = is_connected
 
         elif tag =="set_video_display":
-            testStepResults = testStepResults[0].values()[0]
-            video_display = testStepResults[0].get("video_display")       
+            testStepResults = list(testStepResults[0].values())[0]
+            video_display = testStepResults[0].get("video_display")
             info["videoDisplay"] = video_display[0]
-            info["portName"] = video_display[0] 
+            info["portName"] = video_display[0]
 
         elif tag =="get_supported_sound_modes":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             supported_sound_modes = testStepResults[0].get("supported_audio_modes")
             info["soundMode"] = ",".join(supported_sound_modes)
 
         elif tag =="get_supported_resolutions":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             supportedResolutions = testStepResults[0].get("supportedResolutions")
             info["resolution"] = ",".join(supportedResolutions)
 
         elif tag =="get_supported_audio_profiles":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             audioProfiles = testStepResults[0].get("supportedMS12AudioProfiles")
             if len(arg) and arg[0] == "get_profiles_without_off":
                 if "Off" in audioProfiles:
@@ -4237,7 +4237,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["profileName"] = arg[0]
 
         elif tag == "get_connected_audio_port":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             audioPorts = testStepResults[0].get("connected_audio_port")
             if "HDMI0" in audioPorts:
                 info["audioPort"] = "HDMI0"
@@ -4247,7 +4247,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["audioPort"] = audioPorts[0]
 
         elif tag =="get_formatted_sound_modes":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             supported_sound_modes = testStepResults[0].get("supported_audio_modes")
             soundModes = []
             for mode in supported_sound_modes:
@@ -4256,43 +4256,43 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 else:
                     soundModes.append(mode)
             info["soundMode"] = ",".join(soundModes)
-    
+
         elif tag =="get_settop_and_tv_resolutions":
-            testStepResults1 = testStepResults[0].values()[0]
-            testStepResults2 = testStepResults[1].values()[0]
+            testStepResults1 = list(testStepResults[0].values())[0]
+            testStepResults2 = list(testStepResults[1].values())[0]
             supportedTvResolutions = testStepResults1[0].get("supportedTvResolutions")
             supportedSettopResolutions = testStepResults2[0].get("supportedSettopResolutions")
             commonResolutions = list(set(supportedTvResolutions) & set(supportedSettopResolutions))
             info["commonResolutions"] = ",".join(commonResolutions)
-        
+
         elif tag =="get_selected_resolutions":
             resolutionsList = []
-            testStepResults1 = testStepResults[0].values()[0]
-            testStepResults2 = testStepResults[1].values()[0]
+            testStepResults1 = list(testStepResults[0].values())[0]
+            testStepResults2 = list(testStepResults[1].values())[0]
             supportedResolutions = testStepResults1[0].get("supportedResolutions")
             currentResolution = testStepResults2[0].get("resolution")
             supportedResolutions.remove(currentResolution)
             resolutionsList.append(supportedResolutions[0])
-            resolutionsList.append(supportedResolutions[len(supportedResolutions)/2])
+            resolutionsList.append(supportedResolutions[len(supportedResolutions)//2])
             resolutionsList.append(supportedResolutions[len(supportedResolutions)-1])
             info["resolution"] = resolutionsList
 
         elif tag == "get_default_resolution":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["defaultResolution"] = testStepResults[0].get("defaultResolution")
 
         elif tag == "get_audio_delay":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["audioDelay"] = testStepResults[0].get("audioDelay")
-        
+
         elif tag == "displaysettings_get_default_values":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["defaultValue"] = testStepResults[0].get("defaultValue")
             if len(arg) and arg[0] == "get_default_mode":
                 info["defaultMode"] = testStepResults[0].get("defaultMode")
 
         elif tag == "displaysettings_generate_new_value":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) and arg[0] == "bass_enhancer":
                 bassBoost = testStepResults[0].get("bassBoost")
                 if bassBoost != 75:
@@ -4311,15 +4311,15 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                     info["ms12SettingsValue"] = "10"
                 else:
                     info["ms12SettingsValue"] = "1"
-        
+
         elif tag =="get_supported_color_depth_capabilities":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             supportedColorDepth = testStepResults[0].get("supportedColorDepth")
             info["colorDepth"] = ",".join(supportedColorDepth)
 
         # Wifi Plugin Response result parser steps
         elif tag == "wifi_toggle_adapter_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             state = str(testStepResults[0].get("state"))
             if len(arg) and arg[0] == "get_state_no":
                 if state == "1":
@@ -4333,7 +4333,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                     info["enable"] = False
 
         elif tag == "wifi_toggle_signal_threshold_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("enabled")
             if len(arg) and arg[0] == "get_toggle_value":
                 if str(status).lower() == "false":
@@ -4343,7 +4343,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_toggle_discoverable_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("discoverable")
             if str(status).lower() == "true":
                 info["discoverable"] = False
@@ -4351,32 +4351,32 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["discoverable"] = True
 
         elif tag == "bluetooth_get_device_id":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["deviceID"] = testStepResults[0].get("deviceID")
 
         # Logging Preferences Plugin Response result parser steps
         elif tag == "loggingpreferences_toggle_keystroke_mask_state":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             status = testStepResults[0].get("keystrokeMaskEnabled")
             if str(status).lower()== "false":
-                  info["keystrokeMaskEnabled"] = True
+                info["keystrokeMaskEnabled"] = True
             else:
-                  info["keystrokeMaskEnabled"] = False
+                info["keystrokeMaskEnabled"] = False
 
         #Timer Plugin Response result parser steps
         elif tag == "timer_start_timer_result":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["timerId"] = testStepResults[0].get("timerId")
 
 
         # Messenger Plugin Response result parser steps
         elif tag == "messenger_get_roomid":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["roomid"] = testStepResults[0].get("roomid")
 
         # HdmiInput plugin result parser steps
         elif tag == "hdmiinput_get_portids":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             port_id_list = testStepResults[0].get("portIds")
             if len(arg) and arg[0] == "deviceid":
                 info["deviceId"] = ",".join(port_id_list)
@@ -4385,19 +4385,19 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         #CompositeInput plugin result parser steps
         elif tag == "compositeinput_get_portids":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             port_id_list = testStepResults[0].get("portIds")
             info["portId"] = ",".join(port_id_list)
 
         #PlayerInfo Plugin Response result parser steps
         elif tag == "player_info_get_resolutions":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             SupportingRes = testStepResults[0].get("supportedResolutions")
             info["resolution"] = ",".join(SupportingRes)
-        
+
         # TextToSpeech Plugin Response result parser steps
         elif tag == "texttospeech_toggle_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled_status = testStepResults[0].get("enabletts")
             if str(enabled_status).lower() == "true":
                 info["enabletts"] = False
@@ -4406,14 +4406,14 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # XCast Plugin Response result parser steps
         elif tag == "xcast_toggle_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled_status = testStepResults[0].get("enabled")
             if str(enabled_status).lower() == "true":
                 info["enabled"] = False
             else:
                 info["enabled"] = True
         elif tag == "xcast_toggle_standby_behavior_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             standbyBehavior = testStepResults[0].get("standbybehavior")
             if str(standbyBehavior).lower() == "active":
                 info["standbybehavior"] = "inactive"
@@ -4422,18 +4422,18 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # DTV Plugin Response result parser steps
         elif tag == "dtv_get_service_info":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) and arg[0] == "get_first_service":
                 service = testStepResults[0].get("Service_List")[0]
                 info["dvburi"] = service.get("dvburi")
                 info["lcn"] = service.get("lcn")
-        
+
         elif tag == "dtv_get_play_handle":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["value"] = testStepResults[0].get("result")
 
         elif tag == "dtv_get_country_list":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             country_list  = testStepResults[0].get("Country_List")
             if len(arg) and arg[0] == "get_country_code":
                 country_code = []
@@ -4445,11 +4445,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             elif len(arg) and arg[0] == "get_no_of_countries":
                 info["no_of_countries"] = len(country_list)
             else:
-                info["Country_List"] = country_list   
-     
+                info["Country_List"] = country_list
+
         elif tag == "dtv_get_events_params":
-            testStepResults1 = testStepResults[0].values()[0]
-            testStepResults2 = testStepResults[1].values()[0]
+            testStepResults1 = list(testStepResults[0].values())[0]
+            testStepResults2 = list(testStepResults[1].values())[0]
             service = testStepResults1[0].get("Service_List")
             nowEvent = testStepResults2[0].get("now")
             nextEvent = testStepResults2[0].get("next")
@@ -4468,7 +4468,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["dvburi"] = value
 
         elif tag == "dtv_get_events_expected_values":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             nowEvent = testStepResults[0].get("now")
             nextEvent = testStepResults[0].get("next")
             info["nowEvent_EventID"] = nowEvent.get("eventid")
@@ -4477,7 +4477,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "dtv_get_random_services_dvburi":
             dvburi = []
             service_list = []
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             services = testStepResults[0].get("Service_List")
             if len(services) >= 3:
                 for value in range(3):
@@ -4490,7 +4490,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["dvburi"] = ",".join(dvburi)
 
         elif tag == "dtv_get_random_services_lcn":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             services = testStepResults[0].get("Service_List")
             for service in services:
                 if arg[0] == service.get("dvburi"):
@@ -4498,51 +4498,51 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                     break
         # TVControlSettings Plugin Response result parser steps
         elif tag == "tvcontrolsettings_get_aspect_ratio":
-            testStepResults = testStepResults[0].values()[0]
-            info["aspectRatio"] = testStepResults[0].get("aspectRatio") 
-        
+            testStepResults = list(testStepResults[0].values())[0]
+            info["aspectRatio"] = testStepResults[0].get("aspectRatio")
+
         elif tag == "tvcontrolsettings_get_supported_modes":
             Modes = []
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             supportedModes = testStepResults[0].get(arg[0])
             for value in supportedModes:
                 Modes.append(str(value))
             info[arg[1]] = ",".join(Modes)
-        
+
         elif tag == "tvcontrolsettings_get_saved_data":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info[arg[0]] = testStepResults[0].get(arg[0])
 
         elif tag == "tvcontrolsettings_get_selected_mode":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info[arg[0]] = testStepResults[0].get("randomnumber")
-         
+
         elif tag == "tvcontrolsettings_get_default_values":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["defaultValue"] = testStepResults[0].get("defaultValue")
 
         # Security Agent Plugin Response result parser steps
         elif tag == "securityagent_get_token":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["token"] = testStepResults[0].get("securityToken")
 
         # LISA Plugin Response result parser steps
         elif tag == "lisa_get_handle":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["handle"] = testStepResults[0].get("Result")
 
         # OCIContainer Plugin Response result parser steps
         elif tag == "ocicontainer_get_process_id":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["processID"] = testStepResults[0].get("processID")
 
         elif tag == "ocicontainer_get_container_details":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["descriptor"] = testStepResults[0].get("descriptor")
 
         # HdmiCec2 Plugin Response result parser steps
         elif tag == "hdmicec2_toggle_enabled_status":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
             if str(enabled).lower() == "true":
                 info["enabled"] = False
@@ -4551,15 +4551,15 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
 
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_name":
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             info["callsign"] = testStepResults[0].get("callsign")
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
 
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
     return status,info
 
@@ -4610,7 +4610,7 @@ def checkTestCaseApplicability(methodTag,configKeyData,arguments):
                 result = "TRUE"
             else:
                 result = "FALSE"
-        
+
         elif tag == "frontpanel_check_feature_applicability":
             if all(item in keyData for item in arg):
                 result = "TRUE"
@@ -4676,12 +4676,12 @@ def checkTestCaseApplicability(methodTag,configKeyData,arguments):
                 result = "FALSE"
 
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
 
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
     return status,result
 
@@ -4742,7 +4742,7 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rdkshell_set_launch_params":
             userGeneratedParam = { "callsign": testParams.get("callsign"), "configuration": { "closurepolicy": testParams.get("closurepolicy") } }
         elif tag == "rdkshell_set_launch_app_params":
-             userGeneratedParam = { "callsign": testParams.get("callsign"),"type": testParams.get("type"),"visible": testParams.get("visible"),"configuration": { "url": testParams.get("url") } }
+            userGeneratedParam = { "callsign": testParams.get("callsign"),"type": testParams.get("type"),"visible": testParams.get("visible"),"configuration": { "url": testParams.get("url") } }
         elif tag == "rdkshell_set_keylistener_params":
             newtestParams = testParams.copy()
             newtestParams.pop("client")
@@ -4750,7 +4750,7 @@ def generateComplexTestInputParam(methodTag,testParams):
         elif tag == "rdkshell_set_animations_params":
             userGeneratedParam = {"animations":[testParams]}
         elif tag == "rdkshell_add_key_intercepts":
-            print testParams,"testParams"
+            print(testParams,"testParams")
             userGeneratedParam = {"intercepts": [{"client":testParams.get("client1"),"keys":[{"keyCode":int(testParams.get("keyCode1")),"modifiers": testParams.get("modifiers")}]},{"client":testParams.get("client2"),"keys":[{"keyCode":int(testParams.get("keyCode2")),"modifiers": testParams.get("modifiers")}]}]}
         elif tag == "cobalt_set_accessibility_params":
             newtestParams = testParams.copy()
@@ -4769,12 +4769,12 @@ def generateComplexTestInputParam(methodTag,testParams):
             userGeneratedParam = testParams.get("configuration")
 
         else:
-            print "\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
 
     except Exception as e:
         status = "FAILURE"
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
 
     return status,userGeneratedParam
 
@@ -4823,8 +4823,8 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
     # USER CAN ADD N NUMBER OF FUNCTION CALL STEPS BELOW
 
     try:
-        print "\n\n---------- Executing Function ------------"
-        print "FUNCTION TAG     :", tag
+        print("\n\n---------- Executing Function ------------")
+        print("FUNCTION TAG     :", tag)
         if tag == "executeBluetoothCtl":
             info["Test_Step_Status"] = executeBluetoothCtl(deviceConfigFile,arg)
         elif tag == "broadcastIARMEventTuneReady":
@@ -4862,7 +4862,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             #Lightningapp url formation
             if ip_change_app_url and tm_url and deviceName and user_name and password and ip_address_type:
                 url = ip_change_app_url+'?tmURL='+tm_url+'&deviceName='+deviceName+'&tmUserName='+user_name+'&tmPassword='+password+'&ipAddressType='+ip_address_type
-                print url
+                print(url)
                 info["url"] = url
                 info["Test_Step_Status"] = "SUCCESS"
             else:
@@ -4933,7 +4933,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 output = executeCommand(execInfo,command)
                 output = str(output).split("\n")[1]
                 info["status"] = output.strip()
- 
+
         elif tag == "network_check_stb_ip_family":
             info["STB_IP_Family"] = expectedValues
             if str(expectedValues[0]) == str(deviceIP):
@@ -4953,39 +4953,39 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             if int(output[1]) == 1:
-                print "Version.txt File Exists"
+                print("Version.txt File Exists")
                 command = '[ -s "/version.txt" ] && echo 1 ||  echo 0'
                 output = executeCommand(execInfo, command)
-                output = str(output).split("\n")
+                output = output.split("\n")[1]
                 if int(output[1]) == 1:
-                    print "Version.txt File Is not Empty"
+                    print("Version.txt File Is not Empty")
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    print "Version.txt File Is Empty"
+                    print("Version.txt File Is Empty")
                     info["Test_Step_Status"] = "FAILURE"
             else:
-                print "Version.txt File doesn't Exists"
+                print("Version.txt File doesn't Exists")
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_include.properties_file":
             xconfurl = arg[0]
-            print "include.properties file exist,checking whether xconf url is updated"
+            print("include.properties file exist,checking whether xconf url is updated")
             command = 'grep -q '+xconfurl+' /etc/include.properties  && echo 1 || echo 0'
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             if int(output[1]) == 1:
-                print "File is updated with xconf url"
+                print("File is updated with xconf url")
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                print "File is not updated with xconf url,Updating file with xconf url"
+                print("File is not updated with xconf url,Updating file with xconf url")
                 command = 'sed -i \'s~^CLOUDURL=.*$~CLOUDURL='+xconfurl+'~g\' /etc/include.properties;grep -q '+xconfurl+' /etc/include.properties  && echo 1 || echo 0'
                 output = executeCommand(execInfo, command)
                 output = str(output).split("\n")
                 if int(output[1]) == 1:
-                    print "Successfully updated file with xconf url"
+                    print("Successfully updated file with xconf url")
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    print "File is not updated with xconf url"
+                    print("File is not updated with xconf url")
                     info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_swupdate_file":
@@ -4994,45 +4994,45 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             if int(output[1]) == 1:
-                print "swupdate.conf file exist,checking whether xconf url is updated"
+                print("swupdate.conf file exist,checking whether xconf url is updated")
                 command = 'grep -q '+xconfurl+' /opt/swupdate.conf  && echo 1 || echo 0'
                 output = executeCommand(execInfo, command)
                 output = str(output).split("\n")
                 if int(output[1]) == 1:
-                    print "File is updated with xconf url"
+                    print("File is updated with xconf url")
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    print "File is not updated with xconf url,Updating file with xconf url"
+                    print("File is not updated with xconf url,Updating file with xconf url")
                     command = 'echo '+xconfurl+' >> /opt/swupdate.conf;grep -q '+xconfurl+' /opt/swupdate.conf  && echo 1 || echo 0'
                     output = executeCommand(execInfo, command)
                     output = str(output).split("\n")
                     if int(output[1]) == 1:
-                        print "Successfully updated file with xconf url"
+                        print("Successfully updated file with xconf url")
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
-                        print "File is not updated with xconf url"
+                        print("File is not updated with xconf url")
                         info["Test_Step_Status"] = "FAILURE"
             else:
-                print "swupdate.conf file does not exist. Creating the file...."
+                print("swupdate.conf file does not exist. Creating the file....")
                 command = 'touch /opt/swupdate.conf;[ -f "/opt/swupdate.conf" ] && echo 1 || echo 0'
                 output = executeCommand(execInfo, command)
                 output = str(output).split("\n")
                 if int(output[1]) == 1:
-                    print "File created"
+                    print("File created")
                     command = 'echo '+xconfurl+' >> /opt/swupdate.conf;grep -q '+xconfurl+' /opt/swupdate.conf  && echo 1 || echo 0'
                     output = executeCommand(execInfo, command)
                     output = str(output).split("\n")
                     if int(output[1]) == 1:
-                        print "Successfully updated file with xconf url"
+                        print("Successfully updated file with xconf url")
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
-                        print "File is not updated with xconf url"
+                        print("File is not updated with xconf url")
                         info["Test_Step_Status"] = "FAILURE"
 
                 else:
-                    print "File doesn't created"
+                    print("File doesn't created")
                     info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "Check_disk_partition":
             command = 'ls /dev/mmcblk0* | wc -l'
             output = executeCommand(execInfo, command)
@@ -5043,10 +5043,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-        
-        
+
+
         elif tag == "system_check_and_create_configuration_rule":
-            configParser = ConfigParser.ConfigParser()
+            configParser = configparser.ConfigParser()
             configParser.read(r'%s' % deviceConfigFile)
             xconfurl = configParser.get('device.config', 'XCONF_SERVER_URL')
 
@@ -5054,7 +5054,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             slashparts = xconfurl.split('/')
             xconfurl = '/'.join(slashparts[:3]) + '/'
 
-            # Method to check and create model id 
+            # Method to check and create model id
             if len(arg) and arg[0] == "system_check_model_id":
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 if len(arg) and arg[1] == "existing_rule":
@@ -5069,7 +5069,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                             info["Test_Step_Status"] = "SUCCESS"
                         else:
                             info["Test_Step_Status"] = "FAILURE"
-                    
+
                 elif len(arg) and arg[1] == "new_rule":
                     command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+ruleId+'","description":"TDK '+arg[3]+' test model"}\''
                     output = executeCommandInTM(command)
@@ -5080,7 +5080,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     else:
                         info["Test_Step_Status"] = "FAILURE"
 
-            # Method to check and create firmware configuration 
+            # Method to check and create firmware configuration
             elif len(arg) and arg[0] == "system_check_firmware_configuration":
                 #Getting firmware configurations from config file
                 firmwareFilename = configParser.get('device.config', 'FIRMWARE_FILENAME')
@@ -5099,24 +5099,24 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                     info["existing_firmware_configuration"] = content
                     if len(content) == 0:
                         info["Test_Step_Message"] = "NO EXISTING FIRMWARE CONFIGURATION"
-                    else:  
+                    else:
                         firmwareConfigs = json.loads(output)
                         info["Test_Step_Status"] = "FAILURE"
                         for output in firmwareConfigs:
                             if str(output.get("description")).lower() == str(ruleId).lower():
                                 info["Test_Step_Status"] = "SUCCESS"
                                 if str(output.get("firmwareFilename")).lower() != firmwareFilename.lower():
-                                     firmwareConfigId = output.get("id")
-                                     command = 'curl -sX PUT '+xconfurl+'updates/firmwares.json -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
-                                     output = executeCommandInTM(command)
-                                     info["new_firmware_configuration"] = output
-                                     output = json.loads(output)
-                                     if str(output.get("description")).lower() == str(ruleId).lower():
-                                         info["Test_Step_Status"] = "SUCCESS"
-                                     else:
-                                         info["Test_Step_Status"] = "FAILURE"
-                                     break;    
-                                         
+                                    firmwareConfigId = output.get("id")
+                                    command = 'curl -sX PUT '+xconfurl+'updates/firmwares.json -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"id":"'+firmwareConfigId+'" ,"updated": 144757585,"supportedModelIds": ["TDK_'+str(arg[3]).upper()+'_TEST_MODEL"],"firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'","firmwareFilename": "'+firmwareFilename+'","firmwareVersion": "'+firmwareVersion+'","description":"'+ruleId+'","rebootImmediately": true}\''
+                                    output = executeCommandInTM(command)
+                                    info["new_firmware_configuration"] = output
+                                    output = json.loads(output)
+                                    if str(output.get("description")).lower() == str(ruleId).lower():
+                                        info["Test_Step_Status"] = "SUCCESS"
+                                    else:
+                                        info["Test_Step_Status"] = "FAILURE"
+                                    break;
+
 
                 elif len(arg) and arg[1] == "new_rule":
                     command = 'curl -sX POST '+xconfurl+arg[2]+' -H \'Content-Type: application/json\' -H \'Accept: application/json\' -d \'{"description":"'+ruleId+'","supportedModelIds": [ "TDK_'+str(arg[3]).upper()+'_TEST_MODEL" ], "firmwareDownloadProtocol": "'+firmwareDownloadProtocol+'", "firmwareFilename": "'+firmwareFilename+'", "firmwareVersion": "'+firmwareVersion+'", "rebootImmediately": true}\''
@@ -5127,10 +5127,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
-            
+
             # Method to check and create firmware rule
             elif len(arg) and arg[0] == "system_check_firmware_rule":
-                print "arg",arg
+                print("arg",arg)
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_RULE'
                 modelId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
                 firmwareconfigId = arg[2]
@@ -5152,15 +5152,15 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 info["Test_Step_Status"] = "SUCCESS"
                                 firmwarerulemacaddress = output["rule"]["condition"]["fixedArg"]["bean"]["value"]["java.lang.String"]
                                 if str(firmwarerulemacaddress).lower() != str(deviceMAC).lower():
-                                     firmwareruleId = output['id']
-                                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
-                                     output = executeCommandInTM(command)
-                                     info["new_firmware_rule_status"] = output
-                                     output = json.loads(output)
-                                     if str(output.get("IMPORTED")[0]).lower() == str(ruleId).lower():
-                                         info["Test_Step_Status"] = "SUCCESS"
-                                     else:
-                                         info["Test_Step_Status"] = "FAILURE"
+                                    firmwareruleId = output['id']
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id": "'+firmwareruleId+'","name":"'+firmwarerulename+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
+                                    output = executeCommandInTM(command)
+                                    info["new_firmware_rule_status"] = output
+                                    output = json.loads(output)
+                                    if str(output.get("IMPORTED")[0]).lower() == str(ruleId).lower():
+                                        info["Test_Step_Status"] = "SUCCESS"
+                                    else:
+                                        info["Test_Step_Status"] = "FAILURE"
                 elif len(arg) and arg[1] == "new_rule":
                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}}},"applicableAction":{"type":".RuleAction","actionType":"RULE","configId":"'+firmwareconfigId+'","configEntries":[],"active":true,"useAccountPercentage":false,"firmwareCheckRequired":false,"rebootImmediately":true},"type":"MAC_RULE","active":true,"applicationType":"stb"}]\''
                     output = executeCommandInTM(command)
@@ -5173,7 +5173,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
 
             # Method to check and create firmware local server rule
             elif len(arg) and arg[0] == "system_check_firmware_local_server_rule":
-                print "arg",arg
+                print("arg",arg)
                 firmwareLocation = configParser.get('device.config','FIRMWARE_LOCATION')
                 firmwareDownloadProtocol = configParser.get('device.config', 'FIRMWARE_DOWNLOAD_PROTOCOL')
                 ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_LOCAL_SERVER_RULE'
@@ -5197,15 +5197,15 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                                 firmwareRuleLocation = output['applicableAction']['properties']["firmwareLocation"]
                                 firmwareRuleDownloadLocation = output['applicableAction']['properties']["firmwareDownloadProtocol"]
                                 if str(firmwareRuleMacAddress).lower() != str(deviceMAC).lower() or str(firmwareRuleLocation).lower() != str(firmwareLocation).lower() or str(firmwareRuleDownloadLocation).lower() != str(firmwareDownloadProtocol).lower():
-                                     firmwareRuleId = output['id']
-                                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
-                                     output = executeCommandInTM(command)
-                                     info["new_firmware_local_server_rule_status"] = output
-                                     output = json.loads(output)
-                                     if str(output.get("IMPORTED")[0]).lower() == str(ruleId).lower():
-                                         info["Test_Step_Status"] = "SUCCESS"
-                                     else:
-                                         info["Test_Step_Status"] = "FAILURE"
+                                    firmwareRuleId = output['id']
+                                    command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+firmwareRuleId+'","name":"'+firmwareRuleName+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
+                                    output = executeCommandInTM(command)
+                                    info["new_firmware_local_server_rule_status"] = output
+                                    output = json.loads(output)
+                                    if str(output.get("IMPORTED")[0]).lower() == str(ruleId).lower():
+                                        info["Test_Step_Status"] = "SUCCESS"
+                                    else:
+                                        info["Test_Step_Status"] = "FAILURE"
 
                 elif len(arg) and arg[1] == "new_rule":
                     command = 'curl -sX POST '+xconfurl+'firmwarerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"name":"'+ruleId+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"eStbMac"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"AA:BB:CC:DD:EE:FF"}}}},"compoundParts":[]}]},"applicableAction":{"type":".DefinePropertiesAction","actionType":"DEFINE_PROPERTIES","configId":"'+firmwareConfigId+'","properties":{"ipv6FirmwareLocation":"","firmwareLocation":"'+firmwareLocation+'","firmwareDownloadProtocol":"'+firmwareDownloadProtocol+'"},"byPassFilters":[],"activationFirmwareVersions":{}},"type":"DOWNLOAD_LOCATION_FILTER","active":true,"applicationType":"stb"}]\''
@@ -5259,7 +5259,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             else:
                 info["Running_Processes"] = processesRunning
                 info["processes_Not_Running"] = processesNotRunning
-                info["Test_Step_Status"] = "FAILURE" 
+                info["Test_Step_Status"] = "FAILURE"
         elif tag == "check_fps_value":
             expectedFPS = (int(expectedValues[0])-int(expectedValues[1]))
             info["AVERAGE_FPS"] = arguments[0]
@@ -5310,7 +5310,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 DisplayFrameRate = width+'x'+height+'x60'
                 DisplayFrameRate_values.append(DisplayFrameRate)
             info["DisplayFrameRate"] = DisplayFrameRate_values
-        
+
         elif tag == "Get_Default_Values":
             profile = arg[len(arg)-1]
             arg[0] = profile+'.'+arg[0]
@@ -5320,13 +5320,13 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = output[1]
             info["defaultValue"] = int(output)
             if len(arg) > 3 and arg[2] == "get_audio_profiles_default_modes":
-                    arg[1] = profile+'.'+arg[1]
-                    command =  'grep -F '+arg[1]+' /etc/hostDataDefault'
-                    output = executeCommand(execInfo, command)
-                    output = str(output).split()
-                    output = output[1]
-                    info["defaultMode"] = int(output)
-        
+                arg[1] = profile+'.'+arg[1]
+                command =  'grep -F '+arg[1]+' /etc/hostDataDefault'
+                output = executeCommand(execInfo, command)
+                output = str(output).split()
+                output = output[1]
+                info["defaultMode"] = int(output)
+
         elif tag == "TV_ControlSettings_Get_Default_Values":
             command = 'grep -F '+arg[0]+' ' +arg[1]+''
             output = executeCommand(execInfo, command)
@@ -5340,11 +5340,11 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             else:
                 randomnumber = random.randint(int(arg[0]),int(arg[1]))
             info["randomnumber"] = randomnumber
- 
+
         elif tag == "RDKShell_Get_Width_And_Height":
-            mapping_details = arg[len(arg)/2].split(":")
+            mapping_details = arg[len(arg)//2].split(":")
             info["width"] = mapping_details[1].split('|')[0].strip('[]')
-            info["height"] = mapping_details[1].split('|')[1].strip('[]')       
+            info["height"] = mapping_details[1].split('|')[1].strip('[]')
 
         elif tag == "Get_Image_Name":
             command = 'find / -name *.png'
@@ -5364,7 +5364,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
         elif tag == "securityagent_get_security_token":
             command = "WPEFrameworkSecurityUtility |  cut -d '\"' -f 4"
             output = executeCommand(execInfo, command)
-            print output
+            print(output)
             output = str(output).split("\n")[1]
             output =  output.strip()
             if len(arg) and arg[0] == "get_modified_token":
@@ -5390,9 +5390,9 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
         elif tag == "check_container_status":
             container_status = "FAILURE"
             command = 'DobbyTool list'
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             output = executeCommand(execInfo, command)
-            print output
+            print(output)
             result = output.splitlines()
             if len(arg) and arg[0] == "check_empty_container":
                 container_status = "SUCCESS"
@@ -5402,21 +5402,21 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                         info["Test_Step_Message"] = expectedValues[0]+' container is running'
                         info["Test_Step_Status"] =  "FAILURE"
                         break;
-                print "container_status",container_status
+                print("container_status",container_status)
                 if "SUCCESS" in container_status:
-                   info["Test_Step_Message"] = expectedValues[0]+' container is not running'
-                   info["Test_Step_Status"] =  "SUCCESS"
+                    info["Test_Step_Message"] = expectedValues[0]+' container is not running'
+                    info["Test_Step_Status"] =  "SUCCESS"
             else:
                 container_status = "FAILURE"
                 for line in result:
-                   if str(expectedValues[0]) in line.lower() and str(expectedValues[1]).lower() in line.lower():
-                       container_status = "SUCCESS"
-                       info["Test_Step_Message"] = expectedValues[1]+' container is '+expectedValues[0]
-                       break;
-                print "container_status",container_status
+                    if str(expectedValues[0]) in line.lower() and str(expectedValues[1]).lower() in line.lower():
+                        container_status = "SUCCESS"
+                        info["Test_Step_Message"] = expectedValues[1]+' container is '+expectedValues[0]
+                        break;
+                print("container_status",container_status)
                 if "FAILURE" in container_status:
-                   info["Test_Step_Message"] = expectedValues[1]+' container is not '+expectedValues[0]
-                   info["Test_Step_Status"] =  "FAILURE"
+                    info["Test_Step_Message"] = expectedValues[1]+' container is not '+expectedValues[0]
+                    info["Test_Step_Status"] =  "FAILURE"
 
         elif tag == "Check_Environment_Variable_In_Service_File":
             command = 'grep -q '+str(expectedValues[0])+' /lib/systemd/system/wpeframework.service && echo 1 || echo 0'
@@ -5454,16 +5454,16 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = str(output).split("\n")[1]
             info["details"] = output.replace('"','').strip()
             info["Test_Step_Status"] =  "SUCCESS"
-        
+
         elif tag == "system_check_swupdate_file_status":
             command = '[ -f "/opt/swupdate.conf" ] && echo 1 || echo 0'
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             if int(output[1]) == 1:
-                print "SWUpdate file exist"
+                print("SWUpdate file exist")
                 info["FIRMWARE_UPGRADE_STATUS"] = "true"
             else:
-                print "SWUpdate file not exist"
+                print("SWUpdate file not exist")
                 info["FIRMWARE_UPGRADE_STATUS"] = "false"
 
         elif tag == "system_check_public_ip_address":
@@ -5504,11 +5504,11 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             info["Test_Step_Status"] =  "SUCCESS"
 
         else:
-            print "\nError Occurred: [%s] No function call available for %s" %(inspect.stack()[0][3],methodTag)
+            print("\nError Occurred: [%s] No function call available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
 
     except Exception as e:
-        print "\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e)
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
         info["Test_Step_Status"] = "FAILURE"
     return info
 
@@ -5519,7 +5519,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
 def checkAndGetAllResultInfo(result,success="null"):
     info = {}
     info = result.copy()
-    status = checkNonEmptyResultData(info.values())
+    status = checkNonEmptyResultData(list(info.values()))
     success = str(success).lower() == "true" if success != "null" else True
     if success and status == "TRUE":
         info["Test_Step_Status"] = "SUCCESS"
@@ -5573,12 +5573,12 @@ def DecodeBase64ToHex(base64):
 
 def getcountofelements(dictionary):
     global timeZones
-    for key,value in dictionary.items():
-         if isinstance(value, dict):
-             for continent,country in value.items():
+    for key,value in list(dictionary.items()):
+        if isinstance(value, dict):
+            for continent,country in list(value.items()):
                 zoneinfo = key+"/"+continent
                 timeZones.append(str(zoneinfo))
-             getcountofelements(value)
+            getcountofelements(value)
     return timeZones
 
 
@@ -5588,22 +5588,22 @@ def getcountofelements(dictionary):
 def executeBluetoothCtl(deviceConfigFile,commands):
     try :
         #Get Bluetooth configuration file
-        configParser = ConfigParser.ConfigParser()
+        configParser = configparser.ConfigParser()
         configParser.read(r'%s' % deviceConfigFile)
         ip = configParser.get('device.config', 'BT_EMU_IP')
         username = configParser.get('device.config', 'BT_EMU_USER_NAME')
         password = configParser.get('device.config', 'BT_EMU_PWD')
         deviceName = configParser.get('device.config','BT_EMU_DEVICE_NAME')
         #Executing the commands in device
-        print 'Number of commands:', len(commands)
-        print 'Commands List:', commands
-        print "Connecting to client device"
+        print('Number of commands:', len(commands))
+        print('Commands List:', commands)
+        print("Connecting to client device")
         global session
         session = pxssh.pxssh(options={
                             "StrictHostKeyChecking": "no",
                             "UserKnownHostsFile": "/dev/null"})
         session.login(ip,username,password,sync_multiplier=5)
-        print "Executing the bluetoothctl commands"
+        print("Executing the bluetoothctl commands")
         for parameters in range(0,len(commands)):
             session.sendline(commands[parameters])
         session.prompt()
@@ -5612,9 +5612,9 @@ def executeBluetoothCtl(deviceConfigFile,commands):
         #session.logout()
         status = "SUCCESS"
         #session.close()
-        print "Successfully Executed bluetoothctl commands in client device"
-    except Exception, e:
-        print e;
+        print("Successfully Executed bluetoothctl commands in client device")
+    except Exception as e:
+        print(e);
         status = "FAILURE"
 
     return status
@@ -5625,7 +5625,7 @@ def executeCommand(execInfo, command, device="test-device"):
     deviceMAC        = execInfo[3]
     execMethod       = execInfo[4]
 
-    configParser = ConfigParser.ConfigParser()
+    configParser = configparser.ConfigParser()
     configParser.read(r'%s' % deviceConfigFile)
     sshMethod = configParser.get('device.config', 'SSH_METHOD')
     if device == "test-device":
@@ -5645,33 +5645,33 @@ def executeCommand(execInfo, command, device="test-device"):
             session = pxssh.pxssh(options={
                                 "StrictHostKeyChecking": "no",
                                 "UserKnownHostsFile": "/dev/null"})
-            print "\nCreating ssh session"
+            print("\nCreating ssh session")
             session.login(deviceIP,username,password,sync_multiplier=5)
             sleep(2)
-            print "Executing command: ",command
+            print("Executing command: ",command)
             session.sendline(command)
             if command == "reboot":
                 sleep(2);
                 output = "reboot"
             else:
                 session.prompt()
-                output = session.before
-                print"Closing session"
+                output = str(session.before, 'utf-8')
+                print("Closing session")
                 session.logout()
         except pxssh.ExceptionPxssh as e:
-            print "Login to device failed"
-            print e
+            print("Login to device failed")
+            print(e)
     elif sshMethod.upper() == "REST":
         auth_token= ""
         rest_url = ""
         try:
-            print "\nFetching config file values for REST api call"
+            print("\nFetching config file values for REST api call")
             rest_url = CertificationSuiteCommonVariables.rest_url
             auth_method = CertificationSuiteCommonVariables.auth_method
             if auth_method == "TOKEN":
                 auth_token = CertificationSuiteCommonVariables.auth_token
                 if auth_token =="" or rest_url == "":
-                    print "\n[ERROR]: Missing REST API configurations"
+                    print("\n[ERROR]: Missing REST API configurations")
                 else:
                     headers = {'Content-Type': 'application/json', 'authToken': auth_token,}
                     url = str(rest_url.replace("mac",deviceMAC))
@@ -5679,16 +5679,16 @@ def executeCommand(execInfo, command, device="test-device"):
                     if "awk" in command:
                         command = command.replace("$","\$")
                     command = "\"" + command + "\"";
-                    print "Executing command: ",command
+                    print("Executing command: ",command)
                     response = requests.post(url, headers=headers, data=command, timeout=20)
                     #print response.content
                     output = response.content
                     #output = command + '\n' + output;
         except Exception as e:
-            print "Login to device failed"
-            print e
+            print("Login to device failed")
+            print(e)
     else:
-        print "\n[ERROR]: Invalid SSH Method"
+        print("\n[ERROR]: Invalid SSH Method")
 
     return output
 
@@ -5698,14 +5698,14 @@ def executeCommandInTM(command):
     try:
         if "" == command:
             status = "FAILURE"
-            print "[ERROR]: Command to be executed cannot be empty"
+            print("[ERROR]: Command to be executed cannot be empty")
         else:
-            print "Going to execute %s..." %(command)
+            print("Going to execute %s..." %(command))
             output = subprocess.check_output (command, shell=True)
-    except Exception, e:
-        print e
+    except Exception as e:
+        print(e)
         status = "FAILURE"
-        print "Unable to execute %s successfully" %(command)
+        print("Unable to execute %s successfully" %(command))
     return output
 
 #Get value from device config file
@@ -5724,18 +5724,18 @@ def getDeviceConfig (basePath, configKey,deviceName,deviceType):
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output

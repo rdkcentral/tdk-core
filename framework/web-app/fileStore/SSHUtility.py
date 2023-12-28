@@ -23,25 +23,25 @@ import requests
 def ssh_and_execute(ssh_method, hostname, username, password, command):
     output = ""
     try:
-	if (ssh_method == "directSSH"):
+        if (ssh_method == "directSSH"):
             session = pxssh.pxssh(timeout = 2400,options={
                                     "StrictHostKeyChecking": "no",
                                     "UserKnownHostsFile": "/dev/null"})
-            print "\nCreating ssh session"
+            print("\nCreating ssh session")
             session.login(hostname,username,password,sync_multiplier=3)
-            print "\nExecuting command"
+            print("\nExecuting command")
             session.sendline(command)
             session.prompt()
-            output = session.before
-            print"\nClosing session"
+            output = session.before.decode()
+            print("\nClosing session")
             session.logout()
-	else:
-	    #TODO
-	    print "ssh method other than directSSH is currently not implemented"
-	    pass
+        else:
+            #TODO
+            print("ssh method other than directSSH is currently not implemented")
+            pass
     except pxssh.ExceptionPxssh as e:
-	print "Login to device failed"
-    	print e
+        print("Login to device failed")
+        print(e)
     return output
 
 def ssh_and_execute_rest(hostname, username, password, command):
@@ -49,13 +49,13 @@ def ssh_and_execute_rest(hostname, username, password, command):
     auth_token= ""
     rest_url = ""
     try:
-        print "\nFetching config file values for REST api call"
+        print("\nFetching config file values for REST api call")
         rest_url = CertificationSuiteCommonVariables.rest_url
         auth_method = CertificationSuiteCommonVariables.auth_method
         if auth_method == "TOKEN":
             auth_token =CertificationSuiteCommonVariables.auth_token
             if auth_token =="" or rest_url == "":
-                print "\nPlease configure REST api configurations in device specific config file"
+                print("\nPlease configure REST api configurations in device specific config file")
             else:
                 headers = {'Content-Type': 'application/json', 'authToken': auth_token,}
                 url = str(rest_url.replace("mac",deviceMAC))
@@ -64,10 +64,10 @@ def ssh_and_execute_rest(hostname, username, password, command):
                     command = command.replace("$","\$")
                 command = "\"" + command + "\"";
                 response = requests.post(url, headers=headers, data=command, timeout=20)
-                print response.content
+                print(response.content)
                 output = response.content
                 output = command + '\n' + output;
     except Exception as e:
-        print "\nLogin to device failed"
-        print e
+        print("\nLogin to device failed")
+        print(e)
     return output

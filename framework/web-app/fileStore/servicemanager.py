@@ -37,7 +37,7 @@ def registerService(obj,service_name):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Details: ", details
+    print("Details: ", details)
 
     #Set the result status of execution
     if expectedresult in actualresult:
@@ -64,7 +64,7 @@ def unRegisterService(obj,service_name):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Details: ", details
+    print("Details: ", details)
 
     #Set the result status of execution
     if expectedresult in actualresult:
@@ -91,16 +91,16 @@ def doesServiceExists(obj,service_name):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Details: ", details
+    print("Details: ", details)
 
     #Set the result status of execution
     if expectedresult in actualresult:
         if "PRESENT" in details:
-		tdkTestObj.setResultStatus("SUCCESS")
-		retValue = "SUCCESS"
-	else:
-		tdkTestObj.setResultStatus("FAILURE")
-        	retValue = "FAILURE"
+            tdkTestObj.setResultStatus("SUCCESS")
+            retValue = "SUCCESS"
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            retValue = "FAILURE"
     else:
         tdkTestObj.setResultStatus("FAILURE")
         retValue = "FAILURE"
@@ -110,47 +110,47 @@ def doesServiceExists(obj,service_name):
 
 def DS_getSoundMode(obj,portName):
 
-        tdkTestObj = obj.createTestStep('SM_DisplaySetting_GetSoundMode');
-        expectedresult="SUCCESS"
+    tdkTestObj = obj.createTestStep('SM_DisplaySetting_GetSoundMode');
+    expectedresult="SUCCESS"
 
-        tdkTestObj.addParameter("portName", portName);
-        tdkTestObj.executeTestCase(expectedresult);
+    tdkTestObj.addParameter("portName", portName);
+    tdkTestObj.executeTestCase(expectedresult);
 
-        actualresult = tdkTestObj.getResult();
-        serviceDetail = tdkTestObj.getResultDetails();
-        ret_list = [actualresult, serviceDetail];
+    actualresult = tdkTestObj.getResult();
+    serviceDetail = tdkTestObj.getResultDetails();
+    ret_list = [actualresult, serviceDetail];
 
-        print "[TEST EXECUTION DETAILS] sound mode is: %s"%serviceDetail;
+    print("[TEST EXECUTION DETAILS] sound mode is: %s"%serviceDetail);
 
-        #Check for SUCCESS/FAILURE
-        if expectedresult in actualresult:
-                tdkTestObj.setResultStatus("SUCCESS");
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
+    #Check for SUCCESS/FAILURE
+    if expectedresult in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        return ret_list
+    return ret_list
 
 
 def RunSMEvent(obj, service_name, event_name, event_param):
 
-        tdkTestObj = obj.createTestStep('SM_RunSMEvent_QtApp');
+    tdkTestObj = obj.createTestStep('SM_RunSMEvent_QtApp');
 
-        tdkTestObj.addParameter("service_name",service_name);
-        tdkTestObj.addParameter("event_name",event_name);
-        tdkTestObj.addParameter("event_param",event_param);
+    tdkTestObj.addParameter("service_name",service_name);
+    tdkTestObj.addParameter("event_name",event_name);
+    tdkTestObj.addParameter("event_param",event_param);
 
-        expectedresult = "SUCCESS";
-        tdkTestObj.executeTestCase(expectedresult);
+    expectedresult = "SUCCESS";
+    tdkTestObj.executeTestCase(expectedresult);
 
-        actualresult= tdkTestObj.getResult();
-        serviceDetail = tdkTestObj.getResultDetails();
-        print "Details: ", serviceDetail
+    actualresult= tdkTestObj.getResult();
+    serviceDetail = tdkTestObj.getResultDetails();
+    print("Details: ", serviceDetail)
 
-        if expectedresult in actualresult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                retValue = "SUCCESS"
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                retValue = "FAILURE"
+    if expectedresult in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        retValue = "SUCCESS"
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        retValue = "FAILURE"
 
-        return retValue
+    return retValue

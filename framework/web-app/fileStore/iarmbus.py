@@ -34,14 +34,14 @@ def IARMBUS_Init(obj,expectedresult):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Result: IARMBus Init [%s]"%(actualresult)
+    print("Result: IARMBus Init [%s]"%(actualresult))
 
     #Set the result status of execution
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
         retValue = "SUCCESS"
     else:
-        print "Failure Details: [%s]"%(details)
+        print("Failure Details: [%s]"%(details))
         tdkTestObj.setResultStatus("FAILURE")
         retValue = "FAILURE"
 
@@ -59,14 +59,14 @@ def IARMBUS_Connect(obj,expectedresult):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Result: IARMBus Connect [%s]"%(actualresult)
+    print("Result: IARMBus Connect [%s]"%(actualresult))
 
     #Set the result status of execution
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
         retValue = "SUCCESS"
     else:
-        print "Failure Details: [%s]"%(details)
+        print("Failure Details: [%s]"%(details))
         tdkTestObj.setResultStatus("FAILURE")
         retValue = "FAILURE"
 
@@ -84,14 +84,14 @@ def IARMBUS_DisConnect(obj,expectedresult):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Result: IARMBus DisConnect [%s]"%(actualresult)
+    print("Result: IARMBus DisConnect [%s]"%(actualresult))
 
     #Set the result status of execution
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
         retValue = "SUCCESS"
     else:
-        print "Failure Details: [%s]"%(details)
+        print("Failure Details: [%s]"%(details))
         tdkTestObj.setResultStatus("FAILURE")
         retValue = "FAILURE"
 
@@ -109,14 +109,14 @@ def IARMBUS_Term(obj,expectedresult):
     #Get the result of execution
     actualresult = tdkTestObj.getResult()
     details = tdkTestObj.getResultDetails()
-    print "Result: IARMBus Term [%s]"%(actualresult)
+    print("Result: IARMBus Term [%s]"%(actualresult))
 
     #Set the result status of execution
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS")
         retValue = "SUCCESS"
     else:
-        print "Failure Details: [%s]"%(details)
+        print("Failure Details: [%s]"%(details))
         tdkTestObj.setResultStatus("FAILURE")
         retValue = "FAILURE"
 
@@ -128,19 +128,19 @@ def change_powermode(obj,mode):
     #Setting the POWER state
     tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
     tdkTestObj.addParameter("method_name","SetPowerState");
-    tdkTestObj.addParameter("owner_name","PWRMgr");               
-    tdkTestObj.addParameter("newState",mode);        
+    tdkTestObj.addParameter("owner_name","PWRMgr");
+    tdkTestObj.addParameter("newState",mode);
     expectedresult="SUCCESS"
     tdkTestObj.executeTestCase(expectedresult);
     actualresult = tdkTestObj.getResult();
     details=tdkTestObj.getResultDetails();
-    print "set power state: %s" %details;
+    print("set power state: %s" %details);
     #Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
     before_set_powerstate = details;
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
         retValue = "SUCCESS";
-        print "SUCCESS: Setting STB power state -RPC method invoked successfully";
+        print("SUCCESS: Setting STB power state -RPC method invoked successfully");
         #Querying the STB power state
         tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
         tdkTestObj.addParameter("method_name","GetPowerState");
@@ -149,26 +149,26 @@ def change_powermode(obj,mode):
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details=tdkTestObj.getResultDetails();
-        print "current power state: %s" %details;
+        print("current power state: %s" %details);
         #Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
         after_set_powerset=details;
-        if expectedresult in actualresult:                      
-            print "SUCCESS: Querying STB power state -RPC method invoked successfully";
+        if expectedresult in actualresult:
+            print("SUCCESS: Querying STB power state -RPC method invoked successfully");
             if before_set_powerstate == after_set_powerset :
                 tdkTestObj.setResultStatus("SUCCESS");
                 retValue = "SUCCESS";
-                print "SUCCESS: Both the Power states are equal";
+                print("SUCCESS: Both the Power states are equal");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 retValue = "FAILURE"
-                print "FAILURE: Both power states are different";
+                print("FAILURE: Both power states are different");
         else:
             tdkTestObj.setResultStatus("FAILURE");
             retValue = "FAILURE"
-            print "FAILURE: Querying STB power state - IARM_Bus_Call failed. %s " %details;
+            print("FAILURE: Querying STB power state - IARM_Bus_Call failed. %s " %details);
     else:
         tdkTestObj.setResultStatus("FAILURE");
         retValue = "FAILURE"
-        print "FAILURE: Set STB power state - IARM_Bus_Call failed. %s " %details;
-            
+        print("FAILURE: Set STB power state - IARM_Bus_Call failed. %s " %details);
+
     return retValue;

@@ -25,7 +25,7 @@ import requests
 import os
 import subprocess
 import inspect
-import ConfigParser
+import configparser
 from time import sleep
 import pexpect
 import time
@@ -55,8 +55,8 @@ def init_module (libobj, port, deviceInfo):
         SSHUtility.deviceMAC = deviceMac
         SSHUtility.realpath = libobj.realpath
     except Exception as e:
-       print "\nException Occurred while getting MAC \n"
-       print e
+        print("\nException Occurred while getting MAC \n")
+        print(e)
 
 #------------------------------------------------------------------------------
 # Function to retreive the config values set in the corresponding config file
@@ -77,20 +77,20 @@ def getDeviceConfig (configKey):
         deviceConfigFile = deviceTypeConfigFile
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
-        print output
+        print(output)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
-            config = ConfigParser.ConfigParser ()
+            config = configparser.ConfigParser ()
             config.read (deviceConfigFile)
             deviceConfig = config.sections ()[0]
             configValue =  config.get (deviceConfig, configKey)
             output = configValue
         else:
             output = "FAILURE : DeviceConfig file or key cannot be empty"
-            print output
+            print(output)
     except Exception as e:
         output = "FAILURE : Exception Occurred: [" + inspect.stack()[0][3] + "] " + e.message
-        print output
+        print(output)
     return output
 
 #-------------------------------------------------------------------
@@ -113,13 +113,13 @@ def executeInDUT (command,sshMethod="", credentials=""):
         password = credentialsList[2]
     else:
         #TODO
-        print "Secure ssh to CPE"
+        print("Secure ssh to CPE")
         pass
     try:
         output = ssh_and_execute (sshMethod, host_name, user_name, password, command)
     except Exception as e:
-        print "Exception occured during ssh session"
-        print e
+        print("Exception occured during ssh session")
+        print(e)
     return output
 
 #---------------------------------------------------------------
@@ -141,9 +141,9 @@ def postCURLRequest(data,securityEnabled):
             status = "INVALID TOKEN"
     except requests.exceptions.RequestException as e:
         status = "FAILURE"
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Command : ",data
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Command : ",data)
+        print("Error message received :\n",e);
         response = "EXCEPTION OCCURRED"
     return response,json_response,status
 
@@ -157,36 +157,36 @@ def execute_step(Data):
         data = '{"jsonrpc": "2.0", "id": 1234567890, '+Data+'}'
         response,json_response,status = postCURLRequest(data,securityEnabled)
         if status == "INVALID TOKEN":
-           print "\nAuthorization issue occurred. Update Token & Re-try..."
-           global deviceToken
-           tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
-           if not securityEnabled:
-               # Create the Device Token config file and update the token
-               token_status,deviceToken = read_token_config(deviceIP,tokenFile)
-               if token_status == "SUCCESS":
-                   print "Device Security Token obtained successfully"
-               else:
-                   print "Failed to get the device security token"
-               securityEnabled = True
-           else:
-               # Update the token in the device token config file
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-           if token_status == "SUCCESS":
-               response,json_response,status = postCURLRequest(data,securityEnabled)
-           else:
-               print "Failed to update the token in token config file"
-           if status == "INVALID TOKEN":
-               token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
-               if token_status == "SUCCESS":
-                   response,json_response,status = postCURLRequest(data,securityEnabled)
-               else:
-                   status = "FAILURE"
+            print("\nAuthorization issue occurred. Update Token & Re-try...")
+            global deviceToken
+            tokenFile = libObj.realpath + "/" + "fileStore/tdkvRDKServiceConfig/tokenConfig/" + deviceName + ".config"
+            if not securityEnabled:
+                # Create the Device Token config file and update the token
+                token_status,deviceToken = read_token_config(deviceIP,tokenFile)
+                if token_status == "SUCCESS":
+                    print("Device Security Token obtained successfully")
+                else:
+                    print("Failed to get the device security token")
+                securityEnabled = True
+            else:
+                # Update the token in the device token config file
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+            if token_status == "SUCCESS":
+                response,json_response,status = postCURLRequest(data,securityEnabled)
+            else:
+                print("Failed to update the token in token config file")
+            if status == "INVALID TOKEN":
+                token_status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+                if token_status == "SUCCESS":
+                    response,json_response,status = postCURLRequest(data,securityEnabled)
+                else:
+                    status = "FAILURE"
         web_socket_util.deviceToken = deviceToken
         if status == "SUCCESS":
-            print "\n---------------------------------------------------------------------------------------------------"
-            print "Json command : ", data
-            print "\n Response : ", json_response, "\n"
-            print "----------------------------------------------------------------------------------------------------\n"
+            print("\n---------------------------------------------------------------------------------------------------")
+            print("Json command : ", data)
+            print("\n Response : ", json_response, "\n")
+            print("----------------------------------------------------------------------------------------------------\n")
             result = json_response.get("result")
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
@@ -195,8 +195,8 @@ def execute_step(Data):
             result = response;
         return result;
     except requests.exceptions.RequestException as e:
-        print "ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!"
-        print "Error message received :\n",e;
+        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+        print("Error message received :\n",e);
         return "EXCEPTION OCCURRED"
 
 #--------------------------------------------------------------------------
@@ -206,18 +206,18 @@ def checkApplicationInstalled():
     method = "LISA.1.getList"
     params ='{}'
     result = executeCurlCommand(method,params);
-    print "getList Result",result
+    print("getList Result",result)
 
     installed = "FAILURE"
     cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
     if cobalt_app_id in str(result):
-        print "Application is installed"
-        print "Proceeding to launching"
+        print("Application is installed")
+        print("Proceeding to launching")
         installed="SUCCESS"
     else:
-        print "Application is not installed"
-        print "Proceeding to install application"
-        
+        print("Application is not installed")
+        print("Proceeding to install application")
+
     return installed
 
 #-------------------------------------------------------------------
@@ -239,7 +239,7 @@ def InstallApplication():
     params  = params + cobalt_bundle
     params = params + '","version":"1.0.0","appName":"' + cobalt_app_id + '","type":"dac","category":"category"}'
     result = executeCurlCommand(method,params);
-    print "LISA install result",result
+    print("LISA install result",result)
     status="FAILURE"
     if result.isnumeric():
         #tdkTestObj.setResultStatus("SUCCESS")
@@ -247,7 +247,7 @@ def InstallApplication():
         application_wait_timeout = getDeviceConfig ('APPLICATION_INSTALLATION_TIMEOUT')
         time.sleep(float(application_wait_timeout))
     else:
-        print "LISA installation failed"
+        print("LISA installation failed")
         #tdkTestObj.setResultStatus("FAILURE")
     return status
 
@@ -256,39 +256,39 @@ def InstallApplication():
 #-------------------------------------------------------------------
 def LaunchApplication():
     cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
-    print "Launching %s application"%(cobalt_app_id)
+    print("Launching %s application"%(cobalt_app_id))
     method = "org.rdk.RDKShell.1.launchApplication"
     params ='{"client":"' + cobalt_app_id + '","mimeType":"application/dac.native","uri":"' + cobalt_app_id +';1.0.0"}'
     result = executeCurlCommand(method,params);
-    print "launchApplication Result",result
+    print("launchApplication Result",result)
 
     if "True" in str(result):
-        print "Get Clients of RDKShell to verify if cobalt is launched"
+        print("Get Clients of RDKShell to verify if cobalt is launched")
         method = "org.rdk.RDKShell.1.getClients"
         result = executeCurlCommand(method,params);
-        print "getClients Result",result
+        print("getClients Result",result)
 
         if "True" in str(result) and cobalt_app_id in str(result):
-            print "Cobalt is successfully launched"
-            print "SetFocus of cobalt to front"
+            print("Cobalt is successfully launched")
+            print("SetFocus of cobalt to front")
             method = "org.rdk.RDKShell.1.setFocus"
             params = '{"client":"' + cobalt_app_id + '"}'
             result = executeCurlCommand(method,params);
-            print "setFocus result",result
+            print("setFocus result",result)
 
             if "True" in str(result):
-                print "Cobalt set to front successfully"
+                print("Cobalt set to front successfully")
 
             else:
-                print "Unable to set cobalt to front"
+                print("Unable to set cobalt to front")
                 return "FAILURE"
 
         else:
-            print "Cobalt was not obtained as RDKShell Clients"
+            print("Cobalt was not obtained as RDKShell Clients")
             return "FAILURE"
 
     else:
-        print "Cobalt laucnh failure"
+        print("Cobalt laucnh failure")
         return "FAILURE"
 
     return "SUCCESS"
@@ -301,12 +301,12 @@ def Press_key(key_code):
     params = '{"keys":[{"keyCode": '
     params = params + str(key_code) +',"modifiers": [],"delay":1.0}]}}'
     result = executeCurlCommand(method,params);
-    print "RDKShell generate key",result
+    print("RDKShell generate key",result)
     status="FAILURE"
     if "True" in str(result):
         status="SUCCESS"
     else:
-        print "RDKShell generate key failed"
+        print("RDKShell generate key failed")
     return status
 
 #-------------------------------------------------------------------
@@ -317,12 +317,12 @@ def KillApplication():
     cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
     params ='{"client":"' + cobalt_app_id + '"}'
     result = executeCurlCommand(method,params);
-    print "Kill Application result",result
+    print("Kill Application result",result)
     status="FAILURE"
     if "True" in str(result):
         status="SUCCESS"
     else:
-        print "Cobalt kill application failed"
+        print("Cobalt kill application failed")
     return status
 
 #-------------------------------------------------------------------
@@ -337,8 +337,8 @@ def checkProcEntry(sshMethod,credentials,validation_script,mode):
         method_to_call = getattr(lib, method)
         result = method_to_call(sshMethod,credentials,mode)
     except Exception as e:
-        print e;
-        print "[ERROR]: Failed to import video validation script file, please check the configuration"
+        print(e);
+        print("[ERROR]: Failed to import video validation script file, please check the configuration")
         result = "FAILURE"
     finally:
         return result
@@ -357,17 +357,17 @@ def checkPROC(check_pause):
         credentials = ssh_param_dict['credentials']
         validation_script = getDeviceConfig ('VIDEO_VALIDATION_SCRIPT_FILE')
         proc_file_path = libObj.realpath + "/"   + "fileStore/" + validation_script
-        print "proc validation file: ",proc_file_path
+        print("proc validation file: ",proc_file_path)
         if not os.path.exists(proc_file_path) :
-            print " PROC entry file is missing from fileStore "
+            print(" PROC entry file is missing from fileStore ")
             return "FAILURE"
         mode = getDeviceConfig ('PROC_CHECK_MODE')
         if check_pause == "True":
-             mode = mode + "-paused"
+            mode = mode + "-paused"
         av_status = checkProcEntry(sshMethod,credentials,validation_script,mode)
         return av_status
     else:
-        print "PROC Entry validation is disabled"
+        print("PROC Entry validation is disabled")
         return "NOT_ENABLED"
 
 def ChangeContainerStatus(operation):
@@ -380,10 +380,10 @@ def ChangeContainerStatus(operation):
     cobalt_app_id = getDeviceConfig ('COBALT_APP_ID')
     params =' { "containerId": "' + cobalt_app_id + '" } }'
     result = executeCurlCommand(method,params);
-    print "Container status change result",result
+    print("Container status change result",result)
     status="FAILURE"
     if "True" in str(result):
         status="SUCCESS"
     else:
-        print "Container status change failed"
+        print("Container status change failed")
     return status

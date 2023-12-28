@@ -20,7 +20,7 @@
 import json
 import time
 import sys,os
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import importlib
 from datetime import datetime
 from rdkv_performancelib import getConfigFileName
@@ -61,7 +61,7 @@ def init_module(libobj,port,deviceInfo):
 def compare_metric_threshold_values(deviceConfigFile,configParam, metricValue):
     result,threshold_limit = getDeviceConfigKeyValue(deviceConfigFile,configParam)
     if result == "SUCCESS":
-        print "Threshold limit for the metric: ",threshold_limit
+        print("Threshold limit for the metric: ",threshold_limit)
         if str(threshold_limit).strip() != "":
             status = "SUCCESS"
             for value in metricValue:
@@ -70,10 +70,10 @@ def compare_metric_threshold_values(deviceConfigFile,configParam, metricValue):
                     break
             return status
         else:
-            print "Unable to check the metric.Please update the threshold limits in device config file"
+            print("Unable to check the metric.Please update the threshold limits in device config file")
             return "FAILED"
     else:
-        print "Unable to read parameter form device config file"
+        print("Unable to read parameter form device config file")
         return "FAILED"
 
 
@@ -107,38 +107,38 @@ def rdkv_profiling_collectd_check_system_memory(tmUrl, resultId, deviceConfig, f
         url = tmUrl + '/execution/fetchDataFromGrafanaMultiple?executionResultId=' + str(resultId)+ str("&") + url_param + str("&") + 'fromDateString=' + fromDateString + str("&") + 'toDateString=' + toDateString
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         #print "response: ",response
         memory_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
+            print("\n********** Metric From GRAFANA **************")
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this.Validating memory-used as of now, other metrics the threshold value will vary
                 if "memory-used" in params.get("parameter"):
                     memory_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             if thresholdCheck == "true":
                 status = compare_metric_threshold_values(deviceConfig,"PROFILING_SYSTEM_MEMORY_THRESHOLD",memory_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "System wide memory-used metric is within the expected threshold level"
+                    print("System wide memory-used metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "System wide memory-used metric is not within the expected threshold level"
+                    print("System wide memory-used metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[SYSTEM-WIDE MEMORY-USED CHECK STATUS]: %s\n" %(status)
+                print("[SYSTEM-WIDE MEMORY-USED CHECK STATUS]: %s\n" %(status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -173,37 +173,37 @@ def rdkv_profiling_collectd_check_system_loadavg(tmUrl, resultId, deviceConfig, 
         url = tmUrl + '/execution/fetchDataFromGrafanaMultiple?executionResultId='+str(resultId)+str("&")+url_param + str("&") + 'fromDateString=' + fromDateString + str("&") + 'toDateString=' + toDateString
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         load_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
+            print("\n********** Metric From GRAFANA **************")
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this. Validating shortterm as of now, other metrics the threshold value will vary
                 if "shortterm" in params.get("parameter"):
                     load_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             if thresholdCheck == "true":
                 status = compare_metric_threshold_values(deviceConfig,"PROFILING_SYSTEM_LOAD_THRESHOLD",load_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "System wide load shortterm metric is within the expected threshold level"
+                    print("System wide load shortterm metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "System wide load shortterm metric is not within the expected threshold level"
+                    print("System wide load shortterm metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[SYSTEM-WIDE LOAD SHORTTERM CHECK STATUS]: %s\n" %(status)
+                print("[SYSTEM-WIDE LOAD SHORTTERM CHECK STATUS]: %s\n" %(status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -236,36 +236,36 @@ def rdkv_profiling_collectd_check_system_CPU(tmUrl, resultId, deviceConfig, from
         url = tmUrl + '/execution/fetchDataFromGrafanaMultiple?executionResultId='+str(resultId)+str("&")+url_param + str("&") + 'fromDateString=' + fromDateString + str("&") + 'toDateString=' + toDateString
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         cpu_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
+            print("\n********** Metric From GRAFANA **************")
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this
                 cpu_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             if thresholdCheck == "true":
                 status = compare_metric_threshold_values(deviceConfig,"PROFILING_SYSTEM_CPU_THRESHOLD",cpu_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "System wide cpu metric is within the expected threshold level"
+                    print("System wide cpu metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "System wide cpu metric is not within the expected threshold level"
+                    print("System wide cpu metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[SYSTEM-WIDE CPU CHECK STATUS]: %s\n" %(status)
+                print("[SYSTEM-WIDE CPU CHECK STATUS]: %s\n" %(status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -301,40 +301,40 @@ def rdkv_profiling_collectd_check_process_metrics(tmUrl, resultId, processName, 
         url = tmUrl + '/execution/fetchDataFromGrafanaMultiple?executionResultId='+str(resultId)+str("&")+url_param + str("&") + 'fromDateString=' + fromDateString + str("&") + 'toDateString=' + toDateString
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         process_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
-            print "Process Name: ",processName
+            print("\n********** Metric From GRAFANA **************")
+            print("Process Name: ",processName)
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this
                 if "ps_rss" in params.get("parameter"):
                     process_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             if thresholdCheck == "true":
                 # TODO: This check will be added for process specific in up coming releases
                 process_config_param = "PROFILING_PROCESSES_" + processName.upper() + "_PS_RSS_THRESHOLD"
                 status = compare_metric_threshold_values(deviceConfig,process_config_param,process_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "Process rss metric is within the expected threshold level"
+                    print("Process rss metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "Process rss metric is not within the expected threshold level"
+                    print("Process rss metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[%s RSS METRICS CHECK STATUS]: %s\n" %(processName,status)
+                print("[%s RSS METRICS CHECK STATUS]: %s\n" %(processName,status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -368,38 +368,38 @@ def rdkv_profiling_collectd_check_process_usedCPU(tmUrl, resultId, processName, 
         url = tmUrl + '/execution/fetchDataFromGrafanaMultiple?executionResultId='+str(resultId)+str("&")+url_param + str("&") + 'fromDateString=' + fromDateString + str("&") + 'toDateString=' + toDateString
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         process_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
-            print "Process Name: ",processName
+            print("\n********** Metric From GRAFANA **************")
+            print("Process Name: ",processName)
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this
                 process_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             if thresholdCheck == "true":
                 process_config_param = "PROFILING_PROCESSES_" + processName.upper() + "_USEDCPU_THRESHOLD"
                 status = compare_metric_threshold_values(deviceConfig,process_config_param,process_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "Process used CPU metric is within the expected threshold level"
+                    print("Process used CPU metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "Process used CPU metric is not within the expected threshold level"
+                    print("Process used CPU metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[%s CPU METRICS CHECK STATUS]: %s\n" %(processName,status)
+                print("[%s CPU METRICS CHECK STATUS]: %s\n" %(processName,status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -435,39 +435,39 @@ def rdkv_profiling_collectd_check_process_usedSHR(tmUrl, resultId, processName, 
 
     result_details = {}
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         process_metric_list = []
         if response != []:
-            print "\n********** Metric From GRAFANA **************"
-            print "Process Name: ",processName
+            print("\n********** Metric From GRAFANA **************")
+            print("Process Name: ",processName)
             for params in response:
                 # TODO As of now max value is taken. Need to confirm on this
                 process_metric_list.append(float(params.get("max")))
-                print "%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg"))
-            print "********************************************\n"
+                print("%s : min:%s , max:%s , avg:%s \n" %(params.get("parameter").split(".")[-1].split("_",1)[1],params.get("min"),params.get("max"),params.get("avg")))
+            print("********************************************\n")
             # TODO As of now SHR memory validation is disabled. Need to confirm on this
             if thresholdCheck == "true":
                 process_config_param = "PROFILING_PROCESSES_" + processName.upper() + "_USEDSHR_THRESHOLD"
                 status = compare_metric_threshold_values(deviceConfig,process_config_param,process_metric_list)
                 if status == "SUCCESS":
                     result_details["test_step_status"] = "SUCCESS"
-                    print "Process used SHR metric is within the expected threshold level"
+                    print("Process used SHR metric is within the expected threshold level")
                 elif status == "FAILURE":
                     result_details["test_step_status"] = "FAILURE"
-                    print "Process used SHR metric is not within the expected threshold level"
+                    print("Process used SHR metric is not within the expected threshold level")
                 else:
                     result_details["test_step_status"] = "FAILURE"
-                print "[%s SHR METRICS CHECK STATUS]: %s\n" %(processName,status)
+                print("[%s SHR METRICS CHECK STATUS]: %s\n" %(processName,status))
             else:
                 result_details["test_step_status"] = "SUCCESS"
             result_details["response"] = response
         else:
             result_details["test_step_status"] = "FAILURE"
-            print "Received response: ",response
+            print("Received response: ",response)
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -494,27 +494,27 @@ def rdkv_profiling_get_alerts(tmUrl, resultId):
     try:
         # Grafana updates alerts for every 1 min. So waiting to get the alerts
         time.sleep(60)
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read()
         response=json.loads(response)
         alert_status = False
         if response != []:
-            print "\n********** Alerts From GRAFANA **************"
+            print("\n********** Alerts From GRAFANA **************")
             for params in response:
-                print params
+                print(params)
                 if params.get("state") == "alerting":
                     alert_status = True
-            print "********************************************\n"
+            print("********************************************\n")
             if not alert_status:
                 result_details["test_step_status"] = "SUCCESS"
             else:
                 result_details["test_step_status"] = "FAILURE"
             result_details["response"] = response
         else:
-            print "No Alerts received"
+            print("No Alerts received")
             result_details["test_step_status"] = "SUCCESS"
     except:
         result_details["test_step_status"] = "FAILURE"
-        print "Unable to get details from grafana server using REST !!!"
+        print("Unable to get details from grafana server using REST !!!")
     finally:
         result_details = json.dumps(result_details)
         return result_details
@@ -550,7 +550,7 @@ def rdkv_profiling_smem_execute(deviceIP,deviceConfig,realPath,logPath,execId,ex
         dest_file_name = str(execId) + "_" + str(execDeviceId) + "_" + str(execResultId) + "_" + "smemData" + "_" + timing_info
         result_val = execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_file_name,dest_file_name)
     else:
-         print "\nDevice does not have smem support. Skipping smem execution"
+        print("\nDevice does not have smem support. Skipping smem execution")
 
     return result_val
 
@@ -562,10 +562,10 @@ def transfer_output_file(deviceIP,user_name,password,realPath,file_name,dest_pat
     result_val = "SUCCESS"
     try:
         if not os.path.exists(dest_path):
-            print "\nCreating file transfer path..."
+            print("\nCreating file transfer path...")
             os.makedirs(dest_path)
         if os.path.exists(dest_path):
-            print "\nFile transfer path available. Tranferring the log..."
+            print("\nFile transfer path available. Tranferring the log...")
         log_transfer_file = realPath + "fileStore/transfer_thunderdevice_logs.py"
 
         command = "python "+log_transfer_file+" "+deviceIP+" "+user_name+" "+password+" "+file_name+" "+dest_path+" "+dest_file_name
@@ -576,13 +576,13 @@ def transfer_output_file(deviceIP,user_name,password,realPath,file_name,dest_pat
         dest_log_file = dest_path + "/" + dest_file_name
         os.rename(src_log_file,dest_log_file)
         if os.path.exists(dest_log_file):
-            print "Log file %s transferred successfully" %(dest_file_name)
+            print("Log file %s transferred successfully" %(dest_file_name))
         else:
-            print "Log file transfer failed"
+            print("Log file transfer failed")
             result_val = ""
 
     except Exception as e:
-        print "\nException Occurred : %s" %(e)
+        print("\nException Occurred : %s" %(e))
         result_val = "EXCEPTION OCCURRED"
     return result_val
 
@@ -609,7 +609,7 @@ def rdkv_profiling_pmap_execute(deviceIP,deviceConfig,realPath,logPath,execId,ex
     result,pmap_support = getDeviceConfigKeyValue(deviceConfig,"PROFILING_PMAP_SUPPORT")
     if pmap_support != "" and pmap_support.upper() == "YES":
         file_name = "/tmp/pmapData.txt"
-        #list of processes for which pmap have to be executed are passed from script 
+        #list of processes for which pmap have to be executed are passed from script
         command = '''echo "" > '''+file_name+'''; var1="'''+processes+'''" ; IFS=' ' read -r -a arrayvar <<< "$var1";for a in "${arrayvar[@]}" ; do echo "Process Name : $a" >> '''+file_name +''';pidof $a | xargs pmap >> '''+file_name+'''; done'''
         now = datetime.now()
         timing_info = str(now.strftime("%Y%m%d%H%M%S"))
@@ -617,7 +617,7 @@ def rdkv_profiling_pmap_execute(deviceIP,deviceConfig,realPath,logPath,execId,ex
         dest_file_name = str(execId) + "_" + str(execDeviceId) + "_" + str(execResultId) + "_" + "pmapData" + "_" + timing_info
         result_val = execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_file_name,dest_file_name)
     else:
-         print "\nDevice does not have pmap support. Skipping pmap execution"
+        print("\nDevice does not have pmap support. Skipping pmap execution")
     return result_val
 #----------------------------------------------------------------------------
 # To execute the systemd-analyze tool in DUT and transfer the systemd-analyze log from DUT to TM
@@ -650,7 +650,7 @@ def rdkv_profiling_systemd_analyze_execute(deviceIP,deviceConfig,realPath,logPat
         #Calling ssh_method to ssh and execute the command in device
         result_val = execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_file_name,dest_file_name)
     else:
-         print "\nDevice does not have systemd analyze support. Skipping systemd analyze execution"
+        print("\nDevice does not have systemd analyze support. Skipping systemd analyze execution")
     return result_val
 #----------------------------------------------------------------------------
 # To execute the systemd-bootchart tool in DUT and transfer the systemd-bootchart log from DUT to TM
@@ -684,7 +684,7 @@ def rdkv_profiling_systemd_bootchart_execute(deviceIP,deviceConfig,realPath,logP
         #Calling ssh_method to ssh and execute the command in device
         result_val = execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_file_name,dest_file_name)
     else:
-         print "\nDevice does not have systemd-bootchart support. Skipping systemd-bootchart execution"
+        print("\nDevice does not have systemd-bootchart support. Skipping systemd-bootchart execution")
     return result_val
 #----------------------------------------------------------------------------
 # To execute the lmbench tool in DUT and transfer the lmbench log from DUT to TM
@@ -716,7 +716,7 @@ def rdkv_profiling_lmbench(deviceIP,deviceConfig,realPath,logPath,execId,execDev
         #Calling ssh_method to ssh and execute the command in device
         result_val = execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_file_name,dest_file_name)
     else:
-         print "\nDevice does not have lmbench support. Skipping lmbench execution"
+        print("\nDevice does not have lmbench support. Skipping lmbench execution")
     return result_val
 #----------------------------------------------------------------------------
 #To Handle SSH connection and execute the command in device
@@ -727,31 +727,31 @@ def execute_ssh(deviceIP,deviceConfig,file_name,command,realPath,logPath,src_fil
     result,user_name  = getDeviceConfigKeyValue(deviceConfig,"SSH_USERNAME")
     result,password   = getDeviceConfigKeyValue(deviceConfig,"SSH_PASSWORD")
     if ssh_method == "" or user_name == "" or password == "":
-            print "Please configure the SSH details in device config file"
-            result_val = ""
+        print("Please configure the SSH details in device config file")
+        result_val = ""
     else:
-            if password == "None":
-                ssh_password = ""
+        if password == "None":
+            ssh_password = ""
+        else:
+            ssh_password = password
+        try:
+            lib = importlib.import_module("SSHUtility")
+            if ssh_method == "directSSH":
+                method = "ssh_and_execute"
+            elif ssh_method == "RestAPI":
+                print(" Yet to implement RestApi method")
             else:
-                ssh_password = password
-            try:
-                lib = importlib.import_module("SSHUtility")
-                if ssh_method == "directSSH":
-                    method = "ssh_and_execute"
-                elif ssh_method == "RestAPI":
-                    print " Yet to implement RestApi method"
-                else:
-                     method = "ssh_and_execute_" + ssh_method
-                method_to_call = getattr(lib, method)
-                if ssh_method == "directSSH":
-                     output = method_to_call(ssh_method,host_name,user_name,ssh_password,command)
-                else:
-                     output = method_to_call(host_name,user_name,password,command)
+                method = "ssh_and_execute_" + ssh_method
+            method_to_call = getattr(lib, method)
+            if ssh_method == "directSSH":
+                output = method_to_call(ssh_method,host_name,user_name,ssh_password,command)
+            else:
+                output = method_to_call(host_name,user_name,password,command)
 
-                dest_path = logPath
-                result_val = transfer_output_file(deviceIP,user_name,password,realPath,file_name,dest_path,dest_file_name,src_file_name)
-            except Exception as e:
-                result_val = "EXCEPTION OCCURRED"
+            dest_path = logPath
+            result_val = transfer_output_file(deviceIP,user_name,password,realPath,file_name,dest_path,dest_file_name,src_file_name)
+        except Exception as e:
+            result_val = "EXCEPTION OCCURRED"
     return result_val
 #----------------------------------------------------------------------------
 #Validating process wise profiling data

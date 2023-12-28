@@ -18,7 +18,7 @@
 # limitations under the License.
 ##########################################################################
 import tdklib;
-from time import sleep; 
+from time import sleep;
 audioPortType = {"LR":0, "HDMI":1, "SPDIF":2, "SPEAKER":3, "HDMI_ARC":4, "HEADPHONE":5, "INVALID":9};
 videoPortType = {"RF":0, "BB":1, "SVIDEO":2, "1394":3, "DVI":4, "COMPONENT":5, "HDMI":6, "HDMI_INPUT":7, "INTERNAL":8, "SCART":9, "INVALID":15};
 stereoModeType = {"UNKNOWN":0, "MONO":1, "STEREO":2, "SURROUND":3, "PASSTHRU":4, "INVALID":9};
@@ -43,42 +43,42 @@ def stopDsmgrService(obj):
     tdkTestObj.executeTestCase(expectedResult);
 
     actualResult = tdkTestObj.getResult();
-    print "Exceution result: ", actualResult;
+    print("Exceution result: ", actualResult);
 
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
-        print "Output: ", details;
+        print("Output: ", details);
         if "active (running)" in details:
             tdkTestObj = obj.createTestStep('ExecuteCommand');
-            #Stop dsmgr service 
+            #Stop dsmgr service
             cmd = "systemctl stop dsmgr.service";
 
             #configure the command
             tdkTestObj.addParameter("command", cmd);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "Exceution result: ", actualResult;
+            print("Exceution result: ", actualResult);
 
             if expectedResult in actualResult:
                 details = tdkTestObj.getResultDetails();
-                print "Output: ", details;
+                print("Output: ", details);
                 sleep(2);
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "dsmgr service stopped";
+                print("dsmgr service stopped");
                 status = True;
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to stop dsmgr service";
+                print("Failed to stop dsmgr service");
         else:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "dsmgr service is not running";
+            print("dsmgr service is not running");
             status = True;
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Command execution failed";
-    
+        print("Command execution failed");
+
     return status;
- 
+
 def startDsmgrService(obj):
     expectedResult="SUCCESS";
     status = False;
@@ -91,37 +91,37 @@ def startDsmgrService(obj):
     tdkTestObj.executeTestCase(expectedResult);
 
     actualResult = tdkTestObj.getResult();
-    print "Exceution result: ", actualResult;
+    print("Exceution result: ", actualResult);
 
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
-        print "Output: ", details;
+        print("Output: ", details);
         if "active (running)" not in details:
             tdkTestObj = obj.createTestStep('ExecuteCommand');
-            #Stop dsmgr service 
+            #Stop dsmgr service
             cmd = "systemctl start dsmgr.service";
 
             #configure the command
             tdkTestObj.addParameter("command", cmd);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print "Exceution result: ", actualResult;
+            print("Exceution result: ", actualResult);
 
             if expectedResult in actualResult:
                 details = tdkTestObj.getResultDetails();
-                print "Output: ", details;
+                print("Output: ", details);
                 sleep(2);
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "dsmgr service started";
+                print("dsmgr service started");
                 status = True;
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to start dsmgr service";
+                print("Failed to start dsmgr service");
         else:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "dsmgr service is already running";
+            print("dsmgr service is already running");
             status = True;
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Command execution failed";
+        print("Command execution failed");
     return status;

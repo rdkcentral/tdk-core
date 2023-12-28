@@ -24,7 +24,7 @@ import ast
 import rdkv_performancelib
 import json
 import IPChangeDetectionVariables
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import sys
 
 # Global variable to store the initial URL in WebKit
@@ -55,16 +55,16 @@ def check_current_interface(obj):
         if result == "SUCCESS":
             interface = tdkTestObj.getResultDetails()
             if interface == "":
-                print "\n [Error] Default interface is empty \n"
+                print("\n [Error] Default interface is empty \n")
                 tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Default interface of the DUT :\n",interface
+                print("\n Default interface of the DUT :\n",interface)
                 tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Error while executing org.rdk.Network.1.getDefaultInterface method \n"
+            print("\n Error while executing org.rdk.Network.1.getDefaultInterface method \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Unable to activate org.rdk.Network plugin\n"
+        print("\n Unable to activate org.rdk.Network plugin\n")
     return interface,revert
 
 # Function to frame the complete URL of Lightning application from the configuration parameters
@@ -82,7 +82,7 @@ def get_lightning_app_url(obj):
     ip_address_type_status,ip_address_type = getDeviceConfigKeyValue(conf_file,"DEVICE_IP_ADDRESS_TYPE")
     complete_url = ip_change_app_url+'?tmURL='+obj.url+'&deviceName='+device_name+'&tmUserName='+user_name+'&tmPassword='+password+'&ipAddressType='+ip_address_type
     if any(value == "" for value in (ip_change_app_url,user_name,password,ip_address_type)):
-        print "\n Please configure values in IPChangeDetectionVariables and Device specific configuration file \n" 
+        print("\n Please configure values in IPChangeDetectionVariables and Device specific configuration file \n")
         status = "FAILURE"
     return status,complete_url
 
@@ -106,8 +106,8 @@ def launch_lightning_app(obj,url):
     expectedResult = "SUCCESS"
     status = "FAILURE"
     global current_url
-    print "Load Lightning Application"
-    print "\nGet the URL in WebKitBrowser"
+    print("Load Lightning Application")
+    print("\nGet the URL in WebKitBrowser")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","WebKitBrowser.1.url");
     tdkTestObj.executeTestCase(expectedResult);
@@ -115,7 +115,7 @@ def launch_lightning_app(obj,url):
     result = tdkTestObj.getResult();
     if current_url != None and expectedResult in result:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Current URL:",current_url
+        print("Current URL:",current_url)
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.addParameter("value",url);
@@ -123,7 +123,7 @@ def launch_lightning_app(obj,url):
         result = tdkTestObj.getResult();
         if expectedResult in  result:
             time.sleep(10)
-            print "\nValidate if the URL is set successfully or not"
+            print("\nValidate if the URL is set successfully or not")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.executeTestCase(expectedResult);
@@ -131,16 +131,16 @@ def launch_lightning_app(obj,url):
             result = tdkTestObj.getResult()
             if new_url == url and expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "\n URL(",new_url,") is set successfully \n"
+                print("\n URL(",new_url,") is set successfully \n")
                 status = "SUCCESS"
             else:
-                print "\n Unable to set URL: {} in WebKitBrowser \n".format(url)
+                print("\n Unable to set URL: {} in WebKitBrowser \n".format(url))
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while executing WebKitBrowser.1.url method \n"
+            print("\n Error while executing WebKitBrowser.1.url method \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Unable to get the current URL in WebKitBrowser \n"
+        print("\n Unable to get the current URL in WebKitBrowser \n")
         tdkTestObj.setResultStatus("FAILURE")
     return status
 
@@ -153,13 +153,13 @@ def getDeviceIP_and_Status(tm_url):
     response = []
     time.sleep(5)
     try:
-        response = urllib.urlopen(url).read()
+        response = urllib.request.urlopen(url).read().decode()
         devicePattern=r'\((\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\)'
         matches=re.search(devicePattern, response)
         device_ip = matches.group(1)
         device_status = response.split(":")[1]
     except:
-        print "Unable to get the response from REST"
+        print("Unable to get the response from REST")
         exit()
     sys.stdout.flush()
     return device_ip,device_status
@@ -183,7 +183,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
         if ssh_param_dict != {} and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Enable the RFC Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable in DUT \n"
+            print("\n Enable the RFC Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable in DUT \n")
             #command to enable RFC for PreferredNetworkInterface
             command = "tr181 -s -v true Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable; tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable"
             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -195,7 +195,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
             output = tdkTestObj.getResultDetails()
             if output != "EXCEPTION" and expectedResult in result:
                 if "true" in output.split("\n")[1]:
-                    print "\n Enabled RFC feature \n"
+                    print("\n Enabled RFC feature \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     #list of interfaces supported by this device including their state
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -210,7 +210,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                             if interface["interface"] == "WIFI":
                                 wifi_interface = True
                         if wifi_interface:
-                            print "\n WiFi interface is present in org.rdk.Network.1.getInterfaces list \n"
+                            print("\n WiFi interface is present in org.rdk.Network.1.getInterfaces list \n")
                             tdkTestObj.setResultStatus("SUCCESS")
                             params = '{"interface":"WIFI", "enabled":true, "persist":true}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -252,38 +252,38 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                                     status = "SUCCESS"
                                                     time.sleep(30)
                                                 else:
-                                                    print "\n Error while setting WIFI as default interface \n"
+                                                    print("\n Error while setting WIFI as default interface \n")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Error while connecting to WIFI SSID \n"
+                                                print("\n Error while connecting to WIFI SSID \n")
                                         else:
-                                            print "\n Error while setting URL in WebKitBrowser \n"
+                                            print("\n Error while setting URL in WebKitBrowser \n")
                                     else:
-                                        print "\n Unable to set WIFI to enabled state \n"
+                                        print("\n Unable to set WIFI to enabled state \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error while executing org.rdk.Network.1.getInterfaces method \n"
+                                    print("\n Error while executing org.rdk.Network.1.getInterfaces method \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while executing org.rdk.Network.1.setInterfaceEnabled method \n"
+                                print("\n Error while executing org.rdk.Network.1.setInterfaceEnabled method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n WIFI is not present in org.rdk.Network.1.getInterfaces output \n"
+                            print("\n WIFI is not present in org.rdk.Network.1.getInterfaces output \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while executing org.rdk.Network.1.getInterfaces method \n"
+                        print("\n Error while executing org.rdk.Network.1.getInterfaces method \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while enabling RFC for PreferredNetworkInterface\n"
+                    print("\n Error while enabling RFC for PreferredNetworkInterface\n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while enabling RFC feature in DUT \n"
+                print("\n Error while enabling RFC feature in DUT \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Please configure SSH details in Device configuration file \n"
+            print("\n Please configure SSH details in Device configuration file \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Please check the preconditions before test \n"
+        print("\n Please check the preconditions before test \n")
     if start_time_needed:
         if wifi_connect_needed:
             return status,plugin_status_dict,revert,start_time,wifi_connect_start_time,deviceAvailability
@@ -292,7 +292,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
     else:
         return status,plugin_status_dict,revert,deviceAvailability
 
-# Function to connect to a SSID given in the Device configuration file               
+# Function to connect to a SSID given in the Device configuration file
 def connect_wifi(obj,ap_freq,start_time_needed=False):
     status = "FAILURE"
     start_time = ""
@@ -310,7 +310,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
         result,password = getDeviceConfigKeyValue(conf_file,password_key)
         result,security_mode = getDeviceConfigKeyValue(conf_file,security_mode_key)
         if any(value == "" for value in (ssid,password,security_mode)):
-            print "please configure values before test"
+            print("please configure values before test")
         else:
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
             tdkTestObj.addParameter("method","org.rdk.Wifi.1.getCurrentState")
@@ -319,7 +319,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
             result = tdkTestObj.getResult()
             if result == "SUCCESS":
                 state = int(tdkTestObj.getResultDetails())
-                print "\n Current state value of Wifi adapter :{} \n".format(state)
+                print("\n Current state value of Wifi adapter :{} \n".format(state))
                 state_failure = False
                 if state not in (0,6):
                     tdkTestObj.setResultStatus("SUCCESS")
@@ -332,7 +332,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(10)
-                        print "\n Connecting to SSID : {}\n".format(ssid)
+                        print("\n Connecting to SSID : {}\n".format(ssid))
                         params = '{"ssid":"'+ ssid +'", "passphrase": "'+ password +'", "securityMode":'+ security_mode +'}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.Wifi.1.connect")
@@ -358,46 +358,46 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                                 status = "SUCCESS"
                             time.sleep(30)
                             if status == "SUCCESS":
-                                    print "Validate whether the device is available with the new IP:"
-                                    #check wthether connected
-                                    print "\n Checking whether DUT is connected to SSID \n"
-                                    tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                                    tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
-                                    tdkTestObj.addParameter("reqValue","ssid")
-                                    tdkTestObj.executeTestCase(expectedResult)
-                                    result = tdkTestObj.getResult()
-                                    if result == "SUCCESS":
+                                print("Validate whether the device is available with the new IP:")
+                                #check wthether connected
+                                print("\n Checking whether DUT is connected to SSID \n")
+                                tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
+                                tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+                                tdkTestObj.addParameter("reqValue","ssid")
+                                tdkTestObj.executeTestCase(expectedResult)
+                                result = tdkTestObj.getResult()
+                                if result == "SUCCESS":
+                                    deviceAvailability = "Yes"
+                                    connected_ssid = tdkTestObj.getResultDetails()
+                                    print(" \n Connected SSID Name: {}\n ".format(connected_ssid))
+                                    if ssid == connected_ssid:
+                                        print("Successfully Connected to SSID \n ")
+                                        status = "SUCCESS"
                                         deviceAvailability = "Yes"
-                                        connected_ssid = tdkTestObj.getResultDetails()
-                                        print " \n Connected SSID Name: {}\n ".format(connected_ssid)
-                                        if ssid == connected_ssid:
-                                            print "Successfully Connected to SSID \n "
-                                            status = "SUCCESS"
-                                            deviceAvailability = "Yes"
-                                            tdkTestObj.setResultStatus("SUCCESS")
-                                        else:
-                                            print "DUT is not connected to SSID"
-                                            deviceAvailability = "No"
-                                            tdkTestObj.setResultStatus("FAILURE")
+                                        tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                    	print "\n Error while executing org.rdk.Wifi.1.getConnectedSSID method \n"
+                                        print("DUT is not connected to SSID")
                                         deviceAvailability = "No"
-                                    	tdkTestObj.setResultStatus("FAILURE")
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                else:
+                                    print("\n Error while executing org.rdk.Wifi.1.getConnectedSSID method \n")
+                                    deviceAvailability = "No"
+                                    tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error while executing org.rdk.Wifi.1.connect method \n"
+                            print("\n Error while executing org.rdk.Wifi.1.connect method \n")
                             deviceAvailability = "No"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while executing org.rdk.Wifi.1.startScan method \n"
+                        print("\n Error while executing org.rdk.Wifi.1.startScan method \n")
                         tdkTestObj.setResultStatus("FAILURE")
-                else:               
-                    print "\n Wifi adapter is not working \n"
+                else:
+                    print("\n Wifi adapter is not working \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing org.rdk.Wifi.1.getCurrentState method \n"
+                print("\n Error while executing org.rdk.Wifi.1.getCurrentState method \n")
                 tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Device specific configuration file is missing \n"
+        print("\n Device specific configuration file is missing \n")
     if start_time_needed:
         return status,start_time,deviceAvailability
     else:
@@ -406,7 +406,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
 # Function to set default interface
 def set_default_interface(obj,interface,start_time_needed = False):
     status = expectedResult = "SUCCESS"
-    print "Set {} as default interface".format(interface)
+    print("Set {} as default interface".format(interface))
     params = '{ "interface":"'+interface+'", "persist":true}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     tdkTestObj.addParameter("method","org.rdk.Network.1.setDefaultInterface");
@@ -415,7 +415,7 @@ def set_default_interface(obj,interface,start_time_needed = False):
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();
     if expectedResult in result:
-        print "\n Set default interface method executed successfuly for {} interfce \n".format(interface)
+        print("\n Set default interface method executed successfuly for {} interfce \n".format(interface))
         tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(40)
         device_ip,device_status = getDeviceIP_and_Status(obj.url)
@@ -432,7 +432,7 @@ def set_default_interface(obj,interface,start_time_needed = False):
             obj.IP = device_ip
         time.sleep(30)
         if status == "SUCCESS":
-            print "Validate whether the device is available with the new IP:"
+            print("Validate whether the device is available with the new IP:")
             try:
                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                 tdkTestObj.addParameter("method","org.rdk.Network.1.getDefaultInterface")
@@ -443,19 +443,19 @@ def set_default_interface(obj,interface,start_time_needed = False):
                     deviceAvailability = "Yes"
                     new_interface,revert = check_current_interface(obj)
                     if interface not in new_interface:
-                        print "\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface)
+                        print("\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface))
                         status = "FAILURE"
                         deviceAvailability = "No"
             except Exception as e:
                 status = "FAILURE"
                 deviceAvailability = "No"
-                print "Error :"
+                print("Error :")
                 print (e)
                 if "ConnectTimeoutError" in e:
-                    print "Unable to connect to the device as it is not in available status with the new IP"
+                    print("Unable to connect to the device as it is not in available status with the new IP")
     else:
         status = "FAILURE"
-        print "\n Unable to set {} as Default interface \n".format(interface)
+        print("\n Unable to set {} as Default interface \n".format(interface))
         tdkTestObj.setResultStatus("FAILURE")
     if start_time_needed:
         return status,start_time,deviceAvailability
@@ -473,7 +473,7 @@ def close_lightning_app(obj):
     result = tdkTestObj.getResult();
     if expectedResult in  result:
         time.sleep(10)
-        print "\nValidate if the URL is set successfully or not"
+        print("\nValidate if the URL is set successfully or not")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -481,13 +481,13 @@ def close_lightning_app(obj):
         result = tdkTestObj.getResult()
         if current_url in new_url and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "URL(",new_url,") is set successfully"
+            print("URL(",new_url,") is set successfully")
             status = "SUCCESS"
         else:
-            print "\n Unable to set URL: {} in WebKitBrowser \n".format(current_url)
+            print("\n Unable to set URL: {} in WebKitBrowser \n".format(current_url))
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Error while executing WebKitBrowser.1.url method \n"
+        print("\n Error while executing WebKitBrowser.1.url method \n")
         tdkTestObj.setResultStatus("FAILURE")
     return status
 
@@ -505,7 +505,7 @@ def check_cur_ssid_freq(obj):
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
             connected_ssid = tdkTestObj.getResultDetails()
-            print " \n Connected SSID Name: {}\n ".format(connected_ssid)
+            print(" \n Connected SSID Name: {}\n ".format(connected_ssid))
             if ssid == connected_ssid:
                 return_val = "2.4"
             else:
@@ -513,13 +513,13 @@ def check_cur_ssid_freq(obj):
                 if ssid_5ghz == connected_ssid:
                     return_val = "5"
                 else:
-                    print "\n DUT is not connected to any of the SSIDs configured in device specific config file, please check \n"
+                    print("\n DUT is not connected to any of the SSIDs configured in device specific config file, please check \n")
                     tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while checking connected SSID \n"
+            print("\n Error while checking connected SSID \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Please configure the SSID details in device specific config file\n"
+        print("\n Please configure the SSID details in device specific config file\n")
     return return_val
 
 # Function to connect to given interface
@@ -548,7 +548,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
             if start_time_needed:
-                if wifi_connect_needed: 
+                if wifi_connect_needed:
                     return result_status, revert_dict, revert_plugins, start_time, wifi_start_time,deviceAvailability
                 else:
                     return result_status, revert_dict, revert_plugins, start_time, deviceAvailability
@@ -580,7 +580,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
                 else:
                     result_status,deviceAvailability = set_default_interface(obj, "ETHERNET")
         else:
-            print "\n Error while launching Lightning App"
+            print("\n Error while launching Lightning App")
     revert_dict["current_if"] = current_connection
     if revert_plugins == "YES":
         revert_dict.update(plugins_status_dict)
