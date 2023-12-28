@@ -49,9 +49,9 @@ Testcase ID: CT_XUPNP_55</synopsis>
 2.Process xcal-device and xdiscovery should be running on GW Box and xdiscovery should be running on IPClient Box</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>string paramName = bcastMacAddress</input_parameters>
-    <automation_approch>1.TM loads xupnp_agent via the test agent. 
+    <automation_approch>1.TM loads xupnp_agent via the test agent.
 2.The stub will invokes the RPC method for checking the parameter name in output.json file and send the results.
-3. The stub function will verify the presence of parameter name and  sends the results as Json response 
+3. The stub function will verify the presence of parameter name and  sends the results as Json response
 4. TM will receive and display the result.
 5. TM will convert the details as a list.
 6. Using systemutil ExecuteCommand command get the parameter from cat /.tmp/deviceDtails.cache
@@ -68,8 +68,8 @@ Checkpoint 2 the parameter from the ExecuteCommand  should be present in the par
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 #IP and Port of box, No need to change,
@@ -83,7 +83,7 @@ def check_WiFiConnected():
     iarmObj.configureTestCase(ip,port,'XUPNP_GetBcastMacAddressFromOutFile');
     #Get the result of connection with test component and STB
     iarmLoadStatus = iarmObj.getLoadModuleResult();
-    print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+    print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
     #Set the module loading status
     iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
@@ -100,7 +100,7 @@ def check_WiFiConnected():
                 netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
                 netsrvObj.configureTestCase(ip,port,'XUPNP_GetBcastMacAddressFromOutFile');
                 netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-                print "[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus;
+                print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus);
                 #Set the module loading status
                 netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
@@ -117,32 +117,32 @@ def check_WiFiConnected():
                     actualresult = tdkTestObj.getResult();
                     details = tdkTestObj.getResultDetails();
                     isConnected = 0;
-                    print "[TEST EXECUTION RESULT] : %s" %actualresult;
+                    print("[TEST EXECUTION RESULT] : %s" %actualresult);
                     if expectedresult in actualresult:
-                        print "isPaired executed successfully";
+                        print("isPaired executed successfully");
                         if int(details):
-                            print "Device is connected in WiFi mode";
+                            print("Device is connected in WiFi mode");
                             isConnected = 1;
                         else:
-                            print "Device is not connected to WiFi mode";
+                            print("Device is not connected to WiFi mode");
                     else:
-                        print "isPaired failed";
+                        print("isPaired failed");
                         tdkTestObj.setResultStatus("FAILURE");
                     netsrvObj.unloadModule("netsrvmgr");
                 else:
-                    print "Netsrv module load failed"
+                    print("Netsrv module load failed")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "iarmbus init failed";
+                print("iarmbus init failed");
                 tdkTestObj.setResultStatus("FAILURE");
             IARMBUS_DisConnect(iarmObj,"SUCCESS")
         else:
-            print "iarmbus connect failed";
+            print("iarmbus connect failed");
             tdkTestObj.setResultStatus("FAILURE");
         IARMBUS_Term(iarmObj,"SUCCESS")
         iarmObj.unloadModule("iarmbus");
     else:
-        print "iarmbus module load failed"
+        print("iarmbus module load failed")
         tdkTestObj.setResultStatus("FAILURE");
     return isConnected;
 
@@ -151,85 +151,85 @@ xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
 xUpnpObj.configureTestCase(ip,port,'XUPNP_GetBcastMacAddressFromOutFile');
 #Get the result of connection with test component and STB
 xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-print "XUPNP module loading status : %s" %xupnpLoadStatus;
+print("XUPNP module loading status : %s" %xupnpLoadStatus);
 #Set the module loading status
 xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'XUPNP_GetBcastMacAddressFromOutFile');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in xupnpLoadStatus.upper()) and ("SUCCESS" in sysUtilLoadStatus.upper()):
-        tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
-        expectedresult="SUCCESS";
-        #Configuring the test object for starting test execution
-        tdkTestObj.addParameter("paramName","bcastMacAddress");
-        tdkTestObj.executeTestCase(expectedresult);
+    tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
+    expectedresult="SUCCESS";
+    #Configuring the test object for starting test execution
+    tdkTestObj.addParameter("paramName","bcastMacAddress");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("GetBcastMacAddress Result : %s"%actualresult);
+    #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
+    if "SUCCESS" in actualresult.upper():
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = details.replace('\\t','').replace('\\','').replace('\"','')
+        details_list = details.split(',')
+        print("GetBcastMacAddress Details : %s"%details_list);
+        bcast_mac_list = [ detail.split(':',1)[1] for detail in details_list]
+        print("bcastlist: %s"%bcast_mac_list)
+
+        #Check if Device support wifi
+        tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
+        cmd = "cat /etc/device.properties | grep WIFI_SUPPORT=true"
+        print(cmd);
+        tdkTestObj.addParameter("command", cmd);
+        tdkTestObj.executeTestCase("SUCCESS");
         actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "GetBcastMacAddress Result : %s"%actualresult;
-        #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
-        if "SUCCESS" in actualresult.upper():
-		tdkTestObj.setResultStatus("SUCCESS");
-		details = details.replace('\\t','').replace('\\','').replace('\"','')
-		details_list = details.split(',')
-        	print "GetBcastMacAddress Details : %s"%details_list;
-		bcast_mac_list = [ detail.split(':',1)[1] for detail in details_list]
-		print "bcastlist: %s"%bcast_mac_list
+        WIFI_SUPPORT = tdkTestObj.getResultDetails();
+        wifi_connected = 0;
+        if WIFI_SUPPORT:
+            print("Device supports wifi")
+            print("Check if device is connected in wifi mode")
+            wifi_connected = check_WiFiConnected();
+        else:
+            print("Device doesnot support wifi")
 
-                #Check if Device support wifi
-                tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
-                cmd = "cat /etc/device.properties | grep WIFI_SUPPORT=true"
-                print cmd;
-                tdkTestObj.addParameter("command", cmd);
-                tdkTestObj.executeTestCase("SUCCESS");
-                actualresult = tdkTestObj.getResult();
-                WIFI_SUPPORT = tdkTestObj.getResultDetails();
-                wifi_connected = 0;
-                if WIFI_SUPPORT:
-                    print "Device supports wifi"
-                    print "Check if device is connected in wifi mode"
-                    wifi_connected = check_WiFiConnected();
-                else:
-                    print "Device doesnot support wifi"
+        #Get the BcasMacAddress value from /tmp/.deviceDetails.cache and compare
+        mac_details = 0;
+        tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
+        if wifi_connected:
+            cmd = "cat /tmp/.deviceDetails.cache | grep wifi_mac | cut -d '=' -f2 | tr -d '\\n'"
+        else:
+            cmd = "cat /tmp/.deviceDetails.cache | grep moca_mac | cut -d '=' -f2 | tr -d '\\n'"
+            tdkTestObj.addParameter("command", cmd);
+            tdkTestObj.executeTestCase("SUCCESS");
+            mac_details = tdkTestObj.getResultDetails();
+            if ( not mac_details ):
+                print("Device is not connected via MoCA, getting eth_mac instead");
+                cmd = "cat /tmp/.deviceDetails.cache | grep eth_mac | cut -d '=' -f2 | tr -d '\\n'"
 
-		#Get the BcasMacAddress value from /tmp/.deviceDetails.cache and compare
-                mac_details = 0;
-		tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
-                if wifi_connected:
-                    cmd = "cat /tmp/.deviceDetails.cache | grep wifi_mac | cut -d '=' -f2 | tr -d '\\n'"
-                else:
-                    cmd = "cat /tmp/.deviceDetails.cache | grep moca_mac | cut -d '=' -f2 | tr -d '\\n'"
-                    tdkTestObj.addParameter("command", cmd);
-                    tdkTestObj.executeTestCase("SUCCESS");
-                    mac_details = tdkTestObj.getResultDetails();
-                    if ( not mac_details ):
-                        print "Device is not connected via MoCA, getting eth_mac instead";
-                        cmd = "cat /tmp/.deviceDetails.cache | grep eth_mac | cut -d '=' -f2 | tr -d '\\n'"
+        print(cmd);
+        if( not mac_details):
+            tdkTestObj.addParameter("command", cmd);
+            tdkTestObj.executeTestCase("SUCCESS");
+            actualresult = tdkTestObj.getResult();
+            mac_details = tdkTestObj.getResultDetails();
+        bcast_mac = mac_details.lower()
+        print("BcastMacAddress from /tmp/.deviceDetails.cache: %s" %bcast_mac)
+        if expectedresult in actualresult and (bcast_mac in bcast_mac_list):
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("Actual Result: BcastMacAddress retrieved from  /tmp/.deviceDetails.cache and output.json are same")
+            print("[TEST EXECUTION RESULT] : SUCCESS")
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("Actual Result :BcastMacAddress retrieved from /tmp/.deviceDetails.cache and output.json are not same")
+            print("[TEST EXECUTION RESULT] : FAILURE")
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("BcastMacAddress not retrieved from output.json")
 
-		print cmd;
-                if( not mac_details):
-                    tdkTestObj.addParameter("command", cmd);
-                    tdkTestObj.executeTestCase("SUCCESS");
-                    actualresult = tdkTestObj.getResult();
-                    mac_details = tdkTestObj.getResultDetails();
-                bcast_mac = mac_details.lower()
-                print "BcastMacAddress from /tmp/.deviceDetails.cache: %s" %bcast_mac
-                if expectedresult in actualresult and (bcast_mac in bcast_mac_list):
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "Actual Result: BcastMacAddress retrieved from  /tmp/.deviceDetails.cache and output.json are same"
-                        print "[TEST EXECUTION RESULT] : SUCCESS"
-                else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "Actual Result :BcastMacAddress retrieved from /tmp/.deviceDetails.cache and output.json are not same"
-                        print "[TEST EXECUTION RESULT] : FAILURE"
-	else:
-		tdkTestObj.setResultStatus("FAILURE");
-                print "BcastMacAddress not retrieved from output.json"
-
-        #Unload xupnp module
-        xUpnpObj.unloadModule("xupnp");
-        sysUtilObj.unloadModule("systemutil");
+    #Unload xupnp module
+    xUpnpObj.unloadModule("xupnp");
+    sysUtilObj.unloadModule("systemutil");

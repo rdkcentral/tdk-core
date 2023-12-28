@@ -75,12 +75,12 @@ Testcase ID: CT_XUPNP_16</synopsis>
 2.Process xcal-device and xdiscovery should be running on GW Box and xdiscovery should be running on IPClient Box</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>string paramName=sno</input_parameters>
-    <automation_approch>1.TM loads xupnp_agent via the test agent. 
+    <automation_approch>1.TM loads xupnp_agent via the test agent.
 2.The stub will invokes the RPC method for checking the parameter name in output.json file and send the results.
-3. The stub function will verify the presence of parameter name and  sends the results as Json response 
+3. The stub function will verify the presence of parameter name and  sends the results as Json response
 4. TM will receive and display the result.
 5. TM will convert the details as a list.
-6. Using systemutil ExecuteCommand command get the parameter from tr181Set -g Device.DeviceInfo.SerialNumber. 
+6. Using systemutil ExecuteCommand command get the parameter from tr181Set -g Device.DeviceInfo.SerialNumber.
 7 If the serial number obtained from the tr181Set -g Device.DeviceInfo.SerialNumber is present in the list created in step 5 the result is success else failure.</automation_approch>
     <expected_output>Checkpoint 1 stub will parse for parameter name in output.json file
 Checkpoint 2 the parameter from the ExecuteCommand  should be present in the parameter list obtained from output.json</expected_output>
@@ -107,59 +107,56 @@ xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
 xUpnpObj.configureTestCase(ip,port,'XUPNP_GetSerialNumFromOutFile');
 #Get the result of connection with test component and STB
 xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-print "XUPNP module loading status : %s" %xupnpLoadStatus;
+print("XUPNP module loading status : %s" %xupnpLoadStatus);
 #Set the module loading status
 xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
 sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 sysUtilObj.configureTestCase(ip,port,'XUPNP_GetSerialNumFromOutFile');
 sysUtilLoadStatus = sysUtilObj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if ("SUCCESS" in xupnpLoadStatus.upper()) and ("SUCCESS" in sysUtilLoadStatus.upper()):
-        tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
-        expectedresult="SUCCESS";
-        #Configuring the test object for starting test execution
-        tdkTestObj.addParameter("paramName","sno");
-        tdkTestObj.executeTestCase(expectedresult);
+    tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
+    expectedresult="SUCCESS";
+    #Configuring the test object for starting test execution
+    tdkTestObj.addParameter("paramName","sno");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("GetSerialNum Result : %s"%actualresult);
+    #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
+    if "SUCCESS" in actualresult.upper():
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = details.replace('\\t','').replace('\\','').replace('\"','')
+        details_list = details.split(',')
+        print("GetSerialNum Details : %s"%str(details_list));
+        serial_num_list = [ detail.split(':')[1] for detail in details_list]
+
+        #get the serialnumber from tr181Set -g Device.DeviceInfo.SerialNumber and compare
+        tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
+        cmd = "tr181Set -g Device.DeviceInfo.SerialNumber &> /opt/TDK/serial.txt;cat /opt/TDK/serial.txt | tr -d '\n';rm /opt/TDK/serial.txt";
+        print(cmd);
+        tdkTestObj.addParameter("command", cmd);
+        tdkTestObj.executeTestCase("SUCCESS");
         actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	print "GetSerialNum Result : %s"%actualresult;
-        #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
-        if "SUCCESS" in actualresult.upper():
-                tdkTestObj.setResultStatus("SUCCESS");
-        	details = details.replace('\\t','').replace('\\','').replace('\"','')
-        	details_list = details.split(',')
-        	print "GetSerialNum Details : %s"%str(details_list);
-		serial_num_list = [ detail.split(':')[1] for detail in details_list]
-                
-		#get the serialnumber from tr181Set -g Device.DeviceInfo.SerialNumber and compare
-		tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
-		cmd = "tr181Set -g Device.DeviceInfo.SerialNumber &> /opt/TDK/serial.txt;cat /opt/TDK/serial.txt | tr -d '\n';rm /opt/TDK/serial.txt";
-		print cmd;
-    		tdkTestObj.addParameter("command", cmd);
-    		tdkTestObj.executeTestCase("SUCCESS");
-		actualresult = tdkTestObj.getResult();
-    		details = tdkTestObj.getResultDetails().strip();
+        details = tdkTestObj.getResultDetails().strip();
 
-		serial_num = details
-		print "Serial number from Device.DeviceInfo.SerialNumber: %s" %serial_num
-		if expectedresult in actualresult and serial_num in serial_num_list:
-			tdkTestObj.setResultStatus("SUCCESS");
-        		print "Actual Result: Serial Number retrieved from tr181Set -g Device.DeviceInfo.SerialNumber and output.json are same"
-        		print "[TEST EXECUTION RESULT] : SUCCESS"
-		else:
-			tdkTestObj.setResultStatus("FAILURE");
-        		print "Actual Result: Serial Number retrieved from tr181Set -g Device.DeviceInfo.SerialNumber and output.json are not same"
-        		print "[TEST EXECUTION RESULT] : FAILURE"
-	else:
-		tdkTestObj.setResultStatus("FAILURE");
-                print "Serial Number not retrieved from output.json"
-        #Unload xupnp module
-        xUpnpObj.unloadModule("xupnp");
-	sysUtilObj.unloadModule("systemutil");
-
-
-
+        serial_num = details
+        print("Serial number from Device.DeviceInfo.SerialNumber: %s" %serial_num)
+        if expectedresult in actualresult and serial_num in serial_num_list:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("Actual Result: Serial Number retrieved from tr181Set -g Device.DeviceInfo.SerialNumber and output.json are same")
+            print("[TEST EXECUTION RESULT] : SUCCESS")
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("Actual Result: Serial Number retrieved from tr181Set -g Device.DeviceInfo.SerialNumber and output.json are not same")
+            print("[TEST EXECUTION RESULT] : FAILURE")
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Serial Number not retrieved from output.json")
+    #Unload xupnp module
+    xUpnpObj.unloadModule("xupnp");
+    sysUtilObj.unloadModule("systemutil");

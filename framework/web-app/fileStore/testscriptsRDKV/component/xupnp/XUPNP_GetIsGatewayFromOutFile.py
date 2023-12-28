@@ -54,15 +54,15 @@ Testcase ID: CT_XUPNP_11</synopsis>
 2.Process xcal-device and xdiscovery should be running on GW Box and xdiscovery should be running on IPClient Box</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>string paramName=isgateway</input_parameters>
-    <automation_approch>1.TM loads xupnp_agent via the test agent. 
+    <automation_approch>1.TM loads xupnp_agent via the test agent.
 2.The stub will invokes the RPC method for checking the parameter name in output.json file and send the results.
-3. The stub function will verify the presence of parameter name and  sends the results as Json response 
+3. The stub function will verify the presence of parameter name and  sends the results as Json response
 4. TM will receive and display the result.
 5. TM will create a list of Isgateway values.
 6. Again invoke the stub with parameter DevType
 7. After getting the values for recvDevType, TM will create a list of recvDevType values .
 8. TM will create a dictionary with the 2 lists and compare the key and values with the predefined dictionary.
-9. If values are same for the corresponding keys of each dictionary then test is success else failure. 
+9. If values are same for the corresponding keys of each dictionary then test is success else failure.
 </automation_approch>
     <except_output>Checkpoint 1 stub will parse for parameter name in output.json file
 checkpoint 2 Each key will have same value in the corresponding key in the predefined dictionary.</except_output>
@@ -89,57 +89,57 @@ xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
 xUpnpObj.configureTestCase(ip,port,'XUPNP_GetIsGatewayFromOutFile');
 #Get the result of connection with test component and STB
 xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-print "XUPNP module loading status : %s" %xupnpLoadStatus;
+print("XUPNP module loading status : %s" %xupnpLoadStatus);
 #Set the module loading status
 xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
 if "SUCCESS" in xupnpLoadStatus.upper():
+    tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
+    expectedresult="SUCCESS";
+    #Configuring the test object for starting test execution
+    tdkTestObj.addParameter("paramName","isgateway");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("GetIsGateway Result : %s"%actualresult);
+    if "SUCCESS" in actualresult.upper():
+        tdkTestObj.setResultStatus("SUCCESS");
+        details = details.replace('\\t','').replace('\\','').replace('\"','')
+        details_list = details.split(',')
+        isgateway_list = [ detail.split(':',1)[1] for detail in details_list]
+        #Get the devtype values
         tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
         expectedresult="SUCCESS";
         #Configuring the test object for starting test execution
-        tdkTestObj.addParameter("paramName","isgateway");
+        tdkTestObj.addParameter("paramName","DevType");
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
+        print("GetDevType Result : %s"%actualresult);
         details = tdkTestObj.getResultDetails();
-        print "GetIsGateway Result : %s"%actualresult;
-	if "SUCCESS" in actualresult.upper():
-                tdkTestObj.setResultStatus("SUCCESS");
-                details = details.replace('\\t','').replace('\\','').replace('\"','')
-                details_list = details.split(',')
-                isgateway_list = [ detail.split(':',1)[1] for detail in details_list]
-                #Get the devtype values
-		tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
-                expectedresult="SUCCESS";
-                #Configuring the test object for starting test execution
-                tdkTestObj.addParameter("paramName","DevType");
-                tdkTestObj.executeTestCase(expectedresult);
-                actualresult = tdkTestObj.getResult();
-                print "GetDevType Result : %s"%actualresult;
-		details = tdkTestObj.getResultDetails();
-                if "SUCCESS" in actualresult.upper():
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        details = details.replace('\\t','').replace('\\','').replace('\"','')
-                        details_list = details.split(',')
-                        #removing the Devtype values from the list
-                        for detail in details_list:
-                                if detail.split(':')[0]!= 'recvDevType':
-                                        details_list.remove(detail)
-                        recvDevType_list = [ detail.split(':')[1] for detail in details_list]
-                        #creating dictionary with key as devtype and isgateway value as the corresponding value
-                        dictionary = dict(zip(recvDevType_list, isgateway_list));
-                        dict_valid = {'mediaclient':'no','hybrid':'yes'};
-			for key in dictionary :
-                        	if dictionary.get(key) == dict_valid.get(key):
-                                	tdkTestObj.setResultStatus("SUCCESS");
-                                        print "ACTUAL RESULT : isgateway value is %s for the corresponding recvDevType %s"%(dictionary.get(key),key);
-                        	else:
-					tdkTestObj.setResultStatus("FAILURE");
-                                	print "[TEST EXECUTION RESULT] : FAILURE";
+        if "SUCCESS" in actualresult.upper():
+            tdkTestObj.setResultStatus("SUCCESS");
+            details = details.replace('\\t','').replace('\\','').replace('\"','')
+            details_list = details.split(',')
+            #removing the Devtype values from the list
+            for detail in details_list:
+                if detail.split(':')[0]!= 'recvDevType':
+                    details_list.remove(detail)
+            recvDevType_list = [ detail.split(':')[1] for detail in details_list]
+            #creating dictionary with key as devtype and isgateway value as the corresponding value
+            dictionary = dict(list(zip(recvDevType_list, isgateway_list)));
+            dict_valid = {'mediaclient':'no','hybrid':'yes'};
+            for key in dictionary :
+                if dictionary.get(key) == dict_valid.get(key):
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("ACTUAL RESULT : isgateway value is %s for the corresponding recvDevType %s"%(dictionary.get(key),key));
                 else:
-			tdkTestObj.setResultStatus("FAILURE");
-			print "recvDevtype not found"
-	else:
-		 tdkTestObj.setResultStatus("FAILURE");
-                 print "isgateway parameter not found"
-        #Unload xupnp module
-        xUpnpObj.unloadModule("xupnp");
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("[TEST EXECUTION RESULT] : FAILURE");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("recvDevtype not found")
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("isgateway parameter not found")
+    #Unload xupnp module
+    xUpnpObj.unloadModule("xupnp");

@@ -54,9 +54,9 @@ TestcaseID: CT_XUPNP_01</synopsis>
 2.Process xcal-device and xdiscovery should be running on GW Box and xdiscovery should be running on IPClient Box</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
-    <automation_approch>1.TM loads xupnp_agent via the test agent. 
+    <automation_approch>1.TM loads xupnp_agent via the test agent.
 2.The stub will invokes the RPC method for checking the presence of output.json and send the results.
-3. The stub function will verify the output file and its contents and sends the results as Json response 
+3. The stub function will verify the output file and its contents and sends the results as Json response
 4. TM will receive and display the result.</automation_approch>
     <except_output>Checkpoint 1 stub will check for the output.json file</except_output>
     <priority>High</priority>
@@ -84,22 +84,22 @@ xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
 xUpnpObj.configureTestCase(ip,port,'XUPNP_CheckXDiscOutputFile');
 #Get the result of connection with test component and STB
 xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-print "XUPNP module loading status : %s" %xupnpLoadStatus;
+print("XUPNP module loading status : %s" %xupnpLoadStatus);
 #Set the module loading status
 xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
 if "SUCCESS" in xupnpLoadStatus.upper():
-        tdkTestObj = xUpnpObj.createTestStep('XUPNP_CheckXDiscOutputFile');
-        expectedresult="SUCCESS";
-        #Configuring the test object for starting test execution
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print "Result: [%s] Details: [%s]"%(actualresult,details);
-        #Check for SUCCESS return value of XUPNP_CheckXDiscOutputFile
-        if "SUCCESS" in actualresult.upper():
-                tdkTestObj.setResultStatus("SUCCESS");
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-        #Unload xupnp module
-        xUpnpObj.unloadModule("xupnp");
+    tdkTestObj = xUpnpObj.createTestStep('XUPNP_CheckXDiscOutputFile');
+    expectedresult="SUCCESS";
+    #Configuring the test object for starting test execution
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print("Result: [%s] Details: [%s]"%(actualresult,details));
+    #Check for SUCCESS return value of XUPNP_CheckXDiscOutputFile
+    if "SUCCESS" in actualresult.upper():
+        tdkTestObj.setResultStatus("SUCCESS");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload xupnp module
+    xUpnpObj.unloadModule("xupnp");

@@ -77,8 +77,8 @@ Testcase ID: CT_XUPNP_48</synopsis>
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
@@ -91,30 +91,28 @@ xUpnpObj.configureTestCase(ip,port,'XUPNP_GetIpv6PrefixFromOutFile');
 
 #Get the result of connection with test component and STB
 xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-print "XUPNP module loading status : %s" %xupnpLoadStatus;
+print("XUPNP module loading status : %s" %xupnpLoadStatus);
 #Set the module loading status
 xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
 if "SUCCESS" in xupnpLoadStatus.upper():
-        tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
-        expectedresult="SUCCESS";
-        #Configuring the test object for starting test execution
-        tdkTestObj.addParameter("paramName","ipv6Prefix");
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-	details = details.replace('\\t','')
-        details = details.replace('\\','')
-        details = details.replace('\"','')
-        print "GetIpv6Prefix Result : %s"%actualresult;
-        print "GetIpv6Prefix Details : %s"%details;
-        #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
-        if "SUCCESS" in actualresult.upper():
-                tdkTestObj.setResultStatus("SUCCESS");
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
+    tdkTestObj = xUpnpObj.createTestStep('XUPNP_ReadXDiscOutputFile');
+    expectedresult="SUCCESS";
+    #Configuring the test object for starting test execution
+    tdkTestObj.addParameter("paramName","ipv6Prefix");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    details = details.replace('\\t','')
+    details = details.replace('\\','')
+    details = details.replace('\"','')
+    print("GetIpv6Prefix Result : %s"%actualresult);
+    print("GetIpv6Prefix Details : %s"%details);
+    #Check for SUCCESS return value of XUPNP_ReadXDiscOutputFile
+    if "SUCCESS" in actualresult.upper():
+        tdkTestObj.setResultStatus("SUCCESS");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
 
-        #Unload xupnp module
-        xUpnpObj.unloadModule("xupnp");
-
-
+    #Unload xupnp module
+    xUpnpObj.unloadModule("xupnp");

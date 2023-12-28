@@ -45,16 +45,16 @@ Testcase ID: CT_XUPNP_19</synopsis>
     <test_setup>XG1</test_setup>
     <pre_requisite>1.start_upnp.sh should be started.
 2.Process xcal-device and xdiscovery should be running on GW Box and xdiscovery should be running on IPClient Box</pre_requisite>
-    <api_or_interface_used>IARM_Bus_Init : 
+    <api_or_interface_used>IARM_Bus_Init :
 (test agent process_name)
 IARM_Bus_Connect : None
 IARM_Bus_Call(IARM_BUS_XUPNP_API_GetXUPNPDeviceInfo)
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</api_or_interface_used>
     <input_parameters>string paramName=baseStreamingUrl</input_parameters>
-    <automation_approch>1.TM loads xupnp_agent via the test agent. 
+    <automation_approch>1.TM loads xupnp_agent via the test agent.
 2.The stub will invokes the RPC method for checking the parameter name in xupnp result resturned from IARM_Bus call and send the results.
-3. The stub function will verify the parameter name in xupnp result and  sends the results as Json response 
+3. The stub function will verify the parameter name in xupnp result and  sends the results as Json response
 4. TM will receive and display the result.</automation_approch>
     <except_output>Checkpoint 1 stub will parse for parameter name in xupnp result.</except_output>
     <priority>Medium</priority>
@@ -81,48 +81,48 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'XUPNP_GetBaseStreamingUrl');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
 if "SUCCESS" in iarmLoadStatus.upper():
-        #Calling IARMBUS API "IARM_Bus_Init"
-        result = IARMBUS_Init(iarmObj,"SUCCESS")
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    #Calling IARMBUS API "IARM_Bus_Init"
+    result = IARMBUS_Init(iarmObj,"SUCCESS")
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in result:
+        #Calling IARMBUS API "IARM_Bus_Connect"
+        result = IARMBUS_Connect(iarmObj,"SUCCESS")
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
         if "SUCCESS" in result:
-                #Calling IARMBUS API "IARM_Bus_Connect"
-                result = IARMBUS_Connect(iarmObj,"SUCCESS")
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                if "SUCCESS" in result:
-                        xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
-                        xUpnpObj.configureTestCase(ip,port,'XUPNP_GetBaseStreamingUrl');
-                        #Get the result of connection with test component and STB
-                        xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-                        print "XUPNP module loading status : %s" %xupnpLoadStatus;
-                        #Set the module loading status
-                        xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
+            xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
+            xUpnpObj.configureTestCase(ip,port,'XUPNP_GetBaseStreamingUrl');
+            #Get the result of connection with test component and STB
+            xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
+            print("XUPNP module loading status : %s" %xupnpLoadStatus);
+            #Set the module loading status
+            xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
-                        if "SUCCESS" in xupnpLoadStatus.upper():
-                                tdkTestObj = xUpnpObj.createTestStep('XUPNP_GetUpnpResult');
-                                expectedresult="SUCCESS";
-                                #Configuring the test object for starting test execution
-                                tdkTestObj.addParameter("paramName","baseStreamingUrl");
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                                print "GetBaseStreamingUrl Result : %s"%actualresult;
-                                print "GetBaseStreamingUrl Details : %s"%details;
-                                #Check for SUCCESS return value of XUPNP_GetUpnpResult
-                                if "SUCCESS" in actualresult.upper():
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                #Unload xupnp module
-                                xUpnpObj.unloadModule("xupnp");
+            if "SUCCESS" in xupnpLoadStatus.upper():
+                tdkTestObj = xUpnpObj.createTestStep('XUPNP_GetUpnpResult');
+                expectedresult="SUCCESS";
+                #Configuring the test object for starting test execution
+                tdkTestObj.addParameter("paramName","baseStreamingUrl");
+                tdkTestObj.executeTestCase(expectedresult);
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                print("GetBaseStreamingUrl Result : %s"%actualresult);
+                print("GetBaseStreamingUrl Details : %s"%details);
+                #Check for SUCCESS return value of XUPNP_GetUpnpResult
+                if "SUCCESS" in actualresult.upper():
+                    tdkTestObj.setResultStatus("SUCCESS");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                #Unload xupnp module
+                xUpnpObj.unloadModule("xupnp");
 
-                        #Calling IARM_Bus_DisConnect API
-                        result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
-                #calling IARMBUS API "IARM_Bus_Term"
-                result = IARMBUS_Term(iarmObj,"SUCCESS")
-        #Unload iarmbus module
-        iarmObj.unloadModule("iarmbus");
+            #Calling IARM_Bus_DisConnect API
+            result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+        #calling IARMBUS API "IARM_Bus_Term"
+        result = IARMBUS_Term(iarmObj,"SUCCESS")
+    #Unload iarmbus module
+    iarmObj.unloadModule("iarmbus");

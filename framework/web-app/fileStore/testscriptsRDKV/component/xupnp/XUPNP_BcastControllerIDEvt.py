@@ -46,7 +46,7 @@ Testcase ID: CT_XUPNP_36</synopsis>
     <test_type>Positive</test_type>
     <test_setup>XG1</test_setup>
     <pre_requisite>“IARMDaemonMain” and "sysMgrMain" process should be running.</pre_requisite>
-    <api_or_interface_used>IARM_Bus_Init : 
+    <api_or_interface_used>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
 IARM_Bus_BroadcastEvent(IARM_BUS_SYSMGR_NAME,IARM_BUS_SYSMGR_EVENT_SYSTEMSTATE,(void*)&amp;eventData,sizeof(eventData))
@@ -59,11 +59,11 @@ string payload
 string eventLog</input_parameters>
     <automation_approch>1. TM loads the IARMBUS_Agent via the test agent
 2. IARMBUS_Agent initializes and registers with IARM Bus Daemon.
-3. TM loads xupnp_agent via the test agent. 
+3. TM loads xupnp_agent via the test agent.
 4. xupnp_agent broadcast the event IARM_BUS_SYSMGR_EVENT_SYSTEMSTATE to sysMgr.
 5. IARMBUS_Agent calls an RPC call(IARM_BUS_SYSMGR_API_GetSystemStates) to get the data passed using Broadcast Event
 6. The stub will invokes the RPC method for checking the controller ID event is registered and send the results.
-7. The stub function will verify and sends the results as Json response 
+7. The stub function will verify and sends the results as Json response
 8. TM will recieve and display the result.
 9. IARMBUS_Agent deregisters from the IARM Bus Daemon.</automation_approch>
     <except_output>Checkpoint 1 stub will parse for event messages in xdevice.log file.</except_output>
@@ -92,70 +92,70 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'XUPNP_BcastControllerIDEvt');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
 if "SUCCESS" in iarmLoadStatus.upper():
-        #Calling IARMBUS API "IARM_Bus_Init"
-        result = IARMBUS_Init(iarmObj,"SUCCESS")
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    #Calling IARMBUS API "IARM_Bus_Init"
+    result = IARMBUS_Init(iarmObj,"SUCCESS")
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in result:
+        #Calling IARMBUS API "IARM_Bus_Connect"
+        result = IARMBUS_Connect(iarmObj,"SUCCESS")
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
         if "SUCCESS" in result:
-                #Calling IARMBUS API "IARM_Bus_Connect"
-                result = IARMBUS_Connect(iarmObj,"SUCCESS")
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                if "SUCCESS" in result:
-                        xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
-                        xUpnpObj.configureTestCase(ip,port,'XUPNP_BcastControllerIDEvt');
-                        #Get the result of connection with test component and STB
-                        xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
-                        print "XUPNP module loading status : %s" %xupnpLoadStatus;
-                        #Set the module loading status
-                        xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
+            xUpnpObj = tdklib.TDKScriptingLibrary("xupnp","2.0");
+            xUpnpObj.configureTestCase(ip,port,'XUPNP_BcastControllerIDEvt');
+            #Get the result of connection with test component and STB
+            xupnpLoadStatus = xUpnpObj.getLoadModuleResult();
+            print("XUPNP module loading status : %s" %xupnpLoadStatus);
+            #Set the module loading status
+            xUpnpObj.setLoadModuleStatus(xupnpLoadStatus);
 
-                        if "SUCCESS" in xupnpLoadStatus.upper():
-                                tdkTestObj = xUpnpObj.createTestStep('XUPNP_BroadcastEvent');
-                                expectedresult="SUCCESS";
-                                #Configuring the test object for starting test execution
-                                tdkTestObj.addParameter("stateId",31);
-                                tdkTestObj.addParameter("eventLog","Received controller id update");
-                                tdkTestObj.addParameter("payload","4321");
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                                #Check for SUCCESS return value of Testcase
-                                if "SUCCESS" in actualresult.upper():
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                	print "Broadcasting ControllerID Event Result : %s"%actualresult;
-	                                print "Details : %s"%details;
-                                else:
-                                	tdkTestObj.addParameter("stateId",31);
-	                                tdkTestObj.addParameter("eventLog","dac id available");
-	                                tdkTestObj.addParameter("payload","4321");
-	                                tdkTestObj.executeTestCase(expectedresult);
-	                                actualresult = tdkTestObj.getResult();
-	                                details = tdkTestObj.getResultDetails();
-	                                print "Broadcasting ControllerID Event Result : %s"%actualresult;
-	                                print "Details : %s"%details;
-	                                if "SUCCESS" in actualresult.upper():
-        	                                tdkTestObj.setResultStatus("SUCCESS");
-	                                else:
-        	                                tdkTestObj.setResultStatus("FAILURE");
+            if "SUCCESS" in xupnpLoadStatus.upper():
+                tdkTestObj = xUpnpObj.createTestStep('XUPNP_BroadcastEvent');
+                expectedresult="SUCCESS";
+                #Configuring the test object for starting test execution
+                tdkTestObj.addParameter("stateId",31);
+                tdkTestObj.addParameter("eventLog","Received controller id update");
+                tdkTestObj.addParameter("payload","4321");
+                tdkTestObj.executeTestCase(expectedresult);
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                #Check for SUCCESS return value of Testcase
+                if "SUCCESS" in actualresult.upper():
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Broadcasting ControllerID Event Result : %s"%actualresult);
+                    print("Details : %s"%details);
+                else:
+                    tdkTestObj.addParameter("stateId",31);
+                    tdkTestObj.addParameter("eventLog","dac id available");
+                    tdkTestObj.addParameter("payload","4321");
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
+                    print("Broadcasting ControllerID Event Result : %s"%actualresult);
+                    print("Details : %s"%details);
+                    if "SUCCESS" in actualresult.upper():
+                        tdkTestObj.setResultStatus("SUCCESS");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
 
-                                #Unload xupnp module
-                                xUpnpObj.unloadModule("xupnp");
+                #Unload xupnp module
+                xUpnpObj.unloadModule("xupnp");
 
-                        #Calling IARM_Bus_DisConnect API
-                        result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
-                #calling IARMBUS API "IARM_Bus_Term"
-                result = IARMBUS_Term(iarmObj,"SUCCESS")
-        #Unload iarmbus module
-        iarmObj.unloadModule("iarmbus");
-        print "Rebooting the setup to revert the changes in output.json"
-        iarmObj.initiateReboot();
-        #Waiting for 2 mins for repopulation in output.json
-        time.sleep(120)
-        #Loading and unloading module to exit the test properly
-        iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
-        iarmObj.configureTestCase(ip,port,'XUPNP_BcastControllerIDEvt');
-        iarmObj.unloadModule("iarmbus");
+            #Calling IARM_Bus_DisConnect API
+            result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+        #calling IARMBUS API "IARM_Bus_Term"
+        result = IARMBUS_Term(iarmObj,"SUCCESS")
+    #Unload iarmbus module
+    iarmObj.unloadModule("iarmbus");
+    print("Rebooting the setup to revert the changes in output.json")
+    iarmObj.initiateReboot();
+    #Waiting for 2 mins for repopulation in output.json
+    time.sleep(120)
+    #Loading and unloading module to exit the test properly
+    iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
+    iarmObj.configureTestCase(ip,port,'XUPNP_BcastControllerIDEvt');
+    iarmObj.unloadModule("iarmbus");
