@@ -83,7 +83,7 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -100,11 +100,11 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_Utilities_permissions_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1:Verify g and s bits not set in the file permissions. Application utilities to be tested must be confirmed"
+    print("\nTEST STEP 1:Verify g and s bits not set in the file permissions. Application utilities to be tested must be confirmed")
     conf_file=getConfigFileNameDetail(obj)
     configParam="Application_utilities_filePath_suid_guid"
     status ,UserInput=getDeviceConfigValue(conf_file,configParam)
@@ -118,13 +118,13 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
         val=str(str1[0])
         print("Utilities permission  ",str1[0])
         if "s" and "g"and "S" in val:
-            print "FAILURE: 's/S' bits set in the file permissions"
+            print("FAILURE: 's/S' bits set in the file permissions")
             tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "SUCCESS: 's/S' bits not set in the file permissions"
+            print("SUCCESS: 's/S' bits not set in the file permissions")
             tdkTestObj.setResultStatus("SUCCESS");
-    
-    print "\nTEST STEP 2: Unchanging files in writable partitions MUST be marked with 'immutable.'"
+
+    print("\nTEST STEP 2: Unchanging files in writable partitions MUST be marked with 'immutable.'")
     conf_file=getConfigFileNameDetail(obj)
     configParam="Application_utilities_filePath_lsattr"
     status ,UserInput=getDeviceConfigValue(conf_file,configParam)
@@ -134,17 +134,17 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
     details_list=output.split("\n")
     for line in details_list[:-1]:
         print(line)
-	str1=line.split(" ")
+        str1=line.split(" ")
         val=str(str1[0])
         print("Utilities permission value is ",str1[0])
         if "i" in val:
-            print "SUCCESS:Availability of 'i' attribute in lsattr"
+            print("SUCCESS:Availability of 'i' attribute in lsattr")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "FAILURE:Unavailability of 'i' attribute in lsattr"
+            print("FAILURE:Unavailability of 'i' attribute in lsattr")
             tdkTestObj.setResultStatus("FAILURE");
 
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

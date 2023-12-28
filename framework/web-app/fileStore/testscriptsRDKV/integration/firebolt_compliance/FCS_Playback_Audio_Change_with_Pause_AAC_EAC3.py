@@ -94,7 +94,7 @@ timeout - a string to specify the time in seconds for which the videoplayback sh
   </script_tags>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import MediaValidationVariables
 from FireboltComplianceUtility import *
@@ -116,27 +116,27 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
-    
+
     #Construct the command with the url and execute the command in DUT
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-    
+
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_audio_change_with_pause"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
     test_url = MediaValidationVariables.video_src_url_aac_eac3
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not 
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video playback status check is added"
+        print("Video playback status check is added")
         checkAVStatus = check_av_status_flag
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds 
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
-        
+
     #If the value of FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT is retrieved correctly and its value is not empty, timeout value should be passed to the test application
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
@@ -144,33 +144,33 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
     #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
     #Sample command = "mediapipelinetests test_audio_change_with_pause <AC3_EAC3_URL> checkavstatus=yes timeout=10"
-    command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds) 
-    print "Executing command in DUT: ", command
-    
+    command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
+    print("Executing command in DUT: ", command)
+
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
-        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully 
+        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully
         executionStatus = checkMediaPipelineTestStatus (output)
-        
+
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "AAC EAC3 codec switch was successfull"
-            print "Mediapipeline test executed successfully"
+            print("AAC EAC3 codec switch was successfull")
+            print("Mediapipeline test executed successfully")
             checkifCodecPlayed(tdkTestObj,"aac")
             checkifCodecPlayed(tdkTestObj,"e-ac-3");
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "AAC EAC3 codec switch failed"
+            print("AAC EAC3 codec switch failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 else:
-    print "Module load failed"
+    print("Module load failed")

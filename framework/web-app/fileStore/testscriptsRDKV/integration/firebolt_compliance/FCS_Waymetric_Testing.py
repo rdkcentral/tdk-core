@@ -92,19 +92,19 @@ port = <port>
 obj.configureTestCase(ip,port,'FCS_Waymetric_Testing');
 #Get the result of connection with test component and STB
 sysutilLoadStatus =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus
+print("[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus)
 if "SUCCESS" in sysutilLoadStatus.upper():
     #Get EssosValidation configuration file
     logFile,Waymetric_log = FCS_GraphicsValidation_utility.getLogFile(obj);
     #Configure the test to be executed
     Test = "waymetric"
-    #Run the waymetric app  with options 
+    #Run the waymetric app  with options
     #Add --no-multi option to avoid multi testing
     options = " --no-multi "
     #Add logFile to capture App output
     options = options + logFile
- 
-    print "\nCheck if waymetric application is present or not"
+
+    print("\nCheck if waymetric application is present or not")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     cmd  = "command -v " + Test
     tdkTestObj.addParameter("command", cmd);
@@ -114,11 +114,11 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if not details:
-        print "waymetric application not found"
-        print "Not Proceeding with test case"
+        print("waymetric application not found")
+        print("Not Proceeding with test case")
         exit()
 
-    print "\nStopping wpeframework\n"
+    print("\nStopping wpeframework\n")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     #Test to be executed
     cmd = "systemctl stop wpeframework";
@@ -128,9 +128,9 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     #Get the result of execution
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "[TEST EXECUTION RESULT] : %s" %actualResult;
+    print("[TEST EXECUTION RESULT] : %s" %actualResult);
 
-    print "\nStarting Test Execution\n"
+    print("\nStarting Test Execution\n")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     #Test to be executed
     cmd = Test + " " + options;
@@ -140,41 +140,41 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     #Get the result of execution
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "[TEST EXECUTION RESULT] : %s" %actualResult;
+    print("[TEST EXECUTION RESULT] : %s" %actualResult);
     if "SUCCESS" not in actualResult:
-        print "Unable to execute %s" %(test);
+        print("Unable to execute %s" %(test));
         tdkTestObj.setResultStatus("FAILURE");
 
     try:
-       expectedResult = "SUCCESS"
-       actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
-       if expectedResult in actualresult.upper() and log_transfer == "no":
-          print "Log Transfer is disabled"
-          log_transfer = False;
-       else:
-          log_transfer = True;
+        expectedResult = "SUCCESS"
+        actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
+        if expectedResult in actualresult.upper() and log_transfer == "no":
+            print("Log Transfer is disabled")
+            log_transfer = False;
+        else:
+            log_transfer = True;
     except:
-       log_transfer = True;
+        log_transfer = True;
 
     if log_transfer:
         #Transfer waymetric report from STB
         try:
-           tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
-           filepath = tdkTestObj.transferLogs( Waymetric_log, "false" );
+            tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
+            filepath = tdkTestObj.transferLogs( Waymetric_log, "false" );
         except:
-           print "Transfer of logs unsuccessfull";
-           obj.unloadModule("systemutil");
-           exit() 
+            print("Transfer of logs unsuccessfull");
+            obj.unloadModule("systemutil");
+            exit()
 
         FCS_GraphicsValidation_utility.PrintTitle("SUMMARY OF TEST EXECUTION")
         waymetric_index = FCS_GraphicsValidation_utility.Summary(filepath,"speed index");
 
         data = open(filepath,'r');
         message = data.read()
-        print "\n**************Waymetric Execution Log - Begin*************\n\n"
+        print("\n**************Waymetric Execution Log - Begin*************\n\n")
         print(message)
         data.close()
-        print "\n**************Waymetric Execution - End*************\n\n"
+        print("\n**************Waymetric Execution - End*************\n\n")
     else:
         speed_indices = []
         command = "grep -inr 'speed index' " + logFile + ' | wc -l';
@@ -182,22 +182,22 @@ if "SUCCESS" in sysutilLoadStatus.upper():
         tdkTestObj.executeTestCase("SUCCESS");
         waymetric_index = int(tdkTestObj.getResultDetails().strip(r'\n'));
         if waymetric_index:
-           for index in range (1,int(waymetric_index)+1):
-              command = "grep 'speed index' GraphicsTDKTest.txt | awk 'FNR ==" + str(index) + "'"
-              tdkTestObj.addParameter("command", command);
-              tdkTestObj.executeTestCase("SUCCESS");
-              details = tdkTestObj.getResultDetails()
-              speed_indices.append(details)
-           print " \n\n Waymetric Speed Indices";
-           print('\n'.join(map(str, speed_indices)))
+            for index in range (1,int(waymetric_index)+1):
+                command = "grep 'speed index' GraphicsTDKTest.txt | awk 'FNR ==" + str(index) + "'"
+                tdkTestObj.addParameter("command", command);
+                tdkTestObj.executeTestCase("SUCCESS");
+                details = tdkTestObj.getResultDetails()
+                speed_indices.append(details)
+            print(" \n\n Waymetric Speed Indices");
+            print('\n'.join(map(str, speed_indices)))
 
     if waymetric_index:
         FCS_GraphicsValidation_utility.deleteLogFile(obj,Waymetric_log,"SUCCESS");
     else:
-        print "Waymetric Testing Failed"
+        print("Waymetric Testing Failed")
         FCS_GraphicsValidation_utility.deleteLogFile(obj,Waymetric_log,"FAILURE");
 
-    print "\nResetting wpeframework\n"
+    print("\nResetting wpeframework\n")
     tdkTestObj = obj.createTestStep('ExecuteCommand');
     #Test to be executed
     cmd = "systemctl start wpeframework";
@@ -207,10 +207,10 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     #Get the result of execution
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    print "[TEST EXECUTION RESULT] : %s" %actualResult;
+    print("[TEST EXECUTION RESULT] : %s" %actualResult);
 
     obj.unloadModule("systemutil");
 else:
-    print "Failed to load sysutil module\n";
+    print("Failed to load sysutil module\n");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

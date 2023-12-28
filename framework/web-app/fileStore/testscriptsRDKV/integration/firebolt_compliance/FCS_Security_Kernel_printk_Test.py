@@ -74,8 +74,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from tdkvutility import *
 
 #Test component to be tested
@@ -89,7 +89,7 @@ obj.configureTestCase(ip,port,'FCS_Security_Kernel_printk_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Path to be extracted
 filePath = "/tmp"
@@ -103,7 +103,7 @@ if "SUCCESS" in result.upper():
     enabled = False;
     printkbuffer = ""
     printkList = ["console_loglevel","default_message_loglevel","minimum_console_loglevel","default_console_loglevel"]
-    print "\nTEST STEP 1: Check if printk is enabled"
+    print("\nTEST STEP 1: Check if printk is enabled")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"cat /proc/sys/kernel/printk"}, True)
     if result and details:
         detailsList = details.split('\\t');
@@ -114,27 +114,27 @@ if "SUCCESS" in result.upper():
                 printkbuffer = printkbuffer + "\n%s : %s"%(printkList[count],element.strip('\\n'))
                 count = count + 1;
         if enabled:
-             print "printk is enabled in the DUT"
-             print "loglevels obtained are"
-             print printkbuffer
-             print "\nTEST STEP 2: Checking level of restriction of printk"
-             result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"cat /proc/sys/kernel/kptr_restrict"},True)
-             if "0" in details:
-                 print "kptr_restrict is set to 0 (the default) (This is the equivalent to %p.)"
-                 print "restrict level must be set higher"
-                 tdkTestObj.setResultStatus("FAILURE");
-             elif "1" or "2" in details:
-                 print "kptr_restrict is set to %s which is expected\n"%(details)
-                 tdkTestObj.setResultStatus("SUCCESS");
-             else:
-                 print "Unexpected output from /proc/sys/kernel/kptr_restrict"
-                 tdkTestObj.setResultStatus("FAILURE");
+            print("printk is enabled in the DUT")
+            print("loglevels obtained are")
+            print(printkbuffer)
+            print("\nTEST STEP 2: Checking level of restriction of printk")
+            result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"cat /proc/sys/kernel/kptr_restrict"},True)
+            if "0" in details:
+                print("kptr_restrict is set to 0 (the default) (This is the equivalent to %p.)")
+                print("restrict level must be set higher")
+                tdkTestObj.setResultStatus("FAILURE");
+            elif "1" or "2" in details:
+                print("kptr_restrict is set to %s which is expected\n"%(details))
+                tdkTestObj.setResultStatus("SUCCESS");
+            else:
+                print("Unexpected output from /proc/sys/kernel/kptr_restrict")
+                tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "CONFIG_PRINTK is disabled in DUT"
+            print("CONFIG_PRINTK is disabled in DUT")
             tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "SUCCESS: /proc/sys/kernel/printk  is not present, its disabled"
+        print("SUCCESS: /proc/sys/kernel/printk  is not present, its disabled")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 else:
-    print "Module load failed"
+    print("Module load failed")

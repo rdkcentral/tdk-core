@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,22 +93,22 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Ports_Rules_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP : Check if all ports are blocked by ipTables rules"
+    print("\nTEST STEP : Check if all ports are blocked by ipTables rules")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"iptables -S | grep -inr 'drop\|reject'"}, True)
 
     if details:
-        print "FAILURE: Some ports are are dropped or rejected which is not expected"
-        print details
+        print("FAILURE: Some ports are are dropped or rejected which is not expected")
+        print(details)
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: All ports are blocked by ipTables rules"
+        print("SUCCESS: All ports are blocked by ipTables rules")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

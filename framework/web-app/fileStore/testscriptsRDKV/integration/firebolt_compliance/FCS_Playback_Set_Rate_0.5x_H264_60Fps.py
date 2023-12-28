@@ -115,7 +115,7 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
@@ -131,7 +131,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video Decoder proc check is added"
+        print("Video Decoder proc check is added")
         checkAVStatus = check_av_status_flag
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
@@ -147,13 +147,13 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
     #Sample command = "mediapipelinetests test_trickplay <H264_STREAM_URL> checkavstatus=yes operations=slowMotion0.5x:20"
     command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, operations = getOperations ())
-    print "Executing command in DUT: ", command
+    print("Executing command in DUT: ", command)
 
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
@@ -162,16 +162,15 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Playback with 0.5x playback rate on 60fps H264 stream was successfull"
-            print "Mediapipeline test executed successfully"
+            print("Playback with 0.5x playback rate on 60fps H264 stream was successfull")
+            print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Playback with 0.5x playback rate on 60fps H264 stream failed"
+            print("Playback with 0.5x playback rate on 60fps H264 stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 else:
-    print "Module load failed"
-
+    print("Module load failed")

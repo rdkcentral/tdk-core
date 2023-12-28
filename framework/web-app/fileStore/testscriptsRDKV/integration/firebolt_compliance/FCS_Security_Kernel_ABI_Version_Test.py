@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,21 +93,21 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_ABI_Version_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Kernel ABI Version Check should be enabled"
+    print("\nTEST STEP 1: Kernel ABI Version Check should be enabled")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"uname -r"}, True)
 
     if result and details:
-        print "SUCCESS: Able to obtain Kernel ABI version"
+        print("SUCCESS: Able to obtain Kernel ABI version")
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "FAILURE: Unable to obtain Kernel ABI version"
+        print("FAILURE: Unable to obtain Kernel ABI version")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

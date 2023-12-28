@@ -74,7 +74,7 @@
 test_url - H264 url from MediaValidationVariables library (MediaValidationVariables.video_src_url_dash_h264)
 "checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
 timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file</input_parameters>
-    <automation_approch>1.Load the systemutil module 
+    <automation_approch>1.Load the systemutil module
 2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
 3.Retrieve the video_src_url_dash_h264 variable from MediaValidationVariables library
 4. Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout value.
@@ -93,8 +93,8 @@ Checkpoint 2. Verify that the output returned from mediapipelinetests contains t
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import MediaValidationVariables
 from FireboltComplianceUtility import *
 
@@ -115,30 +115,30 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
-    
+
     #Construct the command with the url and execute the command in DUT
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
-    
+
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_play_pause_pipeline"
 
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
     test_url = MediaValidationVariables.video_src_url_dash_h264
 
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not 
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video Decoder proc check is added"
+        print("Video Decoder proc check is added")
         checkAVStatus = check_av_status_flag
-    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds 
+    #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
-        
+
     #If the value of FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT is retrieved correctly and its value is not empty, timeout value should be passed to the test application
     #if the device config value is empty, default timeout(10sec) is passed
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
@@ -147,32 +147,32 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
     #Sample command = "mediapipelinetests test_play_pause_pipeline <H264_STREAM_URL> checkavstatus=yes timeout=30"
     command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
-    print "Executing command in DUT: ", command
-    
+    print("Executing command in DUT: ", command)
+
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
-        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully 
+        #Check the output string returned from 'mediapipelinetests' to verify if the test suite executed successfully
         executionStatus = checkMediaPipelineTestStatus (output)
-        
+
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "H264 Play-pause using 'playbin' and 'westeros-sink' was successfull"
-            print "Mediapipeline test executed successfully"
+            print("H264 Play-pause using 'playbin' and 'westeros-sink' was successfull")
+            print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "H264 Play-pause using 'playbin' and 'westeros-sink' failed"
+            print("H264 Play-pause using 'playbin' and 'westeros-sink' failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
 
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 
 else:
-    print "Module load failed"
+    print("Module load failed")

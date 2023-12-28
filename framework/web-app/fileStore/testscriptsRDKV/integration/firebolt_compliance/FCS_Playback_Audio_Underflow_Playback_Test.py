@@ -114,7 +114,7 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 
 if "SUCCESS" in sysutilloadModuleStatus.upper():
@@ -133,7 +133,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video Decoder proc check is added"
+        print("Video Decoder proc check is added")
         checkAVStatus = check_av_status_flag
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
@@ -156,14 +156,14 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     command = command + " audioEnd=" + audioEnd;
     #Add audioStart point to command line argument
     command = command + " audioStart=" + audioStart;
-    print "Executing command in DUT: ", command
+    print("Executing command in DUT: ", command)
 
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
     output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
@@ -172,19 +172,17 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Pipeline was able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'"
-            print "Mediapipeline test executed successfully"
+            print("Pipeline was able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'")
+            print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pipeline was not able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'"
+            print("Pipeline was not able to run as expected after seeking to audioStart point after audio underrun occured using 'playbin' and 'audiosink'")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
 
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 
 else:
-    print "Module load failed"
-
-
+    print("Module load failed")

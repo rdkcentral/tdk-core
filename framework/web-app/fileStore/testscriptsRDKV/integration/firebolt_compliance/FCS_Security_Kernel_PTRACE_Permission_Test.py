@@ -80,7 +80,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -97,22 +97,22 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_PTRACE_Permission_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1:PTRACE MUST be disabled on production builds"
+    print("\nTEST STEP 1:PTRACE MUST be disabled on production builds")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"sysctl -a |grep ptrace | grep -vw '0'"}, True)
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
     if not output:
-        print "SUCCESS:Unavailability of PTRACE  attribute in production build"
+        print("SUCCESS:Unavailability of PTRACE  attribute in production build")
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "Output is ",output
-        print "FAILURE:Availability of PTRACE  attribute in production build"
+        print("Output is ",output)
+        print("FAILURE:Availability of PTRACE  attribute in production build")
 
     obj.unloadModule("systemutil");
-    
+
 else:
-    print "Load module failed"
+    print("Load module failed")

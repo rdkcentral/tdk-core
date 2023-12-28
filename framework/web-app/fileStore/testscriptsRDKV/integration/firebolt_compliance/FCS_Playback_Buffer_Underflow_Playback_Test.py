@@ -70,7 +70,7 @@
 2. Test stream url for a stream with video underrun should be updated in the config variable video_src_url_underflow_stream inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
 4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time to wait before checking for AV playback
-5. FIREBOLT_COMPLIANCE_VIDEO_END_POINT configuration should be set to notify the point where video underrun happens 
+5. FIREBOLT_COMPLIANCE_VIDEO_END_POINT configuration should be set to notify the point where video underrun happens
 6. FIREBOLT_COMPLIANCE_VIDEO_START_POINT configuration should be set to notify the point where video starts after underrun</pre_requisite>
     <api_or_interface_used>Execute the mediapipelinetests application in DUT</api_or_interface_used>
     <input_parameters>testcasename - "test_buffer_underflow_playback"
@@ -79,7 +79,7 @@ test_url - underflow stream from MediaValidationVariables library (MediaValidati
 timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file
 "videoEnd" - time in seconds to notify the point where video is ended and only audio plays.
 "videoStart" - time in seconds to notify the point where video begins after underrun</input_parameters>
-    <automation_approch>1.Load the systemutil module 
+    <automation_approch>1.Load the systemutil module
 2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS, FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT, FIREBOLT_COMPLIANCE_VIDEO_START_POINT and FIREBOLT_COMPLIANCE_VIDEO_END_POINT config values from Device config file.
 3.Retrieve the video_src_url_underflow_stream variable from MediaValidationVariables library
 4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value, FIREBOLT_COMPLIANCE_VIDEO_END_POINT deviceconfig value, FIREBOLT_COMPLIANCE_VIDEO_START_POINT deviceconfig value and timeout
@@ -118,7 +118,7 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 
 if "SUCCESS" in sysutilloadModuleStatus.upper():
@@ -137,7 +137,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video Decoder proc check is added"
+        print("Video Decoder proc check is added")
         checkAVStatus = check_av_status_flag
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
     actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
@@ -160,14 +160,14 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     command = command + " videoEnd=" + videoEnd;
     #Add videoStart point to command line argument
     command = command + " videoStart=" + videoStart;
-    print "Executing command in DUT: ", command
+    print("Executing command in DUT: ", command)
 
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
     output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output 
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
@@ -176,17 +176,17 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Pipeline was able to run as expected after seeking to videoStart point after video underrun occured using 'playbin' and 'westerossink'"
-            print "Mediapipeline test executed successfully"
+            print("Pipeline was able to run as expected after seeking to videoStart point after video underrun occured using 'playbin' and 'westerossink'")
+            print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pipeline was not able to run as expected after seeking to videoStart point after video underrun occured using 'playbin' and 'westerossink'"
+            print("Pipeline was not able to run as expected after seeking to videoStart point after video underrun occured using 'playbin' and 'westerossink'")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
 
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 
 else:
-    print "Module load failed"
+    print("Module load failed")

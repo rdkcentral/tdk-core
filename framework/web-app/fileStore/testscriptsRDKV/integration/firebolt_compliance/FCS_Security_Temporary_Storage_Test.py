@@ -79,7 +79,7 @@ CheckPoint 2:Dummy file created must be erased after reboot.</expected_output>
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 
@@ -95,56 +95,56 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Temporary_Storage_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Check of temporary storage in mounted on a dedicated file system"
+    print("\nTEST STEP 1: Check of temporary storage in mounted on a dedicated file system")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"mount | grep '/tmp' -m1"}, True)
 
     if result and "tmpfs on /tmp type tmpfs" in details:
-        print "SUCCESS: Temporary storage mounted on dedicated file system"
+        print("SUCCESS: Temporary storage mounted on dedicated file system")
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "FAILURE: Temporary storage not mounted on dedicated file system"
-        print "mount /tmp storage to a dedicated file system"
+        print("FAILURE: Temporary storage not mounted on dedicated file system")
+        print("mount /tmp storage to a dedicated file system")
         tdkTestObj.setResultStatus("FAILURE");
 
-    print "\nTEST STEP 2:Check if temporarily created files are erased after reboot"
+    print("\nTEST STEP 2:Check if temporarily created files are erased after reboot")
     result,details = executeTest(obj, 'ExecuteCommand', {"command": "echo 'TDK test file' > /tmp/testFile"})
     if result:
         result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": "cat /tmp/testFile"}, True)
         if result and 'TDK test file' in details:
-            print "Temporary file created successfully"
+            print("Temporary file created successfully")
             tdkTestObj.setResultStatus("SUCCESS");
-      
+
             #Rebooting the DUT
-            print "Rebooting the device";
+            print("Rebooting the device");
             obj.initiateReboot();
 
             result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": "cat /tmp/testFile"}, True)
             if result and 'TDK test file' not in details:
-                print "SUCCESS : Temporary file erased after reboot as expected"
+                print("SUCCESS : Temporary file erased after reboot as expected")
                 tdkTestObj.setResultStatus("SUCCESS");
-  
+
             elif result and 'TDK test file' in details:
-                print "FAILURE : Temporary file not erased after reboot"
+                print("FAILURE : Temporary file not erased after reboot")
                 tdkTestObj.setResultStatus("FAILURE");
-    
+
             else:
-                print "FAILURE : Unable to verify if temporary file exists or not"
+                print("FAILURE : Unable to verify if temporary file exists or not")
                 tdkTestObj.setResultStatus("FAILURE");
 
         else:
-            print "Temporary file creation unsuccessfull"
+            print("Temporary file creation unsuccessfull")
             tdkTestObj.setResultStatus("FAILURE");
-     
+
     else:
-        print "FAILURE : Temporary File was not created successfully"
+        print("FAILURE : Temporary File was not created successfully")
         tdkTestObj.setResultStatus("FAILURE");
- 
+
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

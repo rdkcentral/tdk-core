@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,34 +93,34 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_ReadOnly_Directories_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Check if /proc directory is readonly"
+    print("\nTEST STEP 1: Check if /proc directory is readonly")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"touch /proc/test_file ; ls /proc/test_file ; rm /proc/test_file"}, True)
 
     if details:
-        print "FAILURE: /proc directory is not readonly"
-        print "System directories such as /proc  MUST NOT be writable within a sandbox or container"
+        print("FAILURE: /proc directory is not readonly")
+        print("System directories such as /proc  MUST NOT be writable within a sandbox or container")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: /proc directory is readonly"
+        print("SUCCESS: /proc directory is readonly")
         tdkTestObj.setResultStatus("SUCCESS");
-  
-    print "\nTEST STEP 2: Check if /dev directory is readonly"
+
+    print("\nTEST STEP 2: Check if /dev directory is readonly")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"touch /dev/test_file ; ls /dev/test_file ; rm /dev/test_file"}, True)
 
     if details:
-        print "FAILURE: /dev directory is not readonly"
-        print "System directories such as /dev  MUST NOT be writable within a sandbox or container"
+        print("FAILURE: /dev directory is not readonly")
+        print("System directories such as /dev  MUST NOT be writable within a sandbox or container")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: /dev directory is readonly"
+        print("SUCCESS: /dev directory is readonly")
         tdkTestObj.setResultStatus("SUCCESS");
 
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

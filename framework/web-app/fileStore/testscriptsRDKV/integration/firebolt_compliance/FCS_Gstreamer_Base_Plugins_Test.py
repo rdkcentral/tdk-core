@@ -75,8 +75,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import os
 import re
 
@@ -93,84 +93,84 @@ obj.configureTestCase(ip,port,'FCS_Gstreamer_Base_Plugins_Test');
 def getNumberOfFailures(fileName):
     failed = 0;
     if os.stat(fileName).st_size == 0:
-        print "Execution failed";
+        print("Execution failed");
         return "error"
     with open(fileName, 'r') as a:
         word = "Failed Suite List"
         for line in a:
             line = line.rstrip()
             if re.search(r"({})".format(word), line):
-                print line
+                print(line)
                 failed_str = str(line.split(":")[1].strip())
                 failed_list = list(failed_str.split(" "))
                 failed = len(failed_list)
-    print "Number of FAILURES:",failed
+    print("Number of FAILURES:",failed)
     return failed
 
 #Get the result of connection with test component and DUT
 result = obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 if "success" in result.lower():
-  print "GStreamer_plugins_test module successfully loaded";
-  #Set the module loading status
-  obj.setLoadModuleStatus("SUCCESS");
-  #Primitive test case which associated to this Script
-  tdkTestObj = obj.createTestStep('Gstreamer_Test_Execute');
-  # Configuring the test object for gst-plugin-good test suites execution
-  tdkTestObj.addParameter("GStreamer_plugins_type","gst-plugin-base");
-  #Execute the test case in STB
-  expectedresult="Test Suite Executed"
-  tdkTestObj.executeTestCase(expectedresult);
-  #Get the result of execution
-  actualresult = tdkTestObj.getResult();
-  print "Gst plugin base Test Result : %s" %actualresult;
-  
-  #To Validate the Execution of Test Suites 
-  details = tdkTestObj.getResultDetails();
-  if "TotalSuite" in details:
-      print "Gst plugin base status details : %s" %details;
-      details=dict(item.split(":") for item in details.split(" "))
-      Resultvalue=details.values();
+    print("GStreamer_plugins_test module successfully loaded");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
+    #Primitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('Gstreamer_Test_Execute');
+    # Configuring the test object for gst-plugin-good test suites execution
+    tdkTestObj.addParameter("GStreamer_plugins_type","gst-plugin-base");
+    #Execute the test case in STB
+    expectedresult="Test Suite Executed"
+    tdkTestObj.executeTestCase(expectedresult);
+    #Get the result of execution
+    actualresult = tdkTestObj.getResult();
+    print("Gst plugin base Test Result : %s" %actualresult);
 
-      if int(Resultvalue[0])==(int(Resultvalue[1])+int(Resultvalue[2])) and int(Resultvalue[2])==0 and expectedresult in actualresult :
-          tdkTestObj.setResultStatus("SUCCESS");
-      else:
-          tdkTestObj.setResultStatus("FAILURE");
-     
-      #Get the log path of the Gst plugin base Testsuite
-      logpath =tdkTestObj.getLogPath();
-      if "TestSummary.log" in logpath:
-          print "Log Path :%s"%logpath;
-       
-          #Transferring the Gst plugin base Testsuite Logs
-          filepath = tdkTestObj.transferLogs( logpath, "false" );
-    
-          #Parsing the output of gst-plugin-base test apps
-          data = open(filepath,'r');
-          message = data.read()
-          print "\n**************GStreamer_plugins_base Execution Log - Begin*************\n\n"
-          print(message)
-          data.close()
-          print "\n**************GStreamer_plugins_base Execution - End*************\n\n"
-          failures = getNumberOfFailures(filepath);
-          if failures:
-              print "Observed Failures during Execution"
-              tdkTestObj.setResultStatus("FAILURE");
-          else:
-              print "Successfully executed all applications under gst-plugin-base"
-              tdkTestObj.setResultStatus("SUCCESS");
+    #To Validate the Execution of Test Suites
+    details = tdkTestObj.getResultDetails();
+    if "TotalSuite" in details:
+        print("Gst plugin base status details : %s" %details);
+        details=dict(item.split(":") for item in details.split(" "))
+        Resultvalue=list(details.values());
 
-      else:
-          print "Log path is not available and transfer of logs will not be initialised";
+        if int(Resultvalue[0])==(int(Resultvalue[1])+int(Resultvalue[2])) and int(Resultvalue[2])==0 and expectedresult in actualresult :
+            tdkTestObj.setResultStatus("SUCCESS");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
 
-  else:
-      print " Gst plugin base status details:%s" %details;
-      print "Proper Execution details are not received due to error in execution";
-      tdkTestObj.setResultStatus("FAILURE");
-	 
-  #Unloading the opensource test suite module
-  obj.unloadModule("firebolt_compliance");
+        #Get the log path of the Gst plugin base Testsuite
+        logpath =tdkTestObj.getLogPath();
+        if "TestSummary.log" in logpath:
+            print("Log Path :%s"%logpath);
+
+            #Transferring the Gst plugin base Testsuite Logs
+            filepath = tdkTestObj.transferLogs( logpath, "false" );
+
+            #Parsing the output of gst-plugin-base test apps
+            data = open(filepath,'r');
+            message = data.read()
+            print("\n**************GStreamer_plugins_base Execution Log - Begin*************\n\n")
+            print(message)
+            data.close()
+            print("\n**************GStreamer_plugins_base Execution - End*************\n\n")
+            failures = getNumberOfFailures(filepath);
+            if failures:
+                print("Observed Failures during Execution")
+                tdkTestObj.setResultStatus("FAILURE");
+            else:
+                print("Successfully executed all applications under gst-plugin-base")
+                tdkTestObj.setResultStatus("SUCCESS");
+
+        else:
+            print("Log path is not available and transfer of logs will not be initialised");
+
+    else:
+        print(" Gst plugin base status details:%s" %details);
+        print("Proper Execution details are not received due to error in execution");
+        tdkTestObj.setResultStatus("FAILURE");
+
+    #Unloading the opensource test suite module
+    obj.unloadModule("firebolt_compliance");
 
 else:
-  print "Failed to load GStreamer_plugins_test module";
+    print("Failed to load GStreamer_plugins_test module");

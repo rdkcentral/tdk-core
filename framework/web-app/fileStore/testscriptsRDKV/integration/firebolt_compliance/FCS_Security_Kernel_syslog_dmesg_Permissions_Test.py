@@ -80,7 +80,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -97,22 +97,22 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_syslog_dmesg_Permissions_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP :Kernel syslog (dmesg) MUST be restricted to root user only"
+    print("\nTEST STEP :Kernel syslog (dmesg) MUST be restricted to root user only")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"sysctl kernel.dmesg_restrict"}, True)
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
     output=str(output)
     if "1" in output:
-        print "SUCCESS:Kernel syslog (dmesg) restricted to root user"
+        print("SUCCESS:Kernel syslog (dmesg) restricted to root user")
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "FAILURE:Kernel syslog (dmesg)is NOT restricted to root user"
+        print("FAILURE:Kernel syslog (dmesg)is NOT restricted to root user")
 
     obj.unloadModule("systemutil");
-    
+
 else:
-    print "Load module failed"
+    print("Load module failed")

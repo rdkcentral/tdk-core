@@ -70,7 +70,7 @@
     <api_or_interface_used>Execute the iCrypto Interface test application, "cgfacetests" in DUT</api_or_interface_used>
     <input_parameters>None</input_parameters>
     <automation_approch>1.Load the systemutil module.
-2.Execute the Vault Interface tests in DUT. 
+2.Execute the Vault Interface tests in DUT.
 3.During the execution, the DUT will Import a test_Vector and the id returned by Import will be used to Export the data and the verification based on Import Input and Export Output.
 4.Vault Set/Get operation performs a similar operation with test_Vector  being passed to vault_Set and the id being used to retrieve the test_Vector back using vault_Get.
 5.Verify the output from the execute command and check if the string "0 FAILED" exists in the returned output
@@ -103,7 +103,7 @@ obj.configureTestCase(ip,port,'FCS_iCrypto_Vault_Tests');
 
 #Get the result of connection with test component and STB
 sysutilLoadStatus =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus
+print("[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus)
 if "SUCCESS" in sysutilLoadStatus.upper():
 
     #Configure the test to be executed
@@ -114,7 +114,7 @@ if "SUCCESS" in sysutilLoadStatus.upper():
         expectedResult = "SUCCESS"
         actualresult, log_transfer = FCS_iCrypto_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
         if expectedResult in actualresult.upper() and log_transfer == "no":
-            print "Log Transfer is disabled"
+            print("Log Transfer is disabled")
             log_transfer = False;
         else:
             log_transfer = True;
@@ -127,7 +127,7 @@ if "SUCCESS" in sysutilLoadStatus.upper():
 
         #Run the interface test for OpenSSL
         details = FCS_iCrypto_utility.RunTest(obj,Test,logFile);
-        print "[TEST EXECUTION DETAILS] : %s" %details;
+        print("[TEST EXECUTION DETAILS] : %s" %details);
         time.sleep(3)
 
         #Transfer iCrypto log file from STB
@@ -135,9 +135,9 @@ if "SUCCESS" in sysutilLoadStatus.upper():
             tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
             filepath = tdkTestObj.transferLogs( iCrypto_log, "false" );
         except:
-            print "Transfer of logs unsuccessfull";
+            print("Transfer of logs unsuccessfull");
             obj.unloadModule("systemutil");
-            exit() 
+            exit()
 
 
         #Parsing the output of iCrypto test app
@@ -146,24 +146,24 @@ if "SUCCESS" in sysutilLoadStatus.upper():
             FCS_iCrypto_utility.Summary(ResultFile);
             data = open(ResultFile,'r');
             message = data.read()
-            print "\n**************iCrypto TestApp Execution Log - Begin*************\n\n"
+            print("\n**************iCrypto TestApp Execution Log - Begin*************\n\n")
             print(message)
             data.close()
-            print "\n**************iCrypto TestApp Execution - End*************\n\n"
+            print("\n**************iCrypto TestApp Execution - End*************\n\n")
 
-            #Reading the iCrypto Execution log file to check for number of failures 
+            #Reading the iCrypto Execution log file to check for number of failures
             Failures = FCS_iCrypto_utility.getNumberOfFailures(ResultFile,"ModuleTest")
             if Failures:
                 FCS_iCrypto_utility.PrintTitle("SUMMARY OF FAILED TESTCASES")
                 FCS_iCrypto_utility.FailureSummary(ResultFile);
                 iCryptoExecutionStatus = "FAILURE"
-                print "Observed failures during execution"
+                print("Observed failures during execution")
             else:
                 iCryptoExecutionStatus = "SUCCESS"
-                print "Successfuly Executed the test application"
-            print "[TEST EXECUTION RESULT] : %s" %iCryptoExecutionStatus;
+                print("Successfuly Executed the test application")
+            print("[TEST EXECUTION RESULT] : %s" %iCryptoExecutionStatus);
         except:
-            print "ERROR : Unable to open execution log file"
+            print("ERROR : Unable to open execution log file")
             obj.unloadModule("systemutil");
             exit();
 
@@ -175,6 +175,6 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     obj.unloadModule("systemutil");
 
 else:
-    print "Failed to load sysutil module\n";
+    print("Failed to load sysutil module\n");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

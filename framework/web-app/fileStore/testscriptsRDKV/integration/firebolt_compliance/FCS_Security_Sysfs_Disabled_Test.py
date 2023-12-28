@@ -78,7 +78,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -95,22 +95,22 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Sysfs_Disabled_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP : Check if sysfs is enabled/disabled"
+    print("\nTEST STEP : Check if sysfs is enabled/disabled")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"mount | grep sysfs"}, True)
 
     if details:
-        print "FAILURE: sysfs is enabled"
-        print "Sysfs SHOULD be disabled if possible"
+        print("FAILURE: sysfs is enabled")
+        print("Sysfs SHOULD be disabled if possible")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: sysfs is disabled as expected"
+        print("SUCCESS: sysfs is disabled as expected")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

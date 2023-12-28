@@ -101,7 +101,7 @@ obj.configureTestCase(ip,port,'FCS_Westeros_Validation');
 
 #Get the result of connection with test component and STB
 sysutilLoadStatus =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus
+print("[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus)
 if "SUCCESS" in sysutilLoadStatus.upper():
 
     #Get WesterosValidation configuration file
@@ -115,57 +115,57 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     #Configure the test to be executed
     Test = "Westeros"
 
-    #Run the Westeros_TDKTestApp with options 
+    #Run the Westeros_TDKTestApp with options
     #Add option for timeout
     options = str(timeout);
     #Add display for westeros instance
     options = options + " "  + display;
     details = FCS_GraphicsValidation_utility.RunTest(obj,Test,logFile,options);
-    print "[TEST EXECUTION DETAILS] : %s" %details;
+    print("[TEST EXECUTION DETAILS] : %s" %details);
 
     #Wait for Test to get completed
     time.sleep(35)
 
     try:
-       expectedResult = "SUCCESS"
-       actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
-       if expectedResult in actualresult.upper() and log_transfer == "no":
-          print "Log Transfer is disabled"
-          log_transfer = False;
-       else:
-          log_transfer = True;
+        expectedResult = "SUCCESS"
+        actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
+        if expectedResult in actualresult.upper() and log_transfer == "no":
+            print("Log Transfer is disabled")
+            log_transfer = False;
+        else:
+            log_transfer = True;
     except:
-       log_transfer = True;
+        log_transfer = True;
 
     if log_transfer:
         #Transfer Westeros_TDKTestApp log file from STB
         try:
-           tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
-           filepath = tdkTestObj.transferLogs( WesterosValidation_log, "false" );
+            tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
+            filepath = tdkTestObj.transferLogs( WesterosValidation_log, "false" );
         except:
-           print "Transfer of logs unsuccessfull";
-           obj.unloadModule("systemutil");
-           exit()
+            print("Transfer of logs unsuccessfull");
+            obj.unloadModule("systemutil");
+            exit()
 
         #Parsing the output of Westeros_TDKTestApp
         data = open(filepath,'r');
         message = data.read()
-        print "\n**************Westeros_TDKTestApp Execution Log - Begin*************\n\n"
+        print("\n**************Westeros_TDKTestApp Execution Log - Begin*************\n\n")
         print(message)
         data.close()
-        print "\n**************Westeros_TDKTestApp Execution - End*************\n\n"
+        print("\n**************Westeros_TDKTestApp Execution - End*************\n\n")
     else:
         filepath=""
 
-    #Reading the Westeros_TDKTestApp Execution log file to check for number of failures 
+    #Reading the Westeros_TDKTestApp Execution log file to check for number of failures
     Failures = FCS_GraphicsValidation_utility.getNumberOfFailures(obj,filepath)
     if Failures:
         WesterosValidationExecutionStatus = "FAILURE"
-        print "Observed failures during execution"
+        print("Observed failures during execution")
     else:
         WesterosValidationExecutionStatus = "SUCCESS"
-        print "Successfuly Executed the test application"
-        print "[TEST EXECUTION RESULT] : %s" %WesterosValidationExecutionStatus;
+        print("Successfuly Executed the test application")
+        print("[TEST EXECUTION RESULT] : %s" %WesterosValidationExecutionStatus);
 
     #Delete the log file in DUT
     FCS_GraphicsValidation_utility.deleteLogFile(obj,WesterosValidation_log,WesterosValidationExecutionStatus);
@@ -173,6 +173,6 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     obj.unloadModule("systemutil");
 
 else:
-    print "Failed to load sysutil module\n";
+    print("Failed to load sysutil module\n");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

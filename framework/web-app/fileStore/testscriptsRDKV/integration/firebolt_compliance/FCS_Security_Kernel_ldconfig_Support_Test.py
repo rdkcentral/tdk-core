@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,34 +93,34 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_ldconfig_Support_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Check if Kernel ldconfig support is enabled/disabled"
+    print("\nTEST STEP 1: Check if Kernel ldconfig support is enabled/disabled")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"find /sbin -iname ldconfig*"}, True)
 
     if len(details):
-        print "FAILURE: Kernel ldconfig support is enabled"
-        print "Kernel ldconfig support must be disabled"
+        print("FAILURE: Kernel ldconfig support is enabled")
+        print("Kernel ldconfig support must be disabled")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: Kernel ldconfig support is disabled as expected"
+        print("SUCCESS: Kernel ldconfig support is disabled as expected")
         tdkTestObj.setResultStatus("SUCCESS");
 
-    print "\nTEST STEP 2: Check if ld.so.conf file is present"
+    print("\nTEST STEP 2: Check if ld.so.conf file is present")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"ls /etc/ld.so.conf "}, True)
-   
+
     if len(details):
-        print "FAILURE: ld.so.conf is present"
-        print "ld.so.conf must be removed from the DUT"
+        print("FAILURE: ld.so.conf is present")
+        print("ld.so.conf must be removed from the DUT")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: ld.so.conf is not present as expected"
+        print("SUCCESS: ld.so.conf is not present as expected")
         tdkTestObj.setResultStatus("SUCCESS");
 
-    print "\nTEST STEP 3: Check if ld.so.cache isused to set LIBRARY_PATH"
+    print("\nTEST STEP 3: Check if ld.so.cache isused to set LIBRARY_PATH")
     #get library paths used
     command = 'strings /etc/ld.so.cache > tempfile ;'
     #discard libs which are used from /usr/lib or /lib as they are default paths
@@ -130,14 +130,14 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command}, True)
 
     if len(details):
-        print "FAILURE: %s paths are used for library loading"%(details)
-        print "No other paths except /usr/lib or /lib must be used to loading libraries"
+        print("FAILURE: %s paths are used for library loading"%(details))
+        print("No other paths except /usr/lib or /lib must be used to loading libraries")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: Only /usr/lib or /lib are used to loading libraries"
+        print("SUCCESS: Only /usr/lib or /lib are used to loading libraries")
         tdkTestObj.setResultStatus("SUCCESS");
 
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

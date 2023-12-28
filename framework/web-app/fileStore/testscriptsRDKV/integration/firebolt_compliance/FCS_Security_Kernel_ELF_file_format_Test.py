@@ -69,7 +69,7 @@
     <pre_requisite></pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
-    <automation_approch>1.Use hexdump to find if files having elf header find $WHERE -type f -exec hexdump -n 4 -e '4/1 "%2x" " {}\n"'  {} \; | grep ^7f454c46 
+    <automation_approch>1.Use hexdump to find if files having elf header find $WHERE -type f -exec hexdump -n 4 -e '4/1 "%2x" " {}\n"'  {} \; | grep ^7f454c46
 2-find-executable-filetypes
 </automation_approch>
     <expected_output>1.ELF file format MUST be used</expected_output>
@@ -83,7 +83,7 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -100,16 +100,16 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_ELF_file_format_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1:Verify Kernel module Executable filetypes(ELF)"
+    print("\nTEST STEP 1:Verify Kernel module Executable filetypes(ELF)")
     command1 = 'cd /usr/bin ;'
     str1='4/1 "%2x" " {}\n"'
     command = command1 + "find $WHERE -type f -exec hexdump -n 4 -e '%s' {} \; | grep 'WPEFramework' "%str1
-    print command
+    print(command)
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command}, True)
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
     details_list=output.split("\n")
@@ -117,12 +117,11 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
         if '7f454c46' in lst:
             print("SUCCESS:ELF magic number successfully verified ")
             tdkTestObj.setResultStatus("SUCCESS");
-            
+
         else:
-            print "FAILURE:Unable to find ELF magic number"
+            print("FAILURE:Unable to find ELF magic number")
             tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
-
+    print("Load module failed")

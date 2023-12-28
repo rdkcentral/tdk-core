@@ -80,7 +80,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -97,16 +97,16 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_default_Shell_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP :Verify default shell MUST be set to /dev/null"
+    print("\nTEST STEP :Verify default shell MUST be set to /dev/null")
     command = 'echo "$SHELL"'
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command}, True)
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
-    
+
     if "/dev/null"  in output:
         print("SUCCESS:Default shell Is set to {}".format(output))
         tdkTestObj.setResultStatus("SUCCESS");
@@ -116,12 +116,11 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
 
     elif "/bin/sh" in output:
         print("FAILURE:Default shell Is set to {}".format(output))
-        tdkTestObj.setResultStatus("FAILURE");        
+        tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE:Default shell Is Not set to {} Instead of /dev/null".format(output)
+        print("FAILURE:Default shell Is Not set to {} Instead of /dev/null".format(output))
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
-
+    print("Load module failed")

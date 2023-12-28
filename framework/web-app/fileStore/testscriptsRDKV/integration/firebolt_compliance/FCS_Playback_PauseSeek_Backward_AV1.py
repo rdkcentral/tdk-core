@@ -114,7 +114,7 @@ seekPositionInSeconds = "0"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 if "SUCCESS" in sysutilloadModuleStatus.upper():
     expectedResult="SUCCESS"
@@ -130,7 +130,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
     #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
     if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-        print "Video Decoder proc check is added"
+        print("Video Decoder proc check is added")
         checkAVStatus = check_av_status_flag
         checkAVStatus = check_av_status_flag
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_SEEK_POSITION' that specifies the video position in seconds to which the pipeline should seek
@@ -157,14 +157,14 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
         #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
         #Sample command = "mediapipelinetests test_trickplay <AV1_STREAM_URL> checkavstatus=yes operations=seek:20:0"
         command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, operations = getOperations ())
-        print "Executing command in DUT: ", command
+        print("Executing command in DUT: ", command)
 
         tdkTestObj.addParameter("command", command)
         tdkTestObj.executeTestCase(expectedResult)
         actualresult = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
         output = output[output.find('\n'):]
-        print "OUTPUT: ...\n", output
+        print("OUTPUT: ...\n", output)
 
         #Check if the command executed successfully
         if expectedResult in actualresult.upper() and output:
@@ -173,20 +173,18 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
             if expectedResult in executionStatus:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Pause with Backward seek on AV1 stream was successfull"
-                print "Mediapipeline test executed successfully"
+                print("Pause with Backward seek on AV1 stream was successfull")
+                print("Mediapipeline test executed successfully")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Pause with Backward seek on AV1 stream failed"
+                print("Pause with Backward seek on AV1 stream failed")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Pause with Backward seek on AV1 stream failed"
+            print("Pause with Backward seek on AV1 stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed"
+        print("Mediapipeline test execution failed")
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 else:
-    print "Module load failed"
-
-
+    print("Module load failed")

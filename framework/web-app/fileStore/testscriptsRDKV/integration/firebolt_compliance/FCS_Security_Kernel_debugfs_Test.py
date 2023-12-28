@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,22 +93,22 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_debugfs_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP : Check if Kernel debug fs is enabled/disabled"
+    print("\nTEST STEP : Check if Kernel debug fs is enabled/disabled")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"ls /sys/kernel/debug | wc -l"}, True)
 
     if result and "0" not in details:
-        print "FAILURE: Kernel debugfs is enabled"
-        print "Kernel debugfs must be disabled"
+        print("FAILURE: Kernel debugfs is enabled")
+        print("Kernel debugfs must be disabled")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: Kernel debugfs is disabled as expected"
+        print("SUCCESS: Kernel debugfs is disabled as expected")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

@@ -98,7 +98,7 @@ port = <port>
 obj.configureTestCase(ip,port,'FCS_Essos_Wayland_Client_Validation');
 #Get the result of connection with test component and STB
 sysutilLoadStatus =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus
+print("[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus)
 if "SUCCESS" in sysutilLoadStatus.upper():
     #Get EssosValidation configuration file
     logFile,EssosValidation_log = FCS_GraphicsValidation_utility.getLogFile(obj);
@@ -109,65 +109,65 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     timeout = 20;
     #Configure the test to be executed
     Test = "Essos"
-    #Run the Essos_TDKTestApp with options 
+    #Run the Essos_TDKTestApp with options
     #Add -t option for timeout
     options = str(timeout);
     #Add display for westeros instance
     options = options + " " + display + " ";
     #Add USE_WAYLAND option to run essos as wayland client
     options = options + "USE_WAYLAND";
-    
+
     details = FCS_GraphicsValidation_utility.RunTest(obj,Test,logFile,options);
-    print "[TEST EXECUTION DETAILS] : %s" %details;
+    print("[TEST EXECUTION DETAILS] : %s" %details);
     #Wait for Test to get completed
     time.sleep(35)
- 
+
     try:
-       expectedResult = "SUCCESS"
-       actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
-       if expectedResult in actualresult.upper() and log_transfer == "no":
-          print "Log Transfer is disabled"
-          log_transfer = False;
-       else:
-          log_transfer = True;
+        expectedResult = "SUCCESS"
+        actualresult, log_transfer = FCS_GraphicsValidation_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
+        if expectedResult in actualresult.upper() and log_transfer == "no":
+            print("Log Transfer is disabled")
+            log_transfer = False;
+        else:
+            log_transfer = True;
     except:
-       log_transfer = True;
+        log_transfer = True;
 
     if log_transfer:
         #Transfer Essos_TDKTestApp log file from STB
         try:
-           tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
-           filepath = tdkTestObj.transferLogs( EssosValidation_log, "false" );
+            tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
+            filepath = tdkTestObj.transferLogs( EssosValidation_log, "false" );
         except:
-           print "Transfer of logs unsuccessfull";
-           obj.unloadModule("systemutil");
-           exit() 
+            print("Transfer of logs unsuccessfull");
+            obj.unloadModule("systemutil");
+            exit()
 
         FCS_GraphicsValidation_utility.PrintTitle("SUMMARY OF TEST EXECUTION")
         FCS_GraphicsValidation_utility.Summary(filepath,"VALIDATION");
         data = open(filepath,'r');
         message = data.read()
-        print "\n**************Essos_TDKTestApp Execution Log - Begin*************\n\n"
+        print("\n**************Essos_TDKTestApp Execution Log - Begin*************\n\n")
         print(message)
         data.close()
-        print "\n**************Essos_TDKTestApp Execution - End*************\n\n"
-    else:   
+        print("\n**************Essos_TDKTestApp Execution - End*************\n\n")
+    else:
         filepath =""
 
-    #Reading the Essos_TDKTestApp Execution log file to check for number of failures 
+    #Reading the Essos_TDKTestApp Execution log file to check for number of failures
     #Get Number of failures by filtering "VALIDATION" error statements
     Failures = FCS_GraphicsValidation_utility.getNumberOfFailures(obj,filepath,"VALIDATION")
     if Failures:
         EssosValidationExecutionStatus = "FAILURE"
-        print "Observed failures during execution"
+        print("Observed failures during execution")
     else:
         EssosValidationExecutionStatus = "SUCCESS"
-        print "Successfuly Executed the test application"
-        print "[TEST EXECUTION RESULT] : %s" %EssosValidationExecutionStatus;
+        print("Successfuly Executed the test application")
+        print("[TEST EXECUTION RESULT] : %s" %EssosValidationExecutionStatus);
     #Delete the log file in DUT
     FCS_GraphicsValidation_utility.deleteLogFile(obj,EssosValidation_log,EssosValidationExecutionStatus);
     obj.unloadModule("systemutil");
 else:
-    print "Failed to load sysutil module\n";
+    print("Failed to load sysutil module\n");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

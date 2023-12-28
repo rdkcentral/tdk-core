@@ -72,7 +72,7 @@
     <api_or_interface_used>Execute the mediapipelinetests application in DUT</api_or_interface_used>
     <input_parameters>testcasename - "test_init_shutdown"
 test_url - dash url from MediaValidationVariables library (MediaValidationVariables.video_src_url_dash)</input_parameters>
-    <automation_approch>1.Load the systemutil module 
+    <automation_approch>1.Load the systemutil module
 2.Retrieve the video_src_url_dash variable from MediaValidationVariables library
 3.Construct the mediapipelinetests command based on the retrieved video url and testcasename("test_init_shutdown")
 4.Execute the command in DUT. During the execution, the DUT will initialise the pipeline with the provided url and then application exits by closing the pipeline
@@ -115,7 +115,7 @@ timeoutInSeconds = "10"
 
 #Load the systemutil library
 sysutilloadModuleStatus =sysUtilObj.getLoadModuleResult()
-print "[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus
+print("[System Util LIB LOAD STATUS]  :  %s" %sysutilloadModuleStatus)
 sysUtilObj.setLoadModuleStatus(sysutilloadModuleStatus)
 
 if "SUCCESS" in sysutilloadModuleStatus.upper():
@@ -136,13 +136,13 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
     #To do the init shutdown test, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
     #Sample command = "mediapipelinetests test_init_shutdown <DASH_STREAM_URL>"
     command = getMediaPipelineTestCommand (test_name, test_url)
-    print "Executing command in DUT: ", command
+    print("Executing command in DUT: ", command)
 
     tdkTestObj.addParameter("command", command)
     tdkTestObj.executeTestCase(expectedResult)
     actualresult = tdkTestObj.getResult()
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-    print "OUTPUT: ...\n", output
+    print("OUTPUT: ...\n", output)
 
     #Check if the command executed successfully
     if expectedResult in actualresult.upper() and output:
@@ -151,10 +151,10 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Init and shutdown of pipeline was successfull"
+            print("Init and shutdown of pipeline was successfull")
 
             #Now try to check if playback is happening properly to ensure that the pipeline is shutting down correctly without doing the playback
-            print "Trying to verify the playback after Init-Shutdown cycle"
+            print("Trying to verify the playback after Init-Shutdown cycle")
             #Construct the command with the url and execute the command in DUT
             tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand')
 
@@ -168,7 +168,7 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
             actualresult, check_av_status_flag = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS')
             #If the value of FIREBOLT_COMPLIANCE_CHECK_AV_STATUS is retrieved correctly and its value is "yes", argument to check the SOC level AV status should be passed to test application
             if expectedResult in actualresult.upper() and check_av_status_flag == "yes":
-                print "Video Decoder proc check is added"
+                print("Video Decoder proc check is added")
                 checkAVStatus = check_av_status_flag
             #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT' that specifies the video playback timeout in seconds
             actualresult, timeoutConfigValue = getDeviceConfigValue (sysUtilObj, 'FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT')
@@ -181,13 +181,13 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
             #To do the AV playback through 'playbin' element, we are using 'mediapipelinetests' test application that is available in TDK along with required parameters
             #Sample command = "mediapipelinetests test_generic_playback <DASH_STREAM_URL> checkavstatus=yes timeout=20"
             command = getMediaPipelineTestCommand (test_name, test_url, checkavstatus = checkAVStatus, timeout = timeoutInSeconds)
-            print "Executing command in DUT: ", command
+            print("Executing command in DUT: ", command)
 
             tdkTestObj.addParameter("command", command)
             tdkTestObj.executeTestCase(expectedResult)
             actualresult = tdkTestObj.getResult()
             output = tdkTestObj.getResultDetails().replace(r'\n', '\n'); output = output[output.find('\n'):]
-            print "OUTPUT: ...\n", output
+            print("OUTPUT: ...\n", output)
 
             #Check if the command executed successfully
             if expectedResult in actualresult.upper() and output:
@@ -196,25 +196,24 @@ if "SUCCESS" in sysutilloadModuleStatus.upper():
 
                 if expectedResult in executionStatus:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "DASH Playback using 'playbin' and 'westeros-sink' was successfull"
-                    print "Mediapipeline test executed successfully for playback"
+                    print("DASH Playback using 'playbin' and 'westeros-sink' was successfull")
+                    print("Mediapipeline test executed successfully for playback")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print "DASH Playback using 'playbin' and 'westeros-sink' failed"
+                    print("DASH Playback using 'playbin' and 'westeros-sink' failed")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Mediapipeline test execution failed during playback"
+                print("Mediapipeline test execution failed during playback")
 
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Failed to do Initialisation and shutdown of pipeline correctly"
+            print("Failed to do Initialisation and shutdown of pipeline correctly")
     else:
         tdkTestObj.setResultStatus("FAILURE")
-        print "Mediapipeline test execution failed during Initialisation and shutdown"
+        print("Mediapipeline test execution failed during Initialisation and shutdown")
 
     #Unload the modules
     sysUtilObj.unloadModule("systemutil")
 
 else:
-    print "Module load failed"
-
+    print("Module load failed")

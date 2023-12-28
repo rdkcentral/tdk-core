@@ -81,7 +81,7 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -98,12 +98,12 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_Mount_filesystems_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Check if a filesystem containing no executable code MUST have the noexec option specified."
+    print("\nTEST STEP 1: Check if a filesystem containing no executable code MUST have the noexec option specified.")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"mount | grep 'sysfs\'"}, True)
     lst=["sysfs"]
     str1=details.split("\\")
@@ -112,13 +112,13 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
         for val in lst:
             if val in line:
                 if "noexec"  in line:
-                    print "SUCCESS:{} noexec option is specified".format(val)
+                    print("SUCCESS:{} noexec option is specified".format(val))
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "FAILURE:{} noexec option is not  specified".format(val)
+                    print("FAILURE:{} noexec option is not  specified".format(val))
                     tdkTestObj.setResultStatus("FAILURE");
 
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

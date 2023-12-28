@@ -76,7 +76,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -93,21 +93,21 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Export_Libraries_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP : Check if LD_LIBRARY_PATH is used in export"
+    print("\nTEST STEP : Check if LD_LIBRARY_PATH is used in export")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"grep LD_LIBRARY_PATH /etc/profile"}, True)
     if details:
-        print "FAILURE: LD_LIBRARY_PATH is used to export %s" %(details)
-        print "%s libraries must not be exported using LD_LIBRARY_PATH" %(details)
+        print("FAILURE: LD_LIBRARY_PATH is used to export %s" %(details))
+        print("%s libraries must not be exported using LD_LIBRARY_PATH" %(details))
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: LD_LIBRARY_PATH is not used to export"
+        print("SUCCESS: LD_LIBRARY_PATH is not used to export")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

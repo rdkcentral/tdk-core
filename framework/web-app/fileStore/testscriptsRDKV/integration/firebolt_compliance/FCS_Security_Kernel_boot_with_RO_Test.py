@@ -80,7 +80,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -97,12 +97,12 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_boot_with_RO_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP :Verify  Kernel MUST boot with 'ro' in command line to mount RFS as read-only"
+    print("\nTEST STEP :Verify  Kernel MUST boot with 'ro' in command line to mount RFS as read-only")
     command = 'cat /proc/cmdline'
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command}, True)
     output = tdkTestObj.getResultDetails().replace(r'\n', '\n');
@@ -112,12 +112,11 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
         if "ro"==str(lst):
             state="found"
             print("SUCCESS:Kernel boot with 'ro' in command line to mount RFS as read-only")
-            tdkTestObj.setResultStatus("SUCCESS");        
+            tdkTestObj.setResultStatus("SUCCESS");
     if state =="not found":
-        print "FAILURE:Kernel Is Not boot with 'ro' in command line to mount RFS as read-only"
+        print("FAILURE:Kernel Is Not boot with 'ro' in command line to mount RFS as read-only")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
-
+    print("Load module failed")

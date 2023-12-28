@@ -104,7 +104,7 @@ obj.configureTestCase(ip,port,'FCS_iCrypto_Cipher_Tests');
 
 #Get the result of connection with test component and STB
 sysutilLoadStatus =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus
+print("[LIB LOAD STATUS]  :  %s" %sysutilLoadStatus)
 if "SUCCESS" in sysutilLoadStatus.upper():
 
     #Configure the test to be executed
@@ -115,7 +115,7 @@ if "SUCCESS" in sysutilLoadStatus.upper():
         expectedResult = "SUCCESS"
         actualresult, log_transfer = FCS_iCrypto_utility.getDeviceConfigValue (obj, 'FIREBOLT_COMPLIANCE_TRANSFER_LOG')
         if expectedResult in actualresult.upper() and log_transfer == "no":
-            print "Log Transfer is disabled"
+            print("Log Transfer is disabled")
             log_transfer = False;
         else:
             log_transfer = True;
@@ -128,7 +128,7 @@ if "SUCCESS" in sysutilLoadStatus.upper():
 
         #Run the interface test for OpenSSL
         details = FCS_iCrypto_utility.RunTest(obj,Test,logFile);
-        print "[TEST EXECUTION DETAILS] : %s" %details;
+        print("[TEST EXECUTION DETAILS] : %s" %details);
         time.sleep(3)
 
         #Transfer iCrypto log file from STB
@@ -136,7 +136,7 @@ if "SUCCESS" in sysutilLoadStatus.upper():
             tdkTestObj = obj.createTestStep('FireboltCompliance_DoNothing');
             filepath = tdkTestObj.transferLogs( iCrypto_log, "false" );
         except:
-            print "Transfer of logs unsuccessfull";
+            print("Transfer of logs unsuccessfull");
             obj.unloadModule("systemutil");
             exit()
 
@@ -147,10 +147,10 @@ if "SUCCESS" in sysutilLoadStatus.upper():
             FCS_iCrypto_utility.Summary(ResultFile);
             data = open(ResultFile,'r');
             message = data.read()
-            print "\n**************iCrypto TestApp Execution Log - Begin*************\n\n"
+            print("\n**************iCrypto TestApp Execution Log - Begin*************\n\n")
             print(message)
             data.close()
-            print "\n**************iCrypto TestApp Execution - End*************\n\n"
+            print("\n**************iCrypto TestApp Execution - End*************\n\n")
 
             #Reading the iCrypto Execution log file to check for number of failures
             Failures = FCS_iCrypto_utility.getNumberOfFailures(ResultFile,"ModuleTest")
@@ -158,13 +158,13 @@ if "SUCCESS" in sysutilLoadStatus.upper():
                 FCS_iCrypto_utility.PrintTitle("SUMMARY OF FAILED TESTCASES")
                 FCS_iCrypto_utility.FailureSummary(ResultFile);
                 iCryptoExecutionStatus = "FAILURE"
-                print "Observed failures during execution"
+                print("Observed failures during execution")
             else:
                 iCryptoExecutionStatus = "SUCCESS"
-                print "Successfuly Executed the test application"
-            print "[TEST EXECUTION RESULT] : %s" %iCryptoExecutionStatus;
+                print("Successfuly Executed the test application")
+            print("[TEST EXECUTION RESULT] : %s" %iCryptoExecutionStatus);
         except:
-            print "ERROR : Unable to open execution log file"
+            print("ERROR : Unable to open execution log file")
             obj.unloadModule("systemutil");
             exit();
 
@@ -176,6 +176,6 @@ if "SUCCESS" in sysutilLoadStatus.upper():
     obj.unloadModule("systemutil");
 
 else:
-    print "Failed to load sysutil module\n";
+    print("Failed to load sysutil module\n");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

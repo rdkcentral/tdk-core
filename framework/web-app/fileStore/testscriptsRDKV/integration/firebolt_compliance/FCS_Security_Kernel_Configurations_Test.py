@@ -73,8 +73,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from tdkvutility import *
 
 #Test component to be tested
@@ -88,7 +88,7 @@ obj.configureTestCase(ip,port,'FCS_Security_Kernel_Configurations_Test');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Path to be extracted
 filePath = "/tmp"
@@ -99,37 +99,37 @@ testOption = "KERNEL_CONFIG_CHECK "
 
 #Test component to be tested
 if "SUCCESS" in result.upper():
-    print "\nTEST STEP 1: Check if /proc/config.gz is present"
+    print("\nTEST STEP 1: Check if /proc/config.gz is present")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"ls /proc/config.gz"}, True)
     if result and details:
-        print "SUCCESS: Kernel config file (/proc/config.gz) is present"
+        print("SUCCESS: Kernel config file (/proc/config.gz) is present")
         #Check if parsing shell script is present
         command = "ls " + shellScript
         result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": command},True)
         if not details:
-            print "Parsing shell script %s is not present in DUT"%(shellScript)
+            print("Parsing shell script %s is not present in DUT"%(shellScript))
             tdkTestObj.setResultStatus("FAILURE");
         else:
             #Execute shell script
-            print "TEST STEP 2: Check if expected kernel configurations are disabled"
+            print("TEST STEP 2: Check if expected kernel configurations are disabled")
             #sh SecurityTestTDK.sh KERNEL_CONFIG_CHECK /tmp
             command = "sh " + shellScript + testOption  + filePath;
             result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command},True)
             if "Extracted config file could not be found" in details:
-                print details
+                print(details)
                 tdkTestObj.setResultStatus("FAILURE");
             elif details:
-                print "Following kernel configs must be disabled in the DUT"
+                print("Following kernel configs must be disabled in the DUT")
                 detailsList = details.split("=y");
                 result = [i.strip("=y") for i in detailsList]
                 print('\n'.join(map(str, result)))
                 tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "All expected Kernel configurations are disabled as expected"
+                print("All expected Kernel configurations are disabled as expected")
                 tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "FAILURE: Kernel config file (/proc/config.gz) is not present"
+        print("FAILURE: Kernel config file (/proc/config.gz) is not present")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("systemutil");
 else:
-    print "Module load failed"
+    print("Module load failed")

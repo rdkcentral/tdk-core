@@ -77,7 +77,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -94,35 +94,35 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_Virtual_Space_Access_Test');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP 1: Check if kernel virtual filesystem access is removed"
-    print "\nEXPECTED OUTPUT : /proc/kcore or /dev/kcore files must not be present"
+    print("\nTEST STEP 1: Check if kernel virtual filesystem access is removed")
+    print("\nEXPECTED OUTPUT : /proc/kcore or /dev/kcore files must not be present")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"find /dev /proc -iname kcore"}, True)
 
     if details:
-        print "FAILURE: kcore file is present"
-        print "This allows read access to all the kernels virtual memory space.\nSupport for /dev/kcore MUST be removed."
+        print("FAILURE: kcore file is present")
+        print("This allows read access to all the kernels virtual memory space.\nSupport for /dev/kcore MUST be removed.")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: kcore file is not present"
+        print("SUCCESS: kcore file is not present")
         tdkTestObj.setResultStatus("SUCCESS");
 
-    print "\nTEST STEP 1: Check if access to the virtual address space of kernel is removed"
-    print "\nEXPECTED OUTPUT : /proc/kmem or /dev/kmem files must not be present"
+    print("\nTEST STEP 1: Check if access to the virtual address space of kernel is removed")
+    print("\nEXPECTED OUTPUT : /proc/kmem or /dev/kmem files must not be present")
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"find /dev /proc -iname kmem"}, True)
 
     if details:
-        print "FAILURE: kmem file is present"
-        print "This provides access to the virtual address space of the operating system kernel, excluding memory that is associated with an I/O device..\nSupport for /dev/kmem MUST be removed."
+        print("FAILURE: kmem file is present")
+        print("This provides access to the virtual address space of the operating system kernel, excluding memory that is associated with an I/O device..\nSupport for /dev/kmem MUST be removed.")
         tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "SUCCESS: kmem file is not present"
+        print("SUCCESS: kmem file is not present")
         tdkTestObj.setResultStatus("SUCCESS");
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
+    print("Load module failed")

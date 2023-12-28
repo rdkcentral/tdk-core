@@ -82,7 +82,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from tdkvutility import *
 from time import *
@@ -99,12 +99,12 @@ port = <port>
 obj = tdklib.TDKScriptingLibrary("systemutil","1");
 obj.configureTestCase(ip,port,'FCS_Security_Kernel_Module_Unload_disable');
 sysUtilLoadStatus = obj.getLoadModuleResult();
-print "System module loading status : %s" %sysUtilLoadStatus;
+print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 obj.setLoadModuleStatus(sysUtilLoadStatus);
 
 if "SUCCESS" in sysUtilLoadStatus.upper():
-    print "\nTEST STEP :Verify Kernel module unload MUST be disabled after boot unless architecturally infeasible"
+    print("\nTEST STEP :Verify Kernel module unload MUST be disabled after boot unless architecturally infeasible")
     command = 'cd /lib/modules/`uname -r`/kernel ;'
     command = command + 'lsmod | grep -w  "0" | cut -d  " " -f 1'
     result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":command}, True)
@@ -114,18 +114,17 @@ if "SUCCESS" in sysUtilLoadStatus.upper():
     for lst in details_list[1::-1]:
         result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"rmmod ./kernel/{}".format(lst)}, True)
         if not details:
-            print "FAILURE:Kernel module {} Removal Operation Is Not restricted to user".format(lst)
+            print("FAILURE:Kernel module {} Removal Operation Is Not restricted to user".format(lst))
             tdkTestObj.setResultStatus("FAILURE");
             state= False
-            break     
+            break
         else:
-            print "SUCCESS:Kernel module Operation Is restricted to user"
+            print("SUCCESS:Kernel module Operation Is restricted to user")
             tdkTestObj.setResultStatus("SUCCESS");
     if state==False:
-        print "Kernal module operation permitted hence reboot the device to maintain its original status"
+        print("Kernal module operation permitted hence reboot the device to maintain its original status")
         obj.initiateReboot();
     obj.unloadModule("systemutil");
 
 else:
-    print "Load module failed"
-
+    print("Load module failed")
