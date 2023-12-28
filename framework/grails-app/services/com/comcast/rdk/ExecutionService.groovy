@@ -822,7 +822,7 @@ class ExecutionService {
 		def filePath = "${realPathFromFile}//logs//devicelogs//${device?.stbName}//"
 		
 		def cmdList = [
-			"python",
+			"python3",
 			absolutePath,
 			device?.stbIp,
 			device?.agentMonitorPort,		

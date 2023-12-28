@@ -153,7 +153,7 @@ public final class Constants
     public static final String HTML_PATTERN             = "<span(.*?)</span>";
     public static final String HTML_PATTERN_AFTERSPAN   = "</?span\\b[^>]*>";
     
-    public static final String PYTHON_COMMAND     = "python";
+    public static final String PYTHON_COMMAND     = "python3";
     public static final String ROOT_STRING        = "root";
     public static final String NONE_STRING        = "None";
     public static final String HYPHEN             = "-";

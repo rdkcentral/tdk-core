@@ -32,53 +32,52 @@ import sys
 #------------------------------------------------------------------------------
 
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 def getRDKVersion(deviceIP,devicePort):
 
-        # Syntax       : getRDKVersion.getRDKVersion( deviceIP,devicePort )
-        # Description  : Sends a json query to get the RDK version of device.
-        # Parameters   : deviceIP - IP address of the device under test.
-	#		 devicePort - Port Number of the device under test. 
-        # Return Value : Returns string which holds RDK version of connected devices.
+    # Syntax       : getRDKVersion.getRDKVersion( deviceIP,devicePort )
+    # Description  : Sends a json query to get the RDK version of device.
+    # Parameters   : deviceIP - IP address of the device under test.
+    #                devicePort - Port Number of the device under test.
+    # Return Value : Returns string which holds RDK version of connected devices.
 
-	try:
-        	port = devicePort
-		tcpClient = getSocketInstance(deviceIP)
-        	tcpClient.connect((deviceIP, port))
+    try:
+        port = devicePort
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, port))
 
-       		#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'GetRDKVersion'}
-       		jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getRDKVersion"}\r\n'
-     		#query = json.dumps(jsonMsg)
-        	#tcpClient.send(query) #Sending json query
-                tcpClient.send(jsonMsg) #Sending json query
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
-		if "Method not found." in result:
-			print "METHOD_NOT_FOUND"
-			sys.stdout.flush()
-			sys.exit()
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'GetRDKVersion'}
+        jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getRDKVersion"}\r\n'
+        #query = json.dumps(jsonMsg)
+        #tcpClient.send(query) #Sending json query
+        tcpClient.send(jsonMsg.encode()) #Sending json query
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
+        if "Method not found." in result:
+            print("METHOD_NOT_FOUND")
+            sys.stdout.flush()
+            sys.exit()
 
-		else:
-			data = json.loads(result)
-			resultObj=data["result"]
-			message=resultObj["result"]
-			print message
-			sys.stdout.flush()
-		return message 
+        else:
+            data = json.loads(result)
+            resultObj=data["result"]
+            message=resultObj["result"]
+            print(message)
+            sys.stdout.flush()
+        return message
 
-	except socket.error:
-		print "AGENT_NOT_FOUND"
-		sys.stdout.flush()
-
+    except socket.error:
+        print("AGENT_NOT_FOUND")
+        sys.stdout.flush()

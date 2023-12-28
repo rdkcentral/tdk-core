@@ -27,12 +27,12 @@ import sys
 from consoleLogTransfer import consoleLogTransfer
 
 if((len(sys.argv))!=5):
-	print "Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName"
-	print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"AgentConsole.log\" \"111_222_333_AgentConsole.log\""
+    print("Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"AgentConsole.log\" \"111_222_333_AgentConsole.log\"")
 
 else:
-	deviceIP = sys.argv[1]
-	agentMonitorPort = (int)(sys.argv[2])
-	boxFileName = sys.argv[3]
-	tmFileName = sys.argv[4]
-	consoleLogTransfer(deviceIP,agentMonitorPort,boxFileName,tmFileName)
+    deviceIP = sys.argv[1]
+    agentMonitorPort = (int)(sys.argv[2])
+    boxFileName = sys.argv[3]
+    tmFileName = sys.argv[4]
+    consoleLogTransfer(deviceIP,agentMonitorPort,boxFileName,tmFileName)

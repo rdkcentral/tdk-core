@@ -132,7 +132,7 @@ environments {
 modules.xmlfile.location="moduleConfig/StubDescriptor.xml"
 boxdetails.xmlfile.location="moduleConfig/BoxDetails.xml"
 
-python.execution.path="python"
+python.execution.path="python3"
 //python.execution.path="C:/Python27/python.exe"
 
 // log4j configuration
@@ -147,7 +147,6 @@ log4j = {
     root {
         info()
     }*/
-
     error  'org.codehaus.groovy.grails.web.servlet',        // controllers
            'org.codehaus.groovy.grails.web.pages',          // GSP
            'org.codehaus.groovy.grails.web.sitemesh',       // layouts

@@ -22,17 +22,16 @@ from setRoute import setRoute
 import sys
 
 if((len(sys.argv))!=8):
-        print "Usage : python " + sys.argv[0] + " DeviceIP PortNumber ClientMACaddress ClientExecutionPort ClientStatusPort clientLogTransferPort clientAgentMonitorPort"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8088 <Valid DUT MAC Address> 9000 9001 9002 9003"
+    print("Usage : python " + sys.argv[0] + " DeviceIP PortNumber ClientMACaddress ClientExecutionPort ClientStatusPort clientLogTransferPort clientAgentMonitorPort")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8088 <Valid DUT MAC Address> 9000 9001 9002 9003")
 
 else:
-	deviceIP = sys.argv[1]
-	devicePort = (int)(sys.argv[2])
-	clientMAC = sys.argv[3]
-	clientAgentPort = (sys.argv[4])
-	clientStatusPort = (sys.argv[5])
-	clientLogTransferPort = (sys.argv[6])
-	clientAgentMonitorPort = (sys.argv[7])
+    deviceIP = sys.argv[1]
+    devicePort = (int)(sys.argv[2])
+    clientMAC = sys.argv[3]
+    clientAgentPort = (sys.argv[4])
+    clientStatusPort = (sys.argv[5])
+    clientLogTransferPort = (sys.argv[6])
+    clientAgentMonitorPort = (sys.argv[7])
 
-	setRoute(deviceIP,devicePort,clientMAC,clientAgentPort,clientStatusPort,clientLogTransferPort,clientAgentMonitorPort)
-
+    setRoute(deviceIP,devicePort,clientMAC,clientAgentPort,clientStatusPort,clientLogTransferPort,clientAgentMonitorPort)

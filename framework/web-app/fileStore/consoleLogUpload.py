@@ -30,90 +30,90 @@ import socket
 # Methods
 #------------------------------------------------------------------------------
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 
 def consoleLogUpload(deviceIP,agentMonitorPort,boxFileName,tmFileName,logUploadURL):
 
-        # Syntax       : consoleLogUpload.consoleLogUpload (deviceIP,agentMonitorPort,boxFileName,tmFileName,logUploadURL)
-        # Description  : Sends a json query to get path to console log file and transfer the same.
-        # Parameters   : deviceIP - IP address of the device under test.
-	#		 agentMonitorPort - Port Number of the device under test.
-	#		 boxFileName - Name of log file in box.
-	#		 tmFileName - Name in which the file is saved in TM after transferring.
-        # Return Value : Nil
+    # Syntax       : consoleLogUpload.consoleLogUpload (deviceIP,agentMonitorPort,boxFileName,tmFileName,logUploadURL)
+    # Description  : Sends a json query to get path to console log file and transfer the same.
+    # Parameters   : deviceIP - IP address of the device under test.
+    #                agentMonitorPort - Port Number of the device under test.
+    #                boxFileName - Name of log file in box.
+    #                tmFileName - Name in which the file is saved in TM after transferring.
+    # Return Value : Nil
 
-	# Sending JSON request to get log path
-	try:
-		tcpClient = getSocketInstance(deviceIP)
-		tcpClient.connect((deviceIP, agentMonitorPort))
+    # Sending JSON request to get log path
+    try:
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, agentMonitorPort))
 
-       		#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'GetAgentConsoleLogPath'}
-       		jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getAgentConsoleLogPath"}\r\n'
-     		#query = json.dumps(jsonMsg)
-        	#tcpClient.send(query) #Sending json query
-                tcpClient.send(jsonMsg) #Sending json query
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'GetAgentConsoleLogPath'}
+        jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getAgentConsoleLogPath"}\r\n'
+        #query = json.dumps(jsonMsg)
+        #tcpClient.send(query) #Sending json query
+        tcpClient.send(jsonMsg.encode()) #Sending json query
 
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
-		data = json.loads(result)
-		result=data["result"]
-		message=result["result"]          
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
+        data = json.loads(result)
+        result=data["result"]
+        message=result["result"]
 
-		sys.stdout.flush()
+        sys.stdout.flush()
 
-	except socket.error:
-		print "ERROR: Unable to connect agent.." 
-		sys.stdout.flush()
-		sys.exit()
+    except socket.error:
+        print("ERROR: Unable to connect agent..")
+        sys.stdout.flush()
+        sys.exit()
 
-	# Transferring file using TFTP
-	try:
+    # Transferring file using TFTP
+    try:
 
-		boxFile = message + "/" + boxFileName
-		tmFile = tmFileName
-		tcpClient = getSocketInstance(deviceIP)
-		tcpClient.connect((deviceIP, agentMonitorPort))
+        boxFile = message + "/" + boxFileName
+        tmFile = tmFileName
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, agentMonitorPort))
 
-		# Sending message to push the logs from STB to TM
-		#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'uploadLogs','STBfilename':boxFile,'TMfilename':tmFile,'logUploadURL':logUploadURL}
-		jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"uploadLog","params":{"STBfilename":"'+boxFile+'","TMfilename":"'+tmFile+'","logUploadURL":"'+logUploadURL+'"}}\r\n'
-		#query = json.dumps(jsonMsg)
-		#tcpClient.send(query) #Sending json query
-		tcpClient.send(jsonMsg) #Sending json query
+        # Sending message to push the logs from STB to TM
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'uploadLogs','STBfilename':boxFile,'TMfilename':tmFile,'logUploadURL':logUploadURL}
+        jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"uploadLog","params":{"STBfilename":"'+boxFile+'","TMfilename":"'+tmFile+'","logUploadURL":"'+logUploadURL+'"}}\r\n'
+        #query = json.dumps(jsonMsg)
+        #tcpClient.send(query) #Sending json query
+        tcpClient.send(jsonMsg.encode()) #Sending json query
 
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
 
-		data = json.loads(result)
-		result=data["result"]
-		message=result["result"]
-		print message
+        data = json.loads(result)
+        result=data["result"]
+        message=result["result"]
+        print(message)
 
-		sys.stdout.flush()
+        sys.stdout.flush()
 
-        except socket.error:
-		print "ERROR: Unable to connect agent.."
-		sys.stdout.flush()
-		sys.exit()
+    except socket.error:
+        print("ERROR: Unable to connect agent..")
+        sys.stdout.flush()
+        sys.exit()
 
-	except TypeError:
-		print "Connection Error!!! Transfer of " + boxFile + " Failed: Make sure Agent is running"
-		sys.exit()
+    except TypeError:
+        print("Connection Error!!! Transfer of " + boxFile + " Failed: Make sure Agent is running")
+        sys.exit()
 
-	except:
-		print "Error!!! Transfer of " + boxFile + " Failed.."
-		sys.exit()
+    except:
+        print("Error!!! Transfer of " + boxFile + " Failed..")
+        sys.exit()
 
 # End of File

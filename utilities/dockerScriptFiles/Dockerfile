@@ -32,16 +32,14 @@ RUN apt-get clean && apt-get update && apt-get upgrade -y \
  git \
  mysql-server \
  openjdk-8-jdk \
- python \
+ python3.8 \
  expect \
- python-xlwt \
- python-xlrd \
- python-numpy \
- python-paramiko \
- python-tftpy \
- python-pycurl \
- python-mysqldb \
- python-pip \
+ python3-xlrd \
+ python3-numpy \
+ python3-paramiko \
+ python3-pycurl \
+ python3-mysqldb \
+ python3-pip \
  vim \
  net-tools \
  inetutils-ping \
@@ -49,14 +47,32 @@ RUN apt-get clean && apt-get update && apt-get upgrade -y \
  zip \
  wget \
  sshpass 
-RUN python -m pip install selenium
-RUN python -m pip install --pre --upgrade websocket-client==0.57.0
-RUN pip install requests \
-    pexpect \
-    urllib3==1.23 \
-    pillow
-RUN pip install xlutils
-
+#Python3 Migration: In replacement to zlwt
+RUN pip3 install xlwt-future
+RUN pip3 install tftpy
+RUN pip3 install websocket-client
+RUN python3 -m pip install selenium
+RUN pip3 install requests
+RUN pip3 install pexpect
+RUN pip3 install urllib3
+#Libraries required for pillow
+RUN apt-get install -y cmake \
+libtiff5-dev \
+libjpeg8-dev \
+libopenjp2-7-dev \
+zlib1g-dev \
+libfreetype6-dev \
+liblcms2-dev \
+libwebp-dev \
+tcl8.6-dev \
+tk8.6-dev \
+python3-tk \
+libharfbuzz-dev \
+libfribidi-dev \
+libxcb1-dev
+RUN python3 -m pip install --upgrade Pillow
+#Python3 Migration: xlutils is not available in Python3
+RUN echo alias python=python3 >> ~/.bashrc
 #Setting up Mysql database
 COPY mysqld.cnf /mnt
 RUN /bin/bash -c "/etc/init.d/mysql stop" && sleep 5
@@ -92,7 +108,7 @@ COPY war_creation_generic.py /mnt
 ARG tag_name=rdk-next
 ENV tag_name=$tag_name
 RUN /bin/bash -c "chmod 777 /mnt/war_creation_generic.py"
-RUN /bin/bash -c "python /mnt/war_creation_generic.py $tag_name"
+RUN /bin/bash -c "python3 /mnt/war_creation_generic.py $tag_name"
 RUN sleep 50
 RUN /bin/bash -c "cp /mnt/rdk-test-tool.war /opt/apache-tomcat-7.0.96/webapps"
 #COPY rdk-test-tool.war /opt/apache-tomcat-7.0.96/webapps/

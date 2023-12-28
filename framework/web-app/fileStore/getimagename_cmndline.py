@@ -27,15 +27,15 @@ from getImageName import getImageName
 # To enable time out
 class NotFoundException(Exception):
     pass
-    
+
 def timeout(signum, frame):
     raise NotFoundException
-		
+
 # Check the number of arguments and print the syntax if args not equal to 5
 if ( (len(sys.argv)) != 3):
-        print "Usage : python " + sys.argv[0] + " Device_IP_Address PortNumber"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8087"
-        exit()
+    print("Usage : python " + sys.argv[0] + " Device_IP_Address PortNumber")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8087")
+    exit()
 
 # Assigning Box IP address, port number
 boxipaddress = sys.argv[1]
@@ -49,6 +49,6 @@ signal.alarm(5)
 
 try:
     status = getImageName(boxipaddress, port)
-    print status
+    print(status)
 except NotFoundException:
-    print "NOT_FOUND"
+    print("NOT_FOUND")

@@ -27,24 +27,24 @@ import json
 #------------------------------------------------------------------------------
 
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 # Check the number of arguments and print the syntax if args not equal to 5
 if((len(sys.argv))!=5):
-        print "Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"/version.txt\" \"111_222_333_version.txt\""
-	sys.exit()
+    print("Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"/version.txt\" \"111_222_333_version.txt\"")
+    sys.exit()
 
 # Assigning IP address, port number and path of source and destination files
 deviceIP = sys.argv[1]
@@ -53,36 +53,36 @@ boxFile = sys.argv[3]
 tmFile = sys.argv[4]
 
 try:
-	tcpClient = getSocketInstance(deviceIP)
-	tcpClient.connect((deviceIP, agentMonitorPort))
+    tcpClient = getSocketInstance(deviceIP)
+    tcpClient.connect((deviceIP, agentMonitorPort))
 
-	# Sending message to push the logs from STB to TM
-	#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'PushLog','STBfilename':boxFile,'TMfilename':tmFile}
-	jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"PushLog","params":{"STBfilename":"'+ boxFile +'","TMfilename":"'+ tmFile +'"}}\r\n'
-	#query = json.dumps(jsonMsg)
-	#tcpClient.send(query) #Sending json query
-	tcpClient.send(jsonMsg) #Sending json query
+    # Sending message to push the logs from STB to TM
+    #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'PushLog','STBfilename':boxFile,'TMfilename':tmFile}
+    jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"PushLog","params":{"STBfilename":"'+ boxFile +'","TMfilename":"'+ tmFile +'"}}\r\n'
+    #query = json.dumps(jsonMsg)
+    #tcpClient.send(query) #Sending json query
+    tcpClient.send(jsonMsg.encode()) #Sending json query
 
-	result = tcpClient.recv(1048) #Receiving response
-	tcpClient.close()
-	data = json.loads(result)
-	result=data["result"]
-	message=result["result"]
-	print message 
+    result = tcpClient.recv(1048).decode() #Receiving response
+    tcpClient.close()
+    data = json.loads(result)
+    result=data["result"]
+    message=result["result"]
+    print(message)
 
-	sys.stdout.flush()
+    sys.stdout.flush()
 
 except socket.error:
-	print "ERROR: Unable to connect agent.."
-	sys.stdout.flush()
-	sys.exit()
+    print("ERROR: Unable to connect agent..")
+    sys.stdout.flush()
+    sys.exit()
 
 except TypeError:
-	print "Connection Error!!! Transfer of " + boxFile + " Failed: Make sure Agent is running"
-	sys.exit()
+    print("Connection Error!!! Transfer of " + boxFile + " Failed: Make sure Agent is running")
+    sys.exit()
 
 except:
-	print "Error!!! Transfer of " + boxFile + " Failed.."
-	sys.exit()
+    print("Error!!! Transfer of " + boxFile + " Failed..")
+    sys.exit()
 
 #End of file

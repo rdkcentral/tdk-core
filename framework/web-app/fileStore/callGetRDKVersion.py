@@ -28,11 +28,10 @@ from getRDKVersion import getRDKVersion
 
 
 if((len(sys.argv))!=3):
-	print "Usage : python " + sys.argv[0] + " DeviceIP PortNumber"
-	print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090"
+    print("Usage : python " + sys.argv[0] + " DeviceIP PortNumber")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090")
 
 else:
-	deviceIP = sys.argv[1]
-	devicePort = (int)(sys.argv[2])
-	version = getRDKVersion(deviceIP,devicePort)
-
+    deviceIP = sys.argv[1]
+    devicePort = (int)(sys.argv[2])
+    version = getRDKVersion(deviceIP,devicePort)

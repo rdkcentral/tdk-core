@@ -973,7 +973,7 @@ class DeviceGroupController {
 							}
 					}
 				} catch (Exception e) {
-
+						e.printStackTrace()
 						Device.withTransaction {
 							Device dev = Device.findById(deviceInstance?.id)
 							if(dev){

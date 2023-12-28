@@ -163,8 +163,7 @@ class ExecutescriptService {
 			sFile?.id + COMMA_SEPERATOR + deviceInstance?.id + COMMA_SEPERATOR + SINGLE_QUOTES + isBenchMark + SINGLE_QUOTES + COMMA_SEPERATOR + SINGLE_QUOTES + isSystemDiagnostics + SINGLE_QUOTES + COMMA_SEPERATOR +
 			SINGLE_QUOTES + isMultiple + SINGLE_QUOTES + COMMA_SEPERATOR)
 
-
-		scriptData	 = scriptData + "\nprint \"SCRIPTEND#!@~\";"
+		scriptData	 = scriptData + "\nprint(\"SCRIPTEND#!@~\");"
 		Date date = new Date()
 		String newFile = FILE_STARTS_WITH+date.getTime().toString()+PYTHON_EXTENSION
 		File file = new File(filePath, newFile)
@@ -2604,7 +2603,7 @@ class ExecutescriptService {
 			if((absolutePath) && !(absolutePath.isEmpty())){
 
 				def cmdList = [
-					"python",
+					"python3",
 					absolutePath,
 					dev?.stbIp,
 					//dev?.logTransferPort,

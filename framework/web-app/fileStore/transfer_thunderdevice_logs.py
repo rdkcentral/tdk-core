@@ -24,8 +24,8 @@ import sys
 
 #Usage example
 if((len(sys.argv))!=7):
-        print "Usage : python " + sys.argv[0] + " DeviceIP username password LogFileName DestinationFolderPath DestinationFileName"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> root None /opt/logs/wpeframework.log /home/tdk/LOGS boxLog.log"
+    print("Usage : python " + sys.argv[0] + " DeviceIP username password LogFileName DestinationFolderPath DestinationFileName")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> root None /opt/logs/wpeframework.log /home/tdk/LOGS boxLog.log")
 
 else:
     host_ip = sys.argv[1]
@@ -40,5 +40,5 @@ else:
         p = subprocess.Popen(scp_command,shell=True)
         sts = p.wait()
     except Exception as error:
-        print "Failed to copy files from device"
-        print error
+        print("Failed to copy files from device")
+        print(error)

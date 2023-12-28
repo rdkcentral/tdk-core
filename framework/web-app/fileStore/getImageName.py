@@ -31,51 +31,51 @@ import sys
 #------------------------------------------------------------------------------
 
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 def getImageName(deviceIP,devicePort):
 
-        # Syntax       : getImageName.getImageName( deviceIP,devicePort )
-        # Description  : Sends a json query to get the RDK image name on device.
-        # Parameters   : deviceIP - IP address of the device under test.
-	#		 devicePort - Port Number of the device under test. 
-        # Return Value : Returns string which holds RDK image name on device.
+    # Syntax       : getImageName.getImageName( deviceIP,devicePort )
+    # Description  : Sends a json query to get the RDK image name on device.
+    # Parameters   : deviceIP - IP address of the device under test.
+    #                devicePort - Port Number of the device under test.
+    # Return Value : Returns string which holds RDK image name on device.
 
-	try:
-		tcpClient = getSocketInstance(deviceIP)
-		tcpClient.connect((deviceIP, devicePort))
+    try:
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, devicePort))
 
-       		#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'getImageName'}
-       		jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getImageName"}\r\n'
-     		#query = json.dumps(jsonMsg)
-        	#tcpClient.send(query) #Sending json query
-        	tcpClient.send(jsonMsg) #Sending json query
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'getImageName'}
+        jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"getImageName"}\r\n'
+        #query = json.dumps(jsonMsg)
+        #tcpClient.send(query) #Sending json query
+        tcpClient.send(jsonMsg.encode()) #Sending json query
 
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
 
-		if "Method not found" in result:
-			message = "METHOD_NOT_FOUND"
-			#sys.stdout.flush()
-		else:
-			data = json.loads(result)
-			resultJson = data["result"]
-			message = resultJson["result"]
-			sys.stdout.flush()
-		return message
+        if "Method not found" in result:
+            message = "METHOD_NOT_FOUND"
+            #sys.stdout.flush()
+        else:
+            data = json.loads(result)
+            resultJson = data["result"]
+            message = resultJson["result"]
+            sys.stdout.flush()
+        return message
 
-	except socket.error:
-		#print "AGENT_NOT_FOUND"
-		#sys.stdout.flush()
-		return "AGENT_NOT_FOUND"
+    except socket.error:
+        #print "AGENT_NOT_FOUND"
+        #sys.stdout.flush()
+        return "AGENT_NOT_FOUND"

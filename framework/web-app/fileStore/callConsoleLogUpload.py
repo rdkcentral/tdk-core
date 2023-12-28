@@ -27,13 +27,13 @@ import sys
 from consoleLogUpload import consoleLogUpload
 
 if((len(sys.argv))!=6):
-	print "Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName logUploadURL"
-	print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"AgentConsole.log\" \"111_222_333_AgentConsole.log\" http://<Valid TM IP Address>:8080/rdk-test-tool/"
+    print("Usage : python " + sys.argv[0] + " DeviceIP AgentMonitorPortNumber BoxFileName TMFileName logUploadURL")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8090 \"AgentConsole.log\" \"111_222_333_AgentConsole.log\" http://<Valid TM IP Address>:8080/rdk-test-tool/")
 
 else:
-	deviceIP = sys.argv[1]
-	agentMonitorPort = (int)(sys.argv[2])
-	boxFileName = sys.argv[3]
-	tmFileName = sys.argv[4]
-	logUploadURL = sys.argv[5]
-	consoleLogUpload(deviceIP,agentMonitorPort,boxFileName,tmFileName,logUploadURL)
+    deviceIP = sys.argv[1]
+    agentMonitorPort = (int)(sys.argv[2])
+    boxFileName = sys.argv[3]
+    tmFileName = sys.argv[4]
+    logUploadURL = sys.argv[5]
+    consoleLogUpload(deviceIP,agentMonitorPort,boxFileName,tmFileName,logUploadURL)

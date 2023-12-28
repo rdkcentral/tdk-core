@@ -31,64 +31,63 @@ import sys
 #------------------------------------------------------------------------------
 
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 def setTDKAvailablity(deviceIP,devicePort,option):
 
-	# Syntax       : setTDKAvailablity.setTDKAvailablity( deviceIP,devicePort,option )
-	# Description  : Sends a json query to enable/disable TDK in device under test.
-	# Parameters   : deviceIP - IP address of the device under test.
-	#		 devicePort - Port Number of the device under test.
-	#                option - enable/disable
-	# Return Value : Returns string which holds status.
+    # Syntax       : setTDKAvailablity.setTDKAvailablity( deviceIP,devicePort,option )
+    # Description  : Sends a json query to enable/disable TDK in device under test.
+    # Parameters   : deviceIP - IP address of the device under test.
+    #                devicePort - Port Number of the device under test.
+    #                option - enable/disable
+    # Return Value : Returns string which holds status.
 
-	try:
-        	port = devicePort
-		tcpClient = getSocketInstance(deviceIP)
-        	tcpClient.connect((deviceIP, port))
+    try:
+        port = devicePort
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, port))
 
-		print "Option : " , option
+        print("Option : " , option)
 
-		if "enable" in option:
-			#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'callEnableTDK'}
-			jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"callEnableTDK"}\r\n'
-		elif "disable" in option:
-			#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'callDisableTDK'}
-			jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"callDisableTDK"}\r\n'
-		else:
-			print "Invalid Option. Option should be enable/disable"
-			sys.exit()
-		query = json.dumps(jsonMsg)
-		tcpClient.send(query) #Sending json query
+        if "enable" in option:
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'callEnableTDK'}
+            jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"callEnableTDK"}\r\n'
+        elif "disable" in option:
+            #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'callDisableTDK'}
+            jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"callDisableTDK"}\r\n'
+        else:
+            print("Invalid Option. Option should be enable/disable")
+            sys.exit()
+        query = json.dumps(jsonMsg)
+        tcpClient.send(query.encode()) #Sending json query
 
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
 
-		if "Method not found." in result:
-			print "METHOD_NOT_FOUND"
-			sys.stdout.flush()
+        if "Method not found." in result:
+            print("METHOD_NOT_FOUND")
+            sys.stdout.flush()
 
-		else:
-			data = json.loads(result)
-			result=data["result"]
-			message=result["result"]
-			print "Status : ", message
-			sys.stdout.flush()
+        else:
+            data = json.loads(result)
+            result=data["result"]
+            message=result["result"]
+            print("Status : ", message)
+            sys.stdout.flush()
 
-                return message
+        return message
 
-	except socket.error:
-		print "AGENT_NOT_FOUND"
-		sys.stdout.flush()
-
+    except socket.error:
+        print("AGENT_NOT_FOUND")
+        sys.stdout.flush()

@@ -27,23 +27,23 @@ from devicestatus import getStatus
 # To enable time out
 class NotFoundException(Exception):
     pass
-    
+
 def timeout(signum, frame):
     raise NotFoundException
-		
+
 # Check the number of arguments and print the syntax if args not equal to 5
 if ( (len(sys.argv)) != 5):
-        print "Usage : python " + sys.argv[0] + " Device_IP_Address PortNumber Test_Manager_IP_Address Box_Name"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8088 <Valid TM IP Address> \"TVM_XG1\""
-        exit()
+    print("Usage : python " + sys.argv[0] + " Device_IP_Address PortNumber Test_Manager_IP_Address Box_Name")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 8088 <Valid TM IP Address> \"TVM_XG1\"")
+    exit()
 
 # Assigning Box IP address, port number, Test manager IP address and Box Name
 boxipaddress = sys.argv[1]
 port = int (sys.argv[2])
 testmanageripaddress = sys.argv[3]
 boxname = sys.argv[4]
-	
-	
+
+
 #SIGALRM is only usable on a unix platform
 signal.signal(signal.SIGALRM, timeout)
 
@@ -52,6 +52,6 @@ signal.alarm(15)
 
 try:
     status = getStatus(boxipaddress,testmanageripaddress,boxname,port)  # Calling getStatus to get box status
-    print status
+    print(status)
 except NotFoundException:
-    print "NOT_FOUND"
+    print("NOT_FOUND")

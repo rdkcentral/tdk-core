@@ -21,9 +21,9 @@ import requests
 import json
 
 if ( (len(sys.argv)) != 3):
-        print "Usage : python " + sys.argv[0] + " Device_IP_Address Thunder_Port"
-        print "eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 9998"
-        exit()
+    print("Usage : python " + sys.argv[0] + " Device_IP_Address Thunder_Port")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 9998")
+    exit()
 else:
     data = '{"jsonrpc":"2.0","id":"3","method": "Controller.1.status@Controller"}'
     headers = {'content-type': 'text/plain;',}
@@ -32,9 +32,9 @@ else:
     try:
         response = requests.post(url, headers=headers, data=data, timeout=3)
         if response.status_code == 200:
-            print "FREE"
+            print("FREE")
         else:
-            print "NOT_FOUND"
+            print("NOT_FOUND")
 
     except Exception as e:
-        print "NOT_FOUND"
+        print("NOT_FOUND")

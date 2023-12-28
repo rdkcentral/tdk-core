@@ -97,7 +97,7 @@ try:
         ls_mnt = subprocess.Popen(['ls','/mnt'])
         out = ls_tdk_mysql_database.communicate()
 
-        print "rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt"
+        print("rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt")
     elif ((len(sys.argv))==2):
         #version_name=str(sys.argv[1])
         fileName=sys.argv[1]
@@ -147,7 +147,7 @@ try:
             ls_mnt = subprocess.Popen(['ls','/mnt'])
             out = ls_tdk_mysql_database.communicate()
 
-            print "rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt"
+            print("rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt")
         else:
             os.chdir('./FOLDER')
             #version_name = raw_input("Please enter release tag name? ")
@@ -193,7 +193,7 @@ try:
 
             ls_mnt = subprocess.Popen(['ls','/mnt'])
             out = ls_tdk_mysql_database.communicate()
-            print "rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt"
+            print("rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt")
     else:
         filename=sys.argv[2]
         if(filename=="license=advanced") or (filename=="advanced"):
@@ -253,14 +253,14 @@ try:
             ls_mnt = subprocess.Popen(['ls','/mnt'])
             out = ls_tdk_mysql_database.communicate()
 
-            print "rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt"
+            print("rdk-test-tool.war annd rdktestproddbdump.sql copied to /mnt")
             
         else:
-            print "Please mention license tag for Advaned repo contents"
+            print("Please mention license tag for Advaned repo contents")
     #   filename = sys.argv[1]
     #   args = dict([arg.split('=', maxsplit=1) for arg in sys.argv[2:]])
     #   print "key value"
 except:
     e = sys.exc_info()[1]
-    print "Error occured : " + str(e)
+    print("Error occured : " + str(e))
     sys.exit()

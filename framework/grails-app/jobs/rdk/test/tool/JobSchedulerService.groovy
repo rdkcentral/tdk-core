@@ -1595,7 +1595,7 @@ class JobSchedulerService implements Job{
 				SINGLE_QUOTES + isMultiple + SINGLE_QUOTES + COMMA_SEPERATOR)// + gatewayIp + COMMA_SEPERATOR)
 
 
-		scriptData	 = scriptData + "\nprint \"SCRIPTEND#!@~\";"
+		scriptData	 = scriptData + "\nprint(\"SCRIPTEND#!@~\");"
 
 		Date date = new Date()
 		String newFile = FILE_STARTS_WITH+date.getTime().toString()+PYTHON_EXTENSION

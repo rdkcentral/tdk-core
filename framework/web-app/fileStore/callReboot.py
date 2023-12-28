@@ -31,54 +31,53 @@ import sys
 #------------------------------------------------------------------------------
 
 def isValidIpv6Address(ip):
-                try:
-                        socket.inet_pton(socket.AF_INET6, ip)
-                except socket.error:  # not a valid address
-                        return False
-                return True
+    try:
+        socket.inet_pton(socket.AF_INET6, ip)
+    except socket.error:  # not a valid address
+        return False
+    return True
 
 def getSocketInstance(ip):
-                if isValidIpv6Address(ip):
-                        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
-                else:
-                        tcpClient = socket.socket()
-                return tcpClient
+    if isValidIpv6Address(ip):
+        tcpClient = socket.socket(socket.AF_INET6, socket.SOCK_STREAM, 0)
+    else:
+        tcpClient = socket.socket()
+    return tcpClient
 
 def callReboot(deviceIP,devicePort):
 
-        # Syntax       : callReboot.callReboot( deviceIP,devicePort )
-        # Description  : Sends a json query to reboot connected STB.
-        # Parameters   : deviceIP - IP address of the device under test.
-	#		 devicePort - Port Number of the device under test. 
-        # Return Value : Nil
+    # Syntax       : callReboot.callReboot( deviceIP,devicePort )
+    # Description  : Sends a json query to reboot connected STB.
+    # Parameters   : deviceIP - IP address of the device under test.
+    #                devicePort - Port Number of the device under test.
+    # Return Value : Nil
 
-	try:
-        	port = devicePort
-		tcpClient = getSocketInstance(deviceIP)
-        	tcpClient.connect((deviceIP, port))
+    try:
+        port = devicePort
+        tcpClient = getSocketInstance(deviceIP)
+        tcpClient.connect((deviceIP, port))
 
-       		#jsonMsg = {'jsonrpc':'2.0','id':'2','method':'RebootBox'}
-       		jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"rebootBox"}\r\n'
-     		#query = json.dumps(jsonMsg)
-        	#tcpClient.send(query) #Sending json query
-                tcpClient.send(jsonMsg) #Sending json query
+        #jsonMsg = {'jsonrpc':'2.0','id':'2','method':'RebootBox'}
+        jsonMsg = '{"jsonrpc":"2.0","id":"2","method":"rebootBox"}\r\n'
+        #query = json.dumps(jsonMsg)
+        #tcpClient.send(query) #Sending json query
+        tcpClient.send(jsonMsg.encode()) #Sending json query
 
-		result = tcpClient.recv(1048) #Receiving response
-		tcpClient.close()
+        result = tcpClient.recv(1048).decode() #Receiving response
+        tcpClient.close()
 
-		if "Method not found." in result:
-                        print "METHOD_NOT_FOUND"
-			sys.stdout.flush()
+        if "Method not found." in result:
+            print("METHOD_NOT_FOUND")
+            sys.stdout.flush()
 
-		else:
-			data = json.loads(result)
-			result=data["result"]
-			message=result["result"]
-			print message
+        else:
+            data = json.loads(result)
+            result=data["result"]
+            message=result["result"]
+            print(message)
 
-			sys.stdout.flush()
+            sys.stdout.flush()
 
-	except socket.error:
-		print "AGENT_NOT_FOUND"
-		sys.stdout.flush()
-
+    except socket.error:
+        print("AGENT_NOT_FOUND")
+        sys.stdout.flush()
