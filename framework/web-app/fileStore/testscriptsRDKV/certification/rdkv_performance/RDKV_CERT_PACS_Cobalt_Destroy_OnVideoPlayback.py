@@ -66,7 +66,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 from StabilityTestUtility import *
 import PerformanceTestVariables
@@ -87,13 +87,13 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
@@ -102,7 +102,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -111,7 +111,7 @@ if expectedResult in result.upper():
         new_status_dict = get_plugins_status(obj,plugins_list)
         time.sleep(10)
         if new_status_dict != plugin_status_needed:
-            print "\n Error while setting status of plugins"
+            print("\n Error while setting status of plugins")
             status = "FAILURE"
     error_in_loop = False
     validation_dict = get_validation_params(obj)
@@ -126,7 +126,7 @@ if expectedResult in result.upper():
             cobalt_launch_status = launch_cobalt(obj)
             if cobalt_launch_status in expectedResult:
                 time.sleep(30)
-                print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
+                print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                 tdkTestObj.addParameter("value",cobalt_test_url)
@@ -135,7 +135,7 @@ if expectedResult in result.upper():
                 time.sleep(10)
                 if(cobalt_result in expectedResult):
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "Clicking OK to play video"
+                    print("Clicking OK to play video")
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                     for key_count in range(0,2):
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -146,10 +146,10 @@ if expectedResult in result.upper():
                         if not(count == 0 and key_count == 1):
                             time.sleep(50)
                         if result == "SUCCESS":
-                            print "\n Pressed OK key"
+                            print("\n Pressed OK key")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error during key press"
+                            print("\n Error during key press")
                             tdkTestObj.setResultStatus("FAILURE")
                             error_in_loop = True
                             break
@@ -164,19 +164,19 @@ if expectedResult in result.upper():
                             result_val = tdkTestObj.getResultDetails()
                             if result_val == "SUCCESS" :
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n Video playback is happening"
+                                print("\n Video playback is happening")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n Video playback is not happening"
+                                print("\n Video playback is not happening")
                                 break
                     if error_in_loop:
-                        print "\n Stopping the test"
+                        print("\n Stopping the test")
                         break
                 else:
-                    print "Unable to launch the url"
+                    print("Unable to launch the url")
                     tdkTestObj.setResultStatus("FAILURE")
                 #Deactivate cobalt
-                print "\n Exiting from Cobalt \n"
+                print("\n Exiting from Cobalt \n")
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin","Cobalt")
                 tdkTestObj.addParameter("status","deactivate")
@@ -185,20 +185,20 @@ if expectedResult in result.upper():
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "Unable to deactivate Cobalt"
+                    print("Unable to deactivate Cobalt")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to launch Cobalt \n"
+                print("\n Unable to launch Cobalt \n")
                 obj.setLoadModuleStatus("FAILURE")
         else:
-            print "\n Completing the test"
+            print("\n Completing the test")
     else:
-        print "\n[Error] Preconditions are not met \n"
+        print("\n[Error] Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if revert == "YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

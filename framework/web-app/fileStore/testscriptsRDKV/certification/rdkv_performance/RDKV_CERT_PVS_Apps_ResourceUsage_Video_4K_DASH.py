@@ -79,8 +79,8 @@
   <script_tags />
 </xml>
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+ # use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from web_socket_util import *
 import PerformanceTestVariables
 from MediaValidationUtility import *
@@ -103,7 +103,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -130,11 +130,11 @@ if expectedResult in result.upper():
     appArguments = getURLArguments()
     video_test_urls = []
     players_list = str(MediaValidationVariables.codec_dash_hevc).split(",")
-    print "SELECTED PLAYERS: ", players_list
+    print("SELECTED PLAYERS: ", players_list)
     # Getting the complete test app URL
     video_test_urls = getTestURLs(players_list,appArguments)
 
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     webkit_instance = PerformanceTestVariables.webkit_instance
@@ -151,7 +151,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -160,8 +160,8 @@ if expectedResult in result.upper():
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL in {}".format(webkit_instance)
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL in {}".format(webkit_instance))
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -171,15 +171,15 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS");
             webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
             time.sleep(10)
-            print "\nCurrent URL:",current_url
-            print "\nSet Lightning Application URL"
+            print("\nCurrent URL:",current_url)
+            print("\nSet Lightning Application URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",video_test_urls[0]);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             if expectedResult in result:
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
@@ -187,7 +187,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult();
                 if new_url in video_test_urls[0] and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "\n URL(",new_url,") is set successfully \n"
+                    print("\n URL(",new_url,") is set successfully \n")
                     if logging_method == "REST_API":
                         app_log_file = obj.logpath+"/"+str(obj.execID)+"/"+str(obj.execID)+"_"+str(obj.execDevId)+"_"+str(obj.resultId)+"_mvs_applog.txt"
                         continue_count = 0
@@ -199,7 +199,7 @@ if expectedResult in result.upper():
                         lastIndex = 0
                         while True:
                             if file_check_count > 60:
-                                print "\nREST API Logging is not happening properly. Exiting..."
+                                print("\nREST API Logging is not happening properly. Exiting...")
                                 break;
                             if os.path.exists(app_log_file):
                                 logging_flag = 1
@@ -210,7 +210,7 @@ if expectedResult in result.upper():
                         while logging_flag:
                             if continue_count > 60:
                                 hang_detected = 1
-                                print "\nApp not proceeding for 60 secs. Exiting..."
+                                print("\nApp not proceeding for 60 secs. Exiting...")
                                 break;
                             with open(app_log_file,'r') as f:
                                 lines = f.readlines()
@@ -235,7 +235,7 @@ if expectedResult in result.upper():
                         test_result = ""
                         while True:
                             if continue_count > 60:
-                                print "\n Lightning Application is not launched within 60 seconds"
+                                print("\n Lightning Application is not launched within 60 seconds")
                                 break
                             if (len(webkit_console_socket.getEventsBuffer())== 0):
                                 time.sleep(1)
@@ -248,20 +248,20 @@ if expectedResult in result.upper():
                         webkit_console_socket.disconnect()
                         time.sleep(5)
                     if "URL Info:" in test_result:
-                        print "\n Application launched successfully \n "
+                        print("\n Application launched successfully \n ")
                         tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                         tdkTestObj.executeTestCase(expectedResult)
                         resource_usage = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if expectedResult in result and resource_usage != "ERROR":
-                            print "\n Successfully validated Resource usage"
+                            print("\n Successfully validated Resource usage")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error while validating Resource usage"
+                            print("\n Error while validating Resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "\n Error occured during application launch"
+                        print("\n Error occured during application launch")
                     #Set the URL back to previous
                     tdkTestObj = obj.createTestStep('rdkservice_setValue');
                     tdkTestObj.addParameter("method",set_method);
@@ -269,28 +269,28 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult);
                     result = tdkTestObj.getResult();
                     if result == "SUCCESS":
-                        print "\n URL is reverted successfully \n"
+                        print("\n URL is reverted successfully \n")
                         tdkTestObj.setResultStatus("SUCCESS");
                     else:
-                        print "\n Failed to revert the URL"
+                        print("\n Failed to revert the URL")
                         tdkTestObj.setResultStatus("FAILURE");
                 else:
-                    print "\n Failed to load the URL,new URL: %s" %(new_url)
+                    print("\n Failed to load the URL,new URL: %s" %(new_url))
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "\n Failed to set the URL"
+                print("\n Failed to set the URL")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\n Unable to get the current URL"
+            print("\n Unable to get the current URL")
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "\n Failed to load module"
+    print("\n Failed to load module")

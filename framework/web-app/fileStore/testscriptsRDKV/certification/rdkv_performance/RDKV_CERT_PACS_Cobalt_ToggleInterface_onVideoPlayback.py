@@ -56,9 +56,9 @@ tm_password : string</input_parameters>
     <automation_approch>1. Launch Cobalt using RDKShell
 2. Set video URL and click OK to play video
 3. Validate video playback using decoder entries if the platform supports
-4. Check the current network interface and toggle the interface 
+4. Check the current network interface and toggle the interface
 5. Validate video playback using decoder entries if the platform supports
-6. Revert the network interface 
+6. Revert the network interface
 7. Close Cobalt</automation_approch>
     <expected_output>Video playback should be happening even if interface is toggled.</expected_output>
     <priority>High</priority>
@@ -70,7 +70,7 @@ tm_password : string</input_parameters>
   </test_cases>
 </xml>
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 from StabilityTestUtility import *
 import PerformanceTestVariables
@@ -92,12 +92,12 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
@@ -107,7 +107,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -115,7 +115,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
-            print "\n Unable to set status of plugins"
+            print("\n Unable to set status of plugins")
             status = "FAILURE"
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
@@ -132,7 +132,7 @@ if expectedResult in result.upper():
             cobalt_launch_status = launch_cobalt(obj)
             if cobalt_launch_status in expectedResult:
                 time.sleep(30)
-                print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
+                print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                 tdkTestObj.addParameter("value",cobalt_test_url)
@@ -141,7 +141,7 @@ if expectedResult in result.upper():
                 time.sleep(10)
                 if(cobalt_result in expectedResult):
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "Clicking OK to play video"
+                    print("Clicking OK to play video")
                     for iteration in range(0,2):
                         params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -153,7 +153,7 @@ if expectedResult in result.upper():
                             time.sleep(35)
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error while executing generateKey method"
+                            print("\n Error while executing generateKey method")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
@@ -166,10 +166,10 @@ if expectedResult in result.upper():
                             tdkTestObj.executeTestCase(expectedResult)
                             result_val = tdkTestObj.getResultDetails()
                             if result_val == "SUCCESS" :
-                                print "\n Video playback is happening"
+                                print("\n Video playback is happening")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "\n Video playback is not happening"
+                                print("\n Video playback is not happening")
                                 tdkTestObj.setResultStatus("FAILURE")
                         if result_val == "SUCCESS":
                             connect_status, revert_dict, revert_plugin_status,deviceAvailability = connect_to_interface(obj,new_interface)
@@ -189,33 +189,33 @@ if expectedResult in result.upper():
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result_val = tdkTestObj.getResultDetails()
                                         if result_val == "SUCCESS" :
-                                            print "\n Video playback is happening after toggling the network interface"
+                                            print("\n Video playback is happening after toggling the network interface")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
-                                            print "\n Video playback is not happening after toggling the network interface"
+                                            print("\n Video playback is not happening after toggling the network interface")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n User opted for no validation, completing the test"
+                                        print("\n User opted for no validation, completing the test")
                                 else:
-                                    print "\n Error while moving Cobalt to front"
+                                    print("\n Error while moving Cobalt to front")
                             else:
-                                print "\n Error while setting interface as :{}".format(new_interface)
+                                print("\n Error while setting interface as :{}".format(new_interface))
                                 tdkTestObj.setResultStatus("FAILURE")
                             movetofront_result = move_plugin(obj,"WebKitBrowser","moveToFront")
-                            result_status, revert_dict_new, revert_plugins,deviceAvailability = connect_to_interface(obj, current_interface) 
+                            result_status, revert_dict_new, revert_plugins,deviceAvailability = connect_to_interface(obj, current_interface)
                             if result_status == "SUCCESS" and deviceAvailability == "Yes":
-                                print "\n Successfully reverted the interface to: {}".format(current_interface)
+                                print("\n Successfully reverted the interface to: {}".format(current_interface))
                             else:
-                                print "\n Error while reverting the interface to: {}".format(current_interface)
+                                print("\n Error while reverting the interface to: {}".format(current_interface))
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Stopping the test "
+                            print("\n Stopping the test ")
                             tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Unable to launch the url"
+                    print("\n Unable to launch the url")
                     tdkTestObj.setResultStatus("FAILURE")
                 #Deactivate cobalt
-                print "\n Exiting from Cobalt "
+                print("\n Exiting from Cobalt ")
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin","Cobalt")
                 tdkTestObj.addParameter("status","deactivate")
@@ -224,21 +224,21 @@ if expectedResult in result.upper():
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Unable to deactivate Cobalt"
+                    print("\n Unable to deactivate Cobalt")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to launch Cobalt \n"
+                print("\n Unable to launch Cobalt \n")
                 obj.setLoadModuleStatus("FAILURE")
     else:
-        print "\n[Error] Preconditions are not met \n"
+        print("\n[Error] Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         if revert == "YES":
-            print "\n Revert the values before exiting"
+            print("\n Revert the values before exiting")
             status = set_plugins_status(obj,curr_plugins_status_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

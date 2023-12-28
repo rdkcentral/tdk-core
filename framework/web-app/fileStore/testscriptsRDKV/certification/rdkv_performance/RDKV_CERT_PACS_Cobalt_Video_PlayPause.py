@@ -69,8 +69,8 @@
 </xml>
 
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+ # use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from rdkv_performancelib import *
 import rdkv_performancelib
 import PerformanceTestVariables
@@ -91,14 +91,14 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url;
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url value\n"
+        print("\n Please configure the cobalt_test_url value\n")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt"]
@@ -111,9 +111,9 @@ if expectedResult in result.upper():
     cobal_launch_status = launch_cobalt(obj)
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         time.sleep(30)
-        print "\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url)
+        print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","Cobalt.1.deeplink")
         tdkTestObj.addParameter("value",cobalt_test_url)
@@ -122,7 +122,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         if(cobalt_result == expectedResult):
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Clicking OK to play video"
+            print("Clicking OK to play video")
             params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -147,7 +147,7 @@ if expectedResult in result.upper():
                     else:
                         password = validation_dict["password"]
                     credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-                    print "\n check whether video is playing"
+                    print("\n check whether video is playing")
                     tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                     tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                     tdkTestObj.addParameter("credentials",credentials)
@@ -155,12 +155,12 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult)
                     result_val = tdkTestObj.getResultDetails()
                 else:
-                    print "\n Validation is not required, proceeding the test \n"
+                    print("\n Validation is not required, proceeding the test \n")
                 if result_val == "SUCCESS" or not validation_dict["validation_required"]:
                     tdkTestObj.setResultStatus("SUCCESS")
                     if validation_dict["validation_required"]:
-                        print "\nVideo playback is happening\n"
-                    print "\n Pause video for 10 seconds \n"
+                        print("\nVideo playback is happening\n")
+                    print("\n Pause video for 10 seconds \n")
                     params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -170,7 +170,7 @@ if expectedResult in result.upper():
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                         if validation_dict["validation_required"]:
-                            print "\n Check video is paused"
+                            print("\n Check video is paused")
                             tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                             tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                             tdkTestObj.addParameter("credentials",credentials)
@@ -180,9 +180,9 @@ if expectedResult in result.upper():
                         else:
                             result_val = "FAILURE"
                         if result_val != "SUCCESS":
-                            print "\n Video is paused"
+                            print("\n Video is paused")
                             time.sleep(10)
-                            print "\n Play the video \n"
+                            print("\n Play the video \n")
                             params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -192,7 +192,7 @@ if expectedResult in result.upper():
                             if result == "SUCCESS":
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 if validation_dict["validation_required"]:
-                                    print "Check whether video is playing"
+                                    print("Check whether video is playing")
                                     tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                                     tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                                     tdkTestObj.addParameter("credentials",credentials)
@@ -200,33 +200,33 @@ if expectedResult in result.upper():
                                     tdkTestObj.executeTestCase(expectedResult)
                                     result_val = tdkTestObj.getResultDetails()
                                     if result_val == "SUCCESS" :
-                                        print "\nVideo playback is happening\n"
+                                        print("\nVideo playback is happening\n")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n Video playback is not happening \n"
+                                        print("\n Video playback is not happening \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\nPause and Play operation is completed \n"
+                                    print("\nPause and Play operation is completed \n")
                                     tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "Unable to play from pause"
+                                print("Unable to play from pause")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Video is not paused"
+                            print("Video is not paused")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Unable to pause the video"
+                        print("Unable to pause the video")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "Video is not playing"
+                    print("Video is not playing")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Unable to click OK"
+                print("Unable to click OK")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Unable to load the cobalt_test_url"
+            print("Unable to load the cobalt_test_url")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exiting from Cobalt \n"
+        print("\n Exiting from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -235,15 +235,15 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

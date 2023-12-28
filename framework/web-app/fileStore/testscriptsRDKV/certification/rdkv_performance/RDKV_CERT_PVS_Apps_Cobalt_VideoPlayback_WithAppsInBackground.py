@@ -64,8 +64,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from rdkv_performancelib import *
 import PerformanceTestVariables
 from StabilityTestUtility import *
@@ -85,15 +85,15 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url;
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url value\n"
+        print("\n Please configure the cobalt_test_url value\n")
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt"]
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
@@ -107,7 +107,7 @@ if expectedResult in result.upper():
             status = "FAILURE"
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
-        print "\n Launching WebKitBrowser \n"
+        print("\n Launching WebKitBrowser \n")
         webkit_status,webkit_start_time = launch_plugin(obj,"WebKitBrowser")
         time.sleep(5)
         if webkit_status == "SUCCESS":
@@ -130,7 +130,7 @@ if expectedResult in result.upper():
                         if expectedResult in cobalt_result:
                             tdkTestObj.setResultStatus("SUCCESS")
                             if cobalt_curr_status in ("resumed","activated"):
-                                print "\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url)
+                                print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                 tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                                 tdkTestObj.addParameter("value",cobalt_test_url)
@@ -139,7 +139,7 @@ if expectedResult in result.upper():
                                 time.sleep(10)
                                 if expectedResult in result:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "Clicking OK to play video"
+                                    print("Clicking OK to play video")
                                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -163,7 +163,7 @@ if expectedResult in result.upper():
                                             else:
                                                 password = validation_dict["password"]
                                             credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-                                            print "\n check whether video is playing"
+                                            print("\n check whether video is playing")
                                             tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                                             tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                                             tdkTestObj.addParameter("credentials",credentials)
@@ -171,30 +171,30 @@ if expectedResult in result.upper():
                                             tdkTestObj.executeTestCase(expectedResult)
                                             result_val = tdkTestObj.getResultDetails()
                                         else:
-                                            print "\n Validation is not required, completing the test\n"
+                                            print("\n Validation is not required, completing the test\n")
                                         if result_val == "SUCCESS" or not validation_dict["validation_required"]:
                                             if validation_dict["validation_required"]:
-                                                print "\nVideo playback is happening\n"
+                                                print("\nVideo playback is happening\n")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
-                                            print "\n Video playback is not happening \n"
+                                            print("\n Video playback is not happening \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Unable to press OK button \n"
+                                        print("\n Unable to press OK button \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "Error while setting URL in Cobalt using Deeplink method \n"
+                                    print("Error while setting URL in Cobalt using Deeplink method \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Cobalt is not activated, current status is: {} \n".format(cobalt_curr_status)
+                                print("\n Cobalt is not activated, current status is: {} \n".format(cobalt_curr_status))
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Unable to get Cobalt status \n"
+                            print("\n Unable to get Cobalt status \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while launching Cobalt \n"
+                        print("\n Error while launching Cobalt \n")
                         tdkTestObj.setResultStatus("FAILURE")
-                    print "\n Exiting from Cobalt \n"
+                    print("\n Exiting from Cobalt \n")
                     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                     tdkTestObj.addParameter("plugin","Cobalt")
                     tdkTestObj.addParameter("status","deactivate")
@@ -203,15 +203,15 @@ if expectedResult in result.upper():
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "Unable to deactivate Cobalt"
+                        print("Unable to deactivate Cobalt")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n WebkitBrowser is not activated, current status is: {} \n".format(webkit_curr_status)
+                    print("\n WebkitBrowser is not activated, current status is: {} \n".format(webkit_curr_status))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to get WebKitBrowser status \n"
+                print("\n Unable to get WebKitBrowser status \n")
                 tdkTestObj.setResultStatus("FAILURE")
-            print "\n Exiting from WebKit \n"
+            print("\n Exiting from WebKit \n")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin","WebKitBrowser")
             tdkTestObj.addParameter("status","deactivate")
@@ -220,18 +220,18 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Unable to deactivate WebKitBrowser"
+                print("Unable to deactivate WebKitBrowser")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to launch WebKitBrowser \n"
+            print("\n Unable to launch WebKitBrowser \n")
             obj.setLoadModuleStatus("FAILURE")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

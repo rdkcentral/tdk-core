@@ -108,13 +108,13 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 conf_file, status = get_configfile_name(obj);
 result, current_cobalt_version = getDeviceConfigKeyValue(conf_file,"CURRENT_COBALT_VERSION")
 
 expectedResult = "SUCCESS"
-print "current_cobalt_version ", current_cobalt_version
+print("current_cobalt_version ", current_cobalt_version)
 if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
     tdkTestObj.addParameter("realpath",obj.realpath)
@@ -134,15 +134,15 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and "Cobalt version" in output:
-                print "\n Checking Cobalt version\n"
-                output = output.replace(command,"")
-                cobalt_version = (output.split('Cobalt version ')[1].split('\n')[0])
-                if (cobalt_version.__contains__(current_cobalt_version)):
-                    print "\n Cobalt version is the current version :{}  \n".format(cobalt_version)
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print "\n Cobalt version is not  current version: {}\n".format(cobalt_version)
-                    tdkTestObj.setResultStatus("FAILURE")
+            print("\n Checking Cobalt version\n")
+            output = output.replace(command,"")
+            cobalt_version = (output.split('Cobalt version ')[1].split('\n')[0])
+            if (cobalt_version.__contains__(current_cobalt_version)):
+                print("\n Cobalt version is the current version :{}  \n".format(cobalt_version))
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("\n Cobalt version is not  current version: {}\n".format(cobalt_version))
+                tdkTestObj.setResultStatus("FAILURE")
         elif output != "EXCEPTION":
             status = "SUCCESS"
             revert = "NO"
@@ -151,56 +151,56 @@ if expectedResult in result.upper():
             plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
             curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
             if curr_plugins_status_dict != plugin_status_needed:
-        	revert = "YES"
-        	status = set_plugins_status(obj,plugin_status_needed)
-    	    cobal_launch_status = launch_cobalt(obj)
-    	    if status == "SUCCESS" and cobal_launch_status == "SUCCESS":
-        		time.sleep(10)
-        		print "\n Cobalt is launched \n "
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
-                        tdkTestObj.addParameter("realpath",obj.realpath)
-                        tdkTestObj.addParameter("deviceIP",obj.IP)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        result = tdkTestObj.getResult()
-                        ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-                        if ssh_param_dict != {} and expectedResult in result:
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            command = 'cat /opt/logs/wpeframework.log | grep "Cobalt" | grep "lts"'
-                            time.sleep(10)
-                            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-                            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-                            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
-                            tdkTestObj.addParameter("command",command)
-                            tdkTestObj.executeTestCase(expectedResult)
-                            result = tdkTestObj.getResult()
-                            output = tdkTestObj.getResultDetails()
-                            if output != "EXCEPTION" and expectedResult in result:
-                                if "Cobalt/" in output:
-                                    index_value = output.split("Cobalt/")[1].index(" ")
-                                    cobalt_version = output.split("Cobalt/")[1][0:index_value]
-                                    if (cobalt_version.__contains__(current_cobalt_version)):
-                                        print "\n Cobalt version is the current version :{}  \n".format(cobalt_version)
-                                        tdkTestObj.setResultStatus("SUCCESS")
-                                    else:
-                                        print "\n Cobalt version is not  current version: {}\n".format(cobalt_version)
-                                        tdkTestObj.setResultStatus("FAILURE")
-                                else:
-                                    print "\n Cobalt version is not available\n"
-                                    tdkTestObj.setResultStatus("FAILURE")
+                revert = "YES"
+                status = set_plugins_status(obj,plugin_status_needed)
+            cobal_launch_status = launch_cobalt(obj)
+            if status == "SUCCESS" and cobal_launch_status == "SUCCESS":
+                time.sleep(10)
+                print("\n Cobalt is launched \n ")
+                tdkTestObj.setResultStatus("SUCCESS")
+                tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+                tdkTestObj.addParameter("realpath",obj.realpath)
+                tdkTestObj.addParameter("deviceIP",obj.IP)
+                tdkTestObj.executeTestCase(expectedResult)
+                result = tdkTestObj.getResult()
+                ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+                if ssh_param_dict != {} and expectedResult in result:
+                    tdkTestObj.setResultStatus("SUCCESS")
+                    command = 'cat /opt/logs/wpeframework.log | grep "Cobalt" | grep "lts"'
+                    time.sleep(10)
+                    tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                    tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                    tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                    tdkTestObj.addParameter("command",command)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    result = tdkTestObj.getResult()
+                    output = tdkTestObj.getResultDetails()
+                    if output != "EXCEPTION" and expectedResult in result:
+                        if "Cobalt/" in output:
+                            index_value = output.split("Cobalt/")[1].index(" ")
+                            cobalt_version = output.split("Cobalt/")[1][0:index_value]
+                            if (cobalt_version.__contains__(current_cobalt_version)):
+                                print("\n Cobalt version is the current version :{}  \n".format(cobalt_version))
+                                tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command)
+                                print("\n Cobalt version is not  current version: {}\n".format(cobalt_version))
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Cobalt has not been resumed successfully\n"
+                            print("\n Cobalt version is not available\n")
                             tdkTestObj.setResultStatus("FAILURE")
+                    else:
+                        print("\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command))
+                        tdkTestObj.setResultStatus("FAILURE")
+                else:
+                    print("\n Cobalt has not been resumed successfully\n")
+                    tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while launching the plugin\n"
+                print("\n Error while launching the plugin\n")
                 tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Please configure the SSH details in configuration file \n"
+        print("\n Please configure the SSH details in configuration file \n")
         tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

@@ -67,7 +67,7 @@ f) Load a video using Deeplink method
 g) Validate CPU load and memory usage
 3. Revert to the default interface and plugins status</automation_approch>
     <expected_output>If default interface is ETHERNET then DUT should connect to WIFI.
-The methods of each plugin must work fine.  
+The methods of each plugin must work fine.
 The CPU load and memory usage must be within the expected range.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_performance</test_stub_interface>
@@ -79,8 +79,8 @@ The CPU load and memory usage must be within the expected range.</expected_outpu
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 import PerformanceTestVariables
@@ -102,12 +102,12 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     connected_to_5ghz = True
     ssid_freq = ""
@@ -128,11 +128,11 @@ if expectedResult in result.upper():
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
         plugin_status,plugins_status_dict,revert = set_plugins(obj)
         if plugin_status == "SUCCESS":
             revert_plugins_dict.update(plugins_status_dict)
-            print "\n Check frequency of Connected SSID"
+            print("\n Check frequency of Connected SSID")
             ssid_freq = check_cur_ssid_freq(obj)
             if ssid_freq == "FAILURE":
                 status = "FAILURE"
@@ -171,17 +171,17 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult);
                     result1 = tdkTestObj.getResult();
                     if expectedResult in result1:
-                        print "\n Deviceinfo is activated"
+                        print("\n Deviceinfo is activated")
                         tdkTestObj.setResultStatus("SUCCESS")
                         device_info_activated = True
                     else:
-                        print "\n Error while activating DeviceInfo"
+                        print("\n Error while activating DeviceInfo")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                   print "\n Device info is in activated state"
-                   device_info_activated = True
+                    print("\n Device info is in activated state")
+                    device_info_activated = True
             else:
-                print "\n Error while getting DeviceInfo status"
+                print("\n Error while getting DeviceInfo status")
                 tdkTestObj.setResultStatus("FAILURE")
             if device_info_activated:
                 if validation_dict["validation_required"]:
@@ -195,7 +195,7 @@ if expectedResult in result.upper():
                 if status == "SUCCESS":
                     cobal_launch_status = launch_cobalt(obj)
                     time.sleep(30)
-                    print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
+                    print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                     tdkTestObj.addParameter("value",cobalt_test_url)
@@ -204,7 +204,7 @@ if expectedResult in result.upper():
                     time.sleep(10)
                     if(cobalt_result in expectedResult and cobal_launch_status in expectedResult ):
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "Clicking OK to play video"
+                        print("Clicking OK to play video")
                         params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -230,10 +230,10 @@ if expectedResult in result.upper():
                                 result_val = tdkTestObj.getResultDetails()
                                 if result_val == "SUCCESS" :
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n Video playback is happening"
+                                    print("\n Video playback is happening")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print " \n Video playback is not happening"
+                                    print(" \n Video playback is not happening")
                             if result_val == "SUCCESS":
                                 tdkTestObj = obj.createTestStep('rdkservice_getCPULoad')
                                 tdkTestObj.executeTestCase(expectedResult)
@@ -249,13 +249,13 @@ if expectedResult in result.upper():
                                     result = tdkTestObj.getResult()
                                     is_high_cpuload = tdkTestObj.getResultDetails()
                                     if is_high_cpuload == "YES"  or expectedResult not in result:
-                                        print "\n CPU load is high :{}%".format(cpuload)
+                                        print("\n CPU load is high :{}%".format(cpuload))
                                         tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print "\n CPU load: {}%".format(cpuload)
+                                        print("\n CPU load: {}%".format(cpuload))
                                 else:
-                                    print "\n Unable to get cpuload"
+                                    print("\n Unable to get cpuload")
                                     tdkTestObj.setResultStatus("FAILURE")
                                 #get the memory usage
                                 tdkTestObj = obj.createTestStep('rdkservice_getMemoryUsage')
@@ -272,22 +272,22 @@ if expectedResult in result.upper():
                                     result = tdkTestObj.getResult()
                                     is_high_memory_usage = tdkTestObj.getResultDetails()
                                     if is_high_memory_usage == "YES" or expectedResult not in result:
-                                        print "\n Memory usage is high :{}%".format(memory_usage)
+                                        print("\n Memory usage is high :{}%".format(memory_usage))
                                         tdkTestObj.setResultStatus("FAILURE")
                                     else:
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print "\n Memory usage is {}%".format(memory_usage)
+                                        print("\n Memory usage is {}%".format(memory_usage))
                                 else:
-                                    print "\n Unable to get the memory usage"
+                                    print("\n Unable to get the memory usage")
                                     tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Unable to press OK button"
+                            print("\n Unable to press OK button")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Unable to launch the url"
+                        print("\n Unable to launch the url")
                         tdkTestObj.setResultStatus("FAILURE")
                     #Deactivate cobalt
-                    print "\n Exiting from Cobalt"
+                    print("\n Exiting from Cobalt")
                     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                     tdkTestObj.addParameter("plugin","Cobalt")
                     tdkTestObj.addParameter("status","deactivate")
@@ -296,23 +296,23 @@ if expectedResult in result.upper():
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "\n Unable to deactivate Cobalt"
+                        print("\n Unable to deactivate Cobalt")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Precondition to suspend WebKitBrowser didn't work"
+                    print("\n Precondition to suspend WebKitBrowser didn't work")
             else:
-                print "\n Precondition to activate DeviceInfo is not working"
+                print("\n Precondition to activate DeviceInfo is not working")
             if revert_wifi_ssid:
-                print "\n Reconnecting to 2.4 GHZ SSID"
+                print("\n Reconnecting to 2.4 GHZ SSID")
                 connect_wifi_status = connect_wifi(obj,"2.4")
                 if connect_wifi_status == "FAILURE":
-                    print "\n Error while reconnecting to 2.4 GHZ SSID"
+                    print("\n Error while reconnecting to 2.4 GHZ SSID")
                     tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while connecting to 5GHZ SSID"
+            print("\n Error while connecting to 5GHZ SSID")
             obj.setLoadModuleStatus("FAILURE")
     else:
-        print "\n[Error] Preconditions are not met "
+        print("\n[Error] Preconditions are not met ")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         if revert_if == "YES" and status == "SUCCESS":
@@ -320,16 +320,16 @@ if expectedResult in result.upper():
             time.sleep(60)
             interface_status ,deviceAvailability = set_default_interface(obj,"ETHERNET")
             if interface_status == "SUCCESS" and resume_status == "SUCCESS":
-                print "\n Successfully reverted to ETHERNET"
+                print("\n Successfully reverted to ETHERNET")
                 status = close_lightning_app(obj)
             else:
-                print "\n Error while reverting to ETHERNET"
+                print("\n Error while reverting to ETHERNET")
                 obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

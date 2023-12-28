@@ -71,8 +71,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import PerformanceTestVariables
 from StabilityTestUtility import *
 from datetime import datetime
@@ -90,22 +90,22 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PACS_Cobalt_TimeTo_Video_PlayPause');
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url value\n"
+        print("\n Please configure the cobalt_test_url value\n")
     plugins_list = ["Cobalt","WebKitBrowser"]
     plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
@@ -124,10 +124,10 @@ if expectedResult in result.upper():
     if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {} and cobalt_test_url != "":
         tdkTestObj.setResultStatus("SUCCESS")
         cobal_launch_status = launch_cobalt(obj)
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         time.sleep(30)
         if cobal_launch_status == "SUCCESS":
-            print "\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url)
+            print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","Cobalt.1.deeplink")
             tdkTestObj.addParameter("value",cobalt_test_url)
@@ -136,7 +136,7 @@ if expectedResult in result.upper():
             time.sleep(20)
             if(cobalt_result == expectedResult):
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Clicking OK to play video"
+                print("Clicking OK to play video")
                 params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -153,7 +153,7 @@ if expectedResult in result.upper():
                 time.sleep(50)
                 if "SUCCESS" == (result1 and result2):
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n Check video is started \n"
+                    print("\n Check video is started \n")
                     command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                     tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -168,10 +168,10 @@ if expectedResult in result.upper():
                         video_played_time = getTimeStampFromString(video_playing_log)
                         video_played_time_in_millisec = getTimeInMilliSec(video_played_time)
                         if video_played_time_in_millisec > video_play_starttime_in_millisec:
-                            print "\n Video started Playing\n"
+                            print("\n Video started Playing\n")
                             tdkTestObj.setResultStatus("SUCCESS")
                             time.sleep(10)
-                            print "\n Pausing Video \n"
+                            print("\n Pausing Video \n")
                             params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -182,7 +182,7 @@ if expectedResult in result.upper():
                             if result == "SUCCESS":
                                 time.sleep(20)
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n Check video is paused \n"
+                                print("\n Check video is paused \n")
                                 command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
                                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                 tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -198,10 +198,10 @@ if expectedResult in result.upper():
                                     video_pausedtime_in_millisec = getTimeInMilliSec(video_pausedtime)
                                     time_for_video_pause = video_pausedtime_in_millisec - pause_starttime_in_millisec
                                     if video_pausedtime_in_millisec > pause_starttime_in_millisec:
-                                        print "\n Video is paused \n"
+                                        print("\n Video is paused \n")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         #Play video
-                                        print "\n Play video \n"
+                                        print("\n Play video \n")
                                         params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -210,7 +210,7 @@ if expectedResult in result.upper():
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result = tdkTestObj.getResult()
                                         if result == "SUCCESS":
-                                            print "\n Check video is playing \n"
+                                            print("\n Check video is playing \n")
                                             time.sleep(20)
                                             command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -224,7 +224,7 @@ if expectedResult in result.upper():
                                                 playing_log = output.split('\n')[1]
                                                 play_starttime_in_millisec = getTimeInMilliSec(play_start_time)
                                                 video_playedtime = getTimeStampFromString(playing_log)
-                                                print "\n Played time",video_playedtime
+                                                print("\n Played time",video_playedtime)
                                                 video_playedtime_in_millisec = getTimeInMilliSec(video_playedtime)
                                                 time_for_video_play = video_playedtime_in_millisec - play_starttime_in_millisec
                                                 #Get threshold values from device config file
@@ -236,66 +236,66 @@ if expectedResult in result.upper():
                                                 offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                                 Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                                 if all(value != "" for value in (cobalt_pause_threshold,cobalt_play_threshold,offset)):
-                                                    print "\n play initiated at {} ".format(play_start_time)
+                                                    print("\n play initiated at {} ".format(play_start_time))
                                                     Summ_list.append('play initiated at :{}'.format(play_start_time))
-                                                    print "\n play happend at {} ".format(video_playedtime)
+                                                    print("\n play happend at {} ".format(video_playedtime))
                                                     Summ_list.append('play happend at :{}'.format(video_playedtime))
-                                                    print "\n Time taken for play operation: {} milliseconds \n".format(time_for_video_play)
+                                                    print("\n Time taken for play operation: {} milliseconds \n".format(time_for_video_play))
                                                     Summ_list.append('Time taken for play operation :{}ms'.format(time_for_video_play))
-                                                    print "\n Threshold value for time taken for play operation : {} ms".format(cobalt_play_threshold)
+                                                    print("\n Threshold value for time taken for play operation : {} ms".format(cobalt_play_threshold))
                                                     if 0 < int(time_for_video_play) < (int(cobalt_play_threshold) + int(offset)):
-                                                        print "\n Time taken for play operation is within the expected limit"
+                                                        print("\n Time taken for play operation is within the expected limit")
                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                     else:
-                                                        print "\n Time taken for play operation is not within the expected limit"
+                                                        print("\n Time taken for play operation is not within the expected limit")
                                                         tdkTestObj.setResultStatus("FAILURE")
-                                                    print "\n pause initiated at {} ".format(pause_start_time)
+                                                    print("\n pause initiated at {} ".format(pause_start_time))
                                                     Summ_list.append('pause initiated at :{}'.format(pause_start_time))
-                                                    print "\n pause happend at {} (UTC)".format(video_pausedtime)
+                                                    print("\n pause happend at {} (UTC)".format(video_pausedtime))
                                                     Summ_list.append('pause happend at :{}'.format(video_pausedtime))
-                                                    print "\n Time taken for pause operation: {} milleseconds \n".format(time_for_video_pause)
+                                                    print("\n Time taken for pause operation: {} milleseconds \n".format(time_for_video_pause))
                                                     Summ_list.append('Time taken for pause operation :{}ms'.format(time_for_video_pause))
-                                                    print "\n Threshold value for time taken for pause operation : {} ms".format(cobalt_pause_threshold)
+                                                    print("\n Threshold value for time taken for pause operation : {} ms".format(cobalt_pause_threshold))
                                                     if 0 < int(time_for_video_pause) < (int(cobalt_pause_threshold) + int(offset)):
-                                                        print "\n Time taken for pause operation is within the expected limit \n"
+                                                        print("\n Time taken for pause operation is within the expected limit \n")
                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                     else:
-                                                        print "\n Time taken for pause operation is not within the expected limit \n"
+                                                        print("\n Time taken for pause operation is not within the expected limit \n")
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                 else:
-                                                    print "\n Please configure the threshold values in device config file \n"
+                                                    print("\n Please configure the threshold values in device config file \n")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Video play related logs are not available"
+                                                print("\n Video play related logs are not available")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error while executing generateKey method \n"
+                                            print("\n Error while executing generateKey method \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Video pause related logs are not available \n"
+                                        print("\n Video pause related logs are not available \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Video pause related logs are not available"
+                                    print("\n Video pause related logs are not available")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while executing generateKey method \n"
+                                print("\n Error while executing generateKey method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Video is not started playing \n"
+                            print("\n Video is not started playing \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Video play related logs are not available \n"
+                        print("\n Video play related logs are not available \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while executing generateKey method \n"
+                    print("\n Error while executing generateKey method \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing deeplink method \n"
+                print("\n Error while executing deeplink method \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while launching Cobalt \n"
+            print("\n Error while launching Cobalt \n")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exiting from Cobalt \n"
+        print("\n Exiting from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -304,17 +304,17 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         tdkTestObj.setResultStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

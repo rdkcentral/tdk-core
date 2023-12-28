@@ -77,8 +77,8 @@ Video must pause after pressing space key and it should continue to play after s
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 import PerformanceTestVariables
@@ -100,12 +100,12 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert_plugins_dict = {}
     revert_if  = revert_device_info = revert_plugins = "NO"
@@ -123,7 +123,7 @@ if expectedResult in result.upper():
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
     validation_dict = get_validation_params(obj)
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
@@ -132,7 +132,7 @@ if expectedResult in result.upper():
         if status == "SUCCESS":
             cobal_launch_status = launch_cobalt(obj)
             time.sleep(30)
-            print "\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url)
+            print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","Cobalt.1.deeplink")
             tdkTestObj.addParameter("value",cobalt_test_url)
@@ -142,7 +142,7 @@ if expectedResult in result.upper():
             if(cobalt_result in expectedResult and cobal_launch_status in expectedResult):
                 tdkTestObj.setResultStatus("SUCCESS")
                 revert_plugins_dict["Cobalt"] = "deactivated"
-                print "Clicking OK to play video"
+                print("Clicking OK to play video")
                 params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -167,7 +167,7 @@ if expectedResult in result.upper():
                         else:
                             password = validation_dict["password"]
                         credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-                        print "\n check whether video is playing"
+                        print("\n check whether video is playing")
                         tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                         tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                         tdkTestObj.addParameter("credentials",credentials)
@@ -175,12 +175,12 @@ if expectedResult in result.upper():
                         tdkTestObj.executeTestCase(expectedResult)
                         result_val = tdkTestObj.getResultDetails()
                     else:
-                        print "\n Validation is not required, proceeding the test \n"
+                        print("\n Validation is not required, proceeding the test \n")
                     if result_val == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                         if validation_dict["validation_required"]:
-                            print "\nVideo playback is happening\n"
-                        print "\n Pause video for 10 seconds \n"
+                            print("\nVideo playback is happening\n")
+                        print("\n Pause video for 10 seconds \n")
                         params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -190,7 +190,7 @@ if expectedResult in result.upper():
                         if result == "SUCCESS":
                             tdkTestObj.setResultStatus("SUCCESS")
                             if validation_dict["validation_required"]:
-                                print "\n Check video is paused"
+                                print("\n Check video is paused")
                                 tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                                 tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                                 tdkTestObj.addParameter("credentials",credentials)
@@ -200,9 +200,9 @@ if expectedResult in result.upper():
                             else:
                                 result_val = "FAILURE"
                             if result_val != "SUCCESS":
-                                print "\n Video is paused"
+                                print("\n Video is paused")
                                 time.sleep(10)
-                                print "\n Play the video \n"
+                                print("\n Play the video \n")
                                 params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -213,7 +213,7 @@ if expectedResult in result.upper():
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     time.sleep(10)
                                     if validation_dict["validation_required"]:
-                                        print "Check whether video is playing"
+                                        print("Check whether video is playing")
                                         tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                                         tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                                         tdkTestObj.addParameter("credentials",credentials)
@@ -221,53 +221,53 @@ if expectedResult in result.upper():
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result_val = tdkTestObj.getResultDetails()
                                         if result_val == "SUCCESS" :
-                                            print "\nVideo playback is happening\n"
+                                            print("\nVideo playback is happening\n")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
-                                            print "\n Video playback is not happening \n"
+                                            print("\n Video playback is not happening \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\nPause and Play operation is completed \n"
+                                        print("\nPause and Play operation is completed \n")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "Unable to play from pause"
+                                    print("Unable to play from pause")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "Video is not paused"
+                                print("Video is not paused")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Unable to pause the video"
+                            print("Unable to pause the video")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Video is not playing"
+                        print("Video is not playing")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "Unable to click OK"
+                    print("Unable to click OK")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Unable to load the cobalt_test_url"
+                print("Unable to load the cobalt_test_url")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Precondition to suspend WebKitBrowser didn't work \n"
+            print("\n Precondition to suspend WebKitBrowser didn't work \n")
     else:
-        print "\n[Error] Preconditions are not met \n"
+        print("\n[Error] Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
-    if deviceAvailability == "Yes":    
+    if deviceAvailability == "Yes":
         if revert_if == "YES" and status == "SUCCESS":
             resume_status,start_resume = launch_plugin(obj,"WebKitBrowser")
             time.sleep(60)
             interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
             if interface_status == "SUCCESS" and resume_status == "SUCCESS":
-                print "\n Successfully reverted to ETHERNET \n"
+                print("\n Successfully reverted to ETHERNET \n")
                 status = close_lightning_app(obj)
             else:
-                print "\n Error while reverting to ETHERNET \n"
+                print("\n Error while reverting to ETHERNET \n")
                 obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

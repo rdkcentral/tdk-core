@@ -68,8 +68,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import PerformanceTestVariables
 from StabilityTestUtility import *
 from datetime import datetime
@@ -88,12 +88,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PACS_Cobalt_TimeTo_PlayNextVideo');
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -102,13 +102,13 @@ if expectedResult in result.upper():
     revert="NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url in Config file"
+        print("\n Please configure the cobalt_test_url in Config file")
     plugins_list = ["Cobalt","WebKitBrowser"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -128,7 +128,7 @@ if expectedResult in result.upper():
         ssh_param_dict = {}
     if status == "SUCCESS" and cobalt_test_url != "" and validation_dict != {} and ssh_param_dict != {}:
         plugin = "Cobalt"
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         keycode_list = ['40', '40', '13']
         enterkey_keycode = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
         generatekey_method = 'org.rdk.RDKShell.1.generateKey'
@@ -153,7 +153,7 @@ if expectedResult in result.upper():
         details = tdkTestObj.getResultDetails();
         if expectedResult in result and details == "SUCCESS" :
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Play next video"
+            print("\n Play next video")
             for keycode in keycode_list:
                 params = '{"keys":[ {"keyCode": ' + keycode + ',"modifiers": [],"delay":1.0}]}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -164,15 +164,15 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if expectedResult in result:
-                    print "\n Sending keycode : {} using generateKey".format(keycode)
+                    print("\n Sending keycode : {} using generateKey".format(keycode))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Error while executing generateKey method with keycode: {}".format(keycode)
+                    print("\n Error while executing generateKey method with keycode: {}".format(keycode))
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
                 time.sleep(25)
-                print "\n Check the logs from DUT"
+                print("\n Check the logs from DUT")
                 command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                 tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -183,7 +183,7 @@ if expectedResult in result.upper():
                 output = tdkTestObj.getResultDetails()
                 if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
                     playing_log = output.split('\n')[1]
-                    print "\n Playing log  :",playing_log
+                    print("\n Playing log  :",playing_log)
                     play_starttime_in_millisec = getTimeInMilliSec(play_start_time)
                     video_playedtime = getTimeStampFromString(playing_log)
                     video_playedtime_in_millisec = getTimeInMilliSec(video_playedtime)
@@ -195,29 +195,29 @@ if expectedResult in result.upper():
                     offset_status,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                     Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                     if all(value != "" for value in (cobalt_play_threshold,offset)):
-                        print "\n Play initiated at {}".format(play_start_time)
+                        print("\n Play initiated at {}".format(play_start_time))
                         Summ_list.append('Play initiated at :{}'.format(play_start_time))
-                        print "\n Play happend at {}".format(video_playedtime)
+                        print("\n Play happend at {}".format(video_playedtime))
                         Summ_list.append('Play happend at :{}'.format(video_playedtime))
-                        print "\n Time taken for play operation: {} milliseconds \n".format(time_for_video_play)
+                        print("\n Time taken for play operation: {} milliseconds \n".format(time_for_video_play))
                         Summ_list.append('Time taken for play operation :{}ms'.format(time_for_video_play))
-                        print "\n Threshold value for Time taken for playing next video: {} milliseconds \n".format(cobalt_play_threshold)
+                        print("\n Threshold value for Time taken for playing next video: {} milliseconds \n".format(cobalt_play_threshold))
                         if 0 < int(time_for_video_play) < (int(cobalt_play_threshold) + int(offset)):
-                            print "\n Time taken for play operation is within the expected limit"
+                            print("\n Time taken for play operation is within the expected limit")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Time taken for play operation is not within the expected limit"
+                            print("\n Time taken for play operation is not within the expected limit")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Please configure the threshold values in device config file"
+                        print("\n Please configure the threshold values in device config file")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Unable to find video playback logs from DUT"
+                    print("\n Unable to find video playback logs from DUT")
                     tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while playing video in Cobalt"
+            print("\n Error while playing video in Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exiting from Cobalt \n"
+        print("\n Exiting from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -226,16 +226,16 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

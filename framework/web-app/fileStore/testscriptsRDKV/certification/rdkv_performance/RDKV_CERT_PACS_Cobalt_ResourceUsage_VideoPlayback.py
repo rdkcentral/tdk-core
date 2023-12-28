@@ -63,8 +63,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 import PerformanceTestVariables
 from rdkv_performancelib import *
@@ -84,12 +84,12 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
@@ -113,7 +113,7 @@ if expectedResult in result.upper():
         cobalt_launch_status = launch_cobalt(obj)
         if cobalt_launch_status in expectedResult:
             time.sleep(30)
-            print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
+            print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","Cobalt.1.deeplink")
             tdkTestObj.addParameter("value",cobalt_test_url)
@@ -122,7 +122,7 @@ if expectedResult in result.upper():
             time.sleep(10)
             if(cobalt_result in expectedResult):
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Clicking OK to play video"
+                print("Clicking OK to play video")
                 params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -148,10 +148,10 @@ if expectedResult in result.upper():
                         result_val = tdkTestObj.getResultDetails()
                         if result_val == "SUCCESS" :
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "\nVideo playback is happening\n"
+                            print("\nVideo playback is happening\n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print "Video playback is not happening"
+                            print("Video playback is not happening")
                     if result_val == "SUCCESS":
                         tdkTestObj = obj.createTestStep('rdkservice_getCPULoad')
                         tdkTestObj.executeTestCase(expectedResult)
@@ -167,13 +167,13 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             is_high_cpuload = tdkTestObj.getResultDetails()
                             if is_high_cpuload == "YES"  or expectedResult not in result:
-                                print "\ncpu load is high :{}% \n".format(cpuload)
+                                print("\ncpu load is high :{}% \n".format(cpuload))
                                 tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\ncpu load: {}% \n".format(cpuload)
+                                print("\ncpu load: {}% \n".format(cpuload))
                         else:
-                            print "Unable to get cpuload"
+                            print("Unable to get cpuload")
                             tdkTestObj.setResultStatus("FAILURE")
                         #get the memory usage
                         tdkTestObj = obj.createTestStep('rdkservice_getMemoryUsage')
@@ -190,25 +190,25 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             is_high_memory_usage = tdkTestObj.getResultDetails()
                             if is_high_memory_usage == "YES" or expectedResult not in result:
-                                print "\n memory usage is high :{}%\n".format(memory_usage)
+                                print("\n memory usage is high :{}%\n".format(memory_usage))
                                 tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n memory usage is {}%\n".format(memory_usage)
+                                print("\n memory usage is {}%\n".format(memory_usage))
                         else:
-                            print "\n Unable to get the memory usage\n"
+                            print("\n Unable to get the memory usage\n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Stopping the test \n"
+                        print("\n Stopping the test \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "Unable to press OK button"
+                    print("Unable to press OK button")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Unable to launch the url"
+                print("Unable to launch the url")
                 tdkTestObj.setResultStatus("FAILURE")
             #Deactivate cobalt
-            print "\n Exiting from Cobalt \n"
+            print("\n Exiting from Cobalt \n")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin","Cobalt")
             tdkTestObj.addParameter("status","deactivate")
@@ -217,18 +217,18 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Unable to deactivate Cobalt"
+                print("Unable to deactivate Cobalt")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to launch Cobalt \n"
+            print("\n Unable to launch Cobalt \n")
             obj.setLoadModuleStatus("FAILURE")
     else:
-        print "\n[Error] Preconditions are not met \n"
+        print("\n[Error] Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if revert == "YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")
