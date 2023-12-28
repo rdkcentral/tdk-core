@@ -112,11 +112,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port_lightning)
@@ -132,15 +132,15 @@ if expectedResult in result.upper():
     if "SUCCESS" in result1 and "SUCCESS" in result2 and "SUCCESS" in result3:
         if expected_fps == "" and threshold == "" and logging_method == "":
             config_status = "FAILURE"
-            print "Please set expected_fps and threshold values in device config file"
+            print("Please set expected_fps and threshold values in device config file")
     else:
         config_status = "FAILURE"
-        print "Failed to get the FPS value & threshold value from device config file"
+        print("Failed to get the FPS value & threshold value from device config file")
     if pre_requisite_status == "SUCCESS" and config_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet Multiple objects Animation test url..."
+        print("\nSet Multiple objects Animation test url...")
         #Setting device config file
         setDeviceConfigFile(conf_file)
         appURL    = MediaValidationVariables.lightning_multianimation_test_app_url
@@ -155,7 +155,7 @@ if expectedResult in result.upper():
         # Getting the complete test app URL
         animation_test_url = getTestURL(appURL,appArguments)
 
-        # Setting the animation test url in webkit instance using RDKShell        
+        # Setting the animation test url in webkit instance using RDKShell
         launch_status = launchPlugin(obj,"LightningApp",animation_test_url)
         if "SUCCESS" in launch_status:
             continue_count = 0
@@ -173,7 +173,7 @@ if expectedResult in result.upper():
             if logging_method == "REST_API":
                 while True:
                     if file_check_count > 60:
-                        print "\nREST API Logging is not happening properly. Exiting..."
+                        print("\nREST API Logging is not happening properly. Exiting...")
                         break;
                     if os.path.exists(app_log_file):
                         logging_flag = 1
@@ -185,9 +185,9 @@ if expectedResult in result.upper():
                 while logging_flag:
                     if continue_count > 180:
                         hang_detected = 1
-                        print "\nApp not proceeding for 3 min. Exiting..."
+                        print("\nApp not proceeding for 3 min. Exiting...")
                         break;
- 
+
                     with open(app_log_file,'r') as f:
                         lines = f.readlines()
                     if lines:
@@ -210,12 +210,12 @@ if expectedResult in result.upper():
                             continue_count += 1
                     else:
                         continue_count += 1
- 
+
                     time.sleep(1)
             elif logging_method == "WEB_INSPECT":
                 while True:
                     if continue_count > 180:
-                        print "\nApp not proceeding for 3 mins. Exiting..."
+                        print("\nApp not proceeding for 3 mins. Exiting...")
                         break
                     if (len(webkit_console_socket.getEventsBuffer())== 0):
                         time.sleep(1)
@@ -234,43 +234,42 @@ if expectedResult in result.upper():
                 webkit_console_socket.disconnect()
             avg_fps_single_object = str(avgerage_fps_list[0]).split(",")[1].split(":")[1]
             if "NaN" in avg_fps_single_object:
-                print "Failed to get the average FPS Value"
-                print "[TEST EXECUTION RESULT]: FAILURE"
+                print("Failed to get the average FPS Value")
+                print("[TEST EXECUTION RESULT]: FAILURE")
                 tdkTestObj.setResultStatus("FAILURE");
             elif float(avg_fps_single_object) >= minfps:
-                print "Average FPS (for single object) >= %f" %(minfps)
-                print "\nBelow are the no.of objects the device can animate with the expected FPS:"
+                print("Average FPS (for single object) >= %f" %(minfps))
+                print("\nBelow are the no.of objects the device can animate with the expected FPS:")
                 for info in avgerage_fps_list:
                     if float(str(info).split(",")[1].split(":")[1]) >= minfps:
-                        print info
-                print "\n[TEST EXECUTION RESULT]: SUCCESS"
+                        print(info)
+                print("\n[TEST EXECUTION RESULT]: SUCCESS")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "Average FPS (for single object) < %f" %(minfps)
-                print "Average FPS for single object animation is not as expected"
-                print "[TEST EXECUTION RESULT]: FAILURE"
+                print("Average FPS (for single object) < %f" %(minfps))
+                print("Average FPS for single object animation is not as expected")
+                print("[TEST EXECUTION RESULT]: FAILURE")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to load the Animation Test URL in Webkit\n"
+            print("Unable to load the Animation Test URL in Webkit\n")
 
-        print "\nSet post conditions..."
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,"LightningApp",webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")

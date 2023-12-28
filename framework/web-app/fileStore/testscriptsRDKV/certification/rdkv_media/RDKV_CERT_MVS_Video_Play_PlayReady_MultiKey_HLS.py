@@ -106,11 +106,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     # Checking whether playready DRM is supported
@@ -127,9 +127,9 @@ if expectedResult in result.upper():
 
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet Lightning video player test app url..."
+        print("\nSet Lightning video player test app url...")
         #Setting device config file
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
@@ -145,12 +145,12 @@ if expectedResult in result.upper():
         setURLArgument("drmconfigs",MediaValidationVariables.video_src_url_playready_multikey_hls_drmconfigs)
         setURLArgument("type","hls")
         appArguments = getURLArguments()
-        
-	# Getting the complete test app URL for selected players
+
+        # Getting the complete test app URL for selected players
         video_test_urls = []
         test_counter = 0
         players_list = str(MediaValidationVariables.codec_hls_h264).split(",")
-        print "SELECTED PLAYERS: ", players_list
+        print("SELECTED PLAYERS: ", players_list)
         video_test_urls = getTestURLs(players_list,appArguments)
 
         #Example video test url
@@ -158,55 +158,55 @@ if expectedResult in result.upper():
         #url=<video_src_url_playready_multikey_hls>.mpd&drmconfigs=com.playready(license_url)&operations=close(60)&autotest=true&type=hls
 
         # Setting the video test url in webkit instance using RDKShell
-	for video_test_url in video_test_urls:
+        for video_test_url in video_test_urls:
             launch_status = launchPlugin(obj,webkit_instance,video_test_url)
             if "SUCCESS" in launch_status:
-            	# Monitoring the app progress, checking whether app plays the video properly or any hang detected in between,
-            	# performing proc entry check and getting the test result from the app
+                # Monitoring the app progress, checking whether app plays the video properly or any hang detected in between,
+                # performing proc entry check and getting the test result from the app
                 test_counter += 1
-            	test_result,proc_check_list = monitorVideoTest(obj,webkit_console_socket,validation_dict,"Video Player Playing");
-            	tdkTestObj = obj.createTestStep('rdkv_media_test');
-            	tdkTestObj.executeTestCase(expectedResult);
-            	if "SUCCESS" in test_result and "FAILURE" not in proc_check_list:
-                    print "Video play is fine"
-                    print "[TEST EXECUTION RESULT]: SUCCESS"
+                test_result,proc_check_list = monitorVideoTest(obj,webkit_console_socket,validation_dict,"Video Player Playing");
+                tdkTestObj = obj.createTestStep('rdkv_media_test');
+                tdkTestObj.executeTestCase(expectedResult);
+                if "SUCCESS" in test_result and "FAILURE" not in proc_check_list:
+                    print("Video play is fine")
+                    print("[TEST EXECUTION RESULT]: SUCCESS")
                     tdkTestObj.setResultStatus("SUCCESS");
-            	elif "SUCCESS" in test_result and "FAILURE" in proc_check_list:
-                    print "Decoder proc entry check returns failure.Video not playing fine"
-                    print "[TEST EXECUTION RESULT]: FAILURE"
+                elif "SUCCESS" in test_result and "FAILURE" in proc_check_list:
+                    print("Decoder proc entry check returns failure.Video not playing fine")
+                    print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
-            	else:
-                    print "Video not playing fine"
-                    print "[TEST EXECUTION RESULT]: FAILURE"
+                else:
+                    print("Video not playing fine")
+                    print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
 
-		if test_counter < len(video_test_urls):
+                if test_counter < len(video_test_urls):
                     launch_status = launchPlugin(obj,webkit_instance,"about:blank")
                     time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Unable to load the video Test URL in Webkit\n"
+                print("Unable to load the video Test URL in Webkit\n")
 
-        print "\nSet post conditions..."
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,webkit_instance,webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
-        
+
     elif pre_requisite_status == "NA":
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         obj.setAsNotApplicable();
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

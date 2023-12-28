@@ -110,11 +110,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
@@ -142,16 +142,16 @@ if expectedResult in result.upper():
             if expectedResult in result:
                 sc_revert = "YES"
                 sc_status = "activated"
-                print "\nScreenCapture plugin is activated\n"
+                print("\nScreenCapture plugin is activated\n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 sc_result = "FAILURE"
-                print "\nError while activating ScreenCapture plugin\n"
+                print("\nError while activating ScreenCapture plugin\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-               print "\nScreenCapture plugin is in activated state"
+            print("\nScreenCapture plugin is in activated state")
     else:
-        print "\n Error while getting ScreenCapture plugin status"
+        print("\n Error while getting ScreenCapture plugin status")
         tdkTestObj.setResultStatus("FAILURE")
 
 
@@ -162,13 +162,13 @@ if expectedResult in result.upper():
     image_upload_dir = MediaValidationVariables.image_upload_dir
     if sc_upload_url == "" or image_upload_dir == "":
         config_status = "FAILURE"
-        print "Please configure upload url & dir required for screenshots\n"
+        print("Please configure upload url & dir required for screenshots\n")
 
     if pre_requisite_status== "SUCCESS" and config_status == "SUCCESS" and "SUCCESS" in sc_result:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "\nPre conditions for the test are set successfully";
+        print("\nPre conditions for the test are set successfully");
 
-        print "\nSet Lightning animation test app url..."
+        print("\nSet Lightning animation test app url...")
         #Setting device config file
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
@@ -192,7 +192,7 @@ if expectedResult in result.upper():
             sc_capture_status = "SUCCESS"
             for count in range(0,5):
                 image_name = str(obj.execID)+'_screen_'+str(count+1)+'.png'
-                print "\n########## Iteration :%d ##########\n" %((count+1))
+                print("\n########## Iteration :%d ##########\n" %((count+1)))
                 params = '{"url":"'+sc_upload_url+'?filename='+image_name+'"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
                 tdkTestObj.addParameter("method","org.rdk.ScreenCapture.1.uploadScreenCapture");
@@ -204,16 +204,16 @@ if expectedResult in result.upper():
                     base_file_name = image_upload_dir+'/'+image_name
                     if os.path.exists(base_file_name):
                         sc_images_list.append(base_file_name)
-                        print "Image %s uploaded successfully" %(image_name)
+                        print("Image %s uploaded successfully" %(image_name))
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
                         sc_capture_status = "FAILURE"
-                        print "Image %s upload is not working" %(image_name)
+                        print("Image %s upload is not working" %(image_name))
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
                     sc_capture_status = "FAILURE"
-                    print "\n Error while executing uploadScreenCapture method\n"
+                    print("\n Error while executing uploadScreenCapture method\n")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
 
@@ -222,12 +222,12 @@ if expectedResult in result.upper():
             if sc_capture_status == "SUCCESS":
                 comparison_result = compare_images(sc_images_list)
                 if comparison_result == "DIFFERENT":
-                    print "\n All the captured images are different"
-                    print "Object Animation is validated using screenshot comparison successfully\n"
+                    print("\n All the captured images are different")
+                    print("Object Animation is validated using screenshot comparison successfully\n")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\nCaptured images are not different"
-                    print "Object Animation did not happen as expected, screenshot comparison failed\n"
+                    print("\nCaptured images are not different")
+                    print("Object Animation did not happen as expected, screenshot comparison failed\n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
@@ -237,23 +237,23 @@ if expectedResult in result.upper():
                     if os.path.exists(image):
                         os.remove(image)
 
-            print "\nSet post conditions..."
+            print("\nSet post conditions...")
             tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
             tdkTestObj.executeTestCase(expectedResult);
             # Setting the post-requites for media test.Removing app url from webkit instance and
             # moving next high z-order app to front (residentApp if its active)
             post_requisite_status = setMediaTestPostRequisites(obj,"LightningApp",webkit_console_socket)
             if post_requisite_status == "SUCCESS":
-                print "Post conditions for the test are set successfully\n"
+                print("Post conditions for the test are set successfully\n")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "Post conditions are not met\n"
+                print("Post conditions are not met\n")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to load the Animation Test URL in Webkit\n"
+            print("Unable to load the Animation Test URL in Webkit\n")
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     #Revert the values
     if sc_revert=="YES":
@@ -262,12 +262,12 @@ if expectedResult in result.upper():
         tdkTestObj.addParameter("status",curr_sc_status);
         tdkTestObj.executeTestCase(expectedResult);
         if expectedResult in tdkTestObj.getResult():
-            print "\nScreenCapture plugin status reverted"
+            print("\nScreenCapture plugin status reverted")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\nFailed to revert ScreenCapture plugin status"
+            print("\nFailed to revert ScreenCapture plugin status")
             tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

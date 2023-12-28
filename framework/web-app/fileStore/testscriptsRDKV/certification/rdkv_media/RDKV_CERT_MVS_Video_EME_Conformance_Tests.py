@@ -105,11 +105,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     setWebKitSocketPort(webinspect_port)
@@ -121,20 +121,20 @@ if expectedResult in result.upper():
     if webkit_console_socket == None and pre_requisite_status == "SUCCESS":
         websocket_conn_status,webkit_console_socket = createWebKitSocket(obj)
         if not websocket_conn_status:
-            print "Connection to web-inspect page failed. cannot proceed test"
+            print("Connection to web-inspect page failed. cannot proceed test")
             pre_requisite_status = "FAILURE"
         else:
-            pre_requisite_status = "SUCCESS"    
+            pre_requisite_status = "SUCCESS"
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet EME Conformance test app url..."
+        print("\nSet EME Conformance test app url...")
         #Setting device config file
         test_app_url = MediaValidationVariables.eme_conformance_test_app_url
-        print "\n================================================="
-        print "URL Used: ",test_app_url
-        print "=================================================\n"
+        print("\n=================================================")
+        print("URL Used: ",test_app_url)
+        print("=================================================\n")
 
         # Setting the EME test url in webkit instance using RDKShell
         launch_status = launchPlugin(obj,"WebKitBrowser",test_app_url)
@@ -146,35 +146,33 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkv_media_test');
             tdkTestObj.executeTestCase(expectedResult);
             if "SUCCESS" in test_result:
-                print "All EME Conformance Tests Success"
-                print "[TEST EXECUTION RESULT]: SUCCESS"
+                print("All EME Conformance Tests Success")
+                print("[TEST EXECUTION RESULT]: SUCCESS")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "EME Conformance Tests Failed"
-                print "[TEST EXECUTION RESULT]: FAILURE"
+                print("EME Conformance Tests Failed")
+                print("[TEST EXECUTION RESULT]: FAILURE")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to load the EME Conformance Test URL in Webkit\n"
+            print("Unable to load the EME Conformance Test URL in Webkit\n")
 
-        print "\nSet post conditions..."
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app utl from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,"WebKitBrowser",webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
-
+    print("Failed to load module")

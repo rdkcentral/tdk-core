@@ -59,7 +59,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_Media_Validation_256</test_case_id>
-    <test_objective>Test Script to launch a lightning Video player application via Webkit instance and perform video fast forward operation of hevc content repeatedly for given number of times	</test_objective>
+    <test_objective>Test Script to launch a lightning Video player application via Webkit instance and perform video fast forward operation of hevc content repeatedly for given number of times        </test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDKTV,Accelerator</test_setup>
     <pre_requisite>1. Wpeframework process should be up and running in the device.
@@ -73,7 +73,7 @@ hevc_url_type:string
 operation_max_interval: int</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket connection to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
-3. Launch webkit instance with video test app with the src url, operations to be performed, fastforward and playnow with given interval and repeat count. 
+3. Launch webkit instance with video test app with the src url, operations to be performed, fastforward and playnow with given interval and repeat count.
 4. App performs the provided operations and validates each operation using events
 5. If expected event ratechange occurs for each  fastforward operation, then app gives the validation result as SUCCESS or else FAILURE
 6. Update the test script result as SUCCESS/FAILURE based on event validation result from the app and proc check status (if applicable)
@@ -106,11 +106,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     # Setting the pre-requites for media test. Launching the wekit instance via RDKShell and
@@ -119,9 +119,9 @@ if expectedResult in result.upper():
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance)
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet Lightning video player test app url..."
+        print("\nSet Lightning video player test app url...")
         #Setting device config file
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
@@ -144,7 +144,7 @@ if expectedResult in result.upper():
         setURLArgument("autotest","true")
         setURLArgument("type",MediaValidationVariables.hevc_url_type)
         appArguments = getURLArguments()
-        
+
         # Getting the complete test app URL for selected players
         video_test_urls = []
         test_counter = 0
@@ -153,10 +153,10 @@ if expectedResult in result.upper():
         elif MediaValidationVariables.hevc_url_type == "dash":
             players_list = str(MediaValidationVariables.codec_dash_hevc).split(",")
         else:
-            players_list = str(MediaValidationVariables.codec_mp4).split(",")      
-        print "SELECTED PLAYERS: ", players_list
+            players_list = str(MediaValidationVariables.codec_mp4).split(",")
+        print("SELECTED PLAYERS: ", players_list)
         video_test_urls = getTestURLs(players_list,appArguments)
-        
+
 
         #Example video test url
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
@@ -174,16 +174,16 @@ if expectedResult in result.upper():
                 tdkTestObj = obj.createTestStep('rdkv_media_test');
                 tdkTestObj.executeTestCase(expectedResult);
                 if "SUCCESS" in test_result and "FAILURE" not in proc_check_list:
-                    print "Video play is fine"
-                    print "[TEST EXECUTION RESULT]: SUCCESS"
+                    print("Video play is fine")
+                    print("[TEST EXECUTION RESULT]: SUCCESS")
                     tdkTestObj.setResultStatus("SUCCESS");
                 elif "SUCCESS" in test_result and "FAILURE" in proc_check_list:
-                    print "Decoder proc entry check returns failure.Video not playing fine"
-                    print "[TEST EXECUTION RESULT]: FAILURE"
+                    print("Decoder proc entry check returns failure.Video not playing fine")
+                    print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
                 else:
-                    print "Video not playing fine"
-                    print "[TEST EXECUTION RESULT]: FAILURE"
+                    print("Video not playing fine")
+                    print("[TEST EXECUTION RESULT]: FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
 
                 if test_counter < len(video_test_urls):
@@ -191,26 +191,25 @@ if expectedResult in result.upper():
                     time.sleep(3)
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Unable to load the video Test URL in Webkit\n"
-            
-        print "\nSet post conditions..."
+                print("Unable to load the video Test URL in Webkit\n")
+
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,webkit_instance,webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
-        
+
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")

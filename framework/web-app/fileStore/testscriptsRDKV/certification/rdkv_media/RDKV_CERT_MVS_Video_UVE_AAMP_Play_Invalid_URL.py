@@ -109,11 +109,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     # Setting the pre-requites for media test. Launching the webkit instance via RDKShell and
@@ -122,9 +122,9 @@ if expectedResult in result.upper():
     pre_requisite_status,webkit_console_socket,validation_dict = setMediaTestPreRequisites(obj,webkit_instance,False)
     if pre_requisite_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet Lightning video player test app url..."
+        print("\nSet Lightning video player test app url...")
         #Setting device config file
         conf_file,result = getDeviceConfigFile(obj.realpath)
         result, logging_method= readDeviceConfigKeyValue(conf_file,"LOGGING_METHOD")
@@ -163,7 +163,7 @@ if expectedResult in result.upper():
             if logging_method == "REST_API":
                 while True:
                     if file_check_count > 60:
-                        print "\nREST API Logging is not happening properly. Exiting..."
+                        print("\nREST API Logging is not happening properly. Exiting...")
                         break;
                     if os.path.exists(app_log_file):
                         logging_flag = 1
@@ -175,7 +175,7 @@ if expectedResult in result.upper():
                 while logging_flag:
                     if continue_count > 60:
                         hang_detected = 1
-                        print "\nApp not proceeding for 60 secs. Exiting..."
+                        print("\nApp not proceeding for 60 secs. Exiting...")
                         break;
 
                     with open(app_log_file,'r') as f:
@@ -206,7 +206,7 @@ if expectedResult in result.upper():
             elif logging_method == "WEB_INSPECT":
                 while True:
                     if continue_count > 60:
-                        print "\nApp not proceeding for 60 secs. Exiting..."
+                        print("\nApp not proceeding for 60 secs. Exiting...")
                         break
                     if (len(webkit_console_socket.getEventsBuffer())== 0):
                         time.sleep(1)
@@ -226,31 +226,31 @@ if expectedResult in result.upper():
             tdkTestObj = obj.createTestStep('rdkv_media_test');
             tdkTestObj.executeTestCase(expectedResult);
             if event_status == 1 and error_status == 1:
-                print "Video not playing fine due to invalid url stream"
-                print "[TEST EXECUTION RESULT]: SUCCESS"
+                print("Video not playing fine due to invalid url stream")
+                print("[TEST EXECUTION RESULT]: SUCCESS")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to load the video Test URL in Webkit\n"
+            print("Unable to load the video Test URL in Webkit\n")
 
-        print "\nSet post conditions..."
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,webkit_instance,webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

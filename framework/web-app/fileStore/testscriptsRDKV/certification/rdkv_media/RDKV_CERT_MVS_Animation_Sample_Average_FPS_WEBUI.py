@@ -113,11 +113,11 @@ webkit_console_socket = None
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\nCheck Pre conditions..."
+    print("\nCheck Pre conditions...")
     tdkTestObj = obj.createTestStep('rdkv_media_pre_requisites');
     tdkTestObj.executeTestCase(expectedResult);
     socketConnectionEnableDisable(False);
@@ -132,15 +132,15 @@ if expectedResult in result.upper():
     if "SUCCESS" in result1 and "SUCCESS" in result2:
         if expected_fps == "" and threshold == "":
             config_status = "FAILURE"
-            print "Please set expected_fps and threshold values in device config file"
+            print("Please set expected_fps and threshold values in device config file")
     else:
         config_status = "FAILURE"
-        print "Failed to get the FPS value & threshold value from device config file"
+        print("Failed to get the FPS value & threshold value from device config file")
     if pre_requisite_status == "SUCCESS" and config_status == "SUCCESS":
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Pre conditions for the test are set successfully"
+        print("Pre conditions for the test are set successfully")
 
-        print "\nSet Sample animation test app url..."
+        print("\nSet Sample animation test app url...")
         #Setting device config file
         setDeviceConfigFile(conf_file)
         animation_test_url = MediaValidationVariables.sample_animation_test_url
@@ -165,45 +165,44 @@ if expectedResult in result.upper():
                     avg_fps = sum(fps_list)/len(fps_list)
                 else:
                     avg_fps = 0
-                print "Collected FPS: ",fps_list
-                print "Average FPS: ",avg_fps
+                print("Collected FPS: ",fps_list)
+                print("Average FPS: ",avg_fps)
                 tdkTestObj = obj.createTestStep('rdkv_media_test');
                 tdkTestObj.executeTestCase(expectedResult);
                 minfps = float(int(expected_fps) - int(threshold))
                 if float(avg_fps) >= minfps:
-                    print "Average FPS is >= %f" %(minfps)
-                    print "Sample Animation App is rendered and average FPS is as expected"
-                    print "[TEST EXECUTION RESULT]: SUCCESS\n"
+                    print("Average FPS is >= %f" %(minfps))
+                    print("Sample Animation App is rendered and average FPS is as expected")
+                    print("[TEST EXECUTION RESULT]: SUCCESS\n")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Average FPS is < %f" %(minfps)
-                    print "Sample Animation App is rendered and average FPS is not as expected"
-                    print "[TEST EXECUTION RESULT]: FAILURE\n"
+                    print("Average FPS is < %f" %(minfps))
+                    print("Sample Animation App is rendered and average FPS is not as expected")
+                    print("[TEST EXECUTION RESULT]: FAILURE\n")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "\n Failed to get the data from WEBUI\n"
+                print("\n Failed to get the data from WEBUI\n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to load the Sample Animation URL in Webkit\n"
+            print("Unable to load the Sample Animation URL in Webkit\n")
 
-        print "\nSet post conditions..."
+        print("\nSet post conditions...")
         tdkTestObj = obj.createTestStep('rdkv_media_post_requisites');
         tdkTestObj.executeTestCase(expectedResult);
         # Setting the post-requites for media test.Removing app url from webkit instance and
         # moving next high z-order app to front (residentApp if its active)
         post_requisite_status = setMediaTestPostRequisites(obj,"LightningApp",webkit_console_socket)
         if post_requisite_status == "SUCCESS":
-            print "Post conditions for the test are set successfully\n"
+            print("Post conditions for the test are set successfully\n")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "Post conditions are not met\n"
+            print("Post conditions are not met\n")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "Pre conditions are not met\n"
+        print("Pre conditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_media");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")
