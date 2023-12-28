@@ -25,7 +25,7 @@
   <primitive_test_name>IARMBUS_IsConnected</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>ALLOCATED</status>
-  <synopsis>This test script tests Connecting and Disconnect  IARMBUS for multiple times with gap of every 100 milli seconds				
+  <synopsis>This test script tests Connecting and Disconnect  IARMBUS for multiple times with gap of every 100 milli seconds
 TEST CASE ID:CT_IARMBUS_57</synopsis>
   <groups_id/>
   <execution_time>3</execution_time>
@@ -53,19 +53,19 @@ TEST CASE ID:CT_IARMBUS_57</synopsis>
     <test_type>Stress</test_type>
     <test_setup>XI3-1 / XG1-1</test_setup>
     <pre_requisite>“IARMDaemonMain” process should be running.</pre_requisite>
-    <api_or_interface_used>IARM_Bus_Init(char *) 
+    <api_or_interface_used>IARM_Bus_Init(char *)
 IARM_Bus_Connect()
 IARM_Bus_Disconnect()
 IARM_Bus_Term()</api_or_interface_used>
-    <input_parameters>IARM_Bus_Init : 
+    <input_parameters>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</input_parameters>
     <automation_approch>1.TM loads the IARMBUS_Agent via the test agent.
-2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon . 
+2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon .
 3.IARMBUS_Agent deregisters from the IARM Bus Daemon.
-4.For each API called in the script, IARMBUS_Agent will send SUCCESS or FAILURE status to Test Agent by comparing the return vale of APIs.  
+4.For each API called in the script, IARMBUS_Agent will send SUCCESS or FAILURE status to Test Agent by comparing the return vale of APIs.
 5.Above 3 and 4 steps will be repeated for n number times and the result will be passed to TM.</automation_approch>
     <except_output>Checkpoint 1.Check the return value of API for success status.</except_output>
     <priority>High</priority>
@@ -92,124 +92,124 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'CT_IARMBUS_57');
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-        #calling IARMBUS API "IARM_Bus_Init"
-        tdkTestObj = obj.createTestStep('IARMBUS_Init');
-        expectedresult="SUCCESS"
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-        if ("SUCCESS" in actualresult):
+    #calling IARMBUS API "IARM_Bus_Init"
+    tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    expectedresult="SUCCESS"
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if ("SUCCESS" in actualresult):
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("SUCCESS: Application is initialized with IARM Bus library");
+        i = 0;
+        for i in range(0,10):
+            print("****************%d" %i);
+            #calling IARMBUS API "IARM_Bus_Connect"
+            tdkTestObj = obj.createTestStep('IARMBUS_Connect');
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details = tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+            if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS: Application is initialized with IARM Bus library";
-                i = 0;
-                for i in range(0,10):
-                        print "****************%d" %i;
-                        #calling IARMBUS API "IARM_Bus_Connect"
-                        tdkTestObj = obj.createTestStep('IARMBUS_Connect');
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details = tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS: Application is successfully connected with IARMBUS";
-                                #calling IARMBUS API "IARM_Bus_IsConnected"
-                                tdkTestObj = obj.createTestStep('IARMBUS_IsConnected');
-                                expectedresult="SUCCESS"
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                                #Check for SUCCESS/FAILURE return value of IARMBUS_IsConnected
-                                if expectedresult in actualresult:
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "SUCCESS: API-Is_Connected success";
-                                        #calling IARMBUS API "IARM_Bus_DisConnect"
-                                        tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
-                                        expectedresult="SUCCESS"
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        details = tdkTestObj.getResultDetails();
-                                        #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
-                                        if expectedresult in actualresult:
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                print "SUCCESS: Application successfully disconnected from IARM Bus";
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                print "FAILURE: IARM_Bus_Disconnect failed. %s " %details;
-                                                print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "FAILURE: IARM_Bus_Isconnected failed. %s " %details;       
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: IARM_Bus_Connect failed. %s" %details;
-                        time.sleep(10/1000);
-                        #calling IARMBUS API "IARM_Bus_Connect"
-                        tdkTestObj = obj.createTestStep('IARMBUS_Connect');
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details = tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS: Application is successfully connected with IARMBUS";
-                                #calling IARMBUS API "IARM_Bus_IsConnected"
-                                tdkTestObj = obj.createTestStep('IARMBUS_IsConnected');
-                                expectedresult="SUCCESS"
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                                #Check for SUCCESS/FAILURE return value of IARMBUS_IsConnected
-                                if expectedresult in actualresult:
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "SUCCESS: API-Is_Connected success";
-                                        #calling IARMBUS API "IARM_Bus_DisConnect"
-                                        tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
-                                        expectedresult="SUCCESS"
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        details = tdkTestObj.getResultDetails();
-                                        #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
-                                        if expectedresult in actualresult:
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                print "SUCCESS: Application successfully disconnected from IARM Bus";
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                print "FAILURE: IARM_Bus_Disconnect failed. %s " %details;
-                                                print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "FAILURE: IARM_Bus_Isconnected failed. %s " %details;
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: IARM_Bus_Connect failed. %s" %details;
-                #calling IARMBUS API "IARM_Bus_Term"
-                tdkTestObj = obj.createTestStep('IARMBUS_Term');
-                expectedresult="SUCCESS";
+                print("SUCCESS: Application is successfully connected with IARMBUS");
+                #calling IARMBUS API "IARM_Bus_IsConnected"
+                tdkTestObj = obj.createTestStep('IARMBUS_IsConnected');
+                expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
-                details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+                details = tdkTestObj.getResultDetails();
+                #Check for SUCCESS/FAILURE return value of IARMBUS_IsConnected
                 if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: API-Is_Connected success");
+                    #calling IARMBUS API "IARM_Bus_DisConnect"
+                    tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
+                    if expectedresult in actualresult:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM_Bus term success";
-                else:
+                        print("SUCCESS: Application successfully disconnected from IARM Bus");
+                    else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus Term failed";                                
-        else:
+                        print("FAILURE: IARM_Bus_Disconnect failed. %s " %details);
+                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: IARM_Bus_Isconnected failed. %s " %details);
+            else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus_Init failed. %s " %details;
-        #Unload the iarmbus module
-        obj.unloadModule("iarmbus");
+                print("FAILURE: IARM_Bus_Connect failed. %s" %details);
+            time.sleep(10/1000);
+            #calling IARMBUS API "IARM_Bus_Connect"
+            tdkTestObj = obj.createTestStep('IARMBUS_Connect');
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details = tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+            if expectedresult in actualresult:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("SUCCESS: Application is successfully connected with IARMBUS");
+                #calling IARMBUS API "IARM_Bus_IsConnected"
+                tdkTestObj = obj.createTestStep('IARMBUS_IsConnected');
+                expectedresult="SUCCESS"
+                tdkTestObj.executeTestCase(expectedresult);
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                #Check for SUCCESS/FAILURE return value of IARMBUS_IsConnected
+                if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: API-Is_Connected success");
+                    #calling IARMBUS API "IARM_Bus_DisConnect"
+                    tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
+                    if expectedresult in actualresult:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: Application successfully disconnected from IARM Bus");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE: IARM_Bus_Disconnect failed. %s " %details);
+                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: IARM_Bus_Isconnected failed. %s " %details);
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("FAILURE: IARM_Bus_Connect failed. %s" %details);
+        #calling IARMBUS API "IARM_Bus_Term"
+        tdkTestObj = obj.createTestStep('IARMBUS_Term');
+        expectedresult="SUCCESS";
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details=tdkTestObj.getResultDetails();
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM_Bus term success");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus Term failed");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus_Init failed. %s " %details);
+    #Unload the iarmbus module
+    obj.unloadModule("iarmbus");
 else:
-        print"Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");

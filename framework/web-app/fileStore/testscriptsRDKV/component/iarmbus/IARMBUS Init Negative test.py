@@ -52,17 +52,17 @@
     <test_type>Negative</test_type>
     <test_setup>XI3-1 / XG1-1</test_setup>
     <pre_requisite>“IARMDaemonMain” process should be running.</pre_requisite>
-    <api_or_interface_used>IARM_Bus_Init(char *) 
+    <api_or_interface_used>IARM_Bus_Init(char *)
 IARM_Bus_Connect()
 IARM_Bus_Disconnect()
 IARM_Bus_Term()</api_or_interface_used>
-    <input_parameters>IARM_Bus_Init : 
+    <input_parameters>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</input_parameters>
     <automation_approch>1.TM loads the IARMBUS_Agent via the test agent.
-2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon. 
+2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon.
 3.IARMBUS_Agent will try to register the application which is already registered with the Process group.
 4.IARMBUS_Agent deregisters from the IARM Bus Daemon.
 5.For each API called in the script, IARMBUS_Agent will send SUCCESS or FAILURE status to Test Agent by comparing the return vale of APIs.</automation_approch>
@@ -90,62 +90,62 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'CT_IARMBUS_2');
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-        #calling IARMBUS API "IARM_Bus_Init"
+    #calling IARMBUS API "IARM_Bus_Init"
+    tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    expectedresult="SUCCESS"
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details=tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("SUCCESS: IARM Bus library is initialized");
+        #calling IARMBUS API "IARM_Bus_Init" to initialize IARMBus library second time
         tdkTestObj = obj.createTestStep('IARMBUS_Init');
-        expectedresult="SUCCESS"
+        expectedresult="FAILURE"
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details=tdkTestObj.getResultDetails();
         #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-        if "SUCCESS" in actualresult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS: IARM Bus library is initialized";
-                #calling IARMBUS API "IARM_Bus_Init" to initialize IARMBus library second time
-                tdkTestObj = obj.createTestStep('IARMBUS_Init');
-                expectedresult="FAILURE"
-                tdkTestObj.executeTestCase(expectedresult);
-                actualresult = tdkTestObj.getResult();
-                details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-                if expectedresult in actualresult:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM Bus Library is already initialized";
-                        #actual test case is passed
-                        result = "SUCCESS";
-                else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "IARM_Bus_Init success"
-                        print "FAILURE: IARM Bus Library initialized second time";
-                        #Actual test case is failed
-                        result = "FAILURE";
-                #calling IARMBUS API "IARM_Bus_Term"
-                tdkTestObj = obj.createTestStep('IARMBUS_Term');
-                expectedresult="SUCCESS";
-                tdkTestObj.executeTestCase(expectedresult);
-                actualresult = tdkTestObj.getResult();
-                details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-                if expectedresult in actualresult:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM_Bus term success";
-                else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus Term failed";
-
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM Bus Library is already initialized");
+            #actual test case is passed
+            result = "SUCCESS";
         else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus_Init failed. %s" %details;
-                #Actual test case is failed
-                result = "FAILURE";
-        print "[TEST EXECUTION RESULT] : %s" %result;
-        #Unload the iarmbus module
-        obj.unloadModule("iarmbus");
+            tdkTestObj.setResultStatus("FAILURE");
+            print("IARM_Bus_Init success")
+            print("FAILURE: IARM Bus Library initialized second time");
+            #Actual test case is failed
+            result = "FAILURE";
+        #calling IARMBUS API "IARM_Bus_Term"
+        tdkTestObj = obj.createTestStep('IARMBUS_Term');
+        expectedresult="SUCCESS";
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details=tdkTestObj.getResultDetails();
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM_Bus term success");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus Term failed");
+
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus_Init failed. %s" %details);
+        #Actual test case is failed
+        result = "FAILURE";
+    print("[TEST EXECUTION RESULT] : %s" %result);
+    #Unload the iarmbus module
+    obj.unloadModule("iarmbus");
 else:
-        print"Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");

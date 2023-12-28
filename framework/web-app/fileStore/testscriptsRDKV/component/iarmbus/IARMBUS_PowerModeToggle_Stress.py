@@ -62,21 +62,21 @@ IARM_Bus_Connect()
 IARM_Bus_Call(const char *,  const char *, void *, size_t )
 IARM_Bus_Disconnect()
 IARM_Bus_Term()</api_or_interface_used>
-    <input_parameters>IARM_Bus_Init : 
+    <input_parameters>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
-IARM_Bus_RegisterCall : 
+IARM_Bus_RegisterCall :
 const char * - IARM_BUS_PWRMGR_API_GetPowerState
 IARM_BusCall_t - _GetPowerStatecallback
-IARM_Bus_Call : 
+IARM_Bus_Call :
 const char *- IARM_BUS_PWRMGR_NAME,     const char * - IARM_BUS_PWRMGR_API_GetPowerState  , void * -param, size_t - sizeof(param)
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</input_parameters>
     <automation_approch>1.TM loads the IARMBUS_Agent via the test agent.
-2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon. 
+2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon.
 3.pwrMgrMain registers a RPC methods for setting the power state and this RPC can be invoked by IARMBUS_Agent application.
 4.IARMBUS_Agent Invoke the RPC method of pwrMgrMain application to set the power state of STB.
-5.IARMBUS_Agent Invoke the RPC method of pwrMgrMain application to get the power state of STB. 
+5.IARMBUS_Agent Invoke the RPC method of pwrMgrMain application to get the power state of STB.
 6.Repeat steps 2 to 5 for power state values STANDBY (1) and ON (2) for 50 times.
 7.IARMBUS_Agent deregister from the IARM Bus Daemon.
 8.For each API called in the script, IARMBUS_Agent will send SUCCESS or FAILURE status to Test Agent by comparing the return vale of APIs.</automation_approch>
@@ -109,7 +109,7 @@ port = <port>
 
 iarmObj.configureTestCase(ip,port,'IARMBUS_PowerModeToggle_Stress');
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "[IARMBUS LIB LOAD STATUS] : %s"%iarmLoadStatus ;
+print("[IARMBUS LIB LOAD STATUS] : %s"%iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 expectedresult="SUCCESS"
@@ -120,49 +120,49 @@ if expectedresult in iarmLoadStatus.upper():
         # Toggle between state values STANDBY (1) / ON (2)
         for powermode in range(1,3):
             actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Init', 'SUCCESS',verifyList ={});
-            print "IARMBUS_Init result: [%s]"%actualresult;
+            print("IARMBUS_Init result: [%s]"%actualresult);
             #Check for return value of IARMBUS_Init
             if expectedresult in actualresult:
                 #Calling "IARM_Bus_Connect"
                 actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Connect', 'SUCCESS',verifyList ={});
-                print "IARMBUS_Connect result: [%s]"%actualresult;
+                print("IARMBUS_Connect result: [%s]"%actualresult);
 
                 #Check for return value of IARMBUS_Connect
                 if expectedresult in actualresult:
                     #Calling change_powermode
                     result = change_powermode(iarmObj,powermode);
-                    print "Set PowerMode to %d: %s"%(powermode,result);
+                    print("Set PowerMode to %d: %s"%(powermode,result));
 
                     #Calling IARMBus_DisConnect API
                     actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_DisConnect', 'SUCCESS',verifyList ={});
-                    print "IARMBUS_DisConnect result: [%s]"%actualresult;
+                    print("IARMBUS_DisConnect result: [%s]"%actualresult);
 
                 #calling IARMBUS API "IARM_Bus_Term"
                 actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Term', 'SUCCESS',verifyList ={});
-                print "IARMBUS_Term result: [%s]"%actualresult;
+                print("IARMBUS_Term result: [%s]"%actualresult);
     #End of loop for power mode toggle
     #End of loop for 50 times
     #Make sure the DUT must in Power ON state after the loop
     actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Init', 'SUCCESS',verifyList ={});
-    print "IARMBUS_Init result: [%s]"%actualresult;
+    print("IARMBUS_Init result: [%s]"%actualresult);
     #Check for return value of IARMBUS_Init
     if expectedresult in actualresult:
                 #Calling "IARM_Bus_Connect"
-                actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Connect', 'SUCCESS',verifyList ={});
-                print "IARMBUS_Connect result: [%s]"%actualresult;
+        actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Connect', 'SUCCESS',verifyList ={});
+        print("IARMBUS_Connect result: [%s]"%actualresult);
 
-                #Check for return value of IARMBUS_Connect
-                if expectedresult in actualresult:
+        #Check for return value of IARMBUS_Connect
+        if expectedresult in actualresult:
                     #Calling change_powermode
-                    change_powermode(iarmObj,2);
-                    print "Set PowerMode to %d: %s"%(powermode,result);
+            change_powermode(iarmObj,2);
+            print("Set PowerMode to %d: %s"%(powermode,result));
 
-                    #Calling IARMBus_DisConnect API
-                    actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_DisConnect', 'SUCCESS',verifyList ={});
-                    print "IARMBUS_DisConnect result: [%s]"%actualresult;
+            #Calling IARMBus_DisConnect API
+            actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_DisConnect', 'SUCCESS',verifyList ={});
+            print("IARMBUS_DisConnect result: [%s]"%actualresult);
 
-                #calling IARMBUS API "IARM_Bus_Term"
-                actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Term', 'SUCCESS',verifyList ={});
-                print "IARMBUS_Term result: [%s]"%actualresult
+        #calling IARMBUS API "IARM_Bus_Term"
+        actualresult,iarmTestObj,details = tdklib.Create_ExecuteTestcase(iarmObj,'IARMBUS_Term', 'SUCCESS',verifyList ={});
+        print("IARMBUS_Term result: [%s]"%actualresult)
     #Unload the iarmbus module
     iarmObj.unloadModule("iarmbus");

@@ -55,7 +55,7 @@ IARM_Bus_Connect()
 IARM_Bus_Call(const char *,  const char *, void *, size_t )
 IARM_Bus_Disconnect()
 IARM_Bus_Term()</api_or_interface_used>
-    <input_parameters>IARM_Bus_Init : 
+    <input_parameters>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
 IARM_Bus_Call : const char * - IARM_BUS_SYSMGR_NAME, const char * - IARM_BUS_SYSMGR_API_GetHDCPProfile
@@ -96,110 +96,110 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'CT_IARMBUS_67');
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-        #calling IARMBUS API "IARM_Bus_Init"
-        tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    #calling IARMBUS API "IARM_Bus_Init"
+    tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    expectedresult="SUCCESS"
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details=tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if ("SUCCESS" in actualresult):
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("SUCCESS :Application successfully initialized with IARMBUS library");
+        #calling IARMBUS API "IARM_Bus_Connect"
+        tdkTestObj = obj.createTestStep('IARMBUS_Connect');
         expectedresult="SUCCESS"
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details=tdkTestObj.getResultDetails();
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-        if ("SUCCESS" in actualresult):
-                tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS :Application successfully initialized with IARMBUS library";
-                #calling IARMBUS API "IARM_Bus_Connect"
-                tdkTestObj = obj.createTestStep('IARMBUS_Connect');
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("Application is successfully connected with IARM-BUS Daemon");
+            for hdcpProfile in range(0,2):
+                #Setting the HdcpProfile, RNG supports HDCPProfile = 0 and 1, others HDCPProfile = 1
+                tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
+                tdkTestObj.addParameter("method_name","SetHDCPProfile");
+                tdkTestObj.addParameter("owner_name","SYSMgr");
+                tdkTestObj.addParameter("newState",hdcpProfile);
                 expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+                print("Set HDCP profile: %d"%(hdcpProfile));
+                #Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
                 if expectedresult in actualresult:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "Application is successfully connected with IARM-BUS Daemon";
-			for hdcpProfile in range(0,2):
-					#Setting the HdcpProfile, RNG supports HDCPProfile = 0 and 1, others HDCPProfile = 1
-                                	tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
-                                	tdkTestObj.addParameter("method_name","SetHDCPProfile");
-                                	tdkTestObj.addParameter("owner_name","SYSMgr");
-					tdkTestObj.addParameter("newState",hdcpProfile);
-                                	expectedresult="SUCCESS"
-                                	tdkTestObj.executeTestCase(expectedresult);
-                                	actualresult = tdkTestObj.getResult();
-                                	details=tdkTestObj.getResultDetails();
-                                	print "Set HDCP profile: %d"%(hdcpProfile);
-                                	#Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
-                                	if expectedresult in actualresult:
-                                        	tdkTestObj.setResultStatus("SUCCESS");
-                                        	print "SUCCESS: Setting STB HDCP profile is successful";
-					else:
-						tdkTestObj.setResultStatus("FAILURE");
-						print "FAILURE: Setting STB HDCP profile failed. ",details;
-
-                                        #Querying the STB HDCP profile
-                                        tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
-                                        tdkTestObj.addParameter("method_name","GetHDCPProfile");
-                                        tdkTestObj.addParameter("owner_name","SYSMgr");
-                                        expectedresult="SUCCESS"
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        details=tdkTestObj.getResultDetails();
-                                        print "Get HDCP profile: %s" %details;
-                                        #Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
-                                        if expectedresult in actualresult:
-                                                if str(hdcpProfile) == details:
-                                                        tdkTestObj.setResultStatus("SUCCESS");
-                                                        print "SUCCESS: HDCPProfile fetched is same as HDCPProfile set";
-                                                else:
-                                                        tdkTestObj.setResultStatus("FAILURE");
-                                                        print "FAILURE: HDCPProfile fetched is not same as HDCPProfile set";
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                print "FAILURE: Querying STB HDCP Profile. ",details;
-			#End for loop
-
-                        # Calling IARM_Bus_DisConnect API
-                        tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details=tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS :Application successfully disconnected from IARMBus";
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: IARM_Bus_Disconnect failed. %s " %details;                                
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: Setting STB HDCP profile is successful");
                 else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus_Connect failed. %s" %details;
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: Setting STB HDCP profile failed. ",details);
 
-                #calling IARMBUS API "IARM_Bus_Term"
-                tdkTestObj = obj.createTestStep('IARMBUS_Term');
-                expectedresult="SUCCESS";
+                #Querying the STB HDCP profile
+                tdkTestObj = obj.createTestStep('IARMBUS_BusCall');
+                tdkTestObj.addParameter("method_name","GetHDCPProfile");
+                tdkTestObj.addParameter("owner_name","SYSMgr");
+                expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+                print("Get HDCP profile: %s" %details);
+                #Check for SUCCESS/FAILURE return value of IARMBUS_BusCall
                 if expectedresult in actualresult:
+                    if str(hdcpProfile) == details:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM_Bus term success";
-                else:
+                        print("SUCCESS: HDCPProfile fetched is same as HDCPProfile set");
+                    else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus Term failed";                        
-        else:
+                        print("FAILURE: HDCPProfile fetched is not same as HDCPProfile set");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: Querying STB HDCP Profile. ",details);
+            #End for loop
+
+            # Calling IARM_Bus_DisConnect API
+            tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details=tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
+            if expectedresult in actualresult:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("SUCCESS :Application successfully disconnected from IARMBus");
+            else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus_Init failed. %s " %details;
-        
-        print "[TEST EXECUTION RESULT] : %s" %actualresult;
-        #Unload the iarmbus module
-        obj.unloadModule("iarmbus");
+                print("FAILURE: IARM_Bus_Disconnect failed. %s " %details);
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus_Connect failed. %s" %details);
+
+        #calling IARMBUS API "IARM_Bus_Term"
+        tdkTestObj = obj.createTestStep('IARMBUS_Term');
+        expectedresult="SUCCESS";
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details=tdkTestObj.getResultDetails();
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM_Bus term success");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus Term failed");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus_Init failed. %s " %details);
+
+    print("[TEST EXECUTION RESULT] : %s" %actualresult);
+    #Unload the iarmbus module
+    obj.unloadModule("iarmbus");
 else:
-        print"Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");

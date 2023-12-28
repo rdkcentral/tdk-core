@@ -25,7 +25,7 @@
   <primitive_test_name>IARMBUS_RequestResource</primitive_test_name>
   <primitive_test_version>3</primitive_test_version>
   <status>ALLOCATED</status>
-  <synopsis>This test script verifies the request of a resource by a application when the same 
+  <synopsis>This test script verifies the request of a resource by a application when the same
  application already acquires the same resource.TestCase ID:CT_IARMBUS_8</synopsis>
   <groups_id/>
   <execution_time>3</execution_time>
@@ -59,7 +59,7 @@ IARM_BusDaemon_RequestOwnership(IARM_Bus_ResrcType_t )
 IARM_BusDaemon_ReleaseOwnership(IARM_Bus_ResrcType_t )
 IARM_Bus_Disconnect()
 IARM_Bus_Term()</api_or_interface_used>
-    <input_parameters>IARM_Bus_Init : 
+    <input_parameters>IARM_Bus_Init :
 char *  - (test agent process_name)
 IARM_Bus_Connect : None
 IARM_BusDaemon_RequestOwnership : IARM_Bus_ResrcType_t - IARM_BUS_RESOURCE_FOCUS
@@ -67,7 +67,7 @@ IARM_BusDaemon_ReleaseOwnership : IARM_Bus_ResrcType_t - IARM_BUS_RESOURCE_FOCUS
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</input_parameters>
     <automation_approch>1.TM loads the IARMBUS_Agent via the test agent.
-2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon . 
+2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon .
 3.IARMBUS_Agent request for a resource “IARM_BUS_RESOURCE_FOCUS”.
 4.IARMBUS_Agent will again request for the same resource “IARM_BUS_RESOURCE_FOCUS” before releasing it.
 5.IARMBUS_Agent will release the resource “IARM_BUS_RESOURCE_FOCUS”
@@ -99,111 +99,111 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'CT_IARMBUS_8');
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-        #calling IARMBUS API "IARM_Bus_Init"
-        tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    #calling IARMBUS API "IARM_Bus_Init"
+    tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    expectedresult="SUCCESS"
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details=tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if ("SUCCESS" in actualresult):
+        print("SUCCESS: Application successfully initialized with IARMBUS library");
+        tdkTestObj.setResultStatus("SUCCESS");
+        #calling IARMBUS API "IARM_Bus_Connect"
+        tdkTestObj = obj.createTestStep('IARMBUS_Connect');
         expectedresult="SUCCESS"
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details=tdkTestObj.getResultDetails();
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-        if ("SUCCESS" in actualresult):
-                print "SUCCESS: Application successfully initialized with IARMBUS library";
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: Application successfully connected with IARMBUS ");
+            #calling IARMBUS API "IARM_BusDaemon_RequestOwnership"
+            tdkTestObj = obj.createTestStep('IARMBUS_RequestResource');
+            #Requesting "RESOURCE_FOCUS" resource
+            tdkTestObj.addParameter("resource_type",1);
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details=tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_RequestResource
+            if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                #calling IARMBUS API "IARM_Bus_Connect"
-                tdkTestObj = obj.createTestStep('IARMBUS_Connect');
-                expectedresult="SUCCESS"
+                #Application tries to acquire the same resource second time
+                #calling IARMBUS API"IARM_BusDaemon_RequestOwnership"
+                print("SUCCESS: Requested resource is allocated successfully for the application");
+                tdkTestObj.addParameter("resource_type",1);
+                expectedresult="FAILURE"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+                #Check for SUCCESS/FAILURE return value of IARMBUS_RequestResource
                 if expectedresult in actualresult:
+                    print("SUCCESS: Requested resource is already allocated for the application");
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    #calling IARMBUS API "IARM_BusDaemon_ReleaseOwnership"
+                    tdkTestObj = obj.createTestStep('IARMBUS_ReleaseResource');
+                    tdkTestObj.addParameter("resource_type",1);
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details=tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_ReleaseResource
+                    if expectedresult in actualresult:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: Application successfully connected with IARMBUS ";
-                        #calling IARMBUS API "IARM_BusDaemon_RequestOwnership"
-                        tdkTestObj = obj.createTestStep('IARMBUS_RequestResource');
-                        #Requesting "RESOURCE_FOCUS" resource
-                        tdkTestObj.addParameter("resource_type",1);
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details=tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_RequestResource
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                #Application tries to acquire the same resource second time
-                                #calling IARMBUS API"IARM_BusDaemon_RequestOwnership"
-                                print "SUCCESS: Requested resource is allocated successfully for the application";
-                                tdkTestObj.addParameter("resource_type",1);
-                                expectedresult="FAILURE"
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details=tdkTestObj.getResultDetails();
-                                #Check for SUCCESS/FAILURE return value of IARMBUS_RequestResource
-                                if expectedresult in actualresult:
-                                        print "SUCCESS: Requested resource is already allocated for the application";
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        #calling IARMBUS API "IARM_BusDaemon_ReleaseOwnership"
-                                        tdkTestObj = obj.createTestStep('IARMBUS_ReleaseResource');
-                                        tdkTestObj.addParameter("resource_type",1);
-                                        expectedresult="SUCCESS"
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        details=tdkTestObj.getResultDetails();
-                                        #Check for SUCCESS/FAILURE return value of IARMBUS_ReleaseResource
-                                        if expectedresult in actualresult:
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                print "SUCCESS: Allocated  resource is successfully released";
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                print "FAILURE: IARM_BusDaemon_ReleaseOwnership failed. %s" %details;
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "FAILURE: IARM_BusDaemon_RequestOwnership failed. %s" %details;
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: Requesting resource second time -IARM_BusDaemon_RequestOwnership %s" %details;
-
-                        # Calling IARM_Bus_DisConnect API
-                        tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details=tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS :Application successfully disconnected from IARMBus";
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: IARM_Bus_Disconnect failed. %s " %details;
-                else:
+                        print("SUCCESS: Allocated  resource is successfully released");
+                    else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus_Connect failed. %s" %details;
-                #calling IARMBUS API "IARM_Bus_Term"
-                tdkTestObj = obj.createTestStep('IARMBUS_Term');
-                expectedresult="SUCCESS";
-                tdkTestObj.executeTestCase(expectedresult);
-                actualresult = tdkTestObj.getResult();
-                details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Term
-                if expectedresult in actualresult:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM_Bus term success";
+                        print("FAILURE: IARM_BusDaemon_ReleaseOwnership failed. %s" %details);
                 else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus Term failed";
-        else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: IARM_BusDaemon_RequestOwnership failed. %s" %details);
+            else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus_Init failed. %s " %details;
-        print "[TEST EXECUTION RESULT] : %s" %actualresult;
-        #Unload the iarmbus module
-        obj.unloadModule("iarmbus");
+                print("FAILURE: Requesting resource second time -IARM_BusDaemon_RequestOwnership %s" %details);
+
+            # Calling IARM_Bus_DisConnect API
+            tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details=tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
+            if expectedresult in actualresult:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("SUCCESS :Application successfully disconnected from IARMBus");
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("FAILURE: IARM_Bus_Disconnect failed. %s " %details);
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus_Connect failed. %s" %details);
+        #calling IARMBUS API "IARM_Bus_Term"
+        tdkTestObj = obj.createTestStep('IARMBUS_Term');
+        expectedresult="SUCCESS";
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details=tdkTestObj.getResultDetails();
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM_Bus term success");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus Term failed");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus_Init failed. %s " %details);
+    print("[TEST EXECUTION RESULT] : %s" %actualresult);
+    #Unload the iarmbus module
+    obj.unloadModule("iarmbus");
 else:
-        print"Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");

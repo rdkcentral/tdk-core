@@ -73,8 +73,8 @@ Test Case ID : IARMBUS_PERF_4</synopsis>
   </rdk_versions>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import time;
 #from resetAgent import resetAgent;
 
@@ -88,211 +88,211 @@ port = <port>
 obj.configureTestCase(ip,port,'IARMBUS_Two_Evt_Sender_Two_Evt_Receiver');
 
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS"); 
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-	#Prmitive test case which associated to this Script
-	tdkTestObj = obj.createTestStep('IARMBUS_Init');
-        expectedresult="SUCCESS/FAILURE"
+    #Prmitive test case which associated to this Script
+    tdkTestObj = obj.createTestStep('IARMBUS_Init');
+    expectedresult="SUCCESS/FAILURE"
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details=tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if ("SUCCESS" in actualresult):
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("SUCCESS: Application successfully initialized with IARMBUS library");
+        #calling IARMBUS API "IARM_Bus_Connect"
+        tdkTestObj = obj.createTestStep('IARMBUS_Connect');
+        expectedresult="SUCCESS"
         tdkTestObj.executeTestCase(expectedresult);
         actualresult = tdkTestObj.getResult();
         details=tdkTestObj.getResultDetails();
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
-        if ("SUCCESS" in actualresult):
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: Application successfully connected with IARM-Bus Daemon");
+
+            #Prmitive test case which associated to this Script
+            tdkTestObj = obj.createTestStep('IARMBUS_RegisterEventHandler');
+            #registering event handler for IR Key events
+            tdkTestObj.addParameter("owner_name","IRMgr");
+            tdkTestObj.addParameter("event_id",0);
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details=tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_RegisterEventHandler
+            if expectedresult in actualresult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS: Application successfully initialized with IARMBUS library";
-                #calling IARMBUS API "IARM_Bus_Connect"
-                tdkTestObj = obj.createTestStep('IARMBUS_Connect');
+                print("SUCCESS: Event Handler registered for IR key events");
+                #sleep for 3 sec to receive IR key event that is broadcasted from second app.
+                time.sleep(3);
+
+                #Prmitive test case which associated to this Script
+                tdkTestObj = obj.createTestStep('IARMBUS_RegisterEventHandler');
+                #registering event handler for IR Key events
+                tdkTestObj.addParameter("owner_name","Daemon");
+                tdkTestObj.addParameter("event_id",1);
                 expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
+                #Check for SUCCESS/FAILURE return value of IARMBUS_RegisterEventHandler
                 if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: Event Handler registered for Daemon");
+                    #sleep for 3 sec to receive IR key event that is broadcasted from second app.
+                    #time.sleep(3);
+
+                    #Prmitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('IARMBUS_InvokeEventTransmitterApp');
+                    #registering event handler for IR Key events
+                    tdkTestObj.addParameter("owner_name","IRMgr");
+                    tdkTestObj.addParameter("event_id",0);
+                    tdkTestObj.addParameter("evttxappname","gen_single_event");
+                    tdkTestObj.addParameter("keyType",32768);
+                    tdkTestObj.addParameter("keyCode",301);
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    #details=tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value
+                    if expectedresult in actualresult:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: Application successfully connected with IARM-Bus Daemon";
-
-			#Prmitive test case which associated to this Script
-			tdkTestObj = obj.createTestStep('IARMBUS_RegisterEventHandler');
-			#registering event handler for IR Key events
-			tdkTestObj.addParameter("owner_name","IRMgr");
-			tdkTestObj.addParameter("event_id",0);
-			expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details=tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_RegisterEventHandler
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS: Event Handler registered for IR key events";
-                                #sleep for 3 sec to receive IR key event that is broadcasted from second app.
-                                time.sleep(3);
-
-				#Prmitive test case which associated to this Script
-				tdkTestObj = obj.createTestStep('IARMBUS_RegisterEventHandler');
-				#registering event handler for IR Key events
-				tdkTestObj.addParameter("owner_name","Daemon");
-				tdkTestObj.addParameter("event_id",1);
-				expectedresult="SUCCESS"
-                        	tdkTestObj.executeTestCase(expectedresult);
-	                        actualresult = tdkTestObj.getResult();
-        	                details=tdkTestObj.getResultDetails();
-                	        #Check for SUCCESS/FAILURE return value of IARMBUS_RegisterEventHandler
-                        	if expectedresult in actualresult:
-                                	tdkTestObj.setResultStatus("SUCCESS");
-	                                print "SUCCESS: Event Handler registered for Daemon";
-        	                        #sleep for 3 sec to receive IR key event that is broadcasted from second app.
-                	                #time.sleep(3);
-
-					#Prmitive test case which associated to this Script
-					tdkTestObj = obj.createTestStep('IARMBUS_InvokeEventTransmitterApp');
-					#registering event handler for IR Key events
-					tdkTestObj.addParameter("owner_name","IRMgr");
-					tdkTestObj.addParameter("event_id",0);
-					tdkTestObj.addParameter("evttxappname","gen_single_event");
-					tdkTestObj.addParameter("keyType",32768);
-					tdkTestObj.addParameter("keyCode",301);
-					expectedresult="SUCCESS"
-                                	tdkTestObj.executeTestCase(expectedresult);
-	                                actualresult = tdkTestObj.getResult();
-        	                        #details=tdkTestObj.getResultDetails();
-                	                #Check for SUCCESS/FAILURE return value
-                        	        if expectedresult in actualresult:
-                                	        tdkTestObj.setResultStatus("SUCCESS");
-                                        	print "SUCCESS: Second application Invoked successfully";
-	                                else:
-        	                                tdkTestObj.setResultStatus("FAILURE");
-                	                        print "FAILURE: Second application failed to execute";
-                        	        time.sleep(2);
-                                        #Prmitive test case which associated to this Script
-                                        tdkTestObj = obj.createTestStep('IARMBUS_GetLastReceivedEventPerformanceDetails');
-                                        expectedresult="SUCCESS"
-                                        tdkTestObj.executeTestCase(expectedresult);
-                                        actualresult = tdkTestObj.getResult();
-                                        details=tdkTestObj.getResultDetails();
-                                        print details;
-                                        #Check for SUCCESS/FAILURE return value of IARMBUS_GetLastReceivedEventDetails
-                                        if expectedresult in actualresult:
-                                                tdkTestObj.setResultStatus("SUCCESS");
-                                                print "SUCCESS: GetLastReceivedEventDetails executed successfully";
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
-                                                print "FAILURE: GetLastReceivedEventDetails failed";
-
-					#Prmitive test case which associated to this Script
-					tdkTestObj = obj.createTestStep('IARMBUS_InvokeEventTransmitterApp');
-					#registering event handler for IARMBUS Daemon Key events
-					tdkTestObj.addParameter("owner_name","Daemon");
-					tdkTestObj.addParameter("event_id",1);
-					tdkTestObj.addParameter("evttxappname","gen_single_event");
-					expectedresult="SUCCESS"
-                                	tdkTestObj.executeTestCase(expectedresult);
-	                                actualresult = tdkTestObj.getResult();
-        	                        #details=tdkTestObj.getResultDetails();
-                	                #Check for SUCCESS/FAILURE return value
-                        	        if expectedresult in actualresult:
-                                	        tdkTestObj.setResultStatus("SUCCESS");
-                                        	print "SUCCESS: Second application Invoked successfully";
-	                                else:
-        	                                tdkTestObj.setResultStatus("FAILURE");
-                	                        print "FAILURE: Second application failed to execute";
-                        	        time.sleep(2);									
-					#Prmitive test case which associated to this Script
-					tdkTestObj = obj.createTestStep('IARMBUS_GetLastReceivedEventPerformanceDetails');
-					expectedresult="SUCCESS"
-                	                tdkTestObj.executeTestCase(expectedresult);
-                        	        actualresult = tdkTestObj.getResult();
-                                	details=tdkTestObj.getResultDetails();
-	                                print details;
-        	                        #Check for SUCCESS/FAILURE return value of IARMBUS_GetLastReceivedEventDetails
-                	                if expectedresult in actualresult:
-                        	                tdkTestObj.setResultStatus("SUCCESS");
-                                	        print "SUCCESS: GetLastReceivedEventDetails executed successfully";
-	                                else:
-        	                                tdkTestObj.setResultStatus("FAILURE");
-                	                        print "FAILURE: GetLastReceivedEventDetails failed";
-
-					tdkTestObj = obj.createTestStep('IARMBUS_UnRegisterEventHandler');
-					#Transmit IR Key events
-					tdkTestObj.addParameter("owner_name","Daemon");
-					tdkTestObj.addParameter("event_id",1);
-
-					expectedresult="SUCCESS"
-                        	        tdkTestObj.executeTestCase(expectedresult);
-                                	actualresult = tdkTestObj.getResult();
-	                                details=tdkTestObj.getResultDetails();
-        	                        #Check for SUCCESS/FAILURE return value of IARMBUS_UnRegisterEventHandler
-                	                if expectedresult in actualresult:
-                        	                tdkTestObj.setResultStatus("SUCCESS");
-                                	        print "SUCCESS: UnRegister Event Handler for Daemon events";
-	                                else:
-        	                                tdkTestObj.setResultStatus("FAILURE");
-                	                        print "FAILURE : IARM_Bus_UnRegisterEventHanlder failed. %s " %details;
- 	                        else:
-        	                    tdkTestObj.setResultStatus("FAILURE");
-                	            print "FAILURE : IARM_Bus_RegisterEventHandler Daemon Events failed. %s " %details;
-
-				tdkTestObj = obj.createTestStep('IARMBUS_UnRegisterEventHandler');
-				#Transmit IR Key events
-				tdkTestObj.addParameter("owner_name","IRMgr");
-				tdkTestObj.addParameter("event_id",0);
-				expectedresult="SUCCESS"
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details=tdkTestObj.getResultDetails();
-                                #Check for SUCCESS/FAILURE return value of IARMBUS_UnRegisterEventHandler
-                                if expectedresult in actualresult:
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "SUCCESS: UnRegister Event Handler for IR key events";
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "FAILURE : IARM_Bus_UnRegisterEventHanlder failed. %s " %details;
-
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE : IARM_Bus_RegisterEventHandler IR Events failed. %s " %details;
-
-                        #calling IARMBUS API "IARM_Bus_DisConnect"
-                        tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
-                        expectedresult="SUCCESS"
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        details=tdkTestObj.getResultDetails();
-                        #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
-                        if expectedresult in actualresult:
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "SUCCESS: Application successfully disconnected from IARMBus";
-                        else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print "FAILURE: IARM_Bus_Disconnect failed. %s " %details
-
-                else:
+                        print("SUCCESS: Second application Invoked successfully");
+                    else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus_Connect failed. %s" %details;
+                        print("FAILURE: Second application failed to execute");
+                    time.sleep(2);
+                    #Prmitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('IARMBUS_GetLastReceivedEventPerformanceDetails');
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details=tdkTestObj.getResultDetails();
+                    print(details);
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_GetLastReceivedEventDetails
+                    if expectedresult in actualresult:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: GetLastReceivedEventDetails executed successfully");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE: GetLastReceivedEventDetails failed");
 
-                #calling IARMBUS API "IARM_Bus_Term"
-                tdkTestObj = obj.createTestStep('IARMBUS_Term');
-                expectedresult="SUCCESS";
+                    #Prmitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('IARMBUS_InvokeEventTransmitterApp');
+                    #registering event handler for IARMBUS Daemon Key events
+                    tdkTestObj.addParameter("owner_name","Daemon");
+                    tdkTestObj.addParameter("event_id",1);
+                    tdkTestObj.addParameter("evttxappname","gen_single_event");
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    #details=tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value
+                    if expectedresult in actualresult:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: Second application Invoked successfully");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE: Second application failed to execute");
+                    time.sleep(2);
+                    #Prmitive test case which associated to this Script
+                    tdkTestObj = obj.createTestStep('IARMBUS_GetLastReceivedEventPerformanceDetails');
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details=tdkTestObj.getResultDetails();
+                    print(details);
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_GetLastReceivedEventDetails
+                    if expectedresult in actualresult:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: GetLastReceivedEventDetails executed successfully");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE: GetLastReceivedEventDetails failed");
+
+                    tdkTestObj = obj.createTestStep('IARMBUS_UnRegisterEventHandler');
+                    #Transmit IR Key events
+                    tdkTestObj.addParameter("owner_name","Daemon");
+                    tdkTestObj.addParameter("event_id",1);
+
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
+                    actualresult = tdkTestObj.getResult();
+                    details=tdkTestObj.getResultDetails();
+                    #Check for SUCCESS/FAILURE return value of IARMBUS_UnRegisterEventHandler
+                    if expectedresult in actualresult:
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: UnRegister Event Handler for Daemon events");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE : IARM_Bus_UnRegisterEventHanlder failed. %s " %details);
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE : IARM_Bus_RegisterEventHandler Daemon Events failed. %s " %details);
+
+                tdkTestObj = obj.createTestStep('IARMBUS_UnRegisterEventHandler');
+                #Transmit IR Key events
+                tdkTestObj.addParameter("owner_name","IRMgr");
+                tdkTestObj.addParameter("event_id",0);
+                expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details=tdkTestObj.getResultDetails();
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+                #Check for SUCCESS/FAILURE return value of IARMBUS_UnRegisterEventHandler
                 if expectedresult in actualresult:
-                        tdkTestObj.setResultStatus("SUCCESS");
-                        print "SUCCESS: IARM_Bus term success";
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: UnRegister Event Handler for IR key events");
                 else:
-                        tdkTestObj.setResultStatus("FAILURE");
-                        print "FAILURE: IARM_Bus Term failed";
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE : IARM_Bus_UnRegisterEventHanlder failed. %s " %details);
+
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("FAILURE : IARM_Bus_RegisterEventHandler IR Events failed. %s " %details);
+
+            #calling IARMBUS API "IARM_Bus_DisConnect"
+            tdkTestObj = obj.createTestStep('IARMBUS_DisConnect');
+            expectedresult="SUCCESS"
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details=tdkTestObj.getResultDetails();
+            #Check for SUCCESS/FAILURE return value of IARMBUS_DisConnect
+            if expectedresult in actualresult:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("SUCCESS: Application successfully disconnected from IARMBus");
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("FAILURE: IARM_Bus_Disconnect failed. %s " %details)
 
         else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus_Init failed. %s " %details;
-        
-	obj.unloadModule("iarmbus");
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus_Connect failed. %s" %details);
+
+        #calling IARMBUS API "IARM_Bus_Term"
+        tdkTestObj = obj.createTestStep('IARMBUS_Term');
+        expectedresult="SUCCESS";
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        details=tdkTestObj.getResultDetails();
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+        if expectedresult in actualresult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: IARM_Bus term success");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("FAILURE: IARM_Bus Term failed");
+
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus_Init failed. %s " %details);
+
+    obj.unloadModule("iarmbus");
 
 else:
-        print "Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");

@@ -25,7 +25,7 @@
   <primitive_test_name>IARMBUS_Term</primitive_test_name>
   <primitive_test_version>0</primitive_test_version>
   <status>FREE</status>
-  <synopsis>This test script will check Terminating an application with IARMBUS without Initializing				
+  <synopsis>This test script will check Terminating an application with IARMBUS without Initializing
 TEST CASE ID:CT_IARMBUS_42</synopsis>
   <groups_id/>
   <execution_time>3</execution_time>
@@ -56,7 +56,7 @@ TEST CASE ID:CT_IARMBUS_42</synopsis>
     <api_or_interface_used>IARM_Bus_Term()</api_or_interface_used>
     <input_parameters>IARM_Bus_Term : None</input_parameters>
     <automation_approch>1.TM loads the IARMBUS_Agent via the test agent.
-2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon . 
+2.The IARMBUS_Agent initializes and registers with IARM Bus Daemon .
 3.IARMBUS_Agent deregisters from the IARM Bus Daemon.
 4.For each API called in the script, IARMBUS_Agent will send SUCCESS or FAILURE status to Test Agent by comparing the return vale of APIs.</automation_approch>
     <except_output>Checkpoint 1.Check the return value of API for failure status.</except_output>
@@ -81,28 +81,28 @@ ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'CT_IARMBUS_42');
 loadmodulestatus =obj.getLoadModuleResult();
-print "Iarmbus module loading status  :  %s" %loadmodulestatus ;
+print("Iarmbus module loading status  :  %s" %loadmodulestatus) ;
 if "SUCCESS" in loadmodulestatus.upper():
-        #Set the module loading status
-        obj.setLoadModuleStatus("SUCCESS");
+    #Set the module loading status
+    obj.setLoadModuleStatus("SUCCESS");
 
-        #calling IARMBUS API "IARM_Bus_Term"
-        tdkTestObj = obj.createTestStep('IARMBUS_Term');
-        
-        expectedresult="FAILURE";
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult = tdkTestObj.getResult();
-        details=tdkTestObj.getResultDetails();
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Term
-        if expectedresult in actualresult:
-                tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS: Cannot Terminate Iarm bus without Init";
-        else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: IARM_Bus Term success without Init";
+    #calling IARMBUS API "IARM_Bus_Term"
+    tdkTestObj = obj.createTestStep('IARMBUS_Term');
 
-        obj.unloadModule("iarmbus");
+    expectedresult="FAILURE";
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details=tdkTestObj.getResultDetails();
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Term
+    if expectedresult in actualresult:
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("SUCCESS: Cannot Terminate Iarm bus without Init");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("FAILURE: IARM_Bus Term success without Init");
+
+    obj.unloadModule("iarmbus");
 else:
-        print"Load module failed";
-        #Set the module loading status
-        obj.setLoadModuleStatus("FAILURE");
+    print("Load module failed");
+    #Set the module loading status
+    obj.setLoadModuleStatus("FAILURE");
