@@ -76,7 +76,7 @@ obj.configureTestCase(ip,port,'RDKV_Basic_Sanity_Check_Eth_Wifi_Toggle_Functiona
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -91,12 +91,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -121,22 +121,22 @@ if expectedResult in result.upper():
             if "FAILURE" in output or expectedResult not in output:
                 #Check if the file exists or not
                 if "No such file or directory" in output:
-                  print "FAILURE: File not found"
-                  tdkTestObj.setResultStatus("FAILURE")
+                    print("FAILURE: File not found")
+                    tdkTestObj.setResultStatus("FAILURE")
                 else:
-                  print "FAILURE: Script Execution was not Successful"
-                  tdkTestObj.setResultStatus("FAILURE")
+                    print("FAILURE: Script Execution was not Successful")
+                    tdkTestObj.setResultStatus("FAILURE")
             elif "FAILURE" not in output and expectedResult in output:
-                print "SUCCESS: Script Execution Successful"
+                print("SUCCESS: Script Execution Successful")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Error: Error in the Script Execution"
-                tdkTestObj.setResultStatus("FAILURE")              
+                print("Error: Error in the Script Execution")
+                tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
     obj.unloadModule("rdkv_basic_sanity");
@@ -144,7 +144,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
-
-
+    print("FAILURE: Failed to load module")
