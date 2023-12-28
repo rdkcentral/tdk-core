@@ -61,13 +61,13 @@ string – level (e.g., ERROR)
 string - msg ("log of 512 alphanumeric characters")</input_parameters>
     <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.
 2. TM will invoke “TestMgr_RDKLogger_Log_Msg” in RDKLoggerStub_agent.
-3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.  
+3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.
 4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call RDK_LOG() API of the component.
 5. RDKLoggerStub_Agent will send SUCCESS or FAILURE to TM.</automation_approch>
     <except_output>Checkpoint 1..Check for the log message logged by the API.
 Checkpoint 2.Check the return value of API for success status.</except_output>
     <priority>High</priority>
-    <test_stub_interface>librdkloggerstub.so 
+    <test_stub_interface>librdkloggerstub.so
 TestMgr_RDKLogger_Log_Msg</test_stub_interface>
     <test_script>RDKLogger_MaxLogLine</test_script>
     <skipped>No</skipped>
@@ -92,7 +92,7 @@ obj = TDKScriptingLibrary("rdklogger","2.0");
 obj.configureTestCase(ip,port,'RDKLogger_MaxLogLine');
 #Get the result of connection with test component and STB
 result =obj.getLoadModuleResult();
-print "rdklogger module loading status :%s" %result;
+print("rdklogger module loading status :%s" %result);
 
 #Check for SUCCESS/FAILURE of rdklogger module
 if "SUCCESS" in result.upper():
@@ -105,15 +105,15 @@ if "SUCCESS" in result.upper():
     expectedRes = "SUCCESS"
 
     module = "TEST"
-    print "Requested module: %s"%module
+    print("Requested module: %s"%module)
     tdkTestObj.addParameter("module",module);
     level = "ERROR"
-    print "Requested level: %s"%level
+    print("Requested level: %s"%level)
     tdkTestObj.addParameter("level",level);
     #randMsg = [choice(ascii_letters + digits) for n in xrange(512)]
-    randMsg = [choice(ascii_letters + digits) for n in xrange(256)]
+    randMsg = [choice(ascii_letters + digits) for n in range(256)]
     msg = "".join(randMsg)
-    print "Requested message: %s"%msg
+    print("Requested message: %s"%msg)
     tdkTestObj.addParameter("msg",msg);
 
     #Execute the test case in STB
@@ -121,19 +121,19 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     details = tdkTestObj.getResultDetails();
     #Set the result status of execution
     if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("SUCCESS");
-        print "rdklogger logging Successful";
+        print("rdklogger logging Successful");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "rdklogger logging Failed: [%s]"%details;
+        print("rdklogger logging Failed: [%s]"%details);
 
     #unloading rdklogger module
     obj.unloadModule("rdklogger");
 else:
-    print "Failed to load rdklogger module";
+    print("Failed to load rdklogger module");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

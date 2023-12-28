@@ -53,22 +53,22 @@ Test Type: Negative</synopsis>
     <test_objective>To add a log message from a module with a particular log level disabled in debug.ini file.</test_objective>
     <test_type>Negative</test_type>
     <test_setup>XI3-1/XG1-1</test_setup>
-    <pre_requisite>1. RDK debug manager module should be intialized 
+    <pre_requisite>1. RDK debug manager module should be intialized
 2. Module should be configured with !INFO level in debug.ini conf file</pre_requisite>
     <api_or_interface_used>rdk_dbg_MsgRaw()</api_or_interface_used>
-    <input_parameters>rdk_dbg_MsgRaw:  
+    <input_parameters>rdk_dbg_MsgRaw:
 
 string – module (e.g., JAVA)
 String – level (e.g., INFO)</input_parameters>
     <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.
 2. TM will invoke “TestMgr_RDKLogger_Log” in RDKLoggerStub_agent.
-3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.  
+3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.
 4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call RDK_LOG() API of the component with inverse log level of JAVA module.
 5. RDKLoggerStub_Agent will send SUCCESS or FAILURE to TM.</automation_approch>
     <except_output>Checkpoint 1. Check that log message is not logged by the API.
 Checkpoint 2.Check the return value of API for success status.</except_output>
     <priority>High</priority>
-    <test_stub_interface>librdkloggerstub.so 
+    <test_stub_interface>librdkloggerstub.so
 TestMgr_RDKLogger_Log</test_stub_interface>
     <test_script>RDKLogger_Log_InverseLevel</test_script>
     <skipped>No</skipped>
@@ -91,7 +91,7 @@ obj = TDKScriptingLibrary("rdklogger","2.0");
 obj.configureTestCase(ip,port,'RDKLogger_Log_InverseLevel');
 #Get the result of connection with test component and STB
 result =obj.getLoadModuleResult();
-print "rdklogger module loading status :%s" %result;
+print("rdklogger module loading status :%s" %result);
 
 #Check for SUCCESS/FAILURE of rdklogger module
 if "SUCCESS" in result.upper():
@@ -104,10 +104,10 @@ if "SUCCESS" in result.upper():
     expectedRes = "FAILURE"
 
     module = "JAVA"
-    print "Requested module: %s"%module
+    print("Requested module: %s"%module)
     tdkTestObj.addParameter("module",module);
     level = "INFO"
-    print "Requested level: %s"%level
+    print("Requested level: %s"%level)
     tdkTestObj.addParameter("level",level);
 
     #Execute the test case in STB
@@ -115,19 +115,19 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     details = tdkTestObj.getResultDetails();
     #Set the result status of execution
     if "FAILURE" in result.upper():
         tdkTestObj.setResultStatus("SUCCESS");
-        print "rdklogger logging Successful";
+        print("rdklogger logging Successful");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "rdklogger logging Failed: [%s]"%details;
+        print("rdklogger logging Failed: [%s]"%details);
 
     #unloading rdklogger module
     obj.unloadModule("rdklogger");
 else:
-    print "Failed to load rdklogger module";
+    print("Failed to load rdklogger module");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

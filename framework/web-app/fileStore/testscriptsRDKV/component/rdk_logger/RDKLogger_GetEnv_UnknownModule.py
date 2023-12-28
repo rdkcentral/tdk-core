@@ -25,8 +25,8 @@
   <primitive_test_name>RDKLogger_EnvGet</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the environment variable value of a module not present in debug.ini file. 
-Test Case ID: CT_RDKLogger_34 
+  <synopsis>To get the environment variable value of a module not present in debug.ini file.
+Test Case ID: CT_RDKLogger_34
 Test Type: Negative</synopsis>
   <groups_id/>
   <execution_time>5</execution_time>
@@ -57,15 +57,15 @@ Test Type: Negative</synopsis>
     <api_or_interface_used>rdk_logger_envGet()</api_or_interface_used>
     <input_parameters>rdk_logger_envGet:
 string – module (e.g., TDK)</input_parameters>
-    <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.  
-2. TM will invoke “TestMgr_RDKLogger_EnvGet” in RDKLoggerStub_agent. 
-3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.  
-4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call rdk_logger_envGet() API of the component and get the result. 
+    <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.
+2. TM will invoke “TestMgr_RDKLogger_EnvGet” in RDKLoggerStub_agent.
+3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.
+4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call rdk_logger_envGet() API of the component and get the result.
 5. If return value of API is ERROR, RDKLoggerStub_Agent will send SUCCESS to TM else send FAILURE to TM.</automation_approch>
     <except_output>Checkpoint 1..Check for the logging level value returned by the API.
 Checkpoint 2.Check the return value of API for success status.</except_output>
     <priority>High</priority>
-    <test_stub_interface>librdkloggerstub.so 
+    <test_stub_interface>librdkloggerstub.so
 TestMgr_RDKLogger_EnvGet</test_stub_interface>
     <test_script>RDKLogger_GetEnv_UnknownModule</test_script>
     <skipped>No</skipped>
@@ -88,7 +88,7 @@ obj = TDKScriptingLibrary("rdklogger","2.0");
 obj.configureTestCase(ip,port,'RDKLogger_GetEnv_UnknownModule');
 #Get the result of connection with test component and STB
 result =obj.getLoadModuleResult();
-print "rdklogger module loading status :%s" %result;
+print("rdklogger module loading status :%s" %result);
 
 #Check for SUCCESS/FAILURE of rdklogger module
 if "SUCCESS" in result.upper():
@@ -101,7 +101,7 @@ if "SUCCESS" in result.upper():
     expectedRes = "FAILURE"
 
     module = "TDK"
-    print "Requested module: %s"%module
+    print("Requested module: %s"%module)
     tdkTestObj.addParameter("module",module);
 
     #Execute the test case in STB
@@ -109,20 +109,20 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     details = tdkTestObj.getResultDetails();
-    print "[TEST EXECUTION DETAILS] : %s" %details;
+    print("[TEST EXECUTION DETAILS] : %s" %details);
     #Set the result status of execution
     if "FAILURE" in result.upper():
         tdkTestObj.setResultStatus("SUCCESS");
-        print "rdklogger env get failed for unknown module"
+        print("rdklogger env get failed for unknown module")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "rdklogger env get success for unknown module"
+        print("rdklogger env get success for unknown module")
 
     #unloading rdklogger module
     obj.unloadModule("rdklogger");
 else:
-    print "Failed to load rdklogger module";
+    print("Failed to load rdklogger module");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");

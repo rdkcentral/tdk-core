@@ -55,19 +55,19 @@ Test Type: Positive</synopsis>
     <test_setup>XG1-1/XI3-1</test_setup>
     <pre_requisite>RDK debug manager module should be intialized</pre_requisite>
     <api_or_interface_used>rdk_dbg_enabled()</api_or_interface_used>
-    <input_parameters>rdk_dbg_enabled:  
+    <input_parameters>rdk_dbg_enabled:
 string – level (e.g., INFO)
 string – module (e.g., QAMSRC)</input_parameters>
-    <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.  
-2. TM will invoke “TestMgr_RDKLogger_Dbg_Enabled_Status” in RDKLoggerStub_agent. 
-3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.  
-4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call rdk_dbg_enabled() API of the component and get the result. 
-5. RDKLoggerStub_agent will call a helper function to find if specified module and level are enabled in debug.ini file. 
+    <automation_approch>1. TM loads RDKLoggerStub_agent via the test agent.
+2. TM will invoke “TestMgr_RDKLogger_Dbg_Enabled_Status” in RDKLoggerStub_agent.
+3. RDKLoggerStub_agent will call rdk_logger_init() API of the component and get the result.
+4. On success of rdk_logger_init() API, RDKLoggerStub_agent will call rdk_dbg_enabled() API of the component and get the result.
+5. RDKLoggerStub_agent will call a helper function to find if specified module and level are enabled in debug.ini file.
 6. RDKLoggerStub_Agent will send SUCCESS or FAILURE to TM after comparing return  value of rdk_dbg_enabled() API and helper function.</automation_approch>
     <except_output>Checkpoint 1..Check for the return value of  rdk_dbg_enabled API and cross check with debug.ini settings.
 Checkpoint 2.Check the return value of API for success status.</except_output>
     <priority>High</priority>
-    <test_stub_interface>librdkloggerstub.so 
+    <test_stub_interface>librdkloggerstub.so
 TestMgr_RDKLogger_Dbg_Enabled_Status</test_stub_interface>
     <test_script>RDKLogger_Dbg_Enabled_Status</test_script>
     <skipped>No</skipped>
@@ -93,7 +93,7 @@ obj = TDKScriptingLibrary("rdklogger","2.0");
 obj.configureTestCase(ip,port,'RDKLogger_Dbg_Enabled_Status');
 #Get the result of connection with test component and STB
 result =obj.getLoadModuleResult();
-print "rdklogger module loading status :%s" %result;
+print("rdklogger module loading status :%s" %result);
 
 #Check for SUCCESS/FAILURE of rdklogger module
 if "SUCCESS" in result.upper():
@@ -105,10 +105,10 @@ if "SUCCESS" in result.upper():
 
     expectedRes = "SUCCESS"
     module = "DVR"
-    print "Requested module: %s"%module
+    print("Requested module: %s"%module)
     tdkTestObj.addParameter("module",module);
     level = "ERROR"
-    print "Requested level: %s"%level
+    print("Requested level: %s"%level)
     tdkTestObj.addParameter("level",level);
 
     #Execute the test case in STB
@@ -116,19 +116,19 @@ if "SUCCESS" in result.upper():
 
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     details = tdkTestObj.getResultDetails();
     #Set the result status of execution
     if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("SUCCESS");
-        print "rdklogger dbg enabled status Successful: [%s]" %details;
+        print("rdklogger dbg enabled status Successful: [%s]" %details);
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "rdklogger dbg enabled status Failed: [%s]"%details;
+        print("rdklogger dbg enabled status Failed: [%s]"%details);
 
     #unloading rdklogger module
     obj.unloadModule("rdklogger");
 else:
-    print "Failed to load rdklogger module";
+    print("Failed to load rdklogger module");
     #Set the module loading status
     obj.setLoadModuleStatus("FAILURE");
