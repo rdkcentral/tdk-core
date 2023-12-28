@@ -110,7 +110,7 @@ sysobj.configureTestCase(ip,port,'Aamp_SetSlowMotionRate_MPD');
 #Get the result of connection with test component and STB
 aamp_status  =aampobj.getLoadModuleResult();
 sysutil_status = sysobj.getLoadModuleResult();
-print "[LIB LOAD STATUS]:aamp is %s and systemutil is %s" %(aamp_status,sysutil_status);
+print("[LIB LOAD STATUS]:aamp is %s and systemutil is %s" %(aamp_status,sysutil_status));
 
 if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
     aampobj.setLoadModuleStatus("SUCCESS");
@@ -126,12 +126,12 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
     #Get the result of execution
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "AAMP Tune call is success"
+        print("AAMP Tune call is success")
         #Search events in Log
         result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         if Expected_Result in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "AAMP Tune events are verified"
+            print("AAMP Tune events are verified")
 
             rate = 0.5
             tdkTestObj = aampobj.createTestStep('Aamp_AampSetRate');
@@ -146,17 +146,17 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                 result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
                 if Expected_Result in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Verified AampSetRate happened with rate: %s"%rate;
+                    print("Verified AampSetRate happened with rate: %s"%rate);
 
                     #Check if playback rate is set as expected
-                    aampUtilitylib.CheckPlayBackRate(aampobj,rate) 
+                    aampUtilitylib.CheckPlayBackRate(aampobj,rate)
 
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "AampSetRate Events not verified with rate :%s"%rate;
+                    print("AampSetRate Events not verified with rate :%s"%rate);
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "No AAMP events are received"
+            print("No AAMP events are received")
 
         #AampTuneStop call
         tdkTestObj = aampobj.createTestStep('Aamp_AampStop');
@@ -166,15 +166,14 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
         result = tdkTestObj.getResult();
         if Expected_Result in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "AAMP Stop Success"
+            print("AAMP Stop Success")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AAMP Stop Failure"
+            print("AAMP Stop Failure")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AAMP Tune is Failure"
+        print("AAMP Tune is Failure")
 
     #Unload Module
     aampobj.unloadModule("aamp");
     sysobj.unloadModule("systemutil");
-

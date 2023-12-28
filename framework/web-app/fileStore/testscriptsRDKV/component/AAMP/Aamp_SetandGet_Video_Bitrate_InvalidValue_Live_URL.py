@@ -87,8 +87,8 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 from time import sleep;
 #IP and Port of box, No need to change,
@@ -102,135 +102,135 @@ aampObj.configureTestCase(ip,port,'Aamp_SetandGet_Video_Bitrate_InvalidValue_Liv
 sysObj.configureTestCase(ip,port,'Aamp_SetandGet_Video_Bitrate_InvalidValue_Live_URL');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-	aampObj.setLoadModuleStatus("SUCCESS");
-	sysObj.setLoadModuleStatus("SUCCESS");
-    
-	streamType="livestream"
-	#pattern to be searched for event validation
-	pattern="AAMP_EVENT_TUNED"
-	#fetch Aamp stream from config file
-	tuneURL=aampUtilitylib.getAampTuneURL(streamType);
-	
-	#Prmitive test case which associated to this Script
-	tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-	tdkTestObj.addParameter("URL",tuneURL);
-	expectedResult = "SUCCESS";
-	#Execute the test case in STB
-	tdkTestObj.executeTestCase(expectedResult);
-	#Get the result of execution
-	actualResult = tdkTestObj.getResult();
-	if expectedResult in actualResult:
-		print "AAMP Tune call is success"
-		#Search events in Log	
-                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-		if expectedResult in actualResult:
-			print "AAMP Tune event recieved"
-			print "[TEST EXECUTION RESULT] : %s" %actualResult;
-			#Set the result status of execution
-			tdkTestObj.setResultStatus("SUCCESS");
+    aampObj.setLoadModuleStatus("SUCCESS");
+    sysObj.setLoadModuleStatus("SUCCESS");
 
-			#Testing with small value as bitrate comes in the range of lakhs
-			rate = "150";
-		        tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoBitrate');
-			tdkTestObj.addParameter("bitRate", int(rate));
-		        expectedResult = "SUCCESS";
-			print "Trying to set video bitrate to ", rate;
-			#Execute the test case in STB
-			tdkTestObj.executeTestCase(expectedResult);
-			#Get the result of execution
-			actualResult = tdkTestObj.getResult();
-			print actualResult;
-			details = tdkTestObj.getResultDetails();
-			sleep(10);
+    streamType="livestream"
+    #pattern to be searched for event validation
+    pattern="AAMP_EVENT_TUNED"
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
 
-			if expectedResult in actualResult:
-				tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoBitrate');
-				expectedResult = "SUCCESS";
-				#Execute the test case in STB
-				tdkTestObj.executeTestCase(expectedResult);
-				#Get the result of execution
-				actualResult = tdkTestObj.getResult();
-				print actualResult;
-				details = tdkTestObj.getResultDetails();
-				print details;
-				if expectedResult in actualResult and rate not in details:
-					#Set the result status of execution
-					tdkTestObj.setResultStatus("SUCCESS");
-					print "Video bitrate not set to invalid value";
-				else:
-					#Set the result status of execution
-					tdkTestObj.setResultStatus("FAILURE");
-					print "Video bitrate set to invalid value";
-			else:
-				 #Set the result status of execution
-				 tdkTestObj.setResultStatus("FAILURE");
-				 print "Aamp_AampSetVideoBitrate call failed";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
 
-                        #Testing with negative value
-                        rate = "-50";
-                        tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoBitrate');
-                        tdkTestObj.addParameter("bitRate", int(rate));
-                        expectedResult = "SUCCESS";
-                        print "Trying to set video bitrate to ", rate;
-                        #Execute the test case in STB
-                        tdkTestObj.executeTestCase(expectedResult);
-                        #Get the result of execution
-                        actualResult = tdkTestObj.getResult();
-                        print actualResult;
-                        details = tdkTestObj.getResultDetails();
-                        sleep(10);
+            #Testing with small value as bitrate comes in the range of lakhs
+            rate = "150";
+            tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoBitrate');
+            tdkTestObj.addParameter("bitRate", int(rate));
+            expectedResult = "SUCCESS";
+            print("Trying to set video bitrate to ", rate);
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            sleep(10);
 
-                        if expectedResult in actualResult:
-                                tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoBitrate');
-                                expectedResult = "SUCCESS";
-                                #Execute the test case in STB
-                                tdkTestObj.executeTestCase(expectedResult);
-                                #Get the result of execution
-                                actualResult = tdkTestObj.getResult();
-                                print actualResult;
-                                details = tdkTestObj.getResultDetails();
-                                print details;
-                                if expectedResult in actualResult and rate not in details:
-                                        #Set the result status of execution
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "Video bitrate not set to invalid value";
-                                else:
-                                        #Set the result status of execution
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "Video bitrate set to invalid value";
-                        else:
-                                 #Set the result status of execution
-                                 tdkTestObj.setResultStatus("FAILURE");
-                                 print "Aamp_AampSetVideoBitrate call failed";
-		else:
-			print "No AAMP tune event received"
-                	#Set the result status of execution
-	                tdkTestObj.setResultStatus("FAILURE");
-                #AampTuneStop call
-                tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+            if expectedResult in actualResult:
+                tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoBitrate');
+                expectedResult = "SUCCESS";
                 #Execute the test case in STB
                 tdkTestObj.executeTestCase(expectedResult);
                 #Get the result of execution
-                result = tdkTestObj.getResult();
-                if expectedResult in result:
-                    print "AAMP Stop Success"
-                    tdkTestObj.setResultStatus("SUCCESS")
+                actualResult = tdkTestObj.getResult();
+                print(actualResult);
+                details = tdkTestObj.getResultDetails();
+                print(details);
+                if expectedResult in actualResult and rate not in details:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Video bitrate not set to invalid value");
                 else:
-                    print "AAMP Stop Failure"
-                    tdkTestObj.setResultStatus("FAILURE")
-	else:
-		print "AAMP Tune call Failed"
-		print "[TEST EXECUTION RESULT] : %s" %actualResult;
-		#Set the result status of execution
-		tdkTestObj.setResultStatus("FAILURE");
-	#Unload Module
-	aampObj.unloadModule("aamp");
-	sysObj.unloadModule("systemutil");
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("Video bitrate set to invalid value");
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print("Aamp_AampSetVideoBitrate call failed");
+
+            #Testing with negative value
+            rate = "-50";
+            tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoBitrate');
+            tdkTestObj.addParameter("bitRate", int(rate));
+            expectedResult = "SUCCESS";
+            print("Trying to set video bitrate to ", rate);
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            sleep(10);
+
+            if expectedResult in actualResult:
+                tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoBitrate');
+                expectedResult = "SUCCESS";
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                #Get the result of execution
+                actualResult = tdkTestObj.getResult();
+                print(actualResult);
+                details = tdkTestObj.getResultDetails();
+                print(details);
+                if expectedResult in actualResult and rate not in details:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Video bitrate not set to invalid value");
+                else:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("Video bitrate set to invalid value");
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print("Aamp_AampSetVideoBitrate call failed");
+        else:
+            print("No AAMP tune event received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+        #AampTuneStop call
+        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+        #Execute the test case in STB
+        tdkTestObj.executeTestCase(expectedResult);
+        #Get the result of execution
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("AAMP Stop Success")
+            tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            print("AAMP Stop Failure")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("AAMP Tune call Failed")
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");

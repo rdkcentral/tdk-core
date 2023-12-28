@@ -63,8 +63,8 @@ Tune(Tune_URL.c_str())</api_or_interface_used>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 stream_Type="hlsstream"
 Expected_Result="SUCCESS"
@@ -80,7 +80,7 @@ obj.configureTestCase(ip,port,'Aamp_Valid_URL_Tune_Test_01');
 
 #Get the result of connection with test component and STB
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #fetch Aamp stream from config file
 tune_URL=aampUtilitylib.getAampTuneURL(stream_Type);
@@ -95,28 +95,28 @@ tdkTestObj.executeTestCase(Expected_Result);
 result = tdkTestObj.getResult();
 
 if Expected_Result in result:
-	print "AAMP Tune is success"
-	print "[TEST EXECUTION RESULT] : %s" %result;
-	#Set the result status of execution
-	tdkTestObj.setResultStatus("SUCCESS");
-   
-        #AampTuneStop call
-        tdkTestObj = obj.createTestStep('Aamp_AampStop');
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(Expected_Result);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        if Expected_Result in result:
-            print "AAMP Stop Success"
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print "AAMP Stop Failure"
-            tdkTestObj.setResultStatus("FAILURE")
+    print("AAMP Tune is success")
+    print("[TEST EXECUTION RESULT] : %s" %result);
+    #Set the result status of execution
+    tdkTestObj.setResultStatus("SUCCESS");
+
+    #AampTuneStop call
+    tdkTestObj = obj.createTestStep('Aamp_AampStop');
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(Expected_Result);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    if Expected_Result in result:
+        print("AAMP Stop Success")
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        print("AAMP Stop Failure")
+        tdkTestObj.setResultStatus("FAILURE")
 else:
-	print "AAMP Tune is Failure"
-	print "[TEST EXECUTION RESULT] : %s" %result;
-	#Set the result status of execution
-	tdkTestObj.setResultStatus("FAILURE");
+    print("AAMP Tune is Failure")
+    print("[TEST EXECUTION RESULT] : %s" %result);
+    #Set the result status of execution
+    tdkTestObj.setResultStatus("FAILURE");
 
 #Unload Module
 obj.unloadModule("aamp");

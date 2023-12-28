@@ -113,7 +113,7 @@ sysobj.configureTestCase(ip,port,'\Aamp_SetSlowMotionRate_Seek_HLS');
 #Get the result of connection with test component and STB
 aamp_status  =aampobj.getLoadModuleResult();
 sysutil_status = sysobj.getLoadModuleResult();
-print "[LIB LOAD STATUS]:aamp is %s and systemutil is %s" %(aamp_status,sysutil_status);
+print("[LIB LOAD STATUS]:aamp is %s and systemutil is %s" %(aamp_status,sysutil_status));
 
 if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
     aampobj.setLoadModuleStatus("SUCCESS");
@@ -129,12 +129,12 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
     #Get the result of execution
     result = tdkTestObj.getResult();
     if Expected_Result in result:
-        print "AAMP Tune call is success"
+        print("AAMP Tune call is success")
         #Search events in Log
         result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         if Expected_Result in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "AAMP Tune events are verified"
+            print("AAMP Tune events are verified")
 
             tdkTestObj = aampobj.createTestStep('Aamp_AampGetPlaybackPosition');
             #Execute the test case in STB
@@ -142,12 +142,12 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
             #Get the result of execution
             result = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
-            print "Result :", details;
+            print("Result :", details);
             if Expected_Result in result:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
                 initial_position  = float(details.rstrip(" ").split(':')[-1]);
-                print "Initial play position : ", initial_position;
+                print("Initial play position : ", initial_position);
 
                 playbackspeed = 0.5
                 if ( initial_position > 15 ):
@@ -155,7 +155,7 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                 else:
                     seekposition = 25
                 #seekposition = initial_position + 30
-                print "SeekPosition : ",seekposition
+                print("SeekPosition : ",seekposition)
                 tdkTestObj = aampobj.createTestStep('Aamp_AampSetRateAndSeek');
                 tdkTestObj.addParameter("rate",playbackspeed);
                 tdkTestObj.addParameter("seconds",int(seekposition));
@@ -169,7 +169,7 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                     result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
                     if Expected_Result in result:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "Verified AampSetRate"
+                        print("Verified AampSetRate")
 
                         tdkTestObj = aampobj.createTestStep('Aamp_AampGetPlaybackPosition');
                         #Execute the test case in STB
@@ -177,33 +177,33 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
                         #Get the result of execution
                         result = tdkTestObj.getResult();
                         details = tdkTestObj.getResultDetails();
-                        print "Result :", details;
+                        print("Result :", details);
                         if Expected_Result in result:
                             #Set the result status of execution
                             position_seeked  = float(details.rstrip(" ").split(':')[-1]);
-                            print "After seeking playback position : ", position_seeked;
+                            print("After seeking playback position : ", position_seeked);
                             if position_seeked >= seekposition:
                                 tdkTestObj.setResultStatus("SUCCESS");
-                                print "Seek position success"
- 
+                                print("Seek position success")
+
                                 #Check if playback rate is playing as expected
                                 aampUtilitylib.CheckPlayBackRate(aampobj,playbackspeed);
 
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "Seek position failure"
+                                print("Seek position failure")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "Playback position not retrieved";
+                            print("Playback position not retrieved");
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "AampSetRate failed to speed change"
+                        print("AampSetRate failed to speed change")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Playback position not retrieved";
+                print("Playback position not retrieved");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "No AAMP events are received"
+            print("No AAMP events are received")
 
         #AampTuneStop call
         tdkTestObj = aampobj.createTestStep('Aamp_AampStop');
@@ -213,19 +213,19 @@ if ("SUCCESS" in aamp_status.upper()) and ("SUCCESS" in sysutil_status.upper()):
         result = tdkTestObj.getResult();
         if Expected_Result in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "AAMP Stop Success"
+            print("AAMP Stop Success")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "AAMP Stop Failure"
+            print("AAMP Stop Failure")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "AAMP Tune is Failure"
+        print("AAMP Tune is Failure")
 
     #Unload Module
     aampobj.unloadModule("aamp");
     sysobj.unloadModule("systemutil");
 
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampobj.setLoadModuleStatus("FAILURE");
     sysobj.setLoadModuleStatus("FAILURE");

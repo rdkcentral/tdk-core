@@ -92,8 +92,8 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 from time import sleep;
 from tdkvutility import *
@@ -109,13 +109,13 @@ aampObj.configureTestCase(ip,port,'Aamp_SetandGet_Video_Bitrate_HLS_URL');
 sysObj.configureTestCase(ip,port,'Aamp_SetandGet_Video_Bitrate_HLS_URL');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
     aampObj.setLoadModuleStatus("SUCCESS");
     sysObj.setLoadModuleStatus("SUCCESS");
-    
+
     streamType="hlsstream"
     #pattern to be searched for event validation
     pattern="AAMP_EVENT_TUNED"
@@ -129,45 +129,45 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();
     if result and aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern) == "SUCCESS":
-        print "AAMP Tune call is success"	
+        print("AAMP Tune call is success")
         result,details,tdkTestObj = executeTest(aampObj, 'Aamp_AampGetVideoBitrates', "no parameters", True)
         if result:
-	    bitrates = details.split(':')[-1].strip(' ').split(' ');
-	    print bitrates;
-	    result,details = executeTest(aampObj, 'Aamp_AampStop');
+            bitrates = details.split(':')[-1].strip(' ').split(' ');
+            print(bitrates);
+            result,details = executeTest(aampObj, 'Aamp_AampStop');
             if len(bitrates) <2:
-	        tdkTestObj.setResultStatus("FAILURE");
-		print "Please use a stream which support multiple bitrates"
+                tdkTestObj.setResultStatus("FAILURE");
+                print("Please use a stream which support multiple bitrates")
 
-	    else:
+            else:
                 for rate in bitrates:
-		    print "Setting Video Bitrate to :",rate;
+                    print("Setting Video Bitrate to :",rate);
                     result,details = executeTest(aampObj, 'Aamp_AampSetVideoBitrate', {"bitRate":int(rate)});
-		    sleep(5);
+                    sleep(5);
                     if result:
-		        result,details = executeTest(aampObj, 'Aamp_AampTune', {"URL":tuneURL});
+                        result,details = executeTest(aampObj, 'Aamp_AampTune', {"URL":tuneURL});
                         if result:
-		            result,details = executeTest(aampObj, 'Aamp_AampGetVideoBitrate');
-			    if result:
-			        print "Video bitrate set to ", rate;
-			    else:
-			        print "Video bitrate not set to ", rate;
+                            result,details = executeTest(aampObj, 'Aamp_AampGetVideoBitrate');
+                            if result:
+                                print("Video bitrate set to ", rate);
+                            else:
+                                print("Video bitrate not set to ", rate);
                             result,details = executeTest(aampObj, 'Aamp_AampStop');
-		        else:
-			    print "AAMP Tune call Failed"
-		    else:
-                        print "Aamp_AampSetVideoBitrate call failed";
-	else:
+                        else:
+                            print("AAMP Tune call Failed")
+                    else:
+                        print("Aamp_AampSetVideoBitrate call failed");
+        else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "Aamp_AampGetVideoBitrates call failed";
-	result,details = executeTest(aampObj, 'Aamp_AampStop');
+            print("Aamp_AampGetVideoBitrates call failed");
+        result,details = executeTest(aampObj, 'Aamp_AampStop');
     else:
-	print "AAMP Tune call Failed"
+        print("AAMP Tune call Failed")
     #Unload Module
     aampObj.unloadModule("aamp");
     sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");

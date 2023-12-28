@@ -105,141 +105,141 @@ aampObj.configureTestCase(ip,port,'Aamp_Enable_Video_Rectangle');
 sysObj.configureTestCase(ip,port,'Aamp_Enable_Video_Rectangle');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-        aampObj.setLoadModuleStatus("SUCCESS");
-        sysObj.setLoadModuleStatus("SUCCESS");
+    aampObj.setLoadModuleStatus("SUCCESS");
+    sysObj.setLoadModuleStatus("SUCCESS");
 
-        streamType="mpdstream"
-        #pattern to be searched for event validation
-        pattern="AAMP_EVENT_TUNED"
-        #fetch Aamp stream from config file
-        tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    streamType="mpdstream"
+    #pattern to be searched for event validation
+    pattern="AAMP_EVENT_TUNED"
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
 
-        tdkTestObj = aampObj.createTestStep('Aamp_AampSetWesterosSinkConfig');
-        expectedResult = "SUCCESS";
-        tdkTestObj.addParameter("enable","true");
-        tdkTestObj.executeTestCase(expectedResult);
-        actualResult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        print details
+    tdkTestObj = aampObj.createTestStep('Aamp_AampSetWesterosSinkConfig');
+    expectedResult = "SUCCESS";
+    tdkTestObj.addParameter("enable","true");
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    print(details)
 
-        #Prmitive test case which associated to this Script
-        tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-        tdkTestObj.addParameter("URL",tuneURL);
-        expectedResult = "SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+
+            #GetVideoRectangle must return empty co-ordinates before setting videoRectangle DELIA-45366
+            tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
+            expectedResult = "FAILURE";
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            if expectedResult in actualResult:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("SUCCESS : Empty co-ordinates is returned as expected before setting videoRectangle\n")
+
+                tdkTestObj = aampObj.createTestStep('Aamp_AampEnableVideoRectangle');
+                expectedResult = "SUCCESS";
+                tdkTestObj.addParameter("enable","true");
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                print(details)
+                tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoRectangle');
+                x=0
+                y=0
+                w=1920
+                h=1080
+                expectedResult = "SUCCESS";
+                tdkTestObj.addParameter("x", x);
+                tdkTestObj.addParameter("y", y);
+                tdkTestObj.addParameter("w", w);
+                tdkTestObj.addParameter("h", h);
+                print("Setting video rectangle co-ordinates in x,y,w,h format : ",x,y,w,h)
+                tdkTestObj.executeTestCase(expectedResult);
+                actualResult = tdkTestObj.getResult();
+                print(actualResult);
+                details = tdkTestObj.getResultDetails();
+                if expectedResult in actualResult :
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Result :", details);
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
+
+                    tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
+                    expectedResult = "SUCCESS";
+                    tdkTestObj.executeTestCase(expectedResult);
+                    actualResult = tdkTestObj.getResult();
+                    print(actualResult);
+                    details = tdkTestObj.getResultDetails();
+                    if details:
+                        x1 = int(str(details).split(":")[1].split(",")[0].strip())
+                        y1 = int(str(details).split(":")[1].split(",")[1].strip())
+                        w1 = int(str(details).split(":")[1].split(",")[2].strip())
+                        h1 = int(str(details).split(":")[1].split(",")[3].strip())
+                    if expectedResult in actualResult and (x1 == x and y1 == y and w1 == w and h1 == h):
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("Result :", details);
+                        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print(details);
+                        print("[TEST EXECUTION RESULT] : FAILURE\n")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print(details);
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print(details);
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
+        else:
+            print("No AAMP tune event received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+        #AampTuneStop call
+        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         #Get the result of execution
-        actualResult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        if expectedResult in actualResult:
-                print "AAMP Tune call is success"
-                #Search events in Log
-                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-                if expectedResult in actualResult:
-                        print "AAMP Tune event recieved"
-                        print "[TEST EXECUTION RESULT] : %s" %actualResult;
-                        #Set the result status of execution
-                        tdkTestObj.setResultStatus("SUCCESS");
-
-                        #GetVideoRectangle must return empty co-ordinates before setting videoRectangle DELIA-45366
-                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
-                        expectedResult = "FAILURE";
-                        #Execute the test case in STB
-                        tdkTestObj.executeTestCase(expectedResult);
-                        #Get the result of execution
-                        actualResult = tdkTestObj.getResult();
-                        print actualResult;
-                        details = tdkTestObj.getResultDetails();
-                        if expectedResult in actualResult:
-                            #Set the result status of execution
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            print "SUCCESS : Empty co-ordinates is returned as expected before setting videoRectangle\n"
-
-                            tdkTestObj = aampObj.createTestStep('Aamp_AampEnableVideoRectangle');
-                            expectedResult = "SUCCESS";
-                            tdkTestObj.addParameter("enable","true");
-                            tdkTestObj.executeTestCase(expectedResult);
-                            actualResult = tdkTestObj.getResult();
-                            details = tdkTestObj.getResultDetails();
-                            print details
-                            tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoRectangle');
-                            x=0
-                            y=0
-                            w=1920
-                            h=1080
-                            expectedResult = "SUCCESS";
-                            tdkTestObj.addParameter("x", x);
-                            tdkTestObj.addParameter("y", y);
-                            tdkTestObj.addParameter("w", w);
-                            tdkTestObj.addParameter("h", h);
-                            print "Setting video rectangle co-ordinates in x,y,w,h format : ",x,y,w,h
-                            tdkTestObj.executeTestCase(expectedResult);
-                            actualResult = tdkTestObj.getResult();
-                            print actualResult;
-                            details = tdkTestObj.getResultDetails();
-                            if expectedResult in actualResult :
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "Result :", details;
-                                print "[TEST EXECUTION RESULT] : SUCCESS\n"
-
-                                tdkTestObj = aampObj.createTestStep('Aamp_AampGetVideoRectangle');
-                                expectedResult = "SUCCESS";
-                                tdkTestObj.executeTestCase(expectedResult);
-                                actualResult = tdkTestObj.getResult();
-                                print actualResult;
-                                details = tdkTestObj.getResultDetails();
-                                if details:
-                                    x1 = int(str(details).split(":")[1].split(",")[0].strip())
-                                    y1 = int(str(details).split(":")[1].split(",")[1].strip())
-                                    w1 = int(str(details).split(":")[1].split(",")[2].strip())
-                                    h1 = int(str(details).split(":")[1].split(",")[3].strip())
-                                if expectedResult in actualResult and (x1 == x and y1 == y and w1 == w and h1 == h):
-                                    tdkTestObj.setResultStatus("SUCCESS");
-                                    print "Result :", details;
-                                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
-
-                                else:
-                                    tdkTestObj.setResultStatus("FAILURE");
-                                    print details;
-                                    print "[TEST EXECUTION RESULT] : FAILURE\n"
-                            else:
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print details;
-                                print "[TEST EXECUTION RESULT] : FAILURE\n"
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE");
-                            print details;
-                            print "[TEST EXECUTION RESULT] : FAILURE\n"
-                else:
-                        print "No AAMP tune event received"
-                        #Set the result status of execution
-                        tdkTestObj.setResultStatus("FAILURE");
-                #AampTuneStop call
-                tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-                #Execute the test case in STB
-                tdkTestObj.executeTestCase(expectedResult);
-                #Get the result of execution
-                result = tdkTestObj.getResult();
-                if expectedResult in result:
-                    print "AAMP Stop Success"
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print "AAMP Stop Failure"
-                    tdkTestObj.setResultStatus("FAILURE")
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("AAMP Stop Success")
+            tdkTestObj.setResultStatus("SUCCESS")
         else:
-                print "AAMP Tune call Failed"
-                print "Error description : ",details
-                print "[TEST EXECUTION RESULT] : %s" %actualResult;
-                #Set the result status of execution
-                tdkTestObj.setResultStatus("FAILURE");
-        #Unload Module
-        aampObj.unloadModule("aamp");
-        sysObj.unloadModule("systemutil");
+            print("AAMP Stop Failure")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("AAMP Tune call Failed")
+        print("Error description : ",details)
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");

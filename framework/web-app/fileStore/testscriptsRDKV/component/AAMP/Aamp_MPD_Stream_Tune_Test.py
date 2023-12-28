@@ -83,8 +83,8 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 from time import sleep;
 
@@ -107,63 +107,63 @@ sysObj.configureTestCase(ip,port,'Aamp_MPD_Stream_Tune_Test');
 
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus;
+print("AAMP module loading status : %s" %aampLoadStatus);
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus;
+print("SystemUtil module loading status : %s" %sysLoadStatus);
 
 aampObj.setLoadModuleStatus(aampLoadStatus);
 sysObj.setLoadModuleStatus(sysLoadStatus);
 
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-   
-	#fetch Aamp stream from config file
-	tuneURL=aampUtilitylib.getAampTuneURL(streamType);
-	#Prmitive test case which associated to this Script
-	tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-	tdkTestObj.addParameter("URL",tuneURL);
 
-	#Execute the test case in STB
-	tdkTestObj.executeTestCase(expectedResult);
-	#Get the result of execution
-	result = tdkTestObj.getResult();
-	if expectedResult in result:
-		print "AAMP Tune is success"
-		#Search events in Log	
-                result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-		if expectedResult in result:
-			print "AAMP Tune events are verified"
-			print "[TEST EXECUTION RESULT] : %s" %result;
-			#Set the result status of execution
-			tdkTestObj.setResultStatus("SUCCESS");
-			sleep(10);
-			
-		else:
-			print "No AAMP events are received"
-                	#Set the result status of execution
-	                tdkTestObj.setResultStatus("FAILURE");
-                        
-		expectedResult = "SUCCESS";
-                #AampTuneStop call
-                tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-                #Execute the test case in STB
-                tdkTestObj.executeTestCase(expectedResult);
-                #Get the result of execution
-                result = tdkTestObj.getResult();
-                if expectedResult in result:
-                    	print "AAMP Stop Success"
-                    	tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    	print "AAMP Stop Failure"
-                    	tdkTestObj.setResultStatus("FAILURE")
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
 
-	else:
-		print "AAMP Tune is Failure"
-		print "[TEST EXECUTION RESULT] : %s" %result;
-		#Set the result status of execution
-		tdkTestObj.setResultStatus("FAILURE");
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    if expectedResult in result:
+        print("AAMP Tune is success")
+        #Search events in Log
+        result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in result:
+            print("AAMP Tune events are verified")
+            print("[TEST EXECUTION RESULT] : %s" %result);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+            sleep(10);
 
-	#Unload Module
-	aampObj.unloadModule("aamp");
-	sysObj.unloadModule("systemutil");
+        else:
+            print("No AAMP events are received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+
+        expectedResult = "SUCCESS";
+        #AampTuneStop call
+        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+        #Execute the test case in STB
+        tdkTestObj.executeTestCase(expectedResult);
+        #Get the result of execution
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("AAMP Stop Success")
+            tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            print("AAMP Stop Failure")
+            tdkTestObj.setResultStatus("FAILURE")
+
+    else:
+        print("AAMP Tune is Failure")
+        print("[TEST EXECUTION RESULT] : %s" %result);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");

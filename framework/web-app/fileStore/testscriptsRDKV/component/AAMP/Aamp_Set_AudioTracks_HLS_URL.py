@@ -104,152 +104,151 @@ aampObj.configureTestCase(ip,port,'Aamp_Set_AudioTracks_HLS_URL');
 sysObj.configureTestCase(ip,port,'Aamp_Set_AudioTracks_HLS_URL');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-     aampObj.setLoadModuleStatus("SUCCESS");
-     sysObj.setLoadModuleStatus("SUCCESS");
+    aampObj.setLoadModuleStatus("SUCCESS");
+    sysObj.setLoadModuleStatus("SUCCESS");
 
-     streamType="multiaudiohls"
-     #pattern to be searched for event validation
-     pattern="AAMP_EVENT_TUNED"
-     #fetch Aamp stream from config file
-     tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    streamType="multiaudiohls"
+    #pattern to be searched for event validation
+    pattern="AAMP_EVENT_TUNED"
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
 
-     #Prmitive test case which associated to this Script
-     tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-     tdkTestObj.addParameter("URL",tuneURL);
-     expectedResult = "SUCCESS";
-     #Execute the test case in STB
-     tdkTestObj.executeTestCase(expectedResult);
-     #Get the result of execution
-     actualResult = tdkTestObj.getResult();
-     details = tdkTestObj.getResultDetails();
-     if expectedResult in actualResult:
-         print "AAMP Tune call is success"
-         #Search events in Log
-         actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-         if expectedResult in actualResult:
-             print "AAMP Tune event recieved"
-             print "[TEST EXECUTION RESULT] : %s" %actualResult;
-             #Set the result status of execution
-             tdkTestObj.setResultStatus("SUCCESS");
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
 
-             tdkTestObj = aampObj.createTestStep('Aamp_AampGetAvailableAudioTracks');
-             expectedResult = "SUCCESS";
-             #Execute the test case in STB
-             tdkTestObj.executeTestCase(expectedResult);
-             #Get the result of execution
-             actualResult = tdkTestObj.getResult();
-             print actualResult;
-             details = tdkTestObj.getResultDetails();
-             if expectedResult in actualResult:
-                 #Set the result status of execution
-                 tdkTestObj.setResultStatus("SUCCESS");
-                 print "Result :", details
-                 tracks = details.replace('Avaliable Audio tracks: ','').split(',')
-                 numberOfTracks = len(list(set(tracks)))
+            tdkTestObj = aampObj.createTestStep('Aamp_AampGetAvailableAudioTracks');
+            expectedResult = "SUCCESS";
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            if expectedResult in actualResult:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("Result :", details)
+                tracks = details.replace('Avaliable Audio tracks: ','').split(',')
+                numberOfTracks = len(list(set(tracks)))
 
-                 tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioTrack');
-                 expectedResult = "SUCCESS";
-                 #Execute the test case in STB
-                 tdkTestObj.executeTestCase(expectedResult);
-                 #Get the result of execution
-                 actualResult = tdkTestObj.getResult();
-                 print actualResult;
-                 details = tdkTestObj.getResultDetails();
-                 if expectedResult in actualResult:
-                     #Set the result status of execution
-                     tdkTestObj.setResultStatus("SUCCESS");
-                     print "Result :", details
-                     track_index_get = details.replace('TrackIndex:', '').replace('\\n','')
-                 else:
-                     
-                     #Set the result status of execution
-                     tdkTestObj.setResultStatus("FAILURE");
-                     print details;
+                tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioTrack');
+                expectedResult = "SUCCESS";
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(expectedResult);
+                #Get the result of execution
+                actualResult = tdkTestObj.getResult();
+                print(actualResult);
+                details = tdkTestObj.getResultDetails();
+                if expectedResult in actualResult:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Result :", details)
+                    track_index_get = details.replace('TrackIndex:', '').replace('\\n','')
+                else:
 
-                 TrackRange = range(0, numberOfTracks, 1)
-                 trackList = list(TrackRange)
-                 #Remove Current Audio
-                 trackList.remove(int(track_index_get))
-                 
-                 for _track in trackList:
-                     tdkTestObj = aampObj.createTestStep('Aamp_AampSetAudioTrack');
-                     expectedResult = "SUCCESS";
-                     track_index_set = _track
-                     tdkTestObj.addParameter("track_index",int(track_index_set));
-                     #Execute the test case in STB
-                     tdkTestObj.executeTestCase(expectedResult);
-                     #Get the result of execution
-                     actualResult = tdkTestObj.getResult();
-                     print actualResult;
-                     details = tdkTestObj.getResultDetails();
-                     if expectedResult in actualResult:
-                         #Set the result status of execution
-                         tdkTestObj.setResultStatus("SUCCESS");
-                         print "Result :", details
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print(details);
 
-                         tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioTrack');
-                         expectedResult = "SUCCESS";
-                         #Execute the test case in STB
-                         tdkTestObj.executeTestCase(expectedResult);
-                         #Get the result of execution
-                         actualResult = tdkTestObj.getResult();
-                         print actualResult;
-                         details = tdkTestObj.getResultDetails();
-                         if expectedResult in actualResult:
-                             #Set the result status of execution
-                             tdkTestObj.setResultStatus("SUCCESS");
-                             print "Result :", details
-                             track_index_get = details.replace('TrackIndex:', '').replace('\\n','')
-                             if str(track_index_set) == str(track_index_get):
-                                 print "SUCCESS: Audio Track was set successfully"
-                                 tdkTestObj.setResultStatus("SUCCESS");
-                             else:
-                                 print "FAILURE: Audio Track was not successfully set"
-                                 tdkTestObj.setResultStatus("FAILURE");
-                         else:
-                             #Set the result status of execution
-                             tdkTestObj.setResultStatus("FAILURE");
-                             print details;
-                     else:
-                         #Set the result status of execution
-                         tdkTestObj.setResultStatus("FAILURE");
-                         print details;
+                TrackRange = list(range(0, numberOfTracks, 1))
+                trackList = list(TrackRange)
+                #Remove Current Audio
+                trackList.remove(int(track_index_get))
 
-             else:
-                 #Set the result status of execution
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print details;
-         else:
-             print "No AAMP tune event received"
-             #Set the result status of execution
-             tdkTestObj.setResultStatus("FAILURE");
-         #AampTuneStop call
-         tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-         #Execute the test case in STB
-         tdkTestObj.executeTestCase(expectedResult);
-         #Get the result of execution
-         result = tdkTestObj.getResult();
-         if expectedResult in result:
-             print "AAMP Stop Success"
-             tdkTestObj.setResultStatus("SUCCESS")
-         else:
-             print "AAMP Stop Failure"
-             tdkTestObj.setResultStatus("FAILURE")
-     else:
-         print "AAMP Tune call Failed"
-         print "Error description : ",details
-         print "[TEST EXECUTION RESULT] : %s" %actualResult;
-         #Set the result status of execution
-         tdkTestObj.setResultStatus("FAILURE");
-     #Unload Module
-     aampObj.unloadModule("aamp");
-     sysObj.unloadModule("systemutil");
+                for _track in trackList:
+                    tdkTestObj = aampObj.createTestStep('Aamp_AampSetAudioTrack');
+                    expectedResult = "SUCCESS";
+                    track_index_set = _track
+                    tdkTestObj.addParameter("track_index",int(track_index_set));
+                    #Execute the test case in STB
+                    tdkTestObj.executeTestCase(expectedResult);
+                    #Get the result of execution
+                    actualResult = tdkTestObj.getResult();
+                    print(actualResult);
+                    details = tdkTestObj.getResultDetails();
+                    if expectedResult in actualResult:
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("Result :", details)
+
+                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioTrack');
+                        expectedResult = "SUCCESS";
+                        #Execute the test case in STB
+                        tdkTestObj.executeTestCase(expectedResult);
+                        #Get the result of execution
+                        actualResult = tdkTestObj.getResult();
+                        print(actualResult);
+                        details = tdkTestObj.getResultDetails();
+                        if expectedResult in actualResult:
+                            #Set the result status of execution
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            print("Result :", details)
+                            track_index_get = details.replace('TrackIndex:', '').replace('\\n','')
+                            if str(track_index_set) == str(track_index_get):
+                                print("SUCCESS: Audio Track was set successfully")
+                                tdkTestObj.setResultStatus("SUCCESS");
+                            else:
+                                print("FAILURE: Audio Track was not successfully set")
+                                tdkTestObj.setResultStatus("FAILURE");
+                        else:
+                            #Set the result status of execution
+                            tdkTestObj.setResultStatus("FAILURE");
+                            print(details);
+                    else:
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print(details);
+
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print(details);
+        else:
+            print("No AAMP tune event received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+        #AampTuneStop call
+        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+        #Execute the test case in STB
+        tdkTestObj.executeTestCase(expectedResult);
+        #Get the result of execution
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("AAMP Stop Success")
+            tdkTestObj.setResultStatus("SUCCESS")
+        else:
+            print("AAMP Stop Failure")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("AAMP Tune call Failed")
+        print("Error description : ",details)
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-     print "Failed to load aamp/systemutil module";
-     aampObj.setLoadModuleStatus("FAILURE");
-     sysObj.setLoadModuleStatus("FAILURE");
-
+    print("Failed to load aamp/systemutil module");
+    aampObj.setLoadModuleStatus("FAILURE");
+    sysObj.setLoadModuleStatus("FAILURE");

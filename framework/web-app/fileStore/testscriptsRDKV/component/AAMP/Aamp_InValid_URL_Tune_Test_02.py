@@ -68,7 +68,7 @@
     <api_or_interface_used>AampTune</api_or_interface_used>
     <input_parameters>No</input_parameters>
     <automation_approch>1.TM loads the Aamp_Agent via the test agent.
-2.Give an invalid URL for streaming 
+2.Give an invalid URL for streaming
 3.Call AampTune
 4.Sleep for sometime
 5.Call the ExecuteCmd with desired pattern for Log comparison
@@ -85,8 +85,8 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 Expected_Result="SUCCESS"
 #pattern to be searched for event validation
@@ -104,35 +104,35 @@ aampobj.configureTestCase(ip,port,'Aamp_InValid_URL_Tune_Test_02');
 
 #Get the result of connection with test component and STB
 aamp_status  =aampobj.getLoadModuleResult();
-print "[LIB LOAD STATUS]:aamp is %s " %aamp_status;
+print("[LIB LOAD STATUS]:aamp is %s " %aamp_status);
 if "SUCCESS" in aamp_status.upper():
 
-	aampobj.setLoadModuleStatus("SUCCESS");
-    
-	#fetch Aamp stream from config file
-	tune_URL="https://Invalid/Invalid1/invalid2.m3u8"
-	#Prmitive test case which associated to this Script
-	tdkTestObj = aampobj.createTestStep('Aamp_AampTune');
-	tdkTestObj.addParameter("URL",tune_URL);
+    aampobj.setLoadModuleStatus("SUCCESS");
 
-	#Execute the test case in STB
-	tdkTestObj.executeTestCase(Expected_Result);
-	#Get the result of execution
-	result = tdkTestObj.getResult();
-	if Expected_Result in result:
-		print "AAMP Tune is success which is not expected"
-		print "[TEST EXECUTION RESULT] : FAILURE";
-		#Set the result status of execution
-		tdkTestObj.setResultStatus("FAILURE");
+    #fetch Aamp stream from config file
+    tune_URL="https://Invalid/Invalid1/invalid2.m3u8"
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampobj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tune_URL);
 
-	else:
-		print "AAMP Tune is Failure which is expected"
-		print "[TEST EXECUTION RESULT] : SUCCESS";
-		#Set the result status of execution
-		tdkTestObj.setResultStatus("SUCCESS");
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(Expected_Result);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    if Expected_Result in result:
+        print("AAMP Tune is success which is not expected")
+        print("[TEST EXECUTION RESULT] : FAILURE");
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
 
-	#Unload Module
-	aampobj.unloadModule("aamp");
+    else:
+        print("AAMP Tune is Failure which is expected")
+        print("[TEST EXECUTION RESULT] : SUCCESS");
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+
+    #Unload Module
+    aampobj.unloadModule("aamp");
 else:
-    print "Failed to load aamp module";
+    print("Failed to load aamp module");
     aampobj.setLoadModuleStatus("FAILURE");

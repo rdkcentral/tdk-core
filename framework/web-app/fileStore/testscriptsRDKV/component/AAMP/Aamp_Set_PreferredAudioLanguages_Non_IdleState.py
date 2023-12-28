@@ -103,55 +103,55 @@ ip = <ipaddress>
 port = <port>
 
 def Tune(aampObj,tuneURL):
-        status = "SUCCESS";
-        #Prmitive test case which associated to this Script
-        tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-        tdkTestObj.addParameter("URL",tuneURL);
-        expectedResult = "SUCCESS";
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedResult);
-        #Get the result of execution
-        actualResult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
+    status = "SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         if expectedResult in actualResult:
-            print "AAMP Tune call is success"
-            #Search events in Log
-            actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-            if expectedResult in actualResult:
-                print "AAMP Tune event recieved"
-                print "[TEST EXECUTION RESULT] : %s" %actualResult;
-                #Set the result status of execution
-                tdkTestObj.setResultStatus("SUCCESS");
-            else:
-                status = "FAILURE"
-                print "No AAMP tune event received"
-                #Set the result status of execution
-                tdkTestObj.setResultStatus("FAILURE");
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
         else:
             status = "FAILURE"
-            print "AAMP Tune call Failed"
-            print "Error description : ",details
-            print "[TEST EXECUTION RESULT] : %s" %actualResult;
+            print("No AAMP tune event received")
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-        return status;
+    else:
+        status = "FAILURE"
+        print("AAMP Tune call Failed")
+        print("Error description : ",details)
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    return status;
 
 def Stop(aampObj):
-        status = "SUCCESS"
-        #AampTuneStop call
-        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-        #Execute the test case in STB
-        tdkTestObj.executeTestCase(expectedResult);
-        #Get the result of execution
-        result = tdkTestObj.getResult();
-        if expectedResult in result:
-            print "AAMP Stop Success"
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            status = "FAILURE"
-            print "AAMP Stop Failure"
-            tdkTestObj.setResultStatus("FAILURE")
-        return status;
+    status = "SUCCESS"
+    #AampTuneStop call
+    tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    result = tdkTestObj.getResult();
+    if expectedResult in result:
+        print("AAMP Stop Success")
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        status = "FAILURE"
+        print("AAMP Stop Failure")
+        tdkTestObj.setResultStatus("FAILURE")
+    return status;
 
 
 #Test component to be tested
@@ -161,126 +161,125 @@ aampObj.configureTestCase(ip,port,'Aamp_Set_PreferredAudioLanguages_Non_IdleStat
 sysObj.configureTestCase(ip,port,'Aamp_Set_PreferredAudioLanguages_Non_IdleState');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-        aampObj.setLoadModuleStatus("SUCCESS");
-        sysObj.setLoadModuleStatus("SUCCESS");
+    aampObj.setLoadModuleStatus("SUCCESS");
+    sysObj.setLoadModuleStatus("SUCCESS");
 
-        getLangCodesStatus = "SUCCESS"
-        streamType="livestream"
-        #pattern to be searched for event validation
-        pattern="AAMP_EVENT_TUNED"
-        #fetch Aamp stream from config file
-        tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    getLangCodesStatus = "SUCCESS"
+    streamType="livestream"
+    #pattern to be searched for event validation
+    pattern="AAMP_EVENT_TUNED"
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
 
-        tuneStatus = Tune(aampObj,tuneURL);
-        if "SUCCESS" in tuneStatus:
-            tdkTestObj = aampObj.createTestStep('Aamp_AampGetAvailableAudioTracks');
+    tuneStatus = Tune(aampObj,tuneURL);
+    if "SUCCESS" in tuneStatus:
+        tdkTestObj = aampObj.createTestStep('Aamp_AampGetAvailableAudioTracks');
+        expectedResult = "SUCCESS";
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        print(actualResult);
+        details = tdkTestObj.getResultDetails();
+        if expectedResult in actualResult:
+            tdkTestObj.setResultStatus("SUCCESS");
+            audio_tracks = str(details).split(":")[1].replace("'","").strip().split(",")
+            print("Result :", details);
+            print("Tracks :",audio_tracks)
+
+            tdkTestObj = aampObj.createTestStep('Aamp_AampGetCurrentAudioLanguage');
             expectedResult = "SUCCESS";
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print actualResult;
+            print(actualResult);
             details = tdkTestObj.getResultDetails();
+            curr_lang = str(details).strip()
             if expectedResult in actualResult:
                 tdkTestObj.setResultStatus("SUCCESS");
-                audio_tracks = str(details).split(":")[1].replace("'","").strip().split(",")
-                print "Result :", details;
-                print "Tracks :",audio_tracks
-
-                tdkTestObj = aampObj.createTestStep('Aamp_AampGetCurrentAudioLanguage');
-                expectedResult = "SUCCESS";
-                tdkTestObj.executeTestCase(expectedResult);
-                actualResult = tdkTestObj.getResult();
-                print actualResult;
-                details = tdkTestObj.getResultDetails();
-                curr_lang = str(details).strip()
-                if expectedResult in actualResult:
-                    tdkTestObj.setResultStatus("SUCCESS");
-                    lang_codes = [ lang for lang in audio_tracks if lang != curr_lang ]
-                    print "Result :", details;
-                    print "Tracks without current language : ",lang_codes
-                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
-                else:
-                    getLangCodesStatus = "FAILURE";
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print details;
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                lang_codes = [ lang for lang in audio_tracks if lang != curr_lang ]
+                print("Result :", details);
+                print("Tracks without current language : ",lang_codes)
+                print("[TEST EXECUTION RESULT] : SUCCESS\n")
             else:
                 getLangCodesStatus = "FAILURE";
                 tdkTestObj.setResultStatus("FAILURE");
-                print details;
-                print "[TEST EXECUTION RESULT] : FAILURE\n"
+                print(details);
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
+        else:
+            getLangCodesStatus = "FAILURE";
+            tdkTestObj.setResultStatus("FAILURE");
+            print(details);
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
 
-            # Setting the preferred language during player non idle state
-            if getLangCodesStatus == "SUCCESS" :
-                tdkTestObj = aampObj.createTestStep('Aamp_AampSetPreferredLanguages');
-                if len(lang_codes) > 0:
-                    lang_list = ",".join(lang_codes)
-                else:
-                    lang_list = ",".join(audio_tracks)
+        # Setting the preferred language during player non idle state
+        if getLangCodesStatus == "SUCCESS" :
+            tdkTestObj = aampObj.createTestStep('Aamp_AampSetPreferredLanguages');
+            if len(lang_codes) > 0:
+                lang_list = ",".join(lang_codes)
+            else:
+                lang_list = ",".join(audio_tracks)
 
+            expectedResult = "SUCCESS";
+            print("Preferred Languages to be set :",lang_list)
+            tdkTestObj.addParameter("languages",lang_list);
+            tdkTestObj.executeTestCase(expectedResult);
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            if expectedResult in actualResult:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("Result : %s\n" %(details))
+
+                time.sleep(5);
+                tdkTestObj = aampObj.createTestStep('Aamp_AampGetPreferredLanguages');
                 expectedResult = "SUCCESS";
-                print "Preferred Languages to be set :",lang_list
-                tdkTestObj.addParameter("languages",lang_list);
                 tdkTestObj.executeTestCase(expectedResult);
                 actualResult = tdkTestObj.getResult();
-                print actualResult;
+                print(actualResult);
                 details = tdkTestObj.getResultDetails();
-                if expectedResult in actualResult:
+                if expectedResult in actualResult and "not set" in details:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Result : %s\n" %(details)
+                    print("Result :", details);
+                    print("Preferred language not set when player is non idle")
+                    print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
-                    time.sleep(5);
-                    tdkTestObj = aampObj.createTestStep('Aamp_AampGetPreferredLanguages');
+                    tdkTestObj = aampObj.createTestStep('Aamp_AampGetCurrentAudioLanguage');
                     expectedResult = "SUCCESS";
                     tdkTestObj.executeTestCase(expectedResult);
                     actualResult = tdkTestObj.getResult();
-                    print actualResult;
+                    print(actualResult);
                     details = tdkTestObj.getResultDetails();
-                    if expectedResult in actualResult and "not set" in details:
+                    new_lang = str(details).strip()
+                    if expectedResult in actualResult and new_lang == curr_lang:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "Result :", details;
-                        print "Preferred language not set when player is non idle"
-                        print "[TEST EXECUTION RESULT] : SUCCESS\n"
-
-                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetCurrentAudioLanguage');
-                        expectedResult = "SUCCESS";
-                        tdkTestObj.executeTestCase(expectedResult);
-                        actualResult = tdkTestObj.getResult();
-                        print actualResult;
-                        details = tdkTestObj.getResultDetails();
-                        new_lang = str(details).strip()
-                        if expectedResult in actualResult and new_lang == curr_lang:
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            print "Result :", details;
-                            print "Current Audio language is not updated"
-                            print "[TEST EXECUTION RESULT] : SUCCESS\n"
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE");
-                            print details;
-                            print "Current Audio language is updated"
-                            print "[TEST EXECUTION RESULT] : FAILURE\n"
+                        print("Result :", details);
+                        print("Current Audio language is not updated")
+                        print("[TEST EXECUTION RESULT] : SUCCESS\n")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print details;
-                        print "[TEST EXECUTION RESULT] : FAILURE\n"
+                        print(details);
+                        print("Current Audio language is updated")
+                        print("[TEST EXECUTION RESULT] : FAILURE\n")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print details;
-                    print "[TEST EXECUTION RESULT] : FAILURE\n"
+                    print(details);
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
             else:
-                print "Cannot proceed due to failure\n"
-            Stop(aampObj);
+                tdkTestObj.setResultStatus("FAILURE");
+                print(details);
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
         else:
-            print "Tune failure cannot proceed\n"
+            print("Cannot proceed due to failure\n")
+        Stop(aampObj);
+    else:
+        print("Tune failure cannot proceed\n")
 
-        #Unload Module
-        aampObj.unloadModule("aamp");
-        sysObj.unloadModule("systemutil");
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");
-

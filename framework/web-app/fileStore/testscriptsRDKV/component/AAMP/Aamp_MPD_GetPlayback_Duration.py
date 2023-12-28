@@ -112,9 +112,9 @@ sysObj.configureTestCase(ip,port,'Aamp_MPD_GetPlayback_Duration');
 
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus;
+print("AAMP module loading status : %s" %aampLoadStatus);
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus;
+print("SystemUtil module loading status : %s" %sysLoadStatus);
 
 aampObj.setLoadModuleStatus(aampLoadStatus);
 sysObj.setLoadModuleStatus(sysLoadStatus);
@@ -132,12 +132,12 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     #Get the result of execution
     result = tdkTestObj.getResult();
     if expectedResult in result:
-        print "AAMP Tune is success"
+        print("AAMP Tune is success")
         #Search events in Log
         result=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
         if expectedResult in result:
-            print "AAMP Tune events are verified"
-            print "[TEST EXECUTION RESULT] : %s" %result;
+            print("AAMP Tune events are verified")
+            print("[TEST EXECUTION RESULT] : %s" %result);
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
             sleep(10);
@@ -148,19 +148,19 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
             result = tdkTestObj.getResult();
             details = tdkTestObj.getResultDetails();
             if expectedResult in result:
-                print "AAMP Get Playback Duration is executed successfully"
-                print "[TEST EXECUTION RESULT] : %s" %result;
-                print  details;
+                print("AAMP Get Playback Duration is executed successfully")
+                print("[TEST EXECUTION RESULT] : %s" %result);
+                print(details);
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "AAMP Get Playback Duration returns invalid duration"
-                print "[TEST EXECUTION RESULT] : %s" %result;
-                print  details;
+                print("AAMP Get Playback Duration returns invalid duration")
+                print("[TEST EXECUTION RESULT] : %s" %result);
+                print(details);
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "No AAMP events are received"
+            print("No AAMP events are received")
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
         #AampTuneStop call
@@ -170,15 +170,15 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
         #Get the result of execution
         result = tdkTestObj.getResult();
         if expectedResult in result:
-            print "AAMP Stop Success"
+            print("AAMP Stop Success")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "AAMP Stop Failure"
+            print("AAMP Stop Failure")
             tdkTestObj.setResultStatus("FAILURE")
 
     else:
-        print "AAMP Tune is Failure"
-        print "[TEST EXECUTION RESULT] : %s" %result;
+        print("AAMP Tune is Failure")
+        print("[TEST EXECUTION RESULT] : %s" %result);
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
 
@@ -186,4 +186,4 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     aampObj.unloadModule("aamp");
     sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");

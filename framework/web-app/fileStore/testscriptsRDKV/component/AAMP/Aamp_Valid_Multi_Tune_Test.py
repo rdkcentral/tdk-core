@@ -77,12 +77,12 @@
 3.Call AampTune
 4.Sleep for sometime
 5.Set the script status as per the Log comparison
-6. Repeat test step 2,3,4 and 5 for all the listed URLS in the config file 
-</automation_approch>
+6. Repeat test step 2,3,4 and 5 for all the listed URLS in the config file
+</automationAamp_Valid_Multi_Tune_Test_approch>
     <expected_output>Aamp tune should be success</expected_output>
     <priority>High</priority>
     <test_stub_interface>libaampstub.so.0.0.0</test_stub_interface>
-    <test_script>Aamp_Valid_Multi_Tune_Test</test_script>
+    <test_script></test_script>
     <skipped>No</skipped>
     <release_version>M78</release_version>
     <remarks></remarks>
@@ -90,8 +90,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import aampUtilitylib;
 import time
 Expected_Result="SUCCESS"
@@ -108,68 +108,68 @@ aampobj.configureTestCase(ip,port,'Aamp_Valid_Multi_Tune_Test');
 
 #Get the result of connection with test component and STB
 aamp_status  =aampobj.getLoadModuleResult();
-print "[LIB LOAD STATUS]:aamp is %s " %(aamp_status);
+print("[LIB LOAD STATUS]:aamp is %s " %(aamp_status));
 if ("SUCCESS" in aamp_status.upper()):
 
-	aampobj.setLoadModuleStatus("SUCCESS");
-    
-	#fetch Aamp stream from config file
-	URLCount=aampUtilitylib.getIPStreamsCounts();
-	print "Total number of streams configured in Config file: %d" %URLCount
-	if URLCount > 0 :
-		for index in range(1, URLCount+1):
-		  	tune_URL=aampUtilitylib.getURLFromMultiStreamIndex(index);
-			
-			print "----------------Execution START For index:%d --------------" %index
-			print "URL retrived from config file: %s" %tune_URL
-			if "Failure" not in tune_URL:
-				#Prmitive test case which associated to this Script
-				tdkTestObj = aampobj.createTestStep('Aamp_AampTune');
-				tdkTestObj.addParameter("URL",tune_URL);
-		
-				#Execute the test case in STB
-				tdkTestObj.executeTestCase(Expected_Result);
-				#Get the result of execution
-				result = tdkTestObj.getResult();
-			        details= tdkTestObj.getResultDetails();
-		        	print "Details: %s" %details;
-				if Expected_Result in result:
-					print "AAMP Tune is success"
-		        	  	time.sleep(2);
-					tdkTestObj.setResultStatus("SUCCESS");
-					#AampTuneStop call
-			                tdkTestObj = aampobj.createTestStep('Aamp_AampStop');
-			                #Execute the test case in STB
-			                tdkTestObj.executeTestCase(Expected_Result);
-			                #Get the result of execution
-			                result = tdkTestObj.getResult();
-			                if Expected_Result in result:
-						print "Verified AampStop"
-						print "[TEST EXECUTION RESULT] : %s" %result;
-						#Set the result status of execution
-						tdkTestObj.setResultStatus("SUCCESS")
-						print "----------------Execution END For index:%d --------------" %index
-					else:
-						print "AampStop Failed"
-						print "[TEST EXECUTION RESULT] : %s" %result;
-						#Set the result status of execution
-						tdkTestObj.setResultStatus("FAILURE")
-						print "----------------Execution END For index:%d --------------" %index
-				else:
-					print "AAMP Tune is Failure"
-					print "[TEST EXECUTION RESULT] : %s" %result;
-					#Set the result status of execution
-					tdkTestObj.setResultStatus("FAILURE");
-					print "----------------Execution END For index:%d -------------" %index
-		  	else:
-				print "URL is not Valid at given instance: %d" %index
-				tdkTestObj.setResultStatus("FAILURE");
-				print "----------------Execution END For index:%d --------------" %index
-	else:
-		print "Not even single URL confiured in config file"         
-		tdkTestObj.setResultStatus("FAILURE");
-	#Unload Module
-	aampobj.unloadModule("aamp");
+    aampobj.setLoadModuleStatus("SUCCESS");
+
+    #fetch Aamp stream from config file
+    URLCount=aampUtilitylib.getIPStreamsCounts();
+    print("Total number of streams configured in Config file: %d" %URLCount)
+    if URLCount > 0 :
+        for index in range(1, URLCount+1):
+            tune_URL=aampUtilitylib.getURLFromMultiStreamIndex(index);
+
+            print("----------------Execution START For index:%d --------------" %index)
+            print("URL retrived from config file: %s" %tune_URL)
+            if "Failure" not in tune_URL:
+                #Prmitive test case which associated to this Script
+                tdkTestObj = aampobj.createTestStep('Aamp_AampTune');
+                tdkTestObj.addParameter("URL",tune_URL);
+
+                #Execute the test case in STB
+                tdkTestObj.executeTestCase(Expected_Result);
+                #Get the result of execution
+                result = tdkTestObj.getResult();
+                details= tdkTestObj.getResultDetails();
+                print("Details: %s" %details);
+                if Expected_Result in result:
+                    print("AAMP Tune is success")
+                    time.sleep(2);
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    #AampTuneStop call
+                    tdkTestObj = aampobj.createTestStep('Aamp_AampStop');
+                    #Execute the test case in STB
+                    tdkTestObj.executeTestCase(Expected_Result);
+                    #Get the result of execution
+                    result = tdkTestObj.getResult();
+                    if Expected_Result in result:
+                        print("Verified AampStop")
+                        print("[TEST EXECUTION RESULT] : %s" %result);
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print("----------------Execution END For index:%d --------------" %index)
+                    else:
+                        print("AampStop Failed")
+                        print("[TEST EXECUTION RESULT] : %s" %result);
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("FAILURE")
+                        print("----------------Execution END For index:%d --------------" %index)
+                else:
+                    print("AAMP Tune is Failure")
+                    print("[TEST EXECUTION RESULT] : %s" %result);
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("----------------Execution END For index:%d -------------" %index)
+            else:
+                print("URL is not Valid at given instance: %d" %index)
+                tdkTestObj.setResultStatus("FAILURE");
+                print("----------------Execution END For index:%d --------------" %index)
+    else:
+        print("Not even single URL confiured in config file")
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload Module
+    aampobj.unloadModule("aamp");
 else:
-    print "Failed to load aamp module";
+    print("Failed to load aamp module");
     aampobj.setLoadModuleStatus("FAILURE");

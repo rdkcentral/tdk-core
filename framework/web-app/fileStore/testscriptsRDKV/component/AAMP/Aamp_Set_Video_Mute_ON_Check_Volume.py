@@ -102,130 +102,128 @@ aampObj.configureTestCase(ip,port,'Aamp_Set_Video_Mute_ON_Check_Volume');
 sysObj.configureTestCase(ip,port,'Aamp_Set_Video_Mute_ON_Check_Volume');
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus ;
+print("AAMP module loading status : %s" %aampLoadStatus) ;
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus ;
+print("SystemUtil module loading status : %s" %sysLoadStatus) ;
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-        aampObj.setLoadModuleStatus("SUCCESS");
-        sysObj.setLoadModuleStatus("SUCCESS");
+    aampObj.setLoadModuleStatus("SUCCESS");
+    sysObj.setLoadModuleStatus("SUCCESS");
 
-        streamType="livestream"
-        #pattern to be searched for event validation
-        pattern="AAMP_EVENT_TUNED"
-        #fetch Aamp stream from config file
-        tuneURL=aampUtilitylib.getAampTuneURL(streamType);
+    streamType="livestream"
+    #pattern to be searched for event validation
+    pattern="AAMP_EVENT_TUNED"
+    #fetch Aamp stream from config file
+    tuneURL=aampUtilitylib.getAampTuneURL(streamType);
 
-        #Prmitive test case which associated to this Script
-        tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-        tdkTestObj.addParameter("URL",tuneURL);
-        expectedResult = "SUCCESS";
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    expectedResult = "SUCCESS";
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+
+            #As per the aamp src code, minimum audio volume level is 0
+            #and maximum audio volume level is 100
+            tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioVolume');
+            expectedResult = "SUCCESS";
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            actualResult = tdkTestObj.getResult();
+            print(actualResult);
+            details = tdkTestObj.getResultDetails();
+            volume1 = int(str(details).split(":")[1].strip())
+            if expectedResult in actualResult:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("Result :", details);
+
+                tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoMute');
+                mute = "ON"
+                expectedResult = "SUCCESS";
+                tdkTestObj.addParameter("mute",mute);
+                #Execute the test case in STB
+                print("Setting video mute status :",mute)
+                tdkTestObj.executeTestCase(expectedResult);
+                #Get the result of execution
+                actualResult = tdkTestObj.getResult();
+                print(actualResult);
+                details = tdkTestObj.getResultDetails();
+                if expectedResult in actualResult:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Result :", details);
+
+                    tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioVolume');
+                    expectedResult = "SUCCESS";
+                    #Execute the test case in STB
+                    tdkTestObj.executeTestCase(expectedResult);
+                    #Get the result of execution
+                    actualResult = tdkTestObj.getResult();
+                    print(actualResult);
+                    details = tdkTestObj.getResultDetails();
+                    volume2 = int(str(details).split(":")[1].strip())
+                    if expectedResult in actualResult and volume1 == volume2:
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("Result :", details);
+                        print("Audio volume is not changed after video mute")
+                        print("[TEST EXECUTION RESULT] : SUCCESS\n")
+                    else:
+                        #Set the result status of execution
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print(details);
+                        print("Audio volume is not within expected range 0-100")
+                        print("[TEST EXECUTION RESULT] : FAILURE\n")
+                else:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print(details);
+                    print("Audio volume is not within expected range 0-100")
+                    print("[TEST EXECUTION RESULT] : FAILURE\n")
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print(details);
+                print("[TEST EXECUTION RESULT] : FAILURE\n")
+        else:
+            print("No AAMP tune event received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+        #AampTuneStop call
+        tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
         #Execute the test case in STB
         tdkTestObj.executeTestCase(expectedResult);
         #Get the result of execution
-        actualResult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
-        if expectedResult in actualResult:
-                print "AAMP Tune call is success"
-                #Search events in Log
-                actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-                if expectedResult in actualResult:
-                        print "AAMP Tune event recieved"
-                        print "[TEST EXECUTION RESULT] : %s" %actualResult;
-                        #Set the result status of execution
-                        tdkTestObj.setResultStatus("SUCCESS");
-
-                        #As per the aamp src code, minimum audio volume level is 0
-                        #and maximum audio volume level is 100
-                        tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioVolume');
-                        expectedResult = "SUCCESS";
-                        #Execute the test case in STB
-                        tdkTestObj.executeTestCase(expectedResult);
-                        #Get the result of execution
-                        actualResult = tdkTestObj.getResult();
-                        print actualResult;
-                        details = tdkTestObj.getResultDetails();
-                        volume1 = int(str(details).split(":")[1].strip())
-                        if expectedResult in actualResult:
-                            #Set the result status of execution
-                            tdkTestObj.setResultStatus("SUCCESS");
-                            print "Result :", details;
-
-                            tdkTestObj = aampObj.createTestStep('Aamp_AampSetVideoMute');
-                            mute = "ON"
-                            expectedResult = "SUCCESS";
-                            tdkTestObj.addParameter("mute",mute);
-                            #Execute the test case in STB
-                            print "Setting video mute status :",mute
-                            tdkTestObj.executeTestCase(expectedResult);
-                            #Get the result of execution
-                            actualResult = tdkTestObj.getResult();
-                            print actualResult;
-                            details = tdkTestObj.getResultDetails();
-                            if expectedResult in actualResult:
-                                #Set the result status of execution
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                print "Result :", details;
-
-                                tdkTestObj = aampObj.createTestStep('Aamp_AampGetAudioVolume');
-                                expectedResult = "SUCCESS";
-                                #Execute the test case in STB
-                                tdkTestObj.executeTestCase(expectedResult);
-                                #Get the result of execution
-                                actualResult = tdkTestObj.getResult();
-                                print actualResult;
-                                details = tdkTestObj.getResultDetails();
-                                volume2 = int(str(details).split(":")[1].strip())
-                                if expectedResult in actualResult and volume1 == volume2:
-                                    #Set the result status of execution
-                                    tdkTestObj.setResultStatus("SUCCESS");
-                                    print "Result :", details;
-                                    print "Audio volume is not changed after video mute"
-                                    print "[TEST EXECUTION RESULT] : SUCCESS\n"
-                                else:
-                                    #Set the result status of execution
-                                    tdkTestObj.setResultStatus("FAILURE");
-                                    print details;
-                                    print "Audio volume is not within expected range 0-100"
-                                    print "[TEST EXECUTION RESULT] : FAILURE\n"
-                            else:
-                                #Set the result status of execution
-                                tdkTestObj.setResultStatus("FAILURE");
-                                print details;
-                                print "Audio volume is not within expected range 0-100"
-                                print "[TEST EXECUTION RESULT] : FAILURE\n"
-                        else:
-                            #Set the result status of execution
-                            tdkTestObj.setResultStatus("FAILURE");
-                            print details;
-                            print "[TEST EXECUTION RESULT] : FAILURE\n"
-                else:
-                        print "No AAMP tune event received"
-                        #Set the result status of execution
-                        tdkTestObj.setResultStatus("FAILURE");
-                #AampTuneStop call
-                tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-                #Execute the test case in STB
-                tdkTestObj.executeTestCase(expectedResult);
-                #Get the result of execution
-                result = tdkTestObj.getResult();
-                if expectedResult in result:
-                    print "AAMP Stop Success"
-                    tdkTestObj.setResultStatus("SUCCESS")
-                else:
-                    print "AAMP Stop Failure"
-                    tdkTestObj.setResultStatus("FAILURE")
+        result = tdkTestObj.getResult();
+        if expectedResult in result:
+            print("AAMP Stop Success")
+            tdkTestObj.setResultStatus("SUCCESS")
         else:
-                print "AAMP Tune call Failed"
-                print "Error description : ",details
-                print "[TEST EXECUTION RESULT] : %s" %actualResult;
-                #Set the result status of execution
-                tdkTestObj.setResultStatus("FAILURE");
-        #Unload Module
-        aampObj.unloadModule("aamp");
-        sysObj.unloadModule("systemutil");
+            print("AAMP Stop Failure")
+            tdkTestObj.setResultStatus("FAILURE")
+    else:
+        print("AAMP Tune call Failed")
+        print("Error description : ",details)
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
+    print("Failed to load aamp/systemutil module");
     aampObj.setLoadModuleStatus("FAILURE");
     sysObj.setLoadModuleStatus("FAILURE");
-
-
