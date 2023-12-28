@@ -74,8 +74,8 @@ Initialize devicesetting manager</pre_requisite>
 2. Aamp Agent invokes Tune API with Fog URL
 3. TM checks if the corresponding event is received.
 4. TM gets the tsb location from fog.log.
-5. TM checks if a folder is created in the tsb location and the folder name is same as the recording id 
-6. TM checks if the data is deleted after Aaamp_Stop is invoked and returns SUCCESS/FAILURE 
+5. TM checks if a folder is created in the tsb location and the folder name is same as the recording id
+6. TM checks if the data is deleted after Aaamp_Stop is invoked and returns SUCCESS/FAILURE
 7. TM unloads the Aamp Agent and systemutil Agent.</automation_approch>
     <except_output>Checkpoint 1. Event is received for Fog URL tune
 Checkpoint 2. TSB folder name is same as recording id
@@ -91,39 +91,39 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import aampUtilitylib;
 from time import sleep;
 
 def FindTSBLocation(obj, fileName, pattern):
-        value = "";
-        tdkTestObj = obj.createTestStep('ExecuteCommand');
-        expectedResult="SUCCESS";
-        #cmd = "grep " + pattern + " " + fileName + " | cut -d \" \" -f 6 | sed -e 's/\"//g; s/,//g; s/\\r//g' ";
-        cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
-        print cmd;
+    value = "";
+    tdkTestObj = obj.createTestStep('ExecuteCommand');
+    expectedResult="SUCCESS";
+    #cmd = "grep " + pattern + " " + fileName + " | cut -d \" \" -f 6 | sed -e 's/\"//g; s/,//g; s/\\r//g' ";
+    cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
+    print(cmd);
 
-        #configre the command
-        tdkTestObj.addParameter("command", cmd);
-        tdkTestObj.executeTestCase(expectedResult);
+    #configre the command
+    tdkTestObj.addParameter("command", cmd);
+    tdkTestObj.executeTestCase(expectedResult);
 
-        actualResult = tdkTestObj.getResult();
-        print "Exceution result: ", actualResult;
+    actualResult = tdkTestObj.getResult();
+    print("Exceution result: ", actualResult);
 
-        if expectedResult in actualResult:
-                details = tdkTestObj.getResultDetails();
-                value = details.strip("\\n");
-		if value != "":
-                	print "TSB Location: ", value;
-                	tdkTestObj.setResultStatus("SUCCESS");
-		else:
-                	print "TSB Location not found";
-                	tdkTestObj.setResultStatus("FAILURE");
+    if expectedResult in actualResult:
+        details = tdkTestObj.getResultDetails();
+        value = details.strip("\\n");
+        if value != "":
+            print("TSB Location: ", value);
+            tdkTestObj.setResultStatus("SUCCESS");
         else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "Command execution failed";
-        return value;
+            print("TSB Location not found");
+            tdkTestObj.setResultStatus("FAILURE");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Command execution failed");
+    return value;
 
 
 streamType = "fogmpdstream";
@@ -149,9 +149,9 @@ aampObj.configureTestCase(ip,port,'FOG_MPD_Check_TSB_Deleted_After_Stop');
 
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus;
+print("AAMP module loading status : %s" %aampLoadStatus);
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus;
+print("SystemUtil module loading status : %s" %sysLoadStatus);
 
 aampObj.setLoadModuleStatus(aampLoadStatus);
 sysObj.setLoadModuleStatus(sysLoadStatus);
@@ -159,7 +159,7 @@ sysObj.setLoadModuleStatus(sysLoadStatus);
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
 
     #Prmitive test case which associated to this Script
-    print "\nTEST STEP 1: Check if tune is successfull"
+    print("\nTEST STEP 1: Check if tune is successfull")
     tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
     tdkTestObj.addParameter("URL",tuneURL);
     #Execute the test case in STB
@@ -168,99 +168,99 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     actualResult = tdkTestObj.getResult();
 
     if expectedResult in actualResult:
-    	print "AAMP Tune call is success"
-       	#Search events in Log
+        print("AAMP Tune call is success")
+        #Search events in Log
         test_step=2
-       	actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern,test_step);
-       	if expectedResult in actualResult:
-            print "AAMP Tune event recieved"
-            print "[TEST EXECUTION RESULT] : %s" %actualResult;
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
 
-            print "\nTEST STEP 3: Obtain recordingID from fog curl command"
-	    tsbLocation = FindTSBLocation(sysObj, fogLog, locationPattern);
-	    if tsbLocation != "":
-	        tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-		cmd = "curl -L \"http://127.0.0.1:9080/recordings\" | grep recordingId" ;
-		print cmd;
-		tdkTestObj.addParameter("command", cmd);
-		tdkTestObj.executeTestCase("SUCCESS");
-	    	actualresult = tdkTestObj.getResult();
-	    	details = tdkTestObj.getResultDetails();
-		recId = details.split(":")[1].split("\"")[1].strip("\\");
-		print "Recording ID: ",recId;
+            print("\nTEST STEP 3: Obtain recordingID from fog curl command")
+            tsbLocation = FindTSBLocation(sysObj, fogLog, locationPattern);
+            if tsbLocation != "":
+                tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+                cmd = "curl -L \"http://127.0.0.1:9080/recordings\" | grep recordingId" ;
+                print(cmd);
+                tdkTestObj.addParameter("command", cmd);
+                tdkTestObj.executeTestCase("SUCCESS");
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                recId = details.split(":")[1].split("\"")[1].strip("\\");
+                print("Recording ID: ",recId);
 
-                print "\nTEST STEP 4: Check if TSB folder is present"
-	        tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+                print("\nTEST STEP 4: Check if TSB folder is present")
+                tdkTestObj = sysObj.createTestStep('ExecuteCommand');
                 cmd = "ls " + tsbLocation.rstrip() + "| grep " + recId;
-                print cmd;
+                print(cmd);
                 tdkTestObj.addParameter("command", cmd);
                 tdkTestObj.executeTestCase("SUCCESS");
                 actualresult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
                 folderName = details.strip("\\n");
-		if recId == folderName:
-	            tdkTestObj.setResultStatus("SUCCESS");
-		    print "Recording Id and folder name are equal";
+                if recId == folderName:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Recording Id and folder name are equal");
 
-                    print "\nTEST STEP 5: Check if TSB data is being loaded"
-		    tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-	 	    cmd = "du -sh " + tsbLocation.rstrip() + "//" + folderName;
-                    print cmd;
+                    print("\nTEST STEP 5: Check if TSB data is being loaded")
+                    tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+                    cmd = "du -sh " + tsbLocation.rstrip() + "//" + folderName;
+                    print(cmd);
                     tdkTestObj.addParameter("command", cmd);
                     tdkTestObj.executeTestCase("SUCCESS");
-	            actualresult = tdkTestObj.getResult();
-        	    details = tdkTestObj.getResultDetails();
-		    size = details.split("\\t")[0][:-1];
-		    size = float(size.upper().rstrip("\\NMKB"));
-		    print "TSB data size:",size;
-				
-                    print "\nTEST STEP 6: Invoke Aamp Stop to stop tuning"
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
+                    size = details.split("\\t")[0][:-1];
+                    size = float(size.upper().rstrip("\\NMKB"));
+                    print("TSB data size:",size);
+
+                    print("\nTEST STEP 6: Invoke Aamp Stop to stop tuning")
                     tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
                     #Execute the test case in STB
                     tdkTestObj.executeTestCase(expectedResult);
                     #Get the result of execution
                     result = tdkTestObj.getResult();
                     if expectedResult in result:
-                        print "AAMP Stop Success"
+                        print("AAMP Stop Success")
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "AAMP Stop Failure"
+                        print("AAMP Stop Failure")
                         tdkTestObj.setResultStatus("FAILURE")
- 
-                    print "\nWaiting for some time"
+
+                    print("\nWaiting for some time")
                     sleep(100)
-                    print "\nTEST STEP 7: Check if TSB folder is present after tune is stopped"
+                    print("\nTEST STEP 7: Check if TSB folder is present after tune is stopped")
                     tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-	 	    cmd = "ls " + tsbLocation.rstrip() + "//" + folderName;
-                    print cmd;
+                    cmd = "ls " + tsbLocation.rstrip() + "//" + folderName;
+                    print(cmd);
                     tdkTestObj.addParameter("command", cmd);
                     tdkTestObj.executeTestCase("SUCCESS");
-	            actualresult = tdkTestObj.getResult();
-        	    details = tdkTestObj.getResultDetails();
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
                     if not details:
-		        tdkTestObj.setResultStatus("SUCCESS");
-			print "SUCCESS: TSB data is deleted after tuning is stopped";
-		    else:
-		        tdkTestObj.setResultStatus("FAILURE");
-			print "FAILURE: TSB data is not deleted after tuning is stopped";
-		else:
-		    tdkTestObj.setResultStatus("FAILURE");
-		    print "Recording Id and folder name are not equal";
-         
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("SUCCESS: TSB data is deleted after tuning is stopped");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("FAILURE: TSB data is not deleted after tuning is stopped");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("Recording Id and folder name are not equal");
+
             else:
-                print "TSB data is not loaded"
+                print("TSB data is not loaded")
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
 
         else:
-            print "No AAMP tune event received"
+            print("No AAMP tune event received")
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "AAMP Tune call Failed"
-        print "[TEST EXECUTION RESULT] : %s" %actualResult;
+        print("AAMP Tune call Failed")
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
 
@@ -268,5 +268,4 @@ if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()
     aampObj.unloadModule("aamp");
     sysObj.unloadModule("systemutil");
 else:
-    print "Failed to load aamp/systemutil module";
-
+    print("Failed to load aamp/systemutil module");

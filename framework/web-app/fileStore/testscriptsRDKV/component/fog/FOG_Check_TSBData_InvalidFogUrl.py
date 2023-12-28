@@ -89,38 +89,38 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import aampUtilitylib;
 from time import sleep;
 
 def FindTSBLocation(obj, fileName, pattern):
-        value = "";
-        tdkTestObj = obj.createTestStep('ExecuteCommand');
-        expectedResult="SUCCESS";
-        cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
-        print cmd;
+    value = "";
+    tdkTestObj = obj.createTestStep('ExecuteCommand');
+    expectedResult="SUCCESS";
+    cmd = "grep " + pattern + " " + fileName + " | cut -d \":\" -f6";
+    print(cmd);
 
-        #configre the command
-        tdkTestObj.addParameter("command", cmd);
-        tdkTestObj.executeTestCase(expectedResult);
+    #configre the command
+    tdkTestObj.addParameter("command", cmd);
+    tdkTestObj.executeTestCase(expectedResult);
 
-        actualResult = tdkTestObj.getResult();
-        print "Exceution result: ", actualResult;
+    actualResult = tdkTestObj.getResult();
+    print("Exceution result: ", actualResult);
 
-        if expectedResult in actualResult:
-                details = tdkTestObj.getResultDetails();
-                value = details.strip("\\n");
-		if value != "":
-                	print "TSB Location: ", value;
-                	tdkTestObj.setResultStatus("SUCCESS");
-		else:
-                	print "TSB Location not found";
-                	tdkTestObj.setResultStatus("FAILURE");
+    if expectedResult in actualResult:
+        details = tdkTestObj.getResultDetails();
+        value = details.strip("\\n");
+        if value != "":
+            print("TSB Location: ", value);
+            tdkTestObj.setResultStatus("SUCCESS");
         else:
-                tdkTestObj.setResultStatus("FAILURE");
-                print "Command execution failed";
-        return value;
+            print("TSB Location not found");
+            tdkTestObj.setResultStatus("FAILURE");
+    else:
+        tdkTestObj.setResultStatus("FAILURE");
+        print("Command execution failed");
+    return value;
 
 
 streamType = "hlsstream";
@@ -145,88 +145,87 @@ aampObj.configureTestCase(ip,port,'FOG_Check_TSBData_InvalidFogUrl');
 
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus;
+print("AAMP module loading status : %s" %aampLoadStatus);
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus;
+print("SystemUtil module loading status : %s" %sysLoadStatus);
 
 aampObj.setLoadModuleStatus(aampLoadStatus);
 sysObj.setLoadModuleStatus(sysLoadStatus);
 
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
 
-	#Prmitive test case which associated to this Script
-	tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-	tdkTestObj.addParameter("URL",tuneURL);
-	#Execute the test case in STB
-    	tdkTestObj.executeTestCase(expectedResult);
-    	#Get the result of execution
-    	actualResult = tdkTestObj.getResult();
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
 
-    	if expectedResult in actualResult:
-        	print "AAMP Tune call is success"
-        	#Search events in Log
-        	actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
-        	if expectedResult in actualResult:
-            		print "AAMP Tune event recieved"
-            		print "[TEST EXECUTION RESULT] : %s" %actualResult;
-            		#Set the result status of execution
-            		tdkTestObj.setResultStatus("SUCCESS");
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success")
+        #Search events in Log
+        actualResult=aampUtilitylib.SearchAampPlayerEvents(tdkTestObj,pattern);
+        if expectedResult in actualResult:
+            print("AAMP Tune event recieved")
+            print("[TEST EXECUTION RESULT] : %s" %actualResult);
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
 
-			tsbLocation = FindTSBLocation(sysObj, fogLog, locationPattern);
-			if tsbLocation != "":
-				tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-			    	cmd =  "du -sh " + tsbLocation.rstrip() +  " | cut -d \"\t\" -f1";
-			    	print cmd;
-			    	tdkTestObj.addParameter("command", cmd);
-			    	tdkTestObj.executeTestCase("SUCCESS");
-			    	actualresult = tdkTestObj.getResult();
-			    	details = tdkTestObj.getResultDetails();
-				size1 = float(details.upper().rstrip("\\NMKB"));
-                                print size1;
+            tsbLocation = FindTSBLocation(sysObj, fogLog, locationPattern);
+            if tsbLocation != "":
+                tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+                cmd =  "du -sh " + tsbLocation.rstrip() +  " | cut -d \"\t\" -f1";
+                print(cmd);
+                tdkTestObj.addParameter("command", cmd);
+                tdkTestObj.executeTestCase("SUCCESS");
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                size1 = float(details.upper().rstrip("\\NMKB"));
+                print(size1);
 
-				sleep(30);
-				tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-			    	cmd =  "du -sh " + tsbLocation.rstrip() +  " | cut -d \"\t\" -f1";
-			    	print cmd;
-			    	tdkTestObj.addParameter("command", cmd);
-			    	tdkTestObj.executeTestCase("SUCCESS");
-			    	actualresult = tdkTestObj.getResult();
-			    	details = tdkTestObj.getResultDetails();
-				size2 = float(details.upper().rstrip("\\NMKB"));
-                                print size2;
+                sleep(30);
+                tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+                cmd =  "du -sh " + tsbLocation.rstrip() +  " | cut -d \"\t\" -f1";
+                print(cmd);
+                tdkTestObj.addParameter("command", cmd);
+                tdkTestObj.executeTestCase("SUCCESS");
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                size2 = float(details.upper().rstrip("\\NMKB"));
+                print(size2);
 
-				if size1 < size2:
-					tdkTestObj.setResultStatus("FAILURE");
-					print "TSB size is increasing";
-				else:
-					tdkTestObj.setResultStatus("SUCCESS");
-					print "TSB size not increasing";
-    
-			tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-			#Execute the test case in STB
-			tdkTestObj.executeTestCase(expectedResult);
-			#Get the result of execution
-			result = tdkTestObj.getResult();
-			if expectedResult in result:
-				print "AAMP Stop Success"
-				tdkTestObj.setResultStatus("SUCCESS")
-			else:
-				print "AAMP Stop Failure"
-				tdkTestObj.setResultStatus("FAILURE")
+                if size1 < size2:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("TSB size is increasing");
+                else:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("TSB size not increasing");
 
-        	else:
-            		print "No AAMP tune event received"
-            		#Set the result status of execution
-            		tdkTestObj.setResultStatus("FAILURE");
-    	else:
-        	print "AAMP Tune call Failed"
-        	print "[TEST EXECUTION RESULT] : %s" %actualResult;
-        	#Set the result status of execution
-        	tdkTestObj.setResultStatus("FAILURE");
+            tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            #Get the result of execution
+            result = tdkTestObj.getResult();
+            if expectedResult in result:
+                print("AAMP Stop Success")
+                tdkTestObj.setResultStatus("SUCCESS")
+            else:
+                print("AAMP Stop Failure")
+                tdkTestObj.setResultStatus("FAILURE")
 
-    	#Unload Module
-    	aampObj.unloadModule("aamp");
-    	sysObj.unloadModule("systemutil");
+        else:
+            print("No AAMP tune event received")
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+    else:
+        print("AAMP Tune call Failed")
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    	print "Failed to load aamp/systemutil module";
-
+    print("Failed to load aamp/systemutil module");

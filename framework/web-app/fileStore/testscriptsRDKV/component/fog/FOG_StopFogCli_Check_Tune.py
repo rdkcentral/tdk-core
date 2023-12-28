@@ -87,7 +87,7 @@ libsystemutilstub.so.0.0.0</test_stub_interface>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import aampUtilitylib;
 from time import sleep;
@@ -110,51 +110,50 @@ aampObj.configureTestCase(ip,port,'FOG_StopFogCli_Check_Tune');
 
 #Get the result of connection with test component and STB
 aampLoadStatus = aampObj.getLoadModuleResult();
-print "AAMP module loading status : %s" %aampLoadStatus;
+print("AAMP module loading status : %s" %aampLoadStatus);
 sysLoadStatus = sysObj.getLoadModuleResult();
-print "SystemUtil module loading status : %s" %sysLoadStatus;
+print("SystemUtil module loading status : %s" %sysLoadStatus);
 
 aampObj.setLoadModuleStatus(aampLoadStatus);
 sysObj.setLoadModuleStatus(sysLoadStatus);
 
 if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
- 
-	tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-	cmd = "systemctl stop fog";
-	print cmd;
-	tdkTestObj.addParameter("command", cmd);
-	tdkTestObj.executeTestCase("SUCCESS");
-	actualresult = tdkTestObj.getResult();
 
-	#Prmitive test case which associated to this Script
-	tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-	tdkTestObj.addParameter("URL",tuneURL);
-	#Execute the test case in STB
-    	tdkTestObj.executeTestCase(expectedResult);
-    	#Get the result of execution
-    	actualResult = tdkTestObj.getResult();
+    tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+    cmd = "systemctl stop fog";
+    print(cmd);
+    tdkTestObj.addParameter("command", cmd);
+    tdkTestObj.executeTestCase("SUCCESS");
+    actualresult = tdkTestObj.getResult();
 
-    	if expectedResult in actualResult:
-        	print "AAMP Tune call is success which is not expected when fogcli is not running"
-        	print "[TEST EXECUTION RESULT] : %s" %actualResult;
-            	#Set the result status of execution
-            	tdkTestObj.setResultStatus("FAILURE");
-    	else:
-        	print "AAMP Tune call Failed as expected"
-        	print "[TEST EXECUTION RESULT] : %s" %actualResult;
-        	#Set the result status of execution
-        	tdkTestObj.setResultStatus("SUCCESS");
-        
-	tdkTestObj = sysObj.createTestStep('ExecuteCommand');
-	cmd = "systemctl start fog";
-	print cmd;
-	tdkTestObj.addParameter("command", cmd);
-	tdkTestObj.executeTestCase("SUCCESS");
-	actualresult = tdkTestObj.getResult();
+    #Prmitive test case which associated to this Script
+    tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
+    tdkTestObj.addParameter("URL",tuneURL);
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    #Get the result of execution
+    actualResult = tdkTestObj.getResult();
 
-    	#Unload Module
-    	aampObj.unloadModule("aamp");
-    	sysObj.unloadModule("systemutil");
+    if expectedResult in actualResult:
+        print("AAMP Tune call is success which is not expected when fogcli is not running")
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+    else:
+        print("AAMP Tune call Failed as expected")
+        print("[TEST EXECUTION RESULT] : %s" %actualResult);
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+
+    tdkTestObj = sysObj.createTestStep('ExecuteCommand');
+    cmd = "systemctl start fog";
+    print(cmd);
+    tdkTestObj.addParameter("command", cmd);
+    tdkTestObj.executeTestCase("SUCCESS");
+    actualresult = tdkTestObj.getResult();
+
+    #Unload Module
+    aampObj.unloadModule("aamp");
+    sysObj.unloadModule("systemutil");
 else:
-    	print "Failed to load aamp/systemutil module";
-
+    print("Failed to load aamp/systemutil module");
