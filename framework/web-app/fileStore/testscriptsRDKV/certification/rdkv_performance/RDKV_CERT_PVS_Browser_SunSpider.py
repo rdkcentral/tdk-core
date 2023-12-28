@@ -64,8 +64,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from BrowserPerformanceUtility import *
 import BrowserPerformanceUtility
 from rdkv_performancelib import *
@@ -91,7 +91,7 @@ Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -99,11 +99,11 @@ if expectedResult in result.upper():
     browser_test_url=BrowserPerformanceVariables.sunspider_url
     browser_subcategory_list = BrowserPerformanceVariables.sunspider_test_subcategory_list
     sub_category_failure = False
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status);
+    print("Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status));
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             set_status=set_pre_requisites(obj)
@@ -114,8 +114,8 @@ if expectedResult in result.upper():
             else:
                 status = "FAILURE";
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -123,8 +123,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult();
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet SunSider test URL"
+            print("Current URL:",current_url)
+            print("\nSet SunSider test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",browser_test_url);
@@ -132,7 +132,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult();
             if expectedResult in result:
                 time.sleep(10)
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                 tdkTestObj.executeTestCase(expectedResult);
@@ -140,50 +140,50 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult();
                 if new_url == browser_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "URL(",new_url,") is set successfully"
+                    print("URL(",new_url,") is set successfully")
                     time.sleep(40)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_SunSpider')
                     tdkTestObj.executeTestCase(expectedResult)
                     browser_score_dict = json.loads(tdkTestObj.getResultDetails())
                     result = tdkTestObj.getResult()
-                   
+
                     if browser_score_dict["main_score"] != "FAILURE" and expectedResult in result:
                         tdkTestObj.setResultStatus("SUCCESS")
-	                print "\nThe Browser performance value(in ms) using SunSpider test is :{}\n".format(browser_score_dict["main_score"])
-	                browser_score = browser_score_dict["main_score"].split()[0].replace("ms","")
-	                conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                        print("\nThe Browser performance value(in ms) using SunSpider test is :{}\n".format(browser_score_dict["main_score"]))
+                        browser_score = browser_score_dict["main_score"].split()[0].replace("ms","")
+                        conf_file,result = getConfigFileName(tdkTestObj.realpath)
                         result1, sunspider_threshold_value = getDeviceConfigKeyValue(conf_file,"SUNSPIDER_THRESHOLD_VALUE")
                         result2, sunspider_subcategory_threshold_values = getDeviceConfigKeyValue(conf_file,"SUNSPIDER_SUBCATEGORY_THRESHOLD_VALUES")
                         if all(value != "" for value in (sunspider_threshold_value,sunspider_subcategory_threshold_values)):
-                            print "\n Threshold value for browser performance main score: ",sunspider_threshold_value
+                            print("\n Threshold value for browser performance main score: ",sunspider_threshold_value)
                             Summ_list.append('Threshold value for browser performance main score:{} '.format(sunspider_threshold_value))
                             Summ_list.append('Browser score from test: {} '.format(browser_score))
                             if float(browser_score) < float(sunspider_threshold_value):
                                 tdkTestObj.setResultStatus("SUCCESS");
-                                print "\n The browser performance main score is high as expected\n"
+                                print("\n The browser performance main score is high as expected\n")
                                 subcategory_threshold_value_list = sunspider_subcategory_threshold_values.split(',')
                                 for index,subcategory in enumerate(browser_subcategory_list):
                                     if float(browser_score_dict[subcategory]) > float(subcategory_threshold_value_list[index]):
-                                        print "\n Subcategory {} time:{}ms is greater than the threshold time:{}ms \n".format(subcategory,browser_score_dict[subcategory],subcategory_threshold_value_list[index])
+                                        print("\n Subcategory {} time:{}ms is greater than the threshold time:{}ms \n".format(subcategory,browser_score_dict[subcategory],subcategory_threshold_value_list[index]))
                                         tdkTestObj.setResultStatus("FAILURE")
                                         sub_category_failure = True
                                 if not sub_category_failure:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n The subcategory scores of {} are also as high as expected\n".format(browser_subcategory_list)
+                                    print("\n The subcategory scores of {} are also as high as expected\n".format(browser_subcategory_list))
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print "\n The overall browser performance is lower than expected \n"
+                                    print("\n The overall browser performance is lower than expected \n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "\n The browser performance main score is lower than expected\n"
+                                print("\n The browser performance main score is lower than expected\n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "\n Failed to get the threshold value from config file\n"
+                            print("\n Failed to get the threshold value from config file\n")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-	                print "\n Failed to get the Browser performace using SunSpider Test\n"
+                        print("\n Failed to get the Browser performace using SunSpider Test\n")
                 else:
-                    print "Failed to load the URL",new_url
+                    print("Failed to load the URL",new_url)
                     tdkTestObj.setResultStatus("FAILURE");
                 #Set the URL back to previous
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -192,25 +192,25 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if result == "SUCCESS":
-                    print "URL is reverted successfully"
+                    print("URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Failed to revert the URL"
+                    print("Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to set the URL"
+                print("Failed to set the URL")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get current URL from webkitbrowser"
+            print("Failed to get current URL from webkitbrowser")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
     getSummary(Summ_list,obj)
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj);
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

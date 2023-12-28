@@ -77,8 +77,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from BrowserPerformanceUtility import *
 import BrowserPerformanceUtility
 from rdkv_performancelib import *
@@ -104,17 +104,17 @@ Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     browser_test_url=BrowserPerformanceVariables.smashcat_test_url
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status)
+    print("Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status))
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             #Need to revert the values since we are changing plugin status
@@ -127,8 +127,8 @@ if expectedResult in result.upper():
         else:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully")
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","WebKitBrowser.1.url")
         tdkTestObj.executeTestCase(expectedResult)
@@ -136,8 +136,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Current URL:",current_url
-            print "\nSet test URL"
+            print("Current URL:",current_url)
+            print("\nSet test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","WebKitBrowser.1.url")
             tdkTestObj.addParameter("value",browser_test_url)
@@ -146,7 +146,7 @@ if expectedResult in result.upper():
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue')
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url")
                 tdkTestObj.executeTestCase(expectedResult)
@@ -154,7 +154,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 if new_url == browser_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "URL(",new_url,") is set successfully"
+                    print("URL(",new_url,") is set successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                     time.sleep(10)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_Smashcat')
@@ -167,23 +167,23 @@ if expectedResult in result.upper():
                         conf_file,result = getConfigFileName(tdkTestObj.realpath)
                         result1,smashcat_threshold_value = getDeviceConfigKeyValue(conf_file,"SMASHCAT_THRESHOLD_VALUE")
                         if smashcat_threshold_value != "":
-                            print "\n Browser score from test: ",browser_score
+                            print("\n Browser score from test: ",browser_score)
                             Summ_list.append('Browser score from test: {} '.format(browser_score))
-                            print "\n Threshold value for browser score:",smashcat_threshold_value
+                            print("\n Threshold value for browser score:",smashcat_threshold_value)
                             Summ_list.append('Threshold value for browser score: {}'.format(smashcat_threshold_value))
                             if float(browser_score) > float(smashcat_threshold_value):
-                                print "\n The browser performance score is high as expected\n"
+                                print("\n The browser performance score is high as expected\n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n The browser performance score is lower than expected \n"
+                                print("\n The browser performance score is lower than expected \n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print "Failed to get the threshold value from config file"
+                            print("Failed to get the threshold value from config file")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "Failed to get the browser score"
+                        print("Failed to get the browser score")
                 else:
-                    print "Failed to load the URL",new_url
+                    print("Failed to load the URL",new_url)
                     tdkTestObj.setResultStatus("FAILURE")
                 #Set the URL back to previous
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -192,26 +192,26 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
-                    print "URL is reverted successfully"
+                    print("URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "Failed to revert the URL"
+                    print("Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Failed to set URL to webkitbrowser"
+                print("Failed to set URL to webkitbrowser")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Failed to get URL in webkitbrowser"
+            print("Failed to get URL in webkitbrowser")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     getSummary(Summ_list,obj)
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

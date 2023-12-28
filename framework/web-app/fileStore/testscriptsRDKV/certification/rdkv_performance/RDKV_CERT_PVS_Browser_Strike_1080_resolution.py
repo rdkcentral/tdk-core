@@ -111,7 +111,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -119,11 +119,11 @@ if expectedResult in result.upper():
     browser_test_url = BrowserPerformanceVariables.strike_tool_url
     webinspect_port = PerformanceTestVariables.webinspect_port
     webkit_console_socket = None
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "\n Current values: \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status)
+    print("\n Current values: \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status))
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             #Need to revert the values since we are changing plugin status
@@ -137,7 +137,7 @@ if expectedResult in result.upper():
             status = "FAILURE"
     params = '{"h":1080,"w":1920}'
     set_resolution = "FAILURE"
-    print "\n Get the current screen resolution \n"
+    print("\n Get the current screen resolution \n")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getScreenResolution");
     tdkTestObj.executeTestCase(expectedResult);
@@ -145,10 +145,10 @@ if expectedResult in result.upper():
     curr_resolution_dict = eval(curr_resolution)
     curr_resolution_dict.pop('success')
     if curr_resolution == params:
-        print "\n Current resolution is same as expected resolution\n"
+        print("\n Current resolution is same as expected resolution\n")
         set_resolution = "SUCCESS"
     else:
-        print "\n Setting Resolution \n"
+        print("\n Setting Resolution \n")
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.setScreenResolution");
         tdkTestObj.addParameter("value",params);
@@ -157,7 +157,7 @@ if expectedResult in result.upper():
         if expectedResult in  result:
             tdkTestObj.setResultStatus("SUCCESS")
             time.sleep(10)
-            print "\n Validate resolution \n"
+            print("\n Validate resolution \n")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getScreenResolution");
             tdkTestObj.executeTestCase(expectedResult);
@@ -166,19 +166,19 @@ if expectedResult in result.upper():
             print(resolution_details)
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Resolution details",resolution_details
+                print("\n Resolution details",resolution_details)
                 resolution_dict = eval(resolution_details)
                 resolution_dict.pop('success')
                 params=json.loads(params)
                 if resolution_dict == params:
-                    print "\n Set and Get resolutions are same \n"
+                    print("\n Set and Get resolutions are same \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     set_resolution = "SUCCESS"
     if set_resolution == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
         time.sleep(20)
-        print "\nGet the URL in WebKitBrowser"
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","WebKitBrowser.1.url")
         tdkTestObj.executeTestCase(expectedResult)
@@ -186,8 +186,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Current URL:",current_url
-            print "\n Set test URL"
+            print("\n Current URL:",current_url)
+            print("\n Set test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","WebKitBrowser.1.url")
             tdkTestObj.addParameter("value",browser_test_url)
@@ -195,7 +195,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             if expectedResult in  result:
                 time.sleep(10)
-                print "\n Validate if the URL is set successfully or not"
+                print("\n Validate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue')
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url")
                 tdkTestObj.executeTestCase(expectedResult)
@@ -203,7 +203,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 if browser_test_url in new_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "URL(",new_url,") is set successfully"
+                    print("URL(",new_url,") is set successfully")
                     time.sleep(10)
                     webkit_console_socket.clearEventsBuffer()
                     #Press enter to start the test
@@ -219,7 +219,7 @@ if expectedResult in result.upper():
                         browser_score = 0
                         while True:
                             if continue_count > 180:
-                                print "\n Unable to run strike tool \n"
+                                print("\n Unable to run strike tool \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                             if (len(webkit_console_socket.getEventsBuffer())== 0):
@@ -232,29 +232,29 @@ if expectedResult in result.upper():
                                 console_log = json.loads(console_log)
                                 browser_score_list = console_log.get('params').get('message').get('parameters')
                                 browser_score = [element.get('value') for element in browser_score_list if element.get('type') == 'number'][0]
-                                print "\n Score from Strike tool: ",browser_score
+                                print("\n Score from Strike tool: ",browser_score)
                                 break;
                         if browser_score:
                             conf_file,result = getConfigFileName(tdkTestObj.realpath)
                             result, strike_threshold_value = getDeviceConfigKeyValue(conf_file,"STRIKE_THRESHOLD_VALUE")
                             if strike_threshold_value != "" :
-                                print "\n Threshold value for performance score: ",strike_threshold_value
+                                print("\n Threshold value for performance score: ",strike_threshold_value)
                                 Summ_list.append('Threshold value for performance score:{}'.format(strike_threshold_value))
                                 Summ_list.append('Browser score with strike:{}'.format(browser_score))
                                 if int(browser_score) > int(strike_threshold_value):
-                                    print "\n The browser performance score is high as expected\n"
+                                    print("\n The browser performance score is high as expected\n")
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "\n The browser performance main score is lower than expected \n"
+                                    print("\n The browser performance main score is lower than expected \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n Failed to get the threshold value from config file"
+                                print("\n Failed to get the threshold value from config file")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "\n Failed to get the browser score"
+                        print("\n Failed to get the browser score")
                 else:
-                    print "\n Failed to load the URL",new_url
+                    print("\n Failed to load the URL",new_url)
                     tdkTestObj.setResultStatus("FAILURE")
                 #Set the URL back to previous
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -263,22 +263,22 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
-                    print "\n URL is reverted successfully"
+                    print("\n URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Failed to revert the URL"
+                    print("\n Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "\n Failed to set URL to webkitbrowser"
+                print("\n Failed to set URL to webkitbrowser")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "\n Failed to get URL in webkitbrowser"
+            print("\n Failed to get URL in webkitbrowser")
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
 
-    print "Revert the resolution"
+    print("Revert the resolution")
     params = '{"w":'+str(curr_resolution_dict['w'])+',"h":'+str(curr_resolution_dict['h'])+'}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue')
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.setScreenResolution");
@@ -288,15 +288,14 @@ if expectedResult in result.upper():
     if expectedResult in  result:
         tdkTestObj.setResultStatus("SUCCESS")
     else:
-        print "Unable to revert the resolution"
+        print("Unable to revert the resolution")
         tdkTestObj.setResultStatus("FAILURE")
     getSummary(Summ_list,obj)
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
-
+    print("Failed to load module")

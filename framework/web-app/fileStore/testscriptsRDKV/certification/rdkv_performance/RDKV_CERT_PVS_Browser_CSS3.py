@@ -92,19 +92,19 @@ pre_requisite_reboot(obj,"yes")
 Summ_list=[]
 
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result.upper();
+print("[LIB LOAD STATUS]  :  %s" %result.upper());
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     browser_test_url=BrowserPerformanceVariables.css3_test_url;
     browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     sub_category_failure = False
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status);
+    print("Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status));
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             #Need to revert the values since we are changing plugin status
@@ -117,8 +117,8 @@ if expectedResult in result.upper():
         else:
             status = "FAILURE";
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -126,8 +126,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult();
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet CSS3 test URL"
+            print("Current URL:",current_url)
+            print("\nSet CSS3 test URL")
 
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
@@ -137,7 +137,7 @@ if expectedResult in result.upper():
             if expectedResult in  result:
                 time.sleep(10)
 
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                 tdkTestObj.executeTestCase(expectedResult);
@@ -145,7 +145,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 if new_url == browser_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "URL(",new_url,") is set successfully"
+                    print("URL(",new_url,") is set successfully")
 
                     time.sleep(20)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserScore_CSS3');
@@ -154,39 +154,40 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     if browser_score_dict["main_score"] != "Unable to get the browser score" and expectedResult in result:
                         tdkTestObj.setResultStatus("SUCCESS");
-	                browser_score = browser_score_dict["main_score"]
-	                conf_file,result = getConfigFileName(tdkTestObj.realpath)
+                        browser_score = browser_score_dict["main_score"]
+                        conf_file,result = getConfigFileName(tdkTestObj.realpath)
                         result1, css3_threshold_value = getDeviceConfigKeyValue(conf_file,"CSS3_THRESHOLD_VALUE")
                         result2, css3_subcategory_threshold_values = getDeviceConfigKeyValue(conf_file,"CSS3_SUBCATEGORY_THRESHOLD_VALUES")
                         if all(value != "" for value in (css3_threshold_value,css3_subcategory_threshold_values)):
-                            print "\n Threshold value for browser performance main score: ",css3_threshold_value
+                            print("\n Threshold value for browser performance main score: ",css3_threshold_value)
                             Summ_list.append('Threshold value for browser performance main score:{} '.format(css3_threshold_value))
                             Summ_list.append('Browser score from test: {} '.format(browser_score))
                             if int(browser_score) > int(css3_threshold_value):
-                                print "\n The browser performance main score is high as expected\n"
+                                print("\n The browser performance main score is high as expected\n")
                                 subcategory_threshold_value_list = css3_subcategory_threshold_values.split(',')
                                 for index,subcategory in enumerate(browser_subcategory_list):
-                                    if int(browser_score_dict[subcategory]) < int(subcategory_threshold_value_list[index]):
-                                        print "\n Subcategory {} score:{} is less than the threshold value:{} \n".format(subcategory,browser_score_dict[subcategory],subcategory_threshold_value_list[index])
-                                        tdkTestObj.setResultStatus("FAILURE")
-                                        sub_category_failure = True
+                                    if subcategory in browser_score_dict:
+                                        if int(browser_score_dict[subcategory]) < int(subcategory_threshold_value_list[index]):
+                                            print("\n Subcategory {} score:{} is less than the threshold value:{} \n".format(subcategory,browser_score_dict[subcategory],subcategory_threshold_value_list[index]))
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            sub_category_failure = True
                                 if not sub_category_failure:
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n The subcategory scores of {} are also as high as expected \n".format(browser_subcategory_list)
+                                    print("\n The subcategory scores of {} are also as high as expected \n".format(browser_subcategory_list))
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print "\n The overall browser performance is lower than expected \n"
+                                    print("\n The overall browser performance is lower than expected \n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "\n The browser performance main score is lower than expected \n"
+                                print("\n The browser performance main score is lower than expected \n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "Failed to get the threshold value from config file"
+                            print("Failed to get the threshold value from config file")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-	                print "Failed to get the browser score"
+                        print("Failed to get the browser score")
                 else:
-                    print "Failed to load the URL",new_url
+                    print("Failed to load the URL",new_url)
                     tdkTestObj.setResultStatus("FAILURE");
                 #Set the URL back to previous
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -195,27 +196,27 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if result == "SUCCESS":
-                    print "URL is reverted successfully"
+                    print("URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Failed to revert the URL"
+                    print("Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to set URL to webkitbrowser"
+                print("Failed to set URL to webkitbrowser")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to get URL in webkitbrowser"
+            print("Failed to get URL in webkitbrowser")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
 
     getSummary(Summ_list,obj)
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj);
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

@@ -80,7 +80,7 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import PerformanceTestVariables
 from BrowserPerformanceUtility import *
@@ -98,13 +98,13 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Browser_HtmlApp_LoadURLValidation')
 pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     browser_test_url = PerformanceTestVariables.browser_test_url
     html_app_webinspect_port = PerformanceTestVariables.html_app_webinspect_port
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status = "SUCCESS"
@@ -113,7 +113,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -121,10 +121,10 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
-            print "\n Unable to deactivate plugins"
+            print("\n Unable to deactivate plugins")
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         launch_status,launch_start_time = launch_plugin(obj,"HtmlApp")
         if launch_status == expectedResult:
             time.sleep(10)
@@ -135,9 +135,9 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             if htmlapp_status == 'resumed' and expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n HtmlApp is resumed successfully"
+                print("\n HtmlApp is resumed successfully")
                 time.sleep(10)
-                print "\n Set test URL"
+                print("\n Set test URL")
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","HtmlApp.1.url")
                 tdkTestObj.addParameter("value",browser_test_url)
@@ -145,7 +145,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 time.sleep(10)
                 if expectedResult in result:
-                    print "\nValidate if the URL is set successfully or not"
+                    print("\nValidate if the URL is set successfully or not")
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
                     tdkTestObj.addParameter("method","HtmlApp.1.url");
                     tdkTestObj.executeTestCase(expectedResult)
@@ -153,7 +153,7 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     if browser_test_url in new_url and expectedResult in result:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "\n URL(",new_url,") is set successfully"
+                        print("\n URL(",new_url,") is set successfully")
                         time.sleep(10)
                         tdkTestObj = obj.createTestStep('rdkservice_getBrowserURL')
                         tdkTestObj.addParameter("webinspect_port",html_app_webinspect_port)
@@ -162,26 +162,26 @@ if expectedResult in result.upper():
                         result = tdkTestObj.getResult()
                         if expectedResult in result:
                             tdkTestObj.setResultStatus("SUCCESS");
-                            print "Validate whether the url launched in HTML App and url loaded in webinspect page are same"
+                            print("Validate whether the url launched in HTML App and url loaded in webinspect page are same")
                             if new_url == target_URL:
-                                print ("The url launched in HTML App: {} is same as the url in webinspect page: {}").format(new_url,target_URL)
+                                print("The url launched in HTML App: {} is same as the url in webinspect page: {}").format(new_url,target_URL)
                             else:
-                                print ("The url launched in HTML App: {} is not the same url in webinspect page: {}").format(new_url,target_URL)
+                                print("The url launched in HTML App: {} is not the same url in webinspect page: {}").format(new_url,target_URL)
                                 tdkTestObj.setResultStatus("FAILURE");
                         else:
-                            print "Error in getting the url from webinspect page"
+                            print("Error in getting the url from webinspect page")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                            print "\nFailed to load the URL, current url:",new_url
-                            tdkTestObj.setResultStatus("FAILURE")
+                        print("\nFailed to load the URL, current url:",new_url)
+                        tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Failed to set the URL in HTML App"
+                    print("\n Failed to set the URL in HTML App")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while resuming HtmlApp, current status: ",htmlapp_status
+                print("\n Error while resuming HtmlApp, current status: ",htmlapp_status)
                 tdkTestObj.setResultStatus("FAILURE")
             #Deactivate plugin
-            print "\n Exiting from HtmlApp"
+            print("\n Exiting from HtmlApp")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin","HtmlApp")
             tdkTestObj.addParameter("status","deactivate")
@@ -190,17 +190,17 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Unable to deactivate HtmlApp"
+                print("\n Unable to deactivate HtmlApp")
                 tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\nPre conditions are not met"
+        print("\nPre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
-	time.sleep(5)
+        time.sleep(5)
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

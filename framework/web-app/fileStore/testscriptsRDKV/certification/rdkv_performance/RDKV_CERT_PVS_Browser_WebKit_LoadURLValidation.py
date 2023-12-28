@@ -81,7 +81,7 @@
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib; 
+import tdklib;
 import PerformanceTestVariables
 from BrowserPerformanceUtility import *
 from StabilityTestUtility import *
@@ -98,17 +98,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Browser_WebKit_LoadURLValidation');
 pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     webinspect_port = PerformanceTestVariables.webinspect_port
     browser_test_url = PerformanceTestVariables.browser_test_url
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status);
+    print("Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status));
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             set_status=set_pre_requisites(obj)
@@ -121,8 +121,8 @@ if expectedResult in result.upper():
     time.sleep(10)
     if status == "SUCCESS" and browser_test_url != "":
         time.sleep(10)
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -130,15 +130,15 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet Browser test URL"
+            print("Current URL:",current_url)
+            print("\nSet Browser test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",browser_test_url);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             if expectedResult in result:
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                 tdkTestObj.executeTestCase(expectedResult);
@@ -146,7 +146,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 if browser_test_url in new_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "\n URL(",new_url,") is set successfully"
+                    print("\n URL(",new_url,") is set successfully")
                     time.sleep(30)
                     tdkTestObj = obj.createTestStep('rdkservice_getBrowserURL')
                     tdkTestObj.addParameter("webinspect_port",webinspect_port)
@@ -155,18 +155,18 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     if expectedResult in result:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "Validate whether the url launched in webkit browser and url loaded in webinspect page are same"
+                        print("Validate whether the url launched in webkit browser and url loaded in webinspect page are same")
                         if new_url == target_URL:
-                            print ("The url launched in webkit browser: {} is same as the url in webinspect page: {}").format(new_url,target_URL)
+                            print("The url launched in webkit browser: {} is same as the url in webinspect page: {}").format(new_url,target_URL)
                         else:
-                            print ("The url launched in webkit browser: {} is not the same url in webinspect page: {}").format(new_url,target_URL)
+                            print("The url launched in webkit browser: {} is not the same url in webinspect page: {}").format(new_url,target_URL)
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "Error in getting the url from webinpect page"
+                        print("Error in getting the url from webinpect page")
                 else:
-                    print "\nFailed to load the URL ",browser_test_url
-                    print "current url:",new_url
+                    print("\nFailed to load the URL ",browser_test_url)
+                    print("current url:",new_url)
                     tdkTestObj.setResultStatus("FAILURE");
         #Set the URL back to previous
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -175,20 +175,20 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult);
         result = tdkTestObj.getResult();
         if result == "SUCCESS":
-            print "\nURL is reverted successfully"
+            print("\nURL is reverted successfully")
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            print "\nFailed to revert the URL"
+            print("\nFailed to revert the URL")
             tdkTestObj.setResultStatus("FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "\nPre conditons are not met"
+        print("\nPre conditons are not met")
     time.sleep(5)
     #Revert the values
     if revert=="YES":
-        print "\nRevert the values before exiting"
+        print("\nRevert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj);
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")
