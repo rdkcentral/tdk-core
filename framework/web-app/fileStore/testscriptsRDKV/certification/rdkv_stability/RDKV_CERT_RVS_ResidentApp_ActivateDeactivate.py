@@ -84,8 +84,8 @@ CPU load and memory usage must be within the expected limit.</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from rdkv_performancelib import *
 from StabilityTestUtility import *
 import StabilityTestVariables
@@ -110,7 +110,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -134,14 +134,14 @@ if expectedResult in (result.upper() and pre_condition_status):
             tdkTestObj.executeTestCase(expectedResult);
             result1 = tdkTestObj.getResult();
             if expectedResult in result1:
-                print "\n Deviceinfo is activated \n"
+                print("\n Deviceinfo is activated \n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Error while activating DeviceInfo\n"
+                print("\n Error while activating DeviceInfo\n")
                 tdkTestObj.setResultStatus("FAILURE")
                 status = "FAILURE"
         else:
-            print "\n DeviceInfo is activated"
+            print("\n DeviceInfo is activated")
         #Get the ResidentApp url
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","ResidentApp.1.url");
@@ -154,13 +154,13 @@ if expectedResult in (result.upper() and pre_condition_status):
             tdkTestObj.setResultStatus("FAILURE")
             status = "FAILURE"
     else:
-        print "\n Unable to get plugins status"
+        print("\n Unable to get plugins status")
         status = "FAILURE"
     if status == "SUCCESS":
         error_in_loop = False
         plugin_status = curr_plugins_status_dict[plugin]
         for count in range(0,activate_deactivate_max_count):
-            print "\n########## Iteration :{} ##########\n".format(count+1)
+            print("\n########## Iteration :{} ##########\n".format(count+1))
             result_dict = {}
             for inner_count in range (0,2):
                 if plugin_status == "deactivated":
@@ -173,7 +173,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                     method = "org.rdk.RDKShell.1.destroy"
                     params = '{"callsign": "'+plugin+'"}'
                     expected_status = ["deactivated"]
-                print "\n Setting {} plugin to {} \n".format(plugin,new_status)
+                print("\n Setting {} plugin to {} \n".format(plugin,new_status))
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method",method)
                 tdkTestObj.addParameter("value",params)
@@ -183,37 +183,37 @@ if expectedResult in (result.upper() and pre_condition_status):
                     tdkTestObj.setResultStatus("SUCCESS")
                     time.sleep(10)
                     #check status
-                    print "\n Checking current status of {} plugin \n".format(plugin)
+                    print("\n Checking current status of {} plugin \n".format(plugin))
                     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
                     tdkTestObj.addParameter("plugin",plugin)
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
                     if result == "SUCCESS":
                         plugin_status = tdkTestObj.getResultDetails()
-                        print "\n Current status of {} plugin : {}\n".format(plugin,plugin_status)
+                        print("\n Current status of {} plugin : {}\n".format(plugin,plugin_status))
                         if plugin_status in expected_status:
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "{} Status not set to {} , current status: {}".format(plugin,new_status,plugin_status)
+                            print("{} Status not set to {} , current status: {}".format(plugin,new_status,plugin_status))
                             tdkTestObj.setResultStatus("FAILURE")
                             error_in_loop = True
                             break
                     else:
-                        print "Error while getting {} plugin status".format(plugin)
+                        print("Error while getting {} plugin status".format(plugin))
                         tdkTestObj.setResultStatus("FAILURE")
                         error_in_loop = True
                         break
                 else:
-                    print "Error while setting {} plugin status to {}".format(plugin,new_status)
+                    print("Error while setting {} plugin status to {}".format(plugin,new_status))
                     tdkTestObj.setResultStatus("FAILURE")
                     error_in_loop = True
                     break
             if error_in_loop:
-                print "\n Stopping the test !!!"
+                print("\n Stopping the test !!!")
                 break
-            print "\n##### Inner iterations for  activation and deactivation of plugin completed ##### \n"
-            print "\n ##### Validating CPU load and memory usage #####\n"
-	    print "Iteration : ", count+1
+            print("\n##### Inner iterations for  activation and deactivation of plugin completed ##### \n")
+            print("\n ##### Validating CPU load and memory usage #####\n")
+            print("Iteration : ", count+1)
             tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
             tdkTestObj.executeTestCase(expectedResult)
             status = tdkTestObj.getResult()
@@ -226,13 +226,13 @@ if expectedResult in (result.upper() and pre_condition_status):
                 result_dict["cpu_load"] = float(cpuload)
                 result_dict["memory_usage"] = float(memory_usage)
                 result_dict_list.append(result_dict)
-	    else:
-		print "\n Error while validating Resource usage"
+            else:
+                print("\n Error while validating Resource usage")
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         else:
-            print "\nSuccessfully completed the {} iterations \n".format(activate_deactivate_max_count)
-            print "\n Check Resident App is loaded with main URL\n"
+            print("\nSuccessfully completed the {} iterations \n".format(activate_deactivate_max_count))
+            print("\n Check Resident App is loaded with main URL\n")
             #Get the ResidentApp url
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","ResidentApp.1.url");
@@ -240,24 +240,23 @@ if expectedResult in (result.upper() and pre_condition_status):
             curr_ui_app_url = tdkTestObj.getResultDetails();
             result = tdkTestObj.getResult()
             if ui_app_url == curr_ui_app_url and  result == "SUCCESS" :
-                print "\n Resident App is having initial URL \n"
+                print("\n Resident App is having initial URL \n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "[ERROR] Resident App is not having the initial URL: {},\n Current URL :{} \n".format(ui_app_url,curr_ui_app_url)
+                print("[ERROR] Resident App is not having the initial URL: {},\n Current URL :{} \n".format(ui_app_url,curr_ui_app_url))
                 tdkTestObj.setResultStatus("FAILURE")
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
     else:
-        print "\n Preconditions are not met\n"
+        print("\n Preconditions are not met\n")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES" or plugin_status != curr_plugins_status_dict[plugin] :
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
-    print "Failed to load module"
+    print("Failed to load module")
     obj.setLoadModuleStatus("FAILURE");
-

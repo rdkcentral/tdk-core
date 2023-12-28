@@ -69,7 +69,7 @@ b) Validate resource usage
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import StabilityTestVariables
 import json
@@ -96,7 +96,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 #Check the device status before starting the stress test
@@ -110,12 +110,12 @@ if expectedResult in (result.upper() and pre_condition_status):
     plugins_list = ["org.rdk.DisplaySettings","DeviceInfo"]
     sleep_time = StabilityTestVariables.set_resolution_sleep_time
     max_iterations = StabilityTestVariables.set_resolution_max_count
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     plugin_status_needed = {"org.rdk.DisplaySettings":"activated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -123,7 +123,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(10)
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
-            print "\n Error while setting status of plugins, current status: ",new_plugins_status
+            print("\n Error while setting status of plugins, current status: ",new_plugins_status)
             status = "FAILURE"
     if status == "SUCCESS":
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
@@ -135,7 +135,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         connected_displays = ast.literal_eval(connected_displays)
         if connected_displays and result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Get current resolution for ",connected_displays[0]
+            print("\n Get current resolution for ",connected_displays[0])
             value["videoDisplay"] = connected_displays[0]
             input_value = json.dumps(value)
             tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
@@ -147,9 +147,9 @@ if expectedResult in (result.upper() and pre_condition_status):
             initial_resolution = ast.literal_eval(initial_resolution)
             initial_resolution = initial_resolution["resolution"]
             if result == "SUCCESS":
-                print "\n Current resolution for {} port :{}".format(connected_displays[0],initial_resolution)
+                print("\n Current resolution for {} port :{}".format(connected_displays[0],initial_resolution))
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Get supported resolutions for :",connected_displays[0]
+                print("\n Get supported resolutions for :",connected_displays[0])
                 tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
                 tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedResolutions")
                 tdkTestObj.addParameter("params",input_value)
@@ -158,7 +158,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 supported_resolutions = tdkTestObj.getResultDetails()
                 supported_resolutions = ast.literal_eval(supported_resolutions)
                 supported_resolutions = supported_resolutions["supportedResolutions"]
-                print "\n Supported resolutions for {} display: {}".format(connected_displays[0],supported_resolutions)
+                print("\n Supported resolutions for {} display: {}".format(connected_displays[0],supported_resolutions))
                 for count in range(0,max_iterations):
                     result_dict = {}
                     params = {}
@@ -167,7 +167,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                     params["resolution"] = resolution
                     params["persist"] = False
                     input_params = json.dumps(params)
-                    print "\n Set resolution to :",resolution
+                    print("\n Set resolution to :",resolution)
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution")
                     tdkTestObj.addParameter("value",input_params)
@@ -185,9 +185,9 @@ if expectedResult in (result.upper() and pre_condition_status):
                         current_resolution = ast.literal_eval(current_resolution)
                         current_resolution = current_resolution["resolution"]
                         if result == "SUCCESS" and  current_resolution == resolution:
-                            print "\n Successfully set current resolution to: ",resolution
+                            print("\n Successfully set current resolution to: ",resolution)
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "\n Validate Resource usage for iteration: {}".format(count+1)
+                            print("\n Validate Resource usage for iteration: {}".format(count+1))
                             tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                             tdkTestObj.executeTestCase(expectedResult)
                             resource_usage = tdkTestObj.getResultDetails()
@@ -201,19 +201,19 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 result_dict["memory_usage"] = float(memory_usage)
                                 result_dict_list.append(result_dict)
                             else:
-                                print "\n Error while validating Resource usage"
+                                print("\n Error while validating Resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Unable to set current resolution to: ",resolution
+                            print("\n Unable to set current resolution to: ",resolution)
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n Error while setting the current resolution for videodisplay: ",connected_displays[0]
+                        print("\n Error while setting the current resolution for videodisplay: ",connected_displays[0])
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Successfully completed {} iterations".format(max_iterations)
+                    print("\n Successfully completed {} iterations".format(max_iterations))
                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                 json.dump(cpu_mem_info_dict,json_file)
                 json_file.close()
@@ -223,32 +223,32 @@ if expectedResult in (result.upper() and pre_condition_status):
                 params["resolution"] = initial_resolution
                 params["persist"] = True
                 input_params = json.dumps(params)
-                print "\n Revert resolution to :",initial_resolution
+                print("\n Revert resolution to :",initial_resolution)
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution")
                 tdkTestObj.addParameter("value",input_params)
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
-                    print "\n Successfully reverted the resolution"
+                    print("\n Successfully reverted the resolution")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Error while reverting the resolution to : ",initial_resolution
+                    print("\n Error while reverting the resolution to : ",initial_resolution)
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while checking current resolution"
+                print("\n Error while checking current resolution")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while checking connected video displays, details:",connected_displays
+            print("\n Error while checking connected video displays, details:",connected_displays)
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

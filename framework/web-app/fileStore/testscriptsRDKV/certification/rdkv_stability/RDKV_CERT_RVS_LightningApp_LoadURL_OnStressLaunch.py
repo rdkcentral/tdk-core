@@ -71,7 +71,7 @@ After successful completion of above steps for 99 times, do below steps:
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import IPChangeDetectionVariables
 import json
@@ -97,7 +97,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 #Check the device status before starting the stress test
@@ -110,15 +110,15 @@ if expectedResult in (result.upper() and pre_condition_status):
     max_iterations = 99
     lightningapp_test_url = IPChangeDetectionVariables.ip_change_app_url
     if lightningapp_test_url == "":
-        print "\n Please configure the ip_change_app_url in IPChangeDetectionVariables file"
+        print("\n Please configure the ip_change_app_url in IPChangeDetectionVariables file")
     plugins_list = ["LightningApp","Cobalt","DeviceInfo","WebKitBrowser"]
     htmlapp_post_condition = {"LightningApp":"deactivated"}
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     plugin_status_needed = {"LightningApp":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated","WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -128,7 +128,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS" and lightningapp_test_url != "":
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         plugin = "LightningApp"
         plugin_operations_list = []
         plugin_validation_details = ["LightningApp.1.url",lightningapp_test_url]
@@ -143,10 +143,10 @@ if expectedResult in (result.upper() and pre_condition_status):
             result = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails();
             if expectedResult in result and details == "SUCCESS" :
-                print "\n Successfully completed launch and destroy of {}".format(plugin)
+                print("\n Successfully completed launch and destroy of {}".format(plugin))
                 tdkTestObj.setResultStatus("SUCCESS")
                 #Validate resource usage
-                print "\n Validate Resource usage for iteration: {}".format(count+1)
+                print("\n Validate Resource usage for iteration: {}".format(count+1))
                 tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                 tdkTestObj.executeTestCase(expectedResult)
                 resource_usage = tdkTestObj.getResultDetails()
@@ -160,15 +160,15 @@ if expectedResult in (result.upper() and pre_condition_status):
                     result_dict["memory_usage"] = float(memory_usage)
                     result_dict_list.append(result_dict)
                 else:
-                    print "\n Error while validating Resource usage"
+                    print("\n Error while validating Resource usage")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Error while doing launch and destroy of {} plugin".format(plugin)
+                print("\n Error while doing launch and destroy of {} plugin".format(plugin))
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         else:
-            print "\n Successfully Completed {} iterations".format(max_iterations)
+            print("\n Successfully Completed {} iterations".format(max_iterations))
             tdkTestObj = obj.createTestStep('rdkservice_validatePluginFunctionality')
             tdkTestObj.addParameter("plugin",plugin)
             tdkTestObj.addParameter("operations",plugin_operations)
@@ -177,10 +177,10 @@ if expectedResult in (result.upper() and pre_condition_status):
             result = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails();
             if expectedResult in result and details == "SUCCESS" :
-                print "\n Successfully verified load URL"
+                print("\n Successfully verified load URL")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Error while validating load URL in LightningApp"
+                print("\n Error while validating load URL in LightningApp")
                 tdkTestObj.setResultStatus("FAILURE")
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
@@ -189,19 +189,19 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(10)
         status_dict = get_plugins_status(obj,[plugin])
         if status_dict and status_dict[plugin] in 'deactivated':
-            print "\n Successfully deactivated LightningApp"
+            print("\n Successfully deactivated LightningApp")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Unable to deactivate LightningApp, current status: ",status_dict[plugin]
+            print("\n Unable to deactivate LightningApp, current status: ",status_dict[plugin])
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

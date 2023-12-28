@@ -73,7 +73,7 @@ In a loop of minimum 1000 times:
 2. Set and get preferred Standby mode to LIGHTSLEEP
 3. Set device to standby mode
 4. Set device to ON state
-5. Verify if the video playback is happening. 
+5. Verify if the video playback is happening.
 6. Validate CPU load and memory usage
 7. Revert everything.</automation_approch>
     <expected_output>Video must be playing even after setting power state from StandBy to ON.
@@ -88,8 +88,8 @@ CPU load and memory usage must be within the expected limit.</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 import StabilityTestVariables
 from web_socket_util import *
@@ -117,7 +117,7 @@ max_powerstate_changes = StabilityTestVariables.max_power_state_changes
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -126,10 +126,10 @@ pre_condition_status = check_device_state(obj)
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
     cobalt_test_url = StabilityTestVariables.cobalt_test_url;
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url value\n"
+        print("\n Please configure the cobalt_test_url value\n")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo","org.rdk.System"]
@@ -138,7 +138,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated","org.rdk.System":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -152,14 +152,14 @@ if expectedResult in (result.upper() and pre_condition_status):
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "org.rdk.System.1.register","params": {"event": "onSystemPowerStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(5)
-        print "\nPre conditions for the test are set successfully \n"
+        print("\nPre conditions for the test are set successfully \n")
         if validation_dict["validation_required"]:
             if validation_dict["password"] == "None":
                 password = ""
             else:
                 password = validation_dict["password"]
             credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-        print "\n Get the current power state: \n"
+        print("\n Get the current power state: \n")
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
         tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
         tdkTestObj.addParameter("reqValue","powerState")
@@ -168,7 +168,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         current_power_state = initial_power_state = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Get the current Preferred Standby Mode \n"
+            print("Get the current Preferred Standby Mode \n")
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
             tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
             tdkTestObj.addParameter("reqValue","preferredStandbyMode")
@@ -180,7 +180,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 cobal_launch_status = launch_cobalt(obj)
                 time.sleep(30)
                 if cobal_launch_status == "SUCCESS":
-                    print "\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url)
+                    print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                     tdkTestObj.addParameter("value",cobalt_test_url)
@@ -189,7 +189,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                     time.sleep(10)
                     if(cobalt_result == expectedResult):
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "Clicking OK to play video"
+                        print("Clicking OK to play video")
                         params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -216,16 +216,16 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 result_val = tdkTestObj.getResultDetails()
                                 if result_val == "SUCCESS" :
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\nVideo playback is happening\n"
+                                    print("\nVideo playback is happening\n")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print "\n Video playback is not happening \n"
+                                    print("\n Video playback is not happening \n")
                             else:
-                                print "\n Video validation is skipped \n "
+                                print("\n Video validation is skipped \n ")
                             if result_val == "SUCCESS" or not validation_dict["validation_required"]:
                                 for count in range(0,max_powerstate_changes):
-                                    print "\n********************ITERATION: {} ********************\n".format(count+1)
-                                    print "\n Set Preferred standby mode as LIGHT_SLEEP \n"
+                                    print("\n********************ITERATION: {} ********************\n".format(count+1))
+                                    print("\n Set Preferred standby mode as LIGHT_SLEEP \n")
                                     params = '{"standbyMode":"LIGHT_SLEEP"}'
                                     tdkTestObj = obj.createTestStep('rdkservice_setValue');
                                     tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
@@ -233,9 +233,9 @@ if expectedResult in (result.upper() and pre_condition_status):
                                     tdkTestObj.executeTestCase(expectedResult);
                                     result = tdkTestObj.getResult();
                                     if expectedResult in result:
-                                        print "\n Setting Preferred Standby Mode is success \n"
+                                        print("\n Setting Preferred Standby Mode is success \n")
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print "Get the Preferred Standby Mode \n"
+                                        print("Get the Preferred Standby Mode \n")
                                         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
                                         tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
                                         tdkTestObj.addParameter("reqValue","preferredStandbyMode")
@@ -243,7 +243,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                         result = tdkTestObj.getResult();
                                         preferred_standby = tdkTestObj.getResultDetails()
                                         if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-                                            print "\n Preferred standby mode is LIGHT_SLEEP \n"
+                                            print("\n Preferred standby mode is LIGHT_SLEEP \n")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             if current_power_state in ("STANDBY","DEEP_SLEEP","LIGHT_SLEEP"):
                                                 new_power_state = "ON"
@@ -266,18 +266,18 @@ if expectedResult in (result.upper() and pre_condition_status):
                                                         time.sleep(1)
                                                         continue
                                                     event_log = event_listener.getEventsBuffer().pop(0)
-                                                    print "\n Triggered event: ",event_log
+                                                    print("\n Triggered event: ",event_log)
                                                     if (new_power_state == "STANDBY" and ("LIGHT_SLEEP" in event_log or "STANDBY" in event_log)) or (new_power_state == "ON" and "ON" in event_log):
-                                                        print "onSystemPowerStateChanged event triggered while setting {} power state".format(new_power_state)
+                                                        print("onSystemPowerStateChanged event triggered while setting {} power state".format(new_power_state))
                                                         break
                                                     else:
-                                                       continue_count = 61
+                                                        continue_count = 61
                                                 if continue_count > 60 :
-                                                    print "\n onSystemPowerStateChanged event is not triggered for power state: {} \n".format(new_power_state)
+                                                    print("\n onSystemPowerStateChanged event is not triggered for power state: {} \n".format(new_power_state))
                                                     tdkTestObj.setResultStatus("FAILURE")
                                                     break
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print "\n Verify the Power state \n"
+                                                print("\n Verify the Power state \n")
                                                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                                                 tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
                                                 tdkTestObj.addParameter("reqValue","powerState")
@@ -285,7 +285,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                                 result = tdkTestObj.getResult()
                                                 current_power_state = tdkTestObj.getResultDetails()
                                                 if expectedResult in result and current_power_state == new_power_state:
-                                                    print "\n Successfully set power state to : {}\n".format(new_power_state)
+                                                    print("\n Successfully set power state to : {}\n".format(new_power_state))
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     if current_power_state == "ON":
                                                         if validation_dict["validation_required"]:
@@ -298,67 +298,67 @@ if expectedResult in (result.upper() and pre_condition_status):
                                                             result_val = tdkTestObj.getResultDetails()
                                                             if result_val == "SUCCESS" :
                                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                                print "\nVideo playback is happening\n"
+                                                                print("\nVideo playback is happening\n")
                                                             else:
                                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                                print "\n Video playback is not happening \n"
+                                                                print("\n Video playback is not happening \n")
                                                                 break
                                                         else:
-                                                            print "\n Video validation is skipped \n"
+                                                            print("\n Video validation is skipped \n")
                                                     result_dict = {}
-						    print "\n ##### Validating CPU load and memory usage #####\n"
-            					    print "Iteration : ", count+1
-            					    tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            					    tdkTestObj.executeTestCase(expectedResult)
-            					    status = tdkTestObj.getResult()
-            					    result = tdkTestObj.getResultDetails()
-            					    if expectedResult in status and result != "ERROR":
-            					        tdkTestObj.setResultStatus("SUCCESS")
-            					        cpuload = result.split(',')[0]
-            					        memory_usage = result.split(',')[1]
+                                                    print("\n ##### Validating CPU load and memory usage #####\n")
+                                                    print("Iteration : ", count+1)
+                                                    tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                                    tdkTestObj.executeTestCase(expectedResult)
+                                                    status = tdkTestObj.getResult()
+                                                    result = tdkTestObj.getResultDetails()
+                                                    if expectedResult in status and result != "ERROR":
+                                                        tdkTestObj.setResultStatus("SUCCESS")
+                                                        cpuload = result.split(',')[0]
+                                                        memory_usage = result.split(',')[1]
                                                         result_dict["iteration"] = count+1
                                                         result_dict["cpu_load"] = float(cpuload)
                                                         result_dict["memory_usage"] = float(memory_usage)
                                                         result_dict_list.append(result_dict)
-						    else:
-							print "\n Error while validating Resource usage"
-                					tdkTestObj.setResultStatus("FAILURE")
-                					break
+                                                    else:
+                                                        print("\n Error while validating Resource usage")
+                                                        tdkTestObj.setResultStatus("FAILURE")
+                                                        break
                                                 else:
-                                                    print "\n Unable to set the powerstate to : {}, current power state:{}\n".format(new_power_state,current_power_state)
+                                                    print("\n Unable to set the powerstate to : {}, current power state:{}\n".format(new_power_state,current_power_state))
                                                     tdkTestObj.setResultStatus("FAILURE")
                                                     break
                                             else:
-                                                print "\n Error while executing org.rdk.System.1.setPowerState method \n"
+                                                print("\n Error while executing org.rdk.System.1.setPowerState method \n")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                                 break
                                         else:
-                                            print "\n Error while setting Preferred Standby Mode to LIGHT_SLEEP \n"
+                                            print("\n Error while setting Preferred Standby Mode to LIGHT_SLEEP \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                             break
                                     else:
-                                        print "\n Error while executing org.rdk.System.1.setPreferredStandbyMode method \n"
+                                        print("\n Error while executing org.rdk.System.1.setPreferredStandbyMode method \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                         break
                                 else:
-                                    print "\n Successfully completed {} iterations \n".format(max_powerstate_changes)
+                                    print("\n Successfully completed {} iterations \n".format(max_powerstate_changes))
                                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                                 json.dump(cpu_mem_info_dict,json_file)
                                 json_file.close()
                             else:
-                                print "\n Error while playing Video \n"
+                                print("\n Error while playing Video \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error while pressing OK key \n"
+                            print("\n Error while pressing OK key \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while setting URL in Cobalt using Deeplink method\n"
+                        print("\n Error while setting URL in Cobalt using Deeplink method\n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while lauching Cobalt \n"
+                    print("\n Error while lauching Cobalt \n")
                     tdkTestObj.setResultStatus("FAILURE")
                 #Exiting from Cobalt
-                print "\n Exit from Cobalt \n"
+                print("\n Exit from Cobalt \n")
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin","Cobalt")
                 tdkTestObj.addParameter("status","deactivate")
@@ -367,11 +367,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                 if result == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "Unable to deactivate Cobalt"
+                    print("Unable to deactivate Cobalt")
                     tdkTestObj.setResultStatus("FAILURE")
                 #Revert preferred standby mode
                 if initial_preferred_standby != preferred_standby:
-                    print "\n Reverting the Preferred Standby mode \n"
+                    print("\n Reverting the Preferred Standby mode \n")
                     params = '{"standbyMode":"'+initial_preferred_standby+'"}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue');
                     tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
@@ -379,18 +379,18 @@ if expectedResult in (result.upper() and pre_condition_status):
                     tdkTestObj.executeTestCase(expectedResult);
                     result = tdkTestObj.getResult();
                     if expectedResult in result:
-                        print "\n setPreferredStandbyMode is success \n"
+                        print("\n setPreferredStandbyMode is success \n")
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "\n Error while setting PreferredStandbyMode\n"
+                        print("\n Error while setting PreferredStandbyMode\n")
                         tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to get the Preferred StandBy mode \n"
+                print("\n Unable to get the Preferred StandBy mode \n")
                 tdkTestObj.setResultStatus("FAILURE")
             #Revert power state
             if current_power_state != initial_power_state:
-                print "Reverting the Power state \n"
-                print "\n Set power state to {} \n".format(initial_power_state)
+                print("Reverting the Power state \n")
+                print("\n Set power state to {} \n".format(initial_power_state))
                 params = '{"powerState":"'+initial_power_state+'", "standbyReason":"APIUnitTest"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
                 tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState");
@@ -398,25 +398,25 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if expectedResult in result:
-                    print "Reverted the power state to {}\n".format(initial_power_state)
+                    print("Reverted the power state to {}\n".format(initial_power_state))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Error while reverting the power state to {}\n".format(initial_power_state)
+                    print("\n Error while reverting the power state to {}\n".format(initial_power_state))
                     tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to get Power state of DUT \n"
+            print("\n Unable to get Power state of DUT \n")
             tdkTestObj.setResultStatus("FAILURE")
         event_listener.disconnect()
         time.sleep(5)
     else:
-        print "\n Pre conditions are not met \n"
+        print("\n Pre conditions are not met \n")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

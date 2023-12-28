@@ -66,8 +66,8 @@ In a loop of 1000:
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import StabilityTestVariables
 from StabilityTestUtility import *
 
@@ -92,7 +92,7 @@ max_count = StabilityTestVariables.suspend_resume_max_count
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 obj.setLoadModuleStatus(result)
 
@@ -101,7 +101,7 @@ pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status = "SUCCESS"
@@ -111,7 +111,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     time.sleep(10)
     plugin_status_needed = {"HtmlApp":"resumed","Cobalt":"deactivated","DeviceInfo":"activated","WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -119,10 +119,10 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(10)
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
-            print "\n Error while setting plugin status"
+            print("\n Error while setting plugin status")
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         time.sleep(10)
         for count in range(0,max_count):
             suspend_status,start_suspend = suspend_plugin(obj,plugin)
@@ -135,7 +135,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 htmlapp_status = tdkTestObj.getResultDetails()
                 if htmlapp_status == 'suspended' and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n HtmlApp plugin suspended successfully"
+                    print("\n HtmlApp plugin suspended successfully")
                     time.sleep(5)
                     resume_status,start_resume = launch_plugin(obj,plugin)
                     if resume_status == expectedResult:
@@ -146,11 +146,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                         htmlapp_status = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if htmlapp_status == 'resumed' and expectedResult in result:
-                            print "\n HtmlApp plugin resumed successfully\n"
+                            print("\n HtmlApp plugin resumed successfully\n")
                             tdkTestObj.setResultStatus("SUCCESS")
                             result_dict = {}
-                            print "\n ##### Validating CPU load and memory usage #####\n"
-                            print "\n Iteration : ", count + 1
+                            print("\n ##### Validating CPU load and memory usage #####\n")
+                            print("\n Iteration : ", count + 1)
                             tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                             tdkTestObj.executeTestCase(expectedResult)
                             status = tdkTestObj.getResult()
@@ -164,37 +164,37 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 result_dict["memory_usage"] = float(memory_usage)
                                 result_dict_list.append(result_dict)
                             else:
-                                print "\n Error while validating resource usage"
+                                print("\n Error while validating resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n HtmlApp plugin is not in resumed state, current HtmlApp status: ",htmlapp_status
+                            print("\n HtmlApp plugin is not in resumed state, current HtmlApp status: ",htmlapp_status)
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n Unable to set HtmlApp plugin to resumed state"
+                        print("\n Unable to set HtmlApp plugin to resumed state")
                         break
                 else:
-                    print "\n HtmlApp is not in suspended state, current HtmlApp status: ",htmlapp_status
+                    print("\n HtmlApp is not in suspended state, current HtmlApp status: ",htmlapp_status)
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Unable to set HtmlApp plugin to suspended state"
+                print("\n Unable to set HtmlApp plugin to suspended state")
                 break
         else:
-            print "\n Successfully completed the {} iterations\n".format(max_count)
+            print("\n Successfully completed the {} iterations\n".format(max_count))
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

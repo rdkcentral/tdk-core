@@ -67,8 +67,8 @@
 </xml>
 
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+ # use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from rdkv_stabilitylib import *
 import StabilityTestVariables
@@ -95,7 +95,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -107,7 +107,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     webkit_console_socket = None
     keys_list = [50,51,52,53,54,55,56,57,37,38]
     max_count = StabilityTestVariables.key_stress_max_count
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
@@ -116,19 +116,19 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
         time.sleep(10)
-	new_plugins_status = get_plugins_status(obj,plugins_list)
-	if new_plugins_status != plugin_status_needed:
-	    status = "FAILURE"
+        new_plugins_status = get_plugins_status(obj,plugins_list)
+        if new_plugins_status != plugin_status_needed:
+            status = "FAILURE"
     if status == "SUCCESS" :
         webkit_console_socket = createEventListener(ip,StabilityTestVariables.webinspect_port,[],"/devtools/page/1",False)
-        print "\nPre conditions for the test are set successfully"
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully")
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -136,8 +136,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         result = tdkTestObj.getResult()
         if current_url != None and  expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet Stress test URL"
+            print("Current URL:",current_url)
+            print("\nSet Stress test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",stress_test_url);
@@ -145,8 +145,8 @@ if expectedResult in (result.upper() and pre_condition_status):
             time.sleep(10)
             result = tdkTestObj.getResult();
             if expectedResult in result:
-		tdkTestObj.setResultStatus("SUCCESS")
-                print "\nValidate if the URL is set successfully or not"
+                tdkTestObj.setResultStatus("SUCCESS")
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                 tdkTestObj.executeTestCase(expectedResult);
@@ -154,7 +154,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 if expectedResult in result:
                     new_url = tdkTestObj.getResultDetails();
                     if new_url == stress_test_url:
-			tdkTestObj.setResultStatus("SUCCESS")
+                        tdkTestObj.setResultStatus("SUCCESS")
                         key_code_received = True
                         for count in range(0,max_count):
                             result_dict = {}
@@ -165,14 +165,14 @@ if expectedResult in (result.upper() and pre_condition_status):
                             tdkTestObj.executeTestCase(expectedResult)
                             result = tdkTestObj.getResult()
                             if expectedResult in result:
-				tdkTestObj.setResultStatus("SUCCESS")
+                                tdkTestObj.setResultStatus("SUCCESS")
                                 time.sleep(10)
                                 if (len(webkit_console_socket.getEventsBuffer())== 0):
-                                    print "\n No events occurred corresponding to key press\n"
+                                    print("\n No events occurred corresponding to key press\n")
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                                 else:
-                                    print "\n Checking key press events \n"
+                                    print("\n Checking key press events \n")
                                     for index,key in enumerate(keys_list):
                                         key_press_log_with_time = webkit_console_socket.getEventsBuffer()[index]
                                         key_press = key_press_log_with_time.split('$$$')[1]
@@ -180,39 +180,39 @@ if expectedResult in (result.upper() and pre_condition_status):
                                         key_code = key_press_log.get("params").get("message").get("text")
                                         key_code = int(key_code.split(":")[1])
                                         if key != key_code:
-                                            print "Key press event is not received for Key code :",key_code
+                                            print("Key press event is not received for Key code :",key_code)
                                             tdkTestObj.setResultStatus("FAILURE")
                                             key_code_received = False
                                             break
                                     else:
-                                        print "\n All key codes are received successfully \n"
+                                        print("\n All key codes are received successfully \n")
                                         webkit_console_socket.clearEventsBuffer()
                                         #get the cpu load
-					print "\n ##### Validating CPU load and memory usage #####\n"
-            				print "Iteration : ", count+1
-            				tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            				tdkTestObj.executeTestCase(expectedResult)
-            				status = tdkTestObj.getResult()
-            				result = tdkTestObj.getResultDetails()
-            				if expectedResult in status and result != "ERROR":
-            				    tdkTestObj.setResultStatus("SUCCESS")
-            				    cpuload = result.split(',')[0]
-            				    memory_usage = result.split(',')[1]
+                                        print("\n ##### Validating CPU load and memory usage #####\n")
+                                        print("Iteration : ", count+1)
+                                        tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        status = tdkTestObj.getResult()
+                                        result = tdkTestObj.getResultDetails()
+                                        if expectedResult in status and result != "ERROR":
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            cpuload = result.split(',')[0]
+                                            memory_usage = result.split(',')[1]
                                             result_dict["iteration"] = count+1
                                             result_dict["cpu_load"] = float(cpuload)
                                             result_dict["memory_usage"] = float(memory_usage)
                                             result_dict_list.append(result_dict)
-					else:
-					    print "\n Error while validating Resource usage"
-                			    tdkTestObj.setResultStatus("FAILURE")
-                			    break
+                                        else:
+                                            print("\n Error while validating Resource usage")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            break
                                     if not key_code_received:
                                         break
                             else:
-                                print "\nError while executing generate key method\n"
+                                print("\nError while executing generate key method\n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\nsuccessfully completed the {} iterations \n".format(max_count)
+                            print("\nsuccessfully completed the {} iterations \n".format(max_count))
                         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                         json.dump(cpu_mem_info_dict,json_file)
                         json_file.close()
@@ -225,32 +225,32 @@ if expectedResult in (result.upper() and pre_condition_status):
                         tdkTestObj.executeTestCase(expectedResult);
                         result = tdkTestObj.getResult();
                         if result == "SUCCESS":
-                            print "URL is reverted successfully"
+                            print("URL is reverted successfully")
                             tdkTestObj.setResultStatus("SUCCESS");
                         else:
-                            print "Failed to revert the URL"
+                            print("Failed to revert the URL")
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
-                        print "Unable to launch the URL"
+                        print("Unable to launch the URL")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print "Unable to get the URL after setting it"
+                    print("Unable to get the URL after setting it")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Failed to set the URL"
+                print("Failed to set the URL")
         else:
-            print "Unable to get the current URL in webkit"
+            print("Unable to get the current URL in webkit")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

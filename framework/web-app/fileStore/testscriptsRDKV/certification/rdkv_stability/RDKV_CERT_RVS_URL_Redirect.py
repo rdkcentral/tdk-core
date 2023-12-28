@@ -54,7 +54,7 @@ stress_test_duration: int
     <automation_approch>1. As a pre requisite disable all plugins and enable LightningApp/WebKitBrowser plugin and DeviceInfo plugin.
 2. Get the current URL.
 3. Load the application URL for a given time
-4. Validate the redirection of URLs in webkit instance. 
+4. Validate the redirection of URLs in webkit instance.
 5. Check the webkit instance plugin(LightningApp/WebKitBrowser) is in resumed state in each iteration
 5. Check if the CPU load and Memory usage is within the expected value.
 6.Revert all values before exiting</automation_approch>
@@ -70,8 +70,8 @@ stress_test_duration: int
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from rdkv_stabilitylib import *
 import StabilityTestVariables
@@ -99,7 +99,7 @@ test_interval = 120
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -108,7 +108,7 @@ pre_condition_status = check_device_state(obj)
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
     stress_test_url = StabilityTestVariables.stress_test_url;
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     webkit_instance = StabilityTestVariables.webkit_instance
@@ -119,7 +119,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -129,8 +129,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS" :
-        print "\n Pre conditions for the test are set successfully"
-        print "\n Get the URL in {}".format(webkit_instance)
+        print("\n Pre conditions for the test are set successfully")
+        print("\n Get the URL in {}".format(webkit_instance))
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -138,8 +138,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         result = tdkTestObj.getResult()
         if current_url != None and  expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "\n Current URL:",current_url
-            print "\n Set Stress test URL"
+            print("\n Current URL:",current_url)
+            print("\n Set Stress test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",stress_test_url);
@@ -147,7 +147,7 @@ if expectedResult in (result.upper() and pre_condition_status):
             time.sleep(10)
             result = tdkTestObj.getResult();
             if expectedResult in result:
-                print "\n Validate if the URL is set successfully or not"
+                print("\n Validate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
@@ -155,10 +155,10 @@ if expectedResult in (result.upper() and pre_condition_status):
                 if expectedResult in result:
                     new_url = tdkTestObj.getResultDetails();
                     exp_url_pattern = StabilityTestVariables.expected_url_pattern
-                    match_result = re.match(exp_url_pattern,new_url) 
+                    match_result = bool(re.match(exp_url_pattern,new_url))
                     if match_result:
                         run_value1 = int(new_url.split('?')[1].split('&')[0].split('=')[1])
-                        print "\n Successfully set Stress test URL"
+                        print("\n Successfully set Stress test URL")
                         tdkTestObj.setResultStatus("SUCCESS")
                         test_time_in_mins = int(StabilityTestVariables.stress_test_duration)
                         test_time_in_millisec = test_time_in_mins * 60 * 1000
@@ -175,9 +175,9 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 redirected_url = tdkTestObj.getResultDetails()
                                 run_value2 = int(redirected_url.split('?')[1].split('&')[0].split('=')[1])
                                 if run_value2 > run_value1 :
-                                    print "\n URL redirecting is working fine\n"
+                                    print("\n URL redirecting is working fine\n")
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n Get the {} plugin status:\n".format(webkit_instance)
+                                    print("\n Get the {} plugin status:\n".format(webkit_instance))
                                     tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
                                     tdkTestObj.addParameter("plugin",webkit_instance)
                                     tdkTestObj.executeTestCase(expectedResult)
@@ -185,45 +185,45 @@ if expectedResult in (result.upper() and pre_condition_status):
                                     webkit_status = tdkTestObj.getResultDetails()
                                     if webkit_status == 'resumed' and expectedResult in result:
                                         tdkTestObj.setResultStatus("SUCCESS")
-                                        print "\n {} is in resumed state\n".format(webkit_instance)
+                                        print("\n {} is in resumed state\n".format(webkit_instance))
                                         result_dict = {}
                                         iteration += 1
                                         #get the cpu load
-					print "Iteration : ", iteration
-            				tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            				tdkTestObj.executeTestCase(expectedResult)
-            				status = tdkTestObj.getResult()
-            				result = tdkTestObj.getResultDetails()
-            				if expectedResult in status and result != "ERROR":
-            				    tdkTestObj.setResultStatus("SUCCESS")
-            				    cpuload = result.split(',')[0]
-            				    memory_usage = result.split(',')[1]
+                                        print("Iteration : ", iteration)
+                                        tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                        tdkTestObj.executeTestCase(expectedResult)
+                                        status = tdkTestObj.getResult()
+                                        result = tdkTestObj.getResultDetails()
+                                        if expectedResult in status and result != "ERROR":
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            cpuload = result.split(',')[0]
+                                            memory_usage = result.split(',')[1]
                                             result_dict["iteration"] = iteration
                                             result_dict["cpu_load"] = float(cpuload)
                                             result_dict["memory_usage"] = float(memory_usage)
                                             result_dict_list.append(result_dict)
-					else:
-					    completed = False 
-					    print "\n Error while validating Resource usage"
-                			    tdkTestObj.setResultStatus("FAILURE")
-                			    break
+                                        else:
+                                            completed = False
+                                            print("\n Error while validating Resource usage")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                            break
                                         run_value1 = run_value2
                                         time.sleep(test_interval)
                                     else:
-                                        print "\n {} is not in Resumed state, current state: {} ".format(webkit_instance,webkit_status)
+                                        print("\n {} is not in Resumed state, current state: {} ".format(webkit_instance,webkit_status))
                                         tdkTestObj.setResultStatus("FAILURE")
                                         completed = False
                                         break
                                 else:
-                                    print "\n URL redirecting is not working"
+                                    print("\n URL redirecting is not working")
                                     tdkTestObj.setResultStatus("FAILURE")
                                     completed = False
                                     break
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n Unable to get the URL"
+                                print("\n Unable to get the URL")
                         if(completed):
-                            print "\n Successfully completed the {} times in {} minutes\n".format(iteration,test_time_in_mins)
+                            print("\n Successfully completed the {} times in {} minutes\n".format(iteration,test_time_in_mins))
                             #Set the URL back to previous
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
                             tdkTestObj.addParameter("method",set_method);
@@ -231,35 +231,35 @@ if expectedResult in (result.upper() and pre_condition_status):
                             tdkTestObj.executeTestCase(expectedResult);
                             result = tdkTestObj.getResult();
                             if result == "SUCCESS":
-                                print "\n URL is reverted successfully"
+                                print("\n URL is reverted successfully")
                                 tdkTestObj.setResultStatus("SUCCESS");
                             else:
-                                print "\n Failed to revert the URL"
+                                print("\n Failed to revert the URL")
                                 tdkTestObj.setResultStatus("FAILURE");
                         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                         json.dump(cpu_mem_info_dict,json_file)
                         json_file.close()
                     else:
-                        print "\n Unable to launch the URL"
+                        print("\n Unable to launch the URL")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print "\n Unable to get the URL after setting it"
+                    print("\n Unable to get the URL after setting it")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "\n Failed to set the URL"
+                print("\n Failed to set the URL")
         else:
-            print "\n Unable to get the current URL"
+            print("\n Unable to get the current URL")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "\n Failed to load module"
+    print("\n Failed to load module")

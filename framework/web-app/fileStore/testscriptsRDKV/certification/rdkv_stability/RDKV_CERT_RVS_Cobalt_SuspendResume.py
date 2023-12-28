@@ -66,8 +66,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from rdkv_stabilitylib import *
 import StabilityTestVariables
@@ -96,7 +96,7 @@ max_count = StabilityTestVariables.suspend_resume_max_count
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 #Check the device status before starting the stress test
@@ -104,7 +104,7 @@ pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
@@ -113,7 +113,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"resumed","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -123,12 +123,12 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         time.sleep(10)
         iteration = 0
         completed = True
         while iteration < max_count:
-            print "\nSuspend the Cobalt plugin :\n"
+            print("\nSuspend the Cobalt plugin :\n")
             params = '{"callsign":"Cobalt"}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.suspend")
@@ -145,8 +145,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                 cobalt_status = tdkTestObj.getResultDetails()
                 if cobalt_status == 'suspended' and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\nCobalt plugin Suspended Successfully\n"
-                    print "\nResume the Cobalt plugin\n"
+                    print("\nCobalt plugin Suspended Successfully\n")
+                    print("\nResume the Cobalt plugin\n")
                     params = '{"callsign": "Cobalt", "type":"", "uri":""}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.launch")
@@ -162,11 +162,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                         result = tdkTestObj.getResult()
                         cobalt_status = tdkTestObj.getResultDetails()
                         if cobalt_status == 'resumed' and expectedResult in result:
-                            print "\nCobalt plugin Resumed Successfully\n"
+                            print("\nCobalt plugin Resumed Successfully\n")
                             result_dict = {}
                             iteration += 1
-			    print "\n ##### Validating CPU load and memory usage #####\n"
-                            print "Iteration : ", iteration
+                            print("\n ##### Validating CPU load and memory usage #####\n")
+                            print("Iteration : ", iteration)
                             tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                             tdkTestObj.executeTestCase(expectedResult)
                             status = tdkTestObj.getResult()
@@ -179,46 +179,45 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 result_dict["cpu_load"] = float(cpuload)
                                 result_dict["memory_usage"] = float(memory_usage)
                                 result_dict_list.append(result_dict)
-			    else:
-				completed = False
-				print "\n Error while validating Resource usage"
-                		tdkTestObj.setResultStatus("FAILURE")
-                		break
+                            else:
+                                completed = False
+                                print("\n Error while validating Resource usage")
+                                tdkTestObj.setResultStatus("FAILURE")
+                                break
                         else:
-                            print "Cobalt plugin is not in Resumed state, current Cobalt Status: ",cobalt_status
+                            print("Cobalt plugin is not in Resumed state, current Cobalt Status: ",cobalt_status)
                             tdkTestObj.setResultStatus("FAILURE")
                             completed = False
                             break
                     else:
-                        print "Unable to set Cobalt plugin to resumed state"
+                        print("Unable to set Cobalt plugin to resumed state")
                         tdkTestObj.setResultStatus("FAILURE")
                         completed = False
                         break
                 else:
-                    print "Cobat is not in Suspended state, current Cobalt Status: ",cobalt_status
+                    print("Cobat is not in Suspended state, current Cobalt Status: ",cobalt_status)
                     tdkTestObj.setResultStatus("FAILURE")
                     completed = False
                     break
             else:
-                print "Unable to set Cobalt plugin to suspended state"
+                print("Unable to set Cobalt plugin to suspended state")
                 tdkTestObj.setResultStatus("FAILURE")
                 completed = False
                 break
         if(completed):
-            print "\nsuccessfully completed the {} iterations\n".format(iteration)
+            print("\nsuccessfully completed the {} iterations\n".format(iteration))
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")

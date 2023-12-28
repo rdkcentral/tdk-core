@@ -101,7 +101,7 @@ test_interval = 300
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -110,7 +110,7 @@ pre_condition_status = check_device_state(obj)
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
     cobalt_test_url = StabilityTestVariables.cobalt_test_url;
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
@@ -120,7 +120,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
-        print "\n Error while getting status of plugins"
+        print("\n Error while getting status of plugins")
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
@@ -132,8 +132,8 @@ if expectedResult in (result.upper() and pre_condition_status):
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} :
         time.sleep(30)
-        print "\nPre conditions for the test are set successfully"
-        print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
+        print("\nPre conditions for the test are set successfully")
+        print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","Cobalt.1.deeplink")
         tdkTestObj.addParameter("value",cobalt_test_url)
@@ -142,7 +142,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(10)
         if(cobalt_result == expectedResult):
             tdkTestObj.setResultStatus("SUCCESS")
-            print "Clicking OK to play video"
+            print("Clicking OK to play video")
             params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -180,16 +180,16 @@ if expectedResult in (result.upper() and pre_condition_status):
                         result_val = tdkTestObj.getResultDetails()
                         if result_val == "SUCCESS" :
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "\nVideo playback is happening\n"
+                            print("\nVideo playback is happening\n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
-                            print "Video playback is not happening"
+                            print("Video playback is not happening")
                             completed =  False
                             break
                     result_dict = {}
                     iteration += 1
-		    print "\n ##### Validating CPU load and memory usage #####\n"
-                    print "Iteration : ", iteration
+                    print("\n ##### Validating CPU load and memory usage #####\n")
+                    print("Iteration : ", iteration)
                     tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
@@ -202,15 +202,15 @@ if expectedResult in (result.upper() and pre_condition_status):
                         result_dict["cpu_load"] = float(cpuload)
                         result_dict["memory_usage"] = float(memory_usage)
                         result_dict_list.append(result_dict)
-		    else:
-			completed = False
-			print "\n Error while validating Resource usage"
-                	tdkTestObj.setResultStatus("FAILURE")
-                	break
+                    else:
+                        completed = False
+                        print("\n Error while validating Resource usage")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        break
                     time.sleep(test_interval)
                     #Press OK key in every 1 hour
                     if ((iteration % 12) == 0):
-                        print "\n ##### sending OK #####\n"
+                        print("\n ##### sending OK #####\n")
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                         tdkTestObj.addParameter("value",params)
@@ -219,22 +219,22 @@ if expectedResult in (result.upper() and pre_condition_status):
                         if result == "SUCCESS":
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "Unable to press OK button"
+                            print("Unable to press OK button")
                             tdkTestObj.setResultStatus("FAILURE")
                             completed = False
                             break
                 if(completed):
-                    print "\nsuccessfully completed the {} times in {} minutes".format(iteration,test_time_in_mins)
+                    print("\nsuccessfully completed the {} times in {} minutes".format(iteration,test_time_in_mins))
                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                 json.dump(cpu_mem_info_dict,json_file)
                 json_file.close()
             else:
-                print "Unable to press OK button"
+                print("Unable to press OK button")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Unable to launch the url"
+            print("Unable to launch the url")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exit from Cobalt \n"
+        print("\n Exit from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -243,17 +243,17 @@ if expectedResult in (result.upper() and pre_condition_status):
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"	
+    print("Failed to load module")

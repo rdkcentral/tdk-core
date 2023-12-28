@@ -69,7 +69,7 @@ The images of different resolutions should be different.</expected_output>
 </xml>
 
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from StabilityTestUtility import *
 from rdkv_stabilitylib import *
@@ -102,7 +102,7 @@ change_resolution_max_count = StabilityTestVariables.change_resolution_max_count
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -110,7 +110,7 @@ pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     revert_webkit = False
@@ -123,7 +123,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -137,7 +137,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     conf_file,file_status = getConfigFileName(obj.realpath)
     sc_config_status,screenshot_validation = getDeviceConfigKeyValue(conf_file,"SC_VALIDATION_NEEDED")
     if screenshot_validation == "":
-        print "\n Please configure SC_VALIDATION_NEEDED variable in Device configuration file \n"
+        print("\n Please configure SC_VALIDATION_NEEDED variable in Device configuration file \n")
     elif screenshot_validation.upper() == "YES":
         #Get Screen capture plugin status
         plugin = "org.rdk.ScreenCapture"
@@ -156,30 +156,30 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult);
                 result1 = tdkTestObj.getResult();
                 if expectedResult in result1:
-                    print "\n org.rdk.ScreenCapture is activated \n"
+                    print("\n org.rdk.ScreenCapture is activated \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     status = "FAILURE"
-                    print "\n Error while activating org.rdk.ScreenCapture\n"
+                    print("\n Error while activating org.rdk.ScreenCapture\n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-               print"org.rdk.ScreenCapture is in activated state"
+                print("org.rdk.ScreenCapture is in activated state")
         else:
-            print "\n Error while getting org.rdk.ScreenCapture status,current status :",sc_status
+            print("\n Error while getting org.rdk.ScreenCapture status,current status :",sc_status)
             tdkTestObj.setResultStatus("FAILURE")
             status = "FAILURE"
         upload_url_status,sc_upload_url = getDeviceConfigKeyValue(conf_file,"SC_UPLOAD_URL")
         image_upload_dir = StabilityTestVariables.image_upload_dir
         if sc_upload_url == "" or image_upload_dir == "":
-            print "\n Please configure SC_UPLOAD_URL in Device configuration file and configure image_upload_dir in StabilityTestVariables file\n"
+            print("\n Please configure SC_UPLOAD_URL in Device configuration file and configure image_upload_dir in StabilityTestVariables file\n")
             status = "FAILURE"
     else:
-        print "\n User opted for NO screen capture validation"
+        print("\n User opted for NO screen capture validation")
     if all(status_val == "SUCCESS" for status_val in (status,webkit_status,sc_config_status)) :
         image_files = []
         resolutions_list = StabilityTestVariables.resolutions_list
-        print "\nPre conditions for the test are set successfully"
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully")
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -187,8 +187,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         result = tdkTestObj.getResult();
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet test URL"
+            print("Current URL:",current_url)
+            print("\nSet test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",webkit_url);
@@ -196,7 +196,7 @@ if expectedResult in (result.upper() and pre_condition_status):
             result = tdkTestObj.getResult();
             if expectedResult in  result:
                 time.sleep(20)
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                 tdkTestObj.executeTestCase(expectedResult);
@@ -204,8 +204,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                 result = tdkTestObj.getResult()
                 if webkit_url in new_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "URL(",new_url,") is set successfully"
-                    print "\n Get the current screen resolution \n"
+                    print("URL(",new_url,") is set successfully")
+                    print("\n Get the current screen resolution \n")
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getScreenResolution");
                     tdkTestObj.executeTestCase(expectedResult);
@@ -215,7 +215,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                         tdkTestObj.setResultStatus("SUCCESS")
                         curr_resolution_dict = eval(curr_resolution)
                         curr_resolution_dict.pop('success')
-                        print "Current resolution",curr_resolution_dict
+                        print("Current resolution",curr_resolution_dict)
                         proceed = True
                         if screenshot_validation.upper() == "YES":
                             base_image_name = str(obj.execID)+'BaseImage.png'
@@ -229,18 +229,18 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 time.sleep(5)
                                 base_file_name = image_upload_dir+'/'+base_image_name
                                 if os.path.exists(base_file_name):
-                                    print "Image uploaded successfully"
+                                    print("Image uploaded successfully")
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "Image upload is not working"
+                                    print("Image upload is not working")
                                     proceed = False
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while executing org.rdk.ScreenCapture.1.uploadScreenCapture method\n"
+                                print("\n Error while executing org.rdk.ScreenCapture.1.uploadScreenCapture method\n")
                                 proceed = False
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Screen capture validation is skipped \n"
+                            print("\n Screen capture validation is skipped \n")
                         if proceed:
                             if curr_resolution_dict in resolutions_list:
                                 resolutions_list.remove(curr_resolution_dict)
@@ -248,13 +248,13 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 resolutions_list.pop()
                             error_in_loop = False
                             for count in range(0,change_resolution_max_count):
-                                print "\n########## Iteration :{} ##########\n".format(count+1)
+                                print("\n########## Iteration :{} ##########\n".format(count+1))
                                 if screenshot_validation.upper() == "YES":
                                     image_files = [base_file_name]
                                 result_dict = {}
                                 for resolution in resolutions_list:
                                     params = '{"w":'+str(resolution['w'])+',"h":'+str(resolution['h'])+'}'
-                                    print "\n Setting Resolution {}x{} \n".format(resolution['w'],resolution['h'])
+                                    print("\n Setting Resolution {}x{} \n".format(resolution['w'],resolution['h']))
                                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.setScreenResolution");
                                     tdkTestObj.addParameter("value",params);
@@ -263,7 +263,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                     if expectedResult in  result:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         time.sleep(10)
-                                        print "\n Validate resolution \n"
+                                        print("\n Validate resolution \n")
                                         tdkTestObj = obj.createTestStep('rdkservice_getValue');
                                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getScreenResolution");
                                         tdkTestObj.executeTestCase(expectedResult);
@@ -271,15 +271,15 @@ if expectedResult in (result.upper() and pre_condition_status):
                                         result = tdkTestObj.getResult()
                                         if expectedResult in result:
                                             tdkTestObj.setResultStatus("SUCCESS")
-                                            print "\n Resolution details",resolution_details
+                                            print("\n Resolution details",resolution_details)
                                             resolution_dict = eval(resolution_details)
                                             resolution_dict.pop('success')
                                             if resolution_dict == resolution :
-                                                print "\n Set and Get resolutions are same \n"
+                                                print("\n Set and Get resolutions are same \n")
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                                 if screenshot_validation.upper() == "YES":
                                                     image_name = str(obj.execID)+'test_image'+str(resolution['w'])+'x'+str(resolution['h'])+'.png'
-                                                    print image_name
+                                                    print(image_name)
                                                     params = '{"url":"'+sc_upload_url+'?filename='+image_name+'"}'
                                                     tdkTestObj = obj.createTestStep('rdkservice_setValue');
                                                     tdkTestObj.addParameter("method","org.rdk.ScreenCapture.1.uploadScreenCapture");
@@ -291,69 +291,69 @@ if expectedResult in (result.upper() and pre_condition_status):
                                                         file_name = image_upload_dir+'/'+image_name
                                                         if os.path.exists(file_name):
                                                             image_files.append(file_name)
-                                                            print "\n Image uploaded successfully \n"
+                                                            print("\n Image uploaded successfully \n")
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                         else:
-                                                            print "\n Image upload is not working \n"
+                                                            print("\n Image upload is not working \n")
                                                             error_in_loop = True
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                             break
                                                     else:
-                                                        print "\n Error while executing org.rdk.ScreenCapture.1.uploadScreenCapture method\n"
+                                                        print("\n Error while executing org.rdk.ScreenCapture.1.uploadScreenCapture method\n")
                                                         error_in_loop = True
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                         break
                                             else:
-                                                print "\n Both resolutions are not same, current resolution :",resolution_dict
+                                                print("\n Both resolutions are not same, current resolution :",resolution_dict)
                                                 tdkTestObj.setResultStatus("FAILURE")
                                                 error_in_loop = True
                                                 break
                                         else:
-                                            print "\n Failed to get the resolution details \n"
+                                            print("\n Failed to get the resolution details \n")
                                             tdkTestObj.setResultStatus("FAILURE");
                                             error_in_loop = True
                                             break
                                     else:
-                                        print "\n Unable to set resolution using org.rdk.RDKShell.1.setScreenResolution \n"
+                                        print("\n Unable to set resolution using org.rdk.RDKShell.1.setScreenResolution \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                         error_in_loop = True
                                         break
                                 # Exit from outer loop if any issue in inner-loop
                                 if error_in_loop:
                                     break
-                                
+
                                 if screenshot_validation.upper() == "YES":
                                     comparison_result = compare_images(image_files)
                                     if comparison_result == "DIFFERENT":
-                                        print "\n Resolutions are set properly \n"
+                                        print("\n Resolutions are set properly \n")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n[ERROR] Resolutions are not set properly \n"
+                                        print("\n[ERROR] Resolutions are not set properly \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                         break
                                     for image in image_files:
                                         if image not in base_file_name:
                                             os.remove(image)
-                                print "\n ##### Validating CPU load and memory usage #####\n"
-				print "Iteration : ", count+1
-            			tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            			tdkTestObj.executeTestCase(expectedResult)
-            			status = tdkTestObj.getResult()
-            			result = tdkTestObj.getResultDetails()
-            			if expectedResult in status and result != "ERROR":
-            			    tdkTestObj.setResultStatus("SUCCESS")
-            			    cpuload = result.split(',')[0]
-            			    memory_usage = result.split(',')[1]
+                                print("\n ##### Validating CPU load and memory usage #####\n")
+                                print("Iteration : ", count+1)
+                                tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                tdkTestObj.executeTestCase(expectedResult)
+                                status = tdkTestObj.getResult()
+                                result = tdkTestObj.getResultDetails()
+                                if expectedResult in status and result != "ERROR":
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    cpuload = result.split(',')[0]
+                                    memory_usage = result.split(',')[1]
                                     result_dict["iteration"] = count+1
                                     result_dict["cpu_load"] = float(cpuload)
                                     result_dict["memory_usage"] = float(memory_usage)
                                     result_dict_list.append(result_dict)
-				else:
-				    print "\n Error while validating Resource usage"
-                		    tdkTestObj.setResultStatus("FAILURE")
-                		    break
+                                else:
+                                    print("\n Error while validating Resource usage")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    break
                             else:
-                                print "\nSuccessfully completed the {} iterations \n".format(change_resolution_max_count)
+                                print("\nSuccessfully completed the {} iterations \n".format(change_resolution_max_count))
                             cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                             json.dump(cpu_mem_info_dict,json_file)
                             json_file.close()
@@ -364,8 +364,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                                     if os.path.exists(image):
                                         os.remove(image)
                         else:
-                            print "\n Error while uploading the image \n"
-                        print "Revert the resolution"
+                            print("\n Error while uploading the image \n")
+                        print("Revert the resolution")
                         params = '{"w":'+str(curr_resolution_dict['w'])+',"h":'+str(curr_resolution_dict['h'])+'}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.setScreenResolution");
@@ -375,21 +375,21 @@ if expectedResult in (result.upper() and pre_condition_status):
                         if expectedResult in  result:
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "Unable to revert the resolution"
+                            print("Unable to revert the resolution")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Failed to get the resolution details \n"
+                        print("\n Failed to get the resolution details \n")
                         tdkTestObj.setResultStatus("FAILURE");
                 else:
-                    print "\n Unable to set URL : {} in WebKitBrowser, Current URL :{} \n".format(webkit_url,new_url)
+                    print("\n Unable to set URL : {} in WebKitBrowser, Current URL :{} \n".format(webkit_url,new_url))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while setting URL in WebKitBrowser \n"
+                print("\n Error while setting URL in WebKitBrowser \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Unable to get the Current URL in WebKitBrowser \n"
+            print("Unable to get the Current URL in WebKitBrowser \n")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exiting from WebKitBrowser \n"
+        print("\n Exiting from WebKitBrowser \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","WebKitBrowser")
         tdkTestObj.addParameter("status","deactivate")
@@ -398,14 +398,14 @@ if expectedResult in (result.upper() and pre_condition_status):
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate WebKitBrowser"
+            print("Unable to deactivate WebKitBrowser")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
         if revert_webkit:
             #Set the URL back to previous
@@ -415,13 +415,13 @@ if expectedResult in (result.upper() and pre_condition_status):
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             if result == "SUCCESS":
-                print "URL is reverted successfully"
+                print("URL is reverted successfully")
                 tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print "Failed to revert the URL"
+                print("Failed to revert the URL")
                 tdkTestObj.setResultStatus("FAILURE");
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

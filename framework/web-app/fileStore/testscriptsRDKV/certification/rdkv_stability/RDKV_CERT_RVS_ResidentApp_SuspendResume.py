@@ -66,7 +66,7 @@ In a loop of 1000:
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import StabilityTestVariables
 from StabilityTestUtility import *
@@ -91,7 +91,7 @@ max_count = StabilityTestVariables.suspend_resume_max_count
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 obj.setLoadModuleStatus(result)
 
@@ -100,7 +100,7 @@ pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status = "SUCCESS"
@@ -121,7 +121,7 @@ if expectedResult in (result.upper() and pre_condition_status):
             curr_plugins_status_dict.pop(plugin)
             plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
             if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-                print "\n Error while getting the status of plugins"
+                print("\n Error while getting the status of plugins")
                 status = "FAILURE"
             elif curr_plugins_status_dict != plugin_status_needed:
                 revert = "YES"
@@ -129,18 +129,18 @@ if expectedResult in (result.upper() and pre_condition_status):
                 time.sleep(10)
                 new_plugins_status = get_plugins_status(obj,plugins_list)
                 if new_plugins_status != plugin_status_needed:
-                    print "\n Error while setting plugin status"
+                    print("\n Error while setting plugin status")
                     status = "FAILURE"
         else:
-            print "\n Error while getting current URL in ResidentApp"
+            print("\n Error while getting current URL in ResidentApp")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n ResidentApp is not in activated/resumed state"
+        print("\n ResidentApp is not in activated/resumed state")
         status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         time.sleep(10)
-        for count in range(0,max_count): 
+        for count in range(0,max_count):
             suspend_status,start_suspend = suspend_plugin(obj,plugin)
             if suspend_status == expectedResult:
                 time.sleep(5)
@@ -151,7 +151,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 residentapp_status = tdkTestObj.getResultDetails()
                 if residentapp_status == 'suspended' and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\nResidentApp plugin Suspended Successfully"
+                    print("\nResidentApp plugin Suspended Successfully")
                     time.sleep(5)
                     resume_status,start_resume = launch_plugin(obj,plugin,ui_app_url)
                     if resume_status == expectedResult:
@@ -162,11 +162,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                         residentapp_status = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if residentapp_status == 'resumed' and expectedResult in result:
-                            print "\nResidentApp plugin Resumed Successfully\n"
+                            print("\nResidentApp plugin Resumed Successfully\n")
                             tdkTestObj.setResultStatus("SUCCESS")
                             result_dict = {}
-                            print "\n ##### Validating CPU load and memory usage #####\n"
-                            print "Iteration : ", count + 1
+                            print("\n ##### Validating CPU load and memory usage #####\n")
+                            print("Iteration : ", count + 1)
                             tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                             tdkTestObj.executeTestCase(expectedResult)
                             status = tdkTestObj.getResult()
@@ -180,37 +180,37 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 result_dict["memory_usage"] = float(memory_usage)
                                 result_dict_list.append(result_dict)
                             else:
-                                print "\n Error while validating Resource usage"
+                                print("\n Error while validating Resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "ResidentApp plugin is not in Resumed state, current ResidentApp Status: ",residentapp_status
+                            print("ResidentApp plugin is not in Resumed state, current ResidentApp Status: ",residentapp_status)
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "Unable to set ResidentApp plugin to resumed state"
+                        print("Unable to set ResidentApp plugin to resumed state")
                         break
                 else:
-                    print "ResidentApp is not in Suspended state, current ResidentApp Status: ",residentapp_status
+                    print("ResidentApp is not in Suspended state, current ResidentApp Status: ",residentapp_status)
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "Unable to set ResidentApp plugin to suspended state"
+                print("Unable to set ResidentApp plugin to suspended state")
                 break
         else:
-            print "\n Successfully completed the {} iterations\n".format(max_count)
+            print("\n Successfully completed the {} iterations\n".format(max_count))
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

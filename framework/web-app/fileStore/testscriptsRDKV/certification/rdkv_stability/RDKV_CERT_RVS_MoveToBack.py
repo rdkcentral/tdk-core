@@ -65,8 +65,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import StabilityTestVariables
 import ast
 from rdkv_performancelib import *
@@ -93,7 +93,7 @@ webkit_url = "https://www.google.com/"
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -109,7 +109,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(plugins_cur_status_dict[plugin] == "FAILURE" for plugin in plugin_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif plugin_status_needed != plugins_cur_status_dict :
         revert = "YES"
@@ -126,7 +126,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         webkit_launch_status,webkit_launch_start_time = launch_plugin(obj,"WebKitBrowser")
         time.sleep(10)
         #Set URL in WebKitBrowser
-        print "\nSet a test URL in WebKitBrowser"
+        print("\nSet a test URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.addParameter("value",webkit_url);
@@ -135,7 +135,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(10)
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\nValidate if the URL is set successfully or not"
+            print("\nValidate if the URL is set successfully or not")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.executeTestCase(expectedResult);
@@ -143,21 +143,21 @@ if expectedResult in (result.upper() and pre_condition_status):
             result = tdkTestObj.getResult()
             if webkit_url in new_url and expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "\n URL(",new_url,") is set successfully"
+                print("\n URL(",new_url,") is set successfully")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue')
                 tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
                 tdkTestObj.executeTestCase(expectedResult)
                 zorder = tdkTestObj.getResultDetails()
                 zorder_status = tdkTestObj.getResult()
                 if zorder_status != "SUCCESS" :
-                    print "\n Error while executing getZorder method \n"
+                    print("\n Error while executing getZorder method \n")
                 if all(result_status == "SUCCESS" for result_status in (cobalt_launch_status,webkit_launch_status,zorder_status)):
                     tdkTestObj.setResultStatus("SUCCESS")
                     #Check zorder
                     zorder = ast.literal_eval(zorder)["clients"]
                     zorder = exclude_from_zorder(zorder)
                     for count in range(0,moveto_back_max_count):
-                        print "\n Zorder:",zorder
+                        print("\n Zorder:",zorder)
                         zorder = [plugin.lower() for plugin in zorder]
                         if all(plugin in zorder for plugin in ["webkitbrowser","cobalt"]):
                             result_dict = {}
@@ -166,11 +166,11 @@ if expectedResult in (result.upper() and pre_condition_status):
                             else:
                                 plugin = "Cobalt"
                         else:
-                            print "\n Zorder is not having Cobalt or WebkitBrowser as last plugin, zorder: ",zorder
+                            print("\n Zorder is not having Cobalt or WebkitBrowser as last plugin, zorder: ",zorder)
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                         #moveToBack
-                        print "\n Moving {} plugin to back \n".format(plugin)
+                        print("\n Moving {} plugin to back \n".format(plugin))
                         param_val = '{"client": "'+plugin+'"}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.moveToBack")
@@ -189,62 +189,62 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 zorder = ast.literal_eval(zorder)["clients"]
                                 zorder = exclude_from_zorder(zorder)
-                                print "\n zorder:",zorder
+                                print("\n zorder:",zorder)
                                 if zorder[-1].lower() == plugin.lower():
-                                    print "\n{} plugin moved to back \n".format(plugin)
+                                    print("\n{} plugin moved to back \n".format(plugin))
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n ##### Validating CPU load and memory usage #####\n"
-				    print "Iteration : ", count+1
-            			    tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            			    tdkTestObj.executeTestCase(expectedResult)
-            			    status = tdkTestObj.getResult()
-            			    result = tdkTestObj.getResultDetails()
-            			    if expectedResult in status and result != "ERROR":
-            			        tdkTestObj.setResultStatus("SUCCESS")
-            			        cpuload = result.split(',')[0]
-            			        memory_usage = result.split(',')[1]
+                                    print("\n ##### Validating CPU load and memory usage #####\n")
+                                    print("Iteration : ", count+1)
+                                    tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    status = tdkTestObj.getResult()
+                                    result = tdkTestObj.getResultDetails()
+                                    if expectedResult in status and result != "ERROR":
+                                        tdkTestObj.setResultStatus("SUCCESS")
+                                        cpuload = result.split(',')[0]
+                                        memory_usage = result.split(',')[1]
                                         result_dict["iteration"] = count+1
                                         result_dict["cpu_load"] = float(cpuload)
                                         result_dict["memory_usage"] = float(memory_usage)
                                         result_dict_list.append(result_dict)
-				    else:
-					print "\n Error while validating Resource usage"
-                			tdkTestObj.setResultStatus("FAILURE")
-                			break
+                                    else:
+                                        print("\n Error while validating Resource usage")
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        break
                                 else:
-                                    print "\n Unable to move {} plugin to back\n".format(plugin)
+                                    print("\n Unable to move {} plugin to back\n".format(plugin))
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\n Error while executing getZorder method \n"
+                                print("\n Error while executing getZorder method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Error while executing moveToBack method \n"
+                            print("\n Error while executing moveToBack method \n")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\nSuccessfully completed the {} iterations \n".format(moveto_back_max_count)
+                        print("\nSuccessfully completed the {} iterations \n".format(moveto_back_max_count))
                     cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                     json.dump(cpu_mem_info_dict,json_file)
                     json_file.close()
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to set test URL in WebKitBrowser"
+                print("\n Unable to set test URL in WebKitBrowser")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while executing WebKitBrowser.1.url method \n"
+            print("\n Error while executing WebKitBrowser.1.url method \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met\n"
+        print("\n Preconditions are not met\n")
         obj.setLoadModuleStatus("FAILURE")
-    print "\n Revert the values before exiting \n"
+    print("\n Revert the values before exiting \n")
     status = set_plugins_status(obj,plugins_cur_status_dict)
     if status == "FAILURE":
-        print "\n Error while reverting the status of plugins"
+        print("\n Error while reverting the status of plugins")
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

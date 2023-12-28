@@ -77,8 +77,8 @@ CPU load and memory usage must be within the expected limit</expected_output>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from rdkv_performancelib import *
 import StabilityTestVariables
 from web_socket_util import *
@@ -109,7 +109,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -128,15 +128,15 @@ if expectedResult in (result.upper() and pre_condition_status):
         buf = the_file.readlines()
         line_to_add = 'var basepath = "'+basepath+'"\n'
         if line_to_add in buf:
-            print "The stream path is already configured"
+            print("The stream path is already configured")
         else:
-            print "Configuring the stream path for channel change test"
+            print("Configuring the stream path for channel change test")
             with open(filename, 'w') as out_file:
                 for line in buf:
                     if line == "*/\n":
                         line = "*/\n"+line_to_add
                     out_file.write(line)
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert_plugins_dict = {}
     revert_if  = revert_device_info = revert_plugins = "NO"
@@ -154,7 +154,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     webkit_instance = StabilityTestVariables.webkit_instance
@@ -171,7 +171,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     plugin_required_status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(plugins_cur_status_dict[plugin] == "FAILURE" for plugin in plugin_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif plugin_status_needed != plugins_cur_status_dict :
         revert = "YES"
@@ -187,8 +187,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         if revert_if == "YES":
             closed_status = close_lightning_app(obj)
             time.sleep(10)
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -198,14 +198,14 @@ if expectedResult in (result.upper() and pre_condition_status):
             tdkTestObj.setResultStatus("SUCCESS");
             webkit_console_socket = createEventListener(obj.IP,webinspect_port,[],"/devtools/page/1",False)
             time.sleep(10)
-            print "Current URL:",current_url
-            print "\nSet Channel change test URL"
+            print("Current URL:",current_url)
+            print("\nSet Channel change test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",channel_change_url);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
-            print "\nValidate if the URL is set successfully or not"
+            print("\nValidate if the URL is set successfully or not")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.executeTestCase(expectedResult);
@@ -213,7 +213,7 @@ if expectedResult in (result.upper() and pre_condition_status):
             new_url = tdkTestObj.getResultDetails();
             if new_url == channel_change_url and expectedResult == (result and result1):
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "URL(",new_url,") is set successfully"
+                print("URL(",new_url,") is set successfully")
                 validate = False
                 continue_count = 0
                 check_channel_tune = True
@@ -254,25 +254,25 @@ if expectedResult in (result.upper() and pre_condition_status):
                             check_channel_tune = True
                             check_play_count = 0
                             continue_count = 0
-			    print "\n ##### Validating CPU load and memory usage #####\n"
-              	            print "Iteration : ", channel_change_count
-              	            tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-              	            tdkTestObj.executeTestCase(expectedResult)
-              	            status = tdkTestObj.getResult()
-              	            result = tdkTestObj.getResultDetails()
-              	            if expectedResult in status and result != "ERROR":
-              	                tdkTestObj.setResultStatus("SUCCESS")
-              	                cpuload = result.split(',')[0]
-              	                memory_usage = result.split(',')[1]
+                            print("\n ##### Validating CPU load and memory usage #####\n")
+                            print("Iteration : ", channel_change_count)
+                            tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                            tdkTestObj.executeTestCase(expectedResult)
+                            status = tdkTestObj.getResult()
+                            result = tdkTestObj.getResultDetails()
+                            if expectedResult in status and result != "ERROR":
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                cpuload = result.split(',')[0]
+                                memory_usage = result.split(',')[1]
                                 result_dict["iteration"] = channel_change_count
                                 result_dict["remarks"] = remarks
                                 result_dict["cpu_load"] = float(cpuload)
                                 result_dict["memory_usage"] = float(memory_usage)
                                 result_dict_list.append(result_dict)
-			    else:
-				print "\n Error while validating Resource usage"
-               			tdkTestObj.setResultStatus("FAILURE")
-                	        break
+                            else:
+                                print("\n Error while validating Resource usage")
+                                tdkTestObj.setResultStatus("FAILURE")
+                                break
                             channel_change_count += 1
                         else:
                             check_play_count += 1
@@ -281,13 +281,13 @@ if expectedResult in (result.upper() and pre_condition_status):
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                 if (validate):
-                    print "\nSuccessfully completed {} channel changes\n".format(max_channel_change_count)
+                    print("\nSuccessfully completed {} channel changes\n".format(max_channel_change_count))
                     tdkTestObj.setResultStatus("SUCCESS")
                 elif(continue_count > 20):
-                    print "\nchannel change didn't happen after {}channel changes\n".format(channel_change_count)
+                    print("\nchannel change didn't happen after {}channel changes\n".format(channel_change_count))
                     tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print error_msg
+                    print(error_msg)
                 webkit_console_socket.disconnect()
                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                 json.dump(cpu_mem_info_dict,json_file)
@@ -299,19 +299,19 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if result == "SUCCESS":
-                    print "URL is reverted successfully"
+                    print("URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Failed to revert the URL"
+                    print("Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "Failed to load the URL:{}, Current URL:{}".format(channel_change_url,new_url)
+                print("Failed to load the URL:{}, Current URL:{}".format(channel_change_url,new_url))
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to get the current URL loaded in webkit"
+            print("Unable to get the current URL loaded in webkit")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert_if == "YES" and status == "SUCCESS":
         status,complete_url = get_lightning_app_url(obj)
@@ -319,15 +319,14 @@ if expectedResult in (result.upper() and pre_condition_status):
         time.sleep(60)
         interface_status = set_default_interface(obj,"ETHERNET")
         if interface_status == "SUCCESS":
-            print "\n Successfully reverted to ETHERNET \n"
+            print("\n Successfully reverted to ETHERNET \n")
             status = close_lightning_app(obj)
         else:
-            print "\n Error while reverting to ETHERNET \n"
+            print("\n Error while reverting to ETHERNET \n")
     if revert_plugins_dict != {}:
         status = set_plugins_status(obj,revert_plugins_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")

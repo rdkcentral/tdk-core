@@ -178,7 +178,7 @@ if expectedResult in result.upper():
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                        
+
                                         #CHECK PLUGINS WITH AUTOSTART AS TRUE ARE ACTIVATED
                                         PluginStatusAfterReboot = literal_eval(PluginStatusAfterReboot)
                                         activated_status = checkPluginsActivated(PluginStatusAfterReboot,ValidateActivatedPlugins)
@@ -186,7 +186,7 @@ if expectedResult in result.upper():
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            
+
                                         #GET THE STATUS OF ETHERNET INTERFACE
                                         if_status = getIFStatus(EthernetInterface,ValidateInterface)
                                         if if_status != "FAILURE":
@@ -217,23 +217,23 @@ if expectedResult in result.upper():
                                                 count = count +1
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                print "Failed to get the UI status"
+                                                print("Failed to get the UI status")
                                                 break
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            print "Failed to get the interface status"
+                                            print("Failed to get the interface status")
                                             break
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print "Failed to get the plugin status"
+                                        print("Failed to get the plugin status")
                                         break
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print "Failed to get the number of plugins"
+                                    print("Failed to get the number of plugins")
                                     break
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "Failed to get the Uptime"
+                                print("Failed to get the Uptime")
                                 break
                         else:
                             tdkTestObj.setResultStatus("FAILURE")

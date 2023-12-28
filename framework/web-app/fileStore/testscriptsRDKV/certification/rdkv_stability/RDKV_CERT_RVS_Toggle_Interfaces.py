@@ -91,8 +91,8 @@ c)Validate CPU load and memory usage
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 import StabilityTestVariables
@@ -120,7 +120,7 @@ cpu_mem_info_dict = {}
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -133,14 +133,14 @@ if expectedResult in (result.upper() and pre_condition_status):
     revert_plugins_dict = {}
     plugins_list = ["WebKitBrowser","org.rdk.Wifi","DeviceInfo"]
     plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","DeviceInfo":"activated"}
-    print "\n Get plugins status \n"
+    print("\n Get plugins status \n")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(current_plugin_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif plugin_status_needed != current_plugin_status_dict:
-        print "\n Set plugins status \n"
+        print("\n Set plugins status \n")
         status = set_plugins_status(obj,plugin_status_needed)
         time.sleep(10)
         new_plugins_status_dict = get_plugins_status(obj,plugins_list)
@@ -163,7 +163,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 status = launch_lightning_app(obj,complete_url)
                 time.sleep(30)
             if status == "SUCCESS":
-                print "\n Setting Default interface as {}\n".format(new_interface)
+                print("\n Setting Default interface as {}\n".format(new_interface))
                 tdkTestObj = obj.createTestStep('rdkservice_setDefaultInterface')
                 tdkTestObj.addParameter("new_interface",new_interface)
                 tdkTestObj.executeTestCase(expectedResult)
@@ -172,8 +172,8 @@ if expectedResult in (result.upper() and pre_condition_status):
                 if details == "SUCCESS" and expectedResult in result and deviceAvailability == "Yes":
                     tdkTestObj.setResultStatus("SUCCESS")
                     current_interface = new_interface
-                    print "\n ##### Validating CPU load and memory usage #####\n"
-		    print "Iteration : ", count+1
+                    print("\n ##### Validating CPU load and memory usage #####\n")
+                    print("Iteration : ", count+1)
                     tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
@@ -186,25 +186,25 @@ if expectedResult in (result.upper() and pre_condition_status):
                         result_dict["cpu_load"] = float(cpuload)
                         result_dict["memory_usage"] = float(memory_usage)
                         result_dict_list.append(result_dict)
-		    else:
-			print "\n Error while validating Resource usage"
-                	tdkTestObj.setResultStatus("FAILURE")
-                	break
+                    else:
+                        print("\n Error while validating Resource usage")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        break
                 else:
-                    print "\n Error while setting Default interface \n"
+                    print("\n Error while setting Default interface \n")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "Error while lauching application \n"
+                print("Error while lauching application \n")
                 break
         else:
-            print "\nSuccessfully completed the {} iterations \n".format(max_iterations)
+            print("\nSuccessfully completed the {} iterations \n".format(max_iterations))
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
         #Revert interface
         if current_interface != initial_interface and deviceAvailability == "Yes":
-            print "\n Revert network interface to {}\n".format(initial_interface)
+            print("\n Revert network interface to {}\n".format(initial_interface))
             if initial_interface == "ETHERNET":
                 status = launch_lightning_app(obj,complete_url)
                 time.sleep(30)
@@ -214,21 +214,21 @@ if expectedResult in (result.upper() and pre_condition_status):
             result = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails()
             if details == "SUCCESS" and expectedResult in result:
-                print "\n Successfully reverted the interface\n"
+                print("\n Successfully reverted the interface\n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Error while reverting the network interface \n"
+                print("\n Error while reverting the network interface \n")
                 tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met "
+        print("\n Preconditions are not met ")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
         post_condition_status = check_device_state(obj)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

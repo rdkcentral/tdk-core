@@ -64,8 +64,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import StabilityTestVariables
 import json
 from StabilityTestUtility import *
@@ -90,7 +90,7 @@ cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 #Check the device status before starting the stress test
@@ -120,9 +120,9 @@ if expectedResult in (result.upper() and pre_condition_status):
             output = tdkTestObj.getResultDetails()
             if output != "EXCEPTION" and expectedResult in result and 'users' in output:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Output of {} command :{}\n".format(command,output.split('\n')[1])
-                print "\n ##### Validating CPU load and memory usage #####\n"
-		print "Iteration : ", count+1
+                print("\n Output of {} command :{}\n".format(command,output.split('\n')[1]))
+                print("\n ##### Validating CPU load and memory usage #####\n")
+                print("Iteration : ", count+1)
                 tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                 tdkTestObj.executeTestCase(expectedResult)
                 status = tdkTestObj.getResult()
@@ -135,23 +135,23 @@ if expectedResult in (result.upper() and pre_condition_status):
                     result_dict["cpu_load"] = float(cpuload)
                     result_dict["memory_usage"] = float(memory_usage)
                     result_dict_list.append(result_dict)
-		else:
-		    print "\n Error while validating Resource usage"
+                else:
+                    print("\n Error while validating Resource usage")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Error occured during SSH to the device \n"
+                print("\n Error occured during SSH to the device \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\nSuccessfully completed the {} iterations \n".format(do_ssh_max_count)
+            print("\nSuccessfully completed the {} iterations \n".format(do_ssh_max_count))
         cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
         json.dump(cpu_mem_info_dict,json_file)
         json_file.close()
     else:
-        print "\n Please configure SSH details in device config file\n"
+        print("\n Please configure SSH details in device config file\n")
         tdkTestObj.setResultStatus("FAILURE")
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability")
 else:
-    print "Failed to load module"
+    print("Failed to load module")
     obj.setLoadModuleStatus("FAILURE")

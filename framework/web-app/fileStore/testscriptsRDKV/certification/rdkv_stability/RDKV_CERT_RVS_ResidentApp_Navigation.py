@@ -63,7 +63,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import ast
 from rdkv_performancelib import *
@@ -91,7 +91,7 @@ test_interval = 60
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 #Check the device status before starting the stress test
@@ -114,7 +114,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         device_info_status = rdkservice_getPluginStatus(device_info)
     if device_info_status in "activated" and curr_plugin_status[resident_app] in ("activated","resumed"):
         #Check zorder to check ResidentApp is in the front
-        print "\n Get the zorder"
+        print("\n Get the zorder")
         tdkTestObj = obj.createTestStep('rdkservice_getValue')
         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
         tdkTestObj.executeTestCase(expectedResult)
@@ -126,7 +126,7 @@ if expectedResult in (result.upper() and pre_condition_status):
             zorder = exclude_from_zorder(zorder)
             if resident_app.lower() in zorder and zorder[0].lower() == resident_app.lower():
                 is_front = True
-                print "\n ResidentApp is in front"
+                print("\n ResidentApp is in front")
             elif resident_app.lower() in zorder and zorder[0].lower() != resident_app.lower():
                 param_val = '{"client": "'+resident_app+'"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -146,20 +146,20 @@ if expectedResult in (result.upper() and pre_condition_status):
                         zorder = ast.literal_eval(zorder)["clients"]
                         zorder = exclude_from_zorder(zorder)
                         if zorder[0].lower() == resident_app.lower():
-                            print "\n Successfully moved ResidentApp to front"
+                            print("\n Successfully moved ResidentApp to front")
                             is_front = True
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Unable to move ResidentApp to front"
+                            print("\n Unable to move ResidentApp to front")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while getting the zorder"
+                        print("\n Error while getting the zorder")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while executing moveToFront method"
+                    print("\n Error while executing moveToFront method")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n ResidentApp is not present in zorder"
+                print("\n ResidentApp is not present in zorder")
                 tdkTestObj.setResultStatus("FAILURE")
             if is_front:
                 test_time_in_mins = int(StabilityTestVariables.navigation_test_duration)
@@ -168,7 +168,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 iteration = 0
                 error_in_loop = False
                 while int(round(time.time() * 1000)) < time_limit:
-                    print "\n########## Iteration :{} ##########\n".format(iteration+1)
+                    print("\n########## Iteration :{} ##########\n".format(iteration+1))
                     result_dict = {}
                     #Navigate in ResidentApp UI
                     for key in navigation_key_sequence:
@@ -179,18 +179,18 @@ if expectedResult in (result.upper() and pre_condition_status):
                         tdkTestObj.executeTestCase(expectedResult)
                         result = tdkTestObj.getResult()
                         if expectedResult in result:
-                            print "\n Pressed {} key".format(key)
+                            print("\n Pressed {} key".format(key))
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error while pressing {} key".format(key)
+                            print("\n Error while pressing {} key".format(key))
                             tdkTestObj.setResultStatus("FAILURE")
                             error_in_loop = True
                             break
                     else:
-                        print "\n Successfully completed navigations in ResidentApp UI"
-                        print "\n ##### Validating CPU load and memory usage #####\n"
+                        print("\n Successfully completed navigations in ResidentApp UI")
+                        print("\n ##### Validating CPU load and memory usage #####\n")
                         time.sleep(test_interval)
-                        print "Iteration : ", iteration+1
+                        print("Iteration : ", iteration+1)
                         tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                         tdkTestObj.executeTestCase(expectedResult)
                         status = tdkTestObj.getResult()
@@ -205,28 +205,28 @@ if expectedResult in (result.upper() and pre_condition_status):
                             result_dict_list.append(result_dict)
                             iteration += 1
                         else:
-                            print "\n Error while validating Resource usage"
+                            print("\n Error while validating Resource usage")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     if error_in_loop:
-                        print "\n Stopping the test"
+                        print("\n Stopping the test")
                         break
                 else:
-                    print "\n Successfully completed {} iterations in {} minutes".format(iteration,test_time_in_mins)
+                    print("\n Successfully completed {} iterations in {} minutes".format(iteration,test_time_in_mins))
                 cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
                 json.dump(cpu_mem_info_dict,json_file)
                 json_file.close()
             else:
-                print "\n Unable to move ResidentApp to front"
+                print("\n Unable to move ResidentApp to front")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while getting zorder"
+            print("\n Error while getting zorder")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

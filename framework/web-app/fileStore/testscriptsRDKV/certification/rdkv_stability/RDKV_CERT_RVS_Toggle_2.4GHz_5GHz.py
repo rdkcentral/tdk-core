@@ -82,7 +82,7 @@ b) Connect to SSID
 c) Set WIFI as default interface
 3. In a loop of minimum 1000 switch between 2.4GHZ SSID and 5GHZ SSID.
 4. Validate CPU load and memory usage in each iteration.</automation_approch>
-    <expected_output>DUT should connect to corresponding SSID in each iteration. 
+    <expected_output>DUT should connect to corresponding SSID in each iteration.
 CPU load and memory usage must be within the expected range.</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_stability</test_stub_interface>
@@ -94,7 +94,7 @@ CPU load and memory usage must be within the expected range.</expected_output>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
@@ -122,7 +122,7 @@ cpu_mem_info_dict = {}
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -137,14 +137,14 @@ if expectedResult in (result.upper() and pre_condition_status):
     revert_plugins_dict = {}
     plugins_list = ["WebKitBrowser","org.rdk.Wifi","DeviceInfo"]
     plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","DeviceInfo":"activated"}
-    print "\n Get plugins status \n"
+    print("\n Get plugins status \n")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(current_plugin_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif plugin_status_needed != current_plugin_status_dict:
-        print "\n Set plugins status \n"
+        print("\n Set plugins status \n")
         status = set_plugins_status(obj,plugin_status_needed)
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
@@ -167,7 +167,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         revert_plugins_dict.update(current_plugin_status_dict)
         status = launch_lightning_app(obj,complete_url)
         time.sleep(30)
-        print "\n Check frequency of Connected SSID"
+        print("\n Check frequency of Connected SSID")
         ssid_freq = initial_ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq != "FAILURE" and status == "SUCCESS":
             for count in range(0,max_iterations):
@@ -176,13 +176,13 @@ if expectedResult in (result.upper() and pre_condition_status):
                     new_ssid_freq = "5"
                 else:
                     new_ssid_freq = "2.4"
-                print "\n Connecting to {}GHZ SSID".format(new_ssid_freq)
+                print("\n Connecting to {}GHZ SSID".format(new_ssid_freq))
                 connect_wifi_status,deviceAvailability = connect_wifi(obj,new_ssid_freq)
                 if connect_wifi_status == "SUCCESS":
                     ssid_freq = new_ssid_freq
                     time.sleep(10)
-                    print "\n ##### Validating CPU load and memory usage #####\n"
-		    print "Iteration : ", count+1
+                    print("\n ##### Validating CPU load and memory usage #####\n")
+                    print("Iteration : ", count+1)
                     tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
                     tdkTestObj.executeTestCase(expectedResult)
                     status = tdkTestObj.getResult()
@@ -195,42 +195,42 @@ if expectedResult in (result.upper() and pre_condition_status):
                         result_dict["cpu_load"] = float(cpuload)
                         result_dict["memory_usage"] = float(memory_usage)
                         result_dict_list.append(result_dict)
-		    else:
-			print "\n Error while validating Resource usage"
-               		tdkTestObj.setResultStatus("FAILURE")
-                	break
+                    else:
+                        print("\n Error while validating Resource usage")
+                        tdkTestObj.setResultStatus("FAILURE")
+                        break
                 else:
-                    print "\n Error happened while connecting to SSID"
+                    print("\n Error happened while connecting to SSID")
                     completed = False
                     break
             else:
-                print "\nSuccessfully completed the {} iterations ".format(max_iterations)
+                print("\nSuccessfully completed the {} iterations ".format(max_iterations))
             cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
             json.dump(cpu_mem_info_dict,json_file)
             json_file.close()
         else:
-            print "\n Preconditions are not met"
+            print("\n Preconditions are not met")
             completed = False
         if deviceAvailability == "Yes":
             if revert_if == "YES" and status == "SUCCESS":
                 time.sleep(40)
                 interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
                 if interface_status == "SUCCESS":
-                    print "\n Successfully reverted to ETHERNET \n"
+                    print("\n Successfully reverted to ETHERNET \n")
                     status = close_lightning_app(obj)
                 else:
-                    print "\n Error while reverting to ETHERNET \n"
+                    print("\n Error while reverting to ETHERNET \n")
             if not completed:
                 obj.setLoadModuleStatus("FAILURE")
         else:
-            print "\n Preconditions are not met "
+            print("\n Preconditions are not met ")
             obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
             post_condition_status = check_device_state(obj)
         else:
-            print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+            print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

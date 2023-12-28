@@ -66,7 +66,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from web_socket_util import *
 from StabilityTestUtility import *
@@ -90,7 +90,7 @@ pre_requisite_reboot(obj)
 webkit_console_socket = None
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 #Check the device status before starting the stress test
@@ -107,15 +107,15 @@ if expectedResult in (result.upper() and pre_condition_status):
         buf = the_file.readlines()
         line_to_add = 'var basepath = "'+basepath+'"\n'
         if line_to_add in buf:
-            print "The stream path is already configured"
+            print("The stream path is already configured")
         else:
-            print "Configuring the stream path for channel change test"
+            print("Configuring the stream path for channel change test")
             with open(filename, 'w') as out_file:
                 for line in buf:
                     if line == "*/\n":
                         line = "*/\n"+line_to_add
                     out_file.write(line)
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     webkit_instance = StabilityTestVariables.webkit_instance
@@ -132,7 +132,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(plugins_cur_status_dict[plugin] == "FAILURE" for plugin in plugin_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif plugin_status_needed != plugins_cur_status_dict :
         revert = "YES"
@@ -142,8 +142,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugin_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -153,14 +153,14 @@ if expectedResult in (result.upper() and pre_condition_status):
             tdkTestObj.setResultStatus("SUCCESS");
             webkit_console_socket = createEventListener(ip,webinspect_port,[],"/devtools/page/1",False)
             time.sleep(10)
-            print "Current URL:",current_url
-            print "\nSet Channel change test URL"
+            print("Current URL:",current_url)
+            print("\nSet Channel change test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",channel_change_url);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
-            print "\nValidate if the URL is set successfully or not"
+            print("\nValidate if the URL is set successfully or not")
             tdkTestObj = obj.createTestStep('rdkservice_getValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.executeTestCase(expectedResult);
@@ -168,13 +168,13 @@ if expectedResult in (result.upper() and pre_condition_status):
             new_url = tdkTestObj.getResultDetails();
             if new_url == channel_change_url and expectedResult == (result and result1):
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "URL(",new_url,") is set successfully"
+                print("URL(",new_url,") is set successfully")
                 continue_count = 0
                 channel_count = 0
                 max_channel_change_count = 1000
                 while channel_count < max_channel_change_count:
                     if continue_count > 120:
-                        print "\n Channel change is not working"
+                        print("\n Channel change is not working")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                     if (len(webkit_console_socket.getEventsBuffer())== 0):
@@ -195,39 +195,39 @@ if expectedResult in (result.upper() and pre_condition_status):
                         for parameter in channel_count_params:
                             if parameter["type"] == "number":
                                 channel_count = parameter["value"]
-                        print "\n Channel change count: ",channel_count
+                        print("\n Channel change count: ",channel_count)
                     else:
                         continue_count += 1
                         continue
                 else:
-                    print "\n Check channel is playing after {} channel changes \n".format(max_channel_change_count)
+                    print("\n Check channel is playing after {} channel changes \n".format(max_channel_change_count))
                     time.sleep(10)
                     if (len(webkit_console_socket.getEventsBuffer())!= 0):
                         for event in webkit_console_socket.getEventsBuffer():
                             if "Playing" in event:
-                                print "\n Channel is playing after {} channel changes\n".format(max_channel_change_count)
+                                print("\n Channel is playing after {} channel changes\n".format(max_channel_change_count))
                                 channel_change_log = json.loads(event)
                                 remarks = channel_change_log.get("params").get("message").get("text")
-                                print "\n Validate CPU load and memory usage \n"
-            		        tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-            		        tdkTestObj.executeTestCase(expectedResult)
-            		        status = tdkTestObj.getResult()
-            		        result = tdkTestObj.getResultDetails()
-            		        if expectedResult in status and result != "ERROR":
-            		            tdkTestObj.setResultStatus("SUCCESS")
-				else:
-				    print "\n Error while validating Resource usage"
-                		    tdkTestObj.setResultStatus("FAILURE")
-                		    break
-                                print "\n Successfully completed the {} channel changes".format(max_channel_change_count)
+                                print("\n Validate CPU load and memory usage \n")
+                                tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
+                                tdkTestObj.executeTestCase(expectedResult)
+                                status = tdkTestObj.getResult()
+                                result = tdkTestObj.getResultDetails()
+                                if expectedResult in status and result != "ERROR":
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                else:
+                                    print("\n Error while validating Resource usage")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    break
+                                print("\n Successfully completed the {} channel changes".format(max_channel_change_count))
                                 break
                             else:
                                 continue
                         else:
-                            print "\n Channel is not playing after {} channel changes \n".format(max_channel_change_count)
+                            print("\n Channel is not playing after {} channel changes \n".format(max_channel_change_count))
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n No events are available in the application console\n"
+                        print("\n No events are available in the application console\n")
                         tdkTestObj.setResultStatus("FAILURE")
                 webkit_console_socket.disconnect()
                 time.sleep(5)
@@ -238,26 +238,26 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if result == "SUCCESS":
-                    print "URL is reverted successfully"
+                    print("URL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "Failed to revert the URL"
+                    print("Failed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "Failed to load the URL:{}, Current URL:{}".format(channel_change_url,new_url)
+                print("Failed to load the URL:{}, Current URL:{}".format(channel_change_url,new_url))
                 tdkTestObj.setResultStatus("FAILURE");
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "Unable to get the current URL loaded in webkit"
+            print("Unable to get the current URL loaded in webkit")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,plugins_cur_status_dict)
     post_condition_status = check_device_state(obj)
     obj.unloadModule("rdkv_stability");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")
