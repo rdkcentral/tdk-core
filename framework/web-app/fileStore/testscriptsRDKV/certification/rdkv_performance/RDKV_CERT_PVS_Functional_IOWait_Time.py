@@ -104,7 +104,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -141,23 +141,23 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails()
             if output != "EXCEPTION" and expectedResult in result:
                 iowait_time = float(output.splitlines()[1])
-                print "Validate iowait time for the CPU cores"
+                print("Validate iowait time for the CPU cores")
                 if iowait_time <= cpu_cores_percentage :
-                    print "The iowait time is not greater than the CPUs in the device.\nCPU cores:{}\niowait time:{}%\n CPU core percentage:{}\n".format(CPU_cores,iowait_time,cpu_cores_percentage)
+                    print("The iowait time is not greater than the CPUs in the device.\nCPU cores:{}\niowait time:{}%\n CPU core percentage:{}\n".format(CPU_cores,iowait_time,cpu_cores_percentage))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "CPU cores are waiting a significant amount of time for the disk subsystem to catch up.\nCPU cores:{}\niowait time: {}%\nCPU core percentage:{}\n".format(CPU_cores,iowait_time,cpu_cores_percentage)
+                    print("CPU cores are waiting a significant amount of time for the disk subsystem to catch up.\nCPU cores:{}\niowait time: {}%\nCPU core percentage:{}\n".format(CPU_cores,iowait_time,cpu_cores_percentage))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Error occurred while checking the iowait of the device"
+                print("Error occurred while checking the iowait of the device")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error occurred while checking the number of cores"
+            print("Error occurred while checking the number of cores")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Please configure the SSH details in configuration file"
+        print("Please configure the SSH details in configuration file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

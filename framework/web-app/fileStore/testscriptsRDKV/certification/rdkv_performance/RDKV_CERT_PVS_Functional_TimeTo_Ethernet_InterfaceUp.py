@@ -66,7 +66,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 from StabilityTestVariables import *
 import rebootTestUtility
@@ -88,11 +88,11 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_Ethernet_Interfac
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -105,7 +105,7 @@ if expectedResult in result.upper():
     result = tdkTestObj.getResultDetails()
     if expectedResult in result:
         tdkTestObj.setResultStatus("SUCCESS")
-        print "Rebooted device successfully"
+        print("Rebooted device successfully")
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
         tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
         tdkTestObj.addParameter("reqValue","uptime")
@@ -115,7 +115,7 @@ if expectedResult in result.upper():
             uptime = int(tdkTestObj.getResultDetails())
             if uptime < 240:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Device is rebooted and uptime is: {}".format(uptime)
+                print("Device is rebooted and uptime is: {}".format(uptime))
                 tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                 tdkTestObj.addParameter("realpath",obj.realpath)
                 tdkTestObj.addParameter("deviceIP",obj.IP)
@@ -139,18 +139,18 @@ if expectedResult in result.upper():
                         interface_up_list = output.split('\n')
                         interface_up_line = ""
                         for item in interface_up_list:
-                             if check_print in item:
+                            if check_print in item:
                                 interface_up_line = item
                         if interface_up_line != "":
                             interface_up_time = getTimeStampFromString(interface_up_line)
-                            print "\nDevice reboot initiated at :{} (UTC)".format(start_time)
+                            print("\nDevice reboot initiated at :{} (UTC)".format(start_time))
                             Summ_list.append('Device reboot initiated at :{}'.format(start_time))
-                            print "eth0 interface became up  at :{} (UTC)  ".format(interface_up_time)
+                            print("eth0 interface became up  at :{} (UTC)  ".format(interface_up_time))
                             Summ_list.append('eth0 interface became up  at :{}'.format(interface_up_time))
                             start_time_millisec = getTimeInMilliSec(start_time)
                             interface_up_time_millisec = getTimeInMilliSec(interface_up_time)
                             interface_uptime = interface_up_time_millisec - start_time_millisec
-                            print "Time taken for the eth0 interface to up after reboot : {} ms\n".format(interface_uptime)
+                            print("Time taken for the eth0 interface to up after reboot : {} ms\n".format(interface_uptime))
                             Summ_list.append('Time taken for the eth0 interface to up after reboot :{}ms'.format(interface_uptime))
                             conf_file,result = getConfigFileName(tdkTestObj.realpath)
                             result1, if_uptime_threshold_value = getDeviceConfigKeyValue(conf_file,"IF_UPTIME_THRESHOLD_VALUE")
@@ -158,37 +158,36 @@ if expectedResult in result.upper():
                             result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                             Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                             if all(value != "" for value in (if_uptime_threshold_value,offset)):
-                                print "\n Threshold value for time taken for eth0 interface to up after reboot: {} ms".format(if_uptime_threshold_value)
+                                print("\n Threshold value for time taken for eth0 interface to up after reboot: {} ms".format(if_uptime_threshold_value))
                                 if 0 < int(interface_uptime) < (int(if_uptime_threshold_value) + int(offset)) :
                                     tdkTestObj.setResultStatus("SUCCESS");
-                                    print "\n The time taken for eth0 interface to up after reboot is within the expected limit\n"
+                                    print("\n The time taken for eth0 interface to up after reboot is within the expected limit\n")
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE");
-                                    print "\n The time taken for eth0 interface to up after reboot is not within the expected limit \n"
+                                    print("\n The time taken for eth0 interface to up after reboot is not within the expected limit \n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "Failed to get the threshold value from config file"
+                                print("Failed to get the threshold value from config file")
                         else:
-                            print "eth0 interface is not up in DUT"
+                            print("eth0 interface is not up in DUT")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Error occurred while executing the command:{} in DUT, \n Please check the SSH details \n".format(command)
+                        print("Error occurred while executing the command:{} in DUT, \n Please check the SSH details \n".format(command))
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "please configure the details in device configuration file"
+                    print("please configure the details in device configuration file")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Device is not rebooted, uptime:{}".format(uptime)
+                print("Device is not rebooted, uptime:{}".format(uptime))
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Failed to get the uptime"
+            print("Failed to get the uptime")
     else:
-        print "Error occurred during reboot"
+        print("Error occurred during reboot")
         tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
-
+    print("Failed to load module")

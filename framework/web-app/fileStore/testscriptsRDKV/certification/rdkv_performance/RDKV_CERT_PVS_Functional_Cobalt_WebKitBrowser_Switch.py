@@ -52,7 +52,7 @@ browser_test_url: string</input_parameters>
 5. Launch WebKitBrowser
 6. Set URL using WebKitBrowser.1.url method
 7. Verify whether URL is set using above method
-8. Press home button 
+8. Press home button
 9. Revert plugins</automation_approch>
     <expected_output>Both application should be working fine</expected_output>
     <priority>High</priority>
@@ -65,8 +65,8 @@ browser_test_url: string</input_parameters>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import PerformanceTestVariables
 from StabilityTestUtility import *
 
@@ -85,7 +85,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     status = "SUCCESS"
@@ -99,7 +99,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -161,41 +161,41 @@ if expectedResult in result.upper():
                     zorder_status = tdkTestObj.getResult()
                     if expectedResult in zorder_status :
                         zorder = ast.literal_eval(zorder)["clients"]
-                        print "zorder: ",zorder
+                        print("zorder: ",zorder)
                         zorder = exclude_from_zorder(zorder)
                         if zorder[0].lower() == resident_app.lower():
-                            print "\n Home screen is reached"
+                            print("\n Home screen is reached")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Home screen is not reached"
+                            print("\n Home screen is not reached")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n Error while getting zorder value"
+                        print("\n Error while getting zorder value")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Error while pressing Home button"
+                    print("\n Error while pressing Home button")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Error while validating the {} plugin functionality".format(plugin)
+                print("\n Error while validating the {} plugin functionality".format(plugin))
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         else:
-            print "\n Successfully Completed switching between plugins"
+            print("\n Successfully Completed switching between plugins")
         #Deactivate plugins
         status = set_plugins_status(obj,plugin_status_needed)
         if status == "SUCCESS":
-            print "\n Deactivated Cobalt and WebKitBrowser"
+            print("\n Deactivated Cobalt and WebKitBrowser")
         else:
-            print "\n Error while deactivating plugins"
+            print("\n Error while deactivating plugins")
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert == "YES":
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
 else:
-    print "Failed to load module"
+    print("Failed to load module")
     obj.setLoadModuleStatus("FAILURE")

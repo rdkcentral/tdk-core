@@ -65,7 +65,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import PerformanceTestVariables
 from StabilityTestUtility import *
@@ -86,16 +86,16 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_HtmlApp_TimeTo_Destroy')
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     status = "SUCCESS"
     revert = "NO"
@@ -104,7 +104,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -112,7 +112,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
-            print "\n Unable to deactivate the plugins"
+            print("\n Unable to deactivate the plugins")
             status = "FAILURE"
     if status == "SUCCESS":
         thunder_port = rdkv_performancelib.devicePort
@@ -127,11 +127,11 @@ if expectedResult in result.upper():
             htmlapp_status = tdkTestObj.getResultDetails()
             result = tdkTestObj.getResult()
             if htmlapp_status == 'resumed' and expectedResult in result:
-                print "\n HtmlApp resumed successfully "
+                print("\n HtmlApp resumed successfully ")
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
                 #Deactivate HtmlApp
-                print "\n Destroying HtmlApp \n"
+                print("\n Destroying HtmlApp \n")
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin","HtmlApp")
                 tdkTestObj.addParameter("status","deactivate")
@@ -146,7 +146,7 @@ if expectedResult in result.upper():
                     htmlapp_status = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if htmlapp_status == 'deactivated' and expectedResult in result:
-                        print "\n HtmlApp destroyed successfully"
+                        print("\n HtmlApp destroyed successfully")
                         tdkTestObj.setResultStatus("SUCCESS")
                         destroyed_time = ""
                         continue_count = 0
@@ -158,9 +158,9 @@ if expectedResult in result.upper():
                                 time.sleep(1)
                                 continue
                             event_log = event_listener.getEventsBuffer().pop(0)
-                            print "\n Triggered event: ",event_log,"\n"
+                            print("\n Triggered event: ",event_log,"\n")
                             if ("HtmlApp" in event_log and "onDestroyed" in str(event_log)):
-                                print "\n Event :onDestroyed is triggered during HtmlApp destroy"
+                                print("\n Event :onDestroyed is triggered during HtmlApp destroy")
                                 destroyed_time = event_log.split('$$$')[0]
                                 break
                         if destroyed_time:
@@ -172,50 +172,50 @@ if expectedResult in result.upper():
                             if all(value != "" for value in (htmlapp_destroy_threshold,offset)):
                                 destroy_start_time_in_millisec = getTimeInMilliSec(destroy_start_time)
                                 destroyed_time_in_millisec = getTimeInMilliSec(destroyed_time)
-                                print "\n HtmlApp destroy initiated at: ",destroy_start_time
+                                print("\n HtmlApp destroy initiated at: ",destroy_start_time)
                                 Summ_list.append('HtmlApp destroy initiated at :{}'.format(destroy_start_time))
-                                print "\n HtmlApp destroyed at : ",destroyed_time
+                                print("\n HtmlApp destroyed at : ",destroyed_time)
                                 Summ_list.append('HtmlApp destroyed at :{}'.format(destroyed_time))
                                 time_taken_for_destroy = destroyed_time_in_millisec - destroy_start_time_in_millisec
-                                print "\n Time taken to destroy HtmlApp: {}(ms)".format(time_taken_for_destroy)
+                                print("\n Time taken to destroy HtmlApp: {}(ms)".format(time_taken_for_destroy))
                                 Summ_list.append('Time taken to destroy HtmlApp :{}ms'.format(time_taken_for_destroy))
-                                print "\n Threshold value for time taken to destroy HtmlApp plugin : {} ms".format(htmlapp_destroy_threshold)
-                                print "\n Validate the time:"
+                                print("\n Threshold value for time taken to destroy HtmlApp plugin : {} ms".format(htmlapp_destroy_threshold))
+                                print("\n Validate the time:")
                                 if 0 < time_taken_for_destroy < (int(htmlapp_destroy_threshold) + int(offset)) :
-                                    print "\n Time taken for destroying HtmlApp is within the expected range"
+                                    print("\n Time taken for destroying HtmlApp is within the expected range")
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "\n Time taken for destroying HtmlApp is not within the expected range"
+                                    print("\n Time taken for destroying HtmlApp is not within the expected range")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Please configure the Threshold value in device configuration file"
+                                print("\n Please configure the Threshold value in device configuration file")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n onDestroyed event not triggered for during HtmlApp destroy"
+                            print("\n onDestroyed event not triggered for during HtmlApp destroy")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Unable to destroy HtmlApp, current status: ",htmlapp_status
+                        print("\n Unable to destroy HtmlApp, current status: ",htmlapp_status)
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while destroying HtmlApp"
+                    print("\n Error while destroying HtmlApp")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Unable to launch HtmlApp, current status: ",htmlapp_status
+                print("\n Unable to launch HtmlApp, current status: ",htmlapp_status)
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while launching HtmlApp"
+            print("\n Error while launching HtmlApp")
             obj.setLoadModuleStatus("FAILURE")
         event_listener.disconnect()
         time.sleep(10)
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

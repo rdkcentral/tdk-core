@@ -65,8 +65,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib
 import PerformanceTestVariables
 import json
 import ast
@@ -88,11 +88,11 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_ChangeResolution'
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -103,12 +103,12 @@ if expectedResult in result.upper():
     params = {}
     event_listener = None
     plugins_list = ["org.rdk.DisplaySettings"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     plugin_status_needed = {"org.rdk.DisplaySettings":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -116,12 +116,12 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
-            print "\n Error while setting status of plugins, current status: ",new_plugins_status
+            print("\n Error while setting status of plugins, current status: ",new_plugins_status)
             status = "FAILURE"
     conf_file,file_status = get_configfile_name(obj)
     result1, resolution = getDeviceConfigKeyValue(conf_file,"CHANGE_RESOLUTION_VALUE")
     if resolution == "":
-        print "\n Configure the CHANGE_RESOLUTION_VALUE in device config file"
+        print("\n Configure the CHANGE_RESOLUTION_VALUE in device config file")
     if status == "SUCCESS" and resolution != "":
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getConnectedVideoDisplays")
@@ -132,7 +132,7 @@ if expectedResult in result.upper():
         connected_displays = ast.literal_eval(connected_displays)
         if connected_displays and result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Get current resolution for ",connected_displays[0]
+            print("\n Get current resolution for ",connected_displays[0])
             value["videoDisplay"] = connected_displays[0]
             input_value = json.dumps(value)
             tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
@@ -144,9 +144,9 @@ if expectedResult in result.upper():
             initial_resolution = ast.literal_eval(initial_resolution)
             initial_resolution = initial_resolution["resolution"]
             if result == "SUCCESS":
-                print "\n Current resolution for {} port :{}".format(connected_displays[0],initial_resolution)
+                print("\n Current resolution for {} port :{}".format(connected_displays[0],initial_resolution))
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Get supported resolutions for :",connected_displays[0]
+                print("\n Get supported resolutions for :",connected_displays[0])
                 tdkTestObj = obj.createTestStep('rdkservice_getValueWithParams')
                 tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.getSupportedResolutions")
                 tdkTestObj.addParameter("params",input_value)
@@ -156,7 +156,7 @@ if expectedResult in result.upper():
                     supported_resolutions = tdkTestObj.getResultDetails()
                     supported_resolutions = ast.literal_eval(supported_resolutions)
                     supported_resolutions = supported_resolutions["supportedResolutions"]
-                    print "\n Supported resolutions for {} display: {}".format(connected_displays[0],supported_resolutions)
+                    print("\n Supported resolutions for {} display: {}".format(connected_displays[0],supported_resolutions))
                     if len(supported_resolutions) > 1:
                         tdkTestObj.setResultStatus("SUCCESS")
                         thunder_port = rdkv_performancelib.devicePort
@@ -168,7 +168,7 @@ if expectedResult in result.upper():
                             params["resolution"] = resolution
                             params["persist"] = True
                             input_params = json.dumps(params)
-                            print "\n Set resolution to :",resolution
+                            print("\n Set resolution to :",resolution)
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution")
                             tdkTestObj.addParameter("value",input_params)
@@ -188,9 +188,9 @@ if expectedResult in result.upper():
                                         time.sleep(1)
                                         continue
                                     event_log = event_listener.getEventsBuffer().pop(0)
-                                    print "\n Triggered event: ",event_log,"\n"
+                                    print("\n Triggered event: ",event_log,"\n")
                                     if (resolution in event_log and "resolutionChanged" in str(event_log)):
-                                        print "\n Event :resolutionChanged is triggered during resolution change"
+                                        print("\n Event :resolutionChanged is triggered during resolution change")
                                         resolution_changed_time = event_log.split('$$$')[0]
                                         break
                                 if resolution_changed_time:
@@ -203,7 +203,7 @@ if expectedResult in result.upper():
                                     current_resolution = ast.literal_eval(current_resolution)
                                     current_resolution = current_resolution["resolution"]
                                     if result == "SUCCESS" and  current_resolution == resolution:
-                                        print "\n Successfully set current resolution to: ",resolution
+                                        print("\n Successfully set current resolution to: ",resolution)
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         config_status,resol_change_threshold = getDeviceConfigKeyValue(conf_file,"RESOLUTION_CHANGE_THRESHOLD_VALUE")
                                         Summ_list.append('RESOLUTION_CHANGE_THRESHOLD_VALUE :{}ms'.format(resol_change_threshold))
@@ -212,34 +212,34 @@ if expectedResult in result.upper():
                                         if all(value != "" for value in (resol_change_threshold,offset)):
                                             resol_change_start_time_in_millisec = getTimeInMilliSec(resol_change_start_time)
                                             resolution_changed_time_in_millisec = getTimeInMilliSec(resolution_changed_time)
-                                            print "\n Resolution change initiated at: " ,resol_change_start_time
+                                            print("\n Resolution change initiated at: " ,resol_change_start_time)
                                             Summ_list.append('Resolution change initiated at :{}'.format(resol_change_start_time))
-                                            print "\n Resolution changed at : ",resolution_changed_time
+                                            print("\n Resolution changed at : ",resolution_changed_time)
                                             Summ_list.append('Resolution changed at  :{}'.format(resolution_changed_time))
                                             time_taken_for_resol_change = resolution_changed_time_in_millisec - resol_change_start_time_in_millisec
                                             Summ_list.append('Time taken to change resolution :{}ms'.format(time_taken_for_resol_change))
-                                            print "\n Time taken to change resolution: {}(ms)".format(time_taken_for_resol_change)
-                                            print "\n Threshold value for time taken to change resolution plugin : {} ms".format(resol_change_threshold)
-                                            print "\n Validate the time:"
+                                            print("\n Time taken to change resolution: {}(ms)".format(time_taken_for_resol_change))
+                                            print("\n Threshold value for time taken to change resolution plugin : {} ms".format(resol_change_threshold))
+                                            print("\n Validate the time:")
                                             if 0 < time_taken_for_resol_change < (int(resol_change_threshold) + int(offset)) :
-                                                print "\n Time taken for changing resolution is within the expected range"
+                                                print("\n Time taken for changing resolution is within the expected range")
                                                 tdkTestObj.setResultStatus("SUCCESS")
                                             else:
-                                                print "\n Time taken for changing resolution is not within the expected range"
+                                                print("\n Time taken for changing resolution is not within the expected range")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Please configure the Threshold value in device configuration file"
+                                            print("\n Please configure the Threshold value in device configuration file")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Unable to set the resolution to : {}, current resolution: {}".format(resolution,current_resolution)
+                                        print("\n Unable to set the resolution to : {}, current resolution: {}".format(resolution,current_resolution))
                                 else:
-                                    print "\n resolutionChanged event not triggered for during Resolution change"
+                                    print("\n resolutionChanged event not triggered for during Resolution change")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while setting resolution"
+                                print("\n Error while setting resolution")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n The resolution {} is not supported, please configure CHANGE_RESOLUTION_VALUE from : {}".format(resolution,supported_resolutions)
+                            print("\n The resolution {} is not supported, please configure CHANGE_RESOLUTION_VALUE from : {}".format(resolution,supported_resolutions))
                             tdkTestObj.setResultStatus("FAILURE")
                         event_listener.disconnect()
                         time.sleep(10)
@@ -249,39 +249,39 @@ if expectedResult in result.upper():
                         params["resolution"] = initial_resolution
                         params["persist"] = True
                         input_params = json.dumps(params)
-                        print "\n Revert resolution to :",initial_resolution
+                        print("\n Revert resolution to :",initial_resolution)
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method","org.rdk.DisplaySettings.1.setCurrentResolution")
                         tdkTestObj.addParameter("value",input_params)
                         tdkTestObj.executeTestCase(expectedResult)
                         result = tdkTestObj.getResult()
                         if result == "SUCCESS":
-                            print "\n Successfully reverted the resolution"
+                            print("\n Successfully reverted the resolution")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error while reverting the resolution to : ",initial_resolution
+                            print("\n Error while reverting the resolution to : ",initial_resolution)
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Only one resolution is supported"
+                        print("\n Only one resolution is supported")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while getting the supported resolutions"
+                    print("\n Error while getting the supported resolutions")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while getting the initial resolution"
+                print("\n Error while getting the initial resolution")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to find connected displays, connected displays list:",connected_displays
+            print("\n Unable to find connected displays, connected displays list:",connected_displays)
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Pre conditions are not met \n"
+        print("\n Pre conditions are not met \n")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

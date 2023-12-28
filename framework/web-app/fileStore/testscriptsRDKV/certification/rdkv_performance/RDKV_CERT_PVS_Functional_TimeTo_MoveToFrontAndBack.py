@@ -50,7 +50,7 @@
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
     <automation_approch>1. Launch Cobalt plugin
-2. Check the zorder 
+2. Check the zorder
 3. Based on the zorder of Cobalt decide on moveToFront or moveToBack and perform the operation
 4. Check the logs corresponding to the operation and parse the time stamp
 5. Same steps to be followed for both operation
@@ -67,8 +67,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import ast
 from datetime import datetime
 from rdkv_performancelib import *
@@ -87,11 +87,11 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_MoveToFrontAndBac
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -116,7 +116,7 @@ if expectedResult in result.upper():
     plugin_status_needed = {"LightningApp":"deactivated","WebKitBrowser":"deactivated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -124,7 +124,7 @@ if expectedResult in result.upper():
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
             status = "FAILURE"
-            print "\n Error while deactivating plugins:",plugins_list
+            print("\n Error while deactivating plugins:",plugins_list)
     if expectedResult == (result and status) and ssh_param_dict != {} and all(value != "" for value in (moveToFront_threshold,moveToBack_threshold,offset)):
         validation_dict = {}
         tdkTestObj.setResultStatus("SUCCESS")
@@ -144,7 +144,7 @@ if expectedResult in result.upper():
                 zorder_status = tdkTestObj.getResult()
                 if expectedResult in zorder_status :
                     zorder = ast.literal_eval(zorder)["clients"]
-                    print "zorder: ",zorder
+                    print("zorder: ",zorder)
                     zorder = exclude_from_zorder(zorder)
                     if plugin.lower() in [element.lower() for element in zorder]:
                         tdkTestObj.setResultStatus("SUCCESS")
@@ -173,61 +173,61 @@ if expectedResult in result.upper():
                             output = tdkTestObj.getResultDetails()
                             if output != "EXCEPTION" and expectedResult in result and len(output.split('\n')) > 2:
                                 required_log = output.split('\n')[1]
-                                print required_log
+                                print(required_log)
                                 if  "response" in required_log and json.loads(required_log.split("=")[-1]).get("success"):
-                                    print "\n Successfully done {} of {}, logs:{} \n".format(method,plugin,required_log)
-                                    print "\n {} started at: {} UTC".format(method,start_time_dict[method])
+                                    print("\n Successfully done {} of {}, logs:{} \n".format(method,plugin,required_log))
+                                    print("\n {} started at: {} UTC".format(method,start_time_dict[method]))
                                     Summ_list.append(' {} started at: {} UTC'.format(method,start_time_dict[method]))
                                     start_time_dict[method] = int(getTimeInMilliSec(start_time_dict[method]))
                                     event_time = getTimeStampFromString(required_log)
-                                    print "\n {} happened at: {} UTC".format(method,event_time)
+                                    print("\n {} happened at: {} UTC".format(method,event_time))
                                     Summ_list.append(' {} happened at: {} UTC'.format(method,event_time))
                                     event_time_dict[method] = int(getTimeInMilliSec(event_time))
                                     time_taken = event_time_dict[method] -  start_time_dict[method]
-                                    print "\n Time taken for {}: {}(ms) ".format(method,time_taken)
+                                    print("\n Time taken for {}: {}(ms) ".format(method,time_taken))
                                     Summ_list.append('Time taken for {}: {}ms '.format(method,time_taken))
-                                    print "\n Threshold value for {}: {} (ms)".format(method,validation_dict[method])
+                                    print("\n Threshold value for {}: {} (ms)".format(method,validation_dict[method]))
                                     Summ_list.append(' Threshold value for {}: {} ms'.format(method,validation_dict[method]))
                                     if 0 < time_taken < ( validation_dict[method] + int(offset)):
-                                        print "\n Time taken for {} is within the expected range".format(method)
+                                        print("\n Time taken for {} is within the expected range".format(method))
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n  Time taken for {} is not within the expected range".format(method)
+                                        print("\n  Time taken for {} is not within the expected range".format(method))
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n The {} method is not executed successfully".format(method)
+                                    print("\n The {} method is not executed successfully".format(method))
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\n Error in command execution in DUT"
+                                print("\n Error in command execution in DUT")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Error while executing {} ".format(method)
+                            print("\n Error while executing {} ".format(method))
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n {} plugin is not present in zorder list".format(plugin)
+                        print("\n {} plugin is not present in zorder list".format(plugin))
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Error while getting zorder"
+                    print("\n Error while getting zorder")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
         else:
-            print "\n Error while set and get {} plugin status".format(plugin)
+            print("\n Error while set and get {} plugin status".format(plugin))
             tdkTestObj.setResultStatus("FAILURE")
         result = set_plugins_status(obj,curr_plugins_status_dict)
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Unable to deactivate {}".format(plugin)
+            print("\n Unable to deactivate {}".format(plugin))
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

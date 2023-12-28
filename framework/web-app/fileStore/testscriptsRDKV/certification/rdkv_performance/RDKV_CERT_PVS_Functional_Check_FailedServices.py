@@ -97,7 +97,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_Check_FailedServices');
 pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
@@ -119,7 +119,7 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and expectedResult in result:
-	    #command to get the number of failed services
+            #command to get the number of failed services
             command = 'systemctl --failed | grep "loaded units listed"'
             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
             tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -129,9 +129,9 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             output = tdkTestObj.getResultDetails()
             if output != "EXCEPTION" and expectedResult in result:
-                print "Validate failed services:"
+                print("Validate failed services:")
                 services_count =int(output.split('\n')[1].split(' ')[0])
-		#command to get the list of failed services
+                #command to get the list of failed services
                 command = 'systemctl --failed | cut -d " " -f2 | grep "service"'
                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                 tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -142,21 +142,21 @@ if expectedResult in result.upper():
                 output = tdkTestObj.getResultDetails()
                 services_list = output.replace(command,"")
                 if services_count < 10:
-                    print "The list of failed services are: {}".format(services_list)
+                    print("The list of failed services are: {}".format(services_list))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "The number of failed services in the device are: {} \n The list of failed services are: {} \n".format(services_count,services_list)
+                    print("The number of failed services in the device are: {} \n The list of failed services are: {} \n".format(services_count,services_list))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "Error in validating the failed services in the device"
+                print("Error in validating the failed services in the device")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error occurred during SSH, please check ssh details in configuration file"
+            print("Error occurred during SSH, please check ssh details in configuration file")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Please configure the SSH details in configuration file"
+        print("Please configure the SSH details in configuration file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

@@ -62,7 +62,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 from rdkv_performancelib import *
 from datetime import datetime
@@ -81,17 +81,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_ResidentApp_TimeTo_Launc
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 
 if expectedResult in result.upper():
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     conf_file,file_status = get_configfile_name(obj)
     result1, reboot_wait_time = getDeviceConfigKeyValue(conf_file,"REBOOT_WAIT_TIME")
     result2, threshold_uptime = getDeviceConfigKeyValue(conf_file,"THRESHOLD_UPTIME")
@@ -108,10 +108,10 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Rebooted the device successfully"
+            print("\n Rebooted the device successfully")
             uptime = get_device_uptime(obj)
             if uptime != -1 and uptime < int(threshold_uptime):
-                print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                 tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                 tdkTestObj.addParameter("realpath",obj.realpath)
                 tdkTestObj.addParameter("deviceIP",obj.IP)
@@ -134,35 +134,35 @@ if expectedResult in result.upper():
                         if required_log != "":
                             log_list = required_log.split(' ')
                             time_taken = int(float(log_list[log_list.index('took')+1]))
-                            print "\n Time taken for launching ResidentApp : {} ms".format(time_taken)
+                            print("\n Time taken for launching ResidentApp : {} ms".format(time_taken))
                             Summ_list.append('Time taken for launching ResidentApp :{}ms'.format(time_taken))
-                            print "\n Threshold value for time taken for launching ResidentApp: {} ms".format(launch_time_threshold_value)
+                            print("\n Threshold value for time taken for launching ResidentApp: {} ms".format(launch_time_threshold_value))
                             if 0 < int(time_taken) < (int(launch_time_threshold_value) + int(offset)) :
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n The time taken for launching ResidentApp is within the expected limit"
+                                print("\n The time taken for launching ResidentApp is within the expected limit")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n The time taken for launching ResidentApp is not within the expected limit"
+                                print("\n The time taken for launching ResidentApp is not within the expected limit")
                         else:
-                            print "\n ResidentApp launched logs are not available"
+                            print("\n ResidentApp launched logs are not available")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while executing commands in device"
+                        print("\n Error while executing commands in device")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Please configure the SSH parameters in device config file"
+                    print("\n Please configure the SSH parameters in device config file")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while validating uptime"
+                print("\n Error while validating uptime")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while rebooting the device"
+            print("\n Error while rebooting the device")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Please configure the variables in device config file"
+        print("\n Please configure the variables in device config file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

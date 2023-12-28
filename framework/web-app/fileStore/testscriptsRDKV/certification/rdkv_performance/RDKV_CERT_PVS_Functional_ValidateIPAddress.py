@@ -48,7 +48,7 @@
     <pre_requisite>1. wpeframework should be running</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>None</input_parameters>
-    <automation_approch>1. Check current interface of the device 
+    <automation_approch>1. Check current interface of the device
 2. SSH to the device
 3. Get the ip address using linux command based on the interface.
 4. Validate the ip address based on ip address type.
@@ -63,7 +63,7 @@
   </test_cases>
 </xml>
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from ip_change_detection_utility import *
 from StabilityTestUtility import *
@@ -83,12 +83,12 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     revert_plugins_dict = {}
     interface_name_key = ""
     #Check current interface
@@ -131,23 +131,23 @@ if expectedResult in result.upper():
                 else:
                     is_valid_ip_address = is_valid_ipv6_address(ip_address)
                 if is_valid_ip_address:
-                    print "\n DUT is having a valid {} address: {}".format(ip_address_type,ip_address)
+                    print("\n DUT is having a valid {} address: {}".format(ip_address_type,ip_address))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n {} is not a valid ip address".format(ip_address)
+                    print("\n {} is not a valid ip address".format(ip_address))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing command in DUT"
+                print("\n Error while executing command in DUT")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Please configure the details in device configuration file"
+            print("\n Please configure the details in device configuration file")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert_plugins_dict != {}:
         status = set_plugins_status(obj,revert_plugins_dict)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

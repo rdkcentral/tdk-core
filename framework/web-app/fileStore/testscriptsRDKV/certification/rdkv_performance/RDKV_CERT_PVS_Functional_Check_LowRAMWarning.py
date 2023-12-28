@@ -104,11 +104,11 @@ pre_requisite_reboot(obj,"yes")
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     status = "SUCCESS"
     revert = "NO"
@@ -128,8 +128,8 @@ if expectedResult in result.upper():
     result = tdkTestObj.getResult()
     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
     if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
-        print "\nPre conditions for the test are set successfully"
-        print "\n Set the Memory status are 'True' \n"
+        print("\nPre conditions for the test are set successfully")
+        print("\n Set the Memory status are 'True' \n")
         params = '{"enable":"True"}'
         tdkTestObj = obj.createTestStep('rdkservice_setValue');
         tdkTestObj.addParameter("method","org.rdk.RDKShell.setMemoryMonitor");
@@ -150,8 +150,8 @@ if expectedResult in result.upper():
                 cobalt_status = tdkTestObj.getResultDetails()
                 result = tdkTestObj.getResult()
                 if cobalt_status == 'resumed' and expectedResult in result:
-                    print "\nCobalt Resumed Successfully\n"
-                    print "\n launch HtmlApp"
+                    print("\nCobalt Resumed Successfully\n")
+                    print("\n launch HtmlApp")
                     launch_status,launch_start_time = launch_plugin(obj,"HtmlApp")
                     if launch_status == expectedResult:
                         time.sleep(5)
@@ -161,9 +161,9 @@ if expectedResult in result.upper():
                         htmlapp_status = tdkTestObj.getResultDetails()
                         result = tdkTestObj.getResult()
                         if htmlapp_status == 'resumed' and expectedResult in result:
-                            print "\n HtmlApp resumed successfully"
+                            print("\n HtmlApp resumed successfully")
                             time.sleep(10)
-                            print "\n Launching Lightning app"
+                            print("\n Launching Lightning app")
                             launch_status,launch_start_time = launch_plugin(obj,"LightningApp")
                             if launch_status == expectedResult:
                                 time.sleep(5)
@@ -173,11 +173,11 @@ if expectedResult in result.upper():
                                 lightningapp_status = tdkTestObj.getResultDetails()
                                 result = tdkTestObj.getResult()
                                 if lightningapp_status == 'resumed' and expectedResult in result:
-                                    print "\n LightningApp resumed successfully"
+                                    print("\n LightningApp resumed successfully")
                                     continue_count = 0
                                     while True:
                                         if (continue_count > 120):
-                                            print "\n The events onDeviceLowRamWarning and onDeviceCriticallyLowRamWarning are not triggered"
+                                            print("\n The events onDeviceLowRamWarning and onDeviceCriticallyLowRamWarning are not triggered")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             break
                                         if (len(event_listener.getEventsBuffer())== 0):
@@ -185,23 +185,23 @@ if expectedResult in result.upper():
                                             time.sleep(1)
                                             continue
                                         event_log = event_listener.getEventsBuffer().pop(0)
-                                        print "\n Triggered event: ",event_log,"\n"
+                                        print("\n Triggered event: ",event_log,"\n")
                                         if ("onDeviceLowRamWarning" in str(event_log)):
-                                            print "\n Event onDeviceLowRamWarning is triggered"
+                                            print("\n Event onDeviceLowRamWarning is triggered")
                                             tdkTestObj.setResultStatus("FAILURE")
                                         elif ("onDeviceCriticallyLowRamWarning" in str(event_log)):
-                                            print "\n Event onDeviceCriticallyLowRamWarning is triggered"
+                                            print("\n Event onDeviceCriticallyLowRamWarning is triggered")
                                             tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error in validating the events from event log"
+                                            print("\n Error in validating the events from event log")
                                             tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error while getting the status of Lightning app"
+                                    print("\n Error while getting the status of Lightning app")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while launching Lightning app"
+                                print("\n Error while launching Lightning app")
                                 tdkTestObj.setResultStatus("FAILURE")
-                            print "\n Exiting from Lightning App \n"
+                            print("\n Exiting from Lightning App \n")
                             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                             tdkTestObj.addParameter("plugin","LightningApp")
                             tdkTestObj.addParameter("status","deactivate")
@@ -210,15 +210,15 @@ if expectedResult in result.upper():
                             if result == "SUCCESS":
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "Unable to deactivate LightningApp"
+                                print("Unable to deactivate LightningApp")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "Error while getting the status of HTML plugin"
+                            print("Error while getting the status of HTML plugin")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while launching HTML App"
+                        print("\n Error while launching HTML App")
                         tdkTestObj.setResultStatus("FAILURE")
-                    print "\n Exiting from HtmlApp \n"
+                    print("\n Exiting from HtmlApp \n")
                     tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                     tdkTestObj.addParameter("plugin","HtmlApp")
                     tdkTestObj.addParameter("status","deactivate")
@@ -227,15 +227,15 @@ if expectedResult in result.upper():
                     if result == "SUCCESS":
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "Unable to deactivate HtmlApp"
+                        print("Unable to deactivate HtmlApp")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while getting the status of Cobalt plugin"
+                    print("\n Error while getting the status of Cobalt plugin")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while launching Cobalt plugin"
+                print("\n Error while launching Cobalt plugin")
                 tdkTestObj.setResultStatus("FAILURE")
-            print "\n Exiting from HtmlApp \n"
+            print("\n Exiting from HtmlApp \n")
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin","HtmlApp")
             tdkTestObj.addParameter("status","deactivate")
@@ -244,13 +244,13 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Unable to deactivate HtmlApp"
+                print("Unable to deactivate HtmlApp")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while setting up the memory status as 'True'"
+            print("\n Error while setting up the memory status as 'True'")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Error in setting up the pre conditions"
+        print("Error in setting up the pre conditions")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
         status = set_plugins_status(obj,curr_plugins_status_dict)
@@ -258,4 +258,4 @@ if expectedResult in result.upper():
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

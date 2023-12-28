@@ -68,7 +68,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from StabilityTestUtility import *
 from datetime import datetime
@@ -91,17 +91,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_UserFactory_Reset
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     event_listener = None
@@ -111,14 +111,14 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {"org.rdk.System":"activated","org.rdk.Warehouse":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting status of plugins"
+        print("\n Error while getting status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
         plugins_status_dict = get_plugins_status(obj,plugins_list)
         if plugins_status_dict != plugin_status_needed:
-            print "\n Unable to set status of plugins"
+            print("\n Unable to set status of plugins")
             status = "FAILURE"
     tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
     tdkTestObj.addParameter("realpath",obj.realpath)
@@ -144,17 +144,17 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
             output = tdkTestObj.getResultDetails()
             if len(output.split('\n')) >= 3 and "yes" in output.split('\n')[1]:
-                print "\n Successfully created tdk_test.ini file in /opt/ directory"
-                print "\n Reset device"
+                print("\n Successfully created tdk_test.ini file in /opt/ directory")
+                print("\n Reset device")
                 params = '{"suppressReboot": false, "resetType": "USERFACTORY"}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
                 tdkTestObj.addParameter("method","org.rdk.Warehouse.1.resetDevice");
                 tdkTestObj.addParameter("value",params)
-                reset_start_time = str(datetime.utcnow()).split()[1] 
+                reset_start_time = str(datetime.utcnow()).split()[1]
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if expectedResult in result:
-                    print "\n The resetDevice method executed successfully"
+                    print("\n The resetDevice method executed successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                     time.sleep(10)
                     continue_count = 0
@@ -166,34 +166,34 @@ if expectedResult in result.upper():
                             time.sleep(1)
                             continue
                         event_log = event_listener.getEventsBuffer().pop(0)
-                        print "\n Triggered event: ",event_log
+                        print("\n Triggered event: ",event_log)
                         event = json.loads(event_log.split('$$$')[1])
                         if event["method"] == 'client.events.1.resetDone' and event['params']["success"]:
-                            print "\n Device reset is success"
+                            print("\n Device reset is success")
                             reset_done_time = event_log.split('$$$')[0]
                             tdkTestObj.setResultStatus("SUCCESS")
                             break
                         else:
-                            print "\n Error while resetting Device using resetDevice method"
+                            print("\n Error while resetting Device using resetDevice method")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     time.sleep(150)
                     if reset_done_time:
-                        print "\n Check reboot info"
+                        print("\n Check reboot info")
                         status = "SUCCESS"
                         new_plugins_status_dict = get_plugins_status(obj,plugins_list)
                         if any(new_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-                            print "\n Error while getting status of plugins"
+                            print("\n Error while getting status of plugins")
                             status = "FAILURE"
                         elif new_plugins_status_dict != plugin_status_needed:
                             revert = "YES"
                             status = set_plugins_status(obj,plugin_status_needed)
                             plugins_status_dict_after_set = get_plugins_status(obj,plugins_list)
                             if plugins_status_dict_after_set != plugin_status_needed:
-                                print "\n Unable to set status of plugins"
+                                print("\n Unable to set status of plugins")
                                 status = "FAILURE"
                         if status == "SUCCESS":
-                            print "\n Check previous reboot info"
+                            print("\n Check previous reboot info")
                             tdkTestObj = obj.createTestStep('rdkservice_getValue')
                             tdkTestObj.addParameter("method","org.rdk.System.1.getPreviousRebootInfo2")
                             tdkTestObj.executeTestCase(expectedResult)
@@ -203,9 +203,9 @@ if expectedResult in result.upper():
                                 reboot_info = ast.literal_eval(reboot_info)
                                 reboot_source = reboot_info['rebootInfo']['source']
                                 if "WarehouseReset" in reboot_source:
-                                    print "\n Device is rebooted due to resetDevice method"
+                                    print("\n Device is rebooted due to resetDevice method")
                                     tdkTestObj.setResultStatus("SUCCESS")
-                                    print "\n Check whether device reset is happened"
+                                    print("\n Check whether device reset is happened")
                                     command = '[ -f /opt/tdk_test.ini ] && echo yes || echo no'
                                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                     tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -217,7 +217,7 @@ if expectedResult in result.upper():
                                     if output != "EXCEPTION" and expectedResult in result:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         if len(output.split('\n')) >= 3 and "no" in output.split('\n')[1]:
-                                            print "\n The file /opt/tdk_test.ini is removed as part of reset"
+                                            print("\n The file /opt/tdk_test.ini is removed as part of reset")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             conf_file,file_status = getConfigFileName(obj.realpath)
                                             config_status,device_reset_time_threshold = getDeviceConfigKeyValue(conf_file,"DEVICE_RESET_TIME_THRESHOLD_VALUE")
@@ -225,63 +225,63 @@ if expectedResult in result.upper():
                                             if all(value != "" for value in (device_reset_time_threshold,offset)):
                                                 reset_start_time_in_millisec = getTimeInMilliSec(reset_start_time)
                                                 reset_done_time_in_millisec = getTimeInMilliSec(reset_done_time)
-                                                print "\n Reset device initiated at: ", reset_start_time
+                                                print("\n Reset device initiated at: ", reset_start_time)
                                                 Summ_list.append('Reset device initiated at :{}'.format(reset_start_time))
-                                                print "\n Reset device completed at : ", reset_done_time 
+                                                print("\n Reset device completed at : ", reset_done_time)
                                                 Summ_list.append('Reset device completed at :{}'.format(reset_done_time))
                                                 time_taken_for_reset = reset_done_time_in_millisec - reset_start_time_in_millisec
-                                                print "\n Time taken to reset the device: {}(ms)".format(time_taken_for_reset)
+                                                print("\n Time taken to reset the device: {}(ms)".format(time_taken_for_reset))
                                                 Summ_list.append('Time taken to reset the device :{}ms'.format(time_taken_for_reset))
-                                                print "\n Threshold value for time taken to reset the device: {}(ms)".format(device_reset_time_threshold)
+                                                print("\n Threshold value for time taken to reset the device: {}(ms)".format(device_reset_time_threshold))
                                                 Summ_list.append('Threshold value for time taken to reset the device :{}ms'.format(device_reset_time_threshold))
-                                                print "\n Validate the time: \n"
+                                                print("\n Validate the time: \n")
                                                 if 0 < time_taken_for_reset < (int(device_reset_time_threshold) + int(offset)) :
-                                                    print "\n Time taken for resetting the device is within the expected range"
+                                                    print("\n Time taken for resetting the device is within the expected range")
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                 else:
-                                                    print "\n Time taken for resetting the device is not within the expected range"
+                                                    print("\n Time taken for resetting the device is not within the expected range")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Please configure the Threshold value in device configuration file \n"
+                                                print("\n Please configure the Threshold value in device configuration file \n")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n The file /opt/tdk_test.ini is not removed as part of reset"
+                                            print("\n The file /opt/tdk_test.ini is not removed as part of reset")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Error while executing a command in DUT"
+                                        print("\n Error while executing a command in DUT")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n The reboot source is not updated as WarehouseReset, current reboot source: ",reboot_source
+                                    print("\n The reboot source is not updated as WarehouseReset, current reboot source: ",reboot_source)
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while executing org.rdk.System.1.getPreviousRebootInfo2 method"
+                                print("\n Error while executing org.rdk.System.1.getPreviousRebootInfo2 method")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Plugins are not activated"
+                            print("\n Plugins are not activated")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while resetting the device"
+                        print("\n Error while resetting the device")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while executing org.rdk.Warehouse.1.resetDevice method"
+                    print("\n Error while executing org.rdk.Warehouse.1.resetDevice method")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while creating file named tdk_test.ini under /opt directory in DUT"
+                print("\n Error while creating file named tdk_test.ini under /opt directory in DUT")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while executing command in DUT"
+            print("\n Error while executing command in DUT")
             tdkTestObj.setResultStatus("FAILURE")
         event_listener.disconnect()
         time.sleep(10)
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         tdkTestObj.setResultStatus("FAILURE")
      #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

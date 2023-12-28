@@ -103,13 +103,13 @@ pre_requisite_reboot(obj,"yes")
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     vimeo_test_url = PerformanceTestVariables.vimeo_test_url
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     webkit_instance = PerformanceTestVariables.webkit_instance
     set_method = webkit_instance+'.1.url'
     if webkit_instance in "WebKitBrowser":
@@ -126,7 +126,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -135,8 +135,8 @@ if expectedResult in result.upper():
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\n Pre conditions for the test are set successfully";
-        print "\n Get the URL in {}".format(webkit_instance)
+        print("\n Pre conditions for the test are set successfully");
+        print("\n Get the URL in {}".format(webkit_instance))
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -145,8 +145,8 @@ if expectedResult in result.upper():
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
             time.sleep(60)
-            print "\n Current URL:",current_url
-            print "\n Set Vimeo URL"
+            print("\n Current URL:",current_url)
+            print("\n Set Vimeo URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",vimeo_test_url);
@@ -154,25 +154,25 @@ if expectedResult in result.upper():
             vimeo_result = tdkTestObj.getResult();
             time.sleep(10)
             if expectedResult in result:
-                print "\n Validate if the URL is set successfully or not"
+                print("\n Validate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult();  
+                result = tdkTestObj.getResult();
                 new_url = tdkTestObj.getResultDetails();
                 if new_url in vimeo_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n Clicking OK to play video"
+                    print("\n Clicking OK to play video")
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")        
+                    tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
                     tdkTestObj.addParameter("value", params)
                     tdkTestObj.executeTestCase(expectedResult)
                     result1 = tdkTestObj.getResult()
                     time.sleep(40)
                     if "SUCCESS" == (result1):
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print"\n Pressing Home button \n"
+                        print("\n Pressing Home button \n")
                         params = '{"keys":[ {"keyCode": 36,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -212,20 +212,20 @@ if expectedResult in result.upper():
                                         zorder_status = tdkTestObj.getResult()
                                         if expectedResult in zorder_status :
                                             zorder = ast.literal_eval(zorder)["clients"]
-                                            print "zorder: ",zorder
+                                            print("zorder: ",zorder)
                                             resident_app = "ResidentApp"
                                             zorder = exclude_from_zorder(zorder)
                                             if zorder[0].lower() == resident_app.lower():
-                                                print "\n Home screen is reached"
+                                                print("\n Home screen is reached")
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print"\n Home button pressed at :{} (UTC)".format(start_time)
+                                                print("\n Home button pressed at :{} (UTC)".format(start_time))
                                                 Summ_list.append('Home button pressed at :{}'.format(start_time))
-                                                print"\n Main UI launched at :{} (UTC)  ".format(main_ui_launched_time)
+                                                print("\n Main UI launched at :{} (UTC)  ".format(main_ui_launched_time))
                                                 Summ_list.append('Main UI launched at :{}'.format(main_ui_launched_time))
                                                 start_time_millisec = getTimeInMilliSec(start_time)
                                                 main_ui_launched_time_millisec = getTimeInMilliSec(main_ui_launched_time)
                                                 ui_launchtime = main_ui_launched_time_millisec - start_time_millisec
-                                                print"\n Time taken for launching Main UI from another window  : {} ms\n".format(ui_launchtime)
+                                                print("\n Time taken for launching Main UI from another window  : {} ms\n".format(ui_launchtime))
                                                 Summ_list.append('Time taken for launching Main UI from another window :{}ms'.format(ui_launchtime))
                                                 conf_file,result = getConfigFileName(tdkTestObj.realpath)
                                                 result1, ui_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"MAIN_UI_SWITCH_TIME_THRESHOLD_VALUE")
@@ -233,56 +233,56 @@ if expectedResult in result.upper():
                                                 result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                                 Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                                 if all(value != "" for value in (ui_launch_threshold_value,offset)):
-                                                    print "\n Threshold value for time taken for launching Main UI from another window: {} ms".format(ui_launch_threshold_value)
+                                                    print("\n Threshold value for time taken for launching Main UI from another window: {} ms".format(ui_launch_threshold_value))
                                                     if 0 < int(ui_launchtime) < (int(ui_launch_threshold_value) + int(offset)):
                                                         tdkTestObj.setResultStatus("SUCCESS");
-                                                        print "\n The time taken for launching Main UI from another window is within the expected limit\n"
+                                                        print("\n The time taken for launching Main UI from another window is within the expected limit\n")
                                                     else:
                                                         tdkTestObj.setResultStatus("FAILURE");
-                                                        print "\n The time taken for launching Main UI from another window is not within the expected limit\n"
+                                                        print("\n The time taken for launching Main UI from another window is not within the expected limit\n")
                                                 else:
                                                     tdkTestObj.setResultStatus("FAILURE");
-                                                    print "\n Failed to get the threshold value from config file"
+                                                    print("\n Failed to get the threshold value from config file")
                                             else:
-                                                print "\n Home screen is not reached"
+                                                print("\n Home screen is not reached")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error while getting zorder value"
+                                            print("\n Error while getting zorder value")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Required logs are not present in wpeframework.log"
+                                        print("\n Required logs are not present in wpeframework.log")
                                         tdkTestObj.setResultStatus("FAILURE");
                                 else:
-                                    print "\n Error occured while executing the command \n"
+                                    print("\n Error occured while executing the command \n")
                                     tdkTestObj.setResultStatus("FAILURE");
                             else:
-                                print "\n Please configure SSH parameter"
+                                print("\n Please configure SSH parameter")
                                 tdkTestObj.setResultStatus("FAILURE");
                         else:
-                            print "\n Error while executing org.rdk.RDKShell.1.generateKey method \n"
+                            print("\n Error while executing org.rdk.RDKShell.1.generateKey method \n")
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "\n Unable to go back to Home screen"
+                        print("\n Unable to go back to Home screen")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "\n Unable to play the video"
+                    print("\n Unable to play the video")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "\n Unable to validate the URL"
+                print("\n Unable to validate the URL")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\n Unable to get the current URL loaded"
+            print("\n Unable to get the current URL loaded")
     else:
-        print"\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
         #Revert the values
         if revert == "YES":
-            print "\n Revert the values before exiting"
+            print("\n Revert the values before exiting")
             status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list, obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print
-    "\n Failed to load module"
+    print("\n Failed to load module")
+    

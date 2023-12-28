@@ -55,7 +55,7 @@
 4. Verify the status.
 5. Store the current time in start_resume variable and resume the plugin using RDKShell.
 6. Verify the status.
-7. Find the corresponding events 
+7. Find the corresponding events
 8. Calculate the time taken to suspend by finding the difference between start_suspend and timestamp from onSuspended event
 9. Calculate the time taken to resume by  finding the difference between start_resume and timestamp from onLaunched event
 10. Verify the time values are within the expected range</automation_approch>
@@ -70,7 +70,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import rdkv_performancelib
 from rdkv_performancelib import *
@@ -93,17 +93,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_LightningApp_TimeTo_Susp
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     event_listener = None
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["LightningApp","Cobalt","WebKitBrowser"]
@@ -113,7 +113,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {"LightningApp":"resumed","Cobalt":"deactivated","WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting status of plugins"
+        print("\n Error while getting status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -121,13 +121,13 @@ if expectedResult in result.upper():
         time.sleep(10)
         plugins_status_dict = get_plugins_status(obj,plugins_list)
         if plugins_status_dict != plugin_status_needed:
-            print "\n Unable to set status of plugins"
+            print("\n Unable to set status of plugins")
             status = "FAILURE"
     if status == "SUCCESS" :
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "org.rdk.RDKShell.1.register","params": {"event": "onSuspended", "id": "client.events.1" }}','{"jsonrpc": "2.0","id": 6,"method": "org.rdk.RDKShell.1.register","params": {"event": "onLaunched", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(30)
-        print "\n Pre conditions for the test are set successfully"
+        print("\n Pre conditions for the test are set successfully")
         suspend_status,start_suspend = suspend_plugin(obj,"LightningApp")
         time.sleep(10)
         if suspend_status == expectedResult:
@@ -137,7 +137,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             lightningapp_status = tdkTestObj.getResultDetails()
             if lightningapp_status == 'suspended' and expectedResult in result:
-                print "\n LightningApp suspended successfully"
+                print("\n LightningApp suspended successfully")
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
                 resume_status,start_resume = launch_plugin(obj,"LightningApp")
@@ -149,8 +149,8 @@ if expectedResult in result.upper():
                     lightningapp_status = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if lightningapp_status == 'resumed' and expectedResult in result:
-                        print "\n LightningApp resumed successfully"
-                        print "\n Check events triggered "
+                        print("\n LightningApp resumed successfully")
+                        print("\n Check events triggered ")
                         time.sleep(30)
                         if (len(event_listener.getEventsBuffer())!= 0):
                             for event_log in event_listener.getEventsBuffer():
@@ -160,7 +160,7 @@ if expectedResult in result.upper():
                                         suspended_time = event_log.split('$$$')[0]
                                     elif "onLaunched" in json_msg["method"] and not resumed_time:
                                         resumed_time = event_log.split('$$$')[0]
-                                    print "\n Event: ",event_log.split('$$$')[1]
+                                    print("\n Event: ",event_log.split('$$$')[1])
                             if suspended_time and resumed_time:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 conf_file,file_status = getConfigFileName(obj.realpath)
@@ -173,68 +173,68 @@ if expectedResult in result.upper():
                                 if all(value != "" for value in (suspend_threshold,resume_threshold,offset)):
                                     start_suspend_in_millisec = getTimeInMilliSec(start_suspend)
                                     suspended_time_in_millisec = getTimeInMilliSec(suspended_time)
-                                    print "\n Suspended initiated at: ",start_suspend
+                                    print("\n Suspended initiated at: ",start_suspend)
                                     Summ_list.append('Suspended initiated at :{}'.format(start_suspend))
-                                    print "\n Suspended at : ",suspended_time
+                                    print("\n Suspended at : ",suspended_time)
                                     Summ_list.append('Suspended at :{}'.format(suspended_time))
                                     time_taken_for_suspend = suspended_time_in_millisec - start_suspend_in_millisec
-                                    print "\n Time taken to suspend LightningApp Plugin: " + str(time_taken_for_suspend) + "(ms)"
+                                    print("\n Time taken to suspend LightningApp Plugin: " + str(time_taken_for_suspend) + "(ms)")
                                     Summ_list.append('Time taken to suspend LightningApp Plugin :{}ms'.format(time_taken_for_suspend))
-                                    print "\n Threshold value for time taken to suspend LightningApp plugin: {} ms".format(suspend_threshold)
-                                    print "\n Validate the time taken for suspending the plugin"
+                                    print("\n Threshold value for time taken to suspend LightningApp plugin: {} ms".format(suspend_threshold))
+                                    print("\n Validate the time taken for suspending the plugin")
                                     if 0 < time_taken_for_suspend < (int(suspend_threshold) + int(offset)) :
-                                        print "\n Time taken for suspending LightningApp plugin is within the expected range"
+                                        print("\n Time taken for suspending LightningApp plugin is within the expected range")
                                     else:
-                                        print "\n Time taken for suspending LightningApp plugin is greater than the expected range"
+                                        print("\n Time taken for suspending LightningApp plugin is greater than the expected range")
                                         tdkTestObj.setResultStatus("FAILURE")
                                     start_resume_in_millisec = getTimeInMilliSec(start_resume)
                                     resumed_time_in_millisec =  getTimeInMilliSec(resumed_time)
-                                    print "\n Resume initiated at: ",start_resume
+                                    print("\n Resume initiated at: ",start_resume)
                                     Summ_list.append('Resume initiated at :{}'.format(start_resume))
-                                    print "\n Resumed at: ",resumed_time
+                                    print("\n Resumed at: ",resumed_time)
                                     Summ_list.append('Resumed at :{}'.format(resumed_time))
                                     time_taken_for_resume = resumed_time_in_millisec - start_resume_in_millisec
-                                    print "\n Time taken to resume LightningApp Plugin: " + str(time_taken_for_resume) + "(ms)"
+                                    print("\n Time taken to resume LightningApp Plugin: " + str(time_taken_for_resume) + "(ms)")
                                     Summ_list.append('Time taken to resume LightningApp Plugin :{}ms'.format(time_taken_for_resume))
-                                    print "\n Threshold value for time taken to resume LightningApp plugin: {} ms".format(resume_threshold)
-                                    print "\n Validate the time taken for resuming the plugin"
+                                    print("\n Threshold value for time taken to resume LightningApp plugin: {} ms".format(resume_threshold))
+                                    print("\n Validate the time taken for resuming the plugin")
                                     if 0 < time_taken_for_resume < (int(resume_threshold) + int(offset)) :
-                                        print "\n Time taken for resuming LightningApp plugin is within the expected range"
+                                        print("\n Time taken for resuming LightningApp plugin is within the expected range")
                                     else:
-                                        print "\n Time taken for resuming LightningApp plugin is greater than the expected range"
+                                        print("\n Time taken for resuming LightningApp plugin is greater than the expected range")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Threshold values are not configured in Device configuration file"
+                                    print("\n Threshold values are not configured in Device configuration file")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error in suspend and resume events"
+                                print("\n Error in suspend and resume events")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n State changed events are not triggered"
+                            print("\n State changed events are not triggered")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n LightningApp is not in resumed state, current LightningApp status: ",lightningapp_status
+                        print("\n LightningApp is not in resumed state, current LightningApp status: ",lightningapp_status)
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Unable to set LightningApp plugin to resumed state"
+                    print("\n Unable to set LightningApp plugin to resumed state")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n LightningApp is not in suspended state, current LightningApp status: ",lightningapp_status
+                print("\n LightningApp is not in suspended state, current LightningApp status: ",lightningapp_status)
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to set LightningApp plugin to suspended state"
+            print("\n Unable to set LightningApp plugin to suspended state")
             obj.setLoadModuleStatus("FAILURE")
         event_listener.disconnect()
         getSummary(Summ_list,obj)
         time.sleep(30)
     else:
-        print "\n Pre conditions are not met \n"
+        print("\n Pre conditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

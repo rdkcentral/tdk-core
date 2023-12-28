@@ -103,13 +103,13 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     vimeo_test_url = PerformanceTestVariables.vimeo_test_url
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     webkit_instance = PerformanceTestVariables.webkit_instance
     set_method = webkit_instance+'.1.url'
     if webkit_instance in "WebKitBrowser":
@@ -126,7 +126,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -136,8 +136,8 @@ if expectedResult in result.upper():
             status = "FAILURE"
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS":
-        print "\n Pre conditions for the test are set successfully";
-        print "\n Get the URL in {}".format(webkit_instance)
+        print("\n Pre conditions for the test are set successfully");
+        print("\n Get the URL in {}".format(webkit_instance))
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -146,8 +146,8 @@ if expectedResult in result.upper():
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
             time.sleep(60)
-            print "\n Current URL:",current_url
-            print "\n Set Vimeo URL"
+            print("\n Current URL:",current_url)
+            print("\n Set Vimeo URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",vimeo_test_url);
@@ -155,7 +155,7 @@ if expectedResult in result.upper():
             vimeo_result = tdkTestObj.getResult();
             time.sleep(10)
             if expectedResult in result:
-                print "\n Validate if the URL is set successfully or not"
+                print("\n Validate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
@@ -163,7 +163,7 @@ if expectedResult in result.upper():
                 new_url = tdkTestObj.getResultDetails();
                 if vimeo_test_url in new_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n Clicking OK to play video"
+                    print("\n Clicking OK to play video")
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -183,39 +183,39 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             if validation_dict["validation_required"]:
                                 if validation_dict["password"] == "None":
-			            password = ""
-			        else:
-				    password = validation_dict["password"]
-			            tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
-				    tdkTestObj.addParameter("ssh_method", ssh_param_dict["ssh_method"])
-				    tdkTestObj.addParameter("credentials", ssh_param_dict["credentials"])
-				    tdkTestObj.addParameter("video_validation_script", validation_dict["video_validation_script"])
-				    tdkTestObj.executeTestCase(expectedResult)
-				    result = tdkTestObj.getResult()
-				    output = tdkTestObj.getResultDetails()
+                                    password = ""
+                                else:
+                                    password = validation_dict["password"]
+                                    tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
+                                    tdkTestObj.addParameter("ssh_method", ssh_param_dict["ssh_method"])
+                                    tdkTestObj.addParameter("credentials", ssh_param_dict["credentials"])
+                                    tdkTestObj.addParameter("video_validation_script", validation_dict["video_validation_script"])
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    output = tdkTestObj.getResultDetails()
                             else:
-                                print "\n Skipped the proc entry validation as this device is not configured for this validation"
-                            print "\n Validate Resource Usage"
+                                print("\n Skipped the proc entry validation as this device is not configured for this validation")
+                            print("\n Validate Resource Usage")
                             tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                             tdkTestObj.executeTestCase(expectedResult)
                             resource_usage = tdkTestObj.getResultDetails()
                             result = tdkTestObj.getResult()
                             if expectedResult in result and resource_usage != "ERROR":
-                                print "\n Successfully validated Resource usage"
+                                print("\n Successfully validated Resource usage")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "\n Error while validating Resource usage"
+                                print("\n Error while validating Resource usage")
                                 tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while playing the video\n "
+                        print("\n Error while playing the video\n ")
                         tdkTestObj.setResultStatus("FAILURE");
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "\n Error while executing org.rdk.RDKShell.1.generateKey method"
+                    print("\n Error while executing org.rdk.RDKShell.1.generateKey method")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "\n Unable to set the URL for Vimeo"
-            print "\n Exit from {} \n".format(webkit_instance)
+                print("\n Unable to set the URL for Vimeo")
+            print("\n Exit from {} \n".format(webkit_instance))
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
             tdkTestObj.addParameter("plugin",webkit_instance)
             tdkTestObj.addParameter("status","deactivate")
@@ -224,19 +224,19 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "Unable to deactivate LightningApp"
+                print("Unable to deactivate LightningApp")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\n Unable to get the URL from webkit_instance"
+            print("\n Unable to get the URL from webkit_instance")
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
         # Revert the values
         if revert == "YES":
-            print "\n Revert the values before exiting"
+            print("\n Revert the values before exiting")
             status = set_plugins_status(obj, curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "\n Failed to load module"
+    print("\n Failed to load module")

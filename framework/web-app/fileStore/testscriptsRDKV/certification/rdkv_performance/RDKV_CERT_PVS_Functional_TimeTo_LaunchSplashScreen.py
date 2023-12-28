@@ -65,8 +65,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestVariables import *
 import rebootTestUtility
 from rebootTestUtility import *
@@ -87,11 +87,11 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_LaunchSplashScree
 #The device will reboot before starting the performance testing if "pre_req_reboot_pvs" is
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -107,8 +107,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\nIteration ",i+1
-            print "Rebooted device successfully \n"
+            print("\nIteration ",i+1)
+            print("Rebooted device successfully \n")
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
             tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
             tdkTestObj.addParameter("reqValue","uptime")
@@ -117,7 +117,7 @@ if expectedResult in result.upper():
             if expectedResult in result:
                 uptime = int(tdkTestObj.getResultDetails())
                 if uptime < 240:
-                    print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                    print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                     time.sleep(50)
                     tdkTestObj.setResultStatus("SUCCESS")
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     if ui_app_url != "" and  result == "SUCCESS" :
                         ui_app_url = ui_app_url.split('#')[0]
-                        print ui_app_url
+                        print(ui_app_url)
                         tdkTestObj.setResultStatus("SUCCESS")
                         tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                         tdkTestObj.addParameter("realpath",obj.realpath)
@@ -147,7 +147,7 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             output = tdkTestObj.getResultDetails()
                             if output != "EXCEPTION" and expectedResult in result:
-                                print output
+                                print(output)
                                 load_finished_list = output.split('\n')
                                 load_finished_line = ""
                                 for item in load_finished_list:
@@ -155,71 +155,71 @@ if expectedResult in result.upper():
                                         load_finished_line = item
                                 if load_finished_line != "" and '"httpstatus":200' in load_finished_line:
                                     load_finished_time = getTimeStampFromString(load_finished_line)
-                                    print "\nDevice reboot initiated at :{} (UTC)\n".format(start_time)
-                                    print "UI load finished at :{} (UTC) \n".format(load_finished_time)
+                                    print("\nDevice reboot initiated at :{} (UTC)\n".format(start_time))
+                                    print("UI load finished at :{} (UTC) \n".format(load_finished_time))
                                     start_time_millisec = getTimeInMilliSec(start_time)
                                     loadfinished_time_millisec = getTimeInMilliSec(load_finished_time)
                                     ui_uptime = loadfinished_time_millisec - start_time_millisec
                                     reboot_time.append(ui_uptime)
-                                    print "Reboot Time",reboot_time[i]
-                                    print "Time taken for the UI to load after reboot : {} ms\n".format(ui_uptime)
+                                    print("Reboot Time",reboot_time[i])
+                                    print("Time taken for the UI to load after reboot : {} ms\n".format(ui_uptime))
                                     conf_file,result = getConfigFileName(tdkTestObj.realpath)
                                     result1, ui_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"UI_LAUNCH_TIME_THRESHOLD_VALUE")
                                     result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                     count = count+1
                                 else:
-                                    print "\n UI app url is not loaded in DUT"
+                                    print("\n UI app url is not loaded in DUT")
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command)
+                                print("\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command))
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Please configure the details in device config file"
+                            print("\n Please configure the details in device config file")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n Error while executing ResidentApp.1.url method"
+                        print("\n Error while executing ResidentApp.1.url method")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print "\n Device is not rebooted, device uptime:{}".format(uptime)
+                    print("\n Device is not rebooted, device uptime:{}".format(uptime))
                     break
             else:
-                print "\n Failed to get the uptime";
+                print("\n Failed to get the uptime");
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         else:
-            print "\n Error occurred during reboot"
+            print("\n Error occurred during reboot")
             tdkTestObj.setResultStatus("FAILURE")
             break
     if count == 5:
         reboot_time.sort()
-        print "Reboot list",reboot_time
+        print("Reboot list",reboot_time)
         ui_uptime = (reboot_time[3]+reboot_time[4])/2
-        print "\nThe time taken for launching splash screen, calculated using 90th percentile method",ui_uptime
+        print("\nThe time taken for launching splash screen, calculated using 90th percentile method",ui_uptime)
         if all(value != "" for value in (ui_launch_threshold_value,offset)):
-            print "\n Threshold value for time taken for splash screen to load after reboot : {} ms".format(ui_launch_threshold_value)
+            print("\n Threshold value for time taken for splash screen to load after reboot : {} ms".format(ui_launch_threshold_value))
             Summ_list.append("Threshold value for time taken for splash screen to load after reboot : {} ms".format(ui_launch_threshold_value))
             if 0 < int(ui_uptime) < (int(ui_launch_threshold_value) + int(offset)):
                 tdkTestObj.setResultStatus("SUCCESS");
                 Summ_list.append('Time taken for UI to load after reboot : {} ms'.format(ui_uptime))
-                print "\n The time taken for UI to load after reboot is within the expected limit\n"
+                print("\n The time taken for UI to load after reboot is within the expected limit\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
                 Summ_list.append('Time taken for UI to load after reboot : {} ms'.format(ui_uptime))
-                print "\n The time taken for UI to load after reboot is not within the expected limit \n"
+                print("\n The time taken for UI to load after reboot is not within the expected limit \n")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\n Failed to get the threshold value from config file"
+            print("\n Failed to get the threshold value from config file")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "\n Failed to reboot 5 times successfully"
+        print("\n Failed to reboot 5 times successfully")
 
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

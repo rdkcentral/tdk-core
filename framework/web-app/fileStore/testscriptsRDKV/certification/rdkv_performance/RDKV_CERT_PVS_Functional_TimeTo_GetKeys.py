@@ -84,8 +84,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from web_socket_util import *
 from rdkv_performancelib import *
@@ -104,12 +104,12 @@ pre_requisite_reboot(obj,"yes")
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     key_test_url = obj.url+'/fileStore/lightning-apps/KeyStressTest.html'
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     webkit_instance = PerformanceTestVariables.webkit_instance
@@ -126,7 +126,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -142,8 +142,8 @@ if expectedResult in result.upper():
     result = tdkTestObj.getResult()
     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
     if status == "SUCCESS" and expectedResult in result and ssh_param_dict != {}:
-        print "\nPre conditions for the test are set successfully"
-        print "\nGet the URL "
+        print("\nPre conditions for the test are set successfully")
+        print("\nGet the URL ")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -151,8 +151,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if current_url != None and  expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet Key test URL"
+            print("Current URL:",current_url)
+            print("\nSet Key test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",key_test_url);
@@ -161,7 +161,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult();
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\nValidate if the URL is set successfully or not"
+                print("\nValidate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
@@ -184,9 +184,9 @@ if expectedResult in result.upper():
                             if expectedResult in result:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 time.sleep(10)
-                                print "checking for Keycode log"
+                                print("checking for Keycode log")
                                 command = 'cat /opt/logs/wpeframework.log | grep -inr KeyCode | tail -1'
-                                print "COMMAND : %s" %(command)
+                                print("COMMAND : %s" %(command))
                                 #Primitive test case which associated to this Script
                                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
                                 #Add the parameters to ssh to the DUT and execute the command
@@ -199,27 +199,27 @@ if expectedResult in result.upper():
                                 output = tdkTestObj.getResultDetails()
                                 output = output[output.find('\n'):]
                                 if "KeyCode" in output:
-                                    print "\n Keycode logs are present in wpelogs"
+                                    print("\n Keycode logs are present in wpelogs")
                                     end_get_key_time = output.split('\n')[1].split(' ')[2]
                                     if result in expectedResult and end_get_key_time != {}:
-                                        print "\n key codes are received successfully \n"
-                                        print "end time",end_get_key_time
+                                        print("\n key codes are received successfully \n")
+                                        print("end time",end_get_key_time)
                                         start_get_key_time_in_millisec = getTimeInMilliSec(start_get_key_time)
                                         end_get_key_time_in_millisec = getTimeInMilliSec(end_get_key_time)
                                         time_taken = end_get_key_time_in_millisec - start_get_key_time_in_millisec
-                                        print "time taken",time_taken
+                                        print("time taken",time_taken)
                                         total_time = total_time + time_taken
                                         count = count + 1
                                     else:
-                                        print "\n Error in getting the keycode time"
+                                        print("\n Error in getting the keycode time")
                                         tdkTestObj.setResultStatus("FAILURE")
                                         break
                                 else:
-                                    print "\n Keycode logs are not present in wpelogs"
+                                    print("\n Keycode logs are not present in wpelogs")
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\nError while executing generate key method\n"
+                                print("\nError while executing generate key method\n")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         if end_get_key_time:
@@ -229,20 +229,20 @@ if expectedResult in result.upper():
                             if count == 15:
                                 avg_get_key_time = total_time/15
                             else:
-                                print "\n 15 Iterations for receiving the keys is not successful"
+                                print("\n 15 Iterations for receiving the keys is not successful")
                                 tdkTestObj.setResultStatus("FAILURE")
-                            print "\n Time taken to get keys : {}(ms)".format(avg_get_key_time)
+                            print("\n Time taken to get keys : {}(ms)".format(avg_get_key_time))
                             Summ_list.append('Time taken to get keys :{}ms'.format(avg_get_key_time))
-                            print "\n Threshold value to get keys: {}(ms)".format(get_key_threshold)
-                            print "\n Validate the time:"
+                            print("\n Threshold value to get keys: {}(ms)".format(get_key_threshold))
+                            print("\n Validate the time:")
                             if avg_get_key_time < get_key_threshold:
-                                print "\n Time taken for getting the keys is within the expected range \n"
+                                print("\n Time taken for getting the keys is within the expected range \n")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "\n Time taken for getting keys is not within the expected range \n"
+                                print("\n Time taken for getting keys is not within the expected range \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "All keys not received successfully"
+                            print("All keys not received successfully")
                             tdkTestObj.setResultStatus("FAILURE")
                         #Set the URL back to previous
                         tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -251,32 +251,32 @@ if expectedResult in result.upper():
                         tdkTestObj.executeTestCase(expectedResult);
                         result = tdkTestObj.getResult();
                         if result == "SUCCESS":
-                            print "URL is reverted successfully"
+                            print("URL is reverted successfully")
                             tdkTestObj.setResultStatus("SUCCESS");
                         else:
-                            print "Failed to revert the URL"
+                            print("Failed to revert the URL")
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
-                        print "Unable to launch the URL"
+                        print("Unable to launch the URL")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
-                    print "Unable to get the URL after setting it"
+                    print("Unable to get the URL after setting it")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
-                print "Failed to set the URL"
+                print("Failed to set the URL")
         else:
-            print "Unable to get the current URL in webkit"
+            print("Unable to get the current URL in webkit")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

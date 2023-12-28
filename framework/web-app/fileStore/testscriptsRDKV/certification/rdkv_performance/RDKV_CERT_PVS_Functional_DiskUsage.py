@@ -62,8 +62,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import json
 from rdkv_performancelib import *
 from StabilityTestUtility import *
@@ -83,7 +83,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -95,7 +95,7 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult)
     result = tdkTestObj.getResult()
     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-    print "\n Get the partition name from Device Config file \n"
+    print("\n Get the partition name from Device Config file \n")
     conf_file,result = getConfigFileName(obj.realpath)
     partition_result, partition = getDeviceConfigKeyValue(conf_file,"DISK_PARTITION")
     if ssh_param_dict != {} and expectedResult in result and partition != "" :
@@ -110,21 +110,21 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and expectedResult in result:
-            print "Checking DiskUsage of {} \n".format(partition)
+            print("Checking DiskUsage of {} \n".format(partition))
             disk_space_usage = float(output.split('\n')[1].replace("%",""))
             if disk_space_usage >= max_mem_limit :
-                print "[Error] {} has higher diskusage: {}% \n".format(partition,disk_space_usage)
+                print("[Error] {} has higher diskusage: {}% \n".format(partition,disk_space_usage))
                 tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "{} has diskusage: {}% \n".format(partition,disk_space_usage)
+                print("{} has diskusage: {}% \n".format(partition,disk_space_usage))
                 tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Error occurred during SSH, please check ssh details in configuration file"
+            print("Error occurred during SSH, please check ssh details in configuration file")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Please configure the SSH details in configuration file"
+        print("Please configure the SSH details in configuration file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

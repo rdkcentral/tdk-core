@@ -106,12 +106,12 @@ Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     ping_test_destination = PerformanceTestVariables.ping_test_destination
@@ -129,7 +129,7 @@ if expectedResult in result.upper():
         plugins_status_dict = get_plugins_status(obj,plugins_list)
         if plugins_status_dict != plugin_status_needed:
             status = "FAILURE"
-    print "\nPre conditions for the test are set successfully"
+    print("\nPre conditions for the test are set successfully")
     params = '{"endpoint": "'+ping_test_destination+'", "packets": 10}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
     tdkTestObj.addParameter("method","org.rdk.Network.1.ping");
@@ -137,46 +137,45 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     result = tdkTestObj.getResult();
     ping_details = tdkTestObj.getResultDetails()
-    print ping_details
+    print(ping_details)
     if expectedResult in result:
         tdkTestObj.setResultStatus("SUCCESS")
         ping_details = tdkTestObj.getResultDetails()
         ping_details_dict = eval(ping_details)
         packet_loss = ping_details_dict["packetLoss"]
         if int(packet_loss) == 0 :
-            print "No packet loss"
+            print("No packet loss")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print"Packet loss is greater than zero"
+            print("Packet loss is greater than zero")
             tdkTestObj.setResultStatus("FAILURE")
         triptime = ping_details_dict["tripAvg"]
         conf_file,result = getConfigFileName(tdkTestObj.realpath)
         result1, triptime_threshold_value = getDeviceConfigKeyValue(conf_file,"TRIPTIME_THRESHOLD_VALUE")
         if triptime_threshold_value != "":
-            print "\n Average Trip Time: ",triptime
+            print("\n Average Trip Time: ",triptime)
             Summ_list.append('Time taken for average Trip:{}'.format(triptime))
-            print "\n Threshold value for trip time:",triptime_threshold_value
+            print("\n Threshold value for trip time:",triptime_threshold_value)
             Summ_list.append('Threshold value for triptime:{}'.format(triptime_threshold_value))
             if float(triptime) < float(triptime_threshold_value):
-                 print "\n The trip time is lesser than threshold time\n"
+                print("\n The trip time is lesser than threshold time\n")
             else:
-                 tdkTestObj.setResultStatus("FAILURE")
-                 print "\n The trip time is higher than threshold time \n"
+                tdkTestObj.setResultStatus("FAILURE")
+                print("\n The trip time is higher than threshold time \n")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print "Failed to get the threshold value from config file"
+            print("Failed to get the threshold value from config file")
     else:
-        print "Not able to ping"
+        print("Not able to ping")
         tdkTestObj.setResultStatus("FAILURE")
-  
-  
+
+
     getSummary(Summ_list,obj)
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
-
+    print("Failed to load module")

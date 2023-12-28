@@ -64,10 +64,10 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from BrowserPerformanceUtility import *
-import PerformanceTestVariables 
+import PerformanceTestVariables
 from datetime import datetime
 import json
 from web_socket_util import *
@@ -88,22 +88,22 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_WebKitBrowser_TimeTo_Loa
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     event_listener = None
-    browser_test_url = obj.url+'/fileStore/lightning-apps/KeyStressTest.html' 
-    print "Check Pre conditions"
+    browser_test_url = obj.url+'/fileStore/lightning-apps/KeyStressTest.html'
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     status,curr_webkit_status,curr_cobalt_status = check_pre_requisites(obj)
-    print "Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status);
+    print("Current values \nWebKitBrowser:%s\nCobalt:%s"%(curr_webkit_status,curr_cobalt_status));
     if status == "FAILURE":
         if "FAILURE" not in (curr_webkit_status,curr_cobalt_status):
             set_status=set_pre_requisites(obj)
@@ -117,8 +117,8 @@ if expectedResult in result.upper():
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "WebKitBrowser.1.register","params": {"event": "urlchange", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(10)
-        print "\nPre conditions for the test are set successfully";
-        print "\nGet the URL in WebKitBrowser"
+        print("\nPre conditions for the test are set successfully");
+        print("\nGet the URL in WebKitBrowser")
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method","WebKitBrowser.1.url");
         tdkTestObj.executeTestCase(expectedResult);
@@ -126,8 +126,8 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Current URL:",current_url
-            print "\nSet Browser test URL"
+            print("Current URL:",current_url)
+            print("\nSet Browser test URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","WebKitBrowser.1.url");
             tdkTestObj.addParameter("value",browser_test_url);
@@ -138,7 +138,7 @@ if expectedResult in result.upper():
                 url_change_count = 0
                 while url_change_count < 2:
                     if (continue_count > 60):
-                        print "\n URL change related events are not triggered \n"
+                        print("\n URL change related events are not triggered \n")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                     if (len(event_listener.getEventsBuffer())== 0):
@@ -146,7 +146,7 @@ if expectedResult in result.upper():
                         time.sleep(1)
                         continue
                     event_log = event_listener.getEventsBuffer().pop(0)
-                    print "\n Triggered event: ",event_log
+                    print("\n Triggered event: ",event_log)
                     json_msg = json.loads(event_log.split('$$$')[1])
                     if "urlchange" in event_log and browser_test_url in event_log.replace("\\",""):
                         if not json_msg["params"]["loaded"]:
@@ -159,8 +159,8 @@ if expectedResult in result.upper():
                             continue_count += 1
                     else:
                         continue_count += 1
-                else: 
-                    print "\nValidate if the URL is set successfully or not"
+                else:
+                    print("\nValidate if the URL is set successfully or not")
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
                     tdkTestObj.addParameter("method","WebKitBrowser.1.url");
                     tdkTestObj.executeTestCase(expectedResult);
@@ -168,15 +168,15 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     if browser_test_url in new_url and expectedResult in result:
                         tdkTestObj.setResultStatus("SUCCESS");
-                        print "URL(",new_url,") is set successfully"
-                        print "\nURL triggered at: {} (UTC)".format(url_triggered_time)
+                        print("URL(",new_url,") is set successfully")
+                        print("\nURL triggered at: {} (UTC)".format(url_triggered_time))
                         Summ_list.append('URL triggered at :{}'.format(url_triggered_time))
-                        print "URL changed at: {} (UTC)".format(url_changed_time)
+                        print("URL changed at: {} (UTC)".format(url_changed_time))
                         Summ_list.append('URL changed at :{}'.format(url_changed_time))
                         url_triggered_timein_millisec = getTimeInMilliSec(url_triggered_time)
                         url_changed_timin_millisec = getTimeInMilliSec(url_changed_time)
                         url_loaded_time = url_changed_timin_millisec - url_triggered_timein_millisec
-                        print "Time taken to load the URL: {} ms\n".format(url_loaded_time)
+                        print("Time taken to load the URL: {} ms\n".format(url_loaded_time))
                         Summ_list.append('Time taken to load the URL :{}ms'.format(url_loaded_time))
                         conf_file,result = getConfigFileName(tdkTestObj.realpath)
                         result1, url_loadtime_threshold_value = getDeviceConfigKeyValue(conf_file,"URL_LOADTIME_THRESHOLD_VALUE")
@@ -184,19 +184,19 @@ if expectedResult in result.upper():
                         result2,offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                         if all(value != "" for value in (url_loadtime_threshold_value,offset)):
-                            print "\n Threshold value for time taken to load the URL: {} ms".format(url_loadtime_threshold_value)
+                            print("\n Threshold value for time taken to load the URL: {} ms".format(url_loadtime_threshold_value))
                             if 0 < int(url_loaded_time) < (int(url_loadtime_threshold_value) + int(offset)):
                                 tdkTestObj.setResultStatus("SUCCESS");
-                                print "\n The time taken to load the URL is within the expected limit\n"
+                                print("\n The time taken to load the URL is within the expected limit\n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE");
-                                print "\n The time taken to load the URL is not within the expected limit \n"
+                                print("\n The time taken to load the URL is not within the expected limit \n")
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "Failed to get the threshold value from config file"
+                            print("Failed to get the threshold value from config file")
                     else:
-                        print "\nFailed to load the URL ",browser_test_url
-                        print "current url:",new_url
+                        print("\nFailed to load the URL ",browser_test_url)
+                        print("current url:",new_url)
                         tdkTestObj.setResultStatus("FAILURE");
                 #Set the URL back to previous
                 tdkTestObj = obj.createTestStep('rdkservice_setValue');
@@ -205,28 +205,28 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult();
                 if result == "SUCCESS":
-                    print "\nURL is reverted successfully"
+                    print("\nURL is reverted successfully")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "\nFailed to revert the URL"
+                    print("\nFailed to revert the URL")
                     tdkTestObj.setResultStatus("FAILURE");
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to set the URL"
+                print("Failed to set the URL")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\nFailed to get current URL from webkitbrowser"
+            print("\nFailed to get current URL from webkitbrowser")
         event_listener.disconnect()
         time.sleep(10)
     else:
-        print "\nPre conditions are not met"
+        print("\nPre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\nRevert the values before exiting"
+        print("\nRevert the values before exiting")
         status = revert_value(curr_webkit_status,curr_cobalt_status,obj);
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

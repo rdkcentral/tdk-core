@@ -63,8 +63,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib
 from rdkv_performancelib import *
 from datetime import datetime
 from StabilityTestUtility import *
@@ -82,17 +82,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_ColdBoot')
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     conf_file,file_status = get_configfile_name(obj)
     result1, wait_time = getDeviceConfigKeyValue(conf_file,"COLDBOOT_IDLE_WAIT_TIME")
     result2, reboot_wait_time = getDeviceConfigKeyValue(conf_file,"REBOOT_WAIT_TIME")
@@ -102,7 +102,7 @@ if expectedResult in result.upper():
     result5, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
     Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
     if all(value != "" for value in (wait_time,reboot_wait_time,threshold_uptime,cold_boot_time_threshold_value,offset)):
-        #Keep device idle 
+        #Keep device idle
         time.sleep(int(wait_time))
         #Reboot device
         tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
@@ -113,10 +113,10 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Rebooted the device successfully"
+            print("\n Rebooted the device successfully")
             uptime = get_device_uptime(obj)
             if uptime != -1 and uptime < int(threshold_uptime):
-                print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                 tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                 tdkTestObj.addParameter("realpath",obj.realpath)
                 tdkTestObj.addParameter("deviceIP",obj.IP)
@@ -138,43 +138,43 @@ if expectedResult in result.upper():
                         required_log = output.split('\n')[1]
                         if required_log != "":
                             wpeframework_started_time = getTimeStampFromString(required_log)
-                            print "\n Device reboot initiated at :{}".format(start_time)
+                            print("\n Device reboot initiated at :{}".format(start_time))
                             Summ_list.append('Device reboot initiated at :{}'.format(start_time))
-                            print "\n WPEFramework started at :{}".format(wpeframework_started_time)
+                            print("\n WPEFramework started at :{}".format(wpeframework_started_time))
                             Summ_list.append('WPEFramework started at :{}'.format(wpeframework_started_time))
                             start_time_millisec = getTimeInMilliSec(start_time)
                             wpeframwork_start_time_millisec = getTimeInMilliSec(wpeframework_started_time)
                             timeto_coldboot = wpeframwork_start_time_millisec - start_time_millisec
-                            print "\n Time taken for the cold boot : {} ms".format(timeto_coldboot)
+                            print("\n Time taken for the cold boot : {} ms".format(timeto_coldboot))
                             Summ_list.append('Time taken for the cold boot :{}ms'.format(timeto_coldboot))
-                            print "\n Threshold value for time taken for cold boot: {} ms".format(cold_boot_time_threshold_value)
+                            print("\n Threshold value for time taken for cold boot: {} ms".format(cold_boot_time_threshold_value))
                             Summ_list.append("Threshold value for time taken for cold boot: {} ms".format(cold_boot_time_threshold_value))
                             if 0 < int(timeto_coldboot) < (int(cold_boot_time_threshold_value) + int(offset)) :
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\n The time taken for cold boot is within the expected limit"
+                                print("\n The time taken for cold boot is within the expected limit")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "\n The time taken for cold boot is not within the expected limit"
+                                print("\n The time taken for cold boot is not within the expected limit")
                         else:
-                            print "\n wpeframework started logs are not available"
+                            print("\n wpeframework started logs are not available")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while executing commands in device"
+                        print("\n Error while executing commands in device")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Please configure the SSH parameters in device config file"
+                    print("\n Please configure the SSH parameters in device config file")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while validating uptime"
+                print("\n Error while validating uptime")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while rebooting the device"
+            print("\n Error while rebooting the device")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Please configure the variables in device config file"
+        print("\n Please configure the variables in device config file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

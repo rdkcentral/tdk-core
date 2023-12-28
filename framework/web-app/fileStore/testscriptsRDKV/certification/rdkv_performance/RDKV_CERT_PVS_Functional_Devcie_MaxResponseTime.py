@@ -97,7 +97,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_Device_MaxResponseTime')
 pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 response_time = []
@@ -116,27 +116,27 @@ if expectedResult in result.upper():
             response_time.append(time)
             count = count + 1
         else:
-            print "Error in getting the resposne time"
+            print("Error in getting the resposne time")
             tdkTestObj.setResultStatus("FAILURE")
             break
     if expectedResult in result:
-            tdkTestObj.setResultStatus("SUCCESS")
-            print "\nCalculate the average time taken for get the resposne from device"
-            conf_file,result = getConfigFileName(tdkTestObj.realpath)
-            result, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
-            average_timeTaken = sum (response_time)/len(response_time)
-            print "\n Average time taken for 5 iterations: ",average_timeTaken
-            print "\n Threshold value for maximum response time: ",max_response_time
-            if (float(average_timeTaken) <= 0 or float(average_timeTaken) > float(max_response_time)):
-                print "\nDevice took more than usual to respond."
-                tdkTestObj.setResultStatus("FAILURE")
-            else:
-                print "\nDevice responded within the expected time"
-                tdkTestObj.setResultStatus("SUCCESS")
-    else:
-            print "\nFailed to validate the response time for 5 times"
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("\nCalculate the average time taken for get the resposne from device")
+        conf_file,result = getConfigFileName(tdkTestObj.realpath)
+        result, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
+        average_timeTaken = sum (response_time)/len(response_time)
+        print("\n Average time taken for 5 iterations: ",average_timeTaken)
+        print("\n Threshold value for maximum response time: ",max_response_time)
+        if (float(average_timeTaken) <= 0 or float(average_timeTaken) > float(max_response_time)):
+            print("\nDevice took more than usual to respond.")
             tdkTestObj.setResultStatus("FAILURE")
+        else:
+            print("\nDevice responded within the expected time")
+            tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        print("\nFailed to validate the response time for 5 times")
+        tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
-    print "Set Post Requisites Failed"
+    print("Set Post Requisites Failed")
     tdkTestObj.setResultStatus("FAILURE")

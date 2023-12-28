@@ -53,7 +53,7 @@
 2. SSH to the Bluetooth emulator and make the device discoverable.
 3. Start scanning in DUT for the emulator.
 4. Stop scanning and check for emulator details in the discoveredDevices.
-5. Connect to the device 
+5. Connect to the device
 6. Validate the CPU and memory details from DeviceInfo Plugin.
 7. Revert the status of plugins </automation_approch>
     <expected_output>Bluetooth emulator should be connected and cpu load and memory usage must with within the expected range.</expected_output>
@@ -68,8 +68,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from tdkvRDKServicesSupportlib import executeBluetoothCtl
 from StabilityTestUtility import *
 from rdkv_performancelib import *
@@ -89,7 +89,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -114,7 +114,7 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
-            print "\n Bluetooth enabled sucessfully"
+            print("\n Bluetooth enabled sucessfully")
             tdkTestObj.setResultStatus("SUCCESS")
             time.sleep(10)
             params = '{"timeout": "30", "profile": "DEFAULT"}'
@@ -125,7 +125,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResult()
             details = tdkTestObj.getResultDetails()
             if result == "SUCCESS":
-                print "\n Bluetooth startScan executed sucessfully \n"
+                print("\n Bluetooth startScan executed sucessfully \n")
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(30)
                 tdkTestObj = obj.createTestStep('rdkservice_getValue')
@@ -133,17 +133,17 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 if result == "SUCCESS":
-                    print "\n Bluetooth stopScan executed sucessfully \n"
+                    print("\n Bluetooth stopScan executed sucessfully \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     status,device_name = getDeviceConfigKeyValue(conf_file,"BT_EMU_DEVICE_NAME")
-                    print "Devicename :",device_name
+                    print("Devicename :",device_name)
                     tdkTestObj = obj.createTestStep('rdkservice_getValue')
                     tdkTestObj.addParameter("method","org.rdk.Bluetooth.1.getDiscoveredDevices")
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
                     details = tdkTestObj.getResultDetails()
                     if result == "SUCCESS":
-                        print "\n Bluetooth getDiscoveredDevices executed sucessfully \n"
+                        print("\n Bluetooth getDiscoveredDevices executed sucessfully \n")
                         device_id = ""
                         devices_list = ast.literal_eval(details)["discoveredDevices"]
                         for device in devices_list:
@@ -151,7 +151,7 @@ if expectedResult in result.upper():
                                 device_id = device["deviceID"]
                                 device_type = device["deviceType"]
                         if device_id != "" :
-                            print "\n Device found in the getDiscoveredDevices list \n"
+                            print("\n Device found in the getDiscoveredDevices list \n")
                             tdkTestObj.setResultStatus("SUCCESS")
                             params = '{"deviceID": "' + device_id + '"}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -169,11 +169,11 @@ if expectedResult in result.upper():
                                 details = tdkTestObj.getResultDetails()
                                 if result == "SUCCESS":
                                     devices_list = []
-                                    print "\n Bluetooth getPairedDevices executed sucessfully \n"
+                                    print("\n Bluetooth getPairedDevices executed sucessfully \n")
                                     devices_list = ast.literal_eval(details)["pairedDevices"]
-                                    print "\n Paired Devices :",devices_list
+                                    print("\n Paired Devices :",devices_list)
                                     if devices_list and  any(device["name"] == device_name for device in devices_list):
-                                        print "Device paired successfully"
+                                        print("Device paired successfully")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         #Get bluetooth_mac of DUT
                                         tdkTestObj = obj.createTestStep('rdkservice_getBluetoothMac')
@@ -182,7 +182,7 @@ if expectedResult in result.upper():
                                         bluetooth_mac = tdkTestObj.getResultDetails()
                                         if result == "SUCCESS":
                                             tdkTestObj.setResultStatus("SUCCESS")
-                                            print "Bluetooth_mac:",bluetooth_mac
+                                            print("Bluetooth_mac:",bluetooth_mac)
                                             #execute trust command in bluetooth emulator
                                             ip_result,ip = getDeviceConfigKeyValue(conf_file,'BT_EMU_IP')
                                             username_result,username = getDeviceConfigKeyValue(conf_file,'BT_EMU_USER_NAME')
@@ -198,7 +198,7 @@ if expectedResult in result.upper():
                                             output = tdkTestObj.getResultDetails()
                                             if output != "EXCEPTION" and expectedResult in result:
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print "\n Executing connect method \n"
+                                                print("\n Executing connect method \n")
                                                 params = '{"deviceID": "' + device_id + '","deviceType":"' + device_type + '","profile": "DEFAULT"}'
                                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                                 tdkTestObj.addParameter("method","org.rdk.Bluetooth.1.connect")
@@ -215,11 +215,11 @@ if expectedResult in result.upper():
                                                     details = tdkTestObj.getResultDetails()
                                                     if result == "SUCCESS":
                                                         devices_list = []
-                                                        print "\n Bluetooth getConnectedDevices executed sucessfully \n"
+                                                        print("\n Bluetooth getConnectedDevices executed sucessfully \n")
                                                         devices_list = ast.literal_eval(details)["connectedDevices"]
-                                                        print "Devices_list",devices_list
+                                                        print("Devices_list",devices_list)
                                                         if devices_list and  any(device["name"] == device_name for device in devices_list):
-                                                            print "Bluetooth Device is present in connected list\n"
+                                                            print("Bluetooth Device is present in connected list\n")
                                                             tdkTestObj.setResultStatus("SUCCESS")
                                                             #get the cpu load
                                                             tdkTestObj = obj.createTestStep('rdkservice_getCPULoad')
@@ -236,13 +236,13 @@ if expectedResult in result.upper():
                                                                 result = tdkTestObj.getResult()
                                                                 is_high_cpuload = tdkTestObj.getResultDetails()
                                                                 if is_high_cpuload == "YES"  or expectedResult not in result:
-                                                                    print "\n CPU load is high :{}%".format(cpuload)
+                                                                    print("\n CPU load is high :{}%".format(cpuload))
                                                                     tdkTestObj.setResultStatus("FAILURE")
                                                                 else:
                                                                     tdkTestObj.setResultStatus("SUCCESS")
-                                                                    print "\n CPU load : {}%\n".format(cpuload)
+                                                                    print("\n CPU load : {}%\n".format(cpuload))
                                                             else:
-                                                                print "Unable to get cpuload"
+                                                                print("Unable to get cpuload")
                                                                 tdkTestObj.setResultStatus("FAILURE")
                                                             #get the memory usage
                                                             tdkTestObj = obj.createTestStep('rdkservice_getMemoryUsage')
@@ -259,13 +259,13 @@ if expectedResult in result.upper():
                                                                 result = tdkTestObj.getResult()
                                                                 is_high_memory_usage = tdkTestObj.getResultDetails()
                                                                 if is_high_memory_usage == "YES" or expectedResult not in result:
-                                                                    print "\n Memory usage is high :{}%\n".format(memory_usage)
+                                                                    print("\n Memory usage is high :{}%\n".format(memory_usage))
                                                                     tdkTestObj.setResultStatus("FAILURE")
                                                                 else:
-                                                                    print "\n Memory usage :{}%\n".format(memory_usage)
+                                                                    print("\n Memory usage :{}%\n".format(memory_usage))
                                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                             else:
-                                                                print "\n Unable to get the memory usage\n"
+                                                                print("\n Unable to get the memory usage\n")
                                                                 tdkTestObj.setResultStatus("FAILURE")
                                                             #Disconnect Bluetooth device
                                                             params = '{"deviceID": "' +device_id + '","deviceType":"' + device_type + '"}'
@@ -275,9 +275,9 @@ if expectedResult in result.upper():
                                                             tdkTestObj.executeTestCase(expectedResult)
                                                             result = tdkTestObj.getResult()
                                                             if result == "SUCCESS":
-                                                                print "Disconnect method is success \n"
+                                                                print("Disconnect method is success \n")
                                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                                print "\n Check Bluetooth Device is disconnected :\n"
+                                                                print("\n Check Bluetooth Device is disconnected :\n")
                                                                 tdkTestObj = obj.createTestStep('rdkservice_getValue')
                                                                 tdkTestObj.addParameter("method","org.rdk.Bluetooth.1.getConnectedDevices")
                                                                 tdkTestObj.executeTestCase(expectedResult)
@@ -286,33 +286,33 @@ if expectedResult in result.upper():
                                                                 if result == "SUCCESS":
                                                                     devices_list = []
                                                                     devices_list = ast.literal_eval(details)["connectedDevices"]
-                                                                    print "Devices_list",devices_list
+                                                                    print("Devices_list",devices_list)
                                                                     if not (devices_list and any(device["name"] == device_name for device in devices_list)):
-                                                                        print "Device is disconnected \n"
+                                                                        print("Device is disconnected \n")
                                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                                     else:
-                                                                        print "\n Bluetooth device is not properly disconnected \n"
+                                                                        print("\n Bluetooth device is not properly disconnected \n")
                                                                         tdkTestObj.setResultStatus("FAILURE")
                                                                 else:
-                                                                    print "\n Error while executing getConnectedDevices method \n"
+                                                                    print("\n Error while executing getConnectedDevices method \n")
                                                                     tdkTestObj.setResultStatus("FAILURE")
                                                             else:
-                                                                print "\n Error in disconnect method \n"
+                                                                print("\n Error in disconnect method \n")
                                                                 tdkTestObj.setResultStatus("FAILURE")
                                                         else:
-                                                            print "\n Bluetooth device is not present in connected list \n"
+                                                            print("\n Bluetooth device is not present in connected list \n")
                                                             tdkTestObj.setResultStatus("FAILURE")
                                                     else:
-                                                        print "\n Error while executing getConnectedDevices method \n"
+                                                        print("\n Error while executing getConnectedDevices method \n")
                                                         tdkTestObj.setResultStatus("FAILURE")
                                                 else:
-                                                    print "\n Error while executing connect method \n"
+                                                    print("\n Error while executing connect method \n")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Error while executing trust command in Bluetooth device \n"
+                                                print("\n Error while executing trust command in Bluetooth device \n")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error while getting Bluetooth MAC of DUT \n"
+                                            print("\n Error while getting Bluetooth MAC of DUT \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                         #Unpair device
                                         params = '{"deviceID": "' +device_id + '"}'
@@ -322,7 +322,7 @@ if expectedResult in result.upper():
                                         tdkTestObj.executeTestCase(expectedResult)
                                         result = tdkTestObj.getResult()
                                         if result == "SUCCESS":
-                                            print "\n Unpair method is executed successfully \n"
+                                            print("\n Unpair method is executed successfully \n")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                             tdkTestObj = obj.createTestStep('rdkservice_getValue')
                                             tdkTestObj.addParameter("method","org.rdk.Bluetooth.1.getPairedDevices")
@@ -331,52 +331,52 @@ if expectedResult in result.upper():
                                             details = tdkTestObj.getResultDetails()
                                             if result == "SUCCESS":
                                                 devices_list = []
-                                                print "\n Bluetooth getPairedDevices executed sucessfully \n"
+                                                print("\n Bluetooth getPairedDevices executed sucessfully \n")
                                                 devices_list = ast.literal_eval(details)["pairedDevices"]
-                                                print "\n Paired Devices :",devices_list
+                                                print("\n Paired Devices :",devices_list)
                                                 if not (devices_list and any(device["name"] == device_name for device in devices_list)):
-                                                    print " \n Device is unpaired \n"
+                                                    print(" \n Device is unpaired \n")
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                 else:
-                                                    print  "\n Bluetooth Device is not unpaired \n"
+                                                    print("\n Bluetooth Device is not unpaired \n")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Error while executing getPairedDevices method \n"
+                                                print("\n Error while executing getPairedDevices method \n")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error in unpair method \n"
+                                            print("\n Error in unpair method \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Device is not paired \n"
+                                        print("\n Device is not paired \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error while executing getPairedDevices method \n"
+                                    print("\n Error while executing getPairedDevices method \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while executing pair method \n"
+                                print("\n Error while executing pair method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Device not found in the getDiscoveredDevices list \n"
+                            print("\n Device not found in the getDiscoveredDevices list \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while executing getDiscoveredDevices method \n"
+                        print("\n Error while executing getDiscoveredDevices method \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n StopScan is not working \n"
+                    print("\n StopScan is not working \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n StartScan is not working \n"
+                print("\n StartScan is not working \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Bluetooth is not enabled \n"
+            print("\n Bluetooth is not enabled \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "\n Revert the values before exiting \n"
+        print("\n Revert the values before exiting \n")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

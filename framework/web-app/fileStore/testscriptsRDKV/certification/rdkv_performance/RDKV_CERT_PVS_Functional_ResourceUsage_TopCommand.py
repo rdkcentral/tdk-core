@@ -65,8 +65,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import json
 from StabilityTestUtility import *
 
@@ -86,7 +86,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
@@ -95,7 +95,7 @@ if expectedResult in result.upper():
     tdkTestObj.addParameter("deviceIP",obj.IP)
     tdkTestObj.executeTestCase(expectedResult)
     result = tdkTestObj.getResult()
-    ssh_param_dict = json.loads(tdkTestObj.getResultDetails()) 
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
     if ssh_param_dict != {} and expectedResult in result:
         tdkTestObj.setResultStatus("SUCCESS")
         #command to get the top output
@@ -108,20 +108,20 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and expectedResult in result:
-            print "Checking %CPU of processes\n"
+            print("Checking %CPU of processes\n")
             if output.split("\n")[1] == "" :
-                print "\n No process has CPU usage greater than 90% \n"
+                print("\n No process has CPU usage greater than 90% \n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Process details with CPU usage greater than 90% :\n"
+                print("\n Process details with CPU usage greater than 90% :\n")
                 output = output.split("\n")
                 output.pop(0)
-                print "\n %CPU \t COMMAND"
+                print("\n %CPU \t COMMAND")
                 for line in output:
-                    print line
+                    print(line)
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error occurred during SSH, please check ssh details in configuration file"
+            print("Error occurred during SSH, please check ssh details in configuration file")
             tdkTestObj.setResultStatus("FAILURE")
         command = "top -b -n 1 -o +%MEM -w 512 | awk '/PID USER/,0' | awk '{print $10,$12}' | awk '{if($1>90)print $1,$2}'"
         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -132,25 +132,25 @@ if expectedResult in result.upper():
         output = tdkTestObj.getResultDetails()
         result = tdkTestObj.getResult()
         if output != "EXCEPTION" and expectedResult in result:
-            print "\n Checking %MEM of processes:\n"
+            print("\n Checking %MEM of processes:\n")
             if output.split("\n")[1] == "" :
-                print "\n No process has Memory usage greater than 90% \n"
+                print("\n No process has Memory usage greater than 90% \n")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Process details with Memory usage greater than 90% :\n"
+                print("\n Process details with Memory usage greater than 90% :\n")
                 output = output.split("\n")
                 output.pop(0)
-                print "\n %MEM \t COMMAND"
+                print("\n %MEM \t COMMAND")
                 for line in output:
-                    print line
+                    print(line)
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error occurred during SSH, please check ssh details in configuration file"
+            print("Error occurred during SSH, please check ssh details in configuration file")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Please configure the SSH details in configuration file"
+        print("Please configure the SSH details in configuration file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

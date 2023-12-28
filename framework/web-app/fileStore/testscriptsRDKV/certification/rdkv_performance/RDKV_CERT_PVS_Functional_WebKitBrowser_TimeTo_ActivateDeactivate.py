@@ -72,8 +72,8 @@ Verify the status, store the current time as start_activate and activate the plu
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import rdkv_performancelib
 from rdkv_performancelib import *
 from datetime import datetime
@@ -94,17 +94,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_WebKitBrowser_TimeTo_Act
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     event_listener = None
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser"]
@@ -114,20 +114,20 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {"WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugin"
+        print("\n Error while getting the status of plugin")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
         plugins_status_dict = get_plugins_status(obj,plugins_list)
         if plugins_status_dict != plugin_status_needed:
-            print "\n Error while deactivating WebKitBrowser"
+            print("\n Error while deactivating WebKitBrowser")
             status = "FAILURE"
     if status == "SUCCESS" :
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "org.rdk.RDKShell.1.register","params": {"event": "onLaunched", "id": "client.events.1" }}','{"jsonrpc": "2.0","id": 6,"method": "org.rdk.RDKShell.1.register","params": {"event": "onDestroyed", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(30)
-        print "\nPre conditions for the test are set successfully"
+        print("\nPre conditions for the test are set successfully")
         plugin = "WebKitBrowser"
         launch_status,start_activate = launch_plugin(obj,plugin)
         time.sleep(10)
@@ -139,7 +139,7 @@ if expectedResult in result.upper():
             webkit_status = tdkTestObj.getResultDetails()
             if webkit_status == 'resumed' and expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\nWebKitbrowser resumed successfully\n"
+                print("\nWebKitbrowser resumed successfully\n")
                 time.sleep(10)
                 tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                 tdkTestObj.addParameter("plugin",plugin)
@@ -155,8 +155,8 @@ if expectedResult in result.upper():
                     webkit_status = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if webkit_status == 'deactivated' and expectedResult in result:
-                        print "\nWebKitbrowser deactivated successfully\n"
-                        print "\n Check events triggered \n"
+                        print("\nWebKitbrowser deactivated successfully\n")
+                        print("\n Check events triggered \n")
                         time.sleep(30)
                         if (len(event_listener.getEventsBuffer())!= 0):
                             for event_log in event_listener.getEventsBuffer():
@@ -178,68 +178,68 @@ if expectedResult in result.upper():
                                 if all(value != "" for value in (activate_threshold,deactivate_threshold,offset)):
                                     start_activate_in_millisec = getTimeInMilliSec(start_activate)
                                     activated_time_in_millisec = getTimeInMilliSec(activated_time)
-                                    print "\n Activate initiated at: " +start_activate + "(UTC)"
+                                    print("\n Activate initiated at: " +start_activate + "(UTC)")
                                     Summ_list.append('Activate initiated at :{}'.format(start_activate))
-                                    print "\n Activated at : "+activated_time+ "(UTC)"
+                                    print("\n Activated at : "+activated_time+ "(UTC)")
                                     Summ_list.append('Activated at :{}'.format(activated_time))
                                     time_taken_for_activate = activated_time_in_millisec - start_activate_in_millisec
-                                    print "\n Time taken to activate {} plugin: {} (ms)".format(plugin,time_taken_for_activate)
+                                    print("\n Time taken to activate {} plugin: {} (ms)".format(plugin,time_taken_for_activate))
                                     Summ_list.append('Time taken to activate {} plugin: {} ms'.format(plugin,time_taken_for_activate))
-                                    print "\n Threshold value for time taken to activate {} plugin: {} (ms)".format(plugin,activate_threshold)
-                                    print "\n Validate the time taken for activation \n"
+                                    print("\n Threshold value for time taken to activate {} plugin: {} (ms)".format(plugin,activate_threshold))
+                                    print("\n Validate the time taken for activation \n")
                                     if 0 < time_taken_for_activate < (int(activate_threshold) + int(offset)) :
-                                        print "\n Time taken for activating {} plugin is within the expected range \n".format(plugin)
+                                        print("\n Time taken for activating {} plugin is within the expected range \n".format(plugin))
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n Time taken for activating {} plugin is greater than the expected range \n".format(plugin)
+                                        print("\n Time taken for activating {} plugin is greater than the expected range \n".format(plugin))
                                         tdkTestObj.setResultStatus("FAILURE")
                                     start_deactivate_in_millisec = getTimeInMilliSec(start_deactivate)
                                     deactivated_time_in_millisec =  getTimeInMilliSec(deactivated_time)
-                                    print "\n Deactivate initiated at: " + start_deactivate + "(UTC)"
+                                    print("\n Deactivate initiated at: " + start_deactivate + "(UTC)")
                                     Summ_list.append('Deactivate initiated at :{}'.format(start_deactivate))
-                                    print "\n Deactivated at: " + deactivated_time + "(UTC)"
+                                    print("\n Deactivated at: " + deactivated_time + "(UTC)")
                                     Summ_list.append('Deactivated at :{}'.format(deactivated_time))
                                     time_taken_for_deactivate = deactivated_time_in_millisec - start_deactivate_in_millisec
-                                    print "\n Time taken to deactivate {} plugin: {} (ms) \n".format(plugin,time_taken_for_deactivate)
+                                    print("\n Time taken to deactivate {} plugin: {} (ms) \n".format(plugin,time_taken_for_deactivate))
                                     Summ_list.append(' Time taken to deactivate {} plugin: {} ms'.format(plugin,time_taken_for_deactivate))
-                                    print "\n Threshold value for time taken to deactivate {} plugin: {} (ms)".format(plugin,deactivate_threshold)
-                                    print "\n Validate the time taken for deactivation: \n"
+                                    print("\n Threshold value for time taken to deactivate {} plugin: {} (ms)".format(plugin,deactivate_threshold))
+                                    print("\n Validate the time taken for deactivation: \n")
                                     if 0 < time_taken_for_deactivate < (int(deactivate_threshold)+int(offset)) :
-                                        print "\n Time taken for deactivating {} plugin is within the expected range \n".format(plugin)
+                                        print("\n Time taken for deactivating {} plugin is within the expected range \n".format(plugin))
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n Time taken for deactivating {} plugin is greater than the expected range \n".format(plugin)
+                                        print("\n Time taken for deactivating {} plugin is greater than the expected range \n".format(plugin))
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "Threshold values are not configured in Device configuration file"
+                                    print("Threshold values are not configured in Device configuration file")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n onLaunched and onDestroyed events are not triggered"
+                                print("\n onLaunched and onDestroyed events are not triggered")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n No events are triggered"
+                            print("\n No events are triggered")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while deactivating the plugin, current status: ",webkit_status
+                        print("\n Error while deactivating the plugin, current status: ",webkit_status)
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Unable to deactivate the plugin"
+                    print("\n Unable to deactivate the plugin")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while checking the status of plugin, current status: ",webkit_status
+                print("\n Error while checking the status of plugin, current status: ",webkit_status)
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while launching the plugin"
+            print("\n Error while launching the plugin")
             obj.setLoadModuleStatus("FAILURE")
     else:
-        print "Pre conditions are not met"
+        print("Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

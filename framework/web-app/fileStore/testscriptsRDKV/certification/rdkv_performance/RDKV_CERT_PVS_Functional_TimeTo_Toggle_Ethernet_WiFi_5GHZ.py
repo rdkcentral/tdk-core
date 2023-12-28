@@ -92,8 +92,8 @@ b) Get netsrvmgr logs to calculate the time taken to set WIFI as default interfa
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 from datetime import datetime
@@ -112,17 +112,17 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_Toggle_Ethernet_W
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert_plugins_dict = {}
     revert_wifi_ssid = False
@@ -131,10 +131,10 @@ if expectedResult in result.upper():
     event_time_dict = {}
     plugins_list = ["WebKitBrowser","org.rdk.Wifi"]
     plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated"}
-    print "\n Get plugins status"
+    print("\n Get plugins status")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     if plugin_status_needed != current_plugin_status_dict:
-        print "\n Set plugins status"
+        print("\n Set plugins status")
         status = set_plugins_status(obj,plugin_status_needed)
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
@@ -143,7 +143,7 @@ if expectedResult in result.upper():
     if revert_nw == "YES":
         revert_plugins_dict["org.rdk.Network"] = "deactivated"
     if current_interface == "WIFI":
-        print "\n Current interface is WIFI"
+        print("\n Current interface is WIFI")
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
             status = "FAILURE"
@@ -175,10 +175,10 @@ if expectedResult in result.upper():
                     keyword = "ip link set dev wlan0 up"
                     wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface],deviceAvailability = switch_to_wifi(obj,"5",True)
                     if wifi_connect_status == "SUCCESS":
-                        print "\n Successfully Set WIFI as default interface"
+                        print("\n Successfully Set WIFI as default interface")
                         result_status = "SUCCESS"
                     else:
-                        print "\n Error while setting WIFI as default interface"
+                        print("\n Error while setting WIFI as default interface")
                         result_status = "FAILURE"
                 else:
                     new_interface = "ETHERNET"
@@ -188,10 +188,10 @@ if expectedResult in result.upper():
                     time.sleep(30)
                     interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"ETHERNET",True)
                     if interface_status  == "SUCCESS":
-                        print "\n Successfully set ETHERNET as default interface"
+                        print("\n Successfully set ETHERNET as default interface")
                         result_status = close_lightning_app(obj)
                     else:
-                        print "\n Error while setting to ETHERNET"
+                        print("\n Error while setting to ETHERNET")
                         result_status = "FAILURE"
                 tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                 tdkTestObj.addParameter("realpath",obj.realpath)
@@ -213,58 +213,58 @@ if expectedResult in result.upper():
                     output = tdkTestObj.getResultDetails()
                     if output != "EXCEPTION" and expectedResult in result and keyword in output:
                         required_log = output.split('\n')[1]
-                        print "\n Successfully switched to {}, logs:{}".format(new_interface,required_log)
-                        print "\n Setting {} as default interface started at: {} UTC".format(new_interface,start_time_dict[new_interface])
+                        print("\n Successfully switched to {}, logs:{}".format(new_interface,required_log))
+                        print("\n Setting {} as default interface started at: {} UTC".format(new_interface,start_time_dict[new_interface]))
                         Summ_list.append(' Setting {} as default interface started at: {}'.format(new_interface,start_time_dict[new_interface]))
                         start_time_dict[new_interface] = int(getTimeInMilliSec(start_time_dict[new_interface]))
                         event_time = getTimeStampFromString(required_log)
-                        print "\n {} interface became default interface at: {} UTC".format(new_interface,event_time)
+                        print("\n {} interface became default interface at: {} UTC".format(new_interface,event_time))
                         Summ_list.append(' {} interface became default interface at: {}'.format(new_interface,event_time))
                         event_time_dict[new_interface] = int(getTimeInMilliSec(event_time))
                         time_taken = event_time_dict[new_interface] -  start_time_dict[new_interface]
-                        print "\n Time taken for setting {} as default interface: {}(ms) ".format(new_interface,time_taken)
+                        print("\n Time taken for setting {} as default interface: {}(ms) ".format(new_interface,time_taken))
                         Summ_list.append(' Time taken for setting {} as default interface: {}ms '.format(new_interface,time_taken))
-                        print "\n Threshold value for time taken for setting {} as default interface: {}(ms) ".format(new_interface,validation_dict[new_interface])
+                        print("\n Threshold value for time taken for setting {} as default interface: {}(ms) ".format(new_interface,validation_dict[new_interface]))
                         Summ_list.append(' Threshold value for time taken for setting {} as default interface: {}ms '.format(new_interface,validation_dict[new_interface]))
                         if 0 < time_taken < ( validation_dict[new_interface] + int(offset)):
-                            print "\n Time taken is within the expected range"
+                            print("\n Time taken is within the expected range")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n  Time taken is not within the expected range"
+                            print("\n  Time taken is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error happened during SSH session, logs are not available"
+                        print("\n Error happened during SSH session, logs are not available")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Error while setting default interface"
+                    print("\n Error while setting default interface")
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Successfully completed validation"
+                print("\n Successfully completed validation")
         else:
-            print "\n Please configure the SSH details and threshold values in the device config file"
+            print("\n Please configure the SSH details and threshold values in the device config file")
             tdkTestObj.setResultStatus("FAILURE")
         if deviceAvailability == "Yes":
-	    getSummary(Summ_list,obj)
+            getSummary(Summ_list,obj)
             #Revert interface
             if current_interface != initial_interface:
-                print "\n Revert network interface to {}\n".format(initial_interface)
+                print("\n Revert network interface to {}\n".format(initial_interface))
                 if initial_interface == "ETHERNET":
                     status = launch_lightning_app(obj,complete_url)
                     time.sleep(30)
                     interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
                     if interface_status == "SUCCESS":
-                        print "\n Successfully reverted ETHERNET as default interface"
+                        print("\n Successfully reverted ETHERNET as default interface")
                     else:
-                        print "\n Error while reverting ETHERNET as default interface"
+                        print("\n Error while reverting ETHERNET as default interface")
                         status = "FAILURE"
                 else:
                     wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
                     if wifi_connect_status == "SUCCESS":
-                        print "\n Successfully reverted WIFI as default interface"
+                        print("\n Successfully reverted WIFI as default interface")
                     else:
-                        print "\n Error while reverting WIFI as default interface"
+                        print("\n Error while reverting WIFI as default interface")
                         status = "FAILURE"
             if revert_wifi_ssid:
                 status = launch_lightning_app(obj,complete_url)
@@ -280,13 +280,13 @@ if expectedResult in result.upper():
             if status == "FAILURE":
                 obj.setLoadModuleStatus("FAILURE")
         else:
-            print "\n Preconditions are not met "
+            print("\n Preconditions are not met ")
             obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-     	print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

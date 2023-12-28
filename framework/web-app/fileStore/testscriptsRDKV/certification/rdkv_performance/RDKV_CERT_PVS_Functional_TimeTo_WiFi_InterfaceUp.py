@@ -74,8 +74,8 @@ The time taken should be within the expected range.</expected_output>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestVariables import *
 import rebootTestUtility
 from rebootTestUtility import *
@@ -97,12 +97,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_WiFi_InterfaceUp'
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -126,7 +126,7 @@ if expectedResult in result.upper():
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
     if status == "SUCCESS":
         reboot_time = []
         count = 0
@@ -139,8 +139,8 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResultDetails()
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\nIteration ",i+1
-                print "Rebooted device successfully \n"
+                print("\nIteration ",i+1)
+                print("Rebooted device successfully \n")
                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                 tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
                 tdkTestObj.addParameter("reqValue","uptime")
@@ -149,7 +149,7 @@ if expectedResult in result.upper():
                 if expectedResult in result:
                     uptime = int(tdkTestObj.getResultDetails())
                     if uptime < 240:
-                        print "\n Device is rebooted and uptime is: {} \n".format(uptime)
+                        print("\n Device is rebooted and uptime is: {} \n".format(uptime))
                         time.sleep(30)
                         tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                         tdkTestObj.addParameter("realpath",obj.realpath)
@@ -170,71 +170,71 @@ if expectedResult in result.upper():
                             output = tdkTestObj.getResultDetails()
                             if output != "EXCEPTION" and expectedResult in result:
                                 if len(output.split('\n')) == 3 and "eventInterfaceIPAddressStatusChanged:" in output:
-                                    print "\nRequired logs:",output
+                                    print("\nRequired logs:",output)
                                     interface_up_line = output.split('\n')[1]
                                     interface_up_time = getTimeStampFromString(interface_up_line)
-                                    print "\n Device reboot initiated at :{} (UTC)".format(start_time)
-                                    print "\n wlan0 interface became up  at :{} (UTC)  ".format(interface_up_time)
+                                    print("\n Device reboot initiated at :{} (UTC)".format(start_time))
+                                    print("\n wlan0 interface became up  at :{} (UTC)  ".format(interface_up_time))
                                     start_time_millisec = getTimeInMilliSec(start_time)
                                     interface_up_time_millisec = getTimeInMilliSec(interface_up_time)
                                     interface_uptime = interface_up_time_millisec - start_time_millisec
                                     reboot_time.append(interface_uptime)
-                                    print "\n Time taken for the wlan0 interface to up after reboot : {} ms\n".format(interface_uptime)
+                                    print("\n Time taken for the wlan0 interface to up after reboot : {} ms\n".format(interface_uptime))
                                     conf_file,result = getConfigFileName(tdkTestObj.realpath)
                                     result1, if_uptime_threshold_value = getDeviceConfigKeyValue(conf_file,"WLAN0_IF_UPTIME_THRESHOLD_VALUE")
                                     result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                     count = count+1
                                 else:
-                                    print "\n wlan0 interface up related logs are not present in log file"
+                                    print("\n wlan0 interface up related logs are not present in log file")
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command)
+                                print("\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command))
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Please configure the details in device config file"
+                            print("\n Please configure the details in device config file")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "\n Device is not rebooted, device uptime:{}".format(uptime)
+                        print("\n Device is not rebooted, device uptime:{}".format(uptime))
                         break
                 else:
-                    print "\n Failed to get the uptime";
+                    print("\n Failed to get the uptime");
                     tdkTestObj.setResultStatus("FAILURE")
                     break
             else:
-                print "\n Error occurred during reboot"
+                print("\n Error occurred during reboot")
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         if count == 5:
             reboot_time.sort()
-            print "Reboot list",reboot_time
+            print("Reboot list",reboot_time)
             interface_uptime = (reboot_time[3]+reboot_time[4])/2
-            print "\nThe time taken for wlan0 interface to up, calculated using 90th percentile method",interface_uptime
+            print("\nThe time taken for wlan0 interface to up, calculated using 90th percentile method",interface_uptime)
             if all(value != "" for value in (if_uptime_threshold_value,offset)):
-                print "\n Threshold value for time taken for wlan0 interface to up after reboot: {} ms".format(if_uptime_threshold_value)
+                print("\n Threshold value for time taken for wlan0 interface to up after reboot: {} ms".format(if_uptime_threshold_value))
                 Summ_list.append("Threshold value for time taken for wlan0 interface to up after reboot: {} ms".format(if_uptime_threshold_value))
                 if 0 < int(interface_uptime) < (int(if_uptime_threshold_value) + int(offset)):
                     Summ_list.append('Time taken for wlan0 interface to up after reboot : {} ms'.format(interface_uptime))
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "\n The time taken for wlan0 interface to up after reboot is within the expected limit\n"
+                    print("\n The time taken for wlan0 interface to up after reboot is within the expected limit\n")
                 else:
                     Summ_list.append('Time taken for wlan0 interface to up after reboot : {} ms'.format(interface_uptime))
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "\n The time taken for wlan0 interface to up after reboot is not within the expected limit \n"
+                    print("\n The time taken for wlan0 interface to up after reboot is not within the expected limit \n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "\n Failed to get the threshold value from config file"
+                print("\n Failed to get the threshold value from config file")
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "\n Failed to reboot 5 times successfully"
+            print("\n Failed to reboot 5 times successfully")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
-	getSummary(Summ_list,obj)
+        getSummary(Summ_list,obj)
         if revert_if == "YES" and status == "SUCCESS":
             activate_status = set_plugins_status(obj,plugins_status_needed)
             url_status,complete_url = get_lightning_app_url(obj)
@@ -243,17 +243,17 @@ if expectedResult in result.upper():
             if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
                 interface_status,deviceAvailabiliy = set_default_interface(obj,"ETHERNET")
                 if interface_status  == "SUCCESS":
-                    print "\n Successfully reverted to ETHERNET \n"
+                    print("\n Successfully reverted to ETHERNET \n")
                     status = close_lightning_app(obj)
                 else:
-                    print "\n Error while reverting to ETHERNET \n"
+                    print("\n Error while reverting to ETHERNET \n")
             else:
-                print "\n Error while launching Lightning App \n"
+                print("\n Error while launching Lightning App \n")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

@@ -66,8 +66,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import PerformanceTestVariables
 from StabilityTestUtility import *
 from web_socket_util import *
@@ -87,16 +87,16 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_LaunchWebKitBrows
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     rebootwaitTime = 160
     status = "SUCCESS"
@@ -111,7 +111,7 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Rebooted device successfully \n"
+            print("\n Rebooted device successfully \n")
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
             tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
             tdkTestObj.addParameter("reqValue","uptime")
@@ -120,14 +120,14 @@ if expectedResult in result.upper():
             if expectedResult in result:
                 uptime = int(tdkTestObj.getResultDetails())
                 if uptime < 260:
-                    print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                    print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                     time.sleep(20)
                     tdkTestObj.setResultStatus("SUCCESS")
                     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
                     if initial_plugins_status_dict != curr_plugins_status_dict:
                         revert = "YES"
                     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-                        print "\n Error while getting status of plugins"
+                        print("\n Error while getting status of plugins")
                         status = "FAILURE"
                     elif curr_plugins_status_dict != plugin_status_needed:
                         status = set_plugins_status(obj,plugin_status_needed)
@@ -149,7 +149,7 @@ if expectedResult in result.upper():
                             webkit_status = tdkTestObj.getResultDetails()
                             result = tdkTestObj.getResult()
                             if webkit_status == 'resumed' and expectedResult in result:
-                                print "\nWebKitBrowser Resumed Successfully\n"
+                                print("\nWebKitBrowser Resumed Successfully\n")
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 time.sleep(10)
                                 continue_count = 0
@@ -162,9 +162,9 @@ if expectedResult in result.upper():
                                         time.sleep(1)
                                         continue
                                     event_log = event_listener.getEventsBuffer().pop(0)
-                                    print "\n Triggered event: ",event_log,"\n"
+                                    print("\n Triggered event: ",event_log,"\n")
                                     if ("WebKitBrowser" in event_log and "onLaunched" in str(event_log)):
-                                        print "\n Event :onLaunched is triggered during WebKitBrowser launch \n"
+                                        print("\n Event :onLaunched is triggered during WebKitBrowser launch \n")
                                         launched_time = event_log.split('$$$')[0]
                                         break
                                 if launched_time:
@@ -176,34 +176,34 @@ if expectedResult in result.upper():
                                     if all(value != "" for value in (webkit_launch_threshold,offset)):
                                         launch_start_time_in_millisec = getTimeInMilliSec(launch_start_time)
                                         launched_time_in_millisec = getTimeInMilliSec(launched_time)
-                                        print "\n WebKitBrowser launch initiated at: ",launch_start_time
+                                        print("\n WebKitBrowser launch initiated at: ",launch_start_time)
                                         Summ_list.append('WebKitBrowser launch initiated at :{}'.format(launch_start_time))
-                                        print "\n WebKitBrowser launched at : ",launched_time
+                                        print("\n WebKitBrowser launched at : ",launched_time)
                                         Summ_list.append('WebKitBrowser launched at :{}'.format(launched_time))
                                         time_taken_for_launch = launched_time_in_millisec - launch_start_time_in_millisec
-                                        print "\n Time taken to launch WebKitBrowser: {}(ms)".format(time_taken_for_launch)
+                                        print("\n Time taken to launch WebKitBrowser: {}(ms)".format(time_taken_for_launch))
                                         Summ_list.append('Time taken to launch WebKitBrowser :{}ms'.format(time_taken_for_launch))
-                                        print "\n Threshold value for time taken to launch WebKitBrowser : {} ms".format(webkit_launch_threshold)
-                                        print "\n Validate the time: \n"
+                                        print("\n Threshold value for time taken to launch WebKitBrowser : {} ms".format(webkit_launch_threshold))
+                                        print("\n Validate the time: \n")
                                         if 0 < time_taken_for_launch < (int(webkit_launch_threshold) + int(offset)) :
-                                            print "\n Time taken for launching WebKitBrowser is within the expected range \n"
+                                            print("\n Time taken for launching WebKitBrowser is within the expected range \n")
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
-                                            print "\n Time taken for launching WebKitBrowser is not within the expected range \n"
+                                            print("\n Time taken for launching WebKitBrowser is not within the expected range \n")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Please configure the Threshold value in device configuration file \n"
+                                        print("\n Please configure the Threshold value in device configuration file \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n onLaunched event not triggered for during WebKitBrowser launch\n"
+                                    print("\n onLaunched event not triggered for during WebKitBrowser launch\n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while checking WebKitBrowser status \n"
+                                print("\n Error while checking WebKitBrowser status \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error while launching WebKitBrowser \n"
+                            print("\n Error while launching WebKitBrowser \n")
                             tdkTestObj.setResultStatus("FAILURE")
-                        print "\n Exiting from WebKitBrowser \n"
+                        print("\n Exiting from WebKitBrowser \n")
                         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
                         tdkTestObj.addParameter("plugin",plugin)
                         tdkTestObj.addParameter("status","deactivate")
@@ -212,31 +212,31 @@ if expectedResult in result.upper():
                         if result == "SUCCESS":
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "Unable to deactivate Cobalt"
+                            print("Unable to deactivate Cobalt")
                             tdkTestObj.setResultStatus("FAILURE")
                         event_listener.disconnect()
                         time.sleep(10)
                     else:
-                        print "\n Preconditions are not met"
+                        print("\n Preconditions are not met")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n  Device is not rebooted, uptime:",uptime
+                    print("\n  Device is not rebooted, uptime:",uptime)
                     tdkTestObj.setResultStatus("FAILURE")
             else:
                 "\n Error while getting uptime of the DUT"
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while rebooting the DUT"
+            print("\n Error while rebooting the DUT")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Error while getting status of plugins"
+        print("\n Error while getting status of plugins")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,initial_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

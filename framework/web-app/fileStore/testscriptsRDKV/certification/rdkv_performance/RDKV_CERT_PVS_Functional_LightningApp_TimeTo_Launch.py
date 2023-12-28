@@ -64,7 +64,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import PerformanceTestVariables
 from StabilityTestUtility import *
@@ -90,12 +90,12 @@ Summ_list=[]
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     status = "SUCCESS"
     revert = "NO"
@@ -104,7 +104,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -112,7 +112,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
-            print "\n Unable to deactivate plugins"
+            print("\n Unable to deactivate plugins")
             status = "FAILURE"
     if status == "SUCCESS":
         thunder_port = rdkv_performancelib.devicePort
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
             lightningapp_status = tdkTestObj.getResultDetails()
             result = tdkTestObj.getResult()
             if lightningapp_status == 'resumed' and expectedResult in result:
-                print "\n LightningApp resumed successfully"
+                print("\n LightningApp resumed successfully")
                 tdkTestObj.setResultStatus("SUCCESS")
                 time.sleep(10)
                 continue_count = 0
@@ -140,9 +140,9 @@ if expectedResult in result.upper():
                         time.sleep(1)
                         continue
                     event_log = event_listener.getEventsBuffer().pop(0)
-                    print "\n Triggered event: ",event_log,"\n"
+                    print("\n Triggered event: ",event_log,"\n")
                     if ("LightningApp" in event_log and "onLaunched" in str(event_log)):
-                        print "\n Event :onLaunched is triggered during LightningApp launch"
+                        print("\n Event :onLaunched is triggered during LightningApp launch")
                         launched_time = event_log.split('$$$')[0]
                         break
                 if launched_time:
@@ -154,35 +154,35 @@ if expectedResult in result.upper():
                     if all(value != "" for value in (lightningapp_launch_threshold,offset)):
                         launch_start_time_in_millisec = getTimeInMilliSec(launch_start_time)
                         launched_time_in_millisec = getTimeInMilliSec(launched_time)
-                        print "\n LightningApp launch initiated at: " ,launch_start_time
+                        print("\n LightningApp launch initiated at: " ,launch_start_time)
                         Summ_list.append('LightningApp launch initiated at: {}ms'.format(launch_start_time))
-                        print "\n LightningApp launched at : ",launched_time
+                        print("\n LightningApp launched at : ",launched_time)
                         Summ_list.append('LightningApp launched at :{}ms'.format(launched_time))
                         time_taken_for_launch = launched_time_in_millisec - launch_start_time_in_millisec
-                        print "\n Time taken to launch LightningApp: {}(ms)".format(time_taken_for_launch)
+                        print("\n Time taken to launch LightningApp: {}(ms)".format(time_taken_for_launch))
                         Summ_list.append('Time taken to launch LightningApp: {}ms'.format(time_taken_for_launch))
-                        print "\n Threshold value for time taken to launch LightningApp: {}(ms)".format(lightningapp_launch_threshold)
-                        print "\n Validate the time:"
+                        print("\n Threshold value for time taken to launch LightningApp: {}(ms)".format(lightningapp_launch_threshold))
+                        print("\n Validate the time:")
                         if 0 < time_taken_for_launch < (int(lightningapp_launch_threshold) + int(offset)) :
-                            print "\n Time taken for launching LightningApp is within the expected range"
+                            print("\n Time taken for launching LightningApp is within the expected range")
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Time taken for launching LightningApp is not within the expected range"
+                            print("\n Time taken for launching LightningApp is not within the expected range")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Please configure the Threshold value in device configuration file"
+                        print("\n Please configure the Threshold value in device configuration file")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n onLaunched event not triggered for during LightningApp launch"
+                    print("\n onLaunched event not triggered for during LightningApp launch")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while checking LightningApp status"
+                print("\n Error while checking LightningApp status")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while launching LightningApp"
+            print("\n Error while launching LightningApp")
             obj.setLoadModuleStatus("FAILURE")
         #Deactivate plugin
-        print "\n Exiting from LightningApp"
+        print("\n Exiting from LightningApp")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","LightningApp")
         tdkTestObj.addParameter("status","deactivate")
@@ -191,19 +191,19 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate LightningApp"
+            print("Unable to deactivate LightningApp")
             tdkTestObj.setResultStatus("FAILURE")
         event_listener.disconnect()
         getSummary(Summ_list,obj)
         time.sleep(10)
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

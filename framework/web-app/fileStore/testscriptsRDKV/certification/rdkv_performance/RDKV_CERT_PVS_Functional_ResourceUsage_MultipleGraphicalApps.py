@@ -61,7 +61,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_PERFORMANCE_132</test_case_id>
-    <test_objective>The objective of this test is to validate the resource usage while launching and playing video in multiple graphical apps	</test_objective>
+    <test_objective>The objective of this test is to validate the resource usage while launching and playing video in multiple graphical apps   </test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Accelerator</test_setup>
     <pre_requisite>None</pre_requisite>
@@ -105,14 +105,14 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 req_plugins = PerformanceTestVariables.req_graphical_plugins
-print "\n Required plugin details: {}".format(req_plugins)
+print("\n Required plugin details: {}".format(req_plugins))
 pluginName, pluginMethod, pluginLink, pluginAction = [], {}, {}, {}
 flag = 0
-plugin_name = "" 
+plugin_name = ""
 plugin_data_list = req_plugins.split(";")
 if len(plugin_data_list)>0:
     for plugin in range(len(plugin_data_list)):
@@ -127,8 +127,8 @@ if len(plugin_data_list)>0:
 if flag >0:
     if expectedResult in result.upper():
         status = "SUCCESS"
-        revert = "NO"        
-        print "Check Pre conditions"
+        revert = "NO"
+        print("Check Pre conditions")
         status = "SUCCESS"
         revert_dict = {}
         curr_plugins_status_dict = get_plugins_status(obj, pluginName)
@@ -137,7 +137,7 @@ if flag >0:
         for pluginData in pluginName:
             plugin_status_needed[pluginData] = "deactivated"
         if any(curr_plugins_status_dict == "FAILURE" for plugin in pluginName):
-            print "\n Error while getting the status of plugins"
+            print("\n Error while getting the status of plugins")
             status = "FAILURE"
         elif curr_plugins_status_dict != plugin_status_needed:
             revert = "YES"
@@ -145,10 +145,10 @@ if flag >0:
             new_plugins_status = get_plugins_status(obj,pluginName)
             if new_plugins_status != plugin_status_needed:
                 status = "FAILURE"
-                print "\n Unable to set status of plugin"
+                print("\n Unable to set status of plugin")
         validation_dict = get_validation_params(obj)
         if status == "SUCCESS":
-            print "\n Preconditions are set successfully"
+            print("\n Preconditions are set successfully")
             for plugin_data in range(len(plugin_data_list)):
                 expectedResult = "SUCCESS"
                 plugin_name = pluginName[plugin_data]
@@ -161,18 +161,18 @@ if flag >0:
                     plugin_status = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if plugin_status == 'resumed' and expectedResult in result:
-                        print "\n {} resumed successfully".format(plugin_name)
+                        print("\n {} resumed successfully".format(plugin_name))
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(5)
                     else:
-                        print "\n Unable to resume {} plugin,current status: {}".format(plugin_name,plugin_status)
+                        print("\n Unable to resume {} plugin,current status: {}".format(plugin_name,plugin_status))
                         tdkTestObj.setResultStatus("FAILURE")
                         break
-                    plugin_method = pluginMethod.get(pluginName[plugin_data])    
+                    plugin_method = pluginMethod.get(pluginName[plugin_data])
                     plugin_link = pluginLink.get(pluginName[plugin_data])
                     method_param = plugin_name+".1."+plugin_method
                     get_param = plugin_name+".1.url"
-                    print "\n Set the URL : {}".format(plugin_link)
+                    print("\n Set the URL : {}".format(plugin_link))
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method",method_param)
                     tdkTestObj.addParameter("value",'"'+"https://"+plugin_link+'"')
@@ -186,7 +186,7 @@ if flag >0:
                                 password = ""
                             else:
                                 password = validation_dict["password"]
-                            credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password                            
+                            credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
                             tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
                             tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
                             tdkTestObj.addParameter("credentials",credentials)
@@ -195,14 +195,14 @@ if flag >0:
                             result_val = tdkTestObj.getResultDetails()
                             if result_val == "SUCCESS" :
                                 tdkTestObj.setResultStatus("SUCCESS")
-                                print "\nVideo playback is happening\n"
+                                print("\nVideo playback is happening\n")
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print "Video playback is not happening"
+                                print("Video playback is not happening")
                                 break
                         plugin_action = pluginAction.get(pluginName[plugin_data])
-                        if plugin_action: 
-                            print "\n Clicking OK to play video"
+                        if plugin_action:
+                            print("\n Clicking OK to play video")
                             params = '{"keys":[ {"keyCode":"'+plugin_action+'","modifiers": [],"delay":1.0}]}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -211,24 +211,24 @@ if flag >0:
                             result1 = tdkTestObj.getResult()
                             time.sleep(40)
                 else:
-                    print "\n Please enter the details in the config file to launch the url and/or video playback"
+                    print("\n Please enter the details in the config file to launch the url and/or video playback")
                     tdkTestObj.setResultStatus("FAILURE")
-            print "\n Validating resource usage:"
+            print("\n Validating resource usage:")
             tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
             tdkTestObj.executeTestCase(expectedResult)
             resource_usage = tdkTestObj.getResultDetails()
             result = tdkTestObj.getResult()
             if expectedResult in result and resource_usage != "ERROR":
-                print "\n Resource usage is within the expected limit"
+                print("\n Resource usage is within the expected limit")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Resource usage is greater than the expected limit"
+                print("\n Resource usage is greater than the expected limit")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while setting up the pre-conditions"
+            print("\n Error while setting up the pre-conditions")
             tdkTestObj.setResultStatus("FAILURE")
         status = set_plugins_status(obj,revert_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "\n Failed to load module"
+    print("\n Failed to load module")

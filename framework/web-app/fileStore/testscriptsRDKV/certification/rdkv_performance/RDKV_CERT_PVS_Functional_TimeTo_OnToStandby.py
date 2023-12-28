@@ -54,7 +54,7 @@
 3. Get the preferred standby mode and if it is not LIGHT_SLEEP set it to LIGHT_SLEEP.
 4. Set the power state to ON if it is not ON
 5. Set the power state to STANDBY after storing the current system time
-6. Get the event logs from wpeframework log and parse the time stamp 
+6. Get the event logs from wpeframework log and parse the time stamp
 7. Calculate the result by finding the difference between system time stored and time stamp of event
 8. Revert values</automation_approch>
     <expected_output>Device's power state should be changed.
@@ -70,8 +70,8 @@ The time should be within the expected range.</expected_output>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import rdkv_performancelib
 from rdkv_performancelib import *
 from datetime import datetime
@@ -92,16 +92,16 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_OnToStandby');
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     event_listener = None
     continue_count = 0
     power_state = ""
@@ -121,8 +121,8 @@ if expectedResult in result.upper():
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "org.rdk.System.1.register","params": {"event": "onSystemPowerStateChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(10)
-        print "\nPre conditions for the test are set successfully"
-        print "\n Get the current power state: \n"
+        print("\nPre conditions for the test are set successfully")
+        print("\n Get the current power state: \n")
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
         tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
         tdkTestObj.addParameter("reqValue","powerState")
@@ -131,8 +131,8 @@ if expectedResult in result.upper():
         current_power_state = tdkTestObj.getResultDetails()
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Current power state : \n",current_power_state
-            print "\n Set Preferred standby mode as LIGHT_SLEEP \n"
+            print("\n Current power state : \n",current_power_state)
+            print("\n Set Preferred standby mode as LIGHT_SLEEP \n")
             params = '{"standbyMode":"LIGHT_SLEEP"}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","org.rdk.System.1.setPreferredStandbyMode");
@@ -140,9 +140,9 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
             if expectedResult in result:
-                print "\n setPreferredStandbyMode is success \n"
+                print("\n setPreferredStandbyMode is success \n")
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Invoke org.rdk.System.1.getPreferredStandbyMode \n"
+                print("Invoke org.rdk.System.1.getPreferredStandbyMode \n")
                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult');
                 tdkTestObj.addParameter("method","org.rdk.System.1.getPreferredStandbyMode");
                 tdkTestObj.addParameter("reqValue","preferredStandbyMode")
@@ -150,16 +150,16 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult();
                 preferred_standby = tdkTestObj.getResultDetails()
                 if expectedResult in result and preferred_standby == "LIGHT_SLEEP":
-                    print "\n Preferred standby mode is LIGHT_SLEEP \n"
+                    print("\n Preferred standby mode is LIGHT_SLEEP \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     if current_power_state == "ON":
-                         power_states = ["STANDBY"]
+                        power_states = ["STANDBY"]
                     else:
                         power_states = ["ON","STANDBY"]
                     time.sleep(5)
                     power_on_time = ""
                     for i in range (len(power_states)):
-                        print "\n Set power state to {} \n".format(power_states[i])
+                        print("\n Set power state to {} \n".format(power_states[i]))
                         params = '{"powerState":"'+power_states[i]+'", "standbyReason":"APIUnitTest"}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue');
                         tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState");
@@ -178,20 +178,20 @@ if expectedResult in result.upper():
                                     time.sleep(1)
                                     continue
                                 event_log = event_listener.getEventsBuffer().pop(0)
-                                print "\n Triggered event: ",event_log
+                                print("\n Triggered event: ",event_log)
                                 if (power_states[i] == "STANDBY" and ("LIGHT_SLEEP" in event_log or "STANDBY" in event_log)) or (power_states[i] == "ON" and "ON" in event_log):
-                                        print "onSystemPowerStateChanged event triggered while setting {} power state".format(power_states[i])
-                                        break
+                                    print("onSystemPowerStateChanged event triggered while setting {} power state".format(power_states[i]))
+                                    break
                                 else:
                                     continue_count = 61
                             if continue_count > 60 :
-                                print "\n onSystemPowerStateChanged event is not triggered for power state: {} \n".format(power_states[i])
+                                print("\n onSystemPowerStateChanged event is not triggered for power state: {} \n".format(power_states[i]))
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                             elif "LIGHT_SLEEP" in event_log or "STANDBY" in event_log:
                                 power_on_time = event_log.split('$$$')[0]
                             tdkTestObj.setResultStatus("SUCCESS")
-                            print "\n Verify the Power state \n"
+                            print("\n Verify the Power state \n")
                             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                             tdkTestObj.addParameter("method","org.rdk.System.1.getPowerState")
                             tdkTestObj.addParameter("reqValue","powerState")
@@ -200,18 +200,18 @@ if expectedResult in result.upper():
                             power_state = tdkTestObj.getResultDetails()
                             if expectedResult in result:
                                 if power_state == power_states[i]:
-                                    print "\n Successfully set power state to : {}\n".format(power_states[i])
+                                    print("\n Successfully set power state to : {}\n".format(power_states[i]))
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "\n Unable to set the powerstate to : {}, current power state:{}\n".format(power_states[i],power_state)
+                                    print("\n Unable to set the powerstate to : {}, current power state:{}\n".format(power_states[i],power_state))
                                     tdkTestObj.setResultStatus("FAILURE")
                                     break
                             else:
-                                print "\n Error while executing org.rdk.System.1.getPowerState method \n"
+                                print("\n Error while executing org.rdk.System.1.getPowerState method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                                 break
                         else:
-                            print "\n Error while executing org.rdk.System.1.setPowerState method \n"
+                            print("\n Error while executing org.rdk.System.1.setPowerState method \n")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
@@ -224,30 +224,30 @@ if expectedResult in result.upper():
                             if all(value != "" for value in (on_to_standby_threshold,offset)):
                                 start_power_on_in_millisec = getTimeInMilliSec(start_power_on)
                                 power_on_time_in_millisec = getTimeInMilliSec(power_on_time)
-                                print "\n Set power state to STANDBY  initiated at: " + start_power_on + "(UTC)"
+                                print("\n Set power state to STANDBY  initiated at: " + start_power_on + "(UTC)")
                                 Summ_list.append('Set power state to STANDBY initiated at :{}'.format(start_power_on))
-                                print "\n Power state became STANDBY at : "+ power_on_time + "(UTC)"
+                                print("\n Power state became STANDBY at : "+ power_on_time + "(UTC)")
                                 Summ_list.append('Power state became STANDBY at :{}'.format(power_on_time))
                                 time_taken_for_poweron = power_on_time_in_millisec - start_power_on_in_millisec
-                                print "\n Time taken from Power ON to  STANDBY: {}(ms)".format(time_taken_for_poweron)
+                                print("\n Time taken from Power ON to  STANDBY: {}(ms)".format(time_taken_for_poweron))
                                 Summ_list.append('Time taken from Power ON to STANDBY :{}ms'.format(time_taken_for_poweron))
-                                print "\n Threshold value for time taken from Power ON to STANDBY: {}(ms)".format(on_to_standby_threshold)
-                                print "\n Validate the time: \n"
+                                print("\n Threshold value for time taken from Power ON to STANDBY: {}(ms)".format(on_to_standby_threshold))
+                                print("\n Validate the time: \n")
                                 if 0 < time_taken_for_poweron < (int(on_to_standby_threshold) + int(offset)) :
-                                    print "\n Time taken for setting power state to ON is within the expected range \n"
+                                    print("\n Time taken for setting power state to ON is within the expected range \n")
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "\n Time taken for setting power state to ON is not within the expected range \n"
+                                    print("\n Time taken for setting power state to ON is not within the expected range \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Please configure the Threshold value in device configuration file \n"
+                                print("\n Please configure the Threshold value in device configuration file \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n onSystemPowerStateChanged event not triggered for ON state\n"
+                            print("\n onSystemPowerStateChanged event not triggered for ON state\n")
                             tdkTestObj.setResultStatus("FAILURE")
                     if continue_count > 60 or power_state != current_power_state:
-                        print "Reverting the Power state \n"
-                        print "\n Set power state to {} \n".format(current_power_state)
+                        print("Reverting the Power state \n")
+                        print("\n Set power state to {} \n".format(current_power_state))
                         params = '{"powerState":"'+current_power_state+'", "standbyReason":"APIUnitTest"}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue');
                         tdkTestObj.addParameter("method","org.rdk.System.1.setPowerState");
@@ -255,31 +255,31 @@ if expectedResult in result.upper():
                         tdkTestObj.executeTestCase(expectedResult);
                         result = tdkTestObj.getResult();
                         if expectedResult in result:
-                            print "Reverted the power state to {}\n".format(current_power_state)
+                            print("Reverted the power state to {}\n".format(current_power_state))
                             tdkTestObj.setResultStatus("SUCCESS")
                         else:
-                            print "\n Error while reverting the power state to {}\n".format(current_power_state)
+                            print("\n Error while reverting the power state to {}\n".format(current_power_state))
                             tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error while executing org.rdk.System.1.getPreferredStandbyMode method \n"
+                    print("\n Error while executing org.rdk.System.1.getPreferredStandbyMode method \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing org.rdk.System.1.setPreferredStandbyMode method \n"
+                print("\n Error while executing org.rdk.System.1.setPreferredStandbyMode method \n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while executing org.rdk.System.1.getPowerState method \n"
+            print("\n Error while executing org.rdk.System.1.getPowerState method \n")
             tdkTestObj.setResultStatus("FAILURE")
         event_listener.disconnect()
         time.sleep(10)
     else:
-        print "\n Pre conditions are not met \n"
+        print("\n Pre conditions are not met \n")
         obj.setLoadModuleStatus("FAILURE");
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

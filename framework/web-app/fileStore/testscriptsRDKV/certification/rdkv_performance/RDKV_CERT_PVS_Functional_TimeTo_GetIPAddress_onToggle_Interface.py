@@ -69,7 +69,7 @@ device_ip_address_type : string</input_parameters>
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import ip_change_detection_utility
 from datetime import datetime
@@ -90,18 +90,18 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_GetIPAddress_onTo
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert = "NO"
     start_time_dict = {}
@@ -114,7 +114,7 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -122,7 +122,7 @@ if expectedResult in result.upper():
         time.sleep(10)
         new_status_dict = get_plugins_status(obj,plugins_list)
         if new_status_dict != plugin_status_needed:
-            print "\n Unable to set status of plugins"
+            print("\n Unable to set status of plugins")
             status = "FAILURE"
     offset = 10
     conf_file,file_status = get_configfile_name(obj)
@@ -149,7 +149,7 @@ if expectedResult in result.upper():
                     ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
                     if ssh_param_dict != {}:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "\n Validate the time taken to get IP address during toggle interafce"
+                        print("\n Validate the time taken to get IP address during toggle interafce")
                         command = 'cat /opt/logs/wpeframework.log | grep -inr IP.*Changed.*to.*'+obj.IP+'| tail -1'
                         tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                         tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
@@ -162,56 +162,56 @@ if expectedResult in result.upper():
                             tdkTestObj.setResultStatus("SUCCESS")
                             if len(output.split('\n')) > 2:
                                 required_log = output.split('\n')[1]
-                                print "\n Toggle from {} to {} started at: {} UTC".format(current_interface,new_interface,wifi_connect_dict[new_interface])
+                                print("\n Toggle from {} to {} started at: {} UTC".format(current_interface,new_interface,wifi_connect_dict[new_interface]))
                                 start_time_dict[new_interface] = int(getTimeInMilliSec(start_time_dict[new_interface]))
                                 event_time = getTimeStampFromString(required_log)
-                                print "\n {} ip address obtained at: {} UTC".format(new_interface,event_time)
+                                print("\n {} ip address obtained at: {} UTC".format(new_interface,event_time))
                                 event_time_dict[new_interface] = int(getTimeInMilliSec(event_time))
                                 time_taken = event_time_dict[new_interface] -  start_time_dict[new_interface]
                                 if new_interface == "WIFI" and time_taken < 0:
                                     wifi_connect_dict[new_interface] = int(getTimeInMilliSec(wifi_connect_dict[new_interface]))
                                     time_taken = event_time_dict[new_interface] - wifi_connect_dict[new_interface]
-                                print "\n Time taken for getting {} ip address: {}(ms) ".format(new_interface,time_taken)
+                                print("\n Time taken for getting {} ip address: {}(ms) ".format(new_interface,time_taken))
                                 Summ_list.append('Time taken for getting ip address :{}ms'.format(time_taken))
-                                print "\n Threshold value for getting {} ip address: {}(ms) ".format(new_interface,validation_dict[new_interface])
+                                print("\n Threshold value for getting {} ip address: {}(ms) ".format(new_interface,validation_dict[new_interface]))
                                 Summ_list.append('Threshold value for getting {} ip address: {}ms'.format(new_interface,validation_dict[new_interface]))
                                 if 0 < time_taken < ( int(validation_dict[new_interface]) + int(offset)):
-                                    print "\n Time taken for getting {} ip address is within the expected range".format(new_interface)
+                                    print("\n Time taken for getting {} ip address is within the expected range".format(new_interface))
                                     tdkTestObj.setResultStatus("SUCCESS")
                                 else:
-                                    print "\n  Time taken for getting {}ip address is not within the expected range".format(new_interface)
+                                    print("\n  Time taken for getting {}ip address is not within the expected range".format(new_interface))
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Unable to find the ip address change related logs in wpeframework.log file"
+                                print("\n Unable to find the ip address change related logs in wpeframework.log file")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error in command execution in DUT"
+                            print("\n Error in command execution in DUT")
                             tdkTestObj.setResultStatus("FAILURE")
                             break
                     else:
-                        print "\n Please configure SSH details in device config file"
+                        print("\n Please configure SSH details in device config file")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                     time.sleep(40)
                 else:
-                    print "\n Error while setting interface as :{}".format(new_interface)
+                    print("\n Error while setting interface as :{}".format(new_interface))
                     obj.setLoadModuleStatus("FAILURE")
                     break
             else:
-                print "\n Error while getting default interface"
+                print("\n Error while getting default interface")
                 obj.setLoadModuleStatus("FAILURE")
                 break
     else:
-        print "\n[Error] Preconditions are not met \n"
+        print("\n[Error] Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         getSummary(Summ_list,obj)
         if revert == "YES":
-            print "\n Revert the values before exiting"
+            print("\n Revert the values before exiting")
             status = set_plugins_status(obj,curr_plugins_status_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance")
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

@@ -99,13 +99,13 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     vimeo_test_url = PerformanceTestVariables.vimeo_test_url
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     webkit_instance = PerformanceTestVariables.webkit_instance
     set_method = webkit_instance+'.1.url'
     if webkit_instance in "WebKitBrowser":
@@ -122,7 +122,7 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -131,8 +131,8 @@ if expectedResult in result.upper():
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     if status == "SUCCESS":
-        print "\n Pre conditions for the test are set successfully";
-        print "\n Get the URL in {}".format(webkit_instance)
+        print("\n Pre conditions for the test are set successfully");
+        print("\n Get the URL in {}".format(webkit_instance))
         tdkTestObj = obj.createTestStep('rdkservice_getValue');
         tdkTestObj.addParameter("method",set_method);
         tdkTestObj.executeTestCase(expectedResult);
@@ -141,8 +141,8 @@ if expectedResult in result.upper():
         if current_url != None and expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS");
             time.sleep(60)
-            print "\n Current URL:",current_url
-            print "\n Set Vimeo URL"
+            print("\n Current URL:",current_url)
+            print("\n Set Vimeo URL")
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method",set_method);
             tdkTestObj.addParameter("value",vimeo_test_url);
@@ -150,15 +150,15 @@ if expectedResult in result.upper():
             vimeo_result = tdkTestObj.getResult();
             time.sleep(10)
             if expectedResult in result:
-                print "\n Validate if the URL is set successfully or not"
+                print("\n Validate if the URL is set successfully or not")
                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
                 tdkTestObj.addParameter("method",set_method);
                 tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResult();  
+                result = tdkTestObj.getResult();
                 new_url = tdkTestObj.getResultDetails();
                 if new_url in vimeo_test_url and expectedResult in result:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n Clicking OK to play video"
+                    print("\n Clicking OK to play video")
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
                     tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -168,7 +168,7 @@ if expectedResult in result.upper():
                     time.sleep(40)
                     if "SUCCESS" == (result1):
                         tdkTestObj.setResultStatus("SUCCESS")
-                        print "\n Pressing Home button \n"
+                        print("\n Pressing Home button \n")
                         params = '{"keys":[ {"keyCode": 36,"modifiers": [],"delay":1.0}]}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
                         tdkTestObj.addParameter("method", "org.rdk.RDKShell.1.generateKey")
@@ -194,9 +194,9 @@ if expectedResult in result.upper():
                                 tdkTestObj.addParameter("command", command)
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
-                                output = tdkTestObj.getResultDetails()                               
+                                output = tdkTestObj.getResultDetails()
                                 if output != "EXCEPTION" and expectedResult in result:
-                                    if "ResidentApp moveToFront Success" in output:                                   
+                                    if "ResidentApp moveToFront Success" in output:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         tdkTestObj = obj.createTestStep('rdkservice_getValue')
                                         tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder")
@@ -205,58 +205,58 @@ if expectedResult in result.upper():
                                         zorder_status = tdkTestObj.getResult()
                                         if expectedResult in zorder_status :
                                             zorder = ast.literal_eval(zorder)["clients"]
-                                            print "zorder: ",zorder
+                                            print("zorder: ",zorder)
                                             resident_app = "ResidentApp"
                                             zorder = exclude_from_zorder(zorder)
                                             if zorder[0].lower() == resident_app.lower():
-                                                print "\n Home screen is reached"
+                                                print("\n Home screen is reached")
                                                 tdkTestObj.setResultStatus("SUCCESS")
-                                                print "\n Validate Resource Usage"
+                                                print("\n Validate Resource Usage")
                                                 tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
                                                 tdkTestObj.executeTestCase(expectedResult)
                                                 resource_usage = tdkTestObj.getResultDetails()
                                                 result = tdkTestObj.getResult()
                                                 if expectedResult in result and resource_usage != "ERROR":
-                                                    print "\n Successfully validated Resource usage"
+                                                    print("\n Successfully validated Resource usage")
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                 else:
-                                                    print "\n Error while validating Resource usage"
+                                                    print("\n Error while validating Resource usage")
                                                     tdkTestObj.setResultStatus("FAILURE")
                                             else:
-                                                print "\n Home screen is not reached"
+                                                print("\n Home screen is not reached")
                                                 tdkTestObj.setResultStatus("FAILURE")
                                         else:
-                                            print "\n Error while getting zorder value"
+                                            print("\n Error while getting zorder value")
                                             tdkTestObj.setResultStatus("FAILURE")
                                     else:
-                                        print "\n Required logs are not present in wpeframework.log"
+                                        print("\n Required logs are not present in wpeframework.log")
                                         tdkTestObj.setResultStatus("FAILURE");
                                 else:
-                                    print "\n Error occured while executing the command \n"
+                                    print("\n Error occured while executing the command \n")
                                     tdkTestObj.setResultStatus("FAILURE");
                             else:
-                                print "\n Error while executing org.rdk.RDKShell.1.generateKey method \n "
+                                print("\n Error while executing org.rdk.RDKShell.1.generateKey method \n ")
                                 tdkTestObj.setResultStatus("FAILURE");
                         else:
                             tdkTestObj.setResultStatus("FAILURE");
-                            print "\n Unable to go back to Home screen"
+                            print("\n Unable to go back to Home screen")
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
-                        print "\n Unable to play video"
+                        print("\n Unable to play video")
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "\n Unable to validate the URL"
+                    print("\n Unable to validate the URL")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "\n Unable to get the current URL loaded"
+                print("\n Unable to get the current URL loaded")
         else:
-            print "\n Pre conditions are not met"
+            print("\n Pre conditions are not met")
             obj.setLoadModuleStatus("FAILURE");
             # Revert the values
             if revert == "YES":
-                print "\n Revert the values before exiting"
+                print("\n Revert the values before exiting")
                 status = set_plugins_status(obj, curr_plugins_status_dict)
         obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "\n Failed to load module"
+    print("\n Failed to load module")

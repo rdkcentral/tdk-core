@@ -67,7 +67,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from StabilityTestUtility import *
 import PerformanceTestVariables
@@ -88,20 +88,20 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     status = "SUCCESS"
     revert="NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url in Config file"
+        print("\n Please configure the cobalt_test_url in Config file")
     plugins_list = ["Cobalt"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     plugin_status_needed = {"Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -112,7 +112,7 @@ if expectedResult in result.upper():
     validation_dict = get_validation_params(obj)
     if status == "SUCCESS" and cobalt_test_url != "" and validation_dict != {}:
         plugin = "Cobalt"
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         enterkey_keycode = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
         generatekey_method = 'org.rdk.RDKShell.1.generateKey'
         plugin_operations_list = [{'Cobalt.1.deeplink':cobalt_test_url},{generatekey_method:enterkey_keycode},{generatekey_method:enterkey_keycode}]
@@ -135,18 +135,18 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails();
         if expectedResult in result and details == "SUCCESS" :
-            print "\n Successfully completed lifecycle"
+            print("\n Successfully completed lifecycle")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Error while executing life cycle methods"
+            print("\n Error while executing life cycle methods")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

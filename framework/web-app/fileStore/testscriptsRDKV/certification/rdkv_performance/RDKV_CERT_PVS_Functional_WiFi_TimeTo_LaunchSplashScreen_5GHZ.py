@@ -76,8 +76,8 @@ d) Set WIFI as default interface
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestVariables import *
 import rebootTestUtility
 from rebootTestUtility import *
@@ -100,12 +100,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_WiFi_TimeTo_LaunchSplash
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -132,11 +132,11 @@ if expectedResult in result.upper():
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
         plugin_status,plugins_status_dict,revert = set_plugins(obj)
         if plugin_status == "SUCCESS":
             revert_plugins_dict.update(plugins_status_dict)
-            print "\n Check frequency of Connected SSID"
+            print("\n Check frequency of Connected SSID")
             ssid_freq = check_cur_ssid_freq(obj)
             if ssid_freq == "FAILURE":
                 status = "FAILURE"
@@ -163,7 +163,7 @@ if expectedResult in result.upper():
             result = tdkTestObj.getResultDetails()
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Rebooted device successfully \n"
+                print("\n Rebooted device successfully \n")
                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                 tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
                 tdkTestObj.addParameter("reqValue","uptime")
@@ -172,7 +172,7 @@ if expectedResult in result.upper():
                 if expectedResult in result:
                     uptime = int(tdkTestObj.getResultDetails())
                     if uptime < 240:
-                        print "\n Device is rebooted and uptime is: {} \n".format(uptime)
+                        print("\n Device is rebooted and uptime is: {} \n".format(uptime))
                         time.sleep(60)
                         tdkTestObj.setResultStatus("SUCCESS")
                         tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -181,9 +181,9 @@ if expectedResult in result.upper():
                         ui_app_url = tdkTestObj.getResultDetails();
                         result = tdkTestObj.getResult()
                         if ui_app_url != "" and  result == "SUCCESS" :
-                            print "\n Resident App URL :",ui_app_url
+                            print("\n Resident App URL :",ui_app_url)
                             ui_app_url = ui_app_url.split('#')[0]
-                            print "\n URL to check in device logs: ",ui_app_url
+                            print("\n URL to check in device logs: ",ui_app_url)
                             tdkTestObj.setResultStatus("SUCCESS")
                             tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
                             tdkTestObj.addParameter("realpath",obj.realpath)
@@ -203,7 +203,7 @@ if expectedResult in result.upper():
                                 result = tdkTestObj.getResult()
                                 output = tdkTestObj.getResultDetails()
                                 if output != "EXCEPTION" and expectedResult in result:
-                                    print "\n Output: " + output + "\n"
+                                    print("\n Output: " + output + "\n")
                                     load_finished_list = output.split('\n')
                                     load_finished_line = ""
                                     for item in load_finished_list:
@@ -211,14 +211,14 @@ if expectedResult in result.upper():
                                             load_finished_line = item
                                     if load_finished_line != "" and '"httpstatus":200' in load_finished_line:
                                         load_finished_time = getTimeStampFromString(load_finished_line)
-                                        print "\n Device reboot initiated at :{} (UTC)".format(start_time)
+                                        print("\n Device reboot initiated at :{} (UTC)".format(start_time))
                                         Summ_list.append('Device reboot initiated at :{}'.format(start_time))
-                                        print "\n UI load finished at :{} (UTC)".format(load_finished_time)
+                                        print("\n UI load finished at :{} (UTC)".format(load_finished_time))
                                         Summ_list.append('UI load finished at :{}'.format(load_finished_time))
                                         start_time_millisec = getTimeInMilliSec(start_time)
                                         loadfinished_time_millisec = getTimeInMilliSec(load_finished_time)
                                         ui_uptime = loadfinished_time_millisec - start_time_millisec
-                                        print "\n Time taken for the UI to load after reboot : {} ms".format(ui_uptime)
+                                        print("\n Time taken for the UI to load after reboot : {} ms".format(ui_uptime))
                                         Summ_list.append('Time taken for the UI to load after reboot :{}'.format(ui_uptime))
                                         conf_file,result = getConfigFileName(tdkTestObj.realpath)
                                         result1, ui_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"UI_LAUNCH_TIME_THRESHOLD_VALUE")
@@ -226,54 +226,54 @@ if expectedResult in result.upper():
                                         result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                         Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                         if all(value != "" for value in (ui_launch_threshold_value,offset)):
-                                            print "\n Threshold value for time taken for the splashscreen to load after reboot: {} ms".format(ui_launch_threshold_value)
+                                            print("\n Threshold value for time taken for the splashscreen to load after reboot: {} ms".format(ui_launch_threshold_value))
                                             if 0 < int(ui_uptime) < (int(ui_launch_threshold_value) + int(offset)) :
                                                 tdkTestObj.setResultStatus("SUCCESS");
-                                                print "\n The time taken for UI to load after reboot is within the expected limit"
+                                                print("\n The time taken for UI to load after reboot is within the expected limit")
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE");
-                                                print "\n The time taken for UI to load after reboot is not within the expected limit"
+                                                print("\n The time taken for UI to load after reboot is not within the expected limit")
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE");
-                                            print "\n Failed to get the threshold value from config file"
+                                            print("\n Failed to get the threshold value from config file")
                                     else:
-                                        print "\n Splash screen url is not loaded in DUT"
+                                        print("\n Splash screen url is not loaded in DUT")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command)
+                                    print("\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details".format(command))
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n please configure the details in device config file"
+                                print("\n please configure the details in device config file")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error while executing ResidentApp.1.url method"
+                            print("\n Error while executing ResidentApp.1.url method")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "\n Device is not rebooted, device uptime:{}".format(uptime)
+                        print("\n Device is not rebooted, device uptime:{}".format(uptime))
                 else:
-                    print "\n Failed to get the uptime";
+                    print("\n Failed to get the uptime");
                     tdkTestObj.setResultStatus("FAILURE")
                 if revert_wifi_ssid:
-                    print "\n Reconnecting to 2.4 GHZ SSID"
+                    print("\n Reconnecting to 2.4 GHZ SSID")
                     plugin_status,plugins_status_dict,revert = set_plugins(obj)
                     time.sleep(5)
                     connect_wifi_status,deviceAvailability = connect_wifi(obj,"2.4")
                     if connect_wifi_status == "FAILURE":
-                        print "\n Error while reconnecting to 2.4 GHZ SSID"
+                        print("\n Error while reconnecting to 2.4 GHZ SSID")
                         tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error occurred during reboot"
+                print("\n Error occurred during reboot")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while connecting to 5GHZ SSID"
+            print("\n Error while connecting to 5GHZ SSID")
             obj.setLoadModuleStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         getSummary(Summ_list,obj)
-	if revert_if == "YES" and status == "SUCCESS":
+        if revert_if == "YES" and status == "SUCCESS":
             activate_status = set_plugins_status(obj,plugins_status_needed)
             url_status,complete_url = get_lightning_app_url(obj)
             lauch_app_status = launch_lightning_app(obj,complete_url)
@@ -281,17 +281,17 @@ if expectedResult in result.upper():
             if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
                 interface_status = set_default_interface(obj,"ETHERNET")
                 if interface_status  == "SUCCESS":
-                    print "\n Successfully reverted to ETHERNET"
+                    print("\n Successfully reverted to ETHERNET")
                     status = close_lightning_app(obj)
                 else:
-                    print "\n Error while reverting to ETHERNET"
+                    print("\n Error while reverting to ETHERNET")
             else:
-                print "\n Error while launching Lightning App"
+                print("\n Error while launching Lightning App")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

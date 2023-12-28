@@ -88,8 +88,8 @@ device_ip_address_type : string</input_parameters>
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 
@@ -109,7 +109,7 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -133,18 +133,18 @@ if expectedResult in result.upper():
             connected = tdkTestObj.getResultDetails()
             connected_status = tdkTestObj.getResult()
             if expectedResult in connected_status :
-                print "\n Successfully executed isConnectedToInternet method"
-                print "\n Result of isConnectedToInternet method for {} connection:{}".format(connection,connected)
+                print("\n Successfully executed isConnectedToInternet method")
+                print("\n Result of isConnectedToInternet method for {} connection:{}".format(connection,connected))
                 if connected:
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing isConnectedToInternet method"
+                print("\n Error while executing isConnectedToInternet method")
                 tdkTestObj.setResultStatus("FAILURE")
                 break
         else:
-            print "\n Error while setting {} as default interface".format(connection)
+            print("\n Error while setting {} as default interface".format(connection))
             obj.setLoadModuleStatus("FAILURE")
             break
     if deviceAvailability == "Yes":
@@ -157,4 +157,4 @@ if expectedResult in result.upper():
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

@@ -61,7 +61,7 @@ d) Set WIFI as default interface
 e) Validate CPU load and memory usage
 f) revert the default interface and plugins status
  </automation_approch>
-    <expected_output>The methods of each plugin must work fine.  
+    <expected_output>The methods of each plugin must work fine.
 The CPU load and memory usage must be within the expected range</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_performance</test_stub_interface>
@@ -74,8 +74,8 @@ The CPU load and memory usage must be within the expected range</expected_output
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 from ip_change_detection_utility import *
 
@@ -95,12 +95,12 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert_plugins_dict = {}
     revert_if  = revert_device_info = revert_plugins = "NO"
@@ -118,7 +118,7 @@ if expectedResult in result.upper():
         if wifi_connect_status == "FAILURE":
             status = "FAILURE"
     else:
-        print "\n Current interface is WIFI \n"
+        print("\n Current interface is WIFI \n")
     if status == "SUCCESS":
         #Get DeviceInfo Plugin status
         plugin = "DeviceInfo"
@@ -138,17 +138,17 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result1 = tdkTestObj.getResult();
                 if expectedResult in result1:
-                    print "\n Deviceinfo is activated \n"
+                    print("\n Deviceinfo is activated \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     device_info_activated = True
                 else:
-                    print "\n Error while activating DeviceInfo\n"
+                    print("\n Error while activating DeviceInfo\n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-               print"Device info is in activated state"
-               device_info_activated = True
+                print("Device info is in activated state")
+                device_info_activated = True
         else:
-            print "\n Error while getting DeviceInfo status"
+            print("\n Error while getting DeviceInfo status")
             tdkTestObj.setResultStatus("FAILURE")
         if device_info_activated:
             #Get the cpu load
@@ -166,13 +166,13 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 is_high_cpuload = tdkTestObj.getResultDetails()
                 if is_high_cpuload == "YES" or expectedResult not in result:
-                    print "\n cpu load is high :{}%".format(cpuload)
+                    print("\n cpu load is high :{}%".format(cpuload))
                     tdkTestObj.setResultStatus("FAILURE")
                 else:
                     tdkTestObj.setResultStatus("SUCCESS")
-                    print "\n cpu load : {}%\n".format(cpuload)
+                    print("\n cpu load : {}%\n".format(cpuload))
             else:
-                print "Unable to get cpuload"
+                print("Unable to get cpuload")
                 tdkTestObj.setResultStatus("FAILURE")
             #get the memory usage
             tdkTestObj = obj.createTestStep('rdkservice_getMemoryUsage')
@@ -189,33 +189,33 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 is_high_memory_usage = tdkTestObj.getResultDetails()
                 if is_high_memory_usage == "YES" or expectedResult not in result:
-                    print "\nmemory usage is high :{}%\n".format(memory_usage)
+                    print("\nmemory usage is high :{}%\n".format(memory_usage))
                     tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\nmemory usage :{}%\n".format(memory_usage)
+                    print("\nmemory usage :{}%\n".format(memory_usage))
                     tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Unable to get the memory usage\n"
+                print("\n Unable to get the memory usage\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Preconditions are not met \n"
+            print("\n Preconditions are not met \n")
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         if revert_if == "YES" and status == "SUCCESS":
             time.sleep(70)
             interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
             if interface_status == "SUCCESS":
-                print "\n Successfully reverted to ETHERNET \n"
+                print("\n Successfully reverted to ETHERNET \n")
                 status = close_lightning_app(obj)
             else:
-                print "\n Error while reverting to ETHERNET \n"
+                print("\n Error while reverting to ETHERNET \n")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-     	print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

@@ -67,8 +67,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from StabilityTestUtility import *
 
 #Test component to be tested
@@ -86,7 +86,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper() :
@@ -94,12 +94,12 @@ if expectedResult in result.upper() :
     revert="NO"
     lightning_app_test_url = obj.url+'/fileStore/lightning-apps/VideoResizeTest.html'
     plugins_list = ["LightningApp"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     plugin_status_needed = {"LightningApp":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugin"
+        print("\n Error while getting the status of plugin")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -109,7 +109,7 @@ if expectedResult in result.upper() :
             status = "FAILURE"
     if status == "SUCCESS":
         plugin = "LightningApp"
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         plugin_operations_list = []
         plugin_validation_details = ["LightningApp.1.url",lightning_app_test_url]
         plugin_operations_list.append({plugin_validation_details[0]:plugin_validation_details[1]})
@@ -123,18 +123,18 @@ if expectedResult in result.upper() :
         result = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails();
         if expectedResult in result and details == "SUCCESS" :
-            print "\n Successfully completed lifecycle"
+            print("\n Successfully completed lifecycle")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Error while executing life cycle methods"
+            print("\n Error while executing life cycle methods")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

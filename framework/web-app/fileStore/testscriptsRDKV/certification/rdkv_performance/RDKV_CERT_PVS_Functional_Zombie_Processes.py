@@ -102,7 +102,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -125,10 +125,10 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         output = tdkTestObj.getResultDetails()
         if output != "EXCEPTION" and expectedResult in result:
-            print "Validate zombie process:"
+            print("Validate zombie process:")
             zombie_count = int(output.splitlines()[1])
             if zombie_count == 0:
-                print "There is no zombie process in this device"
+                print("There is no zombie process in this device")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
                 #command to print the zombie process in device
@@ -141,17 +141,17 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 output = tdkTestObj.getResultDetails()
                 zombie_process = output.replace(command,"")
-                print "The number of Zombie process running in the device are: {}% \n".format(zombie_count)
+                print("The number of Zombie process running in the device are: {}% \n".format(zombie_count))
                 tdkTestObj.setResultStatus("FAILURE")
-		print "The zombie process running in this device are: {} \n".format(zombie_process)
+                print("The zombie process running in this device are: {} \n".format(zombie_process))
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Error occurred during SSH, please check ssh details in configuration file"
+            print("Error occurred during SSH, please check ssh details in configuration file")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "Please configure the SSH details in configuration file"
+        print("Please configure the SSH details in configuration file")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

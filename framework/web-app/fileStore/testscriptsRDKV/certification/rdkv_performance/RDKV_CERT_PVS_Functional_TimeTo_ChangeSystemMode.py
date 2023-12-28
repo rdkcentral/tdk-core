@@ -66,8 +66,8 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib
 import rdkv_performancelib
 from rdkv_performancelib import *
 from datetime import datetime
@@ -89,16 +89,16 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_ChangeSystemMode'
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     event_listener = None
     continue_count = 0
     mode_change_start_time = ""
@@ -120,8 +120,8 @@ if expectedResult in result.upper():
         thunder_port = rdkv_performancelib.devicePort
         event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 5,"method": "org.rdk.System.1.register","params": {"event": "onSystemModeChanged", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(10)
-        print "\nPre conditions for the test are set successfully"
-        print "\n Get the current mode"
+        print("\nPre conditions for the test are set successfully")
+        print("\n Get the current mode")
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
         tdkTestObj.addParameter("method","org.rdk.System.1.getMode")
         tdkTestObj.addParameter("reqValue","modeInfo")
@@ -131,8 +131,8 @@ if expectedResult in result.upper():
         current_mode = ast.literal_eval(current_mode)["mode"]
         if expectedResult in result:
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Current system mode : ",current_mode
-            print "\n Set system mode to :",inverse_dict[current_mode]
+            print("\n Current system mode : ",current_mode)
+            print("\n Set system mode to :",inverse_dict[current_mode])
             params = '{"modeInfo":{"mode":"'+inverse_dict[current_mode]+'","duration":120}}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.System.1.setMode")
@@ -141,11 +141,11 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResult()
             if expectedResult in result:
-                print "\n setMode is executed successfully"
+                print("\n setMode is executed successfully")
                 tdkTestObj.setResultStatus("SUCCESS")
                 while not(mode_changed_time):
                     if (continue_count > 60):
-                        print "\n onSystemModeChanged event is not triggered"
+                        print("\n onSystemModeChanged event is not triggered")
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                     if (len(event_listener.getEventsBuffer())== 0):
@@ -153,9 +153,9 @@ if expectedResult in result.upper():
                         time.sleep(1)
                         continue
                     event_log = event_listener.getEventsBuffer().pop(0)
-                    print "\n Triggered event: ",event_log
+                    print("\n Triggered event: ",event_log)
                     if ("onSystemModeChanged" in str(event_log) and inverse_dict[current_mode] in str(event_log)):
-                        print "\n Event :onSystemModeChanged is triggered during mode change"
+                        print("\n Event :onSystemModeChanged is triggered during mode change")
                         mode_changed_time = event_log.split('$$$')[0]
                 else:
                     tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
@@ -166,7 +166,7 @@ if expectedResult in result.upper():
                     new_mode = tdkTestObj.getResultDetails()
                     new_mode = ast.literal_eval(new_mode)["mode"]
                     if expectedResult in result and new_mode == inverse_dict[current_mode]:
-                        print "\n New system mode is: ",inverse_dict[current_mode]
+                        print("\n New system mode is: ",inverse_dict[current_mode])
                         tdkTestObj.setResultStatus("SUCCESS")
                         conf_file,file_status = getConfigFileName(obj.realpath)
                         config_status,modechange_time_threshold = getDeviceConfigKeyValue(conf_file,"SYS_MODECHANGE_THRESHOLD_VALUE")
@@ -176,28 +176,28 @@ if expectedResult in result.upper():
                         if all(value != "" for value in (modechange_time_threshold,offset)):
                             mode_change_start_time_in_millisec = getTimeInMilliSec(mode_change_start_time)
                             mode_changed_time_in_millisec = getTimeInMilliSec(mode_changed_time)
-                            print "\n Set system mode initiated at: " + mode_change_start_time + "(UTC)"
+                            print("\n Set system mode initiated at: " + mode_change_start_time + "(UTC)")
                             Summ_list.append('Set system mode initiated at :{}'.format(mode_change_start_time))
-                            print "\n System mode changed at : "+ mode_changed_time + "(UTC)"
+                            print("\n System mode changed at : "+ mode_changed_time + "(UTC)")
                             Summ_list.append('System mode changed at :{}'.format(mode_changed_time))
                             time_taken_for_modechange = mode_changed_time_in_millisec - mode_change_start_time_in_millisec
-                            print "\n Time taken for system mode change : {}(ms)".format(time_taken_for_modechange)
+                            print("\n Time taken for system mode change : {}(ms)".format(time_taken_for_modechange))
                             Summ_list.append('Time taken for system mode change :{}ms'.format(time_taken_for_modechange))
-                            print "\n Threshold value for system mode change: {} ms".format(modechange_time_threshold)
-                            print "\n Validate the time: \n"
+                            print("\n Threshold value for system mode change: {} ms".format(modechange_time_threshold))
+                            print("\n Validate the time: \n")
                             if 0 < time_taken_for_modechange < (int(modechange_time_threshold) + int(offset)) :
-                                print "\n Time taken for system mode change is within the expected range \n"
+                                print("\n Time taken for system mode change is within the expected range \n")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:
-                                print "\n Time taken for system mode change is not within the expected range \n"
+                                print("\n Time taken for system mode change is not within the expected range \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Failed to get the threshold value from config file"
+                            print("\n Failed to get the threshold value from config file")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Unable to set system mode to :{}, current system mode: {}".format(inverse_dict[current_mode],new_mode)
+                        print("\n Unable to set system mode to :{}, current system mode: {}".format(inverse_dict[current_mode],new_mode))
                         tdkTestObj.setResultStatus("FAILURE")
-                print "\n Revert system mode to:",current_mode
+                print("\n Revert system mode to:",current_mode)
                 params = '{"modeInfo":{"mode":"'+current_mode+'","duration":10}}'
                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
                 tdkTestObj.addParameter("method","org.rdk.System.1.setMode")
@@ -205,28 +205,28 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult();
                 if expectedResult in result:
-                    print "\n setMode is executed successfully"
+                    print("\n setMode is executed successfully")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "\n Error while executing setMode method"
+                    print("\n Error while executing setMode method")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing setMode method"
+                print("\n Error while executing setMode method")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while executing getMode method"
+            print("\n Error while executing getMode method")
             tdkTestObj.setResultStatus("FAILURE")
         event_listener.disconnect()
         time.sleep(10)
     else:
-        print "\n Pre conditions are not met"
+        print("\n Pre conditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     #Revert the values
     if revert=="YES":
-        print "Revert the values before exiting"
+        print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")

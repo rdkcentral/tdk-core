@@ -63,7 +63,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from rdkv_performancelib import *
 import StabilityTestVariables
@@ -86,7 +86,7 @@ pre_requisite_reboot(obj,"yes")
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
@@ -99,7 +99,7 @@ if expectedResult in result.upper():
     plugin_status_needed = {"org.rdk.Network":"activated","org.rdk.Wifi":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
-        print "\n Error while getting status of plugins"
+        print("\n Error while getting status of plugins")
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
@@ -118,14 +118,14 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
             connected_ssid = tdkTestObj.getResultDetails()
-            print " \n Connected SSID Name: {}\n ".format(connected_ssid)
+            print(" \n Connected SSID Name: {}\n ".format(connected_ssid))
             tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
             tdkTestObj.addParameter("waitTime",rebootwaitTime)
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails()
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Rebooted device successfully"
+                print("\n Rebooted device successfully")
                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
                 tdkTestObj.addParameter("method","DeviceInfo.1.systeminfo")
                 tdkTestObj.addParameter("reqValue","uptime")
@@ -134,13 +134,13 @@ if expectedResult in result.upper():
                 if expectedResult in result:
                     uptime = int(tdkTestObj.getResultDetails())
                     if uptime < 240:
-                        print "\n Device is rebooted and uptime is: {}".format(uptime)
+                        print("\n Device is rebooted and uptime is: {}".format(uptime))
                         time.sleep(60)
                         tdkTestObj.setResultStatus("SUCCESS")
                         #Check current interface
                         interface,revert = check_current_interface(obj)
                         if interface == "WIFI":
-                            print "\n Current interface is WIFI"
+                            print("\n Current interface is WIFI")
                             #Check connected SSID
                             wifi_activated = False
                             wifi_status = rdkservice_getPluginStatus("org.rdk.Wifi")
@@ -154,13 +154,13 @@ if expectedResult in result.upper():
                                     if wifi_status == "activated":
                                         wifi_activated = True
                                     else:
-                                        print "\n Error while getting Wifi plugin status"
+                                        print("\n Error while getting Wifi plugin status")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error while activating Wifi plugin"
+                                    print("\n Error while activating Wifi plugin")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Error while getting Wifi plugin status"
+                                print("\n Error while getting Wifi plugin status")
                                 tdkTestObj.setResultStatus("FAILURE")
                             if wifi_activated:
                                 #get the connected SSID
@@ -171,36 +171,36 @@ if expectedResult in result.upper():
                                 result = tdkTestObj.getResult()
                                 if result == "SUCCESS":
                                     new_ssid = tdkTestObj.getResultDetails()
-                                    print " \n Connected SSID Name: {}".format(new_ssid)
+                                    print(" \n Connected SSID Name: {}".format(new_ssid))
                                     if new_ssid == connected_ssid:
-                                        print "\n Wifi connection is persisted"
+                                        print("\n Wifi connection is persisted")
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
-                                        print "\n Wifi connection before reboot and after reboot are different"
+                                        print("\n Wifi connection before reboot and after reboot are different")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print "\n Error while getting connected SSID"
+                                    print("\n Error while getting connected SSID")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print "\n Wifi plugin is not in activated state"
+                                print("\n Wifi plugin is not in activated state")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Wifi connection is not persisted"
+                            print("\n Wifi connection is not persisted")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
                         tdkTestObj.setResultStatus("FAILURE")
-                        print "\n Device is not rebooted, device uptime:{}".format(uptime)
+                        print("\n Device is not rebooted, device uptime:{}".format(uptime))
                 else:
-                    print "\n Failed to get the uptime";
+                    print("\n Failed to get the uptime");
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error occurred during reboot"
+                print("\n Error occurred during reboot")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while getting Connected SSID details"
+            print("\n Error while getting Connected SSID details")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
         revert_if = revert_dict.pop("revert_if")
@@ -213,8 +213,8 @@ if expectedResult in result.upper():
         if revert_plugin_status == "YES":
             status = set_plugins_status(obj,revert_dict)
     else:
-        print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

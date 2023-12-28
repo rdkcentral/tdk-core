@@ -68,8 +68,8 @@
 </xml>
 
 '''
- # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+ # use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 import json
 from StabilityTestUtility import *
 
@@ -88,7 +88,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -97,11 +97,11 @@ if expectedResult in result.upper() :
     plugin = "ResidentApp"
     ui_app_url = ""
     plugins_list = ["ResidentApp","WebKitBrowser"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     plugin_status_needed = {"ResidentApp":"deactivated","WebKitBrowser":"resumed"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting the status of plugins"
+        print("\n Error while getting the status of plugins")
         status = "FAILURE"
     elif curr_plugins_status_dict[plugin] in ("resumed","activated"):
         #Get the ResidentApp url
@@ -120,10 +120,10 @@ if expectedResult in result.upper() :
             tdkTestObj.setResultStatus("FAILURE")
             status = "FAILURE"
     else:
-        print "\n ResidentApp is not in activated/resumed state"
+        print("\n ResidentApp is not in activated/resumed state")
         status = "FAILURE"
     if status == "SUCCESS":
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         plugin_operations_list = []
         plugin_validation_details = ["ResidentApp.1.url",ui_app_url]
         plugin_validation_details = json.dumps(plugin_validation_details)
@@ -136,16 +136,16 @@ if expectedResult in result.upper() :
         result = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails();
         if expectedResult in result and details == "SUCCESS" :
-            print "\n Successfully completed lifecycle"
+            print("\n Successfully completed lifecycle")
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "\n Error while executing life cycle methods"
+            print("\n Error while executing life cycle methods")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if ui_app_url:
-        print "\n Launch ResidentApp"
+        print("\n Launch ResidentApp")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter('plugin','ResidentApp')
         tdkTestObj.addParameter('status','activate')
@@ -153,14 +153,14 @@ if expectedResult in result.upper() :
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
         if result == "SUCCESS":
-            print "\n Successfully launched ResidentApp"
+            print("\n Successfully launched ResidentApp")
             tdkTestObj.setResultStatus("SUCCESS")
             curr_plugins_status_dict.pop("ResidentApp")
             status = set_plugins_status(obj,curr_plugins_status_dict)
         else:
-            print "\n Error while launching ResidentApp"
+            print("\n Error while launching ResidentApp")
             tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

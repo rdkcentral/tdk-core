@@ -63,7 +63,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import PerformanceTestVariables
 from StabilityTestUtility import *
@@ -84,12 +84,12 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult()
-print "[LIB LOAD STATUS]  :  %s" %result
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     conf_file,file_status = get_configfile_name(obj)
     plugins_list = get_graphical_plugins(conf_file)
     status = "SUCCESS"
@@ -98,7 +98,7 @@ if expectedResult in result.upper():
         plugins_list.append("DeviceInfo")
         curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
         if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-            print "\n Error while getting the status of plugin"
+            print("\n Error while getting the status of plugin")
             status = "FAILURE"
         elif curr_plugins_status_dict["DeviceInfo"] == "deactivated":
             tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
@@ -109,11 +109,11 @@ if expectedResult in result.upper():
             if result == "SUCCESS":
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Error while activating DeviceInfo"
+                print("\n Error while activating DeviceInfo")
                 tdkTestObj.setResultStatus("FAILURE")
                 status = "FAILURE"
         elif curr_plugins_status_dict["DeviceInfo"] == None:
-            print "\n DeviceInfo is not available in the device"
+            print("\n DeviceInfo is not available in the device")
             status = "FAILURE"
     else:
         status = "FAILURE"
@@ -130,32 +130,32 @@ if expectedResult in result.upper():
                     plugin_status = tdkTestObj.getResultDetails()
                     result = tdkTestObj.getResult()
                     if plugin_status == 'resumed' and expectedResult in result:
-                        print "\n {} resumed successfully".format(plugin)
+                        print("\n {} resumed successfully".format(plugin))
                         tdkTestObj.setResultStatus("SUCCESS")
                         time.sleep(5)
                     else:
-                        print "\n Unable to resume {} plugin, current status: {} ".format(plugin,plugin_status)
+                        print("\n Unable to resume {} plugin, current status: {} ".format(plugin,plugin_status))
                         tdkTestObj.setResultStatus("FAILURE")
                         break
                 else:
-                    print "\n Error while launching {} plugin status".format(plugin)
+                    print("\n Error while launching {} plugin status".format(plugin))
                     obj.setLoadModuleStatus("FAILURE")
                     break
         else:
-            print "\n Validating resource usage:"
+            print("\n Validating resource usage:")
             tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
             tdkTestObj.executeTestCase(expectedResult)
             resource_usage = tdkTestObj.getResultDetails()
             result = tdkTestObj.getResult()
             if expectedResult in result and resource_usage != "ERROR":
-                print "\n Resource usage is within the expected limit"
+                print("\n Resource usage is within the expected limit")
                 tdkTestObj.setResultStatus("SUCCESS")
             else:
-                print "\n Error while validating resource usage"
+                print("\n Error while validating resource usage")
                 tdkTestObj.setResultStatus("FAILURE")
         status = set_plugins_status(obj,revert_dict)
     else:
-        print "\n Preconditions are not met \n"
+        print("\n Preconditions are not met \n")
         obj.setLoadModuleStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
 else:

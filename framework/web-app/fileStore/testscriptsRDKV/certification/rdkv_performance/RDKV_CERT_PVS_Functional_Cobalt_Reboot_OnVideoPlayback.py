@@ -50,11 +50,11 @@
     <input_parameters>cobalt_test_url:string</input_parameters>
     <automation_approch>1. Launch Cobalt using RDKShell
 2. Set video URL
-3. Validate the video playback using decoder entries if the platform support 
+3. Validate the video playback using decoder entries if the platform support
 4. Reboot the device using harakiri method.
 5. Launch Cobalt using RDKShell
 6.  Set video URL
-7. Validate the video playback using decoder 
+7. Validate the video playback using decoder
 </automation_approch>
     <expected_output>DUT should be stable after the reboot on video playback also. </expected_output>
     <priority>High</priority>
@@ -67,7 +67,7 @@
 </xml>
 
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib
 import PerformanceTestVariables
 import json
@@ -89,7 +89,7 @@ pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -98,13 +98,13 @@ if expectedResult in result.upper():
     revert="NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     if cobalt_test_url == "":
-        print "\n Please configure the cobalt_test_url in Config file"
+        print("\n Please configure the cobalt_test_url in Config file")
     plugins_list = ["Cobalt"]
-    print "\n Check Pre conditions"
+    print("\n Check Pre conditions")
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     plugin_status_needed = {"Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
-        print "\n Error while getting plugin status"
+        print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
@@ -116,7 +116,7 @@ if expectedResult in result.upper():
     if status == "SUCCESS" and cobalt_test_url != "" and validation_dict != {}:
         plugin = "Cobalt"
         rebootwaitTime = 160
-        print "\n Preconditions are set successfully"
+        print("\n Preconditions are set successfully")
         enterkey_keycode = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
         generatekey_method = 'org.rdk.RDKShell.1.generateKey'
         plugin_operations_list = [{'Cobalt.1.deeplink':cobalt_test_url},{generatekey_method:enterkey_keycode},{generatekey_method:enterkey_keycode}]
@@ -139,9 +139,9 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         details = tdkTestObj.getResultDetails();
         if expectedResult in result and details == "SUCCESS" :
-            print "\n Successfully launched Cobalt and started video playback"
+            print("\n Successfully launched Cobalt and started video playback")
             tdkTestObj.setResultStatus("SUCCESS")
-            print "\n Rebooting device"
+            print("\n Rebooting device")
             tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
             tdkTestObj.addParameter("waitTime",rebootwaitTime)
             tdkTestObj.executeTestCase(expectedResult)
@@ -149,10 +149,10 @@ if expectedResult in result.upper():
             result = expectedResult
             if expectedResult in result:
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "\n Rebooted device successfully \n"
-                uptime = get_device_uptime(obj) 
+                print("\n Rebooted device successfully \n")
+                uptime = get_device_uptime(obj)
                 if 0 < uptime < 250:
-                    print "\n Device is rebooted and uptime is: {}\n".format(uptime)
+                    print("\n Device is rebooted and uptime is: {}\n".format(uptime))
                     tdkTestObj.setResultStatus("SUCCESS")
                     tdkTestObj = obj.createTestStep('rdkservice_validatePluginFunctionality')
                     tdkTestObj.addParameter("plugin",plugin)
@@ -162,22 +162,22 @@ if expectedResult in result.upper():
                     result = tdkTestObj.getResult()
                     details = tdkTestObj.getResultDetails();
                     if expectedResult in result and details == "SUCCESS" :
-                        print "\n Successfully launched Cobalt and started video playback"
+                        print("\n Successfully launched Cobalt and started video playback")
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print "\n Error while launching and playing video in Cobalt"
+                        print("\n Error while launching and playing video in Cobalt")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Uptime is not within the expected range: ",uptime
+                    print("\n Uptime is not within the expected range: ",uptime)
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while rebooting device"
+                print("\n Error while rebooting device")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Error while launching and playing video in Cobalt"
+            print("\n Error while launching and playing video in Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
         #Deactivate cobalt
-        print "\n Exiting from Cobalt \n"
+        print("\n Exiting from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -186,15 +186,15 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\n Preconditions are not met"
+        print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if revert=="YES":
-        print "\n Revert the values before exiting"
+        print("\n Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

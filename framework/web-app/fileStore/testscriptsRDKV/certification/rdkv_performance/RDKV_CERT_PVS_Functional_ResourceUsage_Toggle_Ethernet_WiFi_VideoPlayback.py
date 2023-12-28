@@ -116,12 +116,12 @@ Summ_list=[]
 #Get the result of connection with test component and DUT
 deviceAvailability = "No"
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Check Pre conditions"
+    print("Check Pre conditions")
     status = "SUCCESS"
     revert_plugins_dict = {}
     start_time_dict = {}
@@ -130,10 +130,10 @@ if expectedResult in result.upper():
     validation_dict = {}
     plugins_list = ["WebKitBrowser","org.rdk.Wifi","Cobalt"]
     plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","Cobalt":"deactivated"}
-    print "\n Get plugins status"
+    print("\n Get plugins status")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     if plugin_status_needed != current_plugin_status_dict:
-        print "\n Set plugins status"
+        print("\n Set plugins status")
         status = set_plugins_status(obj,plugin_status_needed)
         validation_dict = get_validation_params(obj)
         if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
@@ -151,7 +151,7 @@ if expectedResult in result.upper():
     if revert_nw == "YES":
         revert_plugins_dict["org.rdk.Network"] = "deactivated"
     if current_interface == "WIFI":
-        print "\n Current interface is WIFI"
+        print("\n Current interface is WIFI")
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
             status = "FAILURE"
@@ -171,112 +171,112 @@ if expectedResult in result.upper():
         revert_plugins_dict.update(current_plugin_status_dict)
         for count in range(0,2):
             time.sleep(30)
-	    result_status = "FAILURE"
-	    if current_interface == "ETHERNET":
-	        new_interface = "WIFI"
-		wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface],deviceAvailability = switch_to_wifi(obj,"2.4",True)
-		if wifi_connect_status == "SUCCESS":
-		    print "\n Successfully set WIFI as default interface"
-	            result_status = "SUCCESS"
-		else:
-		    print "\n Error while setting WIFI as default interface"
-		    result_status = "FAILURE"
-	    else:
-		new_interface = "ETHERNET"
-		status = launch_lightning_app(obj,complete_url)
-		time.sleep(30)
-		interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"ETHERNET",True)
-		if interface_status  == "SUCCESS":
-		    print "\n Successfully set ETHERNET as default interface \n"
-		    result_status = close_lightning_app(obj)
-		else:
-		    print "\n Error while setting to ETHERNET \n"
-		    result_status = "FAILURE"
-	    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
-	    tdkTestObj.addParameter("realpath",obj.realpath)
-	    tdkTestObj.addParameter("deviceIP",obj.IP)
-	    tdkTestObj.executeTestCase(expectedResult)
-	    result = tdkTestObj.getResult()
-	    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
-	    if result_status == "SUCCESS" and ssh_param_dict != {} and expectedResult in result:
-	        tdkTestObj.setResultStatus("SUCCESS")
-		current_interface = new_interface
-		if cobalt_launch_status in expectedResult:
-		    time.sleep(30)
-		    print "\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url)
-		    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-		    tdkTestObj.addParameter("method","Cobalt.1.deeplink")
-		    tdkTestObj.addParameter("value",cobalt_test_url)
-		    tdkTestObj.executeTestCase(expectedResult)
-		    cobalt_result = tdkTestObj.getResult()
-		    time.sleep(10)
-		    if(cobalt_result in expectedResult):
-		        tdkTestObj.setResultStatus("SUCCESS")
-			print "Clicking OK to play video"
-			params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
-			tdkTestObj = obj.createTestStep('rdkservice_setValue')
-			tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-			tdkTestObj.addParameter("value",params)
-			tdkTestObj.executeTestCase(expectedResult)
-			result1 = tdkTestObj.getResult()
-			time.sleep(50)
-			if "SUCCESS" == result1:
-			    result_val = "SUCCESS"
-			    if validation_dict["validation_required"]:
-			        tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
-				tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
-				tdkTestObj.addParameter("credentials",credentials)
-				tdkTestObj.addParameter("video_validation_script",validation_dict["video_validation_script"])
-				tdkTestObj.executeTestCase(expectedResult)
-				result_val = tdkTestObj.getResultDetails()
-				if result_val == "SUCCESS" :
-				    tdkTestObj.setResultStatus("SUCCESS")
-				    print "\nVideo playback is happening\n"
-				else:
-				    tdkTestObj.setResultStatus("FAILURE")
-				    print "Video playback is not happening"
-			    if result_val == "SUCCESS":
-			        print "\n Validate Resource Usage"
-				tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
-				tdkTestObj.executeTestCase(expectedResult)
-				resource_usage = tdkTestObj.getResultDetails()
-				result = tdkTestObj.getResult()
-				if expectedResult in result and resource_usage != "ERROR":
-				    print "\n Successfully validated Resource usage"
-				    tdkTestObj.setResultStatus("SUCCESS")
-				else:
-				    print "\n Error while validating Resource usage"
-				    tdkTestObj.setResultStatus("FAILURE")
-			    else:
-			        print "\n Error happened during SSH session, logs are not available"
-				tdkTestObj.setResultStatus("FAILURE")
-				break
+            result_status = "FAILURE"
+            if current_interface == "ETHERNET":
+                new_interface = "WIFI"
+                wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface],deviceAvailability = switch_to_wifi(obj,"2.4",True)
+                if wifi_connect_status == "SUCCESS":
+                    print("\n Successfully set WIFI as default interface")
+                    result_status = "SUCCESS"
+                else:
+                    print("\n Error while setting WIFI as default interface")
+                    result_status = "FAILURE"
+            else:
+                new_interface = "ETHERNET"
+                status = launch_lightning_app(obj,complete_url)
+                time.sleep(30)
+                interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"ETHERNET",True)
+                if interface_status  == "SUCCESS":
+                    print("\n Successfully set ETHERNET as default interface \n")
+                    result_status = close_lightning_app(obj)
+                else:
+                    print("\n Error while setting to ETHERNET \n")
+                    result_status = "FAILURE"
+            tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+            tdkTestObj.addParameter("realpath",obj.realpath)
+            tdkTestObj.addParameter("deviceIP",obj.IP)
+            tdkTestObj.executeTestCase(expectedResult)
+            result = tdkTestObj.getResult()
+            ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+            if result_status == "SUCCESS" and ssh_param_dict != {} and expectedResult in result:
+                tdkTestObj.setResultStatus("SUCCESS")
+                current_interface = new_interface
+                if cobalt_launch_status in expectedResult:
+                    time.sleep(30)
+                    print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
+                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                    tdkTestObj.addParameter("method","Cobalt.1.deeplink")
+                    tdkTestObj.addParameter("value",cobalt_test_url)
+                    tdkTestObj.executeTestCase(expectedResult)
+                    cobalt_result = tdkTestObj.getResult()
+                    time.sleep(10)
+                    if(cobalt_result in expectedResult):
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print("Clicking OK to play video")
+                        params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                        tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                        tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                        tdkTestObj.addParameter("value",params)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result1 = tdkTestObj.getResult()
+                        time.sleep(50)
+                        if "SUCCESS" == result1:
+                            result_val = "SUCCESS"
+                            if validation_dict["validation_required"]:
+                                tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
+                                tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
+                                tdkTestObj.addParameter("credentials",credentials)
+                                tdkTestObj.addParameter("video_validation_script",validation_dict["video_validation_script"])
+                                tdkTestObj.executeTestCase(expectedResult)
+                                result_val = tdkTestObj.getResultDetails()
+                                if result_val == "SUCCESS" :
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    print("\nVideo playback is happening\n")
+                                else:
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    print("Video playback is not happening")
+                            if result_val == "SUCCESS":
+                                print("\n Validate Resource Usage")
+                                tdkTestObj = obj.createTestStep("rdkservice_validateResourceUsage")
+                                tdkTestObj.executeTestCase(expectedResult)
+                                resource_usage = tdkTestObj.getResultDetails()
+                                result = tdkTestObj.getResult()
+                                if expectedResult in result and resource_usage != "ERROR":
+                                    print("\n Successfully validated Resource usage")
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                else:
+                                    print("\n Error while validating Resource usage")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                            else:
+                                print("\n Error happened during SSH session, logs are not available")
+                                tdkTestObj.setResultStatus("FAILURE")
+                                break
                         else:
-                            print "\n Error while clicking OK button"
+                            print("\n Error while clicking OK button")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Error while setting up the url"
+                        print("\n Error while setting up the url")
                         tdkTestObj.setResultStatus("FAILURE")
         if deviceAvailability == "Yes":
-	    getSummary(Summ_list,obj)
+            getSummary(Summ_list,obj)
             #Revert interface
             if current_interface != initial_interface:
-                print "\n Revert network interface to {}\n".format(initial_interface)
+                print("\n Revert network interface to {}\n".format(initial_interface))
                 if initial_interface == "ETHERNET":
                     status = launch_lightning_app(obj,complete_url)
                     time.sleep(30)
                     interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
                     if interface_status == "SUCCESS":
-                        print "\n Successfully reverted ETHERNET as default interface"
+                        print("\n Successfully reverted ETHERNET as default interface")
                     else:
-                        print "\n Error while reverting ETHERNET as default interface"
+                        print("\n Error while reverting ETHERNET as default interface")
                         status = "FAILURE"
                 else:
                     wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
                     if wifi_connect_status == "SUCCESS":
-                        print "\n Successfully reverted WIFI as default interface"
+                        print("\n Successfully reverted WIFI as default interface")
                     else:
-                        print "\n Error while reverting WIFI as default interface"
+                        print("\n Error while reverting WIFI as default interface")
                         status = "FAILURE"
             if revert_wifi_ssid:
                 status = launch_lightning_app(obj,complete_url)
@@ -292,13 +292,13 @@ if expectedResult in result.upper():
             if status == "FAILURE":
                 obj.setLoadModuleStatus("FAILURE")
         else:
-            print "\n Preconditions are not met "
+            print("\n Preconditions are not met ")
             obj.setLoadModuleStatus("FAILURE")
         if revert_plugins_dict != {}:
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
-     	print "\n Device went down after change in interface. So reverting the plugins and interface is skipped"
+        print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")

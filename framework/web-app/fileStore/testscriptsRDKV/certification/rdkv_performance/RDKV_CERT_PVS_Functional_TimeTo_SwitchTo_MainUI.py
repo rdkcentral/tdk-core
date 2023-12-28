@@ -80,8 +80,8 @@ Time taken to launch UI from another window. should be within the expected limit
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 from datetime import datetime
 import json
 from rdkv_performancelib import *
@@ -100,11 +100,11 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Functional_TimeTo_SwitchTo_MainUI')
 #configured as "Yes".
 pre_requisite_reboot(obj,"yes")
 
-#Execution summary variable 
+#Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
 expectedResult = "SUCCESS"
@@ -121,7 +121,7 @@ if expectedResult in result.upper():
         cobalt_launch_status = launch_cobalt(obj)
         time.sleep(20)
         if cobalt_launch_status == "SUCCESS":
-            print "\n Pressing Home button \n"
+            print("\n Pressing Home button \n")
             params = '{"keys":[ {"keyCode": 36,"modifiers": [],"delay":1.0}]}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
@@ -153,19 +153,19 @@ if expectedResult in result.upper():
                         zorder_status = tdkTestObj.getResult()
                         if expectedResult in zorder_status :
                             zorder = ast.literal_eval(zorder)["clients"]
-                            print "zorder: ",zorder
+                            print("zorder: ",zorder)
                             resident_app = "ResidentApp"
                             zorder = exclude_from_zorder(zorder)
                             if zorder[0].lower() == resident_app.lower():
-                                print "\n Home screen is reached"
-                                print "\n Home button pressed at :{} (UTC)".format(start_time)
+                                print("\n Home screen is reached")
+                                print("\n Home button pressed at :{} (UTC)".format(start_time))
                                 Summ_list.append('Home button pressed at :{}'.format(start_time))
-                                print "\n Main UI launched at :{} (UTC)  ".format(main_ui_launched_time)
+                                print("\n Main UI launched at :{} (UTC)  ".format(main_ui_launched_time))
                                 Summ_list.append('Main UI launched at :{}'.format(main_ui_launched_time))
                                 start_time_millisec = getTimeInMilliSec(start_time)
                                 main_ui_launched_time_millisec = getTimeInMilliSec(main_ui_launched_time)
                                 ui_launchtime = main_ui_launched_time_millisec - start_time_millisec
-                                print "\n Time taken for launching Main UI from another window  : {} ms\n".format(ui_launchtime)
+                                print("\n Time taken for launching Main UI from another window  : {} ms\n".format(ui_launchtime))
                                 Summ_list.append('Time taken for launching Main UI from another window :{}ms'.format(ui_launchtime))
                                 conf_file,result = getConfigFileName(tdkTestObj.realpath)
                                 result1, ui_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"MAIN_UI_SWITCH_TIME_THRESHOLD_VALUE")
@@ -173,35 +173,35 @@ if expectedResult in result.upper():
                                 result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                 Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                 if all(value != "" for value in (ui_launch_threshold_value,offset)):
-                                    print "\n Threshold value for time taken for launching Main UI from another window: {} ms".format(ui_launch_threshold_value)
+                                    print("\n Threshold value for time taken for launching Main UI from another window: {} ms".format(ui_launch_threshold_value))
                                     if 0 < int(ui_launchtime) < (int(ui_launch_threshold_value) + int(offset)):
                                         tdkTestObj.setResultStatus("SUCCESS");
-                                        print "\n The time taken for launching Main UI from another window is within the expected limit\n"
+                                        print("\n The time taken for launching Main UI from another window is within the expected limit\n")
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE");
-                                        print "\n The time taken for launching Main UI from another window is not within the expected limit \n"
+                                        print("\n The time taken for launching Main UI from another window is not within the expected limit \n")
                                 else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-                                        print "\n Failed to get the threshold value from config file"
+                                    tdkTestObj.setResultStatus("FAILURE");
+                                    print("\n Failed to get the threshold value from config file")
                             else:
-                                print "\n Home screen is not reached"
+                                print("\n Home screen is not reached")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "\n Error while getting zorder value"
+                            print("\n Error while getting zorder value")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "\n Required logs are not present in wpeframework.log"
+                        print("\n Required logs are not present in wpeframework.log")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command)
+                    print("\n Error occurred while executing the command:{} in DUT,\n Please check the SSH details \n".format(command))
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "\n Error while executing org.rdk.RDKShell.1.generateKey method\n"
+                print("\n Error while executing org.rdk.RDKShell.1.generateKey method\n")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "\n Unable to launch Cobalt plugin \n"
+            print("\n Unable to launch Cobalt plugin \n")
             tdkTestObj.setResultStatus("FAILURE")
-        print "\n Exiting from Cobalt \n"
+        print("\n Exiting from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')
         tdkTestObj.addParameter("plugin","Cobalt")
         tdkTestObj.addParameter("status","deactivate")
@@ -210,13 +210,13 @@ if expectedResult in result.upper():
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "Unable to deactivate Cobalt"
+            print("Unable to deactivate Cobalt")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "\nPreconditions are not met\n"
+        print("\nPreconditions are not met\n")
         tdkTestObj.setResultStatus("FAILURE")
     obj.unloadModule("rdkv_performance")
     getSummary(Summ_list,obj)
 else:
     obj.setLoadModuleStatus("FAILURE")
-    print "Failed to load module"
+    print("Failed to load module")
