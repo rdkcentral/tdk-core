@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Check the profiles are present for following processes 
+  <synopsis>Check the profiles are present for following processes
 irMgrMain
 audioCaptureManager
 lighttpd</synopsis>
@@ -71,7 +71,7 @@ lighttpd</synopsis>
 2. Apparmor should be enabled</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>FilePath</input_parameters>
-    <automation_approch>1. SSH to device and run the command 
+    <automation_approch>1. SSH to device and run the command
 2. Validate all 3 profiles are present
 3. Pass if files are present.</automation_approch>
     <expected_output>path: /etc/apparmor.d</expected_output>
@@ -100,18 +100,18 @@ obj.configureTestCase(ip,port,'RDKV_AppArmor_Write_Exe_Check');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["FilePath", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = obtainCredentials(obj,configKeyList)
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Apparmor service is running"
+    print("\nTo Ensure Apparmor service is running")
     command = 'systemctl status apparmor.service | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
 
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
@@ -127,11 +127,11 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Apparmor is running %s" %(output)
+        print("Apparmor is running %s" %(output))
 
         #To check Apparmor is enabled
         command = "sh " + configValues["FilePath"] + "/tdk_apparmor_tests.sh aptest06"
-        print "COMMAND : %s" %(command)
+        print("COMMAND : %s" %(command))
         #Primitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
         #Add the parameters to ssh to the DUT and execute the command
@@ -146,18 +146,18 @@ if expectedResult in result.upper():
         #Get the result of execution
         output = tdkTestObj.getResultDetails();
         output = str(output)
-        print "[RESPONSE FROM DEVICE]: %s" %(output)
+        print("[RESPONSE FROM DEVICE]: %s" %(output))
         if "FAILURE" not in output and expectedResult in output:
-            print "SUCCESS: Script Execution Successful"
+            print("SUCCESS: Script Execution Successful")
             tdkTestObj.setResultStatus("SUCCESS");
         elif "FAILURE" in output or expectedResult not in output:
-            print "FAILURE: Script Execution was not Successful"
+            print("FAILURE: Script Execution was not Successful")
             tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "Error: Error execution of the script"
+            print("Error: Error execution of the script")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "AppArmor is not active"
+        print("AppArmor is not active")
         tdkTestObj.setResultStatus("FAILURE")
 
     #Unload the module
@@ -166,4 +166,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
+    print("FAILURE: Failed to load module")

@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Check the profiles are present for following processes 
+  <synopsis>Check the profiles are present for following processes
 irMgrMain
 audioCaptureManager
 lighttpd</synopsis>
@@ -69,7 +69,7 @@ lighttpd</synopsis>
 2. Apparmor should be enabled</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>FilePath</input_parameters>
-    <automation_approch>1. SSH to device and run the command 
+    <automation_approch>1. SSH to device and run the command
 2. Validate Apparmor service runs without profiles
 3. Pass if files are present.</automation_approch>
     <expected_output>Apparmor service should be up</expected_output>
@@ -98,7 +98,7 @@ obj.configureTestCase(ip,port,'RDKV_AppArmor_Check_No_Profiles');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -113,12 +113,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -137,21 +137,21 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult);
             output = tdkTestObj.getResultDetails();
             output = str(output)
-            print "[RESPONSE FROM DEVICE]: %s" %(output)
+            print("[RESPONSE FROM DEVICE]: %s" %(output))
             if "FAILURE" not in output and expectedResult in output:
-		print "SUCCESS: Script Execution Successful"
-		tdkTestObj.setResultStatus("SUCCESS");
-	    elif "FAILURE" in output or expectedResult not in output:
-		print "FAILURE: Script Execution was not Successful"
-		tdkTestObj.setResultStatus("FAILURE");
-	    else:
-		print "Error: Error execution of the script"
-		tdkTestObj.setResultStatus("FAILURE");
+                print("SUCCESS: Script Execution Successful")
+                tdkTestObj.setResultStatus("SUCCESS");
+            elif "FAILURE" in output or expectedResult not in output:
+                print("FAILURE: Script Execution was not Successful")
+                tdkTestObj.setResultStatus("FAILURE");
+            else:
+                print("Error: Error execution of the script")
+                tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
     obj.unloadModule("rdkv_apparmor");
@@ -159,4 +159,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
+    print("FAILURE: Failed to load module")

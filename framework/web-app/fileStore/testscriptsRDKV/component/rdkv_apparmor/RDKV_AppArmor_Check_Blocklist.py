@@ -67,7 +67,7 @@
     <pre_requisite>1. Configure the location of shell scripts in FilePath available in fileStore/ApparmorConfig.config file</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>FilePath</input_parameters>
-    <automation_approch>1. SSH to device and run the command 
+    <automation_approch>1. SSH to device and run the command
 2. Validate the file is present.</automation_approch>
     <expected_output>path: /etc/secure/Apparmor_blocklist</expected_output>
     <priority>High</priority>
@@ -95,19 +95,19 @@ obj.configureTestCase(ip,port,'RDKV_AppArmor_Check_Blocklist');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result;)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["AppArmor_Profiles", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = obtainCredentials(obj,configKeyList)
     AppArmor_Profiles = configValues["AppArmor_Profiles"]
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-    print "\nTo Ensure Apparmor service is running"
+    print("\nTo Ensure Apparmor service is running")
     command = 'systemctl status apparmor.service | grep active | grep -v inactive'
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
 
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
@@ -123,11 +123,11 @@ if expectedResult in result.upper():
     #Get the result of execution
     output = tdkTestObj.getResultDetails();
     if "Active: active" in output and expectedResult in result:
-        print "Apparmor is running %s" %(output)
+        print("Apparmor is running %s" %(output))
         
         #To check Apparmor is enabled
         command = 'aa-enabled'
-        print "COMMAND : %s" %(command)
+        print("COMMAND : %s" %(command))
         #Primitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
         #Add the parameters to ssh to the DUT and execute the command
@@ -142,16 +142,16 @@ if expectedResult in result.upper():
         #Getthe result of execution
         output = tdkTestObj.getResultDetails();
         if 'Yes' in output and expectedResult in result:
-            print "Apparmor is enabled"
+            print("Apparmor is enabled")
             
             #Set Apparmor profile mode into enforce with tr181 command
-            print (AppArmor_Profiles)
+            print(AppArmor_Profiles)
             AppArmor_Profiles=AppArmor_Profiles.split(',')
             count = len(AppArmor_Profiles)
             print(count)
             for i in range(count):
                 command = 'tr181 -s -v "'+AppArmor_Profiles[i]+':enforce" Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.NonRootSupport.ApparmorBlocklist'
-                print "COMMAND : %s" %(command)
+                print("COMMAND : %s" %(command))
                 #Primitive test case which associated to this Script
                 tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
                 #Add the parameters to ssh to the DUT and execute the command
@@ -163,7 +163,7 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult()
             if expectedResult in result:
-                print "tr181 is set"
+                print("tr181 is set")
                 #Reboot the device
                 tdkTestObj = obj.createTestStep('rdkvapparmor_rebootDevice')
                 tdkTestObj.addParameter("waitTime",50)
@@ -171,11 +171,11 @@ if expectedResult in result.upper():
                 tdkTestObj.executeTestCase(expectedResult);
                 result = tdkTestObj.getResult()
                 if expectedResult in result:
-                    print "Device is rebooted"
+                    print("Device is rebooted")
                     
                     #check status from /opt/secure/Apparmor_blocklist
                     command = 'cat /opt/secure/Apparmor_blocklist'
-                    print "COMMAND : %s" %(command)
+                    print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
                     #Add the parameters to ssh to the DUT and execute the command
@@ -193,11 +193,11 @@ if expectedResult in result.upper():
                         else:
                             enforced = "Failure"
                     if enforced == "Success":
-                        print "Status is valid in Apparmor_blocklist"
+                        print("Status is valid in Apparmor_blocklist")
 
                         #To check if profiles are loaded into kernel
                         command = 'cat /sys/kernel/security/apparmor/profiles'
-                        print "COMMAND : %s" %(command)
+                        print("COMMAND : %s" %(command))
                         #Primitive test case which associated to this Script
                         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
                         #Add the parameters to ssh to the DUT and execute the command
@@ -215,11 +215,11 @@ if expectedResult in result.upper():
                             else:
                                 kernel = "Failure"
                         if kernel == "Success":
-                            print "apparmor profiles are loaded in to kernel space"
+                            print("apparmor profiles are loaded in to kernel space")
 
                             #Check for AppArmor initialization logs
                             command = 'cat /opt/logs/startup_stdout_log.txt | grep "Starting AppArmor initialization"'
-                            print "COMMAND : %s" %(command)
+                            print("COMMAND : %s" %(command))
                             #Primitive test case which associated to this Script
                             tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
                             #Add the parameters to ssh to the DUT and execute the command
@@ -232,27 +232,27 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             output = tdkTestObj.getResultDetails()
                             if "Starting AppArmor initialization" in output:
-                                print "AppArmor initialized successfully"
+                                print("AppArmor initialized successfully")
                             else:
-                                print "Unable to get the required logs"
+                                print("Unable to get the required logs")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print "apparmor profiles are not loaded in to kernel space"
+                            print("apparmor profiles are not loaded in to kernel space")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print "Status is valid in Apparmor_blocklist"
+                        print("Status is valid in Apparmor_blocklist")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
-                    print "Device is not rebooted"
+                    print("Device is not rebooted")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print "tr181 is not set"
+                print("tr181 is not set")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "Apparmor is not enabled"
+            print("Apparmor is not enabled")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print "AppArmor is not supported"
+        print("AppArmor is not supported")
         tdkTestObj.setResultStatus("FAILURE")
 
     #Unload the module
@@ -260,4 +260,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
+    print("FAILURE: Failed to load module")
