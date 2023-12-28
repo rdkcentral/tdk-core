@@ -82,8 +82,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_security","1",standAlone=True);
@@ -96,7 +96,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_PortScan_TCP_FINPSH');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -105,11 +105,11 @@ if expectedResult in result.upper():
     tdkTestObj = obj.createTestStep('rdkvsecurity_executeInTM');
     #command to be executed for scanning tcp ports
     command = "nmap --scanflags FINPSH " + obj.IP
-    print "COMMAND : %s" %(command)
+    print("COMMAND : %s" %(command))
     tdkTestObj.addParameter("command", command);
 
     #Execute the test case in DUT
-    print "Scanning the TCP open ports using FINPSH scan type"
+    print("Scanning the TCP open ports using FINPSH scan type")
     tdkTestObj.executeTestCase(expectedResult);
 
     #Get the result of execution
@@ -119,39 +119,38 @@ if expectedResult in result.upper():
         portList = []
         #The output of port scan is a multiline string from which the open port numbers needs to b saved to a list
         for line in scanResult.splitlines():
-             #Port numbers are followed by "/tcp" substring
-             if "/tcp" in line:
-                 portList.append (line.split("/")[0])
+            #Port numbers are followed by "/tcp" substring
+            if "/tcp" in line:
+                portList.append (line.split("/")[0])
         if not portList:
-             tdkTestObj.setResultStatus("SUCCESS");
-             print "SUCCESS: No TCP open ports detected"
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("SUCCESS: No TCP open ports detected")
         else:
-             print "Open ports are: %s" %(portList)
-             #Get the list of expected open ports from device config file
-             tdkTestObj = obj.createTestStep('rdkvsecurity_getDeviceConfig')
-             tdkTestObj.addParameter("basePath",obj.realpath)
-             tdkTestObj.addParameter("configKey","TCP_PORTS")
-             tdkTestObj.executeTestCase(expectedResult)
-             expected_portList = tdkTestObj.getResultDetails()
-             print "Configured Open ports are: %s" %(expected_portList)
-             if "FAILURE" not in expected_portList:
-                 additional_portList = []
-                 for port in portList:
-                     if port not in expected_portList:
-                         additional_portList.append (port)
-                 if not additional_portList:
-                     tdkTestObj.setResultStatus("SUCCESS");
-                     print "SUCCESS: No additional TCP open ports detected"
-                 else:
-                     tdkTestObj.setResultStatus("FAILURE");
-                     print "FAILURE: Additional TCP open ports detected!!!\nPorts: %s" %(additional_portList)
-             else:
-                 tdkTestObj.setResultStatus("FAILURE");
-                 print "FAILURE: Failed to retrieve expected open ports list"
+            print("Open ports are: %s" %(portList))
+            #Get the list of expected open ports from device config file
+            tdkTestObj = obj.createTestStep('rdkvsecurity_getDeviceConfig')
+            tdkTestObj.addParameter("basePath",obj.realpath)
+            tdkTestObj.addParameter("configKey","TCP_PORTS")
+            tdkTestObj.executeTestCase(expectedResult)
+            expected_portList = tdkTestObj.getResultDetails()
+            print("Configured Open ports are: %s" %(expected_portList))
+            if "FAILURE" not in expected_portList:
+                additional_portList = []
+                for port in portList:
+                    if port not in expected_portList:
+                        additional_portList.append (port)
+                if not additional_portList:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS: No additional TCP open ports detected")
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: Additional TCP open ports detected!!!\nPorts: %s" %(additional_portList))
+            else:
+                tdkTestObj.setResultStatus("FAILURE");
+                print("FAILURE: Failed to retrieve expected open ports list")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "FAILURE: Failed to execute nmap successfully"
+        print("FAILURE: Failed to execute nmap successfully")
 
     #Unload the module
     obj.unloadModule("rdkv_security");
-

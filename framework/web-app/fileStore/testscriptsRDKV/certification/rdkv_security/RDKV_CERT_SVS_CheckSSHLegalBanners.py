@@ -80,8 +80,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_security","1",standAlone=True);
@@ -94,12 +94,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckSSHLegalBanners');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SSH_BANNER_AVAILABLE", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = {}
     tdkTestObj = obj.createTestStep('rdkvsecurity_getDeviceConfig')
@@ -110,12 +110,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -124,9 +124,9 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            print "Checking whether SSH Legal Banner file exists or not"
+            print("Checking whether SSH Legal Banner file exists or not")
             command = '[ -f "/etc/sshbanner.txt" ] && echo 1 || echo 0'
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT')
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
             tdkTestObj.addParameter("credentials", credentials);
@@ -135,10 +135,10 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             output = str(output).split("\n")
             if configValues["SSH_BANNER_AVAILABLE"].lower() == "yes" and int(output[1]) == 1:
-                print "SUCCESS: SSH Legal Banner file exists checking presence of contents........"
+                print("SUCCESS: SSH Legal Banner file exists checking presence of contents........")
                 tdkTestObj.setResultStatus("SUCCESS")
                 command = '[ -s "/etc/sshbanner.txt" ] && echo 1 ||  echo 0'
-                print "COMMAND : %s" %(command)
+                print("COMMAND : %s" %(command))
                 tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT');
                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
                 tdkTestObj.addParameter("credentials", credentials);
@@ -147,32 +147,30 @@ if expectedResult in result.upper():
                 output = tdkTestObj.getResultDetails();
                 output = str(output).split("\n")
                 if int(output[1]) == 1:
-                    print "SUCCESS: Contents present in legal banner file"
+                    print("SUCCESS: Contents present in legal banner file")
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:
-                    print "FAILURE: Legal banner file is empty"
+                    print("FAILURE: Legal banner file is empty")
                     tdkTestObj.setResultStatus("FAILURE")
-                
+
             elif configValues["SSH_BANNER_AVAILABLE"].lower() == "no"  and int(output[1]) == 0:
-                print "SUCCESS: SSH Legal Banner file not present in the device as configured"
+                print("SUCCESS: SSH Legal Banner file not present in the device as configured")
                 tdkTestObj.setResultStatus("SUCCESS")
             elif configValues["SSH_BANNER_AVAILABLE"].lower() == "yes"  and int(output[1]) == 0:
-                print "FAILURE: SSH Legal Banner file not present in the device but configured availability as YES"
+                print("FAILURE: SSH Legal Banner file not present in the device but configured availability as YES")
                 tdkTestObj.setResultStatus("FAILURE")
             elif configValues["SSH_BANNER_AVAILABLE"].lower() == "no"  and int(output[1]) == 1:
-                print "FAILURE: SSH Legal Banner file present in the device but configured as NO"
+                print("FAILURE: SSH Legal Banner file present in the device but configured as NO")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
     obj.unloadModule("rdkv_security");
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
-                                                
+    print("FAILURE: Failed to load module")

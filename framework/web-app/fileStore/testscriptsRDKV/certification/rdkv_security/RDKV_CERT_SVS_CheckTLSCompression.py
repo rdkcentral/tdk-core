@@ -100,7 +100,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckTLSCompression');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 result = obj.getLoadModuleResult();
 
 expectedResult = "SUCCESS"
@@ -115,15 +115,15 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configKey != "SUPPORTED_SSL_TLS_PROTOCOLS" and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         elif "FAILURE" not in configValues[configKey] and configKey == "SUPPORTED_SSL_TLS_PROTOCOLS":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
-            tdkTestObj.setResultStatus("SUCCESS")    
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
+            tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configKey != "SUPPORTED_SSL_TLS_PROTOCOLS" and configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -138,98 +138,97 @@ if expectedResult in result.upper():
             ansi_escape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
             if not configValues["SUPPORTED_SSL_TLS_PROTOCOLS"]:
                 defaultProtocols = configValues["DEFAULT_SSL_TLS_PROTOCOLS"].split(",")
-                print "No supported protocols configured"
-                print "Checking any default protocols are enabled......"
-                print "[DEFAULT_PROTOCOLS: %s]" %(defaultProtocols)
+                print("No supported protocols configured")
+                print("Checking any default protocols are enabled......")
+                print("[DEFAULT_PROTOCOLS: %s]" %(defaultProtocols))
                 tdkTestObj.setResultStatus("SUCCESS")
                 enabled=0;
                 for protocol in defaultProtocols:
                     for line in Result.splitlines():
                         if protocol in line:
                             if "enabled" in line:
-                                print "FAILURE: %s - Enabled but configured as disabled" %(protocol)
+                                print("FAILURE: %s - Enabled but configured as disabled" %(protocol))
                                 tdkTestObj.setResultStatus("FAILURE");
                                 enabled = 1;
                                 break;
                             elif "disabled" in line:
-                                print "SUCCESS: %s - disabled" %(protocol)
+                                print("SUCCESS: %s - disabled" %(protocol))
                                 tdkTestObj.setResultStatus("SUCCESS");
                                 break;
                 if enabled == 0:
-                    print "All the default protocols are disabled"
+                    print("All the default protocols are disabled")
                     tdkTestObj.setResultStatus("SUCCESS");
                 elif enabled == 1:
-                    print "Some of the protocols are enabled but configured as disabled"
-                    print "Checking TLS Compression settings........"
-                    for line in  Result.splitlines():
-                      Compressionfound = 0;
-                      if "Compression" in line and "disabled" in line:
-                          Compressionfound = 1;
-                          line = ansi_escape.sub('', line)
-                          print "[RESPONSE FROM DEVICE]: %s" %(line)
-                          print "SUCCESS: Compression disabled"
-                          tdkTestObj.setResultStatus("SUCCESS");
-                          break;
-                      elif "Compression" in line and  "enabled" in line:
-                          Compressionfound = 1;
-                          line = ansi_escape.sub('', line)
-                          print "[RESPONSE FROM DEVICE]: %s" %(line)
-                          print "FAILURE: Compression enabled"
-                          tdkTestObj.setResultStatus("FAILURE");
-                          break;
-                    if Compressionfound == 0:
-                        print "FAILURE: Compression settings not found"
-                        tdkTestObj.setResultStatus("FAILURE");
-            else:
-                supportedProtocols = configValues["SUPPORTED_SSL_TLS_PROTOCOLS"].split(",")
-                print "[CONFIGURED SUPPORTED PROTOCOLS: %s]"  %(supportedProtocols)
-                print "Checking configured protocols are enabled or not......."
-                disabled = 0;enabled = 0;
-                for protocol in supportedProtocols:
-                    for line in Result.splitlines():
-                        if protocol in line:
-                            if "enabled" in line:
-                                print "SUCCESS: %s - Enabled" %(protocol)
-                                enabled = 1
-                                tdkTestObj.setResultStatus("SUCCESS");
-                                break;
-                            elif "disabled" in line:
-                                print "FAILURE: %s - disabled" %(protocol)
-                                tdkTestObj.setResultStatus("FAILURE");
-                                disabled = 1
-                                break;
-                if disabled == 1 and enabled == 0:
-                    tdkTestObj.setResultStatus("FAILURE");
-                    print "FAILURE: Some of the protocols are disabled but configured as enabled"
-                if enabled == 1: 
-                    print "Checking TLS Compression settings........"
+                    print("Some of the protocols are enabled but configured as disabled")
+                    print("Checking TLS Compression settings........")
                     for line in  Result.splitlines():
                         Compressionfound = 0;
                         if "Compression" in line and "disabled" in line:
                             Compressionfound = 1;
                             line = ansi_escape.sub('', line)
-                            print "[RESPONSE FROM DEVICE]: %s" %(line)
-                            print "SUCCESS: Compression disabled"
+                            print("[RESPONSE FROM DEVICE]: %s" %(line))
+                            print("SUCCESS: Compression disabled")
                             tdkTestObj.setResultStatus("SUCCESS");
                             break;
                         elif "Compression" in line and  "enabled" in line:
                             Compressionfound = 1;
-                            print "FAILURE: Compression enabled"
+                            line = ansi_escape.sub('', line)
+                            print("[RESPONSE FROM DEVICE]: %s" %(line))
+                            print("FAILURE: Compression enabled")
                             tdkTestObj.setResultStatus("FAILURE");
                             break;
                     if Compressionfound == 0:
-                        print "FAILURE: Compression settings not found"
+                        print("FAILURE: Compression settings not found")
+                        tdkTestObj.setResultStatus("FAILURE");
+            else:
+                supportedProtocols = configValues["SUPPORTED_SSL_TLS_PROTOCOLS"].split(",")
+                print("[CONFIGURED SUPPORTED PROTOCOLS: %s]"  %(supportedProtocols))
+                print("Checking configured protocols are enabled or not.......")
+                disabled = 0;enabled = 0;
+                for protocol in supportedProtocols:
+                    for line in Result.splitlines():
+                        if protocol in line:
+                            if "enabled" in line:
+                                print("SUCCESS: %s - Enabled" %(protocol))
+                                enabled = 1
+                                tdkTestObj.setResultStatus("SUCCESS");
+                                break;
+                            elif "disabled" in line:
+                                print("FAILURE: %s - disabled" %(protocol))
+                                tdkTestObj.setResultStatus("FAILURE");
+                                disabled = 1
+                                break;
+                if disabled == 1 and enabled == 0:
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("FAILURE: Some of the protocols are disabled but configured as enabled")
+                if enabled == 1:
+                    print("Checking TLS Compression settings........")
+                    for line in  Result.splitlines():
+                        Compressionfound = 0;
+                        if "Compression" in line and "disabled" in line:
+                            Compressionfound = 1;
+                            line = ansi_escape.sub('', line)
+                            print("[RESPONSE FROM DEVICE]: %s" %(line))
+                            print("SUCCESS: Compression disabled")
+                            tdkTestObj.setResultStatus("SUCCESS");
+                            break;
+                        elif "Compression" in line and  "enabled" in line:
+                            Compressionfound = 1;
+                            print("FAILURE: Compression enabled")
+                            tdkTestObj.setResultStatus("FAILURE");
+                            break;
+                    if Compressionfound == 0:
+                        print("FAILURE: Compression settings not found")
                         tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "FAILURE: SSlScan failed"
+            print("FAILURE: SSlScan failed")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to retrieve configuration values from device config file"
+        print("FAILURE: Failed to retrieve configuration values from device config file")
         tdkTestObj.setResultStatus("FAILURE");
     obj.unloadModule("rdkv_security");
 
 else:
     obj.setLoadModuleStatus("FAILURE");
 
-    print "FAILURE: Failed to load module"
-
+    print("FAILURE: Failed to load module")

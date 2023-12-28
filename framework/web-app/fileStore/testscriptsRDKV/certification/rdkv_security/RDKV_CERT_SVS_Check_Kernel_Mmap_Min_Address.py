@@ -96,7 +96,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_Check_Kernel_Mmap_Min_Address');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -111,12 +111,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -136,21 +136,21 @@ if expectedResult in result.upper():
             output = tdkTestObj.getResultDetails();
             output = output.splitlines()
             numberOfLines=int(output[1])
-            print "Checking whether Kernel based NULL pointer attacks are allowed by validating Kernel Mmap Min Address"
-            print "[RESPONSE FROM DEVICE]: %s" %(output)
+            print("Checking whether Kernel based NULL pointer attacks are allowed by validating Kernel Mmap Min Address")
+            print("[RESPONSE FROM DEVICE]: %s" %(output))
             if numberOfLines>=4096:
-                 print "SUCCESS"
-                 print "Kernel Mmap Min Address is as expected, So Kernel based NULL pointer attacks are not allowed"
-                 tdkTestObj.setResultStatus("SUCCESS");
-	    else:	
-                 print "FAILURE: Kernel Mmap Min Address status %s is not as expected and " \
-                       "attacks are allowed" %(nullcontext)
-                 tdkTestObj.setResultStatus("FAILURE");
+                print("SUCCESS")
+                print("Kernel Mmap Min Address is as expected, So Kernel based NULL pointer attacks are not allowed")
+                tdkTestObj.setResultStatus("SUCCESS");
+            else:
+                print("FAILURE: Kernel Mmap Min Address status %s is not as expected and " \
+                      "attacks are allowed" %(nullcontext))
+                tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
     obj.unloadModule("rdkv_security");
@@ -158,4 +158,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
+    print("FAILURE: Failed to load module")

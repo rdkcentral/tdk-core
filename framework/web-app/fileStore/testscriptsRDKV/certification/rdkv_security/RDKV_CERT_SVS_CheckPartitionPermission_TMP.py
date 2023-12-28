@@ -67,9 +67,9 @@
     <pre_requisite>1. Configure the values tmp partition permission (variable $TMP_PARTITION_PERMISSION) available in fileStore/tdkvRDKServiceConfig/device.config file</pre_requisite>
     <api_or_interface_used></api_or_interface_used>
     <input_parameters>None</input_parameters>
-    <automation_approch>1.check whether /tmp partition is available 
+    <automation_approch>1.check whether /tmp partition is available
 2. Execute the mount command with /tmp partition to list the partition permission of the DUT
-3. Check whether configured permissions are listed 
+3. Check whether configured permissions are listed
 4. Pass/fail the test based on the existence of permissions configured</automation_approch>
     <expected_output>Should list the permissions configured in the config file</expected_output>
     <priority>High</priority>
@@ -82,8 +82,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_security","1",standAlone=True);
@@ -96,12 +96,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckPartitionPermission_TMP');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["TMP_PARTITION_PERMISSION", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = {}
     tdkTestObj = obj.createTestStep('rdkvsecurity_getDeviceConfig')
@@ -112,12 +112,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -126,52 +126,51 @@ if expectedResult in result.upper():
             if configValues["SSH_PASSWORD"] == "None":
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
-            print "Checking whether /tmp partition is available or not\n"
+            print("Checking whether /tmp partition is available or not\n")
             command = '[ -d "/tmp" ] && echo 1 || echo 0'
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT')
             tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
             tdkTestObj.addParameter("credentials", credentials);
             tdkTestObj.addParameter("command", command);
             tdkTestObj.executeTestCase(expectedResult);
             output = tdkTestObj.getResultDetails();
-            output = str(output).split("\n") 
+            output = str(output).split("\n")
             if int(output[1]) == 1:
-                print "SUCCESS: /tmp partition exists checking partition permissions........\n"
+                print("SUCCESS: /tmp partition exists checking partition permissions........\n")
                 tdkTestObj.setResultStatus("SUCCESS")
-                print "Configured /tmp partition permissions: %s\n" %(configValues["TMP_PARTITION_PERMISSION"])
+                print("Configured /tmp partition permissions: %s\n" %(configValues["TMP_PARTITION_PERMISSION"]))
                 command = 'mount | grep /tmp'
-                print "COMMAND : %s" %(command)
+                print("COMMAND : %s" %(command))
                 tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT');
                 tdkTestObj.addParameter("sshMethod", configValues["SSH_METHOD"]);
                 tdkTestObj.addParameter("credentials", credentials);
                 tdkTestObj.addParameter("command", command);
                 tdkTestObj.executeTestCase(expectedResult);
                 output = tdkTestObj.getResultDetails();
-                print "[RESPONSE FROM DEVICE]: %s" %(output)
+                print("[RESPONSE FROM DEVICE]: %s" %(output))
                 permissions = configValues["TMP_PARTITION_PERMISSION"].split(",")
-                print "Checking whether configured permissions are set on /tmp partition\n"
+                print("Checking whether configured permissions are set on /tmp partition\n")
                 for value in permissions:
-                     if value in str(output):
-                         print "SUCCESS: %s  permission is  set on /tmp partition" %(value)
-                         tdkTestObj.setResultStatus("SUCCESS");
-                     else:
-                         print "FAILURE: %s permission are not set on /tmp partition" %(value)
-                         tdkTestObj.setResultStatus("FAILURE");
+                    if value in str(output):
+                        print("SUCCESS: %s  permission is  set on /tmp partition" %(value))
+                        tdkTestObj.setResultStatus("SUCCESS");
+                    else:
+                        print("FAILURE: %s permission are not set on /tmp partition" %(value))
+                        tdkTestObj.setResultStatus("FAILURE");
             else:
-                print "FAILURE: /tmp partition not found"
+                print("FAILURE: /tmp partition not found")
                 tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
-        
+
     #Unload the module
     obj.unloadModule("rdkv_security");
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
+    print("FAILURE: Failed to load module")

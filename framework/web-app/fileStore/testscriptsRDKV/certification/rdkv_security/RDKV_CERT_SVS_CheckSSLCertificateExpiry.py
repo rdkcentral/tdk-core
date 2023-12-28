@@ -100,7 +100,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckSSLCertificateExpiry');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -115,12 +115,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -130,7 +130,7 @@ if expectedResult in result.upper():
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
             command = 'for pem in '+ configValues["CERT_PATH"] + '/*.pem; do if ! openssl x509 -checkend ' + configValues["EXPIRY_PERIOD"] + ' -in "$pem"; then printf \'%s: %s\\n\' "$(openssl x509 -enddate -noout -in "$pem"|cut -d= -f 2)" "$pem"; fi done'
-            print "COMMAND: %s" %(command)
+            print("COMMAND: %s" %(command))
 
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT');
@@ -152,22 +152,22 @@ if expectedResult in result.upper():
                 months = int(configValues["EXPIRY_PERIOD"])/2630000
                 if "yes" in configValues["PRESENCE_OF_EXPIRED_CERTIFICATES"].lower():
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "SUCCESS: Few Certificates are expected to expire within %d months: %s\n" %(months,certListToBeExpired)
+                    print("SUCCESS: Few Certificates are expected to expire within %d months: %s\n" %(months,certListToBeExpired))
                 elif "no" in configValues["PRESENCE_OF_EXPIRED_CERTIFICATES"].lower():
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "FAILURE: Few Certificates are expected to expire within %d months: %s\n" %(months,certListToBeExpired)
+                    print("FAILURE: Few Certificates are expected to expire within %d months: %s\n" %(months,certListToBeExpired))
             else:
                 if "yes" in configValues["PRESENCE_OF_EXPIRED_CERTIFICATES"].lower():
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "FAILURE: No certificate expires within specified time but configured as expired certificates are present in the device"
+                    print("FAILURE: No certificate expires within specified time but configured as expired certificates are present in the device")
                 elif "no" in configValues["PRESENCE_OF_EXPIRED_CERTIFICATES"].lower():
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "SUCCESS: No certificate expires within specified time"
+                    print("SUCCESS: No certificate expires within specified time")
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
@@ -176,5 +176,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
+    print("FAILURE: Failed to load module")

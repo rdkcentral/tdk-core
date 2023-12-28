@@ -80,8 +80,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_security","1",standAlone=True);
@@ -94,12 +94,12 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckPartition_SecurityFS');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
-    print "Retrieving Configuration values from config file......."
+    print("Retrieving Configuration values from config file.......")
     configKeyList = ["SECURITYFS_PARTITION_AVAILABLE", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
     configValues = {}
     tdkTestObj = obj.createTestStep('rdkvsecurity_getDeviceConfig')
@@ -110,12 +110,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -125,7 +125,7 @@ if expectedResult in result.upper():
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
             command = 'mount | grep "security"'
-            print "COMMAND : %s" %(command)
+            print("COMMAND : %s" %(command))
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
@@ -136,26 +136,26 @@ if expectedResult in result.upper():
             tdkTestObj.executeTestCase(expectedResult);
             #Get the result of execution
             output = tdkTestObj.getResultDetails();
-            print "Response from device: %s" %(output)
+            print("Response from device: %s" %(output))
             if  configValues["SECURITYFS_PARTITION_AVAILABLE"].lower() == "yes":
                 if "type securityfs" in str(output):
-                    print "SUCCESS: SecurityFS partition is present in the device"
+                    print("SUCCESS: SecurityFS partition is present in the device")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "FAILURE: SecurityFS partition is not present in the device"
+                    print("FAILURE: SecurityFS partition is not present in the device")
                     tdkTestObj.setResultStatus("FAILURE");
             elif configValues["SECURITYFS_PARTITION_AVAILABLE"].lower() == "no":
                 if "type securityfs" not in str(output):
-                    print "SUCCESS: SecurityFS partition is not present in the device"
+                    print("SUCCESS: SecurityFS partition is not present in the device")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print "FAILURE: SecurityFS partition is present in the device but configured as not present"
+                    print("FAILURE: SecurityFS partition is present in the device but configured as not present")
                     tdkTestObj.setResultStatus("FAILURE");
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
 
     #Unload the module
@@ -163,6 +163,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
-
+    print("FAILURE: Failed to load module")

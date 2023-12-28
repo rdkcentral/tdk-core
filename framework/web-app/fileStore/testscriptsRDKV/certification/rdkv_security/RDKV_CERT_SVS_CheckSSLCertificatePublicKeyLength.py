@@ -80,8 +80,8 @@
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_security","1",standAlone=True);
@@ -94,7 +94,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_SVS_CheckSSLCertificatePublicKeyLength'
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result.upper());
 
 expectedResult = "SUCCESS"
@@ -109,12 +109,12 @@ if expectedResult in result.upper():
         tdkTestObj.executeTestCase(expectedResult)
         configValues[configKey] = tdkTestObj.getResultDetails()
         if "FAILURE" not in configValues[configKey] and configValues[configKey] != "":
-            print "SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey)
+            print("SUCCESS: Successfully retrieved %s configuration from device config file" %(configKey))
             tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print "FAILURE: Failed to retrieve %s configuration from device config file" %(configKey)
+            print("FAILURE: Failed to retrieve %s configuration from device config file" %(configKey))
             if configValues[configKey] == "":
-                print "\n Please configure the %s key in the device config file" %(configKey)
+                print("\n Please configure the %s key in the device config file" %(configKey))
             tdkTestObj.setResultStatus("FAILURE")
             result = "FAILURE"
             break
@@ -124,7 +124,7 @@ if expectedResult in result.upper():
                 configValues["SSH_PASSWORD"] = ""
             credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
             command =  'for pem in ' + configValues["CERT_PATH"] + '/*.pem; do if [[ $( openssl x509 -in "$pem" -text -noout | grep "Public-Key" | cut -d\( -f 2 | cut -d\'' ' \' -f 1 ) -lt ' + configValues["SSL_CERTIFICATE_KEY_LENGTH"] + '&& $( openssl x509 -in "$pem" -text -noout | grep "Public-Key" | cut -d\( -f 2 | cut -d\'' ' \' -f 1 ) -ne "0" ]]; then printf \'%s-------%d is insecure \\n\' "$pem" "$( openssl x509 -in "$pem" -text -noout | grep "Public-Key" | cut -d\( -f 2 | cut -d\'' ' \' -f 1 )"; fi done'
-            print "COMMAND : %s" %(command)            
+            print("COMMAND : %s" %(command))
             #Primitive test case which associated to this Script
             tdkTestObj = obj.createTestStep('rdkvsecurity_executeInDUT');
             #Add the parameters to ssh to the DUT and execute the command
@@ -142,17 +142,17 @@ if expectedResult in result.upper():
                         shortKeyCertList.append (line)
                 if shortKeyCertList:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "FAILURE: Few Certificates are having public key length less than configured key length %s: \n%s" %(configValues["SSL_CERTIFICATE_KEY_LENGTH"],shortKeyCertList)
+                    print("FAILURE: Few Certificates are having public key length less than configured key length %s: \n%s" %(configValues["SSL_CERTIFICATE_KEY_LENGTH"],shortKeyCertList))
                 else:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "SUCCESS: All certificates are having public key length greater than configured key length"
+                    print("SUCCESS: All certificates are having public key length greater than configured key length")
             else:
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print "FAILURE: Currently only supports directSSH ssh method"
+            print("FAILURE: Currently only supports directSSH ssh method")
             tdkTestObj.setResultStatus("FAILURE");
     else:
-        print "FAILURE: Failed to get configuration values"
+        print("FAILURE: Failed to get configuration values")
         tdkTestObj.setResultStatus("FAILURE");
     #Unload the module
     obj.unloadModule("rdkv_security");
@@ -160,6 +160,4 @@ if expectedResult in result.upper():
 else:
     #Set load module status
     obj.setLoadModuleStatus("FAILURE");
-    print "FAILURE: Failed to load module"
-
-                                     
+    print("FAILURE: Failed to load module")
