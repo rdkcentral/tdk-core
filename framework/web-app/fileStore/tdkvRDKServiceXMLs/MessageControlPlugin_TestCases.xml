@@ -1,0 +1,973 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2023 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<testPlugin pluginName="MessageControl" pluginVersion="1">
+
+        <pluginPreRequisite>
+          <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="MessageControl" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,MessageControl" />
+                <params>
+                  <param tag="callsign" value="MessageControl" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,MessageControl" />
+                <params>
+                  <param tag="plugin" value="MessageControl" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+	  <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false" >
+            <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+          </prerequisite>
+        </pluginPreRequisite>
+
+
+        <testCase testCaseId="MC_01" testCaseName= "MessageControl_Application_Toggle_All_Tracelevels" desc="Toggles all traces levels of the application module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Application" />
+            <testStep testStepId="1" name="Get_All_Application_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_Application_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Application" />
+                    <param tag="category" value="Activity,WebFlow,SocketFlow,TextFlow,Information,Discovery" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+			  <arguments value=",application,tracing" useIterableArg="true"/>    
+	          </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_Application_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Application_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+	            <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Application" />
+                    <param tag="category"  value="Activity,WebFlow,SocketFlow,TextFlow,Information,Discovery" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Application_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Application" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+	             <arguments value="check_state,application,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_Application_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Application" />
+                    <param tag="category"  value="Activity,WebFlow,SocketFlow,TextFlow,Information,Discovery" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_Application_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Application" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,application,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+
+        <testCase testCaseId="MC_02" testCaseName= "MessageControl_SysLog_Toggle_All_Tracelevels" desc="Toggles all traces levels of the SysLog module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="SysLog" />
+            <testStep testStepId="1" name="Get_All_SysLog_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_SysLog_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="SysLog" />
+                    <param tag="category" value="Crash,Startup,Shutdown,ParsingError,Notification" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",syslog,logging" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_SysLog_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_SysLog_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Logging" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="SysLog" />
+                    <param tag="category"  value="Crash,Startup,Shutdown,ParsingError,Notification" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_SysLog_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="SysLog" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,syslog,logging" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_SysLog_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Logging" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="SysLog" />
+                    <param tag="category"  value="Crash,Startup,Shutdown,ParsingError,Notification" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_SysLog_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="SysLog" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,syslog,logging" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        <testCase testCaseId="MC_03" testCaseName= "MessageControl_LocationSync_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LocationSync module" >
+		<testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="LocationSync" />     
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_LocationSync_Plugin">
+                   <testStep testStepId="1" name="Check_LocationSync_Active_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="LocationSync" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LocationSync" />
+                     <params>
+                       <param tag="callsign" value="LocationSync" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_LocationSync_Active_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LocationSync" />
+                     <params>
+                       <param tag="plugin" value="LocationSync" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_LocationSync_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_LocationSync_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_LocationSync" />
+                    <param tag="category" value="Information" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_locationsync,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_LocationSync_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_LocationSync_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_LocationSync" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_LocationSync_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_LocationSync" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_locationsync,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_LocationSync_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_LocationSync" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_LocationSync_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_LocationSync" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_locationsync,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>	
+	<testCase testCaseId="MC_04" testCaseName= "MessageControl_OCDM_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the OCDM module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="OCDM" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_OCDM_Plugin">
+                   <testStep testStepId="1" name="Check_OCDM_Active_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="OCDM" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,OCDM" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,OCDM" />
+                     <params>
+                       <param tag="callsign" value="OCDM" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_OCDM_Active_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,OCDM" />
+                     <params>
+                       <param tag="plugin" value="OCDM" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,OCDM" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite> 
+	    <testStep testStepId="1" name="Get_All_OCDM_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_OCDM_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_OCDM" />
+                    <param tag="category" value="Information,Error,Fatal,Warning" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_ocdm,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_OCDM_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_OCDM_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_OCDM" />
+                    <param tag="category"  value="Information,Error,Fatal,Warning" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_OCDM_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_OCDM" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_ocdm,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_OCDM_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_OCDM" />
+                    <param tag="category"  value="Information,Error,Fatal,Warning" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_OCDM_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_OCDM" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_ocdm,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        
+	<testCase testCaseId="MC_05" testCaseName= "MessageControl_SecurityAgent_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the SecurityAgent module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="SecurityAgent" />
+          <testCasePreRequisite>
+          <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="SecurityAgent" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,SecurityAgent" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,SecurityAgent" />
+                <params>
+                  <param tag="callsign" value="SecurityAgent" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,SecurityAgent" />
+                <params>
+                  <param tag="plugin" value="SecurityAgent" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,SecurityAgent" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+          </testCasePreRequisite>
+	    <testStep testStepId="1" name="Get_All_SecurityAgent_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_SecurityAgent_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_SecurityAgent" />
+                    <param tag="category" value="Information" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_securityagent,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_SecurityAgent_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_SecurityAgent_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_SecurityAgent" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_SecurityAgent_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_SecurityAgent" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_securityagent,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_SecurityAgent_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_SecurityAgent" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_SecurityAgent_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_SecurityAgent" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_securityagent,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+         
+	<testCase testCaseId="MC_06" testCaseName= "MessageControl_LISA_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the LISA module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="LISA" />
+            <testCasePreRequisite> 
+		  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="LISA" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LISA" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LISA" />
+                <params>
+                  <param tag="callsign" value="LISA" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LISA" />
+                <params>
+                  <param tag="plugin" value="LISA" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LISA" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>  
+	    </testCasePreRequisite> 
+	    <testStep testStepId="1" name="Get_All_LISA_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_LISA_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_LISA" />
+                    <param tag="category" value="Information,Error" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_lisa,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_LISA_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_LISA_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_LISA" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_LISA_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_LISA" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_lisa,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_LISA_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_LISA" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_LISA_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_LISA" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_lisa,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+	<testCase testCaseId="MC_07" testCaseName= "MessageControl_System_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the System module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="System" />
+            <testCasePreRequisite>
+		    <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="callsign" value="org.rdk.System" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_System_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_System_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_SystemServices" />
+                    <param tag="category" value="Information,Error" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_systemservices,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_System_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_System_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_SystemServices" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_System_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_SystemServices" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_systemservices,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_System_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_SystemServices" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_System_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_SystemServices" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_systemservices,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+
+	<testCase testCaseId="MC_08" testCaseName= "MessageControl_Cobalt_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Cobalt module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Cobalt" />
+            <testCasePreRequisite>
+		    <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="Cobalt" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Cobalt" />
+                <params>
+                  <param tag="callsign" value="Cobalt" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Cobalt" />
+                <params>
+                  <param tag="plugin" value="Cobalt" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" />
+            </testStep>
+            <testStep testStepId="4" name="Is_Cobalt_Resumed" method="Get_Cobalt_State" pluginName="Cobalt" saveResult="true" >
+                <resultGeneration useMethodTag="cobalt_get_state" />
+            </testStep>
+            <testStep testStepId="5" name="Resume_Cobalt" method="Set_Cobalt_State" pluginName="Cobalt" >
+                <conditionalExecution enable="true" Id="4" useMethodTag="cobalt_check_state" arguments="isSuspended" />
+                <params>
+                  <param tag="state" useDefault="true" />
+                </params>
+            </testStep>
+            <testStep testStepId="6" name="Is_Cobalt_Resumed" method="Get_Cobalt_State" pluginName="Cobalt" delay="5">
+                <conditionalExecution enable="true" Id="4" useMethodTag="cobalt_check_state" arguments="isSuspended" />
+                <resultGeneration useMethodTag="cobalt_get_state" expectedValues="resumed" />
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_Cobalt_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_Cobalt_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_Cobalt" />
+                    <param tag="category" value="Information" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_cobalt,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_Cobalt_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Cobalt_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Cobalt" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Cobalt_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Cobalt" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_cobalt,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_Cobalt_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Cobalt" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_Cobalt_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Cobalt" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_cobalt,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+    </testCase>
+    <testCase testCaseId="MC_09" testCaseName= "MessageControl_Messenger_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Messenger module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Messenger" />
+            <testCasePreRequisite>
+                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="Messenger" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Messenger" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Messenger" />
+                <params>
+                  <param tag="callsign" value="Messenger" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Messenger" />
+                <params>
+                  <param tag="plugin" value="Messenger" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Messenger" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_Messenger_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_Messenger_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_Messenger" />
+                    <param tag="category" value="Information,Error,Warning" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_messenger,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_Messenger_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Messenger_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Messenger" />
+                    <param tag="category"  value="Information,Error,Warning" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Messenger_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Messenger" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_messenger,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_Messenger_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Messenger" />
+                    <param tag="category"  value="Information,Error,Warning" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_Messenger_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Messenger" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_messenger,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+        <testCase testCaseId="MC_10" testCaseName= "MessageControl_Monitor_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the Monitor module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="Monitor" />
+            <testCasePreRequisite>
+                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="Monitor" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+                <params>
+                  <param tag="callsign" value="Monitor" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Monitor" />
+                <params>
+                  <param tag="plugin" value="Monitor" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Monitor" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_Monitor_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_Monitor_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_Monitor" />
+                    <param tag="category" value="Information,Error,Fatal" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_monitor,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_Monitor_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Monitor_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Monitor" />
+                    <param tag="category"  value="Information,Error,Fatal" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Monitor_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Monitor" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_monitor,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_Monitor_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_Monitor" />
+                    <param tag="category"  value="Information,Error,Fatal" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_Monitor_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_Monitor" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_monitor,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+	<testCase testCaseId="MC_11" testCaseName= "MessageControl_DisplayInfo_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DisplayInfo  module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="DisplayInfo" />
+            <testCasePreRequisite>
+                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="DisplayInfo" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DisplayInfo" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DisplayInfo" />
+                <params>
+                  <param tag="callsign" value="DisplayInfo" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DisplayInfo" />
+                <params>
+                  <param tag="plugin" value="DisplayInfo" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DisplayInfo" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_DisplayInfo_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_DisplayInfo_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_DisplayInfo" />
+                    <param tag="category" value="Information,Error" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_displayinfo,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_DisplayInfo_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_DisplayInfo_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_DisplayInfo" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_DisplayInfo_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_DisplayInfo" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_displayinfo,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_DisplayInfo_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_DisplayInfo" />
+                    <param tag="category"  value="Information,Error" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_DisplayInfo_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_DisplayInfo" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_displayinfo,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+	<testCase testCaseId="MC_12" testCaseName= "MessageControl_DeviceIdentification_Plugin_Toggle_All_Tracelevels" desc="Toggles all traces levels of the DeviceIdentification  module" >
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="MESSAGECONTROL_NOT_APPLICABLE_PLUGINS" useMethodTag="is_plugin_applicable" arguments="DeviceIdentification" />
+            <testCasePreRequisite>
+                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="DeviceIdentification" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceIdentification" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceIdentification" />
+                <params>
+                  <param tag="callsign" value="DeviceIdentification" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DeviceIdentification" />
+                <params>
+                  <param tag="plugin" value="DeviceIdentification" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceIdentification" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_All_DeviceIdentification_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Get_DeviceIdentification_Tracelevel" method="Get_Message_Controls" saveResult="true" >
+                  <params>
+                    <param tag="module"   value="Plugin_DeviceIdentification" />
+                    <param tag="category" value="Information" iteration="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                          <arguments value=",plugin_deviceidentification,tracing" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+            <testStep testStepId="2" name="SetAndGet_All_DeviceIdentification_Tracelevels" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_DeviceIdentification_Tracelevel" method="Set_Message_Controls" revertSet="yes">
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_DeviceIdentification" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_DeviceIdentification_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_DeviceIdentification" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_deviceidentification,tracing" useIterableArg="true"/>
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_toggle_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Revert_DeviceIdentification_Tracelevel" method="Set_Message_Controls" >
+                  <params>
+                    <param tag="type"    value="Tracing" />
+                    <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true" />
+                    <param tag="module"    value="Plugin_DeviceIdentification" />
+                    <param tag="category"  value="Information" iteration="true"  />
+                  </params>
+              </subtestStep>
+              <subtestStep subtestStepId="4" name="Get_DeviceIdentification_Tracelevel" method="Get_Message_Controls" >
+                  <params>
+                    <param tag="module"   value="Plugin_DeviceIdentification" />
+                    <param tag="category" useIterable="true" />
+                  </params>
+                  <resultGeneration useMethodTag="messagecontrol_get_controls" >
+                     <arguments value="check_state,plugin_deviceidentification,tracing" useIterableArg="true" />
+                     <expectedValues usePreviousResult="true" Id="1" useMethodTag="messagecontrol_get_original_state" useIterableArg="true"/>
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+	<testCase testCaseId="MC_13" testCaseName="MessageControl_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+             <testCaseInfo testCaseType="direct" />
+             <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="MessageControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,MessageControl" />
+                     <params>
+                       <param tag="callsign" value="MessageControl" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,MessageControl" />
+                     <params>
+                       <param tag="plugin" value="MessageControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_MessageControl_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="MessageControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="messagecontrol,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="MessageControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_MessageControl_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="MessageControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="messagecontrol,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="MessageControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,MessageControl" expectedValues="activated"/>
+            </testStep>
+        </testCase>
+</testPlugin>
+
