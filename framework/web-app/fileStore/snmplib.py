@@ -28,7 +28,7 @@ import signal
 import subprocess
 import tdklib
 import pipes
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import json
 from tdkbVariables import *;
 
@@ -41,16 +41,16 @@ def getDeviceBoxType(self):
         # Parameters  : None
         # Return Value: Return the box type
 
-                 url = self.url + '/deviceGroup/getDeviceBoxType?deviceIp='+self.ip
-                 response = urllib.urlopen(url).read()
-                 if 'SUCCESS' in response:
-                        boxType = json.loads(response)
-                 else:
-                        print "#TDK_@error-ERROR : Unable to get Device Box Type from REST !!!"
-                        exit()
+    url = self.url + '/deviceGroup/getDeviceBoxType?deviceIp='+self.ip
+    response = urllib.request.urlopen(url).read()
+    if 'SUCCESS' in response:
+        boxType = json.loads(response)
+    else:
+        print("#TDK_@error-ERROR : Unable to get Device Box Type from REST !!!")
+        exit()
 
-                 sys.stdout.flush()
-                 return boxType['boxtype']
+    sys.stdout.flush()
+    return boxType['boxtype']
 
         ########## End of Function ##########
 
@@ -66,111 +66,111 @@ def SnmpExecuteCmd(snmpMethod,communityString,snmpVersion,OID,ipAddress):
         # ipAddress   : IP address of the device
         # Return Value : Console output of the snmp command
 
-        if "." in ipAddress:
-                cmd=snmpMethod + ' ' + snmpVersion + ' -c ' + communityString + ' ' + ipAddress + ' ' +  OID
-        else:
-                cmd=snmpMethod + ' -c ' + communityString + ' ' + snmpVersion + ' udp6:['+ ipAddress + '] ' + OID
+    if "." in ipAddress:
+        cmd=snmpMethod + ' ' + snmpVersion + ' -c ' + communityString + ' ' + ipAddress + ' ' +  OID
+    else:
+        cmd=snmpMethod + ' -c ' + communityString + ' ' + snmpVersion + ' udp6:['+ ipAddress + '] ' + OID
 
-        class Timout(Exception):
-                pass
-        def timeoutHandler(signum, frame):
-                raise Timout
-        signal.signal(signal.SIGALRM, timeoutHandler)
-        signal.alarm(60)
+    class Timout(Exception):
+        pass
+    def timeoutHandler(signum, frame):
+        raise Timout
+    signal.signal(signal.SIGALRM, timeoutHandler)
+    signal.alarm(60)
 
-        # Executing request command
-        try:
-                print "SNMP Request:\"",cmd," \""
-                sys.stdout.flush()
-                snmpResponse = subprocess.check_output(cmd, shell=True)
-                print "SNMP Response: ",snmpResponse;
-                snmpResponse = snmpResponse.replace("<<", "")
-                snmpResponse = snmpResponse.replace(">>", "")
-                snmpResponse = unicode(snmpResponse, errors='ignore')
-                signal.alarm(0)  # reset the alarm
-        except Timout:
-                print "Timeout!! Taking too long"
-                snmpError = "ERROR: Timeout!! Taking too long"
-                sys.stdout.flush()
-                signal.alarm(0)  # reset the alarm
-                return snmpError
-        except:
-                print "Unable to execute snmp command"
-                snmpError = "ERROR: Unable to execute snmp command"
-                sys.stdout.flush()
-                signal.alarm(0)  # reset the alarm
-                return snmpError
+    # Executing request command
+    try:
+        print("SNMP Request:\"",cmd," \"")
+        sys.stdout.flush()
+        snmpResponse = subprocess.check_output(cmd, shell=True).decode()
+        print("SNMP Response: ",snmpResponse);
+        snmpResponse = snmpResponse.replace("<<", "")
+        snmpResponse = snmpResponse.replace(">>", "")
+        #snmpResponse = str(snmpResponse, errors='ignore')
+        signal.alarm(0)  # reset the alarm
+    except Timout:
+        print("Timeout!! Taking too long")
+        snmpError = "ERROR: Timeout!! Taking too long"
+        sys.stdout.flush()
+        signal.alarm(0)  # reset the alarm
+        return snmpError
+    except:
+        print("Unable to execute snmp command")
+        snmpError = "ERROR: Unable to execute snmp command"
+        sys.stdout.flush()
+        signal.alarm(0)  # reset the alarm
+        return snmpError
 
-        return snmpResponse
+    return snmpResponse
 
-        ########## End of Function ##########
+    ########## End of Function ##########
 
 
 def getCommunityString(obj,method):
 
-        # Create an object for getCommunityString
+    # Create an object for getCommunityString
 
-        # Syntax      : OBJ.getCommunityString()
-        # Description : Get the Community string for SNMP
-        # Parameters  : method - GET/SET
-        # Return Value: Return the commmunity string
+    # Syntax      : OBJ.getCommunityString()
+    # Description : Get the Community string for SNMP
+    # Parameters  : method - GET/SET
+    # Return Value: Return the commmunity string
 
-        if method == "snmpget":
-                cmd="sh %s/tdk_utility.sh parseConfigFile SNMPGET_COMMUNITY_STRING" %TDK_PATH
-                print "Request for Community String,GET:", cmd
-        else:
-                cmd="sh %s/tdk_utility.sh parseConfigFile SNMPSET_COMMUNITY_STRING" %TDK_PATH
-                print "Request for Community String,SET:", cmd
+    if method == "snmpget":
+        cmd="sh %s/tdk_utility.sh parseConfigFile SNMPGET_COMMUNITY_STRING" %TDK_PATH
+        print("Request for Community String,GET:", cmd)
+    else:
+        cmd="sh %s/tdk_utility.sh parseConfigFile SNMPSET_COMMUNITY_STRING" %TDK_PATH
+        print("Request for Community String,SET:", cmd)
 
-        tdkTestObj = obj.createTestStep('ExecuteCmd');
-        tdkTestObj.addParameter("command", cmd)
-        tdkTestObj.executeTestCase("SUCCESS");
-        communityString = tdkTestObj.getResultDetails();
-        communityString = communityString.replace("\\n", "");
-        print "communityString:", communityString
+    tdkTestObj = obj.createTestStep('ExecuteCmd');
+    tdkTestObj.addParameter("command", cmd)
+    tdkTestObj.executeTestCase("SUCCESS");
+    communityString = tdkTestObj.getResultDetails();
+    communityString = communityString.replace("\\n", "");
+    print("communityString:", communityString)
 
-        return communityString;
+    return communityString;
 
-        ########## End of Function ##########
+    ########## End of Function ##########
 
 def getIPAddress(obj):
 
-        # Create an object for getIPAddress
+    # Create an object for getIPAddress
 
-        # Syntax      : OBJ.getIPAddress()
-        # Description : Get the IP Address for SNMP
-        # Parameters  : sysObj - Object for the module loaded
-        # Return Value: Return the IP Address
+    # Syntax      : OBJ.getIPAddress()
+    # Description : Get the IP Address for SNMP
+    # Parameters  : sysObj - Object for the module loaded
+    # Return Value: Return the IP Address
 
-        cmd="sh %s/tdk_platform_utility.sh getCMIPAddress" %TDK_PATH
-        print "Request for IP Address:", cmd
-        tdkTestObj = obj.createTestStep('ExecuteCmd');
-        tdkTestObj.addParameter("command", cmd)
-        tdkTestObj.executeTestCase("SUCCESS");
-        ipAddress = tdkTestObj.getResultDetails();
-        ipAddress = ipAddress.replace("\\n", "");
-        print "IP Address:", ipAddress
-        return ipAddress;
+    cmd="sh %s/tdk_platform_utility.sh getCMIPAddress" %TDK_PATH
+    print("Request for IP Address:", cmd)
+    tdkTestObj = obj.createTestStep('ExecuteCmd');
+    tdkTestObj.addParameter("command", cmd)
+    tdkTestObj.executeTestCase("SUCCESS");
+    ipAddress = tdkTestObj.getResultDetails();
+    ipAddress = ipAddress.replace("\\n", "");
+    print("IP Address:", ipAddress)
+    return ipAddress;
 
-        ########## End of Function ##########
+    ########## End of Function ##########
 
 def getMACAddress(obj):
 
-        # Create an object for getMACAddress
+    # Create an object for getMACAddress
 
-        # Syntax      : OBJ.getMACAddress()
-        # Description : Get the MAC Address for SNMP
-        # Parameters  : sysObj - Object for the module loaded
-        # Return Value: Return the MAC Address
+    # Syntax      : OBJ.getMACAddress()
+    # Description : Get the MAC Address for SNMP
+    # Parameters  : sysObj - Object for the module loaded
+    # Return Value: Return the MAC Address
 
-        cmd="sh %s/tdk_platform_utility.sh getCMMACAddress" %TDK_PATH
-        print "Request for CM MAC Address:", cmd
-        tdkTestObj = obj.createTestStep('ExecuteCmd');
-        tdkTestObj.addParameter("command", cmd)
-        tdkTestObj.executeTestCase("SUCCESS");
-        MACAddress = tdkTestObj.getResultDetails();
-        MACAddress = MACAddress.replace("\\n", "");
-        print "MAC Address:", MACAddress
-        return MACAddress;
+    cmd="sh %s/tdk_platform_utility.sh getCMMACAddress" %TDK_PATH
+    print("Request for CM MAC Address:", cmd)
+    tdkTestObj = obj.createTestStep('ExecuteCmd');
+    tdkTestObj.addParameter("command", cmd)
+    tdkTestObj.executeTestCase("SUCCESS");
+    MACAddress = tdkTestObj.getResultDetails();
+    MACAddress = MACAddress.replace("\\n", "");
+    print("MAC Address:", MACAddress)
+    return MACAddress;
 
-        ########## End of Function ##########
+    ########## End of Function ##########

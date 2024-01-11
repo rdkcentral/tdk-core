@@ -68,4 +68,3 @@ def get_FirmwareFilename(obj):
         tdkTestObj.setResultStatus("FAILURE");
 
     return(tdkTestObj, actualresult, FirmwareFilename);
-

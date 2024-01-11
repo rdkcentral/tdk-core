@@ -44,13 +44,13 @@ def setAllParams(module, setup_type, tr181Obj, sysObj, rebootTest = "false"):
     moduleStatus = "SUCCESS"
     preRebootValues = {}
 
-    print "\n------------------------------------------------------------------------"
-    print "SET VALUES OF ALL NAMESPACES IN ", module;
-    print "------------------------------------------------------------------------\n"
+    print("\n------------------------------------------------------------------------")
+    print("SET VALUES OF ALL NAMESPACES IN ", module);
+    print("------------------------------------------------------------------------\n")
 
     tdkTestObj = sysObj.createTestStep('ExecuteCmd');
     deviceType= "sh %s/tdk_utility.sh parseConfigFile DEVICETYPE" %TDK_PATH
-    print deviceType;
+    print(deviceType);
 
     #get the community strings and ipaddress for snmp validation
     global commGetStr, ipaddress, commSetStr
@@ -66,25 +66,25 @@ def setAllParams(module, setup_type, tr181Obj, sysObj, rebootTest = "false"):
     deviceType = deviceType.replace("\\n", "");
     if "Invalid Argument passed" not in deviceType:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("[TEST EXECUTION RESULT] : SUCCESS")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE"
-	return moduleStatus,failedParams;
+        print("[TEST EXECUTION RESULT] : FAILURE")
+        return moduleStatus,failedParams;
 
     xmlName = deviceType + module + "Params.xml"
     xmlPath = os.path.dirname(os.path.realpath(__file__))
     paramListXml = xmlPath + "/tdkbModuleConfig" + "/" + xmlName
 #       paramListXml = TR181_XML_PATH + deviceType + module + "Params.xml"
-    print "The name of param list xml file is ", paramListXml;
+    print("The name of param list xml file is ", paramListXml);
 
     tree = ET.parse(paramListXml)
     paramsRoot = tree.getroot()
@@ -93,14 +93,14 @@ def setAllParams(module, setup_type, tr181Obj, sysObj, rebootTest = "false"):
     for param in paramsRoot:
         paramList.append(param.find('name').text)
 
-    print "PARAMS TO BE SET ARE: ",paramList
+    print("PARAMS TO BE SET ARE: ",paramList)
 
     for param in paramsRoot:
         #Get the value of each param
         paramType = param.find('type').text
         writable = param.find('writable').text
         persistentSet = param.find('persistentSet').text
-	#some parameters will have expected set of values and some may not
+        #some parameters will have expected set of values and some may not
         if param.find('expectedValues') is not None:
             expectedValues = param.find('expectedValues').text
             #if expectedValues in xml is non-empty
@@ -109,16 +109,16 @@ def setAllParams(module, setup_type, tr181Obj, sysObj, rebootTest = "false"):
             else:
                 expectedValues = ""
         #if expectedValues is not known and that tag itself is not available in xml, check if get value is non-empty
-	else:
-	    expectedValues = "non-empty"
-	    #the value used for set is chosen from expectedValues. If that tag is not available, look for setValue tag
+        else:
+            expectedValues = "non-empty"
+            #the value used for set is chosen from expectedValues. If that tag is not available, look for setValue tag
             if param.find('setValue') is not None:
-		setValue = param.find('setValue').text
-	    #if the parameter is writable, it will be called for set operation. In that case setValue tag must be present if there is no expectedValues tag
-	    elif writable == "true":
-		print "ERROR: Neither expectedValues nor setvalue available for the set operation of parameter ",param.find('name').text
+                setValue = param.find('setValue').text
+            #if the parameter is writable, it will be called for set operation. In that case setValue tag must be present if there is no expectedValues tag
+            elif writable == "true":
+                print("ERROR: Neither expectedValues nor setvalue available for the set operation of parameter ",param.find('name').text)
                 moduleStatus = "FAILURE";
-		failedParams.append(paramName);
+                failedParams.append(paramName);
                 return moduleStatus,failedParams;
 
         if setup_type == "TDK":
@@ -138,144 +138,144 @@ def setAllParams(module, setup_type, tr181Obj, sysObj, rebootTest = "false"):
                 paramName = param.find('oid').text
             #if snmp details of one param is not available, skip that param
             else:
-                print "OID not available for %s, skipping this parameter" %param.find('name').text
+                print("OID not available for %s, skipping this parameter" %param.find('name').text)
                 continue;
-	    #get the snmp specific param details
-    	    if param.find('snmpExpectedValues')is not None:
-    	        expectedValues = param.find('snmpExpectedValues').text
+            #get the snmp specific param details
+            if param.find('snmpExpectedValues')is not None:
+                expectedValues = param.find('snmpExpectedValues').text
                 #if expectedValues in xml is non-empty
                 if expectedValues is not None:
                     expectedValues = expectedValues.split(",")
                 else:
                     expectedValues = ""
-	    if param.find('snmpType') is not None:
-		paramType = param.find('snmpType').text
+            if param.find('snmpType') is not None:
+                paramType = param.find('snmpType').text
         else:
             moduleStatus = "FAILURE";
-	    print "Invalid setup_type passed, setupType should be one fom TDK, WEBPA or SNMP"
+            print("Invalid setup_type passed, setupType should be one fom TDK, WEBPA or SNMP")
             return moduleStatus,failedParams;
 
         expectedresult="SUCCESS";
 
-	#get and save the original value before doing set
+        #get and save the original value before doing set
         if writable == "true":
             if setup_type == "SNMP":
                 if param.find('snmpWritable')is not None:
                     snmpWritable = param.find('snmpWritable').text
                     if snmpWritable == "false":
-                        print "Skipping set validation of parameter %s via SNMP" %paramName
+                        print("Skipping set validation of parameter %s via SNMP" %paramName)
                         continue;
-	    print "*************Start validation of %s **************" %paramName
+            print("*************Start validation of %s **************" %paramName)
             value,actualresult = getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, expectedValues)
 
-	    #choose a value to be set from the expected value list
+            #choose a value to be set from the expected value list
             if expectedresult in actualresult:
                 orgValue = value
-		#if no expected values are there for the parameter, use the setValue field in xml directly, otherwise chose one setvalue from expectedValues list
-		if expectedValues != "" and expectedValues != "non-empty":
+                #if no expected values are there for the parameter, use the setValue field in xml directly, otherwise chose one setvalue from expectedValues list
+                if expectedValues != "" and expectedValues != "non-empty":
                     for newValue in expectedValues:
-                       if orgValue != newValue:
+                        if orgValue != newValue:
                             setValue = newValue
-    		            break
+                            break
                 #set a new value from expected value list
                 detail, actualresult = setParameterValue(tr181Obj, sysObj, setup_type, paramName, setValue, paramType);
 
                 if rebootTest == "false":
                     if expectedresult in actualresult:
-		        #For WiFi parameters wait for set operation to be reflected
-		        if module == "WIFI":
-			    print "Sleeping for 60sec for WiFi set opearation to reflect before doing next get\n"
-		    	    sleep(60)
+                        #For WiFi parameters wait for set operation to be reflected
+                        if module == "WIFI":
+                            print("Sleeping for 60sec for WiFi set opearation to reflect before doing next get\n")
+                            sleep(60)
                         value,actualresult = getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, setValue)
                         if expectedresult in actualresult:
-		    	    #revert the value after set
-                    	    detail, actualresult = setParameterValue(tr181Obj, sysObj, setup_type, paramName, orgValue, paramType);
-                    	    if expectedresult in actualresult:
-                    	        print "Successfully reverted the value"
-                                print "*************Set validation of %s is SUCCESS**************\n" %paramName
-                    	    else:
-                    	        print "Revert operation failed"
-    		    	        moduleStatus = "FAILURE";
-		    	        failedParams.append(paramName);
-                                print "*************Set validation with get is FAILURE for %s**************\n" %paramName
+                            #revert the value after set
+                            detail, actualresult = setParameterValue(tr181Obj, sysObj, setup_type, paramName, orgValue, paramType);
+                            if expectedresult in actualresult:
+                                print("Successfully reverted the value")
+                                print("*************Set validation of %s is SUCCESS**************\n" %paramName)
+                            else:
+                                print("Revert operation failed")
+                                moduleStatus = "FAILURE";
+                                failedParams.append(paramName);
+                                print("*************Set validation with get is FAILURE for %s**************\n" %paramName)
                         else:
-                    	    moduleStatus = "FAILURE";
-		    	    failedParams.append(paramName);
+                            moduleStatus = "FAILURE";
+                            failedParams.append(paramName);
                     else:
                         moduleStatus = "FAILURE";
-		        print "Set operation failed for %s" %paramName
-		        failedParams.append(paramName);
-		#if this is a set persistence test with reboot, set validation with get and revert validation is not done immediately but only after a reboot
-		#hence saving all setvalues and orgValues
-	        else:
+                        print("Set operation failed for %s" %paramName)
+                        failedParams.append(paramName);
+                #if this is a set persistence test with reboot, set validation with get and revert validation is not done immediately but only after a reboot
+                #hence saving all setvalues and orgValues
+                else:
                     if module == "WIFI":
-			print "Sleeping for 20sec before doing next set\n"
+                        print("Sleeping for 20sec before doing next set\n")
                         sleep(20)
 
-		    if expectedresult not in actualresult:
+                    if expectedresult not in actualresult:
                         moduleStatus = "FAILURE";
-                        print "Set operation failed for %s" %paramName
+                        print("Set operation failed for %s" %paramName)
                         failedParams.append(paramName);
-		    #save each parameters setvalue and orgvalue in a dictionary, with key as parameter name
-	            if param.find('RFCEnabled') is not None:
-            		RFCEnabled = param.find('RFCEnabled').text
-			if RFCEnabled != "true":
-			    preRebootValues[paramName] = {'setVal': setValue, 'org':orgValue, 'paramtype':paramType}
-		    else:
-			preRebootValues[paramName] = {'setVal': setValue, 'org':orgValue, 'paramtype':paramType}
+                    #save each parameters setvalue and orgvalue in a dictionary, with key as parameter name
+                    if param.find('RFCEnabled') is not None:
+                        RFCEnabled = param.find('RFCEnabled').text
+                        if RFCEnabled != "true":
+                            preRebootValues[paramName] = {'setVal': setValue, 'org':orgValue, 'paramtype':paramType}
+                    else:
+                        preRebootValues[paramName] = {'setVal': setValue, 'org':orgValue, 'paramtype':paramType}
             else:
                 moduleStatus = "FAILURE";
-		print "Get operation failed for %s" %paramName
+                print("Get operation failed for %s" %paramName)
                 failedParams.append(paramName);
-	    #adding sleep time in between to avoid WEBPA error
+            #adding sleep time in between to avoid WEBPA error
             if setup_type == "WEBPA":
-    	        print "Sleeping for 90sec before next webpa operation"
+                print("Sleeping for 90sec before next webpa operation")
                 sleep(90)
                 if deviceType == "RPI":
-		    print "Sleeping for additional 30sec in rpi before next webpa operation"
+                    print("Sleeping for additional 30sec in rpi before next webpa operation")
                     sleep(30)
 
     if rebootTest == "true":
-	#Reboot the device after set
+        #Reboot the device after set
         sysObj.initiateReboot();
         tr181Obj.resetConnectionAfterReboot();
-	#wait till all processes are up
-	print "Waiting for 5 minutes after reboot for all proccesses to come up\n"
+        #wait till all processes are up
+        print("Waiting for 5 minutes after reboot for all proccesses to come up\n")
         sleep(300)
         if setup_type == "WEBPA":
             tdkTestObj,preRequisiteStatus = webpaPreRequisite(sysObj);
             if "SUCCESS" not in preRequisiteStatus:
-		moduleStatus = "FAILURE";
-		print "Webpa Pre-requisite failed after reboot. Please check parodus and webpa processes are running in device"
-		return moduleStatus,failedParams;
+                moduleStatus = "FAILURE";
+                print("Webpa Pre-requisite failed after reboot. Please check parodus and webpa processes are running in device")
+                return moduleStatus,failedParams;
 
-	for parameter in preRebootValues:
-	    setValue = preRebootValues[parameter]['setVal']
-	    orgValue = preRebootValues[parameter]['org']
+        for parameter in preRebootValues:
+            setValue = preRebootValues[parameter]['setVal']
+            orgValue = preRebootValues[parameter]['org']
             paramType = preRebootValues[parameter]['paramtype']
             value,actualresult = getParameterValue(tr181Obj, sysObj, setup_type, parameter, paramType, setValue)
             if expectedresult in actualresult:
                 #revert the value after set
                 detail, actualresult = setParameterValue(tr181Obj, sysObj, setup_type, parameter, orgValue, paramType);
                 if expectedresult in actualresult:
-                    print "Successfully reverted the value"
-                    print "*************Set validation of %s is SUCCESS**************\n" %parameter
+                    print("Successfully reverted the value")
+                    print("*************Set validation of %s is SUCCESS**************\n" %parameter)
                 else:
-                    print "Revert operation failed"
+                    print("Revert operation failed")
                     moduleStatus = "FAILURE";
                     failedParams.append(parameter);
-                    print "*************Set validation with get is FAILURE for %s**************\n" %parameter
+                    print("*************Set validation with get is FAILURE for %s**************\n" %parameter)
             else:
                 moduleStatus = "FAILURE";
                 failedParams.append(parameter);
             #adding sleep time in between set to avoid WEBPA error
             if setup_type == "WEBPA":
-                print "Sleeping for 90sec before next webpa operation"
+                print("Sleeping for 90sec before next webpa operation")
                 sleep(90)
                 if deviceType == "RPI":
-		    print "Sleeping for additional 30sec in rpi before next webpa operation"
+                    print("Sleeping for additional 30sec in rpi before next webpa operation")
                     sleep(30)
-    
+
     return moduleStatus,failedParams;
 
 
@@ -296,13 +296,13 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
     failedParams = [];
     moduleStatus = "SUCCESS"
 
-    print "\n------------------------------------------------------------------------"
-    print "GET VALUES OF ALL NAMESPACES IN ", module;
-    print "------------------------------------------------------------------------\n"
+    print("\n------------------------------------------------------------------------")
+    print("GET VALUES OF ALL NAMESPACES IN ", module);
+    print("------------------------------------------------------------------------\n")
 
     tdkTestObj = sysObj.createTestStep('ExecuteCmd');
     deviceType= "sh %s/tdk_utility.sh parseConfigFile DEVICETYPE" %TDK_PATH
-    print deviceType;
+    print(deviceType);
 
     #get the community strings and ipaddress for snmp validation
     global commGetStr, ipaddress, commSetStr
@@ -318,18 +318,18 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
     deviceType = deviceType.replace("\\n", "");
     if "Invalid Argument passed" not in deviceType:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("[TEST EXECUTION RESULT] : SUCCESS")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("[TEST EXECUTION RESULT] : FAILURE")
         return moduleStatus,failedParams;
 
     xmlName = deviceType + module + "Params.xml"
@@ -337,7 +337,7 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
     paramListXml = xmlPath + "/tdkbModuleConfig" + "/" + xmlName
     #The xml file path for the particular module
 #    paramListXml = TR181_XML_PATH + deviceType + module + "Params.xml"
-    print "The name of param list xml file is ", paramListXml;
+    print("The name of param list xml file is ", paramListXml);
 
     tree = ET.parse(paramListXml)
     paramsRoot = tree.getroot()
@@ -346,28 +346,28 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
     for param in paramsRoot:
         paramList.append(param.find('name').text)
 
-    print "PARAMS TO BE GET ARE: ",paramList
+    print("PARAMS TO BE GET ARE: ",paramList)
 
     for param in paramsRoot:
-	#for some params default value is not applicable, skip
-	if factoryReset == "true" and param.find('defaultValue') is None:
-	    continue;
+        #for some params default value is not applicable, skip
+        if factoryReset == "true" and param.find('defaultValue') is None:
+            continue;
         #Get the value of each param
         if param.find('defaultValue') is not None:
             defaultValue = param.find('defaultValue').text
-	    #if default value given xml is empty
-	    if defaultValue is None:
-		defaultValue = ""
+            #if default value given xml is empty
+            if defaultValue is None:
+                defaultValue = ""
         paramType = param.find('type').text
-	#some parameters will have expected set of values and some may not
+        #some parameters will have expected set of values and some may not
         if param.find('expectedValues')is not None:
             expectedValues = param.find('expectedValues').text
-	    #if expectedValues in xml is non-empty
-	    if expectedValues is not None:
+            #if expectedValues in xml is non-empty
+            if expectedValues is not None:
                 expectedValues = expectedValues.split(",")
-	    else:
-		expectedValues = ""
-	#if expectedValues is not known and that tag itself is not available in xml
+            else:
+                expectedValues = ""
+        #if expectedValues is not known and that tag itself is not available in xml
         else:
             expectedValues = "non-empty"
 
@@ -375,8 +375,8 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
             paramName = param.find('name').text
         elif setup_type == "WEBPA":
             paramName = param.find('webpaName').text
-	    #for some params expected value or default value may differ for webpa
-	    if param.find('webpaExpectedValues')is not None:
+            #for some params expected value or default value may differ for webpa
+            if param.find('webpaExpectedValues')is not None:
                 expectedValues = param.find('webpaExpectedValues').text
                 expectedValues = expectedValues.split(",")
             if param.find('webpaDefaultValue')is not None:
@@ -386,7 +386,7 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
                 paramName = param.find('oid').text
             #if snmp details of one param is not available, skip that param
             else:
-                print "OID not available for %s, skipping this parameter" %param.find('name').text
+                print("OID not available for %s, skipping this parameter" %param.find('name').text)
                 continue;
             if param.find('snmpExpectedValues')is not None:
                 expectedValues = param.find('snmpExpectedValues').text
@@ -404,21 +404,21 @@ def getAllParams(module, setup_type, factoryReset, tr181Obj, sysObj):
                 paramType = param.find('snmpType').text
         else:
             moduleStatus = "FAILURE";
-	    print "Invalid setup_type passed, setupType should be one fom TDK, WEBPA or SNMP"
+            print("Invalid setup_type passed, setupType should be one fom TDK, WEBPA or SNMP")
             return moduleStatus,failedParams;
         expectedresult="SUCCESS";
 
-	print "*************Start validation of %s **************" %paramName
-	#if get operation is to be done with factory reset, cross check parameter's get value with default value list other wise with expectedvalues list
+        print("*************Start validation of %s **************" %paramName)
+        #if get operation is to be done with factory reset, cross check parameter's get value with default value list other wise with expectedvalues list
         if factoryReset == "false":
             value,actualresult = getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, expectedValues)
         else:
             value,actualresult = getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, defaultValue)
 
         if expectedresult in actualresult:
-            print "*************Get validation of %s is SUCCESS**************\n" %paramName
+            print("*************Get validation of %s is SUCCESS**************\n" %paramName)
         else:
-            print "*************Get validation of %s is FAILURE**************\n" %paramName
+            print("*************Get validation of %s is FAILURE**************\n" %paramName)
             moduleStatus = "FAILURE";
             failedParams.append(paramName);
 
@@ -460,42 +460,42 @@ def getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, expect
         tdkTestObj = sysObj.createTestStep('ExecuteCmd');
         tdkTestObj.executeTestCase(expectedresult);
         if "SUCCESS" in parsedResponse[0]:
-                value = parsedResponse[1];
-                actualresult = "SUCCESS"
+            value = parsedResponse[1];
+            actualresult = "SUCCESS"
         else:
-                value = parsedResponse
-                actualresult = "FAILURE"
+            value = parsedResponse
+            actualresult = "FAILURE"
     else:
-	oid = paramName
-	#mapping with the data type strings expected in SNMP response(STRING,INTEGER).This will be used as delimiter in response parsing
+        oid = paramName
+        #mapping with the data type strings expected in SNMP response(STRING,INTEGER).This will be used as delimiter in response parsing
         typeDict={"string":"STRING","int":"INTEGER","unsignedint":"INTEGER","uint":"INTEGER","bool":"INTEGER","Gauge32":"Gauge32"}
-	#send snmp query
-	actResponse =snmplib.SnmpExecuteCmd("snmpget", commGetStr, "-v 2c", oid, ipaddress);
+        #send snmp query
+        actResponse =snmplib.SnmpExecuteCmd("snmpget", commGetStr, "-v 2c", oid, ipaddress);
         tdkTestObj = sysObj.createTestStep('ExecuteCmd');
-	tdkTestObj.executeTestCase(expectedresult);
+        tdkTestObj.executeTestCase(expectedresult);
 
-	#check if the delimiter for paramtype is available in typeDict dictionary
+        #check if the delimiter for paramtype is available in typeDict dictionary
         if typeDict.get(paramType, "nothing") == "nothing":
             tdkTestObj.setResultStatus("FAILURE");
             actualresult = "FAILURE"
             value = "Invalid datatype for SNMP get"
             return (value, actualresult)
 
-	#delimiter for response parsing, based on param type strings like STRING:,INTEGER:
-	delimiter = typeDict.get(paramType)+":"
+        #delimiter for response parsing, based on param type strings like STRING:,INTEGER:
+        delimiter = typeDict.get(paramType)+":"
         #SNMP response with empty value will not have the type name as usual response, hence use = as delimiter
         if expectedValues == "":
             delimiter = '='
-	if delimiter in actResponse:
-	    value = actResponse.split(delimiter)[1].strip().replace('"', '')
-	    actualresult = "SUCCESS"
-	else:
+        if delimiter in actResponse:
+            value = actResponse.split(delimiter)[1].strip().replace('"', '')
+            actualresult = "SUCCESS"
+        else:
             value = actResponse
             actualresult = "FAILURE"
 
     #if there are is no expected value tag, then check if getvalue is non-empty, otherwise getvalue should be in exepectedValues list
     if (expectedresult in actualresult) and (expectedValues == "non-empty" and value!="") or (value in expectedValues and value!="") or (value!="" and ',' in value) or (expectedValues == "" and value ==""):
-	#if the get value has comma, split the value at commas and check each value against expected values
+        #if the get value has comma, split the value at commas and check each value against expected values
         if expectedValues != "" and expectedValues != "non-empty" and ',' in value:
             value = value.split(',')
             for val in value:
@@ -503,29 +503,29 @@ def getParameterValue(tr181Obj, sysObj, setup_type, paramName, paramType, expect
                     #Set the result status of execution
                     tdkTestObj.setResultStatus("FAILURE");
                     actualresult = "FAILURE"
-                    print "TEST STEP : Get the value of param", paramName;
-                    print "EXPECTED RESULT: Should get one of the values from ", expectedValues;
-                    print "ACTUAL RESULT : %s" %value;
-                    print "TEST EXECUTION RESULT: FAILURE"
-                    print "--------------------------------------------------------------------------------------"
-    		    return (value,actualresult);
+                    print("TEST STEP : Get the value of param", paramName);
+                    print("EXPECTED RESULT: Should get one of the values from ", expectedValues);
+                    print("ACTUAL RESULT : %s" %value);
+                    print("TEST EXECUTION RESULT: FAILURE")
+                    print("--------------------------------------------------------------------------------------")
+                    return (value,actualresult);
         #Set the result status of execution
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP: Get the value of param", paramName;
-        print "EXPECTED RESULT: Should get one of the values from ", expectedValues;
-        print "ACTUAL RESULT  : %s" %value;
-        print "TEST EXECUTION RESULT: SUCCESS"
-        print "--------------------------------------------------------------------------------------"
+        print("TEST STEP: Get the value of param", paramName);
+        print("EXPECTED RESULT: Should get one of the values from ", expectedValues);
+        print("ACTUAL RESULT  : %s" %value);
+        print("TEST EXECUTION RESULT: SUCCESS")
+        print("--------------------------------------------------------------------------------------")
 
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-	actualresult = "FAILURE"
-        print "TEST STEP : Get the value of param", paramName;
-        print "EXPECTED RESULT: Should get one of the values from ", expectedValues;
-        print "ACTUAL RESULT : %s" %value;
-        print "TEST EXECUTION RESULT: FAILURE"
-        print "--------------------------------------------------------------------------------------"
+        actualresult = "FAILURE"
+        print("TEST STEP : Get the value of param", paramName);
+        print("EXPECTED RESULT: Should get one of the values from ", expectedValues);
+        print("ACTUAL RESULT : %s" %value);
+        print("TEST EXECUTION RESULT: FAILURE")
+        print("--------------------------------------------------------------------------------------")
 
     return (value,actualresult);
 
@@ -559,20 +559,20 @@ def setParameterValue(tr181Obj, sysObj, setup_type, paramName, setValue, paramTy
         actualresult = tdkTestObj.getResult();
         detail = tdkTestObj.getResultDetails();
     elif setup_type == "WEBPA" :
-	#dummy testobj for marking test status
+        #dummy testobj for marking test status
         tdkTestObj = sysObj.createTestStep('ExecuteCmd');
         tdkTestObj.executeTestCase(expectedresult);
 
         # Modify the input parameter type to the format webpa is expecting
         param = {'name':paramName}
         typeDict={"string":0,"int":1,"unsignedint":2,"uint":2, "bool":3}
-	#check if the param type passed is valid
-	if typeDict.get(paramType, "nothing") == "nothing":
-	    tdkTestObj.setResultStatus("FAILURE");
-	    actualresult = "FAILURE"
-	    detail = "Invalid datatype for WEBPA set"
-	    print "Invalid datatype for WEBPA set"
-	    return (detail, actualresult)
+        #check if the param type passed is valid
+        if typeDict.get(paramType, "nothing") == "nothing":
+            tdkTestObj.setResultStatus("FAILURE");
+            actualresult = "FAILURE"
+            detail = "Invalid datatype for WEBPA set"
+            print("Invalid datatype for WEBPA set")
+            return (detail, actualresult)
 
         # Invoke webpa utility to post the query for set operation
         queryParam = {"name":paramName, "value":setValue, "dataType":typeDict.get(paramType)}
@@ -580,31 +580,31 @@ def setParameterValue(tr181Obj, sysObj, setup_type, paramName, setValue, paramTy
         parsedResponse = parseWebpaResponse(queryResponse, 1, "set")
 
         if "SUCCESS" in parsedResponse[0]:
-                detail = "WEBPA set succes";
-                actualresult = "SUCCESS"
+            detail = "WEBPA set succes";
+            actualresult = "SUCCESS"
         else:
-                detail = "WEBPA query failed"
-                actualresult = "FAILURE"
+            detail = "WEBPA query failed"
+            actualresult = "FAILURE"
     else:
         tdkTestObj = sysObj.createTestStep('ExecuteCmd');
         tdkTestObj.executeTestCase(expectedresult);
 
-	#delimiter for different parameter type
+        #delimiter for different parameter type
         delimitDict={"string":"STRING","int":"INTEGER","unsignedint":"INTEGER","uint":"INTEGER","bool":"INTEGER","Gauge32":"Gauge32"}
 
-	#parameter type mapping for snmp query
+        #parameter type mapping for snmp query
         typeDict={"string":"s","int":"i","unsignedint":"i","uint":"i","bool":"i","Gauge32":"u"}
         if delimitDict.get(paramType, "nothing") == "nothing":
             tdkTestObj.setResultStatus("FAILURE");
             actualresult = "FAILURE"
             detail = "Invalid datatype for SNMP set"
-	    print "Invalid datatype for SNMP set"
+            print("Invalid datatype for SNMP set")
             return (value, actualresult)
 
-	oid = paramName+" "+typeDict.get(paramType)+" "+setValue
+        oid = paramName+" "+typeDict.get(paramType)+" "+setValue
         actResponse =snmplib.SnmpExecuteCmd("snmpset", commSetStr, "-t 10 -v 2c", oid , ipaddress);
 
-	#If snmp query is success, response should have one of the pattern(delimiter) like STRING:, INTEGER:
+        #If snmp query is success, response should have one of the pattern(delimiter) like STRING:, INTEGER:
         delimiter = delimitDict.get(paramType)+":"
         if delimiter in actResponse:
             detail = "SNMP set operation is success"
@@ -616,21 +616,20 @@ def setParameterValue(tr181Obj, sysObj, setup_type, paramName, setValue, paramTy
     if expectedresult in actualresult:
         #Set the result status of execution
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP: Set the value of param", paramName;
-        print "EXPECTED RESULT: Should set the value of param as ", setValue;
-        print "ACTUAL RESULT  : %s" %detail
-        print "TEST EXECUTION RESULT: SUCCESS"
-        print "--------------------------------------------------------------------------------------"
+        print("TEST STEP: Set the value of param", paramName);
+        print("EXPECTED RESULT: Should set the value of param as ", setValue);
+        print("ACTUAL RESULT  : %s" %detail)
+        print("TEST EXECUTION RESULT: SUCCESS")
+        print("--------------------------------------------------------------------------------------")
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP : Set the value of param", paramName;
-        print "EXPECTED RESULT: Should set the value of param as ", setValue;
-        print "ACTUAL RESULT : %s" %detail
-        print "TEST EXECUTION RESULT: FAILURE"
-        print "--------------------------------------------------------------------------------------"
+        print("TEST STEP : Set the value of param", paramName);
+        print("EXPECTED RESULT: Should set the value of param as ", setValue);
+        print("ACTUAL RESULT : %s" %detail)
+        print("TEST EXECUTION RESULT: FAILURE")
+        print("--------------------------------------------------------------------------------------")
 
     return (detail, actualresult);
 
 ############################################# End of Function #################################################
-

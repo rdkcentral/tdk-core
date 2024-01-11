@@ -57,7 +57,7 @@ def prerequisite(sysobj,setup_type):
         tdkTestObj,preRequisiteStatus = webpaPreRequisite(sysobj);
         if "SUCCESS" not in preRequisiteStatus:
             moduleStatus = "FAILURE";
-            print "Webpa Pre-requisite failed , Please check parodus and webpa processes are running in device"
+            print("Webpa Pre-requisite failed , Please check parodus and webpa processes are running in device")
             pre_req_status = 0;
         else:
             pre_req_status = 1;
@@ -74,7 +74,7 @@ def prerequisite(sysobj,setup_type):
 def getXMLNameUsingDeviceType(sysobj,scriptmodule):
     tdkTestObj = sysobj.createTestStep('ExecuteCmd');
     deviceType= "sh %s/tdk_utility.sh parseConfigFile DEVICETYPE" %TDK_PATH
-    print deviceType;
+    print(deviceType);
     tdkTestObj.addParameter("command", deviceType);
     tdkTestObj.executeTestCase(expectedresult);
     actualresult = tdkTestObj.getResult();
@@ -84,18 +84,18 @@ def getXMLNameUsingDeviceType(sysobj,scriptmodule):
     if "Invalid Argument passed" not in deviceType:
         xmlname = deviceType + scriptmodule + ".xml"
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("[TEST EXECUTION RESULT] : SUCCESS")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the device type";
-        print "EXPECTED RESULT 1: Should Get the device type";
-        print "ACTUAL RESULT 1: Device Type: %s" %deviceType;
+        print("TEST STEP 1: Get the device type");
+        print("EXPECTED RESULT 1: Should Get the device type");
+        print("ACTUAL RESULT 1: Device Type: %s" %deviceType);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("[TEST EXECUTION RESULT] : FAILURE")
         xmlname = "Error"
 
     return xmlname;
@@ -116,7 +116,7 @@ def getXMLNameUsingDeviceType(sysobj,scriptmodule):
 def parseXML(xmlName,scriptmodule,setup_type):
     xmlPath = os.path.dirname(os.path.realpath(__file__))
     elementXml = xmlPath + "/tdkbModuleConfig" + "/" + xmlName
-    print "The name of param list xml file is ", elementXml;
+    print("The name of param list xml file is ", elementXml);
 
     tree = ET.parse(elementXml)
     elementRoot = tree.getroot()
@@ -193,25 +193,25 @@ def getHALAPIValue(obj,primitive,hal_ExpRes,scriptmodule):
 
     if hal_ExpRes != "":
         if str(details).upper() == str(hal_ExpRes).upper():
-		    exp_value_flag = 1;
+            exp_value_flag = 1;
         else:
             exp_value_flag = 0;
     else:
         exp_value_flag = 1;
 
     if expectedresult in actualresult and exp_value_flag == 1:
-        print "TEST STEP : Execute callmethod for %s" %primitive
-        print "EXPECTED RESULT : Should successfully execute callmethod"
-        print "ACTUAL RESULT : %s " %details
+        print("TEST STEP : Execute callmethod for %s" %primitive)
+        print("EXPECTED RESULT : Should successfully execute callmethod")
+        print("ACTUAL RESULT : %s " %details)
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         actualresult = "FAILURE"
-        print "TEST STEP : Execute callmethod for %s" %primitive
-        print "EXPECTED RESULT : Should successfully execute callmethod"
-        print "ACTUAL RESULT 1: %s " %details
+        print("TEST STEP : Execute callmethod for %s" %primitive)
+        print("EXPECTED RESULT : Should successfully execute callmethod")
+        print("ACTUAL RESULT 1: %s " %details)
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     return actualresult,details,tdkTestObj;
 
@@ -235,12 +235,12 @@ def getTR181ParameterValue(obj,sysobj,param_name,tr181_ExpRes,setup_type):
         tdkTestObj.executeTestCase(expectedresult);
         tr181_actualresult = tdkTestObj.getResult();
         tr181_result = tdkTestObj.getResultDetails().replace("\\n", "");
-        print "TR181 tr181_result is %s"%tr181_result
+        print("TR181 tr181_result is %s"%tr181_result)
     elif setup_type == "WEBPA":
         param = {'name':param_name}
         # Invoke webpa utility to post the query for get operation
         queryResponse = webpaQuery(sysobj,param);
-        print "WEBPA queryResponse is ",queryResponse;
+        print("WEBPA queryResponse is ",queryResponse);
         parsedResponse = parseWebpaResponse(queryResponse, 1)
         tdkTestObj = sysobj.createTestStep('ExecuteCmd');
         tdkTestObj.executeTestCase(expectedresult);
@@ -279,7 +279,7 @@ def getTR181ParameterValue(obj,sysobj,param_name,tr181_ExpRes,setup_type):
 
     if tr181_ExpRes != "":
         if str(tr181_result).upper() == str(tr181_ExpRes).upper():
-		    exp_value_flag = 1;
+            exp_value_flag = 1;
         else:
             exp_value_flag = 0;
     else:
@@ -288,20 +288,20 @@ def getTR181ParameterValue(obj,sysobj,param_name,tr181_ExpRes,setup_type):
     if expectedresult in tr181_actualresult and exp_value_flag == 1:
         #Set the result status of execution
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Get the Value from TR181 parameter";
-        print "EXPECTED RESULT 1: Should get the Value TR181 parameter";
-        print "ACTUAL RESULT 1: Value is:%s" %tr181_result;
+        print("TEST STEP 1: Get the Value from TR181 parameter");
+        print("EXPECTED RESULT 1: Should get the Value TR181 parameter");
+        print("ACTUAL RESULT 1: Value is:%s" %tr181_result);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         tr181_actualresult = "FAILURE"
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Get the Value TR181 parameter";
-        print "EXPECTED RESULT 1: Should get the Value TR181 parameter";
-        print "ACTUAL RESULT 1: Value is:%s" %tr181_result;
+        print("TEST STEP 1: Get the Value TR181 parameter");
+        print("EXPECTED RESULT 1: Should get the Value TR181 parameter");
+        print("ACTUAL RESULT 1: Value is:%s" %tr181_result);
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     return tr181_actualresult,tr181_result;
 
@@ -318,22 +318,22 @@ def getTR181ParameterValue(obj,sysobj,param_name,tr181_ExpRes,setup_type):
 def compareTR181andHALValues(hal_result,tr181_result,tdkTestObj,param_name):
     global failedparams;
 
-    print "HAL Result is %s"%hal_result
-    print "TR181 Result is %s"%tr181_result
+    print("HAL Result is %s"%hal_result)
+    print("TR181 Result is %s"%tr181_result)
     if str(hal_result).upper().strip() == str(tr181_result).upper().strip():
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Compare TR181 Parameter value and value retrieved from HAL";
-        print "EXPECTED RESULT 1: The values should match";
-        print "ACTUAL RESULT 1: The values are matching ";
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("TEST STEP 1: Compare TR181 Parameter value and value retrieved from HAL");
+        print("EXPECTED RESULT 1: The values should match");
+        print("ACTUAL RESULT 1: The values are matching ");
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Compare TR181 Parameter value and value retrieved from HAL";
-        print "EXPECTED RESULT 1: The values should match";
-        print "ACTUAL RESULT 1: The values are NOT matching ";
+        print("TEST STEP 1: Compare TR181 Parameter value and value retrieved from HAL");
+        print("EXPECTED RESULT 1: The values should match");
+        print("ACTUAL RESULT 1: The values are NOT matching ");
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
         failedparams.append(param_name);
 
     return failedparams;

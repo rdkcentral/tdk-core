@@ -25,11 +25,12 @@
 from jenkinsapi.jenkins import Jenkins
 from jenkinsapi.utils.requester import Requester
 import requests
-from ConfigParser import SafeConfigParser
+from configparser import SafeConfigParser
 from jenkinsapi.custom_exceptions import JenkinsAPIException, UnknownJob,  NoBuildData, NotFound
 import os
 from random import randint
 from xconfVariables import *
+
 #--------------------------------------------------------------------------------
 # To get the latest TDK build for the given Job.
 # Syntax       : getLatestTDKBuild(jobName,branch_name)
@@ -37,74 +38,74 @@ from xconfVariables import *
 # Parameters   : jobname - Job name for build
 #                branch_name - Branch name for build
 #
-# Return Value : Latest TDK build 
+# Return Value : Latest TDK build
 #---------------------------------------------------------------------------------
 def getLatestTDKBuild(jobName,branch_name='master'):
 
-  requests.packages.urllib3.disable_warnings()
-
-  try:
-    parser = SafeConfigParser()
-    parser.read( os.path.dirname(os.path.abspath(__file__))+'/Configure_Jenkins.ini')
-    print "Connecting to Jenkins..."
-    # Fetching the credentials from configuration file
-    username = parser.get('credentials','username')
-    url =  parser.get('credentials','url')
-    password =  parser.get('credentials','password')
-    # Logging into Jengins
-    J = Jenkins(url,requester=Requester(username,password,baseurl=url,ssl_verify=False))
-
-  except  requests.exceptions.HTTPError  as e:
-    print "Login to Jenkins failed. Check your url, username or password"
-
-  else:
-    print "Fetching the latest build..."
+    requests.packages.urllib3.disable_warnings()
 
     try:
-     job =  J[jobName]
+        parser = SafeConfigParser()
+        parser.read( os.path.dirname(os.path.abspath(__file__))+'/Configure_Jenkins.ini')
+        print("Connecting to Jenkins...")
+        # Fetching the credentials from configuration file
+        username = parser.get('credentials','username')
+        url =  parser.get('credentials','url')
+        password =  parser.get('credentials','password')
+        # Logging into Jengins
+        J = Jenkins(url,requester=Requester(username,password,baseurl=url,ssl_verify=False))
 
-    except UnknownJob:
-     print "Unknown Job Name. Please Check and retry."
+    except  requests.exceptions.HTTPError as e:
+        print("Login to Jenkins failed. Check your url, username or password")
 
     else:
+        print("Fetching the latest build...")
 
-     try:
-      # Fetching the build ids of the given Job
-      build_ids = job.get_build_ids()
-      image_file_dir = os.path.dirname(os.path.abspath(__file__))+ '/build-images'+str(randint(0, 100000))
-      image_path =  image_file_dir+'/build-images.txt'
-      remove_command = 'rm -rf ' + image_file_dir
-      make_dir_command = 'mkdir ' + image_file_dir
+        try:
+            job =  J[jobName]
 
-      for buildid in build_ids:
-        # Fetching the build names
-        build_name=job.get_build(buildid)
-        if os.path.isfile(image_path):
-         os.system(remove_command)
-        if build_name.is_good():
-         all_artifacts = build_name.get_artifact_dict()
-         os.system( make_dir_command)
-         all_artifacts.get('build-images.txt').save_to_dir( image_file_dir)
-         file = open(image_path, "r")
-         if os.path.isfile(image_path):
-          image_line = file.readline()
-          file.close()
-          os.system(remove_command)
-          image_name_split= image_line.split()
-          if image_name_split[0] == VALID_KEYWORD :
-                image_name = image_name_split[2]
-                if image_name.find(branch_name) != -1 and image_name.find(INVALID_KEYWORD) == -1:
-                        image_name_required =image_name
-                        print "The latest TDK build is successfully fetched."
-                        return image_name_required
+        except UnknownJob:
+            print("Unknown Job Name. Please Check and retry.")
 
-      return  null
-     #Fetching the Latest TDK build of the given job and branch
-     except  requests.exceptions.HTTPError  as e:
-      print "Unable to fetch TDK build as no build available for this job in Jenkins"
+        else:
 
-     except NoBuildData as e:
-       print "Some error in fetching the TDK  build of the given job. No build data available for this job"
+            try:
+                # Fetching the build ids of the given Job
+                build_ids = job.get_build_ids()
+                image_file_dir = os.path.dirname(os.path.abspath(__file__))+ '/build-images'+str(randint(0, 100000))
+                image_path =  image_file_dir+'/build-images.txt'
+                remove_command = 'rm -rf ' + image_file_dir
+                make_dir_command = 'mkdir ' + image_file_dir
+
+                for buildid in build_ids:
+                    # Fetching the build names
+                    build_name=job.get_build(buildid)
+                    if os.path.isfile(image_path):
+                        os.system(remove_command)
+                    if build_name.is_good():
+                        all_artifacts = build_name.get_artifact_dict()
+                        os.system( make_dir_command)
+                        all_artifacts.get('build-images.txt').save_to_dir( image_file_dir)
+                        file = open(image_path, "r")
+                        if os.path.isfile(image_path):
+                            image_line = file.readline()
+                            file.close()
+                            os.system(remove_command)
+                            image_name_split= image_line.split()
+                            if image_name_split[0] == VALID_KEYWORD :
+                                image_name = image_name_split[2]
+                                if image_name.find(branch_name) != -1 and image_name.find(INVALID_KEYWORD) == -1:
+                                    image_name_required =image_name
+                                    print("The latest TDK build is successfully fetched.")
+                                    return image_name_required
+
+                return  null
+            #Fetching the Latest TDK build of the given job and branch
+            except  requests.exceptions.HTTPError as e:
+                print("Unable to fetch TDK build as no build available for this job in Jenkins")
+
+            except NoBuildData as e:
+                print("Some error in fetching the TDK  build of the given job. No build data available for this job")
 
 ########## End of Function ##########
 
@@ -119,7 +120,7 @@ def getLatestTDKBuild(jobName,branch_name='master'):
 
 def GetPlatformProperties(obj, param):
 
-    #locate tdk_platform.properties in the device
+        #locate tdk_platform.properties in the device
     tdkTestObj = obj.createTestStep('ExecuteCmd');
     tdkTestObj.addParameter("command", "find / -iname 'tdk_platform.properties' | head -n 1 | tr \"\n\" \" \"");
 
@@ -162,7 +163,7 @@ def GetPlatformProperties(obj, param):
 # Return Value : FirmwareVersion, FirmwareFilename
 
 def getFirmwareDetails(obj):
-
+    ldict = {}
     actualresult, suffix = GetPlatformProperties(obj, "FW_NAME_SUFFIX")
 
     tdkTestObj = obj.createTestStep('ExecuteCmd');
@@ -175,45 +176,47 @@ def getFirmwareDetails(obj):
     if "SUCCESS" in result:
         tdkTestObj.setResultStatus("SUCCESS");
         JENKINS_JOB = details[:-2]
-        print "TEST STEP 1: fetch Jenkins job from Version file"
-        print "EXPECTED RESULT 1: Should fetch Jenkins job from Version file"
-        print "ACTUAL RESULT 1: Jenkins job %s " %JENKINS_JOB
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("TEST STEP 1: fetch Jenkins job from Version file")
+        print("EXPECTED RESULT 1: Should fetch Jenkins job from Version file")
+        print("ACTUAL RESULT 1: Jenkins job %s " %JENKINS_JOB)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
 
         ###Check if firmware name is to be fetched from jenkins or is available in config file
         if (AUTO_SEARCH_IN_JENKINS =='TRUE'):
-             print "Enabled AUTO_SEARCH_IN_JENKINS"
+            print("Enabled AUTO_SEARCH_IN_JENKINS")
 
-             #validate whether Master image is to be searched in Jenkins or not
-             if (SEARCH_MASTER_IN_JENKINS=='TRUE'):
-                     print "Enabled SEARCH_MASTER_IN_JENKINS"
-                     FirmwareVersion=getLatestTDKBuild(JENKINS_JOB)
-                     print "Got Latest Master Image Name ",FirmwareVersion
-		     FirmwareFilename =FirmwareVersion + suffix
-                     print "Latest Master FirmwareFilename is ",FirmwareFilename;
-             else:
-                     print "Diabled SEARCH_MASTER_IN_JENKINS"
-                     #Searching Latest Stable2 image in Jenkins
-                     FirmwareVersion=getLatestTDKBuild(JENKINS_JOB,'stable2')
-                     print "Got Latest Stable2 Image Name ",FirmwareVersion
-		     FirmwareFilename =FirmwareVersion + suffix
-                     print "Latest Stable2 FirmwareFilename is ",FirmwareFilename;
+            #validate whether Master image is to be searched in Jenkins or not
+            if (SEARCH_MASTER_IN_JENKINS=='TRUE'):
+                print("Enabled SEARCH_MASTER_IN_JENKINS")
+                FirmwareVersion=getLatestTDKBuild(JENKINS_JOB)
+                print("Got Latest Master Image Name ",FirmwareVersion)
+                FirmwareFilename =FirmwareVersion + suffix
+                print("Latest Master FirmwareFilename is ",FirmwareFilename);
+            else:
+                print("Diabled SEARCH_MASTER_IN_JENKINS")
+                #Searching Latest Stable2 image in Jenkins
+                FirmwareVersion=getLatestTDKBuild(JENKINS_JOB,'stable2')
+                print("Got Latest Stable2 Image Name ",FirmwareVersion)
+                FirmwareFilename =FirmwareVersion + suffix
+                print("Latest Stable2 FirmwareFilename is ",FirmwareFilename);
         else:
-            print "Disabled AUTO_SEARCH_IN_JENKINS"
+            print("Disabled AUTO_SEARCH_IN_JENKINS")
             JENKINS_JOB=JENKINS_JOB.replace("-","_")
-            exec ("FirmwareVersion=%s"%(JENKINS_JOB))
-            print "Success :Got FirmwareVersion",FirmwareVersion
-	    FirmwareFilename =FirmwareVersion + suffix
-            print "FirmwareFilename is ",FirmwareFilename;
+            #Pass an explicit locals dictionary to see effects of the code on locals after function exec() returns
+            exec ("FirmwareVersion=%s"%(JENKINS_JOB) ,globals(), ldict)
+            FirmwareVersion=ldict['FirmwareVersion']
+            print("Success :Got FirmwareVersion",FirmwareVersion)
+            FirmwareFilename =FirmwareVersion + suffix
+            print("FirmwareFilename is ",FirmwareFilename);
 
         return(FirmwareVersion, FirmwareFilename);
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: fetch Jenkins job from Version file"
-        print "EXPECTED RESULT 1: Should fetch Jenkins job from Version file"
-        print "ACTUAL RESULT 1: Jenkins job %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS";
-        print "Unable to fetch Jenkins job from Version file";
+        print("TEST STEP 1: fetch Jenkins job from Version file")
+        print("EXPECTED RESULT 1: Should fetch Jenkins job from Version file")
+        print("ACTUAL RESULT 1: Jenkins job %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
+        print("Unable to fetch Jenkins job from Version file");
 
 ########## End of function ##########
 
@@ -239,26 +242,26 @@ def getXCONFServerConfigCmd(obj, FirmwareVersion, FirmwareFilename, Protocol):
         tdkTestObj.executeTestCase(expectedresult)
         #Get the result of execution
         result = tdkTestObj.getResult();
-        print "[TEST EXECUTION RESULT] : %s" %result;
+        print("[TEST EXECUTION RESULT] : %s" %result);
         estbMAC = tdkTestObj.getResultDetails().strip();
-        print "[TEST EXECUTION DETAILS] : %s" %estbMAC;
+        print("[TEST EXECUTION DETAILS] : %s" %estbMAC);
 
         if expectedresult in actualresult:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "TEST STEP 2: fetch ESTB_MAC from device"
-            print "EXPECTED RESULT 2: Should fetch ESTB_MAC from device"
-            print "ACTUAL RESULT 2: ESTB_MAC is %s " %estbMAC
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("TEST STEP 2: fetch ESTB_MAC from device")
+            print("EXPECTED RESULT 2: Should fetch ESTB_MAC from device")
+            print("ACTUAL RESULT 2: ESTB_MAC is %s " %estbMAC)
+            print("[TEST EXECUTION RESULT] : SUCCESS");
 
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "TEST STEP 2: fetch ESTB_MAC from device"
-            print "EXPECTED RESULT 2: Should fetch ESTB_MAC from device"
-            print "ACTUAL RESULT 2: ESTB_MAC is %s " %estbMAC
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("TEST STEP 2: fetch ESTB_MAC from device")
+            print("EXPECTED RESULT 2: Should fetch ESTB_MAC from device")
+            print("ACTUAL RESULT 2: ESTB_MAC is %s " %estbMAC)
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "Failed to fetch Interface from device"
+        print("Failed to fetch Interface from device")
 
     Curl_CMD="curl -X PUT -H 'Content-Type: application/json'  -d  '{\"eStbMac\": \""+estbMAC+"\",\"xconfServerConfig\": {\"firmwareDownloadProtocol\": \""+Protocol+"\",\"firmwareFilename\": \""+FirmwareFilename+"\",\"firmwareVersion\": \""+FirmwareVersion+"\",\"firmwareLocation\": \""+FIRMWARELOCATION+"\",\"rebootImmediately\": false}}' '" +CDN_MOC_SERVER +"'"
 
@@ -290,20 +293,20 @@ def getCurrentFirmware(obj):
 
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: fetch device's current firmware name"
-        print "EXPECTED RESULT 1: Should fetch device's current firmware name"
-        print "ACTUAL RESULT 1: Image name %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("TEST STEP 1: fetch device's current firmware name")
+        print("EXPECTED RESULT 1: Should fetch device's current firmware name")
+        print("ACTUAL RESULT 1: Image name %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
 
         FirmwareVersion = details;
-	FirmwareFilename =FirmwareVersion + suffix
-	return (FirmwareVersion, FirmwareFilename);
+        FirmwareFilename =FirmwareVersion + suffix
+        return (FirmwareVersion, FirmwareFilename);
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: fetch device's current firmware name"
-        print "EXPECTED RESULT 1: Should fetch device's current firmware name"
-        print "ACTUAL RESULT 1: Image name %s " %details
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("TEST STEP 1: fetch device's current firmware name")
+        print("EXPECTED RESULT 1: Should fetch device's current firmware name")
+        print("ACTUAL RESULT 1: Image name %s " %details)
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
 ########## End of function ##########
 
@@ -326,21 +329,21 @@ def removeLog(obj, cdnLog):
 
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     details = tdkTestObj.getResultDetails();
-    print "[TEST EXCEUTION DETAILS] : %s"%details;
+    print("[TEST EXCEUTION DETAILS] : %s"%details);
     if "SUCCESS" in result:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 4: Remove the logfiles"
-        print "EXPECTED RESULT 4: Should Remove the logfiles"
-        print "ACTUAL RESULT 4: is %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("TEST STEP 4: Remove the logfiles")
+        print("EXPECTED RESULT 4: Should Remove the logfiles")
+        print("ACTUAL RESULT 4: is %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 4: Remove the logfiles"
-        print "EXPECTED RESULT 4: Should Remove the logfiles"
-        print "ACTUAL RESULT 4: is %s " %details
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("TEST STEP 4: Remove the logfiles")
+        print("EXPECTED RESULT 4: Should Remove the logfiles")
+        print("ACTUAL RESULT 4: is %s " %details)
+        print("[TEST EXECUTION RESULT] : FAILURE")
     return result;
 ########## End of function ##########
 
@@ -359,10 +362,10 @@ def overrideServerUrl(obj, overrideUrl):
     expectedresult = "SUCCESS"
     actualresult, propVal = GetPlatformProperties(obj, "XCONF_OVERRIDE_FILE")
     if expectedresult in actualresult:
-        print "SUCCESS:get xconf override file name"
+        print("SUCCESS:get xconf override file name")
         xconfFile = propVal
     else:
-        print "FAILURE:failed to get xconf override file name"
+        print("FAILURE:failed to get xconf override file name")
 
     ########create a back_up of override file by renaming. Then add the override url
     tdkTestObj = obj.createTestStep('ExecuteCmd');
@@ -374,16 +377,16 @@ def overrideServerUrl(obj, overrideUrl):
 
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: Set new xconf override url"
-        print "EXPECTED RESULT 3: Should Set new xconf override url"
-        print "ACTUAL RESULT 3: Status: %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("TEST STEP 1: Set new xconf override url")
+        print("EXPECTED RESULT 3: Should Set new xconf override url")
+        print("ACTUAL RESULT 3: Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: Set new xconf override url"
-        print "EXPECTED RESULT 3: Should Set new xconf override url"
-        print "ACTUAL RESULT 3: Status: %s " %details
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("TEST STEP 1: Set new xconf override url")
+        print("EXPECTED RESULT 3: Should Set new xconf override url")
+        print("ACTUAL RESULT 3: Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : FAILURE");
     return actualresult, xconfFile;
 ########## End of function ##########
 
@@ -409,15 +412,15 @@ def restoreOverrideFile(obj, xconfFile):
 
     if expectedresult in actualresult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print "TEST STEP 1: restore the override file"
-        print "EXPECTED RESULT 3: Should restore the override file"
-        print "ACTUAL RESULT 3: Status: %s " %details
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("TEST STEP 1: restore the override file")
+        print("EXPECTED RESULT 3: Should restore the override file")
+        print("ACTUAL RESULT 3: Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print "TEST STEP 1: restore the override file"
-        print "EXPECTED RESULT 3: Should restore the override file"
-        print "ACTUAL RESULT 3: Status: %s " %details
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("TEST STEP 1: restore the override file")
+        print("EXPECTED RESULT 3: Should restore the override file")
+        print("ACTUAL RESULT 3: Status: %s " %details)
+        print("[TEST EXECUTION RESULT] : FAILURE");
     return actualresult;
 ########## End of function ##########
