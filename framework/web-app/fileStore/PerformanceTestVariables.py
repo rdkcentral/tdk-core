@@ -67,5 +67,14 @@ ping_test_destination = "google.com"
 #URL used to test encrypted videoplayback
 encrypt_test_url = ""
 
+#URL used to test 4K videoplayback
+video4K_test_url = ""
+
+#URL used to test HDR videoplayback
+HDRvideo_test_url = ""
+
+#URL used to test SDR videoplayback
+SDRvideo_test_url = ""
+
 #URL used for Vimeo app
 vimeo_test_url="https://widgets.metrological.com/lightning/rdk/d431ce8577be56e82630650bf701c57d#app:com.metrological.app.VimeoRelease"
