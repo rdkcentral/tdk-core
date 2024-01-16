@@ -222,7 +222,7 @@ class PrimitiveTestCase:
             print("#TDK_@error-ERROR : Parameter (" + searchKey + ") not found in primitive test !!!")
             sys.stdout.flush()
             exit()
-            return
+        return
 
     ########## End of Function ##########
 
@@ -367,8 +367,8 @@ class PrimitiveTestCase:
             print("#TDK_@error-ERROR : Method not registered with Test Agent")
             if self.xmlLogEnabled==True:
                 addTxtEle(self.parentTestCase.xmlLogDom,self.TestFnLogDom,"message","#TDK_@error-ERROR : Method not registered with Test Agent")
-                sys.stdout.flush()
-                exit()
+            sys.stdout.flush()
+            exit()
         else:
             message = self.getValueFromJSON("TDK__#@$00_result")
             self.resultStr=message
@@ -2155,3 +2155,4 @@ def print_crash_summary():
 
 
 ########## End of tdklib ##########
+
