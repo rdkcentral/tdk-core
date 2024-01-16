@@ -95,7 +95,7 @@ obj.configureTestCase(ip,port,'RDKV_AppArmor_Check_Blocklist');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result;)
+print("[LIB LOAD STATUS]  :  %s" %result)
 obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"

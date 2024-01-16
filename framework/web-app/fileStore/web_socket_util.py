@@ -73,7 +73,7 @@ class createEventListener(object):
             # # # Without Thunder Security Token
             else:
                 websocketConnection = "ws://" + self.ip + ":" + str(self.port) + str(self.url)
-                self.ws = websocket.WebSocketApp(websocketConnection, header=[auth],
+            self.ws = websocket.WebSocketApp(websocketConnection, header=[auth],
                                              on_message = self.on_message,
                                              on_error   = self.on_error,
                                              on_close   = self.on_close,
