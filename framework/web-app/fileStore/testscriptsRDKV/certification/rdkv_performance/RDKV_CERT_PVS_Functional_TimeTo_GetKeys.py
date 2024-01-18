@@ -235,7 +235,7 @@ if expectedResult in result.upper():
                             Summ_list.append('Time taken to get keys :{}ms'.format(avg_get_key_time))
                             print("\n Threshold value to get keys: {}(ms)".format(get_key_threshold))
                             print("\n Validate the time:")
-                            if avg_get_key_time < get_key_threshold:
+                            if int(avg_get_key_time) < int(get_key_threshold):
                                 print("\n Time taken for getting the keys is within the expected range \n")
                                 tdkTestObj.setResultStatus("SUCCESS")
                             else:

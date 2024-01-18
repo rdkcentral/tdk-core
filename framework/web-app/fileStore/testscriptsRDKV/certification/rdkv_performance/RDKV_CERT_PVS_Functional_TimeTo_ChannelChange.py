@@ -272,7 +272,7 @@ if expectedResult in result.upper():
                                         print("Channel change logs are not present in wpelogs")
                                         tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print"\n Playing logs not present in wpelogs"
+                                print("\n Playing logs not present in wpelogs")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
                             print("Error in getting the tuning time")
