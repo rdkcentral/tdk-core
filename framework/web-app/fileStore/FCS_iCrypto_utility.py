@@ -184,7 +184,7 @@ def CheckAppExists(obj,appname):
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if not details:
-        print("%s application not found"%(test))
+        print("%s application not found"%(appname))
         print("Not Proceeding with test case")
         exit()
 
@@ -192,6 +192,7 @@ def CheckAppExists(obj,appname):
 def RunTest(obj,Test,logFile):
     #Test to be executed
     test = TESTAPP[Test];
+    print(test)
     CheckAppExists(obj,test)
 
     #Prmitive test case which associated to this Script

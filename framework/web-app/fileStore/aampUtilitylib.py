@@ -91,7 +91,7 @@ def getAampLicenseServerURL(DRM):
     parser = SafeConfigParser()
     # Fetching the stream details from configuration file
     parser.read( os.path.dirname(os.path.abspath(__file__))+'/Aamp_Tune_Config.ini')
-    print "Parsing Aamp License Server URLs ..."
+    print ("Parsing Aamp License Server URLs ...")
     if DRM == "widevine":
         license_server_url = parser.get('licenseservers','WIDEVINE_licenseServerUrl')
         return license_server_url

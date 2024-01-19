@@ -126,7 +126,6 @@ def executeBluetoothCtl(bluetoothObj,commands):
 
         username = configParser.get('bluetooth-config', 'username')
         password = configParser.get('bluetooth-config', 'password')
-        global deviceName;
         deviceName = configParser.get('bluetooth-config','devicename')
         BT_Mac =  configParser.get('bluetooth-config','DUT_BT_controller_mac')
         #Executing the commands in device
