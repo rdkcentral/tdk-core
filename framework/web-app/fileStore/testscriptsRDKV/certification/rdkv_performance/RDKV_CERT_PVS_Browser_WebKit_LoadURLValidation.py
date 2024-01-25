@@ -157,9 +157,9 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS");
                         print("Validate whether the url launched in webkit browser and url loaded in webinspect page are same")
                         if new_url == target_URL:
-                            print("The url launched in webkit browser: {} is same as the url in webinspect page: {}").format(new_url,target_URL)
+                            print("The url launched in webkit browser: {} is same as the url in webinspect page: {}".format(new_url,target_URL))
                         else:
-                            print("The url launched in webkit browser: {} is not the same url in webinspect page: {}").format(new_url,target_URL)
+                            print("The url launched in webkit browser: {} is not the same url in webinspect page: {}".format(new_url,target_URL))
                             tdkTestObj.setResultStatus("FAILURE");
                     else:
                         tdkTestObj.setResultStatus("FAILURE");
