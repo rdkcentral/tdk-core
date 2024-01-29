@@ -295,7 +295,7 @@ class ScriptService {
 
 						modules.each { module ->
 							String moduleNameString = module.toString()
-							if((!moduleNameString.contains(Constants.RDKSERVICES)) && (!moduleNameString.contains(Constants.RDKV_DOBBY)) && (!moduleNameString.contains(Constants.RDKV_APPARMOR)) && (!moduleNameString.contains(Constants.RDKV_BASIC_SANITY)) && (!moduleNameString.contains(Constants.RDKVXCONFRFC)) && (!moduleNameString.contains(Constants.RIALTO_CONTAINER))){
+							if((!moduleNameString.contains(Constants.RDKSERVICES)) && (!moduleNameString.contains(Constants.RDKV_DOBBY)) && (!moduleNameString.contains(Constants.RDKV_APPARMOR)) && (!moduleNameString.contains(Constants.RDKV_BASIC_SANITY)) && (!moduleNameString.contains(Constants.RDKVXCONFRFC)) && (!moduleNameString.contains(Constants.RIALTO_CONTAINER)) && (!moduleNameString.contains(Constants.FIREBOLT_NATIVE_APPS_COMPLIANCE))){
 								def category = null
 								if(Constants.TESTSCRIPTS_RDKV.equals(fileStorePath) || Constants.TESTSCRIPTS_RDKV_ADV.equals(fileStorePath)){
 									category = Constants.RDKV
@@ -341,7 +341,7 @@ class ScriptService {
 						modules.each{folder->
 							File moduleDirectory = new File( "${realPath}//fileStore//"+Constants.TESTSCRIPTS_RDKV+"//"+testGroup+"//"+folder)
 							if(moduleDirectory.exists()){
-								if((testGroup == Constants.COMPONENT && folder == Constants.RDKSERVICES) || (testGroup == Constants.CERTIFICATION) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_DOBBY) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_APPARMOR) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_BASIC_SANITY) || (testGroup == Constants.COMPONENT && folder == Constants.RDKVXCONFRFC) || (testGroup == Constants.INTEGRATION && folder == Constants.RIALTO_CONTAINER)){
+								if((testGroup == Constants.COMPONENT && folder == Constants.RDKSERVICES) || (testGroup == Constants.CERTIFICATION) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_DOBBY) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_APPARMOR) || (testGroup == Constants.COMPONENT && folder == Constants.RDKV_BASIC_SANITY) || (testGroup == Constants.COMPONENT && folder == Constants.RDKVXCONFRFC) || (testGroup == Constants.INTEGRATION && folder == Constants.RIALTO_CONTAINER) || (testGroup == Constants.INTEGRATION && folder == Constants.FIREBOLT_NATIVE_APPS_COMPLIANCE)){
 									List sLstEmpty = []
 									scriptGroupMap.put(folder,sLstEmpty)
 									List sLst = []
@@ -1831,7 +1831,7 @@ class ScriptService {
 						Arrays.sort(modules);
 						modules.each { module ->
 							String moduleNameString = module?.toString()
-							if((!moduleNameString.contains(Constants.RDKSERVICES)) && (!moduleNameString.contains(Constants.RDKV_DOBBY)) && (!moduleNameString.contains(Constants.RDKV_APPARMOR)) && (!moduleNameString.contains(Constants.RDKV_BASIC_SANITY)) && (!moduleNameString.contains(Constants.RDKVXCONFRFC)) && (!moduleNameString.contains(Constants.RIALTO_CONTAINER))){
+							if((!moduleNameString.contains(Constants.RDKSERVICES)) && (!moduleNameString.contains(Constants.RDKV_DOBBY)) && (!moduleNameString.contains(Constants.RDKV_APPARMOR)) && (!moduleNameString.contains(Constants.RDKV_BASIC_SANITY)) && (!moduleNameString.contains(Constants.RDKVXCONFRFC)) && (!moduleNameString.contains(Constants.RIALTO_CONTAINER)) && (!moduleNameString.contains(Constants.FIREBOLT_NATIVE_APPS_COMPLIANCE))){
 								def start1 =System.currentTimeMillis()
 								try {
 									File [] files = module.listFiles(new FilenameFilter() {
