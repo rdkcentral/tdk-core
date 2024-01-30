@@ -81,8 +81,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkservices","1",standAlone=True);
@@ -95,7 +95,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_AVS_Wifi');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 expectedResult = "SUCCESS"
 
@@ -105,12 +105,12 @@ if expectedResult in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     #Get the result of execution
     result = tdkTestObj.getResult();
-    print "[TEST EXECUTION RESULT] : %s" %result;
+    print("[TEST EXECUTION RESULT] : %s" %result);
     #Set the result status of execution
     tdkTestObj.setResultStatus(result);
 else:
     obj.setLoadModuleStatus("FAILURE");
-    print "Failed to load module"
+    print("Failed to load module")
 
 #unload module
 obj.unloadModule('rdkservices');

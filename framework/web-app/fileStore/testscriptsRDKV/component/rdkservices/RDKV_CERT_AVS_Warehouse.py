@@ -81,8 +81,8 @@
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+# use tdklib library,which provides a wrapper for tdk testcase script
+import tdklib;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkservices","1",standAlone=True);
@@ -95,7 +95,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_AVS_Warehouse');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
-print "[LIB LOAD STATUS]  :  %s" %result;
+print("[LIB LOAD STATUS]  :  %s" %result);
 
 #Prmitive test case which associated to this Script
 tdkTestObj = obj.createTestStep('RdkService_Test');
@@ -106,7 +106,7 @@ tdkTestObj.executeTestCase(expectedResult);
 
 #Get the result of execution
 result = tdkTestObj.getResult();
-print "[TEST EXECUTION RESULT] : %s" %result;
+print("[TEST EXECUTION RESULT] : %s" %result);
 
 #Set the result status of execution
 tdkTestObj.setResultStatus(result);
