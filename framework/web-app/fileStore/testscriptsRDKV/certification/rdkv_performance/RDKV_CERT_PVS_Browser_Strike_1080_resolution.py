@@ -118,7 +118,6 @@ expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     browser_test_url = BrowserPerformanceVariables.strike_tool_url
     webinspect_port = PerformanceTestVariables.webinspect_port
-    webkit_console_socket = None
     print("\n Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
@@ -137,6 +136,12 @@ if expectedResult in result.upper():
             status = "FAILURE"
     params = '{"h":1080,"w":1920}'
     set_resolution = "FAILURE"
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
     print("\n Get the current screen resolution \n")
     tdkTestObj = obj.createTestStep('rdkservice_getValue');
     tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getScreenResolution");
@@ -188,6 +193,7 @@ if expectedResult in result.upper():
             tdkTestObj.setResultStatus("SUCCESS")
             print("\n Current URL:",current_url)
             print("\n Set test URL")
+            Execution_start_time = str(datetime.utcnow()).split()[1]
             tdkTestObj = obj.createTestStep('rdkservice_setValue')
             tdkTestObj.addParameter("method","WebKitBrowser.1.url")
             tdkTestObj.addParameter("value",browser_test_url)
@@ -205,7 +211,6 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     print("URL(",new_url,") is set successfully")
                     time.sleep(10)
-                    webkit_console_socket.clearEventsBuffer()
                     #Press enter to start the test
                     params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -213,28 +218,28 @@ if expectedResult in result.upper():
                     tdkTestObj.addParameter("value",params)
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
-                    if expectedResult in result:
+                    if expectedResult in result  and ssh_param_dict != {}:
                         tdkTestObj.setResultStatus("SUCCESS")
-                        continue_count = 0
+                        time.sleep(360)
                         browser_score = 0
-                        while True:
-                            if continue_count > 180:
-                                print("\n Unable to run strike tool \n")
-                                tdkTestObj.setResultStatus("FAILURE")
-                                break
-                            if (len(webkit_console_socket.getEventsBuffer())== 0):
-                                time.sleep(1)
-                                continue_count += 1
-                                continue
-                            console_log = webkit_console_socket.getEventsBuffer().pop(0)
-                            continue_count = 0
-                            if '"text":"Score "' in console_log or "Connection refused" in console_log:
-                                console_log = json.loads(console_log)
-                                browser_score_list = console_log.get('params').get('message').get('parameters')
-                                browser_score = [element.get('value') for element in browser_score_list if element.get('type') == 'number'][0]
-                                print("\n Score from Strike tool: ",browser_score)
-                                break;
-                        if browser_score:
+                        command = "cat /opt/logs/wpeframework.log |grep -inr 'Score' | tail -1"
+                        print ("COMMAND : %s" %(command))
+                        #Primitive test case which associated to this Script
+                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
+                        #Add the parameters to ssh to the DUT and execute the command
+                        tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                        tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                        tdkTestObj.addParameter("command",command)
+                        #Execute the test case in DUT
+                        tdkTestObj.executeTestCase(expectedResult);
+                        result = tdkTestObj.getResult()
+                        output = tdkTestObj.getResultDetails()
+                        output = output[output.find('\n'):]
+                        Score_time = output.split(" ")[-4]
+                        browser_score = output.split(':')[5].split(' ')[0]
+                        print ("Score logs from wpelogs:")
+                        if (Execution_start_time < Score_time ) and browser_score != {}:
+                            print("Strike_tool browser Score is:",browser_score)
                             conf_file,result = getConfigFileName(tdkTestObj.realpath)
                             result, strike_threshold_value = getDeviceConfigKeyValue(conf_file,"STRIKE_THRESHOLD_VALUE")
                             if strike_threshold_value != "" :
