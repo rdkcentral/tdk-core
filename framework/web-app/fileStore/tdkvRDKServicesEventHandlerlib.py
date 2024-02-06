@@ -46,8 +46,8 @@ class createEventListener(object):
         self.trace = trace
         self.access_token = str(eventsInfo.get("token"))
         thread = threading.Thread(target=self.connect, args=())
-        _thread.daemon = True
-        _thread.start()
+        thread.daemon = True
+        thread.start()
         self.listen = True
         self.listenflag = False
         self.eventsbuffer = []

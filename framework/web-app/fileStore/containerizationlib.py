@@ -409,6 +409,7 @@ def containerization_cloneDobby(basePath):
         #Check if dobby test tool is downloaded  in TM
         command = '[ -d '+basePath+'/fileStore/dobby-security-tool ] && echo 1 || echo 0'
         output = containerization_executeInTM(command)
+        output = output.decode("utf-8")
         if int(output) == 0 or "FAILURE" in output:
             #gitclone and obtain dobby security directory in fileStore
             command = "cd " + basePath + "/fileStore;git clone https://github.com/rdkcentral/dobby-security-tool.git"
@@ -416,6 +417,7 @@ def containerization_cloneDobby(basePath):
             sleep(2);
             command = '[ -d '+basePath+'/fileStore/dobby-security-tool ] && echo 1 || echo 0'
             output = containerization_executeInTM(command)
+            output = output.decode("utf-8")
         #if Dobby  is successfully downloaded in fileStore
         if "FAILURE" not in output and int(output) == 1:
             print("SUCCESS: Dobby is installed in TM\n")

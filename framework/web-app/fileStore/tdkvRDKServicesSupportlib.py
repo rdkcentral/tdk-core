@@ -28,6 +28,7 @@ import collections
 from pexpect import pxssh
 import configparser
 from base64 import b64encode, b64decode
+import base64
 import codecs
 from time import sleep
 import re
@@ -37,6 +38,7 @@ import random
 import string
 import IPChangeDetectionVariables
 import os
+import datetime
 
 timeZones = []
 
@@ -1060,8 +1062,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "rdkshell_check_for_resolution_set":
             w = int(result.get("w"))
             h = int(result.get("h"))
-            expectedw = int(expectedValues[1])
-            expectedh = int(expectedValues[0])
+            expectedw = int(expectedValues[0])
+            expectedh = int(expectedValues[1])
             if w == expectedw and h == expectedh:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
@@ -3721,7 +3723,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         # MessageControl Plugin Response result parser steps
         elif tag == "messagecontrol_toggle_state":
             state = ""
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) != 0:
                 for result in testStepResults:
                     if arg[0] == result.get("category"):
@@ -3737,7 +3739,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         # MessageControl Plugin Response result parser steps
         elif tag == "messagecontrol_get_original_state":
             state = ""
-            testStepResults = testStepResults[0].values()[0]
+            testStepResults = list(testStepResults[0].values())[0]
             if len(arg) != 0:
                 for result in testStepResults:
                     if arg[0] == result.get("category"):
@@ -4878,12 +4880,12 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             deviceMAC = deviceMAC.strip()
             #Validate MAC Address
             if re.match("[0-9a-f]{2}([-:]?)[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$",str(deviceMAC).lower()):
-                print "\nSUCCESS : Successfully get the MAC address of the box"
-                print "SUCCESS : Box is SSH able"
+                print("\nSUCCESS : Successfully get the MAC address of the box")
+                print("SUCCESS : Box is SSH able")
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                print "\nFAILURE : Failed to get the MAC address"
-                print "Able to SSH the box, failed in get the MAC address of the box"
+                print("\nFAILURE : Failed to get the MAC address")
+                print("Able to SSH the box, failed in get the MAC address of the box")
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":
@@ -4945,6 +4947,8 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             arguments[1] = arguments[1]+"0"
             hex_code  = "".join((arguments[1],arguments[0]))
             base64_data = hex_code.decode("hex").encode("base64")
+            decoded_bytes = bytes.fromhex(hex_code)
+            base64_data = base64.b64encode(decoded_bytes).decode('utf-8')
             info["Hex_Data"] = hex_code
             info["message"] = base64_data.strip()
 
@@ -5131,10 +5135,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             # Method to check and create firmware rule
             elif len(arg) and arg[0] == "system_check_firmware_rule":
                 print("arg",arg)
-                ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_RULE'
-                modelId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
-                firmwareconfigId = arg[2]
-                deviceMAC = arg[4]
+                ruleId = 'TDK_'+str(arg[2]).upper()+'_TEST_FIRMWARE_RULE'
+                modelId = 'TDK_'+str(arg[2]).upper()+'_TEST_MODEL'
+                firmwareconfigId = arg[4]
+                deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
                     command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=MAC_RULE\''
                     output = executeCommandInTM(command)
@@ -5176,10 +5180,10 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 print("arg",arg)
                 firmwareLocation = configParser.get('device.config','FIRMWARE_LOCATION')
                 firmwareDownloadProtocol = configParser.get('device.config', 'FIRMWARE_DOWNLOAD_PROTOCOL')
-                ruleId = 'TDK_'+str(arg[3]).upper()+'_TEST_FIRMWARE_LOCAL_SERVER_RULE'
-                modelId = 'TDK_'+str(arg[3]).upper()+'_TEST_MODEL'
-                firmwareConfigId = arg[2]
-                deviceMAC = arg[4]
+                ruleId = 'TDK_'+str(arg[2]).upper()+'_TEST_FIRMWARE_LOCAL_SERVER_RULE'
+                modelId = 'TDK_'+str(arg[2]).upper()+'_TEST_MODEL'
+                firmwareConfigId = arg[4]
+                deviceMAC = arg[3]
                 if len(arg) and arg[1] == "existing_rule":
                     command = 'curl -sX --location --request GET \''+xconfurl+'firmwarerule/filtered?name='+ruleId+'&applicationType=stb&templateId=DOWNLOAD_LOCATION_FILTER\''
                     output = executeCommandInTM(command)
