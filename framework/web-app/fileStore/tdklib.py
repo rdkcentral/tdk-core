@@ -1125,14 +1125,15 @@ class TDKScriptingLibrary:
             message=result["result"]
             if "Success" in message:
                 self.uiLogData=self.uiLogData+ "<br/> Opensource test module successfully loaded\n"
-                configKey = ["CRASH_MONITOR"]
-                configValue = getDeviceConfigElements(self, configKey)
-                crash_monitor = configValue[0]
-                #Call the function only if crash_monitor is set to "yes"
-                if crash_monitor.lower() == "yes":
-                    global wpe_pid
-                    #If yes, obtain the process ID (WPEFramework)
-                    wpe_pid = ssh_fetch_wpe_pid(self)
+                if self.isStandAlone:
+                    configKey = ["CRASH_MONITOR"]
+                    configValue = getDeviceConfigElements(self, configKey)
+                    crash_monitor = configValue[0]
+                    #Call the function only if crash_monitor is set to "yes"
+                    if crash_monitor.lower() == "yes":
+                        global wpe_pid
+                        #If yes, obtain the process ID (WPEFramework)
+                        wpe_pid = ssh_fetch_wpe_pid(self)
             else:
                 self.uiLogData=self.uiLogData+ "<br/> Failed to load Opensource test module \n"
 
