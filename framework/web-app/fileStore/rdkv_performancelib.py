@@ -148,7 +148,8 @@ def execute_step(Data,IsPerformanceSelected="false"):
                 time_taken = response.elapsed.total_seconds()
                 print("Time taken for",Data,"is :", time_taken)
                 return time_taken;
-            IsPerformanceSelected = libObj.parentTestCase.performanceBenchMarkingEnabled
+            conf_file = getConfigFileName(libObj.realpath)
+            IsPerformanceSelected = getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
             if IsPerformanceSelected == "true":
                 conf_file,result_conf = getConfigFileName(libObj.realpath)
                 result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
@@ -327,9 +328,7 @@ def rdkservice_getBrowserScore_CSS3():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.css3_test_subcategory_list
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -372,9 +371,7 @@ def rdkservice_getBrowserScore_Octane():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.octane_test_subcategory_list
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -466,9 +463,7 @@ def rdkservice_getBrowserScore_HTML5():
     try:
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.html5_test_subcategory_list
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         print("url:",webinspectURL)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
@@ -514,17 +509,15 @@ def rdkservice_getBrowserScore_SunSpider():
         browser_score = ''
         browser_score_dict = {}
         browser_subcategory_list = BrowserPerformanceVariables.sunspider_test_subcategory_list
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(60)
             action = ActionChains(driver)
-            html = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/li[2]/span/span/span')
+            html = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/li[2]/span/span/span[1]')
             source = action.move_to_element(html).move_by_offset(-30,0).click().key_down(Keys.ALT).click().perform()
             time.sleep(10)
-            parent = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/ol')
+            parent = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol[5]')
             children = parent.find_elements_by_tag_name("li")
             text_values = ''
             total_score_text = 'Total:'
@@ -1045,9 +1038,7 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
     fps_list = []
     try:
         browser_score_dict = {}
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1097,9 +1088,7 @@ def get_graphical_plugins(conf_file):
 def rdkservice_getBrowserScore_Speedometer():
     try:
         browser_score_dict = {}
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1125,9 +1114,7 @@ def rdkservice_getBrowserScore_Speedometer():
 def rdkservice_getBrowserScore_MotionMark():
     try:
         browser_score_dict = {}
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1160,9 +1147,7 @@ def rdkservice_getBrowserScore_MotionMark():
 def rdkservice_getBrowserScore_Smashcat():
     try:
         browser_score_dict = {}
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
@@ -1202,9 +1187,7 @@ def rdkservice_getBrowserScore_Smashcat():
 def rdkservice_getBrowserScore_Kraken():
     try:
         browser_score_dict = {}
-        conf_file,result = getConfigFileName(libObj.realpath)
-        result,Web_URL_Extension = getDeviceConfigKeyValue(conf_file,"URL_Extension")
-        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+Web_URL_Extension
+        webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(10)
