@@ -560,7 +560,14 @@
                <param tag="friendlyName" defaultValue="null" />
             </params>
         </method>
-        <event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
+	<method name="System_Get_Territory" api="getTerritory" type="method" desc="Gets the configured system territory and region. " />
+        <method name="System_Set_Territory" api="setTerritory" type="method" desc="Sets the system territory and region" >
+            <params>
+               <param tag="territory" defaultValue="null" />
+               <param tag="region" defaultValue="null" />
+            </params>
+        </method>
+	<event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
 	<event name="Event_Temperature_Threshold_Changed" eventName="onTemperatureThresholdChanged" eventId="client.events.1" type="event" desc="Fires on temperature threshold change" />
@@ -1694,7 +1701,29 @@
                 <param tag="persist" type="bool" />
             </params>
         </method>
-        <event name="Event_MuteStatus_Changed" eventName="muteStatusChanged" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
+	<method name="Get_Associated_Audio_Mixing" api="getAssociatedAudioMixing" type="method" desc="Returns the Associated Audio Mixing status">
+            <params>
+                <param tag="audioPort" type="string"/>
+            </params>
+        </method>
+        <method name="Set_Associated_Audio_Mixing" api="setAssociatedAudioMixing" type="method" desc="Sets the Associated Audio Mixing Enable/Disable">
+            <params>
+                <param tag="audioPort" type="string"/>
+                <param tag="mixing" type="bool"/>
+            </params>
+        </method>
+        <method name="Get_Fader_Control" api="getFaderControl" type="method" desc="Returns the mixerbalance betweeen main and associated audio">
+            <params>
+                <param tag="audioPort" type="string"/>
+            </params>
+        </method>
+        <method name="Set_Fader_Control" api="setFaderControl" type="method" desc="Sets the set the mixerbalance betweeen main and associated audio">
+            <params>
+                <param tag="audioPort" type="string"/>
+                <param tag="mixerBalance" defaultValue="null"/>
+            </params>
+        </method>
+	<event name="Event_MuteStatus_Changed" eventName="muteStatusChanged" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
         <event name="Event_VolumeLevel_Changed" eventName="volumeLevelChanged" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
         <event name="Event_Resolution_PreChange" eventName="resolutionPreChange" eventId="client.events.1" type="event" desc="Triggered on resolution pre-change"/>
         <event name="Event_Zoom_Settings_Updated" eventName="zoomSettingUpdated" eventId="client.events.1" type="event" desc="Zoom settings updated event "/>

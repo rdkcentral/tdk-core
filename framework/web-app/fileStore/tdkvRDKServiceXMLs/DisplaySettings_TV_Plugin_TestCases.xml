@@ -2938,4 +2938,102 @@
               </subtestStep>
             </testStep>
         </testCase>    
+
+	<!-- Test case 93 -->
+        <testCase testCaseId="DS_93" testCaseName= "Set_and_Get_Fader_Control_SPEAKER0" desc="Checks if able to set and get the mixerbalance betweeen main and associated audio">
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="SPEAKER0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Fader_Control" method="Get_Fader_Control" saveResult="true" revertGet="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_get_fader_control"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Fader_Control" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Fader_Control" method="Set_Fader_Control" revertSet="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                    <param tag="mixerBalance" value="-31,-10,0,10,31" iteration="true" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_set_fader_control"/>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Fader_Control" method="Get_Fader_Control" revertFlag="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_get_fader_control" arguments ="check_fader_control">
+                    <expectedValues useIterableValue="true" />
+                </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 94 -->
+        <testCase testCaseId="DS_94" testCaseName= "Set_Empty_Fader_Control_SPEAKER0" desc="Checks if able to set the mixerbalance as empty">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="SPEAKER0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Fader_Control" method="Set_Fader_Control">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                    <param tag="mixerBalance" value=""/>
+                </params>
+                <resultGeneration useMethodTag="displaysettings_set_fader_control" arguments ="check_negative_fader_control"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 95 -->
+        <testCase testCaseId="DS_95" testCaseName= "Set_Fader_Control_OutofRange_SPEAKER0" desc="Checks if able to set the mixerbalance as out of range">
+            <testCaseInfo testCaseType="loop" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="FaderControl"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="SPEAKER0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Set_Fader_Control" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Fader_Control" method="Set_Fader_Control">
+                 <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                    <param tag="mixerBalance" value="-60,-40,-38,38,40,60" iteration="true"/>
+                 </params>
+                 <resultGeneration useMethodTag="displaysettings_set_fader_control" arguments ="check_negative_fader_control"/>
+              </subtestStep>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 96 -->
+        <testCase testCaseId="DS_96" testCaseName= "Set_and_Get_Audio_Mixing_Status_SPEAKER0" desc="Checks if able to enable/disable associated audio mixing">
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="AudioMixing"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                <resultGeneration useMethodTag="check_connected_audio_ports" expectedValues="SPEAKER0">
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_Associated_Audio_Mixing" method="Get_Associated_Audio_Mixing" saveResult="true" revertGet="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_get_associated_audio_mixing"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Associated_Audio_Mixing" testStepType="loop">
+              <subtestStep subtestStepId="1" name="Set_Associated_Audio_Mixing" method="Set_Associated_Audio_Mixing" revertSet="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                    <param tag="mixing" value="true,false" iteration="true" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_set_associated_audio_mixing"/>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Get_Associated_Audio_Mixing" method="Get_Associated_Audio_Mixing" revertFlag="yes">
+                <params>
+                    <param tag="audioPort" value="SPEAKER0" />
+                </params>
+                <resultGeneration useMethodTag="displaysettings_get_associated_audio_mixing" arguments ="check_audio_mixing">
+                    <expectedValues useIterableValue="true" />
+                </resultGeneration>
+              </subtestStep>
+            </testStep>
+        </testCase>
 </testPlugin>  

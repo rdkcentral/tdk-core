@@ -1201,4 +1201,52 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
+	
+       <!-- Test case 61 -->
+       <testCase testCaseId="SYS_61" testCaseName="System_Set_Invalid_Territory_And_Region" desc="Sets invalid territory and region">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="ABC" />
+                <param tag="region" value="AB-CD" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+            </testStep>
+        </testCase>
+
+	<!-- Test case 62 -->
+	<testCase testCaseId="SYS_62" testCaseName="System_Set_Empty_Territory_And_Region" desc="Sets empty territory and region">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="" />
+                <param tag="region" value="" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+            </testStep>
+        </testCase>
+	
+	<!-- Test case 63 -->
+	<testCase testCaseId="SYS_63" testCaseName="System_Set_Invalid_Territory_And_Valid_Region" desc="Sets invalid territory and valid region">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="ABC" />
+                <param tag="region" value="US-AS" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+            </testStep>
+        </testCase>
+	
+	<!-- Test case 64 -->
+	<testCase testCaseId="SYS_64" testCaseName="System_Set_Empty_Territory_And_Valid_Region" desc="Sets empty territory and valid region">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_Set_Territory" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="" />
+                <param tag="region" value="US-AS" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+            </testStep>
+        </testCase>
 </testPlugin>

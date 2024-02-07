@@ -1023,6 +1023,17 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_check_error_message":
+            success = str(result.get("success")).lower() == "false"
+            info["success"] = result.get("success")
+            result = result.get("error")
+            info["message"] = result.get("message")
+            if success and str(result.get("message")).lower() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         # User Preferces Plugin Response result parser steps
         elif tag == "userpreferences_get_ui_language":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -1635,6 +1646,54 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         # Display Settings Plugin Response result parser steps
+        elif tag == "displaysettings_get_associated_audio_mixing":
+            info["mixing"] = result.get('mixing')
+            info["success"] = result.get('success')
+            if len(arg) and arg[0] == "check_audio_mixing":
+                if str(result.get("success")).lower() == "true" and str(result.get('mixing')).lower() == str(expectedValues[0]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if str(result.get("success")).lower() == "true" and result.get("mixing") is not None:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "displaysettings_set_associated_audio_mixing":
+            info["success"] = result.get('success')
+            if str(result.get("success")).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "displaysettings_get_fader_control":
+            info["mixerBalance"] = result.get('mixerBalance')
+            info["success"] = result.get('success')
+            if len(arg) and arg[0] == "check_fader_control":
+                if str(result.get("success")).lower() == "true" and int(result.get('mixerBalance')) == int(expectedValues[0]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if str(result.get("success")).lower() == "true" and -32 <= int(result.get('mixerBalance')) <= 32:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "displaysettings_set_fader_control":
+            info["success"] = result.get('success')
+            if len(arg) and arg[0] == "check_negative_fader_control":
+                if str(result.get("success")).lower() == "false":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if str(result.get("success")).lower() == "true":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE
+
         elif tag == "display_is_connected":
             info["video_display"] = result.get('connectedVideoDisplays')
             success = str(result.get("success")).lower() == "true"
