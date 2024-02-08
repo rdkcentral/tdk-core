@@ -410,6 +410,8 @@
 
     <!-- System Plugin Information -->
     <plugin pluginName="System" serviceName="org.rdk.System" serviceVersion="1">
+	<method name="Get_Model_ID" api="modelid" type="property" desc="Provides access to the device model number or SKU"/>
+        <method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
         <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details"/>
         <method name="Get_Serial_No"  api="getSerialNumber" type="method" desc="Gives device serial number"/>
         <method name="Get_System_Version"  api="getSystemVersions" type="method" desc="Gives system version details"/>
@@ -1205,7 +1207,7 @@
         </method>
         <method name="Is_Signal_Threshold_Change_Enabled" api="isSignalThresholdChangeEnabled" type="method" desc="Returns true when threshold changes are enabled">
             <expectedValues>0,1</expectedValues>
-        </method>i
+        </method>
         <method name="Initiate_WPS_Pairing" api="initiateWPSPairing" type="method" desc="Initiates the connection via WPS" />
         <method name="Cancel_WPS_Pairing" api="cancelWPSPairing" type="method" desc="Cancels WPS pairing" />
         <method name="Is_Paired" api="isPaired" type="method" desc="Determines if the device paired to an SSID" />

@@ -268,6 +268,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        # MessageControl Plugin Response result parser steps
+        elif tag == "messagecontrol_get_controls":
+            for value in result:
+                if str(value.get("module")).lower() == arg[1] and str(value.get("type")).lower() == arg[2] and str(value.get("category")).lower() == arg[3].lower():
+                    info["enabled"] = value.get("enabled")
+                    info["module"]   = value.get("module")
+                    info["category"] = value.get("category")
+                    break;
+            if arg[0] == "check_state":
+                if str(value.get("enabled")) == expectedValues[0]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         # Network Plugin Response result parser steps
         elif tag == "network_get_interface_info":
@@ -3707,20 +3720,6 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["category"] = testStepResults[0].get("category")
  
         # MessageControl Plugin Response result parser steps
-        elif tag == "messagecontrol_get_controls":
-            for value in result:
-                if str(value.get("module")).lower() == arg[1] and str(value.get("type")).lower() == arg[2] and str(value.get("category")).lower() == arg[3].lower():
-                    info["enabled"] = value.get("enabled")
-                    info["module"]   = value.get("module")
-                    info["category"] = value.get("category")
-                    break;
-            if arg[0] == "check_state":
-                if str(value.get("enabled")) == expectedValues[0]:
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["Test_Step_Status"] = "FAILURE"
-
-        # MessageControl Plugin Response result parser steps
         elif tag == "messagecontrol_toggle_state":
             state = ""
             testStepResults = list(testStepResults[0].values())[0]
@@ -5322,7 +5321,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             output = executeCommand(execInfo, command)
             output = str(output).split()
             output = output[1]
-            info["defaultValue"] = int(output)
+            info["defaultValue"] = int(output,16)
             if len(arg) > 3 and arg[2] == "get_audio_profiles_default_modes":
                 arg[1] = profile+'.'+arg[1]
                 command =  'grep -F '+arg[1]+' /etc/hostDataDefault'

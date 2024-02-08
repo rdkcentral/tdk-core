@@ -215,7 +215,7 @@
                   </resultGeneration>
               </subtestStep>
               <subtestStep subtestStepId="3" name="Check_Display_FrameRate_Changing_Event" event="Event_On_Display_FrameRate_Changing" action="eventListener" delay="3" >
-                  <resultGeneration useMethodTag="framerate_check_display_framerate_event" >
+                  <resultGeneration useMethodTag="framerate_check_display_framerate_changed_event" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
