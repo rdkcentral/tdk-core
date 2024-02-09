@@ -5004,7 +5004,6 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
         elif tag == "EncodeHexToBase64":
             arguments[1] = arguments[1]+"0"
             hex_code  = "".join((arguments[1],arguments[0]))
-            base64_data = hex_code.decode("hex").encode("base64")
             decoded_bytes = bytes.fromhex(hex_code)
             base64_data = base64.b64encode(decoded_bytes).decode('utf-8')
             info["Hex_Data"] = hex_code
