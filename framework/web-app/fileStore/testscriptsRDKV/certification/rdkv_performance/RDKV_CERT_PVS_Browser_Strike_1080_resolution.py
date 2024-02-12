@@ -235,7 +235,7 @@ if expectedResult in result.upper():
                         result = tdkTestObj.getResult()
                         output = tdkTestObj.getResultDetails()
                         output = output[output.find('\n'):]
-                        Score_time = output.split(" ")[-4]
+                        Score_time = getTimeStampFromString(output)
                         browser_score = output.split(':')[5].split(' ')[0]
                         print ("Score logs from wpelogs:")
                         if (Execution_start_time < Score_time ) and browser_score != {}:

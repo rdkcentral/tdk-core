@@ -311,7 +311,7 @@ def rdkservice_getBrowserURL(webinspect_port):
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
             time.sleep(20)
-            target_url = driver.find_element_by_xpath('/html/body/table/tbody/tr/td[1]/div[2]').text
+            target_url = driver.find_element_by_xpath('//*[@id="targetlist"]/table/tbody/tr/td[1]/div[2]').text
             print (target_url)
             driver.quit()
     except Exception as error:
