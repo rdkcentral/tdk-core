@@ -2549,7 +2549,7 @@ class ExecutionController {
 					String executionResultOutput = executionResultList[i]?.executionOutput
 					if(scriptfile){
 						if(scriptfile?.category?.toString()?.equals(RDKV_RDKSERVICE?.toString())){
-							if((scriptfile?.moduleName?.equals(RDKSERVICES?.toString())) || (scriptfile?.moduleName?.equals(RDKV_DOBBY?.toString())) || (scriptfile?.moduleName?.equals(RDKV_APPARMOR?.toString())) || (scriptfile?.moduleName?.equals(RDKV_BASIC_SANITY?.toString())) || (scriptfile?.moduleName?.equals(RIALTO_CONTAINER?.toString())) || (scriptfile?.moduleName?.equals(FIREBOLT_NATIVE_APPS_COMPLIANCE?.toString()))) {
+							if((scriptfile?.moduleName?.equals(RDKSERVICES?.toString())) || (scriptfile?.moduleName?.equals(RDKV_DOBBY?.toString())) || (scriptfile?.moduleName?.equals(RDKV_APPARMOR?.toString())) || (scriptfile?.moduleName?.equals(RDKV_BASIC_SANITY?.toString())) || (scriptfile?.moduleName?.equals(RIALTO_CONTAINER?.toString()))) {
 								isPatternPresent = true
 							}
 							isRDKServiceExecution = true
