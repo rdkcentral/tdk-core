@@ -18,7 +18,7 @@
 ##########################################################################
 
 import pycurl
-import StringIO
+import io
 import xml.etree.ElementTree as ET
 import sys
 from tr69Config import *
@@ -28,49 +28,49 @@ from tr69Config import *
 # Syntax      : send_xml()
 # Description : Function to post a soap xml request to ACS server and to receive and parse the response from server
 # Parameters  : xmlfile - xml file holding the soap xml request to be sent to server
-#	      : method -  whether method is get/set 
+#             : method -  whether method is get/set
 # Return Value: status of operation. In case of get operation, returns value retrived by get also
 
 def send_xml(xmlfile, method):
 
- #parse the soap xml to create a python string
- tree = ET.parse(xmlfile)
- root = tree.getroot()
- encodedBody = ET.tostring(root, encoding="UTF-8")
+    #parse the soap xml to create a python string
+    tree = ET.parse(xmlfile)
+    root = tree.getroot()
+    encodedBody = ET.tostring(root, encoding="UTF-8")
 
- #send the soap request
- curl = pycurl.Curl()
- curl.setopt(pycurl.URL, ACS_URI)
- curl.setopt(pycurl.POST, 1)
- curl.setopt(pycurl.HTTPHEADER, ["Content-type: text/xml"])
- curl.setopt(pycurl.POSTFIELDS, encodedBody)
- b = StringIO.StringIO()
- curl.setopt(pycurl.WRITEFUNCTION, b.write)
- curl.perform()
- print b.getvalue() # printing response XML
- response = b.getvalue()
- status = curl.getinfo(pycurl.HTTP_CODE)
+    #send the soap request
+    curl = pycurl.Curl()
+    curl.setopt(pycurl.URL, ACS_URI)
+    curl.setopt(pycurl.POST, 1)
+    curl.setopt(pycurl.HTTPHEADER, ["Content-type: text/xml"])
+    curl.setopt(pycurl.POSTFIELDS, encodedBody)
+    b = io.StringIO()
+    curl.setopt(pycurl.WRITEFUNCTION, b.write)
+    curl.perform()
+    print(b.getvalue()) # printing response XML
+    response = b.getvalue()
+    status = curl.getinfo(pycurl.HTTP_CODE)
 
- print "status code: %s" %status
+    print("status code: %s" %status)
 
- #parse the response xml using ElementTree library
- tree = ET.ElementTree(ET.fromstring(response))
- if status == 200:
-     if method == "get":
-         print "GET operation is success"
-         for elem in tree.iter():
-             if elem.tag == "value":
-                 print "Value retreived is: ", elem.text
-                 return [status, elem.text]
-     else:
-         print "SET operation is success"
-         for elem in tree.iter():
-             if elem.tag == "status":
-                 print "Status: ", elem.text
-                 return [status]
- else:
-     print "GET/SET operation failed"
-     for elem in tree.iter():
-         if elem.tag == "message":
-             print elem.text
-             return [status]
+    #parse the response xml using ElementTree library
+    tree = ET.ElementTree(ET.fromstring(response))
+    if status == 200:
+        if method == "get":
+            print("GET operation is success")
+            for elem in tree.iter():
+                if elem.tag == "value":
+                    print("Value retreived is: ", elem.text)
+                    return [status, elem.text]
+        else:
+            print("SET operation is success")
+            for elem in tree.iter():
+                if elem.tag == "status":
+                    print("Status: ", elem.text)
+                    return [status]
+    else:
+        print("GET/SET operation failed")
+        for elem in tree.iter():
+            if elem.tag == "message":
+                print(elem.text)
+                return [status]

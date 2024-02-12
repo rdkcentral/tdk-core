@@ -26,6 +26,7 @@ from tdkbE2EUtility import *;
 import subprocess
 import time
 import os
+from selenium.webdriver.firefox.options import Options
 
 #------------------------------------------------------------------------------
 # Methods
@@ -44,26 +45,26 @@ def startSeleniumGrid(tdkTestObj,ClientType,GridUrl,LoginStatus = "LocalLogin"):
         Status = "FAILURE"
         driver = "Failed to initialize the webdriver"
         global profile;
-        print "Starting the Selenium Hub in TM machine"
+        print("Starting the Selenium Hub in TM machine")
         #Kill selenium hub and node as a pre-requisite before starting new hub and node
         Prerequ_Status = kill_hub_node(ClientType)
         if "SUCCESS" in Prerequ_Status:
-            print "Webui Pre-requisite success"
+            print("Webui Pre-requisite success")
 
             status = startHub()
-            if "SUCCESS" in status:
+            if b"SUCCESS" in status:
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "SUCCESS: Selenium Hub started successfully\n"
+                print("SUCCESS: Selenium Hub started successfully\n")
 
-                print "Starting Selenium Node in", ClientType, " client machine"
+                print(("Starting Selenium Node in", ClientType, " client machine"))
                 status = initiateNode(ClientType)
                 if status == "SUCCESS":
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "SUCCESS: Node Started successfully\n"
+                    print("SUCCESS: Node Started successfully\n")
                     isProxyEnabled = tdkbE2EUtility.proxy_enabled;
                     profile = webdriver.FirefoxProfile()
                     if isProxyEnabled == "True":
-                        print "Set proxy for the web browser"
+                        print("Set proxy for the web browser")
                         profile = setProxy(profile);
 
                     if ClientType == "LAN" or ClientType == "WAN":
@@ -71,22 +72,22 @@ def startSeleniumGrid(tdkTestObj,ClientType,GridUrl,LoginStatus = "LocalLogin"):
                             Status,driver = openLocalWebUI(GridUrl,tdkTestObj,LoginStatus);
                         elif LoginStatus == "CaptivePortal":
                             Status,driver = openCaptivePortal(GridUrl,tdkTestObj);
-			elif LoginStatus == "CheckUIAccessibility":
+                        elif LoginStatus == "CheckUIAccessibility":
                             Status,driver = isUIAvailable(GridUrl,tdkTestObj)
                     elif ClientType == "WLAN":
                         Status = "SUCCESS";
                         driver = "Driver will be initialized while opening the WebUI";
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "FAILURE: Failed to start node in client machine\n"
+                    print("FAILURE: Failed to start node in client machine\n")
             else:
                 tdkTestObj.setResultStatus("FAILURE");
-                print "FAILURE: Failed to start the selenium hub\n"
+                print("FAILURE: Failed to start the selenium hub\n")
         else:
-            print "Webui Pre-requisite failed"
+            print("Webui Pre-requisite failed")
     except Exception as error:
-        print "Got Exception at the function startSeleniumGrid()"
-        print error;
+        print("Got Exception at the function startSeleniumGrid()")
+        print(error);
         driver = "Failed to set the driver"
         Status = "FAILURE"
     return driver,Status;
@@ -104,11 +105,11 @@ def startHub():
 
     try:
         command = "sh %s start_hub %s %s %s" %(tdkbE2EUtility.start_hub_script,tdkbE2EUtility.webui_hub_selenium_path,tdkbE2EUtility.webui_logfile,tdkbE2EUtility.hub_machine_ip)
-        print command
+        print(command)
         output = subprocess.check_output(command,shell=True)
     except Exception as error:
-        print "Got Exception at the function startHub()"
-        print error;
+        print("Got Exception at the function startHub()")
+        print(error);
         output = "Unable to start selenium hub in TM machine. Please check if any instances are already running."
     return output
 
@@ -144,8 +145,8 @@ def initiateNode(clientType):
             command = "sh %s start_node %s %s %s %s" %(script,node_selenium_path,tdkbE2EUtility.hub_machine_ip,node_logfile,node_machine_ip)
             status = executeCommand(command)
     except Exception as error:
-        print "Got Exception at the function initiateNode()"
-        print error;
+        print("Got Exception at the function initiateNode()")
+        print(error);
         status = "Unable to start selenium in node machine. Please check if any instances are already running."
     return status
 #---------------------------------------------------------------------------------
@@ -170,8 +171,8 @@ def setProxy(profile):
         profile.update_preferences()
         executable_path  = tdkbE2EUtility.proxy_path
     except Exception as error:
-        print "Got Exception at the function setProxy()"
-        print error;
+        print("Got Exception at the function setProxy()")
+        print(error);
         profile = "Unable to update the profile with proxy settings"
     return profile;
 
@@ -192,9 +193,9 @@ def kill_hub_node(clientType):
         script = tdkbE2EUtility.wlan_script;
     elif clientType == "WAN":
         script = tdkbE2EUtility.wan_script;
-    print "Killing hub"
+    print("Killing hub")
     p = subprocess.call([tdkbE2EUtility.start_hub_script, 'kill_selenium'])
-    print "Killing node"
+    print("Killing node")
     status = clientConnect(clientType)
     if status == "SUCCESS":
         command = "source %s kill_selenium" %(script)
@@ -215,21 +216,21 @@ def openLocalWebUI(GridUrl,tdkTestObj,LoginStatus):
 # Return Value: SUCCESS/FAILURE
 
     try:
-        print "Opening the requested URL in browser"
+        print("Opening the requested URL in browser")
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
-        # Uncomment the below line if there is a physical display unit for UI 
+        # Uncomment the below line if there is a physical display unit for UI
         # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
         # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
         options = Options()
         options.headless = True
         driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
-	#Uncomment below line and comment next line if UI page has changed
-	#checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/h1").text 
+        #Uncomment below line and comment next line if UI page has changed
+        #checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/h1").text
         checkUI = driver.find_element_by_xpath("/html/body/div[1]/div[3]/div[3]/h1").text
         if "Gateway > Login" == checkUI:
             tdkTestObj.setResultStatus("SUCCESS");
-            print "SUCCESS: Successfully opened the xfinity UI page\n"
+            print("SUCCESS: Successfully opened the xfinity UI page\n")
             if LoginStatus != "NoLogin":
                 if LoginStatus == "LocalLogin":
                     driver.find_element_by_id("username").send_keys(tdkbE2EUtility.ui_username)
@@ -238,26 +239,28 @@ def openLocalWebUI(GridUrl,tdkTestObj,LoginStatus):
                     driver.find_element_by_id("username").send_keys(tdkbE2EUtility.mso_ui_username)
                     driver.find_element_by_id("password").send_keys(tdkbE2EUtility.mso_ui_password)
 
-		#Uncomment below line and comment next line if UI page has changed
-		#driver.find_element_by_class_name("btn").submit()
+                #Uncomment below line and comment next line if UI page has changed
+                #driver.find_element_by_class_name("btn").submit()
                 driver.find_element_by_class_name("form-btn").submit()
                 time.sleep(30)
                 checkLogin= driver.find_element_by_xpath("//div[1]/div[3]/div[1]/ul[1]/li[2]/a").text
                 if "Logout" == checkLogin:
                     tdkTestObj.setResultStatus("SUCCESS");
-                    print "Successfully logged in to the UI page"
+                    print("Successfully logged in to the UI page")
                     Status = "SUCCESS"
                 else:
                     tdkTestObj.setResultStatus("FAILURE");
-                    print "Failed to login to the UI page"
+                    print("Failed to login to the UI page")
+                    Status = "FAILURE"
             else:
                 Status = "SUCCESS"
         else:
             tdkTestObj.setResultStatus("FAILURE");
-            print "FAILURE: Failed to open the Xfinity login page\n"
+            print("FAILURE: Failed to open the Xfinity login page\n")
+            Status = "FAILURE"
     except Exception as error:
-        print "Got Exception at the function openLocalWebUI()"
-        print error;
+        print("Got Exception at the function openLocalWebUI()")
+        print(error);
         driver.quit()
         Status = "FAILURE"
     return Status,driver;
@@ -274,27 +277,27 @@ def openCaptivePortal(GridUrl,tdkTestObj):
 # Return Value: SUCCESS/FAILURE
 
     try:
-        print "Opening the requested URL in browser"
+        print("Opening the requested URL in browser")
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
         # Uncomment the below line if there is a physical display unit for UI
-        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
-        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
-        options = Options()
-        options.headless = True
-        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
+        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
+        options = Options()
+        options.headless = True
+        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
         checkUI = driver.find_element_by_xpath('//*[@id="get_set_up"]').text
-        if "Let's Get Set Up" == checkUI:
+        if b"Let's Get Set Up" == checkUI:
             tdkTestObj.setResultStatus("SUCCESS");
             Status = "SUCCESS"
-            print "SUCCESS: Successfully opened the captive portal UI page\n"
+            print("SUCCESS: Successfully opened the captive portal UI page\n")
         else:
             Status = "FAILURE"
             tdkTestObj.setResultStatus("FAILURE");
-            print "FAILURE: Failed to open the captive portal login page\n"
+            print("FAILURE: Failed to open the captive portal login page\n")
     except Exception as error:
-        print "Got Exception at the function openCaptivePortal()"
-        print error;
+        print("Got Exception at the function openCaptivePortal()")
+        print(error);
         driver.quit();
         Status = "FAILURE"
     return Status,driver;
@@ -311,19 +314,19 @@ def isUIAvailable(GridUrl,tdkTestObj):
 # Return Value: SUCCESS/FAILURE
 
     try:
-        print "Opening the requested URL in browser"
+        print("Opening the requested URL in browser")
         hub_url = "http://%s:4444/wd/hub" %tdkbE2EUtility.hub_machine_ip
-        # Uncomment the below line if there is a physical display unit for UI
-        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
-        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
-        options = Options()
-        options.headless = True
-        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
+        # Uncomment the below line if there is a physical display unit for UI
+        # driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url)
+        # If there is no physical display unit for WEBUI, run in headless mode by uncommenting the below 3 lines
+        options = Options()
+        options.headless = True
+        driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
         Status = "FAILURE"
         driver.quit()
     except Exception as error:
-        print "Got Exception in opening the UI page"
-        print error;
+        print("Got Exception in opening the UI page")
+        print(error);
         Status = "SUCCESS"
     return Status,driver;

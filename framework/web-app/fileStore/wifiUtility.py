@@ -47,17 +47,17 @@ def ExecuteWIFIHalCallMethod(obj, primitive, radioIndex, param, methodname):
     details = tdkTestObj.getResultDetails();
 
     if expectedresult in actualresult :
-        print "TEST STEP : Execute callmethod for %s" %methodname
-        print "EXPECTED RESULT : Should successfully execute callmethod"
-        print "ACTUAL RESULT : %s " %details
+        print("TEST STEP : Execute callmethod for %s" %methodname)
+        print("EXPECTED RESULT : Should successfully execute callmethod")
+        print("ACTUAL RESULT : %s " %details)
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : SUCCESS";
+        print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
-        print "TEST STEP : Execute callmethod for %s" %methodname
-        print "EXPECTED RESULT : Should successfully execute callmethod"
-        print "ACTUAL RESULT 1: %s " %details
+        print("TEST STEP : Execute callmethod for %s" %methodname)
+        print("EXPECTED RESULT : Should successfully execute callmethod")
+        print("ACTUAL RESULT 1: %s " %details)
         #Get the result of execution
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
 
     return (tdkTestObj, actualresult, details);
 
@@ -71,49 +71,49 @@ def ExecuteWIFIHalCallMethod(obj, primitive, radioIndex, param, methodname):
 
 def getIndex(obj, radio):
         #Script to load the configuration file of the component
-        tdkTestObj = obj.createTestStep("WIFIHAL_GetOrSetParamULongValue");
-        #Giving the method name to invoke the api wifi_getRadioNumberOfEntries()
-	methodname = "getRadioNumberOfEntries";
-        tdkTestObj.addParameter("methodName",methodname);
-        tdkTestObj.addParameter("radioIndex",1); # Dummy index
-        expectedresult="SUCCESS"; # Dummy expected value
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult = tdkTestObj.getResult();
-        details = tdkTestObj.getResultDetails();
+    tdkTestObj = obj.createTestStep("WIFIHAL_GetOrSetParamULongValue");
+    #Giving the method name to invoke the api wifi_getRadioNumberOfEntries()
+    methodname = "getRadioNumberOfEntries";
+    tdkTestObj.addParameter("methodName",methodname);
+    tdkTestObj.addParameter("radioIndex",1); # Dummy index
+    expectedresult="SUCCESS"; # Dummy expected value
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
 
-        if expectedresult in actualresult:
-                numEntries = int(details.split(':')[1]);
-		print "Number of radio entries found : %d" %numEntries;
+    if expectedresult in actualresult:
+        numEntries = int(details.split(':')[1]);
+        print("Number of radio entries found : %d" %numEntries);
 
-                for index in range(numEntries):
-			methodname = "getRadioOperatingFrequencyBand";
-                        #Script to load the configuration file of the component
-                        tdkTestObj = obj.createTestStep("WIFIHAL_GetOrSetParamStringValue");
-                        #Giving the method name to invoke the api for getting the Operating Frequency band. ie,wifi_getRadioOpeartingFrequencyBand()
-                        tdkTestObj.addParameter("methodName",methodname);
-                        # Query for all indices
-                        tdkTestObj.addParameter("radioIndex",index);
-                        expectedresult="SUCCESS";
-                        tdkTestObj.executeTestCase(expectedresult);
-                        actualresult = tdkTestObj.getResult();
-                        OperatingFrequencyBands = tdkTestObj.getResultDetails();
+        for index in range(numEntries):
+            methodname = "getRadioOperatingFrequencyBand";
+            #Script to load the configuration file of the component
+            tdkTestObj = obj.createTestStep("WIFIHAL_GetOrSetParamStringValue");
+            #Giving the method name to invoke the api for getting the Operating Frequency band. ie,wifi_getRadioOpeartingFrequencyBand()
+            tdkTestObj.addParameter("methodName",methodname);
+            # Query for all indices
+            tdkTestObj.addParameter("radioIndex",index);
+            expectedresult="SUCCESS";
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            OperatingFrequencyBands = tdkTestObj.getResultDetails();
 
-                        if expectedresult in actualresult:
-                                if radio in OperatingFrequencyBands:
-					print "Radio: %s Found at index: %d" %(radio,index);
-                                        return tdkTestObj, index;
+            if expectedresult in actualresult:
+                if radio in OperatingFrequencyBands:
+                    print("Radio: %s Found at index: %d" %(radio,index));
+                    return tdkTestObj, index;
 
-                        else:
-				print "TEST STEP : Execute callmethod for %s" %methodname;
-			        print "EXPECTED RESULT : Should return the operating frequency band for index %d" %index;
-			        print "ACTUAL RESULT : %s " %OperatingFrequencyBands;
+            else:
+                print("TEST STEP : Execute callmethod for %s" %methodname);
+                print("EXPECTED RESULT : Should return the operating frequency band for index %d" %index);
+                print("ACTUAL RESULT : %s " %OperatingFrequencyBands);
 
-        else:
-		print "TEST STEP : Execute callmethod for %s" %methodname;
-		print "EXPECTED RESULT : Should return the number of radios";
-		print "ACTUAL RESULT : %s " %details;
+    else:
+        print("TEST STEP : Execute callmethod for %s" %methodname);
+        print("EXPECTED RESULT : Should return the number of radios");
+        print("ACTUAL RESULT : %s " %details);
 
-        return tdkTestObj, -1;
+    return tdkTestObj, -1;
 
 # A utility function to get the private access point index for 6G radio
 #
@@ -126,7 +126,7 @@ def getIndex(obj, radio):
 def getApIndexfor6G(sysobj, TDK_PATH):
     apIndex = -1;
     cmd= "sh %s/tdk_utility.sh parseConfigFile PRIVATE_6G_AP_INDEX" %TDK_PATH;
-    print cmd;
+    print(cmd);
     expectedresult="SUCCESS";
     tdkTestObj = sysobj.createTestStep('ExecuteCmd');
     tdkTestObj.addParameter("command",cmd);
@@ -136,16 +136,15 @@ def getApIndexfor6G(sysobj, TDK_PATH):
 
     if expectedresult in actualresult and details.isdigit():
         apIndex = int(details);
-        print "\nTEST STEP 1: Get PRIVATE_6G_AP_INDEX  from property file";
-        print "EXPECTED RESULT 1: Should  get PRIVATE_6G_AP_INDEX  from property file"
-        print "ACTUAL RESULT 1: PRIVATE_6G_AP_INDEX from property file :", apIndex ;
-        print "TEST EXECUTION RESULT :SUCCESS";
+        print("\nTEST STEP 1: Get PRIVATE_6G_AP_INDEX  from property file");
+        print("EXPECTED RESULT 1: Should  get PRIVATE_6G_AP_INDEX  from property file")
+        print("ACTUAL RESULT 1: PRIVATE_6G_AP_INDEX from property file :", apIndex) ;
+        print("TEST EXECUTION RESULT :SUCCESS");
         tdkTestObj.setResultStatus("SUCCESS");
     else:
-        print "TEST STEP 1: Get PRIVATE_6G_AP_INDEX  from property file";
-        print "EXPECTED RESULT 1: Should  get PRIVATE_6G_AP_INDEX  from property file"
-        print "ACTUAL RESULT 1: PRIVATE_6G_AP_INDEX from property file :", details ;
-        print "TEST EXECUTION RESULT : FAILURE";
+        print("TEST STEP 1: Get PRIVATE_6G_AP_INDEX  from property file");
+        print("EXPECTED RESULT 1: Should  get PRIVATE_6G_AP_INDEX  from property file")
+        print("ACTUAL RESULT 1: PRIVATE_6G_AP_INDEX from property file :", details) ;
+        print("TEST EXECUTION RESULT : FAILURE");
         tdkTestObj.setResultStatus("FAILURE");
     return tdkTestObj, apIndex;
-

@@ -44,7 +44,7 @@ def getPublicWiFiParamValues(obj):
         actualresult.append(tdkTestObj.getResult())
         details = tdkTestObj.getResultDetails();
         if "VALUE:" in details:
-                orgValue.append( details.split("VALUE:")[1].split(' ')[0] );
+            orgValue.append( details.split("VALUE:")[1].split(' ')[0] );
 
     for index in range(len(paramList)):
         if expectedresult not in actualresult[index]:
@@ -63,44 +63,44 @@ def getPublicWiFiParamValues(obj):
 # Return Value : Execution status
 
 def setPublicWiFiParamValues(obj,paramList):
-        tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple");
-        expectedresult="SUCCESS";
+    tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple");
+    expectedresult="SUCCESS";
 
-        paramList1 = "Device.X_COMCAST-COM_GRE.Tunnel.1.DSCPMarkPolicy|%s|int|Device.X_COMCAST-COM_GRE.Tunnel.1.PrimaryRemoteEndpoint|%s|string|Device.X_COMCAST-COM_GRE.Tunnel.1.SecondaryRemoteEndpoint|%s|string" %(paramList[0],paramList[1],paramList[2])
+    paramList1 = "Device.X_COMCAST-COM_GRE.Tunnel.1.DSCPMarkPolicy|%s|int|Device.X_COMCAST-COM_GRE.Tunnel.1.PrimaryRemoteEndpoint|%s|string|Device.X_COMCAST-COM_GRE.Tunnel.1.SecondaryRemoteEndpoint|%s|string" %(paramList[0],paramList[1],paramList[2])
 
-        paramList2 = "Device.WiFi.SSID.5.SSID|xwifi-2.4|string|Device.WiFi.SSID.5.Enable|%s|bool" %(paramList[3])
+    paramList2 = "Device.WiFi.SSID.5.SSID|xwifi-2.4|string|Device.WiFi.SSID.5.Enable|%s|bool" %(paramList[3])
 
-        paramList3 = "Device.WiFi.SSID.6.SSID|xwifi-5|string|Device.WiFi.SSID.6.Enable|%s|bool" %(paramList[4])
+    paramList3 = "Device.WiFi.SSID.6.SSID|xwifi-5|string|Device.WiFi.SSID.6.Enable|%s|bool" %(paramList[4])
 
-        paramList4 = "Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable|%s|bool" %paramList[5]
+    paramList4 = "Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable|%s|bool" %paramList[5]
 
-        tdkTestObj.addParameter("paramList",paramList1);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult1 = tdkTestObj.getResult();
-        details1 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList1);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult1 = tdkTestObj.getResult();
+    details1 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList2);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult2 = tdkTestObj.getResult();
-        details2 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList2);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult2 = tdkTestObj.getResult();
+    details2 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList3);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult3 = tdkTestObj.getResult();
-        details3 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList3);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult3 = tdkTestObj.getResult();
+    details3 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList4);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult4 = tdkTestObj.getResult();
-        details4 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList4);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult4 = tdkTestObj.getResult();
+    details4 = tdkTestObj.getResultDetails();
 
-        if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4:
-            actualresult = "SUCCESS"
-            details = "setPublicWiFiParamValues success"
-        else:
-            actualresult = "FAILURE"
-            details = "setPublicWiFiParamValues failed"
-        return (tdkTestObj,actualresult,details);
+    if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4:
+        actualresult = "SUCCESS"
+        details = "setPublicWiFiParamValues success"
+    else:
+        actualresult = "FAILURE"
+        details = "setPublicWiFiParamValues failed"
+    return (tdkTestObj,actualresult,details);
 
 # A utility function to get the public wifi parameters.
 #
@@ -126,7 +126,7 @@ def GetPublicWiFiParamValues(obj):
         actualresult.append(tdkTestObj.getResult())
         details = tdkTestObj.getResultDetails();
         if "VALUE:" in details:
-                orgValue.append( details.split("VALUE:")[1].split(' ')[0] );
+            orgValue.append( details.split("VALUE:")[1].split(' ')[0] );
 
     for index in range(len(paramList)):
         if expectedresult not in actualresult[index]:
@@ -147,104 +147,104 @@ def GetPublicWiFiParamValues(obj):
 
 def SetPublicWiFiParamValues(obj,paramList):
 
-        tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple");
+    tdkTestObj = obj.createTestStep("WIFIAgent_SetMultiple");
 
-        paramList1 = "Device.X_COMCAST-COM_GRE.Tunnel.1.DSCPMarkPolicy|%s|int|Device.X_COMCAST-COM_GRE.Tunnel.1.PrimaryRemoteEndpoint|%s|string|Device.X_COMCAST-COM_GRE.Tunnel.1.SecondaryRemoteEndpoint|%s|string" %(paramList[0],paramList[1],paramList[2])
+    paramList1 = "Device.X_COMCAST-COM_GRE.Tunnel.1.DSCPMarkPolicy|%s|int|Device.X_COMCAST-COM_GRE.Tunnel.1.PrimaryRemoteEndpoint|%s|string|Device.X_COMCAST-COM_GRE.Tunnel.1.SecondaryRemoteEndpoint|%s|string" %(paramList[0],paramList[1],paramList[2])
 
-        paramList2 = "Device.WiFi.SSID.5.SSID|%s|string|Device.WiFi.SSID.6.SSID|%s|string|Device.WiFi.SSID.5.Enable|%s|bool" %(paramList[3],paramList[4],paramList[5])
+    paramList2 = "Device.WiFi.SSID.5.SSID|%s|string|Device.WiFi.SSID.6.SSID|%s|string|Device.WiFi.SSID.5.Enable|%s|bool" %(paramList[3],paramList[4],paramList[5])
 
-        paramList3 = "Device.WiFi.SSID.6.Enable|%s|bool|Device.WiFi.AccessPoint.5.SSIDAdvertisementEnabled|%s|bool|Device.WiFi.AccessPoint.6.SSIDAdvertisementEnabled|%s|bool"%(paramList[6],paramList[7],paramList[8])
+    paramList3 = "Device.WiFi.SSID.6.Enable|%s|bool|Device.WiFi.AccessPoint.5.SSIDAdvertisementEnabled|%s|bool|Device.WiFi.AccessPoint.6.SSIDAdvertisementEnabled|%s|bool"%(paramList[6],paramList[7],paramList[8])
 
-        paramList4 = "Device.WiFi.SSID.10.SSID|%s|string|Device.WiFi.SSID.10.Enable|%s|bool|Device.WiFi.AccessPoint.10.SSIDAdvertisementEnabled|%s|bool" %(paramList[9],paramList[10],paramList[11])
+    paramList4 = "Device.WiFi.SSID.10.SSID|%s|string|Device.WiFi.SSID.10.Enable|%s|bool|Device.WiFi.AccessPoint.10.SSIDAdvertisementEnabled|%s|bool" %(paramList[9],paramList[10],paramList[11])
 
-        paramList5 = "Device.WiFi.AccessPoint.10.Security.ModeEnabled|%s|string|Device.WiFi.AccessPoint.10.X_CISCO_COM_BssMaxNumSta|%s|int|Device.WiFi.AccessPoint.10.Security.X_CISCO_COM_EncryptionMethod|%s|string" %(paramList[12],paramList[13],paramList[14])
+    paramList5 = "Device.WiFi.AccessPoint.10.Security.ModeEnabled|%s|string|Device.WiFi.AccessPoint.10.X_CISCO_COM_BssMaxNumSta|%s|int|Device.WiFi.AccessPoint.10.Security.X_CISCO_COM_EncryptionMethod|%s|string" %(paramList[12],paramList[13],paramList[14])
 
-        paramList6 = "Device.WiFi.AccessPoint.10.Security.RadiusServerIPAddr|%s|string|Device.WiFi.AccessPoint.10.Security.RadiusServerPort|%s|unsignedint|Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerIPAddr|%s|string"%(paramList[15],paramList[16],paramList[17])
+    paramList6 = "Device.WiFi.AccessPoint.10.Security.RadiusServerIPAddr|%s|string|Device.WiFi.AccessPoint.10.Security.RadiusServerPort|%s|unsignedint|Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerIPAddr|%s|string"%(paramList[15],paramList[16],paramList[17])
 
-        paramList7 = "Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerPort|%s|unsignedint"%paramList[18]
+    paramList7 = "Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerPort|%s|unsignedint"%paramList[18]
 
-        paramList8 = "Device.WiFi.SSID.9.SSID|%s|string|Device.WiFi.SSID.9.Enable|%s|bool|Device.WiFi.AccessPoint.9.SSIDAdvertisementEnabled|%s|bool" %(paramList[19],paramList[20],paramList[21])
+    paramList8 = "Device.WiFi.SSID.9.SSID|%s|string|Device.WiFi.SSID.9.Enable|%s|bool|Device.WiFi.AccessPoint.9.SSIDAdvertisementEnabled|%s|bool" %(paramList[19],paramList[20],paramList[21])
 
-        paramList9 = "Device.WiFi.AccessPoint.9.Security.ModeEnabled|%s|string|Device.WiFi.AccessPoint.9.X_CISCO_COM_BssMaxNumSta|%s|int|Device.WiFi.AccessPoint.9.Security.X_CISCO_COM_EncryptionMethod|%s|string" %(paramList[22],paramList[23],paramList[24])
+    paramList9 = "Device.WiFi.AccessPoint.9.Security.ModeEnabled|%s|string|Device.WiFi.AccessPoint.9.X_CISCO_COM_BssMaxNumSta|%s|int|Device.WiFi.AccessPoint.9.Security.X_CISCO_COM_EncryptionMethod|%s|string" %(paramList[22],paramList[23],paramList[24])
 
-        paramList10 = "Device.WiFi.AccessPoint.9.Security.RadiusServerIPAddr|%s|string|Device.WiFi.AccessPoint.9.Security.RadiusServerPort|%s|unsignedint|Device.WiFi.AccessPoint.9.Security.SecondaryRadiusServerIPAddr|%s|string"%(paramList[25],paramList[26],paramList[27])
+    paramList10 = "Device.WiFi.AccessPoint.9.Security.RadiusServerIPAddr|%s|string|Device.WiFi.AccessPoint.9.Security.RadiusServerPort|%s|unsignedint|Device.WiFi.AccessPoint.9.Security.SecondaryRadiusServerIPAddr|%s|string"%(paramList[25],paramList[26],paramList[27])
 
-        paramList11 = "Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerPort|%s|unsignedint"%paramList[28]
+    paramList11 = "Device.WiFi.AccessPoint.10.Security.SecondaryRadiusServerPort|%s|unsignedint"%paramList[28]
 
-        paramList12 = "Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable|%s|bool" %paramList[29];
+    paramList12 = "Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable|%s|bool" %paramList[29];
 
-        expectedresult="SUCCESS";
-        tdkTestObj.addParameter("paramList",paramList1);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult1 = tdkTestObj.getResult();
-        details1 = tdkTestObj.getResultDetails();
+    expectedresult="SUCCESS";
+    tdkTestObj.addParameter("paramList",paramList1);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult1 = tdkTestObj.getResult();
+    details1 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList2);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult2 = tdkTestObj.getResult();
-        details2 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList2);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult2 = tdkTestObj.getResult();
+    details2 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList3);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult3 = tdkTestObj.getResult();
-        details3 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList3);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult3 = tdkTestObj.getResult();
+    details3 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList4);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult4 = tdkTestObj.getResult();
-        details4 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList4);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult4 = tdkTestObj.getResult();
+    details4 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList5);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult5 = tdkTestObj.getResult();
-        details5 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList5);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult5 = tdkTestObj.getResult();
+    details5 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList6);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult6 = tdkTestObj.getResult();
-        details6 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList6);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult6 = tdkTestObj.getResult();
+    details6 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList7);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult7 = tdkTestObj.getResult();
-        details7 = tdkTestObj.getResultDetails();
-
-
-        tdkTestObj.addParameter("paramList",paramList8);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult8 = tdkTestObj.getResult();
-        details8 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList7);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult7 = tdkTestObj.getResult();
+    details7 = tdkTestObj.getResultDetails();
 
 
-        tdkTestObj.addParameter("paramList",paramList9);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult9 = tdkTestObj.getResult();
-        details9 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList8);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult8 = tdkTestObj.getResult();
+    details8 = tdkTestObj.getResultDetails();
 
 
-        tdkTestObj.addParameter("paramList",paramList10);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult10 = tdkTestObj.getResult();
-        details10 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList9);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult9 = tdkTestObj.getResult();
+    details9 = tdkTestObj.getResultDetails();
 
 
-        tdkTestObj.addParameter("paramList",paramList11);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult11 = tdkTestObj.getResult();
-        details11 = tdkTestObj.getResultDetails();
+    tdkTestObj.addParameter("paramList",paramList10);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult10 = tdkTestObj.getResult();
+    details10 = tdkTestObj.getResultDetails();
 
-        tdkTestObj.addParameter("paramList",paramList12);
-        tdkTestObj.executeTestCase(expectedresult);
-        actualresult12 = tdkTestObj.getResult();
-        details12 = tdkTestObj.getResultDetails();
 
-        if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4 and expectedresult in actualresult5 and expectedresult in actualresult6 and  expectedresult in actualresult7 and  expectedresult in actualresult8 and  expectedresult in actualresult9 and  expectedresult in actualresult10 and  expectedresult in actualresult11 and  expectedresult in actualresult12:
-            actualresult = "SUCCESS"
-            details = "setPublicWiFiParamValues success"
-        else:
-            actualresult = "FAILURE"
-            details = "setPublicWiFiParamValues failed"
-        return (tdkTestObj,actualresult,details);
+    tdkTestObj.addParameter("paramList",paramList11);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult11 = tdkTestObj.getResult();
+    details11 = tdkTestObj.getResultDetails();
+
+    tdkTestObj.addParameter("paramList",paramList12);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult12 = tdkTestObj.getResult();
+    details12 = tdkTestObj.getResultDetails();
+
+    if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4 and expectedresult in actualresult5 and expectedresult in actualresult6 and  expectedresult in actualresult7 and  expectedresult in actualresult8 and  expectedresult in actualresult9 and  expectedresult in actualresult10 and  expectedresult in actualresult11 and  expectedresult in actualresult12:
+        actualresult = "SUCCESS"
+        details = "setPublicWiFiParamValues success"
+    else:
+        actualresult = "FAILURE"
+        details = "setPublicWiFiParamValues failed"
+    return (tdkTestObj,actualresult,details);
 
 ################################### End of Function #####################################
 
@@ -260,80 +260,80 @@ def SetPublicWiFiParamValues(obj,paramList):
 
 def parsePublicWiFiConfigValues(sysobj):
 
-   tdkTestObj_Sys_ExeCmd = sysobj.createTestStep('ExecuteCmd');
-   details1 = "sh %s/tdk_utility.sh parseConfigFile DSCPMARKPOLICY" %TDK_PATH;
-   details2 = "sh %s/tdk_utility.sh parseConfigFile PRIMARYREMOTEENDPOINT" %TDK_PATH;
-   details3 = "sh %s/tdk_utility.sh parseConfigFile SECONDARYREMOTEENDPOINT" %TDK_PATH;
-   details4 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_SSID_NAME " %TDK_PATH;
-   details5 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_MODE_ENABLED" %TDK_PATH;
-   details6 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_BSS_MAX_NUM_STA" %TDK_PATH;
-   details7 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_ENCRYPTION_METHOD" %TDK_PATH;
-   details8 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_RADIUS_SERVER_IPADDR" %TDK_PATH;
-   details9 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_RADIUS_SERVER_PORT" %TDK_PATH;
+    tdkTestObj_Sys_ExeCmd = sysobj.createTestStep('ExecuteCmd');
+    details1 = "sh %s/tdk_utility.sh parseConfigFile DSCPMARKPOLICY" %TDK_PATH;
+    details2 = "sh %s/tdk_utility.sh parseConfigFile PRIMARYREMOTEENDPOINT" %TDK_PATH;
+    details3 = "sh %s/tdk_utility.sh parseConfigFile SECONDARYREMOTEENDPOINT" %TDK_PATH;
+    details4 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_SSID_NAME " %TDK_PATH;
+    details5 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_MODE_ENABLED" %TDK_PATH;
+    details6 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_BSS_MAX_NUM_STA" %TDK_PATH;
+    details7 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_ENCRYPTION_METHOD" %TDK_PATH;
+    details8 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_RADIUS_SERVER_IPADDR" %TDK_PATH;
+    details9 = "sh %s/tdk_utility.sh parseConfigFile PUBLIC_WIFI_RADIUS_SERVER_PORT" %TDK_PATH;
 
-   print details1;
-   print details2;
-   print details3;
-   print details4;
-   print details5;
-   print details6;
-   print details7;
-   print details8;
-   print details9;
+    print(details1);
+    print(details2);
+    print(details3);
+    print(details4);
+    print(details5);
+    print(details6);
+    print(details7);
+    print(details8);
+    print(details9);
 
-   expectedresult="SUCCESS";
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details1);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult1 = tdkTestObj_Sys_ExeCmd.getResult();
-   DSCPMarkPolicy = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    expectedresult="SUCCESS";
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details1);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult1 = tdkTestObj_Sys_ExeCmd.getResult();
+    DSCPMarkPolicy = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details2);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult2 = tdkTestObj_Sys_ExeCmd.getResult();
-   PrimaryRemoteEndpoint = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details2);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult2 = tdkTestObj_Sys_ExeCmd.getResult();
+    PrimaryRemoteEndpoint = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details3);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult3 = tdkTestObj_Sys_ExeCmd.getResult();
-   SecondaryRemoteEndpoint = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details3);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult3 = tdkTestObj_Sys_ExeCmd.getResult();
+    SecondaryRemoteEndpoint = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details4);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult4 = tdkTestObj_Sys_ExeCmd.getResult();
-   SSIDName = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details4);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult4 = tdkTestObj_Sys_ExeCmd.getResult();
+    SSIDName = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details5);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult5 = tdkTestObj_Sys_ExeCmd.getResult();
-   ModeEnabled = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details5);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult5 = tdkTestObj_Sys_ExeCmd.getResult();
+    ModeEnabled = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details6);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult6 = tdkTestObj_Sys_ExeCmd.getResult();
-   BssMaxNumSta = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details6);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult6 = tdkTestObj_Sys_ExeCmd.getResult();
+    BssMaxNumSta = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details7);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult7 = tdkTestObj_Sys_ExeCmd.getResult();
-   EncryptionMethod = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details7);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult7 = tdkTestObj_Sys_ExeCmd.getResult();
+    EncryptionMethod = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details8);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult8 = tdkTestObj_Sys_ExeCmd.getResult();
-   RadiusServerIPAddr = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details8);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult8 = tdkTestObj_Sys_ExeCmd.getResult();
+    RadiusServerIPAddr = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   tdkTestObj_Sys_ExeCmd.addParameter("command", details9);
-   tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-   actualresult9 = tdkTestObj_Sys_ExeCmd.getResult();
-   RadiusServerPort = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
+    tdkTestObj_Sys_ExeCmd.addParameter("command", details9);
+    tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+    actualresult9 = tdkTestObj_Sys_ExeCmd.getResult();
+    RadiusServerPort = tdkTestObj_Sys_ExeCmd.getResultDetails().replace("\\n", "");
 
-   if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4 and expectedresult in actualresult5 and expectedresult in actualresult6 and  expectedresult in actualresult7 and  expectedresult in actualresult8 and expectedresult in actualresult9 and DSCPMarkPolicy != "" and PrimaryRemoteEndpoint!= "" and SecondaryRemoteEndpoint!= ""  and SSIDName != "" and ModeEnabled != "" and BssMaxNumSta!= "" and EncryptionMethod != "" and RadiusServerIPAddr != "" and RadiusServerPort != "":
-      actualresult = "SUCCESS"
-      details = "getSetValues success"
-   else:
-       actualresult = "FAILURE"
-       details = "getSetValues failed"
+    if expectedresult in actualresult1 and expectedresult in actualresult2 and expectedresult in actualresult3 and expectedresult in actualresult4 and expectedresult in actualresult5 and expectedresult in actualresult6 and  expectedresult in actualresult7 and  expectedresult in actualresult8 and expectedresult in actualresult9 and DSCPMarkPolicy != "" and PrimaryRemoteEndpoint!= "" and SecondaryRemoteEndpoint!= ""  and SSIDName != "" and ModeEnabled != "" and BssMaxNumSta!= "" and EncryptionMethod != "" and RadiusServerIPAddr != "" and RadiusServerPort != "":
+        actualresult = "SUCCESS"
+        details = "getSetValues success"
+    else:
+        actualresult = "FAILURE"
+        details = "getSetValues failed"
 
-   setvalues = [DSCPMarkPolicy,PrimaryRemoteEndpoint,SecondaryRemoteEndpoint,SSIDName,ModeEnabled,BssMaxNumSta,EncryptionMethod,RadiusServerIPAddr,RadiusServerPort];
+    setvalues = [DSCPMarkPolicy,PrimaryRemoteEndpoint,SecondaryRemoteEndpoint,SSIDName,ModeEnabled,BssMaxNumSta,EncryptionMethod,RadiusServerIPAddr,RadiusServerPort];
 
-   return setvalues,tdkTestObj_Sys_ExeCmd,actualresult;
+    return setvalues,tdkTestObj_Sys_ExeCmd,actualresult;

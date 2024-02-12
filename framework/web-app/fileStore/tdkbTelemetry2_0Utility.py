@@ -42,42 +42,42 @@ def getinitialTelemetry2_0Values(tdkTestObj):
     actualresult = tdkTestObj.getResult();
     defaultTelstatus  = tdkTestObj.getResultDetails();
     if expectedresult in actualresult :
-       #Set the result status of execution
-       tdkTestObj.setResultStatus("SUCCESS");
-       print "Telemetry Enable status is:",defaultTelstatus;
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("Telemetry Enable status is:",defaultTelstatus);
 
-       tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version");
-       #Execute testcase on DUT
-       tdkTestObj.executeTestCase(expectedresult);
-       actualresult = tdkTestObj.getResult();
-       defVersion= tdkTestObj.getResultDetails();
-       if expectedresult in actualresult:
-          #Set the result status of execution
-          tdkTestObj.setResultStatus("SUCCESS");
-          print "Telemetry Version  is:",defVersion;
+        tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version");
+        #Execute testcase on DUT
+        tdkTestObj.executeTestCase(expectedresult);
+        actualresult = tdkTestObj.getResult();
+        defVersion= tdkTestObj.getResultDetails();
+        if expectedresult in actualresult:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("Telemetry Version  is:",defVersion);
 
-          tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.ConfigURL");
-          #Execute the test case in DUT
-          tdkTestObj.executeTestCase(expectedresult);
-          actualresult = tdkTestObj.getResult();
-          defURL = tdkTestObj.getResultDetails();
-          if expectedresult in actualresult:
-             getStatus = 1;
-             #Set the result status of execution
-             tdkTestObj.setResultStatus("SUCCESS");
-             print "Telemetry config URL  ",defURL;
-          else:
-              #Set the result status of execution
-              tdkTestObj.setResultStatus("FAILURE");
-              print "Failed to get Telemetry config URL"
-       else:
-           #Set the result status of execution
-           tdkTestObj.setResultStatus("FAILURE");
-           print " Failed to Get the Telemetry Version";
+            tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.ConfigURL");
+            #Execute the test case in DUT
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            defURL = tdkTestObj.getResultDetails();
+            if expectedresult in actualresult:
+                getStatus = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("Telemetry config URL  ",defURL);
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print("Failed to get Telemetry config URL")
+        else:
+            #Set the result status of execution
+            tdkTestObj.setResultStatus("FAILURE");
+            print(" Failed to Get the Telemetry Version");
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "Failed to get Telemetry Enable status";
+        print("Failed to get Telemetry Enable status");
 
     return getStatus,defaultTelstatus,defURL,defVersion;
 
@@ -102,7 +102,7 @@ def setTelemetry2_0Values(tdkTestObj,telStatus,version,URL):
     if expectedresult in actualresult:
         #Set the result status of execution
         tdkTestObj.setResultStatus("SUCCESS");
-        print "Telemetry Enable status is:",details
+        print("Telemetry Enable status is:",details)
 
         tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Version");
         tdkTestObj.addParameter("ParamValue",version);
@@ -114,7 +114,7 @@ def setTelemetry2_0Values(tdkTestObj,telStatus,version,URL):
         if expectedresult in actualresult:
             #Set the result status of execution
             tdkTestObj.setResultStatus("SUCCESS");
-            print "Telemetry Version set status is:",details
+            print("Telemetry Version set status is:",details)
 
             tdkTestObj.addParameter("ParamName","Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.ConfigURL");
             tdkTestObj.addParameter("ParamValue",URL);
@@ -127,19 +127,19 @@ def setTelemetry2_0Values(tdkTestObj,telStatus,version,URL):
                 setStatus = 1;
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("SUCCESS");
-                print "Telemetry ConfigURL is",details;
+                print("Telemetry ConfigURL is",details);
             else:
                 #Set the result status of execution
                 tdkTestObj.setResultStatus("FAILURE");
-                print "Failed to set the Telemetry ConfigURL";
+                print("Failed to set the Telemetry ConfigURL");
         else:
             #Set the result status of execution
             tdkTestObj.setResultStatus("FAILURE");
-            print "Failed to set the Telemetry Version";
+            print("Failed to set the Telemetry Version");
     else:
         #Set the result status of execution
         tdkTestObj.setResultStatus("FAILURE");
-        print "Failed to set the Telemetry Enable status";
+        print("Failed to set the Telemetry Enable status");
     return  setStatus;
 
 #################################################################################
@@ -195,31 +195,31 @@ def telemetry2_0_Prerequisite(sysobj,tdkTestObj_Sys_ExeCmd,tdkTestObj_Tr181_Get,
     enableRes,enableDetails = enableTelemetryDebugLogs(tdkTestObj_Sys_ExeCmd);
     if expectedresult in enableRes:
         tdkTestObj_Sys_ExeCmd.setResultStatus("SUCCESS");
-        print "TEST STEP : Enable the Telemetry Debug logs";
-        print "EXPECTED RESULT : Should Enable the Telemetry Debug logs";
-        print "ACTUAL RESULT : Telemetry Debug logs was Enabled";
-        print "[TEST EXECUTION RESULT] : SUCCESS"
+        print("TEST STEP : Enable the Telemetry Debug logs");
+        print("EXPECTED RESULT : Should Enable the Telemetry Debug logs");
+        print("ACTUAL RESULT : Telemetry Debug logs was Enabled");
+        print("[TEST EXECUTION RESULT] : SUCCESS")
         pid,pidresult = getPID(tdkTestObj_Sys_ExeCmd,"telemetry2_0");
 
         if expectedresult in pidresult:
             tdkTestObj_Sys_ExeCmd.setResultStatus("SUCCESS");
-            print "TEST STEP : Get the PID value of Telemetry2_0 Process";
-            print "EXPECTED RESULT : Should get the PID value of Telemetry Process";
-            print "ACTUAL RESULT : Telemetry PID value was retrieved Successfully";
-            print "[TEST EXECUTION RESULT] : SUCCESS"
+            print("TEST STEP : Get the PID value of Telemetry2_0 Process");
+            print("EXPECTED RESULT : Should get the PID value of Telemetry Process");
+            print("ACTUAL RESULT : Telemetry PID value was retrieved Successfully");
+            print("[TEST EXECUTION RESULT] : SUCCESS")
 
             if pid != "":
                 preReq_Status = 1;
-                print "telemetry2_0 Process is already Running, PID is ",pid
+                print("telemetry2_0 Process is already Running, PID is ",pid)
             else:
-                print "telemetry2_0 Process is not running in initial stage"
+                print("telemetry2_0 Process is not running in initial stage")
                 getResult,initialStatus,initialURL,initialVersion = getinitialTelemetry2_0Values(tdkTestObj_Tr181_Get);
                 if getResult == 1:
                     tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
-                    print "TEST STEP : Get the values of Telemetry2_0 Enable,Version and ConfigURL value";
-                    print "EXPECTED RESULT : Should get the values of Telemetry2_0 Enable,Version and ConfigURL";
-                    print "ACTUAL RESULT : Telemetry2_0 Enable,Version and ConfigURL values retrieved Successfully";
-                    print "[TEST EXECUTION RESULT] : SUCCESS"
+                    print("TEST STEP : Get the values of Telemetry2_0 Enable,Version and ConfigURL value");
+                    print("EXPECTED RESULT : Should get the values of Telemetry2_0 Enable,Version and ConfigURL");
+                    print("ACTUAL RESULT : Telemetry2_0 Enable,Version and ConfigURL values retrieved Successfully");
+                    print("[TEST EXECUTION RESULT] : SUCCESS")
 
                     if initialStatus == "true" and initialVersion == 2 and initialURL == SetURL:
                         paramSet = 1;
@@ -228,61 +228,61 @@ def telemetry2_0_Prerequisite(sysobj,tdkTestObj_Sys_ExeCmd,tdkTestObj_Tr181_Get,
                         if setResult == 1:
                             revertFlag = 1;
                             tdkTestObj_Tr181_set.setResultStatus("SUCCESS");
-                            print "TEST STEP : Set the values of Telemetry2_0 Enable,Version and ConfigURL value";
-                            print "EXPECTED RESULT : Set operation of Telemetry2_0 Enable,Version and ConfigURL should Success";
-                            print "ACTUAL RESULT : Successfully set the values of Telemetry2_0 Enable,Version and ConfigURL";
-                            print "[TEST EXECUTION RESULT] : SUCCESS"
+                            print("TEST STEP : Set the values of Telemetry2_0 Enable,Version and ConfigURL value");
+                            print("EXPECTED RESULT : Set operation of Telemetry2_0 Enable,Version and ConfigURL should Success");
+                            print("ACTUAL RESULT : Successfully set the values of Telemetry2_0 Enable,Version and ConfigURL");
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
                             paramSet = 1;
                         else:
                             paramSet = 0;
                             tdkTestObj_Tr181_set.setResultStatus("FAILURE");
-                            print "TEST STEP : Set the values of Telemetry2_0 Enable,Version and ConfigURL value";
-                            print "EXPECTED RESULT : Set operation of Telemetry2_0 Enable,Version and ConfigURL should Success";
-                            print "ACTUAL RESULT : Failed to set the values of Telemetry2_0 Enable,Version and ConfigURL";
-                            print "[TEST EXECUTION RESULT] : FAILURE"
+                            print("TEST STEP : Set the values of Telemetry2_0 Enable,Version and ConfigURL value");
+                            print("EXPECTED RESULT : Set operation of Telemetry2_0 Enable,Version and ConfigURL should Success");
+                            print("ACTUAL RESULT : Failed to set the values of Telemetry2_0 Enable,Version and ConfigURL");
+                            print("[TEST EXECUTION RESULT] : FAILURE")
 
                     if paramSet == 1:
-                        print "******************************************************"
-                        print "Initiating Reboot Please wait till the device comes up";
-                        print"*******************************************************"
+                        print("******************************************************")
+                        print("Initiating Reboot Please wait till the device comes up");
+                        print("*******************************************************")
                         sysobj .initiateReboot();
                         sleep(300);
                         pid,pidresult = getPID(tdkTestObj_Sys_ExeCmd,"telemetry2_0");
 
                         if expectedresult in pidresult and pid != "":
                             tdkTestObj_Sys_ExeCmd.setResultStatus("SUCCESS");
-                            print "TEST STEP : Get the PID value of Telemetry2_0 to make sure process is running";
-                            print "EXPECTED RESULT : telemetry2_0 process should be running";
-                            print "ACTUAL RESULT : telemetry2_0 process is running after reboot, PID is",pid;
-                            print "[TEST EXECUTION RESULT] : SUCCESS"
+                            print("TEST STEP : Get the PID value of Telemetry2_0 to make sure process is running");
+                            print("EXPECTED RESULT : telemetry2_0 process should be running");
+                            print("ACTUAL RESULT : telemetry2_0 process is running after reboot, PID is",pid);
+                            print("[TEST EXECUTION RESULT] : SUCCESS")
                             preReq_Status = 1;
                         else:
                             tdkTestObj_Sys_ExeCmd.setResultStatus("FAILURE");
-                            print "TEST STEP : Get the PID value of Telemetry2_0 to make sure process is running";
-                            print "EXPECTED RESULT : telemetry2_0 process should be running";
-                            print "ACTUAL RESULT : telemetry2_0 process is NOT running after reboot";
-                            print "[TEST EXECUTION RESULT] : FAILURE"
+                            print("TEST STEP : Get the PID value of Telemetry2_0 to make sure process is running");
+                            print("EXPECTED RESULT : telemetry2_0 process should be running");
+                            print("ACTUAL RESULT : telemetry2_0 process is NOT running after reboot");
+                            print("[TEST EXECUTION RESULT] : FAILURE")
                     else:
                         tdkTestObj_Tr181_set.setResultStatus("FAILURE");
-                        print "Parameters set operation was Failed"
+                        print("Parameters set operation was Failed")
                 else:
                     tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
-                    print "TEST STEP : Get the values of Telemetry2_0 Enable,Version and ConfigURL value";
-                    print "EXPECTED RESULT : Should get the values of Telemetry2_0 Enable,Version and ConfigURL";
-                    print "ACTUAL RESULT : Failed to get Telemetry2_0 Enable,Version and ConfigURL values";
-                    print "[TEST EXECUTION RESULT] : FAILURE"
+                    print("TEST STEP : Get the values of Telemetry2_0 Enable,Version and ConfigURL value");
+                    print("EXPECTED RESULT : Should get the values of Telemetry2_0 Enable,Version and ConfigURL");
+                    print("ACTUAL RESULT : Failed to get Telemetry2_0 Enable,Version and ConfigURL values");
+                    print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj_Sys_ExeCmd.setResultStatus("FAILURE");
-            print "TEST STEP : Get the PID value of Telemetry2_0 Process";
-            print "EXPECTED RESULT : Should get the PID value of Telemetry Process";
-            print "ACTUAL RESULT : Failed to get the Telemetry PID value";
-            print "[TEST EXECUTION RESULT] : FAILURE"
+            print("TEST STEP : Get the PID value of Telemetry2_0 Process");
+            print("EXPECTED RESULT : Should get the PID value of Telemetry Process");
+            print("ACTUAL RESULT : Failed to get the Telemetry PID value");
+            print("[TEST EXECUTION RESULT] : FAILURE")
     else:
         tdkTestObj_Sys_ExeCmd.setResultStatus("FAILURE");
-        print "TEST STEP : Enable the Telemetry Debug logs";
-        print "EXPECTED RESULT : Should Enable the Telemetry Debug logs";
-        print "ACTUAL RESULT : Failed to Enable Telemetry Debug logs";
-        print "[TEST EXECUTION RESULT] : FAILURE"
+        print("TEST STEP : Enable the Telemetry Debug logs");
+        print("EXPECTED RESULT : Should Enable the Telemetry Debug logs");
+        print("ACTUAL RESULT : Failed to Enable Telemetry Debug logs");
+        print("[TEST EXECUTION RESULT] : FAILURE")
 
     return preReq_Status,revertFlag,initialStatus,initialVersion,initialURL;
 
@@ -296,18 +296,18 @@ def telemetry2_0_Prerequisite(sysobj,tdkTestObj_Sys_ExeCmd,tdkTestObj_Tr181_Get,
 def telemetry2_0_PostProcess(sysobj,tdkTestObj_Sys_ExeCmd,tdkTestObj_Tr181_set,revertFlag,initialStatus,initialVersion,initialURL):
     postprocess_Status = 0;
     if revertFlag == 1:
-        print "Revert Flag was SET, Initiating Revert operations"
+        print("Revert Flag was SET, Initiating Revert operations")
         revertResult = setTelemetry2_0Values(tdkTestObj_Tr181_set,initialStatus,initialVersion,initialURL);
         if revertResult == 1:
             tdkTestObj_Tr181_set.setResultStatus("SUCCESS");
-            print "TEST STEP : Revert the Telemetry parameters";
-            print "EXPECTED RESULT : Telemetry parameters should be reverted ";
-            print "ACTUAL RESULT : Revert operation was success";
-            print "[TEST EXECUTION RESULT] : SUCCESS"
+            print("TEST STEP : Revert the Telemetry parameters");
+            print("EXPECTED RESULT : Telemetry parameters should be reverted ");
+            print("ACTUAL RESULT : Revert operation was success");
+            print("[TEST EXECUTION RESULT] : SUCCESS")
 
-            print "******************************************************"
-            print "Initiating Reboot Please wait till the device comes up";
-            print"*******************************************************"
+            print("******************************************************")
+            print("Initiating Reboot Please wait till the device comes up");
+            print("*******************************************************")
             sysobj .initiateReboot();
             sleep(300);
             pid,pidresult = getPID(tdkTestObj_Sys_ExeCmd,"telemetry2_0");
@@ -315,25 +315,25 @@ def telemetry2_0_PostProcess(sysobj,tdkTestObj_Sys_ExeCmd,tdkTestObj_Tr181_set,r
             if expectedresult in pidresult and pid == "":
                 postprocess_Status = 1;
                 tdkTestObj_Sys_ExeCmd.setResultStatus("SUCCESS");
-                print "TEST STEP : Get the PID value of telemetry2_0";
-                print "EXPECTED RESULT : Telemetry process shouldnt be running";
-                print "ACTUAL RESULT : telemetry2_0 Process is NOT Running After Reboot";
-                print "[TEST EXECUTION RESULT] : SUCCESS"
+                print("TEST STEP : Get the PID value of telemetry2_0");
+                print("EXPECTED RESULT : Telemetry process shouldnt be running");
+                print("ACTUAL RESULT : telemetry2_0 Process is NOT Running After Reboot");
+                print("[TEST EXECUTION RESULT] : SUCCESS")
             else:
                 tdkTestObj_Sys_ExeCmd.setResultStatus("FAILURE");
-                print "TEST STEP : Get the PID value of telemetry2_0";
-                print "EXPECTED RESULT : Telemetry process Should not be running";
-                print "ACTUAL RESULT : telemetry2_0 Process is  Running After Reboot";
-                print "[TEST EXECUTION RESULT] : FAILURE"
+                print("TEST STEP : Get the PID value of telemetry2_0");
+                print("EXPECTED RESULT : Telemetry process Should not be running");
+                print("ACTUAL RESULT : telemetry2_0 Process is  Running After Reboot");
+                print("[TEST EXECUTION RESULT] : FAILURE")
         else:
             tdkTestObj_Tr181_set.setResultStatus("FAILURE");
-            print "TEST STEP : Revert the Telemetry parameters";
-            print "EXPECTED RESULT : Telemetry parameters should be reverted ";
-            print "ACTUAL RESULT : Revert operation was Failed";
-            print "[TEST EXECUTION RESULT] : FAILURE"
+            print("TEST STEP : Revert the Telemetry parameters");
+            print("EXPECTED RESULT : Telemetry parameters should be reverted ");
+            print("ACTUAL RESULT : Revert operation was Failed");
+            print("[TEST EXECUTION RESULT] : FAILURE")
     else:
         postprocess_Status = 1;
-        print "Revert Flag is not set, no need for Revert Operation"
+        print("Revert Flag is not set, no need for Revert Operation")
 
     return postprocess_Status;
 
@@ -364,11 +364,11 @@ def getTelLogFileTotalLinesCount(tdkTestObj):
 def killProcess(tdkTestObj_Sys_ExeCmd,pid,scriptname):
     expectedresult="SUCCESS";
     if scriptname !="":
-       cmd = "kill %d ;sh %s &" %(pid,scriptname);
-       tdkTestObj_Sys_ExeCmd.addParameter("command",cmd);
-       tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
-       actualresult = tdkTestObj_Sys_ExeCmd.getResult();
-       details = tdkTestObj_Sys_ExeCmd.getResultDetails().strip().replace("\\n", "");
+        cmd = "kill %d ;sh %s &" %(pid,scriptname);
+        tdkTestObj_Sys_ExeCmd.addParameter("command",cmd);
+        tdkTestObj_Sys_ExeCmd.executeTestCase(expectedresult);
+        actualresult = tdkTestObj_Sys_ExeCmd.getResult();
+        details = tdkTestObj_Sys_ExeCmd.getResultDetails().strip().replace("\\n", "");
     else:
         cmd = "kill %d " %pid;
         tdkTestObj_Sys_ExeCmd.addParameter("command",cmd);
@@ -385,25 +385,25 @@ def killProcess(tdkTestObj_Sys_ExeCmd,pid,scriptname):
 # Return Value : return the actualresult,pid
 ################################################################################
 def checkProcessRestarted(tdkTestObj_Sys_ExeCmd,processname):
-    print "Check for every 10 secs whether the process is up"
+    print("Check for every 10 secs whether the process is up")
     retryCount = 0;
     MAX_RETRY =5 ;
     expectedresult="SUCCESS";
     while retryCount < MAX_RETRY:
-          pid,actualresult = getPID(tdkTestObj_Sys_ExeCmd,processname);
-          if expectedresult in actualresult and pid != "":
-             break;
-          else:
-              sleep(10);
-              retryCount = retryCount + 1;
+        pid,actualresult = getPID(tdkTestObj_Sys_ExeCmd,processname);
+        if expectedresult in actualresult and pid != "":
+            break;
+        else:
+            sleep(10);
+            retryCount = retryCount + 1;
     if pid == "":
-       print "Retry Again: Check for every 5 mins whether the process is up"
-       retryCount = 0;
-       while retryCount < MAX_RETRY:
-             pid,actualresult = getPID(tdkTestObj_Sys_ExeCmd,processname);
-             if expectedresult in actualresult and pid != "":
+        print("Retry Again: Check for every 5 mins whether the process is up")
+        retryCount = 0;
+        while retryCount < MAX_RETRY:
+            pid,actualresult = getPID(tdkTestObj_Sys_ExeCmd,processname);
+            if expectedresult in actualresult and pid != "":
                 break;
-             else:
-                 sleep(300);
-                 retryCount = retryCount + 1;
+            else:
+                sleep(300);
+                retryCount = retryCount + 1;
     return  actualresult,pid;

@@ -54,16 +54,16 @@ def doEnableDisableRBUS(enableFlag,sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_
     if  expectedresult in def_result:
         if default_value == enableFlag:
             rbus_set = 1;
-            print "RBUS Enable status is already ",enableFlag
+            print("RBUS Enable status is already ",enableFlag)
         else:
             set_result, set_details = setTR181Value(tdkTestObj_Tr181_Set,parameter_Name,enableFlag,"bool");
 
             if expectedresult  in set_result:
                 revert_flag = 1;
-                print "TEST STEP : Set the RBUS Enable status to ",enableFlag;
-                print "EXPECTED RESULT :  Set Operation should be success";
-                print "ACTUAL RESULT : Set operation was success";
-                print "[TEST EXECUTION RESULT] : SUCCESS";
+                print("TEST STEP : Set the RBUS Enable status to ",enableFlag);
+                print("EXPECTED RESULT :  Set Operation should be success");
+                print("ACTUAL RESULT : Set operation was success");
+                print("[TEST EXECUTION RESULT] : SUCCESS");
                 tdkTestObj_Tr181_Set.setResultStatus("SUCCESS");
 
                 doRebootDUT(sysobj);
@@ -72,28 +72,28 @@ def doEnableDisableRBUS(enableFlag,sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_
 
                 if expectedresult  in get_result and get_details == enableFlag:
                     rbus_set = 1;
-                    print "TEST STEP : Get the Enable Status of RBUS ";
-                    print "EXPECTED RESULT : Get operation should be success";
-                    print "ACTUAL RESULT : RBUS Enable status %s" %get_details;
-                    print "[TEST EXECUTION RESULT] : SUCCESS";
+                    print("TEST STEP : Get the Enable Status of RBUS ");
+                    print("EXPECTED RESULT : Get operation should be success");
+                    print("ACTUAL RESULT : RBUS Enable status %s" %get_details);
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
                     tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
                 else:
                     revert_flag  = 0;
-                    print "TEST STEP : Get the Enable Status of RBUS ";
-                    print "EXPECTED RESULT : Get operation should be success";
-                    print "ACTUAL RESULT : Failed to get RBUS Enable status";
-                    print "[TEST EXECUTION RESULT] : FAILURE";
+                    print("TEST STEP : Get the Enable Status of RBUS ");
+                    print("EXPECTED RESULT : Get operation should be success");
+                    print("ACTUAL RESULT : Failed to get RBUS Enable status");
+                    print("[TEST EXECUTION RESULT] : FAILURE");
                     tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
             else:
                 rbus_set = 0;
-                print "TEST STEP : Set the RBUS Enable status to ",enableFlag;
-                print "EXPECTED RESULT :  Set Operation should be success";
-                print "ACTUAL RESULT : Set operation Failed";
-                print "[TEST EXECUTION RESULT] : FAILURE";
+                print("TEST STEP : Set the RBUS Enable status to ",enableFlag);
+                print("EXPECTED RESULT :  Set Operation should be success");
+                print("ACTUAL RESULT : Set operation Failed");
+                print("[TEST EXECUTION RESULT] : FAILURE");
                 tdkTestObj_Tr181_Set.setResultStatus("FAILURE");
     else:
         rbus_set = 0;
-        print "[TEST EXECUTION RESULT] : FAILURE";
+        print("[TEST EXECUTION RESULT] : FAILURE");
         tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
 
     #rbus_set = 1 - Successful operation and revert_flag = 1 - initial RBUS enable value was disabled
@@ -113,19 +113,19 @@ def rbus_PreRequisite(sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_Set,tdkTestOb
     rbus_set,revert_flag = doEnableDisableRBUS("true",sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_Set);
 
     if rbus_set == 1:
-        print "RBUS was Enabled successfully"
+        print("RBUS was Enabled successfully")
         tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
 
         actualresult,pid_value = getPID(tdkTestObj_Sys_ExeCmd,"rbus_session_mgr");
         if expectedresult  in actualresult and pid_value != "":
-            print "RBUS process was running successfully"
+            print("RBUS process was running successfully")
             tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
         else:
             rbus_set = 0;
-            print "RBUS was Enabled but RBUS process was NOT running"
+            print("RBUS was Enabled but RBUS process was NOT running")
             tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
     else:
-        print "Failed to Enable RBUS"
+        print("Failed to Enable RBUS")
         tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
 
     return rbus_set,revert_flag;
@@ -147,10 +147,10 @@ def rbus_PostProcess(sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_Set,tdkTestObj
         set_result, set_details = setTR181Value(tdkTestObj_Tr181_Set,parameter_Name,"false","bool");
 
         if expectedresult in set_result:
-            print "TEST STEP : Set the RBUS Enable status to False";
-            print "EXPECTED RESULT : Set operation should be success";
-            print "ACTUAL RESULT : Set operation was success";
-            print "[TEST EXECUTION RESULT] : SUCCESS";
+            print("TEST STEP : Set the RBUS Enable status to False");
+            print("EXPECTED RESULT : Set operation should be success");
+            print("ACTUAL RESULT : Set operation was success");
+            print("[TEST EXECUTION RESULT] : SUCCESS");
             tdkTestObj_Tr181_Set.setResultStatus("SUCCESS");
 
             doRebootDUT(sysobj);
@@ -158,43 +158,43 @@ def rbus_PostProcess(sysobj,tdkTestObj_Tr181_Get,tdkTestObj_Tr181_Set,tdkTestObj
             get_result,get_details = getTR181Value(tdkTestObj_Tr181_Get,parameter_Name);
 
             if expectedresult  in get_result and get_details == "false":
-                print "TEST STEP : Get the Enable Status of RBUS ";
-                print "EXPECTED RESULT : Get operation should be success";
-                print "ACTUAL RESULT : RBUS Enable status %s" %get_details;
-                print "[TEST EXECUTION RESULT] : SUCCESS";
+                print("TEST STEP : Get the Enable Status of RBUS ");
+                print("EXPECTED RESULT : Get operation should be success");
+                print("ACTUAL RESULT : RBUS Enable status %s" %get_details);
+                print("[TEST EXECUTION RESULT] : SUCCESS");
                 tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
 
                 actualresult,pid_value = getPID(tdkTestObj_Sys_ExeCmd,"rbus_session_mgr");
 
                 #Since RBUS was disabled, PID value should be empty
                 if expectedresult  in actualresult and pid_value == "":
-                    print "TEST STEP : Get the PID of RBUS";
-                    print "EXPECTED RESULT :  Should get the PID value o RBUS";
-                    print "ACTUAL RESULT : PID of RBUS %s" %pid_value;
-                    print "[TEST EXECUTION RESULT] : SUCCESS";
+                    print("TEST STEP : Get the PID of RBUS");
+                    print("EXPECTED RESULT :  Should get the PID value o RBUS");
+                    print("ACTUAL RESULT : PID of RBUS %s" %pid_value);
+                    print("[TEST EXECUTION RESULT] : SUCCESS");
                     tdkTestObj_Tr181_Get.setResultStatus("SUCCESS");
                 else:
                     post_process_value = 0;
-                    print "TEST STEP : Get the PID of RBUS";
-                    print "EXPECTED RESULT :  Should get the PID value o RBUS";
-                    print "ACTUAL RESULT : Failed to PID value ";
-                    print "[TEST EXECUTION RESULT] : FAILURE";
+                    print("TEST STEP : Get the PID of RBUS");
+                    print("EXPECTED RESULT :  Should get the PID value o RBUS");
+                    print("ACTUAL RESULT : Failed to PID value ");
+                    print("[TEST EXECUTION RESULT] : FAILURE");
                     tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
             else:
                 post_process_value = 0;
-                print "TEST STEP : Get the Enable Status of RBUS ";
-                print "EXPECTED RESULT : Get operation should be success";
-                print "ACTUAL RESULT : Failed to get RBUS Enable status";
-                print "[TEST EXECUTION RESULT] : FAILURE";
+                print("TEST STEP : Get the Enable Status of RBUS ");
+                print("EXPECTED RESULT : Get operation should be success");
+                print("ACTUAL RESULT : Failed to get RBUS Enable status");
+                print("[TEST EXECUTION RESULT] : FAILURE");
                 tdkTestObj_Tr181_Get.setResultStatus("FAILURE");
         else:
             post_process_value = 0;
-            print "TEST STEP : Set the RBUS Enable status to False";
-            print "EXPECTED RESULT : Set operation should be success";
-            print "ACTUAL RESULT : Set operation was Failed";
-            print "[TEST EXECUTION RESULT] : FAILURE";
+            print("TEST STEP : Set the RBUS Enable status to False");
+            print("EXPECTED RESULT : Set operation should be success");
+            print("ACTUAL RESULT : Set operation was Failed");
+            print("[TEST EXECUTION RESULT] : FAILURE");
             tdkTestObj_Tr181_Set.setResultStatus("FAILURE");
     else:
-        print "Revert Flag was not set, No need for revert Operation"
+        print("Revert Flag was not set, No need for revert Operation")
 
     return post_process_value;

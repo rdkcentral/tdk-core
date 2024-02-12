@@ -26,7 +26,7 @@ SERVER_URL=""
 # Name of the xml file(including its full path), holding the soap request for TS_TR069PA_Enable_CWMP_ConnectToACS.py, could be any set/get request
 Enable_CWMP_XML=""
 
-# Name of the xml file(including its full path), holding the soap request for TS_TR069PA_SetManagementServerURL.py, should be a get request for Device.ManagementServer.URL 
+# Name of the xml file(including its full path), holding the soap request for TS_TR069PA_SetManagementServerURL.py, should be a get request for Device.ManagementServer.URL
 SERVERURI_GET_XML=""
 
 # Name of the xml file(including its full path), holding the soap request for TS_TR069PA_SetManagementServerURL.py, should be a set request to set a url as Device.ManagementServer.URL

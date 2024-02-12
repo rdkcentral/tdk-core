@@ -37,4 +37,3 @@ XCONF_INVALID_URL="https://xconf.invalidurl"
 #image name is to be added in the format JENKINS_JOB=imagename
 #JENKINS_JOB and imagename values are to be reffered from version.txt file in the device
 #replace - symbol in JENKINS_JOB with _
-

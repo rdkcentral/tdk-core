@@ -30,4 +30,3 @@ DNS_SERVER_IP=""
 BTM_CLIENT_CAPABILITY=""
 #Give the Port Number to which LAN client is connected
 LAN_PORT_Number=""
-
