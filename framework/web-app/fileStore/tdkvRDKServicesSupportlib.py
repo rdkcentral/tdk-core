@@ -1692,7 +1692,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 if str(result.get("success")).lower() == "true":
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["Test_Step_Status"] = "FAILURE
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "display_is_connected":
             info["video_display"] = result.get('connectedVideoDisplays')

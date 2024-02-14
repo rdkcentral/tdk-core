@@ -95,7 +95,9 @@
             <params>
                 <param tag="videoDisplay" defaultValue="null" />
            </params>
-        </method>
+   	</method>
+	<method name="Get_Model_ID" api="modelid" type="property" desc="Provides access to the device model number or SKU"/>
+        <method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
     </plugin>
 
 
@@ -410,8 +412,6 @@
 
     <!-- System Plugin Information -->
     <plugin pluginName="System" serviceName="org.rdk.System" serviceVersion="1">
-	<method name="Get_Model_ID" api="modelid" type="property" desc="Provides access to the device model number or SKU"/>
-        <method name="Get_Device_Type" api="devicetype" type="property" desc="Provides access to the device type"/>
         <method name="Get_Device_Info" api="getDeviceInfo" type="method" desc="Gives device details"/>
         <method name="Get_Serial_No"  api="getSerialNumber" type="method" desc="Gives device serial number"/>
         <method name="Get_System_Version"  api="getSystemVersions" type="method" desc="Gives system version details"/>

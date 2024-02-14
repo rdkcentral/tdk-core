@@ -426,6 +426,7 @@ def containerization_cloneDobby(basePath):
             print("[INFO] Creating tar ball to run in DUT")
             command = "rm -rf " + basePath + "/fileStore/dobby-security-tool/files ; mkdir -p " + basePath + "/fileStore/dobby-security-tool/files; cd " + basePath + "/fileStore/;tar czfP dobby-security-tool/files/dobby-security-tool-remote.tar.gz --exclude=/dobby-security-tool/files/dobby-security-tool-remote.tar.gz dobby-security-tool; ls dobby-security-tool/files"
             result = containerization_executeInTM(command)
+            result = result.decode("utf-8")
             if "FAILURE" not in result and "dobby-security-tool-remote.tar.gz" in result:
                 print("SUCCESS: Tar ball was created successfully\n")
                 #Copy dobby tool tar ball into DUT
