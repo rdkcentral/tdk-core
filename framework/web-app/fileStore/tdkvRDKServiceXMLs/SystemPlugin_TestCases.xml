@@ -46,6 +46,7 @@
             <event pluginName="System" eventName="Event_On_Network_Standby_Mode_Changed" />
             <event pluginName="System" eventName="Event_On_TimeZoneDST_Changed"/>
             <event pluginName="System" eventName="Event_On_Friendly_Name_Changed"/>
+	    <event pluginName="System" eventName="Event_On_Territory_Changed"/>
           </prerequisite>
 
         </pluginPreRequisite>
@@ -1247,6 +1248,85 @@
                 <param tag="region" value="US-AS" />
               </params>
               <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory" />
+            </testStep>
+        </testCase>
+
+	<!-- Test case 65 -->
+	<testCase testCaseId="SYS_65" testCaseName="System_Set_And_Get_Territory_Region" desc="Check whether able to set and get territory and region">
+            <testCaseInfo testCaseType="loop" revert="true"/>
+	    <testStep testStepId="1" name="System_Get_Territory" method="System_Get_Territory" revertGet="yes">
+		<resultGeneration useMethodTag="system_validate_territory_region"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_territory_And_region_Config_File" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="Get_territory_And_region_Config_File">
+             	    <arguments useConfigFile="true" key="SYSTEM_TERRITORYS"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="3" name="System_Set_And_Get_Territory_Region" testStepType="loop">
+                <subtestStep subtestStepId="1" name="System_Set_Territory" method="System_Set_Territory" revertSet="yes">
+                  <params>
+                    <param tag="territory" usePreviousResult="true" Id="2" useMethodTag="system_get_previous_territory_result" iteration="true"  revertParam="yes"/>
+                    <param tag="region" usePreviousResult="true" Id="2" useMethodTag="system_get_previous_region_result" useIterableArg="true" revertParam="yes"/>
+                  </params>
+                  <resultGeneration useMethodTag="system_set_territory"/>
+	  	</subtestStep>
+		<subtestStep subtestStepId="2" name="Check_Territory_Change_Event" event="Event_On_Territory_Changed" action="eventListener" >
+                  <resultGeneration useMethodTag="system_Check_Territory_Change_Event">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="system_get_previous_result" />
+	    	  </resultGeneration>
+	  	</subtestStep>
+		<subtestStep subtestStepId="3" name="System_Get_Territory" method="System_Get_Territory" revertFlag="yes">
+			<resultGeneration useMethodTag="system_validate_territory_region" arguments="checksystem"/>
+		</subtestStep>
+            </testStep>
+    	</testCase>
+
+	<!-- Test case 66 -->
+	<testCase testCaseId="SYS_66" testCaseName="System_Set_Only_Territory_And_Set_Only_Region" desc="Check whether able to set only territory and only region to set territory API">
+            <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="System_Set_Only_Territory" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="CHN" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message"/>
+            </testStep>
+	    <testStep testStepId="2" name="System_Set_Only_Region" method="System_Set_Territory">
+              <params>
+                <param tag="region" value="CN-HK" />
+              </params>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 67 -->
+	<testCase testCaseId="SYS_67" testCaseName="System_Set_Valid_Territory_And_Set_Invalid_Region" desc="Check whether able to set valid territory and invalid region to set territory API">
+            <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Invalid_Region" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="CHN" />
+                <param tag="region" value="AB-CD" />
+              </params>
+              <resultGeneration useMethodTag="system_check_negative_scenario"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 68 -->
+	<testCase testCaseId="SYS_68" testCaseName="System_Set_Valid_Territory_And_Set_Empty_Region" desc="Check whether able to set valid territory and empty region to set territory API">
+            <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Empty_Region" method="System_Set_Territory">
+              <params>
+                <param tag="territory" value="CHN" />
+                <param tag="region" value="" />
+              </params>
+              <resultGeneration useMethodTag="system_check_negative_scenario"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 69 -->
+	<testCase testCaseId="SYS_69" testCaseName="System_Get_Mfg_Serial_Number" desc="Check whether able to get the manufacturing serial number">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="System_Get_Mfg_Serial_Number" method="System_Get_Mfg_Serial_Number">
+              <resultGeneration useMethodTag="system_check_mfg_serial_number"/>
             </testStep>
         </testCase>
 </testPlugin>

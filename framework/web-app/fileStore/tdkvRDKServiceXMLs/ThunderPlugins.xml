@@ -567,6 +567,7 @@
                <param tag="region" defaultValue="null" />
             </params>
         </method>
+	<method name="System_Get_Mfg_Serial_Number" api="getMfgSerialNumber" type="method" desc="Gets the manufacturing serial number" />
 	<event name="Event_MacAddresses_Retreived" eventName="onMacAddressesRetreived" eventId="client.events.1" type="event" desc="MacAddressesRetreived" />
         <event name="Event_PowerState_Changed" eventName="onSystemPowerStateChanged" eventId="client.events.1" type="event" desc="power state changed event" />
         <event name="Event_SystemMode_Changed" eventName="onSystemModeChanged" eventId="client.events.1" type="event" desc="Fires on system mode changed event" />
@@ -574,7 +575,8 @@
 	<event name="Event_Reboot_Request" eventName="onRebootRequest" eventId="client.events.1" type="event" desc="Fires on reboot request" />
         <event name="Event_On_Network_Standby_Mode_Changed" eventName="onNetworkStandbyModeChanged" eventId="client.events.1" type="event" desc="Triggered when the network standby mode setting changes" />
         <event name="Event_On_TimeZoneDST_Changed" eventName="onTimeZoneDSTChanged" eventId="client.events.1" type="event" desc="Triggered when device timezone changed" />
-        <event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
+	<event name="Event_On_Friendly_Name_Changed" eventName="onFriendlyNameChanged" eventId="client.events.1" type="event" desc="Triggered when the device friendly name change" />
+	<event name="Event_On_Territory_Changed" eventName="onTerritoryChanged" eventId="client.events.1" type="event" desc="Triggered when the device territory changed" />
     </plugin>
 
 

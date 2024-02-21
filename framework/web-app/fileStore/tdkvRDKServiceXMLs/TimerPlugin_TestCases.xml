@@ -388,4 +388,27 @@
               <resultGeneration useMethodTag="timer_check_negative_scenario" />
             </testStep>
         </testCase>
+	
+	<!-- Test case 11 -->
+        <testCase testCaseId="TIME_11" testCaseName="Cancel_Suspend_Resume_Invalid_Timer_ID" desc="Check whether able to cancel, suspend and resume the invalid timer ID">
+            <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1"  name="Cancel_Timer" method="Cancel_Timer">
+              <params>
+                <param tag="timerId" value="-30"/>
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+	    <testStep testStepId="2"  name="Suspend_Timer" method="Suspend_Timer" >
+              <params>
+                <param tag="timerId" value="-30"/>
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+	    <testStep testStepId="3"  name="Resume_Timer" method="Resume_Timer" >
+              <params>
+                <param tag="timerId" value="-30"/>
+              </params>
+              <resultGeneration useMethodTag="timer_check_negative_scenario" />
+            </testStep>
+	</testCase>
 </testPlugin>

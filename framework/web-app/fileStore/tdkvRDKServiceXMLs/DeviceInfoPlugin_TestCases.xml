@@ -219,16 +219,10 @@
 
        <testCase testCaseId="DI_14" testCaseName="DeviceInfo_Check_Device_Type" desc="Checks the device type of the DUT">
             <testCaseInfo testCaseType="direct"/>
-            <testStep testStepId="1" name="Get_Device_Details" action="externalFnCall" saveResult="true">
-                    <resultGeneration useMethodTag="system_get_device_details_from_file" >
-                         <arguments value="^DEVICE_TYPE" useConfigFile="true" key="DEVICEINFO_DEVICE_DETAILS_FILE_PATH"/>
-                    </resultGeneration>
-            </testStep>
-            <testStep testStepId="2" name="Get_Device_Type" method="Get_Device_Type">
+            <testStep testStepId="1" name="Get_Device_Type" method="Get_Device_Type">
                 <resultGeneration useMethodTag="deviceinfo_check_expected_result" arguments="devicetype" >
-                  <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_device_details"/>
-                </resultGeneration>
+	  	  <expectedValues useConfigFile="true" key="DEVICEINFO_DEVICE_TYPE" />
+	  	</resultGeneration>
             </testStep>
        </testCase>
 </testPlugin>
-

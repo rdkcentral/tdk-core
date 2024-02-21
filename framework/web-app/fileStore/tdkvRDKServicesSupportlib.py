@@ -714,6 +714,35 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
 
         # System Plugin Response result parser steps
+        elif tag =="system_check_mfg_serial_number":    
+            info["mfgSerialNumber"] = result.get('mfgSerialNumber')
+            info["success"] = result.get('success')
+            if str(result.get('success')).lower() == "true" and len(result.get('mfgSerialNumber')) != 0:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_validate_territory_region":
+            info["territory"] = result.get('territory')
+            info["region"] = result.get('region')
+            info["success"] = result.get('success')
+            if len(arg) and arg[0] == "checksystem":
+                if str(result.get('success')).lower() == "true":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if str(result.get('success')).lower() == "true" and len(result.get('territory')) != 0 and len(result.get('region')) != 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_set_territory":
+            if str(result.get("success")).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "system_get_api_info":
             info = checkAndGetAllResultInfo(result,result.get("success"))
 
@@ -3986,6 +4015,25 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["newFpsValue"] = int(testStepResults[0].get("fps"))
 
         # System plugin result parser steps
+        elif tag == "system_get_previous_territory_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["territory"] = testStepResults[0].get("territory")
+
+        elif tag == "system_get_previous_region_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            territorys = testStepResults[0].get("territory")
+            territoryAndregion = testStepResults[0].get("territoryAndregion")
+            for territory in territorys:
+                if arg[0] == territory:
+                    info["region"] = str(territoryAndregion.get(territory))
+                    break
+
+        elif tag == "system_get_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            territory = testStepResults[0].get("territory")
+            region = testStepResults[0].get("region")
+            info["territoryAndregion"] = territory + region
+
         elif tag == "system_toggle_gz_enabled_status":
             testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
@@ -4946,6 +4994,28 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 print("Able to SSH the box, failed in get the MAC address of the box")
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "Get_territory_And_region_Config_File":
+            territorylist = []
+            regionlist = []
+            territoryAndregion = {}
+            systemlist = arg
+            for item in systemlist:
+                key, value = item.split(":")
+                territoryAndregion[key] = value
+            info["territoryAndregion"] = territoryAndregion
+            if arg:
+                for value in arg:
+                    territory,region = value.split(":")
+                    territorylist.append(territory)
+                    regionlist.append(region)
+                info["territory"] = territorylist
+                info["region"] = regionlist
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "Please configure system territorys values in device specific configuration file"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+        
         elif tag == "Check_And_Enable_XDial":
             if len(arg) and arg[0] == "enable_xdial":
                 command = 'tr181 -d -s -v 1 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'
@@ -5017,7 +5087,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 print("Version.txt File Exists")
                 command = '[ -s "/version.txt" ] && echo 1 ||  echo 0'
                 output = executeCommand(execInfo, command)
-                output = output.split("\n")[1]
+                output = output.split("\n")
                 if int(output[1]) == 1:
                     print("Version.txt File Is not Empty")
                     info["Test_Step_Status"] = "SUCCESS"

@@ -455,6 +455,19 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "FAILURE"
 
         # System plugin Events response result parser steps
+        elif tag == "system_Check_Territory_Change_Event":
+            result=result[0]
+            cleaned_list = ','.join(expectedValues).replace("[","").replace("]","").replace("'","").replace(" ","")
+            cleaned_list = cleaned_list.split(",")
+            info["oldTerritory"] = str(result.get("oldTerritory"))
+            info["newTerritory"] = str(result.get("newTerritory"))
+            info["oldRegion"] = str(result.get("oldRegion"))
+            info["newRegion"] = str(result.get("newRegion"))
+            if str(result.get("newTerritory")) and str(result.get("newRegion")) in cleaned_list:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "system_check_macaddress_event":
             result=result[0]
             info = result
