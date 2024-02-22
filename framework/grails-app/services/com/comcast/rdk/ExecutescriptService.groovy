@@ -902,6 +902,16 @@ class ExecutescriptService {
 			boolean pause = false
 			List pendingScripts = []
 			Execution executionInstance = Execution.findByName(execName)
+			def execId=executionInstance?.id
+			def countOfFailures = """
+    SELECT COUNT(*)
+    FROM ExecutionResult
+    WHERE status <> 'SUCCESS'
+    AND execution_id IN (:execId)
+"""
+			def params=[execId: execId]
+			def totalFailureCount=ExecutionResult.executeQuery(countOfFailures,params)
+			def totalCountFailures=totalFailureCount.get(0)
 			int executionCount=0
 			int execCnt = 0
 			int execCount =0
@@ -1028,6 +1038,7 @@ class ExecutescriptService {
 							cnt++
 							Execution.withTransaction{
 								rerunExecutionInstance = Execution.findByName(newExecName)
+								rerunExecutionInstance?.scriptCount=totalCountFailures
 							}
 						}
 						if(executionSaveStatus){

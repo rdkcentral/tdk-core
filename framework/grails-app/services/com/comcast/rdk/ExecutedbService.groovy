@@ -2208,9 +2208,6 @@ class ExecutedbService {
 				else{
 					scriptCount = Integer.parseInt(scriptCnt)
 				}
-				if(executionInstance?.name.toString().contains("_RERUN_")){
-					scriptCount = Integer.parseInt(scriptCnt)
-				}
 				def executedCount = ExecutionResult.countByExecutionDevice(executionDevice)
 				executedCount = executedCount - pendingCount 
 				
