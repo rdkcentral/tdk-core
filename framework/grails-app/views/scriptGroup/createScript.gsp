@@ -34,10 +34,10 @@
 					+ data[0].toLowerCase() + "\",\"" + data[1]
 					+ "\");\r\n\r\n#IP and Port of box, No need to change,\r\n#This will be replaced with corresponding DUT Ip and port while executing script\r\nip = <ipaddress>\r\nport = <port>\r\nobj.configureTestCase(ip,port,\'"					
 					+ scrname.value
-					+ "');\r\n\r\n#Get the result of connection with test component and DUT\r\nresult =obj.getLoadModuleResult();\r\nprint \"[LIB LOAD STATUS]  :  %s\" %result;\r\n"	
+					+ "');\r\n\r\n#Get the result of connection with test component and DUT\r\nresult =obj.getLoadModuleResult();\r\nprint("+"\"[LIB LOAD STATUS]  :  %s\" %result"+");\r\n"	
 					+ "\r\n#Prmitive test case which associated to this Script\r\ntdkTestObj = obj.createTestStep('"
 					+ primitiveTestName
-					+ "');\r\n\r\n#Execute the test case in DUT\r\ntdkTestObj.executeTestCase("+ "\"\""+");\r\n\r\n#Get the result of execution\r\nresult = tdkTestObj.getResult();\r\nprint \"[TEST EXECUTION RESULT] : %s\" %result;\r\n"
+					+ "');\r\n\r\n#Execute the test case in DUT\r\ntdkTestObj.executeTestCase("+ "\"\""+");\r\n\r\n#Get the result of execution\r\nresult = tdkTestObj.getResult();\r\nprint("+"\"[TEST EXECUTION RESULT] : %s\" %result"+");\r\n"
 					+ "\r\n#Set the result status of execution\r\ntdkTestObj.setResultStatus(\"none\");\r\n"
 
 					+ "\r\nobj.unloadModule(\""+data[0].toLowerCase() +"\");";					
