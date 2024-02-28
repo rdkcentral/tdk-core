@@ -55,14 +55,59 @@ tcp_init_server()
 #To send TCP request from client to server
 tcp_request()
 {
-        iperf -c $var2 -B $var3 > $var4 2>&1
-        bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
-        echo "bindStatus:$bindStatus"
-        if [ $bindStatus = "SUCCESS" ]; then
-                value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
-                echo "OUTPUT:$value"
+        #If client port is provided as input
+        if [ -n "$var5" ]; then
+            rm -rf $var4
+            iperf -c $var2 -p $var5 -i 1 -t 60 -B $var3 > $var4 &
+            sleep 5
+
+            if [ -s $var4  ]; then
+                    value="$(cat $var4)"
+                    echo "OUTPUT:$value"
+            else
+                    echo "OUTPUT:FAILURE"
+            fi
+        #If client port is not provided as input
         else
-                echo "OUTPUT:"
+            iperf -c $var2 -B $var3 > $var4 2>&1
+
+            bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
+            echo "bindStatus:$bindStatus"
+
+            if [ $bindStatus = "SUCCESS" ]; then
+                    value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                    echo "OUTPUT:$value"
+            else
+                    echo "OUTPUT:"
+            fi
+        fi
+}
+#To send UDP request from client to server
+udp_request()
+{
+        #If client port is provided as input
+        if [ -n "$var5" ]; then
+            rm -rf $var4
+            iperf -u -c $var2 -p $var5 -i 1 -t 60 -B $var3 > $var4 &
+            sleep 5
+
+            if [ -s $var4  ]; then
+                    value="$(cat $var4)"
+                    echo "OUTPUT:$value"
+            else
+                    echo "OUTPUT:FAILURE"
+            fi
+        #If client port is not provided as input
+        else
+            iperf -c $var2 -B $var4 -u > $var3 2>&1
+
+            bindStatus="$(cat $var3 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
+
+            if [ $bindStatus = "SUCCESS" ]; then
+                    echo "OUTPUT:SUCCESS"
+            else
+                    echo "OUTPUT:"
+            fi
         fi
 }
 #To get the bandwidth from server
@@ -142,6 +187,60 @@ kill_selenium()
         sudo kill -9 `echo $(ps -ef | grep selenium | grep -v grep|awk '{print $2;}')`
 }
 
+#To send netcat request from client to server
+netcat_request()
+{
+        SERVER=$var2
+        PORT=$var3
+        PROTOCOL=$var4
+        CLIENTFILE=$var5
+
+        rm -rf $CLIENTFILE
+        if [ $PROTOCOL = "TCP" ]; then
+                netcat -v $SERVER $PORT > $CLIENTFILE < /dev/null &
+        else
+                netcat -u -v $SERVER $PORT > $CLIENTFILE < /dev/null &
+        fi
+
+        sleep 5
+        if [ -s $CLIENTFILE ]; then
+                value="$(cat $CLIENTFILE)"
+                echo "OUTPUT:$value"
+        else
+                echo "OUTPUT:FAILURE"
+        fi
+}
+
+#To kill netcat pid
+kill_netcat()
+{
+        pkill netcat
+        value="$(ps aux | grep netcat | grep -v "grep" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
+}
+
+#TFTP to Client
+tftpToClient()
+{
+    SERVER=$var2
+    SERVERFILE=$var3
+    CLIENTFILE=$var4
+
+    value="$(tftp $SERVER <<END_OF_SESSION
+get $SERVERFILE
+END_OF_SESSION
+)"
+
+    echo "$value"
+
+    if [ -s $CLIENTFILE ]; then
+            value="$(cat $CLIENTFILE)"
+            echo "OUTPUT:$value"
+    else
+            echo "OUTPUT:FAILURE"
+    fi
+}
+
 # Store the arguments to a variable
 event=$1
 var2=$2
@@ -178,6 +277,13 @@ case $event in
         start_node;;
     "kill_selenium")
         kill_selenium;;
+    "udp_request")
+        udp_request;;
+    "netcat_request")
+        netcat_request;;
+    "kill_netcat")
+        kill_netcat;;
+    "tftpToClient")
+        tftpToClient;;
    *) echo "Invalid Argument passed";;
 esac
-

@@ -223,7 +223,14 @@ tcp_get_client_throughput()
 # To set the TCP server in listening mode
 tcp_init_server()
 {
-        iperf -s -B $var3 > $var2 &
+        #If server port is provided as input
+        if [ -n $var4 ]; then
+            iperf -s -B $var3 -i 1 -p $var4 > $var2 &
+        #If server port is not provided take default port
+        else
+            iperf -s -B $var3 > $var2 &
+        fi
+
         value="$(ps aux | grep iperf | grep -v grep > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
@@ -262,7 +269,14 @@ validate_tcp_server_output_throughput()
 # To set the UDP server in listening mode
 udp_init_server()
 {
-        iperf -s -B $var2 -u &
+        #If server port and file to redirect server logs are given
+        if [ -n $var3 -a -n $var4 ]; then
+            iperf -u -s -B $var3 -i 1 -p $var4 > $var2 &
+        #If server port and file to redirect server logs are not given
+        else
+            iperf -s -B $var2 -u &
+        fi
+
         value="$(ps aux | grep iperf | grep -v grep > /dev/null && echo "SUCCESS" || echo "FAILURE")"
         echo "OUTPUT:$value"
 }
@@ -366,6 +380,52 @@ kill_selenium()
 {
         sudo kill -9 `echo $(ps -ef | grep selenium | grep -v grep|awk '{print $2;}')`
 }
+
+#Triggering port
+trigger_port()
+{
+        protocol=$var4
+        if [ "$protocol" = "TCP" ]; then
+            netcat -v $var2 $var3
+        else
+            netcat -v -u $var2 $var3
+        fi
+        echo "OUTPUT:SUCCESS"
+}
+
+#To start the netcat server
+netcat_init_server()
+{
+        PORT=$var2
+        PROTOCOL=$var3
+        SERVERFILE=$var4
+
+        if [ $PROTOCOL = "TCP" ]; then
+                cat $SERVERFILE | netcat -lvp $PORT > /dev/null &
+        else
+                cat $SERVERFILE | netcat -u -lvp $PORT > /dev/null &
+        fi
+
+        echo "OUTPUT:SUCCESS"
+}
+
+#Write content to file
+write_msgtofile()
+{
+        MESSAGE=$var2
+        FILE=$var3
+        value="$(echo $MESSAGE > $FILE < /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
+}
+
+#To kill netcat pid
+kill_netcat()
+{
+        pkill netcat
+        value="$(ps aux | grep netcat | grep -v "grep" > /dev/null && echo "SUCCESS" || echo "FAILURE")"
+        echo "OUTPUT:$value"
+}
+
 # Store the arguments to a variable
 event=$1
 var2=$2
@@ -445,5 +505,14 @@ case $event in
         start_node;;
     "kill_selenium")
         kill_selenium;;
+    "trigger_port")
+        trigger_port;;
+    "netcat_init_server")
+        netcat_init_server;;
+    "write_msgtofile")
+        write_msgtofile;;
+    "kill_netcat")
+        kill_netcat;;
    *) echo "Invalid Argument passed";;
 esac
+

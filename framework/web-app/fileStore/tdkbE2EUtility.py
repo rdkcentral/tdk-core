@@ -534,6 +534,15 @@ def parseDeviceConfig(obj):
         global bridgemode_status
         bridgemode_status = config.get(deviceConfig, "BRIDGEMODE_STATUS")
 
+        global server_logfile
+        server_logfile = config.get(deviceConfig, "PT_SERVER_LOGFILE")
+
+        global client_logfile
+        client_logfile = config.get(deviceConfig, "PT_CLIENT_LOGFILE")
+
+        global tftpfile
+        tftpfile = config.get(deviceConfig, "PT_TFTPFILE")
+
     except Exception as e:
         print(e);
         status = "Failed to parse the device specific configuration file"
@@ -1524,6 +1533,8 @@ def ftpToClient(dest, network_ip, source="LAN"):
                     command="sudo sh %s ftpToClient %s %s %s" %(wan_script,network_ip,wlan_ftp_username,wlan_ftp_password)
                 elif dest == "WLAN" :
                     command="sudo sh %s ftpToClient %s %s %s" %(lan_script,network_ip,wlan_ftp_username,wlan_ftp_password)
+                elif dest == "LAN" and source == "WAN":
+                    command="sudo sh %s ftpToClient %s %s %s" %(wan_script,network_ip,lan_ftp_username,lan_ftp_password)
                 elif dest == "LAN":
                     command="sudo sh %s ftpToClient %s %s %s" %(wlan_script,network_ip,lan_ftp_username,lan_ftp_password)
                 elif dest == "WAN" and source == "LAN":
@@ -1542,7 +1553,7 @@ def ftpToClient(dest, network_ip, source="LAN"):
             else:
                 status = "Only UBUNTU platform supported!!!"
         else:
-            return "Failed to connect to wlan client"
+            return "Failed to connect to client"
     except Exception as e:
         print(e);
         status = e;
@@ -2459,6 +2470,247 @@ def bringupInterface(interface,source):
 
 ########## End of Function ##########
 
+def triggerPort(dest_ip, trigger_port, trigger_protocol, source="LAN"):
+
+# triggerPort
+# Syntax      : triggerPort(dest_ip, trigger_port, trigger_protocol,source)
+# Description : Function to trigger the port with the specified protocol
+# Parameters  : dest_ip - IP to which netcat trigger to be sent
+#             : trigger_port - Port to which trigger should be sent
+#             : trigger_protocol - Protocol to be used for triggering port
+#             : source - Trigger should be sent from which client LAN/WLAN
+# Return Value: Returns the status of trigger operation
+
+    try:
+        status = clientConnect(source)
+        if status == "SUCCESS":
+            if wlan_os_type == "UBUNTU" and lan_os_type == "UBUNTU":
+                if source == "WLAN":
+                    script_name = wlan_script;
+                else:
+                    script_name = lan_script;
+
+                #Command to trigger port
+                command="sudo sh %s trigger_port %s %s %s" %(script_name, dest_ip, trigger_port, trigger_protocol)
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to %s client" %source
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of triggerPort:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def PTinitServer(serverType, serverBindAddr, serverPort, protocol, logFile, source, serverMsg="None"):
+
+# PTinitServer
+# Syntax      : PTinitServer(serverType, serverBindAddr, serverPort, protocol, logFile, source, serverMsg="None")
+# Description : Function to initialise the server process
+# Parameters  : serverType - whether iperf/netcat
+#             : serverBindAddr - IP address of server (only applicable for IPERF)
+#             : serverPort - Listening port on server
+#             : protocol - TCP/UDP
+#             : logFile - File to which server logs need to be redirected
+#             : source - client machine Type (LAN/WLAN)
+#             : serverMsg - message from server to client (only applicable for NETCAT)
+# Return Value: Returns the status of initialising the server to listen to a specified port
+
+    try:
+        status = clientConnect(source)
+        if status == "SUCCESS":
+            if lan_os_type == "UBUNTU" and wlan_os_type == "UBUNTU":
+                if source == "WLAN":
+                    script_name = wlan_script;
+                else:
+                    script_name = lan_script;
+
+                if serverType == "IPERF" and protocol == "TCP":
+                    command="sudo sh %s tcp_init_server %s %s %s" %(script_name, logFile, serverBindAddr, serverPort)
+                elif serverType == "IPERF" and protocol == "UDP":
+                    command="sudo sh %s udp_init_server %s %s %s" %(script_name, logFile, serverBindAddr, serverPort)
+                elif serverType == "NETCAT":
+                    #Write Message to file
+                    command="sudo sh %s write_msgtofile \"%s\" %s" %(script_name, serverMsg, logFile)
+                    status = executeCommand(command)
+                    if status == "SUCCESS":
+                        command="sudo sh %s netcat_init_server %s %s %s" %(script_name, serverPort, protocol, logFile)
+                    else:
+                        status = "FAILURE"
+
+                status = executeCommand(command)
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to %s client" %source
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of PTinitServer:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def PTClientRequest(clientType, clientBindAddr, clientPort, protocol, logFile, source="WAN"):
+
+# PTClientRequest
+# Syntax      : PTClientRequest(clientType, destIP, clientBindAddr, clientPort, protocol, source="WAN")
+# Description : Function to connect process running in client to the process running in server
+# Parameters  : clientType - whether iperf/netcat
+#             : clientBindAddr - IP address of client
+#             : clientPort - Port to which connection needs to be established with server
+#             : protocol - TCP/UDP
+#             : logFile - File to which client logs need to be redirected
+#             : source - client machine Type (WAN)
+# Return Value: Returns the status of client connection to server process
+
+    finalStatus = "FAILURE"
+    try:
+        status = clientConnect(source)
+        if status == "SUCCESS":
+            if lan_os_type == "UBUNTU" and wlan_os_type == "UBUNTU":
+                if source == "WAN":
+                    script_name = wan_script;
+
+                if clientType == "IPERF" and protocol == "TCP":
+                    command="sudo sh %s tcp_request %s %s %s %s" %(script_name, gw_wan_ip, clientBindAddr, logFile, clientPort)
+                elif clientType == "IPERF" and protocol == "UDP":
+                    command="sudo sh %s udp_request %s %s %s %s" %(script_name, gw_wan_ip, clientBindAddr, logFile, clientPort)
+                elif clientType == "NETCAT":
+                    command="sudo sh %s netcat_request %s %s %s %s" %(script_name, gw_wan_ip, clientPort, protocol, logFile)
+
+                status = executeCommand(command)
+                if "FAILURE" not in status:
+                    finalStatus = "SUCCESS"
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to %s client" %source
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of PTClientRequest:%s" %finalStatus);
+    return status;
+
+
+########## End of Function ##########
+
+def PTServerClientPostRequisite(type, server, client="WAN"):
+
+# PTServerClientPostRequisite
+# Syntax      : PTServerClientPostRequisite(type, server, client="WAN")
+# Description : Function to kill process running in both server and client
+# Parameters  : type - whether iperf/netcat
+#             : server - machine in which server is running
+#             : client - client machine which connects to server
+# Return Value: Returns the status of post requisites
+
+    try:
+        status = clientConnect(server)
+        if status == "SUCCESS":
+            if server == "WLAN":
+                script_name = wlan_script;
+            else:
+                script_name = lan_script;
+
+            #Kill server process
+            if type == "IPERF":
+                command="sudo sh %s kill_iperf" %(script_name)
+            elif type == "NETCAT":
+                command="sudo sh %s kill_netcat" %(script_name)
+            status_server = executeCommand(command)
+        else:
+            return "Failed to connect to %s client" %server
+
+
+        status = clientConnect(client)
+        if status == "SUCCESS":
+            if client == "WAN":
+                script_name = wan_script
+
+            #Kill client process
+            if type == "IPERF":
+                command="sudo sh %s kill_iperf" %(script_name)
+            elif type == "NETCAT":
+                command="sudo sh %s kill_netcat" %(script_name)
+            status_client = executeCommand(command)
+        else:
+            return "Failed to connect to %s client" %client
+
+        if status_server == "SUCCESS" and status_client == "SUCCESS":
+            status = "SUCCESS"
+        else:
+            status = "FAILURE"
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of PTServerClientPostRequisite:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN"):
+
+# tftpToClient
+# Syntax      : tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN")
+# Description : Function to connect to transfer file via TFTP from server to client
+# Parameters  : destIP - Destination IP
+#             : server - The server machine running TFTP
+#             : fileName - The file in server under /tftpboot which needs to be transferred to client
+#             : serverFileMsg - The custom message to be written to the file under /tftpboot in server
+#             : client - Client machine type
+# Return Value: Returns the status of tftp connection
+
+    status = "FAILURE"
+    serverFileFullPath = ""
+    try:
+        status = clientConnect(server)
+        if status == "SUCCESS":
+            if server == "WLAN":
+                script_name = wlan_script;
+            else:
+                script_name = lan_script;
+
+            #Write Message to serverFile
+            serverFileFullPath = "".join(["/tftpboot/", fileName])
+            command="sudo sh %s write_msgtofile \"%s\" %s" %(script_name, serverFileMsg, serverFileFullPath)
+
+            status = executeCommand(command)
+
+            if status == "SUCCESS":
+                status = clientConnect(client)
+                if status == "SUCCESS":
+                    command="sudo sh %s tftpToClient %s %s %s" %(wan_script, destIP, serverFileFullPath, fileName)
+                    status = executeCommand(command)
+
+                    if "FAILURE" not in status:
+                        status = "SUCCESS"
+                else:
+                    return "Failed to connect to %s client" %client
+            else:
+                return "Unable to write message to server file"
+        else:
+            return "Failed to connect to %s client" %server
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of tftpToClient:%s" %status);
+    return status;
+
+########## End of Function ##########
+
 def bringdownInterface(interface,source):
 
 # bringdownInterface
@@ -2488,6 +2740,289 @@ def bringdownInterface(interface,source):
 
     print("Interface bringdown status:%s" %status);
     return status;
+
+########## End of Function ##########
+
+def PTPreRequisite(obj, step):
+
+# PTPreRequisite
+# Syntax      : PTPreRequisite(obj, step)
+# Description : Function to set the pre requisites for port triggering feature
+# Parameters  : obj - tdkb_e2e object
+#             : step - current test step
+# Return Value: status - whether pre-requiste setting is SUCCESS/FAILURE
+#             : tdkTestObj - test object
+#             : revertFlag - whether revert operation is required or not
+#             : step - final test step count
+
+    expectedresult = "SUCCESS"
+    status = "FAILURE";
+    revertFlag = 0;
+
+    print("\n****Pre Requisites for Port Triggering Start****");
+    #Check the initial enable state of Device.NAT.X_CISCO_COM_PortTriggers.Enable
+    print("\nTEST STEP %d : Get the initial enable state of Device.NAT.X_CISCO_COM_PortTriggers.Enable" %step);
+    print("EXPECTED RESULT %d : The initial enable state of Device.NAT.X_CISCO_COM_PortTriggers.Enable should be retrieved successfully" %step);
+
+    tdkTestObj, retStatus, initialEnable = getParameterValue(obj, "Device.NAT.X_CISCO_COM_PortTriggers.Enable")
+
+    if expectedresult in retStatus and initialEnable != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable : %s" %(step, initialEnable));
+        print("TEST EXECUTION RESULT : SUCCESS");
+
+        #Enable Device.NAT.X_CISCO_COM_PortTriggers.Enable if not already in enabled state
+        if initialEnable == "false":
+            print("Port Triggering is disabled initially");
+
+            #Enabling Device.NAT.X_CISCO_COM_PortTriggers.Enable and validating the SET
+            step = step + 1;
+            print("\nTEST STEP %d : Enable Device.NAT.X_CISCO_COM_PortTriggers.Enable" %step);
+            print("EXPECTED RESULT %d : Device.NAT.X_CISCO_COM_PortTriggers.Enable should be enabled successfully" %step);
+            setString = "Device.NAT.X_CISCO_COM_PortTriggers.Enable|true|boolean"
+            tdkTestObj, retStatus, details = setMultipleParameterValues(obj, setString)
+
+            if expectedresult in retStatus and details != "":
+                revertFlag = 1;
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable set to true successfully" %step);
+                print("TEST EXECUTION RESULT : SUCCESS");
+
+                #Cross check SET with GET
+                step = step + 1
+                print("\nTEST STEP %d : Get the final enable state of Device.NAT.X_CISCO_COM_PortTriggers.Enable" %step);
+                print("EXPECTED RESULT %d : The final enable state of Device.NAT.X_CISCO_COM_PortTriggers.Enable should be retrieved successfully" %step);
+
+                tdkTestObj, retStatus, finalEnable = getParameterValue(obj, "Device.NAT.X_CISCO_COM_PortTriggers.Enable")
+
+                if expectedresult in retStatus and finalEnable == "true":
+                    status = "SUCCESS";
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable : %s" %(step, finalEnable));
+                    print("TEST EXECUTION RESULT : SUCCESS");
+                else:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable : %s" %(step, finalEnable));
+                    print("TEST EXECUTION RESULT : FAILURE");
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("FAILURE");
+                print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable was NOT set to %s successfully" %step);
+                print("TEST EXECUTION RESULT : FAILURE");
+        else:
+            status = "SUCCESS";
+            print("Device.NAT.X_CISCO_COM_PortTriggers.Enable is already in enabled state");
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable not retrieved" %step);
+        print("TEST EXECUTION RESULT : FAILURE");
+
+    print("\n****Pre Requisites for Port Triggering Completed****");
+
+    return status, tdkTestObj, revertFlag, step;
+
+########## End of Function ##########
+
+def PTRevertPreRequisite(obj, step):
+
+# PTRevertPreRequisite
+# Syntax      : PTRevertPreRequisite(obj, step)
+# Description : Function to revert the pre requisites for port triggering
+# Parameters  : obj - tdkb_e2e object
+#             : step - current test step
+# Return Value: None
+
+    expectedresult = "SUCCESS"
+
+    print("\nTEST STEP %d : Revert Device.NAT.X_CISCO_COM_PortTriggers.Enable to false" %step);
+    print("EXPECTED RESULT %d : Device.NAT.X_CISCO_COM_PortTriggers.Enable should be reverted to false successfully" %step);
+    setString = "Device.NAT.X_CISCO_COM_PortTriggers.Enable|false|boolean"
+    tdkTestObj, status, details = setMultipleParameterValues(obj, setString)
+
+    if expectedresult in status and details != "":
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable reverted to false successfully" %step);
+        print("TEST EXECUTION RESULT : SUCCESS");
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print("ACTUAL RESULT %d: Device.NAT.X_CISCO_COM_PortTriggers.Enable was NOT reverted to false successfully" %step);
+        print("TEST EXECUTION RESULT : FAILURE");
+
+    return;
+
+########## End of Function ##########
+
+def SetPTRule(obj, obj1, triggerStart, triggerEnd, targetStart, targetEnd, triggerProtocol, targetProtocol, description, enablePTRule, step):
+
+# SetPTRule
+# Syntax      : SetPTRule(obj1, triggerStart, triggerEnd, targetStart, targetEnd, triggerProtocol, targetProtocol, description, enablePTRule, step)
+# Description : Function to set the rule for port triggering
+# Parameters  : obj - tdkb_e2e object
+#             : obj1 - advancedconfig object
+#             : triggerStart - Trigger Start Port
+#             : triggerEnd - Trigger End Port
+#             : targetStart - Target Start Port
+#             : targetEnd - Target End Port
+#             : triggerProtocol - Protocol for trigger port
+#             : targetProtocol - Protocol for target port
+#             : description - PT rule description
+#             : enablePTRule - Enable state of the rule
+#             : step - current test step
+# Return Value: status - Whether PT rule is set is SUCCESS/FAILURE
+#             : tdkTestObj - Test Object
+#             : instance - Instance to which PT rule is added
+#             : step - final step count
+
+    expectedresult = "SUCCESS"
+    status = "FAILURE"
+    #Add a PT object
+    print("\nTEST STEP %d: Adding a new Port Trigger Rule instance" %step);
+    print("EXPECTED RESULT %d: Should add new Port Trigger Rule instance" %step);
+    tdkTestObj = obj1.createTestStep("AdvancedConfig_AddObject");
+    tdkTestObj.addParameter("paramName","Device.NAT.X_CISCO_COM_PortTriggers.Trigger.");
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+
+    if expectedresult in actualresult:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS")
+        print("ACTUAL RESULT %d: Instance added successfully: %s" %(step, details));
+        print("[TEST EXECUTION RESULT] : SUCCESS");
+
+        instance = details.split(':')[1];
+        if (instance.isdigit() and int(instance) > 0):
+            # Setting the rule
+            step = step + 1;
+            print("\nTEST STEP %d: Set the Port triggering rule - Trigger Protocol : %s, Trigger Port Start : %s, Trigger Port End : %s, Target Protocol : %s, Target Port Start : %s, Target Port End : %s, Description : %s" %(step, triggerProtocol, triggerStart, triggerEnd, targetProtocol, targetStart, targetEnd, description))
+            print("EXPECTED RESULT %d: Port Triggering Rule should be set successfully" %step);
+            setValuesList = [triggerProtocol, triggerStart, triggerEnd, targetProtocol, targetStart, targetEnd, description];
+            triggerProtocolParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".TriggerProtocol"
+            triggerStartParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".TriggerPortStart"
+            triggerEndParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".TriggerPortEnd"
+            targetProtocolParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".ForwardProtocol"
+            targetStartParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".ForwardPortStart"
+            targetEndParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".ForwardPortEnd"
+            descriptionParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".Description"
+
+            list1 = [triggerProtocolParam, triggerProtocol, "string"]
+            list2 = [triggerStartParam, triggerStart, "unsignedint"]
+            list3 = [triggerEndParam, triggerEnd, "unsignedint"]
+            list4 = [targetProtocolParam, targetProtocol, "string"]
+            list5 = [targetStartParam, targetStart, "unsignedint"]
+            list6 = [targetEndParam, targetEnd, "unsignedint"]
+            list7 = [descriptionParam, description, "string"]
+
+            #Concatenate the lists with the elements separated by pipe
+            setParamList = list1 + list2 + list3 + list4 + list5 + list6 + list7
+            setParamList = "|".join(map(str, setParamList))
+
+            tdkTestObj = obj1.createTestStep("AdvancedConfig_SetMultiple");
+            tdkTestObj.addParameter("paramList", setParamList);
+            tdkTestObj.executeTestCase(expectedresult);
+            actualresult = tdkTestObj.getResult();
+            details = tdkTestObj.getResultDetails();
+
+            if expectedresult in actualresult:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("ACTUAL RESULT %d: Port Triggering Rule set successfully : %s" %(step, details));
+                print("[TEST EXECUTION RESULT] : SUCCESS");
+
+                #Set the PT rule enable
+                step = step + 1
+                print("\nTEST STEP %d: Set the enable state of PT rule to %s" %(step, enablePTRule));
+                print("EXPECTED RESULT %d: Should set the enable value successfully" %step);
+                enablePTRuleParam = "Device.NAT.X_CISCO_COM_PortTriggers.Trigger." + instance + ".Enable"
+                setString = enablePTRuleParam + "|" + enablePTRule + "|boolean"
+                tdkTestObj, status, details = setMultipleParameterValues(obj, setString)
+
+                if expectedresult in status and details != "":
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("ACTUAL RESULT %d: PT rule set to %s successfully" %(step, enablePTRule));
+                    print("TEST EXECUTION RESULT : SUCCESS");
+
+                    #Check SET with GET
+                    step = step + 1
+                    print("\nTEST STEP %d: Get the PT Rule values and check if they were SET peroperly" %step);
+                    print("EXPECTED RESULT %d: SET values should reflect in GET" %step);
+                    ParamList=[triggerProtocolParam, triggerStartParam, triggerEndParam, targetProtocolParam, targetStartParam, targetEndParam, descriptionParam, enablePTRuleParam]
+                    setValues=[triggerProtocol, triggerStart, triggerEnd, targetProtocol, targetStart, targetEnd, description, enablePTRule]
+                    tdkTestObj,status,newValues = getMultipleParameterValues(obj,ParamList)
+
+                    if expectedresult in status and setValues == newValues:
+                        status = "SUCCESS"
+                        tdkTestObj.setResultStatus("SUCCESS");
+                        print("ACTUAL RESULT %d: Values SET reflected in GET" %step);
+                        print("[TEST EXECUTION RESULT] : SUCCESS");
+                    else:
+                        tdkTestObj.setResultStatus("FAILURE");
+                        print("ACTUAL RESULT %d: Values SET not reflected in GET" %step);
+                        print("[TEST EXECUTION RESULT] : FAILURE");
+                else:
+                    #Set the result status of execution
+                    tdkTestObj.setResultStatus("FAILURE");
+                    print("ACTUAL RESULT %d: PT rule not set to %s successfully" %(step, enablePTRule));
+                    print("TEST EXECUTION RESULT : FAILURE");
+            else:
+                #Set the result status of execution
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("ACTUAL RESULT %d: Port Triggering Rule set successfully : %s" %(step, details));
+                print("[TEST EXECUTION RESULT] : SUCCESS");
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("INSTANCE VALUE : %s is not a valid value" %instance);
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE")
+        print("ACTUAL RESULT %d: Instance not added successfully: %s" %(step, details));
+        print("[TEST EXECUTION RESULT] : FAILURE");
+
+    return status, tdkTestObj, instance, step;
+
+########## End of Function ##########
+
+def DeletePTRule(obj1, instance, step):
+
+# DeletePTRule
+# Syntax      : DeletePTRule(obj1, instance, step)
+# Description : Function to delete the added port triggering rule
+# Parameters  : obj - tdkb_e2e object
+#             : instance - the rule instance to be deleted
+#             : step - current test step
+# Return Value: None
+
+    expectedresult = "SUCCESS";
+
+    print("\nTEST STEP %d: Delete the added Port Triggering Rule" %step)
+    print("EXPECTED RESULT %d: Should delete the added Port Triggering Rule successfully" %step)
+
+    tdkTestObj = obj1.createTestStep("AdvancedConfig_DelObject");
+    tdkTestObj.addParameter("paramName","Device.NAT.X_CISCO_COM_PortTriggers.Trigger.%s." %instance);
+    tdkTestObj.executeTestCase(expectedresult);
+    actualresult = tdkTestObj.getResult();
+    details = tdkTestObj.getResultDetails();
+
+    if expectedresult in actualresult:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("SUCCESS");
+        print("ACTUAL RESULT %d: Added rule deleted successfully: %s" %(step, details));
+        print("[TEST EXECUTION RESULT] : SUCCESS");
+    else:
+        #Set the result status of execution
+        tdkTestObj.setResultStatus("FAILURE");
+        print("ACTUAL RESULT %d: Added rule not deleted successfully: %s" %(step, details));
+        print("[TEST EXECUTION RESULT] : FAILURES");
+
+    return;
 
 ########## End of Function ##########
 
