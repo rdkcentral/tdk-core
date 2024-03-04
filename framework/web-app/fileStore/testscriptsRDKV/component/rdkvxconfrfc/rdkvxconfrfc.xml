@@ -82,13 +82,17 @@
           <parameter name="feature_name" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_deletefeature" id="" version="1">
+      <primitiveTest name="rfc_deletefeature" id=" " version="2">
         <function>rfc_deletefeature</function>
-        <parameters/>
+        <parameters>
+          <parameter name="xconfdomainname" value=""/>
+        </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_deletefeaturerule" id="" version="1">
+      <primitiveTest name="rfc_deletefeaturerule" id=" " version="2">
         <function>rfc_deletefeaturerule</function>
-        <parameters/>
+        <parameters>
+          <parameter name="xconfdomainname" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>

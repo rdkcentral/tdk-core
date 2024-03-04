@@ -223,12 +223,14 @@ if "SUCCESS" in result.upper():
 
                     if feature_rule_created=="SUCCESS":
                         tdkTestObj = obj.createTestStep('rfc_deletefeaturerule')
+                        tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                         tdkTestObj.executeTestCase(expectedResult)
                         actualresult = tdkTestObj.getResultDetails()
                         if expectedResult in actualresult:
                             tdkTestObj.setResultStatus("SUCCESS")
 
                             tdkTestObj = obj.createTestStep('rfc_deletefeature')
+                            tdkTestObj.addParameter("xconfdomainname",xconfdomainname)
                             tdkTestObj.executeTestCase(expectedResult)
                             actualresult = tdkTestObj.getResultDetails()
                             if expectedResult in actualresult:

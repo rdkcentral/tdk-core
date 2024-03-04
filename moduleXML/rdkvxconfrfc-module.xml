@@ -63,6 +63,8 @@
       <parameter funName='rfc_urlvalidate' parameterName='basePath' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_urlvalidate' parameterName='configKey' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_formfeaturename' parameterName='feature_name' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_deletefeature' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_deletefeaturerule' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

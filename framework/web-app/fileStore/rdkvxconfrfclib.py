@@ -546,13 +546,13 @@ def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_
 #---------------------------------------------------------------
 # DELETE THE FEATURE
 #---------------------------------------------------------------
-def rfc_deletefeature():
+def rfc_deletefeature(xconfdomainname):
     deletefeaturestatus="SUCCESS"
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
         print("\nInitialized deleting the feature")
-        command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/feature/"+feature_id
+        command="curl -i -sX DELETE "+xconfdomainname+"feature/"+feature_id
         print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
@@ -574,13 +574,13 @@ def rfc_deletefeature():
 #---------------------------------------------------------------
 # DELETE THE FEATURE RULE
 #---------------------------------------------------------------
-def rfc_deletefeaturerule():
+def rfc_deletefeaturerule(xconfdomainname):
     deletefeaturerulestatus="SUCCESS"
     config_status=rfc_obtainCredentials()
     if "FAILURE" not in config_status:
         credentials = deviceIP + ',' + user_name + ',' + password
         print("\nInitialized deleting the feature rule")
-        command="curl -i -sX DELETE https://xconf.rdkcentral.com:19092/featurerule/"+feature_rule_id
+        command="curl -i -sX DELETE "+xconfdomainname+"featurerule/"+feature_rule_id
         print("Executing Command : %s" %command)
         #execute in DUT function
         result=rfc_executeInDUT (sshMethod, credentials, command)
