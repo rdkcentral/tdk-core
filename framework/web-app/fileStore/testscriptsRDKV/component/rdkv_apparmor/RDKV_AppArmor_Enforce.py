@@ -52,6 +52,8 @@
     <!--  -->
     <box_type>RPI-HYB</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
@@ -65,7 +67,7 @@
     <test_type>Positive</test_type>
     <test_setup>RPI</test_setup>
     <pre_requisite>1. Configure the values AppArmor_Profiles available in fileStore/ApparmorConfig.config file</pre_requisite>
-    <api_or_interface_used></api_or_interface_used>
+    <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>AppArmor_Profiles</input_parameters>
     <automation_approch>
 1. Check if AppArmor is supported in device

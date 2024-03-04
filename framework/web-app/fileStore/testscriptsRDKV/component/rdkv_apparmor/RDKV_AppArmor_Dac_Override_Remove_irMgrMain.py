@@ -52,6 +52,8 @@
     <!--  -->
     <box_type>RPI-HYB</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
@@ -61,7 +63,7 @@
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_APPARMOR_15</test_case_id>
-    <test_objective> </test_objective>
+    <test_objective>Check Dac_Override is removed from irMgrMain</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI-HYB,RPI-Client</test_setup>
     <pre_requisite>1. Latest image on DUT
@@ -74,7 +76,7 @@
     <expected_output>Dac Override Removed irMgrMain</expected_output>
     <priority>High</priority>
     <test_stub_interface>rdkv_apparmor</test_stub_interface>
-    <test_script>RDKV_AppArmor_Dac_Override_Removed_irMgrMain</test_script>
+    <test_script>RDKV_AppArmor_Dac_Override_Remove_irMgrMain</test_script>
     <skipped>No</skipped>
     <release_version>M113</release_version>
     <remarks></remarks>

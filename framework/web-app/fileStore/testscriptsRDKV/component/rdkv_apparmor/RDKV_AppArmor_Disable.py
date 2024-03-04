@@ -21,8 +21,8 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the version as 1 -->
+  <version>2</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_AppArmor_Disable</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
@@ -48,6 +48,8 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
     <box_type>RPI-HYB</box_type>
@@ -65,7 +67,7 @@
     <test_type>Positive</test_type>
     <test_setup>RPI</test_setup>
     <pre_requisite>1. Configure the values AppArmor_Profiles available in fileStore/ApparmorConfig.config file</pre_requisite>
-    <api_or_interface_used></api_or_interface_used>
+    <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>AppArmor_Profiles</input_parameters>
     <automation_approch>
 1. Check if AppArmor is supported in device
@@ -79,6 +81,7 @@
     <release_version>M110</release_version>
     <remarks></remarks>
   </test_cases>
+  <script_tags />
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script

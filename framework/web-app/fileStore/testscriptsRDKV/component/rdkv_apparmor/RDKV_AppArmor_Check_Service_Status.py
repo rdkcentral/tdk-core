@@ -52,6 +52,8 @@
     <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
@@ -65,13 +67,13 @@
     <test_type>Positive</test_type>
     <test_setup>RPI</test_setup>
     <pre_requisite>1. Configure the values AppArmor_Profiles available in fileStore/tdkvRDKServiceConfig/device.config file</pre_requisite>
-    <api_or_interface_used>NA</api_or_interface_used>
+    <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>NA</input_parameters>
     <automation_approch>1. Check if AppArmor service in the device by running the command systemctl status</automation_approch>
     <expected_output>Output should be active</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>rdkv_apparmor</test_stub_interface>
-    <test_script>RDKV_AppArmor_Chekc_Service_Status</test_script>
+    <test_script>RDKV_AppArmor_Check_Service_Status</test_script>
     <skipped>No</skipped>
     <release_version>M110</release_version>
     <remarks>NA</remarks>

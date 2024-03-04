@@ -55,6 +55,10 @@ lighttpd</synopsis>
     <!--  -->
     <box_type>RPI-HYB</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>

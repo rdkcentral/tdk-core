@@ -54,6 +54,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RDKTV</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -65,7 +67,7 @@
     <test_type>Positive</test_type>
     <test_setup>RPI</test_setup>
     <pre_requisite>1. Configure the values AppArmor_Profiles available in fileStore/tdkvRDKServiceConfig/device.config file</pre_requisite>
-    <api_or_interface_used>NA</api_or_interface_used>
+    <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>NA</input_parameters>
     <automation_approch>1. Check if AppArmor is supported in device by running the command</automation_approch>
     <expected_output>AppArmor should be enabled</expected_output>

@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>4</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_AppArmor_Check_Profiles</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -51,6 +51,8 @@ lighttpd</synopsis>
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>RDKTV</box_type>
+    <!--  -->
     <box_type>RPI-Client</box_type>
     <!--  -->
     <box_type>RPI-HYB</box_type>
