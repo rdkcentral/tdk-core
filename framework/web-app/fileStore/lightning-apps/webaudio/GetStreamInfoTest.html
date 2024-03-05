@@ -1,0 +1,92 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stream Information</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <h1>Stream Information</h1>
+    <p id="codecInfo"></p>
+    <p id="frequencyInfo"></p>
+    <p id="durationInfo"></p>
+
+    <script>
+        // Function to extract query parameters from URL
+        function getQueryParam(param) {
+            const urlParams = new URLSearchParams(window.location.search);
+            return urlParams.get(param);
+        }
+
+        // Function to fetch stream and get details
+        async function fetchStreamInfo() {
+            const streamUrl = getQueryParam('streamUrl');
+            if (!streamUrl) {
+                console.error('TDK_LOGS: GetStreamInfoTest : Stream URL parameter not provided.');
+                return;
+            }
+
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const response = await fetch(streamUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                const audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                
+                const codecInfo = response.headers.get('content-type'); // Assuming content-type header contains codec info
+                const numberOfChannels = audioBuffer.numberOfChannels;
+                const sampleRate = audioBuffer.sampleRate;
+                const durationSeconds = audioBuffer.duration;
+
+                // Print stream details to console
+                console.log('TDK_LOGS: GetStreamInfoTest : Codec Information:'+ codecInfo);
+                console.log('TDK_LOGS: GetStreamInfoTest : Number of Channels:'+ numberOfChannels);
+                console.log('TDK_LOGS: GetStreamInfoTest : Sample Rate:'+ sampleRate+ 'Hz');
+                console.log('TDK_LOGS: GetStreamInfoTest : Duration:'+ durationSeconds+ 'seconds');
+		console.log('TDK_END: GetStreamInfoTest');
+
+                // Display stream details on the page
+                const codecInfoElement = document.getElementById('codecInfo');
+                codecInfoElement.textContent = `Codec Information: ${codecInfo}`;
+                
+                const frequencyInfoElement = document.getElementById('frequencyInfo');
+                frequencyInfoElement.textContent = `Number of Channels: ${numberOfChannels} - Sample Rate: ${sampleRate} Hz`;
+                
+                const durationInfoElement = document.getElementById('durationInfo');
+                durationInfoElement.textContent = `Duration: ${durationSeconds.toFixed(2)} seconds`;
+            } catch (error) {
+                console.error('TDK_LOGS: GetStreamInfoTest : Error fetching stream:'+ error);
+		console.log('TDK_END: GetStreamInfoTest');
+            }
+        }
+
+        // Call fetchStreamInfo function on page load
+        window.onload = fetchStreamInfo;
+    </script>
+</body>
+</html>
+

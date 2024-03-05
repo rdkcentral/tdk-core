@@ -1,0 +1,212 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Playback App</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+        }
+
+        #volumeBar {
+            width: 300px;
+            height: 20px;
+            background-color: #eee;
+            margin-top: 20px;
+        }
+
+        #volumeLevel {
+            height: 100%;
+            width: 0;
+            background-color: #4CAF50;
+            transition: width 0.2s, background-color 0.2s; /* Add a smooth transition effect for both width and background-color */
+        }
+    </style>
+</head>
+<body>
+    <h1>Audio Playback App</h1>
+    <button onclick="playAudio()">Play</button>
+    <button onclick="stopAudio()">Stop</button>
+    <div id="volumeBar">
+        <div id="volumeLevel"></div>
+    </div>
+
+    <script>
+        let audioContext;
+        let audioBuffer;
+        let audioSource;
+        let gainNode;
+        let prevVolume = 0;
+
+        // Function to get URL parameters
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        function logMessage(message) {
+            // Log to console
+            console.log(message);
+            var prefix = "TDK_LOGS: AudioPlaybackTest :";
+            var message = message.substring(prefix.length);
+
+            // Display on the page
+            var logElement = document.createElement('p');
+            logElement.textContent = message;
+            document.body.appendChild(logElement);
+        }
+
+        function initializeAudioContext() {
+            logMessage("TDK_LOGS: AudioPlaybackTest :  AudioContext created.");
+            return new Promise((resolve, reject) => {
+                try {
+                    // Create or resume the AudioContext inside a user-triggered event
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    logMessage('TDK_LOGS: AudioPlaybackTest : AudioContext created successfully.');
+                    resolve();
+                } catch (error) {
+                    logMessage('TDK_LOGS: AudioPlaybackTest : Error creating AudioContext:', error.message);
+                    reject(error);
+                }
+            });
+        }
+
+        function loadAudioFile(streamUrl) {
+            return new Promise((resolve, reject) => {
+                // Load audio file from the provided URL
+                   fetch(streamUrl)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`HTTP error! Status: ${response.status}`);
+                        }
+                        return response.arrayBuffer();
+                    })
+                    .then(buffer => audioContext.decodeAudioData(buffer))
+                    .then(decodedBuffer => {
+                        audioBuffer = decodedBuffer;
+                        logMessage('TDK_LOGS: AudioPlaybackTest : Audio file loaded successfully.');
+                        resolve();
+                    })
+                    .catch(error => {
+                        logMessage('TDK_LOGS: AudioPlaybackTest : Error loading audio file:', error.message);
+                        reject(error);
+                    });
+            });
+        }
+
+        async function playAudio() {
+            try {
+                await initializeAudioContext();
+                const streamUrl = getUrlParameter('streamUrl');
+                if (!streamUrl) {
+                    logMessage('TDK_LOGS: AudioPlaybackTest : Stream URL parameter is missing.');
+                    return;
+                }
+                await loadAudioFile(streamUrl);
+
+                if (audioBuffer) {
+                    // Create buffer source
+                    audioSource = audioContext.createBufferSource();
+                    audioSource.buffer = audioBuffer;
+
+                    // Create gain node
+                    gainNode = audioContext.createGain();
+                    audioSource.connect(gainNode);
+                    gainNode.connect(audioContext.destination);
+
+                    // Gradually increase volume to a higher range
+                    gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                    gainNode.gain.linearRampToValueAtTime(1.0, audioContext.currentTime + 10); // 10 seconds
+
+                    // Hold the higher volume for 7 seconds
+                    gainNode.gain.setValueAtTime(1.0, audioContext.currentTime + 7);
+                    gainNode.gain.linearRampToValueAtTime(0.1, audioContext.currentTime + 22); // Gradually decrease volume in 15 seconds
+
+                    // Start audio playback
+                    audioSource.start();
+
+                    // Log when audio starts
+                    logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback started.');
+
+                    // Update visual volume bar continuously while playing
+                    updateVolumeBar();
+
+                    // Add event listener for when audio playback ends
+                    audioSource.addEventListener('ended', () => {
+                        logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback stopped.');
+                    });
+                } else {
+                    logMessage('TDK_LOGS: AudioPlaybackTest : Audio buffer not loaded yet.');
+                }
+            } catch (error) {
+                logMessage('TDK_LOGS: AudioPlaybackTest : Error during playback:', error.message);
+            }
+        }
+
+        function stopAudio() {
+            if (audioSource) {
+                audioSource.stop();
+                logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback stopped.');
+            } else {
+                logMessage('TDK_LOGS: AudioPlaybackTest : Audio source not playing.');
+            }
+        }
+       function updateVolumeBar() {
+    const volumeLevelElement = document.getElementById('volumeLevel');
+    if (volumeLevelElement) {
+        const duration = audioBuffer.duration;
+        const interval = 100; // Update interval in milliseconds
+        const startTime = audioContext.currentTime;
+
+        const update = () => {
+            const currentTime = audioContext.currentTime - startTime;
+            const currentVolume = gainNode ? gainNode.gain.value : 0;
+
+            // Calculate the width based on the volume level
+            const width = currentVolume * 100;
+
+            // Set the width of the progress bar
+            volumeLevelElement.style.width = `${width}%`;
+
+            // Dynamically change background color based on volume change
+            const backgroundColor = currentVolume > prevVolume ? '#FF0000' : '#4CAF50';
+            volumeLevelElement.style.backgroundColor = backgroundColor;
+
+            prevVolume = currentVolume; // Update previous volume
+
+            if (currentTime < duration) {
+                // Continue updating while the audio is playing
+                requestAnimationFrame(update);
+            }
+        };
+
+        // Start the update loop
+        update();
+    }
+}
+
+    </script>
+</body>
+</html>

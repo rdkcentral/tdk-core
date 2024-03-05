@@ -1,0 +1,59 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Web Audio API Support Checker</title>
+<style>
+    body {
+        background-color: white; /* Set background color to white */
+        color: black; /* Set font color to black */
+    }
+</style>
+</head>
+<body>
+<h1>Web Audio API Support Checker</h1>
+
+<script>
+    // Function to log messages to console and display on the page
+    function logMessage(message) {
+        // Log to console
+        console.log(message);
+	var prefix = "TDK_LOGS : CheckWebAudioSupport : ";
+        var message = message.substring(prefix.length);
+	
+        // Display on the page
+        var logElement = document.createElement('p');
+        logElement.textContent = message;
+        document.body.appendChild(logElement);
+    }
+
+    // Check if the browser supports Web Audio API
+    if (window.AudioContext || window.webkitAudioContext) {
+        logMessage("TDK_LOGS : CheckWebAudioSupport : Your browser supports the Web Audio API.");
+    } else {
+        logMessage("TDK_LOGS: CheckWebAudioSupport : Sorry.. Your browser does not support the Web Audio API.");
+    }
+    console.log("TDK_END: CheckWebAudioSupport");
+</script>
+
+</body>
+</html>

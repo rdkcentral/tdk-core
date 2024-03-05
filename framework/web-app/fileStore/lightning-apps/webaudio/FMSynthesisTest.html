@@ -1,0 +1,99 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>FM Synthesis with Web Audio API</title>
+    <style>
+        body {
+            background-color: white; /* Set background color to white */
+            color: black; /* Set font color to black */
+        }
+    </style>
+</head>
+<body>
+    <button onclick="startSynth()">Start Synthesis</button>
+    <button onclick="stopSynth()">Stop Synthesis</button>
+    <!-- Buttons to start and stop the synthesis -->
+    <script>
+        var context = new (window.AudioContext || window.webkitAudioContext)();
+        // Create an AudioContext object. This is the foundation of the Web Audio API and represents an audio-processing graph.
+
+        var carrier, modulator, gainNode;
+        var isSynthStarted = false; // Track if synthesis has started
+        // Declare variables for the carrier oscillator, modulator oscillator, and gain node.
+
+        function startSynth() {
+            console.log("TDK_LOGS: FMSynthesisTest : Synthesis started."); // Log when synthesis starts
+            isSynthStarted = true; // Set flag to true
+            
+            carrier = context.createOscillator();
+            // Create a carrier oscillator.
+
+            modulator = context.createOscillator();
+            // Create a modulator oscillator.
+
+            gainNode = context.createGain();
+            // Create a gain node. This will control the volume.
+
+            modulator.connect(gainNode);
+            // Connect the modulator oscillator to the gain node.
+
+            gainNode.connect(carrier.frequency);
+            // Connect the gain node to the frequency parameter of the carrier oscillator. This is where the frequency modulation occurs.
+
+            carrier.connect(context.destination);
+            // Connect the carrier oscillator to the audio destination, typically the speakers or headphones.
+
+            modulator.frequency.value = 5.0; // Frequency of the modulator
+            // Set the frequency of the modulator oscillator to 5 Hz.
+
+            gainNode.gain.value = 50.0; // Depth of the modulation
+            // Set the depth of the modulation (amplitude) to 50.
+
+            carrier.start(context.currentTime);
+            modulator.start(context.currentTime);
+            // Start both the carrier and modulator oscillators at the current time in the audio context.
+
+            console.log("TDK_LOGS: FMSynthesisTest : Carrier and modulator oscillators started."); // Log when carrier and modulator oscillators start
+	    checkAudioState();
+	    console.log("TDK_END : FMSynthesisTest")
+        }
+
+        function stopSynth() {
+            console.log("TDK_LOGS: FMSynthesisTest : Synthesis stopped."); // Log when synthesis stops
+            isSynthStarted = false; // Set flag to false
+            
+            carrier.stop();
+            modulator.stop();
+            // Stop both the carrier and modulator oscillators.
+        }
+
+        function checkAudioState() {
+            if (isSynthStarted && context.state === 'running') {
+                console.log("TDK_LOGS: FMSynthesisTest : Audio is playing."); // Log if audio is playing
+            } else if (isSynthStarted) {
+                console.log("TDK_LOGS: FMSynthesisTest : Audio is not playing."); // Log if audio is not playing
+            }
+        }
+        //setInterval(checkAudioState, 1000); // Check audio state every second
+    </script>
+</body>
+</html>
+
