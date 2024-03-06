@@ -177,7 +177,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         temp = details.split(':');
                         instance = temp[1];
 
-                        if (instance > 0):
+                        if (int(instance) > 0):
                             print("INSTANCE VALUE: %s" %instance)
                             blockMethod = "Device.X_Comcast_com_ParentalControl.ManagedSites.BlockedSite.%s.BlockMethod" %instance
                             site = "Device.X_Comcast_com_ParentalControl.ManagedSites.BlockedSite.%s.Site" %instance
@@ -237,7 +237,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                             temp = details.split(':');
                                             instance1 = temp[1];
 
-                                            if (instance1 > 0):
+                                            if (int(instance1) > 0):
                                                 print("INSTANCE VALUE: %s" %instance1)
                                                 description = "Device.X_Comcast_com_ParentalControl.ManagedSites.TrustedUser.%s.HostDescription" %instance1
                                                 ipType = "Device.X_Comcast_com_ParentalControl.ManagedSites.TrustedUser.%s.IPAddressType" %instance1

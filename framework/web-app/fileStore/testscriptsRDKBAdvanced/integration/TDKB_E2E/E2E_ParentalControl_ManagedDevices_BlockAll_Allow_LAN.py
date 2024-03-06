@@ -203,7 +203,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         temp = details.split(':');
                                         instance = temp[1];
 
-                                        if (instance > 0):
+                                        if (int(instance) > 0):
                                             print("INSTANCE VALUE: %s" %instance)
                                             #Set a blocking url (www.google.com)
                                             blockType = "Device.X_Comcast_com_ParentalControl.ManagedDevices.Device.%s.Type" %instance

@@ -319,7 +319,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                                             instance2= temp[1];
                                                                             print("2.4 INSTANCE VALUE: %s" %instance2)
 
-                                                                            if (instance2 > 0):
+                                                                            if (int(instance2) > 0):
                                                                                 #Adding a new MACFilter rule for 5GHz
                                                                                 tdkTestObj = obj1.createTestStep("AdvancedConfig_AddObject");
                                                                                 tdkTestObj.addParameter("paramName","Device.WiFi.AccessPoint.%s.X_CISCO_COM_MacFilterTable." %tdkbE2EUtility.ssid_5ghz_index);
@@ -337,7 +337,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                                                     instance5= temp[1];
                                                                                     print("5 INSTANCE VALUE: %s" %instance5)
 
-                                                                                    if (instance5 > 0):
+                                                                                    if (int(instance5) > 0):
 
                                                                                         #Set the name and MAC of the device to be blocked
                                                                                         deviceName2 = "Device.WiFi.AccessPoint.%s.X_CISCO_COM_MacFilterTable.%s.DeviceName" %(tdkbE2EUtility.ssid_2ghz_index, instance2)

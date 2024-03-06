@@ -186,7 +186,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         temp = details.split(':');
                         instance = temp[1];
 
-                        if (instance > 0):
+                        if (int(instance) > 0):
                             print("INSTANCE VALUE: %s" %instance)
                             description = "Device.X_Comcast_com_ParentalControl.ManagedServices.Service.%s.Description" %instance
                             protocol = "Device.X_Comcast_com_ParentalControl.ManagedServices.Service.%s.Protocol" %instance

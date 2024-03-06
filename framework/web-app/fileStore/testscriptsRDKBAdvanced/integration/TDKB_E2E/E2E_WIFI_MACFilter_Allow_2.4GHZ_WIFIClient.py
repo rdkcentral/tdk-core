@@ -263,7 +263,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                         temp = details.split(':');
                                                         instance = temp[1];
 
-                                                        if (instance > 0):
+                                                        if (int(instance) > 0):
                                                             print("INSTANCE VALUE: %s" %instance)
                                                             #Set the name and MAC of the device to be blocked
                                                             deviceName = "Device.WiFi.AccessPoint.%s.X_CISCO_COM_MacFilterTable.%s.DeviceName" %(tdkbE2EUtility.ssid_2ghz_index, instance)

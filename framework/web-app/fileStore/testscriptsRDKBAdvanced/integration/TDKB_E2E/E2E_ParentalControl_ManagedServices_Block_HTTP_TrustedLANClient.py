@@ -176,7 +176,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                         temp = details.split(':');
                         serviceInstance = temp[1];
 
-                        if (serviceInstance> 0):
+                        if (int(serviceInstance) > 0):
                             print("INSTANCE VALUE: %s" %serviceInstance)
                             description = "Device.X_Comcast_com_ParentalControl.ManagedServices.Service.%s.Description" %serviceInstance
                             protocol = "Device.X_Comcast_com_ParentalControl.ManagedServices.Service.%s.Protocol" %serviceInstance
@@ -240,7 +240,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                             temp = details.split(':');
                                             trustedInstance = temp[1];
 
-                                            if (trustedInstance > 0):
+                                            if (int(trustedInstance) > 0):
                                                 print("INSTANCE VALUE: %s" %trustedInstance)
                                                 description = "Device.X_Comcast_com_ParentalControl.ManagedServices.TrustedUser.%s.HostDescription" %trustedInstance
                                                 ipType = "Device.X_Comcast_com_ParentalControl.ManagedServices.TrustedUser.%s.IPAddressType" %trustedInstance
