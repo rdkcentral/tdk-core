@@ -201,6 +201,9 @@ video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz
 video_src_url_bitrate_h264 = ""
 video_src_url_bitrate_hevc = ""
 
+#24Fps H264 URL
+video_src_url_dash_h264_24fps = test_streams_base_path + "DASH_H264_24fps/master.mpd"
+
 #25Fps H264 URL
 video_src_url_dash_h264_25fps = test_streams_base_path + "DASH_H264_25fps/master.mpd"
 
