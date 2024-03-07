@@ -335,7 +335,7 @@ def rdkservice_getBrowserScore_CSS3():
             action = ActionChains(driver)
             head = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/li[2]/span/span/span')
             source = action.move_to_element(head).move_by_offset(-30,0).click().key_down(Keys.ALT).click().perform()
-            time.sleep(10)
+            time.sleep(60)
             browser_score= driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol[2]/ol/ol[1]/ol[1]/ol[1]/li[2]/span/span[2]').text
             browser_score_dict["main_score"] = browser_score.replace("%","")
             print("\nThe Browser score using CSS3 test is : ",browser_score)

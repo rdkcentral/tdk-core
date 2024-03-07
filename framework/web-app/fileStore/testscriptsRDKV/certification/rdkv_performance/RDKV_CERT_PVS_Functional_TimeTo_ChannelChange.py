@@ -205,7 +205,7 @@ if expectedResult in result.upper():
                     total_time = 0
                     time.sleep(10)
                     print("\n checking for Tuning log")
-                    command = 'cat /opt/logs/wpeframework.log | grep -inr "Tuning to channel" | tail -1'
+                    command = 'cat /opt/logs/wpeframework.log | grep -nr "Tuning to channel" | tail -1'
                     print("COMMAND : %s" %(command))
                     #Primitive test case which associated to this Script
                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -225,7 +225,7 @@ if expectedResult in result.upper():
                         tuning_time = output.split('\n')[1].split(' ')[2]
                         if (current_system_time < tuning_time):
                             print("checking for playing log")
-                            command = 'cat /opt/logs/wpeframework.log | grep -inr Playing | head -n1'
+                            command = 'cat /opt/logs/wpeframework.log | grep -nr Playing | head -n1'
                             print("COMMAND : %s" %(command))
                             #Primitive test case which associated to this Script
                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');
@@ -249,7 +249,7 @@ if expectedResult in result.upper():
                                 else:
                                     print("\nchecking time taken for channel change")
                                     #checking for time taken print
-                                    command = 'cat /opt/logs/wpeframework.log | grep -inr "channel change:"'
+                                    command = 'cat /opt/logs/wpeframework.log | grep -nr "channel change:"'
                                     print("COMMAND : %s" %(command))
                                     #Primitive test case which associated to this Script
                                     tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog');

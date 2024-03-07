@@ -419,8 +419,8 @@ def set_default_interface(obj,interface,start_time_needed = False):
         tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(40)
         device_ip,device_status = getDeviceIP_and_Status(obj.url)
-        if obj.IP == device_ip:
-            print ("Device IP not updated after the change in Interface")
+        if "NOT FOUND" in device_status:
+            print ("Device is not accessible after the change in Interface")
             deviceAvailability = "No"
             status = "FAILURE"
         elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
