@@ -27,6 +27,8 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Enable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='webaudio_getLogs_webinspectpage' />
