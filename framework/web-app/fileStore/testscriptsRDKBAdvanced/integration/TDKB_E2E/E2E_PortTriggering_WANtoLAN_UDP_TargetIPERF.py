@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2024 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -205,8 +205,9 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                         print("\nTEST STEP %d: Check if the specified inbound packets are forwarded to the LAN client that triggered it" %step)
                                         print("EXPECTED RESULT %d: IPERF client runing in WAN machine should connect to the server running in LAN with the GW WAN IP of DUT" %step)
                                         status = PTClientRequest("IPERF", tdkbE2EUtility.wan_ip, targetStart, targetProtocol, tdkbE2EUtility.client_logfile, "WAN");
+                                        serverStatus = checkFileContents("LAN", tdkbE2EUtility.server_logfile)
 
-                                        if status != "" and "bits/sec" in status:
+                                        if "bits/sec" in status and "bits/sec" in serverStatus:
                                             tdkTestObj.setResultStatus("SUCCESS");
                                             print("ACTUAL RESULT %d: IPERF from WAN to the LAN is success with the GW WAN IP of DUT" %step)
                                             print("[TEST EXECUTION RESULT] : SUCCESS");

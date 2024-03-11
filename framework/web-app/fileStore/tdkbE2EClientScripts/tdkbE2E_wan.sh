@@ -35,15 +35,31 @@ wget_https_network()
 # FTP to the client devices
 ftpToClient()
 {
-value="$(SERVER=$var2
+    if [ -n "$var5" ]; then
+        PORT=$var5
+
+        value="$(SERVER=$var2
+USER=$var3
+PASSW=$var4
+ftp -v -n $SERVER -P $PORT<<END_OF_SESSION
+user $USER $PASSW
+END_OF_SESSION
+)"
+
+    else
+        value="$(SERVER=$var2
 USER=$var3
 PASSW=$var4
 ftp -v -n $SERVER <<END_OF_SESSION
 user $USER $PASSW
 END_OF_SESSION
 )"
-echo "OUTPUT:$value"
+    fi
+
+    echo "OUTPUT:$value"
 }
+
+
 
 # To set the TCP server in listening mode
 tcp_init_server()
@@ -225,14 +241,14 @@ tftpToClient()
     SERVER=$var2
     SERVERFILE=$var3
     CLIENTFILE=$var4
+    PORT=$var5
 
-    value="$(tftp $SERVER <<END_OF_SESSION
+    value="$(tftp $SERVER $PORT <<END_OF_SESSION
 get $SERVERFILE
 END_OF_SESSION
 )"
 
     echo "$value"
-
     if [ -s $CLIENTFILE ]; then
             value="$(cat $CLIENTFILE)"
             echo "OUTPUT:$value"

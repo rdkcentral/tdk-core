@@ -225,6 +225,7 @@ tcp_init_server()
 {
         #If server port is provided as input
         if [ -n $var4 ]; then
+            rm -rf $var2
             iperf -s -B $var3 -i 1 -p $var4 > $var2 &
         #If server port is not provided take default port
         else
@@ -271,6 +272,7 @@ udp_init_server()
 {
         #If server port and file to redirect server logs are given
         if [ -n $var3 -a -n $var4 ]; then
+            rm -rf $var2
             iperf -u -s -B $var3 -i 1 -p $var4 > $var2 &
         #If server port and file to redirect server logs are not given
         else
@@ -426,6 +428,19 @@ kill_netcat()
         echo "OUTPUT:$value"
 }
 
+#Read contents of a file
+read_fileContent()
+{
+    FILE=$var2
+
+    if [ -s $FILE ]; then
+        value="$(cat $FILE)"
+        echo "OUTPUT:$value"
+    else
+        echo "OUTPUT:FAILURE"
+    fi
+}
+
 # Store the arguments to a variable
 event=$1
 var2=$2
@@ -513,6 +528,8 @@ case $event in
         write_msgtofile;;
     "kill_netcat")
         kill_netcat;;
+    "read_fileContent")
+        read_fileContent;;
    *) echo "Invalid Argument passed";;
 esac
 

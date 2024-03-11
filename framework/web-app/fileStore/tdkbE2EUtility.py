@@ -2586,6 +2586,7 @@ def PTClientRequest(clientType, clientBindAddr, clientPort, protocol, logFile, s
                     command="sudo sh %s netcat_request %s %s %s %s" %(script_name, gw_wan_ip, clientPort, protocol, logFile)
 
                 status = executeCommand(command)
+
                 if "FAILURE" not in status:
                     finalStatus = "SUCCESS"
             else:
@@ -2600,6 +2601,45 @@ def PTClientRequest(clientType, clientBindAddr, clientPort, protocol, logFile, s
     print("Status of PTClientRequest:%s" %finalStatus);
     return status;
 
+########## End of Function ##########
+
+def checkFileContents(source, logFile):
+
+# checkFileContents
+# Syntax      : checkFileContents(source, logFile)
+# Description : Function to get the contents of a file
+# Parameters  : source - LAN/WLAN/WAN
+#             : logFile - file whose contents need to be read
+# Return Value: Returns the status of reading contents from a file
+
+    finalStatus = "FAILURE"
+    try:
+        status = clientConnect(source)
+        if status == "SUCCESS":
+            if lan_os_type == "UBUNTU" and wlan_os_type == "UBUNTU":
+                if source == "LAN":
+                    script_name = lan_script;
+                elif source == "WLAN":
+                    script_name = wlan_script;
+
+                #Read contents of logFile
+                command="sudo sh %s read_fileContent %s" %(script_name, logFile)
+
+                status = executeCommand(command)
+
+                if "FAILURE" not in status:
+                    finalStatus = "SUCCESS"
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to %s client" %source
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of checkFileContents:%s" %finalStatus);
+    return status;
 
 ########## End of Function ##########
 
@@ -2659,16 +2699,17 @@ def PTServerClientPostRequisite(type, server, client="WAN"):
 
 ########## End of Function ##########
 
-def tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN"):
+def tftpToClient(destIP, server, fileName, serverFileMsg, client, port="69"):
 
 # tftpToClient
-# Syntax      : tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN")
+# Syntax      : tftpToClient(destIP, server, fileName, serverFileMsg, client, port="69")
 # Description : Function to connect to transfer file via TFTP from server to client
 # Parameters  : destIP - Destination IP
 #             : server - The server machine running TFTP
 #             : fileName - The file in server under /tftpboot which needs to be transferred to client
 #             : serverFileMsg - The custom message to be written to the file under /tftpboot in server
 #             : client - Client machine type
+#             : port - TFTP Port
 # Return Value: Returns the status of tftp connection
 
     status = "FAILURE"
@@ -2690,11 +2731,15 @@ def tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN"):
             if status == "SUCCESS":
                 status = clientConnect(client)
                 if status == "SUCCESS":
-                    command="sudo sh %s tftpToClient %s %s %s" %(wan_script, destIP, serverFileFullPath, fileName)
+                    command="sudo sh %s tftpToClient %s %s %s %s" %(wan_script, destIP, serverFileFullPath, fileName, port)
                     status = executeCommand(command)
 
-                    if "FAILURE" not in status:
-                        status = "SUCCESS"
+                    if port != "69":
+                        if "FAILURE" not in status:
+                            status = "FAILURE"
+                    else:
+                        if "FAILURE" not in status:
+                            status = "SUCCESS"
                 else:
                     return "Failed to connect to %s client" %client
             else:
@@ -2707,6 +2752,48 @@ def tftpToClient(destIP, server, fileName, serverFileMsg, client="WAN"):
         status = e;
 
     print("Status of tftpToClient:%s" %status);
+    return status;
+
+########## End of Function ##########
+
+def ftpToClientWithPort(dest, destIP, source, port):
+
+# ftpToClient
+# Syntax      : ftpToClientWithPort()
+# Description : Function to connect to the client machine via ftp
+# Parameters  : dest - FTP connection to which machine
+#             : destIP - destination IP
+#             : source - FTP from which machine
+#             : port - port for FTP connection
+# Return Value: Returns the status of ftp connection
+
+    try:
+        status = clientConnect(source)
+        if status == "SUCCESS":
+            if lan_os_type == "UBUNTU":
+                if dest == "WLAN" and source == "WAN":
+                    command="sudo sh %s ftpToClient %s %s %s %s" %(wan_script, destIP, wlan_ftp_username, wlan_ftp_password, port)
+                elif dest == "LAN" and source == "WAN":
+                    command="sudo sh %s ftpToClient %s %s %s %s" %(wan_script, destIP, lan_ftp_username, lan_ftp_password, port)
+                else:
+                    return "Invalid source or destination"
+
+                status = executeCommand(command)
+
+                if "230 Login successful" in status or "230 User logged in" in status:
+                    status = "SUCCESS"
+                else:
+                    status = "FAILURE"
+            else:
+                status = "Only UBUNTU platform supported!!!"
+        else:
+            return "Failed to connect to client"
+
+    except Exception as e:
+        print(e);
+        status = e;
+
+    print("Status of ftpToClientWithPort:%s" %status);
     return status;
 
 ########## End of Function ##########
