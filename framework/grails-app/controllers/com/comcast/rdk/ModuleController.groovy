@@ -1011,9 +1011,9 @@ class ModuleController {
 									newModuleInstance?.category = category
 									newModuleInstance?.executionTime = newExcutionTimeOut
 									newModuleInstance?.testGroup = testGroup
-									if((checkThunder != null) && (checkThunder.equals("enable"))){
+									if((checkThunder != null) && (checkThunder.equalsIgnoreCase("enable"))){
 									newModuleInstance?.isThunderEnabled = 1
-									}else if((checkThunder != null) && (checkThunder.equals("disable"))){
+									}else if((checkThunder != null) && (checkThunder.equalsIgnoreCase("disable"))){
 									newModuleInstance?.isThunderEnabled = 0
 									}
 									newModuleInstance?.logFileNames = crashFile
@@ -1028,6 +1028,13 @@ class ModuleController {
 								if(moduleSaveStatus){
 									def newFunList = []
 									def moduleInstance1 =  Module?.findByName(moduleName)
+									if((checkThunder != null) && (checkThunder.equals("enable"))){
+										moduleInstance1?.isThunderEnabled = 1
+										}else if((checkThunder != null) && (checkThunder.equals("disable"))){
+										moduleInstance1?.isThunderEnabled = 0
+										}
+										if(moduleInstance1?.save(flush:true)){
+										}
 									if(functions)	{
 										functions?.each { funName->
 											if(!(Function?.findByNameAndModule(funName,moduleInstance1))){
@@ -1146,7 +1153,7 @@ class ModuleController {
 					}
 				}}
 			def filename = warFile.getOriginalFilename()
-			def backupWarFile = new File(warFolder, filename)
+			def backupWarFile = new File(warFolder, filename.toString().trim())
 			def warBytes = warFile.getBytes()
 			def warInputStream = new ByteArrayInputStream(warBytes)
 			Files.copy(warInputStream, backupWarFile.toPath())
