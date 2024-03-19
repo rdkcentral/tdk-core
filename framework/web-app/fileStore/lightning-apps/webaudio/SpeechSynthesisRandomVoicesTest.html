@@ -1,0 +1,118 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Synthesis Example</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+        }
+
+        #volumeBar {
+            width: 300px;
+            height: 20px;
+            background-color: #eee;
+            margin-top: 20px;
+        }
+
+        #volumeLevel {
+            height: 100%;
+            width: 0;
+            background-color: #4CAF50;
+            transition: width 0.2s, background-color 0.2s; /* Add a smooth transition effect for both width and background-color */
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech Synthesis Test</h1>
+    
+    <textarea id="textToSpeak" placeholder="Enter text to be spoken">TDK - Test Development Kit for RDK.</textarea>
+
+    <!-- Add a button to speak with random voices -->
+    <button onclick="speakWithRandomVoices()">Speak with Random Voices</button>
+
+    <!-- Display the speaking voice information in a list -->
+    <ul id="speakingInfoList"></ul>
+
+    <script>
+        function getRandomVoices(voices, numVoices) {
+            const shuffledVoices = voices.sort(() => Math.random() - 0.5);
+            return shuffledVoices.slice(0, numVoices);
+        }
+
+        function speakTextWithVoice(textToSpeak, selectedVoice) {
+            const utterance = new SpeechSynthesisUtterance(textToSpeak);
+            utterance.voice = selectedVoice;
+
+            // Display the speaking voice information in a list
+            const speakingInfoList = document.getElementById('speakingInfoList');
+            const listItem = document.createElement('li');
+            listItem.textContent = `Speaking with voice ${++voiceCount}: ${selectedVoice.name}`;
+
+            speakingInfoList.appendChild(listItem);
+
+            // Log the speaking voice information to the console
+            console.log(`TDK_LOGS: SpeechSynthesisRandomVoicesTest: Speaking with voice ${voiceCount}: ${selectedVoice.name}`);
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function speakWithRandomVoices() {
+            // Check if speech synthesis is supported
+            if ('speechSynthesis' in window) {
+                console.log("TDK_LOGS: SpeechSynthesisRandomVoicesTest: Speech synthesis supported");
+
+                const textToSpeak = document.getElementById('textToSpeak').value;
+
+                // Get all available voices
+                const voices = window.speechSynthesis.getVoices();
+
+                if (voices.length < 3) {
+                    console.log('TDK_LOGS: SpeechSynthesisRandomVoicesTest: Not enough voices available.');
+		    console.log('TDK_END: SpeechSynthesisRandomVoicesTest'); 
+                    return;
+                }
+
+                // Get 3 random voices
+                const randomVoices = getRandomVoices(voices, 3);
+
+		// Reset the voice count
+                voiceCount = 0;
+                // Speak the text with each random voice
+                randomVoices.forEach(voice => {
+                    speakTextWithVoice(textToSpeak, voice);
+                });
+            } else {
+                // Speech synthesis not supported
+                console.log('TDK_LOGS:SpeechSynthesisRandomVoicesTest: FAILURE: Speech synthesis is not supported on your browser');
+            }
+        }
+
+        // Ensure the speechSynthesis API is ready before calling speakWithRandomVoices
+        window.speechSynthesis.onvoiceschanged = function() {
+            speakWithRandomVoices();
+        };
+    </script>
+</body>
+</html>
+

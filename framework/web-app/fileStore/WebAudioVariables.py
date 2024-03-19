@@ -29,7 +29,6 @@ chromedriver_path=""
 #Mention how the script should validate the webaudio logs. (WebinspectPageLogs/WpeframeworkLogs)
 log_check_method="WebinspectPageLogs"
 
-
 #Mention the url to the audio stream for testing
 #Path of the TM with IP and port, where the stream is hosted
 stream_path = ""
@@ -42,8 +41,16 @@ m4a_audio_url=stream_path+"TDK_Asset_Sunrise_M4A.m4a"
 
 dts_audio_url=stream_path+"TDK_Asset_Sunrise_DTS.dts"
 
+video_url=stream_path+"TDK_Asset_Sunrise_23fps.mp4"
+
 #Give Stream details in the order codec/No.ofChannels/SampleRate/Duration
 mp3_stream_info="mpeg,2,44100,540.7"
 m4a_stream_info="mp4,2,44100,540.6"
 dts_stream_info="dts,2,44100,540.6"
 wav_stream_info="wav,2,44100,540.6"
+
+#Update the details of SpeechSynthesisSelectedVoiceTest
+#The index of the voice to be selected for Speech Sythesis.
+ss_voice_index="3,5"
+#Voice name to be selected for Speech Synthesis
+ss_voice_name="Microsoft Adri Online (Natural) - Afrikaans (South Africa),Microsoft Anila Online (Natural) - Albanian (Albania)"

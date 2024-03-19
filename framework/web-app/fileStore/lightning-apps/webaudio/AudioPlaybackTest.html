@@ -149,6 +149,7 @@
 
                     // Log when audio starts
                     logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback started.');
+		    logMessage('TDK_END : AudioPlaybackTest');
 
                     // Update visual volume bar continuously while playing
                     updateVolumeBar();
@@ -156,12 +157,14 @@
                     // Add event listener for when audio playback ends
                     audioSource.addEventListener('ended', () => {
                         logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback stopped.');
+			logMessage('TDK_END : AudioPlaybackTest');
                     });
                 } else {
                     logMessage('TDK_LOGS: AudioPlaybackTest : Audio buffer not loaded yet.');
                 }
             } catch (error) {
                 logMessage('TDK_LOGS: AudioPlaybackTest : Error during playback:', error.message);
+		logMessage('TDK_END : AudioPlaybackTest');
             }
         }
 
@@ -169,8 +172,10 @@
             if (audioSource) {
                 audioSource.stop();
                 logMessage('TDK_LOGS: AudioPlaybackTest : Audio playback stopped.');
+		logMessage('TDK_END : AudioPlaybackTest');
             } else {
                 logMessage('TDK_LOGS: AudioPlaybackTest : Audio source not playing.');
+		logMessage('TDK_END : AudioPlaybackTest');
             }
         }
        function updateVolumeBar() {
