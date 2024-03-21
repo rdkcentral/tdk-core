@@ -28,7 +28,7 @@ channel_change_url = "http://TM-IP/rdk-test-tool/fileStore/lightning-apps/Channe
 
 #The url used for testing cobalt
 cobalt_test_url = ""
-
+video4K_test_url =""
 #Api to get the maximum response time
 method = "ResidentApp.1.url"
 
@@ -58,6 +58,9 @@ req_graphical_plugins = "Cobalt,deeplink,<Youtube URL video>,13;WebKitBrowser,ur
 
 #URL used to test HtmlApp plugin
 html_page_url = "https://vimeo.com/channels/premieres"
+
+#URL used to test Invalid Url_Validation
+browser_invalid_test_url= "https://www.tdk-page-test.com"
 
 #List of processes that can be ignored while checking the zorder
 excluded_process_list = ['subtec_s1']

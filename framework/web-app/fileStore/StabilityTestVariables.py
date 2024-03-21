@@ -32,7 +32,7 @@ channel_change_duration = 720
 ####Long duration test details:
 #The url used for testing cobalt
 cobalt_test_url = ""
-
+cobalt_4k_longduration_test_url=""
 #Test duration in minutes till test should be performed, it should be less than the duration of test video
 cobalt_test_duration = 720
 
