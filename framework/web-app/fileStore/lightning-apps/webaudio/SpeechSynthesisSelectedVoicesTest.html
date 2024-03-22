@@ -1,0 +1,139 @@
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+
+ Copyright 2024 RDK Management
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+ http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speech Synthesis Test</title>
+    <style>
+        body {
+            background-color: white;
+            color: black;
+        }
+
+        #volumeBar {
+            width: 300px;
+            height: 20px;
+            background-color: #eee;
+            margin-top: 20px;
+        }
+
+        #volumeLevel {
+            height: 100%;
+            width: 0;
+            background-color: #4CAF50;
+            transition: width 0.2s, background-color 0.2s; /* Add a smooth transition effect for both width and background-color */
+        }
+    </style>
+</head>
+<body>
+    <h1>Speech Synthesis Test</h1>
+
+    <textarea id="textToSpeak" placeholder="Enter text to be spoken">TDK - Test Development Kit for RDK.</textarea>
+
+    <!-- Add a dropdown for voice selection -->
+    <label for="voiceSelect">Select a voice:</label>
+    <select id="voiceSelect" onchange="logSelectedVoice()">
+    </select>
+
+    <button onclick="speakText()">Speak</button>
+
+    <script>
+        function populateVoices() {
+            const voiceSelect = document.getElementById('voiceSelect');
+            const voices = window.speechSynthesis.getVoices();
+
+            if (voices.length > 0) {
+                console.log("TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html : Voices populated successfully");
+
+                voices.forEach(voice => {
+                    const option = document.createElement('option');
+                    option.value = voice.name;
+                    option.textContent = `${voice.name} (${voice.lang})`;
+                    voiceSelect.appendChild(option);
+                });
+            } else {
+                console.log('TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html: No voices available.');
+		console.log('TDK_END:SpeechSynthesisSelectedVoicesTest.html');
+            }
+        }
+
+        function speakText() {
+            // Check if speech synthesis is supported
+            if ('speechSynthesis' in window) {
+                console.log("TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html: Speech synthesis supported");
+
+                const textToSpeak = document.getElementById('textToSpeak').value;
+
+                // Get the selected voice from the dropdown
+                const selectedVoice = document.getElementById('voiceSelect').value;
+
+                // Create a new SpeechSynthesisUtterance instance
+                const utterance = new SpeechSynthesisUtterance(textToSpeak);
+
+                // Get voices directly from the speechSynthesis object
+                const voices = window.speechSynthesis.getVoices();
+
+                // Find the selected voice by name
+                const selectedVoiceObject = voices.find(voice => voice.name === selectedVoice);
+
+                if (selectedVoiceObject) {
+                    utterance.voice = selectedVoiceObject;
+                } else {
+                    console.log('TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html: Voice not found.');
+	            console.log('TDK_END:SpeechSynthesisSelectedVoicesTest.html');
+                }
+
+                // Optional: Set additional parameters
+                utterance.rate = 1.0; // Set speech rate (1.0 is the default)
+                utterance.pitch = 1.0; // Set pitch (1.0 is the default)
+
+                // Use the SpeechSynthesis API to speak the text
+                console.log('TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html: Speaking text:', textToSpeak); // Debug print
+                window.speechSynthesis.speak(utterance);
+            } else {
+                // Speech synthesis not supported
+                console.log('TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html: Speech synthesis is not supported on your browser');
+		console.log('TDK_END:SpeechSynthesisSelectedVoicesTest.html');
+            }
+        }
+
+        function logSelectedVoice() {
+            const selectedVoice = document.getElementById('voiceSelect').value;
+            console.log('TDK_LOGS:SpeechSynthesisSelectedVoicesTest.html:Selected voice:', selectedVoice);
+        }
+
+        // Wait for voices to be loaded before populating the dropdown
+        window.speechSynthesis.onvoiceschanged = function() {
+            populateVoices();
+            speakText(); // Speak default text on voices changed
+        };
+
+        // Call the speakText function with the default content on page load
+        window.onload = function() {
+            // Populate voices immediately if voices are already loaded
+            if (window.speechSynthesis.getVoices().length > 0) {
+                populateVoices();
+            }
+        };
+    </script>
+</body>
+</html>
+

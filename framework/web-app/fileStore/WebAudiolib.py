@@ -328,7 +328,7 @@ def webaudio_create_socket_connection():
 
     webkit_console_socket = createEventListener(deviceIP,port,[],"/socket/1/1/WebPage",False)
     # Close the browser
-    #driver.quit()
+    driver.quit()
 
     return result, driver, webkit_console_socket
 
@@ -374,12 +374,17 @@ def webaudio_launch_testApp(obj, url,browser):
 def webaudio_keypress(obj,browser,keys):
     result="FAILURE"
     param='['
+    index=0
     for key in keys:
-        param = param + '{"keyCode": ' + key + ',"modifiers": [],"delay":1.0,'+ '"callsign":' +browser+',"client":' + browser+ '}'
-        if key != keys[-1]:
+        if ":" in key:
+            param = param + '{"keyCode": ' + key + ',"modifiers": ['+ key.split(":")[0] +'],"delay":1.0,'+ '"callsign":' +browser+',"client":' + browser+ '}'
+        else:
+            param = param + '{"keyCode": ' + key + ',"modifiers": [],"delay":1.0,'+ '"callsign":' +browser+',"client":' + browser+ '}'
+        if index != (len(keys)-1):
             param = param + ','
         else:
             param = param + ']'
+        index +=1
 
     params = '{"keys":'+ param + '}'
     tdkTestObj = obj.createTestStep('webaudio_setValue')
@@ -550,7 +555,7 @@ def webaudio_getLogs_fromDevicelogs(obj,url,browser,grep_line,keys=[]):
        if keys !=[] and expectedResult in result:
             print ("\n Navigate through webaudio test UI and start test ")
             result=webaudio_keypress(obj,browser,keys)
-            time.sleep(20)
+            time.sleep(60)
        if expectedResult in result:
            time.sleep(10)
            print ("\n Check for the logs in wpeframework logs")

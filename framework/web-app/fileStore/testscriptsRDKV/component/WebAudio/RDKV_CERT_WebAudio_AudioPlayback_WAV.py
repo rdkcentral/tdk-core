@@ -20,12 +20,12 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>2</version>
-  <name>RDKV_CERT_WebAudio_AudioPlayback</name>
+  <name>RDKV_CERT_WebAudio_AudioPlayback_WAV</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To test if the audio playback is working fine in device browser</synopsis>
+  <synopsis>To test if the WAV audio playback is working fine in device browser</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -42,8 +42,8 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_04</test_case_id>
-    <test_objective>To test if the audio playback is working fine in device browser</test_objective>
+    <test_case_id>WebAudio_12</test_case_id>
+    <test_objective>To test if the WAV audio playback is working fine in device browser</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
@@ -55,9 +55,9 @@ All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <expected_output>The browser should play the given content using WebAudio apis</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_CERT_WebAudio_AudioPlayback</test_script>
+    <test_script>RDKV_CERT_WebAudio_AudioPlayback_WAV</test_script>
     <skipped>No</skipped>
-    <release_version>M122</release_version>
+    <release_version>M123</release_version>
     <remarks>None</remarks>
   </test_cases>
   <script_tags/>
@@ -78,7 +78,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_AudioPlayback');
+obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_AudioPlayback_WAV');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -87,7 +87,7 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-stream_url= WebAudioVariables.mp3_audio_url
+stream_url= WebAudioVariables.wav_audio_url
 webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/AudioPlaybackTest.html?streamUrl="+stream_url
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
@@ -96,7 +96,7 @@ current_url=''
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
     tdkTestObj = obj.createTestStep('webaudio_prerequisite')
-    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,mp3_audio_url")
+    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,wav_audio_url")
     tdkTestObj.executeTestCase(expectedResult)
     pre_req_status=tdkTestObj.getResultDetails()
     if expectedResult in pre_req_status:
