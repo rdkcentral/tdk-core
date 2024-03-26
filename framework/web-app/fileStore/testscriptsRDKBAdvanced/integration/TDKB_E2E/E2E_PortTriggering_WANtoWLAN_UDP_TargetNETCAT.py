@@ -17,52 +17,39 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>4</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <id/>
+  <version>1</version>
   <name>E2E_PortTriggering_WANtoWLAN_UDP_TargetNETCAT</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
+  <primitive_test_id/>
   <primitive_test_name>tdkb_e2e_Set</primitive_test_name>
-  <!--  -->
   <primitive_test_version>2</primitive_test_version>
-  <!--  -->
   <status>FREE</status>
-  <!--  -->
   <synopsis>To check if the Port Triggering rule in GW takes effect so that an inbound packet with target port 54321 is forwarded to the WLAN machine (which is running a NETCAT server) after it sends an outbound packet through the GW that triggers the 12345 port configured in the rule.</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
+  <groups_id/>
   <execution_time>15</execution_time>
-  <!--  -->
   <long_duration>false</long_duration>
-  <!--  -->
   <advanced_script>true</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
+  <remarks/>
   <skip>false</skip>
-  <!--  -->
   <box_types>
+    <box_type>Broadband</box_type>
     <box_type>RPI</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDKB</rdk_version>
-    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>TC_TDKB_E2E_566</test_case_id>
     <test_objective>To check if the Port Triggering rule in GW takes effect so that inbound packet with target port 54321 is forwarded to the WLAN machine (which is running an NETCAT server) after it sends an outbound packet through the GW that triggers the 12345 port configured in the rule.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Broadband,RPI</test_setup>
+    <test_setup>Broadband, RPI</test_setup>
     <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>Device.NAT.X_CISCO_COM_PortTriggers.Enable - true/false
+Device.WiFi.SSID.{i}.SSID to configure custom SSID
+Device.WiFi.AccessPoint.{i}.Security.KeyPassphrase - to configure custom keypassphrase
+Device.WiFi.Radio.{i}.Enable - true
 Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerProtocol - TCP
 Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortStart - 12345
 Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.TriggerPortEnd - 12345
@@ -74,29 +61,32 @@ Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable - true
 Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.WlanIPAddress</input_parameters>
     <automation_approch>1. Load the E2E, Advanced Config Modules
 2. Check if Device.NAT.X_CISCO_COM_PortTriggers.Enable is enabled, if not enable it.
-3. Check if a wlan client is connected to the GW by fetching the IP corresponding to the configuration interface.
-4. Check if the wlan IP is in the expected DHCP range.
-5. Add a new instance to the port triggering rule table
-6. To the added instance, configure the rule: Trigger Port(start:end) - 12345:12345, TargetPort(start:end) - 54321:54321 (for NETCAT), Trigger Protocol - UDP, Target Protocol - UDP, Description - MyPTRule
-7. Enable the added port trigger rule
-8. Check if the rule is added and enabled successfully by fetching the values of corresponding DMs
-9. Add a static route in the WLAN client so that an outbound packet can be sent from the client via the DUT GW to the external network
-10. Send an outbound packet to trigger the port 12345 with a UDP packet
-11. From WAN client, send an inbound packet to the target port 54321 via the DUT GW WAN IP. The packet should be successfully forwarded to the WLAN client.
-12. Delete the added route
-13. Delete the added port triggering rule
-14. Revert Device.NAT.X_CISCO_COM_PortTriggers.Enable if required
-15. Unload the modules</automation_approch>
+3. Get the current SSID, KeyPassphrase and radio enable of 2G radio.
+4. Set current SSID, KeyPassphrase to new values as per the config file and radio enable to true.
+5. Connect the WLAN client to the WiFi SSID and retrieve its IP address corresponding interface name configured.
+6. Check if the wlan IP is in the expected DHCP range.
+7. Add a new instance to the port triggering rule table
+8. To the added instance, configure the rule: Trigger Port(start:end) - 12345:12345, TargetPort(start:end) - 54321:54321 (for NETCAT), Trigger Protocol - UDP, Target Protocol - UDP, Description - MyPTRule
+9. Enable the added port trigger rule
+10. Check if the rule is added and enabled successfully by fetching the values of corresponding DMs
+11. Add a static route in the WLAN client so that an outbound packet can be sent from the client via the DUT GW to the external network
+12. Send an outbound packet to trigger the port 12345 with a UDP packet
+13. From WAN client, send an inbound packet to the target port 54321 via the DUT GW WAN IP. The packet should be successfully forwarded to the WLAN client.
+14. Delete the added route
+15. Delete the added port triggering rule
+16. Revert the SSID, KeyPassphrase and Radio Enable to initial values.
+17. Revert Device.NAT.X_CISCO_COM_PortTriggers.Enable if required
+18. Unload the modules</automation_approch>
     <expected_output>Port Triggering rule in GW should take effect so that an inbound packet with target port 54321 is forwarded to the WLAN machine (which is running a NETCAT server) after it sends an outbound packet through the GW that triggers the 12345 port configured in the rule.</expected_output>
     <priority>High</priority>
     <test_stub_interface>tdkb_e2e</test_stub_interface>
     <test_script>E2E_PortTriggering_WANtoWLAN_UDP_TargetNETCAT</test_script>
     <skipped>No</skipped>
     <release_version>M122</release_version>
-    <remarks></remarks>
+    <remarks/>
   </test_cases>
-  <script_tags />
 </xml>
+
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;

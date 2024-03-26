@@ -79,19 +79,22 @@ Device.NAT.X_CISCO_COM_PortTriggers.Trigger.{i}.Enable - true
 Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress</input_parameters>
     <automation_approch>1. Load the E2E, Advanced Config Modules
 2. Check if Device.NAT.X_CISCO_COM_PortTriggers.Enable is enabled, if not enable it.
-3. Check if a lan client is connected to the GW by fetching the IP corresponding to the configuration interface.
-4. Check if the lan IP is in the expected DHCP range.
-5. Add a new instance to the port triggering rule table
-6. To the added instance, configure the rule: Trigger Port(start:end) - 12345:12345, TargetPort(start:end) - 54321:54321 (for NETCAT), Trigger Protocol - UDP, Target Protocol - UDP, Description - MyPTRule
-7. Enable the added port trigger rule
-8. Check if the rule is added and enabled successfully by fetching the values of corresponding DMs
-9. Add a static route in the LAN client so that an outbound packet can be sent from the client via the DUT GW to the external network
-10. Send an outbound packet to trigger the port 12343 which is different from the port in PT rule with a UDP packet
-11. From WAN client, send an inbound packet to the target port 54321 via the DUT GW WAN IP. The packet should be successfully forwarded to the LAN client.
-12. Delete the added route
-13. Delete the added port triggering rule
-14. Revert Device.NAT.X_CISCO_COM_PortTriggers.Enable if required
-15. Unload the modules</automation_approch>
+3. Get the current SSID, KeyPassphrase and radio enable of 2G radio.
+4. Set current SSID, KeyPassphrase to new values as per the config file and radio enable to true.
+5. Connect the WLAN client to the WiFi SSID and retrieve its IP address corresponding interface name configured.
+6. Check if the wlan IP is in the expected DHCP range.
+7. Add a new instance to the port triggering rule table
+8. To the added instance, configure the rule: Trigger Port(start:end) - 12345:12345, TargetPort(start:end) - 54321:54321 (for NETCAT), Trigger Protocol - UDP, Target Protocol - UDP, Description - MyPTRule
+9. Enable the added port trigger rule
+10. Check if the rule is added and enabled successfully by fetching the values of corresponding DMs
+11. Add a static route in the WLAN client so that an outbound packet can be sent from the client via the DUT GW to the external network
+12. Send an outbound packet to trigger the port 12343 which is different from the port in PT rule with a UDP packet
+13. From WAN client, send an inbound packet to the target port 54321 via the DUT GW WAN IP. The packet should be successfully forwarded to the WLAN client.
+14. Delete the added route
+15. Delete the added port triggering rule
+16. Revert the SSID, KeyPassphrase and Radio Enable to initial values.
+17. Revert Device.NAT.X_CISCO_COM_PortTriggers.Enable if required
+18. Unload the modules</automation_approch>
     <expected_output>The inbound traffic is not let through when the actual trigger is given via a different port other than in PT rule.</expected_output>
     <priority>High</priority>
     <test_stub_interface>tdkb_e2e</test_stub_interface>
@@ -103,7 +106,7 @@ Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress</input_parame
   <script_tags />
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import time;
 import random;

@@ -17,48 +17,32 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <id/>
   <version>4</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>E2E_PortTriggering_WANtoLAN_UDP_TargetNETCAT_TriggerOutOfRange</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
+  <primitive_test_id/>
   <primitive_test_name>tdkb_e2e_Set</primitive_test_name>
-  <!--  -->
   <primitive_test_version>2</primitive_test_version>
-  <!--  -->
   <status>FREE</status>
-  <!--  -->
   <synopsis>To check if the Port Triggering rule in GW takes effect so that inbound packet with target port 54321 is not forwarded to the LAN machine (which is running an NETCAT server) after it sends an outbound packet through the GW that triggers the out of range port 12350 which is not configured in the rule.</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
+  <groups_id/>
   <execution_time>15</execution_time>
-  <!--  -->
   <long_duration>false</long_duration>
-  <!--  -->
   <advanced_script>true</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
+  <remarks/>
   <skip>false</skip>
-  <!--  -->
   <box_types>
+    <box_type>Broadband</box_type>
     <box_type>RPI</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDKB</rdk_version>
-    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>TC_TDKB_E2E_624</test_case_id>
     <test_objective>To check if the Port Triggering rule in GW takes effect so that an inbound packet with target port 54321 is not forwarded to the LAN machine (which is running a NETCAT server) after it sends an outbound packet through the GW that triggers the out of range port 12350 which is not configured in the rule.</test_objective>
-    <test_type>Positive</test_type>
+    <test_type>Negative</test_type>
     <test_setup>Broadband, RPI</test_setup>
     <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
@@ -93,12 +77,13 @@ Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress</input_parame
     <test_script>E2E_PortTriggering_WANtoLAN_UDP_TargetNETCAT_TriggerOutOfRange</test_script>
     <skipped>No</skipped>
     <release_version>M123</release_version>
-    <remarks></remarks>
+    <remarks/>
   </test_cases>
-  <script_tags />
+  <script_tags/>
 </xml>
+
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
+ # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 import time;
 import random;

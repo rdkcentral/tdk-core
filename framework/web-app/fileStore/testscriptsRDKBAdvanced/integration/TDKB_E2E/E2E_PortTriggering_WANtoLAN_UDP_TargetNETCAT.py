@@ -17,43 +17,27 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version='1.0' encoding='utf-8'?>
-<xml>
-  <id></id>
-  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>4</version>
-  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <id/>
+  <version>1</version>
   <name>E2E_PortTriggering_WANtoLAN_UDP_TargetNETCAT</name>
-  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
-  <!-- Do not change primitive_test_id if you are editing an existing script. -->
+  <primitive_test_id/>
   <primitive_test_name>tdkb_e2e_Set</primitive_test_name>
-  <!--  -->
   <primitive_test_version>2</primitive_test_version>
-  <!--  -->
   <status>FREE</status>
-  <!--  -->
-  <synopsis>To check if the Port Triggering rule in GW takes effect so that inbound packet with target port 54321 is forwarded to the LAN machine (which is running an NETCAT server) after it sends an outbound packet through the GW that triggers the 12345 port configured in the rule.</synopsis>
-  <!--  -->
-  <groups_id />
-  <!--  -->
+  <synopsis>To check if the Port Triggering rule in GW takes effect so that an inbound packet with target port 54321 is forwarded to the LAN machine (which is running a NETCAT server) after it sends an outbound packet through the GW that triggers the 12345 port configured in the rule.</synopsis>
+  <groups_id/>
   <execution_time>15</execution_time>
-  <!--  -->
   <long_duration>false</long_duration>
-  <!--  -->
   <advanced_script>true</advanced_script>
-  <!-- execution_time is the time out time for test execution -->
-  <remarks></remarks>
-  <!-- Reason for skipping the tests if marked to skip -->
+  <remarks/>
   <skip>false</skip>
-  <!--  -->
   <box_types>
+    <box_type>Broadband</box_type>
     <box_type>RPI</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDKB</rdk_version>
-    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>TC_TDKB_E2E_564</test_case_id>
@@ -93,10 +77,10 @@ Device.X_CISCO_COM_DeviceControl.LanManagementEntry.1.LanIPAddress</input_parame
     <test_script>E2E_PortTriggering_WANtoLAN_UDP_TargetNETCAT</test_script>
     <skipped>No</skipped>
     <release_version>M122</release_version>
-    <remarks></remarks>
+    <remarks/>
   </test_cases>
-  <script_tags />
 </xml>
+
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;

@@ -42,7 +42,7 @@
   <test_cases>
     <test_case_id>TC_TDKB_E2E_627</test_case_id>
     <test_objective>To check if the Port Triggering rule in GW takes effect so that an inbound packet with target port 69 is not forwarded to the WLAN machine (which is running a TFTP server) after it sends an outbound packet through the GW that triggers the out of range port 12350 which is not configured in the rule.</test_objective>
-    <test_type>Positive</test_type>
+    <test_type>Negative</test_type>
     <test_setup>Broadband, RPI</test_setup>
     <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>

@@ -60,7 +60,7 @@
   <test_cases>
     <test_case_id>TC_TDKB_E2E_623</test_case_id>
     <test_objective>To check if the Port Triggering rule in GW takes effect so that inbound packet with target port 5001 is not forwarded to the WLAN machine (which is running an IPERF server) after it sends an outbound packet through the GW that triggers the out of range port 12350 which is not configured in the rule using UDP protocol.</test_objective>
-    <test_type>Positive</test_type>
+    <test_type>Negative</test_type>
     <test_setup>Broadband, RPI</test_setup>
     <pre_requisite>Ensure the client setup is up with the IP address assigned by the gateway</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
@@ -293,7 +293,7 @@ if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.uppe
                                                         print("\nTEST STEP %d: Check if the specified inbound packets are not forwarded to the WLAN client that triggered it" %step)
                                                         print("EXPECTED RESULT %d: IPERF client running in WAN machine should not connect to the server running in WLAN with the GW WAN IP of DUT" %step)
                                                         status = PTClientRequest("IPERF", tdkbE2EUtility.wan_ip, triggerStart, targetProtocol, tdkbE2EUtility.client_logfile, "WAN");
-                                                        serverStatus = checkFileContents("WLAN", tdkbE2EUtility.server_logfile) 
+                                                        serverStatus = checkFileContents("WLAN", tdkbE2EUtility.server_logfile)
                                                         if "bits/sec" not in serverStatus:
                                                             tdkTestObj.setResultStatus("SUCCESS");
                                                             print("ACTUAL RESULT %d: IPERF from WAN to the WLAN failed with the GW WAN IP of DUT" %step)
