@@ -1010,8 +1010,22 @@
                 <param tag="modifiers" defaultValue="" type="list" />
                 <param tag="client" defaultValue="null"/>
             </params>
+    	</method>
+ 	<method name="Get_Cursor_Size" api="getCursorSize" type="method" desc="Returns the currently set cursor size" />
+        <method name="Set_Cursor_Size" api="setCursorSize" type="method" desc="Sets the cursor size" >
+            <param>
+                <param tag="width" type="int" />
+                <param tag="height" type="int" />
+            </param>
+        </method>	
+	<method name="Show_Cursor" api="showCursor" type="method" desc="Shows the cursor on the display using the current cursor size. The cursor automatically disappears after 5 seconds of inactivity" />
+	<method name="Hide_Cursor" api="hideCursor" type="method" desc="Hides the cursor from showing on the display. The cursor is hidden by default" />
+	<method name="Show_Watermark" api="showWatermark" type="method" desc="Sets whether a watermark shows on the display" >
+	    <param>
+                <param tag="show" defaultValue="null" type="bool" />
+            </param>
         </method>
-        <event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
+	<event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
         <event name="Event_On_Launched" eventName="onLaunched" eventId="client.events.1" type="event" desc="Fired on launching the client" />
         <event name="Event_On_Suspended" eventName="onSuspended" eventId="client.events.1" type="event" desc="Fired on Suspending the client" />
         <event name="Event_On_Destroyed" eventName="onDestroyed" eventId="client.events.1" type="event" desc="Fired on destroying the client"/>

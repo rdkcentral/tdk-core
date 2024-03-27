@@ -1077,9 +1077,27 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
-
         #Code for RDK Shell plugin
-
+        elif tag =="rdkshell_get_cursor_size":
+            #Check result value empty or not
+            info = checkAndGetAllResultInfo(result)
+            #Check cursor width and height not equal to zero
+            if result.get('width') and result.get('height') != 0:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+            #Validate cursor size
+            if len(arg) and arg[0] == "check_cursor_size":
+                integer_list = []
+                for x in expectedValues:
+                    #Remove unwanted symbols in expectedvalues
+                    x = x.replace("[","").replace("]","").replace(" ","")
+                    integer_list.append(int(x))
+                if str(result.get("success")).lower() == "true" and int(result.get('width')) in integer_list and int(result.get('height')) in integer_list:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+        
         elif tag == "rdkshell_get_connected_client_list":
             result = result.get("clients")
             clients = [ str(name) for name in result if str(name).strip() ]
@@ -4154,6 +4172,28 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["physicalAddress"] = testStepResults2[0].get("physicalAddress")
 
         # RDK Shell plugin result parser steps
+        elif tag =="rdkshell_revert_get_cursor_size":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["width"] = testStepResults[0].get("width")
+            info["height"] = testStepResults[0].get("height")
+
+        elif tag =="rdkshell_get_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["configvalue"] = testStepResults[0].get("configvalue")
+
+        elif tag == "rdkshell_get_cursor_width":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["width"] = testStepResults[0].get("width")
+
+        elif tag =="rdkshell_get_cursor_height":
+            testStepResults = list(testStepResults[0].values())[0]
+            widths = testStepResults[0].get("width")
+            cursor_dict=testStepResults[0].get("cursor_dict")
+            for width in widths:
+                if arg[0] == width:
+                    info["height"]=cursor_dict.get(width)
+                    break
+        
         elif tag == "rdkshell_get_connected_client":
             testStepResults = list(testStepResults[0].values())[0]
             clients = testStepResults[0].get("clients")
@@ -4227,7 +4267,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             else:
                 info["client"] = ""
                 info["target"] = ""
-
+        
         elif tag == "rdkshell_toggle_enabled_status":
             testStepResults = list(testStepResults[0].values())[0]
             enabled = testStepResults[0].get("enabled")
@@ -4958,6 +4998,17 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
         elif tag =="get_configfile_value":
             info["configvalue"] = arg[0]
 
+        elif tag =="validate_config_file_value":
+            if len(arg) != 0:
+                message ="RDKSHELL_WPEFRAMEWORK_SERVICE_FILEPATH configured value in device config file : "+arg[0]
+                info["Test_Step_Message"] = message
+                info["configvalue"] = arg[0]
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message ="RDKSHELL_WPEFRAMEWORK_SERVICE_FILEPATH configured empty value in device config file"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "webkitbrowser_get_url":
             #Get Values from IPChangeDetectionVariables file
             ip_change_app_url = IPChangeDetectionVariables.ip_change_app_url
@@ -5015,7 +5066,46 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 message = "Please configure system territorys values in device specific configuration file"
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
-        
+
+        elif tag =="rdkshell_cursor_size_value":
+            cursor_dict={}
+            width_list = []
+            height_list = []
+            #cursor width and height value
+            cursor_size_list = [(38,38),(48,48),(58,58),(68,68),(78,78),(88,88)]
+            for key,value in cursor_size_list:
+                cursor_dict[key] = value
+                width_list.append(value)
+                height_list.append(value)
+            info["width"] = width_list
+            info["height"] = height_list
+            info["cursor_dict"] = cursor_dict
+            info["Test_Step_Status"] = "SUCCESS"
+
+        elif tag == "check_environment_variable":
+            #check environment variable present or not in wpeframework.service file
+            command = 'grep -q '+expectedValues[0]+' '+arg[0]+' && echo 1 || echo 0'
+            output = executeCommand(execInfo, command)
+            output = output.split("\n")
+            if int(output[1]) == 1:
+                print(expectedValues[0]+" Environment variable is present in the wpeframework.service file")
+                #check  environment variable have value or not in wpeframework.service file
+                command = 'sed \'s/"//g\' '+arg[0]+' | awk -F \'=\' \'/'+expectedValues[0]+'/ {if ($3 == "") print("0") ; else print("1")}\''
+                output = executeCommand(execInfo, command)
+                output = output.split("\n")
+                if int(output[1]) == 1:
+                    message = expectedValues[0]+" Environment variable has a non-empty value"
+                    info["Test_Step_Message"] = message
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    message = expectedValues[0]+" Environment variable has an empty value"
+                    info["Test_Step_Message"] = message
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                message = expectedValues[0]+" Environment variable is not present in the wpeframework.service file"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "Check_And_Enable_XDial":
             if len(arg) and arg[0] == "enable_xdial":
                 command = 'tr181 -d -s -v 1 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'

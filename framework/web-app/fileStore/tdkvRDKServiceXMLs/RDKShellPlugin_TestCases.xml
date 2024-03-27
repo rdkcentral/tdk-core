@@ -85,7 +85,7 @@
             <event pluginName="RDKShell" eventName="Event_On_Application_Suspended" />
             <event pluginName="RDKShell" eventName="Event_On_Application_Terminated" />
             <event pluginName="RDKShell" eventName="Event_On_Plugin_Suspended" />
-            <event pluginName="RDKShell" eventName="Event_On_Will_Destroy" />
+	    <event pluginName="RDKShell" eventName="Event_On_Will_Destroy" />
           </prerequisite>
 
         </pluginPreRequisite>
@@ -2907,13 +2907,19 @@
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_multiple_application" arguments="check_if_exists" expectedValues="cobalt,webkitbrowser" />
             </testStep>
-            <testStep testStepId="2" name="Set_Log_Level" method="Set_Log_Level" >
+	    <testStep testStepId="2" name="Enable_Logs_Flushing" method="Enable_Logs_Flushing">
+                  <params>
+                    <param tag="enable" value="True" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    <testStep testStepId="3" name="Set_Log_Level" method="Set_Log_Level" >
                   <params>
                     <param tag="logLevel" value="DEBUG" />
                   </params>
                   <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
-            <testStep testStepId="3" name="Add_Key_Intercepts" method="AddKeyIntercepts" >
+            <testStep testStepId="4" name="Add_Key_Intercepts" method="AddKeyIntercepts" >
               <params>
                 <param tag="client1"  value="cobalt" />
                 <param tag="keyCode1" value="50"/>
@@ -2923,7 +2929,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
-            <testStep testStepId="4"   name="Generate_Key" method="GenerateKey" >
+            <testStep testStepId="5"   name="Generate_Key" method="GenerateKey" >
               <params paramKey="keys">
                 <param tag="keyCode" value="50" />
                 <param tag="modifiers" useDefault="true" />
@@ -2931,10 +2937,10 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="5" name="Check_Required_Log" action="externalFnCall" delay="2" >
+            <testStep testStepId="6" name="Check_Required_Log" action="externalFnCall" delay="2" >
                     <resultGeneration useMethodTag="check_required_logs"  expectedValues="intercepted by client cobalt" />
             </testStep>
-            <testStep testStepId="6"   name="Generate_Key" method="GenerateKey" >
+            <testStep testStepId="7"   name="Generate_Key" method="GenerateKey" >
               <params paramKey="keys">
                 <param tag="keyCode" value="51" />
                 <param tag="modifiers" useDefault="true" />
@@ -2942,10 +2948,10 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="7" name="Check_Required_Log" action="externalFnCall" delay="2" >
+            <testStep testStepId="8" name="Check_Required_Log" action="externalFnCall" delay="2" >
                  <resultGeneration useMethodTag="check_required_logs"  expectedValues="intercepted by client webkitbrowser"/>
             </testStep>
-            <testStep testStepId="8" name="removekeyintercept" method="RemoveKeyIntercept">
+            <testStep testStepId="9" name="removekeyintercept" method="RemoveKeyIntercept">
               <params>
                 <param tag="client"  value="cobalt" />
                 <param tag="keyCode"   value="50" />
@@ -2953,7 +2959,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
-            <testStep testStepId="9" name="removekeyintercept" method="RemoveKeyIntercept">
+            <testStep testStepId="10" name="removekeyintercept" method="RemoveKeyIntercept">
               <params>
                 <param tag="client"  value="webkitbrowser"/>
                 <param tag="keyCode"   value="51" />
@@ -4111,4 +4117,141 @@
                         <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues="cobalt" />
               </testStep>
         </testCase>
+	
+	<!-- Test case 127 -->
+	<testCase testCaseId="RDKShell_127" testCaseName="RDKShell_Set_CursorSize_Without_Width_And_Valid_Height" desc="Check whether able to set cursor size, without width and valid height">
+            <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="Set_CursorSize_Without_Width_And_Valid_Height" method="Set_Cursor_Size">
+              <params>
+                <param tag="height" value="255" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="please specify width and height parameters" />
+            </testStep>
+	</testCase>
+
+	<!-- Test case 128 -->
+        <testCase testCaseId="RDKShell_128" testCaseName="RDKShell_Set_CursorSize_Valid_Width_And_Without_Height" desc="Check whether able to set cursor size, valid width and without height">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_CursorSize_Valid_Width_And_Without_Height" method="Set_Cursor_Size">
+              <params>
+                <param tag="width" value="255" />
+              </params>
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="please specify width and height parameters" />
+            </testStep>
+        </testCase>
+
+	<!-- Test case 129 -->
+        <testCase testCaseId="RDKShell_129" testCaseName="RDKShell_Set_CursorSize_Without_Parameters" desc="Check whether able to set cursor size, without passing parameters">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_CursorSize_Without_Parameters" method="Set_Cursor_Size">
+              <resultGeneration useMethodTag="rdkshell_check_error_message" expectedValues="please specify width and height parameters" />
+            </testStep>
+    	</testCase>
+
+	<!-- Test case 130 -->
+	<testCase testCaseId="RDKShell_130" testCaseName="RDKShell_Show_And_Hide_Cursor" desc="Shows the cursor on the display using the current cursor size then hides the cursor from showing on the display">
+            <testCaseInfo testCaseType="direct"/>
+	    <testCasePreRequisite>
+		<prerequisite requisiteId="1" requisiteName="Check_Environment_Variable_In_Service_File">
+		<testStep testStepId="1" name="Get_Config_file_Value" action="externalFnCall" saveResult="true">
+                  <resultGeneration useMethodTag="validate_config_file_value">
+                    <arguments useConfigFile="true" key="RDKSHELL_WPEFRAMEWORK_SERVICE_FILEPATH"/>
+                  </resultGeneration>
+            	</testStep>
+                <testStep testStepId="2" name="Check_Environment_Variable_In_Service_File" action="externalFnCall" >
+		  <resultGeneration useMethodTag="check_environment_variable" expectedValues="RDKSHELL_CURSOR_IMAGE" >
+		    <arguments usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_previous_result"/>
+		  </resultGeneration>
+                </testStep>
+                </prerequisite>
+	    </testCasePreRequisite>
+	    <testStep testStepId="1" name="Show_Cursor" method="Show_Cursor">
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+      	    </testStep>
+	    <testStep testStepId="2" name="Hide_Cursor" method="Hide_Cursor" delay="3">
+              <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+        </testCase>
+
+	<!-- Test case 131 -->
+	<testCase testCaseId="RDKShell_131" testCaseName="RDKShell_Set_And_Get_Cursor_Size" desc="Check whether able to set and get the cursor size" >
+            <testCaseInfo testCaseType="loop"/>
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Check_Environment_Variable_In_Service_File">
+                <testStep testStepId="1" name="Get_Config_file_Value" action="externalFnCall" saveResult="true">
+                  <resultGeneration useMethodTag="validate_config_file_value">
+                    <arguments useConfigFile="true" key="RDKSHELL_WPEFRAMEWORK_SERVICE_FILEPATH"/>
+                  </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Check_Environment_Variable_In_Service_File" action="externalFnCall" >
+                  <resultGeneration useMethodTag="check_environment_variable" expectedValues="RDKSHELL_CURSOR_IMAGE" >
+                    <arguments usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_previous_result"/>
+                  </resultGeneration>
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	      <testStep testStepId="1" name="Get_Cursor_Size" method="Get_Cursor_Size" saveResult="true">
+	        <resultGeneration useMethodTag="rdkshell_get_cursor_size" />
+	      </testStep>
+	      <testStep testStepId="2" name="Get_Cursor_Value" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="rdkshell_cursor_size_value" />
+              </testStep>
+	      <testStep testStepId="3" name="Set_And_Get_Cursor_Size" testStepType="loop">
+	        <subtestStep subtestStepId="1" name="Set_Cursor_Size" method="Set_Cursor_Size">
+                  <params>
+                    <param tag="width" usePreviousResult="true" Id="2" useMethodTag="rdkshell_get_cursor_width" iteration="true"/>
+                    <param tag="height" usePreviousResult="true" Id="2" useMethodTag="rdkshell_get_cursor_height" useIterableArg="true"/>
+                  </params>
+		  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+	        </subtestStep>
+      	        <subtestStep subtestStepId="2" name="Get_Cursor_Size" method="Get_Cursor_Size" delay="3">
+		  <resultGeneration useMethodTag="rdkshell_get_cursor_size"  arguments ="check_cursor_size">
+		    <expectedValues usePreviousResult="true" Id="2" useMethodTag="rdkshell_get_cursor_width"/>
+	          </resultGeneration> 
+	        </subtestStep>
+	      </testStep>
+	      <testStep testStepId="4" name="Revert_Set_Cursor_Size" method="Set_Cursor_Size">
+                  <params>
+                    <param tag="width" usePreviousResult="true" Id="1" useMethodTag="rdkshell_revert_get_cursor_size"/>
+                    <param tag="height" usePreviousResult="true" Id="1" useMethodTag="rdkshell_revert_get_cursor_size"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+	      </testStep>
+	      <testStep testStepId="5" name="Revert_Get_Cursor_Size" method="Get_Cursor_Size" delay="3">
+                  <resultGeneration useMethodTag="rdkshell_get_cursor_size"  arguments ="check_cursor_size">
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="rdkshell_revert_get_cursor_size"/>
+                  </resultGeneration>
+              </testStep>
+      </testCase>
+
+	<!-- Test case 132 -->
+	<testCase testCaseId="RDKShell_132" testCaseName="RDKShell_Show_And_Hide_Watermark" desc="Sets whether a watermark shows on the display. True to show the watermark or false to hide the watermark">
+	    <testCaseInfo testCaseType="direct"/>	
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Check_Environment_Variable_In_Service_File">
+                <testStep testStepId="1" name="Get_Configfile_Value" action="externalFnCall" saveResult="true">
+                  <resultGeneration useMethodTag="validate_config_file_value">
+                    <arguments useConfigFile="true" key="RDKSHELL_WPEFRAMEWORK_SERVICE_FILEPATH"/>
+                  </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Check_Environment_Variable_In_Service_File" action="externalFnCall" >
+                  <resultGeneration useMethodTag="check_environment_variable" expectedValues="RDKSHELL_WATERMARK_IMAGE_PNG" >
+                    <arguments usePreviousResult="true" Id="1" useMethodTag="rdkshell_get_previous_result"/>
+                  </resultGeneration>
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	    <testStep testStepId="1" name="Show_Watermark" method="Show_Watermark">
+		<params>
+                    <param tag="show" value="true" />
+                </params>    
+		<resultGeneration useMethodTag="rdkshell_get_result_status" />
+	    </testStep>
+	    <testStep testStepId="2" name="Hide_Watermark" method="Show_Watermark" delay ="3">
+                <params>
+                    <param tag="show" value="false" />
+                </params>
+                <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+        </testCase>	
 </testPlugin>

@@ -89,7 +89,8 @@
             <event pluginName="FrameRate"     eventName="Event_On_FPS" />
             <event pluginName="LightningApp" eventName="Event_LightningApp_Load_Finished" />
             <event pluginName="FrameRate" eventName="Event_On_Display_FrameRate_Changed" />
-            <event pluginName="FrameRate" eventName="Event_On_Display_FrameRate_Changing" />
+	    <event pluginName="FrameRate" eventName="Event_On_Display_FrameRate_Changing" />
+	    <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
           </prerequisite>
         </pluginPreRequisite>
         <testCase testCaseId="FR_01" testCaseName="FrameRate_Collect_FPS" desc="Launches graphics url using lightning app and gets fps using onFpsEvent Event">
@@ -219,6 +220,62 @@
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 05 -->
+        <testCase testCaseId="FR_05" testCaseName="FrameRate_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.FrameRate" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.FrameRate" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.FrameRate" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.FrameRate" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.FrameRate" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.FrameRate" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.FrameRate" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_FrameRate_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.FrameRate" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.framerate,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.FrameRate" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.FrameRate" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_FrameRate_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.FrameRate" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.framerate,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.FrameRate" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.FrameRate" expectedValues="activated"/>
             </testStep>
         </testCase>
 </testPlugin>

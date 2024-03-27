@@ -568,7 +568,7 @@ def rfc_deletefeature(xconfdomainname):
             deletefeaturestatus="FAILURE"
     else:
         print("\nFAILURE : Failed to get the device credentials")
-        deletefeaturestatus="FAILUR"
+        deletefeaturestatus="FAILURE"
     return  deletefeaturestatus
 
 #---------------------------------------------------------------
@@ -596,5 +596,5 @@ def rfc_deletefeaturerule(xconfdomainname):
             deletefeaturerulestatus="FAILURE"
     else:
         print("\nFAILURE : Failed to get the device credentials")
-        deletefeaturerulestatus="FAILUR"
+        deletefeaturerulestatus="FAILURE"
     return deletefeaturerulestatus

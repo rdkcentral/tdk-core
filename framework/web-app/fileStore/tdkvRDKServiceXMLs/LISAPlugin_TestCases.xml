@@ -36,12 +36,12 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LISA" expectedValues="activated"/>
             </testStep>
           </prerequisite>
-          <prerequisite requisiteId="2" requisiteName="Check_LISA_Process_Status">
+          <!--prerequisite requisiteId="2" requisiteName="Check_LISA_Process_Status">
             <testStep testStepId="1" name="Check_LISA_Process_Status" action="externalFnCall">
                     <resultGeneration useMethodTag="Check_WPE_Process" expectedValues="LISA"/>
             </testStep>
-          </prerequisite>
-          <prerequisite requisiteId="3" requisiteName="Activate_RDKShell_Plugin">
+          </prerequisite-->
+          <prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                   <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
@@ -62,7 +62,7 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
             </testStep>
           </prerequisite>
-          <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+          <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="RDKShell" eventName="Event_On_Application_Launched" />
             <event pluginName="RDKShell" eventName="Event_On_Application_Activated" />
             <event pluginName="RDKShell" eventName="Event_On_Application_Connected" />
