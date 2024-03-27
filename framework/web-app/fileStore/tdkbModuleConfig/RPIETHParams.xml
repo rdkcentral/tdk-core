@@ -996,7 +996,7 @@
                <!--default value of the param after factory reset -->
                <defaultValue>Interface4</defaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>Intrer4,Interface4</expectedValues>
+               <expectedValues>Interface4,Inter_4</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
         <parameter>
@@ -1511,8 +1511,8 @@
                <writable>false</writable>
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
-        </parameter>
-        <parameter>
+       </parameter>
+       <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.Ethernet.Interface.5.Stats.DiscardPacketsReceived</name>
                <!--type of the parameter -->
@@ -1812,7 +1812,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-               <parameter>
+        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.Ethernet.Link.2.Enable</name>
                <!--type of the parameter -->
