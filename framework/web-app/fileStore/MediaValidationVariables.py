@@ -168,6 +168,7 @@ video_src_url_mp4_360p = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_
 video_src_url_mp4_2160p_av1 = test_streams_base_path + "TDK_Asset_Waterfall_4K_AV1.mp4"
 video_src_url_mp4_1080p_av1 = test_streams_base_path + "Waterfall_DASH_AV1_AAC/1080p.mp4"
 video_src_url_mp4_720p_av1 = test_streams_base_path + "TDK_Asset_Waterfall_720p_AV1.mp4"
+video_src_url_mp4_720p_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM/720.webm"
 video_src_url_resolution_up_h264 = test_streams_base_path + "TDK_Asset_Sunrise_H264_resolution_up.mp4"
 video_src_url_resolution_down_h264 = test_streams_base_path + "TDK_Asset_Sunrise_H264_resolution_down.mp4"
 video_src_url_resolution_up_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV1_resolution_up.mp4"
@@ -302,6 +303,11 @@ video_src_url_ddp51_heaac = ""
 #Streams with mutiple tracks
 video_src_url_multi_audio_aac = test_streams_base_path + "TDK_Asset_Sunrise_MultiTrack_AAC.mp4"
 video_src_url_multi_audio_eac3 = test_streams_base_path + "TDK_Asset_Sunrise_MultiTrack_EAC3.mp4"
+
+# MP4 audio streams
+audio_src_url_mp4_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"
+audio_src_url_mp4_eac3 = test_streams_base_path + "DASH_H264_EC3/atfms_291_dash_tdk_avc_eac3_fmp4_ac3.mp4"
+audio_src_url_webm_opus = test_streams_base_path + "DASH_VP9_OPUS_WebM/audio.webm"
 
 # Basic WAV PCM Audio format stream
 audio_src_url_wav_pcm = test_streams_base_path + "TDK_Asset_Sunrise_WAV_Audio.wav"
