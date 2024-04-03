@@ -91,7 +91,9 @@ tcp_request()
             echo "bindStatus:$bindStatus"
 
             if [ $bindStatus = "SUCCESS" ]; then
-                    value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                    # Uncomment the below line and comment out next line if Ubuntu version < 22.04
+                    # value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                    value="$(cat $var4 | grep bits/sec | awk '{ print $7 }' | tail -1)"
                     echo "OUTPUT:$value"
             else
                     echo "OUTPUT:"

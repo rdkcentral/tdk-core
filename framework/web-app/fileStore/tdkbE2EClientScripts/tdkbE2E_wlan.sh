@@ -95,7 +95,9 @@ get_bit_rate()
 # Get the current security mode of the WIFI connected
 get_security_mode()
 {
-        value="$(nmcli device wifi list |grep $var2| awk '{ print $9 }')"
+        # Uncomment the below line and comment next line if Ubuntu version < 22.04
+        # value="$(nmcli device wifi list |grep $var2| awk '{ print $9 }')"
+        value="$(nmcli device wifi list |grep $var2| awk '{ print $10 }')"
         echo "OUTPUT:$value"
 }
 
@@ -329,7 +331,9 @@ tcp_request()
         bindStatus="$(cat $var4 | grep "bind failed:" && echo "FAILURE" || echo "SUCCESS")"
         echo "bindStatus:$bindStatus"
         if [ $bindStatus = "SUCCESS" ]; then
-                value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                # Uncomment below line and comment out next line if Ubuntu version < 22.04
+                # value="$(cat $var4 | grep bits/sec | cut -d ' ' -f 11)"
+                value="$(cat $var4 | grep bits/sec | awk '{ print $7 }' | tail -1)"
                 echo "OUTPUT:$value"
         else
                 echo "OUTPUT:"
@@ -347,8 +351,11 @@ validate_tcp_server_output()
 #To get the throughput from server
 validate_tcp_server_output_throughput()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
-        size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
+        # Uncomment below 2 lines and comment out next 2 lines if Ubuntu version < 22.04
+        # serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        # size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
+        serverOutput="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
+        size="$(cat $var2 | grep bits/sec | awk '{ print $8 }' | tail -1)"
         echo "OUTPUT:$serverOutput $size"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
@@ -385,7 +392,9 @@ udp_request()
 validate_udp_output()
 {
         bandwidth="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
-        lossPercentage="$(cat $var2 | grep bits/sec | awk '{ print $13 }' | tail -1)"
+        # Uncomment below line and comment out next line if Ubuntu version < 22.04
+        # lossPercentage="$(cat $var2 | grep bits/sec | awk '{ print $13 }' | tail -1)"
+        lossPercentage="$(cat $var2 | grep bits/sec | awk '{ print $12 }' | tail -1)"
         echo "OUTPUT:$bandwidth,$lossPercentage"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }

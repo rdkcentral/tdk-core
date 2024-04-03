@@ -253,7 +253,9 @@ tcp_request()
 #To get the bandwidth from server
 validate_tcp_server_output()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        # Uncomment below line and comment out next line if Ubuntu version < 22.04
+        # serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        serverOutput="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
         echo "OUTPUT:$serverOutput"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }
@@ -261,8 +263,11 @@ validate_tcp_server_output()
 #To get the throughput from server
 validate_tcp_server_output_throughput()
 {
-        serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
-        size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
+        # Uncomment below 2 lines and comment out next 2 lines if Ubuntu version < 22.04
+        # serverOutput="$(cat $var2 | grep bits/sec | cut -d ' ' -f 11)"
+        # size="$(cat $var2 | grep bits/sec | cut -d ' ' -f 12)"
+        serverOutput="$(cat $var2 | grep bits/sec | awk '{ print $7 }' | tail -1)"
+        size="$(cat $var2 | grep bits/sec | awk '{ print $8 }' | tail -1)"
         echo "OUTPUT:$serverOutput $size"
         deleteTmpFile="$(sudo rm $var2 > /dev/null && echo "SUCCESS" || echo "FAILURE")"
 }

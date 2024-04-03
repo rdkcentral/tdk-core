@@ -287,7 +287,7 @@ def openCaptivePortal(GridUrl,tdkTestObj):
         driver = webdriver.Remote(browser_profile=profile,command_executor=hub_url,options=options)
         driver.get(GridUrl);
         checkUI = driver.find_element_by_xpath('//*[@id="get_set_up"]').text
-        if b"Let's Get Set Up" == checkUI:
+        if "Let's Get Set Up" == checkUI:
             tdkTestObj.setResultStatus("SUCCESS");
             Status = "SUCCESS"
             print("SUCCESS: Successfully opened the captive portal UI page\n")
