@@ -50,6 +50,7 @@
 	</label>
 	<g:textField name="executionTime" required="" value="${moduleInstance?.executionTime}"/> 	
 </div>
+<g:if test="${category.toString()!="RDKB" && category.toString()!="RDKC"}">
 <div class="fieldcontain ${hasErrors(bean: moduleInstance, field: 'isThunderEnabled', 'error')} required">
 <label for="isThunderEnabled"> <g:message
 				code="module.isThunderEnabled.label" default="Is Thunder Enabled" />
@@ -57,6 +58,7 @@
 <g:checkBox id="isThunderEnabled" name="thunderEnabled"
 			checked="${isChecked}" />
 </div>
+</g:if>
 <div class="fieldcontain ${hasErrors(bean: moduleInstance, field: 'name', 'error')} required">
 	<label for="name">
 	</label>
