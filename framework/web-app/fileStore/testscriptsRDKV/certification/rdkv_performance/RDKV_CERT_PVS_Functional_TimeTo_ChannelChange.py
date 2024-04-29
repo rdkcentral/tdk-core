@@ -203,7 +203,7 @@ if expectedResult in result.upper():
                     print("URL(",new_url,") is set successfully")
                     max_count = 0
                     total_time = 0
-                    time.sleep(10)
+                    time.sleep(60)
                     print("\n checking for Tuning log")
                     command = 'cat /opt/logs/wpeframework.log | grep -nr "Tuning to channel" | tail -1'
                     print("COMMAND : %s" %(command))
@@ -334,8 +334,8 @@ if expectedResult in result.upper():
     if revert=="YES":
         print("Revert the values before exiting")
         status = set_plugins_status(obj,curr_plugins_status_dict)
-    obj.unloadModule("rdkv_performance");
     getSummary(Summ_list,obj)
+    obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");
     print("Failed to load module")

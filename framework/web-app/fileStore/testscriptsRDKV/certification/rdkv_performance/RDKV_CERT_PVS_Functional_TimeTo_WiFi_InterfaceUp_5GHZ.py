@@ -251,7 +251,6 @@ if expectedResult in result.upper():
         print("\n Preconditions are not met")
         obj.setLoadModuleStatus("FAILURE")
     if deviceAvailability == "Yes":
-        getSummary(Summ_list,obj)
         if revert_if == "YES" and status == "SUCCESS":
             activate_status = set_plugins_status(obj,plugins_status_needed)
             url_status,complete_url = get_lightning_app_url(obj)
@@ -270,6 +269,7 @@ if expectedResult in result.upper():
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
         print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
+    getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");

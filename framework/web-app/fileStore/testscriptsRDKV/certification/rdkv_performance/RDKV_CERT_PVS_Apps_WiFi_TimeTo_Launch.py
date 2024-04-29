@@ -100,6 +100,8 @@ result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);
 
+Summ_list=[]
+
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     conf_file, status = get_configfile_name(obj);
@@ -277,6 +279,8 @@ if expectedResult in result.upper():
                             result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                             if all(value != "" for value in (app_launch_threshold_value,offset)):
                                 print("\n Threshold value for time taken to launch application: {} ms".format(app_launch_threshold_value))
+                                Summ_list.append('Threshold value for time taken to launch application: {} ms'.format(app_launch_threshold_value))
+                                Summ_list.append('Time taken to launch the application: {} milliseconds'.format(app_launch_time))
                                 if 0 < int(app_launch_time) < (int(app_launch_threshold_value) + int(offset)):
                                     tdkTestObj.setResultStatus("SUCCESS");
                                     print("\n The time taken to launch the app is within the expected limit")
@@ -332,6 +336,7 @@ if expectedResult in result.upper():
             status = set_plugins_status(obj,revert_plugins_dict)
     else:
         print("\n Device went down after change in interface. So reverting the plugins and interface is skipped")
+    getSummary(Summ_list,obj)
     obj.unloadModule("rdkv_performance");
 else:
     obj.setLoadModuleStatus("FAILURE");

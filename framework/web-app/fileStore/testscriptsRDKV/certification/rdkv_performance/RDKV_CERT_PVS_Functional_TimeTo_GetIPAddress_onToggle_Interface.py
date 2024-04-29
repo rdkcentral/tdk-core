@@ -172,7 +172,7 @@ if expectedResult in result.upper():
                                     wifi_connect_dict[new_interface] = int(getTimeInMilliSec(wifi_connect_dict[new_interface]))
                                     time_taken = event_time_dict[new_interface] - wifi_connect_dict[new_interface]
                                 print("\n Time taken for getting {} ip address: {}(ms) ".format(new_interface,time_taken))
-                                Summ_list.append('Time taken for getting ip address :{}ms'.format(time_taken))
+                                Summ_list.append('Time taken for getting {} ip address :{}ms'.format(new_interface,time_taken))
                                 print("\n Threshold value for getting {} ip address: {}(ms) ".format(new_interface,validation_dict[new_interface]))
                                 Summ_list.append('Threshold value for getting {} ip address: {}ms'.format(new_interface,validation_dict[new_interface]))
                                 if 0 < time_taken < ( int(validation_dict[new_interface]) + int(offset)):

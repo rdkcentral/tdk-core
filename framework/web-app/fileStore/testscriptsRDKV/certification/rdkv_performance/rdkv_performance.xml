@@ -151,6 +151,12 @@
           <parameter name="method" value=""/>
         </parameters>
       </primitiveTest>
-    </primitiveTests>
+      <primitiveTest name="rdkservice_getBrowserURL" id=" " version="1">
+        <function>rdkservice_getBrowserURL</function>
+        <parameters>
+          <parameter name="webinspect_port" value=""/>
+        </parameters>
+      </primitiveTest>
+      </primitiveTests>
   </module>
 </xml>
