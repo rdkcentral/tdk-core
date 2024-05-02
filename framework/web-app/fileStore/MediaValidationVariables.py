@@ -175,6 +175,8 @@ video_src_url_resolution_up_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV
 video_src_url_resolution_down_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV1_resolution_down.mp4"
 video_src_url_resolution_up_hevc = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_resolution_up.mp4"
 video_src_url_resolution_down_hevc = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_resolution_down.mp4"
+video_src_url_resolution_up_vp9 = test_streams_base_path + "TDK_Asset_Sunrise_VP9_resolution_up.mp4"
+video_src_url_resolution_down_vp9 = test_streams_base_path + "TDK_Asset_Sunrise_VP9_resolution_down.mp4"
 
 #H.264 Codec Video URL
 video_src_url_dash_h264 = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4.mpd"
