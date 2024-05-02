@@ -3473,6 +3473,114 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        # UsbAccess Plugin Response result parser steps
+        elif tag == "check_mount_device_path":
+            mounted = result.get('mounted')
+            success = result.get('success')
+            #Check result value empty or not
+            if mounted and success:
+                #Check success value not equal false
+                if str(success).lower() != "false":
+                    info["mounted"] = mounted
+                    info["success"] = success
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["mounted"] = mounted
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["mounted"] = mounted
+                info["success"] = success
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_get_link":
+            links = result.get('links')
+            if links:
+                path = links[0].get('path')
+                baseURL = links[0].get('baseURL')
+                success = result.get('success')
+                if str(success).lower() == "true":
+                    info["path"] = path
+                    info["baseURL"] = baseURL
+                    info["success"] = success
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["path"] = path
+                    info["baseURL"] = baseURL
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                success = result.get('success')
+                if str(success).lower() == "true":
+                    info["links"] = links
+                    info["success"] = success
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["links"] = links
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_create_link":
+            baseURL = result.get('baseURL')
+            success = result.get('success')
+            error = result.get("error")
+            #Check result value empty or not
+            if baseURL and success:
+                if str(success).lower() == "true":
+                    info["baseURL"] = baseURL
+                    info["success"] = success
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["baseURL"] = baseURL
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if error:
+                    info["error"] = error
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["baseURL"] = baseURL
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_clear_link":
+            success = result.get('success')
+            error = result.get("error")
+            if str(success).lower() == "true":
+                info["success"] = success
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                if error:
+                    info["error"] = error
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_negative_scenario":
+            success = result.get('success')
+            error = str(result.get("error")).strip()
+            if expectedValues:
+                if str(success).lower() == "false" and expectedValues[0] in error:
+                    info["error"] = error
+                    info["success"] = success
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["error"] = error
+                    info["success"] = success
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_archive_logs":
+            success = result.get('success')
+            if str(success).lower() == "true":
+                info["success"] = success
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["success"] = success
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -3747,6 +3855,16 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "TRUE"
             else:
                 result = "FALSE"
+
+        # UsbAccess Plugin Response result parser steps
+        elif tag == "usbaccess_clear_link":
+            testStepResults = list(testStepResults[0].values())[0]
+            baseURL = testStepResults[0].get("baseURL")
+            if baseURL:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -4701,6 +4819,25 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag == "controller_get_plugin_name":
             testStepResults = list(testStepResults[0].values())[0]
             info["callsign"] = testStepResults[0].get("callsign")
+
+        # Usb Access Plugin Response result parser steps
+        elif tag =="usbaccess_getlink_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            links = testStepResults[0].get("links")
+            info["baseURL"] = links.get("baseURL")
+
+        elif tag =="usbaccess_get_monutdevice_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["path"] = testStepResults[0]['mounted'][0]
+
+        elif tag =="usbaccess_get_createlink_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["baseURL"] = testStepResults[0].get("baseURL")
+
+        elif tag =="usbaccess_get_logfilepath_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["path"] = testStepResults[0].get("path")
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -5104,6 +5241,17 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
             else:
                 message = expectedValues[0]+" Environment variable is not present in the wpeframework.service file"
                 info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_log_file":
+            command ="[ -f "+arg[0]+" ] && echo 1 || echo 0"
+            output = executeCommand(execInfo, command)
+            output = output.split("\n")
+            if int(output[1]) == 1:
+                print("\n"+arg[0]+" file present")
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print("\n"+arg[0]+" file not present")
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":

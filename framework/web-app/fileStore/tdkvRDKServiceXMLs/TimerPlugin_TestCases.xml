@@ -37,7 +37,8 @@
 
           <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="Timer" eventName="Event_Timer_Expired" />
-            <event pluginName="Timer" eventName="Event_Timer_Expiry_Reminder" />
+	    <event pluginName="Timer" eventName="Event_Timer_Expiry_Reminder" />
+	    <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
           </prerequisite>
         </pluginPreRequisite>
 
@@ -411,4 +412,60 @@
               <resultGeneration useMethodTag="timer_check_negative_scenario" />
             </testStep>
 	</testCase>
+
+	<!-- Test case 12 -->
+	<testCase testCaseId="TIME_12" testCaseName="Timer_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.Timer" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Timer" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Timer" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.Timer" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Timer" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.Timer" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Timer" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_Timer_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.Timer" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.timer,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.Timer" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Timer" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_Timer_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.Timer" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.timer,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.Timer" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Timer" expectedValues="activated"/>
+            </testStep>
+       </testCase>
 </testPlugin>

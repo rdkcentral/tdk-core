@@ -94,7 +94,8 @@
 
 	  <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false" >
             <event pluginName="Cobalt" eventName="Event_Cobalt_State_Changed" />
-            <event pluginName="Cobalt" eventName="Event_Cobalt_Closure" />            
+	    <event pluginName="Cobalt" eventName="Event_Cobalt_Closure" />
+	    <event pluginName="Controller" eventName="Event_Controller_State_Changed"/> 
           </prerequisite>
         </pluginPreRequisite>
         <testCase testCaseId="CB_01" testCaseName="Cobalt_Launch_Youtube_URL" desc="Launches youtube link" delay="10" >
@@ -241,5 +242,60 @@
          </postrequisite>
         </testCasePostRequisite>
         </testCase>
-</testPlugin>
 
+	<!-- Test case 05 -->
+	<testCase testCaseId="CB_05" testCaseName="Cobalt_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="Cobalt" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Cobalt" />
+                     <params>
+                       <param tag="callsign" value="Cobalt" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,Cobalt" />
+                     <params>
+                       <param tag="plugin" value="Cobalt" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_Cobalt_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="Cobalt" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="cobalt,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="Cobalt" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_Cobalt_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="Cobalt" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="cobalt,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="Cobalt" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,Cobalt" expectedValues="activated,resumed"/>
+            </testStep>
+       </testCase>
+</testPlugin>

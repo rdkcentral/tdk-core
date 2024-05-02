@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2024 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="UsbAccess" pluginVersion="1">
+	<pluginPreRequisite>
+	  <!-- PluginPreRequisite 1 -->
+          <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                <params>
+                  <param tag="callsign" value="org.rdk.UsbAccess" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                <params>
+                  <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+
+	  <!-- PluginPreRequisite 2 -->
+	  <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+	      <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+	      <event pluginName="UsbAccess" eventName="Event_On_Archive_Logs" />
+          </prerequisite>
+  	</pluginPreRequisite>
+
+	<!-- Test case 01 -->
+	<testCase testCaseId="USBACCESS_01" testCaseName="UsbAccess_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.UsbAccess" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_UsbAccess_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.UsbAccess" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.usbaccess,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_UsbAccess_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.UsbAccess" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.usbaccess,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="activated"/>
+            </testStep>
+        </testCase>
+       
+	<!-- Test case 02 -->
+	<testCase testCaseId="USBACCESS_02" testCaseName="UsbAccess_Clear_Link" desc="Verify that the clearLink method successfully removes a symbolic link that was created by the createLink method">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+		 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+		 <resultGeneration useMethodTag="check_get_link"/>
+	    </testStep>
+	    <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+		 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+		 <param>
+			 <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+		 </param>
+		 <resultGeneration useMethodTag="check_clear_link"/>
+	    </testStep>
+	    <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+		 <params>
+		        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+	    	 </params>
+		 <resultGeneration useMethodTag="check_create_link"/>
+	    </testStep>
+	    <testStep testStepId="5" name="Clear_Link" method="Clear_Link">
+                 <params>
+			 <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+	    </testStep>
+	    <testStep testStepId="6" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 03 -->
+	<testCase testCaseId="USBACCESS_03" testCaseName="UsbAccess_Create_Clear_Link_Invalid_ParameterValue" desc="Check create and clearLink method returns an error when pass invalid parameter value">
+	    <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" value="NonExistentLink"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
+            </testStep>
+            <testStep testStepId="2" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" value="NonExistentLink"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not remove symlink"/>
+            </testStep>
+	</testCase>    
+
+	<!-- Test case 04 -->
+        <testCase testCaseId="USBACCESS_04" testCaseName="UsbAccess_Create_Clear_Link_Twice" desc="Check create and clearLink method returns an error when call two times">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+            <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+                 <param>
+                         <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+                 </param>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_create_link"/>
+	    </testStep>
+	    <testStep testStepId="5" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="symlink already exists"/>
+            </testStep>
+            <testStep testStepId="6" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+	    <testStep testStepId="7" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not remove symlink"/>
+	    </testStep>
+	</testCase>
+
+	<!-- Test case 05 -->
+        <testCase testCaseId="USBACCESS_05" testCaseName="UsbAccess_Check_FileList_with_Invalid_Path" desc="Check whether getlist api returns an error while passing an invalid path">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Check_FileList_with_Invalid_Path" method="Get_File_List">
+                 <params>
+                        <param tag="path" value="NonExistentLink"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="not found"/>
+	    </testStep>
+	</testCase>
+
+	<!-- Test case 06 -->
+	<testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Archive_Logs" desc="Check whether compresses and uploads device logs into attached USB drive">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+ 	    <testStep testStepId="3" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs"/>
+	    </testStep>
+	    <testStep testStepId="4" name="Check_Log_File_InsideUsb" action="externalFnCall" >
+		 <resultGeneration useMethodTag="check_log_file">
+			 <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
+		 </resultGeneration>
+	    </testStep>
+        </testCase>
+</testPlugin>

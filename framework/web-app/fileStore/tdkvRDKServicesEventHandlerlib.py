@@ -956,6 +956,24 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # UsbAccess Events response result parser steps
+        elif tag == "usbaccess_check_usb_archive_logs":
+            result = result[0]
+            error = result.get("error")
+            success = result.get("success")
+            path = result.get("path")
+            path = path.replace('\\', '')
+            if str(error).lower() == "none" and str(success).lower() == "true" and path:
+                info["error"] = error
+                info["path"] = path
+                info["success"] = success
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["error"] = error
+                info["path"] = path
+                info["success"] = success
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"

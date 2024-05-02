@@ -1024,7 +1024,7 @@
 	    <param>
                 <param tag="show" defaultValue="null" type="bool" />
             </param>
-        </method>
+    	</method>
 	<event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
         <event name="Event_On_Launched" eventName="onLaunched" eventId="client.events.1" type="event" desc="Fired on launching the client" />
         <event name="Event_On_Suspended" eventName="onSuspended" eventId="client.events.1" type="event" desc="Fired on Suspending the client" />
@@ -2414,5 +2414,28 @@
                 <param tag="enabled" defaultValue="null" type="bool" />
             </params>
         </method>
+    </plugin>
+
+    <!-- Usb Access Plugin Information -->
+    <plugin pluginName="UsbAccess" serviceName="org.rdk.UsbAccess" serviceVersion="1">
+        <method name="Get_Mounted" api="getMounted" type="method" desc="Returns a list of mounted USB devices"/>
+	<method name="Get_Links" api="getLinks" type="method" desc="Returns a list of created links and the associated root folder of the USB drive"/>
+	<method name="Create_Link" api="createLink" type="method" desc="Creates a symbolic link to the root folder of the USB drive">
+            <params>
+		<param tag="path" type="string" />
+	    </params>
+	</method>
+	<method name="Clear_Link" api="clearLink" type="method" desc="Clears or removes the symbolic link created by the createLink method">
+            <params>
+                <param tag="baseURL" type="string" />
+	    </params>
+	</method>
+	<method name="Get_File_List" api="getFileList" type="method" desc="Gets a list of files and folders from the specified directory or path"/>
+	<method name="Archive_Logs" api="ArchiveLogs" type="method" desc="Compresses and uploads device logs into attached USB drive from /opt/logs with a name comprises of Mac of the device , date and time in a tgz format">
+            <params>
+                <param tag="path" type="string" />
+            </params>
+        </method>
+	<event name="Event_On_Archive_Logs" eventName="onArchiveLogs" eventId="client.events.1" type="event" desc="Triggered to archive the device logs and returns the status of the archive" />
     </plugin>
 </thunderPlugins>
