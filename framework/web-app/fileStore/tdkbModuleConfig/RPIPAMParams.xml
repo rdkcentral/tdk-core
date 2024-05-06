@@ -26,7 +26,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.X_RDKCENTRAL-COM_XPC.SnmpOnboardReboot.Enable</name>
@@ -41,7 +40,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>true</defaultValue>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_CISCO_COM_BootloaderVersion</name>
@@ -55,7 +53,6 @@
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_CISCO_COM_FirmwareName</name>
@@ -69,7 +66,6 @@
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_CISCO_COM_FirmwareBuildTime</name>
@@ -82,7 +78,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_ConfigureWiFi</name>
@@ -99,7 +94,6 @@
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_CaptivePortalEnable</name>
@@ -116,7 +110,6 @@
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_WiFiNeedsPersonalization</name>
@@ -131,7 +124,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>true</defaultValue>
         </parameter>
-
           <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUICapable</name>
@@ -143,7 +135,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
         </parameter>
          <parameter>
                 <!--the tr-181 parameter name -->
@@ -173,8 +165,6 @@
                <defaultValue></defaultValue>
                <expectedValues></expectedValues>
         </parameter>
-
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_CloudUIWebURL</name>
@@ -190,7 +180,6 @@
                <defaultValue></defaultValue>
                <expectedValues></expectedValues>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_EnableXDNS</name>
@@ -204,7 +193,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>false</defaultValue>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_CM_MAC</name>
@@ -216,7 +204,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_CM_IP</name>
@@ -228,7 +215,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_WAN_MAC</name>
@@ -240,7 +226,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_WAN_IP</name>
@@ -252,7 +237,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_WAN_IPv6</name>
@@ -265,7 +249,6 @@
                <persistentSet>false</persistentSet>
                <expectedValues></expectedValues>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_MTA_MAC</name>
@@ -279,7 +262,6 @@
                <persistentSet>false</persistentSet>
                 <expectedValues></expectedValues>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_MTA_IP</name>
@@ -292,7 +274,6 @@
                <persistentSet>false</persistentSet>
                 <expectedValues></expectedValues>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_CMTS_MAC</name>
@@ -316,7 +297,6 @@
                 <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
       <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_CISCO_COM_BaseMacAddress</name>
@@ -342,7 +322,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>Raspberry Pi Foundation</defaultValue>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.ManufacturerOUI</name>
@@ -356,7 +335,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>0xFFFFFFFF</defaultValue>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_CISCO_COM_ProcessorSpeed</name>
@@ -369,7 +347,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.Hardware</name>
@@ -393,7 +370,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
       <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.Hardware_MemFree</name>
@@ -406,7 +382,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.ModelName</name>
@@ -420,7 +395,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>RPI</defaultValue>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.Description</name>
@@ -435,7 +409,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>Raspberry Pi 3 device</defaultValue>
         </parameter>
-
        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.ProductClass</name>
@@ -450,7 +423,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>XB3</defaultValue>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.SerialNumber</name>
@@ -463,7 +435,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.HardwareVersion</name>
@@ -477,7 +448,6 @@
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
         </parameter>
-
        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.SoftwareVersion</name>
@@ -490,7 +460,6 @@
                 <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.AdditionalHardwareVersion</name>
@@ -504,7 +473,6 @@
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.AdditionalSoftwareVersion</name>
@@ -517,7 +485,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.ProvisioningCode</name>
@@ -542,7 +509,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
       </parameter>
-
        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_BootTime</name>
@@ -554,7 +520,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_SystemTime</name>
@@ -580,7 +545,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>factory-reset</defaultValue>
         </parameter>
-
          <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.FirstUseDate</name>
@@ -592,7 +556,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.VendorConfigFileNumberOfEntries</name>
@@ -607,7 +570,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>0</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_xfinitywifiCapableCPE</name>
@@ -634,7 +596,6 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST_COM_xfinitywifiEnable</name>
@@ -651,7 +612,6 @@
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_COMCAST-COM_rdkbPlatformCapable</name>
@@ -665,7 +625,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>true</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.FactoryResetCount</name>
@@ -692,8 +651,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>false</defaultValue>
  </parameter>
-
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.PartnerId</name>
@@ -708,7 +665,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>RDKM</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.TR69CertLocation</name>
@@ -723,7 +679,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>/etc/cacert.pem</defaultValue>
  </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.WANsideSSH.Enable</name>
@@ -740,7 +695,6 @@
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.DefaultLocalIPv4SubnetRange</name>
@@ -755,7 +709,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>255.255.255.0</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.DefaultLanguage</name>
@@ -770,7 +723,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>eng</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.AllowEthernetWAN</name>
@@ -784,7 +736,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>true</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.LocalUI.DefaultLoginUsername</name>
@@ -799,7 +750,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>admin</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.LocalUI.DefaultLoginPassword</name>
@@ -814,7 +764,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>password</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.HelpTip.NetworkName</name>
@@ -828,7 +777,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>RDKM</defaultValue>
 </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.CloudUI.brandname</name>
@@ -843,7 +791,6 @@
                <!--default value of the param after factory reset -->
                <defaultValue>RDKM</defaultValue>
         </parameter>
-
  <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_Syndication.RDKB_UIBranding.CloudUI.productname</name>
@@ -887,7 +834,6 @@
               <!-- the range of values acceptable -->
               <expectedValues>true,false</expectedValues>
 </parameter>
-
 <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Xupnp</name>
@@ -905,7 +851,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
 <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.Telemetry.Enable</name>
@@ -918,7 +863,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
@@ -935,8 +880,8 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>1</defaultValue>
-               <expectedValues>1,2</expectedValues>
+               <defaultValue>2.0.1</defaultValue>
+               <expectedValues>2.0.1</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
 <parameter>
@@ -956,7 +901,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
 <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.AdvancedParentalControl.Enable</name>
@@ -973,7 +917,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
 <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.SyndicationFlowControl.Enable</name>
@@ -991,7 +934,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
        <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.SNMP.V3Support</name>
@@ -1008,7 +950,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.SNMP.V2Support</name>
@@ -1025,7 +966,6 @@
                <expectedValues>true,false</expectedValues>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
-
         <parameter>
                 <!--the tr-181 parameter name -->
                <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BLE.Discovery</name>
@@ -1041,39 +981,6 @@
                <defaultValue>false</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
-               <RFCEnabled>true</RFCEnabled>
-        </parameter>
-
-         <parameter>
-                <!--the tr-181 parameter name -->
-               <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BLE.Tile.ReportingURL</name>
-               <!--webpa param name of the above tr-181 parameter if available -->
-               <webpaName>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BLE.Tile.ReportingURL</webpaName>
-               <!--type of the parameter -->
-               <type>string</type>
-               <!--whether set is applicable or not -->
-               <writable>false</writable>
-               <!-- whether set value will be retained and set should be followed by a get or not -->
-               <persistentSet>false</persistentSet>
-               <!--default value of the param after factory reset -->
-               <defaultValue></defaultValue>
-               <expectedValues></expectedValues>
-               <RFCEnabled>true</RFCEnabled>
-        </parameter>
-
-         <parameter>
-                <!--the tr-181 parameter name -->
-               <name>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BLE.Tile.ReportingInterval</name>
-               <!--webpa param name of the above tr-181 parameter if available -->
-               <webpaName>Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.BLE.Tile.ReportingInterval</webpaName>
-               <!--type of the parameter -->
-               <type>unsignedint</type>
-               <!--whether set is applicable or not -->
-               <writable>false</writable>
-               <!-- whether set value will be retained and set should be followed by a get or not -->
-               <persistentSet>false</persistentSet>
-               <!--default value of the param after factory reset -->
-               <defaultValue>0</defaultValue>
                <RFCEnabled>true</RFCEnabled>
         </parameter>
 </parameters>

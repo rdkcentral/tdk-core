@@ -134,7 +134,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>wifi0</defaultValue>
+               <defaultValue>wlan0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -148,7 +148,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>wifi1</defaultValue>
+               <defaultValue>wlan1</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -250,7 +250,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>144</defaultValue>
+               <defaultValue>1147</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -264,7 +264,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>300</defaultValue>
+               <defaultValue>4804</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -358,9 +358,9 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>b,g,n</defaultValue>
+               <defaultValue>g,n,ax</defaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>b,g,n</expectedValues>
+               <expectedValues>g,n,ax</expectedValues>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -374,9 +374,9 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>a,n,ac</defaultValue>
+               <defaultValue>a,n,ac,ax</defaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>a,n,ac</expectedValues>
+               <expectedValues>a,n,ac,ax</expectedValues>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -418,11 +418,11 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>a,n,ac</defaultValue>
+               <defaultValue>a,n,ac,ax</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>448</snmpDefaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>a,n,ac</expectedValues>
+               <expectedValues>a,n,ac,ax</expectedValues>
                 <!-- the range of values acceptable for snmp-->
                <snmpExpectedValues>448,64,192,320,384</snmpExpectedValues>
         </parameter>
@@ -608,7 +608,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>40MHz</defaultValue>
+               <defaultValue>80MHz</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>3</snmpDefaultValue>
         </parameter>
@@ -712,7 +712,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>-1</defaultValue>
+               <defaultValue>0</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>0</snmpDefaultValue>
         </parameter>
@@ -730,7 +730,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>3</defaultValue>
+               <defaultValue>0</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>0</snmpDefaultValue>
         </parameter>
@@ -746,7 +746,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0,25,50,75,100</defaultValue>
+               <defaultValue>12,25,50,75,100</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -760,7 +760,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0,25,50,75,100</defaultValue>
+               <defaultValue>12,25,50,75,100</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -814,7 +814,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -882,7 +882,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>841</defaultValue>
+               <defaultValue>USI</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>6</snmpDefaultValue>
         </parameter>
@@ -902,7 +902,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>841</defaultValue>
+               <defaultValue>USI</defaultValue>
                <!--default value exepcted by snmp after factory reset -->
                <snmpDefaultValue>6</snmpDefaultValue>
         </parameter>
@@ -966,7 +966,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -1014,7 +1014,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -1030,7 +1030,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -1190,7 +1190,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>1</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1204,7 +1204,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>3</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1294,7 +1294,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>ath0</defaultValue>
+               <defaultValue>wlan0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1308,7 +1308,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>ath1,ath2</defaultValue>
+               <defaultValue>wlan1</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1322,7 +1322,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>ath0</defaultValue>
+               <defaultValue>private_ssid_2g</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1336,7 +1336,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>ath1,ath2</defaultValue>
+               <defaultValue>private_ssid_5g</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1460,7 +1460,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>RPi3_RDKB-AP0</defaultValue>
+               <defaultValue>RPI_RDKB-AP0</defaultValue>
                <!-- the range of values acceptable -->
                <setValue>SSIID-C940</setValue>
                 <!-- the range of values acceptable for snmp-->
@@ -1479,7 +1479,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>RPi3_RDKB-AP1</defaultValue>
+               <defaultValue>RPI_RDKB-AP1</defaultValue>
                <!-- the range of values acceptable -->
                <setValue>SSIID-C940</setValue>
                 <!-- the range of values acceptable for snmp-->
@@ -1498,7 +1498,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>RPI3_RDKB-AP0</defaultValue>
+               <defaultValue>RPI_RDKB-AP0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1514,7 +1514,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>RPI3_RDKB-AP1</defaultValue>
+               <defaultValue>RPI_RDKB-AP1</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1940,9 +1940,9 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>None,WEP-64,WEP-128,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA2-Enterprise,WPA-WPA2-Enterprise</defaultValue>
+               <defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open</defaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>None,WEP-64,WEP-128,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA2-Enterprise,WPA-WPA2-Enterprise</expectedValues>
+               <expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open</expectedValues>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -1956,9 +1956,9 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>None,WEP-64,WEP-128,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA2-Enterprise,WPA-WPA2-Enterprise</defaultValue>
+               <defaultValue>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open</defaultValue>
                <!-- the range of values acceptable -->
-               <expectedValues>None,WEP-64,WEP-128,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA2-Enterprise,WPA-WPA2-Enterprise</expectedValues>
+               <expectedValues>None,WPA-Personal,WPA2-Personal,WPA3-Personal,WPA-WPA2-Personal,WPA3-Personal-Transition,WPA-Enterprise,WPA2-Enterprise,WPA3-Enterprise,WPA-WPA2-Enterprise,Enhanced-Open</expectedValues>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2180,7 +2180,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>75.56.77.78</defaultValue>
+               <defaultValue>0.0.0.0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2196,7 +2196,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>75.56.77.78</defaultValue>
+               <defaultValue>0.0.0.0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2214,7 +2214,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>123</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2232,7 +2232,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>123</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2284,7 +2284,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>75.56.77.78</defaultValue>
+               <defaultValue>0.0.0.0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2300,7 +2300,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>75.56.77.78</defaultValue>
+               <defaultValue>0.0.0.0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2318,7 +2318,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>123</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2336,7 +2336,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>123</defaultValue>
+               <defaultValue>0</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2415,7 +2415,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -2431,7 +2431,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>true</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>false</defaultValue>
+               <defaultValue>true</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>

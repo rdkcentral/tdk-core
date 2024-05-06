@@ -35,11 +35,11 @@ ExpectedPolicyList_Unified = "FIXED_MODE_ON_BOOTUP, FIXED_MODE, PRIMARY_PRIORITY
 #The Expected Wan Manager interface names
 interfaceName = ["dsl0", "eth3", "veip0"];
 #The Expected Wan Manager interface name for RPI
-intrName =["eth0"];
+intrName =["eth0", "wwan0"];
 #The Expected Wan Manager Display Names
 displayName =["DSL","WANOE","GPON"];
 #The Expected Wan Manager Display Name for RPI
-disName =["WanOE"];
+disName =["WanOE", "LTE"];
 #The Reporting Period Prameter List
 ReportingparamList = ["Device.DSL.X_RDK_Report.DSL.Enabled", "Device.DSL.X_RDK_Report.DSL.ReportingPeriod", "Device.DSL.X_RDK_Report.DSL.Default.ReportingPeriod", "Device.DSL.X_RDK_Report.DSL.Default.OverrideTTL"];
 #DSL WAN Parameters
