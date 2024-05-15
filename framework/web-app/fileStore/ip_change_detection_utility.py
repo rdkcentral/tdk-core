@@ -171,7 +171,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
     wifi_connect_start_time = ""
     expectedResult =  "SUCCESS"
     start_time = ""
-    deviceAvailability = ""
+    deviceAvailability = "Yes"
     complete_app_url_status,complete_app_url = get_lightning_app_url(obj)
     plugin_status,plugin_status_dict,revert = set_plugins(obj)
     if plugin_status == "SUCCESS" and complete_app_url_status == "SUCCESS":
@@ -345,8 +345,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                             time.sleep(30)
                             device_ip,device_status = getDeviceIP_and_Status(obj.url)
                             if obj.IP == device_ip and ("BUSY" in device_status):
-                                print ("Device is in available status in TM")
-                                deviceAvailability = "Yes"
+                                print ("Device is in available status in TM")                                
                                 status = "SUCCESS"
                             elif (obj.IP != device_ip) and ("NOT FOUND" in device_status):
                                 print ("TM has been updated with the new IP after interface change. But the device is down")
@@ -366,14 +365,12 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                                 tdkTestObj.addParameter("reqValue","ssid")
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
-                                if result == "SUCCESS":
-                                    deviceAvailability = "Yes"
+                                if result == "SUCCESS":                                    
                                     connected_ssid = tdkTestObj.getResultDetails()
                                     print(" \n Connected SSID Name: {}\n ".format(connected_ssid))
                                     if ssid == connected_ssid:
                                         print("Successfully Connected to SSID \n ")
-                                        status = "SUCCESS"
-                                        deviceAvailability = "Yes"
+                                        status = "SUCCESS"                                        
                                         tdkTestObj.setResultStatus("SUCCESS")
                                     else:
                                         print("DUT is not connected to SSID")
@@ -439,8 +436,7 @@ def set_default_interface(obj,interface,start_time_needed = False):
                 tdkTestObj.addParameter("reqValue","interface")
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
-                if result == "SUCCESS":
-                    deviceAvailability = "Yes"
+                if result == "SUCCESS":                    
                     new_interface,revert = check_current_interface(obj)
                     if interface not in new_interface:
                         print("\n Current interface is: {} , unable to set {} interface \n".format(new_interface,interface))
@@ -526,7 +522,7 @@ def check_cur_ssid_freq(obj):
 def connect_to_interface(obj, required_connection,start_time_needed = False, wifi_connect_needed = False):
     revert_dict = {"revert_if":False}
     start_time = ""
-    deviceAvailability = ""
+    deviceAvailability = "Yes"
     wifi_start_time = ""
     result_status = "FAILURE"
     wifi_ssid_dict = {"WIFI":"2.4", "WIFI_5GHZ":"5"}

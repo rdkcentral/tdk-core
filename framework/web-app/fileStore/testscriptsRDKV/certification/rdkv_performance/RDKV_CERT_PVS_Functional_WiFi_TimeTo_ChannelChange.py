@@ -118,7 +118,7 @@ max_channel_change_count = 5
 #Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 expectedResult = "SUCCESS"

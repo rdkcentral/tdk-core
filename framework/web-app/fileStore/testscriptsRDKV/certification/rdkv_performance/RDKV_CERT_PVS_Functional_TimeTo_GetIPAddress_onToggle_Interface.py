@@ -93,7 +93,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult()
 print("[LIB LOAD STATUS]  :  %s" %result)
 

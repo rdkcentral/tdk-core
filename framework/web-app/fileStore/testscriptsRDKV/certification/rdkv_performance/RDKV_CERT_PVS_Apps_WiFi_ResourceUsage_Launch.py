@@ -95,7 +95,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PVS_Apps_WiFi_ResourceUsage_Launch');
 pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);

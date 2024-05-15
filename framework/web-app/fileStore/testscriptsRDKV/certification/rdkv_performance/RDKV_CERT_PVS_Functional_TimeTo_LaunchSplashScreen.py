@@ -51,7 +51,7 @@
     <input_parameters>ui_app_url : string</input_parameters>
     <automation_approch>1. Save the current system time in UTC.
 2. Reboot the DUT.
-3. Find the timestamp of  "LoadFinished" log of ui_app_url (URL of UI Application)
+3. Find the timestamp of  "Splash" log of ui_app_url (URL of UI Application)
 4. Calculate output by finding the difference between timestamp in step 4 and time got in step 1.</automation_approch>
     <expected_output>The time taken should be within expected range of ms.</expected_output>
     <priority>High</priority>
@@ -63,7 +63,6 @@
   </test_cases>
   <script_tags/>
 </xml>
-
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
@@ -136,9 +135,9 @@ if expectedResult in result.upper():
                         result = tdkTestObj.getResult()
                         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
                         if ssh_param_dict != {} and expectedResult in result:
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            command = 'cat /opt/logs/wpeframework.log | grep -inr LoadFinished.*url.*'+ui_app_url+'.*splash.*| tail -1'
-                            #get the log line containing the loadfinished info from wpeframework log
+                            tdkTestObj.setResultStatus("SUCCESS")                          
+                            command = 'cat /opt/logs/wpeframework.log | grep -inr ResidentApp.*uri.*'+ui_app_url+'.*splash.*| tail -1'     
+                            #get the log line containing the splash info from wpeframework log
                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                             tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
                             tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
@@ -148,18 +147,18 @@ if expectedResult in result.upper():
                             output = tdkTestObj.getResultDetails()
                             if output != "EXCEPTION" and expectedResult in result:
                                 print(output)
-                                load_finished_list = output.split('\n')
-                                load_finished_line = ""
-                                for item in load_finished_list:
-                                    if "LoadFinished:" in item:
-                                        load_finished_line = item
-                                if load_finished_line != "" and '"httpstatus":200' in load_finished_line:
-                                    load_finished_time = getTimeStampFromString(load_finished_line)
+                                splash_line_list = output.split('\n')
+                                splash_line = ""
+                                for item in splash_line_list:
+                                    if "splash" in item:
+                                        splash_line = item
+                                if splash_line != "":
+                                    splash_line_time = getTimeStampFromString(splash_line)
                                     print("\nDevice reboot initiated at :{} (UTC)\n".format(start_time))
-                                    print("UI load finished at :{} (UTC) \n".format(load_finished_time))
+                                    print("Splash_UI loading finished at :{} (UTC) \n".format(splash_line_time))
                                     start_time_millisec = getTimeInMilliSec(start_time)
-                                    loadfinished_time_millisec = getTimeInMilliSec(load_finished_time)
-                                    ui_uptime = loadfinished_time_millisec - start_time_millisec
+                                    splash_line_time_millisec = getTimeInMilliSec(splash_line_time)
+                                    ui_uptime = splash_line_time_millisec - start_time_millisec
                                     reboot_time.append(ui_uptime)
                                     print("Reboot Time",reboot_time[i])
                                     print("Time taken for the UI to load after reboot : {} ms\n".format(ui_uptime))

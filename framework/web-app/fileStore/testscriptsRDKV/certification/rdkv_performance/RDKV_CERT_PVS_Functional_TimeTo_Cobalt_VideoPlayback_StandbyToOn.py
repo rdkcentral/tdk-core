@@ -71,7 +71,6 @@ The time should be within the expected range.</expected_output>
   </test_cases>
   <script_tags/>
 </xml>
-
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
@@ -260,6 +259,27 @@ if expectedResult in result.upper():
                                                         tdkTestObj.setResultStatus("SUCCESS")
                                                         if power_state == "ON":
                                                             time.sleep(60)
+                                                            print("\nChecking the cobalt status\n")
+                                                            tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
+                                                            tdkTestObj.addParameter("plugin","Cobalt")
+                                                            tdkTestObj.executeTestCase(expectedResult)
+                                                            result = tdkTestObj.getResult()
+                                                            cobalt_status = tdkTestObj.getResultDetails()
+                                                            if cobalt_status == 'suspended':
+                                                               time.sleep(10)
+                                                               print("\nCobalt is suspended and trying to resume it\n")
+                                                               resume_status,start_resume = launch_plugin(obj,"Cobalt")
+                                                               print("resume_status:",resume_status)
+                                                               if resume_status == expectedResult:
+                                                                   time.sleep(5)
+                                                                   tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
+                                                                   tdkTestObj.addParameter("plugin","Cobalt")
+                                                                   tdkTestObj.executeTestCase(expectedResult)
+                                                                   cobalt_status = tdkTestObj.getResultDetails()
+                                                                   result = tdkTestObj.getResult()
+                                                                   if cobalt_status == 'resumed' and expectedResult in result:
+                                                                       print("\nCobalt Resumed Successfully\n")
+                                                                       tdkTestObj.setResultStatus("SUCCESS")
                                                             print("\n Check video is started \n")
                                                             command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
                                                             tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
@@ -280,14 +300,14 @@ if expectedResult in result.upper():
                                                                 time_to_video_playfrom_standby = video_playedtime_in_millisec-start_poweron_time_in_millisec
                                                                 print("\n Time taken to play video  :{} ms\n".format(time_to_video_playfrom_standby))
                                                                 conf_file,file_status = getConfigFileName(obj.realpath)
-                                                                result1, video_lauch_threshold_value = getDeviceConfigKeyValue(conf_file,"VIDEOPLAY_FROM_STANDBY_THRESHOLD_VALUE")
-                                                                Summ_list.append('VIDEOPLAY_FROM_STANDBY_THRESHOLD_VALUE :{}ms'.format(video_lauch_threshold_value))
+                                                                result1, video_launch_threshold_value = getDeviceConfigKeyValue(conf_file,"VIDEOPLAY_FROM_STANDBY_THRESHOLD_VALUE")
+                                                                Summ_list.append('VIDEOPLAY_FROM_STANDBY_THRESHOLD_VALUE :{}ms'.format(video_launch_threshold_value))
                                                                 result2, offset = getDeviceConfigKeyValue(conf_file,"THRESHOLD_OFFSET")
                                                                 Summ_list.append('THRESHOLD_OFFSET :{}ms'.format(offset))
                                                                 Summ_list.append('Time taken to play video :{}ms'.format(time_to_video_playfrom_standby))
-                                                                if all(value != "" for value in (video_lauch_threshold_value,offset)):
-                                                                    print("\n Threshold value for time taken to play video from standby : {} ms".format(video_lauch_threshold_value))
-                                                                    if 0 < int(time_to_video_playfrom_standby) < (int(video_lauch_threshold_value) + int(offset)):
+                                                                if all(value != "" for value in (video_launch_threshold_value,offset)):
+                                                                    print("\n Threshold value for time taken to play video from standby : {} ms".format(video_launch_threshold_value))
+                                                                    if 0 < int(time_to_video_playfrom_standby) < (int(video_launch_threshold_value) + int(offset)):
                                                                         print("\n The time taken to play video from standby is within the expected limit\n")
                                                                         tdkTestObj.setResultStatus("SUCCESS");
                                                                     else:
@@ -352,7 +372,7 @@ if expectedResult in result.upper():
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
                     if result == "SUCCESS":
-                        tdkTestObj.setResultStatus("SUCCESS")
+                       tdkTestObj.setResultStatus("SUCCESS")
                     else:
                         print("\n Unable to deactivate Cobalt")
                         tdkTestObj.setResultStatus("FAILURE")

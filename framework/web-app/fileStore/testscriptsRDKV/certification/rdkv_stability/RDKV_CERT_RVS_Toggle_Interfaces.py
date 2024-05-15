@@ -118,7 +118,7 @@ result_dict_list = []
 cpu_mem_info_dict = {}
 
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);

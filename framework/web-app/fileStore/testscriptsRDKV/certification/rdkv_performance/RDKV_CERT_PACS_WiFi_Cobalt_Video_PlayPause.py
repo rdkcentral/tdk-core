@@ -98,7 +98,7 @@ obj.configureTestCase(ip,port,'RDKV_CERT_PACS_WiFi_Cobalt_Video_PlayPause');
 pre_requisite_reboot(obj,"yes")
 
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result);

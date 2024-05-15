@@ -60,8 +60,8 @@ c) Launch Lightning app for detecting IP change in WebKitBrowser
 d) Set WIFI as default interface
 3. Reboot the device after saving current time
 4. Get the Resident app URL from the DUT
-5. Check for the load finished log for above URL in wpeframework log
-6. Find the time taken to launch UI by finding the difference between load finished log time stamp and time saved before reboot.
+5. Check for the splash log for above URL in wpeframework log
+6. Find the time taken to launch UI by finding the difference between splash log time stamp and time saved before reboot.
 7. Validate the result against threshold value
 8. Revert the interface </automation_approch>
     <expected_output>The UI launch time should be within the expected limit.</expected_output>
@@ -74,7 +74,6 @@ d) Set WIFI as default interface
   </test_cases>
   <script_tags/>
 </xml>
-
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
@@ -103,7 +102,7 @@ pre_requisite_reboot(obj,"yes")
 #Execution summary variable
 Summ_list=[]
 #Get the result of connection with test component and DUT
-deviceAvailability = "No"
+deviceAvailability = "Yes"
 result =obj.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %result);
 obj.setLoadModuleStatus(result)
@@ -172,9 +171,9 @@ if expectedResult in result.upper():
                             result = tdkTestObj.getResult()
                             ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
                             if ssh_param_dict != {} and expectedResult in result:
-                                tdkTestObj.setResultStatus("SUCCESS")
-                                command = 'cat /opt/logs/wpeframework.log | grep -inr LoadFinished.*url.*'+ui_app_url+'.*splash.*| tail -1'
-                                #get the log line containing the loadfinished info from wpeframework log
+                                tdkTestObj.setResultStatus("SUCCESS")                                
+                                command = 'cat /opt/logs/wpeframework.log | grep -inr ResidentApp.*uri.*'+ui_app_url+'.*splash.*| tail -1'      
+                                #get the log line containing the splash info from wpeframework log
                                 tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
                                 tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
                                 tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
@@ -184,18 +183,18 @@ if expectedResult in result.upper():
                                 output = tdkTestObj.getResultDetails()
                                 if output != "EXCEPTION" and expectedResult in result:
                                     print("\n Output: " + output + "\n")
-                                    load_finished_list = output.split('\n')
-                                    load_finished_line = ""
-                                    for item in load_finished_list:
-                                        if "LoadFinished:" in item:
-                                            load_finished_line = item
-                                    if load_finished_line != "" and '"httpstatus":200' in load_finished_line:
-                                        load_finished_time = getTimeStampFromString(load_finished_line)
+                                    splash_line_list = output.split('\n')
+                                    splash_line = ""
+                                    for item in splash_line_list:
+                                        if "splash" in item:
+                                            splash_line = item
+                                    if splash_line != "":
+                                        splash_line_time = getTimeStampFromString(splash_line)
                                         print("\n Device reboot initiated at :{} (UTC)\n".format(start_time))
-                                        print("UI load finished at :{} (UTC) \n ".format(load_finished_time))
+                                        print("Splash UI loading finished at :{} (UTC) \n ".format(splash_line_time))
                                         start_time_millisec = getTimeInMilliSec(start_time)
-                                        loadfinished_time_millisec = getTimeInMilliSec(load_finished_time)
-                                        ui_uptime = loadfinished_time_millisec - start_time_millisec
+                                        splash_line_time_millisec = getTimeInMilliSec(splash_line_time)
+                                        ui_uptime = splash_line_time_millisec - start_time_millisec
                                         reboot_time.append(ui_uptime)
                                         print("\n Reboot Time",reboot_time[i])
                                         print("Time taken for the UI to load after reboot : {} ms\n".format(ui_uptime))
