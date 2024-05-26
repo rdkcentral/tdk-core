@@ -540,3 +540,8 @@ disabled look for already selected choices in the results dropdown
 		background-position: 100% -21px !important;
 	}
 }
+.shell-script-container {
+    overflow-x: auto; /* Enable horizontal scrolling if needed */
+    max-width: 100%; /* Ensure the container doesn't exceed its parent's width */ /* Optional: Add border for visual distinction */
+	background-color: #FFFF99;
+}
