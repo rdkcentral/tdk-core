@@ -963,9 +963,13 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
             success = result.get("success")
             path = result.get("path")
             path = path.replace('\\', '')
-            if str(error).lower() == "none" and str(success).lower() == "true" and path:
+            if expectedValues[0] in str(error).lower() and str(success).lower() == "true" and path:
                 info["error"] = error
                 info["path"] = path
+                info["success"] = success
+                info["Test_Step_Status"] = "SUCCESS"
+            elif expectedValues[0] in str(error).lower() and str(success).lower() == "false":
+                info["error"] = error
                 info["success"] = success
                 info["Test_Step_Status"] = "SUCCESS"
             else:
