@@ -150,6 +150,9 @@ video_src_url_av1_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_30fps
 video_src_url_av1_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_50fps.mp4"
 video_src_url_av1_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_60fps.mp4"
 
+#MKV Video URL
+video_src_url_4k_mkv = test_streams_base_path + "TDK_Asset_Sunrise_2160p.mkv"
+
 #Stream to simulate underflow
 video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_underflow_stream_v2.mp4"
 
@@ -531,3 +534,4 @@ codec_audio_mp3 = "sdk"
 codec_audio_dts = "sdk"
 codec_audio_m4a = "sdk"
 codec_audio_wav_pcm = "sdk"
+codec_mkv       = "sdk"
