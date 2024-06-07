@@ -720,8 +720,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if str(result.get('success')).lower() == "true" and len(result.get('mfgSerialNumber')) != 0:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                info["Test_Step_Status"] = "FAILURE"
-
+                info["Test_Step_Status"] = "FAILURE"    
+        
         elif tag == "system_validate_territory_region":
             info["territory"] = result.get('territory')
             info["region"] = result.get('region')
@@ -3477,47 +3477,60 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "check_mount_device_path":
             mounted = result.get('mounted')
             success = result.get('success')
+            info["mounted"] = mounted
+            info["success"] = success
             #Check result value empty or not
             if mounted and success:
                 #Check success value not equal false
                 if str(success).lower() != "false":
-                    info["mounted"] = mounted
-                    info["success"] = success
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["mounted"] = mounted
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
             else:
-                info["mounted"] = mounted
-                info["success"] = success
+                if expectedValues and str(success).lower() != "false":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_mount_device_path_after_reboot":
+            mounted = result.get('mounted')
+            success = result.get('success')
+            info["mounted"] = mounted
+            info["success"] = success
+            if mounted and success:
+                if str(success).lower() != "false" and expectedValues[0] in mounted:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_get_link":
             links = result.get('links')
+            success = result.get('success')
             if links:
                 path = links[0].get('path')
                 baseURL = links[0].get('baseURL')
-                success = result.get('success')
-                if str(success).lower() == "true":
-                    info["path"] = path
-                    info["baseURL"] = baseURL
-                    info["success"] = success
+                info["path"] = path
+                info["baseURL"] = baseURL
+                info["success"] = success
+                if expectedValues:
+                    if expectedValues[0] in baseURL and str(success).lower() == "true":
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif str(success).lower() == "true":
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["path"] = path
-                    info["baseURL"] = baseURL
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
             else:
-                success = result.get('success')
-                if str(success).lower() == "true":
-                    info["links"] = links
-                    info["success"] = success
+                info["links"] = links
+                info["success"] = success
+                if expectedValues and str(success).lower() == "true":
+                    info["Test_Step_Status"] = "SUCCESS"
+                elif str(success).lower() == "true":
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["links"] = links
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_create_link":
@@ -3526,22 +3539,19 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             error = result.get("error")
             #Check result value empty or not
             if baseURL and success:
+                info["baseURL"] = baseURL
+                info["success"] = success
                 if str(success).lower() == "true":
-                    info["baseURL"] = baseURL
-                    info["success"] = success
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
-                    info["baseURL"] = baseURL
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
             else:
+                info["success"] = success
                 if error:
                     info["error"] = error
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
                 else:
                     info["baseURL"] = baseURL
-                    info["success"] = success
                     info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_clear_link":
@@ -3562,24 +3572,75 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "usbaccess_negative_scenario":
             success = result.get('success')
             error = str(result.get("error")).strip()
-            if expectedValues:
-                if str(success).lower() == "false" and expectedValues[0] in error:
-                    info["error"] = error
-                    info["success"] = success
-                    info["Test_Step_Status"] = "SUCCESS"
-                else:
-                    info["error"] = error
-                    info["success"] = success
-                    info["Test_Step_Status"] = "FAILURE"
+            info["error"] = error
+            info["success"] = success
+            if str(success).lower() == "false" and expectedValues[0] in error:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_get_file_list":
+            success = result.get('success')
+            contents = result.get('contents')
+            info["contents"] = contents
+            info["success"] = success
+            if str(success).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "usbaccess_archive_logs":
             success = result.get('success')
+            info["success"] = success
             if str(success).lower() == "true":
-                info["success"] = success
                 info["Test_Step_Status"] = "SUCCESS"
             else:
-                info["success"] = success
                 info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_get_power_state":
+            powerState = result.get("powerState")
+            success = result.get('success')
+            info["powerState"] = powerState
+            info["success"] = success
+            if powerState and success:
+                if expectedValues:
+                    if str(success).lower() == "true" and powerState in expectedValues:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif str(success).lower() == "true":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag =="usbaccess_check_available_Firmware_file":
+            availableFirmwareFiles = result.get("availableFirmwareFiles")
+            success = result.get('success')
+            info["availableFirmwareFiles"] = availableFirmwareFiles
+            info["success"] = success
+            if availableFirmwareFiles and success:
+                for files in availableFirmwareFiles:
+                    if str(success).lower() == "true" and expectedValues[0] in files:
+                        info["Test_Step_Status"] = "SUCCESS"
+                        break
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_check_available_Firmware_file_negative_scenario":
+            availableFirmwareFiles = result.get("availableFirmwareFiles")
+            success = result.get('success')
+            info["availableFirmwareFiles"] = availableFirmwareFiles
+            info["success"] = success
+            for files in availableFirmwareFiles:
+                if str(success).lower() == "true" and arg[0] not in files:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+                    break
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -3861,6 +3922,22 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             baseURL = testStepResults[0].get("baseURL")
             if baseURL:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "usbaccess_set_power_state":
+            testStepResults = list(testStepResults[0].values())[0]
+            powerState = testStepResults[0].get("powerState")
+            if powerState in "ON":
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "usbaccess_check_parameter":
+            testStepResults = list(testStepResults[0].values())[0]
+            tr181parametervalue = testStepResults[0].get("tr181parametervalue")
+            if "true" not in tr181parametervalue:
                 result = "TRUE"
             else:
                 result = "FALSE"
@@ -4826,7 +4903,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             links = testStepResults[0].get("links")
             info["baseURL"] = links.get("baseURL")
 
-        elif tag =="usbaccess_get_monutdevice_previous_result":
+        elif tag =="usbaccess_get_mountdevice_previous_result":
             testStepResults = list(testStepResults[0].values())[0]
             info["path"] = testStepResults[0]['mounted'][0]
 
@@ -4837,6 +4914,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag =="usbaccess_get_logfilepath_previous_result":
             testStepResults = list(testStepResults[0].values())[0]
             info["path"] = testStepResults[0].get("path")
+
+        elif tag =="usbaccess_get_firmwarefile_previous_result":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["path"] = testStepResults[0].get("dummyfirmwarefile")
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -5244,6 +5325,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_log_file":
+            #Check whether log file present or not inside USB
             command ="[ -f "+arg[0]+" ] && echo 1 || echo 0"
             output = executeCommand(execInfo, command)
             output = output.split("\n")
@@ -5252,6 +5334,151 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 print("\n"+arg[0]+" file not present")
+                info["Test_Step_Status"] = "FAILURE"
+            
+        elif tag == "check_log_file_format":
+            #Check whether log file name comprises of Mac of the device,date and time in a tgz format or not
+            command ='[[ -f "'+arg[0]+'" && "'+arg[0]+'" =~ ^/[a-zA-Z0-9_/.-]+/[0-9A-F]{12}_Logs_[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}-[0-9]{2}(AM|PM)\.tgz$ ]] && echo "1" || echo "0"'
+            output = executeCommand(execInfo, command)
+            output = output.split("\n")
+            if int(output[1]) == 1:
+                print("\n"+arg[0]+" file name format is correct")
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print("\n"+arg[0]+" file name format is incorrect")
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "unmount_usb_drive":
+            #Command for unmount USB drive from device
+            command ="umount "+arg[0]+" && echo 1 || echo 0"
+            output = executeCommand(execInfo, command)
+            output = output.split("\n")
+            if int(output[1]) == 1:
+                print("\n"+arg[0]+" SUCCESS : Unmount USB drive successfully")
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print("\n"+arg[0]+" FAILURE : Unmount USB drive failed")
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "mount_usb_drive":
+            #Command for mount USB drive
+            command ="mount "+expectedValues[0]+" "+arg[0]+" && echo 1 || echo 0"
+            output = executeCommand(execInfo, command)
+            output = output.split("\n")
+            if int(output[1]) == 1: 
+                print("\n"+arg[0]+" SUCCESS : Mount USB drive successfully")
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print("\n"+arg[0]+" FAILURE : Mount USB drive failed")
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "enable_tr181_parameter":
+            #Command for enable tr181 parameter
+            command ="tr181 -d -s -v true "+arg[0]
+            output = executeCommand(execInfo, command)
+            if "set operation success" in output.lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_tr181_parameter":
+            #Command for check tr181 parameter value
+            command ="tr181 "+arg[0]
+            output = executeCommand(execInfo, command)
+            output = str(output).split("\n")
+            output = output[1]
+            if expectedValues:
+                if str(expectedValues[0]) in output.lower():
+                    info["tr181parametervalue"] = output
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["tr181parametervalue"] = output
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["tr181parametervalue"] = output
+                info["Test_Step_Status"] = "SUCCESS"
+
+        elif tag == "usbaccess_create_directory":
+            command ="mkdir "+arg[1]+"/Test_Directory && echo 1 || echo 0"
+            output = executeCommand(execInfo, command)
+            output = str(output).split("\n")
+            output = int(output[1])
+            if output == 1:
+                print("\nTest_Directory created successfully inside USB")
+                if arg[0] == "directoryonly":
+                    info["dummyfirmwarefile"] = arg[1]+"/Test_Directory"
+                    info["Test_Step_Status"] = "SUCCESS"
+                elif arg[0] == "subdirectoryonly":
+                    command ="touch "+arg[1]+"/Test_Directory/"+expectedValues[0]+"_Dummy_SubDir_Firmware_File.bin && echo 1 || echo 0"
+                    output = executeCommand(execInfo, command)
+                    output = str(output).split("\n")
+                    output = int(output[1])
+                    if output == 1:
+                        print("\n"+expectedValues[0]+"_Dummy_SubDir_Firmware_File.bin file created successfully inside USB")
+                        info["dummyfirmwarefile"] = expectedValues[0]+"_Dummy_SubDir_Firmware_File.bin"
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        print("\nFailed to create"+expectedValues[0]+"_Dummy_SubDir_Firmware_File.bin file inside USB")
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    command ="touch "+arg[1]+"/"+expectedValues[0]+"_Dummy_Firmware_File.bin && echo 1 || echo 0"
+                    output = executeCommand(execInfo, command)
+                    output = str(output).split("\n")
+                    output = int(output[1])
+                    if output == 1:
+                        print("\n"+expectedValues[0]+"_Dummy_Firmware_File.bin file created successfully inside USB")
+                        info["dummyfirmwarefile"] = expectedValues[0]+"_Dummy_Firmware_File.bin"
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        print("\nFailed to create"+expectedValues[0]+"_Dummy_Firmware_File.bin file inside USB")
+                        info["Test_Step_Status"] = "FAILURE"
+            else:
+                print("\nFailed to create Test_Directory inside USB")
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "usbaccess_delete_directory":
+            if arg[0] == "directoryonly":
+                command ="rm -rf "+arg[1]+"/Test_Directory && echo 1 || echo 0"
+                output = executeCommand(execInfo, command)
+                output = str(output).split("\n")
+                output = int(output[1])
+                if output == 1:
+                    print("\nTest_Directory deleted successfully inside USB")
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    print("\nFailed to delete Test_Directory inside USB")
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                command ="rm -rf "+arg[1]+"/"+expectedValues[0]+"_Dummy_Firmware_File.bin && echo 1 || echo 0"
+                output = executeCommand(execInfo, command)
+                output = str(output).split("\n")
+                output = int(output[1])
+                if output == 1:
+                    print("\v"+expectedValues[0]+"_Dummy_Firmware_File.bin file deleted successfully inside USB")
+                    command ="rm -rf "+arg[1]+"/Test_Directory && echo 1 || echo 0"
+                    output = executeCommand(execInfo, command)
+                    output = str(output).split("\n")
+                    output = int(output[1])
+                    if output == 1:
+                        print("\nTest_Directory deleted successfully inside USB")
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        print("\nFailed to delete Test_Directory inside USB")
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    print("\nFailed to delete "+expectedValues[0]+"_Dummy_Firmware_File.bin file inside USB")
+                    info["Test_Step_Status"] = "FAILURE"
+        
+        elif tag == "check_log_file_present_or_not":
+            command ="tar -tzf "+arg[0]+" > /dev/null 2>&1 && echo 1 || echo 0"
+            output = executeCommand(execInfo, command)
+            output = str(output).split("\n")
+            output = int(output[1])
+            if output == 1:
+                print("\n"+arg[0]+" contains device logs file")
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print("\n"+arg[0]+" does not contain device logs file")
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":

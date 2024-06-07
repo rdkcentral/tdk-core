@@ -39,9 +39,57 @@
           </prerequisite>
 
 	  <!-- PluginPreRequisite 2 -->
-	  <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
-	      <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
-	      <event pluginName="UsbAccess" eventName="Event_On_Archive_Logs" />
+	  <prerequisite requisiteId="2" requisiteName="Activate_System_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="callsign" value="org.rdk.System" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+	
+	  <!-- PluginPreRequisite 3 -->
+          <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+              <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+              <event pluginName="UsbAccess" eventName="Event_On_Archive_Logs" />
+          </prerequisite>
+	  
+	  <!-- PluginPreRequisite 4 -->
+          <prerequisite requisiteId="4" requisiteName="Enable_TR181_Parameter" >
+            <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="check_tr181_parameter" >
+                  <arguments useConfigFile="true" key="USBACCESS_AUTOMOUNT_PARAMETER"/>
+                </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+		<conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+		<resultGeneration useMethodTag="enable_tr181_parameter" >
+                  <arguments useConfigFile="true" key="USBACCESS_AUTOMOUNT_PARAMETER"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+	        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/> 
+		<resultGeneration useMethodTag="system_check_set_operation"  />
+	    </testStep>
+	    <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+		<conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>    
+		<resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                  <arguments useConfigFile="true" key="USBACCESS_AUTOMOUNT_PARAMETER"/>
+                </resultGeneration>
+            </testStep>
           </prerequisite>
   	</pluginPreRequisite>
 
@@ -102,7 +150,7 @@
         </testCase>
        
 	<!-- Test case 02 -->
-	<testCase testCaseId="USBACCESS_02" testCaseName="UsbAccess_Clear_Link" desc="Verify that the clearLink method successfully removes a symbolic link that was created by the createLink method">
+	<testCase testCaseId="USBACCESS_02" testCaseName="UsbAccess_Verify_Clear_Link" desc="Verify that the clearLink method successfully removes a symbolic link that was created by the createLink method">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
 		 <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -119,7 +167,7 @@
 	    </testStep>
 	    <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
 		 <params>
-		        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+		        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
 	    	 </params>
 		 <resultGeneration useMethodTag="check_create_link"/>
 	    </testStep>
@@ -130,29 +178,29 @@
                  <resultGeneration useMethodTag="check_clear_link"/>
 	    </testStep>
 	    <testStep testStepId="6" name="Get_Link" method="Get_Links">
-                 <resultGeneration useMethodTag="check_get_link"/>
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
             </testStep>
         </testCase>
 
 	<!-- Test case 03 -->
-	<testCase testCaseId="USBACCESS_03" testCaseName="UsbAccess_Create_Clear_Link_Invalid_ParameterValue" desc="Check create and clearLink method returns an error when pass invalid parameter value">
+	<testCase testCaseId="USBACCESS_03" testCaseName="UsbAccess_Verify_Create_Clear_Link_With_Invalid_Input" desc="Verify both create and clear link methods return an error when an invalid input is passed">
 	    <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="Create_Link" method="Create_Link">
                  <params>
-                        <param tag="path" value="NonExistentLink"/>
+                        <param tag="path" value="null"/>
                  </params>
                  <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
             </testStep>
             <testStep testStepId="2" name="Clear_Link" method="Clear_Link">
                  <params>
-                         <param tag="baseURL" value="NonExistentLink"/>
+                         <param tag="baseURL" value="null"/>
                  </params>
                  <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not remove symlink"/>
             </testStep>
 	</testCase>    
 
 	<!-- Test case 04 -->
-        <testCase testCaseId="USBACCESS_04" testCaseName="UsbAccess_Create_Clear_Link_Twice" desc="Check create and clearLink method returns an error when call two times">
+        <testCase testCaseId="USBACCESS_04" testCaseName="UsbAccess_Verify_Create_Clear_Link_Twice" desc="Check create and clear link method returns an error when call two times">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -169,13 +217,13 @@
             </testStep>
             <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
                  <params>
-                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
                  </params>
                  <resultGeneration useMethodTag="check_create_link"/>
 	    </testStep>
 	    <testStep testStepId="5" name="Create_Link" method="Create_Link">
                  <params>
-                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
                  </params>
                  <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="symlink already exists"/>
             </testStep>
@@ -194,33 +242,33 @@
 	</testCase>
 
 	<!-- Test case 05 -->
-        <testCase testCaseId="USBACCESS_05" testCaseName="UsbAccess_Check_FileList_with_Invalid_Path" desc="Check whether getlist api returns an error while passing an invalid path">
+        <testCase testCaseId="USBACCESS_05" testCaseName="UsbAccess_Check_FileList_with_Invalid_Input" desc="Check whether getlist api returns an error while passing an invalid input">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
             </testStep>
-	    <testStep testStepId="2" name="Check_FileList_with_Invalid_Path" method="Get_File_List">
+	    <testStep testStepId="2" name="Check_FileList_wth_Invalid_Path" method="Get_File_List">
                  <params>
-                        <param tag="path" value="NonExistentLink"/>
+                        <param tag="path" value="null"/>
                  </params>
                  <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="not found"/>
 	    </testStep>
 	</testCase>
 
 	<!-- Test case 06 -->
-	<testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Archive_Logs" desc="Check whether compresses and uploads device logs into attached USB drive">
+	<testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Check_Archive_Logs_Event" desc="Check whether compresses and uploads device logs into attached USB drive">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
             </testStep>
 	    <testStep testStepId="2" name="Archive_Logs" method="Archive_Logs">
                  <params>
-                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_monutdevice_previous_result"/>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
                  </params>
                  <resultGeneration useMethodTag="usbaccess_archive_logs"/>
             </testStep>
  	    <testStep testStepId="3" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
-                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs"/>
+		    <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="none"/>
 	    </testStep>
 	    <testStep testStepId="4" name="Check_Log_File_InsideUsb" action="externalFnCall" >
 		 <resultGeneration useMethodTag="check_log_file">
@@ -228,4 +276,712 @@
 		 </resultGeneration>
 	    </testStep>
         </testCase>
+
+	<!-- Test case 07 -->
+        <testCase testCaseId="USBACCESS_07" testCaseName="UsbAccess_Check_Archive_Logs_With_Invalid_Input" desc="Check onarchive log event returns an error when an invalid input is passed">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" value="null"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="no usb"/>
+            </testStep>
+	</testCase>  
+
+	<!-- Test case 08 -->
+	<testCase testCaseId="USBACCESS_08" testCaseName="UsbAccess_Verify_Update_Firmware_With_Invalid_Input" desc="Check update firmware API returns an error when an invalid input is passed">
+	    <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="Update_Firmware_Invalid_ParameterValue" method="UsbAccess_Update_Firmware">
+                 <params>
+                        <param tag="fileName" value="null"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="invalid filename"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 09 -->
+        <testCase testCaseId="USBACCESS_09" testCaseName="UsbAccess_Get_File_List" desc="Check whether gets a list of files and folders from the specified directory or path">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Get_UsbFiles_List" method="Get_File_List">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_get_file_list"/>
+	    </testStep>
+    	</testCase>
+
+	<!-- Test case 10 -->
+        <testCase testCaseId="USBACCESS_10" testCaseName="UsbAccess_Create_Link_Non_Existent_Root_Folder" desc="Verify that createLink method returns an error when trying to create a symbolic link to a non-existent root folder of the USB drive">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" value="/test/tdk"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 11 -->
+        <testCase testCaseId="USBACCESS_11" testCaseName="UsbAccess_Check_FileList_Error_Non_Existent_Directory" desc="Verify that the getFileList method returns an error when the specified directory does not exist">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_FileList_Error_Non_Existent_Directory" method="Get_File_List">
+                 <params>
+                        <param tag="path" value="/test/tdk"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="not found"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 12 -->
+        <testCase testCaseId="USBACCESS_12" testCaseName="UsbAccess_Validate_ArchiveLogs_File_Name_Format" desc="Check if the ArchiveLogs method correctly names the compressed file with the Mac of the device, date, and time in a tgz format">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="15" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="none"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_Log_File_Format" action="externalFnCall" >
+                 <resultGeneration useMethodTag="check_log_file_format">
+                         <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 13 -->
+        <testCase testCaseId="USBACCESS_13" testCaseName="UsbAccess_Check_CreateLink_With_No_USB" desc="Verify that the createLink method returns an error when no USB drive is connected">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="3" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+            </testStep>
+	    <testStep testStepId="4" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
+	    </testStep>
+	    <testStep testStepId="5" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+			<arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+			<expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="6" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 14 -->
+        <testCase testCaseId="USBACCESS_14" testCaseName="UsbAccess_Check_getMounted_With_No_USB" desc="Verify that the getMounted method returns an empty list when there are no USB devices mounted on the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+	    </testStep>
+ 	    <testStep testStepId="4" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                        <expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	</testCase>	 
+
+	<!-- Test case 15 -->
+        <testCase testCaseId="USBACCESS_15" testCaseName="UsbAccess_Check_Archive_Logs_Event_With_No_USB" desc="Check the ArchiveLogs method when the USB drive is not attached">
+	    <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+            </testStep>
+	    <testStep testStepId="4" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+            <testStep testStepId="5" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="no usb"/>
+	    </testStep>
+	    <testStep testStepId="6" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                        <expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep> 
+        </testCase>
+
+	<!-- Test case 16 -->
+        <testCase testCaseId="USBACCESS_16" testCaseName="UsbAccess_ClearLink_Non_Existent_Link" desc="Verify that the clearLink method returns an error when trying to remove a symbolic link that does not exist">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" value="http://www.example.invalidurl"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not remove symlink"/>
+            </testStep>
+        </testCase>	
+
+        <!-- Test case 17 -->
+	<testCase testCaseId="USBACCESS_17" testCaseName="UsbAccess_Check_GetLinks_With_No_Created_Links" desc="Verify that the getLinks method returns an empty list when there are no created links">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
+            </testStep>
+	</testCase>
+
+	<!-- Test case 18 -->
+        <testCase testCaseId="USBACCESS_18" testCaseName="UsbAccess_Verify_GetMounted_Method" desc="Verify that the getMounted method returns a list of mounted USB device when there are USB device mounted on the device">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+        </testCase>	
+
+        <!-- Test case 19 -->
+        <testCase testCaseId="USBACCESS_19" testCaseName="UsbAccess_Update_Firmware_With_No_Input" desc="Verify that the updateFirmware method returns an error when no file is provided">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Update_Firmware_Invalid_ParameterValue" method="UsbAccess_Update_Firmware">
+                 <params>
+                        <param tag="fileName" value=""/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="invalid filename"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 20 -->
+	<testCase testCaseId="USBACCESS_20" testCaseName="UsbAccess_Check_Mounted_Device_After_Reboot" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device is restarted">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                 <resultGeneration useMethodTag="system_check_set_operation"  />
+            </testStep>
+	    <testStep testStepId="3" name="Get_Mounted_USB_Device" method="Get_Mounted" delay="10">
+	       	 <resultGeneration useMethodTag="check_mount_device_path_after_reboot">
+			<expectedValues  usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+		 </resultGeneration>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 21 -->
+        <testCase testCaseId="USBACCESS_21" testCaseName="UsbAccess_Check_Mounted_Device_After_Light_Sleep" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device in light sleep mode">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_Power_State" method="Get_Power_State" pluginName="System" saveResult="true">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+	    </testStep>
+	    <testStep testStepId="3" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+		<resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>    
+		<resultGeneration useMethodTag="system_get_preferred_standby_mode" />
+            </testStep>
+            <testStep testStepId="5" name="Set_Preferred_StandBy_Mode" method="Set_Preferred_StandBy_Mode"  pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>    
+		<params>
+                  <param tag="standbyMode" value="LIGHT_SLEEP" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+	    </testStep>
+	    <testStep testStepId="6" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="LIGHT_SLEEP"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+	    </testStep>
+	    <testStep testStepId="7" name="Get_Power_State" method="Get_Power_State" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="STANDBY,LIGHT_SLEEP"/>
+	    </testStep>
+	    <testStep testStepId="8" name="Get_Mounted_USB_Device" method="Get_Mounted">
+		<resultGeneration useMethodTag="check_mount_device_path_after_reboot">
+                        <expectedValues  usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+	    </testStep>
+
+	<testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+            <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+	    </testStep>
+	    <testStep testStepId="3" name="Check_power_state" method="Get_Power_State" pluginName="System">
+		<conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>    
+		<resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="ON" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+	</testCase>
+
+	<!-- Test case 22 -->
+	<testCase testCaseId="USBACCESS_22" testCaseName="UsbAccess_Check_Firmware_File" desc="Check getAvailableFirmwareFiles API return firmware files if present">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_Model_Name" action="externalFnCall" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="system_get_device_details_from_file" >
+                     <arguments value="model_number" useConfigFile="true" key="SYSTEM_DEVICE_DETAILS_FILE_PATH"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="3" name="Create_Directory_Inside_Usb" saveResult="true" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_create_directory">
+		     <arguments value="usb" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+		     <expectedValues usePreviousResult="true" Id="2" useMethodTag="system_get_device_details"/>	 
+                 </resultGeneration>
+            </testStep>
+	    <testStep testStepId="4" name="Get_Available_Firmware_Files" method="Get_Available_Firmware_Files">
+		 <resultGeneration useMethodTag="usbaccess_check_available_Firmware_file">
+		     <expectedValues usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_firmwarefile_previous_result"/>
+		 </resultGeneration>
+            </testStep>
+    	    <testStep testStepId="5" name="Delete_Directory_Inside_Usb" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_delete_directory">
+		     <arguments value="usb" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+		     <expectedValues usePreviousResult="true" Id="2" useMethodTag="system_get_device_details"/>
+                 </resultGeneration>
+            </testStep>   
+	</testCase> 
+
+	<!-- Test case 23 -->
+	<testCase testCaseId="USBACCESS_23" testCaseName="UsbAccess_Check_TarFileContains_LogFile" desc="Check if the tar file contains the device log file">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+ 	    <testStep testStepId="3" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="none"/>
+	    </testStep>
+	    <testStep testStepId="4" name="Check_Log_File_InsideUsb" action="externalFnCall" >
+		 <resultGeneration useMethodTag="check_log_file">
+			 <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
+		 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="5" name="Check_Log_File_Format" action="externalFnCall" >
+                 <resultGeneration useMethodTag="check_log_file_format">
+                         <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="6" name="Check_TarFileContains_LogFile" action="externalFnCall" >
+                 <resultGeneration useMethodTag="check_log_file_present_or_not">
+                         <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 24 -->
+	<testCase testCaseId="USBACCESS_24" testCaseName="UsbAccess_Check_Empty_File_List" desc="Check getFileList API return empty list if the empty dirctory is passed">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Create_Directory_Inside_Usb" saveResult="true" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_create_directory">
+                     <arguments value="directoryonly" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+	    <testStep testStepId="3" name="Get_UsbFiles_List" method="Get_File_List">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="2" useMethodTag="usbaccess_get_firmwarefile_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_get_file_list"/>
+            </testStep>
+	    <testStep testStepId="4" name="Delete_Directory_Inside_Usb" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_delete_directory">
+                     <arguments value="directoryonly" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+        </testCase>
+
+	 <!-- Test case 25 -->
+        <testCase testCaseId="USBACCESS_25" testCaseName="UsbAccess_Check_Archive_Logs_Event_After_Light_Sleep" desc="Verify that the ArchiveLogs method successfully compresses and uploads logs when the device is in a sleep state">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_Power_State" method="Get_Power_State" pluginName="System" saveResult="true">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+	    </testStep>
+	    <testStep testStepId="3" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+		<resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>    
+		<resultGeneration useMethodTag="system_get_preferred_standby_mode" />
+            </testStep>
+            <testStep testStepId="5" name="Set_Preferred_StandBy_Mode" method="Set_Preferred_StandBy_Mode"  pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>    
+		<params>
+                  <param tag="standbyMode" value="LIGHT_SLEEP" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+	    </testStep>
+	    <testStep testStepId="6" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="LIGHT_SLEEP"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+	    </testStep>
+	    <testStep testStepId="7" name="Get_Power_State" method="Get_Power_State" pluginName="System">
+		<conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="STANDBY,LIGHT_SLEEP"/>
+	    </testStep>
+	    <testStep testStepId="8" name="Get_Mounted_USB_Device" method="Get_Mounted">
+		<resultGeneration useMethodTag="check_mount_device_path_after_reboot">
+                        <expectedValues  usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="9" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+ 	    <testStep testStepId="10" name="Check_USB_Archive_Logs_Event" event="Event_On_Archive_Logs" action="eventListener" delay="10" saveResult="true">
+                 <resultGeneration useMethodTag="usbaccess_check_usb_archive_logs" expectedValues="none"/>
+	    </testStep>
+
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+            <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="3" name="Check_power_state" method="Get_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="ON" />
+            </testStep>
+         </postrequisite>
+        </testCasePostRequisite>
+    	</testCase> 
+
+	<!-- Test case 26 -->
+	<testCase testCaseId="USBACCESS_26" testCaseName="UsbAccess_Validate_GetLink_After_USB_UnmountAndMount" desc="Verify that the getLinks method returns the correct list of links after the USB drive is unmounted and then remounted">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+		 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+		 <resultGeneration useMethodTag="check_get_link"/>
+	    </testStep>
+	    <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+		 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+		 <param>
+			 <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+		 </param>
+		 <resultGeneration useMethodTag="check_clear_link"/>
+	    </testStep>
+	    <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+		 <params>
+		        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+	    	 </params>
+		 <resultGeneration useMethodTag="check_create_link"/>
+	    </testStep>
+	    <testStep testStepId="5" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="6" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+	    </testStep>
+ 	    <testStep testStepId="7" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                        <expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="8" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="9" name="Get_Link" method="Get_Links">
+		 <resultGeneration useMethodTag="check_get_link">
+			 <expectedValues  usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+		 </resultGeneration>
+            </testStep>
+	    <testStep testStepId="10" name="Clear_Link" method="Clear_Link">
+                 <params>
+			 <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+	    </testStep>
+	    <testStep testStepId="11" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 27 -->
+        <testCase testCaseId="USBACCESS_27" testCaseName="UsbAccess_Validate_Create_Link_After_USB_UnmountAndMount" desc="Verify that the create link method return an error after the USB drive is unmounted and then remounted">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+            <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+                 <param>
+                         <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+                 </param>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+	    <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_create_link"/>
+            </testStep>
+	    <testStep testStepId="5" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+	    <testStep testStepId="6" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+            </testStep>
+            <testStep testStepId="8" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                        <expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+            </testStep>	
+	    <testStep testStepId="9" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="10" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" value="null"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
+	    </testStep>
+	    <testStep testStepId="11" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="12" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
+            </testStep>
+    	</testCase>
+
+	<!-- Test case 28 -->
+        <testCase testCaseId="USBACCESS_28" testCaseName="UsbAccess_Validate_Clear_Link_After_USB_UnmountAndMount" desc="Verify that the clear link method successfully clear symbolic link after the USB drive is unmounted and then remounted">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+            <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+                 <param>
+                         <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+                 </param>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_create_link"/>
+            </testStep>
+            <testStep testStepId="5" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+            <testStep testStepId="6" name="Unmount_USB_Drive" action="externalFnCall" >
+                 <resultGeneration useMethodTag="unmount_usb_drive">
+                        <arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="7" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path" expectedValues="empty"/>
+	    </testStep>
+	    <testStep testStepId="8" name="Mount_USB_Drive" action="externalFnCall">
+                 <resultGeneration useMethodTag="mount_usb_drive">
+			<arguments usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+			<expectedValues useConfigFile="true" key="USBACCESS_MOUNT_PARTITION"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="9" name="Get_Mounted_USB_Device" method="Get_Mounted">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="10" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="11" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
+	    </testStep>
+	</testCase>
+
+	<!-- Test case 29 -->
+	<testCase testCaseId="USBACCESS_29" testCaseName="UsbAccess_Verify_Archive_Logs_API" desc="Check the archiveLogs API return success">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Archive_Logs" method="Archive_Logs">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_archive_logs"/>
+            </testStep>
+	</testCase>
+	
+	<!-- Test case 30 -->
+	<testCase testCaseId="USBACCESS_30" testCaseName="UsbAccess_Verify_CreateLink_With_No_Input" desc="Verify that the createLink methods return an error when an empty input is passed">
+	    <testCaseInfo testCaseType="direct"/>
+	    <testStep testStepId="1" name="Create_Link" method="Create_Link">
+                 <params>
+                        <param tag="path" value=""/>
+                 </params>
+                 <resultGeneration useMethodTag="usbaccess_negative_scenario" expectedValues="could not create symlink"/>
+	    </testStep>
+	</testCase>
+
+	<!-- Test case 31 -->
+        <testCase testCaseId="USBACCESS_31" testCaseName="UsbAccess_Verify_Create_Link" desc="Verify that the createLink method successfully removes a symbolic link and that was listed in getLink API">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Link" method="Get_Links" saveResult="true">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+            <testStep testStepId="3" name="Clear_Link" method="Clear_Link">
+                 <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_clear_link"/>
+                 <param>
+                         <param tag="baseURL" usePreviousResult="true" Id="2" useMethodTag="usbaccess_getlink_previous_result"/>
+                 </param>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="4" name="Create_Link" method="Create_Link" saveResult="true">
+                 <params>
+                        <param tag="path" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_create_link"/>
+            </testStep>
+	    <testStep testStepId="5" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link"/>
+            </testStep>
+	    <testStep testStepId="6" name="Clear_Link" method="Clear_Link">
+                 <params>
+                         <param tag="baseURL" usePreviousResult="true" Id="4" useMethodTag="usbaccess_get_createlink_previous_result"/>
+                 </params>
+                 <resultGeneration useMethodTag="check_clear_link"/>
+            </testStep>
+            <testStep testStepId="7" name="Get_Link" method="Get_Links">
+                 <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 32 -->
+        <testCase testCaseId="USBACCESS_32" testCaseName="UsbAccess_Validate_Firmware_Subdirectory_File_Not_Listed" desc="Verify that the firmware file is not listed within the subdirectory">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+            </testStep>
+	    <testStep testStepId="2" name="Get_Model_Name" action="externalFnCall" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="system_get_device_details_from_file" >
+                     <arguments value="model_number" useConfigFile="true" key="SYSTEM_DEVICE_DETAILS_FILE_PATH"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="3" name="Create_Directory_Inside_Usb" saveResult="true" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_create_directory">
+                     <arguments value="subdirectoryonly" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                     <expectedValues usePreviousResult="true" Id="2" useMethodTag="system_get_device_details"/>
+                 </resultGeneration>
+            </testStep>
+	    <testStep testStepId="4" name="Get_Available_Firmware_Files" method="Get_Available_Firmware_Files">
+                 <resultGeneration useMethodTag="usbaccess_check_available_Firmware_file_negative_scenario">
+                     <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_firmwarefile_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+	    <testStep testStepId="5" name="Delete_Directory_Inside_Usb" action="externalFnCall" >
+                 <resultGeneration useMethodTag="usbaccess_delete_directory">
+                     <arguments value="directoryonly" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+                 </resultGeneration>
+            </testStep>
+    	</testCase>	
 </testPlugin>
