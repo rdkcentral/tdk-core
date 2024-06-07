@@ -962,6 +962,10 @@ function callFunc(select) {
 				},
 				'copyDeviceIp' : function(node) {
 					copyDeviceIp(select);
+				},
+				'installTDK' : function(node) {
+					option = "installTDK"
+					installTDK(select);
 				}
 			}
 		});
@@ -1024,6 +1028,32 @@ function thunderDisabled(deviceId){
 		alert(" Thunder disabled");
 	});
 }
+var deviceeeId;
+function installTDK(deviceId){	
+		 $.get('tdkpackages', {deviceId:deviceId},function(data) {
+		 deviceeeId=deviceId
+		 if (data.includes("grailsLogo")) {
+        alert("No valid soc vendor not aviable");
+    }
+
+		  else{
+		  
+         $('#popup-container').html(data);
+		  $("#popup-container").modal({ opacity : 60, overlayCss : {
+		  backgroundColor : "#c4c4c4" }, containerCss: {
+			   autoOpen: true,
+    modal: true,
+    width: 500, // Initial width
+    height: 250, // Initial height
+         
+	        } }, { onClose : function(dialog) {
+		  $.modal.close(); } });
+		  }
+         // Show the popup
+     });
+	
+ }
+
 
 /**
  * Ajax call to refresh only the list table when dynamic refresh is enabled
@@ -1395,5 +1425,77 @@ function  executionTriggeredPopUp(){
 	alert("Execution Triggered ");	
 }
 
+ function submitForm(event) {
+	   var result = confirm("Device is going to reboot are you still want to proceed?");
+		 $('#outputDiv').hide();
+		 $('#progressContainer').hide();
+		  var isTure = false;
+		  $('#InstalltionCompleted').hide();
+	  if (result) {
+        // Prevent the default form submission behavior
+		$("#popup").show();
+		var selectedFiles = []; // Array to store selected files
+    var checkboxes = document.getElementsByName('selectedFiles');
 
-
+ for (var i = 0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            selectedFiles.push(checkboxes[i].value); // Add the value of checked checkbox to the array
+        }
+    }
+		$('#progressContainer').show();
+		 $('#progressBar').show();
+		   simulateProgress();
+			  $('#progressBar').css('width', '100%'); 
+		var testFiles=JSON.stringify(selectedFiles)
+			 $('#copyFiles').show();
+		  $.get('captureSelectedFiles', {deviceeeId:deviceeeId,selectedFiles: testFiles}, function(response) {
+					 $("#popup").show();
+					 $('#copyFiles').hide();
+					 $('#FetchLoges').show();
+					 $('#installButton').hide();
+					
+		var parsedResponse = $(response);
+	
+		 isTure = true;
+           parsedResponse.find('div').not('#outputDiv').hide(); // Show the outputDiv
+			$("#LogsFetched").show();
+			$('#FetchLoges').show();
+			 $('#InstalltionCompleted').show();
+			$('#outputDiv').empty().append(parsedResponse);
+			  $('#outputDiv').show();
+			  	$("#popup").hide();
+				
+			  var flashMessage = parsedResponse.find('#flashMessage').text();
+        
+        // Show an alert with the flash message
+        if (flashMessage.trim() !== "") {
+            alert(flashMessage);
+        }
+	 });
+		if ($('.shell-script-container').find('p').length > 0) {
+		    // Apply border if logs are present
+			$('#outputDiv').hide();
+		    $('.shell-script-container').css('border', 'none');
+			
+		} else {
+		    // Remove border if no logs are present
+		    $('.shell-script-container').css('border', '1px solid #ccc');
+		} 
+  } else {
+        // If user clicks "No", show an alert message
+        alert("Installation cancelled.");
+    }	
+	
+ }
+function simulateProgress() {
+            var progress = 0;
+            var interval = setInterval(function() {
+                if (progress < 100) {
+                    progress += 1;
+                    $('#progressBar').css('width', progress + '%');
+                } else {
+                    clearInterval(interval);
+                }
+            }, 100); // Adjust the interval as needed to match your backend process time
+        }	
+    
