@@ -14,12 +14,15 @@
  limitations under the License.
 -->
 <xml>
-  <module testGroup="Component" name="HdmicecHal">
+  <module name="HdmicecHal" testGroup="Component">
     <primitiveTests>
       <primitiveTest name="HdmicecHal_GetLogicalAddress" id="" version="1">
         <function>TestMgr_HdmicecHal_GetLogicalAddress</function>
         <parameters>
           <parameter name="dev_type" value="0"/>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_null_param_check" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="HdmicecHal_GetPhysicalAddress" id="" version="1">
@@ -49,6 +52,46 @@
       <primitiveTest name="HdmicecHal_SetRxCallback" id="" version="1">
         <function>TestMgr_HdmicecHal_SetRxCallback</function>
         <parameters/>
+      </primitiveTest>
+      <primitiveTest name="HdmicecHal_AddLogicalAddress" id=" " version="1">
+        <function>TestMgr_HdmicecHal_AddLogicalAddress</function>
+        <parameters>
+          <parameter name="Is_handle_invalid" value=""/>
+	  <parameter name="logical_addr" value=""/>
+	  <parameter name="handle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="HdmicecHal_RemoveLogicalAddress" id=" " version="1">
+        <function>TestMgr_HdmicecHal_RemoveLogicalAddress</function>
+        <parameters>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="logical_addr" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="HdmicecHal_AddLogicalAddress_InvalidHandle_check" id=" " version="1">
+        <function>TestMgr_HdmicecHal_RemoveLogicalAddress</function>
+        <parameters>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="logical_addr" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="HdmicecHal_Remove_LogicalAddress_InvalidHandle_Check" id=" " version="1">
+        <function>TestMgr_HdmicecHal_RemoveLogicalAddress</function>
+        <parameters>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="logical_addr" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="HdmicecHal_Add_LogicalAddress_InvalidArgument_Check" id=" " version="1">
+        <function>TestMgr_HdmicecHal_AddLogicalAddress</function>
+        <parameters>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="logical_addr" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>
