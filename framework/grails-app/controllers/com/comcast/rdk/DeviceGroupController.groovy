@@ -2978,6 +2978,27 @@ class DeviceGroupController {
 			render(template: "updateDeviceConfigDiv", model: [finalConfigFile:params?.stbName+".config"])
 		}
 	}
+	 /**
+	 * Method to get the device details 
+	 */
+	def getTdkDeviceDetails(String stbIp){
+		def jsonObjMap = [:]
+			if(stbIp)	{
+				Device deviceInstance = Device.findByStbIp(stbIp)//,BoxType.findByName(boxType.trim()))
+				if(deviceInstance){
+				List deviceInstanceList = Device.findAllByStbIp(stbIp)
+				jsonObjMap.put("device_name:",deviceInstance.stbName.toString())
+				jsonObjMap.put("device_ip:",deviceInstance.stbIp.toString())
+				jsonObjMap.put("device_status:",deviceInstance.deviceStatus.toString())
+				jsonObjMap.put("box_type:",deviceInstance.boxType.toString())
+				jsonObjMap.put("mac_id:",deviceInstance.serialNo.toString())
+				render jsonObjMap
+				}else{
+				jsonObjMap.put("status:"," Device not found")
+				render jsonObjMap
+				}
+			}
+	}
 
 }
 
