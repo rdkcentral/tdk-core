@@ -27,6 +27,8 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Disable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='TestMgr_HdmicecHal_GetLogicalAddress' />
@@ -35,16 +37,27 @@
       <function name='TestMgr_HdmicecHal_TxAsync' />
       <function name='TestMgr_HdmicecHal_SetTxCallback' />
       <function name='TestMgr_HdmicecHal_SetRxCallback' />
+      <function name='TestMgr_HdmicecHal_AddLogicalAddress' />
+      <function name='TestMgr_HdmicecHal_RemoveLogicalAddress' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
       <parameter funName='TestMgr_HdmicecHal_GetLogicalAddress' parameterName='dev_type' parameterType='INTEGER' range='0-15' />
+      <parameter funName='TestMgr_HdmicecHal_GetLogicalAddress' parameterName='Is_handle_invalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_HdmicecHal_GetLogicalAddress' parameterName='handle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_HdmicecHal_GetLogicalAddress' parameterName='Is_null_param_check' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_HdmicecHal_Tx' parameterName='header' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_HdmicecHal_Tx' parameterName='opcode' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_HdmicecHal_Tx' parameterName='receive_frames' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_HdmicecHal_TxAsync' parameterName='opcode' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_HdmicecHal_TxAsync' parameterName='header' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_HdmicecHal_TxAsync' parameterName='receive_frames' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_HdmicecHal_AddLogicalAddress' parameterName='logical_addr' parameterType='INTEGER' range='0-15' />
+      <parameter funName='TestMgr_HdmicecHal_AddLogicalAddress' parameterName='Is_handle_invalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_HdmicecHal_AddLogicalAddress' parameterName='handle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_HdmicecHal_RemoveLogicalAddress' parameterName='logical_addr' parameterType='INTEGER' range='0-15' />
+      <parameter funName='TestMgr_HdmicecHal_RemoveLogicalAddress' parameterName='Is_handle_invalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_HdmicecHal_RemoveLogicalAddress' parameterName='handle' parameterType='INTEGER' range='-1-15' />
     </parameters>
   </module>
 </xml>
