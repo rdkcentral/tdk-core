@@ -308,4 +308,32 @@ public class DeviceStatusService {
 		}
 		
 	}
+	
+	def tdkThunderOption(final String deviceName, Map jsonObjMap,boolean thunderEnable){
+		
+		Device.withTransaction {
+			Device dev = Device.findByStbName(deviceName)
+			if(thunderEnable == true){
+			if(dev?.isThunderEnabled==1 ){
+			jsonObjMap.put("status","Thunder already enabled.")
+		}else{
+			dev?.isThunderEnabled=Constants.CUSTOMTHUNDERENABLE
+			dev?.save(flush:true)
+			jsonObjMap.put("status","Thunder enabled.")
+		}}else{
+		if(dev?.isThunderEnabled==0){
+			jsonObjMap.put("status","Thunder already disabled.")
+			
+		}else{
+		dev?.isThunderEnabled=Constants.CUSTOMTHUNDERDISABLE
+		dev?.save(flush:true)
+		jsonObjMap.put("status","Thunder disabled.")
+			
+		}
+		
+		}
+}
+		
+		
+	}
 }

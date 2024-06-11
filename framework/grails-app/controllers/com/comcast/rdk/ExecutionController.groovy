@@ -6458,7 +6458,6 @@ class ExecutionController {
 		}
 	}
 	
-	
 	/**
 	 * Method to show tdk packages in the UI
 	 * @return
@@ -6664,4 +6663,18 @@ class ExecutionController {
 		return
 
 	}
+
+	 /**
+	 * Method to enable/disbale thunder using REST API
+	 */
+	 def thunderOption(String deviceName,boolean thunderEnable){
+		 def jsonObjMap = [:]
+		 try{
+			 deviceStatusService.tdkThunderOption(deviceName,jsonObjMap,thunderEnable)
+		 }catch(Exception e){
+			 e.printStackTrace()
+		 }
+		 render jsonObjMap as JSON
+	 }
+	
 }
