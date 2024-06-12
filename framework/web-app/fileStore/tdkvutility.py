@@ -73,12 +73,12 @@ def executeTest(obj, testcase , params="", returnObject = False):
 
 def readBigFile(obj, fileName):
     message = ""
-    bufferlength = 490
+    bufferlength = 470
     readbyte = bufferlength
     cutbyte = 0
     tdkTestObj = obj.createTestStep('ExecuteCommand')
     expectedResult = "SUCCESS"
-    print(" Reading File ",str(fileName))
+    print("Reading File : ",str(fileName))
     while (True):
         command = "dd if=" + str(fileName) + " bs=1 skip=" + str(cutbyte) + " count=" + str(readbyte) + " > /tmp/output.txt; cat /tmp/output.txt "
         tdkTestObj.addParameter("command", command)
@@ -93,8 +93,9 @@ def readBigFile(obj, fileName):
         else:
             print("File Read FAILURE")
             tdkTestObj.setResultStatus("FAILURE")
-            return message;
+            return message
     print("File Read SUCCESS")
-    message = message.replace(r'\n', '\n');
-    tdkTestObj.setResultStatus("SUCCESS");
+    message = message.replace(r'\n', '\n')
+    message = message.replace("\\","")
+    tdkTestObj.setResultStatus("SUCCESS")
     return message

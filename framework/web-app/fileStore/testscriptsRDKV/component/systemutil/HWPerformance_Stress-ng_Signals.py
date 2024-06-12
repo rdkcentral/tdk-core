@@ -112,7 +112,7 @@ if ("SUCCESS" in sysUtilLoadStatus.upper()):
             print("\n******************** HW Performance tools Execution Log - Begin *****************\n")
             print(output)
             print("\n********************* HW Performance tools Execution - End *********************\n")
-            result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" MB/s",reverserscheck="false")
+            result=hardwarePerformanceThresholdComparison(sysUtilObj,output,unit=" ops/s",reverserscheck="false")
             tdkTestObj.setResultStatus(result);
             print("[TEST EXECUTION RESULT] :  %s" %result)
         else:
