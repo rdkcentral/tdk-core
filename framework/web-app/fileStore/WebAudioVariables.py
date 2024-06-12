@@ -17,6 +17,9 @@
 # limitations under the License.
 #########################################################################
 
+#Configurable Path for WebAudio Related Test Cases
+wpe_webkit_testcases_path = ""
+
 #Browser instance to be used for WebAudio testing. (HtmlApp/LightningApp/WebKitBrowser)
 browser_instance="HtmlApp"
 

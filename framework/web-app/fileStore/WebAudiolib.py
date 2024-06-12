@@ -417,7 +417,7 @@ def webaudio_getLogs_webinspectpage(obj, url, browser,keys=[]):
         string_data = string_data.replace("}","")
         string_data = string_data.replace("[","")
         string_data = string_data.replace("]","")
-        key_value_pairs = string_data.split(',')
+        key_value_pairs = string_data.split('",')
         # Iterate over the key-value pairs
         for pair in key_value_pairs:
             # Split each pair by the first colon to separate key and value
@@ -425,7 +425,7 @@ def webaudio_getLogs_webinspectpage(obj, url, browser,keys=[]):
             key = key.strip('" ')
             key=key.replace("\\", "")
             key=key.replace('"','')
-            value = value.strip('" ')
+            value = value.strip('" ') 
             value = value.replace('\\',"")
             value = value.replace('"','')
             # Add key-value pair to the dictionary
