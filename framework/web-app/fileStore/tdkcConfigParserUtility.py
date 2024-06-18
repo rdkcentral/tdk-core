@@ -22,7 +22,7 @@
 #------------------------------------------------------------------------------
 import os
 import sys
-import ConfigParser
+import configparser
 import tdklib
 
 def parseDeviceConfig(obj):
@@ -46,10 +46,10 @@ def parseDeviceConfig(obj):
         configFilePath = os.path.dirname(os.path.realpath(__file__))
         configFilePath = configFilePath + "/tdkcDeviceConfig"
 
-        print "Device config file:", configFilePath+'/'+deviceConfig
+        print("Device config file:", configFilePath+'/'+deviceConfig)
 
         #Parse the device configuration file
-        config = ConfigParser.ConfigParser()
+        config = configparser.ConfigParser()
         config.read(configFilePath+'/'+deviceConfig)
 
         #Parse the file and store the values in global variables
@@ -117,8 +117,7 @@ def parseDeviceConfig(obj):
         global debug
         debug = config.get(deviceConfig,'UI_DEBUG_XPATH');
 
-    except Exception, e:
-        print e;
+    except Exception as e:
+        print(e);
         status = "Failed to parse the device specific configuration file"
     return status;
-
