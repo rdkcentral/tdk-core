@@ -1,0 +1,107 @@
+package com.rdkm.tdkservice.serviceimpl;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+
+import com.rdkm.tdkservice.config.JwtConfig;
+import com.rdkm.tdkservice.dto.SigninRequestDTO;
+import com.rdkm.tdkservice.dto.SigninResponseDTO;
+import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.model.User;
+import com.rdkm.tdkservice.repository.UserRepository;
+import com.rdkm.tdkservice.service.ILoginService;
+import com.rdkm.tdkservice.util.JWTUtils;
+
+/**
+ * The LoginService class is responsible for handling user authentication and
+ * registration. It provides methods for user registration and sign in. This
+ * class uses the UserRepository to interact with the database and the JWTUtils
+ * to generate JWT tokens.
+ */
+@Service
+public class LoginService implements ILoginService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(LoginService.class);
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Autowired
+	private JWTUtils jwtUtils;
+
+	@Autowired
+	private AuthenticationManager authenticationManager;
+
+	@Autowired
+	UserDetailsService userDetails;
+
+	@Autowired
+	UserService userService;
+
+	@Autowired
+	JwtConfig jwtConfig;
+
+	/**
+	 * This method is used to register a user.
+	 * 
+	 * @param register request - RegisterRequest
+	 * @return User - returns user object if successfully saved
+	 */
+	@Override
+	public boolean register(UserDTO registerRequest) {
+		LOGGER.info("Registed user the user");
+		boolean registeredUser = userService.createUser(registerRequest);
+		// TODO : Place holder for email based registration
+		return registeredUser;
+	}
+
+	/**
+	 * This method is used to authenticate a user. It takes a SigninRequest object
+	 * as input which contains the user's username and password. It first loads the
+	 * user details based on the username. If the user is not found, it throws a
+	 * UsernameNotFoundException. If the user is found, it authenticates the user
+	 * using the AuthenticationManager. After successful authentication, it
+	 * generates a JWT token for the user and sets it in the SigninResponse. It also
+	 * sets the expiration time of the token in the SigninResponse. The method
+	 * returns the SigninResponse object which contains the JWT token and its
+	 * expiration time.
+	 *
+	 * @param signinRequest - the request object containing the username and
+	 *                      password of the user
+	 * @return the SigninResponse object containing the JWT token and its expiration
+	 *         time
+	 * @throws UsernameNotFoundException if the user is not found
+	 */
+	@Override
+	public SigninResponseDTO signIn(SigninRequestDTO signinRequest) {
+		LOGGER.info("Recieved signin request" + signinRequest.toString());
+		SigninResponseDTO signinResponse = new SigninResponseDTO();
+
+		userDetails.loadUserByUsername(signinRequest.getUsername());
+		authenticationManager.authenticate(
+				new UsernamePasswordAuthenticationToken(signinRequest.getUsername(), signinRequest.getPassword()));
+
+		User user = userRepository.findByUsername(signinRequest.getUsername());
+
+		String jwt = jwtUtils.generateToken(user);
+		signinResponse.setToken(jwt);
+		signinResponse.setExpirationTime(jwtConfig.getExpirationTime());
+		signinResponse.setUserID(user.getId());
+		signinResponse.setUserEmail(user.getEmail());
+		signinResponse.setUserName(user.getUsername());
+		signinResponse.setUserRoleName(user.getUserRole().getName());
+		signinResponse.setThemeName(user.getTheme().getName());
+		signinResponse.setDisplayName(user.getDisplayName());
+		signinResponse.setUserGroupName(user.getUserGroup().getName());
+		LOGGER.info("Finished signin request" + signinRequest.toString());
+		return signinResponse;
+
+	}
+
+}
