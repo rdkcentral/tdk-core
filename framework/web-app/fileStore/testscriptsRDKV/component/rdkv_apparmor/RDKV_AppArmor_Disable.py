@@ -105,7 +105,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     print("Retrieving Configuration values from config file.......")
-    configKeyList = ["AppArmor_Profiles", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD"]
+    configKeyList = ["AppArmor_Profiles", "SSH_METHOD", "SSH_USERNAME", "SSH_PASSWORD", "AppArmor_Log_Filepath"]
     configValues = obtainCredentials(obj,configKeyList)
     AppArmor_Profiles = configValues["AppArmor_Profiles"]
     credentials = obj.IP + ',' + configValues["SSH_USERNAME"] + ',' + configValues["SSH_PASSWORD"]
@@ -200,7 +200,7 @@ if expectedResult in result.upper():
                         print("Status is valid in Apparmor_blocklist")
 
                         #Check for AppArmor initialization logs
-                        command = 'cat /opt/logs/startup_stdout_log.txt | grep "Starting AppArmor initialization"'
+                        command = 'cat '+configValues["AppArmor_Log_Filepath"]+' | grep "Started AppArmor initialization"'
                         print("COMMAND : %s" %(command))
                         #Primitive test case which associated to this Script
                         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
@@ -213,7 +213,7 @@ if expectedResult in result.upper():
                         tdkTestObj.executeTestCase(expectedResult);
                         result = tdkTestObj.getResult()
                         output = tdkTestObj.getResultDetails()
-                        if "Starting AppArmor initialization" in output:
+                        if "Started AppArmor initialization" in output:
                             print("AppArmor initialized successfully")
                         else:
                             print("Unable to get the required logs")
