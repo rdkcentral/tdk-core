@@ -6462,207 +6462,175 @@ class ExecutionController {
 	 * Method to show tdk packages in the UI
 	 * @return
 	 */
-	def tdkpackages() {
-		// Directory path within the project to fetch files from
-		List<String> allFilesList = new ArrayList<String>()
-		List<String> allFilessList = new ArrayList<String>()
-		List<String> totalAllFilessList = new ArrayList<String>()
-		def checkDeviceId=params?.deviceId
-		boolean checkStatus
-		Device device
-		try{
-			def pathName="//fileStore/tdk_packages/"
-			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
-			def directory = new File(directoryPath)
-			if (directory.exists() && directory.isDirectory()) {
-				allFilesList = directory.listFiles().collect { it.name }
-
-			}
-
-			allFilesList.each{fileee ->
-				def socVendorInstance=SoCVendor.findAllByName(fileee.toString())
-				def deviceInstance=Device.findBySoCVendor(socVendorInstance)
-				def deviceInstanceList=Device.findAllBySoCVendor(socVendorInstance)
-				deviceInstanceList.each{deviceeid ->
-
-					if((deviceInstance?.deviceStatus.toString().equals("FREE")) && (checkDeviceId?.equals(deviceInstance?.id.toString()))){
+    def tdkpackages() {
+        // Directory path within the project to fetch files from
+        List<String> allFilesList = new ArrayList<String>()
+        List<String> allFilessList = new ArrayList<String>()
+        List<String> totalAllFilessList = new ArrayList<String>()
+        def checkDeviceId=params?.deviceId
+        boolean checkStatus
+        Device device
+		
+        try{
+            def pathName="//fileStore/tdk_packages/"
+            def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+            def directory = new File(directoryPath)
+            if (directory.exists() && directory.isDirectory()) {
+                allFilesList = directory.listFiles().collect { it.name }
+            }
+            allFilesList.each{fileee ->
+               	
+					def socVendorInstance = SoCVendor.findByName(fileee)
+					def deviceInstanceList = Device.findAllBySoCVendor(socVendorInstance)
+                    deviceInstanceList.each{deviceeid ->
+					if((deviceeid?.deviceStatus.toString().equals("FREE")) && (checkDeviceId?.equals(deviceeid?.id.toString()))){
 						checkStatus=true
 						def directoryPathh = grailsApplication.parentContext.getResource("/fileStore/tdk_packages/${fileee}/").file.path
 						def directoryy = new File(directoryPathh)
 						if (directoryy.exists() && directoryy.isDirectory()) {
 							allFilessList = directoryy.listFiles().collect { it.name }
 							totalAllFilessList.addAll(allFilessList)
-
-						}
-
+						} 
 					}
+				}
+                
+            }
 
-				}}
+            if(!checkStatus){
+                redirect(view : "tdkpackages")
+            }
 
-			if(!checkStatus){
-				redirect(view : "tdkpackages")
-			}
-
-		}catch(Exception e){
-			e.printStackTrace()
-		}
-		render(template: "tdkpackages", model: [allFilesList : totalAllFilessList])
-	}
+        }catch(Exception e){
+            e.printStackTrace()
+        }
+		
+        render(template: "tdkpackages", model: [allFilesList : totalAllFilessList])
+    }
 	/**
 	 * Method to install the TDK Packages
 	 * @return
 	 */
-	def captureSelectedFiles() {
+def captureSelectedFiles() {
 
-		String deviceIp
-		def errorOutputLine
-		Device device
-		def selectedPackagesList = []
-		def errorLines = []
-		List<String> allFilesList = new ArrayList<String>()
-		def sshCommand
-		String line
-		def sshProcess
-		def errorOutput
-		boolean isFilesShared=false
-		def reader
-		def output = new StringBuilder()
-		boolean checkStatuss
-		boolean allocated = false
-		def user = "root"
-		def password = ""
-		def command = "systemctl status tdk | grep 'active (running)'"
-		String text
-		def shellScriptCommand="sh /InstallTDK.sh"
-		try{
+    String deviceIp
+    def errorOutputLine
+    Device device
+    def selectedPackagesList = []
+    def errorLines = []
+    List<String> allFilesList = new ArrayList<String>()
+    def sshCommand
+    String line
+    def sshProcess
+    def errorOutput
+    boolean isFilesShared=false
+    def reader
+    def output = new StringBuilder()
+    boolean checkStatuss
+    boolean allocated = false
+    def user = "root"
+    def password = ""
+    String text
+    def shellScriptCommand="sh /InstallTDKPackage.sh"
+    def remoteFilePath="/opt/TDK/logs/tdk_agent.log"
+    try {
 
-			device = Device.findById(params?.deviceeeId)
-			deviceIp = device?.stbIp
-			def checkDeviceId=params?.deviceeeId
-			def caputereId=params?.deviceeeId
+        device = Device.findById(params?.deviceeeId)
+        deviceIp = device?.stbIp
+        def checkDeviceId=params?.deviceeeId
+        def caputereId=params?.deviceeeId
+        def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+        def directory = new File(directoryPath)
+        if (directory.exists() && directory.isDirectory()) {
+            allFilesList = directory.listFiles().collect { it.name }
+        }
+        selectedPackagesList = params.selectedFiles // Get the JSON string of selected files
+        def selectedFileName = selectedPackagesList[1]
+        def result = selectedPackagesList.substring(2, selectedPackagesList.length() - 2)
 
-			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+        if(device?.deviceStatus.toString().equals("FREE")){
+            String status = ""
+            status = DeviceStatusUpdater.fetchDeviceStatus(grailsApplication, device)
+            synchronized (lock) {
+                if(executionService.deviceAllocatedList.contains(device?.id)){
+                    status = "BUSY"
+                }else{
+                    if((status.equals( Status.FREE.toString() ))){
+                        if(!executionService.deviceAllocatedList.contains(device?.id)){
+                            allocated = true
+                            executionService.deviceAllocatedList.add(device?.id)
 
-			def directory = new File(directoryPath)
+                            Thread.start{
+                                deviceStatusService.updateOnlyDeviceStatus(device, Status.BUSY.toString())
+                            }
+                        }
+                    }
+                }
+            }
+           
+            allFilesList.each{fileee ->
+                def socVendorInstance=SoCVendor.findByName(fileee.toString())
+                def deviceInstance=Device.findBySoCVendor(socVendorInstance)
+                def deviceInstanceList=Device.findAllBySoCVendor(socVendorInstance)	
+				deviceInstanceList.each { deviceInnstance ->
+						def checkingId = deviceInnstance?.id
+						def devName = deviceInnstance?.stbName
+			if(device?.stbName.toString().equals(devName.toString())){
+                    checkStatuss=true
+                    def sshKeyScanCommand = "ssh-keyscan -H ${deviceIp}"
+                    def sshKeyScanProcess = sshKeyScanCommand.execute()
+                    sshKeyScanProcess.waitFor()
+                    // Read the output of the ssh-keyscan command
+                    reader = new BufferedReader(new InputStreamReader(sshKeyScanProcess.inputStream))
+                    def knownHostsFile = new File("/root/.ssh/known_hosts")
 
-			if (directory.exists() && directory.isDirectory()) {
-				allFilesList = directory.listFiles().collect { it.name }
-			}
-			selectedPackagesList = params.selectedFiles // Get the JSON string of selected files
-			def selectedFileName = selectedPackagesList[1]
-			def result = selectedPackagesList.substring(2, selectedPackagesList.length() - 2)
-			if(device?.deviceStatus.toString().equals("FREE")){
-				String status = ""
-				status = DeviceStatusUpdater.fetchDeviceStatus(grailsApplication, device)
+                    while ((line = reader.readLine()) != null) {
+                        knownHostsFile.append(line + "\n")
+                    }
+                    reader.close()
 
-				synchronized (lock) {
-					if(executionService.deviceAllocatedList.contains(device?.id)){
-						status = "BUSY"
-					}else{
-						if((status.equals( Status.FREE.toString() ))){
-							if(!executionService.deviceAllocatedList.contains(device?.id)){
-								allocated = true
-								executionService.deviceAllocatedList.add(device?.id)
-
-								Thread.start{
-									deviceStatusService.updateOnlyDeviceStatus(device, Status.BUSY.toString())
-								}
-							}
-						}
-					}
+                    if(result){
+                        def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
+                        def scpFileProcess = scpCopyPackage.execute()
+                        scpFileProcess.waitFor()
+                        def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDKPackage.sh ${user}@${deviceIp}:/"
+                        def scpScriptProcess = scpCopyShellScript.execute()
+                        scpScriptProcess.waitFor()
+                    }
+                    String executeSSHCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} > ${remoteFilePath}; cat ${remoteFilePath}'"
+                    try {
+                        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", executeSSHCommand);
+                        Process process = processBuilder.start();
+                        process.waitFor();
+						BufferedReader readerr = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                        String linee;
+                        while ((linee = readerr.readLine()) != null) {
+                            render(template: "tdkpackages", model: [outputOfShellScript : linee.toString()])
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    if(allocated){
+                        executionService.deviceAllocatedList.remove(device?.id)
+                        allocated = false
+                    }
+                }
 				}
 
+            }
+            if(!checkStatuss){
+                return
+            }
+        }else{
+            redirect(action: "tdkpackages");
+            flash.message = "Device is down."
+            return
+        }}catch(Exception e){
+        e.printStackTrace()
+    }
 
-				allFilesList.each{fileee ->
-					def socVendorInstance=SoCVendor.findByName(fileee.toString())
-					def deviceInstance=Device.findBySoCVendor(socVendorInstance)
-					def deviceInstanceList=Device.findAllBySoCVendor(socVendorInstance)
-					def checkingId=deviceInstance?.id
-					if(checkDeviceId?.equals(checkingId.toString())){
-						checkStatuss=true
-						def sshKeyScanCommand = "ssh-keyscan -H ${deviceIp}"
-						def sshKeyScanProcess = sshKeyScanCommand.execute()
-						sshKeyScanProcess.waitFor()
+    return
 
-						// Read the output of the ssh-keyscan command
-						reader = new BufferedReader(new InputStreamReader(sshKeyScanProcess.inputStream))
-						def knownHostsFile = new File("/root/.ssh/known_hosts")
-
-						while ((line = reader.readLine()) != null) {
-							knownHostsFile.append(line + "\n")
-						}
-						reader.close()
-
-						sshCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} ${command}"
-						sshProcess = sshCommand.execute()
-						sshProcess.waitFor()
-						reader = new BufferedReader(new InputStreamReader(sshProcess.inputStream))
-
-						while ((line = reader.readLine()) != null) {
-							output.append(line).append('\n')
-							errorOutputLine = line
-						}
-						reader.close()
-						errorOutput = new BufferedReader(new InputStreamReader(sshProcess.errorStream))
-						while ((line = errorOutput.readLine()) != null) {
-							errorLines.add(line)
-						}
-						errorOutput.close()
-
-						if(result){
-							def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
-							def scpFileProcess = scpCopyPackage.execute()
-							scpFileProcess.waitFor()
-							def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDK.sh ${user}@${deviceIp}:/"
-							def scpScriptProcess = scpCopyShellScript.execute()
-							scpScriptProcess.waitFor()
-
-						}
-
-						sshCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} ${shellScriptCommand}"
-						sshProcess = sshCommand.execute()
-						sshProcess.waitFor()
-
-						reader = new BufferedReader(new InputStreamReader(sshProcess.inputStream))
-						while ((line = reader.readLine()) != null) {
-							output.append(line).append('\n')
-
-							render(template: "tdkpackages", model: [outputOfShellScript : line.toString()])
-						}
-
-						reader.close()
-
-
-						// Capture any error output from the SSH command
-						errorOutput = new BufferedReader(new InputStreamReader(sshProcess.errorStream))
-						while ((line = errorOutput.readLine()) != null) {
-							text=line
-						}
-
-						errorOutput.close()
-						if(allocated){
-							executionService.deviceAllocatedList.remove(device?.id)
-							allocated = false
-						}
-
-					}
-
-				}
-				if(!checkStatuss){
-					return
-				}
-			}else{
-
-				redirect(action: "tdkpackages");
-				flash.message = "Device is down."
-				return
-			}}catch(Exception e){
-			e.printStackTrace()
-		}
-
-		return
-
-	}
+}
 
 	 /**
 	 * Method to enable/disbale thunder using REST API
