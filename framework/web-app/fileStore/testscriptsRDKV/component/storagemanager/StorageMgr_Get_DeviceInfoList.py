@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>StorageMgr_Get_TSBCapacity</name>
+  <name>StorageMgr_Get_DeviceInfoList</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>GetTSBStatus</primitive_test_name>
+  <primitive_test_name>GetDeviceInfoList</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test Script to get the capacity of the TSB</synopsis>
+  <synopsis>Test Script to get the Device Info List</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RDKTV</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -58,27 +58,27 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_StorageMgr_03</test_case_id>
-    <test_objective>Test Script to get the capacity of the TSB</test_objective>
+    <test_case_id>TC_StorageMgr_12</test_case_id>
+    <test_objective>Test Script to get the list of Device Info</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
-    <api_or_interface_used>rdkStorage_getTSBCapacity</api_or_interface_used>
+    <api_or_interface_used>getDeviceInfoList</api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch>1.Load storagemanager module.
-2.Invoke getTSBCapacity API
-3.Should return the capacity of the TSB</automation_approch>
-    <expected_output>Should return TSB capacity</expected_output>
+2.Invoke the getDeviceInfolist API.
+3.Should return the Device Info List.
+</automation_approch>
+    <expected_output>Should return the Device Info List</expected_output>
     <priority>High</priority>
     <test_stub_interface>libstoragemanagerstub.so.0.0.0</test_stub_interface>
-    <test_script></test_script>
+    <test_script>StorageMgr_Get_DeviceInfoList</test_script>
     <skipped>No</skipped>
-    <release_version>M125</release_version>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
@@ -89,7 +89,7 @@ obj = tdklib.TDKScriptingLibrary("storagemanager","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'StorageMgr_Get_TSBCapacity');
+obj.configureTestCase(ip,port,'StorageMgr_Get_DeviceInfoList');
 
 
 #Get the result of connection with test component and DUT
@@ -100,22 +100,39 @@ if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacity API")
-    print("EXPECTED RESULT : Should return capacity of the TSB")
+    print("\nTEST STEP : Get the Device Info List using rdkStorage_getDeviceInfoList  API")
+    print("EXPECTED RESULT : Should get the Device Info List")
 
-    tdkTestObj = obj.createTestStep('GetTSBCapacity');
+    tdkTestObj = obj.createTestStep('GetDeviceInfoList');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    if expectedResult in actualResult and int(details) != 0:
+    details = details[:-1]
+    print("Device Info: ",details)
+
+    # Split the string by ", "
+    components = details.split(", ")
+    print("components", components)
+
+    result = True
+    for component in components:
+        key = component.split(" = ")[0]
+        print("\nkey : ",key)
+        value = (component.split("=")[1].replace(" ",""))
+        print("value",value)
+
+        if not value:
+            if "IfATAstandard" not in key:
+                print  ("%s value is missing"%(key))
+                result = False
+
+    if expectedResult in actualResult and result:
         tdkTestObj.setResultStatus("SUCCESS");
-        print("TSB Capacity : ",details)
         print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call was success")
+        print("ACTUAL RESULT: StorageMgr_GetDeviceInfoList call was success")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print("TSB Capacity : ",details)
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call failed")
+        print("ACTUAL RESULT: StorageMgr_GetDeviceInfo call failed")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("storagemanager");
@@ -123,5 +140,4 @@ if "SUCCESS" in loadModuleStatus.upper():
 else:
     print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
 

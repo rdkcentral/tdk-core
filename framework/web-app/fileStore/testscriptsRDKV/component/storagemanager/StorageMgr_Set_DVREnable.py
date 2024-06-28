@@ -50,10 +50,6 @@
   <box_types>
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
@@ -62,10 +58,10 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_StorageMgr_04</test_case_id>
+    <test_case_id>TC_StorageMgr_09</test_case_id>
     <test_objective>Test script to set DVR as enable in DVR unsupported device</test_objective>
     <test_type>Negative</test_type>
-    <test_setup>Video_Accelerator, RDKTV, RPI</test_setup>
+    <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
     <api_or_interface_used>setDVREnabled</api_or_interface_used>
     <input_parameters>isEnabled=true</input_parameters>

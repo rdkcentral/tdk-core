@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>StorageMgr_Get_TSBCapacity</name>
+  <name>StorageMgr_Set_Invalid_TSBMaxMinutes</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id></primitive_test_id>
+  <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>GetTSBStatus</primitive_test_name>
+  <primitive_test_name>SetTSBMinutes</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test Script to get the capacity of the TSB</synopsis>
+  <synopsis>Test Script to set the number of minutes allowed for TSB storage as invalid</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RDKTV</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -58,22 +58,23 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_StorageMgr_03</test_case_id>
-    <test_objective>Test Script to get the capacity of the TSB</test_objective>
+    <test_case_id>TC_StorageMgr_15</test_case_id>
+    <test_objective>Test Script to set the number of minutes allowed for TSB storage as invalid</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
-    <api_or_interface_used>rdkStorage_getTSBCapacity</api_or_interface_used>
-    <input_parameters></input_parameters>
+    <api_or_interface_used>setTSBMaxMinutes</api_or_interface_used>
+    <input_parameters>TSBminutes</input_parameters>
     <automation_approch>1.Load storagemanager module.
-2.Invoke getTSBCapacity API
-3.Should return the capacity of the TSB</automation_approch>
-    <expected_output>Should return TSB capacity</expected_output>
+2.Invoke the setTSBMaxMinutes API.
+3.Should set the minutes allowed for TSB storage.
+</automation_approch>
+    <expected_output>Should set the minutes allowed for TSB storage</expected_output>
     <priority>High</priority>
     <test_stub_interface>libstoragemanagerstub.so.0.0.0</test_stub_interface>
-    <test_script></test_script>
+    <test_script>StorageMgr_Set_Invalid_TSBMaxMinutes</test_script>
     <skipped>No</skipped>
-    <release_version>M125</release_version>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -89,8 +90,8 @@ obj = tdklib.TDKScriptingLibrary("storagemanager","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'StorageMgr_Get_TSBCapacity');
-
+obj.configureTestCase(ip,port,'StorageMgr_Get_TSBMaxMinutes');
+TSBminutes = -5;
 
 #Get the result of connection with test component and DUT
 loadModuleStatus = obj.getLoadModuleResult();
@@ -100,22 +101,41 @@ if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacity API")
-    print("EXPECTED RESULT : Should return capacity of the TSB")
+    print("\nTEST STEP 1 : Set the TSB Max minutes using rdkStorage_setTSBMaxMinutes API")
+    print("EXPECTED RESULT : Should Set the number of minutes allowed for TSB storage")
 
-    tdkTestObj = obj.createTestStep('GetTSBCapacity');
+    tdkTestObj = obj.createTestStep('SetTSBMinutes');
+    print("\nSet TSB max minutes %d" %(TSBminutes));
+    tdkTestObj.addParameter("TSBminutes",TSBminutes);
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    if expectedResult in actualResult and int(details) != 0:
+    print("TSB Max minutes = ",details)
+
+    if expectedResult in actualResult and int(details) == TSBminutes:
         tdkTestObj.setResultStatus("SUCCESS");
-        print("TSB Capacity : ",details)
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call was success")
+        print("[TEST EXECUTION RESULT] : SUCCESS")
+        print("\nTEST STEP 2 : Get the number of minutes allowed for TSB storage using rdkStorage_getTSBMaxMinutes API")
+        print("EXPECTED OUTPUT : Should get minutes as set TSB max minutes")
+
+        tdkTestObj = obj.createTestStep('GetTSBMaxMinutes');
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+        print("TSB Max minutes = ",details)
+
+        if expectedResult in actualResult and int(details) != 0:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
+            print("ACTUAL RESULT: StorageMgr_GetTSBMaxMinutes call was success")
+
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("ACTUAL RESULT: StorageMgr_GetTSBMaxMinutes call failed")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print("TSB Capacity : ",details)
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call failed")
+        print("ACTUAL RESULT: StorageMgr_SetTSBMaxMinutes call failed")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("storagemanager");
@@ -123,5 +143,4 @@ if "SUCCESS" in loadModuleStatus.upper():
 else:
     print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
 

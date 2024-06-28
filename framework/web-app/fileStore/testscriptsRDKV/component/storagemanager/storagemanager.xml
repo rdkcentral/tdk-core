@@ -13,9 +13,8 @@
  limitations under the License.
 -->
 
-<?xml version="1.0" encoding="UTF-8"?>
-<xml>
-  <module testGroup="Component" name="storagemanager">
+<?xml version="1.0" encoding="UTF-8"?><xml>
+  <module name="storagemanager" testGroup="Component">
     <primitiveTests>
       <primitiveTest name="GetDeviceID" id="" version="1">
         <function>TestMgr_StorageMgr_GetDeviceID</function>
@@ -65,6 +64,44 @@
         <function>TestMgr_StorageMgr_SetTSBEnabled</function>
         <parameters>
           <parameter name="isEnabled" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="SetTSBMinutes" id=" " version="1">
+        <function>TestMgr_StorageMgr_SetTSBMaxMinutes</function>
+        <parameters>
+          <parameter name="TSBminutes" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="GetTSBMaxMinutes" id="" version="1">
+        <function>TestMgr_StorageMgr_GetTSBMaxMinutes</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="GetDeviceInfo" id="" version="1">
+        <function>TestMgr_StorageMgr_GetDeviceInfo</function>
+	<parameters>
+	  <parameter name="DeviceID" value=""/>
+	  <parameter name="DeviceIDIndex" value=""/>
+	</parameters>
+      </primitiveTest>
+      <primitiveTest name="GetDeviceInfoList" id="" version="1">
+        <function>TestMgr_StorageMgr_GetDeviceInfoList</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="TSBMountPath" id="" version="1">
+        <function>TestMgr_StorageMgr_GetMountPath</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="GetHealth" id=" " version="1">
+        <function>TestMgr_StorageMgr_GetHealth</function>
+        <parameters>
+          <parameter name="DeviceID" value=""/>
+          <parameter name="DeviceIDIndex" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="Execute_Command" id=" " version="1">
+        <function>TestMgr_StorageMgr_GetMountPath</function>
+        <parameters>
+          <parameter name="command" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>

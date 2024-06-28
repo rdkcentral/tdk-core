@@ -23,21 +23,21 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>StorageMgr_Get_TSBCapacity</name>
+  <name>StorageMgr_Get_TSBPartitionMountPath_Reboot_Persist</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>GetTSBStatus</primitive_test_name>
+  <primitive_test_name>TSBMountPath</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test Script to get the capacity of the TSB</synopsis>
+  <synopsis>Test Script to get the mount path after reboot</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>1</execution_time>
+  <execution_time>3</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RDKTV</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -58,27 +58,27 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_StorageMgr_03</test_case_id>
-    <test_objective>Test Script to get the capacity of the TSB</test_objective>
+    <test_case_id>TC_StorageMgr_20</test_case_id>
+    <test_objective>Test Script to get the mount path after reboot</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
-    <api_or_interface_used>rdkStorage_getTSBCapacity</api_or_interface_used>
+    <api_or_interface_used>getTSBPartitionMountPath</api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch>1.Load storagemanager module.
-2.Invoke getTSBCapacity API
-3.Should return the capacity of the TSB</automation_approch>
-    <expected_output>Should return TSB capacity</expected_output>
+2.Invoke thegetTSBPartitionMountPath API.
+3.It should return the path TSB is mounted after reboot
+</automation_approch>
+    <expected_output>Should return the path TSB is mounted after reboot</expected_output>
     <priority>High</priority>
     <test_stub_interface>libstoragemanagerstub.so.0.0.0</test_stub_interface>
-    <test_script></test_script>
+    <test_script>StorageMgr_Get_TSBPartitionMountPath_Reboot_Persist</test_script>
     <skipped>No</skipped>
-    <release_version>M125</release_version>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
@@ -89,8 +89,7 @@ obj = tdklib.TDKScriptingLibrary("storagemanager","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'StorageMgr_Get_TSBCapacity');
-
+obj.configureTestCase(ip,port,'StorageMgr_Get_TSBPartitionMountPath');
 
 #Get the result of connection with test component and DUT
 loadModuleStatus = obj.getLoadModuleResult();
@@ -100,22 +99,40 @@ if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacity API")
-    print("EXPECTED RESULT : Should return capacity of the TSB")
+    print("\nTEST STEP : Get the TSB mount path using rdkStorage_getTSBPartitionMountPath API")
+    print("EXPECTED RESULT : Should return mount path of TSB")
 
-    tdkTestObj = obj.createTestStep('GetTSBCapacity');
+    tdkTestObj = obj.createTestStep('TSBMountPath');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    if expectedResult in actualResult and int(details) != 0:
+    print("TSB Mount Path = ",details)
+
+    if expectedResult in actualResult and details is not ():
         tdkTestObj.setResultStatus("SUCCESS");
-        print("TSB Capacity : ",details)
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call was success")
+        print("ACTUAL RESULT : TSB Mount Path was Success\n")
+
+        print("\nTEST STEP 2 : Device will going to reboot")
+        obj.initiateReboot();
+
+        tdkTestObj = obj.createTestStep('TSBMountPath');
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+        print("TSB Mount Path = ",details)
+
+        if expectedResult in actualResult and details is not ():
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("ACTUAL RESULT : TSB Mount Path was Success\n")
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("ACTUAL RESULT: TSB mount path was not coming as expected after reboot")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
+
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print("TSB Capacity : ",details)
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call failed")
+        print("ACTUAL RESULT: StorageMgr_GetTSBPartitionMountPath call was failed")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("storagemanager");
