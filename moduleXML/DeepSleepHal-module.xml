@@ -27,13 +27,20 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Disable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='TestMgr_DeepSleepHal_SetDeepSleep' />
+      <function name='TestMgr_DeepSleepHal_GetLastWakeupReason' />
+      <function name='TestMgr_DeepSleepHal_GetLastWakeupKeyCode' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
       <parameter funName='TestMgr_DeepSleepHal_SetDeepSleep' parameterName='timeout' parameterType='INTEGER' range='1-180' />
+      <parameter funName='TestMgr_DeepSleepHal_SetDeepSleep' parameterName='networkStandby' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DeepSleepHal_GetLastWakeupReason' parameterName='Is_null_param_check' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DeepSleepHal_GetLastWakeupKeyCode' parameterName='Is_null_param_check' parameterType='INTEGER' range='0-1' />
     </parameters>
   </module>
 </xml>

@@ -27,6 +27,8 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Disable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='TestMgr_PowerMgrHal_GetPowerState' />
@@ -39,6 +41,8 @@
       <function name='TestMgr_PowerMgrHal_SetPowerState' />
       <function name='TestMgr_PowerMgrHal_Reset' />
       <function name='TestMgr_PowerMgrHal_GetCmdTimeTaken' />
+      <function name='TestMgr_PowerMgrHal_SetWakeupSrc' />
+      <function name='TestMgr_PowerMgrHal_GetWakeupSrc' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -47,6 +51,10 @@
       <parameter funName='TestMgr_PowerMgrHal_SetClockSpeed' parameterName='speed' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_PowerMgrHal_SetPowerState' parameterName='state' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_PowerMgrHal_GetCmdTimeTaken' parameterName='cmd' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_PowerMgrHal_SetWakeupSrc' parameterName='wakeupsrc' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_PowerMgrHal_SetWakeupSrc' parameterName='Is_wkup_src_enable' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_PowerMgrHal_GetWakeupSrc' parameterName='wakeupsrc' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_PowerMgrHal_GetWakeupSrc' parameterName='Is_null_param_check' parameterType='INTEGER' range='0-1' />
     </parameters>
   </module>
 </xml>

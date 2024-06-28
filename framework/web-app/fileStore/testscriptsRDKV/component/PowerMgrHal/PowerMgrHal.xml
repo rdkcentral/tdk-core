@@ -65,6 +65,20 @@
           <parameter name="cmd" value="A-Z"/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="PowerMgrHal_SetWakeupSrc" id=" " version="2">
+        <function>TestMgr_PowerMgrHal_SetWakeupSrc</function>
+        <parameters>
+          <parameter name="wakeupsrc" value=""/>
+          <parameter name="Is_wkup_src_enable" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="PowerMgrHal_GetWakeupSrc" id=" " version="1">
+        <function>TestMgr_PowerMgrHal_GetWakeupSrc</function>
+        <parameters>
+          <parameter name="Is_null_param_check" value=""/>
+          <parameter name="wakeupsrc" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>

@@ -14,12 +14,25 @@
  limitations under the License.
 -->
 <xml>
-  <module name='DeepSleepHal' testGroup='Component'>
+  <module name="DeepSleepHal" testGroup="Component">
     <primitiveTests>
-      <primitiveTest name='DeepSleepHal_SetDeepSleep' id='' version='1'>
+      <primitiveTest name="DeepSleepHal_SetDeepSleep" id="" version="1">
         <function>TestMgr_DeepSleepHal_SetDeepSleep</function>
         <parameters>
-          <parameter name='timeout' value='60' />
+	<parameter name="timeout" value="60"/>
+	<parameter name="networkStandby" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DeepSleepHal_GetLastWakeupReason" id=" " version="1">
+        <function>TestMgr_DeepSleepHal_GetLastWakeupReason</function>
+        <parameters>
+          <parameter name="Is_null_param_check" value=""/>
+        </parameters>
+       </primitiveTest>
+      <primitiveTest name="DeepSleepHal_GetLastWakeupKeyCode" id=" " version="1">
+        <function>TestMgr_DeepSleepHal_GetLastWakeupKeyCode</function>
+        <parameters>
+          <parameter name="Is_null_param_check" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>
