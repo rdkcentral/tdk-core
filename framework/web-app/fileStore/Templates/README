@@ -1,0 +1,8 @@
+# This directory is used for Templates verification done as part of screenCaptureUtility
+
+##############################################################################################################
+# Image Templates are to be loaded in this directory so that verifyImageTemplate API of screenCaptureUtility
+# fetches from this folder and validates the template in the main image.
+# Image is fetched based on the configuration done in ScreenshotTemplates.config 
+# Ex : youtube.png
+##############################################################################################################
