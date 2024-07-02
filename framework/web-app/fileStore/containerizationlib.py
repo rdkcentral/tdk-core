@@ -451,7 +451,7 @@ def containerization_cloneDobby(basePath):
                 #Untar the dobby tar ball
                 #Command = untar dobby tar ball;
                 print("\n[INFO] Untaring Dobby security tool in DUT....")
-                command = "cd /home/root; tar xzf dobby-security-tool-remote.tar.gz; [ -d /home/root/dobby-security-tool ] && echo 1 || echo 0"
+                command = "cd /home/root; tar xzf dobby-security-tool-remote.tar.gz >/dev/null 2>&1; [ -d /home/root/dobby-security-tool ] && echo 1 || echo 0"
                 #SSH and execute command
                 result = containerization_executeInDUT(ssh_method,credentials,command)
                 if int(str(result).split("\n")[1]) == 1:
