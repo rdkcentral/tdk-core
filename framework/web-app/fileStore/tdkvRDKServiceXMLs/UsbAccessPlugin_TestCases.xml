@@ -921,7 +921,7 @@
 	</testCase>
 
 	<!-- Test case 31 -->
-        <testCase testCaseId="USBACCESS_31" testCaseName="UsbAccess_Verify_Create_Link" desc="Verify that the createLink method successfully removes a symbolic link and that was listed in getLink API">
+        <testCase testCaseId="USBACCESS_31" testCaseName="UsbAccess_Verify_Create_Link" desc="Verify that the createLink method successfully creates a symbolic link and that was listed in getLink API">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>

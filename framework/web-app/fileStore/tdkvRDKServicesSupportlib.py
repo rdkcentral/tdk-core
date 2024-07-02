@@ -198,6 +198,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "deviceinfo_validate_firmware_version":
+            imagename = result.get('imagename')
+            info["imagename"] = imagename
+            if imagename:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         # LocationSync Plugin Response result parser steps
         elif tag == "locationsync_get_location_info":
             if arg[0] == "get_all_info":
@@ -1059,6 +1067,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             result = result.get("error")
             info["message"] = result.get("message")
             if success and str(result.get("message")).lower() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "system_validate_image_version":
+            imageVersion = result.get('imageVersion')
+            success = result.get('success')
+            info["imageVersion"] = imageVersion
+            info["success"] = success
+            if imageVersion and success:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -2130,7 +2148,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_muted":
-            info["muted"] = result.get('muted');
+            info["muted"] = str(result.get('muted'));
             if str(result.get("success")).lower() == "true" and str(result.get('muted')) in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
@@ -3642,6 +3660,55 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "FAILURE"
                     break
 
+        # Combinational Plugin Response result parser steps
+        elif tag == "validate_audio_ports":
+            supportedAudioPorts = result.get("supportedAudioPorts")
+            success = result.get('success')
+            info["supportedAudioPorts"] = supportedAudioPorts
+            info["success"] = success
+            #Removing unwanted quotes
+            expectedValues = [elem.strip("[]' ") for item in expectedValues for elem in item.split(', ')]
+            if set(supportedAudioPorts) == set(expectedValues):
+                message = "DisplaySettings and DeviceInfo API's are returning same audio ports"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "DisplaySettings and DeviceInfo API's are not returning same audio ports"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "validate_video_ports":
+            supportedVideoDisplays = result.get("supportedVideoDisplays")
+            success = result.get('success')
+            info["supportedVideoDisplays"] = supportedVideoDisplays
+            info["success"] = success
+            #Removing unwanted quotes
+            expectedValues = [elem.strip("[]' ") for item in expectedValues for elem in item.split(', ')]
+            if set(supportedVideoDisplays) == set(expectedValues):
+                message = "DisplaySettings and DeviceInfo API's are returning same video ports"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "DisplaySettings and DeviceInfo API's are not returning same video ports"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "deviceinfo_check_audio_ports":
+            supportedAudioPorts = result.get("supportedAudioPorts")
+            info["supportedAudioPorts"] = supportedAudioPorts
+            if supportedAudioPorts:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "deviceinfo_check_video_ports":
+            supportedVideoDisplays = result.get("supportedVideoDisplays")
+            info["supportedVideoDisplays"] = supportedVideoDisplays
+            if supportedVideoDisplays:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -3938,6 +4005,30 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             tr181parametervalue = testStepResults[0].get("tr181parametervalue")
             if "true" not in tr181parametervalue:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "displaysettings_mute_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            muted_status = testStepResults[0].get("muted")
+            if len(arg) and arg[0] == "muted_status":
+                if "true" in muted_status.lower():
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if "false" in muted_status.lower():
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+
+        elif tag == "displaysettings_volume_level":
+            testStepResults = list(testStepResults[0].values())[0]
+            volume_Level = testStepResults[0].get("volumeLevel")
+            volume_Level_float = float(volume_Level)
+            volume_Level_int = int(volume_Level_float)
+            if volume_Level_int == 100:
                 result = "TRUE"
             else:
                 result = "FALSE"
@@ -4918,6 +5009,40 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag =="usbaccess_get_firmwarefile_previous_result":
             testStepResults = list(testStepResults[0].values())[0]
             info["path"] = testStepResults[0].get("dummyfirmwarefile")
+        
+        # Combinatinal Plugin Response result parser steps
+        elif tag =="get_previous_firmware_version":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["imagename"] = testStepResults1[0].get("imagename")
+            testStepResults2 = list(testStepResults[1].values())[0]
+            info["imageVersion"] = testStepResults2[0].get("imageVersion")
+        
+        elif tag =="get_previous_Serial_Number":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["serialnumber"] = testStepResults1[0].get("serialnumber")
+            testStepResults2 = list(testStepResults[1].values())[0]
+            info["serialNumber"] = testStepResults2[0].get("serialNumber")
+
+        elif tag =="get_previous_audio_ports":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["supportedAudioPorts"] = testStepResults1[0].get("supportedAudioPorts")
+
+        elif tag =="get_previous_video_ports":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["supportedVideoDisplays"] = testStepResults1[0].get("supportedVideoDisplays")
+
+        elif tag =="get_previous_host_EDID":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["EDID"] = testStepResults1[0].get("EDID")
+            testStepResults2 = list(testStepResults[1].values())[0]
+            info["host_edid"] = testStepResults2[0].get("host_edid")
+
+        elif tag =="get_previous_volume_level":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            volumeLevel = testStepResults1[0].get("volumeLevel")
+            volumeLevel_float = float(volumeLevel)
+            volumeLevel_int = int(volumeLevel_float)
+            info["volumeLevel"] = volumeLevel_int+1
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -5468,7 +5593,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 else:
                     print("\nFailed to delete "+expectedValues[0]+"_Dummy_Firmware_File.bin file inside USB")
                     info["Test_Step_Status"] = "FAILURE"
-        
+
         elif tag == "check_log_file_present_or_not":
             command ="tar -tzf "+arg[0]+" > /dev/null 2>&1 && echo 1 || echo 0"
             output = executeCommand(execInfo, command)
@@ -5479,6 +5604,36 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 print("\n"+arg[0]+" does not contain device logs file")
+                info["Test_Step_Status"] = "FAILURE"
+        
+        elif tag == "validate_image_version":
+            if arg[0].strip().lower() == arg[1].strip().lower():
+                message = "System and DeviceInfo API's are returning same firmware version"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "System and DeviceInfo API's are not returning same firmware version"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "validate_Serial_Number":
+            if arg[0].strip().lower() == arg[1].strip().lower():
+                message = "System and DeviceInfo API's are returning same serial number"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "System and DeviceInfo API's are not returning same serial number"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "validate_host_EDID":
+            if arg[0].strip().lower() == arg[1].strip().lower():
+                message = "DisplaySettings and DeviceInfo API's are returning same EDID details"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "DisplaySettings and DeviceInfo API's are not returning same EDID details"
+                info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":
