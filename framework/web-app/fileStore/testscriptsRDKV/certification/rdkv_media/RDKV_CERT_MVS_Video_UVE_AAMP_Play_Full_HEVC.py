@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>15</execution_time>
+  <execution_time>5</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -68,7 +68,7 @@
     <input_parameters>Lightning UVE AAMP player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_hevc: string</input_parameters>
+video_src_url_short_duration_hevc: string</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket conntion to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
 3. Launch webkit instance with uve aamp test app with the src url, operations to be performed i.e playtillend.
@@ -125,7 +125,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         appURL    = MediaValidationVariables.lightning_uve_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_hevc
+        videoURL  = MediaValidationVariables.video_src_url_short_duration_hevc
         # Setting VideoPlayer Operations
         setOperation("playtillend","0")
         operations = getOperations()

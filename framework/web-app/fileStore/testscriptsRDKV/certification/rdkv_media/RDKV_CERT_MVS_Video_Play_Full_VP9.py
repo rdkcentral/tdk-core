@@ -37,7 +37,7 @@
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>30</execution_time>
+  <execution_time>5</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -68,7 +68,7 @@
     <input_parameters>Lightning player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_vp9: string
+video_src_url_short_duration_vp9: string
 vp9_url_type:string
 play_interval: int
 pause_interval:int</input_parameters>
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_vp9
+        videoURL  = MediaValidationVariables.video_src_url_short_duration_vp9
         # Setting VideoPlayer Operations
         setOperation("playtillend","0")
         operations = getOperations()
