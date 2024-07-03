@@ -43,7 +43,7 @@ def stopDsmgrService(obj):
     tdkTestObj.executeTestCase(expectedResult);
 
     actualResult = tdkTestObj.getResult();
-    print("Exceution result: ", actualResult);
+    print("Execution result: ", actualResult);
 
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
@@ -57,7 +57,7 @@ def stopDsmgrService(obj):
             tdkTestObj.addParameter("command", cmd);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print("Exceution result: ", actualResult);
+            print("Execution result: ", actualResult);
 
             if expectedResult in actualResult:
                 details = tdkTestObj.getResultDetails();
@@ -91,7 +91,7 @@ def startDsmgrService(obj):
     tdkTestObj.executeTestCase(expectedResult);
 
     actualResult = tdkTestObj.getResult();
-    print("Exceution result: ", actualResult);
+    print("Execution result: ", actualResult);
 
     if expectedResult in actualResult:
         details = tdkTestObj.getResultDetails();
@@ -105,7 +105,7 @@ def startDsmgrService(obj):
             tdkTestObj.addParameter("command", cmd);
             tdkTestObj.executeTestCase(expectedResult);
             actualResult = tdkTestObj.getResult();
-            print("Exceution result: ", actualResult);
+            print("Execution result: ", actualResult);
 
             if expectedResult in actualResult:
                 details = tdkTestObj.getResultDetails();
@@ -125,3 +125,52 @@ def startDsmgrService(obj):
         tdkTestObj.setResultStatus("FAILURE");
         print("Command execution failed");
     return status;
+
+def EnableVideoPort(dshalObj):
+    tdkTestObj = dshalObj.createTestStep('DSHal_IsVideoPortEnabled');
+    expectedResult="SUCCESS"
+    #Execute the test case in STB
+    tdkTestObj.executeTestCase(expectedResult);
+    actualResult = tdkTestObj.getResult();
+    print("DSHal_IsVideoPortEnabled result: ", actualResult)
+    origStatus = tdkTestObj.getResultDetails();
+    valueMap = {"true":1, "false":0};
+
+    if expectedResult in actualResult and origStatus == "true":
+        return True
+    elif expectedResult in actualResult and origStatus == "false":
+        enableVal = 1
+        print("Trying to change status to ", enableVal);
+
+        tdkTestObj = dshalObj.createTestStep('DSHal_EnableVideoPort');
+        tdkTestObj.addParameter("enable", enableVal);
+        #Execute the test case in STB
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        print("DSHal_EnableVideoPort result: ", actualResult)
+        details = tdkTestObj.getResultDetails();
+        print(details);
+        sleep(2);
+
+        #Check if new status set
+        if expectedResult in actualResult:
+            tdkTestObj = dshalObj.createTestStep('DSHal_IsVideoPortEnabled');
+            #Execute the test case in STB
+            tdkTestObj.executeTestCase(expectedResult);
+            actualResult = tdkTestObj.getResult();
+            print("DSHal_IsVideoPortEnabled result: ", actualResult)
+            newStatus = tdkTestObj.getResultDetails();
+            print(newStatus);
+            if expectedResult in actualResult and valueMap[newStatus] == enableVal:
+                tdkTestObj.setResultStatus("SUCCESS");
+                print("Video port enable status set to ", newStatus);
+                return True
+            else:
+                tdkTestObj.setResultStatus("FAILURE")
+                return False
+        else:
+            tdkTestObj.setResultStatus("FAILURE")
+            return False
+    else:
+        tdkTestObj.setResultStatus("FAILURE")
+        return False

@@ -94,20 +94,27 @@ from dshalUtility import *;
 
 #Test component to be tested
 dshalObj = tdklib.TDKScriptingLibrary("dshal","1");
+sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 dshalObj.configureTestCase(ip,port,'DSHal_GetAndSetResolution_HDMI_InvalidAspectRatio');
+sysUtilObj.configureTestCase(ip,port,'DSHal_GetAndSetResolution_HDMI_InvalidAspectRatio');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
+sysUtilloadModuleStatus = sysUtilObj.getLoadModuleResult();
+print("[DSHAL LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
+print("[SYSTEMUTIL LIB LOAD STATUS]  :  %s" %sysUtilloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
+sysUtilObj.setLoadModuleStatus(sysUtilloadModuleStatus);
 
-if "SUCCESS" in dshalloadModuleStatus.upper():
+if "SUCCESS" in dshalloadModuleStatus.upper() and "SUCCESS" in sysUtilloadModuleStatus.upper():
+    print ("Stopping dsmgr service")
+    stopDsmgrService(sysUtilObj)
     expectedResult="SUCCESS";
     #Prmitive test case which associated to this Script
     tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
@@ -160,6 +167,9 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
+    print ("Resetting dsmgr service")
+    startDsmgrService(sysUtilObj)
+    sysUtilObj.unloadModule("systemutil")
 
 else:
     print("Module load failed");

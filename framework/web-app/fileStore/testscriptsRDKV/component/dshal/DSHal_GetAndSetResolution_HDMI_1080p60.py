@@ -93,24 +93,32 @@ Checkpoint 2 Verify that the resolution is set</expected_output>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
+import time
 from dshalUtility import *;
 
 #Test component to be tested
 dshalObj = tdklib.TDKScriptingLibrary("dshal","1");
+sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 dshalObj.configureTestCase(ip,port,'DSHal_GetAndSetResolution_HDMI_1080p60');
+sysUtilObj.configureTestCase(ip,port,'DSHal_GetAndSetResolution_HDMI_1080p60');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = dshalObj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
+sysUtilloadModuleStatus = sysUtilObj.getLoadModuleResult();
+print("[DSHAL LIB LOAD STATUS]  :  %s" %dshalloadModuleStatus);
+print("[SYSTEMUTIL LIB LOAD STATUS]  :  %s" %sysUtilloadModuleStatus);
 
 dshalObj.setLoadModuleStatus(dshalloadModuleStatus);
+sysUtilObj.setLoadModuleStatus(sysUtilloadModuleStatus);
 
-if "SUCCESS" in dshalloadModuleStatus.upper():
+if "SUCCESS" in dshalloadModuleStatus.upper() and "SUCCESS" in sysUtilloadModuleStatus.upper():
+    print ("Stopping dsmgr service")
+    stopDsmgrService(sysUtilObj)
     expectedResult="SUCCESS";
     #Prmitive test case which associated to this Script
     tdkTestObj = dshalObj.createTestStep('DSHal_GetVideoPort');
@@ -132,13 +140,14 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         print("DSHal_IsDisplayConnected result: ", actualResult)
         if expectedResult in actualResult:
             tdkTestObj.setResultStatus("SUCCESS");
-            details = tdkTestObj.getResultDetails();
-            print("Display connection status: ", details)
-            if details == "true":
+            display_details = tdkTestObj.getResultDetails();
+            print("Display connection status: ", display_details)
+            if display_details == "true" and EnableVideoPort(dshalObj):
                 resolution = "1080p60";
+                
                 tdkTestObj = dshalObj.createTestStep('DSHal_SetResolution');
                 tdkTestObj.addParameter("resolution",resolution);
-                tdkTestObj.addParameter("pixelResolution",3); #dsVIDEO_PIXELRES_1920x1080
+                tdkTestObj.addParameter("pixelResolution",4); #dsVIDEO_PIXELRES_1920x1080
                 tdkTestObj.addParameter("aspectRatio",1);
                 tdkTestObj.addParameter("frameRate",8);#dsVIDEO_FRAMERATE_59dot94
                 tdkTestObj.addParameter("stereoScopicMode",1); #2D
@@ -182,6 +191,9 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         print("VideoPort handle not retrieved");
 
     dshalObj.unloadModule("dshal");
+    print ("Resetting dsmgr service")
+    startDsmgrService(sysUtilObj)
+    sysUtilObj.unloadModule("systemutil")
 
 else:
     print("Module load failed");
