@@ -23,21 +23,21 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>HdmicecHal_Remove_LogicalAddress_from_Source</name>
+  <name>DeepSleepHal_GetLastWakeupReason_InvalidArgument_Check</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>HdmicecHal_RemoveLogicalAddress</primitive_test_name>
+  <primitive_test_name>DeepSleepHal_GetLastWakeupReason</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>to remove the logical address from source device</synopsis>
+  <synopsis>Test script to check the GetLastWakeupReason API with the NULL param for negative case checks.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>3</execution_time>
+  <execution_time>1</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -56,26 +56,26 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_HdmicecHal_22</test_case_id>
-    <test_objective>To validate remove logical address from a source device</test_objective>
-    <test_type>positive</test_type>
+    <test_case_id>TC_DeepSleepHal_03</test_case_id>
+    <test_objective>Test script to verify HAL API PLAT_DS_GetLastWakeupReason with the invalid argument</test_objective>
+    <test_type>Negative</test_type>
     <test_setup>Video_Accelerator</test_setup>
-    <pre_requisite>1. TDK Agent should be up and running
-2. Connect any CEC enabled TV with the source device. 
-3.  HdmiCecOpen should open a CEC driver instance successfully and iarmbus event should be obtained from device ready call back</pre_requisite>
-    <api_or_interface_used>HDMI_CEC_STATUS HdmiCecRemoveLogicalAddress(int handle, int logicalAddresses);</api_or_interface_used>
-    <input_parameters>handle - handle
-    logicalAddresses - logical address to be released</input_parameters>
-    <automation_approch>1.Load the Hdmicec Hal module
-    2. Remove the logical address from the driver using HdmiCecRemoveLogicalAddress API.
-    3. Based on the return value obtained updated the test result as SUCCESS/FAILURE
-    4. Unload the module</automation_approch>
-    <expected_output>Driver should return invalid argument since it wont support if we use this API on source device</expected_output>
-    <priority>Hight</priority>
-    <test_stub_interface>libhdmicechalstub.so.0.0.0</test_stub_interface>
-    <test_script>HdmicecHal_Remove_LogicalAddress_from_Source</test_script>
-    <skipped>no</skipped>
-    <release_version>M125</release_version>
+    <pre_requisite>1.TDK agent should be up and running
+2.Initialize DeepSleep management module.
+</pre_requisite>
+    <api_or_interface_used> PLAT_DS_GetLastWakeupReason(DeepSleep_WakeupReason_t *wakeupReason)</api_or_interface_used>
+    <input_parameters>*wakeupReason - pointer variable to retrieve the wakeup reason value</input_parameters>
+    <automation_approch>1.Load the deep sleep hal module
+2.Initialise the deep sleep module using PLAT_DS_INIT API
+3.Invoke PLAT_DS_GetLastWakeupReason API by passing a NULL param.
+4.Update test result as SUCCESS/FAILURE if device satisfies expected behavior
+5.Unload the module</automation_approch>
+    <expected_output>Driver should handle the NULL check and return the correpsonding error.</expected_output>
+    <priority>High</priority>
+    <test_stub_interface>libdeepsleephalstub.so.0.0.0</test_stub_interface>
+    <test_script>DeepSleepHal_GetLastWakeupReason_InvalidArgument_Check</test_script>
+    <skipped>No</skipped>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -84,43 +84,47 @@
 import tdklib; 
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("hdmicechal","1");
+obj = tdklib.TDKScriptingLibrary("deepsleephal","1");
 
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'HdmicecHal_Remove_LogicalAddress_from_Source');
+obj.configureTestCase(ip,port,'DeepSleepHal_GetLastWakeupReason_InvalidArgument_Check');
 
 #Get the result of connection with test component and DUT
-result = obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result);
-if "SUCCESS" in result.upper():
+loadModuleStatus = obj.getLoadModuleResult();
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
+
+if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Remove the logical address using HdmiCecRemoveLogicalAddress API");
-    print("EXPECTED RESULT : Should get the invalid argument from driver");
     #Prmitive test case which associated to this Script
-    tdkTestObj = obj.createTestStep('HdmicecHal_RemoveLogicalAddress');
-    Is_handle_invalid = 0;
-    logical_addr = 6
-    tdkTestObj.addParameter("logical_addr",logical_addr);
-    tdkTestObj.addParameter("Is_handle_invalid",Is_handle_invalid);
+    tdkTestObj = obj.createTestStep('DeepSleepHal_GetLastWakeupReason');
+
+    #Adding the corresponding param values
+    Is_null_param_check = 1;
+    tdkTestObj.addParameter("Is_null_param_check", Is_null_param_check);
+
     #Execute the test case in DUT
     tdkTestObj.executeTestCase(expectedResult);
+
+    #Get the result of execution
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("FAILURE");
-        print("ACTUAL RESULT  : ",details)
-        print("[TEST EXECUTION RESULT] : FAILURE")
+        print(details)
+        print("ACTUAL RESULT: DeepSleepHal_GetLastWakeupReason call getting succeeded eventhough with the NULL params being passed")
+        print("[TEST EXECUTION RESULT]: FAILURE\n")
     else:
         tdkTestObj.setResultStatus("SUCCESS");
         print(details)
+        print("ACTUAL RESULT: DeepSleepHal_GetLastWakeupReason call failed as expected for invalid argument")
         print("[TEST EXECUTION RESULT]: SUCCESS\n")
 
-    obj.unloadModule("hdmicechal");
+    obj.unloadModule("deepsleephal");
 else:
     print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");

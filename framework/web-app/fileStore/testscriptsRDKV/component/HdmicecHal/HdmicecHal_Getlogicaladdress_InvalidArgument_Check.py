@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>HdmicecHal_Remove_LogicalAddress_from_Source</name>
+  <name>HdmicecHal_Getlogicaladdress_InvalidArgument_Check</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id> </primitive_test_id>
+  <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>HdmicecHal_RemoveLogicalAddress</primitive_test_name>
+  <primitive_test_name>HdmicecHal_GetLogicalAddress</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>to remove the logical address from source device</synopsis>
+  <synopsis>to verify the GetLogicalAddress HAL API by passing an invalid params.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -55,27 +55,27 @@
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
-  <test_cases>
-    <test_case_id>TC_HdmicecHal_22</test_case_id>
-    <test_objective>To validate remove logical address from a source device</test_objective>
-    <test_type>positive</test_type>
+   <test_cases>
+    <test_case_id>TC_HdmicecHal_23</test_case_id>
+    <test_objective>Test script to validate with the invalid NULL param</test_objective>
+    <test_type>negative</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. TDK Agent should be up and running
-2. Connect any CEC enabled TV with the source device. 
-3.  HdmiCecOpen should open a CEC driver instance successfully and iarmbus event should be obtained from device ready call back</pre_requisite>
-    <api_or_interface_used>HDMI_CEC_STATUS HdmiCecRemoveLogicalAddress(int handle, int logicalAddresses);</api_or_interface_used>
-    <input_parameters>handle - handle
-    logicalAddresses - logical address to be released</input_parameters>
+    2. Required a setup with CEC enabled TV connection
+3.  HdmiCecOpen should open a CEC driver instance successfully and iarmbus event should be obtained from device ready call back.</pre_requisite>
+    <api_or_interface_used>HdmiCecGetLogicalAddress(int handle, int *logicalAddresses)</api_or_interface_used>
+    <input_parameters>handle - driver handle
+    logicalAddresses - passing NULL param to validate</input_parameters>
     <automation_approch>1.Load the Hdmicec Hal module
-    2. Remove the logical address from the driver using HdmiCecRemoveLogicalAddress API.
-    3. Based on the return value obtained updated the test result as SUCCESS/FAILURE
+    2. Add the invalid NULL param to the driver using HdmiCecGetLogicalAddress API
+    3. Based on the return value updated the test result as SUCCESS/FAILURE
     4. Unload the module</automation_approch>
-    <expected_output>Driver should return invalid argument since it wont support if we use this API on source device</expected_output>
-    <priority>Hight</priority>
+    <expected_output>Driver should return the invalid argument</expected_output>
+    <priority>High</priority>
     <test_stub_interface>libhdmicechalstub.so.0.0.0</test_stub_interface>
-    <test_script>HdmicecHal_Remove_LogicalAddress_from_Source</test_script>
+    <test_script>HdmicecHal_Getlogicaladdress_InvalidArgument_Check</test_script>
     <skipped>no</skipped>
-    <release_version>M125</release_version>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -90,35 +90,32 @@ obj = tdklib.TDKScriptingLibrary("hdmicechal","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'HdmicecHal_Remove_LogicalAddress_from_Source');
+obj.configureTestCase(ip,port,'HdmicecHal_Getlogicaladdress_InvalidArgument_Check');
 
-#Get the result of connection with test component and DUT
-result = obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result);
-if "SUCCESS" in result.upper():
+#Get the result of connection with test component and STB
+loadModuleStatus = obj.getLoadModuleResult();
+print("[LIB LOAD STATUS]  :  %s" %loadModuleStatus);
+
+if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Remove the logical address using HdmiCecRemoveLogicalAddress API");
-    print("EXPECTED RESULT : Should get the invalid argument from driver");
-    #Prmitive test case which associated to this Script
-    tdkTestObj = obj.createTestStep('HdmicecHal_RemoveLogicalAddress');
-    Is_handle_invalid = 0;
-    logical_addr = 6
-    tdkTestObj.addParameter("logical_addr",logical_addr);
-    tdkTestObj.addParameter("Is_handle_invalid",Is_handle_invalid);
-    #Execute the test case in DUT
+    print("\nTEST STEP : Verify the HdmiCecGetLogicalAddress API by passing NULL to the logical address param")
+    print("EXPECTED RESULT : Should get the invalid argument from the driver")
+    tdkTestObj = obj.createTestStep('HdmicecHal_GetLogicalAddress');
+    Is_null_param_check = 1;
+    tdkTestObj.addParameter("Is_null_param_check", Is_null_param_check);
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("FAILURE");
-        print("ACTUAL RESULT  : ",details)
-        print("[TEST EXECUTION RESULT] : FAILURE")
+        print("Value Returned: ", details)
     else:
         tdkTestObj.setResultStatus("SUCCESS");
         print(details)
-        print("[TEST EXECUTION RESULT]: SUCCESS\n")
+        print("ACTUAL RESULT: HdmiCecGetLogicalAddress call failed due to invalid arg")
+        print("[TEST EXECUTION RESULT] : SUCCESS\n")
 
     obj.unloadModule("hdmicechal");
 else:

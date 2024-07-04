@@ -110,7 +110,6 @@ if "SUCCESS" in result.upper():
     #Execute the test case in DUT
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
-    result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         tdkTestObj.setResultStatus("FAILURE");

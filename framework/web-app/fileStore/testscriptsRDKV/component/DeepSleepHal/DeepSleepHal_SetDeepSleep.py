@@ -93,6 +93,7 @@ if "SUCCESS" in loadModuleStatus.upper():
     print("Timeout for deep sleep : %d (secs)" %(timeout))
     tdkTestObj = obj.createTestStep('DeepSleepHal_SetDeepSleep');
     tdkTestObj.addParameter("timeout", timeout);
+    tdkTestObj.addParameter("networkStandby", False);
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     if expectedResult in actualResult:
