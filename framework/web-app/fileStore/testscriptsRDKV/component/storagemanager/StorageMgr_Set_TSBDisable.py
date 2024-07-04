@@ -52,10 +52,6 @@
     <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -65,7 +61,7 @@
     <test_case_id>TC_StorageMgr_07</test_case_id>
     <test_objective>Test Script to set the TSB disable</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video_Accelerator, RDKTV, RPI</test_setup>
+    <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
     <api_or_interface_used>rdkStorage_isTSBEnabled, rdkStorage_setTSBEnabled</api_or_interface_used>
     <input_parameters>isEnabled = 0</input_parameters>

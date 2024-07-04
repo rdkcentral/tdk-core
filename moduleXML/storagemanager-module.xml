@@ -41,11 +41,23 @@
       <function name='TestMgr_StorageMgr_IsTSBEnabled' />
       <function name='TestMgr_StorageMgr_IsDVREnabled' />
       <function name='TestMgr_StorageMgr_SetDVREnabled' />
+      <function name='TestMgr_StorageMgr_GetTSBMaxMinutes' />
+      <function name='TestMgr_StorageMgr_SetTSBMaxMinutes' />
+      <function name='TestMgr_StorageMgr_GetDeviceInfo' />
+      <function name='TestMgr_StorageMgr_GetDeviceInfoList' />
+      <function name='TestMgr_StorageMgr_GetMountPath' />
+      <function name='TestMgr_StorageMgr_GetHealth' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
       <parameter funName='TestMgr_StorageMgr_SetTSBEnabled' parameterName='isEnabled' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_StorageMgr_SetDVREnabled' parameterName='isDVREnabled' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_StorageMgr_SetTSBMaxMinutes' parameterName='TSBminutes' parameterType='INTEGER' range='0-100' />
+      <parameter funName='TestMgr_StorageMgr_GetDeviceInfo' parameterName='DeviceID' parameterType='STRING' range='0-10' />
+      <parameter funName='TestMgr_StorageMgr_GetDeviceInfo' parameterName='DeviceIDIndex' parameterType='INTEGER' range='0-100' />
+      <parameter funName='TestMgr_StorageMgr_GetMountPath' parameterName='command' parameterType='STRING' range='a-z' />
+      <parameter funName='TestMgr_StorageMgr_GetHealth' parameterName='DeviceID' parameterType='STRING' range='0-10' />
+      <parameter funName='TestMgr_StorageMgr_GetHealth' parameterName='DeviceIDIndex' parameterType='INTEGER' range='0-10' />
     </parameters>
   </module>
 </xml>

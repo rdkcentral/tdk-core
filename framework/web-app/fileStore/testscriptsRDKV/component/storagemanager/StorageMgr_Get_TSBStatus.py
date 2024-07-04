@@ -1,4 +1,4 @@
-##########################################################################
+#########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -52,10 +52,6 @@
     <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -65,7 +61,7 @@
     <test_case_id>TC_StorageMgr_02</test_case_id>
     <test_objective>Test Script to get the TSB Status</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video_Accelerator, RDKTV, RPI</test_setup>
+    <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
     <api_or_interface_used>getTSBStatus</api_or_interface_used>
     <input_parameters></input_parameters>

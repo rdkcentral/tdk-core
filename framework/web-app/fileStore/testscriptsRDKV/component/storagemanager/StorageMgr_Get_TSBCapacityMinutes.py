@@ -27,7 +27,7 @@
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>GetTSBStatus</primitive_test_name>
+  <primitive_test_name>GetTSBCapacityMinutes</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
@@ -52,10 +52,6 @@
     <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
-    <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
-    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -65,7 +61,7 @@
     <test_case_id>TC_StorageMgr_05</test_case_id>
     <test_objective>Test Script to get the device capability for TSB storage in minutes</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>Video_Accelerator, RDKTV, RPI</test_setup>
+    <test_setup>Video_Accelerator, RDKTV</test_setup>
     <pre_requisite></pre_requisite>
     <api_or_interface_used>rdkStorage_getTSBCapacityMinutes</api_or_interface_used>
     <input_parameters></input_parameters>
@@ -104,10 +100,10 @@ if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacity API")
+    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacityMinutes API")
     print("EXPECTED RESULT : Should return the device capability for TSB storage in minutes")
 
-    tdkTestObj = obj.createTestStep('GetTSBCapacity');
+    tdkTestObj = obj.createTestStep('GetTSBCapacityMinutes');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();

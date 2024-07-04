@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>StorageMgr_Get_TSBCapacity</name>
+  <name>StorageMgr_Get_Health</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id></primitive_test_id>
+  <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>GetTSBStatus</primitive_test_name>
+  <primitive_test_name>GetHealth</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test Script to get the capacity of the TSB</synopsis>
+  <synopsis>Test script to get the device health</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -48,9 +48,9 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RDKTV</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -58,27 +58,27 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>TC_StorageMgr_03</test_case_id>
-    <test_objective>Test Script to get the capacity of the TSB</test_objective>
-    <test_type>Positive</test_type>
-    <test_setup>Video_Accelerator, RDKTV</test_setup>
-    <pre_requisite></pre_requisite>
-    <api_or_interface_used>rdkStorage_getTSBCapacity</api_or_interface_used>
+    <test_case_id>TC_StorageMgr_18</test_case_id>
+    <test_objective>Test script to get the device health</test_objective>
+    <test_type></test_type>
+    <test_setup>Positive</test_setup>
+    <pre_requisite>Video_Accelerator, RDKTV</pre_requisite>
+    <api_or_interface_used>getHealth</api_or_interface_used>
     <input_parameters></input_parameters>
     <automation_approch>1.Load storagemanager module.
-2.Invoke getTSBCapacity API
-3.Should return the capacity of the TSB</automation_approch>
-    <expected_output>Should return TSB capacity</expected_output>
+2.Invoke the getHealth API.
+3. It should return the Device Health
+</automation_approch>
+    <expected_output>Should return the device Health</expected_output>
     <priority>High</priority>
     <test_stub_interface>libstoragemanagerstub.so.0.0.0</test_stub_interface>
-    <test_script></test_script>
+    <test_script>StorageMgr_Get_Health</test_script>
     <skipped>No</skipped>
-    <release_version>M125</release_version>
+    <release_version>M126</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
-
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 
@@ -89,8 +89,9 @@ obj = tdklib.TDKScriptingLibrary("storagemanager","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'StorageMgr_Get_TSBCapacity');
-
+obj.configureTestCase(ip,port,'StorageMgr_Get_Health');
+DeviceIDIndex = 1;
+print("ID : ", DeviceIDIndex )
 
 #Get the result of connection with test component and DUT
 loadModuleStatus = obj.getLoadModuleResult();
@@ -100,22 +101,48 @@ if "SUCCESS" in loadModuleStatus.upper():
     obj.setLoadModuleStatus("SUCCESS");
     expectedResult="SUCCESS";
 
-    print("\nTEST STEP : Get the TSB Status using rdkStorage_getTSBCapacity API")
-    print("EXPECTED RESULT : Should return capacity of the TSB")
+    print("\nTEST STEP : Get the Device Health using rdkStorage_getHealth  API")
+    print("EXPECTED RESULT : Should get the Device Health")
 
-    tdkTestObj = obj.createTestStep('GetTSBCapacity');
+    tdkTestObj = obj.createTestStep('GetDeviceID');
     tdkTestObj.executeTestCase(expectedResult);
     actualResult = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails();
-    if expectedResult in actualResult and int(details) != 0:
+    print("Device ID: ",details)
+    if expectedResult in actualResult:
         tdkTestObj.setResultStatus("SUCCESS");
-        print("TSB Capacity : ",details)
-        print("[TEST EXECUTION RESULT] : SUCCESS\n")
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call was success")
+        print("StorageMgr_GetDeviceID call was success")
+
+        tdkTestObj = obj.createTestStep('GetHealth');
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+        details = details[:-1]
+        print("Device Health: ",details)
+        
+        #Split the string by ", "
+        components = details.split(",")
+        result = True
+        for component in components:
+            key_value_pair = component.split("=")
+            if len(key_value_pair) > 1:
+                key = key_value_pair[0].strip()
+                value = key_value_pair[1].strip()
+                if not value:
+                    print  ("%s value is missing"%(key))
+                    result = False
+
+        if expectedResult in actualResult and result:
+            tdkTestObj.setResultStatus("SUCCESS");
+            print("[TEST EXECUTION RESULT] : SUCCESS\n")
+            print("ACTUAL RESULT: StorageMgr_GetHealth call was success")
+        else:
+            tdkTestObj.setResultStatus("FAILURE");
+            print("ACTUAL RESULT: StorageMgr_GetHealth call failed")
+            print("[TEST EXECUTION RESULT] : FAILURE\n")
     else:
         tdkTestObj.setResultStatus("FAILURE");
-        print("TSB Capacity : ",details)
-        print("ACTUAL RESULT: StorageMgr_GetTSBCapacity call failed")
+        print("Failed to get the Device ID")
         print("[TEST EXECUTION RESULT] : FAILURE\n")
 
     obj.unloadModule("storagemanager");
@@ -123,5 +150,4 @@ if "SUCCESS" in loadModuleStatus.upper():
 else:
     print("Load module failed");
     obj.setLoadModuleStatus("FAILURE");
-
 
