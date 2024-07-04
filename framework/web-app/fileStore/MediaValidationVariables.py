@@ -109,6 +109,22 @@ html_video_test_app_url = lightning_apps_loc + "tdkhtmlplayer.html"
 video_src_url_short_duration_hls  = test_streams_base_path + "HLS_H264_AAC_15Sec/master.m3u8"
 #DASH Video URL
 video_src_url_short_duration_dash = test_streams_base_path + "DASH_H264_AAC_15Sec/master.mpd"
+#MKV Video URL
+video_src_url_short_duration_mkv = test_streams_base_path + "TDK_Asset_Sunrise_2160p_30Secs.mkv"
+#AV1 Video URL
+video_src_url_short_duration_av1 = test_streams_base_path + "TDK_Asset_DASH_AV1_AAC_30Sec/master.mpd"
+#Audio-Only URL
+video_src_url_short_duration_audio = test_streams_base_path  + "DASH_AAC_Audio_Only_30Sec/master.mpd"
+#EC3 Codec Video URL
+video_src_url_short_duration_ec3 = test_streams_base_path + "DASH_H264_EC3_30Sec/master.mpd"
+#HEVC Codec Video URL
+video_src_url_short_duration_hevc = test_streams_base_path + "DASH_HEVC_AAC_30Sec/master.mpd"
+#VP9 Codec Video URL
+video_src_url_short_duration_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM_30Sec/master.mpd"
+#AC3 Codec Video URL
+video_src_url_short_duration_ac3 = test_streams_base_path + "DASH_H264_AC3_30Sec/master.mpd"
+#MP4 Video URL
+video_src_url_short_duration_mp4      = test_streams_base_path + "TDK_Asset_Sunrise_MP4_30Secs.mp4"
 
 
 # Long duration src streams. Streams should be of minimum 5-10 minutes
