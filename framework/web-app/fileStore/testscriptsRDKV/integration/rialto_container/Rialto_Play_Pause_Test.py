@@ -156,7 +156,22 @@ if "SUCCESS" in result.upper():
 
     launch_video = "FAILURE"
     if server_running == "SUCCESS":
+        #Skip signin page
+        for i in range(3):
+            tdkTestObj = obj.createTestStep('Press_key')
+            #press down arrow
+            key=40
+            tdkTestObj.addParameter("key_code",key)
+            tdkTestObj.executeTestCase(expectedResult);
+        key=13
+        tdkTestObj.addParameter("key_code",key)
+        tdkTestObj.executeTestCase(expectedResult);
+
         tdkTestObj = obj.createTestStep('Press_key')
+        #press left arrow
+        key=37
+        tdkTestObj.addParameter("key_code",key)
+        tdkTestObj.executeTestCase(expectedResult)
         #press down arrow
         key=40
         tdkTestObj.addParameter("key_code",key)
@@ -164,10 +179,13 @@ if "SUCCESS" in result.upper():
         result = tdkTestObj.getResultDetails();
         if result == "SUCCESS":
             tdkTestObj.setResultStatus("SUCCESS")
-            #press ok
-            key=13
-            tdkTestObj.addParameter("key_code",key)
-            tdkTestObj.executeTestCase(expectedResult);
+            for i in range(2):
+                #press ok
+                #One ok will take to home page
+                #Next ok will play the video
+                key=13
+                tdkTestObj.addParameter("key_code",key)
+                tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResultDetails();
             if result != "SUCCESS":
                 tdkTestObj.setResultStatus("FAILURE")
