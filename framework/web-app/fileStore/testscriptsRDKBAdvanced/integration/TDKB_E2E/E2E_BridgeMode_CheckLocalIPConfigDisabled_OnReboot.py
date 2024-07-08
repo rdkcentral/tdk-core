@@ -52,7 +52,7 @@
     <!--  -->
     <box_type>Emulator</box_type>
     <!--  -->
-
+    <box_type>RPI</box_type>
 
   </box_types>
   <rdk_versions>
@@ -99,19 +99,24 @@ from tdkbE2EUtility import *;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("tdkb_e2e","1");
+obj1 = tdklib.TDKScriptingLibrary("tdkbtr181","1");
 
 #IP and Port of box, No need to change,
 #This will be replaced with correspoing Box Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 obj.configureTestCase(ip,port,'E2E_BridgeMode_CheckLocalIPConfigDisabled_OnReboot');
+obj1.configureTestCase(ip,port,'E2E_BridgeMode_CheckLocalIPConfigDisabled_OnReboot');
 
 #Get the result of connection with test component
 loadmodulestatus =obj.getLoadModuleResult();
+loadmodulestatus1 =obj1.getLoadModuleResult();
 print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus) ;
+print("[LIB LOAD STATUS]  :  %s" %loadmodulestatus1) ;
 
-if "SUCCESS" in loadmodulestatus.upper():
+if "SUCCESS" in loadmodulestatus.upper() and "SUCCESS" in loadmodulestatus1.upper():
     obj.setLoadModuleStatus("SUCCESS");
+    obj1.setLoadModuleStatus("SUCCESS");
     expectedresult = "SUCCESS"
     finalStatus = "FAILURE"
 
@@ -171,7 +176,7 @@ if "SUCCESS" in loadmodulestatus.upper():
                     print("SUCCESS: Local ip configuration is disabled in bridge mode")
 
                     #rebooting the device
-                    obj.initiateReboot();
+                    obj1.initiateReboot();
                     sleep(300);
 
                      #try to edit local ip config when  bridge mode is disabled
@@ -234,8 +239,10 @@ if "SUCCESS" in loadmodulestatus.upper():
     #Handle any post execution cleanup required
     postExecutionCleanup();
     obj.unloadModule("tdkb_e2e");
+    obj1.unloadModule("tdkbtr181");
 
 else:
     print("Failed to load tdkb_e2e module");
     obj.setLoadModuleStatus("FAILURE");
+    obj1.setLoadModuleStatus("FAILURE");
     print("Module loading failed");
