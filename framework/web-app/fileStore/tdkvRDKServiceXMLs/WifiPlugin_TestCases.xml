@@ -222,22 +222,25 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
-            <testStep testStepId="9" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="9" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -245,20 +248,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="10" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="10" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="11" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="10" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="12" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="11" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="13" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="12" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
        </testCase>
@@ -334,19 +337,22 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
             <testStep testStepId="9" name="Get_Connected_SSID" method="Get_Connect_SSID" >
@@ -354,7 +360,7 @@
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="10" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="10" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -362,23 +368,23 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="11" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="11" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="12" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="11" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="13" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="12" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="14" name="Get_Connected_SSID" method="Get_Connect_SSID" >
+            <testStep testStepId="13" name="Get_Connected_SSID" method="Get_Connect_SSID" >
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_no_ssid"/>
             </testStep>
-            <testStep testStepId="15" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="14" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
        </testCase>
@@ -499,19 +505,22 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
             <testStep testStepId="9" name="Get_Connected_SSID" method="Get_Connect_SSID" >
@@ -524,7 +533,7 @@
             </testStep>
        <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Setting_Default_Interface_Ethernet">
-            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -532,20 +541,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="2" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
 	    </testStep>
-            <testStep testStepId="4" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="3" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="5" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="4" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
          </postrequisite>
@@ -585,19 +594,22 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
             <testStep testStepId="9" name="Get_Connected_SSID" method="Get_Connect_SSID" >
@@ -612,7 +624,7 @@
             </testStep>
        <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Setting_Default_Interface_Ethernet">
-            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -620,20 +632,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="2" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="4" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="3" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="5" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="4" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
          </postrequisite>
@@ -673,19 +685,22 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50" >
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
             <testStep testStepId="9" name="Get_Connected_SSID" method="Get_Connect_SSID" >
@@ -700,7 +715,7 @@
             </testStep>
        <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Setting_Default_Interface_Ethernet">
-            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -708,20 +723,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="2" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="4" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="3" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="5" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="4" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
          </postrequisite>
@@ -803,24 +818,27 @@
             <testStep testStepId="5" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="6" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="7" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="7" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
+	    <testStep testStepId="8" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
        <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Setting_Default_Interface_Ethernet">
-            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -828,20 +846,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="2" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="4" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="3" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="5" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="4" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
          </postrequisite>
@@ -874,19 +892,22 @@
             <testStep testStepId="4" name="Check_On_WIFI_State_Changed_Connected_Event" event="Event_On_WIFI_State_Changed" action="eventListener" delay="5">
                 <resultGeneration useMethodTag="wifi_check_state_change_event" expectedValues="5"/>
             </testStep>
-            <testStep testStepId="5" name="Get_Connected_SSID" method="Get_Connect_SSID">
+            <testStep testStepId="5" name="Get_Connected_SSID" method="Get_Connect_SSID" delay="5">
                 <resultGeneration useMethodTag="wifi_get_connected_ssid" arguments="check_ssid">
                     <expectedValues useConfigFile="true" key="WIFI_SSID_NAME" />
                 </resultGeneration>
             </testStep>
-            <testStep testStepId="6" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
+            <!--testStep testStepId="6" name="Set_Default_Interface_WiFi" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface" value="WIFI" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
+            </testStep-->
+	    <testStep testStepId="6" name="Set_Default_Interface_WiFi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
             </testStep>
-            <testStep testStepId="7" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
+	    <testStep testStepId="7" name="Get_Default_Interface" method="Get_Default_Interface" pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="WIFI" />
             </testStep>
             <testStep testStepId="8" name="Get_Connected_SSID" method="Get_Connect_SSID" >
@@ -899,7 +920,7 @@
             </testStep>
        <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Setting_Default_Interface_Ethernet">
-            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" >
+            <testStep testStepId="1" name="Set_Ethernet_Interface_Enabled" method="Set_Interface_Enabled" pluginName="Network" ipChangeStep="yes">
                 <params>
                   <param tag="interface"  value="ETHERNET" />
                   <param tag="enabled"   value="true" />
@@ -907,20 +928,20 @@
                 </params>
                 <resultGeneration useMethodTag="network_check_interface_enable_set_status" />
             </testStep>
-            <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
+            <!--testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="Set_Default_Interface" pluginName="Network" ipChangeStep="yes" >
                 <params>
                   <param tag="interface" value="ETHERNET" />
                   <param tag="persist"   useDefault= "true"/>
                 </params>
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true" />
-            </testStep>
-            <testStep testStepId="3" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
+            </testStep-->
+            <testStep testStepId="2" name="Get_Default_Interface" method="Get_Default_Interface"  pluginName="Network" delay="50">
                 <resultGeneration useMethodTag="network_get_default_interface" arguments="check_interface" expectedValues="ETHERNET" />
             </testStep>
-            <testStep testStepId="4" name="Disconnect" method="Disconnect" delay="3">
+            <testStep testStepId="3" name="Disconnect" method="Disconnect" delay="3">
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
-            <testStep testStepId="5" name="Stop_Scan" method="Stop_Scan" >
+            <testStep testStepId="4" name="Stop_Scan" method="Stop_Scan" >
                 <resultGeneration useMethodTag="wifi_check_set_operation" expectedValues="true"/>
             </testStep>
          </postrequisite>
