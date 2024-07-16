@@ -129,7 +129,7 @@ if expectedResult in result.upper():
         print("Apparmor is running %s" %(output))
 
         #To check Apparmor is enabled
-        command = 'aa-enabled'
+        command = 'cat /sys/module/apparmor/parameters/enabled'
         print("COMMAND : %s" %(command))
         #Primitive test case which associated to this Script
         tdkTestObj = obj.createTestStep('rdkvapparmor_executeInDUT');
@@ -144,7 +144,7 @@ if expectedResult in result.upper():
 
         #Getthe result of execution
         output = tdkTestObj.getResultDetails();
-        if 'Yes' in output and expectedResult in result:
+        if 'Y' in output and expectedResult in result:
             print("Apparmor is enabled")
 
             #Set Apparmor profile mode into enforce with tr181 command
