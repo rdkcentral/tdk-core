@@ -1,0 +1,86 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+.header {
+    background-color: #0e6f87;
+    color: #fff;
+    height: 60px;
+    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
+}
+
+.logo-img {
+    width: 8%;
+}
+
+.apptitle {
+    color: #fff;
+    font-size: 1.5rem !important;
+    font-weight: 500;
+    margin-left: 15px;
+}
+
+.title {
+    color: #00273F;
+    font-size: 1.3rem;
+    text-align: center;
+    padding: 0px 0 5px 0;
+    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+    margin-bottom: 8px;
+}
+
+.groupListTitle {
+    color: #00273F;
+    font-size: 1.3rem;
+    text-align: center;
+    padding: 0 0 0 0;
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+}
+
+.ag-theme-quartz {
+    --ag-header-background-color: rgb(209, 212, 212);
+}
+
+.create-btn {
+    background-color: #00B2DC;
+    color: #fff;
+    font-size: 1rem;
+    margin-right: 145px;
+    padding: 10px 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.back-btn {
+    background-color: #00B2DC;
+    color: #fff;
+    font-size: 1rem;
+    margin-right: 43px;
+    padding: 10px 33px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}

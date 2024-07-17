@@ -1,0 +1,486 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row mt-4">
+        <div class="col-md-12">
+            <mat-card>
+                <mat-card-content>
+                    <h1 class="title">Update {{configureName.toUpperCase()}} Device</h1>
+                    <div *ngIf="showHideCreateFormV">
+                    <form [formGroup]="editDeviceVForm" (ngSubmit)="EditDeviceVSubmit()" class="userform mt-5">
+                        <div class="row">
+                            <div class="col">
+                                <div class="row mb-3">
+                                    <label for="stbname" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                      <input type="text" class="form-control" id="stbname" formControlName="stbname" autocomplete="off" [(ngModel)]="stbNameChange" (keyup)="valuechange($event)">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['stbname']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['stbname']?.errors?.['required']">Please enter Stb name.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3">
+                                    <label for="stbip" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                      <input type="text" class="form-control" id="stbip" formControlName="stbip" autocomplete="off">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['stbip']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['stbip']?.errors?.['required']">Please enter Stb IP.</small>
+                                            <small *ngIf="editDeviceVForm.controls['stbip']?.errors?.['pattern']">Please enter valid Stb IP.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3">
+                                    <label for="macaddr" class="col-md-3 col-form-label">Mac Address</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="macaddr" formControlName="macaddr"
+                                        autocomplete="off">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['macaddr']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['macaddr']?.errors?.['required']">Please enter mac addr.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3">
+                                    <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                            <option value="" default>Select</option>
+                                            @for (item of allBoxType; track $index) {
+                                                <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                            }
+                                          </select>
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['boxtype']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="isrecorderId"> 
+                                    <label for="macaddr" class="col-md-3 col-form-label">Recorder Id<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="macaddr" formControlName="recorderId"
+                                        autocomplete="off">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['recorderId']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['recorderId']?.errors?.['required']">Please enter recorder id.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  
+                                 
+                                  <div class="row mb-3">
+                                    <label for="isthunderEnabled" class="col-md-3 col-form-label">Is Thunder Enabled</label>
+                                    <div class="col-md-8">
+                                        <div class="form-check form-check-inline form-check-reverse">
+                                            <input class="form-check-input thunder" type="checkbox" id="isthunderEnabled" formControlName="isThunder"
+                                            [checked]="isthunderEnabled" (change)="isChecked($event)">
+                                          </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="showPortFile"> 
+                                    <label for="thunderport" class="col-md-3 col-form-label">Thunder Port<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="thunderport" formControlName="thunderport" autocomplete="off">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['thunderport']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['thunderport']?.errors?.['required']">Please enter thunder port.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="showPortFile"> 
+                                    <label for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                      <div class="configbtngrp">
+                                        <button type="button" class="btn btn-outline-secondary newconfigfile" 
+                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                        <span>{{configFileName ==='device.config'? 'Create New':''}}</span> {{configFileName}} File
+                                      </button>
+                                      <button type="button" class="btn btn-outline-secondary newconfigfile" 
+                                        *ngIf="visibleDeviceconfigFile" >Create New Device.config File
+                                      </button>
+                                      </div>
+                                    </div>
+                                  </div>
+                            </div>
+                            <div class="col">
+                              <div class="row mb-3">
+                                <label for="boxManufacturer" class="col-md-3 offset-1 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <div class="col-md-8">
+                                    <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                        <option value="" default>Select</option>
+                                        @for (item of allboxManufacture; track $index) {
+                                            <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                        }
+                                      </select>
+                                    <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['boxmanufacturer']?.errors" class="text-danger">
+                                        <small *ngIf="editDeviceVForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                    </div>
+                                </div>
+                              </div>
+                                  <div class="row mb-3">
+                                    <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                            <option value="" default>Select</option>
+                                            @for (item of allsocVendors; track $index) {
+                                                <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                            }
+                                          </select>
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['socvendor']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="visibleGateway">
+                                    <label for="gateway" class="col-md-3 offset-1 col-form-label">Gateway</label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example"  id="gateway" formControlName="gateway">
+                                            <option value="" default>Select</option>
+                                            @for (item of allGatewayDevices; track $index) {
+                                                <option value="{{item}}">{{item}}</option>
+                                            }
+                                          </select>
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['gateway']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['gateway']?.errors?.['required']">Please select gateway.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                 
+                                  <div class="row mb-3">
+                                    <label for="configuredevicePorts" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
+                                    <div class="col-md-8">
+                                        <div class="form-check form-check-inline form-check-reverse">
+                                            <input class="form-check-input thunder" type="checkbox" id="configuredevicePorts" formControlName="configuredevicePorts"
+                                             (change)="isCheckedConfig($event)">
+                                          </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="showConfigPort"> 
+                                    <label for="agentport" class="col-md-3 offset-1 col-form-label">Agent Port</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="agentport" formControlName="agentport" autocomplete="off" [(ngModel)]="agentport">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentport']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['agentport']?.errors?.['required']">Please enter agent port.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="showConfigPort"> 
+                                    <label for="agentstatusport" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="agentstatusport" formControlName="agentstatusport" autocomplete="off" [(ngModel)]="agentStatusPort">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentstatusport']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['agentstatusport']?.errors?.['required']">Please enter agent status port.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                  <div class="row mb-3" *ngIf="showConfigPort"> 
+                                    <label for="agentmonitorport" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="agentmonitorport" formControlName="agentmonitorport" autocomplete="off" [(ngModel)]="agentMonitoPort">
+                                        <div *ngIf="editDeviceVFormSubmitted && editDeviceVForm.controls['agentmonitorport']?.errors" class="text-danger">
+                                            <small *ngIf="editDeviceVForm.controls['agentmonitorport']?.errors?.['required']">Please enter agent monitor port.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
+                        <div class="row table-sec mt-3" *ngIf="showTable">
+                          <div class="ag-table mb-3">
+                              <ag-grid-angular
+                              style="width: 100%; height: 320px;"
+                              [columnDefs]="columnDefs"
+                              [defaultColDef]="defaultColDef"
+                              [suppressRowClickSelection]="true"
+                              
+                              [rowData]="rowData"
+                              [class]="themeClass"
+                              [pagination]="false"
+                              [paginationPageSize]="paginationPageSize"
+                              [paginationPageSizeSelector]="paginationPageSizeSelector"
+                              (gridReady)="onGridReady($event)"
+                              [tooltipShowDelay]="tooltipShowDelay"
+                              [animateRows]="true"
+                             
+                              [context]="this"
+                              [components]="frameworkComponents"
+                            ></ag-grid-angular>
+                          </div>
+                      </div>
+                        <div class="row">
+                            <div class="mt-2 text-end">
+                                <button class="reset-btn" (click)="goBack()">Back</button>
+                                <button class="reset-btn" (click)="reset()">Reset</button>
+                                <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
+                                <button type="submit" class="create-btn">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                  <div *ngIf="showHideCreateFormB">
+                    <form [formGroup]="rdkBForm" (ngSubmit)="editDeviceBSubmit()" class="userform mt-5">
+                      <div class="row">
+                          <div class="col">
+                              <div class="row mb-3">
+                                  <label for="gatewayName" class="col-md-3 col-form-label">Gateway Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control" id="gatewayName" formControlName="gatewayName" autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['gatewayName']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['gatewayName']?.errors?.['required']">Please enter gateway name.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="gatewayIp" class="col-md-3 col-form-label">Gateway IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control" id="gatewayIp" formControlName="gatewayIp" autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['gatewayIp']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['gatewayIp']?.errors?.['required']">Please enter gateway ip.</small>
+                                          <small *ngIf="rdkBForm.controls['gatewayIp']?.errors?.['pattern']">Please enter valid gateway ip.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="macaddr" class="col-md-3 col-form-label">Mac Address</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="macaddr" formControlName="macaddr"
+                                      autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['macaddr']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['macaddr']?.errors?.['required']">Please enter mac addr.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                          <option value="" default>Select</option>
+                                          @for (item of allBoxType; track $index) {
+                                              <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['boxtype']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="boxManufacturer" class="col-md-3 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                          <option value="" default>Select</option>
+                                          @for (item of allboxManufacture; track $index) {
+                                              <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['boxmanufacturer']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="col">
+                         
+                                <div class="row mb-3">
+                                  <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                          <option value="" default>Select</option>
+                                          @for (item of allsocVendors; track $index) {
+                                              <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['socvendor']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="configuredevicePortB" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
+                                  <div class="col-md-8">
+                                      <div class="form-check form-check-inline form-check-reverse">
+                                          <input class="form-check-input thunder" type="checkbox" id="configuredevicePortB" 
+                                           (change)="isCheckedConfigB($event)">
+                                        </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentPortb" class="col-md-3 offset-1 col-form-label">Agent Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentPortb" formControlName="agentPortb" autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentPortb']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['agentPortb']?.errors?.['required']">Please enter agent port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentStatusportB" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentStatusportB" formControlName="agentStatusportB" autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentStatusportB']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['agentStatusportB']?.errors?.['required']">Please enter agent status port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentMonitorportB" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentMonitorportB" formControlName="agentMonitorportB" autocomplete="off">
+                                      <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['agentMonitorportB']?.errors" class="text-danger">
+                                          <small *ngIf="rdkBForm.controls['agentMonitorportB']?.errors?.['required']">Please enter agent monitor port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="mt-2 text-end">
+                              <button class="reset-btn" (click)="goBack()">Back</button>
+                              <button class="reset-btn" (click)="reset()">Reset</button>
+                              <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
+                              <button type="submit" class="create-btn">Update</button>
+                          </div>
+                      </div>
+                  </form>
+                  </div>
+                  <div *ngIf="showHideCreateFormC">
+                    <form [formGroup]="rdkCForm" (ngSubmit)="editDeviceCSubmit()" class="userform mt-5">
+                      <div class="row">
+                          <div class="col">
+                              <div class="row mb-3">
+                                  <label for="cameraName" class="col-md-3 col-form-label">Camera Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control" id="cameraName" formControlName="cameraName" autocomplete="off"
+                                      placeholder="Please enter camera name">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['cameraName']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['cameraName']?.errors?.['required']">Please enter camera name.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="stbIp" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                    <input type="text" class="form-control" id="stbIp" formControlName="stbIp" autocomplete="off"
+                                    placeholder="Please enter Stb ip">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['stbIp']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['stbIp']?.errors?.['required']">Please enter stb ip.</small>
+                                          <small *ngIf="rdkCForm.controls['stbIp']?.errors?.['pattern']">Please enter valid stb ip.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="macaddr" class="col-md-3 col-form-label">Mac Address<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="macaddr" formControlName="macaddr"
+                                      autocomplete="off" placeholder="Please enter mac address">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['macaddr']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['macaddr']?.errors?.['required']">Please enter mac address.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                          <option value="" default>Select</option>
+                                          @for (item of allBoxType; track $index) {
+                                              <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['boxtype']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="boxManufacturer" class="col-md-3 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                          <option value="" default>Select</option>
+                                          @for (item of allboxManufacture; track $index) {
+                                              <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['boxmanufacturer']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                          <div class="col">
+                         
+                                <div class="row mb-3">
+                                  <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                  <div class="col-md-8">
+                                      <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                          <option value="" default>Select</option>
+                                          @for (item of allsocVendors; track $index) {
+                                              <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                          }
+                                        </select>
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['socvendor']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3">
+                                  <label for="configuredevicePortB" class="col-md-3 offset-1 col-form-label">Configure Device Ports</label>
+                                  <div class="col-md-8">
+                                      <div class="form-check form-check-inline form-check-reverse">
+                                          <input class="form-check-input thunder" type="checkbox" id="configuredevicePortB" 
+                                           (change)="isCheckedConfigB($event)">
+                                        </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentPortb" class="col-md-3 offset-1 col-form-label">Agent Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentPortb" formControlName="agentPortb" autocomplete="off">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['agentPortb']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['agentPortb']?.errors?.['required']">Please enter agent port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentStatusportB" class="col-md-3 offset-1 col-form-label">Agent Status Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentStatusportB" formControlName="agentStatusportB" autocomplete="off">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['agentStatusportB']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['agentStatusportB']?.errors?.['required']">Please enter agent status port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                                <div class="row mb-3" *ngIf="showConfigPortB"> 
+                                  <label for="agentMonitorportB" class="col-md-3 offset-1 col-form-label">Agent Monitor Port</label>
+                                  <div class="col-md-8">
+                                      <input type="text" class="form-control" id="agentMonitorportB" formControlName="agentMonitorportB" autocomplete="off">
+                                      <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['agentMonitorportB']?.errors" class="text-danger">
+                                          <small *ngIf="rdkCForm.controls['agentMonitorportB']?.errors?.['required']">Please enter agent monitor port.</small>
+                                      </div>
+                                  </div>
+                                </div>
+                          </div>
+                      </div>
+                      <div class="row">
+                          <div class="mt-2 text-end">
+                              <button class="reset-btn" (click)="goBack()">Back</button>
+                              <button class="reset-btn" (click)="reset()">Reset</button>
+                              <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
+                              <button type="submit" class="create-btn">Update</button>
+                          </div>
+                      </div>
+                  </form>
+                  </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

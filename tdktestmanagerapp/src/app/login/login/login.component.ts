@@ -1,0 +1,334 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Router, RouterLink } from '@angular/router';
+import { FooterComponent } from '../../layout/footer/footer.component';
+import { RegisterService } from '../../services/register.service';
+import { HttpClientModule } from '@angular/common/http';
+import { MaterialModule } from '../../material/material.module';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginService } from '../../services/login.service';
+import { AuthService } from '../../auth/auth.service';
+@Component({
+  selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, FooterComponent, HttpClientModule, MaterialModule],
+  templateUrl: './login.component.html',
+  styleUrl: './login.component.css'
+})
+export class LoginComponent implements OnInit {
+
+  /**
+   * Represents the isSigninVisible of the application.
+   */
+  isSigninVisible = false;
+  /**
+   * Represents the registerVisible of the application.
+   */
+  registerVisible = false;
+  /**
+   * Represents the signinVisible of the application.
+   */
+  signinVisible = true;
+  /**
+   * Represents the ldapScreenVisible of the application.
+   */
+  ldapScreenVisible = false;
+  /**
+   * Represents the signinForm of the application.
+   */
+  signinForm!: FormGroup;
+  /**
+   * Represents the registerForm of the application.
+   */
+  registerForm!: FormGroup;
+  /**
+   * Represents the ldapForm of the application.
+   */
+  ldapForm!: FormGroup;
+  /**
+   * Represents the submitted of the application.
+   */
+  submitted = false;
+  /**
+   * Represents the regSubmitted of the application.
+   */
+  regSubmitted = false;
+  /**
+   * Represents the ldapSubmitted of the application.
+   */
+  ldapSubmitted = false;
+  /**
+   * Represents the currentForm of the application.
+   */
+  currentForm: string = 'signin';
+  /**
+   * Represents the isSelect of the application.
+   */
+  isSelect = false;
+  /**
+   * Represents the errorMessage of the application.
+   */
+  errorMessage: any = {};
+  /**
+   * Represents the showhideErr of the application.
+   */
+  showhideErr = false;
+  /**
+   * Represents the showHideRegSucess of the application.
+   */
+  showHideRegSucess = false;
+  /**
+   * Represents the registerSuccess of the application.
+   */
+  registerSuccess!: string;
+  /**
+   * Represents the showHideRegForm of the application.
+   */
+  showHideRegForm = true;
+  /**
+   * Represents the errormessageExist of the application.
+   */
+  errormessageExist: any = {};
+  /**
+   * Represents the showhideErrExists of the application.
+   */
+  showhideErrExists = false;
+  /**
+   * Represents the allGroupName of the application.
+   */
+  allGroupName: any = [];
+
+  constructor(private fb: FormBuilder, private router: Router,
+    private registerservice: RegisterService,
+    private _snakebar: MatSnackBar,
+    private loginservice: LoginService,
+    private authservice: AuthService
+  ) { }
+  /**
+   * Initializes the component.
+   */
+  ngOnInit(): void {
+
+    this.signinForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(4)]]
+    })
+
+    this.ldapForm = this.fb.group({
+      username: ['', [Validators.required, Validators.minLength(4)]],
+      password: ['', [Validators.required, Validators.minLength(4)]]
+    })
+
+    let emailregex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    this.registerForm = this.fb.group({
+      regusername: ['', [Validators.required, Validators.minLength(4)]],
+      regemail: ['', [Validators.required, Validators.pattern(emailregex)]],
+      displayname: ['', [Validators.required]],
+      regpassword: ['', [Validators.required, Validators.minLength(4)]],
+      retypepassword: ['', Validators.required],
+      usergroup: ['', [Validators.required]],
+    }, { validators: this.passwordMatchValidator('regpassword', 'retypepassword') })
+
+    this.loginservice.getuserGroup().subscribe(res => {
+      this.allGroupName = res;
+    })
+
+
+  }
+  /**
+   * Validates if the password and retype password fields match.
+   * @param regpassword - The name of the password control.
+   * @param retypepassword - The name of the retype password control.
+   * @returns A validator function that checks if the password and retype password fields match.
+   */
+  passwordMatchValidator(regpassword: any, retypepassword: any) {
+    return (formGroup: FormGroup) => {
+      let password = formGroup['controls'][regpassword] as AbstractControl;
+      let confirmPassword = formGroup['controls'][retypepassword] as AbstractControl;
+      if (confirmPassword.errors && !confirmPassword.errors['passwordMatchValidator']) {
+        return
+      }
+      if (password.value !== confirmPassword.value) {
+        confirmPassword.setErrors({ passwordMatchValidator: true })
+      } else {
+        confirmPassword.setErrors(null)
+      }
+    }
+  }
+  /**
+   * Get the controls of the register form.
+   * @returns The controls of the register form.
+   */
+  get f() { return this.registerForm.controls; }
+
+  /**
+   * Signs in the user.
+   */
+  signIn():void {
+    this.isSigninVisible = false
+    this.registerVisible = false;
+    this.signinVisible = true;
+  }
+
+  /**
+   * Registers the user.
+   * Sets the visibility of the signin and register components accordingly.
+   */
+  register() :void{
+    this.isSigninVisible = true
+    this.registerVisible = true;
+    this.signinVisible = false;
+  }
+  /**
+   * Toggles the form based on the provided form name.
+   * @param formName - The name of the form to toggle.
+   */
+  toogleForm(formName: string): void {
+    this.currentForm = formName
+    if (this.currentForm === 'register') {
+      this.isSigninVisible = true
+      this.registerVisible = true;
+      this.signinVisible = false;
+      this.ldapScreenVisible = false;
+      this.showHideRegSucess = false;
+      this.showHideRegForm = true;
+      this.ngOnInit();
+    } else {
+      this.isSigninVisible = false
+      this.registerVisible = false;
+      this.signinVisible = true;
+    }
+  }
+
+  /**
+   * Handles the event when the user is checked.
+   * @param e - The event object.
+   */
+  isUserchecked(e: any) :void{
+    if (e.target.checked) {
+      this.signinVisible = false;
+      this.ldapScreenVisible = true;
+    }
+  }
+
+  /**
+   * Handles the event when the LDAP checkbox is checked.
+   * @param e - The event object.
+   */
+  isldapChecked(e: any) :void{
+    if (e.target.checked) {
+      this.signinVisible = true;
+      this.ldapScreenVisible = false;
+    }
+  }
+
+  /**
+   * Handles the form submission when the user clicks the submit button.
+   * If the form is valid, it sends the user's credentials to the server for authentication.
+   * If the authentication is successful, it stores the user information and navigates to the configure page.
+   * If there is an error during authentication, it displays the error message.
+   */
+  onSubmit(): void {
+    this.submitted = true;
+    if (this.signinForm.invalid) {
+      return
+    } else {
+      let credential = {
+        username: this.signinForm.value.username,
+        password: this.signinForm.value.password
+      }
+      this.loginservice.userlogin(credential).subscribe({
+        next: (res: any) => {
+          let loggedinUser = res;
+          this.authservice.sendToken(res.token);
+          this.authservice.setPrivileges(res.userRoleName)
+          localStorage.setItem("loggedinUser", JSON.stringify(loggedinUser));
+          this.router.navigate(["/configure"]);
+        },
+        error: (err) => {
+          let errmsg = err.error;
+          this.errorMessage = errmsg;
+          if (this.errorMessage) {
+            this.showhideErr = true;
+            setTimeout(() => {
+              this.showhideErr = false;
+            }, 3500);
+          }
+        }
+
+      })
+    }
+
+  }
+
+  /**
+   * Handles the submission of the LDAP form.
+   */
+  onLdapSubmit(): void {
+    this.ldapSubmitted = true;
+    if (this.ldapForm.invalid) {
+      return;
+    } else {
+      console.log(this.ldapForm.value);
+    }
+  }
+
+  /**
+   * Handles the registration process when the user clicks on the register button.
+   */
+  onRegister(): void {
+    this.regSubmitted = true;
+    if (this.registerForm.invalid) {
+      return
+    } else {
+      let signUpData = {
+        userName: this.registerForm.value.regusername,
+        userEmail: this.registerForm.value.regemail,
+        userDisplayName: this.registerForm.value.displayname,
+        password: this.registerForm.value.regpassword,
+        userGroupName: this.registerForm.value.usergroup
+      }
+
+      this.registerservice.registerUser(signUpData).subscribe({
+        next: (res: any) => {
+          this.registerSuccess = res;
+          this.showHideRegSucess = true;
+          this.showHideRegForm = false;
+          this.registerForm.reset();
+        },
+        error: (err) => {
+          let errmsg = JSON.parse(err.error);
+          this.errormessageExist = errmsg.message ? errmsg.message : errmsg.password;
+          if (this.errormessageExist) {
+            this.showhideErrExists = true;
+            setTimeout(() => {
+              this.showhideErrExists = false;
+            }, 3500);
+          }
+        }
+      })
+    }
+  }
+
+
+}
