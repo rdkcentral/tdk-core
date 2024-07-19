@@ -19,13 +19,13 @@
 '''
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
-  <version>2</version>
-  <name>RDKV_CERT_WebAudio_AudioPlayback_M4A</name>
+  <version>1</version>
+  <name>RDKV_WebAudio_GetStreamInfo_WAV</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To test if the M4A audio playback is working fine in device browser</synopsis>
+  <synopsis>To check if the webaudio can decode the WAV stream and get the details like codec, channels, duration etc.</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -39,28 +39,27 @@
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
-    <rdk_version>RDK1.2</rdk_version>
+    <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_13</test_case_id>
-    <test_objective>To test if the M4A audio playback is working fine in device browser</test_objective>
+    <test_case_id>WebAudio_07</test_case_id>
+    <test_objective>To check if the webaudio can decode the WAV stream and get the details like codec, channels, duration etc.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Video Accelerators</test_setup>
+    <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>AudioPlaybackTest.html</input_parameters>
+    <input_parameters>GetStreamInfoTest.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should play the given content using WebAudio apis</expected_output>
+    <expected_output>The browser should be able to decode the WAV stream and give the stream details</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_CERT_WebAudio_AudioPlayback_M4A</test_script>
+    <test_script>RDKV_WebAudio_GetStreamInfo_WAV</test_script>
     <skipped>No</skipped>
-    <release_version>M123</release_version>
+    <release_version>M122</release_version>
     <remarks>None</remarks>
   </test_cases>
-  <script_tags/>
 </xml>
 
 '''
@@ -70,6 +69,7 @@ import WebAudioVariables;
 import WebAudiolib
 
 import time;
+import re;
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
@@ -78,7 +78,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_AudioPlayback_M4A');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_GetStreamInfo_WAV');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -87,16 +87,17 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-stream_url= WebAudioVariables.m4a_audio_url
-webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/AudioPlaybackTest.html?streamUrl="+stream_url
+stream_url= WebAudioVariables.wav_audio_url
+webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/GetStreamInfoTest.html?streamUrl="+stream_url
 browser_method = browser+".1.url"
+stream_info = WebAudioVariables.wav_stream_info
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
 
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
     tdkTestObj = obj.createTestStep('webaudio_prerequisite')
-    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,m4a_audio_url")
+    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,wav_audio_url,wav_stream_info")
     tdkTestObj.executeTestCase(expectedResult)
     pre_req_status=tdkTestObj.getResultDetails()
     if expectedResult in pre_req_status:
@@ -142,32 +143,48 @@ if expectedResult in result.upper():
                     exit()
             if log_check_method == "WebinspectPageLogs":
                 print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
-                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser,["9","13"])
+                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser)
                 webinspect_logs = ', '.join(webinspect_logs)
             else:
                 print("\n Script is using wpeframework log to validate the webaudio test")
-                grep_line="'AudioPlaybackTest' | tail -4 | tr -d '\\n'"
-                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line,["9","13"])
+                grep_line="'GetStreamInfoTest' | tail -4 | tr '\\n' ','"
+                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line)
             if webinspect_logs != "":
-                if "TDK_LOGS" in webinspect_logs and "AudioPlaybackTest" in webinspect_logs:
+                if "TDK_LOGS" in webinspect_logs and "GetStreamInfoTest" in webinspect_logs:
                     print("\n ", webinspect_logs)
                     print("\nSUCCESS: Successfully fetched the logs from the Html test App")
                     tdkTestObj.setResultStatus("SUCCESS")
 
-                    success_logs=["AudioContext created","AudioContext created successfully","Audio file loaded successfully","Audio playback started"]
+                    #Remove timestamp and other unnecessary string from the logs
+                    webinspect_logs = re.sub(r'\d+:\d+ [A-Za-z]+ \d+ \d+:\d+:\d+\.\d+ ', '', webinspect_logs)
+                    webinspect_logs=webinspect_logs.replace('TDK_LOGS: GetStreamInfoTest : ', '')
+                    webinspect_logs=re.sub(r'WPEFramework\[\d+\]:', '', webinspect_logs)
+                    webinspect_logs=re.sub(r'\['+browser+'\]:\d+', '', webinspect_logs)
+
+                    success_logs=["Codec Information","Number of Channels", "Sample Rate", "Duration"]
+                    stream_info= stream_info.split(",")
+                    result = "SUCCESS"
                     for log in success_logs:
-                        if log in webinspect_logs: 
-                            print("SUCCESS : ",log)
-                            result = "SUCCESS"
+                        if log in webinspect_logs:
+                            match = re.search(fr'{log}:(.*?)(?:,|$)', webinspect_logs)
+                            value = (match.group(1).strip())
+                            index = success_logs.index(log)
+                            if stream_info[index] in value:
+                                print("SUCCESS : ",log, ":", value)
+                            else:
+                                print("\nFAILURE : The stream info is not correct")
+                                print("Configured value of ", log, ": ",stream_info[index])
+                                print("Actual value of ", log, ":", value)
+                                result = "FAILURE"
                         else:
                             print("FAILURE : Failed to get the log '", log, "' from the test")
                             result = "FAILURE"
                             break;
                     if expectedResult in result:
-                        print("\nSUCCESS: Successfully played the audio in the device browser\n")
+                        print("\nSUCCESS: Successfully got stream details using WebAudio\n")
                         tdkTestObj.setResultStatus("SUCCESS")
                     else:
-                        print("\nFAILURE: Failed to playback the audio in the device browser\n")
+                        print("\nFAILURE: Failed to get stream details using WebAudio\n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("FAILURE: Failed to fetch the logs from Html test App \n")

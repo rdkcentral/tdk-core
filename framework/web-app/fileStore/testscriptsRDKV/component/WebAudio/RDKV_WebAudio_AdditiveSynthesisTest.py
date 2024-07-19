@@ -19,13 +19,13 @@
 '''
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
-  <version>1</version>
-  <name>RDKV_CERT_WebAudio_AudioContextCrashTest</name>
+  <version>2</version>
+  <name>RDKV_WebAudio_AdditiveSynthesisTest</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To check if the device browser crashes by creating 50 AudioContext objects</synopsis>
+  <synopsis>To check if the browser plays different harmonics using Webaudio</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -42,24 +42,25 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_02</test_case_id>
-    <test_objective>To check if the device browser crashes by creating 50 AudioContext objects</test_objective>
+    <test_case_id>WebAudio_06</test_case_id>
+    <test_objective>To check if the browser plays different harmonics using Webaudio</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Video Accelerators</test_setup>
+    <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>AudioContextCrashTest.html</input_parameters>
+    <input_parameters>AdditiveSynthesisTest.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should not crash on creating multiple audio context objects.</expected_output>
+    <expected_output>The browser should be able to play the different harmonic sounds using WebAudio</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_CERT_WebAudio_AudioContextCrashTest</test_script>
+    <test_script>RDKV_WebAudio_AdditiveSynthesisTest</test_script>
     <skipped>No</skipped>
     <release_version>M122</release_version>
     <remarks>None</remarks>
   </test_cases>
+  <script_tags/>
 </xml>
 
 '''
@@ -77,7 +78,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_AudioContextCrashTest');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_AdditiveSynthesisTest');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -86,11 +87,10 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/AudioContextCrashTest.html"
+webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/AdditiveSynthesisTest.html"
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
-webinspect_logs = ''
 
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
@@ -141,33 +141,40 @@ if expectedResult in result.upper():
                     exit()
             if log_check_method == "WebinspectPageLogs":
                 print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
-                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser)
-                if webinspect_logs !='':
-                    webinspect_logs = webinspect_logs[-1]
+                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser,["9","13"])
+                webinspect_logs = ', '.join(webinspect_logs)
             else:
                 print("\n Script is using wpeframework log to validate the webaudio test")
-                grep_line="AudioContextCrashTest | tail -1"
-                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line)
-
+                grep_line="'AdditiveSynthesisTest' | tail -9 | tr -d '\\n'"
+                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line,["9","13"])
             if webinspect_logs != "":
-                if "TDK_LOGS" in webinspect_logs and "AudioContextCrashTest" in webinspect_logs:
-                    print (webinspect_logs)
+                if "TDK_LOGS" in webinspect_logs and "AdditiveSynthesisTest" in webinspect_logs:
+                    print("\n ", webinspect_logs)
                     print("\nSUCCESS: Successfully fetched the logs from the Html test App")
                     tdkTestObj.setResultStatus("SUCCESS")
-                    if "Success" in webinspect_logs and "50" in webinspect_logs:
-                        print("\n SUCCESS: The browser didn't crash on creating 50 audiocontext objects\n")
+
+                    success_logs=["Synthesis started","Harmonic 1 started","Harmonic 2 started","Harmonic 3 started","Harmonic 4 started","Harmonic 5 started","Harmonic changed","Synthesis stopped"]
+                    for log in success_logs:
+                        if log in webinspect_logs: 
+                            print("SUCCESS : ",log)
+                            result = "SUCCESS"
+                        else:
+                            print("FAILURE : Failed to get the log '", log, "' from the test")
+                            result = "FAILURE"
+                            break;
+                    if expectedResult in result:
+                        print("\nSUCCESS: Successfully played the audio in the device browser\n")
                         tdkTestObj.setResultStatus("SUCCESS")
-
-                    elif "Failure" in webinspect_logs:
-                        print ("\n FAILURE: The browser crashed on creating 50 audiocontext objects\n")
-                        tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("\n FAILURE: Failed to create 50 audiocontext objects using html test app\n")
+                        print("\nFAILURE: Failed to playback the audio in the device browser\n")
                         tdkTestObj.setResultStatus("FAILURE")
-
                 else:
                     print("FAILURE: Failed to fetch the logs from Html test App \n")
                     tdkTestObj.setResultStatus("FAILURE")
+            else:
+                print("FAILURE: The logs from the browser came as empty")
+                tdkTestObj.setResultStatus("FAILURE")
+
             print("\n Revert everything before exiting the script")
             if current_url !='':
                 tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')

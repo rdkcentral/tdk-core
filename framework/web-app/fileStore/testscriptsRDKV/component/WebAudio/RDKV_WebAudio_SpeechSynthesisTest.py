@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2023 RDK Management
+# Copyright 2024 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -20,12 +20,12 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_CERT_WebAudio_SpeechSynthesisRandomVoicesTest</name>
+  <name>RDKV_WebAudio_SpeechSynthesisTest</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To check if the browser speaks the text given in three different voices.</synopsis>
+  <synopsis>To check if the browser speaks the text given.</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -39,25 +39,25 @@
     <box_type>Video_Accelerator</box_type>
   </box_types>
   <rdk_versions>
-    <rdk_version>RDK1.2</rdk_version>
+    <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_16</test_case_id>
-    <test_objective>To check if the browser speaks the text given in three different voices.</test_objective>
+    <test_case_id>WebAudio_11</test_case_id>
+    <test_objective>To check if the browser speaks the text given.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerator</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>SpeechSynthesisRandomVoicesTest.html</input_parameters>
+    <input_parameters>SpeechSynthesisTest.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
     <expected_output>The browser should be able to speak the given content</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_CERT_WebAudio_SpeechSynthesisRandomVoicesTest</test_script>
+    <test_script>RDKV_WebAudio_SpeechSynthesisTest</test_script>
     <skipped>No</skipped>
-    <release_version>M123</release_version>
+    <release_version>M122</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -77,7 +77,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_SpeechSynthesisRandomVoicesTest');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_SpeechSynthesisTest');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -86,7 +86,7 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/SpeechSynthesisRandomVoicesTest.html"
+webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/SpeechSynthesisTest.html"
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -140,19 +140,19 @@ if expectedResult in result.upper():
                     exit()
             if log_check_method == "WebinspectPageLogs":
                 print("\n Script is directly taking the browser webinspect page console logs to validate the webaudio")
-                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser,["9","9","13"])
+                webinspect_logs=WebAudiolib.webaudio_getLogs_webinspectpage(obj,webaudio_test_url,browser)
                 webinspect_logs = ', '.join(webinspect_logs)
             else:
                 print("\n Script is using wpeframework log to validate the webaudio test")
-                grep_line="'SpeechSynthesisRandomVoicesTest' | tail -4 | tr -d '\\n'"
-                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line,["9","9","13"])
+                grep_line="'SpeechSynthesisTest' | tail -2 | tr -d '\\n'"
+                webinspect_logs = WebAudiolib.webaudio_getLogs_fromDevicelogs(obj,webaudio_test_url,browser,grep_line)
             if webinspect_logs != "":
-                if "TDK_LOGS" in webinspect_logs and "SpeechSynthesisRandomVoicesTest" in webinspect_logs:
+                if "TDK_LOGS" in webinspect_logs and "SpeechSynthesisTest" in webinspect_logs:
                     print("\n ", webinspect_logs)
                     print("\nSUCCESS: Successfully fetched the logs from the Html test App")
                     tdkTestObj.setResultStatus("SUCCESS")
 
-                    success_logs=["Speech synthesis supported", "Speaking with voice 1", "Speaking with voice 2", "Speaking with voice 3"]
+                    success_logs=["speech synthesis supported", "Speech started", "Speech ended"]
                     for log in success_logs:
                         if log in webinspect_logs: 
                             print("SUCCESS : ",log)

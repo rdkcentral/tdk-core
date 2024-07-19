@@ -20,12 +20,12 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_CERT_WebAudio_GetStreamInfo_M4A</name>
+  <name>RDKV_WebAudio_GetStreamInfo_DTS</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To check if the webaudio can decode the M4A stream and get the details like codec, channels, duration etc.</synopsis>
+  <synopsis>To check if the webaudio can decode the DTS stream and get the details like codec, channels, duration etc.</synopsis>
   <groups_id/>
   <execution_time>10</execution_time>
   <long_duration>false</long_duration>
@@ -42,8 +42,8 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_08</test_case_id>
-    <test_objective>To check if the webaudio can decode the M4A stream and get the details like codec, channels, duration etc.</test_objective>
+    <test_case_id>WebAudio_09</test_case_id>
+    <test_objective>To check if the webaudio can decode the DTS stream and get the details like codec, channels, duration etc.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI, Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
@@ -52,10 +52,10 @@ All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <input_parameters>GetStreamInfoTest.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to decode the M4A stream and give the stream details</expected_output>
+    <expected_output>The browser should be able to decode the DTS stream and give the stream details</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_CERT_WebAudio_GetStreamInfo_M4A</test_script>
+    <test_script>RDKV_WebAudio_GetStreamInfo_DTS</test_script>
     <skipped>No</skipped>
     <release_version>M122</release_version>
     <remarks>None</remarks>
@@ -78,7 +78,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_CERT_WebAudio_GetStreamInfo_M4A');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_GetStreamInfo_DTS');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -87,17 +87,17 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-stream_url= WebAudioVariables.m4a_audio_url
+stream_url= WebAudioVariables.dts_audio_url
 webaudio_test_url = obj.url+"/fileStore/lightning-apps/webaudio/GetStreamInfoTest.html?streamUrl="+stream_url
 browser_method = browser+".1.url"
-stream_info = WebAudioVariables.m4a_stream_info
+stream_info = WebAudioVariables.dts_stream_info
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
 
 if expectedResult in result.upper():
     print("\nCheck prerequisites")
     tdkTestObj = obj.createTestStep('webaudio_prerequisite')
-    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,m4a_audio_url,m4a_stream_info")
+    tdkTestObj.addParameter("VariableList","browser_instance,webinspect_port,chromedriver_path,log_check_method,dts_audio_url,dts_stream_info")
     tdkTestObj.executeTestCase(expectedResult)
     pre_req_status=tdkTestObj.getResultDetails()
     if expectedResult in pre_req_status:
