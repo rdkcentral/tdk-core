@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2016 RDK Management
+# Copyright 2024 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,25 +21,23 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>10</version>
+  <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>NM_WifiMgr_isPaired</name>
+  <name>NM_NetSrvMgr_getInterfaceList</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id></primitive_test_id>
+  <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>NetSrvMgr_WifiMgr_GetAvailableSSIDs</primitive_test_name>
+  <primitive_test_name>NetSrvMgrAgent_NetSrvMgr_FunctionCall</primitive_test_name>
   <!--  -->
-  <primitive_test_version>1</primitive_test_version>
+  <primitive_test_version>2</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Objective:To check if the device is paired to a wifi network
-Test CaseID:CT_NM_16
-Test Type: Positive</synopsis>
+  <synopsis>Returns a list of interfaces supported by this device including their state</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>1</execution_time>
+  <execution_time>2</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -52,9 +50,9 @@ Test Type: Positive</synopsis>
   <box_types>
     <box_type>IPClient-Wifi</box_type>
     <!--  -->
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -62,50 +60,40 @@ Test Type: Positive</synopsis>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_30</test_case_id>
-    <test_objective>To check if the device is paired to a wifi network</test_objective>
+    <test_case_id>CT_NM_17</test_case_id>
+    <test_objective>Returns a list of interfaces supported by this device including their state</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
-    <pre_requisite>1. netSrvMgr should be up and running.
-2. IARMDaemonMain should be up and running.</pre_requisite>
-    <api_or_interface_used>IARM_Bus_Init (test agent process_name)
-IARM_Bus_Connect()
-IARM_Bus_Call(IARM_BUS_WIFI_MGR_API_isPaired)
-IARM_Bus_Disconnect()
-IARM_Bus_Term</api_or_interface_used>
-    <input_parameters>char* - methodName</input_parameters>
-    <automation_approch>1. TM loads the NetSrvMgr_Agent via the test agent.
-2.NetSrvMgr_Agent should check if the device is paired to a wifi network.
-3.NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
-    <except_output>Checkpoint 1.Wifi manager checks successfully if the device is paired or not</except_output>
+    <pre_requisite>IARMDaemonMain and netSrvMgr should be up and running</pre_requisite>
+    <api_or_interface_used>IARM_Bus_Call(IARM_BUS_NETSRVMGR_API_getInterfaceList)</api_or_interface_used>
+    <input_parameters>None</input_parameters>
+    <automation_approch>1. TM loads the NetSrvMgr_Agent via the test agent
+2. NetSrvMgr_Agent will connect to a wifi network using the credentials provided
+3. NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
+    <expected_output>Default network interfaces</expected_output>
     <priority>High</priority>
     <test_stub_interface>libnetsrvmgrstub.so</test_stub_interface>
-    <test_script>NM_WifiMgr_isPaired</test_script>
+    <test_script>NM_NetSrvMgr_getInterfaceList</test_script>
     <skipped>No</skipped>
-    <release_version>M48</release_version>
-    <remarks></remarks>
+    <release_version>M127</release_version>
   </test_cases>
-  <script_tags>
-    <script_tag>BASIC</script_tag>
-    <!--  -->
-  </script_tags>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
+# use tdklib library,which provides a wrapper for tdk testcase script 
+import tdklib; 
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 
 #Test component to be tested
 iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
-iarmObj.configureTestCase(ip,port,'NM_WifiMgr_isPaired');
+iarmObj.configureTestCase(ip,port,'NM_NetSrvMgr_getInterfaceList');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus)
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
@@ -120,45 +108,38 @@ if "SUCCESS" in iarmLoadStatus.upper():
         if "SUCCESS" in result:
             #Test component to be tested
             netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
-            netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_isPaired');
+            netsrvObj.configureTestCase(ip,port,'NM_NetSrvMgr_getInterfaceList');
 
-            #Get the result of connection with test component and STB
+            #Get the result of connection with test component and DUT
             netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-            print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus);
-            #Set the module loading status
+            print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus)
             netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
-
             if "SUCCESS" in netsrvLoadStatus.upper():
                 #Prmitive test case which associated to this Script
-                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                tdkTestObj = netsrvObj.createTestStep('NetSrvMgrAgent_NetSrvMgr_FunctionCall');
 
-                #Execute the test case in STB
-                tdkTestObj.addParameter("method_name", "isPaired");
+                tdkTestObj.addParameter("method_name", "getInterfaceList");
                 expectedresult="SUCCESS"
                 tdkTestObj.executeTestCase(expectedresult);
-
-                #Get the result of execution
                 actualresult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
 
-                if "SUCCESS" in actualresult:
-                    print("[TEST EXECUTION - SUCCESS] - Device is paired")
+                print("getInterfaceList returned : %s" %actualresult)
+                print("Details: [%s]"%details)
+                
+                #Set the result status of execution
+                if (expectedresult in actualresult) and (details.find("eth") or details.find("wlan")):
+                    print("[TEST EXECUTION - SUCCESS]")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print("[TEST EXECUTION - FAILURE] - %s"%details)
+                    print("[TEST EXECUTION - FAILURE]")
                     tdkTestObj.setResultStatus("FAILURE");
 
                 netsrvObj.unloadModule("netsrvmgr");
-
             else:
-                print("Failed to Load netsrvmgr Module ")
-                tdkTestObj.setResultStatus("FAILURE");
-            #Calling IARM_Bus_DisConnect API
+                print("Failed to Load netsrvmgr Module")
             result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
-        #calling IARMBUS API "IARM_Bus_Term"
         result = IARMBUS_Term(iarmObj,"SUCCESS")
-    #Unload iarmbus module
     iarmObj.unloadModule("iarmbus");
-
 else:
     print("Failed to Load iarmbus Module ")

@@ -60,12 +60,10 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NET_SRV_MGR_WIFI_10</test_case_id>
+    <test_case_id>CT_NM_10</test_case_id>
     <test_objective>To get all available network interfaces</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
     <test_setup>Video_Accelerator</test_setup>
-    <test_setup>RPI-Client</test_setup>
     <pre_requisite>IARMDaemonMain and netSrvMgr should be up and running</pre_requisite>
     <api_or_interface_used>IARM_Bus_Call(IARM_BUS_NETSRVMGR_API_getActiveInterface)</api_or_interface_used>
     <input_parameters>None</input_parameters>

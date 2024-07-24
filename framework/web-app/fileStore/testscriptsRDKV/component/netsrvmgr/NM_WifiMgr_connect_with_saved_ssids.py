@@ -39,7 +39,7 @@ Test Type: Positive</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>1</execution_time>
+  <execution_time>2</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -52,16 +52,20 @@ Test Type: Positive</synopsis>
   <box_types>
     <box_type>IPClient-Wifi</box_type>
     <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
+    <box_type>RPI-Client</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_27</test_case_id>
+    <test_case_id>CT_NM_22</test_case_id>
     <test_objective>To connect to a wifi network with the saved SSIDs</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
+    <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. netSrvMgr should be up and running.
 2. IARMDaemonMain should be up and running.</pre_requisite>
     <api_or_interface_used>IARM_Bus_Init (test agent process_name)
@@ -89,9 +93,9 @@ IARM_Bus_Term : None</api_or_interface_used>
   </script_tags>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script 
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
-import ConfigParser;
+import configparser;
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 #IP and Port of box, No need to change,
@@ -104,84 +108,91 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'NM_WifiMgr_connect_with_saved_ssids');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
 if "SUCCESS" in iarmLoadStatus.upper():
-        #Calling IARMBUS API "IARM_Bus_Init"
-        result = IARMBUS_Init(iarmObj,"SUCCESS")
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    #Calling IARMBUS API "IARM_Bus_Init"
+    result = IARMBUS_Init(iarmObj,"SUCCESS")
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in result:
+        #Calling IARMBUS API "IARM_Bus_Connect"
+        result = IARMBUS_Connect(iarmObj,"SUCCESS")
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
         if "SUCCESS" in result:
-                #Calling IARMBUS API "IARM_Bus_Connect"
-                result = IARMBUS_Connect(iarmObj,"SUCCESS")
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                if "SUCCESS" in result:
-                        #Test component to be tested
-                        netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
-                        netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_connect_with_saved_ssids');
+            #Test component to be tested
+            netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
+            netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_connect_with_saved_ssids');
 
-                        #Get the result of connection with test component and STB
-                        netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-                        print "[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus;
-                        #Set the module loading status
-                        netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
+            #Get the result of connection with test component and STB
+            netsrvLoadStatus =netsrvObj.getLoadModuleResult();
+            print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus);
+            #Set the module loading status
+            netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
-                        if "SUCCESS" in netsrvLoadStatus.upper():
-                                #Clear any saved SSIDs first
-                                #Prmitive test case which associated to clear SSIDs
-                                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+            if "SUCCESS" in netsrvLoadStatus.upper():
+                #Get Wifi configuration file
+                wifiConfigFile = netsrvObj.realpath+'fileStore/wificredential.config'
+                configParser = configparser.ConfigParser()
+                configParser.read(r'%s' % wifiConfigFile)
+                ssid = configParser.get('wifi-config', 'ssid')
+                passphrase = configParser.get('wifi-config', 'passphrase')
 
-                                #Execute the test case in STB
-                                tdkTestObj.addParameter("method_name", "saveSSID");
-                                #Get Wifi configuration file
-                                wifiConfigFile = netsrvObj.realpath+'fileStore/wificredential.config'
-                                configParser = ConfigParser.ConfigParser()
-                                configParser.read(r'%s' % wifiConfigFile)
-                                ssid = configParser.get('wifi-config', 'ssid')
-                                passphrase = configParser.get('wifi-config', 'passphrase')
-                                tdkTestObj.addParameter("ssid", ssid);
-                                tdkTestObj.addParameter("passphrase", passphrase);
-                                expectedresult="SUCCESS"
-                        	tdkTestObj.executeTestCase(expectedresult);
-                                #Get the result of execution
-                        	actualresult = tdkTestObj.getResult();
-                                if ("SUCCESS" in actualresult):
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                        print "SUCCESS :Successfully cleared previously saved SSIDs";
-                        	        #Primitive test case which is associated to connect to network
-                        	        tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                #Prmitive test case which associated to clear SSIDs
+                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                tdkTestObj.addParameter("method_name", "saveSSID");
+                tdkTestObj.addParameter("ssid", ssid);
+                tdkTestObj.addParameter("passphrase", passphrase);
+                expectedresult="SUCCESS"
+                tdkTestObj.executeTestCase(expectedresult);
 
-                                        #Execute the test case in STB
-                                        tdkTestObj.addParameter("method_name", "connect");
-                                        expectedresult="SUCCESS"
-                        	        tdkTestObj.executeTestCase(expectedresult);
+                #Get the result of execution
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                print("SaveSSID returned : %s" %actualresult)
+                print("Details: [%s]"%details)
 
-                        	        #Get the result of execution
-                        	        actualresult = tdkTestObj.getResult();
-                                        details = tdkTestObj.getResultDetails();
-                        	        print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                        print "Details: [%s]"%details;
+                if ("SUCCESS" in actualresult):
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("SUCCESS :Successfully cleared previously saved SSIDs");
+                    #Primitive test case which is associated to connect to network
+                    tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
 
-                                        #Set the result status of execution
-                        	        if expectedresult in actualresult:
-                        	                tdkTestObj.setResultStatus("SUCCESS");
-                                        else:
-                                                tdkTestObj.setResultStatus("FAILURE");
+                    #Execute the test case in STB
+                    tdkTestObj.addParameter("method_name", "connect");
+                    tdkTestObj.addParameter("ssid", ssid);
+                    tdkTestObj.addParameter("passphrase", passphrase);
+                    expectedresult="SUCCESS"
+                    tdkTestObj.executeTestCase(expectedresult);
 
-                                else:
-                                        print "Failed to save SSIDs"
-                                netsrvObj.unloadModule("netsrvmgr");
-                        	
-                        else :
-                        	print "Failed to Load netsrvmgr Module "
+                    #Get the result of execution
+                    actualresult = tdkTestObj.getResult();
+                    details = tdkTestObj.getResultDetails();
+                    print("Connect with Saved SSID returns : %s" %actualresult);
+                    print("Details: [%s]"%details);
 
-                        #Calling IARM_Bus_DisConnect API
-                        result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
-                #calling IARMBUS API "IARM_Bus_Term"
-                result = IARMBUS_Term(iarmObj,"SUCCESS")
-        #Unload iarmbus module
-        iarmObj.unloadModule("iarmbus");
+                    #Set the result status of execution
+                    if expectedresult in actualresult:
+                        print("[TEST EXECUTION RESULT] - SUCCESS")
+                        tdkTestObj.setResultStatus("SUCCESS");
+                    else:
+                        print("[TEST EXECUTION RESULT] - FAILURE")
+                        tdkTestObj.setResultStatus("FAILURE");
 
-else :
-        print "Failed to Load iarmbus Module "
+                else:
+                    print("Failed to save SSIDs")
+                    tdkTestObj.setResultStatus("FAILURE");
+                netsrvObj.unloadModule("netsrvmgr");
+
+            else :
+                print("Failed to Load netsrvmgr Module ")
+            #Calling IARM_Bus_DisConnect API
+            result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+        #calling IARMBUS API "IARM_Bus_Term"
+        result = IARMBUS_Term(iarmObj,"SUCCESS")
+    #Unload iarmbus module
+    iarmObj.unloadModule("iarmbus");
+
+else:
+    print("Failed to Load iarmbus Module ")

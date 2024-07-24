@@ -60,10 +60,10 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NET_SRV_MGR_WIFI_14</test_case_id>
+    <test_case_id>CT_NM_14</test_case_id>
     <test_objective>This would check either given interface has enabled or not</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
+    <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>IARMDaemonMain and netSrvMgr should be up and running</pre_requisite>
     <api_or_interface_used>IARM_Bus_Call(IARM_BUS_NETSRVMGR_API_isInterfaceEnabled)</api_or_interface_used>
     <input_parameters>None</input_parameters>
@@ -83,6 +83,7 @@
 
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
+import configparser
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 
@@ -121,16 +122,25 @@ if "SUCCESS" in iarmLoadStatus.upper():
             netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
             if "SUCCESS" in netsrvLoadStatus.upper():
+                #Get Wifi configuration file
+                wifiConfigFile = netsrvObj.realpath+'fileStore/wificredential.config'
+                configParser = configparser.RawConfigParser()
+                configParser.read(r'%s' % wifiConfigFile)
+                interface = configParser.get('wifi-config', 'interface')
+
                 #Prmitive test case which associated to this Script
                 tdkTestObj = netsrvObj.createTestStep('NetSrvMgrAgent_NetSrvMgr_FunctionCall');
 
                 tdkTestObj.addParameter("method_name", "isInterfaceEnabled");
+                tdkTestObj.addParameter("interface", interface);
+
                 expectedresult="SUCCESS"
+
                 tdkTestObj.executeTestCase(expectedresult);
                 actualresult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
 
-                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                print("isInterfaceEnabled returns : %s" %actualresult);
                 print("Details: [%s]"%details);
 
                 if (expectedresult in actualresult) and ("true" in details):

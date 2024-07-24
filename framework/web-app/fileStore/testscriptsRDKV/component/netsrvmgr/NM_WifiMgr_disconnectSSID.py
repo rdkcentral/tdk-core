@@ -60,12 +60,10 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NET_SRV_MGR_WIFI_16</test_case_id>
+    <test_case_id>CT_NM_16</test_case_id>
     <test_objective>Disconnect connected SSID</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
     <test_setup>Video_Accelerator</test_setup>
-    <test_setup>RPI-Client</test_setup>
     <pre_requisite>IARMDaemonMain and netsrvmgr should be up and running</pre_requisite>
     <api_or_interface_used>IARM_Bus_Call(IARM_BUS_WIFI_MGR_API_disconnectSSID)</api_or_interface_used>
     <input_parameters>char* - method_name</input_parameters>
@@ -74,8 +72,8 @@
 3.NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
     <expected_output>Disconnect connected SSID</expected_output>
     <priority>High</priority>
-    <test_stub_interface>High</test_stub_interface>
-    <test_script>libnetsrvmgrstub.so</test_script>
+    <test_stub_interface>libnetsrvmgrstub.so</test_stub_interface>
+    <test_script>NM_WifiMgr_disconnectSSID</test_script>
     <skipped>No</skipped>
     <release_version>M126</release_version>
     <remarks></remarks>  
@@ -168,7 +166,7 @@ if "SUCCESS" in iarmLoadStatus.upper():
                        print("[TEST EXECUTION RESULT] : %s" %actualresult);
                        print("Details: [%s]"%details);
 
-                       if (actualresult in details):
+                       if (actualresult in expectedresult):
                            print("[TEST EXECUTION - SUCCESS] :  given SSID[%s] got disconnected"%ssid);
                            tdkTestObj.setResultStatus("SUCCESS");
                        else:
