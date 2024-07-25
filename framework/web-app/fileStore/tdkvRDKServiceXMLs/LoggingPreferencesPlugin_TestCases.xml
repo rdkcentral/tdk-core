@@ -59,7 +59,8 @@
             </testStep>
           </prerequisite>
           <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" >
-            <event pluginName="LoggingPreferences" eventName="Event_OnKeystroke_Mask_Enabled_Change" />
+		  <event pluginName="LoggingPreferences" eventName="Event_OnKeystroke_Mask_Enabled_Change" />
+		  <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
           </prerequisite>
         </pluginPreRequisite>
 
@@ -104,6 +105,74 @@
                 <resultGeneration useMethodTag="loggingpreferences_check_keystroke_mask_state" expectedValues="False"/>
             </testStep>
         </testCase>
+
+	<!-- Test case 03 -->
+	<testCase testCaseId="LOGG_03" testCaseName="LoggingPreferences_Enable/Disable_Keystrokemask_Twice" desc="Call setKeystrokeMaskEnabled when it is already enabled or disabled; isKeystrokeMaskEnabled should return the previously set value.">
+           <testCaseInfo testCaseType="setandget" revert="true" />
+            <testStep testStepId="1" name="Is_Keystroke_Mask_Enabled" method="Is_Keystroke_Mask_Enabled" saveResult="true" revertGet="yes"  >
+                <resultGeneration useMethodTag="loggingpreferences_check_keystroke_mask_state"  />
+            </testStep>
+            <testStep testStepId="2" name="Set_Keystroke_Mask_Enabled" method="Set_Keystroke_Mask_Enabled">
+                <params>
+                  <param tag="keystrokeMaskEnabled" usePreviousResult="true" Id="1" useMethodTag="loggingpreferences_toggle_keystroke_mask_state" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="loggingpreferences_check_set_operation" />
+            </testStep>
+	    <testStep testStepId="3" name="Set_Keystroke_Mask_Enabled" method="Set_Keystroke_Mask_Enabled" revertSet="yes" >
+                <params>
+                  <param tag="keystrokeMaskEnabled" usePreviousResult="true" Id="1" useMethodTag="loggingpreferences_toggle_keystroke_mask_state" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="loggingpreferences_check_set_operation" />
+            </testStep>
+	    <testStep testStepId="4" name="Is_Keystroke_Mask_Enabled" method="Is_Keystroke_Mask_Enabled" revertFlag="yes"  >
+                <resultGeneration useMethodTag="loggingpreferences_check_keystroke_mask_state">
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="loggingpreferences_toggle_keystroke_mask_state" />
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Check_OnKeystroke_Mask_Enabled_Change_Event" event="Event_OnKeystroke_Mask_Enabled_Change" action="eventListener" delay="3"  >
+              <resultGeneration useMethodTag="loggingpreferences_check_onkeystroke_mask_enabled_change_event" >
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="loggingpreferences_toggle_keystroke_mask_state" />
+              </resultGeneration>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 04 -->
+	<testCase testCaseId="LOGG_04" testCaseName="LoggingPreferences_Verify_KeystrokeMask_Toggle_Functionality" desc="Enable the keystroke mask, then disable it, and check the status to ensure it reflects the correct value">
+            <testCaseInfo testCaseType="setandget" revert="true"/>
+	    <testStep testStepId="1" name="Is_Keystroke_Mask_Enabled" method="Is_Keystroke_Mask_Enabled" saveResult="true" revertGet="yes"  >
+                <resultGeneration useMethodTag="loggingpreferences_check_keystroke_mask_state"  />
+            </testStep>	    
+	    <testStep testStepId="2" name="Set_Keystroke_Mask_Enabled" method="Set_Keystroke_Mask_Enabled" >
+                <params>
+                  <param tag="keystrokeMaskEnabled" value="true" />
+                </params>
+                <resultGeneration useMethodTag="loggingpreferences_check_set_operation" />
+            </testStep>
+	    <testStep testStepId="3" name="Set_Keystroke_Mask_Enabled" method="Set_Keystroke_Mask_Enabled" revertSet="yes">
+                <params>
+                  <param tag="keystrokeMaskEnabled" value="false" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="loggingpreferences_check_set_operation" />
+            </testStep>
+	    <testStep testStepId="4" name="Is_Keystroke_Mask_Enabled" method="Is_Keystroke_Mask_Enabled" revertFlag="yes">
+                <resultGeneration useMethodTag="loggingpreferences_check_keystroke_mask_state" expectedValues="False" />
+            </testStep>
+	</testCase>
+
+	<!-- Test case 05 -->
+	<testCase testCaseId="LOGG_05" testCaseName="LoggingPreferences_Verify_SetKeystrokeMask_With_Invalid/Empty_Input" desc="Verify the SetKeystrokeMask function with invalid/empty input">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Set_Invalid_Keystroke_Mask" method="Invalid_Set_Keystroke_Mask" >
+                <params>
+                  <param tag="keystrokeMaskEnabled" value="null" />
+                </params>
+                <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+	    </testStep>
+	    <testStep testStepId="2" name="Set_Empty_Keystroke_Mask" method="Invalid_Set_Keystroke_Mask" >
+                <params>
+                  <param tag="keystrokeMaskEnabled" value="" />
+                </params>
+                <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+            </testStep>
+        </testCase>
 </testPlugin>
-
-

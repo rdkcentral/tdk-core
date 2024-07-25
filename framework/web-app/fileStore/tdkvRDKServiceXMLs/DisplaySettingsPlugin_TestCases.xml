@@ -4025,7 +4025,7 @@
        </testCase>
 
        <!-- Test case 82 -->
-       <testCase testCaseId="DS_82" testCaseName="DisplaySettings_Verify_MuteStatus_After_Volume_Adjustment_HDMI0" desc="Verify the mute status after adjusting the volume (increase) on HDMI0">
+       <testCase testCaseId="DS_82" testCaseName="DisplaySettings_Verify_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) on HDMI0">
             <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
                   <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
@@ -4098,6 +4098,593 @@
                     <param tag="audioPort"  value="HDMI0" />
                   </params>
                   <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 83 -->
+       <testCase testCaseId="DS_83" testCaseName="DisplaySettings_Verify_MuteStatus_After_Setting_Volume_To_Zero_HDMI0" desc="Verify the mute status after adjusting the volume (zero) on HDMI0">
+            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true" revertGet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Volume_Level"  method="Set_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level" arguments="volume_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="50"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level" arguments="volume_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" expectedValues="50"/>
+            </testStep>
+            <testStep testStepId="5" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="6" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+            <testStep testStepId="8" name="Set_Volume_Level"  method="Set_Volume_Level" revertSet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="0" revertParam="yes"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="9" name="Get_Volume_Level" method="Get_Volume_Level" revertFlag="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" expectedValues="0"/>
+            </testStep>
+            <testStep testStepId="10" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+
+        <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 84 -->
+       <testCase testCaseId="DS_84" testCaseName="DisplaySettings_Verify_MuteStatus_After_Decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) on HDMI0">
+            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+              <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true" revertGet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Volume_Level"  method="Set_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level" arguments="volume_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="50"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level" arguments="volume_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" expectedValues="50"/>
+            </testStep>
+            <testStep testStepId="5" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+              <testStep testStepId="6" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="True"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+            <testStep testStepId="8" name="Retrieve_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="9" name="Set_Volume_Level"  method="Set_Volume_Level" revertSet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" usePreviousResult="true" Id="8" useMethodTag="get_previous_volume_level_for_decrease" revertParam="yes"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level" revertFlag="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level">
+                    <expectedValues usePreviousResult="true" Id="8" useMethodTag="get_previous_volume_level_for_decrease"/>
+                  </resultGeneration>
+            </testStep>
+            <testStep testStepId="11" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 85 -->
+       <testCase testCaseId="DS_85" testCaseName="DisplaySettings_Verify_MuteStatus_After_Setting_Volume_To_Hundred_HDMI0" desc="Verify the mute status after adjusting the volume (Hundred) on HDMI0">
+            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+              <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true" revertGet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Volume_Level"  method="Set_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level_for_hundred"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="100"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_volume_level_for_hundred"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" expectedValues="100"/>
+            </testStep>
+            <testStep testStepId="5" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+              <testStep testStepId="6" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="True"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+            <testStep testStepId="8" name="Retrieve_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="9" name="Set_Volume_Level"  method="Set_Volume_Level" revertSet="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="volumeLevel" value="100" revertParam="yes"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation"/>
+            </testStep>
+            <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level" revertFlag="yes">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" expectedValues="100"/>
+            </testStep>
+            <testStep testStepId="11" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 86 -->
+       <testCase testCaseId="DS_86" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_Increasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (increase) using keycode on HDMI0">
+            <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Volume_Level"  method="GenerateKey" pluginName="RDKShell">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_decrease_volume_level"/>
+                  <params>
+                    <param tag="keyCode" value="174" />
+                    <param tag="modifiers" useDefault="true" />
+                    <param tag="delay" value="1.0"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_decrease_volume_level"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_previous_decrease_keycode_volume_level"/>
+                  </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="6" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="True"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+            <testStep testStepId="8" name="Retrieve_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+                  <params>
+                    <param tag="keyCode" value="175"/>
+                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="delay" value="1.0"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+            </testStep>
+            <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level">
+                    <expectedValues usePreviousResult="true" Id="8" useMethodTag="get_previous_increase_keycode_volume_level"/>
+                  </resultGeneration>
+            </testStep>
+            <testStep testStepId="11" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 87 -->
+       <testCase testCaseId="DS_87" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_After_decreasing_Volume_HDMI0" desc="Verify the mute status after adjusting the volume (decrease) using keycode on HDMI0">
+            <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Volume_Level"  method="GenerateKey" pluginName="RDKShell">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_increase_volume_level"/>
+                  <params>
+                    <param tag="keyCode" value="175" />
+                    <param tag="modifiers" useDefault="true" />
+                    <param tag="delay" value="1.0"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_keycode_increase_volume_level"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_previous_increase_keycode_volume_level"/>
+                  </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="6" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="True"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="5" useMethodTag="displaysettings_mute_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+            <testStep testStepId="8" name="Retrieve_Volume_Level" method="Get_Volume_Level" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level" arguments="check_volume_level_range"/>
+            </testStep>
+            <testStep testStepId="9" name="Set_Volume_Level_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+                  <params>
+                    <param tag="keyCode" value="174"/>
+                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="delay" value="1.0"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+            </testStep>
+            <testStep testStepId="10" name="Get_Volume_Level" method="Get_Volume_Level">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_volume_level">
+                    <expectedValues usePreviousResult="true" Id="8" useMethodTag="get_previous_decrease_keycode_volume_level"/>
+                  </resultGeneration>
+            </testStep>
+            <testStep testStepId="11" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_Muted_Status">
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Muted"  method="Set_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                    <param tag="muted" value="False"/>
+                  </params>
+                  <resultGeneration useMethodTag="display_settings_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <conditionalExecution enable="true" Id="2" useMethodTag="displaysettings_mute_status" arguments="muted_status"/>
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
+
+       <!-- Test case 88 -->
+       <testCase testCaseId="DS_88" testCaseName="DisplaySettings_Using_KeyCode_Verify_MuteStatus_HDMI0" desc="Verify the mute status using keycode on HDMI0">
+            <testCaseInfo testCaseType="direct" revert="true" configurableTest="true" testKey="CONNECTED_AUDIO_PORTS" useMethodTag="displaysetting_check_feature_applicability" arguments="HDMI0"/>
+            <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts">
+                  <resultGeneration useMethodTag="check_connected_audio_ports"  expectedValues="HDMI0"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Muted" method="Get_Muted" saveResult="true">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted"/>
+            </testStep>
+            <testStep testStepId="3" name="Set_Mute_Status_Using_KeyCode"  method="GenerateKey" pluginName="RDKShell">
+                  <params>
+                    <param tag="keyCode" value="173"/>
+                    <param tag="modifiers" useDefault="true"/>
+                    <param tag="delay" value="1.0"/>
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+            </testStep>
+            <testStep testStepId="4" name="Get_Muted" method="Get_Muted">
+                  <params>
+                    <param tag="audioPort"  value="HDMI0" />
+                  </params>
+                  <resultGeneration useMethodTag="check_muted">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_keycode_mute_status"/>
+                  </resultGeneration>
             </testStep>
 
        <testCasePostRequisite>

@@ -1060,7 +1060,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-
+ 
         elif tag == "system_check_error_message":
             success = str(result.get("success")).lower() == "false"
             info["success"] = result.get("success")
@@ -1070,7 +1070,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+        
         elif tag == "system_validate_image_version":
             imageVersion = result.get('imageVersion')
             success = result.get('success')
@@ -2940,6 +2940,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["storage_size"] = result
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "persistentstore_get_namespace_storagelimit":
+            output = result.get("storageLimit")
+            if int(output) == int(expectedValues[0]):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         # TextToSpeech Plugin Response result parser steps
         elif tag == "texttospeech_get_enabled_status":
             info["enabletts"] = result.get("isenabled")
@@ -3394,7 +3401,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-
+        
         #Fetch the complete configuration and save it
         elif tag == "controller_get_configuration":
             status = checkNonEmptyResultData(result)
@@ -3911,6 +3918,14 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 else:
                     result = "TRUE"
 
+        elif tag == "xcast_get_enable_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            xcast_enabled = testStepResults[0].get("enabled")
+            if "false" in str(xcast_enabled).lower():
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
         # HdmiCecSink Plugin Response result parser steps
         elif tag == "hdmicecsink_check_cec_enabled_status":
             testStepResults = list(testStepResults[0].values())[0]
@@ -4009,6 +4024,7 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             else:
                 result = "FALSE"
 
+        # DisplaySettings Plugin Response result parser steps
         elif tag == "displaysettings_mute_status":
             testStepResults = list(testStepResults[0].values())[0]
             muted_status = testStepResults[0].get("muted")
@@ -4028,10 +4044,58 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             volume_Level = testStepResults[0].get("volumeLevel")
             volume_Level_float = float(volume_Level)
             volume_Level_int = int(volume_Level_float)
-            if volume_Level_int == 100:
+            if len(arg) and arg[0] == "volume_status":
+                if volume_Level_int == 0:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if volume_Level_int == 100:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+
+        elif tag == "displaysettings_volume_level_for_hundred":
+            testStepResults = list(testStepResults[0].values())[0]
+            volume_Level = testStepResults[0].get("volumeLevel")
+            volume_Level_float = float(volume_Level)
+            volume_Level_int = int(volume_Level_float)
+            if volume_Level_int != 100:
                 result = "TRUE"
             else:
                 result = "FALSE"
+
+        elif tag == "displaysettings_keycode_decrease_volume_level":
+            testStepResults = list(testStepResults[0].values())[0]
+            volume_Level = testStepResults[0].get("volumeLevel")
+            volume_Level_float = float(volume_Level)
+            volume_Level_int = int(volume_Level_float)
+            if volume_Level_int > 90:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "displaysettings_keycode_increase_volume_level":
+            testStepResults = list(testStepResults[0].values())[0]
+            volume_Level = testStepResults[0].get("volumeLevel")
+            volume_Level_float = float(volume_Level)
+            volume_Level_int = int(volume_Level_float)
+            if volume_Level_int < 10:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        # PersistentStore Plugin Response result parser steps
+        elif tag == "persistentstore_get_previous_namespace":
+            testStepResults = list(testStepResults[0].values())[0]
+            namespaces = testStepResults[0].get("Namespaces")
+            if namespaces is None:
+                result = "FALSE"
+            else:
+                if "username" in namespaces:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -4751,6 +4815,42 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             supportedColorDepth = testStepResults[0].get("supportedColorDepth")
             info["colorDepth"] = ",".join(supportedColorDepth)
 
+        elif tag =="get_previous_volume_level":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            volumeLevel = testStepResults1[0].get("volumeLevel")
+            volumeLevel_float = float(volumeLevel)
+            volumeLevel_int = int(volumeLevel_float)
+            info["volumeLevel"] = volumeLevel_int+1
+
+        elif tag =="get_previous_volume_level_for_decrease":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            volumeLevel = testStepResults1[0].get("volumeLevel")
+            volumeLevel_float = float(volumeLevel)
+            volumeLevel_int = int(volumeLevel_float)
+            info["volumeLevel"] = volumeLevel_int-1
+
+        elif tag =="get_previous_increase_keycode_volume_level":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            volumeLevel = testStepResults1[0].get("volumeLevel")
+            volumeLevel_float = float(volumeLevel)
+            volumeLevel_int = int(volumeLevel_float)
+            info["volumeLevel"] = volumeLevel_int+5
+
+        elif tag =="get_previous_decrease_keycode_volume_level":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            volumeLevel = testStepResults1[0].get("volumeLevel")
+            volumeLevel_float = float(volumeLevel)
+            volumeLevel_int = int(volumeLevel_float)
+            info["volumeLevel"] = volumeLevel_int-5
+
+        elif tag =="get_keycode_mute_status":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            mutedStatus = testStepResults1[0].get("muted")
+            if mutedStatus.lower() == "true":
+                info["mutedStatus"] = "False"
+            else:
+                info["mutedStatus"] = "True"
+
         # Wifi Plugin Response result parser steps
         elif tag == "wifi_toggle_adapter_state":
             testStepResults = list(testStepResults[0].values())[0]
@@ -5036,13 +5136,6 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["EDID"] = testStepResults1[0].get("EDID")
             testStepResults2 = list(testStepResults[1].values())[0]
             info["host_edid"] = testStepResults2[0].get("host_edid")
-
-        elif tag =="get_previous_volume_level":
-            testStepResults1 = list(testStepResults[0].values())[0]
-            volumeLevel = testStepResults1[0].get("volumeLevel")
-            volumeLevel_float = float(volumeLevel)
-            volumeLevel_int = int(volumeLevel_float)
-            info["volumeLevel"] = volumeLevel_int+1
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
