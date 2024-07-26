@@ -14,17 +14,17 @@
  limitations under the License.
 -->
 <xml>
-  <module name="dshal" testGroup="Component">
+  <module testGroup="Component" name="dshal">
     <primitiveTests>
-      <primitiveTest id="" name="DSHal_GetSurroundMode" version="1">
+      <primitiveTest name="DSHal_GetSurroundMode" id="" version="1">
         <function>TestMgr_DSHal_GetSurroundMode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetStereoMode" version="1">
+      <primitiveTest name="DSHal_GetStereoMode" id="" version="1">
         <function>TestMgr_DSHal_GetStereoMode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_GetAudioPort" version="1">
+      <primitiveTest name="DSHal_GetAudioPort" id=" " version="1">
         <function>TestMgr_DSHal_GetAudioPort</function>
         <parameters>
           <parameter name="index" value="0"/>
@@ -33,7 +33,7 @@
           <parameter name="secondary_portType" value="3"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_GetVideoPort" version="1">
+      <primitiveTest name="DSHal_GetVideoPort" id=" " version="1">
         <function>TestMgr_DSHal_GetVideoPort</function>
         <parameters>
           <parameter name="index" value="0"/>
@@ -42,111 +42,111 @@
           <parameter name="secondary_portType" value="8"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetStereoMode" version="1">
+      <primitiveTest name="DSHal_SetStereoMode" id=" " version="1">
         <function>TestMgr_DSHal_SetStereoMode</function>
         <parameters>
           <parameter name="stereoMode" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetAudioEncoding" version="1">
+      <primitiveTest name="DSHal_GetAudioEncoding" id="" version="1">
         <function>TestMgr_DSHal_GetAudioEncoding</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_EnableAudioPort" version="1">
+      <primitiveTest name="DSHal_EnableAudioPort" id=" " version="1">
         <function>TestMgr_DSHal_EnableAudioPort</function>
         <parameters>
           <parameter name="enable" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsAudioPortEnabled" version="1">
+      <primitiveTest name="DSHal_IsAudioPortEnabled" id="" version="1">
         <function>TestMgr_DSHal_IsAudioPortEnabled</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsDisplayConnected" version="1">
+      <primitiveTest name="DSHal_IsDisplayConnected" id="" version="1">
         <function>TestMgr_DSHal_IsDisplayConnected</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsDisplaySurround" version="1">
+      <primitiveTest name="DSHal_IsDisplaySurround" id="" version="1">
         <function>TestMgr_DSHal_IsDisplaySurround</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetHDCPProtocol" version="1">
+      <primitiveTest name="DSHal_GetHDCPProtocol" id="" version="1">
         <function>TestMgr_DSHal_GetHDCPProtocol</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetHDCPReceiverProtocol" version="1">
+      <primitiveTest name="DSHal_GetHDCPReceiverProtocol" id="" version="1">
         <function>TestMgr_DSHal_GetHDCPReceiverProtocol</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetHDCPCurrentProtocol" version="1">
+      <primitiveTest name="DSHal_GetHDCPCurrentProtocol" id="" version="1">
         <function>TestMgr_DSHal_GetHDCPCurrentProtocol</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsVideoPortEnabled" version="1">
+      <primitiveTest name="DSHal_IsVideoPortEnabled" id="" version="1">
         <function>TestMgr_DSHal_IsVideoPortEnabled</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_EnableVideoPort" version="1">
+      <primitiveTest name="DSHal_EnableVideoPort" id=" " version="1">
         <function>TestMgr_DSHal_EnableVideoPort</function>
         <parameters>
           <parameter name="enable" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_GetDisplay" version="1">
+      <primitiveTest name="DSHal_GetDisplay" id=" " version="1">
         <function>TestMgr_DSHal_GetDisplay</function>
         <parameters>
           <parameter name="index" value="0"/>
           <parameter name="portType" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetDisplayAspectRatio" version="1">
+      <primitiveTest name="DSHal_GetDisplayAspectRatio" id="" version="1">
         <function>TestMgr_DSHal_GetDisplayAspectRatio</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetColorDepth" version="1">
+      <primitiveTest name="DSHal_GetColorDepth" id="" version="1">
         <function>TestMgr_DSHal_GetColorDepth</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetColorSpace" version="1">
+      <primitiveTest name="DSHal_GetColorSpace" id="" version="1">
         <function>TestMgr_DSHal_GetColorSpace</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsVideoPortActive" version="1">
+      <primitiveTest name="DSHal_IsVideoPortActive" id="" version="1">
         <function>TestMgr_DSHal_IsVideoPortActive</function>
         <parameters/>
       </primitiveTest>
-    <primitiveTest id=" " name="DSHal_SetFPBrightness" version="1">
+      <primitiveTest name="DSHal_SetFPBrightness" id=" " version="1">
         <function>TestMgr_DSHal_SetFPBrightness</function>
         <parameters>
           <parameter name="brightness" value=""/>
           <parameter name="indicator" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_GetFPBrightness" version="1">
+      <primitiveTest name="DSHal_GetFPBrightness" id=" " version="1">
         <function>TestMgr_DSHal_GetFPBrightness</function>
         <parameters>
           <parameter name="indicator" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetCPUTemperature" version="1">
+      <primitiveTest name="DSHal_GetCPUTemperature" id="" version="1">
         <function>TestMgr_DSHal_GetCPUTemperature</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetVersion" version="1">
+      <primitiveTest name="DSHal_GetVersion" id="" version="1">
         <function>TestMgr_DSHal_GetVersion</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetVersion" version="1">
+      <primitiveTest name="DSHal_SetVersion" id=" " version="1">
         <function>TestMgr_DSHal_SetVersion</function>
         <parameters>
           <parameter name="version" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetHDRCapabilities" version="1">
+      <primitiveTest name="DSHal_GetHDRCapabilities" id="" version="1">
         <function>TestMgr_DSHal_GetHDRCapabilities</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetSupportedVideoCodingFormats" version="1">
+      <primitiveTest name="DSHal_GetSupportedVideoCodingFormats" id="" version="1">
         <function>TestMgr_DSHal_GetSupportedVideoCodingFormats</function>
         <parameters/>
       </primitiveTest>
@@ -156,11 +156,11 @@
           <parameter name="format" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetTVHDRCapabilities" version="1">
+      <primitiveTest name="DSHal_GetTVHDRCapabilities" id="" version="1">
         <function>TestMgr_DSHal_GetTVHDRCapabilities</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetFPBlink" version="2">
+      <primitiveTest name="DSHal_SetFPBlink" id=" " version="2">
         <function>TestMgr_DSHal_SetFPBlink</function>
         <parameters>
           <parameter name="blinkDuration" value="0"/>
@@ -168,19 +168,19 @@
           <parameter name="indicator" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetFPTextBrightness" version="1">
+      <primitiveTest name="DSHal_SetFPTextBrightness" id=" " version="1">
         <function>TestMgr_DSHal_SetFPTextBrightness</function>
         <parameters>
           <parameter name="brightness" value="50"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetFPText" version="1">
+      <primitiveTest name="DSHal_SetFPText" id=" " version="1">
         <function>TestMgr_DSHal_SetFPText</function>
         <parameters>
           <parameter name="text" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetFPTime" version="1">
+      <primitiveTest name="DSHal_SetFPTime" id=" " version="1">
         <function>TestMgr_DSHal_SetFPTime</function>
         <parameters>
           <parameter name="format" value="0"/>
@@ -188,52 +188,52 @@
           <parameter name="minutes" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetFPColor" version="2">
+      <primitiveTest name="DSHal_SetFPColor" id=" " version="2">
         <function>TestMgr_DSHal_SetFPColor</function>
         <parameters>
           <parameter name="color" value="0"/>
           <parameter name="indicator" value="0"/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsOutputHDR" version="1">
+      <primitiveTest name="DSHal_IsOutputHDR" id="" version="1">
         <function>TestMgr_DSHal_IsOutputHDR</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_HdmiInGetNumberOfInputs" version="1">
+      <primitiveTest name="DSHal_HdmiInGetNumberOfInputs" id="" version="1">
         <function>TestMgr_DSHal_HdmiInGetNumberOfInputs</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetAudioMute" version="1">
+      <primitiveTest name="DSHal_SetAudioMute" id=" " version="1">
         <function>TestMgr_DSHal_SetAudioMute</function>
         <parameters>
           <parameter name="muted" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsAudioMute" version="1">
+      <primitiveTest name="DSHal_IsAudioMute" id="" version="1">
         <function>TestMgr_DSHal_IsAudioMute</function>
         <parameters/>
       </primitiveTest>
-       <primitiveTest id=" " name="DSHal_SetAudioDelay" version="1">
+      <primitiveTest name="DSHal_SetAudioDelay" id=" " version="1">
         <function>TestMgr_DSHal_SetAudioDelay</function>
         <parameters>
           <parameter name="audioDelay" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetAudioDelay" version="1">
+      <primitiveTest name="DSHal_GetAudioDelay" id="" version="1">
         <function>TestMgr_DSHal_GetAudioDelay</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetAudioDelayOffset" version="1">
+      <primitiveTest name="DSHal_SetAudioDelayOffset" id=" " version="1">
         <function>TestMgr_DSHal_SetAudioDelayOffset</function>
         <parameters>
           <parameter name="offset" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetAudioDelayOffset" version="1">
+      <primitiveTest name="DSHal_GetAudioDelayOffset" id="" version="1">
         <function>TestMgr_DSHal_GetAudioDelayOffset</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetBackgroundColor" version="1">
+      <primitiveTest name="DSHal_SetBackgroundColor" id=" " version="1">
         <function>TestMgr_DSHal_SetBackgroundColor</function>
         <parameters>
           <parameter name="color" value=""/>
@@ -243,17 +243,17 @@
         <function>TestMgr_DSHal_IsAudioMS12Decode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_IsAudioMSDecode" version="1">
+      <primitiveTest name="DSHal_IsAudioMSDecode" id="" version="1">
         <function>TestMgr_DSHal_IsAudioMSDecode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetHdmiPreference" version="1">
+      <primitiveTest name="DSHal_SetHdmiPreference" id=" " version="1">
         <function>TestMgr_DSHal_SetHdmiPreference</function>
         <parameters>
           <parameter name="hdcpProtocol" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetHdmiPreference" version="1">
+      <primitiveTest name="DSHal_GetHdmiPreference" id="" version="1">
         <function>TestMgr_DSHal_GetHdmiPreference</function>
         <parameters/>
       </primitiveTest>
@@ -350,7 +350,7 @@
           <parameter name="height" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetSinkDeviceAtmosCapability" version="1">
+      <primitiveTest name="DSHal_GetSinkDeviceAtmosCapability" id="" version="1">
         <function>TestMgr_DSHal_GetSinkDeviceAtmosCapability</function>
         <parameters/>
       </primitiveTest>
@@ -364,17 +364,17 @@
         <function>TestMgr_DSHal_GetHdmiInCurrentVideoMode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetIntelligentEqualizerMode" version="1">
+      <primitiveTest name="DSHal_SetIntelligentEqualizerMode" id=" " version="1">
         <function>TestMgr_DSHal_SetIntelligentEqualizerMode</function>
         <parameters>
           <parameter name="mode" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetIntelligentEqualizerMode" version="1">
+      <primitiveTest name="DSHal_GetIntelligentEqualizerMode" id="" version="1">
         <function>TestMgr_DSHal_GetIntelligentEqualizerMode</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetDialogEnhancement" version="1">
+      <primitiveTest name="DSHal_SetDialogEnhancement" id=" " version="1">
         <function>TestMgr_DSHal_SetDialogEnhancement</function>
         <parameters>
           <parameter name="level" value=""/>
@@ -416,13 +416,13 @@
         <function>TestMgr_DSHal_GetVolumeLeveller</function>
         <parameters/>
       </primitiveTest>
-      <primitiveTest id=" " name="DSHal_SetBassEnhancer" version="1">
+      <primitiveTest name="DSHal_SetBassEnhancer" id=" " version="1">
         <function>TestMgr_DSHal_SetBassEnhancer</function>
         <parameters>
           <parameter name="boost" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest id="" name="DSHal_GetBassEnhancer" version="1">
+      <primitiveTest name="DSHal_GetBassEnhancer" id="" version="1">
         <function>TestMgr_DSHal_GetBassEnhancer</function>
         <parameters/>
       </primitiveTest>
@@ -435,6 +435,26 @@
       <primitiveTest name="DSHal_GetDRCMode" id="" version="1">
         <function>TestMgr_DSHal_GetDRCMode</function>
         <parameters/>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetAudioFormat" id=" " version="2">
+        <function>TestMgr_DSHal_GetAudioFormat</function>
+        <parameters>
+          <parameter name="paramhandle" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_EnableMS12Config" id="" version="1">
+        <function>TestMgr_DSHal_EnableMS12Config</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetAudioCapabilities" id=" " version="1">
+        <function>TestMgr_DSHal_GetAudioCapabilities</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
       </primitiveTest>
     </primitiveTests>
   </module>

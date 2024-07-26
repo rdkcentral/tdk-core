@@ -25,9 +25,13 @@
           <parameter name="Is_null_param_check" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="HdmicecHal_GetPhysicalAddress" id="" version="1">
+      <primitiveTest name="HdmicecHal_GetPhysicalAddress" id=" " version="2">
         <function>TestMgr_HdmicecHal_GetPhysicalAddress</function>
-        <parameters/>
+        <parameters>
+          <parameter name="Is_handle_invalid" value=""/>
+          <parameter name="handle" value=""/>
+          <parameter name="Is_null_param_check" value=""/>
+        </parameters>
       </primitiveTest>
       <primitiveTest name="HdmicecHal_Tx" id=" " version="5">
         <function>TestMgr_HdmicecHal_Tx</function>
@@ -57,8 +61,8 @@
         <function>TestMgr_HdmicecHal_AddLogicalAddress</function>
         <parameters>
           <parameter name="Is_handle_invalid" value=""/>
-	  <parameter name="logical_addr" value=""/>
-	  <parameter name="handle" value=""/>
+          <parameter name="logical_addr" value=""/>
+          <parameter name="handle" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="HdmicecHal_RemoveLogicalAddress" id=" " version="1">
