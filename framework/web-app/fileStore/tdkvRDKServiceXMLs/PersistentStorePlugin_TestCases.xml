@@ -37,7 +37,8 @@
             </testStep>
           </prerequisite>
           <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false" >
-            <event pluginName="PersistentStore" eventName="Event_On_Value_Changed" />
+		  <event pluginName="PersistentStore" eventName="Event_On_Value_Changed" />
+		  <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
           </prerequisite>
         </pluginPreRequisite>
 
@@ -162,6 +163,117 @@
                   </resultGeneration>
                </subtestStep>
             </testStep>
-        </testCase>
-</testPlugin>
+    	</testCase>
+	
+	<!-- Test case 07 -->
+	<testCase testCaseId="PS_07" testCaseName="PersistentStore_Set_And_Get_Storage_Limits"  desc="Set and get storage limits for available namespaces ">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
+                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace" >
+		<conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace"/>
+		<params>
+                  <param tag="namespace" value="username"/>
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+            </testStep>
+	    <testStep testStepId="3" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit" >
+                <params>
+		     <param tag="namespace" value="username"/>
+		     <param tag="storageLimit" value="20"/>
+                </params>
+	    </testStep>
+	    <testStep testStepId="4" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
+                <params>
+                     <param tag="namespace" value="username"/>
+                </params>
+                <resultGeneration useMethodTag="persistentstore_get_namespace_storagelimit" expectedValues="20"/>
+	    </testStep>
+	    <testStep testStepId="5" name="Delete_Namespace" method="Delete_Namespace" >
+                <params>
+                  <param tag="namespace" value="username"/>
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+            </testStep>
+	</testCase>
 
+	<!-- Test case 08 -->
+	<testCase testCaseId="PS_08" testCaseName="PersistentStore_Check_Set_And_Get_Empty_Storage_Limits"  desc="Verify persistent store handles empty, sets and retrieves storage namespace limits">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Set_Namespace_Storagelimit" method="Set_Namespace_Storagelimit" >
+                <params>
+                     <param tag="namespace" value=""/>
+                     <param tag="storageLimit" value="20"/>
+                </params>
+		<resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
+                <params>
+                     <param tag="namespace" value=""/>
+                </params>
+		<resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 09 -->
+        <testCase testCaseId="PS_09" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Key_Operations"  desc="Verify persistent store handles empty key, set and get operatins across namespaces">
+            <testCaseInfo testCaseType="direct" />
+	    <testStep testStepId="1" name="Set_Value" method="Set_Value">
+                  <params>
+                    <param tag="namespace" value="username"/>
+                    <param tag="key" value="" />
+                    <param tag="value" value="user" />
+                  </params>
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
+            </testStep>
+	    <testStep testStepId="2" name="Get_Value" method="Get_Value">
+                  <params>
+                    <param tag="namespace" value="username"/>
+                    <param tag="key" value=""  />
+                  </params>
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 10 -->
+        <testCase testCaseId="PS_10" testCaseName="PersistentStore_Verify_SetValue_And_GetValue_API_with_Empty_Namespce_Operations"  desc="Verify persistent store handles empty namespace, set and get operatins">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Set_Value" method="Set_Value">
+                  <params>
+                    <param tag="namespace" value=""/>
+                    <param tag="key" value="username" />
+                    <param tag="value" value="user" />
+                  </params>
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_INVALID_INPUT_LENGTH" arguments="check_message"/>
+            </testStep>
+            <testStep testStepId="2" name="Get_Value" method="Get_Value">
+                  <params>
+                    <param tag="namespace" value=""/>
+                    <param tag="key" value="username"  />
+                  </params>
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
+            </testStep>
+        </testCase>
+
+	<!-- Test case 11 -->
+        <testCase testCaseId="PS_11" testCaseName="PersistentStore_GetStorage_NamespaceLimit_For_DeletedNamespace"  desc="Verify that attempting to retrieve the storage namespace limit for a namespace that has already been deleted results in an appropriate error or indication, such as a null response or a specific error message">
+            <testCaseInfo testCaseType="direct" />
+            <testStep testStepId="1" name="Get_Namespaces" method="Get_Namespaces" saveResult="true">
+                <resultGeneration useMethodTag="persistentstore_get_namespaces" arguments="none"/>
+            </testStep>
+            <testStep testStepId="2" name="Delete_Namespace" method="Delete_Namespace" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="persistentstore_get_previous_namespace"/>
+                <params>
+                  <param tag="namespace" value="username"/>
+                </params>
+                <resultGeneration useMethodTag="persistentstore_check_set_operation" />
+            </testStep>
+            <testStep testStepId="3" name="Get_Namespace_Storagelimit" method="Get_Namespace_Storagelimit" >
+                <params>
+                     <param tag="namespace" value="username"/>
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_NOT_EXIST" arguments="check_message"/>
+	    </testStep>
+	</testCase>
+</testPlugin>

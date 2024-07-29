@@ -1338,7 +1338,12 @@
                 <param tag="keystrokeMaskEnabled" defaultValue="true" type="bool" />
             </params>
         </method>
-        <event name="Event_OnKeystroke_Mask_Enabled_Change" eventName="onKeystrokeMaskEnabledChange" eventId="client.events.1" type="event" desc="Keystroke mask status  Change event"/>
+	<method name="Invalid_Set_Keystroke_Mask" api="setKeystrokeMaskEnabled" type="method" desc="Enable or disable Keystroke mask state">
+            <params>
+                <param tag="keystrokeMaskEnabled" defaultValue="null" />
+            </params>
+        </method>
+	<event name="Event_OnKeystroke_Mask_Enabled_Change" eventName="onKeystrokeMaskEnabledChange" eventId="client.events.1" type="event" desc="Keystroke mask status  Change event"/>
     </plugin>
 
 
@@ -1917,38 +1922,49 @@
     <plugin pluginName="PersistentStore" serviceName="org.rdk.PersistentStore" serviceVersion="1">
         <method name="Set_Value" api="setValue" type="method" desc="Sets the value of the key for given the namespace" >
             <params>
-               <param tag="namespace" />
-               <param tag="key" />
-               <param tag="value" />
+               <param tag="namespace" defaultValue="null"/>
+               <param tag="key" defaultValue="null"/>
+               <param tag="value" defaultValue="null"/>
             </params>
         </method>
         <method name="Get_Value" api="getValue" type="method" desc="Gets the value of the key for given namespace">
             <params>
-               <param tag="namespace" />
-               <param tag="key" />
+               <param tag="namespace" defaultValue="null" />
+               <param tag="key" defaultValue="null" />
             </params>
         </method>
         <method name="Get_Keys" api="getKeys" type="method" desc="Gets the keys list for given namespace" >
             <params>
-               <param tag="namespace" />
+               <param tag="namespace" defaultValue="null" />
             </params>
         </method>
         <method name="Delete_Key" api="deleteKey" type="method" desc="Deletes the key for given namespace" >
             <params>
-               <param tag="namespace" />
-               <param tag="key" />
+               <param tag="namespace" defaultValue="null" />
+               <param tag="key" defaultValue="null" />
             </params>
         </method>
         <method name="Delete_Namespace" api="deleteNamespace" type="method" desc="Deletes the given Namespace">
             <params>
-               <param tag="namespace" />
-               <param tag="key" />
+               <param tag="namespace" defaultValue="null"/>
+               <param tag="key" defaultValue="null"/>
             </params>
         </method>
         <method name="Get_Namespaces" api="getNamespaces" type="method" desc="Gets the available namespaces" />
         <method name="Get_Storage_Size" api="getStorageSize" type="method" desc="Returns the size occupied by each namespace" />
         <method name="Flush_Cache" api="flushCache" type="method" desc="flushes the database cache" />
-        <event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
+	<method name="Set_Namespace_Storagelimit" api="setNamespaceStorageLimit" type="method" desc="Sets the storage limit for a given namespace">
+	    <params>
+               <param tag="namespace" defaultValue="null"/>
+               <param tag="storageLimit" type="int"/>
+            </params>
+        </method>	
+	<method name="Get_Namespace_Storagelimit" api="getNamespaceStorageLimit" type="method" desc="Returns the storage limit for a given namespace">
+	    <params>
+               <param tag="namespace" defaultValue="null"/>
+            </params>
+        </method>
+	<event name="Event_On_Value_Changed" eventName="onValueChanged" eventId="client.events.1" type="event" desc="Triggered whenever any of the values stored are changed using setValue" />
     </plugin>
 
     <!-- TextToSpeech Plugin Information -->

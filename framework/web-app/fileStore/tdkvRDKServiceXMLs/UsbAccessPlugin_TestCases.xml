@@ -64,7 +64,8 @@
 	  <!-- PluginPreRequisite 3 -->
           <prerequisite requisiteId="3" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
               <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
-              <event pluginName="UsbAccess" eventName="Event_On_Archive_Logs" />
+	      <event pluginName="UsbAccess" eventName="Event_On_Archive_Logs" />
+	      <event pluginName="Controller" eventName="Event_Controller_All" />
           </prerequisite>
 	  
 	  <!-- PluginPreRequisite 4 -->
@@ -983,5 +984,79 @@
                      <arguments value="directoryonly" usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
                  </resultGeneration>
             </testStep>
-    	</testCase>	
+        </testCase>	
+
+	<!-- Test case 33 -->
+	<testCase testCaseId="USBACCESS_33" testCaseName="UsbAccess_Check_Mounted_Device_Across_Multiple_Reboots" desc="To verify whether a USB device remains mounted after multiple reboots">
+	    <testCaseInfo testCaseType="stress" configurableRepeat="true" repeatKey="USBACCESS_REBOOT_TIMES"/>
+	    <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
+                 <resultGeneration useMethodTag="check_mount_device_path"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Check_Mounted_Device_Across_Multiple_Reboots" testStepType="repeat">
+	      <subtestStep subtestStepId="1" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                 <resultGeneration useMethodTag="system_check_set_operation"  />
+              </subtestStep>
+	      <subtestStep subtestStepId="2" name="Get_Mounted_USB_Device" method="Get_Mounted" delay="10">
+	       	 <resultGeneration useMethodTag="check_mount_device_path_after_reboot">
+			<expectedValues  usePreviousResult="true" Id="1" useMethodTag="usbaccess_get_mountdevice_previous_result"/>
+		 </resultGeneration>
+	      </subtestStep>
+	    </testStep>
+	</testCase>
+
+	<!-- Test case 34 -->
+	<testCase testCaseId="USBACCESS_34" testCaseName="UsbAccess_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+	    <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.UsbAccess" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.UsbAccess" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_UsbAccess_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.UsbAccess" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.usbaccess,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_UsbAccess_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.UsbAccess" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.usbaccess,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.UsbAccess" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.UsbAccess" expectedValues="activated"/>
+            </testStep>
+        </testCase>
 </testPlugin>
