@@ -13,9 +13,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -->
-
 <testPlugin pluginName="Bluetooth" pluginVersion="1">
-
         <pluginPreRequisite>
           <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
@@ -38,7 +36,8 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" expectedValues="activated"/>
             </testStep>
           </prerequisite>
-          <prerequisite requisiteId="2" requisiteName="Activate_System_Plugin">
+	  
+	  <prerequisite requisiteId="2" requisiteName="Activate_System_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                   <param tag="plugin" value="org.rdk.System" indexOnly="true" />
@@ -51,7 +50,7 @@
                   <param tag="callsign" value="org.rdk.System" />
                 </params>
             </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+	    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
                 <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
                 <params>
                   <param tag="plugin" value="org.rdk.System" indexOnly="true" />
@@ -65,17 +64,16 @@
                   <resultGeneration useMethodTag="bluetooth_set_operation" />
             </testStep>
           </prerequisite>
-
-          <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+	  
+	  <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="Bluetooth" eventName="Event_On_Discovered_Device" />  
             <event pluginName="Bluetooth" eventName="Event_On_Status_Changed" />
 	    <event pluginName="Bluetooth" eventName="Event_On_Request_Failed" />
 	    <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
           </prerequisite>
-
         </pluginPreRequisite>
-
-        <testCase testCaseId="BT_01" testCaseName= "Set_And_Get_Name"  desc="Check whether name of the device can be set and get">
+	
+	<testCase testCaseId="BT_01" testCaseName= "Set_And_Get_Name"  desc="Check whether name of the device can be set and get">
             <testCaseInfo testCaseType="setandget" revert="true"/>
             <testStep testStepId="1" name="Get_Bluetooth_Device_Name" method="Get_Name" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="bluetooth_get_name" />
@@ -90,8 +88,8 @@
                 <resultGeneration useMethodTag="bluetooth_get_name" expectedValues="Test Value" arguments="check_name"/>
             </testStep>
         </testCase>
-
-        <testCase testCaseId="BT_02" testCaseName="Bluetooth_Toggle_Discoverable_Status" desc="Toggle bluetooth discoverable status" >
+	
+	<testCase testCaseId="BT_02" testCaseName="Bluetooth_Toggle_Discoverable_Status" desc="Toggle bluetooth discoverable status" >
            <testCaseInfo testCaseType="setandget" revert="true" />
             <testStep testStepId="1" name="Is_Bluetooth_Device_Discoverable" method="Is_Discoverable" saveResult="true" revertGet="yes">
                 <resultGeneration useMethodTag="bluetooth_get_discoverable_status"/>
@@ -109,8 +107,8 @@
                 </resultGeneration>
             </testStep>
         </testCase>
-
-        <testCase testCaseId="BT_03" testCaseName="Bluetooth_Get_Discovered_Devices" desc="Scan and get discovered devices using onDiscoveredDevice Event">
+	
+	<!--testCase testCaseId="BT_03" testCaseName="Bluetooth_Get_Discovered_Devices" desc="Scan and get discovered devices using onDiscoveredDevice Event">
             <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -138,8 +136,8 @@
                 <resultGeneration useMethodTag="bluetooth_set_operation" />
             </testStep>
         </testCase>
-
-        <testCase testCaseId="BT_04" testCaseName="Bluetooth_Pair_Device" desc="Pairs to the given bluetooth device">
+	
+	<testCase testCaseId="BT_04" testCaseName="Bluetooth_Pair_Device" desc="Pairs to the given bluetooth device">
   	        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -177,8 +175,8 @@
                 <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
 	        </testStep> 
         </testCase>
-
-        <testCase testCaseId="BT_05" testCaseName="Bluetooth_Get_Device_Info" desc="Returns the device info of the given device ID">
+	
+	<testCase testCaseId="BT_05" testCaseName="Bluetooth_Get_Device_Info" desc="Returns the device info of the given device ID">
 	        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -221,9 +219,9 @@
                 </params>
                 <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
 	         </testStep> 
-        </testCase>
+        </testCase-->
         
-        <testCase testCaseId="BT_06" testCaseName="Bluetooth_On_Request_Failed" desc="Checks on request failed event">
+        <testCase testCaseId="BT_03" testCaseName="Bluetooth_On_Request_Failed" desc="Checks on request failed event">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -253,13 +251,12 @@
                 <resultGeneration useMethodTag="bluetooth_check_request_failed_event" expectedValues="PAIRING_FAILED"/>
             </testStep>
         </testCase>
-        <!--testCase testCaseId="BT_07" testCaseName="Bluetooth_Connect_Disconnect_Device" desc="Connects to the given bluetooth device">
+	
+	<!--testCase testCaseId="BT_07" testCaseName="Bluetooth_Connect_Disconnect_Device" desc="Connects to the given bluetooth device">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
-
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
             </testStep>
-
             <testStep testStepId="2" name="Start_Scan" method="Start_Scan" >
                 <params>
                   <param tag="timeout" useDefault="true" />
@@ -329,8 +326,9 @@
             <testStep testStepId="14" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
                 <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
             </testStep>
-        </testCase-->     
-        <testCase testCaseId="BT_07" testCaseName="Bluetooth_Connect_Disconnect_Device_LOUDSPEAKER" desc="Connects to the given bluetooth device profile loudspeaker">
+        </testCase>
+	
+	<testCase testCaseId="BT_07" testCaseName="Bluetooth_Connect_Disconnect_Device_LOUDSPEAKER" desc="Connects to the given bluetooth device profile loudspeaker">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -416,7 +414,8 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
-        <!--testCase testCaseId="BT_09" testCaseName="Bluetooth_Connect_Disconnect_Device_SMARTPHONE" desc="Connects to the given bluetooth device profile smartphone">
+	
+	<testCase testCaseId="BT_09" testCaseName="Bluetooth_Connect_Disconnect_Device_SMARTPHONE" desc="Connects to the given bluetooth device profile smartphone">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -490,8 +489,9 @@
             <testStep testStepId="14" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
                 <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
             </testStep>
-	</testCase-->
-        <testCase testCaseId="BT_08" testCaseName="Bluetooth_Check_Pairing_And_Connection_Change_Events" desc="Connects to the given bluetooth device profile loudspeaker and checks for the pairing and connection chnage events">
+	</testCase>
+	
+	<testCase testCaseId="BT_08" testCaseName="Bluetooth_Check_Pairing_And_Connection_Change_Events" desc="Connects to the given bluetooth device profile loudspeaker and checks for the pairing and connection chnage events">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -597,8 +597,9 @@
                     </testStep>
                 </postrequisite>
             </testCasePostRequisite>
-        </testCase>
-        <testCase testCaseId="BT_09" testCaseName="Bluetooth_Get_Discovered_LE_Profile_Devices" desc="Checks whether LE profile devices are getting discovered">
+        </testCase-->
+	
+	<testCase testCaseId="BT_04" testCaseName="Bluetooth_Get_Discovered_LE_Profile_Devices" desc="Checks whether LE profile devices are getting discovered">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -619,13 +620,15 @@
                 </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="BT_10" testCaseName="Check_API_Version_Number" desc="Checks the API version Number">
+	
+	<testCase testCaseId="BT_05" testCaseName="Check_API_Version_Number" desc="Checks the API version Number">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_API_Version_Number" method="Get_API_Version_Number">
                 <resultGeneration useMethodTag="check_api_version_number" expectedValues="1" />
             </testStep>
         </testCase>
-        <testCase testCaseId="BT_11" testCaseName="Bluetooth_Check_Device_Discovered_List_After_Unpairing" desc="Check for the device discovered list after unpairing">
+	
+	<!--testCase testCaseId="BT_11" testCaseName="Bluetooth_Check_Device_Discovered_List_After_Unpairing" desc="Check for the device discovered list after unpairing">
                 <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -669,7 +672,8 @@
                 </resultGeneration>
             </testStep>
         </testCase>
-        <testCase testCaseId="BT_12" testCaseName="Bluetooth_Disconnect_Connect_Already_Connected_Device" desc="Connects and Disconnects the already connected device">
+	
+	<testCase testCaseId="BT_12" testCaseName="Bluetooth_Disconnect_Connect_Already_Connected_Device" desc="Connects and Disconnects the already connected device">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -778,7 +782,8 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
-        <testCase testCaseId="BT_13" testCaseName="Bluetooth_Pair_And_Check_the_Scanned_Devices_List" desc="Check whether bluetooth device is listed in discovered devices after pairing it">
+	
+	<testCase testCaseId="BT_13" testCaseName="Bluetooth_Pair_And_Check_the_Scanned_Devices_List" desc="Check whether bluetooth device is listed in discovered devices after pairing it">
                 <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -838,7 +843,8 @@
                 <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
             </testStep>
         </testCase>
-        <testCase testCaseId="BT_14" testCaseName="Bluetooth_Check_Paired_Device_Persist_After_Reboot" desc="Checks the persistence of paired bluetooth device">
+	
+	<testCase testCaseId="BT_14" testCaseName="Bluetooth_Check_Paired_Device_Persist_After_Reboot" desc="Checks the persistence of paired bluetooth device">
                 <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -907,7 +913,8 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
-        <testCase testCaseId="BT_15" testCaseName="Bluetooth_Check_Connected_Bluetooth_Device_Persist_After_Reboot" desc="Checks the persistence of connected bluetooth device" >
+	
+	<testCase testCaseId="BT_15" testCaseName="Bluetooth_Check_Connected_Bluetooth_Device_Persist_After_Reboot" desc="Checks the persistence of connected bluetooth device" >
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -1001,7 +1008,8 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
-        <testCase testCaseId="BT_16" testCaseName="Bluetooth_Check_Paired_Device_Connection_Status" desc="Checks the paired bluetooth device connected status">
+	
+	<testCase testCaseId="BT_16" testCaseName="Bluetooth_Check_Paired_Device_Connection_Status" desc="Checks the paired bluetooth device connected status">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -1097,8 +1105,8 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
-
-        <testCase testCaseId="BT_17" testCaseName="Bluetooth_Check_Connected_Device_Active_State" desc="To Connect to the given bluetooth device profile loudspeaker and check its active state">
+	
+	<testCase testCaseId="BT_17" testCaseName="Bluetooth_Check_Connected_Device_Active_State" desc="To Connect to the given bluetooth device profile loudspeaker and check its active state">
            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
             <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
                 <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
@@ -1183,10 +1191,10 @@
                     </testStep>
                 </postrequisite>
             </testCasePostRequisite>
-        </testCase>
-
-	<!-- Test case 18 -->
-	<testCase testCaseId="BT_18" testCaseName="Bluetooth_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+        </testCase-->
+	
+	<!-- Test case 06 -->
+	<testCase testCaseId="BT_06" testCaseName="Bluetooth_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
@@ -1240,7 +1248,234 @@
                  <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" expectedValues="activated"/>
             </testStep>
         </testCase>
+
+	<!-- Test case 07 -->
+	<testCase testCaseId="BT_07" testCaseName="Bluetooth_Pair_Unpair_LoudSpeaker_Device" desc="Verify bluetooth scanning, pairing, discoverydevice, state change, deviceinfo and unpairing functionality">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
+            <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
+                <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Scan" method="Start_Scan" >
+                <params>
+                  <param tag="timeout" useDefault="true" />
+                  <param tag="profile" value="LOUDSPEAKER"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_validate_startscan" />
+            </testStep>
+            <testStep testStepId="3" name="Stop_Scan" method="Stop_Scan" delay="30">
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Discovered_Devices" method="Get_Discovered_Devices" saveResult="true">
+                <resultGeneration useMethodTag="bluetooth_get_discovered_devices" arguments="get_device_id" >
+                  <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Pair" method="Pair" >
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id" />
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_On_Status_Changed_Event" event="Event_On_Status_Changed" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="bluetooth_check_status_changed_event"  expectedValues="PAIRING_CHANGE"/>
+            </testStep>
+            <testStep testStepId="7" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="5">
+                <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_device_paired" >
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME" />
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="8" name="Get_Device_Info" method="Get_Device_Info" >
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id" />
+                </params>
+                <resultGeneration useMethodTag="bluetooth_get_device_info"/>
+            </testStep>
+	    <testStep testStepId="9" name="Execute_BT_Ctrl" action="externalFnCall" >
+                <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
+	    </testStep>
+            <testStep testStepId="10" name="Start_Scan" method="Start_Scan" >
+                <params>
+                  <param tag="timeout" useDefault="true" />
+                  <param tag="profile" value="LOUDSPEAKER"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+            </testStep>
+            <testStep testStepId="11" name="Stop_Scan" method="Stop_Scan" delay="30">
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+	    </testStep>
+            <testStep testStepId="12" name="Get_Discovered_Devices" method="Get_Discovered_Devices" >
+                <resultGeneration useMethodTag="bluetooth_get_discovered_devices" >
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                    <arguments value="check_device_not_discovered" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="13" name="Unpair" method="Unpair" delay="3">
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="14" name="Check_On_Status_Changed_Event" event="Event_On_Status_Changed" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="bluetooth_check_status_changed_event"  expectedValues="PAIRING_CHANGE"/>
+            </testStep>
+            <testStep testStepId="15" name="Get_Discovered_Devices" method="Get_Discovered_Devices" >
+                <resultGeneration useMethodTag="bluetooth_get_discovered_devices">
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                    <arguments value="check_device_not_discovered" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                </resultGeneration>
+            </testStep>
 	
+	    <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Unpairing_BT_EMU_Device">
+                    <testStep testStepId="1" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="5" saveResult="true">
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_bt_emu_connected">
+                            <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME" />
+                        </resultGeneration>
+                    </testStep>
+                    <testStep testStepId="2" name="Unpair" method="Unpair" delay="3">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>
+                        <params>
+                            <param tag="deviceID" usePreviousResult="true" Id="1" useMethodTag="bluetooth_get_device_id"/>
+                        </params>
+                        <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+                    </testStep>
+                    <testStep testStepId="3" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
+                    </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+	</testCase>
+
+	<!-- Test case 08 -->
+	<testCase testCaseId="BT_08" testCaseName="Bluetooth_Connect_Disconnect_LoudSpeaker_Device" desc="Verify bluetooth scanning, pairing, discoverydevice, state change, connect, disconnect and unpairing functionality">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="BT_EMULATOR_SUPPORT" useMethodTag="bt_na_tests" arguments="no"/>
+            <testStep testStepId="1" name="Execute_BT_Ctrl" action="externalFnCall" >
+                <resultGeneration useMethodTag="executeBluetoothCtl" arguments="bluetoothctl,agent NoInputNoOutput,default-agent,discoverable on"/>
+            </testStep>
+            <testStep testStepId="2" name="Start_Scan" method="Start_Scan" >
+                <params>
+                  <param tag="timeout" useDefault="true" />
+                  <param tag="profile" value="LOUDSPEAKER"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_validate_startscan" />
+            </testStep>
+            <testStep testStepId="3" name="Stop_Scan" method="Stop_Scan" delay="30">
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Discovered_Devices" method="Get_Discovered_Devices" saveResult="true">
+                <resultGeneration useMethodTag="bluetooth_get_discovered_devices" arguments="get_device_id" >
+                  <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Pair" method="Pair" >
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id" />
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+            </testStep>
+	    <testStep testStepId="6" name="Check_Paired_Devices" method="Get_Paired_Devices" delay="5">
+                <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_device_paired,check_connected_state,False">
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME" />
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="7" name="Get_Device_Bluetooth_Mac" method="Get_Device_Info" saveResult="true" pluginName="System">
+                <params>
+                  <param tag="params" value="bluetooth_mac" />
+                </params>
+                <resultGeneration useMethodTag="system_check_mac_address" arguments="bluetooth_mac" />
+            </testStep>
+            <testStep testStepId="8" name="Execute_Command" action="externalFnCall" >
+                <resultGeneration useMethodTag="Trust_MAC" >
+                    <arguments value="bt-emu" usePreviousResult="true" Id="7" useMethodTag="system_get_bluetooth_mac"/>
+                </resultGeneration>
+            </testStep>
+            <testStep  testStepId="9" name="Connect" method="Connect">
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"  />
+                  <param tag="deviceType"  value="LOUDSPEAKER"/>
+                  <param tag="profile" value="LOUDSPEAKER" />
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+            </testStep>
+	    <testStep testStepId="10" name="Check_On_Status_Changed_Event" event="Event_On_Status_Changed" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="bluetooth_check_status_changed_event"  expectedValues="CONNECTION_CHANGE"/>
+            </testStep>
+	    <testStep testStepId="11" name="Check_Connected_Device_Active_State" method="Get_Connected_Devices" delay="5" >
+                <resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_device_connected,check_active_state">
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="12" name="Check_Paired_Device_Connection_Status" method="Get_Paired_Devices" delay="5">
+                <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_device_paired,check_connected_state,True">
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME" />
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="13" name="Disconnect" method="Disconnect" delay="40">
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"  />
+                  <param tag="deviceType"  value="LOUDSPEAKER"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" />
+            </testStep>
+	    <testStep testStepId="14" name="Check_On_Status_Changed_Event" event="Event_On_Status_Changed" action="eventListener" delay="3">
+                <resultGeneration useMethodTag="bluetooth_check_status_changed_event"  expectedValues="CONNECTION_CHANGE"/>
+            </testStep>
+	    <testStep testStepId="15" name="Get_Connected_Devices" method="Get_Connected_Devices" delay="2" >
+                <resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_connected_device_list_empty" />
+	    </testStep>
+	    <testStep testStepId="16" name="Unpair" method="Unpair" delay="3">
+                <params>
+                  <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                </params>
+                <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+            </testStep>
+            <testStep testStepId="17" name="Get_Discovered_Devices" method="Get_Discovered_Devices" >
+                <resultGeneration useMethodTag="bluetooth_get_discovered_devices">
+                    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+                    <arguments value="check_device_not_discovered" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                </resultGeneration>
+	    </testStep>
+
+	    <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Unpairing_BT_EMU_Device">
+		    <testStep testStepId="1" name="Get_Connected_Devices" method="Get_Connected_Devices" delay="5" saveResult="true">
+			<resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="get_connected_bt_emu_details">
+			    <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME"/>
+			</resultGeneration>
+		    </testStep>	
+		    <testStep testStepId="2" name="Disconnect" method="Disconnect" delay="40">
+			<conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>    
+			<params>
+                  	    <param tag="deviceID" usePreviousResult="true" Id="1" useMethodTag="bluetooth_get_device_id"  />
+                  	    <param tag="deviceType"  value="LOUDSPEAKER"/>
+                	</params>
+                	<resultGeneration useMethodTag="bluetooth_set_operation" />
+            	    </testStep>
+		    <testStep testStepId="3" name="Get_Connected_Devices" method="Get_Connected_Devices" delay="2" >
+			<conditionalExecution enable="true" Id="1" useMethodTag="bluetooth_check_device_pair_status"/>    
+			<resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_connected_device_list_empty" />
+            	    </testStep>
+		    <testStep testStepId="4" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="5" saveResult="true">
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_bt_emu_connected">
+                            <expectedValues useConfigFile="true" key="BT_EMU_DEVICE_NAME" />
+                        </resultGeneration>
+                    </testStep>
+                    <testStep testStepId="5" name="Unpair" method="Unpair" delay="3">
+                        <conditionalExecution enable="true" Id="4" useMethodTag="bluetooth_check_device_pair_status"/>
+                        <params>
+                            <param tag="deviceID" usePreviousResult="true" Id="4" useMethodTag="bluetooth_get_device_id"/>
+                        </params>
+                        <resultGeneration useMethodTag="bluetooth_set_operation" expectedValues="true"/>
+                    </testStep>
+                    <testStep testStepId="6" name="Get_Paired_Devices" method="Get_Paired_Devices" delay="3" >
+                        <conditionalExecution enable="true" Id="4" useMethodTag="bluetooth_check_device_pair_status"/>
+                        <resultGeneration useMethodTag="bluetooth_get_paired_devices" arguments="check_paired_device_list_empty" />
+                    </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+	</testCase>
+	    
 	<pluginPostRequisite>
           <postrequisite requisiteId="1" requisiteName="Bluetooth_Stack_Disable">
             <testStep testStepId="1" name="Disable_Bluetooth_Stack" method="Disable_Stack" saveResult="true">

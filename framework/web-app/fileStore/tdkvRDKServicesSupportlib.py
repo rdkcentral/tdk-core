@@ -2535,6 +2535,17 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
+            elif arg[0] == "get_connected_bt_emu_details":
+                info = checkAndGetAllResultInfo(result,result.get("success"))
+                connectedDevices= result.get("connectedDevices")
+                success = str(result.get("success")).lower() == "true"
+                for connectedDevice in connectedDevices:
+                    if connectedDevice.get("name") and str(connectedDevice.get("name")) in expectedValues[0]:
+                        info = connectedDevice
+                if success:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_api_version_number":
             info = result
