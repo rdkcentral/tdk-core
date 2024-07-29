@@ -355,6 +355,15 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "network_negative_error_message_validation":
+            success = result.get("success")
+            info["success"] = success
+            message = str(result.get("error")).strip()
+            info["error"] = message
+            if str(success).lower() =="false" and any(value in message for value in expectedValues):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "network_check_results":
             info = checkAndGetAllResultInfo(result,result.get("success"))
@@ -1064,12 +1073,27 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "system_check_error_message":
             success = str(result.get("success")).lower() == "false"
             info["success"] = result.get("success")
-            result = result.get("error")
-            info["message"] = result.get("message")
-            if success and str(result.get("message")).lower() in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if arg[0] == "errorMessage":
+                if "errorMessage" in result:
+                    output = str(result.get("errorMessage")).strip()
+                    info["errorMessage"] = output
+                    if success and expectedValues[0].lower() in output.lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                else:
+                    output = str(result.get("message")).strip()
+                    info["message"] = output
+                    if success and expectedValues[0].lower() in output.lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                info["message"] = result.get("message")
+                if success and str(result.get("message")).lower() in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         
         elif tag == "system_validate_image_version":
             imageVersion = result.get('imageVersion')

@@ -743,5 +743,45 @@
          </postrequisite>
      </testCasePostRequisite>
      </testCase>
+	 
+	 <testCase testCaseId="Controller_23" testCaseName="Activate_Invalid_callsign" desc="Validate error message by activating with invalid callsign">
+			<testCaseInfo testCaseType="direct"/>
+			<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+					  <params>
+							<param tag="callsign" value="invalid" />
+					  </params>
+					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+			</testStep>
+     </testCase>
+
+     <testCase testCaseId="Controller_24" testCaseName="Activate_Empty_callsign" desc="Validate error message by activating with empty callsign">                
+			<testCaseInfo testCaseType="direct"/>
+			<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+					  <params>
+							<param tag="callsign" value=" " />
+					  </params>
+					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+			</testStep>
+     </testCase>
+
+     <testCase testCaseId="Controller_25" testCaseName="Deactivate_Invalid_callsign" desc="Validate error message by deactivating with invalid callsign">
+			<testCaseInfo testCaseType="direct"/>
+			<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+					  <params>
+							<param tag="callsign" value="invalid" />
+					  </params>
+					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+			</testStep>
+      </testCase>
+
+      <testCase testCaseId="Controller_26" testCaseName="Deactivate_empty_callsign" desc="Validate error message by deactivating with empty callsign">
+			<testCaseInfo testCaseType="direct"/>
+			<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+					  <params>
+							<param tag="callsign" value=" " />
+					  </params>
+					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+			</testStep>
+     </testCase>
 </testPlugin>
 

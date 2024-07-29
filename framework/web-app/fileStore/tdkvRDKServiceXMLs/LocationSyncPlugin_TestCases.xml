@@ -38,6 +38,10 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" expectedValues="activated"/>
             </testStep>
           </prerequisite>
+		  
+		  <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+			<event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
+          </prerequisite>
         </pluginPreRequisite>
 
 
@@ -98,6 +102,61 @@
               </subtestStep>
             </testStep>
     </testCase>
+	
+	<testCase testCaseId="LS_03" testCaseName="LocationSync_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="LocationSync" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LocationSync" />
+                     <params>
+                       <param tag="callsign" value="LocationSync" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,LocationSync" />
+                     <params>
+                       <param tag="plugin" value="LocationSync" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_LocationSync_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="LocationSync" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="locationsync,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="LocationSync" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_LocationSync_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="LocationSync" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="locationsync,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="LocationSync" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,LocationSync" expectedValues="activated"/>
+            </testStep>
+        </testCase>
 
 </testPlugin>
 
