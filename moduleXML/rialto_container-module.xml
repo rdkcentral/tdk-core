@@ -27,6 +27,8 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Disable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='executeCurlCommand' />
@@ -39,6 +41,8 @@
       <function name='KillApplication' />
       <function name='checkPROC' />
       <function name='ChangeContainerStatus' />
+      <function name='HandleYoutubeSignIn' />
+      <function name='HandleHomePage' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -50,6 +54,8 @@
       <parameter funName='executeInDUT' parameterName='command' parameterType='STRING' range='A-Z' />
       <parameter funName='checkPROC' parameterName='check_pause' parameterType='STRING' range='A-Z' />
       <parameter funName='ChangeContainerStatus' parameterName='operation' parameterType='STRING' range='A-Z' />
+      <parameter funName='HandleYoutubeSignIn' parameterName='image' parameterType='STRING' range='A-Z' />
+      <parameter funName='HandleHomePage' parameterName='image' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

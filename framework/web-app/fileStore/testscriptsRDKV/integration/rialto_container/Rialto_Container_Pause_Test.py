@@ -90,6 +90,7 @@
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from time import sleep
+from tdkvScreenShotUtility import * 
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rialto_container","1",standAlone=True)
@@ -159,57 +160,27 @@ if "SUCCESS" in result.upper():
 
     launch_video = "FAILURE"
     if server_running == "SUCCESS":
-        #Skip signin page
-        for i in range(3):
-            tdkTestObj = obj.createTestStep('Press_key')
-            #press down arrow
-            key=40
-            tdkTestObj.addParameter("key_code",key)
-            tdkTestObj.executeTestCase(expectedResult);
-        key=13
-        tdkTestObj.addParameter("key_code",key)
-        tdkTestObj.executeTestCase(expectedResult);
-
-        tdkTestObj = obj.createTestStep('Press_key')
-        #press left arrow
-        key=37
-        tdkTestObj.addParameter("key_code",key)
-        tdkTestObj.executeTestCase(expectedResult);
-        #press down arrow
-        key=40
-        tdkTestObj.addParameter("key_code",key)
-        tdkTestObj.executeTestCase(expectedResult);
-        result = tdkTestObj.getResultDetails();
-        if result == "SUCCESS":
-            tdkTestObj.setResultStatus("SUCCESS")
-            for i in range(2):
-                #press ok
-                #One ok will take to home page
-                #Next ok will play the video
-                key=13
-                tdkTestObj.addParameter("key_code",key)
-                tdkTestObj.executeTestCase(expectedResult);
+        screenshot = getScreenShot(obj)
+        if screenshot != "FAILURE":
+            tdkTestObj = obj.createTestStep('HandleYoutubeSignIn')
+            tdkTestObj.addParameter("image",screenshot)
+            tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResultDetails();
-            if result != "SUCCESS":
-                tdkTestObj.setResultStatus("FAILURE")
-            else:
-                tdkTestObj.setResultStatus("SUCCESS")
-                #Wait for Video to Start
-                sleep(10)
-                tdkTestObj = obj.createTestStep('checkPROC')
-                tdkTestObj.executeTestCase(expectedResult);
-                result = tdkTestObj.getResultDetails();
-                print("AV status result",result)
-                if "FAILURE" in result:
-                    print("AV status not proper as proc entry validation failed")
-                    tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    tdkTestObj.setResultStatus("SUCCESS")
-                    launch_video = "SUCCESS"
+            if result == "HANDLED SIGNIN PAGE":
+                print ("Signin page is handled")
+                print ("Obtaining next screenshot for homepage handling")
+                screenshot = getScreenShot(obj)
         else:
-            tdkTestObj.setResultStatus("FAILURE")
+            print ("FAILURE : Unable to obtain screenshot")
+        if screenshot != "FAILURE":
+            tdkTestObj = obj.createTestStep('HandleHomePage')
+            tdkTestObj.addParameter("image",screenshot)
+            tdkTestObj.executeTestCase(expectedResult)
+            launch_video = tdkTestObj.getResultDetails();
+        else:
+            print ("FAILURE : Unable to obtain screenshot")
     else:
-        print("Application launch video failed")
+        print("Application launch failed")
         tdkTestObj.setResultStatus("FAILURE")
 
     containerPause = "FAILURE"
