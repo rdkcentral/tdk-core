@@ -5763,6 +5763,13 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 message = "DisplaySettings and DeviceInfo API's are not returning same EDID details"
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
+                
+        elif tag == "disable_ethernet_interface":
+                command = "ifconfig eth0 down"
+                output = executeCommand(execInfo, command)
+                message = "Successfully executed "+command+" command"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
 
         elif tag == "Check_And_Enable_XDial":
             if len(arg) and arg[0] == "enable_xdial":
@@ -6532,6 +6539,9 @@ def executeCommand(execInfo, command, device="test-device"):
             if command == "reboot":
                 sleep(2);
                 output = "reboot"
+            elif command == "ifconfig eth0 down":
+                sleep(2);
+                output = "eth0 down"
             else:
                 session.prompt()
                 output = str(session.before, 'utf-8')
