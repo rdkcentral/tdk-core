@@ -62,10 +62,10 @@ Test Type: Positive</synopsis>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NET_SRV_MGR_WIFI_9</test_case_id>
+    <test_case_id>CT_NM_9</test_case_id>
     <test_objective>To get the current connection type of the wifi manager</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
+    <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. netSrvMgr should be up and running.
 2. IARMDaemonMain should be up and running.</pre_requisite>
     <api_or_interface_used>IARM_Bus_Init (test agent process_name)

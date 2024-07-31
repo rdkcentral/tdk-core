@@ -52,16 +52,20 @@ Test Type: Negative</synopsis>
   <box_types>
     <box_type>IPClient-Wifi</box_type>
     <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
+    <box_type>RPI-Client</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_14</test_case_id>
+    <test_case_id>CT_NM_29</test_case_id>
     <test_objective>To try saving without any SSID and pssword</test_objective>
     <test_type>Negative</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
+    <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. netSrvMgr should be up and running.
 2. IARMDaemonMain should be up and running.</pre_requisite>
     <api_or_interface_used>IARM_Bus_Init (test agent process_name)
@@ -101,7 +105,7 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'NM_WifiMgr_saveSSID_without_ssid');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus)
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
@@ -120,35 +124,55 @@ if "SUCCESS" in iarmLoadStatus.upper():
 
                         #Get the result of connection with test component and STB
                         netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-                        print "[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus;
+                        print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus)
                         #Set the module loading status
                         netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
                         if "SUCCESS" in netsrvLoadStatus.upper():
-                        	#Prmitive test case which associated to this Script
-                        	tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                            #First check the current active interface
+                            #Prmitive test case which associated to this Script
+                            tdkTestObj = netsrvObj.createTestStep('NetSrvMgrAgent_NetSrvMgr_FunctionCall');
+                            tdkTestObj.addParameter("method_name", "getActiveInterface");
+                            tdkTestObj.executeTestCase("SUCCESS");
+                            actualresult = tdkTestObj.getResult();
+                            details = tdkTestObj.getResultDetails();
 
-                                #Execute the test case in STB
-                                tdkTestObj.addParameter("method_name", "saveSSID");
-                                expectedresult="FAILURE"
-                        	tdkTestObj.executeTestCase(expectedresult);
+                            if "SUCCESS" in actualresult:
+                                if "WIFI" in details:
+                                    #Prmitive test case which associated to this Script
+                                    tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
 
-                        	#Get the result of execution
-                        	actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                        	print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                print "Details: [%s]"%details;
+                                    #Execute the test case in STB
+                                    tdkTestObj.addParameter("method_name", "saveSSID");
+                                    tdkTestObj.addParameter("ssid", "");
+                                    tdkTestObj.addParameter("passphrase", "");
+                                    expectedresult="FAILURE"
+                                    tdkTestObj.executeTestCase(expectedresult);
 
-                                #Set the result status of execution
-                        	if expectedresult in actualresult:
-                        	        tdkTestObj.setResultStatus("SUCCESS");
+                                    #Get the result of execution
+                                    actualresult = tdkTestObj.getResult();
+                                    details = tdkTestObj.getResultDetails();
+
+                                    print("Actual Result [%s]"%actualresult)
+
+                                    if expectedresult in actualresult:
+                                        print("[TEST EXECUTION RESULT] - SUCCESS")
+                                        print("Details: [%s]"%details)
+                                        tdkTestObj.setResultStatus("SUCCESS");
+                                    else:
+                                        print("[TEST EXECUTION RESULT] - FAILURE")
+                                        print("Details: [%s]"%details)
+                                        tdkTestObj.setResultStatus("SUCCESS");
                                 else:
-                                        tdkTestObj.setResultStatus("FAILURE");
-
-                                netsrvObj.unloadModule("netsrvmgr");
-                        	
-                        else :
-                        	print "Failed to Load netsrvmgr Module "
+                                    print("Unsupported network interface [%s]"%details)
+                                    tdkTestObj.setResultStatus("FAILURE");
+                            else:
+                                print("getActiveInterface - has returned failed")
+                                tdkTestObj.setResultStatus("FAILURE");
+                            netsrvObj.unloadModule("netsrvmgr");
+                        else:
+                            print("Failed to Load netsrvmgr Module ")
+                            tdkTestObj.setResultStatus("FAILURE");
 
                         #Calling IARM_Bus_DisConnect API
                         result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
@@ -157,5 +181,5 @@ if "SUCCESS" in iarmLoadStatus.upper():
         #Unload iarmbus module
         iarmObj.unloadModule("iarmbus");
 
-else :
-        print "Failed to Load iarmbus Module "
+else:
+        print("Failed to Load iarmbus Module ")

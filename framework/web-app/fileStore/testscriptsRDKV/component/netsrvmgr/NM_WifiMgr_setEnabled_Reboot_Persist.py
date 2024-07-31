@@ -48,7 +48,11 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
+    <box_type>IPClient-Wifi</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
+    <box_type>RPI-Client</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -56,7 +60,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_31</test_case_id>
+    <test_case_id>CT_NM_34</test_case_id>
     <test_objective>To enable wifi adapter and verify after reboot</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>

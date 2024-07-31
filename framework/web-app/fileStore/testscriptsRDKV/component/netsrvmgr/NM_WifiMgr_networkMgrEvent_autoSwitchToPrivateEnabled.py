@@ -75,10 +75,10 @@ string event_log
 int value</input_parameters>
     <automation_approch>1. TM loads the IARMBUS_Agent via the test agent
 2. IARMBUS_Agent initializes and registers with IARM Bus Daemon.
-3. TM loads netsrvmgr_agent via the test agent. 
+3. TM loads netsrvmgr_agent via the test agent.
 4. netsrvmgr_agent broadcast the event IARM_BUS_NETWORK_MANAGER_EVENT_AUTO_SWITCH_TO_PRIVATE_ENABLED to netsrvmgr.
 6. The stub will invokes the RPC method for checking if the event is registered and send the results.
-7. The stub function will verify and sends the results as Json response 
+7. The stub function will verify and sends the results as Json response
 8. TM will recieve and display the result.
 9. IARMBUS_Agent deregisters from the IARM Bus Daemon.</automation_approch>
     <except_output>Checkpoint 1 stub will parse for event messages in netsrvmgr.log file.</except_output>
@@ -109,60 +109,60 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'NM_WifiMgr_networkMgrEvent_autoSwitchToPrivateEnabled');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
 if "SUCCESS" in iarmLoadStatus.upper():
-        #Calling IARMBUS API "IARM_Bus_Init"
-        result = IARMBUS_Init(iarmObj,"SUCCESS")
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    #Calling IARMBUS API "IARM_Bus_Init"
+    result = IARMBUS_Init(iarmObj,"SUCCESS")
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in result:
+        #Calling IARMBUS API "IARM_Bus_Connect"
+        result = IARMBUS_Connect(iarmObj,"SUCCESS")
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
         if "SUCCESS" in result:
-                #Calling IARMBUS API "IARM_Bus_Connect"
-                result = IARMBUS_Connect(iarmObj,"SUCCESS")
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                if "SUCCESS" in result:
-                        nmObj = tdklib.TDKScriptingLibrary("netsrvmgr","2.0");
-                        nmObj.configureTestCase(ip,port,'NM_WifiMgr_networkMgrEvent_autoSwitchToPrivateEnabled');
-                        #Get the result of connection with test component and STB
-                        nmLoadStatus = nmObj.getLoadModuleResult();
-                        print "NetSrvMgr module loading status : %s" %nmLoadStatus;
-                        #Set the module loading status
-                        nmObj.setLoadModuleStatus(nmLoadStatus);
+            nmObj = tdklib.TDKScriptingLibrary("netsrvmgr","2.0");
+            nmObj.configureTestCase(ip,port,'NM_WifiMgr_networkMgrEvent_autoSwitchToPrivateEnabled');
+            #Get the result of connection with test component and STB
+            nmLoadStatus = nmObj.getLoadModuleResult();
+            print("NetSrvMgr module loading status : %s" %nmLoadStatus);
+            #Set the module loading status
+            nmObj.setLoadModuleStatus(nmLoadStatus);
 
-                        if "SUCCESS" in nmLoadStatus.upper():
-                                tdkTestObj = nmObj.createTestStep('NetSrvMgrAgent_WifiMgr_BroadcastEvent');
-                                expectedresult="SUCCESS";
-                                #Configuring the test object for starting test execution
-                                tdkTestObj.addParameter("owner", "NET_SRV_MGR");
-                                tdkTestObj.addParameter("event_id", 6);
-                                tdkTestObj.addParameter("event_log","event handler value of bAutoSwitchToPrivateEnabled 1");
-                                tdkTestObj.addParameter("value",1);
-                                tdkTestObj.executeTestCase(expectedresult);
-                                actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                                #Check for SUCCESS return value of Testcase
-                                if "SUCCESS" in actualresult.upper():
-                                        tdkTestObj.setResultStatus("SUCCESS");
-                                	print "Broadcasting Netwrok Manager Auto Switch to Private Enabled Event Result : %s"%actualresult;
-	                                print "Details : %s"%details;
-                                else:
-                                        print "Broadcasting Event failed";
-                                        print "Details : %s"%details;
-                                	tdkTestObj.setResultStatus("FAILURE");
-                                #Unload netsrvmgr module
-                                nmObj.unloadModule("netsrvmgr");
-                        else:
-                                print "Failed to Load netsrvmgr Module"
-                        #Calling IARM_Bus_DisConnect API
-                        result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+            if "SUCCESS" in nmLoadStatus.upper():
+                tdkTestObj = nmObj.createTestStep('NetSrvMgrAgent_WifiMgr_BroadcastEvent');
+                expectedresult="SUCCESS";
+                #Configuring the test object for starting test execution
+                tdkTestObj.addParameter("owner", "NET_SRV_MGR");
+                tdkTestObj.addParameter("event_id", 6);
+                tdkTestObj.addParameter("event_log","event handler value of bAutoSwitchToPrivateEnabled 1");
+                tdkTestObj.addParameter("value",1);
+                tdkTestObj.executeTestCase(expectedresult);
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                #Check for SUCCESS return value of Testcase
+                if "SUCCESS" in actualresult.upper():
+                    tdkTestObj.setResultStatus("SUCCESS");
+                    print("Broadcasting Netwrok Manager Auto Switch to Private Enabled Event Result : %s"%actualresult);
+                    print("Details : %s"%details);
                 else:
-                        print "IARMBUS Connect failed"
-                #calling IARMBUS API "IARM_Bus_Term"
-                result = IARMBUS_Term(iarmObj,"SUCCESS")
+                    print("Broadcasting Event failed");
+                    print("Details : %s"%details);
+                    tdkTestObj.setResultStatus("FAILURE");
+                #Unload netsrvmgr module
+                nmObj.unloadModule("netsrvmgr");
+            else:
+                print("Failed to Load netsrvmgr Module")
+            #Calling IARM_Bus_DisConnect API
+            result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
         else:
-                print "IARMBUS Init failed"
-        #Unload iarmbus module
-        iarmObj.unloadModule("iarmbus");
+            print("IARMBUS Connect failed")
+        #calling IARMBUS API "IARM_Bus_Term"
+        result = IARMBUS_Term(iarmObj,"SUCCESS")
+    else:
+        print("IARMBUS Init failed")
+    #Unload iarmbus module
+    iarmObj.unloadModule("iarmbus");
 else:
-        print "Failed to Load iarmbus Module " 
+    print("Failed to Load iarmbus Module ")

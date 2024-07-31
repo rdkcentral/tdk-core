@@ -39,7 +39,7 @@ Test Type: Negative</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>1</execution_time>
+  <execution_time>2</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -52,16 +52,20 @@ Test Type: Negative</synopsis>
   <box_types>
     <box_type>IPClient-Wifi</box_type>
     <!--  -->
+    <box_type>Video_Accelerator</box_type>
+    <!--  -->
+    <box_type>RPI-Client</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_13</test_case_id>
+    <test_case_id>CT_NM_26</test_case_id>
     <test_objective>To save the given ssid without any password</test_objective>
     <test_type>Negative</test_type>
-    <test_setup>IPClient-Wifi</test_setup>
+    <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. netSrvMgr should be up and running.
 2. IARMDaemonMain should be up and running.</pre_requisite>
     <api_or_interface_used>IARM_Bus_Init (test agent process_name)
@@ -73,7 +77,8 @@ IARM_Bus_Term</api_or_interface_used>
 char* - ssid</input_parameters>
     <automation_approch>1. TM loads the NetSrvMgr_Agent via the test agent.
 2.NetSrvMgr_Agent should try to save the provided ssid without any password.
-3.NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
+3.As it is negative test case, expecting FAILURE as result.
+4.NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
     <except_output>Checkpoint 1.Wifi manager should not save the provided ssid without any password</except_output>
     <priority>High</priority>
     <test_stub_interface>libnetsrvmgrstub.so</test_stub_interface>
@@ -90,7 +95,7 @@ char* - ssid</input_parameters>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
 import tdklib;
-import ConfigParser;
+import configparser;
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 #IP and Port of box, No need to change,
@@ -103,7 +108,7 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'NM_WifiMgr_saveSSID_with_valid_ssid_and_no_password');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus)
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
@@ -122,42 +127,81 @@ if "SUCCESS" in iarmLoadStatus.upper():
 
                         #Get the result of connection with test component and STB
                         netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-                        print "[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus;
+                        print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus)
                         #Set the module loading status
                         netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
                         if "SUCCESS" in netsrvLoadStatus.upper():
-                        	#Prmitive test case which associated to this Script
-                        	tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                            #First check the current active interface
+                            #Prmitive test case which associated to this Script
+                            tdkTestObj = netsrvObj.createTestStep('NetSrvMgrAgent_NetSrvMgr_FunctionCall');
+                            tdkTestObj.addParameter("method_name", "getActiveInterface");
+                            tdkTestObj.executeTestCase("SUCCESS");
+                            actualresult = tdkTestObj.getResult();
+                            details = tdkTestObj.getResultDetails();
 
-                                #Execute the test case in STB
-                                tdkTestObj.addParameter("method_name", "saveSSID");
-                                #Get Wifi configuration file
-                                wifiConfigFile = netsrvObj.realpath+'fileStore/wificredential.config'
-                                configParser = ConfigParser.ConfigParser()
-                                configParser.read(r'%s' % wifiConfigFile)
-                                ssid = configParser.get('wifi-config', 'ssid')
-                                tdkTestObj.addParameter("ssid", ssid);
-                                expectedresult="FAILURE"
-                        	tdkTestObj.executeTestCase(expectedresult);
+                            print("[getActiveInterface return as] : %s" %actualresult)
+                            print("Active Network Interface is: [%s]"%details)
 
-                        	#Get the result of execution
-                        	actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                        	print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                print "Details: [%s]"%details;
+                            if "SUCCESS" in actualresult:
+                                if "WIFI" in details:
+                                    #Get Wifi configuration file
+                                    wifiConfigFile = netsrvObj.realpath+'fileStore/wificredential.config'
+                                    configParser = configparser.ConfigParser()
+                                    configParser.read(r'%s' % wifiConfigFile)
+                                    ssid = configParser.get('wifi-config', 'ssid')
 
-                                #Set the result status of execution
-                        	if expectedresult in actualresult:
-                        	        tdkTestObj.setResultStatus("SUCCESS");
-                                else:
+                                    #Make sure connected SSID and config SSID are same,
+                                    #before saving it. 
+                                    tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_SetGetParameters');
+                                    tdkTestObj.addParameter("method_name", "getConnectedSSID");
+                                    expectedresult="SUCCESS"
+                                    tdkTestObj.executeTestCase(expectedresult);
+
+                                    #Get the result of execution
+                                    actualresult = tdkTestObj.getResult();
+                                    details = tdkTestObj.getResultDetails();
+                                    print("getConnectedSSID returned : %s" %actualresult);
+                                    print("Details: [%s]"%details);
+
+                                    if(expectedresult in actualresult) and (-1 != details.find(ssid)):
+                                        #Execute the test case in STB
+                                        # Save Connected SSID
+                                        tdkTestObj.addParameter("method_name", "saveSSID");
+                                        tdkTestObj.addParameter("ssid", ssid);
+                                        expectedresult="FAILURE"
+                                        tdkTestObj.executeTestCase(expectedresult);
+
+                                        #Get the result of execution
+                                        actualresult = tdkTestObj.getResult();
+                                        details = tdkTestObj.getResultDetails();
+
+                                        print("Actual Result [%s]"%actualresult)
+
+                                        #Set the result status of execution
+                                        if expectedresult in actualresult:
+                                            print("[TEST EXECUTION RESULT] - SUCCESS")
+                                            print("Details: [%s]"%details)
+                                            tdkTestObj.setResultStatus("SUCCESS");
+                                        else:
+                                            print("[TEST EXECUTION RESULT] - FAILURE")
+                                            print("Details: [%s]"%details)
+                                            tdkTestObj.setResultStatus("FAILURE");
+                                    else:
+                                        print("[TEST EXECUTION RESULT] - FAILURE")
+                                        print("Connected SSID and Config SSID are different")
                                         tdkTestObj.setResultStatus("FAILURE");
+                                else:
+                                    print("Unsupported network interface [%s]"%details)
+                                    tdkTestObj.setResultStatus("FAILURE");
+                            else:
+                                print("getActiveInterface - has returned failed")
+                                tdkTestObj.setResultStatus("FAILURE");
 
-                                netsrvObj.unloadModule("netsrvmgr");
-                        	
-                        else :
-                        	print "Failed to Load netsrvmgr Module "
-
+                            netsrvObj.unloadModule("netsrvmgr");
+                        else:
+                            print("Failed to Load netsrvmgr Module ")
+                            tdkTestObj.setResultStatus("FAILURE");
                         #Calling IARM_Bus_DisConnect API
                         result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
                 #calling IARMBUS API "IARM_Bus_Term"
@@ -165,5 +209,5 @@ if "SUCCESS" in iarmLoadStatus.upper():
         #Unload iarmbus module
         iarmObj.unloadModule("iarmbus");
 
-else :
-        print "Failed to Load iarmbus Module "
+else:
+        print("Failed to Load iarmbus Module ")

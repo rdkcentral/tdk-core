@@ -83,7 +83,7 @@ Test Type: Positive</synopsis>
   </script_tags>
 </xml>
 '''
-						# use tdklib library,which provides a wrapper for tdk testcase script 
+                                                # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
@@ -97,59 +97,57 @@ iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
 iarmObj.configureTestCase(ip,port,'NM_WifiMgr_getLAFState');
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print "Iarmbus module loading status : %s" %iarmLoadStatus ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus) ;
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
 if "SUCCESS" in iarmLoadStatus.upper():
-        #Calling IARMBUS API "IARM_Bus_Init"
-        result = IARMBUS_Init(iarmObj,"SUCCESS")
-        #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    #Calling IARMBUS API "IARM_Bus_Init"
+    result = IARMBUS_Init(iarmObj,"SUCCESS")
+    #Check for SUCCESS/FAILURE return value of IARMBUS_Init
+    if "SUCCESS" in result:
+        #Calling IARMBUS API "IARM_Bus_Connect"
+        result = IARMBUS_Connect(iarmObj,"SUCCESS")
+        #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
         if "SUCCESS" in result:
-                #Calling IARMBUS API "IARM_Bus_Connect"
-                result = IARMBUS_Connect(iarmObj,"SUCCESS")
-                #Check for SUCCESS/FAILURE return value of IARMBUS_Connect
-                if "SUCCESS" in result:
-                        #Test component to be tested
-                        netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
-                        netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_getLAFState');
+            #Test component to be tested
+            netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
+            netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_getLAFState');
 
-                        #Get the result of connection with test component and STB
-                        netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-                        print "[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus;
-                        #Set the module loading status
-                        netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
+            #Get the result of connection with test component and STB
+            netsrvLoadStatus =netsrvObj.getLoadModuleResult();
+            print("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus);
+            #Set the module loading status
+            netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
-                        if "SUCCESS" in netsrvLoadStatus.upper():
-                        	#Prmitive test case which associated to this Script
-                        	tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_GetLAFState');
+            if "SUCCESS" in netsrvLoadStatus.upper():
+                #Prmitive test case which associated to this Script
+                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_GetLAFState');
 
-                                #Execute the test case in STB
-                                expectedresult="SUCCESS"
-                        	tdkTestObj.executeTestCase(expectedresult);
+                #Execute the test case in STB
+                expectedresult="SUCCESS"
+                tdkTestObj.executeTestCase(expectedresult);
 
-                        	#Get the result of execution
-                        	actualresult = tdkTestObj.getResult();
-                                details = tdkTestObj.getResultDetails();
-                        	print "[TEST EXECUTION RESULT] : %s" %actualresult;
-                                print "Details: [%s]"%details;
+                #Get the result of execution
+                actualresult = tdkTestObj.getResult();
+                details = tdkTestObj.getResultDetails();
+                print("[TEST EXECUTION RESULT] : %s" %actualresult);
+                print("Details: [%s]"%details);
 
-                                #Set the result status of execution
-                        	if expectedresult in actualresult:
-                        	        tdkTestObj.setResultStatus("SUCCESS");
-                                else:
-                                        tdkTestObj.setResultStatus("FAILURE");
+                #Set the result status of execution
+                if expectedresult in actualresult:
+                    tdkTestObj.setResultStatus("SUCCESS");
+                else:
+                    tdkTestObj.setResultStatus("FAILURE");
 
-                                netsrvObj.unloadModule("netsrvmgr");
-                        	
-                        else :
-                        	print "Failed to Load netsrvmgr Module "
+                netsrvObj.unloadModule("netsrvmgr");
 
-                        #Calling IARM_Bus_DisConnect API
-                        result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
-                #calling IARMBUS API "IARM_Bus_Term"
-                result = IARMBUS_Term(iarmObj,"SUCCESS")
-        #Unload iarmbus module
-        iarmObj.unloadModule("iarmbus");
+            else :
+                print("Failed to Load netsrvmgr Module ")
 
-					
+            #Calling IARM_Bus_DisConnect API
+            result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+        #calling IARMBUS API "IARM_Bus_Term"
+        result = IARMBUS_Term(iarmObj,"SUCCESS")
+    #Unload iarmbus module
+    iarmObj.unloadModule("iarmbus");
