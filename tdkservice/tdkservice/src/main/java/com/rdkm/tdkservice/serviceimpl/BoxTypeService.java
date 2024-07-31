@@ -199,7 +199,8 @@ public class BoxTypeService implements IBoxTypeService {
 	public BoxTypeDTO updateBoxType(BoxTypeUpdateDTO boxTypeUpdateDTO, Integer id) {
 		BoxType boxType = boxTypeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.BOX_TYPE_ID, id.toString()));
-		if (!Utils.isEmpty(boxTypeUpdateDTO.getBoxTypeName())) {
+		if (!Utils.isEmpty(boxTypeUpdateDTO.getBoxTypeName())
+				&& !(boxTypeUpdateDTO.getBoxTypeName().equals(boxType.getName()))) {
 			if (boxTypeRepository.existsByName(boxTypeUpdateDTO.getBoxTypeName())) {
 				LOGGER.info("Box manufacturer already exists with the same name: " + boxTypeUpdateDTO.getBoxTypeName());
 				throw new ResourceAlreadyExistsException(Constants.BOX_TYPE, boxTypeUpdateDTO.getBoxTypeName());
@@ -369,7 +370,8 @@ public class BoxTypeService implements IBoxTypeService {
 		if (boxTypeDetails == null) {
 			throw new ResourceNotFoundException(Constants.BOX_TYPE, boxType);
 		}
-		if (boxTypeDetails.getType() == BoxTypeCategory.GATEWAY || boxTypeDetails.getType() == BoxTypeCategory.STAND_ALONE_CLIENT) {
+		if (boxTypeDetails.getType() == BoxTypeCategory.GATEWAY
+				|| boxTypeDetails.getType() == BoxTypeCategory.STAND_ALONE_CLIENT) {
 			isGateway = true;
 		}
 		return isGateway;

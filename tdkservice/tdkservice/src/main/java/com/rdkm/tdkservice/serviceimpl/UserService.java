@@ -205,7 +205,7 @@ public class UserService implements UserDetailsService {
 		// if the update , for user update should happen for specific fields as well.
 		// So we are doing the empty check and if it is empty then no need to update
 
-		if (!Utils.isEmpty(updateUserRequest.getUserName())) {
+		if (!Utils.isEmpty(updateUserRequest.getUserName()) && !(updateUserRequest.getUserName().equals(user.getUsername()))) {
 			if (userRepository.existsByUsername(updateUserRequest.getUserName())) {
 				LOGGER.info("User already exists with the same username: " + updateUserRequest.getUserName());
 				throw new ResourceAlreadyExistsException(Constants.USER_NAME, updateUserRequest.getUserName());
@@ -214,7 +214,7 @@ public class UserService implements UserDetailsService {
 			}
 		}
 
-		if (!Utils.isEmpty(updateUserRequest.getUserEmail())) {
+		if (!Utils.isEmpty(updateUserRequest.getUserEmail()) && !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
 			if (userRepository.existsByEmail(updateUserRequest.getUserEmail())) {
 				LOGGER.info("User already exists with the same email: " + updateUserRequest.getUserEmail());
 				throw new ResourceAlreadyExistsException(Constants.EMAIL, updateUserRequest.getUserEmail());

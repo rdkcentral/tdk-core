@@ -30,29 +30,21 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents the details of a streaming entity.
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "streaming_detail", uniqueConstraints = { @UniqueConstraint(columnNames = "streamId") })
-public class StreamingDetails {
-
-	/**
-	 * The unique identifier of the streaming detail.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class StreamingDetails extends BaseEntity {
 
 	/**
 	 * The unique identifier of the stream.

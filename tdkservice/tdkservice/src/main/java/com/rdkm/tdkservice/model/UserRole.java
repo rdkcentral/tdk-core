@@ -20,27 +20,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
-@Data
-@Entity
-@Table(name = "user_role")
+import lombok.EqualsAndHashCode;
 
 /**
  * User role entity class
  */
-public class UserRole {
-	
-	/**
-	 * Represents the unique identifier for the UserRole.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
+@Data
+@Entity
+@EqualsAndHashCode(callSuper = true)
+@Table(name = "user_role")
+public class UserRole extends BaseEntity {
+
 	/**
 	 * Represents the name of the UserRole.
 	 */

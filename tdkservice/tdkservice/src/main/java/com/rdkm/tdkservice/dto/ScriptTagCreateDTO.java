@@ -17,37 +17,34 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.model;
+package com.rdkm.tdkservice.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /*
- * The Box type sub boxtype entity class
+ * The script tag create DTO.
  */
-
 @Data
-@Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "boxtype_subboxtypemap")
-public class BoxtypeSubBoxtypeMap extends BaseEntity {
+public class ScriptTagCreateDTO {
 
-	/**
-	 * The name of the box type.
+	/*
+	 * The script tag name.
 	 */
-	@Column(nullable = false)
-	private String boxTypeName;
+	@NotBlank(message = "Script tag name cannot be null")
+	private String scriptTagName;
 
-	/**
-	 * The box type of the subBoxType.
+	/*
+	 * The script tag category.
 	 */
-	@ManyToOne
-	@JoinColumn(name = "boxtype_id")
-	private BoxType subBoxType;
+
+	@NotBlank(message = "Script tag category cannot be null")
+	private String scriptTagCategory;
+
+	/*
+	 * The script tag user group
+	 * 
+	 */
+	private String scriptTagUserGroup;
 
 }

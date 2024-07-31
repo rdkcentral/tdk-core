@@ -23,6 +23,7 @@ import com.rdkm.tdkservice.enums.Category;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents the details of a streaming entity.
@@ -30,8 +31,9 @@ import lombok.Data;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "soc_vendor")
-public class SocVendor {
+public class SocVendor extends BaseEntity  {
 	
 	/**
 	 * The unique identifier of the SocVendor.

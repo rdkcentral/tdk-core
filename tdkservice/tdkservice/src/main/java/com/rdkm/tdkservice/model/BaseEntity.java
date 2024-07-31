@@ -39,13 +39,13 @@ import lombok.Data;
 @Data
 @MappedSuperclass
 public abstract class BaseEntity {
-	
+
 	/**
 	 * The unique identifier of the entity.
 	 */
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+	private Integer id;
 
 	/**
 	 * The date the entity was created.
@@ -54,7 +54,7 @@ public abstract class BaseEntity {
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(name = "created_date")
 	private LocalDateTime createdDate;
-	
+
 	/**
 	 * The date the entity was last updated.
 	 */

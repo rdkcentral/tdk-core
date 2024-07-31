@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
-import com.rdkm.tdkservice.enums.BoxTypeCategory;
 import com.rdkm.tdkservice.enums.Category;
 
 import jakarta.persistence.Column;
@@ -31,44 +30,34 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 /*
- * The BoxType Entity
+ * The RDk version entity.
  */
+
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "box_type")
-public class BoxType extends BaseEntity {
+@Table(name = "rdk_version")
+public class RdkVersion extends BaseEntity {
 
 	/*
-	 * The name of the box type.
+	 * The build version name.
 	 */
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String name;
 
 	/*
-	 * The type
-	 * 
-	 */
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private BoxTypeCategory type;
-
-	/*
-	 * The user group
-	 * 
-	 */
-	@ManyToOne
-	@JoinColumn(name = "user_group_id")
-	private UserGroup userGroup;
-
-	/*
-	 * The category
-	 * 
+	 * The rdk version category.
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Category category;
+
+	/*
+	 * The rdk version user group.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "user_group_id")
+	private UserGroup userGroup;
 
 }

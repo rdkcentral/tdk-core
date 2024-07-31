@@ -20,10 +20,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+
 /**
  * This class is used to store the utility methods used in the application
  */
 public class Utils {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
 
 	/**
 	 * This method is used to check if the string is empty or not
@@ -36,4 +44,16 @@ public class Utils {
 		return string == null || string.trim().isEmpty();
 	}
 
+	/**
+	 * This method is used to check if the string is not empty
+	 * 
+	 * @param string
+	 * @return boolean
+	 */
+	public static void checkCategoryValid(String category) {
+		if (Category.getCategory(category) == null) {
+			LOGGER.error("Invalid category: " + category);
+			throw new ResourceNotFoundException(Constants.CATEGORY, category);
+		}
+	}
 }

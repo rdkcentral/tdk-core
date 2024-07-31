@@ -17,37 +17,30 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.model;
+package com.rdkm.tdkservice.repository;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.RdkVersion;
 
 /*
- * The Box type sub boxtype entity class
+ * The RDk version repository.
  */
-
-@Data
-@Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "boxtype_subboxtypemap")
-public class BoxtypeSubBoxtypeMap extends BaseEntity {
-
-	/**
-	 * The name of the box type.
+@Repository
+public interface RdkVersionRepository extends JpaRepository<RdkVersion, Integer> {
+	/*
+	 * Check if the build version name exists.
 	 */
-	@Column(nullable = false)
-	private String boxTypeName;
+	boolean existsByName(String buildVersionName);
 
-	/**
-	 * The box type of the subBoxType.
+	/*
+	 * Find the rdk version by category
+	 * 
 	 */
-	@ManyToOne
-	@JoinColumn(name = "boxtype_id")
-	private BoxType subBoxType;
+	List<RdkVersion> findByCategory(Category category);
 
 }

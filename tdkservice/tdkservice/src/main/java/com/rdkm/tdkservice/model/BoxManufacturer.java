@@ -33,15 +33,17 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*
  * Box manufacturer entity
  */
 
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
 @Table(name = "box_manufacturer")
-public class BoxManufacturer {
+public class BoxManufacturer extends BaseEntity {
 	/*
 	 * The unique identifier of the box manufacturer.
 	 */

@@ -156,5 +156,16 @@ public class Constants {
 
 	// Db file name
 	public static final String DB_FILE_NAME = "classpath:data.sql";
+	// script tag name
+	public static final String SCRIPT_TAG_NAME = "Script tag name";
+
+	// script tag is
+	public static final String SCRIPT_TAG_ID = "Script tag id";
+
+	// build version
+	public static final String RDK_VERSION_NAME = "Build version";
+
+	// build version id
+	public static final String RDK_VERSION_ID = "Build version id";
 
 }

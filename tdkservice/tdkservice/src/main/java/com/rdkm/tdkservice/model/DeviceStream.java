@@ -21,30 +21,22 @@ package com.rdkm.tdkservice.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*
  * Device Stream entity
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "device_stream", uniqueConstraints = {
 		@UniqueConstraint(columnNames = { "device_id", "stream_id", "ocap_id" }) })
-public class DeviceStream {
-	/**
-	 * The unique identifier of the device stream.
-	 */
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class DeviceStream extends BaseEntity {
 
 	/**
 	 * The device entity.

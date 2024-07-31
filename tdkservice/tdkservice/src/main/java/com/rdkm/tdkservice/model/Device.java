@@ -27,26 +27,18 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * Represents the details of a device entity.
  */
 @Data
+@EqualsAndHashCode(callSuper = true)
 @Entity
-public class Device {
-
-	/**
-	 * Represents the unique identifier for the device.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class Device extends BaseEntity {
 
 	/**
 	 * Represents the stbip of the device.

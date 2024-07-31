@@ -17,37 +17,31 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.model;
+package com.rdkm.tdkservice.repository;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.ScriptTag;
 
 /*
- * The Box type sub boxtype entity class
+ * The script tag repository.
  */
+@Repository
+public interface ScriptTagRepository extends JpaRepository<ScriptTag, Integer> {
 
-@Data
-@Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "boxtype_subboxtypemap")
-public class BoxtypeSubBoxtypeMap extends BaseEntity {
-
-	/**
-	 * The name of the box type.
+	/*
+	 * Check if the script tag name exists.
 	 */
-	@Column(nullable = false)
-	private String boxTypeName;
+	boolean existsByName(String scriptTagName);
 
-	/**
-	 * The box type of the subBoxType.
+	/*
+	 * Find the script tag by category
+	 * 
 	 */
-	@ManyToOne
-	@JoinColumn(name = "boxtype_id")
-	private BoxType subBoxType;
+	List<ScriptTag> findByCategory(Category category);
 
 }

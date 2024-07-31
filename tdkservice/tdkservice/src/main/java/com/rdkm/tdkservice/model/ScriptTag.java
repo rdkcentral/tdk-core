@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
-import com.rdkm.tdkservice.enums.BoxTypeCategory;
 import com.rdkm.tdkservice.enums.Category;
 
 import jakarta.persistence.Column;
@@ -30,45 +29,34 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+/*
+ * The script tag entity.
+ */
 import lombok.EqualsAndHashCode;
 
-/*
- * The BoxType Entity
- */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "box_type")
-public class BoxType extends BaseEntity {
+@Table(name = "script_tag")
+public class ScriptTag extends BaseEntity {
 
 	/*
-	 * The name of the box type.
+	 * The script tag name.
 	 */
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String name;
 
 	/*
-	 * The type
-	 * 
-	 */
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private BoxTypeCategory type;
-
-	/*
-	 * The user group
-	 * 
-	 */
-	@ManyToOne
-	@JoinColumn(name = "user_group_id")
-	private UserGroup userGroup;
-
-	/*
-	 * The category
-	 * 
+	 * The script tag category.
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Category category;
 
+	/*
+	 * The script tag user group.
+	 */
+	@ManyToOne
+	@JoinColumn(name = "user_group_id")
+	private UserGroup userGroup;
 }

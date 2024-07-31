@@ -339,6 +339,7 @@ public class DeviceController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+					.header("Access-Control-Expose-Headers", "content-disposition")
 					.body(resource);
 		}
 

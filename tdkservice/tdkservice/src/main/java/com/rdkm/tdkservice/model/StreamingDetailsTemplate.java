@@ -22,13 +22,11 @@ package com.rdkm.tdkservice.model;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /*
  * The Streaming details template db model class
@@ -36,16 +34,9 @@ import lombok.Data;
 
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "streaming_detail_template")
-public class StreamingDetailsTemplate {
-
-	/*
-	 * The unique identifier of the streaming details template.
-	 */
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+public class StreamingDetailsTemplate extends BaseEntity {
 
 	/*
 	 * The name of the streaming details template.

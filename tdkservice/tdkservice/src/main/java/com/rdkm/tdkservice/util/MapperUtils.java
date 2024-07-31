@@ -29,6 +29,8 @@ import com.rdkm.tdkservice.dto.BoxTypeDTO;
 import com.rdkm.tdkservice.dto.BoxTypeUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
+import com.rdkm.tdkservice.dto.RdkVersionDTO;
+import com.rdkm.tdkservice.dto.ScriptTagDTO;
 import com.rdkm.tdkservice.dto.SocVendorDTO;
 import com.rdkm.tdkservice.dto.SocVendorUpdateDTO;
 import com.rdkm.tdkservice.dto.StreamingDetailsDTO;
@@ -41,6 +43,8 @@ import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.BoxManufacturer;
 import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.RdkVersion;
+import com.rdkm.tdkservice.model.ScriptTag;
 import com.rdkm.tdkservice.model.SocVendor;
 import com.rdkm.tdkservice.model.StreamingDetails;
 import com.rdkm.tdkservice.model.User;
@@ -327,6 +331,42 @@ public class MapperUtils {
 		LOGGER.info("Streaming Details Update DTO: {}", streamingDetailsUpdateDTO);
 		return streamingDetailsUpdateDTO;
 
+	}
+
+	/**
+	 * This method is used to convert the ScriptTag object to ScriptTagDTO object.
+	 * 
+	 * @param scriptTag This is the ScriptTag object.
+	 * @return ScriptTagDTO This returns the ScriptTagDTO object converted from the
+	 *         ScriptTag object.
+	 */
+	public static ScriptTagDTO convertToScriptTagDTO(ScriptTag scriptTag) {
+		ScriptTagDTO scriptTagDTO = new ScriptTagDTO();
+		scriptTagDTO.setScriptTagId(scriptTag.getId());
+		scriptTagDTO.setScriptTagName(scriptTag.getName());
+		scriptTagDTO.setScriptTagCategory(scriptTag.getCategory().name());
+		scriptTagDTO
+				.setScriptTagUserGroup(scriptTag.getUserGroup() != null ? scriptTag.getUserGroup().getName() : null);
+		LOGGER.info("Script Tag DTO: {}", scriptTagDTO);
+		return scriptTagDTO;
+	}
+
+	/**
+	 * This method is used to convert the RdkVersion object to RdkVersionDTO object.
+	 * 
+	 * @param rdkVersion This is the RdkVersion object.
+	 * @return RdkVersionDTO This returns the RdkVersionDTO object converted from
+	 *         the RdkVersion object.
+	 */
+	public static RdkVersionDTO convertToRdkVersionDTO(RdkVersion rdkVersion) {
+		RdkVersionDTO rdkVersionDTO = new RdkVersionDTO();
+		rdkVersionDTO.setRdkVersionId(rdkVersion.getId());
+		rdkVersionDTO.setBuildVersionName(rdkVersion.getName());
+		rdkVersionDTO.setRdkVersionCategory(rdkVersion.getCategory().name());
+		rdkVersionDTO
+				.setRdkVersionUserGroup(rdkVersion.getUserGroup() != null ? rdkVersion.getUserGroup().getName() : null);
+		LOGGER.info("Rdk Version DTO: {}", rdkVersionDTO);
+		return rdkVersionDTO;
 	}
 
 }

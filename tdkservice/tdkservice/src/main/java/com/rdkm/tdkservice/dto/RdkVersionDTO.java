@@ -17,37 +17,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.model;
+package com.rdkm.tdkservice.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 
 /*
- * The Box type sub boxtype entity class
+ * The RDk version DTO. This DTO is using for update ,find all operations
  */
-
 @Data
-@Entity
-@EqualsAndHashCode(callSuper = true)
-@Table(name = "boxtype_subboxtypemap")
-public class BoxtypeSubBoxtypeMap extends BaseEntity {
+public class RdkVersionDTO {
 
-	/**
-	 * The name of the box type.
+	/*
+	 * The rdk version id.
 	 */
-	@Column(nullable = false)
-	private String boxTypeName;
+	@NotNull(message = "Rdk version id cannot be null. As we are update operations and find all operation is done on the basis of Id.")
+	private Integer rdkVersionId;
 
-	/**
-	 * The box type of the subBoxType.
+	/*
+	 * The build version name.
 	 */
-	@ManyToOne
-	@JoinColumn(name = "boxtype_id")
-	private BoxType subBoxType;
+	private String buildVersionName;
+
+	/*
+	 * The rdK version category
+	 * 
+	 */
+	private String rdkVersionCategory;
+
+	/*
+	 * The rdk version user group.
+	 */
+	private String rdkVersionUserGroup;
 
 }

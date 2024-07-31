@@ -19,54 +19,23 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
-import java.util.Date;
-
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * User group entity class
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "user_group")
-public class UserGroup {
-	
-	/**
-     * Represents the unique identifier for the UserGroup.
-     */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
+public class UserGroup extends BaseEntity {
+
 	/**
 	 * Represents the name of the UserGroup.
 	 */
 	private String name;
-	
-	/**
-	 * Represents the created date of the UserGroup.
-	 */
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date")
-	private String createdDate;
-	
-	/**
-	 * Represents the updated date of the UserGroup.
-	 */
-	@UpdateTimestamp
-	@Column(name = "updated_at")
-	private Date updatedAt;
 
 }
