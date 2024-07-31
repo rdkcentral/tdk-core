@@ -3786,4 +3786,74 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
+	   
+	   <!-- Test case 105 -->
+        <testCase testCaseId="DS_105" testCaseName="Set_Mute_Invalid_audioPort" desc="Validate by setting up mute for invalid audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
+                          <params>
+                                <param tag="audioPort" value="INVALID" />
+                                <param tag="muted" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+
+		<!-- Test case 106 -->
+        <testCase testCaseId="DS_106" testCaseName="Set_Mute_empty_audioPort" desc="Validate by setting up mute for empty audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
+                          <params>
+                                <param tag="audioPort" value="null" />
+                                <param tag="muted" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+		
+		<!-- Test case 107 -->
+        <testCase testCaseId="DS_107" testCaseName="Get_Dialog_Enhancement_InvalidAudioPort" desc="Validate by getting dialogEnhancement for invalid audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement">
+                          <params>
+                                <param tag="audioPort" value="INVALID" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+
+        <!-- Test case 108 -->
+        <testCase testCaseId="DS_108" testCaseName="Get_Dialog_Enhancement_EmptyAudioPort" desc="Validate by getting dialogEnhancement for empty audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement">
+                          <params>
+                                <param tag="audioPort" value=" " />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+
+        <!-- Test case 109 -->
+        <testCase testCaseId="DS_109" testCaseName="Get_Volume_Level_Invalid" desc="Validate by getting VolumeLevel for invalid audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Volume_Level" method="Get_Volume_Level">
+                          <params>
+                                <param tag="audioPort" value="INVALID" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+		
+		<!-- Test case 110 -->
+        <testCase testCaseId="DS_110" testCaseName="Get_Dialog_Enhancement_EmptyAudioPort" desc="Validate by getting VolumeLevel for empty audioport">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Get_Volume_Level" method="Get_Volume_Level">
+                          <params>
+                                <param tag="audioPort" value=" " />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+        </testCase>
+=======
+
 </testPlugin>

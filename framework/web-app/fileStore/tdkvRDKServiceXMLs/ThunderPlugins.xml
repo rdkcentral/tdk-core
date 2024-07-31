@@ -432,6 +432,12 @@
                 <param tag="enabled" defaultValue="null" type="bool" />
             </params>
     	</method>
+		<method name="Delete_Persistent_Path"  api="deletePersistentPath" type="method" desc="Deletes the persistent path" >
+            <params>
+                <param tag="callsign"  type="string" defaultValue="null" />
+                <param tag="type" type="string" defaultValue="null" />
+            </params>
+        </method>
         <method name="Get_Temperature_Thresholds" api="getTemperatureThresholds" type="method" desc="Gets temperature thresholds" />
         <method name="Set_Temperature_Thresholds" api="setTemperatureThresholds" type="method" desc="Sets temperature thresholds">
             <params paramKey="Thresholds" paramType="userGenerate" useMethodTag="system_set_thresholds_params">

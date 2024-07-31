@@ -1013,5 +1013,29 @@ using traceroute" >
           </postrequisite>
         </testCasePostRequisite>
        </testCase>
+	   
+	   <testCase testCaseId="NW_35" testCaseName="Network_Trace_Named_Invalid_EndPoints" desc="Validate error message with invalid endpointName" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Trace_Named_Endpoint" method="Trace_NamedEndpoint">
+                <params>
+                  <param tag="endpointName"  value="INVALID" />
+                  <param tag="packets"   useDefault="true" />
+                  <param tag="guid"   useDefault="true" />
+                </params>
+                <resultGeneration useMethodTag="network_negative_error_message_validation" expectedValues="Unsupported named endpoint" />
+            </testStep>
+        </testCase>
+
+		<testCase testCaseId="NW_36" testCaseName="Network_Trace_Named_Empty_EndPoints" desc="Validate error message with empty endpointName" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Trace_Named_Endpoint" method="Trace_NamedEndpoint">
+                <params>
+                  <param tag="endpointName"  value=" " />
+                  <param tag="packets"   useDefault="true" />
+                  <param tag="guid"   useDefault="true" />
+                </params>
+                <resultGeneration useMethodTag="network_negative_error_message_validation" expectedValues="Unsupported named endpoint" />
+            </testStep>
+		</testCase>
 </testPlugin>
 
