@@ -25,7 +25,7 @@ import static org.quartz.JobKey.*
 import static org.quartz.TriggerBuilder.*
 import static org.quartz.TriggerKey.*
 import grails.converters.JSON
-
+import groovy.json.JsonBuilder
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Map;
@@ -48,6 +48,11 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.codehaus.groovy.grails.validation.routines.InetAddressValidator;
 import org.springframework.util.StringUtils;
+
+import grails.converters.JSON
+import java.nio.file.Files
+import java.nio.file.Path
+import java.nio.file.StandardOpenOption
 /**
  * A class that handles the Execution of scripts.
  * @author sreejasuma
@@ -6644,5 +6649,139 @@ def captureSelectedFiles() {
 		 }
 		 render jsonObjMap as JSON
 	 }
-	
+	 
+
+ def installationOfTdkAgentLibraryFiles(String packageName, String deviceName) {
+        String deviceIp
+        Device device
+        def selectedPackagesList = []
+        def errorLines = []
+        List<String> allFilesList = new ArrayList<String>()
+        def sshCommand
+        String line
+        def sshProcess
+        def reader
+        def output = new StringBuilder()
+        boolean allocated = false
+        def user = "root"
+        def password = ""
+        def jsonObjMap = [:]
+        def shellScriptCommand = "sh /InstallTDKPackage.sh"
+        def remoteFilePath = "/opt/TDK/logs/tdk_agent.log"
+        boolean downloadSuccess = false
+        String jsonMessageLogs = "Unknown error"
+        Path tempFile = null
+        try {
+            device = Device.findByStbName(deviceName.toString())
+            deviceIp = device?.stbIp
+          
+            def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+            def directory = new File(directoryPath)
+            if (directory.exists() && directory.isDirectory()) {
+                allFilesList = directory.listFiles().collect { it.name }
+            }
+            selectedPackagesList = packageName.split(",")
+            def result = selectedPackagesList[0]
+            if (device?.deviceStatus.toString().equals("FREE")) {
+                String status = ""
+                status = DeviceStatusUpdater.fetchDeviceStatus(grailsApplication, device)
+                synchronized (lock) {
+                    if (executionService.deviceAllocatedList.contains(device?.id)) {
+                        status = "BUSY"
+                    } else {
+                        if ((status.equals(Status.FREE.toString()))) {
+                            if (!executionService.deviceAllocatedList.contains(device?.id)) {
+                                allocated = true
+                                executionService.deviceAllocatedList.add(device?.id)
+                                Thread.start {
+                                    deviceStatusService.updateOnlyDeviceStatus(device, Status.BUSY.toString())
+                                }
+                            }
+                        }
+                    }
+                }
+                allFilesList.each { fileee ->
+                    def socVendorInstance = SoCVendor.findByName(fileee.toString())
+                    def deviceInstance = Device.findBySoCVendor(socVendorInstance)
+                    def deviceInstanceList = Device.findAllBySoCVendor(socVendorInstance)
+                    deviceInstanceList.each { deviceInnstance ->
+                        def checkingId = deviceInnstance?.id
+                        def devName = deviceInnstance?.stbName
+                        if (device?.stbName.toString().equals(devName.toString())) {
+                            def sshKeyScanCommand = "ssh-keyscan -H ${deviceIp}"
+                            def sshKeyScanProcess = sshKeyScanCommand.execute()
+                            sshKeyScanProcess.waitFor()
+                            reader = new BufferedReader(new InputStreamReader(sshKeyScanProcess.inputStream))
+                            def knownHostsFile = new File("/root/.ssh/known_hosts")
+                            while ((line = reader.readLine()) != null) {
+                                knownHostsFile.append(line + "\n")
+                            }
+                            reader.close()
+                            if (result) {
+                                jsonMessageLogs = "tdk agent log file ready for download"
+                                def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
+								def scpFileProcess = scpCopyPackage.execute()
+                                scpFileProcess.waitFor()
+                                def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDKPackage.sh ${user}@${deviceIp}:/"
+								def scpScriptProcess = scpCopyShellScript.execute()
+                                scpScriptProcess.waitFor()
+                            } else {
+                                jsonMessageLogs = "No valid packages are available"
+                            }
+                            String executeSSHCommand = "sshpass -p '${password}' ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} > ${remoteFilePath}; cat ${remoteFilePath}'"
+							ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", executeSSHCommand)
+                            Process process = processBuilder.start()
+                            process.waitFor()
+                            reader = new BufferedReader(new InputStreamReader(process.getInputStream()))
+                            StringBuilder shellScriptOutput = new StringBuilder()
+                            while ((line = reader.readLine()) != null) {
+                                shellScriptOutput.append(line).append("\n")
+								println "shellScriptOutput"+shellScriptOutput.toString()
+                            }
+                            shellScriptOutput.append("\nDevice agent logs are downloaded successfully.\n")
+							println "shellScriptOutput 6766"+shellScriptOutput.toString()
+                            tempFile = Files.createTempFile("tdk-agent-log-", ".txt")
+                            Files.write(tempFile, shellScriptOutput.toString().getBytes(), StandardOpenOption.WRITE)
+                            downloadSuccess = true
+                            if (allocated) {
+                                executionService.deviceAllocatedList.remove(device?.id)
+                                allocated = false
+                            }
+                        }
+                    }
+                }
+            } else {
+                jsonMessageLogs = "Device is offline"
+            }
+        } catch (Exception e) {
+            e.printStackTrace()
+            jsonMessageLogs = "An error occurred: " + e.message
+        }
+        if (tempFile != null) {
+            // Return the download URL in the JSON response
+            def downloadUrl = createLink(controller: 'execution', action: 'downloadFile', params: [filePath: tempFile.toString()], absolute: true)
+            jsonObjMap.put("downloadUrl", downloadUrl)
+        }
+        jsonObjMap.put("status", downloadSuccess ? "tdk agent log file ready for download" : jsonMessageLogs)
+        render jsonObjMap as JSON
+    }
+
+    def downloadFile() {
+        def filePath = params.filePath
+        def file = new File(filePath)
+        if (file.exists()) {
+            response.setHeader("Content-Disposition", "attachment; filename=\"tdk-agent-log.txt\"")
+            response.contentType = 'text/plain'
+            response.contentLength = file.length()
+            file.withInputStream { stream ->
+                response.outputStream << stream
+            }
+            response.outputStream.flush()
+        } else {
+            render(status: 404, text: 'File not found')
+        }
+    }
+
+
+
 }

@@ -57,7 +57,7 @@ class SecurityFilters {
 	 */
     def securedPublicActions = [
 			user: ['changePassword'],
-			execution : ['getDeviceStatusList', 'getDeviceStatus','thirdPartyJsonResult','thirdPartyTest','showResult','getDetailedTestResult','stopThirdPartyTestExecution','getAgentConsoleLog','getRealtimeDeviceStatus','getExecutionOutput','thirdPartySingleTestExecution','thirdPartyJsonPerformanceResult','getExecutionId','getImageName','getExecutionList', 'getDeviceImageName','thirdPartyMultipleScriptExecution','getExecutionStatus','exportConsolidatedToExcel', 'resultSummary', 'changeDeviceIP'],
+			execution : ['getDeviceStatusList', 'getDeviceStatus','thirdPartyJsonResult','thirdPartyTest','showResult','getDetailedTestResult','stopThirdPartyTestExecution','getAgentConsoleLog','getRealtimeDeviceStatus','getExecutionOutput','thirdPartySingleTestExecution','thirdPartyJsonPerformanceResult','getExecutionId','getImageName','getExecutionList', 'getDeviceImageName','thirdPartyMultipleScriptExecution','getExecutionStatus','exportConsolidatedToExcel', 'resultSummary', 'changeDeviceIP', 'installationOfTdkAgentLibraryFiles'],
 			deviceGroup :['getDeviceList','deleteDeviceMethod','createNewDevice'],
 			scriptGroup : ['getScriptsByScriptGroup','getScriptsByModule','getAllScriptGroups','deleteScriptGroup','createNewScriptGroup','verifyScriptGroup','getScriptTimeout','getTestJavaScript'],
 			module : ['getModuleScriptTimeOut'],
