@@ -1033,7 +1033,7 @@ function installTDK(deviceId){
 		 $.get('tdkpackages', {deviceId:deviceId},function(data) {
 		 deviceeeId=deviceId
 		 if (data.includes("grailsLogo")) {
-        alert("No valid soc vendor not aviable");
+        alert("No valid SoC vendor is available");
     }
 
 		  else{
