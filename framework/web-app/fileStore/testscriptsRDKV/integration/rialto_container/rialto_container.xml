@@ -64,6 +64,18 @@
           <parameter name="operation" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="HandleYoutubeSignIn" id=" " version="1">
+        <function>HandleYoutubeSignIn</function>
+        <parameters>
+          <parameter name="image" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="HandleHomePage" id=" " version="1">
+        <function>HandleHomePage</function>
+        <parameters>
+          <parameter name="image" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>

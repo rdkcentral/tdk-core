@@ -32,6 +32,7 @@ import time
 from SecurityTokenUtility import *
 from ip_change_detection_utility import *
 import importlib
+from screenCaptureUtility import *
 
 ssh_param_dict = {}
 securityEnabled=False
@@ -288,7 +289,7 @@ def LaunchApplication():
             return "FAILURE"
 
     else:
-        print("Cobalt laucnh failure")
+        print("Cobalt launch failure")
         return "FAILURE"
 
     return "SUCCESS"
@@ -387,3 +388,50 @@ def ChangeContainerStatus(operation):
     else:
         print("Container status change failed")
     return status
+
+def HandleYoutubeSignIn(image):
+    if verifyTextInImage("youtube_signin",image):
+        print ("Verified YoutubeSignIn is launched")
+        print ("Skipping YoutubeSignIn")
+        #Press down key 3 times time and enter key 1 time to Skip page
+        down_key_code=40
+        for i in range(3):
+            Press_key(down_key_code)
+        enter_key_code=13
+        Press_key(enter_key_code)
+        return "HANDLED SIGNIN PAGE"
+    else:
+        print ("SignIn page is not launched,Proceeding forward")
+        return "SIGNIN PAGE SKIPPED"
+
+def HandleHomePage(image):
+    left_key_code=37
+    right_key_code=39
+    down_key_code=40
+    enter_key_code=13
+    if verifyImageTemplate("youtube_icons",image):
+        print ("Youtube HomePage is successfully launched")
+    else:
+        print ("FAILURE : Template Matching for YouTube home Page failed")
+        return "FAILURE"
+    if verifyTextInImage("youtube_homepage_signin",image):
+        print ("YouTube home page is launched with SignIn")
+        print ("Moving to videos")
+        #Press left arrow and down arrow key 1 times and enter key 3 times
+        Press_key(left_key_code)
+        for i in range(1):
+            Press_key(down_key_code)
+        for i in range(2):
+            Press_key(enter_key_code)
+    else:
+        print ("HomePage SignIn page is skipped")
+        print ("Playing Video")
+        #Press left arrow and down arrow key 1 times and enter key 3 times
+        Press_key(left_key_code)
+        for i in range(1):
+            Press_key(down_key_code)
+        for i in range(2):
+            Press_key(enter_key_code)
+    #Waiting for video to start
+    sleep(20)
+    return "SUCCESS"
