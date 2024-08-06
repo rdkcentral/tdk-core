@@ -102,9 +102,9 @@ import jakarta.validation.Validator;
 import jakarta.validation.ValidatorFactory;
 
 @Service
-public class DeviceDetailsService implements IDeviceService {
+public class DeviceService implements IDeviceService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceDetailsService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceService.class);
 
 	@Autowired
 	private DeviceRepositroy deviceRepository;
@@ -334,7 +334,7 @@ public class DeviceDetailsService implements IDeviceService {
 	 *         ID.
 	 */
 	@Override
-	public DeviceResponseDTO findDeviceById(Long id) {
+	public DeviceResponseDTO findDeviceById(Integer id) {
 		LOGGER.info("Executing find Device by id method with id: " + id);
 		Device device = deviceRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Device Id", id.toString()));
@@ -357,7 +357,7 @@ public class DeviceDetailsService implements IDeviceService {
 	 *         deleted successfully, or an error message if the device is not found.
 	 */
 	@Override
-	public void deleteDeviceById(Long id) {
+	public void deleteDeviceById(Integer id) {
 		LOGGER.info("Going to delete Device with id: " + id);
 		try {
 			// First, delete the associated device streams
@@ -444,7 +444,7 @@ public class DeviceDetailsService implements IDeviceService {
 	 * @return A List containing all streams for the device with the given ID.
 	 */
 	@Override
-	public List<StreamingDetailsResponse> getStreamsForTheDevice(Long id) {
+	public List<StreamingDetailsResponse> getStreamsForTheDevice(Integer id) {
 		LOGGER.info("Starting getStreamsForTheDevice method with ID: {}", id);
 		Device device = deviceRepository.findById(id).orElseThrow(() -> {
 			LOGGER.error("Device not found with ID: {}", id);
@@ -455,7 +455,8 @@ public class DeviceDetailsService implements IDeviceService {
 		LOGGER.info("Found {} device streams for device with ID: {}", deviceStreams.size(), id);
 		return deviceStreams.stream().map(deviceStream -> {
 			LOGGER.info("Processing device stream with ID: {}", deviceStream.getId());
-			StreamingDetails details = streamingDetailsRepository
+					if (deviceStream.getStream() != null) {
+						StreamingDetails details = streamingDetailsRepository
 					.findByStreamId(deviceStream.getStream().getStreamId());
 			if (details == null) {
 				LOGGER.error("No StreamingDetails found for stream ID: {}", deviceStream.getStream());
@@ -463,6 +464,10 @@ public class DeviceDetailsService implements IDeviceService {
 			}
 			LOGGER.info("Found streaming details for stream ID: {}", deviceStream.getStream());
 			return convertToStreamingDetailsResponse(details, deviceStream.getOcapId());
+					} else {
+						LOGGER.warn("DeviceStream with ID: {} has no associated StreamingDetails", deviceStream.getId());
+						return null;
+					}
 		}).filter(response -> response != null) // filter out null responses
 				.peek(streamingDetailsResponse -> LOGGER.info("Converted to StreamingDetailsResponse: {}",
 						streamingDetailsResponse))
@@ -512,7 +517,10 @@ public class DeviceDetailsService implements IDeviceService {
 	private DeviceResponseDTO convertToDeviceDTO(Device device) {
 		LOGGER.trace("Converting Device to DeviceDTO");
 		DeviceResponseDTO deviceDTO = MapperUtils.convertToDeviceDTO(device);
-		deviceDTO.setGatewayDeviceName(device.getGatewayIp());
+		Device gatewayDevice = deviceRepository.findByStbIp(device.getGatewayIp());
+		if (gatewayDevice != null) {
+			deviceDTO.setGatewayDeviceName(gatewayDevice.getStbName());
+		}
 		return deviceDTO;
 	}
 

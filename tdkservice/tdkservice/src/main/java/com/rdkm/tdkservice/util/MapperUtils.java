@@ -19,25 +19,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
+import com.rdkm.tdkservice.dto.*;
+import com.rdkm.tdkservice.enums.TestGroup;
+import com.rdkm.tdkservice.model.*;
+import com.rdkm.tdkservice.model.Module;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rdkm.tdkservice.dto.BoxManufacturerDTO;
-import com.rdkm.tdkservice.dto.BoxManufacturerUpdateDTO;
-import com.rdkm.tdkservice.dto.BoxTypeDTO;
-import com.rdkm.tdkservice.dto.BoxTypeUpdateDTO;
-import com.rdkm.tdkservice.dto.DeviceCreateDTO;
-import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.dto.RdkVersionDTO;
-import com.rdkm.tdkservice.dto.ScriptTagDTO;
-import com.rdkm.tdkservice.dto.SocVendorDTO;
-import com.rdkm.tdkservice.dto.SocVendorUpdateDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsUpdateDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
-import com.rdkm.tdkservice.dto.UserGroupDTO;
-import com.rdkm.tdkservice.dto.UserRoleDTO;
+
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.BoxManufacturer;
@@ -51,6 +41,10 @@ import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This class is used to populate the DTO objects from the model objects.
@@ -209,6 +203,8 @@ public class MapperUtils {
 		device.setRecorderId(deviceCreateDTO.getRecorderId());
 		device.setThunderPort(deviceCreateDTO.getThunderPort());
 		device.setThunderEnabled(deviceCreateDTO.isThunderEnabled());
+		//isDevicePortsConfigured
+		device.setDevicePortsConfigured(deviceCreateDTO.isDevicePortsConfigured());
 
 		return device;
 	}
@@ -242,6 +238,8 @@ public class MapperUtils {
 		if (!Utils.isEmpty(deviceUpdateDTO.getThunderPort()))
 			device.setThunderPort(deviceUpdateDTO.getThunderPort());
 		device.setThunderEnabled(deviceUpdateDTO.isThunderEnabled());
+		//isDevicePortsConfigured
+		device.setDevicePortsConfigured(deviceUpdateDTO.isDevicePortsConfigured());
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getCategory())) {
 			Category category = Category.valueOf(deviceUpdateDTO.getCategory().toUpperCase());
@@ -304,6 +302,13 @@ public class MapperUtils {
 
 	}
 
+	/**
+	 * This method is used to convert the Device object to DeviceDTO object.
+	 *
+	 * @param device This is the Device object.
+	 * @return DeviceDTO This returns the DeviceDTO object converted from the Device
+	 *         object.
+	 */
 	public static DeviceResponseDTO convertToDeviceDTO(Device device) {
 		ModelMapper modelMapper = new ModelMapper();
 		DeviceResponseDTO deviceDTO = modelMapper.map(device, DeviceResponseDTO.class);
@@ -331,6 +336,26 @@ public class MapperUtils {
 		LOGGER.info("Streaming Details Update DTO: {}", streamingDetailsUpdateDTO);
 		return streamingDetailsUpdateDTO;
 
+	}
+	/**
+	 * Converts a ModuleCreateDTO object to a Module entity.
+	 *
+	 * @param dto the data transfer object containing the module details
+	 * @param userGroup the user group associated with the module
+	 * @return the Module entity populated with the details from the DTO
+	 */
+	public static Module toModuleEntity(ModuleCreateDTO dto, UserGroup userGroup) {
+		Module module = new Module();
+		module.setName(dto.getModuleName());
+		TestGroup testGroup = TestGroup.valueOf(dto.getTestGroup());
+		module.setTestGroup(testGroup);
+		module.setUserGroup(userGroup);
+		module.setExecutionTime(dto.getExecutionTime());
+		module.setLogFileNames(dto.getModuleLogFileNames());
+		module.setCrashLogFiles(dto.getModuleCrashLogFiles());
+		module.setAdvanced(dto.isModuleAdvanced());
+		module.setThunderEnabled(dto.isModuleThunderEnabled());
+		return module;
 	}
 
 	/**
@@ -369,4 +394,119 @@ public class MapperUtils {
 		return rdkVersionDTO;
 	}
 
+	/**
+	 * This method is used to convert the Module object to ModuleDTO object.
+	 *
+	 * @param module This is the Module object.
+	 * @return ModuleDTO This returns the ModuleDTO object converted from the Module
+	 *         object.
+	 */
+	public static void updateModuleProperties(Module module, ModuleDTO moduleDTO) {
+		if (moduleDTO.getExecutionTime() != null)
+			module.setExecutionTime(moduleDTO.getExecutionTime());
+		if (moduleDTO.getModuleLogFileNames() != null)
+			module.setLogFileNames(moduleDTO.getModuleLogFileNames());
+		if (moduleDTO.getModuleCrashLogFiles() != null)
+			module.setCrashLogFiles(moduleDTO.getModuleCrashLogFiles());
+		if (moduleDTO.getTestGroup() != null && !moduleDTO.getTestGroup().isEmpty()) {
+			TestGroup testGroup = TestGroup.valueOf(moduleDTO.getTestGroup());
+			module.setTestGroup(testGroup);
+		}
+		if (moduleDTO.getModuleCategory() != null && !moduleDTO.getModuleCategory().isEmpty()) {
+			Category category = Category.valueOf(moduleDTO.getModuleCategory());
+			module.setCategory(category);
+		}
+		module.setThunderEnabled(moduleDTO.isModuleThunderEnabled());
+		module.setAdvanced(moduleDTO.isModuleAdvanced());
+	}
+
+	/**
+	 * Converts a Module entity to a ModuleDTO object.
+	 *
+	 * @param module the Module entity to be converted
+	 * @return the ModuleDTO object populated with the details from the Module entity
+	 */
+	public static ModuleDTO convertToModuleDTO(Module module) {
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(module.getId());
+		moduleDTO.setModuleName(module.getName());
+		moduleDTO.setTestGroup(module.getTestGroup().name());
+		moduleDTO.setExecutionTime(module.getExecutionTime());
+		moduleDTO.setModuleLogFileNames(module.getLogFileNames());
+		moduleDTO.setModuleCrashLogFiles(module.getCrashLogFiles());
+		moduleDTO.setModuleThunderEnabled(module.isThunderEnabled());
+		moduleDTO.setModuleAdvanced(module.isAdvanced());
+		moduleDTO.setModuleCategory(module.getCategory().name());
+		return moduleDTO;
+	}
+
+	/**
+	 * Converts a Function entity to a FunctionDTO object.
+	 *
+	 * @param function the Function entity to be converted
+	 * @return the FunctionDTO object populated with the details from the Function entity
+	 */
+	public static FunctionDTO convertToFunctionDTO(Function function) {
+		FunctionDTO functionDTO = new FunctionDTO();
+		functionDTO.setId(function.getId());
+		functionDTO.setFunctionName(function.getName());
+		functionDTO.setModuleName(function.getModule().getName());
+		functionDTO.setFunctionCategory(function.getCategory().name());
+		return functionDTO;
+	}
+
+	/**
+	 * Converts a ParameterType entity to a ParameterTypeDTO object.
+	 *
+	 * @param parameter the ParameterType entity to be converted
+	 * @return the ParameterTypeDTO object populated with the details from the ParameterType entity
+	 */
+	public static ParameterDTO convertToParameterTypeDTO(Parameter parameter) {
+		ParameterDTO parameterDTO = new ParameterDTO();
+		parameterDTO.setId(parameter.getId());
+		parameterDTO.setParameterName(parameter.getName());
+		parameterDTO.setParameterDataType(parameter.getParameterDataType());
+		parameterDTO.setParameterRangeVal(parameter.getRangeVal());
+		parameterDTO.setFunction(parameter.getFunction().getName());
+		return parameterDTO;
+	}
+
+	/**
+	 * Maps the data from FunctionCreateDTO to Function entity.
+	 *
+	 * @param function the function entity to be updated
+	 * @param functionCreateDTO the data transfer object containing the function details
+	 * @param module the module entity associated with the function
+	 */
+	public static void mapCreateDTOToEntity(Function function, FunctionCreateDTO functionCreateDTO, Module module) {
+		function.setName(functionCreateDTO.getFunctionName());
+		function.setModule(module);
+		function.setCategory(Category.valueOf(functionCreateDTO.getFunctionCategory()));
+	}
+
+	/**
+	 * Maps the data from ParameterTypeCreateDTO to ParameterType entity.
+	 *
+	 * @param parameter the parameter type entity to be updated
+	 * @param parameterCreateDTO the data transfer object containing the parameter type details
+	 * @param function the function entity associated with the parameter type
+	 */
+	public static void mapDTOCreateParameterTypeToEntity(Parameter parameter, ParameterCreateDTO parameterCreateDTO, Function function) {
+		parameter.setName(parameterCreateDTO.getParameterName());
+		parameter.setParameterDataType(parameterCreateDTO.getParameterDataType());
+		parameter.setRangeVal(parameterCreateDTO.getParameterRangeVal());
+		parameter.setFunction(function);
+	}
+
+	/**
+	 * Maps the data from ParameterTypeDTO to ParameterType entity.
+	 *
+	 * @param parameter the parameter type entity to be updated
+	 * @param parameterDTO the data transfer object containing the parameter type details
+	 */
+	public static void mapDTOToEntity(Parameter parameter, ParameterDTO parameterDTO) {
+		parameter.setName(parameterDTO.getParameterName());
+		parameter.setParameterDataType(parameterDTO.getParameterDataType());
+		parameter.setRangeVal(parameterDTO.getParameterRangeVal());
+	}
 }

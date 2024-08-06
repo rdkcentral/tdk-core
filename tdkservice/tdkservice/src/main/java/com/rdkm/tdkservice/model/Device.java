@@ -141,7 +141,13 @@ public class Device extends BaseEntity {
 	/**
 	 * Represents the category of the device.
 	 */
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private Category category;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Category category;
+
+	/**
+	 * Represents the isDevicePortsConfigured.
+	 */
+	private boolean isDevicePortsConfigured;
+
 }

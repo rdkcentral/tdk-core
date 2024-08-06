@@ -29,7 +29,7 @@ import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
 
 @Repository
-public interface DeviceRepositroy extends JpaRepository<Device, Long> {
+public interface DeviceRepositroy extends JpaRepository<Device, Integer> {
 	/**
 	 * This method is used to check if a Device exists by its stbIp.
 	 *

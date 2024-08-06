@@ -69,14 +69,14 @@ public interface IDeviceService {
 	 * @param id This is the id of the Device to be found.
 	 * @return Device This returns the found Device.
 	 */
-	public DeviceResponseDTO findDeviceById(Long id);
+	public DeviceResponseDTO findDeviceById(Integer id);
 
 	/**
 	 * This method is used to delete a Device by its id.
 	 *
 	 * @param id This is the id of the Device to be deleted.
 	 */
-	public void deleteDeviceById(Long id);
+	public void deleteDeviceById(Integer id);
 
 	/**
 	 * This method is get all gateway devices.
@@ -91,7 +91,7 @@ public interface IDeviceService {
 	 *
 	 * @return List<Device> This returns a list of all Devices.
 	 */
-	public List<StreamingDetailsResponse> getStreamsForTheDevice(Long id);
+	public List<StreamingDetailsResponse> getStreamsForTheDevice(Integer id);
 
 	/**
 	 * This method is used to parse the Device XML.

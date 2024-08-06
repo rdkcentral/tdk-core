@@ -33,7 +33,7 @@ public class DeviceUpdateDTO {
      * be null.
      */
     @NotNull(message = "Device id is required")
-    private Long id;
+    private Integer id;
     /**
      * Represents the stbip of the device. This field is mandatory, hence it cannot
      * be blank.
@@ -105,5 +105,10 @@ public class DeviceUpdateDTO {
      * Represents the deviceStreams of the device.
      */
     private List<DeviceStreamDTO> deviceStreams;
+
+    /**
+     * Represents the isDevicePortsConfigured of the device.
+     */
+    private boolean isDevicePortsConfigured;
 
 }
