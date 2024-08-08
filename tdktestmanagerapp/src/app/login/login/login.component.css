@@ -1,0 +1,301 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+.container-box {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 18%);
+    position: relative;
+    overflow: hidden;
+    width: 80%;
+    max-width: 100%;
+    min-height: 410px;
+}
+
+.logo-img {
+    width: 8%;
+}
+
+.title {
+    color: #00273F;
+    font-size: 1.3rem;
+    text-align: center;
+    padding-top: 10px;
+    margin-bottom: 0;
+}
+
+.apptitle {
+    color: #fff;
+    font-size: 1.5rem !important;
+    font-weight: 500;
+    margin-left: 15px;
+}
+
+.container-box p {
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0.3px;
+    margin: 20px 0;
+}
+
+.container-box a {
+    color: #00b2dc;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0 10px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.container-box button {
+    background-color: #00B2DC;
+    color: #fff;
+    font-size: 0.9rem;
+    padding: 8px 30px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+
+.container-box button.signup {
+    background-color: transparent;
+    border-color: #fff;
+}
+
+.container-box button.signin {
+    background-color: transparent;
+    border-color: #fff;
+}
+
+.container-box form {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 40px;
+    height: 70%;
+}
+
+.registerform {
+    height: 90% !important;
+    margin-top: 0px !important;
+}
+
+.form-container {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    transition: all 0.6s ease-in-out;
+}
+input::placeholder{
+    font-size: 12px;
+  }
+.form-control {
+    padding: .3rem .75rem;
+  }
+  .form-select{
+    font-size: 15px;
+  }
+.sign-in {
+    left: 0;
+    width: 50%;
+    z-index: 2;
+}
+.registerme-btn{
+    position: fixed;
+    right: 30px;
+    bottom: 7px;
+    font-size: 0.9rem;
+}
+.container-box.active .sign-in {
+    transform: translateX(100%);
+}
+
+.sign-up {
+    left: 0;
+    width: 50%;
+    opacity: 0;
+    z-index: 1;
+    transition: all 0.5s;
+}
+
+.container-box.active .sign-up {
+    transform: translateX(100%);
+    opacity: 1;
+    z-index: 5;
+    animation: move 0.6s;
+}
+
+@keyframes move {
+
+    0%,
+    49.99% {
+        opacity: 0;
+        z-index: 1;
+    }
+
+    50%,
+    100% {
+        opacity: 1;
+        z-index: 5;
+    }
+}
+
+.toggle-container {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 50%;
+    height: 100%;
+    overflow: hidden;
+    transition: all 0.6s ease-in-out;
+    border-radius: 150px 0 0 100px;
+    z-index: 1000;
+}
+
+.container-box.active .toggle-container {
+    transform: translateX(-100%);
+    border-radius: 0 150px 100px 0;
+}
+
+.toggle {
+    color: #fff;
+    position: relative;
+    left: -100%;
+    height: 100%;
+    width: 200%;
+    transform: translateX(0);
+    background-image: radial-gradient(circle at 50% 50%, #00B2DC, #00B2DC 51%, #00B2DC);
+    background-repeat: repeat;
+    background-size: 200% auto;
+    background-position: 100% 0;
+    transition: background-position .5s ease-in-out;
+}
+
+.container-box.active .toggle {
+    transform: translateX(50%);
+}
+
+.toggle-panel {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 0 30px;
+    text-align: center;
+    top: 0;
+    transform: translateX(0);
+    transition: all 0.6s ease-in-out;
+}
+
+.toggle-left {
+    transform: translateX(-200%);
+}
+
+.toggle-left h1 {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+.container-box.active .toggle-left {
+    transform: translateX(0);
+}
+
+.toggle-right {
+    right: 0;
+    transform: translateX(0);
+}
+
+.toggle-right h1 {
+    font-size: 1.7rem;
+    font-weight: 500;
+}
+
+.container-box.active .toggle-right {
+    transform: translateX(200%);
+}
+
+.parent {
+    height: 75vh;
+    margin-top: 5px;
+}
+
+.header {
+    background-color: #0e6f87;
+    color: #fff;
+    height: 60px;
+    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
+}
+
+.signinbtn {
+    text-align: center;
+}
+
+.logingOptionlbl {
+    font-size: 0.7rem;
+}
+
+.btn-check:checked+.btn,
+.btn.active,
+.btn.show,
+.btn:first-child:active,
+:not(.btn-check)+.btn:active {
+    background-color: #00B2DC !important;
+    color: #fff !important;
+}
+
+.btn-check+.btn {
+    color: #00273F !important;
+}
+
+.btn-outline-primary {
+    border: 1px solid #00B2DC !important;
+    ;
+}
+
+::ng-deep snack-bar-container .success-msg {
+    background-color: green !important;
+    color: #fff !important;
+}
+
+.regsuccess {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 40%;
+}
+
+.successicon {
+    font-size: 2rem;
+    margin-bottom: 5px;
+}
+
+.messagetitle {
+    font-size: 1.2rem;
+}
+
+.subtitle {
+    font-size: 0.9rem;
+}

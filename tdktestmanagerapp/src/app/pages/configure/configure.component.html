@@ -1,0 +1,180 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row radiobox-row mt-4">
+        <div class="col-md-12 radiobox">
+            <h3 class="heading">Choose the configuration category :</h3>
+            <div class="rdkgroup">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
+                        (change)="ischecked('RDKV')" checked>
+                    <label class="form-check-label" for="rdkv">RDK-V</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
+                        (change)="ischecked('RDKB')">
+                    <label class="form-check-label" for="rdkb">RDK-B</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
+                        (change)="ischecked('RDKC')">
+                    <label class="form-check-label" for="rdkc">RDK-C</label>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkvVisible">
+            <div class="col-md-3">
+                <h3>RDK-V</h3>
+            </div>
+            <div class="col-md-4">
+                <ul class="rdklist">
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
+                        Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingdetails')">Streaming
+                            Details</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
+                            Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingtemplates')">Streaming Details
+                            Templates</a>
+                    </li>
+
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <ul class="rdk2ndlist">
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add streaming details</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Option to add box type</li>
+                    <li>Option to add SoC vendors</li>
+                    <li>Option to configure device templates</li>
+                </ul>
+            </div>
+            <div class="row" *ngIf="privileges == 'admin'">
+                <div class="col-md-3">
+                    <h3>Common Configuration</h3>
+                </div>
+                <div class="col-md-4">
+                    <ul class="rdklist">
+                        <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
+                        <li>
+                            <a routerLinkActive="active" (click)="navigationToUser('usermanagement')">User
+                                Management</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <ul class="rdkcommonlist">
+                        <li>Option to add Groups</li>
+                        <li>Option to manages users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkbVisible">
+            <div class="col-md-3">
+                <h3>RDK-B</h3>
+            </div>
+            <div class="col-md-4">
+                <ul class="rdklist">
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
+                        Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
+                            Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <ul class="rdk2ndlist">
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Option to add box type</li>
+                    <li>Option to add SoC vendors</li>
+
+                </ul>
+            </div>
+            <div class="row" *ngIf="privileges == 'admin'">
+                <div class="col-md-3">
+                    <h3>Common Configuration</h3>
+                </div>
+                <div class="col-md-4">
+                    <ul class="rdklist">
+                        <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
+                        <li>
+                            <a routerLinkActive="active" (click)="navigationToUser('usermanagement')">User
+                                Management</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <ul class="rdkcommonlist">
+                        <li>Option to add Groups</li>
+                        <li>Option to manages users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkcVisible">
+            <div class="col-md-3">
+                <h3>RDK-C</h3>
+            </div>
+            <div class="col-md-4">
+                <ul class="rdklist">
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
+                        Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
+                            Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
+    
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <ul class="rdk2ndlist">
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Option to add box type</li>
+                    <li>Option to add SoC vendors</li>
+           
+                </ul>
+            </div>
+            <div class="row" *ngIf="privileges == 'admin'">
+                <div class="col-md-3">
+                    <h3>Common Configuration</h3>
+                </div>
+                <div class="col-md-4">
+                    <ul class="rdklist">
+                        <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
+                        <li>
+                            <a routerLinkActive="active" (click)="navigationToUser('usermanagement')">User
+                                Management</a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-5">
+                    <ul class="rdkcommonlist">
+                        <li>Option to add Groups</li>
+                        <li>Option to manages users</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

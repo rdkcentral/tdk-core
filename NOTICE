@@ -106,3 +106,7 @@ Distributed under an MIT license: https://codemirror.net/LICENSE
 
 pxCore is CopyRight 2007-2009 John Robinson
 Licensed under the Apache License, Version 2.0
+
+This component uses files from Angular which is:
+Copyright (c) 2010-2024 Google LLC. https://angular.io/license
+Licensed under the MIT License
