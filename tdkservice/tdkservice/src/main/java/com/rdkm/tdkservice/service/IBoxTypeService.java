@@ -70,7 +70,7 @@ public interface IBoxTypeService {
 	 * @param id             This is the id of the BoxType to be updated.
 	 * @return BoxTypeRequest This returns the updated BoxType.
 	 */
-	BoxTypeDTO updateBoxType(BoxTypeUpdateDTO boxTypeUpdateDTO, Integer id);
+	BoxTypeUpdateDTO updateBoxType(BoxTypeUpdateDTO boxTypeUpdateDTO, Integer id);
 
 	/**
 	 * This method is used to retrieve all BoxTypes by category.
