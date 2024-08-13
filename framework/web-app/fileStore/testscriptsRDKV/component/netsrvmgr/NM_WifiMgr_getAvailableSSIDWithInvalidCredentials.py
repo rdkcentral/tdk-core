@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2016 RDK Management
+# Copyright 2024 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,25 +21,23 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>5</version>
+  <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>NM_WifiMgr_getAvailableSSIDs</name>
+  <name>NM_WifiMgr_getAvailableSSIDWithInvalidCredentials</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
-  <primitive_test_id></primitive_test_id>
+  <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>NetSrvMgr_WifiMgr_GetAvailableSSIDs</primitive_test_name>
+  <primitive_test_name>NetSrvMgr_WifiMgr_getAvailableSSIDWithName</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Objective:To get the list of available SSIDs for Wifi manager
-Test CaseID:CT_NET_SRV_MGR_WIFI_1
-Test Type: Positive</synopsis>
+  <synopsis>This is negative test case, which provide details about given SSID. This test case invoke with invalid credentials</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>5</execution_time>
+  <execution_time>2</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -52,9 +50,9 @@ Test Type: Positive</synopsis>
   <box_types>
     <box_type>IPClient-Wifi</box_type>
     <!--  -->
-    <box_type>Video_Accelerator</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
+    <!--  -->
+    <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -62,50 +60,48 @@ Test Type: Positive</synopsis>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_NM_41</test_case_id>
-    <test_objective>To get the list of available SSIDs for Wifi manager</test_objective>
-    <test_type>Positive</test_type>
+    <test_case_id>CT_NM_46</test_case_id>
+    <test_objective>This is negative test case, which provide details about given SSID. This test case invoke with invalid credentials</test_objective>
+    <test_type>Negative</test_type>
     <test_setup>Video_Accelerator</test_setup>
     <pre_requisite>1. netSrvMgr should be up and running.
 2. IARMDaemonMain should be up and running.</pre_requisite>
     <api_or_interface_used>IARM_Bus_Init (test agent process_name)
 IARM_Bus_Connect()
-IARM_Bus_Call(IARM_BUS_WIFI_MGR_API_getAvailableSSIDs)
+IARM_Bus_Call(IARM_BUS_WIFI_MGR_API_getAvailableSSIDsWithName)
 IARM_Bus_Disconnect : None
 IARM_Bus_Term : None</api_or_interface_used>
     <input_parameters>None</input_parameters>
     <automation_approch>1. TM loads the NetSrvMgr_Agent via the test agent.
-2.NetSrvMgr_Agent will get the list of available SSIDs for the Wifi manager.
+2.NetSrvMgr_Agent will connect to a wifi network using the credentials provided.
 3.NetSrvMgr_Agent will return SUCCESS or FAILURE based on the result from the above step</automation_approch>
-    <except_output>Checkpoint 1. Check if available SSIDs are retrieved successfully</except_output>
+    <expected_output>Check if wifi manger could return failure on provide details</expected_output>
     <priority>High</priority>
     <test_stub_interface>libnetsrvmgrstub.so</test_stub_interface>
-    <test_script>NM_WifiMgr_getAvailableSSIDs</test_script>
+    <test_script>NM_WifiMgr_getAvailableSSIDWithInvalidCredentials</test_script>
     <skipped>No</skipped>
-    <release_version>M47</release_version>
+    <release_version>M128</release_version>
     <remarks></remarks>
   </test_cases>
-  <script_tags>
-    <script_tag>BASIC</script_tag>
-    <!--  -->
-  </script_tags>
 </xml>
 '''
-                                                                                                                                                                                                # use tdklib library,which provides a wrapper for tdk testcase script
+# use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
 from iarmbus import IARMBUS_Init,IARMBUS_Connect,IARMBUS_DisConnect,IARMBUS_Term;
 
 #IP and Port of box, No need to change,
-#This will be replaced with correspoing Box Ip and port while executing script
+#This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
 
 #Test component to be tested
 iarmObj = tdklib.TDKScriptingLibrary("iarmbus","2.0");
-iarmObj.configureTestCase(ip,port,'NM_WifiMgr_getAvailableSSIDs');
+iarmObj.configureTestCase(ip,port,'NM_WifiMgr_getAvailableSSIDWithInvalidCredentials');
+
 #Get the result of connection with test component and STB
 iarmLoadStatus = iarmObj.getLoadModuleResult();
-print(("Iarmbus module loading status : %s" %iarmLoadStatus)) ;
+print("Iarmbus module loading status : %s" %iarmLoadStatus)
+
 #Set the module loading status
 iarmObj.setLoadModuleStatus(iarmLoadStatus);
 
@@ -120,46 +116,45 @@ if "SUCCESS" in iarmLoadStatus.upper():
         if "SUCCESS" in result:
             #Test component to be tested
             netsrvObj = tdklib.TDKScriptingLibrary("netsrvmgr","1");
-            netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_getAvailableSSIDs');
+            netsrvObj.configureTestCase(ip,port,'NM_WifiMgr_getAvailableSSIDWithInvalidCredentials');
 
             #Get the result of connection with test component and STB
             netsrvLoadStatus =netsrvObj.getLoadModuleResult();
-            print(("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus));
+            print ("[LIB LOAD STATUS]  :  %s" %netsrvLoadStatus)
+
             #Set the module loading status
             netsrvObj.setLoadModuleStatus(netsrvLoadStatus);
 
             if "SUCCESS" in netsrvLoadStatus.upper():
                 #Prmitive test case which associated to this Script
-                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_GetAvailableSSIDs');
-
-                #Execute the test case in STB
-                expectedresult="SUCCESS"
+                tdkTestObj = netsrvObj.createTestStep('NetSrvMgr_WifiMgr_getAvailableSSIDWithName');
+                expectedresult="FAILURE"
                 tdkTestObj.executeTestCase(expectedresult);
 
                 #Get the result of execution
                 actualresult = tdkTestObj.getResult();
                 details = tdkTestObj.getResultDetails();
-                dataLen = int(details);
 
-                print(("GetAvailableSSIDs returns : %s" %actualresult));
-                print(("Data Length: [%d]"%dataLen));
+                print("getAvailableSSIDsWithName returned : %s"%actualresult)
+                print("Details : %s"%details)
 
-                #Set the result status of execution
-                if (expectedresult in actualresult) and (dataLen > 0 ):
-                    print("[TEST EXECUTION RESULT] : SUCCESS");
+                if(expectedresult in actualresult) and (details.find("failed")):
+                    print("[TEST EXECUTION RESULT] - SUCCESS")
                     tdkTestObj.setResultStatus("SUCCESS");
                 else:
-                    print("[TEST EXECUTION RESULT] : FAILURE");
+                    print("[TEST EXECUTION RESULT] - FAILURE")
                     tdkTestObj.setResultStatus("FAILURE");
 
                 netsrvObj.unloadModule("netsrvmgr");
-
-            else :
-                print("Failed to Load netsrvmgr Module ")
+            else:
+                print ("Failed to Load netsrvmgr Module ")
 
             #Calling IARM_Bus_DisConnect API
             result = IARMBUS_DisConnect(iarmObj,"SUCCESS")
+
         #calling IARMBUS API "IARM_Bus_Term"
         result = IARMBUS_Term(iarmObj,"SUCCESS")
     #Unload iarmbus module
     iarmObj.unloadModule("iarmbus");
+else:
+    print("Failed to Load iarmbus Module ")
