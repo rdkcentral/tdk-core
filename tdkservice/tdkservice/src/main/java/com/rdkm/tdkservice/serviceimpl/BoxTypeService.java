@@ -196,7 +196,7 @@ public class BoxTypeService implements IBoxTypeService {
 	 * @return BoxTypeRequest This returns the updated BoxType.
 	 */
 	@Override
-	public BoxTypeDTO updateBoxType(BoxTypeUpdateDTO boxTypeUpdateDTO, Integer id) {
+	public BoxTypeUpdateDTO updateBoxType(BoxTypeUpdateDTO boxTypeUpdateDTO, Integer id) {
 		BoxType boxType = boxTypeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.BOX_TYPE_ID, id.toString()));
 		if (!Utils.isEmpty(boxTypeUpdateDTO.getBoxTypeName())
@@ -244,7 +244,7 @@ public class BoxTypeService implements IBoxTypeService {
 			LOGGER.error("Error occurred while updating BoxType", e);
 			throw new RuntimeException("Error occurred while updating BoxType", e);
 		}
-		return MapperUtils.convertToBoxTypeDTO(boxType);
+		return MapperUtils.convertToBoxTypeUpdateDTO(boxType);
 
 	}
 
@@ -327,6 +327,7 @@ public class BoxTypeService implements IBoxTypeService {
 					.collect(Collectors.toList());
 		}
 		return null;
+
 	}
 
 	/**

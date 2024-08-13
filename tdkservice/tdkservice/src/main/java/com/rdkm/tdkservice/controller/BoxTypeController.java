@@ -170,7 +170,7 @@ public class BoxTypeController {
 	@PutMapping("/update/{id}")
 	public ResponseEntity<?> updateBoxType(@PathVariable Integer id, @RequestBody BoxTypeUpdateDTO boxTypeUpdateDTO) {
 		LOGGER.info("Received update box type request: " + boxTypeUpdateDTO.toString());
-		BoxTypeDTO boxType = boxTypeService.updateBoxType(boxTypeUpdateDTO, id);
+		BoxTypeUpdateDTO boxType = boxTypeService.updateBoxType(boxTypeUpdateDTO, id);
 		if (null != boxType) {
 			LOGGER.info("Box type updated successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(boxType);
