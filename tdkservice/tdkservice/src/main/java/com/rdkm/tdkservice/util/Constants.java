@@ -37,13 +37,19 @@ public class Constants {
 	public static final String FILESTORE_LOCATION = "classpath:/filestore/";
 
 	// Default device config file name in filestore
-	public static final String DEFAULT_DEVICE_CONFIG_FILE = "device.config";
+	public static final String DEFAULT_DEVICE_CONFIG_FILE = "sampleDevice.config";
 
 	// Config file extension
 	public static final String CONFIG_FILE_EXTENSION = ".config";
 
 	// Base filestore directory
-	public static final String BASE_FILESTORE_DIR = "src/main/resources/filestore/";
+	public static final String BASE_FILESTORE_DIR = "filestore";
+	
+	// Slash as file path seperator
+	public static final String FILE_PATH_SEPERATOR = "/";
+	
+	// TDKV device config directory inside filestore
+	public static final String TDKV_DEVICE_CONFIG_DIR = "tdkvDeviceConfig";
 
 	// radio stream type
 	public static final String RADIO_STREAM_TYPE = "RADIO";

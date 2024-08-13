@@ -339,8 +339,7 @@ public class DeviceController {
 		} else {
 			return ResponseEntity.status(HttpStatus.OK)
 					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-					.header("Access-Control-Expose-Headers", "content-disposition")
-					.body(resource);
+					.header("Access-Control-Expose-Headers", "content-disposition").body(resource);
 		}
 
 	}
@@ -391,6 +390,7 @@ public class DeviceController {
 	 */
 	@Operation(summary = "Delete device configuration file", description = "Delete the device configuration file for a specific device in the system.")
 	@ApiResponse(responseCode = "200", description = "Device configuration file deleted successfully")
+	@ApiResponse(responseCode = "400", description = "No such file exists")
 	@ApiResponse(responseCode = "500", description = "Internal server error in deleting device configuration file")
 	@DeleteMapping("/deleteDeviceConfigFile")
 	public ResponseEntity<String> deleteDeviceConfigFile(@RequestParam String deviceConfigFileName) {
