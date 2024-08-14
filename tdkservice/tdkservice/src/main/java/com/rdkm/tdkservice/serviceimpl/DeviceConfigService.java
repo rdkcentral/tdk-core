@@ -20,19 +20,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
@@ -47,9 +50,6 @@ import com.rdkm.tdkservice.util.Utils;
 public class DeviceConfigService implements IDeviceConfigService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceConfigService.class);
-
-	@Autowired
-	private ResourceLoader resourceLoader;
 
 	/**
 	 * This method is used to get the device configuration file for a given box name
@@ -106,7 +106,8 @@ public class DeviceConfigService implements IDeviceConfigService {
 		LOGGER.info("Inside uploadDeviceConfigFile method with file: {}", file.getOriginalFilename());
 
 		try {
-			Path uploadPath = Paths.get(Constants.BASE_FILESTORE_DIR);
+			Path uploadPath = Paths.get(AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
+					+ Constants.FILE_PATH_SEPERATOR + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR);
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
@@ -131,16 +132,20 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 * 
 	 * @param fileName - the device configuration file name
 	 * @return boolean - true if the device config file is deleted successfully
-	 *                   false - if the device config file is not deleted
+	 *         false - if the device config file is not deleted
 	 */
 	@Override
 	public boolean deleteDeviceConfigFile(String deviceConfigFileName) {
 		LOGGER.info("Inside deleteDeviceConfigFile method with deviceConfigFileName: {}", deviceConfigFileName);
-		Path filePath = Paths.get(Constants.BASE_FILESTORE_DIR + deviceConfigFileName);
+		Path filePath = Paths.get(AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR + Constants.FILE_PATH_SEPERATOR
+				+ Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR + deviceConfigFileName);
 		try {
 			Files.delete(filePath);
 			LOGGER.info("File deleted successfully: {}", deviceConfigFileName);
 			return true;
+		} catch (NoSuchFileException ex) {
+			LOGGER.error("Delete device Config file failed due to this NoSuchFileException - {}", ex.getMessage());
+			throw new UserInputException("No such file exists");
 		} catch (IOException ex) {
 			LOGGER.error("Delete device Config file failed due to this exception - {}", ex.getMessage());
 			return false;
@@ -160,10 +165,17 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 */
 	private Resource getDeviceConfigFileGivenName(String configFileName) {
 		LOGGER.info("Inside getDeviceConfigFileGivenName method with configFileName: {}", configFileName);
-		String configFileLocation = Constants.FILESTORE_LOCATION + configFileName;
-		Resource resource = resourceLoader.getResource(configFileLocation);
-
-		if (!resource.exists()) {
+		String configFileLocation = AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
+				+ Constants.FILE_PATH_SEPERATOR + Constants.TDKV_DEVICE_CONFIG_DIR;
+		Path path = Paths.get(configFileLocation).resolve(configFileName);
+		Resource resource = null;
+		try {
+			resource = new UrlResource(path.toUri());
+		} catch (MalformedURLException e) {
+			LOGGER.error("Device config file not found: {}", configFileName);
+		}
+		// Loads the resource and checks if it exists
+		if (null != resource && !resource.exists()) {
 			LOGGER.error("Device config file not found: {}", configFileName);
 			return null;
 		}

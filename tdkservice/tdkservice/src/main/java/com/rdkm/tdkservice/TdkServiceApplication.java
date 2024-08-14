@@ -21,6 +21,8 @@ package com.rdkm.tdkservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
@@ -30,10 +32,15 @@ import io.swagger.v3.oas.annotations.info.Info;
  */
 @OpenAPIDefinition(info = @Info(title = "TDK Service", version = "1.0", description = "TDK Service API"))
 @SpringBootApplication
-public class TdkServiceApplication {
+public class TdkServiceApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TdkServiceApplication.class, args);
+	}
+
+	@Override
+	protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
+		return application.sources(TdkServiceApplication.class);
 	}
 
 }
