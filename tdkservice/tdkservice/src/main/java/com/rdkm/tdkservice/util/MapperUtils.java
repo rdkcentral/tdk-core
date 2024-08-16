@@ -27,7 +27,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.BoxManufacturer;
@@ -42,6 +41,7 @@ import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -203,7 +203,7 @@ public class MapperUtils {
 		device.setRecorderId(deviceCreateDTO.getRecorderId());
 		device.setThunderPort(deviceCreateDTO.getThunderPort());
 		device.setThunderEnabled(deviceCreateDTO.isThunderEnabled());
-		//isDevicePortsConfigured
+		// isDevicePortsConfigured
 		device.setDevicePortsConfigured(deviceCreateDTO.isDevicePortsConfigured());
 
 		return device;
@@ -238,7 +238,7 @@ public class MapperUtils {
 		if (!Utils.isEmpty(deviceUpdateDTO.getThunderPort()))
 			device.setThunderPort(deviceUpdateDTO.getThunderPort());
 		device.setThunderEnabled(deviceUpdateDTO.isThunderEnabled());
-		//isDevicePortsConfigured
+		// isDevicePortsConfigured
 		device.setDevicePortsConfigured(deviceUpdateDTO.isDevicePortsConfigured());
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getCategory())) {
@@ -337,10 +337,11 @@ public class MapperUtils {
 		return streamingDetailsUpdateDTO;
 
 	}
+
 	/**
 	 * Converts a ModuleCreateDTO object to a Module entity.
 	 *
-	 * @param dto the data transfer object containing the module details
+	 * @param dto       the data transfer object containing the module details
 	 * @param userGroup the user group associated with the module
 	 * @return the Module entity populated with the details from the DTO
 	 */
@@ -424,7 +425,8 @@ public class MapperUtils {
 	 * Converts a Module entity to a ModuleDTO object.
 	 *
 	 * @param module the Module entity to be converted
-	 * @return the ModuleDTO object populated with the details from the Module entity
+	 * @return the ModuleDTO object populated with the details from the Module
+	 *         entity
 	 */
 	public static ModuleDTO convertToModuleDTO(Module module) {
 		ModuleDTO moduleDTO = new ModuleDTO();
@@ -444,7 +446,8 @@ public class MapperUtils {
 	 * Converts a Function entity to a FunctionDTO object.
 	 *
 	 * @param function the Function entity to be converted
-	 * @return the FunctionDTO object populated with the details from the Function entity
+	 * @return the FunctionDTO object populated with the details from the Function
+	 *         entity
 	 */
 	public static FunctionDTO convertToFunctionDTO(Function function) {
 		FunctionDTO functionDTO = new FunctionDTO();
@@ -459,7 +462,8 @@ public class MapperUtils {
 	 * Converts a ParameterType entity to a ParameterTypeDTO object.
 	 *
 	 * @param parameter the ParameterType entity to be converted
-	 * @return the ParameterTypeDTO object populated with the details from the ParameterType entity
+	 * @return the ParameterTypeDTO object populated with the details from the
+	 *         ParameterType entity
 	 */
 	public static ParameterDTO convertToParameterTypeDTO(Parameter parameter) {
 		ParameterDTO parameterDTO = new ParameterDTO();
@@ -474,9 +478,10 @@ public class MapperUtils {
 	/**
 	 * Maps the data from FunctionCreateDTO to Function entity.
 	 *
-	 * @param function the function entity to be updated
-	 * @param functionCreateDTO the data transfer object containing the function details
-	 * @param module the module entity associated with the function
+	 * @param function          the function entity to be updated
+	 * @param functionCreateDTO the data transfer object containing the function
+	 *                          details
+	 * @param module            the module entity associated with the function
 	 */
 	public static void mapCreateDTOToEntity(Function function, FunctionCreateDTO functionCreateDTO, Module module) {
 		function.setName(functionCreateDTO.getFunctionName());
@@ -487,11 +492,14 @@ public class MapperUtils {
 	/**
 	 * Maps the data from ParameterTypeCreateDTO to ParameterType entity.
 	 *
-	 * @param parameter the parameter type entity to be updated
-	 * @param parameterCreateDTO the data transfer object containing the parameter type details
-	 * @param function the function entity associated with the parameter type
+	 * @param parameter          the parameter type entity to be updated
+	 * @param parameterCreateDTO the data transfer object containing the parameter
+	 *                           type details
+	 * @param function           the function entity associated with the parameter
+	 *                           type
 	 */
-	public static void mapDTOCreateParameterTypeToEntity(Parameter parameter, ParameterCreateDTO parameterCreateDTO, Function function) {
+	public static void mapDTOCreateParameterTypeToEntity(Parameter parameter, ParameterCreateDTO parameterCreateDTO,
+			Function function) {
 		parameter.setName(parameterCreateDTO.getParameterName());
 		parameter.setParameterDataType(parameterCreateDTO.getParameterDataType());
 		parameter.setRangeVal(parameterCreateDTO.getParameterRangeVal());
@@ -501,12 +509,38 @@ public class MapperUtils {
 	/**
 	 * Maps the data from ParameterTypeDTO to ParameterType entity.
 	 *
-	 * @param parameter the parameter type entity to be updated
-	 * @param parameterDTO the data transfer object containing the parameter type details
+	 * @param parameter    the parameter type entity to be updated
+	 * @param parameterDTO the data transfer object containing the parameter type
+	 *                     details
 	 */
 	public static void mapDTOToEntity(Parameter parameter, ParameterDTO parameterDTO) {
 		parameter.setName(parameterDTO.getParameterName());
 		parameter.setParameterDataType(parameterDTO.getParameterDataType());
 		parameter.setRangeVal(parameterDTO.getParameterRangeVal());
+	}
+
+	/**
+	 * This method is used to convert the Function object to FunctionDTO object.
+	 *
+	 * @param function This is the Function object.
+	 * @return FunctionDTO This returns the FunctionDTO object converted from the
+	 *         Function object.
+	 */
+
+	public static List<PrimitiveTestParameterDTO> convertPrimitiveTestParameterToDTO(
+			List<PrimitiveTestParameter> primitiveTestParameters) {
+		LOGGER.info("Converting primitive test parameters to DTO");
+		List<PrimitiveTestParameterDTO> primitiveTestParameterDTOs = new ArrayList<>();
+		for (PrimitiveTestParameter primitiveTestParameter : primitiveTestParameters) {
+			PrimitiveTestParameterDTO primitiveTestParameterDTO = new PrimitiveTestParameterDTO();
+			primitiveTestParameterDTO.setParameterName(primitiveTestParameter.getParameter().getName());
+			primitiveTestParameterDTO.setParameterValue(primitiveTestParameter.getValue());
+			primitiveTestParameterDTO.setParameterrangevalue(primitiveTestParameter.getParameter().getRangeVal());
+			primitiveTestParameterDTO
+					.setParameterType(primitiveTestParameter.getParameter().getParameterDataType().toString());
+			primitiveTestParameterDTOs.add(primitiveTestParameterDTO);
+		}
+		LOGGER.info("Primitive test parameters converted to DTO:" + primitiveTestParameterDTOs.toString());
+		return primitiveTestParameterDTOs;
 	}
 }

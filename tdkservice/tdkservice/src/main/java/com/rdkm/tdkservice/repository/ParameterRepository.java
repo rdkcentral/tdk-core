@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Parameter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -45,6 +46,23 @@ public interface ParameterRepository extends JpaRepository<Parameter, Integer> {
      * @param functionId the ID of the function
      * @return a list of parameter types with the specified function ID
      */
-    List<Parameter> findAllByFunctionId(Integer functionId);
+	List<Parameter> findAllByFunctionId(Integer functionId);
+
+	/**
+	 * Finds all parameters by function.
+	 *
+	 * @param function the function
+	 * @return a list of parameters with the specified function
+	 */
+
+	List<Parameter> findByFunction(Function function);
+
+	/**
+	 * Finds a parameter by its name.
+	 *
+	 * @param parameterName the name of the parameter
+	 * @return the parameter with the specified name, or null if not found
+	 */
+	Parameter findByName(String parameterName);
 
 }

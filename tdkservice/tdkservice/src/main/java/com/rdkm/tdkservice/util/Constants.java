@@ -44,10 +44,10 @@ public class Constants {
 
 	// Base filestore directory
 	public static final String BASE_FILESTORE_DIR = "filestore";
-	
+
 	// Slash as file path seperator
 	public static final String FILE_PATH_SEPERATOR = "/";
-	
+
 	// TDKV device config directory inside filestore
 	public static final String TDKV_DEVICE_CONFIG_DIR = "tdkvDeviceConfig";
 
@@ -174,13 +174,22 @@ public class Constants {
 	// build version id
 	public static final String RDK_VERSION_ID = "Build version id";
 
-	//Module name
+	// Module name
 	public static final String MODULE_NAME = "Module name";
 
-	//function name
+	// function name
 	public static final String FUNCTION_NAME = "Function name";
 
-	//ParameterType name
+	// ParameterType name
 	public static final String PARAMETER_NAME = "Parameter name";
+
+	// Primitive test name
+	public static final String PRIMITIVE_TEST_NAME = "Primitive test name";
+	
+	// Primitive test id
+	public static final String PRIMITIVE_TEST_ID = "Primitive test id";
+
+	// Primitive test with module name
+	public static final String PRIMITIVE_TEST_WITH_MODULE_NAME = "Primitive test with module name";
 
 }
