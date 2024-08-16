@@ -73,7 +73,7 @@ import jakarta.validation.Valid;
 public class DeviceController {
 
 	@Autowired
-	private IDeviceService deviceDetailsService;
+	private IDeviceService deviceService;
 
 	@Autowired
 	private IDeviceConfigService deviceConfigService;
@@ -94,7 +94,7 @@ public class DeviceController {
 	@PostMapping("/create")
 	public ResponseEntity<String> createDevice(@RequestBody @Valid DeviceCreateDTO deviceDTO) {
 		LOGGER.info("Received create device request: " + deviceDTO.toString());
-		boolean isDeviceCreated = deviceDetailsService.createDevice(deviceDTO);
+		boolean isDeviceCreated = deviceService.createDevice(deviceDTO);
 		if (isDeviceCreated) {
 			LOGGER.info("Device created successfully");
 			return ResponseEntity.status(HttpStatus.CREATED).body("Device created successfully");
@@ -119,7 +119,7 @@ public class DeviceController {
 	public ResponseEntity<String> updateDevice(@RequestBody @Valid DeviceUpdateDTO deviceUpdateDTO) {
 		LOGGER.info("Received update device request: " + deviceUpdateDTO.toString());
 		try {
-			deviceDetailsService.updateDevice(deviceUpdateDTO);
+			deviceService.updateDevice(deviceUpdateDTO);
 			LOGGER.info("Device updated successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Device updated successfully");
 		} catch (Exception e) {
@@ -142,7 +142,7 @@ public class DeviceController {
 	public ResponseEntity<?> getAllDevices() {
 		LOGGER.info("Received find all devices request");
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDetailsService.getAllDeviceDetails());
+			return ResponseEntity.status(HttpStatus.OK).body(deviceService.getAllDeviceDetails());
 		} catch (Exception e) {
 			LOGGER.error("Error in fetching device details data", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -165,7 +165,7 @@ public class DeviceController {
 		LOGGER.info("Received find all devices by category request: " + category);
 		try {
 			return ResponseEntity.status(HttpStatus.OK)
-					.body(deviceDetailsService.getAllDeviceDetailsByCategory(category));
+					.body(deviceService.getAllDeviceDetailsByCategory(category));
 		} catch (Exception e) {
 			LOGGER.error("Error in fetching device details data:", e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -184,10 +184,10 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getDeviceById(@PathVariable Long id) {
+	public ResponseEntity<?> getDeviceById(@PathVariable Integer id) {
 		LOGGER.info("Received find device by id request: " + id);
 		try {
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDetailsService.findDeviceById(id));
+			return ResponseEntity.status(HttpStatus.OK).body(deviceService.findDeviceById(id));
 		} catch (Exception e) {
 			LOGGER.error("Error in fetching device details data", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -206,10 +206,10 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in deleting device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/deleteDeviceById/{id}")
-	public ResponseEntity<String> deleteDeviceById(@PathVariable Long id) {
+	public ResponseEntity<String> deleteDeviceById(@PathVariable Integer id) {
 		LOGGER.info("Received delete device request for id: " + id);
 		try {
-			deviceDetailsService.deleteDeviceById(id);
+			deviceService.deleteDeviceById(id);
 			LOGGER.info("Device deleted successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Device deleted successfully");
 		} catch (Exception e) {
@@ -232,7 +232,7 @@ public class DeviceController {
 	@GetMapping("/getlistofgatewaydevices")
 	public ResponseEntity<?> getListOfGateWayDevices(@RequestParam String category) {
 		LOGGER.info("Received find box type by category request");
-		List<String> gateWayDevice = deviceDetailsService.getGatewayDeviceList(category);
+		List<String> gateWayDevice = deviceService.getGatewayDeviceList(category);
 		if (null != gateWayDevice && !gateWayDevice.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.OK).body(gateWayDevice);
 		} else {
@@ -252,10 +252,10 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching streams")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getStreamsForDevice/{id}")
-	public ResponseEntity<?> getStreamsForDevice(@PathVariable Long id) {
+	public ResponseEntity<?> getStreamsForDevice(@PathVariable Integer id) {
 		LOGGER.info("Received get streams for device request: " + id);
 		try {
-			List<StreamingDetailsResponse> streams = deviceDetailsService.getStreamsForTheDevice(id);
+			List<StreamingDetailsResponse> streams = deviceService.getStreamsForTheDevice(id);
 			LOGGER.info("Streams fetched successfully for device: " + id);
 			return ResponseEntity.status(HttpStatus.OK).body(streams);
 		} catch (ResourceNotFoundException e) {
@@ -282,7 +282,7 @@ public class DeviceController {
 	public ResponseEntity<String> createDeviceFromXML(@Valid @RequestParam("file") MultipartFile file) {
 		LOGGER.info("Received upload device XML request: " + file.getOriginalFilename());
 		try {
-			deviceDetailsService.parseXMLForDevice(file);
+			deviceService.parseXMLForDevice(file);
 			LOGGER.info("Device created successfully from XML data");
 			return ResponseEntity.status(HttpStatus.CREATED).body("Device created successfully from XML data");
 		} catch (Exception e) {
@@ -307,7 +307,7 @@ public class DeviceController {
 	@GetMapping("/downloadXML/{deviceName}")
 	public ResponseEntity<String> downloadXML(@PathVariable String deviceName) {
 		LOGGER.info("Received download device XML request: " + deviceName);
-		String xmlContent = deviceDetailsService.downloadDeviceXML(deviceName);
+		String xmlContent = deviceService.downloadDeviceXML(deviceName);
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + deviceName + DEVICE_XML_FILE_EXTENSION);
 		LOGGER.info("Downloaded  Device XMl successfully");
@@ -315,15 +315,15 @@ public class DeviceController {
 	}
 
 	/**
-	 * This method is used to download the device configuration file for a given box
-	 * This functionality is exclusively for RDKV devices
-	 * 
-	 * @param deviceConfigDownloadRequest - the device configuration download
-	 *                                    request
+	 * This method is used to download the device configuration file exclusively
+	 * for RDKV devices and the related usecases
+	 *
+	 * @param boxName - the box name
+	 * @param boxType - the box type
 	 * @return ResponseEntity<Resource> - the response entity - HttpStatus.OK - if
 	 *         the file download is successful - HttpStatus.NOT_FOUND - if the file
-	 *         is not found - HttpStatus.INTERNAL_SERVER_ERROR - if the file
-	 *         download is not successful
+	 *         is not found
+	 *
 	 */
 	@Operation(summary = "Download device configuration file", description = "Download the device configuration file for a specific device in the system.")
 	@ApiResponse(responseCode = "200", description = "Device configuration file downloaded successfully")
@@ -380,13 +380,12 @@ public class DeviceController {
 	/**
 	 * This method is used to delete the device configuration file exclusively for
 	 * RDKV devices and the related usecases
-	 * 
-	 * @param boxName - the box name
-	 * @param boxType - the box type
+	 *
+	 * @param deviceConfigFileName - the device configuration file name
 	 * @return ResponseEntity<String> - the response entity - HttpStatus.OK - if the
-	 *         file delete is successful - HttpStatus.INTERNAL_SERVER_ERROR - if the
-	 *         file delete is not successful
-	 * 
+	 *         file deletion is successful - HttpStatus.INTERNAL_SERVER_ERROR - if
+	 *         the file deletion is not successful
+	 *
 	 */
 	@Operation(summary = "Delete device configuration file", description = "Delete the device configuration file for a specific device in the system.")
 	@ApiResponse(responseCode = "200", description = "Device configuration file deleted successfully")
@@ -418,7 +417,7 @@ public class DeviceController {
 	public ResponseEntity<?> downloadAllDevicesByCategory(@PathVariable String category, HttpServletResponse response) {
 		try {
 			LOGGER.info("Received download all devices by category request: " + category);
-			Path file = deviceDetailsService.downloadAllDevicesByCategory(category);
+			Path file = deviceService.downloadAllDevicesByCategory(category);
 
 			byte[] fileContent = Files.readAllBytes(file);
 

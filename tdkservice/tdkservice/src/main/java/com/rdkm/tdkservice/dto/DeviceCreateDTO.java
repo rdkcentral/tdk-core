@@ -114,4 +114,9 @@ public class DeviceCreateDTO {
 	 * Represents the deviceStreams of the device.
 	 */
 	private ArrayList<DeviceStreamDTO> deviceStreams;
+
+	/**
+	 * Represents the isDevicePortsConfigured of the device.
+	 */
+	private boolean isDevicePortsConfigured;
 }

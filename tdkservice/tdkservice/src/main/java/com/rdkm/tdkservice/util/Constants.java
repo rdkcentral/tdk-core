@@ -174,4 +174,13 @@ public class Constants {
 	// build version id
 	public static final String RDK_VERSION_ID = "Build version id";
 
+	//Module name
+	public static final String MODULE_NAME = "Module name";
+
+	//function name
+	public static final String FUNCTION_NAME = "Function name";
+
+	//ParameterType name
+	public static final String PARAMETER_NAME = "Parameter name";
+
 }
