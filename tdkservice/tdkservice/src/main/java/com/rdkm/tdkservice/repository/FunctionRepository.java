@@ -21,6 +21,8 @@ package com.rdkm.tdkservice.repository;
 
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Module;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -63,4 +65,12 @@ public interface FunctionRepository extends JpaRepository<Function, Integer> {
      * @return a list of functions in the specified module
      */
     List<Function> findAllByModuleId(Integer moduleId);
+    
+	/**
+	 * Finds all functions by their module.
+	 *
+	 * @param module the module
+	 * @return a list of functions in the specified module
+	 */
+    List<Function>findAllByModule(Module module);
 }

@@ -30,58 +30,66 @@ import java.util.List;
  */
 public interface IFunctionService {
 
-    /**
-     * Creates a new function.
-     *
+	/**
+	 * Creates a new function.
+	 *
      * @param functionCreateDTO the data transfer object containing the function details
-     * @return true if the function was created successfully, false otherwise
-     */
-    boolean createFunction(FunctionCreateDTO functionCreateDTO);
+	 * @return true if the function was created successfully, false otherwise
+	 */
+	boolean createFunction(FunctionCreateDTO functionCreateDTO);
 
-    /**
-     * Updates an existing function.
-     *
+	/**
+	 * Updates an existing function.
+	 *
      * @param functionDTO the data transfer object containing the updated function details
-     * @return true if the function was updated successfully, false otherwise
-     */
-    boolean updateFunction(FunctionDTO functionDTO);
+	 * @return true if the function was updated successfully, false otherwise
+	 */
+	boolean updateFunction(FunctionDTO functionDTO);
 
-    /**
-     * Finds all functions.
-     *
+	/**
+	 * Finds all functions.
+	 *
      * @return a list of data transfer objects containing the details of all functions
-     */
-    List<FunctionDTO> findAllFunctions();
+	 */
+	List<FunctionDTO> findAllFunctions();
 
-    /**
-     * Finds a function by its ID.
-     *
-     * @param id the ID of the function
+	/**
+	 * Finds a function by its ID.
+	 *
+	 * @param id the ID of the function
      * @return the data transfer object containing the details of the function, or null if not found
-     */
-    FunctionDTO findFunctionById(Integer id);
+	 */
+	FunctionDTO findFunctionById(Integer id);
 
-    /**
-     * Deletes a function by its ID.
-     *
-     * @param id the ID of the function
-     * @return true if the function was deleted successfully, false otherwise
-     */
-    void deleteFunction(Integer id);
+	/**
+	 * Deletes a function by its ID.
+	 *
+	 * @param id the ID of the function
+	 * @return true if the function was deleted successfully, false otherwise
+	 */
+	void deleteFunction(Integer id);
 
-    /**
-     * Finds all functions by their category.
-     *
-     * @param category the category of the functions
+	/**
+	 * Finds all functions by their category.
+	 *
+	 * @param category the category of the functions
      * @return a list of data transfer objects containing the details of all functions in the specified category
-     */
-    List<FunctionDTO> findAllByCategory(String category);
+	 */
+	List<FunctionDTO> findAllByCategory(String category);
 
-    /**
-     * Finds all functions by their module.
-     *
-     * @param moduleName the module of the functions
+	/**
+	 * Finds all functions by their module.
+	 *
+	 * @param moduleName the module of the functions
      * @return a list of data transfer objects containing the details of all functions in the specified module
-     */
-    public List<FunctionDTO> findAllFunctionsByModule(String moduleName);
+	 */
+	public List<FunctionDTO> findAllFunctionsByModule(String moduleName);
+
+	/**
+	 * Finds all functions by their module.
+	 *
+	 * @param moduleName the module of the functions
+	 * @return a list of function names in the specified module
+	 */
+	List<String> findAllFunctionNameByModule(String category);
 }

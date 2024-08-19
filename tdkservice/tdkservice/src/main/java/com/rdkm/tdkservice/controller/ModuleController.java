@@ -47,185 +47,207 @@ import java.util.List;
 @RequestMapping("/api/v1/module")
 public class ModuleController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModuleController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ModuleController.class);
 
-    @Autowired
-    IModuleService moduleService;
+	@Autowired
+	IModuleService moduleService;
 
-    /**
-     * Creates a new module.
-     *
-     * @param moduleDTO the module creation data transfer object
-     * @return ResponseEntity with a success or failure message
-     */
-    @Operation(summary = "Create a new module", description = "Creates a new module in the system.")
+	/**
+	 * Creates a new module.
+	 *
+	 * @param moduleDTO the module creation data transfer object
+	 * @return ResponseEntity with a success or failure message
+	 */
+	@Operation(summary = "Create a new module", description = "Creates a new module in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module created successfully"),
-            @ApiResponse(responseCode = "500", description = "Failed to create module"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "500", description = "Failed to create module"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    @PostMapping("/create")
-    public ResponseEntity<String> createModule(@RequestBody @Valid  ModuleCreateDTO moduleDTO) {
-        LOGGER.info("Creating new module: {}", moduleDTO);
-            boolean isSaved = moduleService.saveModule(moduleDTO);
-            if (isSaved) {
-                LOGGER.info("Module created successfully: {}", moduleDTO);
-                return ResponseEntity.ok("Module created successfully");
-            } else {
-                LOGGER.error("Failed to create module: {}", moduleDTO);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create module");
-            }
-    }
+	@PostMapping("/create")
+	public ResponseEntity<String> createModule(@RequestBody @Valid ModuleCreateDTO moduleDTO) {
+		LOGGER.info("Creating new module: {}", moduleDTO);
+		boolean isSaved = moduleService.saveModule(moduleDTO);
+		if (isSaved) {
+			LOGGER.info("Module created successfully: {}", moduleDTO);
+			return ResponseEntity.ok("Module created successfully");
+		} else {
+			LOGGER.error("Failed to create module: {}", moduleDTO);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create module");
+		}
+	}
 
-    /**
-     * Updates an existing module.
-     *
-     * @param moduleDTO the module data transfer object
-     * @return ResponseEntity with a success or failure message
-     */
-    @Operation(summary = "Update an existing module", description = "Updates an existing module in the system.")
+	/**
+	 * Updates an existing module.
+	 *
+	 * @param moduleDTO the module data transfer object
+	 * @return ResponseEntity with a success or failure message
+	 */
+	@Operation(summary = "Update an existing module", description = "Updates an existing module in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module updated successfully"),
-            @ApiResponse(responseCode = "409", description = "Module already exists"),
-            @ApiResponse(responseCode = "500", description = "Failed to update module"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "409", description = "Module already exists"),
+			@ApiResponse(responseCode = "500", description = "Failed to update module"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "404", description = "Module not found")
     })
-    @PutMapping("/update")
-    public ResponseEntity<String> updateModule(@Valid @RequestBody ModuleDTO moduleDTO) {
-        LOGGER.info("Updating module: {}", moduleDTO);
-        boolean isUpdated = moduleService.updateModule(moduleDTO);
-        if (isUpdated) {
-            LOGGER.info("Module updated successfully: {}", moduleDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Module updated successfully");
-        } else {
-            LOGGER.error("Failed to update module: {}", moduleDTO);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update module");
-        }
-    }
+	@PutMapping("/update")
+	public ResponseEntity<String> updateModule(@Valid @RequestBody ModuleDTO moduleDTO) {
+		LOGGER.info("Updating module: {}", moduleDTO);
+		boolean isUpdated = moduleService.updateModule(moduleDTO);
+		if (isUpdated) {
+			LOGGER.info("Module updated successfully: {}", moduleDTO);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Module updated successfully");
+		} else {
+			LOGGER.error("Failed to update module: {}", moduleDTO);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update module");
+		}
+	}
 
-    /**
-     * Retrieves all modules.
-     *
-     * @return ResponseEntity with a list of all modules
-     */
-    @Operation(summary = "Retrieve all modules", description = "Retrieves a list of all modules in the system.")
+	/**
+	 * Retrieves all modules.
+	 *
+	 * @return ResponseEntity with a list of all modules
+	 */
+	@Operation(summary = "Retrieve all modules", description = "Retrieves a list of all modules in the system.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved all modules"),
-            @ApiResponse(responseCode = "404", description = "No modules found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "No modules found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/findAll")
-    public ResponseEntity<List<ModuleDTO>> findAllModules() {
-        LOGGER.info("Retrieving all modules");
-            List<ModuleDTO> modules = moduleService.findAllModules();
-            LOGGER.info("Successfully retrieved all modules");
-            return ResponseEntity.status(HttpStatus.OK).body(modules);
-    }
+	@GetMapping("/findAll")
+	public ResponseEntity<List<ModuleDTO>> findAllModules() {
+		LOGGER.info("Retrieving all modules");
+		List<ModuleDTO> modules = moduleService.findAllModules();
+		LOGGER.info("Successfully retrieved all modules");
+		return ResponseEntity.status(HttpStatus.OK).body(modules);
+	}
 
-    /**
-     * Retrieves a module by its ID.
-     *
-     * @param id the ID of the module
-     * @return ResponseEntity with the module data transfer object
-     */
-    @Operation(summary = "Retrieve a module by its ID", description = "Retrieves a module by its ID.")
+	/**
+	 * Retrieves a module by its ID.
+	 *
+	 * @param id the ID of the module
+	 * @return ResponseEntity with the module data transfer object
+	 */
+	@Operation(summary = "Retrieve a module by its ID", description = "Retrieves a module by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
-            @ApiResponse(responseCode = "404", description = "Module not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "Module not found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/findById/{id}")
-    public ResponseEntity<ModuleDTO> findModuleById(@PathVariable Integer id) {
-        LOGGER.info("Retrieving module by ID: {}", id);
-            ModuleDTO module = moduleService.findModuleById(id);
-            if (module != null) {
-                LOGGER.info("Successfully retrieved module: {}", module);
-                return ResponseEntity.status(HttpStatus.OK).body(module);
-            } else {
-                LOGGER.warn("Module not found with ID: {}", id);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-    }
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<ModuleDTO> findModuleById(@PathVariable Integer id) {
+		LOGGER.info("Retrieving module by ID: {}", id);
+		ModuleDTO module = moduleService.findModuleById(id);
+		if (module != null) {
+			LOGGER.info("Successfully retrieved module: {}", module);
+			return ResponseEntity.status(HttpStatus.OK).body(module);
+		} else {
+			LOGGER.warn("Module not found with ID: {}", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
 
-    /**
-     * Retrieves a module by its category.
-     *
-     * @param category the category of the module
-     * @return ResponseEntity with a list of modules
-     */
-    @Operation(summary = "Retrieve a module by its category", description = "Retrieves a module by its category.")
+	/**
+	 * Retrieves a module by its category.
+	 *
+	 * @param category the category of the module
+	 * @return ResponseEntity with a list of modules
+	 */
+	@Operation(summary = "Retrieve a module by its category", description = "Retrieves a module by its category.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
-            @ApiResponse(responseCode = "404", description = "Module not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "Module not found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/findAllByCategory/{category}")
-    public ResponseEntity<List<ModuleDTO>> findAllByCategory(@PathVariable String category) {
-        LOGGER.info("Retrieving modules by category: {}", category);
-            List<ModuleDTO> modules = moduleService.findAllByCategory(category);
-            if (modules != null && !modules.isEmpty()) {
-                LOGGER.info("Successfully retrieved modules by category: {}", category);
-                return ResponseEntity.status(HttpStatus.OK).body(modules);
-            } else {
-                LOGGER.warn("No modules found for category: {}", category);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-    }
-    /**
-     * Deletes a module by its ID.
-     *
-     * @param id the ID of the module
-     * @return ResponseEntity with a success or failure message
-     */
-    @Operation(summary = "Delete a module by its ID", description = "Deletes a module by its ID.")
+	@GetMapping("/findAllByCategory/{category}")
+	public ResponseEntity<List<ModuleDTO>> findAllByCategory(@PathVariable String category) {
+		LOGGER.info("Retrieving modules by category: {}", category);
+		List<ModuleDTO> modules = moduleService.findAllByCategory(category);
+		if (modules != null && !modules.isEmpty()) {
+			LOGGER.info("Successfully retrieved modules by category: {}", category);
+			return ResponseEntity.status(HttpStatus.OK).body(modules);
+		} else {
+			LOGGER.warn("No modules found for category: {}", category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	/**
+	 * Retrieves all module names by category.
+	 *
+	 * @param category the category of the module
+	 * @return ResponseEntity with a list of module names
+	 */
+	@Operation(summary = "Retrieve a module by its category", description = "Retrieves a module by its category.")
+	@ApiResponse(responseCode = "200", description = "Successfully retrieved the module")
+	@ApiResponse(responseCode = "404", description = "Module not found")
+	@GetMapping("/getlistofmodulenamebycategory/{category}")
+	public ResponseEntity<List<String>> findAllModuleNameByCategory(@PathVariable String category) {
+		LOGGER.info("Retrieving modules by category: {}", category);
+		List<String> modules = moduleService.findAllModuleNameByCategory(category);
+		if (modules != null && !modules.isEmpty()) {
+			LOGGER.info("Successfully retrieved modules by category: {}", category);
+			return ResponseEntity.status(HttpStatus.OK).body(modules);
+		} else {
+			LOGGER.error("No modules found for category: {}", category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+
+	/**
+	 * Deletes a module by its ID.
+	 *
+	 * @param id the ID of the module
+	 * @return ResponseEntity with a success or failure message
+	 */
+	@Operation(summary = "Delete a module by its ID", description = "Deletes a module by its ID.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Module deleted successfully"),
-            @ApiResponse(responseCode = "404", description = "Module not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "Module not found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteModule(@PathVariable Integer id) {
-        LOGGER.info("Deleting module by ID: {}", id);
-            boolean isDeleted = moduleService.deleteModule(id);
-            if (isDeleted) {
-                LOGGER.info("Module deleted successfully: {}", id);
-                return ResponseEntity.status(HttpStatus.CREATED).body("Module deleted successfully");
-            } else {
-                LOGGER.warn("Module not found with ID: {}", id);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found");
-            }
-    }
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteModule(@PathVariable Integer id) {
+		LOGGER.info("Deleting module by ID: {}", id);
+		boolean isDeleted = moduleService.deleteModule(id);
+		if (isDeleted) {
+			LOGGER.info("Module deleted successfully: {}", id);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Module deleted successfully");
+		} else {
+			LOGGER.warn("Module not found with ID: {}", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found");
+		}
+	}
 
-    /**
-     * Retrieves all test groups.
-     *
-     * @return ResponseEntity with a list of all test groups
-     */
-    @Operation(summary = "Retrieve all test groups", description = "Retrieves a list of all test groups from the enum.")
+	/**
+	 * Retrieves all test groups.
+	 *
+	 * @return ResponseEntity with a list of all test groups
+	 */
+	@Operation(summary = "Retrieve all test groups", description = "Retrieves a list of all test groups from the enum.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved test groups"),
-            @ApiResponse(responseCode = "404", description = "No test groups found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "No test groups found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    @GetMapping("/getAllTestGroups")
-    public ResponseEntity<List<String>> getAllTestGroups() {
-        LOGGER.info("Retrieving all test groups from enum");
-        List<String> testGroups = moduleService.findAllTestGroupsFromEnum();
-        if (testGroups != null && !testGroups.isEmpty()) {
-            LOGGER.info("Successfully retrieved all test groups from enum");
-            return ResponseEntity.status(HttpStatus.OK).body(testGroups);
-        } else {
-            LOGGER.warn("No test groups found in enum");
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+	@GetMapping("/getAllTestGroups")
+	public ResponseEntity<List<String>> getAllTestGroups() {
+		LOGGER.info("Retrieving all test groups from enum");
+		List<String> testGroups = moduleService.findAllTestGroupsFromEnum();
+		if (testGroups != null && !testGroups.isEmpty()) {
+			LOGGER.info("Successfully retrieved all test groups from enum");
+			return ResponseEntity.status(HttpStatus.OK).body(testGroups);
+		} else {
+			LOGGER.warn("No test groups found in enum");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
 
 }
