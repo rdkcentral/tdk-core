@@ -69,12 +69,14 @@
                     <expectedValues useConfigFile="true" key="RDKSHELL_PREREQ_PLUGINS"/>
                   </resultGeneration>
             </testStep>
-          </prerequisite>          
+          </prerequisite>
 
           <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
             <event pluginName="RDKShell" eventName="Event_On_Launched" />
             <event pluginName="RDKShell" eventName="Event_On_Suspended" />
-            <event pluginName="RDKShell" eventName="Event_On_Destroyed" />
+	    <event pluginName="RDKShell" eventName="Event_On_Hibernated" />
+	    <event pluginName="RDKShell" eventName="Event_On_Restored" />
+	    <event pluginName="RDKShell" eventName="Event_On_Destroyed" />
 	    <event pluginName="RDKShell" eventName="Event_On_UserInactivity" />
 	    <event pluginName="RDKShell" eventName="Event_On_Application_Launched" />
             <event pluginName="RDKShell" eventName="Event_On_Application_Activated" />
@@ -87,7 +89,6 @@
             <event pluginName="RDKShell" eventName="Event_On_Plugin_Suspended" />
 	    <event pluginName="RDKShell" eventName="Event_On_Will_Destroy" />
           </prerequisite>
-
         </pluginPreRequisite>
 
         <!-- Test case 01 -->
@@ -4254,4 +4255,352 @@
                 <resultGeneration useMethodTag="rdkshell_get_result_status" />
             </testStep>
         </testCase>	
+	
+	<!-- Test case 133 -->
+	<testCase testCaseId="RDKShell_133" testCaseName="RDKShell_Memcr_Verify_Launch_Suspend_Hibernate_Event_Validation" desc="Verify if launch, suspend and hibernate events are being triggered">
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+		<!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+		</testStep>
+		</prerequisite>
+
+		<!-- TestCase PreRequisite 2 --> 
+		<prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+		</prerequisite>
+		
+		<!-- TestCase PreRequisite 3 -->
+		<prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+		<testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+              		<resultGeneration useMethodTag="rdkshell_check_for_results"/>
+		</testStep>
+		<testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+              	  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+		  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+		</testStep>
+		<testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+		  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+		  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            	</testStep>
+		<testStep testStepId="4" name="Kill_Application" method="Kill" >
+		  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />	
+		  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+	  	</testStep>
+		</prerequisite>
+            </testCasePreRequisite>
+
+	    <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+    	    <testStep testStepId="2" name="Check_On_Launched_Event" event="Event_On_Launched" action="eventListener" delay="3">
+                  <resultGeneration useMethodTag="rdkshell_check_on_launched_event" expectedValues="Cobalt,activate"/>
+            </testStep>
+	    <testStep testStepId="3" name="Suspend_Application" method="SuspendApplication" >
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    <testStep testStepId="4" name="Check_On_Suspended_Event" event="Event_On_Suspended" action="eventListener" delay="3" clear="false">
+                  <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="Cobalt"/>
+            </testStep>
+	    <testStep testStepId="5" name="Check_On_Hibernated_Event" event="Event_On_Hibernated" action="eventListener" delay="8">
+                  <resultGeneration useMethodTag="rdkshell_check_event_status"/>
+            </testStep>
+	    <testStep testStepId="6" name="Restore_Application" method="Restore_Application" delay="3">
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    
+	    <testCasePostRequisite>
+         	<postrequisite requisiteId="1" requisiteName="Killing_Cobalt_Application">
+		 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+		</postrequisite>
+            </testCasePostRequisite>
+	</testCase>
+
+	<!-- Test case 134 -->
+        <testCase testCaseId="RDKShell_134" testCaseName="RDKShell_Memcr_Verify_Restore_Event_Validation" desc="Verify if restore event are being triggered">
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+		<!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+                </testStep>
+                </prerequisite>
+
+		<!-- TestCase PreRequisite 2 -->
+                <prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+		</prerequisite>
+
+		<!-- TestCase PreRequisite 3 -->
+                <prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+                <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+    
+	    <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Suspend_Application" method="SuspendApplication" delay="3">
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="8">
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    <testStep testStepId="4" name="Check_On_Restored_Event" event="Event_On_Restored" action="eventListener" delay="3">
+                  <resultGeneration useMethodTag="rdkshell_check_event_status"/>
+	    </testStep>
+	
+	    <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Killing_Cobalt_Application">
+                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+	</testCase>	
+
+	<!-- Test case 135 -->
+        <testCase testCaseId="RDKShell_135" testCaseName="RDKShell_Memcr_Launch_Suspend_Hibernate_Cobalt_State_Check" desc="Verify the cobalt launch, suspend and hibernate state functionality">
+            <testCaseInfo testCaseType="direct"/>
+            <testCasePreRequisite>
+                <!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 2 -->
+                <prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+		</prerequisite>
+	
+		<!-- TestCase PreRequisite 3 -->
+                <prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+                <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+            <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+	    <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt"/>
+            </testStep>
+	    <testStep testStepId="3" name="Check_Cobalt_Launch_State" method="Get_Application_State" delay="2">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="resumed" />
+            </testStep>
+	    <testStep testStepId="4" name="Suspend_Application" method="SuspendApplication" delay="3">
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+	    <testStep testStepId="5" name="Check_Cobalt_Hibernate_State" method="Get_Application_State" delay="8">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="hibernated" />
+            </testStep>
+	    <testStep testStepId="6" name="Restore_Application" method="Restore_Application" delay="3">
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+	    </testStep>
+	    <testStep testStepId="7" name="Check_Cobalt_Suspend_State" method="Get_Application_State" delay="2">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="Cobalt" expectedValues="suspended" />
+      	    </testStep>
+      	
+	    <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Killing_Cobalt_Application">
+                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="cobalt"/>
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,cobalt" />
+                  <params>
+                        <param tag="callsign"  value="Cobalt" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+        </testCase>
 </testPlugin>

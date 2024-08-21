@@ -1034,7 +1034,9 @@
 	<event name="Event_On_Application_Launched" eventName="onApplicationLaunched" eventId="client.events.1" type="event" desc="Triggered when an application launches successfully"/>
         <event name="Event_On_Launched" eventName="onLaunched" eventId="client.events.1" type="event" desc="Fired on launching the client" />
         <event name="Event_On_Suspended" eventName="onSuspended" eventId="client.events.1" type="event" desc="Fired on Suspending the client" />
-        <event name="Event_On_Destroyed" eventName="onDestroyed" eventId="client.events.1" type="event" desc="Fired on destroying the client"/>
+	<event name="Event_On_Hibernated" eventName="onHibernated" eventId="client.events.1" type="event" desc="Fired on hibernating the client"/>
+	<event name="Event_On_Restored" eventName="onRestored" eventId="client.events.1" type="event" desc="Fired on restoring the client"/>
+	<event name="Event_On_Destroyed" eventName="onDestroyed" eventId="client.events.1" type="event" desc="Fired on destroying the client"/>
         <event name="Event_On_UserInactivity" eventName="onUserInactivity" eventId="client.events.1" type="event" desc="Fired on user inactive"/>
         <event name="Event_On_Application_Activated" eventName="onApplicationActivated" eventId="client.events.1" type="event" desc="Triggered when an application is activated"/>
         <event name="Event_On_Application_Activated" eventName="onApplicationActivated" eventId="client.events.1" type="event" desc="Triggered when an application is activated"/>
