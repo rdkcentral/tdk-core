@@ -169,15 +169,15 @@ public class ParameterController {
             @ApiResponse(responseCode = "404", description = "Parameter not found")
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Boolean> deleteParameter(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteParameter(@PathVariable Integer id) {
         LOGGER.info("Deleting parameter type by ID: {}", id);
             boolean isDeleted = parameterService.deleteParameter(id);
             if (isDeleted) {
                 LOGGER.info("Parameter deleted successfully: {}", id);
-                return ResponseEntity.ok(true);
+                return ResponseEntity.ok("Parameter deleted successfully");
             } else {
                 LOGGER.error("Failed to delete parameter : {}", id);
-                return ResponseEntity.internalServerError().body(false);
+                return ResponseEntity.internalServerError().body("Failed to delete parameter");
             }
     }
 

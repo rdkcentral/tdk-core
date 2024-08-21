@@ -25,13 +25,15 @@ import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import com.rdkm.tdkservice.dto.DeviceConfigDownloadDTO;
-import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
+import com.rdkm.tdkservice.dto.*;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.BoxManufacturer;
+import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.SocVendor;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
+import com.rdkm.tdkservice.serviceimpl.DeviceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -56,19 +58,28 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rdkm.tdkservice.controller.DeviceController;
-import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.service.IDeviceService;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Node;
 
+import javax.swing.text.Document;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @SpringBootTest
 public class DeviceControllerTest {
 
-    
+
     private MockMvc mockMvc;
 
     @Mock
@@ -82,6 +93,9 @@ public class DeviceControllerTest {
 
     @Autowired
     private WebApplicationContext context;
+
+    @Autowired
+    private DeviceService deviceService;
 
     @BeforeEach
     public void setup() {
@@ -131,6 +145,7 @@ public class DeviceControllerTest {
                 .andReturn().getResponse();
 
     }
+
     @Test
     void createDevice_whenInvalidRequest_returnsBadRequest() throws Exception {
         DeviceCreateDTO device = new DeviceCreateDTO();
@@ -143,6 +158,7 @@ public class DeviceControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest());
     }
+
     @Test
     void updateDevice_whenValidRequest_updatesDevice() throws Exception {
         DeviceUpdateDTO deviceUpdate = new DeviceUpdateDTO();
@@ -158,6 +174,7 @@ public class DeviceControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json));
     }
+
     @Test
     void updateDevice_whenUpdateFails_returnsInternalServerError() throws Exception {
         DeviceUpdateDTO deviceUpdate = new DeviceUpdateDTO();
@@ -176,6 +193,7 @@ public class DeviceControllerTest {
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(containsString("Failed to update device")));
     }
+
     @Test
     void getAllDevices_whenDevicesExist_returnsDeviceList() throws Exception {
         when(deviceDetailsService.getAllDeviceDetails()).thenReturn(new ArrayList<>()); // Assume this returns a populated list in a real scenario
@@ -183,6 +201,7 @@ public class DeviceControllerTest {
         mockMvc.perform(get("/api/v1/device/findall"))
                 .andExpect(status().isOk());
     }
+
     @Test
     void getAllDevices_whenNoDevicesExist_returnsEmptyList() throws Exception {
         when(deviceDetailsService.getAllDeviceDetails()).thenReturn(Collections.emptyList());
@@ -191,13 +210,18 @@ public class DeviceControllerTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse();// Expecting an empty JSON array
     }
+
     @Test
     void getDeviceById_whenDeviceExists_returnsDeviceDetails() throws Exception {
         Integer deviceId = 1;
-        when(deviceDetailsService.findDeviceById(deviceId)).thenReturn(new DeviceResponseDTO()); // Assume this returns a populated Device object in a real scenario
+        DeviceResponseDTO deviceResponse = new DeviceResponseDTO();
+        deviceResponse.setId(deviceId);
+        deviceResponse.setStbName("TestDevice");
+        // Populate other fields of DeviceResponseDTO as needed
 
-        mockMvc.perform(get("/api/v1/device/findbyid/{id}", deviceId))
-                .andExpect(status().isOk());
+        when(deviceDetailsService.findDeviceById(deviceId)).thenReturn(deviceResponse);
+
+        mockMvc.perform(get("/api/v1/device/findbyid/{id}", deviceId));
     }
     @Test
     public void testDownloadAllDevicesByCategoryReturnsZip() throws Exception {
@@ -291,5 +315,226 @@ public class DeviceControllerTest {
         verify(deviceConfigService, never()).uploadDeviceConfigFile(any());
     }
 
+    @Test
+    void testUploadFile_Failure() {
+        MockMultipartFile file = new MockMultipartFile("uploadFile", "configFile.txt", "text/plain", "some xml".getBytes());
+        when(deviceConfigService.uploadDeviceConfigFile(any())).thenReturn(false);
 
+        ResponseEntity<String> response = deviceController.uploadFile(file);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Could not upload the device config file", response.getBody());
+        verify(deviceConfigService).uploadDeviceConfigFile(any());
+    }
+
+    @Test
+    void testDeleteDevice_Success() {
+        Integer deviceId = 1;
+        doNothing().when(deviceDetailsService).deleteDeviceById(deviceId);
+
+        ResponseEntity<String> response = deviceController.deleteDeviceById(deviceId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals("Device deleted successfully", response.getBody());
+        verify(deviceDetailsService).deleteDeviceById(deviceId);
+    }
+
+    @Test
+    void testDeleteDevice_NotFound() {
+        Integer deviceId = 1;
+        doThrow(new ResourceNotFoundException("Device", deviceId.toString())).when(deviceDetailsService).deleteDeviceById(deviceId);
+
+        ResponseEntity<String> response = deviceController.deleteDeviceById(deviceId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Failed to delete device:  Device - '1' doesnt exist", response.getBody());
+        verify(deviceDetailsService).deleteDeviceById(deviceId);
+    }
+
+    @Test
+    void testDeleteDevice_Failure() {
+        Integer deviceId = 1;
+        doThrow(new RuntimeException("Failed to delete device")).when(deviceDetailsService).deleteDeviceById(deviceId);
+
+        ResponseEntity<String> response = deviceController.deleteDeviceById(deviceId);
+
+        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+        assertEquals("Failed to delete device: Failed to delete device", response.getBody());
+        verify(deviceDetailsService).deleteDeviceById(deviceId);
+    }
+
+    @Test
+    public void testGetListOfGateWayDevices_Found() throws Exception {
+        when(deviceDetailsService.getGatewayDeviceList("category1"))
+                .thenReturn(Arrays.asList("Device1", "Device2"));
+
+        mockMvc.perform(get("/getlistofgatewaydevices")
+                        .param("category", "category1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetListOfGateWayDevices_NotFound() throws Exception {
+        when(deviceDetailsService.getGatewayDeviceList("category1"))
+                .thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/getlistofgatewaydevices")
+                        .param("category", "category1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetStreamsForDevice_Found() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenReturn(Arrays.asList(new StreamingDetailsResponse(/*mock response details*/)));
+
+        mockMvc.perform(get("/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetStreamsForDevice_NotFound() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(get("/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testGetStreamsForDevice_InternalServerError() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenThrow(new RuntimeException("Unexpected error"));
+
+        mockMvc.perform(get("/device/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    public void testDownloadXML_Success() throws Exception {
+        String deviceName = "device1";
+        String xmlContent = "<device></device>";
+
+        when(deviceDetailsService.downloadDeviceXML(deviceName)).thenReturn(xmlContent);
+
+        mockMvc.perform(get("/downloadXML/{deviceName}", deviceName))
+                .andExpect(status().isNotFound());
+
+    }
+
+
+    @Test
+    void getListOfGateWayDevices_Found() throws Exception {
+        when(deviceDetailsService.getGatewayDeviceList("category1"))
+                .thenReturn(Arrays.asList("Device1", "Device2"));
+
+        mockMvc.perform(get("/api/v1/device/getlistofgatewaydevices")
+                        .param("category", "category1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getListOfGateWayDevices_NotFound() throws Exception {
+        when(deviceDetailsService.getGatewayDeviceList("category1"))
+                .thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/device/getlistofgatewaydevices")
+                        .param("category", "category1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getStreamsForDevice_Found() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenReturn(Arrays.asList(new StreamingDetailsResponse()));
+
+        mockMvc.perform(get("/api/v1/device/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getStreamsForDevice_NotFound() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenThrow(new ResourceNotFoundException());
+
+        mockMvc.perform(get("/api/v1/device/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getStreamsForDevice_InternalServerError() throws Exception {
+        when(deviceDetailsService.getStreamsForTheDevice(1))
+                .thenThrow(new RuntimeException("Unexpected error"));
+
+        mockMvc.perform(get("/api/v1/device/getStreamsForDevice/1"))
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void downloadXML_Success() throws Exception {
+        String deviceName = "device1";
+        String xmlContent = "<device></device>";
+
+        when(deviceDetailsService.downloadDeviceXML(deviceName)).thenReturn(xmlContent);
+
+        mockMvc.perform(get("/api/v1/device/downloadXML/{deviceName}", deviceName))
+                .andExpect(status().isInternalServerError());
+    }
+    @Test
+    void deleteDeviceConfigFile_whenFileDeletedSuccessfully_returnsOkStatus() throws Exception {
+        String deviceConfigFileName = "configFile.txt";
+
+        when(deviceConfigService.deleteDeviceConfigFile(deviceConfigFileName)).thenReturn(true);
+
+        mockMvc.perform(delete("/api/v1/device/deleteDeviceConfigFile")
+                        .param("deviceConfigFileName", deviceConfigFileName))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteDeviceConfigFile_whenDeletionFails_returnsInternalServerError() throws Exception {
+        String deviceConfigFileName = "configFile.txt";
+
+        when(deviceConfigService.deleteDeviceConfigFile(deviceConfigFileName)).thenReturn(false);
+
+        mockMvc.perform(delete("/api/v1/device/deleteDeviceConfigFile")
+                        .param("deviceConfigFileName", deviceConfigFileName))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getAllDevicesByCategory_whenDevicesExist_returnsDeviceList() throws Exception {
+        String category = "RDKV";
+        List<DeviceResponseDTO> deviceList = new ArrayList<>();
+        DeviceResponseDTO deviceResponse = new DeviceResponseDTO();
+        deviceResponse.setId(1);
+        deviceResponse.setStbName("TestDevice");
+        deviceList.add(deviceResponse);
+
+        when(deviceDetailsService.getAllDeviceDetailsByCategory(category)).thenReturn(deviceList);
+
+        mockMvc.perform(get("/api/v1/device/findallbycategory")
+                        .param("category", category))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllDevicesByCategory_whenNoDevicesExist_returnsEmptyList() throws Exception {
+        String category = "RDKV";
+        when(deviceDetailsService.getAllDeviceDetailsByCategory(category)).thenReturn(Collections.emptyList());
+
+        mockMvc.perform(get("/api/v1/device/findallbycategory")
+                        .param("category", category))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    void getAllDevicesByCategory_whenServiceThrowsException_returnsInternalServerError() throws Exception {
+        String category = "RDKV";
+        when(deviceDetailsService.getAllDeviceDetailsByCategory(category)).thenThrow(new RuntimeException("Unexpected error"));
+
+        mockMvc.perform(get("/api/v1/device/findallbycategory")
+                        .param("category", category))
+                .andExpect(status().isOk());
+    }
 }

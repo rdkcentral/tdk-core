@@ -755,25 +755,6 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromUpdateDTO(Device device, DeviceUpdateDTO deviceUpdateDTO) {
 
-		Device deviceWithSameStbIp = deviceRepository.findByStbIp(deviceUpdateDTO.getStbIp());
-
-		// Set BoxType
-		if (deviceWithSameStbIp != null && !deviceWithSameStbIp.getId().equals(deviceUpdateDTO.getId())) {
-			LOGGER.info("Device with the same stbip already exists");
-			throw new ResourceAlreadyExistsException("StpIp: ", deviceUpdateDTO.getStbIp());
-		}
-		Device deviceWithSameStbName = deviceRepository.findByStbName(deviceUpdateDTO.getStbName());
-		if (deviceWithSameStbName != null && !deviceWithSameStbName.getId().equals(deviceUpdateDTO.getId())) {
-			LOGGER.info("Device with the same stbName already exists");
-			throw new ResourceAlreadyExistsException("StbName: ", deviceUpdateDTO.getStbName());
-		}
-
-		Device deviceWithSameMacId = deviceRepository.findByMacId(deviceUpdateDTO.getMacId());
-		if (deviceWithSameMacId != null && !deviceWithSameMacId.getId().equals(deviceUpdateDTO.getId())) {
-			LOGGER.info("Device with the same macid already exists");
-			throw new ResourceAlreadyExistsException("MacId: ", deviceUpdateDTO.getMacId());
-		}
-
 		if (!Utils.isEmpty(deviceUpdateDTO.getBoxTypeName())) {
 			BoxType boxType = boxTypeRepository.findByName(deviceUpdateDTO.getBoxTypeName());
 			if (boxType != null) {

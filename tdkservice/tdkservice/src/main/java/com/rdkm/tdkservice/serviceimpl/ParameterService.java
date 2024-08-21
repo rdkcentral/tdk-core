@@ -87,7 +87,7 @@ public class ParameterService implements IParameterService {
                 LOGGER.error("Failed to create parameter: {}", parameterCreateDTO, e);
                 return false;
             }
-            return parameter != null && parameter.getId() > 0;
+            return parameter != null && parameter.getId() != null && parameter.getId() > 0;
     }
 
     /**

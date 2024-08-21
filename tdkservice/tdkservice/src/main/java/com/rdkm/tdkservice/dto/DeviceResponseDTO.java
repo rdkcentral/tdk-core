@@ -32,7 +32,7 @@ public class DeviceResponseDTO {
 	/**
 	 * Represents the unique identifier for the device.
 	 */
-	private Long id;
+	private Integer id;
 	/**
 	 * Represents the stbip of the device.
 	 */

@@ -101,7 +101,7 @@ public class ModuleService implements IModuleService {
 			return false;
 		}
 
-		return module != null && module.getId() > 0;
+        return module != null && module.getId() != null && module.getId() > 0;
 
 	}
 

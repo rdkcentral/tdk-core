@@ -77,28 +77,28 @@ public class FunctionService implements IFunctionService {
 			throw new ResourceAlreadyExistsException(Constants.FUNCTION_NAME, functionCreateDTO.getFunctionName());
 		}
 
-		if (module == null) {
-			LOGGER.error("Module not found: {}", functionCreateDTO.getModuleName());
-			throw new ResourceNotFoundException(Constants.MODULE_NAME, functionCreateDTO.getModuleName());
-		}
-		Category category = Category.getCategory(functionCreateDTO.getFunctionCategory());
-		if (null == category) {
-			throw new ResourceNotFoundException(Constants.CATEGORY, functionCreateDTO.getFunctionCategory());
-		} else {
-			module.setCategory(category);
-		}
-		Function function = new Function();
-		MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
-		LOGGER.info("Function created successfully: {}", function);
-		try {
-			functionRepository.save(function);
-			LOGGER.info("Function created successfully: {}", function);
-		} catch (Exception e) {
-			LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
-			return false;
-		}
-		return function != null && function.getId() > 0;
-	}
+            if (module == null) {
+                LOGGER.error("Module not found: {}", functionCreateDTO.getModuleName());
+                throw new ResourceNotFoundException(Constants.MODULE_NAME, functionCreateDTO.getModuleName());
+            }
+            Category category = Category.getCategory(functionCreateDTO.getFunctionCategory());
+            if (null == category) {
+                throw new ResourceNotFoundException(Constants.CATEGORY, functionCreateDTO.getFunctionCategory());
+            } else {
+                module.setCategory(category);
+            }
+            Function function = new Function();
+            MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
+            LOGGER.info("Function created successfully: {}", function);
+            try {
+                functionRepository.save(function);
+                LOGGER.info("Function created successfully: {}", function);
+            } catch (Exception e) {
+                LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
+                return false;
+            }
+            return function != null && function.getId() != null && function.getId() > 0;
+    }
 
 	/**
 	 * Updates an existing function.
@@ -179,33 +179,32 @@ public class FunctionService implements IFunctionService {
 		LOGGER.info("Retrieved function: {}", functionDTO);
 		return functionDTO;
 	}
-
-	/**
-	 * Deletes a function by its ID.
-	 *
-	 * @param id the ID of the function
-	 * @return true if the function was deleted successfully, false otherwise
-	 */
-	@Override
-	public void deleteFunction(Integer id) {
-		LOGGER.info("Deleting function by ID: {}", id);
-		if (!functionRepository.existsById(id)) {
-			LOGGER.error("Function not found for ID: {}", id);
-			throw new ResourceNotFoundException("Function id :: ", id.toString());
-		}
-		try {
-			List<Parameter> parameters = parameterRepository.findAllByFunctionId(id);
-			for (Parameter parameter : parameters) {
-				parameterRepository.delete(parameter);
-				LOGGER.info("Deleted parameter with ID: {}", parameter.getId());
-			}
-			functionRepository.deleteById(id);
-			LOGGER.info("Function deleted successfully: {}", id);
-		} catch (DataIntegrityViolationException e) {
-			LOGGER.error("Failed to delete function by ID: {}", id, e);
-			throw new DeleteFailedException();
-		}
-	}
+    /**
+     * Deletes a function by its ID.
+     *
+     * @param id the ID of the function
+     * @return true if the function was deleted successfully, false otherwise
+     */
+    @Override
+    public void deleteFunction(Integer id) {
+        LOGGER.info("Deleting function by ID: {}", id);
+        if (!functionRepository.existsById(id)) {
+            LOGGER.error("Function not found for ID: {}", id);
+            throw new ResourceNotFoundException("Function id :: ", id.toString());
+        }
+        try {
+            List<Parameter> parameters = parameterRepository.findAllByFunctionId(id);
+            for (Parameter parameter : parameters) {
+                parameterRepository.deleteById(parameter.getId());
+                LOGGER.info("Deleted parameter with ID: {}", parameter.getId());
+            }
+            functionRepository.deleteById(id);
+            LOGGER.info("Function deleted successfully: {}", id);
+        } catch (DataIntegrityViolationException e) {
+            LOGGER.error("Failed to delete function by ID: {}", id, e);
+            throw new DeleteFailedException();
+        }
+    }
 
 	/**
 	 * Finds all functions by their category.

@@ -429,16 +429,17 @@ public class MapperUtils {
 	 *         entity
 	 */
 	public static ModuleDTO convertToModuleDTO(Module module) {
+
 		ModuleDTO moduleDTO = new ModuleDTO();
 		moduleDTO.setId(module.getId());
 		moduleDTO.setModuleName(module.getName());
-		moduleDTO.setTestGroup(module.getTestGroup().name());
+		moduleDTO.setTestGroup(module.getTestGroup() != null ? module.getTestGroup().name() : null);
 		moduleDTO.setExecutionTime(module.getExecutionTime());
 		moduleDTO.setModuleLogFileNames(module.getLogFileNames());
 		moduleDTO.setModuleCrashLogFiles(module.getCrashLogFiles());
 		moduleDTO.setModuleThunderEnabled(module.isThunderEnabled());
 		moduleDTO.setModuleAdvanced(module.isAdvanced());
-		moduleDTO.setModuleCategory(module.getCategory().name());
+		moduleDTO.setModuleCategory(module.getCategory() != null ? module.getCategory().name() : null);
 		return moduleDTO;
 	}
 
@@ -453,7 +454,7 @@ public class MapperUtils {
 		FunctionDTO functionDTO = new FunctionDTO();
 		functionDTO.setId(function.getId());
 		functionDTO.setFunctionName(function.getName());
-		functionDTO.setModuleName(function.getModule().getName());
+		functionDTO.setModuleName(function.getModule() != null ? function.getModule().getName() : null);
 		functionDTO.setFunctionCategory(function.getCategory().name());
 		return functionDTO;
 	}
@@ -471,7 +472,7 @@ public class MapperUtils {
 		parameterDTO.setParameterName(parameter.getName());
 		parameterDTO.setParameterDataType(parameter.getParameterDataType());
 		parameterDTO.setParameterRangeVal(parameter.getRangeVal());
-		parameterDTO.setFunction(parameter.getFunction().getName());
+		parameterDTO.setFunction(parameter.getFunction() != null ? parameter.getFunction().getName() : null);
 		return parameterDTO;
 	}
 

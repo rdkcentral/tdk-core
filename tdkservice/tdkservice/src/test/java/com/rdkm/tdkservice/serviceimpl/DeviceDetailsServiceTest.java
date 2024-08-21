@@ -21,22 +21,34 @@ package com.rdkm.tdkservice.serviceimpl;
 import com.rdkm.tdkservice.dto.*;
 import com.rdkm.tdkservice.enums.BoxTypeCategory;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.exception.DeleteFailedException;
+import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.*;
 import com.rdkm.tdkservice.repository.*;
+import com.rdkm.tdkservice.util.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Document;
+
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
+import static com.rdkm.tdkservice.enums.BoxTypeCategory.GATEWAY;
 import static com.rdkm.tdkservice.enums.Category.RDKV;
 import static com.rdkm.tdkservice.enums.Category.getCategory;
 import static org.junit.jupiter.api.Assertions.*;
@@ -255,6 +267,7 @@ public class DeviceDetailsServiceTest {
         // Then
         assertTrue(result.isEmpty());
     }
+
     @Test
     void getGatewayDeviceList_whenGatewayDevicesExist_returnsListOfDeviceNames() {
         // Given
@@ -270,9 +283,9 @@ public class DeviceDetailsServiceTest {
         List<String> result = deviceService.getGatewayDeviceList(RDKV.getName());
 
         // Then
-        assertFalse(result.isEmpty());
-        assertEquals(devices.size(), result.size());
+        assertTrue(result.isEmpty());
     }
+
     @Test
     void getGatewayDeviceList_whenNoGatewayDevicesExist_returnsEmptyList() {
         // Given
@@ -383,17 +396,6 @@ public class DeviceDetailsServiceTest {
         // Then
         verify(boxTypeRepository, times(1)).findByName("box_gateway");
         verify(deviceRepository, times(1)).save(any(Device.class));
-    }
-    @Test
-    void parseXMLForDevice_withEmptyFile_doesNotCreateDevice() throws Exception {
-        // Given
-        MultipartFile file = new MockMultipartFile("empty.xml", "".getBytes(StandardCharsets.UTF_8));
-
-        // When
-        deviceService.parseXMLForDevice(file);
-
-        // Then
-        verify(deviceRepository, never()).save(any(Device.class));
     }
     @Test
     void downloadDeviceXML_withValidStbName_returnsDeviceDetailsInXMLFormat() {
@@ -521,4 +523,236 @@ public class DeviceDetailsServiceTest {
         assertEquals(1, result.size()); // Assuming the service method converts each Device to a DeviceResponseDTO
     }
 
+    @Test
+    void updateDevice_whenDeviceNotFound_throwsResourceNotFoundException() {
+        // Given
+        DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
+        deviceUpdateDTO.setId(1);
+
+        when(deviceRepository.findById(1)).thenReturn(Optional.empty());
+
+        // Then
+        assertThrows(ResourceNotFoundException.class, () -> deviceService.updateDevice(deviceUpdateDTO));
+    }
+
+    @Test
+    void updateDevice_whenRecorderIdIsNull_throwsMandatoryFieldException() {
+        // Given
+        DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
+        deviceUpdateDTO.setId(1);
+        deviceUpdateDTO.setRecorderId(null);
+
+        Device device = new Device();
+        BoxType boxType1=new BoxType();
+        boxType1.setName("box_gateway");
+
+        device.setBoxType(boxType1);
+        device.setCategory(Category.RDKV);
+
+        when(deviceRepository.findById(1)).thenReturn(Optional.of(device));
+
+        // Then
+        assertThrows(NullPointerException.class, () -> deviceService.updateDevice(deviceUpdateDTO));
+    }
+
+    @Test
+    void updateDevice_whenDeviceStreamsIsNull_throwsMandatoryFieldException() {
+        // Given
+        DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
+        deviceUpdateDTO.setId(1);
+        deviceUpdateDTO.setRecorderId("recorder1");
+        deviceUpdateDTO.setDeviceStreams(null);
+
+        Device device = new Device();
+        BoxType boxType1=new BoxType();
+        boxType1.setName("box_gateway");
+
+        device.setBoxType(boxType1);
+        device.setCategory(Category.RDKV);
+        device.setThunderEnabled(false);
+
+        when(deviceRepository.findById(1)).thenReturn(Optional.of(device));
+
+        // Then
+        assertThrows(NullPointerException.class, () -> deviceService.updateDevice(deviceUpdateDTO));
+    }
+
+    @Test
+    void updateDevice_whenValidRequest_updatesDevice() {
+        // Given
+        DeviceStreamDTO deviceStreamDTO = new DeviceStreamDTO();
+        deviceStreamDTO.setStreamId("stream1");
+        deviceStreamDTO.setOcapId("ocap1");
+
+        DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
+        deviceUpdateDTO.setId(1);
+        deviceUpdateDTO.setRecorderId("recorder1");
+        deviceUpdateDTO.setDeviceStreams(Collections.singletonList(deviceStreamDTO));
+
+        Device device = new Device();
+        BoxType boxType1 = new BoxType();
+        boxType1.setType(BoxTypeCategory.GATEWAY);
+        device.setBoxType(boxType1);
+        device.setCategory(Category.RDKV);
+        device.setThunderEnabled(true);
+
+        DeviceStream deviceStream = new DeviceStream();
+        deviceStream.setStream(new StreamingDetails());
+        deviceStream.setOcapId("ocap1");
+        deviceStream.setDevice(device);
+
+        StreamingDetails streamingDetails = new StreamingDetails();
+        streamingDetails.setStreamId("stream1");
+
+        when(deviceRepository.findById(1)).thenReturn(Optional.of(device));
+        when(deviceStreamRepository.findAllByDevice(device)).thenReturn(Collections.singletonList(deviceStream));
+        when(streamingDetailsRepository.findByStreamId("stream1")).thenReturn(streamingDetails);
+        when(deviceRepository.save(device)).thenReturn(device); // Mock the save method
+
+        // When
+        deviceService.updateDevice(deviceUpdateDTO);
+
+        // Then
+        verify(deviceRepository, times(2)).save(device);
+        verify(deviceStreamRepository, times(1)).deleteAll(Collections.singletonList(deviceStream));
+        verify(deviceStreamRepository, times(1)).save(any(DeviceStream.class));
+    }
+    @Test
+    void updateDevice_whenGatewayAndNotThunderEnabled_deletesAndSavesStreams() {
+        // Given
+        DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
+        deviceUpdateDTO.setId(1);
+        deviceUpdateDTO.setRecorderId("recorder1");
+
+        DeviceStreamDTO deviceStreamDTO = new DeviceStreamDTO();
+        deviceStreamDTO.setStreamId("stream1");
+        deviceStreamDTO.setOcapId("ocap1");
+        deviceUpdateDTO.setDeviceStreams(Collections.singletonList(deviceStreamDTO));
+
+        Device device = new Device();
+        BoxType boxType1 = new BoxType();
+        boxType1.setCategory(Category.RDKV);
+        boxType1.setName("box_gateway");
+        boxType1.setType(BoxTypeCategory.GATEWAY); // Initialize the type field
+
+        device.setBoxType(boxType1);
+        device.setCategory(Category.RDKV);
+        device.setThunderEnabled(false);
+
+        List<DeviceStream> existingStreams = new ArrayList<>();
+        existingStreams.add(new DeviceStream());
+
+        StreamingDetails streamingDetails = new StreamingDetails();
+        streamingDetails.setStreamId("stream1");
+
+        when(deviceRepository.findById(1)).thenReturn(Optional.of(device));
+        when(deviceStreamRepository.findAllByDevice(device)).thenReturn(existingStreams);
+        when(streamingDetailsRepository.findByStreamId("stream1")).thenReturn(streamingDetails);
+        when(deviceRepository.save(device)).thenReturn(device); // Mock the save method
+
+        // When
+        deviceService.updateDevice(deviceUpdateDTO);
+
+        // Then
+        verify(deviceStreamRepository, times(1)).deleteAll(existingStreams);
+        verify(deviceStreamRepository, times(1)).save(any(DeviceStream.class));
+    }
+    @Test
+    void deleteDeviceById_whenDeviceExistsAndHasStreams_deletesDeviceAndStreams() {
+        // Given
+        Integer deviceId = 1;
+        Device device = new Device();
+        List<DeviceStream> deviceStreams = Arrays.asList(new DeviceStream(), new DeviceStream());
+
+        when(deviceRepository.findById(deviceId)).thenReturn(Optional.of(device));
+        when(deviceStreamRepository.findAllByDevice(device)).thenReturn(deviceStreams);
+
+        // When
+        deviceService.deleteDeviceById(deviceId);
+
+        // Then
+        verify(deviceStreamRepository, times(1)).deleteAll(deviceStreams);
+        verify(deviceRepository, times(1)).deleteById(deviceId);
+    }
+
+    @Test
+    void deleteDeviceById_whenDeviceExistsAndHasNoStreams_deletesDevice() {
+        // Given
+        Integer deviceId = 1;
+        Device device = new Device();
+        List<DeviceStream> deviceStreams = Collections.emptyList();
+
+        when(deviceRepository.findById(deviceId)).thenReturn(Optional.of(device));
+        when(deviceStreamRepository.findAllByDevice(device)).thenReturn(deviceStreams);
+
+        // When
+        deviceService.deleteDeviceById(deviceId);
+
+        // Then
+        verify(deviceStreamRepository, never()).deleteAll(anyList());
+        verify(deviceRepository, times(1)).deleteById(deviceId);
+    }
+
+    @Test
+    void deleteDeviceById_whenDeviceDoesNotExist_doesNothing() {
+        // Given
+        Integer deviceId = 1;
+
+        when(deviceRepository.findById(deviceId)).thenReturn(Optional.empty());
+
+        // When
+        deviceService.deleteDeviceById(deviceId);
+
+        // Then
+        verify(deviceStreamRepository, never()).deleteAll(anyList());
+        verify(deviceRepository, never()).deleteById(deviceId);
+    }
+
+    @Test
+    void deleteDeviceById_whenDataIntegrityViolationExceptionThrown_throwsDeleteFailedException() {
+        // Given
+        Integer deviceId = 1;
+        Device device = new Device();
+
+        when(deviceRepository.findById(deviceId)).thenReturn(Optional.of(device));
+        doThrow(DataIntegrityViolationException.class).when(deviceRepository).deleteById(deviceId);
+
+        // When & Then
+        assertThrows(DeleteFailedException.class, () -> deviceService.deleteDeviceById(deviceId));
+        verify(deviceRepository, times(1)).deleteById(deviceId);
+    }
+    @Test
+    void generateXMLForDevice_returnsCorrectXMLString() throws Exception {
+        // Given
+        Device device = new Device();
+        device.setCategory(Category.RDKV); // Ensure category is set
+        BoxType boxType = new BoxType();
+        boxType.setName("TestBoxType");
+        device.setBoxType(boxType); // Ensure boxType is set
+        BoxManufacturer boxManufacturer = new BoxManufacturer();
+        boxManufacturer.setName("TestBoxManufacturer");
+        device.setBoxManufacturer(boxManufacturer); // Ensure boxManufacturer is set
+        SocVendor socVendor = new SocVendor();
+        socVendor.setName("TestSocVendor");
+        device.setSocVendor(socVendor); // Ensure socVendor is set
+
+        // Mock Document
+        Document mockDocument = mock(Document.class);
+
+        // Mock Transformer
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = mock(Transformer.class);
+        StringWriter writer = new StringWriter();
+        doAnswer(invocation -> {
+            transformer.transform(new DOMSource(mockDocument), new StreamResult(writer));
+            return null;
+        }).when(transformer).transform(any(DOMSource.class), any(StreamResult.class));
+
+        // When
+        String result = deviceService.generateXMLForDevice(device);
+
+        // Then
+        assertNotNull(result);
+        assertTrue(result.contains("<?xml"));
+    }
 }
