@@ -44,6 +44,12 @@ m4a_audio_url=stream_path+"TDK_Asset_Sunrise_M4A.m4a"
 
 dts_audio_url=stream_path+"TDK_Asset_Sunrise_DTS.dts"
 
+aac_audio_url=stream_path+"atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"
+
+eac3_audio_url=stream_path+"atfms_291_dash_tdk_avc_eac3_fmp4_ac3.mp4"
+
+webm_opus_audio_url=stream_path+"audio.webm"
+
 video_url=stream_path+"TDK_Asset_Sunrise_23fps.mp4"
 
 #Give Stream details in the order codec/No.ofChannels/SampleRate/Duration
