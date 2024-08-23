@@ -26,6 +26,102 @@ import os
 import sys
 from time import sleep;
 
+def wifi_GetParam(obj,paramName):
+
+# wifi_GetParam
+
+# Syntax      : wifi_GetParam()
+# Description : Function to get the values of wifi parameters
+# Parameters  : obj - module object
+#             : paramName - parameter name to get the value
+# Return Value: SUCCESS/FAILURE, value of parameter
+
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('WIFIAgent_Get')
+    tdkTestObj.addParameter("paramName", paramName)
+    tdkTestObj.executeTestCase(expectedresult)
+    actualresult = tdkTestObj.getResult()
+    value = tdkTestObj.getResultDetails()
+
+    if actualresult == expectedresult:
+        retvalue = value.split("VALUE:")[1].split(' ')[0]
+    else:
+        retvalue = value
+
+    return tdkTestObj,actualresult,retvalue
+
+def wifi_SetParam(obj,paramName,paramValue,paramType):
+
+# wifi_SetParam
+
+# Syntax      : wifi_SetParam()
+# Description : Function to set the values for wifi parameters
+# Parameters  : obj - module object
+#             : paramName - parameter name to set the value
+# Return Value: SUCCESS/FAILURE
+
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('WIFIAgent_Set')
+    tdkTestObj.addParameter("paramName", paramName)
+    tdkTestObj.addParameter("paramValue", paramValue)
+    tdkTestObj.addParameter("paramType", paramType)
+    tdkTestObj.executeTestCase(expectedresult)
+    actualresult = tdkTestObj.getResult()
+    return tdkTestObj,actualresult
+
+def get_radiusconfig_params(obj,ap_index):
+
+# get_radiusconfig_params
+
+# Syntax      : get_radiusconfig_params()
+# Description : Function to get the values of radius configuration parameters
+# Parameters  : obj - module object
+#             : ap_index - access point index
+# Return Value: SUCCESS/FAILURE, values of radius configuration parameters
+
+    paramNames = [
+                f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusServerIPAddr",
+                f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusServerPort",
+                f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusSecret",
+            ]
+    paramResults = {}
+    finalresult = "SUCCESS"
+
+    for paramName in paramNames:
+        tdkTestObj, actualresult, paramValue = wifi_GetParam(obj, paramName)
+        paramResults[paramName] = paramValue
+        if actualresult != "SUCCESS":
+            finalresult = "FAILURE"
+
+    radiusIP = paramResults[f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusServerIPAddr"]
+    radiusPort = paramResults[f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusServerPort"]
+    radiusSecret = paramResults[f"Device.WiFi.AccessPoint.{ap_index}.Security.RadiusSecret"]
+
+    return tdkTestObj,finalresult,radiusIP,radiusPort,radiusSecret
+
+def get_config_values(obj,command):
+
+# get_config_values
+
+# Syntax      : get_config_values()
+# Description : Function to fetch RADIUS/WPA configuration variables from tdk_platform.properties
+# Parameters  : obj - module object
+#             : command - command to fetch the variable from tdk_platform.properties file
+# Return Value: SUCCESS/FAILURE, RADIUS/WPA variables
+
+    expectedresult = "SUCCESS"
+    tdkTestObj = obj.createTestStep('ExecuteCmd')
+    tdkTestObj.addParameter("command", command)
+    tdkTestObj.executeTestCase(expectedresult)
+    actualresult = tdkTestObj.getResult()
+    if actualresult == expectedresult:
+        ret_value = tdkTestObj.getResultDetails().replace("\\n", "")
+        if ret_value == "":
+            actualresult = "FAILURE"
+
+    return tdkTestObj,actualresult,ret_value
+
+
 def getInstanceNumber(paramName,index):
     try:
         instanceNumber = 0
