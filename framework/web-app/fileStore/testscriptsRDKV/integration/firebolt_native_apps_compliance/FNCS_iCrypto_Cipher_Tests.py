@@ -127,7 +127,7 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
         failed = True
 
-    if ("0 FAILED" and "8 PASSED" in output) and (not failed):
+    if ("0 FAILED" in output) and (not failed):
         print ("SUCCESS : Cipher tests execution was successfull");
         tdkTestObj.setResultStatus("SUCCESS")
     else:

@@ -199,7 +199,7 @@ def getDeviceConfigValue (configKey):
             try:
                 check_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_FPS")
             except:
-                check_fps = "no"
+                check_fps = "yes"
             try:
                 use_audioSink = configParser.get('device.config',"FIREBOLT_COMPLIANCE_USE_AUDIO_SINK")
             except:
