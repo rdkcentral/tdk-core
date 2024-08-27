@@ -19,24 +19,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
 import com.rdkm.tdkservice.dto.ModuleDTO;
-import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.service.IModuleService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Collections;
-import java.util.List;
 
 /**
  * REST controller for managing modules.
@@ -247,6 +260,87 @@ public class ModuleController {
 		} else {
 			LOGGER.warn("No test groups found in enum");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+		}
+	}
+	
+	
+	/**
+	 * Parses and saves the XML file.
+	 *
+	 * @param file the XML file
+	 * @return ResponseEntity with a success or failure message
+	 */
+	@Operation(summary = "Parse and save XML", description = "Parses and saves the XML file.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "XML parsed and data saved successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to parse XML"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "No data found") })
+	@PostMapping("/parsexml")
+	public ResponseEntity<String> parseXml(@RequestParam("file") MultipartFile file) {
+		try {
+			moduleService.parseAndSaveXml(file);
+			LOGGER.info("XML parsed and data saved successfully.");
+			return ResponseEntity.status(HttpStatus.OK).body("XML parsed and data saved successfully.");
+		} catch (Exception e) {
+			LOGGER.error("Failed to parse XML: {}", e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+
+	/**
+	 * Generates XML for a module.
+	 *
+	 * @param moduleName the name of the module
+	 * @return ResponseEntity with the generated XML content
+	 */
+
+	@Operation(summary = "Generate XML for a module", description = "Generates XML for a module.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "XML generated successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to generate XML"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "No data found") })
+	@GetMapping(value = "/downloadxml/{moduleName}", produces = "application/xml")
+	public ResponseEntity<?> downloadModuleXML(@PathVariable String moduleName) {
+		try {
+			String xmlContent = moduleService.generateXML(moduleName);
+			LOGGER.info("XML content: {}", xmlContent);
+			ByteArrayResource resource = new ByteArrayResource(xmlContent.getBytes());
+			LOGGER.info("XML downloaded successfully for module: {}", moduleName);
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + moduleName + ".xml")
+					.contentType(MediaType.APPLICATION_XML).body(resource);
+		} catch (Exception e) {
+			LOGGER.error("Failed to download XML for module: {}", moduleName);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
+	}
+
+	/**
+	 * Downloads all modules as a ZIP file.
+	 *
+	 * @param category the category of the modules
+	 * @return ResponseEntity with the ZIP file
+	 * 
+	 */
+	@Operation(summary = "Download modules as ZIP", description = "Downloads all modules as a ZIP file.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Modules downloaded successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to download modules"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "No data found") })
+	@GetMapping(value = "/downloadzip/{category}", produces = "application/zip")
+	public ResponseEntity<?> downloadModulesAsZip(@PathVariable String category) {
+		try {
+			ByteArrayResource resource = moduleService.downloadModulesAsZip(category);
+			LOGGER.info("Modules downloaded successfully as ZIP file for category: {}", category);
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=modules.zip")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
+		} catch (Exception e) {
+			LOGGER.error("Failed to download modules as ZIP file for category: {}", category);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 

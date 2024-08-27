@@ -29,7 +29,7 @@ import java.util.Set;
 /**
  * Entity representing a function.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true,exclude = "parameters")
 @Data
 @Entity
 @Table(name = "functions")

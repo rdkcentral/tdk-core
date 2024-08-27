@@ -191,5 +191,61 @@ public class Constants {
 
 	// Primitive test with module name
 	public static final String PRIMITIVE_TEST_WITH_MODULE_NAME = "Primitive test with module name";
+	
+	// xml extension
+	public static final String XML_EXTENSION = ".xml";
+
+	// xml module tag
+	public static final String XML_MODULE_TAG = "module";
+
+	// xml module element
+	public static final String XML_MODULE_ELEMENT = "moduleName";
+
+	// xml execution time out
+	public static final String XML_TAG_EXECUTION_TIME_OUT = "executionTimeOut";
+
+	// xml test group
+	public static final String XML_TAG_TEST_GROUP = "testGroup";
+
+	// xml log file names
+	public static final String XML_TAG_LOG_FILE_NAMES = "logFileNames";
+
+	// xml crash file names
+	public static final String XML_TAG_CRASH_FILE_NAMES = "crashFileNames";
+
+	// xml functions
+	public static final String XML_FUNCTIONS = "functions";
+
+	// xml function
+	public static final String XML_FUNCTION = "function";
+
+	// name
+	public static final String NAME = "name";
+
+	// xml parameter name
+	public static final String XML_PARAMETER_NAME = "parameterName";
+
+	// xml parameter
+	public static final String XML_PARAMETER = "parameter";
+
+	// xml function name of of parameter
+	public static final String XML_PARAMETER_FUN_NAME = "funName";
+
+	// xml parameter type
+	public static final String XML_PARAMETER_TYPE = "parameterType";
+
+	// xml range value
+	public static final String XML_PARAMETER_RANGE = "range";
+
+	// xml
+	public static final String XML = "xml";
+	// xml parameters
+	public static final String XML_PARAMETERS = "parameters";
+
+	// comma separator
+	public static final String COMMA_SEPARATOR = ",";
+
+	// yes value
+	public static final String YES = "yes";
 
 }

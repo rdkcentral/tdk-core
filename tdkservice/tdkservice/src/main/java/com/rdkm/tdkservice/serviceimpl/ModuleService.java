@@ -19,13 +19,51 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Comment;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
 import com.rdkm.tdkservice.dto.ModuleDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.ParameterDataType;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
@@ -38,18 +76,6 @@ import com.rdkm.tdkservice.service.IModuleService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 /**
@@ -256,4 +282,434 @@ public class ModuleService implements IModuleService {
 
 		return modules.stream().map(Module::getName).collect(Collectors.toList());
 	}
+	
+	
+	/**
+	 * Parses and saves the XML file.
+	 *
+	 * @param file the XML file to be parsed
+	 * @throws Exception if an error occurs while parsing the XML file
+	 */
+	@Override
+	public void parseAndSaveXml(MultipartFile file) {
+		LOGGER.info("Parsing and saving the XML file");
+		validateFile(file);
+		try {
+			Document doc = parseFileToDocument(file);
+			Module module = processModule(doc);
+			moduleRepository.save(module);
+			LOGGER.info("Module saved successfully");
+		} catch (SAXException e) {
+			LOGGER.error("Invalid XML file format");
+			throw new UserInputException("Invalid XML file format.");
+		} catch (IOException | ParserConfigurationException | IllegalArgumentException e) {
+			LOGGER.error("Error reading the XML file");
+			throw new UserInputException("Error reading the XML file.");
+		}
+	}
+
+	/**
+	 * Generates the XML file.
+	 *
+	 * @param moduleName the name of the module
+	 * @return the XML content of the module
+	 * @throws Exception if an error occurs while generating the XML file
+	 */
+	@Override
+	public String generateXML(String moduleName) throws Exception {
+		Module module = moduleRepository.findByName(moduleName);
+		if (module == null) {
+			LOGGER.error("Module with name {} not found", moduleName);
+			throw new ResourceNotFoundException(Constants.MODULE_NAME, moduleName);
+		}
+
+		Document doc = createDocument();
+		Element rootElement = createRootElement(doc);
+		Element moduleElement = createModuleElement(doc, module);
+		rootElement.appendChild(moduleElement);
+
+		appendFunctionsToModuleElement(doc, moduleElement, module);
+		appendParametersToModuleElement(doc, moduleElement, module);
+
+		return convertDocumentToXmlString(doc);
+	}
+
+	/**
+	 * Downloads all modules as a ZIP file.
+	 *
+	 * @param category the category of the modules to be downloaded
+	 * @return the ZIP file containing all modules
+	 * @throws Exception if an error occurs while downloading the modules as a ZIP
+	 *                   file
+	 */
+	@Override
+	public ByteArrayResource downloadModulesAsZip(String category) throws Exception {
+		LOGGER.info("Downloading all modules as a ZIP file");
+		Utils.checkCategoryValid(category);
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		ZipOutputStream zos = new ZipOutputStream(baos);
+
+		Category categoryEnum = Category.getCategory(category);
+		// Fetch all modules by category
+		List<Module> modules = moduleRepository.findAllByCategory(categoryEnum);
+
+		for (Module module : modules) {
+			// Generate XML content for each module
+			String xmlContent = generateXML(module.getName());
+
+			// Create a ZIP entry for each module
+			ZipEntry zipEntry = new ZipEntry(module.getName() + Constants.XML_EXTENSION);
+			zos.putNextEntry(zipEntry);
+
+			// Write XML content to the ZIP entry
+			zos.write(xmlContent.getBytes());
+			zos.closeEntry();
+		}
+
+		zos.finish();
+
+		return new ByteArrayResource(baos.toByteArray());
+
+	}
+
+	/**
+	 * Validates the uploaded file.
+	 *
+	 * @param file the uploaded file
+	 */
+	private void validateFile(MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		if (fileName == null || !fileName.endsWith(Constants.XML_EXTENSION)) {
+			LOGGER.error("The uploaded file must have a .xml extension {}", fileName);
+			throw new UserInputException("The uploaded file must be a .xml file.");
+		}
+		if (file.isEmpty()) {
+			LOGGER.error("The uploaded file is empty");
+			throw new UserInputException("The uploaded file is empty.");
+		}
+	}
+
+	/**
+	 * Parses the uploaded file to a Document object.
+	 *
+	 * @param file the uploaded file
+	 * @return the Document object
+	 * @throws SAXException                 if an error occurs while parsing the
+	 *                                      file
+	 * @throws IOException                  if an error occurs while reading the
+	 *                                      file
+	 * @throws ParserConfigurationException if an error occurs while parsing the
+	 *                                      file
+	 */
+	private Document parseFileToDocument(MultipartFile file)
+			throws SAXException, IOException, ParserConfigurationException {
+		LOGGER.info("Parsing the XML file to Document");
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder builder = factory.newDocumentBuilder();
+		return builder.parse(file.getInputStream());
+	}
+
+	/**
+	 * Processes the module details from the XML file.
+	 *
+	 * @param doc the Document object
+	 * @return the Module object
+	 */
+	private Module processModule(Document doc) {
+		LOGGER.info("Inside processModule method");
+		Element root = doc.getDocumentElement();
+		Element moduleElement = (Element) root.getElementsByTagName(Constants.XML_MODULE_TAG).item(0);
+		Module module = processModuleElement(moduleElement);
+		processFunctions(moduleElement, module);
+		return module;
+	}
+
+	/**
+	 * Processes the module element from the XML file.
+	 *
+	 * @param moduleElement the module element
+	 * @return the Module object
+	 */
+	private Module processModuleElement(Element moduleElement) {
+		LOGGER.info("Inside processModuleElement method");
+		String moduleName = getTextContent(moduleElement, Constants.XML_MODULE_ELEMENT);
+		if (moduleName == null || moduleName.isEmpty()) {
+			LOGGER.error("Module name is required");
+			throw new UserInputException("Module name is required.");
+		}
+		Category category = Category.getCategory(getTextContent(moduleElement, Constants.XML_TAG_CATEGORY));
+		if (category == null) {
+			LOGGER.error("Invalid category");
+			throw new UserInputException("Invalid category.");
+		}
+		int executionTimeOut = Integer.parseInt(getTextContent(moduleElement, Constants.XML_TAG_EXECUTION_TIME_OUT));
+		if (!(executionTimeOut > 0)) {
+			LOGGER.error("Execution time out is Invalid");
+			throw new UserInputException("Execution time out is Invalid");
+		}
+		TestGroup testGroup = TestGroup.getTestGroup(getTextContent(moduleElement, Constants.XML_TAG_TEST_GROUP));
+
+		if (testGroup == null) {
+			LOGGER.error("Invalid test group");
+			throw new UserInputException("Invalid test group.");
+		}
+		Set<String> logFileNames = getListContent(moduleElement, Constants.XML_TAG_LOG_FILE_NAMES);
+		Set<String> crashFileNames = getListContent(moduleElement, Constants.XML_TAG_CRASH_FILE_NAMES);
+
+		Module module = moduleRepository.findByName(moduleName);
+		if (module == null) {
+			module = new Module();
+			module.setName(moduleName);
+			module.setCategory(category);
+			module.setExecutionTime(executionTimeOut);
+			module.setTestGroup(testGroup);
+			module.setLogFileNames(logFileNames);
+			module.setCrashLogFiles(crashFileNames);
+		} else {
+			module.setExecutionTime(executionTimeOut);
+			addFileNames(module.getLogFileNames(), logFileNames);
+			addFileNames(module.getCrashLogFiles(), crashFileNames);
+		}
+
+		return module;
+	}
+
+	/*
+	 * Processes the functions from the XML file.
+	 */
+	private void processFunctions(Element moduleElement, Module module) {
+		LOGGER.info("Inside processFunctions method");
+		NodeList functionNodes = moduleElement.getElementsByTagName(Constants.XML_FUNCTION);
+		Set<Function> existingFunctions = module.getFunctions();
+		if (existingFunctions == null) {
+			existingFunctions = new HashSet<>();
+			module.setFunctions(existingFunctions);
+		}
+
+		Map<String, Function> functionMap = existingFunctions.stream()
+				.collect(Collectors.toMap(Function::getName, Function -> Function));
+
+		for (int i = 0; i < functionNodes.getLength(); i++) {
+			Element functionElement = (Element) functionNodes.item(i);
+			String functionName = functionElement.getAttribute(Constants.NAME);
+
+			Function function = functionMap.get(functionName);
+			if (function == null) {
+				function = new Function();
+				function.setName(functionName);
+				function.setModule(module);
+				existingFunctions.add(function);
+			}
+
+			// Process parameters for the current function
+			processParameters(moduleElement, function);
+		}
+	}
+
+	/*
+	 * Processes the parameters from the XML file.
+	 */
+	private void processParameters(Element moduleElement, Function function) {
+		LOGGER.info("Inside processParameters method");
+		NodeList parameterNodes = moduleElement.getElementsByTagName(Constants.XML_PARAMETER);
+		Set<Parameter> parameters = function.getParameters();
+		if (parameters == null) {
+			parameters = new HashSet<>();
+			function.setParameters(parameters);
+		}
+
+		for (int j = 0; j < parameterNodes.getLength(); j++) {
+			Element parameterElement = (Element) parameterNodes.item(j);
+			String funName = parameterElement.getAttribute(Constants.XML_PARAMETER_FUN_NAME);
+			String parameterName = parameterElement.getAttribute(Constants.XML_PARAMETER_NAME);
+
+			// Ensure parameter is linked to the correct function
+			if (function.getName().equals(funName)) {
+				Parameter parameter = parameters.stream().filter(p -> p.getName().equals(parameterName)).findFirst()
+						.orElse(null);
+
+				if (parameter == null) {
+					parameter = new Parameter();
+					parameter.setName(parameterName);
+					parameter.setParameterDataType(
+							ParameterDataType.valueOf(parameterElement.getAttribute(Constants.XML_PARAMETER_TYPE)));
+					parameter.setRangeVal(parameterElement.getAttribute(Constants.XML_PARAMETER_RANGE));
+					parameter.setFunction(function);
+					parameters.add(parameter);
+				} else {
+					// Update existing parameter
+					parameter.setRangeVal(parameterElement.getAttribute(Constants.XML_PARAMETER_RANGE));
+					parameter.setParameterDataType(
+							ParameterDataType.valueOf(parameterElement.getAttribute(Constants.XML_PARAMETER_TYPE)));
+				}
+			}
+		}
+	}
+
+	/*
+	 * Creates a new Document object.
+	 */
+
+	private Document createDocument() throws ParserConfigurationException {
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		return dBuilder.newDocument();
+	}
+
+	/*
+	 * Creates the root element of the XML
+	 */
+
+	private Element createRootElement(Document doc) {
+		Element rootElement = doc.createElement(Constants.XML);
+		doc.appendChild(rootElement);
+		return rootElement;
+	}
+
+	/*
+	 * Creates a new module element.
+	 */
+	private Element createModuleElement(Document doc, Module module) {
+		Element moduleElement = doc.createElement(Constants.XML_MODULE_TAG);
+		addComment(doc, moduleElement, Constants.MODULE_NAME);
+		moduleElement.appendChild(createElementWithTextContent(doc, Constants.XML_MODULE_ELEMENT, module.getName()));
+		addComment(doc, moduleElement, "Category of the module");
+		moduleElement.appendChild(
+				createElementWithTextContent(doc, Constants.XML_TAG_CATEGORY, module.getCategory().toString()));
+		addComment(doc, moduleElement, "Execution time out of module");
+		moduleElement.appendChild(createElementWithTextContent(doc, Constants.XML_TAG_EXECUTION_TIME_OUT,
+				String.valueOf(module.getExecutionTime())));
+		addComment(doc, moduleElement, "Test Group of the module");
+		moduleElement.appendChild(
+				createElementWithTextContent(doc, Constants.XML_TAG_TEST_GROUP, module.getTestGroup().getName()));
+
+		addComment(doc, moduleElement, "Logs File Names of module");
+		moduleElement.appendChild(
+				createElementWithListContent(doc, Constants.XML_TAG_LOG_FILE_NAMES, module.getLogFileNames()));
+		addComment(doc, moduleElement, "Crash File Names of the module ");
+		moduleElement.appendChild(
+				createElementWithListContent(doc, Constants.XML_TAG_CRASH_FILE_NAMES, module.getCrashLogFiles()));
+
+		return moduleElement;
+	}
+
+	/*
+	 * Creates an element with text content.
+	 */
+
+	private Element createElementWithTextContent(Document doc, String name, String value) {
+		Element element = doc.createElement(name);
+		element.appendChild(doc.createTextNode(value));
+		return element;
+	}
+
+	/*
+	 * Creates an element with list content.
+	 */
+
+	private Element createElementWithListContent(Document doc, String name, Set<String> values) {
+		Element element = doc.createElement(name);
+		String formattedValues = "[" + String.join(",", values) + "]";
+		element.appendChild(doc.createTextNode(formattedValues));
+		return element;
+	}
+
+	/*
+	 * Appends the functions to the module element.
+	 */
+	private void appendFunctionsToModuleElement(Document doc, Element moduleElement, Module module) {
+		addComment(doc, moduleElement, "Total functions corresponding modules");
+		Element functionsElement = doc.createElement(Constants.XML_FUNCTIONS);
+		for (Function function : module.getFunctions()) {
+			Element functionElement = doc.createElement(Constants.XML_FUNCTION);
+			functionElement.setAttribute(Constants.NAME, function.getName());
+			functionsElement.appendChild(functionElement);
+		}
+		moduleElement.appendChild(functionsElement);
+	}
+
+	/*
+	 * Appends the parameters to the module element.
+	 */
+	private void appendParametersToModuleElement(Document doc, Element moduleElement, Module module) {
+		addComment(doc, moduleElement, "Total parameters corresponding module");
+		Element parametersElement = doc.createElement(Constants.XML_PARAMETERS);
+
+		// Iterate over each function to get its parameters
+		for (Function function : module.getFunctions()) {
+			for (Parameter parameter : function.getParameters()) {
+				Element parameterElement = doc.createElement(Constants.XML_PARAMETER);
+				parameterElement.setAttribute(Constants.XML_PARAMETER_FUN_NAME, function.getName()); // Associate with
+																										// the function
+																										// name
+				parameterElement.setAttribute(Constants.XML_PARAMETER_NAME, parameter.getName());
+				parameterElement.setAttribute(Constants.XML_PARAMETER_TYPE,
+						parameter.getParameterDataType().toString());
+				parameterElement.setAttribute(Constants.XML_PARAMETER_RANGE, parameter.getRangeVal());
+				parametersElement.appendChild(parameterElement);
+			}
+		}
+		moduleElement.appendChild(parametersElement);
+	}
+
+	/*
+	 * Converts the Document object to an XML string.
+	 */
+	private String convertDocumentToXmlString(Document doc) throws TransformerException {
+		TransformerFactory transformerFactory = TransformerFactory.newInstance();
+		Transformer transformer = transformerFactory.newTransformer();
+		transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
+		DOMSource source = new DOMSource(doc);
+		StringWriter writer = new StringWriter();
+		StreamResult result = new StreamResult(writer);
+		transformer.transform(source, result);
+		return writer.toString();
+	}
+
+	/*
+	 * Merges new file names with existing file names
+	 * 
+	 * @param existingFileNames
+	 * 
+	 * @param newFileNames
+	 */
+	private void addFileNames(Set<String> existingFileNames, Set<String> newFileNames) {
+		if (existingFileNames != null) {
+			existingFileNames.addAll(newFileNames); // Merge new files with existing ones
+		} else {
+			existingFileNames = newFileNames; // If no existing files, use the new ones
+		}
+	}
+
+	/*
+	 * Gets the text content of a tag from an XML element.
+	 */
+	private String getTextContent(Element element, String tagName) {
+		return element.getElementsByTagName(tagName).item(0).getTextContent();
+	}
+
+	/*
+	 * Gets the list content from an XML element.
+	 */
+	private Set<String> getListContent(Element element, String tagName) {
+		// Get the text content from the tag
+		String content = element.getElementsByTagName(tagName).item(0).getTextContent();
+
+		// Remove the brackets if present
+		content = content.replaceAll("[\\[\\]]", "");
+
+		// Split the content by commas and convert to a Set
+		String[] items = content.split(Constants.COMMA_SEPARATOR);
+		return new HashSet<>(Arrays.asList(items));
+	}
+
+	/*
+	 * Adds a comment to an XML element.
+	 */
+	private void addComment(Document doc, Element parent, String commentText) {
+		Comment comment = doc.createComment(" " + commentText + " ");
+		parent.appendChild(comment);
+	}
+
+	
 }

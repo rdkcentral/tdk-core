@@ -30,7 +30,7 @@ import java.util.Set;
 /**
  * Entity representing a module.
  */
-@EqualsAndHashCode(callSuper = true)
+@EqualsAndHashCode(callSuper = true ,exclude = "functions")
 @Data
 @Entity
 @Table(name = "module")
