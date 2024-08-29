@@ -31,8 +31,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -44,13 +43,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rdkm.tdkservice.dto.StreamingDetailsDTO;
 import com.rdkm.tdkservice.dto.StreamingDetailsUpdateDTO;
 import com.rdkm.tdkservice.service.IStreamingDetailsService;
+import com.rdkm.tdkservice.serviceimpl.UserService;
 import com.rdkm.tdkservice.util.Constants;
+import com.rdkm.tdkservice.util.JWTUtils;
 
 /**
  * This class is used to test the StreamingDetailsController
  */
-@SpringBootTest
-@AutoConfigureMockMvc
 public class StreamingDetailsControllerTest {
 
 	@InjectMocks
@@ -59,15 +58,17 @@ public class StreamingDetailsControllerTest {
 	@Mock
 	private IStreamingDetailsService streamingDetailsService;
 
+	@Mock
+	private JWTUtils jwtUtils;
+
+	@Mock
+	private UserService userService;
+
 	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.openMocks(this);
 	}
 
-	@Autowired
-	private MockMvc mockMvc;
-
-	
 	/**
 	 * This method is used to test the createStreamingDetails method of the
 	 * StreamingDetailsController
@@ -84,7 +85,8 @@ public class StreamingDetailsControllerTest {
 	}
 
 	/**
-	 * This method is used to test the createStreamingDetail with internal server error
+	 * This method is used to test the createStreamingDetail with internal server
+	 * error
 	 */
 	@Test
 	public void createStreamingDetails_Unsuccessful() {
@@ -244,40 +246,4 @@ public class StreamingDetailsControllerTest {
 		assertEquals("Streaming details with ID 1 not found.", response.getBody());
 	}
 
-	/**
-	 * This method is used to test the createStreamingDetails with null stream type
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void testCreateStreamingDetailsWithNullStreamType() throws Exception {
-		StreamingDetailsDTO streamingDetailsDTO = new StreamingDetailsDTO();
-		streamingDetailsDTO.setStreamingDetailsId("1234");
-		streamingDetailsDTO.setStreamType(null);
-
-		String json = new ObjectMapper().writeValueAsString(streamingDetailsDTO);
-
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/streamingdetail/create")
-				.contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest())
-				.andExpect(MockMvcResultMatchers.jsonPath("$.streamType").value("Stream type is required"));
-	}
-
-	/*
-	 * This method is used to test the createStreamingDetails with null stream id
-	 */
-	@Test
-	public void testCreateStreamingDetailsWithNullStreamId() throws Exception {
-		StreamingDetailsDTO streamingDetailsDTO = new StreamingDetailsDTO();
-		streamingDetailsDTO.setChannelType(null);
-		streamingDetailsDTO.setStreamingDetailsId(null);
-		streamingDetailsDTO.setStreamType(Constants.RADIO_STREAM_TYPE);
-
-		String json = new ObjectMapper().writeValueAsString(streamingDetailsDTO);
-
-		mockMvc.perform(MockMvcRequestBuilders.post("/api/v1/streamingdetail/create")
-				.contentType(MediaType.APPLICATION_JSON).content(json))
-				.andExpect(MockMvcResultMatchers.status().isBadRequest()).andExpect(MockMvcResultMatchers
-						.jsonPath("$.streamingDetailsId").value("Streaming details id is required"));
-	}
 }

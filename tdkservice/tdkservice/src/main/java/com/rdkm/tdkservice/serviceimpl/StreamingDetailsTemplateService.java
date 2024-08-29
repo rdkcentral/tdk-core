@@ -175,7 +175,9 @@ public class StreamingDetailsTemplateService implements IStreamingDetailsTemplat
 			throw new ResourceNotFoundException(Constants.STREAMING_TEMPLATE_DETAILS,
 					updateTemplateDTO.getExistingTemplateName());
 		}
-		if (templateRepository.existsByTemplateName(updateTemplateDTO.getNewTemplateName())) {
+
+		if ((templateRepository.existsByTemplateName(updateTemplateDTO.getNewTemplateName()))
+				&& !(updateTemplateDTO.getNewTemplateName().equals(updateTemplateDTO.getExistingTemplateName()))) {
 			throw new ResourceAlreadyExistsException(Constants.STREAMING_TEMPLATE_DETAILS,
 					updateTemplateDTO.getNewTemplateName());
 		}

@@ -30,6 +30,8 @@ import com.rdkm.tdkservice.repository.*;
 import com.rdkm.tdkservice.util.Constants;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,31 +56,31 @@ import static com.rdkm.tdkservice.enums.Category.getCategory;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
-@SpringBootTest
+//@SpringBootTest
 public class DeviceDetailsServiceTest {
 
-    @MockBean
+	@Mock
     private DeviceRepositroy deviceRepository;
 
-    @Autowired
+	@InjectMocks
     private DeviceService deviceService;
 
-    @MockBean
+    @Mock
     private BoxTypeRepository boxTypeRepository;
 
-    @MockBean
+    @Mock
     private BoxManufacturerRepository boxManufacturerRepository;
 
-    @MockBean
+    @Mock
     private SocVendorRepository socVendorRepository;
 
-    @MockBean
+    @Mock
     private UserGroupRepository userGroupRepository;
 
-    @MockBean
+    @Mock
     private DeviceStreamRepository deviceStreamRepository;
 
-    @MockBean
+    @Mock
     private StreamingDetailsRepository streamingDetailsRepository;
     DeviceCreateDTO deviceCreateDTO = new DeviceCreateDTO();
     BoxType boxType = new BoxType();
