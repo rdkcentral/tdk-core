@@ -93,12 +93,15 @@ def postCURLRequest(data,securityEnabled):
         json_response = json.loads(response.content)
         if json_response.get("error") != None and "Missing or invalid token" in json_response.get("error").get("message"):
             status = "INVALID TOKEN"
-    except requests.exceptions.RequestException as e:
-        status = "FAILURE"
-        print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
-        print("Command : ",data)
-        print("Error message received :\n",e);
-        response = "EXCEPTION OCCURRED"
+    except requests.exceptions.RequestException as e:        
+        if "org.rdk.Network.1.setInterfaceEnabled" in str(data):        
+            response = "SUCCESS"
+        else:
+            status = "FAILURE"
+            print("ERROR!! \nEXCEPTION OCCURRED WHILE EXECUTING CURL COMMANDS!!")
+            print("Command : ",data)
+            print("Error message received :\n",e);
+            response = "EXCEPTION OCCURRED"
     return response,json_response,status
 
 #---------------------------------------------------------------

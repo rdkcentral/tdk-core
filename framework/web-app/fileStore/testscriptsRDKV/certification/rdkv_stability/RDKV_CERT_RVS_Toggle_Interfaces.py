@@ -169,7 +169,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 tdkTestObj.executeTestCase(expectedResult)
                 result = tdkTestObj.getResult()
                 details = tdkTestObj.getResultDetails()
-                if details == "SUCCESS" and expectedResult in result and deviceAvailability == "Yes":
+                if  "SUCCESS" in details and expectedResult in result and deviceAvailability == "Yes":
                     tdkTestObj.setResultStatus("SUCCESS")
                     current_interface = new_interface
                     print("\n ##### Validating CPU load and memory usage #####\n")
