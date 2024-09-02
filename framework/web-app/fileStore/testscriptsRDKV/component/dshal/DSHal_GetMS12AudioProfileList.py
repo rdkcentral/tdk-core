@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>DSHal_GetAudioCapabilities</name>
+  <name>DSHal_GetMS12AudioProfileList</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>DSHal_GetAudioCapabilities</primitive_test_name>
+  <primitive_test_name>DSHal_GetMS12AudioProfileList</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test script to get the platform supported audio capabilities.</synopsis>
+  <synopsis>Test script to get the platform supported MS12 audio profiles.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -49,6 +49,7 @@
   <!--  -->
   <box_types>
     <box_type>Video_Accelerator</box_type>
+    <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -56,30 +57,31 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_DS_HAL_175</test_case_id>
-    <test_objective >Test script to get the platform supported audio capabilities</test_objective>
+    <test_case_id>CT_DS_HAL_195</test_case_id>
+    <test_objective >Test script to get the platform supported MS12 audio profiles</test_objective>
     <test_type>Positive</test_type>
-    <test_setup > Video_Accelerator </test_setup>
+    <test_setup>Video_Accelerator,RDKTV</test_setup>
     <pre_requisite> 1. Initialize IARMBus
 2. Connect IARMBus
 3. Initialize dsMgr
 4. Initialize DSHAL subsystems
 5. Stop dsMgr.service</pre_requisite>
-    <api_or_interface_used>dsError_t dsGetAudioCapabilities(intptr_t handle, int *capabilities)</api_or_interface_used>
+    <api_or_interface_used>dsError_t  dsGetMS12AudioProfileList(intptr_t handle, dsMS12AudioProfileList_t* profiles)</api_or_interface_used>
     <input_parameters> handle - audio port handle
-capabilities - address of the value to get the audio capabilities</input_parameters>
+profiles - return the list of supported audio profiles.</input_parameters>
     <automation_approch >1. TM loads the DSHAL agent via test agent.
 2. DSHAL agent will invoke the api dsGetAudioPort to get the handle
-3. Invoke the dsGetAudioCapabilities api to get the supported audio formats.
-4. TM checks if the capabilities retrieved and return SUCCESS/FAILURE status.</automation_approch>
+3. Invoke the dsGetMS12AudioProfileList api to get the supported audio profiles.
+4. TM checks if the supported audio profiles retrieved sucessfully and return SUCCESS/FAILURE status based on that</automation_approch>
     <expected_output>1. Verify the API call is success
 2. verify that handle is received
-3. verify the supported audio capabilities got received successfully</expected_output>
+3. verify the supported audio profiles got received successfully or not
+4. If execution is on source device then dsGetMS12AudioProfileList api should return dsERR_OPERATION_NOT_SUPPORTED</expected_output>
     <priority>High</priority>
     <test_stub_interface>libdshalstub.so.0.0.0</test_stub_interface>
-    <test_script>DSHal_GetAudioCapabilities</test_script>
+    <test_script>DSHal_GetMS12AudioProfileList</test_script>
     <skipped>No</skipped>
-    <release_version>M127</release_version>
+    <release_version>M128</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -95,7 +97,7 @@ obj = tdklib.TDKScriptingLibrary("dshal","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'DSHal_GetAudioCapabilities');
+obj.configureTestCase(ip,port,'DSHal_GetMS12AudioProfileList');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = obj.getLoadModuleResult();
@@ -118,31 +120,56 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         details = tdkTestObj.getResultDetails();
         print(details);
 
-    #Prmitive test case which associated to this Script
-    tdkTestObj = obj.createTestStep('DSHal_GetAudioCapabilities');
-    #Execute the test case in STB
-    tdkTestObj.executeTestCase(expectedResult);
-    actualResult = tdkTestObj.getResult();
-    print("Expected result: ", expectedResult);
-    details = tdkTestObj.getResultDetails();
-    if expectedResult in actualResult:
-        basestr = "   Supported Audio Capabilities of the platform: ";
-        # to find out really platform got supported any audio formats based on the result
-        if details.startswith(basestr):
-            remainder = details[len(basestr):]
-            has_char_after = bool(remainder.strip())
-            if has_char_after:
+        # get the box type & assign the expected result
+        boxtype = obj.getDeviceBoxType();
+        if boxtype in "Video_Accelerator":
+            print("Box type: Video accelerator");
+            expectedResult="FAILURE";
+            source_device_failure_handlings = 1;
+        else:
+            expectedResult="SUCCESS";
+            print("Box type: RDKTV");
+            source_device_failure_handlings = 0;
+
+        print("\nTEST STEP 1 : Get the current audio profiles using dsGetMS12AudioProfileList API");
+        if source_device_failure_handlings:
+            print("EXPECTED OUTPUT : dsGetMS12AudioProfileList API should return dsERR_OPERATION_NOT_SUPPORTED always for source device");
+        else:
+            print("EXPECTED OUTPUT : Should get the current audio profile");
+
+        #Prmitive test case which associated to this Script
+        tdkTestObj = obj.createTestStep('DSHal_GetMS12AudioProfileList');
+        #Execute the test case in STB
+        tdkTestObj.executeTestCase(expectedResult);
+        actualResult = tdkTestObj.getResult();
+        print("Expected result: ", expectedResult);
+        details = tdkTestObj.getResultDetails();
+        if expectedResult in actualResult:
+            # if box type is in STB then expected o/p is OP_NOT_SUPPORTED
+            if source_device_failure_handlings:
+                expectederrorVal = "dsERR_OPERATION_NOT_SUPPORTED";
                 print(details);
-                print("ACTUAL RESULT  : dsGetAudioCapabilities call is success");
-                tdkTestObj.setResultStatus("SUCCESS");
+                if expectederrorVal in details:
+                    print("GetMS12AudioProfileList API returned an expected value : dsERR_OPERATION_NOT_SUPPORTED");
+                    tdkTestObj.setResultStatus("SUCCESS");
+                else:
+                    print("GetMS12AudioProfileList API returned an error value other than the expected value : dsERR_OPERATION_NOT_SUPPORTED");
+                    tdkTestObj.setResultStatus("FAILURE");
             else:
                 print(details);
-                print("ACTUAL RESULT  : dsGetAudioCapabilities call is success but platform does not have any supported audio formats");
-                tdkTestObj.setResultStatus("FAILURE");
+                print("ACTUAL RESULT  : dsGetMS12AudioProfileList call is success");
+                tdkTestObj.setResultStatus("SUCCESS");
+        else:
+            print(details);
+            if source_device_failure_handlings:
+                print("ACTUAL RESULT : dsGetMS12AudioProfileList call is success instead of returning dsERR_OPERATION_NOT_SUPPORTED");
+            else:
+                print("ACTUAL RESULT  : dsGetMS12AudioProfileList call failed")
+            tdkTestObj.setResultStatus("FAILURE");
+            print("[TEST EXECUTION RESULT] : FAILURE");
     else:
-        print(details);
-        print("ACTUAL RESULT  : dsGetAudioCapabilities call failed")
         tdkTestObj.setResultStatus("FAILURE");
+        print("AudioPort handle not retrieved");
 
     obj.unloadModule("dshal");
 else:

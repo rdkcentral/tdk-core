@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>DSHal_GetAudioCapabilities_NullParam_Check</name>
+  <name>DSHal_GetMS12Capabilities_NullParam_Check</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>DSHal_GetAudioCapabilities</primitive_test_name>
+  <primitive_test_name>DSHal_GetMS12Capabilities</primitive_test_name>
   <!--  -->
   <primitive_test_version>1</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test script to validate audio capabilities HAL api by passing null param.</synopsis>
+  <synopsis>Test script to validate MS12 capabilities HAL api by passing null param.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -49,6 +49,7 @@
   <!--  -->
   <box_types>
     <box_type>Video_Accelerator</box_type>
+    <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
@@ -56,30 +57,30 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_DS_HAL_178</test_case_id>
-    <test_objective>Test script to validate the Getaudiocapabilities API by passing null param</test_objective>
+    <test_case_id>CT_DS_HAL_189</test_case_id>
+    <test_objective>Test script to validate the GetMS12capabilities API by passing null param</test_objective>
     <test_type>Negative</test_type>
-    <test_setup>Video_Accelerator</test_setup>
+    <test_setup>Video_Accelerator,RDKTV</test_setup>
     <pre_requisite> 1.Initialize IARMBus
 2.Connect IARMBus
 3.Initialize dsMgr
 4.Initialize DSHAL subsystems
 5.Stop dsMgr.service</pre_requisite>
-    <api_or_interface_used> dsError_t dsGetAudioCapabilities(intptr_t handle, int *capabilities)</api_or_interface_used>
+    <api_or_interface_used> dsError_t dsGetMS12Capabilities(intptr_t handle, int *capabilities)</api_or_interface_used>
     <input_parameters> handle - audio port handle
-capabilities - address of the value to get the audio capabilities</input_parameters>
+capabilities - address of the value to get the MS12 capabilities</input_parameters>
     <automation_approch>1. TM loads the DSHAL agent via test agent.
 2. DSHAL agent will invoke the api dsGetAudioPort to get the handle
-3. Invoke the dsGetAudioCapabilities api by passing a null param to the capabilities arguments.
-4. TM checks if the dsGetAudioCapabilities returned a corresponding error code retrieved and return SUCCESS/FAILURE status.</automation_approch>
+3. Invoke the dsGetMS12Capabilities api by passing a null param to the capabilities arguments.
+4. TM checks if the dsGetMS12Capabilities returned a corresponding error code retrieved and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>1. Verify the API call is success
 2. verify that handle is received
-3. verify the dsGetAudioCapabilities API got returned a proper error statement</expected_output>
+3. verify the dsGetMS12Capabilities API got returned a proper error statement</expected_output>
     <priority >High</priority>
     <test_stub_interface >libdshalstub.so.0.0.0</test_stub_interface>
-    <test_script>DSHal_GetAudioCapabilities_NullParam_Check</test_script>
+    <test_script>DSHal_GetMS12Capabilities_NullParam_Check</test_script>
     <skipped>No</skipped>
-    <release_version>M127</release_version>
+    <release_version>M128</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -95,7 +96,7 @@ obj = tdklib.TDKScriptingLibrary("dshal","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'DSHal_GetAudioCapabilities_NullParam_Check');
+obj.configureTestCase(ip,port,'DSHal_GetMS12Capabilities_NullParam_Check');
 
 #Get the result of connection with test component and STB
 dshalloadModuleStatus = obj.getLoadModuleResult();
@@ -120,11 +121,11 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         details = tdkTestObj.getResultDetails();
         print(details);
 
-    print("Test Step2: To validate the GetAudioCapabilities HAL API by passing null param");
+    print("Test Step2: To validate the GetMS12Capabilities HAL API by passing null param");
     print("Expected output: Should get the proper error code without facing any crashes");
     expectedResult="FAILURE";
     #Prmitive test case which associated to this Script
-    tdkTestObj = obj.createTestStep('DSHal_GetAudioCapabilities');
+    tdkTestObj = obj.createTestStep('DSHal_GetMS12Capabilities');
     tdkTestObj.addParameter("Isnullparamcheck",1);
     #Execute the test case in STB
     tdkTestObj.executeTestCase(expectedResult);
@@ -133,12 +134,12 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
     details = tdkTestObj.getResultDetails();
     if expectedResult in actualResult:
         print(details);
-        print("ACTUAL RESULT : dsGetAudioCapabilities call is failed due to null param being passed");
+        print("ACTUAL RESULT : dsGetMS12Capabilities call is failed due to null param being passed");
         tdkTestObj.setResultStatus("SUCCESS");
         print("[TEST EXECUTION RESULT] : SUCCESS");
     else:
         print("Value returned : ", details);
-        print("ACTUAL RESULT : dsGetAudioCapabilities call is success eventhough null param being passed");
+        print("ACTUAL RESULT : dsGetMS12Capabilities call is success eventhough null param being passed");
         tdkTestObj.setResultStatus("FAILURE");
         print("[TEST EXECUTION RESULT] : FAILURE");
 

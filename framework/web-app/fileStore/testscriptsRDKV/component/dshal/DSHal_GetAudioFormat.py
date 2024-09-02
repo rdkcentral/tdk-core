@@ -56,7 +56,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_DS_HAL_177</test_case_id>
+    <test_case_id>CT_DS_HAL_176</test_case_id>
     <test_objective>Test script to get the audio format of the current playback</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator</test_setup>
