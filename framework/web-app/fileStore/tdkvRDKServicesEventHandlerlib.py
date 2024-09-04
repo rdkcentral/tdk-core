@@ -713,6 +713,13 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["Test_Step_Status"] = "FAILURE"
 
         # RDKShell Events response result parser steps
+        elif tag == "rdkshell_check_event_status":
+            result = result[0]
+            info["Test_Step_Status"] = "FAILURE"
+            status = str(result.get("success")).lower()
+            if status == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+        
         elif tag == "rdkshell_check_on_launched_event":
             result=result[0]
             info = result

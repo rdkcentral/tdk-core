@@ -354,7 +354,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-
+                
         elif tag == "network_negative_error_message_validation":
             success = result.get("success")
             info["success"] = success
@@ -1151,7 +1151,9 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "rdkshell_get_result_status":
-            if str(result.get("success")).lower() == "true":
+            success = result.get("success")
+            info["success"] = success
+            if str(success).lower() == "true":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -2415,7 +2417,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-
+                
         # Bluetooth Plugin Response result parser steps
         elif tag == "bluetooth_validate_startscan":
             info["status"] = result.get("status")
@@ -3933,6 +3935,23 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "TRUE"
                 else:
                     result = "FALSE"
+
+        elif tag == "rdkshell_get_previous_app_state":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            clients = testStepResults1[0].get("clients")
+            if str(arg[0]).lower() in clients:
+                testStepResults2 = list(testStepResults[1].values())[0]
+                apps = testStepResults2[0].get("state")
+                #Iterate through the list to find the youtube app state
+                for app in apps:
+                    if app["callsign"] == "Cobalt":
+                        appstate = app["state"]
+                if str(appstate).lower() == "hibernated":
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                result = "FALSE"
 
         # XCast Plugin Response result parser steps
         elif tag == "xcast_get_xdial_status":
@@ -5765,11 +5784,21 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Status"] = "FAILURE"
                 
         elif tag == "disable_ethernet_interface":
-                command = "ifconfig eth0 down"
-                output = executeCommand(execInfo, command)
-                message = "Successfully executed "+command+" command"
-                info["Test_Step_Message"] = message
+            command = "ifconfig eth0 down"
+            output = executeCommand(execInfo, command)
+            message = "Successfully executed "+command+" command"
+            info["Test_Step_Message"] = message
+            info["Test_Step_Status"] = "SUCCESS"
+
+        elif tag == "check_memcr_service_status":
+            command="systemctl status memcr | grep running"
+            result = executeCommand(execInfo, command)
+            if "active (running)" in result:
+                print(result)
                 info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print(result)
+                info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "Check_And_Enable_XDial":
             if len(arg) and arg[0] == "enable_xdial":
