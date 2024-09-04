@@ -135,15 +135,15 @@ if expectedResult in result.upper():
     if plugin_status_needed != current_plugin_status_dict:
         print("\n Set plugins status")
         status = set_plugins_status(obj,plugin_status_needed)
-        validation_dict = get_validation_params(obj)
-        if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
-            if validation_dict["validation_required"]:
-                if validation_dict["password"] == "None":
-                    password = ""
-                else:
-                    password = validation_dict["password"]
-                credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-            cobalt_launch_status = launch_cobalt(obj)
+    validation_dict = get_validation_params(obj)
+    if status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
+        if validation_dict["validation_required"]:
+            if validation_dict["password"] == "None":
+                password = ""
+            else:
+                password = validation_dict["password"]
+            credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
+        cobalt_launch_status = launch_cobalt(obj)
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
     initial_interface = current_interface
