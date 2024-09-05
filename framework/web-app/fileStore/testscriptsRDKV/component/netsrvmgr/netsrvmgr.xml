@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
-  <module testGroup="Component" name="netsrvmgr">
+  <module name="netsrvmgr" testGroup="Component">
     <primitiveTests>
       <primitiveTest name="NetSrvMgr_WifiMgr_GetAvailableSSIDs" id="" version="1">
         <function>TestMgr_NetSrvMgr_WifiMgrGetAvailableSSIDs</function>
@@ -53,6 +53,13 @@
           <parameter name="interface" value="NULL"/>
           <parameter name="ipversion" value="NULL"/>
           <parameter name="family" value="NULL"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="NetSrvMgr_WifiMgr_getAvailableSSIDWithName" id=" " version="1">
+        <function>TestMgr_WifiMgr_getAvailableSSIDWithName</function>
+        <parameters>
+          <parameter name="frequency" value="0"/>
+          <parameter name="ssid" value="NULL"/>
         </parameters>
       </primitiveTest>
     </primitiveTests>
