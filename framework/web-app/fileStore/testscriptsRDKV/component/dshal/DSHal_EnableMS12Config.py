@@ -58,7 +58,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_DS_HAL_182</test_case_id>
+    <test_case_id>CT_DS_HAL_181</test_case_id>
     <test_objective>Test script to check the return value of EnableMS12Config HAL API to ensure really it got deprecated in HAL implementation</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDKTV,Video_Accelerator</test_setup>

@@ -56,7 +56,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>CT_DS_HAL_178</test_case_id>
+    <test_case_id>CT_DS_HAL_177</test_case_id>
     <test_objective>Test script to validate the Getaudiocapabilities API by passing an invalid handle</test_objective>
     <test_type>Negative</test_type>
     <test_setup>Video_Accelerator</test_setup>

@@ -456,6 +456,166 @@
           <parameter name="paramhandle" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="DSHal_IsSurroundDecoderEnabled" id=" " version="1">
+        <function>TestMgr_DSHal_IsSurroundDecoderEnabled</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_EnableSurroundDecoder" id=" " version="1">
+        <function>TestMgr_DSHal_EnableSurroundDecoder</function>
+        <parameters>
+          <parameter name="enable" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetMS12Capabilities" id=" " version="1">
+        <function>TestMgr_DSHal_GetMS12Capabilities</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetMS12Capabilities" id=" " version="1">
+        <function>TestMgr_DSHal_GetMS12Capabilities</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetMISteering" id=" " version="1">
+        <function>TestMgr_DSHal_GetMISteering</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetMISteering" id=" " version="1">
+        <function>TestMgr_DSHal_SetMISteering</function>
+        <parameters>
+          <parameter name="enable" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetMS12AudioProfileList" id=" " version="1">
+        <function>TestMgr_DSHal_GetMS12AudioProfileList</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetMS12AudioProfile" id=" " version="1">
+        <function>TestMgr_DSHal_GetMS12AudioProfile</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetGraphicEqualizerMode" id=" " version="1">
+        <function>TestMgr_DSHal_GetGraphicEqualizerMode</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetGraphicEqualizerMode" id=" " version="1">
+        <function>TestMgr_DSHal_SetGraphicEqualizerMode</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="mode" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetStereoAuto" id=" " version="2">
+        <function>TestMgr_DSHal_GetStereoAuto</function>
+        <parameters>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetStereoAuto" id=" " version="1">
+        <function>TestMgr_DSHal_SetStereoAuto</function>
+        <parameters>
+          <parameter name="automode" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetAudioGain" id=" " version="2">
+        <function>TestMgr_DSHal_GetAudioGain</function>
+        <parameters>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetAudioGain" id=" " version="2">
+        <function>TestMgr_DSHal_SetAudioGain</function>
+        <parameters>
+          <parameter name="audiogain" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetAudioDB" id=" " version="3">
+        <function>TestMgr_DSHal_GetAudioDB</function>
+        <parameters>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetAudioDB" id=" " version="1">
+        <function>TestMgr_DSHal_SetAudioDB</function>
+        <parameters>
+          <parameter name="audiodBlevel" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_GetAudioLevel" id=" " version="2">
+        <function>TestMgr_DSHal_GetAudioLevel</function>
+        <parameters>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_SetAudioLevel" id=" " version="1">
+        <function>TestMgr_DSHal_SetAudioLevel</function>
+        <parameters>
+          <parameter name="audiolevel" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_IsAudioLoopThru" id=" " version="1">
+        <function>TestMgr_DSHal_IsAudioLoopThru</function>
+        <parameters>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="Isnullparamcheck" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="DSHal_EnableLoopThru" id=" " version="1">
+        <function>TestMgr_DSHal_EnableLoopThru</function>
+        <parameters>
+          <parameter name="enableLoopThru" value=""/>
+          <parameter name="IsHandleInvalid" value=""/>
+          <parameter name="paramhandle" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>

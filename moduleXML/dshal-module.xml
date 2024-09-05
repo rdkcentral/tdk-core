@@ -120,6 +120,23 @@
       <function name='TestMgr_DSHal_GetDRCMode' />
       <function name='TestMgr_DSHal_GetAudioFormat' />
       <function name='TestMgr_DSHal_EnableMS12Config' />
+      <function name='TestMgr_DSHal_IsSurroundDecoderEnabled' />
+      <function name='TestMgr_DSHal_EnableSurroundDecoder' />
+      <function name='TestMgr_DSHal_GetMISteering' />
+      <function name='TestMgr_DSHal_SetMISteering' />
+      <function name='TestMgr_DSHal_GetMS12AudioProfileList' />
+      <function name='TestMgr_DSHal_GetMS12AudioProfile' />
+      <function name='TestMgr_DSHal_GetGraphicEqualizerMode' />
+      <function name='TestMgr_DSHal_SetGraphicEqualizerMode' />
+      <function name='TestMgr_DSHal_GetStereoAuto' />
+      <function name='TestMgr_DSHal_SetStereoAuto' />
+      <function name='TestMgr_DSHal_GetAudioGain' />
+      <function name='TestMgr_DSHal_SetAudioGain' />
+      <function name='TestMgr_DSHal_GetAudioDB' />
+      <function name='TestMgr_DSHal_SetAudioDB' />
+      <function name='TestMgr_DSHal_SetAudioLevel' />
+      <function name='TestMgr_DSHal_IsAudioLoopThru' />
+      <function name='TestMgr_DSHal_EnableLoopThru' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -176,6 +193,12 @@
       <parameter funName='TestMgr_DSHal_SetIntelligentEqualizerMode' parameterName='mode' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_DSHal_SetDialogEnhancement' parameterName='level' parameterType='INTEGER' range='0-9' />
       <parameter funName='TestMgr_DSHal_SetAudioCompression' parameterName='audioCompression' parameterType='INTEGER' range='0-9' />
+      <parameter funName='TestMgr_DSHal_GetAudioLevel' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioLevel' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioLevel' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetMS12Capabilities' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12Capabilities' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12Capabilities' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
       <parameter funName='TestMgr_DSHal_GetAudioCapabilities' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
       <parameter funName='TestMgr_DSHal_GetAudioCapabilities' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_DSHal_GetAudioCapabilities' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
@@ -188,6 +211,57 @@
       <parameter funName='TestMgr_DSHal_GetAudioFormat' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
       <parameter funName='TestMgr_DSHal_GetAudioFormat' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_DSHal_GetAudioFormat' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_IsSurroundDecoderEnabled' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_IsSurroundDecoderEnabled' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_IsSurroundDecoderEnabled' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_EnableSurroundDecoder' parameterName='enable' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_EnableSurroundDecoder' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_EnableSurroundDecoder' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetMISteering' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMISteering' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMISteering' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetMISteering' parameterName='enable' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetMISteering' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetMISteering' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfileList' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfileList' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfileList' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfile' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfile' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetMS12AudioProfile' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetGraphicEqualizerMode' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetGraphicEqualizerMode' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetGraphicEqualizerMode' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetGraphicEqualizerMode' parameterName='mode' parameterType='INTEGER' range='0-5' />
+      <parameter funName='TestMgr_DSHal_SetGraphicEqualizerMode' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetGraphicEqualizerMode' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetStereoAuto' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetStereoAuto' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetStereoAuto' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetStereoAuto' parameterName='automode' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetStereoAuto' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetStereoAuto' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetAudioGain' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioGain' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioGain' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetAudioGain' parameterName='audiogain' parameterType='INTEGER' range='-2080-480' />
+      <parameter funName='TestMgr_DSHal_SetAudioGain' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetAudioGain' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_GetAudioDB' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioDB' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_GetAudioDB' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetAudioDB' parameterName='audiodBlevel' parameterType='INTEGER' range='-1450-180' />
+      <parameter funName='TestMgr_DSHal_SetAudioDB' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetAudioDB' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_SetAudioLevel' parameterName='audiolevel' parameterType='INTEGER' range='0-100' />
+      <parameter funName='TestMgr_DSHal_SetAudioLevel' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_SetAudioLevel' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_IsAudioLoopThru' parameterName='Isnullparamcheck' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_IsAudioLoopThru' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_IsAudioLoopThru' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
+      <parameter funName='TestMgr_DSHal_EnableLoopThru' parameterName='enableLoopThru' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_EnableLoopThru' parameterName='IsHandleInvalid' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_DSHal_EnableLoopThru' parameterName='paramhandle' parameterType='INTEGER' range='-1-15' />
     </parameters>
   </module>
 </xml>
