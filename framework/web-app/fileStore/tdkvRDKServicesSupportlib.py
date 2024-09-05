@@ -1073,7 +1073,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "system_check_error_message":
             success = str(result.get("success")).lower() == "false"
             info["success"] = result.get("success")
-            if arg[0] == "errorMessage":
+            if len(arg) and arg[0] == "errorMessage":
                 if "errorMessage" in result:
                     output = str(result.get("errorMessage")).strip()
                     info["errorMessage"] = output
@@ -1089,6 +1089,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                     else:
                         info["Test_Step_Status"] = "FAILURE"
             else:
+                result = result.get("error")
                 info["message"] = result.get("message")
                 if success and str(result.get("message")).lower() in expectedValues:
                     info["Test_Step_Status"] = "SUCCESS"
