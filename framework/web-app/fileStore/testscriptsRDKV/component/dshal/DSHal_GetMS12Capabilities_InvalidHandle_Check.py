@@ -75,7 +75,7 @@ capabilities - address of the value to get the MS12 capabilities</input_paramete
     <expected_output>verify the whether the API returned a corresponding error statement for the invalid handle</expected_output>
     <priority >High</priority>
     <test_stub_interface >libdshalstub.so.0.0.0</test_stub_interface>
-    <test_script>DSHal_GetAudioCapabilities_InvalidHandle_Check</test_script>
+    <test_script>DSHal_GetMS12Capabilities_InvalidHandle_Check</test_script>
     <skipped>No</skipped>
     <release_version>M128</release_version>
     <remarks></remarks>
