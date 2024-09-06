@@ -127,16 +127,18 @@ export class ListBoxManufacturerComponent {
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteBoxManufacture(data.boxManufacturerId).subscribe({
         next: (res) => {
+          this.rowData = this.rowData.filter((row: any) => row.boxManufacturerId !== data.boxManufacturerId);
+          this.rowData = [...this.rowData];
           this._snakebar.open(res, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
           })
-          this.ngOnInit();
         },
         error: (err) => {
-          this._snakebar.open(err, 'Something went wrong', {
+          const error = JSON.parse(err.error);
+          this._snakebar.open(error.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

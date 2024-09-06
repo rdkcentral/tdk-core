@@ -146,6 +146,8 @@ export class StreamingtemplatesListComponent {
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteStreamingTemplate(data.name).subscribe({
         next: (res) => {
+          this.rowData = this.rowData.filter((row: any) => row.name !== data.name);
+          this.rowData = [...this.rowData];
           this._snakebar.open(res, '', {
             duration: 1000,
             panelClass: ['success-msg'],

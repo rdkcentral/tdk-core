@@ -17,15 +17,31 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+ h1, 
+ h2, 
+ h3, 
+ h4, 
+ h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+}
+.container{
+    margin-bottom: 2rem;
+}
+.exsit-modal-content {
+    max-height: 100vh;
+}
 .card-height{
-    height: 460px !important;
+    height: 418px !important;
     overflow-y: auto;
     display: block;
 }
 .title{
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
-    padding: 0px 0 10px 0;
+    padding: 0px 0 1px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
@@ -39,8 +55,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 .reset-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -50,27 +66,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 .download-btn{
     background-color: #00B2DC;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 7px 20px;
     border: 1px solid transparent;
     border-radius: 6px;
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
+    margin-top: 15px;
+    margin-right: 10px;
 }
 .reset-btn {
     margin-right: 10px;
 }
 .thunder{
-    border: 1px solid;
+    border: 1px solid #0e6f8794;
 }
 .newconfigfile{
     font-size: 0.8rem;
     margin-right: 10px;
-    color: #00273F;
 }
 .config-input{
-    width: 185px;
+    width: 300px;
 }
 .config-input:read-only { 
     background-color: #e9ecef;
@@ -84,7 +101,6 @@ http://www.apache.org/licenses/LICENSE-2.0
  }
  .thunder-hints{
     font-size: 11px;
-    color: blue;
  }
 .device-title{
     font-size: 16px;
@@ -95,9 +111,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 }
 .delete-config{
-    margin: 0 0px 0 20px;
+    margin: 10px 0px 0px 20px;
     padding: 5px 10px;
     border: 1px solid #00B2DC;
+    height: 45px;
 }
 .delete-config:hover{
     background-color: transparent;
@@ -127,9 +144,14 @@ http://www.apache.org/licenses/LICENSE-2.0
     height: 90vh;
 }
 .exist-config ngx-editor{
-    height: 310px !important;
+    height: 304px !important;
     overflow-y: auto;
     display: block;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+.existModal-body{
+    height: 59%;
 }
 .toggleIcon{
     color: #00273F;
@@ -141,8 +163,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     position: fixed;
 }
 .config-header {
+    display: flex;
     color: #00273f;
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 1px 0 10px 0;
     border-image: linear-gradient(
@@ -156,13 +179,13 @@ http://www.apache.org/licenses/LICENSE-2.0
     );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-    margin: 15px 20px 0px 20px;
+    margin: 5px 20px 0px 20px;
   }
   .config-title {
     margin-bottom: 0px !important;
   }
   .modal-maximized ngx-editor {
-    height: 340px !important;
+    height: 250px !important;
     overflow-y: auto;
     display: block;
   }
@@ -170,21 +193,29 @@ http://www.apache.org/licenses/LICENSE-2.0
     max-width: 97vw;
   }
   .modal-maximized button .toggleIcon{
-    margin-left: 38rem; 
+    margin-left: 30rem; 
   }
-
+.modal-btns{
+    text-align: right;
+}
 /* Device Modal CSS Start */
+.newdevice-header{
+    margin-top: 0px;
+    padding-bottom: 0px;
+}
   .device-editor ngx-editor{
-    height: 310px !important;
+    height: 304px !important;
     overflow-y: auto;
     display: block;
+    border: 1px solid #ddd;
+    border-radius: 5px;
 }
 .uploadconfig{
     text-align: right;
     margin-right: 10px;
 }
 .upload-container{
-    height: 286px;
+    height: 200px;
 }
 .backEditor{
     margin-right: 10px;
@@ -194,4 +225,26 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 .toogle-name{
     color: #00B2DC;
+}
+.device-input, .config-editbtn, .config-input{
+    height: 45px;
+    margin: 10px 4px 0px 4px;
+}
+.btns-grps{
+    margin-bottom: 10px;
+}
+.thunder-info{
+    margin: -18px 0 0 30px;
+    position: absolute;
+}
+.thunderport-info{
+    margin: 0px 0 0 5px;
+    position: absolute;
+}
+.form-check-input:disabled{
+    background-color: rgba(128, 128, 128, 0.897);
+}
+.deviceconfig-info{
+    margin: -18px 0 0 55px;
+    position: absolute;
 }

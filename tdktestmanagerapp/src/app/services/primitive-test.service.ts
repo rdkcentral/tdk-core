@@ -1,0 +1,107 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+import { Injectable } from '@angular/core';
+import { AuthService } from '../auth/auth.service';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { GlobalConstants } from '../utility/global-constants';
+
+const apiUrl: string = GlobalConstants.apiUrl;
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PrimitiveTestService {
+
+  currentUrl: any;
+  allPassedData: BehaviorSubject<any> = new BehaviorSubject<any>([]);
+  private dropdownValueSubject = new BehaviorSubject<any>(null); 
+
+  constructor(private http: HttpClient, private authService: AuthService) { }
+  private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
+
+  getlistofModules(category: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/module/getlistofmodulenamebycategory/${category}`, { headers, responseType: 'text' });
+
+  }
+
+  getlistofFunction(moduleName: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/function/getlistoffunctionbymodulename/${moduleName}`, { headers, responseType: 'text' });
+
+  }
+
+  createPrimitiveTest(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.post(`${apiUrl}api/v1/primitivetest/create`, data, { headers, responseType: 'text' })
+  }
+
+  getParameterNames(moduleName: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/primitivetest/getlistbymodulename?moduleName=${moduleName}`, { headers, responseType: 'text' });
+  }
+
+  getParameterList(functionName: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction/${functionName}`, { headers, responseType: 'text' });
+  }
+
+  getParameterListUpdate(id: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/primitivetest/findbyid/${id}`, { headers, responseType: 'text' });
+  }
+
+  updatePrimitiveTest(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.put(`${apiUrl}api/v1/primitivetest/update`, data, { headers, observe: 'response', responseType: 'text' })
+  }
+
+  deletePrimitiveTest(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.delete(`${apiUrl}api/v1/primitivetest/delete/${id}`, { headers, responseType: 'text' });
+  }
+ 
+  dropdownValue$ = this.dropdownValueSubject.asObservable();
+
+  setDropdownValue(value: string) {
+    this.dropdownValueSubject.next(value);
+  }
+
+  getDropdownValue() {
+    return this.dropdownValueSubject.value;
+  }
+}

@@ -17,33 +17,40 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+ *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif !important;
+    /* font-family: 'Roboto Slab', serif; */
+    /* font-family: 'IBM Plex Serif', serif; */
+}
+
 .radiobox-row {
     border-radius: 10px;
     box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
-
 }
 
 .radiobox {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-top: 10px;
     flex-direction: row;
-    padding: 0 40px;
-
+    padding-left: 35px;
 }
 
 .showrdkgrouprow {
-    padding: 0 40px 5px 40px;
+    padding: 0px 40px 5px 40px;
 }
 
 .heading {
-    font-size: 1.1rem;
+    font-size: 0.85rem;
     margin-top: 8px;
+    /* font-family: Roboto, "Helvetica Neue", sans-serif !important; */
 }
-
+.commonlist{
+    margin-left: 5px;
+}
 .rdkgroup {
-    margin-left: 60px;
+    margin-left: 75px;
+    font-size: 0.85rem;
 }
 
 .rdkradio {
@@ -58,7 +65,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     list-style: none;
     text-decoration: underline;
     line-height: 2;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     cursor: pointer;
 }
 
@@ -66,7 +73,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .rdkcommonlist {
     list-style: none;
     line-height: 2;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
 }
 
 .rdkcommonlist {

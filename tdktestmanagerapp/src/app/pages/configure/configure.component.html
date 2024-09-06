@@ -21,56 +21,57 @@ limitations under the License.
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
                         (change)="ischecked('RDKV')" checked>
-                    <label class="form-check-label" for="rdkv">RDK-V</label>
+                    <label class="form-check-label" for="rdkv">Video</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
                         (change)="ischecked('RDKB')">
-                    <label class="form-check-label" for="rdkb">RDK-B</label>
+                    <label class="form-check-label" for="rdkb">Broadband</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
                         (change)="ischecked('RDKC')">
-                    <label class="form-check-label" for="rdkc">RDK-C</label>
+                    <label class="form-check-label" for="rdkc">Camera</label>
                 </div>
             </div>
         </div>
-        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkvVisible">
+        <div class="row showrdkgrouprow" *ngIf="rdkvVisible">
             <div class="col-md-3">
-                <h3>RDK-V</h3>
+                <h3 class="heading">Video</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <ul class="rdklist">
-                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
-                        Modules</a></li>
-                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingdetails')">Streaming
-                            Details</a></li>
-                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
-                            Manufacturers</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('rdkversions')">RDK Versions</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('scripttags')">Script Tags</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
-                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingtemplates')">Streaming Details
-                            Templates</a>
-                    </li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingdetails')">Streaming Details</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('streamingtemplates')">Streaming Details Templates</a></li>
 
                 </ul>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <ul class="rdk2ndlist">
-                    <li>Configure Information about Component Interface Modules</li>
-                    <li>Option to add streaming details</li>
-                    <li>Option to add box manufacturers</li>
                     <li>Option to add box type</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add Primitive Test</li>
+                    <li>Option to add RDK Versions</li>
+                    <li>Option to add Script Tags</li>
                     <li>Option to add SoC vendors</li>
+                    <li>Option to add streaming details</li>
                     <li>Option to configure device templates</li>
                 </ul>
             </div>
             <div class="row" *ngIf="privileges == 'admin'">
                 <div class="col-md-3">
-                    <h3>Common Configuration</h3>
+                    <h3 class="heading">Common Configuration</h3>
                 </div>
-                <div class="col-md-4">
-                    <ul class="rdklist">
+                <div class="col-md-3">
+                    <ul class="rdklist commonlist">
                         <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
                         <li>
                             <a routerLinkActive="active" (click)="navigationToUser('usermanagement')">User
@@ -78,7 +79,7 @@ limitations under the License.
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <ul class="rdkcommonlist">
                         <li>Option to add Groups</li>
                         <li>Option to manages users</li>
@@ -86,34 +87,38 @@ limitations under the License.
                 </div>
             </div>
         </div>
-        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkbVisible">
+        <div class="row mt-2 showrdkgrouprow" *ngIf="rdkbVisible">
             <div class="col-md-3">
-                <h3>RDK-B</h3>
+                <h3 class="heading">Broadband</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <ul class="rdklist">
-                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
-                        Modules</a></li>
-                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
-                            Manufacturers</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('rdkversions')">RDK Versions</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('scripttags')">Script Tags</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
                 </ul>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <ul class="rdk2ndlist">
-                    <li>Configure Information about Component Interface Modules</li>
-                    <li>Option to add box manufacturers</li>
                     <li>Option to add box type</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add Primitive Test</li>
+                    <li>Option to add RDK Versions</li>
+                    <li>Option to add Script Tags</li>
                     <li>Option to add SoC vendors</li>
 
                 </ul>
             </div>
             <div class="row" *ngIf="privileges == 'admin'">
                 <div class="col-md-3">
-                    <h3>Common Configuration</h3>
+                    <h3 class="heading">Common Configuration</h3>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <ul class="rdklist">
                         <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
                         <li>
@@ -122,7 +127,7 @@ limitations under the License.
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <ul class="rdkcommonlist">
                         <li>Option to add Groups</li>
                         <li>Option to manages users</li>
@@ -130,35 +135,39 @@ limitations under the License.
                 </div>
             </div>
         </div>
-        <div class="row mt-4 showrdkgrouprow" *ngIf="rdkcVisible">
+        <div class="row mt-2 showrdkgrouprow" *ngIf="rdkcVisible">
             <div class="col-md-3">
-                <h3>RDK-C</h3>
+                <h3 class="heading">Camera</h3>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <ul class="rdklist">
-                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">
-                        Modules</a></li>
-                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box
-                            Manufacturers</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('rdkversions')">RDK Versions</a></li>
+                    <li><a routerLinkActive="active" (click)="navigationToUser('scripttags')">Script Tags</a></li>
                     <li><a routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a></li>
     
                 </ul>
             </div>
-            <div class="col-md-5">
+            <div class="col-md-6">
                 <ul class="rdk2ndlist">
-                    <li>Configure Information about Component Interface Modules</li>
-                    <li>Option to add box manufacturers</li>
                     <li>Option to add box type</li>
+                    <li>Option to add box manufacturers</li>
+                    <li>Configure Information about Component Interface Modules</li>
+                    <li>Option to add Primitive Test</li>
+                    <li>Option to add RDK Versions</li>
+                    <li>Option to add Script Tags</li>
                     <li>Option to add SoC vendors</li>
            
                 </ul>
             </div>
             <div class="row" *ngIf="privileges == 'admin'">
                 <div class="col-md-3">
-                    <h3>Common Configuration</h3>
+                    <h3 class="heading">Common Configuration</h3>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <ul class="rdklist">
                         <li><a routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a></li>
                         <li>
@@ -167,7 +176,7 @@ limitations under the License.
                         </li>
                     </ul>
                 </div>
-                <div class="col-md-5">
+                <div class="col-md-6">
                     <ul class="rdkcommonlist">
                         <li>Option to add Groups</li>
                         <li>Option to manages users</li>
@@ -176,5 +185,4 @@ limitations under the License.
             </div>
         </div>
     </div>
-
 </div>

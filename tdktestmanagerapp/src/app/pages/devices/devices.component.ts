@@ -19,11 +19,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef,GridApi,GridReadyEvent,IMultiFilterParams } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
+import '../../../../node_modules/ag-grid-community/styles/ag-grid.css';
+import '../../../../node_modules/ag-grid-community/styles/ag-theme-quartz.css';
 import { ButtonComponent } from '../../utility/component/ag-grid-buttons/button/button.component';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -88,6 +88,7 @@ export class DevicesComponent {
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
         onViewClick:this.openModal.bind(this),
+        onDownloadClick:this.downloadXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
     }
@@ -95,7 +96,7 @@ export class DevicesComponent {
 
 
   constructor(private router: Router, private service:DeviceService,
-    private _snakebar :MatSnackBar, public dialog:MatDialog){
+    private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
   }
   
   /**
@@ -103,6 +104,8 @@ export class DevicesComponent {
    */
   close(){
     (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'padding-right');
   }
 
   /**
@@ -148,7 +151,9 @@ export class DevicesComponent {
       this.findallbyCategory();
     }
   }
-
+  gridOptions = {
+    domLayout: 'autoHeight'
+  };
   /**
    * Event handler for when the grid is ready.
    * @param params - The GridReadyEvent object containing the grid API.
@@ -272,7 +277,16 @@ export class DevicesComponent {
    * Download all device details as zip format based on device category selection
    */
   downloadAllDevice(){
-    this.service.downloadDeviceByCategory(this.selectedDeviceCategory);
+    if(this.rowData.length > 0){
+      this.service.downloadDeviceByCategory(this.selectedDeviceCategory);
+    }else{
+      this._snakebar.open('No data available for download', '', {
+        duration: 2000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      })
+    }
   }
   openModal(params:any){
     this.service.getStreamsForDeviceForUpdate(params.id).subscribe(res=>{
@@ -305,4 +319,19 @@ export class DevicesComponent {
       }
     })
   }
+  downloadXML(params:any):void{
+    if(params.stbName){
+      this.service.downloadDevice(params.stbName).subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${params.stbName}.xml`; 
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      });
+    }
+  }
+
 }

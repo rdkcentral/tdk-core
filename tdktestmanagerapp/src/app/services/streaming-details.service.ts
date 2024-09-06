@@ -45,11 +45,9 @@ export class StreamingDetailsService {
       `${apiUrl}api/v1/streamingdetail/findall`,
       { headers, responseType: 'text' }
     );
-    // return this.http.get(`${apiUrl}api/v1/socvendor/getlistbycategory?category=rdkv`, this.options);
   }
 
   createStreamDetails(data: any): Observable<any> {
-    console.log('Data being send to the server:', data);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
@@ -59,7 +57,6 @@ export class StreamingDetailsService {
   }
 
   createRadioStreamingDetails(data: any): Observable<any> {
-    console.log('Data being send to the server:', data);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
@@ -69,7 +66,6 @@ export class StreamingDetailsService {
   }
 
   updateStreamingDetails(data: any): Observable<any> {
-    console.log("Data in updatefn", data);
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
@@ -78,7 +74,6 @@ export class StreamingDetailsService {
   }
 
   deleteStreamingDetails(id: any): Observable<any> {
-    console.log('Streaming details id:', id);
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });

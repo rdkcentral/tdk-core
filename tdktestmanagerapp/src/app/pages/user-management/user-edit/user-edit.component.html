@@ -16,14 +16,15 @@ limitations under the License.
 <div class="container">
     <div class="row mt-2">
         <div class="col-md-12">
-            <mat-card>
+            <mat-card class="card-height">
                 <mat-card-content class="card-padding">
                     <h1 class="title">Update User</h1>
                     <form [formGroup]="editUserForm" (ngSubmit)="userEditSubmit()" class="editUserForm mt-5">
                         <div class="row">
                             <div class="col">
                                 <div class="row mb-3">
-                                    <label for="username" class="col-md-3 col-form-label">User Name</label>
+                                    <label for="username" class="col-md-3 col-form-label">User Name <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="username" formControlName="username"
                                             autocomplete="off" placeholder="Enter User Name">
@@ -38,7 +39,8 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="useremail" class="col-md-3 col-form-label">Email</label>
+                                    <label for="useremail" class="col-md-3 col-form-label">Email <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
                                         <input type="email" id="useremail" class="form-control"
                                             formControlName="useremail" autocomplete="off" placeholder="Enter Email">
@@ -54,7 +56,9 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="userDisplayName" class="col-md-3 col-form-label">Display Name</label>
+                                    <label for="userDisplayName" class="col-md-3 col-form-label">Display Name<span
+                                        style="color:red; margin-left: 0.75em;">*</span>
+                                    </label>
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="userDisplayName"
                                             formControlName="userDisplayName" autocomplete="off"
@@ -89,7 +93,8 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="rolename" class="col-md-3 offset-1 col-form-label">Role</label>
+                                    <label for="rolename" class="col-md-3 offset-1 col-form-label">Role <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example" id="rolename"
                                             formControlName="rolename">
@@ -107,7 +112,8 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="userpassword" class="col-md-3 offset-1 col-form-label">Password</label>
+                                    <label for="userpassword" class="col-md-3 offset-1 col-form-label">Password <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
                                         <input type="password" id="userpassword" class="form-control"
                                             formControlName="userpassword">

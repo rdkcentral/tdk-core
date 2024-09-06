@@ -42,7 +42,6 @@ export class SocVendorService {
       'Authorization': this.authService.getApiToken()
     });
     return this.http.get(`${apiUrl}api/v1/socvendor/findallbycategory?category=${category}`, { headers, responseType: 'text' });
-    // return this.http.get(`${apiUrl}api/v1/socvendor/getlistbycategory?category=rdkv`, this.options);
   }
 
   createSocVendor(data: any): Observable<any> {
@@ -55,7 +54,6 @@ export class SocVendorService {
   }
 
   updateSocVendor(id: any, data: any): Observable<any> {
-    console.log(data);
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()

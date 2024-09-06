@@ -18,7 +18,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 
-
+.container-fluid{
+    margin-bottom: 5rem;
+}
 .logo-img {
     width: 8%;
 }
@@ -43,9 +45,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 .create-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-right: 140px;
-    padding: 10px 20px;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -56,9 +58,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 .back-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.9rem;
     margin-right: 10px;
-    padding: 10px 20px;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;

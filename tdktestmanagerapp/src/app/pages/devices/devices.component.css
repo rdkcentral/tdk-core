@@ -17,7 +17,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+}
+.container{
+    margin-bottom: 2rem;
+}
 .radiobox-row{
     border: 1px solid #0000002e;
     border-radius: 10px;
@@ -27,15 +40,15 @@ http://www.apache.org/licenses/LICENSE-2.0
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
     flex-direction: row;
     padding: 0 40px;
+    height: 20px;
+    margin-top: 10px;
 }
 .showrdkgrouprow{
-    padding: 0 40px 30px 40px;
+    padding: 0 40px 1px 40px;
 }
 .heading{
-    font-size: 1.1rem;
     margin-top: 8px;
 }
 .rdkgroup{
@@ -67,9 +80,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-color: #0e6f87;
 }
 .title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
-    padding: 1px 0 10px 0;
+    padding: 1px 0 1px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
@@ -77,7 +90,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .example-header {
-    margin-bottom: 10px;
+    margin-bottom: 1px;
     display: flex;
     justify-content: center;
     align-items: baseline;
@@ -85,7 +98,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .download-btn{
     background-color: #00B2DC;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 7px 20px;
     border: 1px solid transparent;
     border-radius: 6px;
@@ -100,7 +113,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     float: right;
 }
 .search{
-    font-size: 16px;
+    font-size: 15px;
     display: flex;
     margin-right: 5px;
 }
@@ -110,10 +123,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-left: 8px;
 }
 .uploadbtn{
-    margin-left: 80px;
+    margin-left: 30px;
     background-color: #00B2DC;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 7px 20px;
     border: 1px solid transparent;
     border-radius: 6px;
@@ -124,4 +137,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 .modal-footer{
     border-top: none;
     padding: 1rem 1.45rem 2rem 2rem;
+}
+.custom-modal{
+    max-width: 800px;
+    margin-top: 100px;
+}
+.modaltitle{
+    margin: 0 10px 0px 10px;
+    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+    padding: 10px 5px 5px 5px;
+}
+.custom-title{
+    margin-bottom: 0;
+    font-size: 1rem;
 }

@@ -17,9 +17,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+.container-fluid{
+    margin-bottom: 2rem;
+}
 .title {
-    color: #00273F;
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 0px 0 5px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
@@ -33,23 +35,11 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: auto;
 }
 
-.ag-theme-quartz {
-    /* Changes the color of the grid text */
-    /* --ag-foreground-color: rgb(245, 246, 248); */
-    /* Changes the color of the grid background */
-    /* --ag-background-color: rgb(241, 247, 255); */
-    /* Changes the header color of the top row */
-    --ag-header-background-color: rgb(209, 212, 212);
-    /* Changes the hover color of the row*/
-    /* --ag-row-hover-color: rgb(216, 226, 255); */
-}
-
 .create-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
-    ;
-    padding: 10px 20px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;

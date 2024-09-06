@@ -16,7 +16,7 @@ limitations under the License.
 <div class="container">
     <div class="row mt-2">
         <div class="col-md-12">
-            <mat-card>
+            <mat-card class="card-height">
                 <mat-card-content class="card-padding">
                     <h1 class="title">Create User</h1>
                     <form [formGroup]="userForm" (ngSubmit)="onuserSubmit()" class="userform mt-5">
@@ -67,8 +67,7 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="usergroupname" class="col-md-3 col-form-label">Group Name<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="usergroupname" class="col-md-3 col-form-label">Group Name</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"
                                             id="usergroupname" formControlName="usergroupname">

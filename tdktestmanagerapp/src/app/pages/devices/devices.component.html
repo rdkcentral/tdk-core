@@ -14,28 +14,28 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row radiobox-row mt-2">
+    <div class="row radiobox-row mt-1">
         <div class="col-md-12 radiobox">
             <h3 class="heading">Choose the device category :</h3>
             <div class="rdkgroup">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDeviceCategory" (change)="ischecked($event)" >
-                    <label class="form-check-label" for="rdkv">RDK-V</label>
+                    <label class="form-check-label" for="rdkv">Video</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDeviceCategory"(change)="ischecked($event)">
-                    <label class="form-check-label" for="rdkb">RDK-B</label>
+                    <label class="form-check-label" for="rdkb">Broadband</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDeviceCategory" (change)="ischecked($event)">
-                    <label class="form-check-label" for="rdkc">RDK-C</label>
+                    <label class="form-check-label" for="rdkc">Camera</label>
                 </div>
             </div>
         </div>
         <div class="row showrdkgrouprow">
             <h1 class="title"> {{configureName.toUpperCase()}} Device Summary</h1>
             <div>
-                <div class="row mt-3">
+                <div class="row mt-1">
                     <div class="col">
                         <button type="button" class="download-btn" (click)="downloadAllDevice()"><i class="bi bi-download download-icon"></i> Download all the {{configureName.toUpperCase()}} Device Details</button>
                     </div>
@@ -51,30 +51,32 @@ limitations under the License.
                         <button  class="download-btn create" (click)="createDevice()">Create </button>
                     </div>
                 </div>
-                <ag-grid-angular
-                style="width: 100%; height: 390px;"
-                [columnDefs]="columnDefs"
-                [defaultColDef]="{sortable: true}"
-                [rowData]="rowData"
-                [class]="themeClass"
-                [pagination]="true"
-                [paginationPageSize]="paginationPageSize"
-                [paginationPageSizeSelector]="paginationPageSizeSelector"
-                (gridReady)="onGridReady($event)"
-                [animateRows]="true"
-                [context]="this"
-              ></ag-grid-angular>
+                <div style="width: 100%; height: 395px; margin-top: 5px;" [class]="themeClass">
+                    <ag-grid-angular
+                    [columnDefs]="columnDefs"
+                    [defaultColDef]="{sortable: true}"
+                    [rowData]="rowData"
+                    [pagination]="true"
+                    [paginationPageSize]="paginationPageSize"
+                    [paginationPageSizeSelector]="paginationPageSizeSelector"
+                    (gridReady)="onGridReady($event)"
+                    [animateRows]="true"
+                    [context]="this"
+                    [domLayout]="'autoHeight'"
+                  ></ag-grid-angular>
+                </div>
+             
             </div>
         </div>
     </div>
 </div>
  <!-- Modal Start-->
  <div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog custom-modal">
       <div class="modal-content">
         <form [formGroup]="uploadXMLForm" (ngSubmit)="uploadXMLSubmit()">
         <div class="modal-header modaltitle">
-          <h1 class="modal-title " id="staticBackdropLabel">Upload Device XML File</h1>
+          <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Device XML File</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

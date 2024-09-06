@@ -205,7 +205,6 @@ export class UserListComponent implements OnInit {
    */
   onRowSelected(event: RowSelectedEvent): void  {
     this.isRowSelected = event.node.isSelected();
-    console.log(this.isRowSelected);
     this.rowIndex = event.rowIndex
   }
 

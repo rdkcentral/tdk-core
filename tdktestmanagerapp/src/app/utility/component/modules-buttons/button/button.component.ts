@@ -34,26 +34,27 @@ interface customcellRenderparams extends ICellRendererParams{
   imports: [MaterialModule, CommonModule],
   template: `
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
-    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" (click)="onEditClick($event)"><i class="bi bi-pencil extra-icon edit"></i></button>
-    &nbsp;
-    <button  class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="extra-icon">delete_forever</mat-icon></button>
-    &nbsp;
-    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button>
-    &nbsp;
-    <button *ngIf="functionShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Create Function" (click)="onFunctionClick($event)"><i class="bi bi-plus extra-icon create"></i></button>
-    &nbsp;
-    <button *ngIf="paraMeterShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Create Parameter" (click)="onParameterClick($event)"><i class="bi bi-plus extra-icon create"></i></button>
-    &nbsp;
+    <button *ngIf="editShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" (click)="onEditClick($event)"><i class="bi bi-pencil extra-icon edit"></i></button>
+  
+    <button *ngIf="deleteShowHide" class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="extra-icon">delete_forever</mat-icon></button>
+   
+    <button *ngIf="viewShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button>
+  
+    <button *ngIf="functionShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Functions and Parameters" (click)="onFunctionClick($event)"><i class="bi bi-gear extra-icon create"></i></button>
+   
+    <button *ngIf="paraMeterShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Parameters" (click)="onParameterClick($event)"><i class="bi bi-braces extra-icon create"></i></button>
+   
     <button *ngIf="downloadShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Download Module" ><i class="bi bi-download extra-icon download"></i></button>
+    <button *ngIf="downloadExcel" class="btn btn-primary btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
   `,  
   styles:[
     `.delete-btn{
         border: none;
         padding: 0px;
-        margin-right:3px;
+        margin-right:10px;
         border-radius: 50px;
     }
-    .extra-icon{
+    .extra-icon, .excel-icon{
       color: white;
       font-size: 1rem;
       display: flex;
@@ -62,6 +63,7 @@ interface customcellRenderparams extends ICellRendererParams{
       height:24px;
       width:24px;
     }
+
     .edit{
       background-color: #00B2DC;
       border-radius: 50px;
@@ -78,6 +80,10 @@ interface customcellRenderparams extends ICellRendererParams{
       background-color: #f58233;
       border-radius: 50px;
     }
+    .download-xlsx{
+      background-color: green;
+      border-radius: 50px;
+    }
     `
   ]
 })
@@ -89,6 +95,10 @@ export class ModuleButtonComponent implements OnInit{
   functionShowHide = true;
   paraMeterShowHide = false;
   downloadShowHide = false;
+  downloadExcel = false;
+  viewShowHide = true;
+  editShowHide = true;
+  deleteShowHide = true;
 
   agInit(params:customcellRenderparams): void {
     this.params = params;
@@ -100,21 +110,42 @@ export class ModuleButtonComponent implements OnInit{
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    console.log(this.route.snapshot.url[1].path);
-    
-    if(this.route.snapshot.url[1].path === 'modules-list'){
+    if(this.route.snapshot.url[1]){
+      if(this.route.snapshot.url[1].path === 'modules-list'){
         this.functionShowHide = true;
-        this.paraMeterShowHide = true;
+        this.paraMeterShowHide = false;
         this.downloadShowHide = true;
+        this.downloadExcel = false;
+        this.viewShowHide = true;
+        this.editShowHide = true;
+        this.deleteShowHide = true;
     }else if(this.route.snapshot.url[1].path === 'function-list'){
         this.functionShowHide = false;
         this.paraMeterShowHide = true;
-        this.downloadShowHide = true;
+        this.downloadShowHide = false;
+        this.downloadExcel = false;
+        this.viewShowHide = true;
+        this.editShowHide = true;
+        this.deleteShowHide = true;
+    }else if(this.route.snapshot.url[1].path === 'parameter-list'){
+      this.functionShowHide = false;
+      this.paraMeterShowHide = false;
+      this.downloadShowHide = false;
+      this.downloadExcel = false;
+      this.viewShowHide = true;
+      this.editShowHide = true;
+      this.deleteShowHide = true;
+    }
     }else{
       this.functionShowHide = false;
       this.paraMeterShowHide = false;
-      this.downloadShowHide = true;
+      this.downloadShowHide = false;
+      this.viewShowHide = false;
+      this.editShowHide = false;
+      this.deleteShowHide = false;
+      this.downloadExcel = true;
     }
+ 
   }
   //** Condition for disable edit and delete button to own user */
   isButtonDisabled(): boolean {
@@ -152,6 +183,12 @@ export class ModuleButtonComponent implements OnInit{
   onParameterClick($event:any){
     if (this.params.onParameterClick instanceof Function) {
       this.params.onParameterClick(this.params.node.data);
+    }
+  }
+
+  onDownloadClick($event:any){
+    if (this.params.onDownloadClick instanceof Function) {
+      this.params.onDownloadClick(this.params.node.data);
     }
   }
 }

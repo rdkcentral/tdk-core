@@ -15,20 +15,18 @@ limitations under the License.
 <div class="container-fluid">
     <div class="row mt-2">
         <div class="col-md-12">
-            <h1 class="title">{{configureName.toUpperCase()}} Function List</h1>
+            <h1 class="title">{{configureName.toUpperCase()}} - {{dynamicModuleName}} - Function List</h1>
         </div>
     </div>
     <div class="row table-sec mt-2">
         <div class="col-md-12 text-end">
             <button class="back-btn" (click)="goBack()">Back</button>
-            <button class="create-btn" (click)="createFunction()">Create {{configureName.toUpperCase()}}
-                Function
-            </button>
+            <button class="create-btn" (click)="goTocreateFunctionPage()">Create Function</button>
         </div>
     </div>
     <div class="row table-sec mt-2">
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 80%; height: 390px;" [columnDefs]="columnDefs"
+            <ag-grid-angular style="width: 80%; height: 395px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"

@@ -23,10 +23,9 @@ import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angula
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../auth/auth.service';
-import { testGroupModel } from '../../models/manageusermodel';
 import { Router } from '@angular/router';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { ModulesService } from '../../../services/modules.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-modules-create',
@@ -37,41 +36,82 @@ import { LiveAnnouncer } from '@angular/cdk/a11y';
 })
 export class ModulesCreateComponent {
 
-  configureName!:string;
+  categoryName!:string;
   createModuleForm!:FormGroup;
   moduleFormSubmitted = false;
-  testGroupArr:testGroupModel[] = [];
-  crashFilesArr: string[] = [];
-  logFilesArr: string[] = [];
+  testGroupArr:any;
+  crashFilesArr: string[] = ['/opt/logs'];
+  logFilesArr: string[] = ['/opt/logs'];
   isThunder :boolean = false;
+  isAdvanced :boolean = false;
+  loggedinUser: any;
 
 
-  constructor(private authservice: AuthService,private router: Router) { }
+  constructor(private authservice: AuthService,private router: Router,
+    private moduleservice: ModulesService,private _snakebar :MatSnackBar,
+  ) {
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+    
+   }
 
   /**
    * Initializes the component and sets up the initial values.
    */
   ngOnInit(): void {
-    this.configureName = this.authservice.selectedConfigVal;
-    this.testGroupArr=[
-      {id:1, name:'E2E'},
-      {id:2, name:'Component'},
-      {id:3, name:'OpenSource'},
-      {id:4, name:'Certification'},
-    ];
+    this.categoryName = this.authservice.selectedConfigVal;
+    this.moduleservice.getAllTestGroups().subscribe((res:any) => {
+      this.testGroupArr = JSON.parse(res);
+    });
     this.createModuleForm = new FormGroup({
       moduleName: new FormControl<string | null>('', { validators: Validators.required }),
       testGroup: new FormControl<string | null>('', { validators: Validators.required }),
       executionTime: new FormControl<string | null>('', { validators: Validators.required }),
       thundrShowHide: new FormControl<boolean | null>({value: false, disabled: false}),
-      crashFiles: new FormControl<string | null>(''),
-      logFiles: new FormControl<string | null>('')
+      isAdvanced: new FormControl<boolean | null>({value: false, disabled: false}),
+      crashFilesPath: new FormControl<string | null>(''),
+      logFilesPath: new FormControl<string | null>('')
     })
   }
 
   moduleSubmit():void{
+    this.moduleFormSubmitted = true;
+    if(this.createModuleForm.invalid){
+      return
+     }else{
+      let moduleObj = {
+          moduleName:this.createModuleForm.value.moduleName,
+          testGroup: this.createModuleForm.value.testGroup,
+          executionTime: this.createModuleForm.value.executionTime,
+          userGroup: this.loggedinUser.userGroupName,
+          moduleLogFileNames:this.logFilesArr?this.logFilesArr:[],
+          moduleCrashLogFiles:this.crashFilesArr?this.crashFilesArr:[],
+          moduleCategory: this.categoryName,
+          moduleThunderEnabled:this.isThunder?true:false,
+          moduleAdvanced: this.isAdvanced?true:false
+        }
+        this.moduleservice.createModule(moduleObj).subscribe({
+          next:(res)=>{
+            this._snakebar.open(res, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+            })
+            setTimeout(() => {
+              this.createModuleForm.reset();
+              this.router.navigate(["configure/modules-list"]);
+            }, 1000);
+          },
+          error:(err)=>{
+            this._snakebar.open(err.error?err.error:(JSON.parse(err.error)).message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+              })
+            }
+          })
+    }
   }
-
   /**
    * Navigates back to the modules list page.
    */
@@ -93,8 +133,13 @@ export class ModulesCreateComponent {
   thundrEnable(event: any):void{
     const inputEle = event.target as HTMLInputElement;
     this.isThunder = inputEle.checked;
+    
   }
-
+  
+  isAdvancedCheck(event: any):void{
+    const inputEle = event.target as HTMLInputElement;
+    this.isAdvanced = inputEle.checked;
+  }
   /**
    * Removes a crash file from the `crashFilesArr` array at the specified index.
    * @param index - The index of the crash file to remove.
@@ -113,24 +158,35 @@ export class ModulesCreateComponent {
    * Adds a crash file to the `crashFilesArr` array.
    */
   addCrash(): void {
-    const value = this.createModuleForm.get('crashFiles')?.value.trim();
+    const value = this.createModuleForm.get('crashFilesPath')?.value.trim();
     if (value) {
       this.crashFilesArr.push(value);
-      this.createModuleForm.get('crashFiles')?.setValue('');
+      this.createModuleForm.get('crashFilesPath')?.setValue('');
     }
-  
+  }
+  modifyCrash(item: any, index: number){
+    if(item != ""){
+      this.createModuleForm.get('crashFilesPath')?.setValue(item);
+      this.removeCrash(index);
+    }
   }
   /**
    * Adds logs to the logFilesArr array.
    */
   addLogs(): void {
-    const value = this.createModuleForm.get('logFiles')?.value.trim();
+    const value = this.createModuleForm.get('logFilesPath')?.value.trim();
     if (value) {
       this.logFilesArr.push(value);
-      this.createModuleForm.get('logFiles')?.setValue('');
+      this.createModuleForm.get('logFilesPath')?.setValue('');
+      
     }
   }
-
+  modifyLogs(item: any, index: number):void{
+    if(item != ""){
+      this.createModuleForm.get('logFilesPath')?.setValue(item);
+      this.removeLogs(index);
+    }
+  }
 
 
 }

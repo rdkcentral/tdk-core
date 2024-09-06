@@ -120,6 +120,8 @@ export class GroupListComponent implements OnInit {
     if (confirm("Are you sure want to delete ? ")) {
       this.service.deleteUserGroup(data.userGroupId).subscribe({
         next: (res) => {
+          this.rowData = this.rowData.filter((row: any) => row.userGroupId !== data.userGroupId);
+          this.rowData = [...this.rowData];
           this._snakebar.open(res, '', {
             duration: 3000,
             panelClass: ['success-msg'],

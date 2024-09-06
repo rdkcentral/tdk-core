@@ -46,6 +46,7 @@ export class EditBoxManufacturerComponent implements OnInit {
   errormessage!: string;
   validationName = 'box manufacturer'
   placeholderName = 'Box Manufacturer Name'
+  labelName = "Name";
 
   constructor(private route: ActivatedRoute, private router: Router,
     public service: UsergroupService, private _snakebar: MatSnackBar,

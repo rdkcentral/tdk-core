@@ -29,7 +29,7 @@ export class AuthService {
    * The selected configuration value.
    */
   selectedConfigVal: string = 'RDKV';
-
+  selectedCategory! : string ;
   /**
    * The current route.
    */

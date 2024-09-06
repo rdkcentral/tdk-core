@@ -17,104 +17,115 @@ limitations under the License.
     <div class="row mt-2">
         <div class="col">
             <mat-card class="card-height">
-                <mat-card-content>
                     <div class="container container-box" id="container-box">
                         <div class="form-container create-group">
-                            <h1 class="title">Create {{configureName}} Module</h1>
+                            <h1 class="title">Create {{categoryName}} Module</h1>
                             <form [formGroup]="createModuleForm" (ngSubmit)="moduleSubmit()" data-bs-spy="scroll">
                                 <div class="row mb-3">
-                                    <label for="moduleName" class="col-md-3 col-form-label offset-1">Module Name<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="moduleName" formControlName="moduleName"
-                                            placeholder="Enter Module Name">
-                                        <div *ngIf="moduleFormSubmitted && createModuleForm.controls['moduleName']?.errors"
-                                            class="text-danger">
-                                            <small
-                                                *ngIf="createModuleForm.controls['moduleName']?.errors?.['required']">Please
-                                                enter module name.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="testGroup" class="col-md-3 col-form-label offset-1">Test Group<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-    
-                                    <div class="col-md-7">
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="testGroup" id="testGroup">
-                                            <option value="" default>Select Test Group</option>
-                                            @for (item of testGroupArr; track $index) {
-                                                <option value="{{item.name}}">{{item.name}}</option>
-                                                }
-                                        </select>
-                                        <div *ngIf="moduleFormSubmitted && createModuleForm.controls['testGroup']?.errors" class="text-danger">
-                                            <small *ngIf="createModuleForm.controls['testGroup']?.errors?.['required']">
-                                                please select test group.
-                                            </small>
-                                        </div>
-    
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="executionTime" class="col-md-3 col-form-label offset-1">Execution TimeOut <span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-7">
-                                        <input  class="form-control" id="executionTime" formControlName="executionTime"
-                                            placeholder="Enter Execution TimeOut" inputmode="numeric" oninput="this.value = this.value.replace(/\D+/g, '')" >
-                                        <div *ngIf="moduleFormSubmitted && createModuleForm.controls['executionTime']?.errors" class="text-danger">
-                                            <small *ngIf="createModuleForm.controls['executionTime']?.errors?.['required']">
-                                                please enter execution timeout.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-3">
-                                    <label for="isThunder" class="col-md-3 col-form-label offset-1">Is Thunder Enabled</label>
-                                    <div class="col-md-7 check-thunder">
-                                        <div class="form-check form-check-inline form-check-reverse">
-                                            <input class="form-check-input thunder" type="checkbox" id="isThunder" formControlName="thundrShowHide"
-                                            (change)="thundrEnable($event)" >
-                                          </div>
-                                    </div>
-                                  </div>
-                                    <div class="row mb-3">
-                                        <label for="crashFiles" class="col-md-3 col-form-label offset-1">Crash Files</label>
-                                        <div class="col-md-7">
-                                            <div class="chip-group">
-                                                <input type="text" class="form-control" id="crashFiles" formControlName="crashFiles"
-                                                placeholder="Enter Crash Files">
-                                                <button type="button" class="back-btn chip-btn" (click)="addCrash()"><i class="bi bi-plus-circle"></i></button>
-                                            </div>
-                                            @for (item of crashFilesArr; track $index) {
-                                                <div class="chips-container">
-                                                    <span class="chip-text">{{item}}</span>
-                                                    <button type="button" class="chip-cancel-btn" (click)="removeCrash($index)"><i class="bi bi-x-circle"></i></button>
+                                    <div class="col ">
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <label for="moduleName" class="col-form-label">Module Name<span
+                                                    style="color:red; margin-left: 0.75em;">*</span></label>
+                                          
+                                                <input type="text" class="form-control" id="moduleName" formControlName="moduleName"
+                                                    placeholder="Enter Module Name">
+                                                <div *ngIf="moduleFormSubmitted && createModuleForm.controls['moduleName']?.errors"
+                                                    class="text-danger">
+                                                    <small
+                                                        *ngIf="createModuleForm.controls['moduleName']?.errors?.['required']">Please
+                                                        enter module name.</small>
                                                 </div>
-                                            }
-                                
+                                            </div>
                                         </div>
-                                      </div>
-
-                                    <div class="row mb-3">
-                                        <label for="logFiles" class="col-md-3 col-form-label offset-1">Log Files</label>
-                                        <div class="col-md-7">
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <label for="executionTime" class="col-form-label">Execution Timeout (in mins) <span
+                                                    style="color:red; margin-left: 0.75em;">*</span></label>
+                                            
+                                                <input  class="form-control" id="executionTime" formControlName="executionTime"
+                                                    placeholder="Enter Execution Timeout (in mins)" inputmode="numeric" oninput="this.value = this.value.replace(/\D+/g, '')" >
+                                                <div *ngIf="moduleFormSubmitted && createModuleForm.controls['executionTime']?.errors" class="text-danger">
+                                                    <small *ngIf="createModuleForm.controls['executionTime']?.errors?.['required']">
+                                                        please enter execution timeout (in mins).
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="crashFiles" class="col-form-label">Crash Files Path</label>
+                                                <div class="chip-group">
+                                                    <input type="text" class="form-control" id="crashFiles" formControlName="crashFilesPath"
+                                                    placeholder="Enter Crash Files Path">
+                                                    <button type="button" class="back-btn chip-btn" (click)="addCrash()"><i class="bi bi-plus-circle"></i></button>
+                                                </div>
+                                                @for (item of crashFilesArr; track $index) {
+                                                    <div class="chips-container" (click)="modifyCrash(item, $index)">
+                                                        <span class="chip-text">{{item}}</span>
+                                                        <button type="button" class="chip-cancel-btn" (click)="removeCrash($index)"><i class="bi bi-x-circle"></i></button>
+                                                    </div>
+                                                }
+                                  
+                                        </div>
+                                    </div>
+                                    <div class="col offset-1">
+                                        <div class="row mb-3">
+                                            <div class="col-md-12">
+                                                <label for="testGroup" class="col-form-label">Test Group<span
+                                                    style="color:red; margin-left: 0.75em;">*</span></label>
+                                        
+                                                <select class="form-select" aria-label="Default select example"
+                                                    formControlName="testGroup" id="testGroup">
+                                                    <option value="" default>Select Test Group</option>
+                                                    @for (item of testGroupArr; track $index) {
+                                                        <option value="{{item}}">{{item}}</option>
+                                                        }
+                                                </select>
+                                                <div *ngIf="moduleFormSubmitted && createModuleForm.controls['testGroup']?.errors" class="text-danger">
+                                                    <small *ngIf="createModuleForm.controls['testGroup']?.errors?.['required']">
+                                                        please select test group.
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <div class="col-md-6">
+                                                <label for="isThunder" class="col-form-label">Is Thunder Enabled</label>
+                                                <div class="check-thunder">
+                                                    <div class="form-check form-check-inline form-check-reverse">
+                                                        <input class="form-check-input thunder" type="checkbox" id="isThunder" formControlName="thundrShowHide"
+                                                        (change)="thundrEnable($event)" >
+                                                      </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                    <label for="isAdvance" class="col-form-label">Is Advanced</label>
+                                                    <div class="check-thunder">
+                                                        <div class="form-check form-check-inline form-check-reverse">
+                                                            <input class="form-check-input thunder" type="checkbox" id="isAdvance" formControlName="isAdvanced"
+                                                            (change)="isAdvancedCheck($event)" >
+                                                          </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                        <div class="row mb-3">
+                                            <label for="logFiles" class="col-form-label">Log Files Path</label>
                                             <div class="chip-group">
-                                                <input type="text" class="form-control" id="logFiles" formControlName="logFiles"
-                                                placeholder="Enter Log Files">
+                                                <input type="text" class="form-control" id="logFiles" formControlName="logFilesPath"
+                                                    placeholder="Enter Log Files Path">
                                                 <button type="button" class="back-btn chip-btn" (click)="addLogs()"><i class="bi bi-plus-circle"></i></button>
                                             </div>
-                                            @for (item of logFilesArr; track $index) {
-                                                <div class="chips-container">
-                                                    <span class="chip-text">{{item}}</span>
-                                                    <button type="button" class="chip-cancel-btn" (click)="removeLogs($index)"><i class="bi bi-x-circle"></i></button>
-                                                </div>
-                                            }
+                                                @for (item of logFilesArr; track $index) {
+                                                    <div class="chips-container" (click)="modifyLogs(item, $index)">
+                                                        <span class="chip-text">{{item}}</span>
+                                                        <button type="button" class="chip-cancel-btn" (click)="removeLogs($index)"><i class="bi bi-x-circle"></i></button>
+                                                    </div>
+                                                }
                                         </div>
-                                      </div>
-                           
+                                    </div>
+                                </div>
                                 <div class="row">
-                                    <div class="mt-2 createbtn">
+                                    <div class="mt-2 createbtn text-end">
                                         <button type="button" class="back-btn create-btn" (click)="goBack()">Back</button>
                                         <button type="button" class="back-btn create-btn" (click)="reset()">Reset</button>
                                         <button type="submit" class="create-btn">Create</button>
@@ -123,7 +134,6 @@ limitations under the License.
                             </form>
                         </div>
                     </div>
-                </mat-card-content>
             </mat-card>
         </div>
     </div>

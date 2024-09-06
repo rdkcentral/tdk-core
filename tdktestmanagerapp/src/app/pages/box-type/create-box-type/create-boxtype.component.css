@@ -17,26 +17,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-.header {
-    background-color: #0e6f87;
-    color: #fff;
-    height: 60px;
-    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
-}
-
-.logo-img {
-    width: 8%;
-}
-
-.apptitle {
-    color: #fff;
-    font-size: 1.5rem !important;
-    font-weight: 500;
-    margin-left: 15px;
-}
 
 .title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 5px 0 5px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
@@ -56,7 +39,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .container-box form {
-    background-color: #fff;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -64,10 +46,6 @@ http://www.apache.org/licenses/LICENSE-2.0
     height: 90%;
 }
 
-
-.mt-2 {
-    margin-top: 1.5rem !important;
-}
 
 .mt-2.createbtn {
     display: flex;
@@ -79,18 +57,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 .back-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
     margin-right: 10px;
-}
-
-.back-btn {
-    margin-right: 20px;
 }
 
 ::ng-deep .dropdown-list {

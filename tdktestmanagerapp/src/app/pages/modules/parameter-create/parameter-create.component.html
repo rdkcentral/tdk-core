@@ -20,7 +20,7 @@ limitations under the License.
                 <mat-card-content>
                     <div class="container container-box" id="container-box">
                         <div class="form-container create-group">
-                            <h1 class="title">Create {{configureName}} Parameter</h1>
+                            <h1 class="title">Create Parameter</h1>
                             <form [formGroup]="parameterForm" (ngSubmit)="parameterFormSubmit()" data-bs-spy="scroll">
                                 <div class="row mb-4">
                                     <label for="paraName" class="col-md-3 col-form-label offset-1">Parameter Name<span
@@ -37,15 +37,15 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-4">
-                                    <label for="parameterType" class="col-md-3 col-form-label offset-1">Parameter Type Enum<span
+                                    <label for="parameterType" class="col-md-3 col-form-label offset-1">Parameter Type<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
     
                                     <div class="col-md-7">
                                         <select class="form-select" aria-label="Default select example"
                                             formControlName="parameterType" id="parameterType">
                                             <option value="" default>Select Parameter Type</option>
-                                            @for (item of testGroupArr; track $index) {
-                                                <option value="{{item.name}}">{{item.name}}</option>
+                                            @for (item of parameterType; track $index) {
+                                                <option value="{{item}}">{{item}}</option>
                                                 }
                                         </select>
                                         <div *ngIf="paraFormSubmitted && parameterForm.controls['parameterType']?.errors" class="text-danger">
@@ -74,18 +74,14 @@ limitations under the License.
                                             style="color:red; margin-left: 0.75em;">*</span></label>
     
                                     <div class="col-md-7">
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="module" id="module">
-                                            <option value="" default>Select Module</option>
-                                            @for (item of testGroupArr; track $index) {
-                                                <option value="{{item.name}}">{{item.name}}</option>
-                                                }
-                                        </select>
-                                        <div *ngIf="paraFormSubmitted && parameterForm.controls['module']?.errors" class="text-danger">
-                                            <small *ngIf="parameterForm.controls['module']?.errors?.['required']">
-                                                please select test group.
-                                            </small>
-                                        </div>
+                                        <input type="text" class="form-control" id="module" formControlName="module"
+                                        placeholder="Enter Function Name" readonly>
+                                    <div *ngIf="paraFormSubmitted && parameterForm.controls['module']?.errors"
+                                        class="text-danger">
+                                        <small
+                                            *ngIf="parameterForm.controls['module']?.errors?.['required']">Please
+                                            enter function name.</small>
+                                    </div>
                                     </div>
                                 </div>
                                 <div class="row mb-4">
@@ -93,18 +89,14 @@ limitations under the License.
                                             style="color:red; margin-left: 0.75em;">*</span></label>
     
                                     <div class="col-md-7">
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="function" id="function">
-                                            <option value="" default>Select Function</option>
-                                            @for (item of testGroupArr; track $index) {
-                                                <option value="{{item.name}}">{{item.name}}</option>
-                                                }
-                                        </select>
-                                        <div *ngIf="paraFormSubmitted && parameterForm.controls['function']?.errors" class="text-danger">
-                                            <small *ngIf="parameterForm.controls['function']?.errors?.['required']">
-                                                please select function.
-                                            </small>
-                                        </div>
+                                        <input type="text" class="form-control" id="module" formControlName="function"
+                                        placeholder="Enter Function Name" readonly>
+                                    <div *ngIf="paraFormSubmitted && parameterForm.controls['function']?.errors"
+                                        class="text-danger">
+                                        <small
+                                            *ngIf="parameterForm.controls['function']?.errors?.['required']">Please
+                                            enter function name.</small>
+                                    </div>
                                     </div>
                                 </div>
                                 <div class="row">

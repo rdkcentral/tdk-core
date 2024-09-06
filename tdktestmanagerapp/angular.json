@@ -13,6 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
+            "allowedCommonJsDependencies": ["file-saver"],
             "outputPath": "dist/tdktest-manager-app",
             "index": "src/index.html",
             "browser": "src/main.ts",
@@ -20,14 +21,27 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              "src/assets",
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor",
+                "output": "./assets/monaco-editor/"
+              },
+              {
+                "glob": "**/*",
+                "input": "node_modules/monaco-editor/min-maps",
+                "output": "./assets/min-maps/"
+              }
             ],
             "styles": [
-              "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css",
-              "node_modules/bootstrap/dist/css/bootstrap.min.css"
+              "@angular/material/prebuilt-themes/indigo-pink.css",
+              "./node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "node_modules/ag-grid-community/styles/ag-grid.css",
+              "node_modules/ag-grid-community/styles/ag-theme-quartz.css"
             ],
             "scripts": [
               "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"
@@ -41,16 +55,19 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 },
                 {
                   "type": "anyComponentStyle",
-                  "maximumWarning": "2kb",
-                  "maximumError": "4kb"
+                  "maximumWarning": "4mb",
+                  "maximumError": "4mb"
                 }
               ],
-              "outputHashing": "all"
+              "outputHashing": "all",
+              "optimization": {
+                "styles": false
+              }
             },
             "development": {
               "optimization": false,
@@ -86,15 +103,22 @@
               "zone.js/testing"
             ],
             "tsConfig": "tsconfig.spec.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
               "src/assets"
             ],
             "styles": [
+              "src/styles.css",
               "@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.css"
+              "node_modules/ag-grid-community/styles/ag-grid.css",
+              "node_modules/ag-grid-community/styles/ag-theme-quartz.css"
+
             ],
-            "scripts": []
+            "scripts": [],
+            "karmaConfig": "karma.conf.js",
+            "main": "src/test.ts"
+          
           }
         }
       }

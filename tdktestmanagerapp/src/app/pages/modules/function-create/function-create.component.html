@@ -20,7 +20,7 @@ limitations under the License.
                 <mat-card-content>
                     <div class="container container-box" id="container-box">
                         <div class="form-container create-group">
-                            <h1 class="title">Create {{configureName}} Function</h1>
+                            <h1 class="title">Create Function</h1>
                             <form [formGroup]="functionForm" (ngSubmit)="functionSubmit()" data-bs-spy="scroll">
                                 <div class="row mb-4">
                                     <label for="functionName" class="col-md-3 col-form-label offset-1">Function Name<span
@@ -41,16 +41,11 @@ limitations under the License.
                                             style="color:red; margin-left: 0.75em;">*</span></label>
     
                                     <div class="col-md-7">
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="module" id="module">
-                                            <option value="" default>Select Module</option>
-                                            @for (item of testGroupArr; track $index) {
-                                                <option value="{{item.name}}">{{item.name}}</option>
-                                                }
-                                        </select>
-                                        <div *ngIf="functionFormSubmitted && functionForm.controls['module']?.errors" class="text-danger">
-                                            <small *ngIf="functionForm.controls['module']?.errors?.['required']">
-                                                please select test group.
+                                        <input type="text" class="form-control" id="moduleName" formControlName="moduleName"
+                                            placeholder="Enter Module Name">
+                                        <div *ngIf="functionFormSubmitted && functionForm.controls['moduleName']?.errors" class="text-danger">
+                                            <small *ngIf="functionForm.controls['moduleName']?.errors?.['required']">
+                                                please enter module.
                                             </small>
                                         </div>
     

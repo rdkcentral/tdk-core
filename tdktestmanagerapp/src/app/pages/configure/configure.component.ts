@@ -91,6 +91,15 @@ export class ConfigureComponent implements OnInit {
     if (val === 'modules') {
       this.router.navigate(['configure/modules-list']);
     }
+    if (val === 'scripttags') {
+      this.router.navigate(['configure/scripttag-list']);
+    }
+    if (val === 'rdkversions') {
+      this.router.navigate(['configure/list-rdkversions']);
+    }
+    if (val === 'prmitivetest') {
+      this.router.navigate(['configure/list-primitivetest']);
+    }
   }
 
   /**

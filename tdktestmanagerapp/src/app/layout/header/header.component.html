@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<mat-toolbar>
+<mat-toolbar class="main-heading">
   <img src="assets/logo/rdkLogo.png" alt="TDK_logo" class="logo-img img-fluid" /><span class="apptitle">TDK Test
     Development Kit</span>
   <div class="divider"></div>
@@ -34,7 +34,7 @@ limitations under the License.
 
   <span class="displayname">Welcome, {{loggedInUser.displayName}} </span>
   <button mat-icon-button [matMenuTriggerFor]="menu">
-    <mat-icon>account_circle</mat-icon>
+    <mat-icon class="material-icons">account_circle</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
     <a mat-menu-item routerLink="/change-password"><mat-icon>vpn_key</mat-icon>Change Password</a>
@@ -58,7 +58,8 @@ limitations under the License.
           <a class="nav-link text-white menugap" routerLink="/analysis" routerLinkActive="active">ANALYSIS</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/script" routerLinkActive="active">SCRIPT</a>
+          <a class="nav-link text-white menugap" routerLink="/script"(click)="navigateToScript()" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:false}">SCRIPT</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white menugap" routerLink="/devices" routerLinkActive="active"
