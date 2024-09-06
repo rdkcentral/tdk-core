@@ -153,7 +153,7 @@ export class LoginComponent implements OnInit {
       this.allGroupName = res;
     })
 
-
+   
   }
   /**
    * Validates if the password and retype password fields match.
@@ -289,7 +289,6 @@ export class LoginComponent implements OnInit {
     if (this.ldapForm.invalid) {
       return;
     } else {
-      console.log(this.ldapForm.value);
     }
   }
 

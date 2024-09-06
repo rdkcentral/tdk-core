@@ -1,0 +1,174 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+import { CommonModule } from '@angular/common';
+import { HttpClientModule } from '@angular/common/http';
+import { Component } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MaterialModule } from '../../../material/material.module';
+import { testGroupModel } from '../../models/manageusermodel';
+import { AuthService } from '../../../auth/auth.service';
+import { Router } from '@angular/router';
+import { ModulesService } from '../../../services/modules.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
+@Component({
+  selector: 'app-modules-edit',
+  standalone: true,
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, MaterialModule],
+  templateUrl: './modules-edit.component.html',
+  styleUrl: './modules-edit.component.css'
+})
+export class ModulesEditComponent {
+
+  configureName!:string;
+  updateModuleForm!:FormGroup;
+  moduleFormSubmitted = false;
+  testGroupArr:testGroupModel[] = [];
+  crashFilesArr: string[] = [];
+  logFilesArr: string[] = [];
+  isThunder :boolean = false;
+  isAdvanced :boolean = false;
+  moduleDetails:any;
+  loggedinUser: any;
+
+  constructor(private authservice: AuthService,private router: Router,
+    private moduleservice: ModulesService,private _snakebar :MatSnackBar,
+  ) {
+    let data = JSON.parse(localStorage.getItem('modules') || '{}');
+    this.moduleDetails = data;
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+   }
+
+  ngOnInit(): void {
+    this.configureName = this.authservice.selectedConfigVal;
+    this.moduleservice.getAllTestGroups().subscribe((res:any) => {
+      this.testGroupArr = JSON.parse(res);
+    });
+    this.updateModuleForm = new FormGroup({
+      moduleName: new FormControl<string | null>(this.moduleDetails.moduleName, { validators: Validators.required }),
+      testGroup: new FormControl<string | null>(this.moduleDetails.testGroup, { validators: Validators.required }),
+      executionTime: new FormControl<string | null>(this.moduleDetails.executionTime, { validators: Validators.required }),
+      thundrShowHide: new FormControl<boolean | null>({value: this.isThunder?this.isThunder:this.moduleDetails.moduleThunderEnabled, disabled: false}),
+      isAdvanced: new FormControl<boolean | null>({value: this.isAdvanced?this.isAdvanced:this.moduleDetails.moduleAdvanced, disabled: false}),
+      crashFiles: new FormControl<string | null>(''),
+      logFiles: new FormControl<string | null>('')
+    })
+    this.crashFilesArr = this.moduleDetails.moduleCrashLogFiles;
+    this.logFilesArr = this.moduleDetails.moduleLogFileNames;
+  }
+
+  thundrEnable(event: any):void{
+    const inputEle = event.target as HTMLInputElement;
+    this.isThunder = inputEle.checked;
+  }
+  
+  isAdvancedCheck(event: any):void{
+    const inputEle = event.target as HTMLInputElement;
+    this.isAdvanced = inputEle.checked;
+  }
+    /**
+   * Removes a crash file from the `crashFilesArr` array at the specified index.
+   * @param index - The index of the crash file to remove.
+   */
+    removeCrash(index: number):void {
+      this.crashFilesArr.splice(index, 1);
+    }
+    /**
+     * Removes a log file from the logFilesArr array at the specified index.
+     * @param index - The index of the log file to remove.
+     */
+    removeLogs(index: number):void {
+      this.logFilesArr.splice(index, 1);
+    }
+    /**
+     * Adds a crash file to the `crashFilesArr` array.
+     */
+    addCrash(): void {
+      const value = this.updateModuleForm.get('crashFiles')?.value.trim();
+      if (value) {
+        this.crashFilesArr.push(value);
+        this.updateModuleForm.get('crashFiles')?.setValue('');
+        
+      }
+    
+    }
+    /**
+     * Adds logs to the logFilesArr array.
+     */
+    addLogs(): void {
+      const value = this.updateModuleForm.get('logFiles')?.value.trim();
+      if (value) {
+        this.logFilesArr.push(value);
+        this.updateModuleForm.get('logFiles')?.setValue('');
+        
+      }
+    }
+
+  moduleUpdate():void{
+    this.moduleFormSubmitted = true;
+    if(this.updateModuleForm.invalid){
+      return;
+    }else{
+      let moduleObj = {
+        id:this.moduleDetails.id,
+        moduleName:this.updateModuleForm.value.moduleName,
+        testGroup: this.updateModuleForm.value.testGroup,
+        executionTime: this.updateModuleForm.value.executionTime,
+        userGroup: this.loggedinUser.userGroupName,
+        moduleLogFileNames:this.logFilesArr?this.logFilesArr:[],
+        moduleCrashLogFiles:this.crashFilesArr?this.crashFilesArr:[],
+        moduleCategory: this.configureName,
+        moduleThunderEnabled: this.updateModuleForm.value.thundrShowHide,
+        moduleAdvanced: this.updateModuleForm.value.isAdvanced
+      }
+      this.moduleservice.updateModule(moduleObj).subscribe({
+        next:(res)=>{
+          this._snakebar.open(res, '', {
+          duration: 3000,
+          panelClass: ['success-msg'],
+          verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            // this.updateModuleForm.reset();
+            this.router.navigate(["configure/modules-list"]);
+          }, 1000);
+        },
+        error:(err)=>{
+          this._snakebar.open(err.error?err.error:(JSON.parse(err.error)).message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      })
+    }
+
+  }
+
+  goBack():void{
+    this.router.navigate(["/configure/modules-list"]);
+    localStorage.removeItem('modules');
+  }
+
+  reset():void{
+    this.updateModuleForm.reset();
+  }
+}

@@ -40,7 +40,8 @@ export class GroupAddComponent implements OnInit {
   errormessage: any;
   validationName = 'user group';
   placeholderName = 'User Group Name';
-
+  labelName = 'Name';
+  
   constructor(private router: Router,
     public service: UsergroupService, private route: ActivatedRoute,
     private _snakebar: MatSnackBar) {

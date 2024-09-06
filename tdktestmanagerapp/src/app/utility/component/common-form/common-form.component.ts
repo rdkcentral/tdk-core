@@ -40,6 +40,7 @@ export class CommonFormComponent implements OnChanges{
   @Input() formTitle:any
   @Input()validationName:any;
   @Input()placeholderName:any;
+  @Input()labelName:any;
   createUpdateForm!: FormGroup;
   user:any;
   
@@ -70,6 +71,16 @@ export class CommonFormComponent implements OnChanges{
         this.createUpdateForm.controls['name'].patchValue(this.initialValue.socVendorName);
       }
     }
+    if(this.route.snapshot.url[1].path ==='scripttag-edit'){
+      if (changes['initialValue'] && this.initialValue) {
+        this.createUpdateForm.controls['name'].patchValue(this.initialValue.scriptTagName);
+      }
+    }
+    if(this.route.snapshot.url[1].path ==='edit-rdkversions'){
+      if (changes['initialValue'] && this.initialValue) {
+        this.createUpdateForm.controls['name'].patchValue(this.initialValue.buildVersionName);
+      }
+    }
 
   }
   onSubmit(): void {
@@ -89,7 +100,12 @@ export class CommonFormComponent implements OnChanges{
     if(this.route.snapshot.url[1].path ==='create-socvendor'|| this.route.snapshot.url[1].path === 'edit-socvendor'){
       this.router.navigate(['configure/list-socvendor']);
     }
-
+    if(this.route.snapshot.url[1].path ==='scripttag-create'|| this.route.snapshot.url[1].path === 'scripttag-edit'){
+      this.router.navigate(['configure/scripttag-list']);
+    }
+    if(this.route.snapshot.url[1].path ==='create-rdkversions'|| this.route.snapshot.url[1].path === 'edit-rdkversions'){
+      this.router.navigate(['configure/list-rdkversions']);
+    }
   }
   reset(){
     this.formSubmitted.emit(this.createUpdateForm.reset());

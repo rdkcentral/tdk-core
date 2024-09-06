@@ -95,8 +95,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .registerform {
-    height: 90% !important;
-    margin-top: 0px !important;
+    /* height: 90% !important; */
+    margin-top: 10px !important;
+    overflow-y: auto;
+    display: block !important;
 }
 
 .form-container {
@@ -112,7 +114,7 @@ input::placeholder{
     padding: .3rem .75rem;
   }
   .form-select{
-    font-size: 15px;
+    font-size: 0.8rem;
   }
 .sign-in {
     left: 0;
@@ -239,6 +241,9 @@ input::placeholder{
 .parent {
     height: 75vh;
     margin-top: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .header {

@@ -59,6 +59,23 @@ import { FunctionListComponent } from './pages/modules/function-list/function-li
 import { ModulesCreateComponent } from './pages/modules/modules-create/modules-create.component';
 import { FunctionCreateComponent } from './pages/modules/function-create/function-create.component';
 import { ParameterCreateComponent } from './pages/modules/parameter-create/parameter-create.component';
+import { ListScriptTagComponent } from './pages/script-tag/list-script-tag/list-script-tag.component';
+import { CreateScriptTagComponent } from './pages/script-tag/create-script-tag/create-script-tag.component';
+import { EditScriptTagComponent } from './pages/script-tag/edit-script-tag/edit-script-tag.component';
+import { CreateRdkVersionsComponent } from './pages/rdk-versions/create-rdk-versions/create-rdk-versions.component';
+import { ListRdkVersionsComponent } from './pages/rdk-versions/list-rdk-versions/list-rdk-versions.component';
+import { EditRdkVersionsComponent } from './pages/rdk-versions/edit-rdk-versions/edit-rdk-versions.component';
+import { ListPrimitiveTestComponent } from './pages/primitive-test/list-primitive-test/list-primitive-test.component';
+import { CreatePrimitiveTestComponent } from './pages/primitive-test/create-primitive-test/create-primitive-test.component';
+import { ModulesEditComponent } from './pages/modules/modules-edit/modules-edit.component';
+import { ModulesViewComponent } from './pages/modules/modules-view/modules-view.component';
+import { FunctionEditComponent } from './pages/modules/function-edit/function-edit.component';
+import { FunctionViewComponent } from './pages/modules/function-view/function-view.component';
+import { ParameterEditComponent } from './pages/modules/parameter-edit/parameter-edit.component';
+import { ParameterViewComponent } from './pages/modules/parameter-view/parameter-view.component';
+import { ScriptListComponent } from './pages/script/script-list/script-list.component';
+import { CreateScriptsComponent } from './pages/script/create-scripts/create-scripts.component';
+import { EditPrimitiveTestComponent } from './pages/primitive-test/edit-primitive-test/edit-primitive-test.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -103,8 +120,26 @@ export const routes: Routes = [
             {path: 'configure/function-list', title: 'Function', component:FunctionListComponent},
             {path: 'configure/parameter-list', title: 'Parameter', component:ParameterListComponent},
             {path: 'configure/modules-create', title: 'Module Create', component:ModulesCreateComponent},
+            {path: 'configure/modules-edit', title: 'Module Edit', component:ModulesEditComponent},
+            {path: 'configure/modules-view', title: 'Module View', component:ModulesViewComponent},
             {path: 'configure/function-create', title: 'Function Create', component:FunctionCreateComponent},
-            {path: 'configure/parmeter-create', title: 'Parmeter Create', component:ParameterCreateComponent}
+            {path: 'configure/function-edit', title: 'Function Edit', component:FunctionEditComponent},
+            {path: 'configure/function-view', title: 'Function View', component:FunctionViewComponent},
+            {path: 'configure/parmeter-create', title: 'Parmeter Create', component:ParameterCreateComponent},
+            {path: 'configure/parameter-edit', title: 'Parmeter Edit', component:ParameterEditComponent},
+            {path: 'configure/parameter-view', title: 'Parmeter View', component:ParameterViewComponent},
+            {path: 'configure/scripttag-list', title: 'Script Tags ', component:ListScriptTagComponent},
+            {path: 'configure/scripttag-create', title: 'ScriptTags Create', component: CreateScriptTagComponent},
+            {path: 'configure/scripttag-edit', title: 'ScriptTags Edit', component: EditScriptTagComponent},
+            {path: 'configure/list-rdkversions',title:'List RDK Versions',component:ListRdkVersionsComponent},
+            {path: 'configure/create-rdkversions',title:'Create RDK Versions',component:CreateRdkVersionsComponent},
+            {path: 'configure/edit-rdkversions',title:'Edit RDK Versions',component:EditRdkVersionsComponent},
+            {path: 'configure/list-primitivetest',title:'List PrimitiveTest',component:ListPrimitiveTestComponent},
+            // {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
+            {path: 'configure/edit-primitivetest',title:'Edit PrimitiveTest',component:EditPrimitiveTestComponent},
+            {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
+            {path:'script', title:'Script', component:ScriptListComponent},
+            {path:'script/create-scripts', title:'Cretae Script', component:CreateScriptsComponent}
         ]
     }
 ];

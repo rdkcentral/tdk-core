@@ -45,6 +45,7 @@ export class CreateBoxManufacturerComponent implements OnInit {
   validationName = 'box manufacturer'
   placeholderName = 'Box Manufacturer Name'
   loggedinUser: any={};
+  labelName = 'Name'
 
   constructor(private router: Router, public service: BoxManufactureService,
     private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService) {
@@ -71,31 +72,34 @@ export class CreateBoxManufacturerComponent implements OnInit {
       "boxManufacturerCategory": this.authservice.selectedConfigVal,
       "boxManufacturerUserGroup": this.loggedinUser.userGroupName
     }
-    this.service.createBoxManufacture(obj).subscribe({
-      next: (res) => {
-        this._snakebar.open(res, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-        })
-        setTimeout(() => {
-          this.router.navigate(["configure/list-boxManufacturer"]);
+    if(name !== undefined && name !== null){
+      this.service.createBoxManufacture(obj).subscribe({
+        next: (res) => {
+          this._snakebar.open(res, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            this.router.navigate(["configure/list-boxManufacturer"]);
+  
+          }, 1000);
+  
+        },
+        error: (err) => {
+          let errmsg = JSON.parse(err.error);
+          this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
+          this._snakebar.open(this.errormessage, '', {
+            duration: 4000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+  
+      })
+    }
 
-        }, 1000);
-
-      },
-      error: (err) => {
-        let errmsg = JSON.parse(err.error);
-        this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
-        this._snakebar.open(this.errormessage, '', {
-          duration: 4000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }
-
-    })
   }
 
 

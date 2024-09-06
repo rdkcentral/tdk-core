@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container-fluid">
+<div class="container-fluid mb-3">
     <div class="row">
         <div class="col">
             <div class="parent mt-2">
@@ -22,7 +22,7 @@ limitations under the License.
                         <h1 class="title">Update {{configureName.toUpperCase()}} BoxType</h1>
                         <form [formGroup]="updateBoxTypeForm" (ngSubmit)="updateBoxType()" data-bs-spy="scroll">
                             <div class="row mb-4">
-                                <label for="boxtypeName" class="col-md-3 col-form-label offset-1">Box Type Name</label>
+                                <label for="boxtypeName" class="col-md-3 col-form-label offset-1">Box Type Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 <div class="col-md-7">
                                     <input type="text" class="form-control" id="boxtypeName"
                                         formControlName="boxtypeName" placeholder="Enter Box Type Name">
@@ -35,7 +35,7 @@ limitations under the License.
                                 </div>
                             </div>
                             <div class="row mb-4">
-                                <label for="Boxtype" class="col-md-3 col-form-label offset-1">Type</label>
+                                <label for="Boxtype" class="col-md-3 col-form-label offset-1">Type <span style="color:red; margin-left: 0.75em;">*</span></label>
 
                                 <div class="col-md-7">
                                     <select class="form-select" aria-label="Default select example" id="Boxtype"

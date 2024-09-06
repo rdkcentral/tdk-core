@@ -41,7 +41,8 @@ export class GroupEditComponent {
   commonFormName = 'Update';
   errormessage!: string;
   placeholderName = 'User Group Name';
-
+  labelName = 'Name';
+  
   constructor(private route: ActivatedRoute, private router: Router,
     public service: UsergroupService, private _snakebar: MatSnackBar
   ) {

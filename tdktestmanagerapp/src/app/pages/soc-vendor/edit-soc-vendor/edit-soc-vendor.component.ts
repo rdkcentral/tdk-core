@@ -45,6 +45,7 @@ export class EditSocVendorComponent {
   errormessage!: string;
   validationName = 'soc vendor';
   placeholderName = 'Soc Vendor Name';
+  labelName = 'Name';
 
   constructor(private route: ActivatedRoute, private router: Router, private _snakebar: MatSnackBar,
     public service: SocVendorService, private authservice: AuthService) {

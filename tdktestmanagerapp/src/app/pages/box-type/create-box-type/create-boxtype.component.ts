@@ -60,7 +60,7 @@ export class CreateBoxtypeComponent implements OnInit {
    */
   ngOnInit(): void {
     this.createBoxTypeForm = this.formBuilder.group({
-      boxtypeName: ['', [Validators.required, Validators.minLength(4)]],
+      boxtypeName: ['', [Validators.required, Validators.minLength(3)]],
       selectBoxtype: ['', Validators.required],
       subBoxtype: ['']
     });

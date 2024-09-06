@@ -17,22 +17,29 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    /* font-family: 'IBM Plex Serif', serif; */
+}
+.main-heading{
+    height: 35px;
+}
 .divider {
     flex: 1 1 auto;
 }
 
 .logo-img {
-    width: 8%;
+    width: 7%;
 }
 
 .apptitle {
-    font-size: 1.5rem !important;
+    font-size: 1.2rem !important;
     font-weight: 500;
     margin-left: 15px;
 }
 
 .displayname {
-    font-size: 1rem;
+    font-size: 0.85rem;
     font-weight: 400;
 }
 .theme-btn{
@@ -44,7 +51,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .themeicon {
     color: #fff;
-    font-size: 1.2rem;
+    font-size: 1rem;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -54,13 +61,29 @@ http://www.apache.org/licenses/LICENSE-2.0
     width: 100%;
     margin: 0 12%;
 }
+::ng-deep .mat-mdc-slide-toggle .mdc-switch__handle:has(.mdc-switch__icons) {
+    width: 18px !important;
+    height: 18px !important;
+}
+::ng-deep .mdc-switch__track {
+    height: 12px !important;
+    width: 90% !important;
+}
 
 .menulist {
     display: flex;
     justify-content: space-around;
+    font-size: 0.75rem;
+    letter-spacing: 0.06rem;
 }
 
 li.nav-item :hover {
     font-weight: 500;
     text-shadow: 1px 1px 1px black;
+}
+.header {
+   height: 30px;
+}
+.nav-link{
+    padding: 0px 0px 0px 0px;
 }

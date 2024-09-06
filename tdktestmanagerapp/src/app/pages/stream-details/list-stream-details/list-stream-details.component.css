@@ -17,20 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
-.logo-img {
-    width: 8%;
-}
-
-.apptitle {
-    color: #fff;
-    font-size: 1.5rem !important;
-    font-weight: 500;
-    margin-left: 15px;
+.container-fluid{
+    margin-bottom: 2rem;
 }
 
 .title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 0px 0 5px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
@@ -40,7 +32,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .title2 {
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 0px 0 5px 0;
     border-image-slice: 1;
@@ -50,9 +42,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 .create-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
     margin-right: 138px;
-    padding: 10px 20px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -63,9 +55,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 .back-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
     margin-right: 10px;
-    padding: 10px 20px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -76,9 +68,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 .create-radiobtn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
     margin-right: 138px;
-    padding: 10px 20px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;

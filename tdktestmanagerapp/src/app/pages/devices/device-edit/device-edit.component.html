@@ -14,13 +14,12 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row mt-4">
+    <div class="row mt-1">
         <div class="col-md-12">
-            <mat-card>
-                <mat-card-content>
+            <mat-card class="card-height">
                     <h1 class="title">Update {{configureName.toUpperCase()}} Device</h1>
                     <div *ngIf="showHideCreateFormV">
-                    <form [formGroup]="editDeviceVForm" (ngSubmit)="EditDeviceVSubmit()" class="userform mt-5">
+                    <form [formGroup]="editDeviceVForm" (ngSubmit)="EditDeviceVSubmit()" class="userform mt-3">
                         <div class="row">
                             <div class="col">
                                 <div class="row mb-3">
@@ -83,7 +82,7 @@ limitations under the License.
                                     <div class="col-md-8">
                                         <div class="form-check form-check-inline form-check-reverse">
                                             <input class="form-check-input thunder" type="checkbox" id="isthunderEnabled" formControlName="isThunder"
-                                            [checked]="isthunderEnabled" (change)="isChecked($event)">
+                                            [checked]="isThunderchecked" (change)="isChecked($event)">
                                           </div>
                                     </div>
                                   </div>
@@ -101,11 +100,11 @@ limitations under the License.
                                     <div class="col-md-8">
                                       <div class="configbtngrp">
                                         <button type="button" class="btn btn-outline-secondary newconfigfile" 
-                                        data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                        <span>{{configFileName ==='device.config'? 'Create New':''}}</span> {{configFileName}} File
+                                        (click)="existDeviceDialog()">
+                                        <span>{{configFileName ==='sampleDevice.config'? 'Create New Device Config': configFileName}}</span> File
                                       </button>
                                       <button type="button" class="btn btn-outline-secondary newconfigfile" 
-                                        *ngIf="visibleDeviceconfigFile" >Create New Device.config File
+                                        *ngIf="visibleDeviceconfigFile" (click)="openNewDeviceDialog()">Create New Config File
                                       </button>
                                       </div>
                                     </div>
@@ -193,7 +192,7 @@ limitations under the License.
                                   </div>
                             </div>
                         </div>
-                        <div class="row table-sec mt-3" *ngIf="showTable">
+                        <div class="row table-sec mt-3" *ngIf="streamingTable">
                           <div class="ag-table mb-3">
                               <ag-grid-angular
                               style="width: 100%; height: 320px;"
@@ -470,7 +469,7 @@ limitations under the License.
                           </div>
                       </div>
                       <div class="row">
-                          <div class="mt-2 text-end">
+                          <div class="mt-1 btns-grps text-end">
                               <button class="reset-btn" (click)="goBack()">Back</button>
                               <button class="reset-btn" (click)="reset()">Reset</button>
                               <button type="button" class="reset-btn" (click)="downloadFile()"> Download</button>
@@ -479,8 +478,141 @@ limitations under the License.
                       </div>
                   </form>
                   </div>
-                </mat-card-content>
             </mat-card>
         </div>
     </div>
 </div>
+
+ <!-- Modal Start-->
+ <ng-template #dialogTemplate>
+  <mat-dialog-content class="exsit-modal-content">
+    <div class="config-modal">
+      <div class="config-content">
+        <form [formGroup]="uploadConfigForm" (ngSubmit)="configFileUpload()">
+        <div class="config-header">
+           <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename"  readonly>
+           <div *ngIf="configFileName == 'sampleDevice.config'">
+              <button type="button" class="btn btn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()"  matTooltip="Change FileName" >
+              <i class="bi bi-toggles2 toogle-name"></i>
+            </button>
+           </div>
+            <button type="button" class="btn btn-outline-primary btn-sm delete-config" (click)="deleteDeviceConfigFile(configFileName)" matTooltip="Delete Config File">
+              <i class="bi bi-trash-fill delete-fill"></i>
+          </button>
+  
+          <button type="button" class="btn btn-outline-primary btn-sm delete-config"  matTooltip ="Download config file">
+            <i class="bi bi-download download-icon"></i>
+          </button>
+  
+          <!-- <button type="button" class="btn btm-secondary btn-sm toggleBtn" (click)="toggleMaximize()" 
+            matTooltip ="" >
+            <i [class]=" 'bi ' + (isMaximized ? 'bi-fullscreen-exit toggleIcon' : 'bi-fullscreen toggleIcon') "></i>
+          </button> -->
+  
+
+        </div>
+        <div class="existModal-body">
+          <div class="row">
+            <div class="col changefile-name">
+              <!-- <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename"  [readOnly]="!isEditingFile">
+              <button type="button" class="btn bbtn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()" 
+              data-bs-toggle="tooltip" [attr.data-bs-title]="toolTipText" data-bs-placement="bottom" >
+              <i [class]=" 'bi ' + (isEditingFile ? 'bi-check-circle' : 'bi-pencil') "></i>
+            </button> -->
+            </div>
+            <div class="col uploadconfig">
+              <button type="button" class="download-btn backEditor" (click)="backToExistingEditor()" *ngIf="backToExistEditorbtn">Back</button>
+              <button type="button" class="download-btn" (click)="openExistingModal('Upload Configuration File')" *ngIf="showExistUploadButton">Upload Configuration File</button>
+            </div>
+          </div>
+            <div class="editor-container mt-4 exist-config" *ngIf="existingConfigEditor">
+              <ngx-editor [editor]="editor"  formControlName="editorContent"></ngx-editor>  
+              <div *ngIf="existConfigSubmitted && uploadConfigForm.controls['editorContent']?.errors" class="text-danger">
+                <small *ngIf="uploadConfigForm.controls['editorContent']?.errors?.['required']">Please add some content</small>
+            </div>  
+            </div>
+  
+            <div class="container mt-5 upload-container" *ngIf="uploadExistingConfig">
+              <div class="row mb-3"> 
+                  <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                      <div class="col-md-8">
+                          <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" (change)="onExistConfigChange($event)">
+                          <!-- <div *ngIf="submitted && uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors" class="text-danger">
+                              <small *ngIf="uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors?.['required']">Please select the config file.</small>
+                          </div> -->
+                  </div>
+              </div>
+          </div>
+        </div>
+        <div class="modal-btns">
+          <button type="button" class="download-btn" (click)="closeDialog()">Close</button>
+          <button type="submit" class="download-btn">Upload</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+ <!-- Modal End -->
+
+ <!-- Device Modal Start-->
+<ng-template #newDeviceTemplate>
+  <mat-dialog-content class="exsit-modal-content">
+    <div class="config-modal">
+      <div class="config-content">
+        <form [formGroup]="uploadDeviceConfigForm" (ngSubmit)="configDeviceFileUpload()">
+        <div class="config-header newdevice-header">
+          <h1 class="modal-title device-title" id="staticBackdropLabel">{{uploadCreateHeading}}</h1>
+  
+          <!-- <button type="button" class="btn btm-secondary btn-sm toggleBtn" (click)="toggleMaximizeDevice()" 
+           data-bs-placement="bottom" title="{{isMaximized?'Exit FullScreen':'FullScreen'}}">
+           <i [class]=" 'bi ' + (isMaximized ? 'bi-fullscreen-exit toggleIcon' : 'bi-fullscreen toggleIcon') "></i></button>
+  
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        -->
+        </div>
+        <div class="existModal-body">
+          <div class="row">
+            <div class="col changefile-name">
+              <input type="text" id="configFilename" class="form-control config-input device-input" formControlName="editorFilename"  [readOnly]="!isEditingFile">
+              <button type="button" class="btn bbtn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()" 
+                matTooltip="Change FileName" >
+              <i [class]=" 'bi ' + (isEditingFile ? 'bi-check-circle' : 'bi-pencil') "></i>
+            </button>
+            </div>
+            <div class="col uploadconfig">
+              <button type="button" class="download-btn backEditor" (click)="backToEditor('Create New Device Config File')" *ngIf="backToEditorbtn">Back</button>
+              <button type="button" class="download-btn" (click)="openUploadFile('Upload Configuration File')" *ngIf="showUploadButton">Upload Configuration File</button>
+            </div>
+          </div>
+  
+            <div class="device-container mt-4 device-editor" *ngIf="deviceEditor">
+              <ngx-editor [editor]="editor2"  formControlName="editorContent"></ngx-editor> 
+              <div *ngIf="submitted && uploadDeviceConfigForm.controls['editorContent']?.errors" class="text-danger">
+                <small *ngIf="uploadDeviceConfigForm.controls['editorContent']?.errors?.['required']">Please add some content</small>
+            </div>  
+            </div>
+  
+            <div class="container mt-5 upload-container" *ngIf="uploadConfigSec">
+              <div class="row mb-3"> 
+                  <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                      <div class="col-md-8">
+                          <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" formControlName="uploadConfigFileModal" (change)="onModalFileChange($event)">
+                          <!-- <div *ngIf="submitted && uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors" class="text-danger">
+                              <small *ngIf="uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors?.['required']">Please select the config file.</small>
+                          </div> -->
+                  </div>
+              </div>
+          </div>
+  
+        </div>
+        <div class="modal-btns">
+          <button type="button" class="download-btn" (click)="closeNewDeviceDialog()">Close</button>
+          <button type="submit" class="download-btn">Upload</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </mat-dialog-content>
+</ng-template>
+ <!-- Device Modal End-->

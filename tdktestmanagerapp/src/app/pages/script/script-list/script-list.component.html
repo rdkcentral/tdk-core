@@ -1,0 +1,72 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row radiobox-row mt-1">
+        <div class=" showrdkgrouprow mt-1">
+            <h1 class="title"> {{headingName}} Script Summary</h1>
+                <div class="row mt-2">
+                    <div class="download-row">
+                        <button type="button" class="download-btn" matTooltip="Download All Script Details"><i class="bi bi-download download-icon"></i> All Script Details</button>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                    <div class="col-md-2">
+                            <span >Select Category</span>
+                            <div >
+                                <select class="form-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange(selectedCategory)" name="dropdown" id="dropdown">
+                                    <option *ngFor="let option of categories" [value]="option">{{ option }}</option>
+                                </select>
+                            </div>
+                          </div>
+                    <div class="col-md-2">
+                            <span >Select View</span>
+                            <div >
+                                  <select class="form-select" aria-label="Default select example" id="selectBoxtype" name="selectBoxtype"
+                                  >
+                                  <option value="Scripts">Scripts</option>
+                                  <option value="TestSuites">TestSuites</option>
+                              </select>
+                            </div>
+                    </div>
+                    <div class="col-md-8">
+                        <label ></label>
+                        <div class="btns-group">
+                            <button type="button" class="download-btn" matTooltip="Download All {{selectedCategory}} Script"><i class="bi bi-download download-icon"></i> All {{selectedCategory}} Script </button>
+                            <button type="button" class="download-btn" matTooltip="Download All {{selectedCategory}} test cases"><i class="bi bi-download download-icon"></i> All {{selectedCategory}} test cases </button>
+                            <button type="button" class="uploadbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
+                                <i class="bi bi-upload download-icon"></i> {{selectedCategory}} Script
+                            </button>
+                            <button class="download-btn create" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Script</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-1">
+                </div>
+                
+                    <div class="ag-table mb-3 mt-1" style="display: flex; justify-content: center;">
+                        <ag-grid-angular style="width: 100%; height: 395px;" [columnDefs]="columnDefs"
+                            [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
+                            [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
+                            [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
+                            [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true"
+                             [context]="this">
+                        </ag-grid-angular>
+                    </div>
+               
+        </div>
+    </div>
+</div>
+

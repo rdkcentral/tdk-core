@@ -25,9 +25,30 @@ body {
   height: 100%;
   margin: 0;
   padding: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-
+html,body,*:not(.material-icons){
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  /* font-family: 'Roboto Slab', serif; */
+  /* font-family: 'IBM Plex Serif', serif; */
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  /* font-family: 'IBM Plex Serif', serif; */
+}
+.material-icons {
+  font-family: 'Material Icons' !important;
+}
+.light-footer1{
+  fill: #00B2DC;
+}
+.light-footer2{
+  fill: #0e6f87;
+}
 
 /* darl-light theme css start  */
 .dark{
@@ -37,7 +58,14 @@ body {
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
   }
   .header {
-    background-color: #0d0d0e94;
+    /* background-color: #0d0d0e94; */
+    background-color: #272f3cf2;
+    border-bottom: 1px solid #00b2dc5c;
+  }
+  .mat-mdc-menu-panel .mat-mdc-menu-content{
+    /* background-color: #272F3C !important; */
+    --mat-menu-container-color: #272F3C !important;
+    color: #fff !important;
   }
   footer {
     background-color: #272F3C;
@@ -51,13 +79,13 @@ body {
   .active {
     font-weight: 500;
     text-shadow: 1px 1px 1px black;
-    background-color: #404040;
+    background-color: #111;
   }
   mat-drawer-container{
     background-color: #272F3C;
     padding-bottom: 10px;
   }
-  .title , .title2{
+  .title , .title2,.streaming-details{
     color: #fff;
   }
   .radiobox-row{
@@ -65,15 +93,16 @@ body {
     color: #fff;
   }
   .ag-theme-quartz {
-    --ag-header-background-color: #212121;
-    --ag-background-color: #212121;
+    --ag-header-background-color: #000;
+    --ag-background-color: #000;
     --ag-foreground-color: #fff;
     --ag-border-color: #fff;
+    --ag-font-size: 0.78rem;
   }
   .card-height ,.form-control, .form-select, .form-select:focus, .container-box{
-    background-color: #212121;
+    background-color: #242931;
   }
-  .form-control, .form-select ,.form-select:focus{
+  .form-control, .multiselect-dropdown, .form-select ,.form-select:focus{
     color: #fff;
   }
   .col-form-label{
@@ -81,6 +110,19 @@ body {
   }
   input::placeholder{
     color: #fff;
+    font-size: 0.8rem !important;
+  }
+  .form-select{
+    font-size: 0.8rem !important;
+  }
+  .chips-container {
+    background-color: #636979;
+  }
+  .newconfigfile{
+    color: #fff;
+  }
+  .thunder-hints{
+    color: #8db0f2;
   }
 }
 .light{
@@ -116,13 +158,40 @@ body {
   .ag-theme-quartz {
     --ag-header-background-color: rgb(209, 212, 212);
     --ag-background-color: #fff;
+    --ag-font-size: 0.78rem;
   }
-
-  
+  input::placeholder{
+    font-size: 0.8rem !important;
+  }
+  .form-control{
+    border: 1px solid #0e6f8794;
+    font-size: 0.8rem !important;
+  }
+  .form-select{
+    font-size: 0.8rem !important;
+    border: 1px solid #0e6f8794;
+  }
+  .multiselect-dropdown{
+    border: 1px solid #0e6f8794 !important;
+    border-radius: 5px !important;
+    font-size: 0.8rem !important;
+}
+  .chips-container{
+    background-color: #92c849;
+  }
+  .newconfigfile{
+    color: #00273F;
+  }
+  .thunder-hints{
+    color: blue;
+  }
 }
 
 /* darl-light theme css end  */
 
+.col-form-label{
+  font-size: 0.8rem !important;
+}
 .ag-cell {
   border: none !important;
 }
@@ -181,13 +250,17 @@ body {
 }
 .view-title{
   color: #00273F;
-  font-size: 1.3rem;
+  font-size: 1rem !important;
   text-align: center;
   padding: 0px 0 10px 0;
   border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
   border-image-slice: 1;
   border-image-width: 0px 0px 4px 0px;
   margin: 0 25px;
+}
+.close{
+  font-size: 0.8rem !important;
+  padding: 8px 20px !important;
 }
 
 /* .ag-theme-quartz .ag-header-cell:not(.no-sort) .ag-header-icon {

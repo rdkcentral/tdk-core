@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, OnInit, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
@@ -36,6 +36,8 @@ import { InputComponent } from '../../../utility/component/ag-grid-buttons/input
 import { StreamingTemplatesService } from '../../../services/streaming-templates.service';
 import {  Editor, NgxEditorModule } from 'ngx-editor';
 import { Modal } from 'bootstrap';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-device-create',
@@ -46,8 +48,8 @@ import { Modal } from 'bootstrap';
   styleUrl: './device-create.component.css'
 })
 export class DeviceCreateComponent implements OnInit{
-  @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
-  @ViewChild('deviceBackdrop', {static: false}) deviceBackdrop?:ElementRef;
+  @ViewChild('dialogTemplate', { static: true }) dialogTemplate!: TemplateRef<any>;
+  @ViewChild('newDeviceTemplate', { static: true }) newDeviceTemplate!: TemplateRef<any>;
   deviceForm!: FormGroup;
   rdkBForm!:FormGroup;
   rdkCForm!:FormGroup;
@@ -61,7 +63,7 @@ export class DeviceCreateComponent implements OnInit{
   allboxManufacture:any;
   allsocVendors:any;
   allGatewayDevices:any;
-  showTable= false;
+  streamingTable= false;
   errormessage!:string;
   rowData:any = [];
   public themeClass: string = "ag-theme-quartz";
@@ -209,11 +211,17 @@ export class DeviceCreateComponent implements OnInit{
   showExistUploadButton = true;
   backToExistEditorbtn = false;
   uploadExistConfigHeading!: string;
-  
+  dialogRef!: MatDialogRef<any>;
+  newDeviceDialogRef!: MatDialogRef<any>;
+  selectedBoxType:any;
+  isThunderPresent: any;
+  streamingTempList:any[]=[];
+  visibleStreamingList = false;
+
   constructor( private router: Router,private fb:FormBuilder,
     private _snakebar :MatSnackBar, private boxManufactureService:BoxManufactureService, 
     private service:DeviceService, private socVendorService:SocVendorService, private boxtypeService:BoxtypeService,
-    private streamingService :StreamingTemplatesService, private renderer:Renderer2
+    private streamingService :StreamingTemplatesService, private renderer:Renderer2,public dialog:MatDialog
   ) { 
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     this.frameworkComponents = {
@@ -256,6 +264,7 @@ export class DeviceCreateComponent implements OnInit{
       boxmanufacturer: new FormControl<string | null>('', { validators: Validators.required }),
       socvendor: new FormControl<string | null>('', { validators: Validators.required}),
       gateway: new FormControl<string | null>(''),
+      streamingTemp: new FormControl<string | null>(''),
       thunderport:new FormControl<string | null>(''),
       isThunder: new FormControl<boolean | null>({value: false, disabled: true}),
       configuredevicePorts:new FormControl<boolean | null>(false),
@@ -304,6 +313,8 @@ export class DeviceCreateComponent implements OnInit{
       editorContent: ['',[Validators.required]],
       uploadConfigFileModal:['']
     });
+    this.getTemplatelist();
+
   }
 
   /**
@@ -321,24 +332,21 @@ export class DeviceCreateComponent implements OnInit{
       this.isThunderchecked = false;
     }
   }
-  /**
-   * Editor modal close.
-   */
-  close(): void{
-    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
-  }
-  /**
-   * Editor device modal close.
-   */
-  closeDeviceModal(): void{
-    (this.deviceBackdrop?.nativeElement as HTMLElement).style.display = 'none';
-  }
+
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
   onGridReady(params: any): void {
     this.gridApi = params.api;
+  }
+  /**
+   * The method render the list of streaming template.
+   */
+  getTemplatelist():void{
+    this.service.streamingTemplateList().subscribe(res=>{
+      this.streamingTempList = JSON.parse(res);
+    })
   }
  /**
    * list of all boxtype.
@@ -380,18 +388,77 @@ export class DeviceCreateComponent implements OnInit{
       }
     }
   }
+  streamTempChange(event:any):void{
+    const tempName = event.target.value;
+    if(tempName != null || tempName != ''){
+      this.service.streamingDetailsByTemplate(tempName).subscribe(res=>{
+        this.rowData = JSON.parse(res);
+      })
+    }
+    if(tempName === null || tempName === ''){
+      this.streamingService.getstreamingdetails().subscribe(res=>{
+        this.rowData = res;
+      })
+    }
+  }
+  /**
+   * This methos is change the boxtype 
+  */ 
+    boxtypeChange(event:any): void{
+      this.visibleDeviceconfigFile = false;
+      let value = event.target.value;
+      this.boxTypeValue = value;
+      const dropdown = event.target as HTMLSelectElement
+      this.checkIsThunderValidity();
+      this.service.isBoxtypeGateway(value).subscribe(res=>{
+        this.isGateway = res;
+        if(this.isGateway === 'true'){
+          this.isrecorderId = true;
+        }else{
+          this.isrecorderId = false;
+        }
+      })
+      const selectedType = this.allBoxType.find((item:any) => item.boxTypeName === dropdown.value)
+      this.selectedBoxType = selectedType;
+      localStorage.setItem('boxtypeDropdown',JSON.stringify(selectedType));
+      if( selectedType.type === 'CLIENT' || selectedType.type ==='STAND_ALONE_CLIENT'){
+        this.visibleGateway = true;
+        this.visibleStreamingList = false;
+        this.service.getlistofGatewayDevices(this.selectedDeviceCategory).subscribe(res=>{
+          this.allGatewayDevices = JSON.parse(res)
+        })
+      }else{
+        this.visibleGateway = false;
+        this.visibleStreamingList = true;
+      }
+      if(this.isThunderchecked){
+        this.showPortFile = true;
+        this.visibilityConfigFile();
+      }
+      if (this.selectedBoxType.type ==='STAND_ALONE_CLIENT' || this.selectedBoxType.type ==='GATEWAY') {
+        this.streamingTable = !this.isThunderchecked;
+      } else if (this.selectedBoxType.type ==="CLIENT") {
+        this.streamingTable = false;
+      }
+    }
   /**
    * Isthunder is checked or unchecked 
   */
   thunderChecked(event:any): void{
+    this.isThunderPresent = event.target.checked;
     this.isThunderchecked = !this.isThunderchecked;
     if(this.isThunderchecked){
       this.showPortFile = true;
-      this.showTable = false;
+      this.streamingTable = false;
       this.visibilityConfigFile();
     }else{
       this.showPortFile = false;
-      this.showTable = false;
+      this.streamingTable = false;
+    }
+    if (this.selectedBoxType.type ==='STAND_ALONE_CLIENT' || this.selectedBoxType.type ==='GATEWAY') {
+      this.streamingTable = !this.isThunderchecked;
+    } else if (this.selectedBoxType.type ==="CLIENT") {
+      this.streamingTable = false;
     }
   }
 
@@ -402,7 +469,8 @@ export class DeviceCreateComponent implements OnInit{
     let boxNameConfig = this.deviceForm.value.stbname;
     let boxTypeConfig = this.deviceForm.value.boxtype; 
     this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig)
-    .subscribe((res)=>{ 
+    .subscribe({ 
+      next:(res)=>{
       this.configFileName = res.filename;
       if(this.configFileName !== `${boxNameConfig}.config` && this.stbNameChange !== undefined && this.stbNameChange !== ""){
         this.visibleDeviceconfigFile = true;
@@ -425,6 +493,11 @@ export class DeviceCreateComponent implements OnInit{
         editorFilename: this.stbNameChange+'.config',
         editorContent: this.configData
       })
+    },
+    error(err){
+      const sts = err.status;
+    }
+
     })
   }
   /**
@@ -463,14 +536,7 @@ export class DeviceCreateComponent implements OnInit{
     }
     reader.readAsText(file)
   }
-  /**
-   * Lifecycle hook that is called when the component is destroyed.
-   * It is used to perform any necessary cleanup logic before the component is removed from the DOM.
-   */
-  ngOnDestroy():void{
-    this.editor.destroy();
-    this.editor2.destroy();
-  }
+
   /**
    * Formats the content by replacing all occurrences of '#' with '<br># '.
    * 
@@ -478,7 +544,13 @@ export class DeviceCreateComponent implements OnInit{
    * @returns The formatted content.
    */
   formatContent(content:any){
-    return content.replace(/#/g, '<br># ');
+    return `<p>${content.replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/####/g, '#####')
+      .replace(/=======/g, '=======')
+      .replace(/\n/g, '<br>')
+    }
+    </p>`;
   }
 
   isConfigDevicePorts(event:any): void{
@@ -498,37 +570,12 @@ export class DeviceCreateComponent implements OnInit{
     }
   }
   /**
-   * This methos is change the boxtype 
-  */ 
-  boxtypeChange(event:any): void{
-    this.visibleDeviceconfigFile = false;
-    let value = event.target.value;
-    this.boxTypeValue = value;
-    const dropdown = event.target as HTMLSelectElement
-    this.checkIsThunderValidity();
-    this.service.isBoxtypeGateway(value).subscribe(res=>{
-      this.isGateway = res;
-      if(this.isGateway === 'true'){
-        this.isrecorderId = true;
-        this.showTable = true;
-      }else{
-        this.isrecorderId = false;
-        this.showTable = false;
-      }
-    })
-    const selectedType = this.allBoxType.find((item:any) => item.boxTypeName === dropdown.value)
-    if( selectedType.type === 'CLIENT' || selectedType.type ==='STAND_ALONE_CLIENT'){
-      this.visibleGateway = true;
-      this.service.getlistofGatewayDevices(this.selectedDeviceCategory).subscribe(res=>{
-        this.allGatewayDevices = JSON.parse(res)
-      })
-    }else{
-      this.visibleGateway = false;
-    }
-    if(this.isThunderchecked){
-      this.showPortFile = true;
-      this.visibilityConfigFile();
-    }
+   * Lifecycle hook that is called when the component is destroyed.
+   * It is used to perform any necessary cleanup logic before the component is removed from the DOM.
+   */
+  ngOnDestroy():void{
+    this.editor.destroy();
+    this.editor2.destroy();
   }
   /**
    * Go back to the previous page.
@@ -550,7 +597,7 @@ export class DeviceCreateComponent implements OnInit{
     if(this.deviceForm.invalid){
      return
     }else{
-     if(this.showTable==true){
+     if(this.streamingTable==true){
       const tableData :any[]=[];
       this.gridApi.forEachNode((element: any) => {
        tableData.push(element.data)
@@ -707,7 +754,7 @@ export class DeviceCreateComponent implements OnInit{
     }else{
       this.uploadConfigForm.get('editorFilename')?.disable();
     }
-    if(this.configFileName ==='device.config'){
+    if(this.configFileName ==='sampleDevice.config'){
       let boxNameConfig = this.deviceForm.value.stbname;
       let boxTypeConfig = this.deviceForm.value.boxtype;
       this.fileNameArray.push(boxNameConfig,boxTypeConfig);
@@ -767,7 +814,8 @@ export class DeviceCreateComponent implements OnInit{
       return;
     }else if(this.uploadExistConfigHeading ==='Upload Configuration File'){
       const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
-      const editorContent = this.uploadExistFileContent;
+      const content = this.uploadExistFileContent;
+      const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
       this.service.uploadConfigFile(contentFile).subscribe({
@@ -779,9 +827,12 @@ export class DeviceCreateComponent implements OnInit{
           })
           setTimeout(() => {
             this.uploadConfigForm.get('uploadExistConfigFile')?.reset();
-            this.close();
+            if (this.dialogRef) {
+              this.dialogRef.close();
+              this.visibilityConfigFile();
+            }
             this.uploadExistConfigHeading ='';
-
+            
           }, 1000);
         },
         error:(err)=>{
@@ -797,7 +848,8 @@ export class DeviceCreateComponent implements OnInit{
     }else{
       const formData = new FormData();
       const editorFilename = this.uploadConfigForm.get('editorFilename')!.value;
-      const editorContent = this.uploadConfigForm.get('editorContent')!.value;
+      const content = this.uploadConfigForm.get('editorContent')!.value;
+      const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
       this.service.uploadConfigFile(contentFile).subscribe({
@@ -808,7 +860,8 @@ export class DeviceCreateComponent implements OnInit{
             verticalPosition: 'top'
           })
           setTimeout(() => {
-            this.close();
+            this.dialogRef.close();
+            this.visibilityConfigFile();
           }, 1000);
         },
         error:(err)=>{
@@ -839,6 +892,11 @@ export class DeviceCreateComponent implements OnInit{
     }
     reader.readAsText(file)
   }
+  replaceTags(content:string):string{
+    const replacepara = content.replace(/<\/?p>/g,'\n');
+    const replacebreakes = replacepara.replace(/<br\s*\/?>/g,'\n');
+    return replacebreakes.trim();
+  }
   /**
    * The method is upload the default device configfile of editor modal
    */
@@ -848,7 +906,8 @@ export class DeviceCreateComponent implements OnInit{
         return
       }else if(this.uploadCreateHeading ==='Upload Configuration File'){
         const editorFilename = this.uploadFileNameConfig;
-        const editorContent = this.uploadFileContent;
+        const content = this.uploadFileContent;
+        const editorContent  = this.replaceTags(content);
         const contentBlob = new Blob([editorContent], {type:'text/plain'});
         const contentFile = new File([contentBlob],editorFilename);
         this.service.uploadConfigFile(contentFile).subscribe({
@@ -860,7 +919,8 @@ export class DeviceCreateComponent implements OnInit{
             })
             setTimeout(() => {
               this.uploadDeviceConfigForm.get('uploadConfigFileModal')?.reset();
-              this.closeDeviceModal();
+              this.closeNewDeviceDialog();
+              this.visibilityConfigFile();
             }, 1000);
           },
           error:(err)=>{
@@ -875,7 +935,8 @@ export class DeviceCreateComponent implements OnInit{
         })
     }else{
       const editorFilename = this.uploadDeviceConfigForm.get('editorFilename')!.value;
-      const editorContent = this.uploadDeviceConfigForm.get('editorContent')!.value;
+      const content = this.uploadDeviceConfigForm.get('editorContent')!.value;
+      const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
       this.service.uploadConfigFile(contentFile).subscribe({
@@ -886,7 +947,8 @@ export class DeviceCreateComponent implements OnInit{
             verticalPosition: 'top'
           })
           setTimeout(() => {
-            this.closeDeviceModal();
+            this.closeNewDeviceDialog();
+            this.visibilityConfigFile();
           }, 1000);
         },
         error:(err)=>{
@@ -902,20 +964,7 @@ export class DeviceCreateComponent implements OnInit{
     }
   }  
 
-  /**
-   * Modal open when click on default device.config file
-   */
-  openDeviceModal(): void{
-    const modalElement = document.getElementById('deviceBackdrop');
-    if(modalElement){
-      const modal = new Modal(modalElement);
-      modal.show();
-      this.deviceEditor = true;
-      this.uploadConfigSec = false;
-      this.backToEditorbtn = false;
-      this.showUploadButton = true;
-    }
-  }
+
   /**
    * Opens the upload file section and sets the necessary flags and values.
    * @param value - The value to set the uploadCreateHeading property to.
@@ -940,20 +989,7 @@ export class DeviceCreateComponent implements OnInit{
     this.showUploadButton = true;
     this.uploadCreateHeading = value;
   }
-  /**
-   * Opens the existing configuration modal.
-   */
-  openExistConfigModal(): void{
-    const modalElement = document.getElementById('staticBackdrop');
-    if(modalElement){
-      const modal = new Modal(modalElement);
-      modal.show();
-      this.existingConfigEditor = true;
-      this.uploadExistingConfig = false;
-      this.backToExistEditorbtn = false;
-      this.showExistUploadButton = true;
-    }
-  }
+
   /**
    * Opens the existing modal with the specified value.
    * @param val - The value to be passed to the modal.
@@ -981,7 +1017,7 @@ export class DeviceCreateComponent implements OnInit{
    * Deletes a device configuration file.
    * @param configFileName - The name of the configuration file to delete.
    */
-  deleteDeviceConfigFile(configFileName:any):void{
+  deleteDeviceConfigFile(configFileName: any) {
     if (configFileName) {
       if (confirm("Are you sure to delete ?")) {
         this.service.deleteDeviceConfigFile(configFileName).subscribe({
@@ -992,7 +1028,9 @@ export class DeviceCreateComponent implements OnInit{
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
-            this.ngOnInit();
+            this.dialogRef.close();
+            this.showPortFile = true;
+            this.visibilityConfigFile();
           },
           error: (err) => {
             let errmsg = JSON.parse(err.error);
@@ -1004,8 +1042,45 @@ export class DeviceCreateComponent implements OnInit{
             })
           }
         })
+
       }
     }
-  }
 
+  }
+  existDeviceDialog(): void {
+    this.dialogRef = this.dialog.open(this.dialogTemplate, {
+      width: '90vw', 
+      height: '90vh' 
+    });
+  }
+  closeDialog(): void {
+    this.dialogRef.close();
+  }
+  openNewDeviceDialog(): void {
+    this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
+      width: '90vw', 
+      height: '90vh'
+    });
+  }
+  closeNewDeviceDialog(): void {
+    this.newDeviceDialogRef.close();
+  }
+  downloadConfigFile(){
+    this.service.downloadDeviceConfigFile(this.stbNameChange,this.boxTypeValue).subscribe({
+      next:(res)=>{
+        const filename = res.filename;
+        const blob = new Blob([res.content], { type: res.content.type || 'application/json' });
+        saveAs(blob, filename); 
+      },
+      error:(err)=>{
+        let errmsg = err.error;
+        this._snakebar.open(errmsg, '', {
+        duration: 2000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+        })
+      }
+    })
+  }
 }

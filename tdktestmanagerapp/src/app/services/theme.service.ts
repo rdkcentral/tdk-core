@@ -22,7 +22,6 @@ export class ThemeService {
   updateTheme():void{
     this.themeSignal.update(value =>(value === "light"?"dark":"light"));
     this.selectedTheme = this.themeSignal();
-    console.log(this.themeSignal());
     
   }
 

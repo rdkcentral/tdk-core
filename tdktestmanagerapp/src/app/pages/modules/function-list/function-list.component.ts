@@ -37,6 +37,9 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
 import { ModuleButtonComponent } from '../../../utility/component/modules-buttons/button/button.component';
+import { ModulesService } from '../../../services/modules.service';
+import { MatDialog } from '@angular/material/dialog';
+import { FunctionViewComponent } from '../function-view/function-view.component';
 
 @Component({
   selector: 'app-function-list',
@@ -69,7 +72,7 @@ export class FunctionListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onViewClick:this.view.bind(this),
+        onViewClick:this.openModal.bind(this),
         onParameterClick:this.createParameter.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
@@ -89,42 +92,30 @@ export class FunctionListComponent {
   isCheckboxSelected: boolean = false;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  constructor(private router: Router, private authservice: AuthService, private _snakebar: MatSnackBar
+  dynamicModuleName!:string;
+
+  constructor(private router: Router, private authservice: AuthService, 
+    private _snakebar: MatSnackBar,private moduleservice:ModulesService, public dialog:MatDialog,
   ) { }
+
   /**
    * Initializes the component.
   */
   ngOnInit(): void {
+    let data = JSON.parse(localStorage.getItem('modules') || '{}');
+    this.dynamicModuleName = data.moduleName;
     this.configureName = this.authservice.selectedConfigVal;
-    this.rowData = [
-        {
-            "moduleId": 1,
-            "functionName": "functionName 1",
-            "moduleCategory": "RDKV",
-            "moduleUserGroup": "comcast",
-            "testGroup":"Component",
-            "executionTimeOut": 15
-        },
-        {
-            "moduleId": 2,
-            "functionName": "functionName 2",
-            "moduleCategory": "RDKV",
-            "moduleUserGroup": "comcast",
-            "testGroup":"Component",
-            "executionTimeOut": 11
-        },
-        {
-            "moduleId": 8,
-            "functionName": "functionName 3",
-            "moduleCategory": "RDKV",
-            "moduleUserGroup": "comcast",
-            "testGroup":"Component",
-            "executionTimeOut": 1
-        }
-    ]
+    this.functionListByModule();
     
   }
-
+  /**
+   * Function to get the list of function by module name.
+  */
+  functionListByModule():void{
+    this.moduleservice.functionList(this.dynamicModuleName).subscribe( res=>{
+      this.rowData = JSON.parse(res);
+    })
+  }
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
@@ -158,7 +149,7 @@ export class FunctionListComponent {
   /**
    * Creates a new box manufacturer.
    */
-  createFunction() {
+  goTocreateFunctionPage() {
     this.router.navigate(['/configure/function-create']);
   }
   
@@ -167,10 +158,9 @@ export class FunctionListComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(user: any): any {
-      // localStorage.setItem('user', JSON.stringify(user))
-      // this.service.currentUrl = user.userGroupId;
-      // this.router.navigate(['configure/boxManufacturer-edit']);
+  userEdit(functions: any): any {
+      localStorage.setItem('functions', JSON.stringify(functions));
+      this.router.navigate(['configure/function-edit']);
   }
   /**
    * Deletes a record.
@@ -178,22 +168,54 @@ export class FunctionListComponent {
    */
   delete(data: any) {
     if (confirm("Are you sure to delete ?")) {
-
+      if(data){
+        this.moduleservice.deleteFunction(data.id).subscribe({
+          next:(res)=>{
+            this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
+            this.rowData = [...this.rowData];
+            this._snakebar.open(res, '', {
+              duration: 1000,
+              panelClass: ['success-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            })
+            
+          },
+          error:(err)=>{
+            const error = JSON.parse(err.error);
+            this._snakebar.open(error.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+            })
+          }
+        })
+      }
     }
 
   }
 
-  view(data:any){
+  openModal(data:any){
+    this.dialog.open( FunctionViewComponent,{
+      width: '99%',
+      height: '93vh',
+      maxWidth:'100vw',
+      panelClass: 'custom-modalbox',
+      data:{
+        functionName : data.functionName,
+        moduleName : data.moduleName,
+      }
+    })
   }
   createParameter(data:any){
-    localStorage.setItem('user', JSON.stringify(data));
+    localStorage.setItem('function', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
   /**
    * Navigates back to the previous page.
    */
   goBack() {
-    this.authservice.selectedConfigVal = 'RDKV';
     this.router.navigate(["/configure/modules-list"]);
   }
 

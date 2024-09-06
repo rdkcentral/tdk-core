@@ -17,13 +17,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+.container{
+    margin-bottom: 2rem;
+}
 .card-height{
-    height: 460px !important;
+    height: 416px !important;
     overflow-y: auto;
     display: block;
 }
 .title {
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
     padding: 0px 0 10px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
@@ -38,17 +41,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .container-box form {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 30px 18%;
+    margin: 10px 2rem;
 }
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 25px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -60,22 +60,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 .reset-btn {
     margin-right: 10px;
 }
-.createbtn{
-    text-align: center;
-}
+
 .crash-files{
     width: 100%;
 }
 .chip-group{
     display :flex;
 }
-.thunder{
-    border: 1px solid;
+.thunder {
+    border: 1px solid #0e6f8794;
 }
 .chip-btn{
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 1rem;
     border: 1px solid transparent;
     border-radius: 3px;
     letter-spacing: 0.5px;
@@ -84,16 +82,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 .chips-container{
     display: inline-flex;
     align-items: center;
-    background-color: #92c849;
     padding: 0.25rem 0.75rem;
-    margin: 0.7rem 0.5rem 0.5rem 0;
+    margin: 0.5rem 0.5rem 0.5rem 0.7rem;
     border-radius: 50px;
     box-shadow: 1px 2px 2px #666565;
     border: 1px solid #ccc;
+    width: auto;
+    cursor: pointer;
 }
 .chip-text{
     margin-right: 0.5rem;
-    font-size: 1.07rem;
+    font-size: .8rem;
     color: #fff;
 }
 .chip-cancel-btn{
@@ -102,4 +101,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     font-size: 1rem;
     border: none;
     cursor: pointer;
+}
+.check-thunder {
+    line-height: 3;
 }

@@ -25,7 +25,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 mat-drawer-container {
     flex: 1 1 auto;
-
+    position: relative;
+    z-index: 0;
     mat-drawer {
         width: 270px;
         padding: 1rem;

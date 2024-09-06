@@ -19,7 +19,13 @@ limitations under the License.
         </div>
     </div>
     <div class="row table-sec mt-2">
-        <div class="col-md-12 text-end">
+        <div class="col">
+            <button type="button" class="download-btn" (click)="dowloadAllModule()"><i class="bi bi-download download-icon"></i> Download all the {{configureName.toUpperCase()}} Module Details</button>
+            <button type="button" class="uploadbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                Upload Module XML File
+              </button>
+        </div>
+        <div class="col text-end">
             <button class="back-btn" (click)="goBack()">Back</button>
             <button class="create-btn" (click)="createModule()">Create {{configureName.toUpperCase()}}
                 Module
@@ -28,12 +34,41 @@ limitations under the License.
     </div>
     <div class="row table-sec mt-2">
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 80%; height: 390px;" [columnDefs]="columnDefs"
+            <ag-grid-angular style="width: 100%; height: 390px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
                 [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true"
                  [context]="this"></ag-grid-angular>
         </div>
+    </div>
+    <!-- Modal Start-->
+ <div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog custom-modal">
+      <div class="modal-content">
+        <form [formGroup]="uploadXMLForm" (ngSubmit)="uploadXMLSubmit()">
+        <div class="modal-header modaltitle">
+          <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Module XML File</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-4">
+                <div class="row mb-3"> 
+                    <label for="uploadfile" class="col-md-4  col-form-label">Select the module XML file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                        <div class="col-md-8">
+                            <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadXml" (change)="onFileChange($event)">
+                            <div *ngIf="uploadFormSubmitted && uploadXMLForm.controls['uploadXml']?.errors" class="text-danger">
+                                <small *ngIf="uploadXMLForm.controls['uploadXml']?.errors?.['required']">Please select the module xml file.</small>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="download-btn">Upload</button>
+          <button type="button" class="download-btn" data-bs-dismiss="modal">Close</button>
+        </div>
+        </form>
+      </div>
     </div>
 </div>

@@ -69,7 +69,7 @@ export class ListBoxtypeComponent implements OnInit {
    */
   public columnDefs: ColDef[] = [
     {
-      headerName: 'BoxType Name',
+      headerName: 'Name',
       field: 'boxTypeName',
       filter: 'agTextColumnFilter',
       flex: 1,
@@ -144,13 +144,14 @@ export class ListBoxtypeComponent implements OnInit {
       if (confirm("Are you sure to delete ?")) {
         this.service.deleteBoxType(data.boxTypeId).subscribe({
           next: (res) => {
+            this.rowData = this.rowData.filter((row: any) => row.boxTypeId !== data.boxTypeId);
+            this.rowData = [...this.rowData];
             this._snakebar.open(res, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
-            this.ngOnInit();
           },
           error: (err) => {
             let errmsg = JSON.parse(err.error);

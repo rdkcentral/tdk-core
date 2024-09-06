@@ -32,9 +32,10 @@ const apiUrl: string = GlobalConstants.apiUrl;
 export class DeviceService {
 
   deviceCategory!: string ;
-  // allPassedData: BehaviorSubject<any> = new BehaviorSubject<any>([]);
   fileName!: string;
-private storageKey = 'streamData';
+  private storageKey = 'streamData';
+  typeOfboxtypeDropdown!:string;
+
   constructor(private http: HttpClient, private authService: AuthService) { }
     
     isBoxtypeGateway(boxtype:any):Observable<any>{
@@ -106,13 +107,6 @@ private storageKey = 'streamData';
       return this.http.get(`${apiUrl}api/v1/device/downloadXML/${name}`, { headers, responseType: 'blob' })
     }
 
-    // getConfigFileData(): Observable<{filename:string,editorContent:string}>{
-    //   let res =  this.http.get('assets/AAML_TDK_PVS.config',{responseType: 'text'});
-    //   console.log(res);
-      
-    //   return of({filename:'sample.config',editorContent: JSON.stringify(res)})
-    // }
-
 
     uploadXMLFile(file: File): Observable<any> {
       const headers = new HttpHeaders({
@@ -120,13 +114,6 @@ private storageKey = 'streamData';
       });
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
-   
-      // Append additional data if any
-      // for (const key in additionalData) {
-      //   if (additionalData.hasOwnProperty(key)) {
-      //     formData.append(key, additionalData[key]);
-      //   }
-      // }
    
       return this.http.post(`${apiUrl}api/v1/device/uploadDeviceXML`, formData,{ headers, responseType: 'text' });
     }
@@ -137,7 +124,6 @@ private storageKey = 'streamData';
     });
     return this.http.get(`${apiUrl}api/v1/device/downloadDeviceConfigFile?boxName=${boxname}&boxType=${boxtype}`,{ headers, responseType: 'blob', observe:'response' }).pipe(
       map((response:HttpResponse<Blob>)=>{
-        console.log(response.headers.get('content-disposition'));
         const contentDisposition = response.headers.get('content-disposition');
         let filename = 'device.config';
         if(contentDisposition){
@@ -146,7 +132,11 @@ private storageKey = 'streamData';
             filename = matches[1];
           }
         }
-        return {filename, content:response.body}
+        const status = {
+          ...response.body,
+          statusCode: response.status
+        }
+        return {filename, content:response.body,status}
       })
     )
     
@@ -168,11 +158,26 @@ private storageKey = 'streamData';
     formData.append('uploadFile', file, file.name);
     return this.http.post(`${apiUrl}api/v1/device/uploadDeviceConfigFile`, formData,{ headers, responseType: 'text' });
   }
+
   deleteDeviceConfigFile(deviceConfigFileName:any){
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
     return this.http.delete(`${apiUrl}api/v1/device/deleteDeviceConfigFile?deviceConfigFileName=${deviceConfigFileName}`, { headers, responseType: 'text' });
   }
+   
+  streamingTemplateList():Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/streamingdetailstemplate/gettemplatelist`, { headers, responseType: 'text' })
+  }
   
+  streamingDetailsByTemplate(templateName:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/streamingdetailstemplate/getstreamingdetailsbytemplatename?templateName=${templateName}`, { headers, responseType: 'text' })
+  }
+
 }

@@ -64,6 +64,13 @@ export class HeaderComponent implements OnInit {
   logOut() {
     this.loginService.logoutUser();
     this.router.navigate(['/']);
+    localStorage.removeItem('theme');
+    const theme = this.themeService.selectedTheme;
+    if (theme === "dark") {
+      this.isChecked = true;
+    }else {
+      this.isChecked = false;
+    }
   }
 
   /**
@@ -72,11 +79,12 @@ export class HeaderComponent implements OnInit {
   navigateToPage() {
     this.service.selectedConfigVal = 'RDKV';
   }
-
+  navigateToScript(){
+    this.service.selectedCategory = 'RDKV';
+    localStorage.removeItem('scriptCategory');
+  }
   toggleTheme(){
     this.themeService.selectedTheme = this.themeService.themeSignal();
-    console.log(this.themeService.selectedTheme);
-    
     this.themeService.updateTheme();
     this.isChecked = !this.isChecked;
     if(this.isChecked){

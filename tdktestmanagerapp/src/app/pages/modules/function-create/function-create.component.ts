@@ -25,6 +25,8 @@ import { MaterialModule } from '../../../material/material.module';
 import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
 import { testGroupModel } from '../../models/manageusermodel';
+import { ModulesService } from '../../../services/modules.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-function-create',
@@ -39,27 +41,57 @@ export class FunctionCreateComponent {
   functionForm!:FormGroup;
   functionFormSubmitted = false;
   testGroupArr:testGroupModel[] = [];
+  dynamicModuleName!: string;
 
-  constructor(private authservice: AuthService,private router: Router) { }
+  constructor(private authservice: AuthService,private router: Router,
+    private moduleservice: ModulesService,private _snakebar :MatSnackBar,
+  ) { }
 
   /**
    * Initializes the component and sets up the initial values.
    */
   ngOnInit(): void {
+    let data = JSON.parse(localStorage.getItem('modules') || '{}');
+    this.dynamicModuleName = data.moduleName;
     this.configureName = this.authservice.selectedConfigVal;
     this.functionForm = new FormGroup({
       functionName: new FormControl<string | null>('', { validators: Validators.required }),
-      module: new FormControl<string | null>('', { validators: Validators.required })
+      moduleName: new FormControl<string | null>({value: this.dynamicModuleName, disabled: true}, { validators: Validators.required}),
     })
-    this.testGroupArr=[
-      {id:1, name:'E2E'},
-      {id:2, name:'Component'},
-      {id:3, name:'OpenSource'},
-      {id:4, name:'Certification'},
-    ];
   }
 
-  functionSubmit(){    
+  functionSubmit():void{    
+    this.functionFormSubmitted = true;
+    if(this.functionForm.invalid){
+      return;
+    }else{
+      let functionObj = {
+        functionName: this.functionForm.value.functionName,
+        moduleName: this.dynamicModuleName,
+        functionCategory: this.configureName
+      }
+      this.moduleservice.createFunction(functionObj).subscribe({
+        next:(res)=>{
+          this._snakebar.open(res, '', {
+          duration: 3000,
+          panelClass: ['success-msg'],
+          verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            this.functionForm.reset();
+            this.router.navigate(["/configure/function-list"]);
+          }, 1000);
+        },
+        error:(err)=>{
+          this._snakebar.open(err.error?err.error:(JSON.parse(err.error)).message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+    }
   }
 
   /**

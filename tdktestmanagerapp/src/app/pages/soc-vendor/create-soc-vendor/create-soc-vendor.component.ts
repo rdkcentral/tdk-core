@@ -41,7 +41,8 @@ export class CreateSocVendorComponent {
   errormessage!: string;
   validationName = 'soc vendor';
   placeholderName = 'Soc Vendor Name';
-
+  labelName = 'Name';
+  
   constructor(private router: Router, private route: ActivatedRoute, public service: SocVendorService,
     private _snakebar: MatSnackBar, private authservice: AuthService) {
     this.commonFormName = this.route.snapshot.url[1].path === 'create-socvendor' ? this.commonFormName + ' ' + `${this.authservice.selectedConfigVal.toUpperCase()}` + ' ' + 'SoCVendor' : this.commonFormName;
@@ -58,31 +59,34 @@ export class CreateSocVendorComponent {
       "socVendorCategory": this.authservice.selectedConfigVal,
       "socVendorUserGroup": this.loggedinUser.userGroupName
     }
-    this.service.createSocVendor(obj).subscribe({
-      next: (res) => {
-        this._snakebar.open(res, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-        })
-        setTimeout(() => {
-          this.router.navigate(["configure/list-socvendor"]);
-
-        }, 1000);
-
-      },
-      error: (err) => {
-        let errmsg = JSON.parse(err.error);
-        this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
-        this._snakebar.open(this.errormessage, '', {
-          duration: 4000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }
-
-    })
+    if(name !== undefined && name !== null){
+      this.service.createSocVendor(obj).subscribe({
+        next: (res) => {
+          this._snakebar.open(res, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            this.router.navigate(["configure/list-socvendor"]);
+  
+          }, 1000);
+  
+        },
+        error: (err) => {
+          let errmsg = JSON.parse(err.error);
+          this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
+          this._snakebar.open(this.errormessage, '', {
+            duration: 4000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+  
+      })
+    }
+  
   }
 
   /**

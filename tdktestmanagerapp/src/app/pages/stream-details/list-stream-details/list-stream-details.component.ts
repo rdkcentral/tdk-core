@@ -173,14 +173,17 @@ export class ListStreamDetailsComponent implements OnInit {
   delete(data: any) :void{
     if (confirm("Are you sure to delete ?")) {
       this.streamingservice.deleteStreamingDetails(data.streamId).subscribe({
-        next: (res) => {
+        next: (res) => { 
+          this.radioDataArr = this.radioDataArr.filter((row: any) => row.streamId !== data.streamId);
+          this.radioDataArr = [...this.radioDataArr];
+          this.videoDataArr = this.videoDataArr.filter((row: any) => row.streamId !== data.streamId);
+          this.videoDataArr = [...this.videoDataArr];
           this._snakebar.open(res, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
           })
-          this.ngOnInit();
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);

@@ -17,29 +17,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-.header {
-    background-color: #0e6f87;
-    color: #fff;
-    height: 60px;
-    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
-}
-
-.logo-img {
-    width: 8%;
-}
-
-.apptitle {
-    color: #fff;
-    font-size: 1.5rem !important;
-    font-weight: 500;
-    margin-left: 15px;
+.container-fluid{
+    margin-bottom: 2rem;
 }
 
 .title {
     color: #00273F;
-    font-size: 1.3rem;
+    font-size: 1rem;
     text-align: center;
-    padding: 15px 0 10px 0;
+    padding: 1px 0 10px 0;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
@@ -48,7 +34,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 .container-box {
     background-color: #fff;
     border-radius: 10px;
-    margin-top: 94px;
     box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 18%);
     position: relative;
     overflow: hidden;
@@ -64,16 +49,8 @@ http://www.apache.org/licenses/LICENSE-2.0
     flex-direction: column;
     padding: 30px 18%;
     height: 90%;
-    margin-top: 30px;
 }
 
-.mt-4 {
-    margin-top: -4.5rem !important;
-}
-
-.mt-2 {
-    margin-top: 1.5rem !important;
-}
 
 .mt-2.createbtn {
     display: flex;
@@ -85,8 +62,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 .back-btn {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1rem;
-    padding: 10px 30px;
+    font-size: 0.8rem;
+    padding: 8px 20px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;
@@ -95,6 +72,3 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-right: 10px;
 }
 
-.back-btn {
-    margin-right: 20px;
-}

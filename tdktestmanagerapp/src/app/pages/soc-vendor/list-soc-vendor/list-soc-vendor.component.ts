@@ -121,13 +121,14 @@ export class ListSocVendorComponent implements OnInit {
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteSocVendor(data.socVendorId).subscribe({
         next: (res) => {
+          this.rowData = this.rowData.filter((row: any) => row.socVendorId !== data.socVendorId);
+          this.rowData = [...this.rowData];
           this._snakebar.open(res, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
           })
-          this.ngOnInit();
         },
         error: (err) => {
           this._snakebar.open(err, 'Something went wrong', {
