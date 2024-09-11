@@ -90,12 +90,15 @@ public class PrimitiveTestServiceTest {
 		List<ParameterValueDTO> parameters = new ArrayList<>();
 		ParameterValueDTO parameterValueDTO = new ParameterValueDTO();
 		parameterValueDTO.setParameterName("param1");
+		
 		parameterValueDTO.setParameterValue("value1");
 		parameters.add(parameterValueDTO);
 		primitiveTestDTO.setPrimitiveTestParameters(parameters);
 		List<Parameter> parameterList = new ArrayList<>();
 		Parameter parameter = new Parameter();
 		parameter.setName("param1");
+		parameter.setParameterDataType(ParameterDataType.STRING);
+		parameter.setRangeVal("10");
 		parameterList.add(parameter);
 
 		when(primitiveTestRepository.existsByName(any(String.class))).thenReturn(false);
@@ -159,8 +162,10 @@ public class PrimitiveTestServiceTest {
 
 		List<PrimitiveTestParameter> primitiveTestParameters = new ArrayList<>();
 		PrimitiveTestParameter primitiveTestParameter = new PrimitiveTestParameter();
-		primitiveTestParameter.setParameter(parameter);
-		primitiveTestParameter.setValue("value1");
+		primitiveTestParameter.setParameterName("param1");
+		primitiveTestParameter.setParameterType("STRING");
+		primitiveTestParameter.setParameterRange("50");
+		primitiveTestParameter.setParameterValue("18");
 
 		primitiveTestParameters.add(primitiveTestParameter);
 		when(primitiveTestParameterRepository.findByPrimitiveTest(any(PrimitiveTest.class)))
@@ -175,7 +180,7 @@ public class PrimitiveTestServiceTest {
 		assertEquals("testModule", result.getPrimitivetestModule());
 		assertEquals("testFunction", result.getPrimitiveTestfunction());
 		assertEquals("param1", result.getPrimitiveTestParameters().get(0).getParameterName());
-		assertEquals("value1", result.getPrimitiveTestParameters().get(0).getParameterValue());
+		assertEquals("18", result.getPrimitiveTestParameters().get(0).getParameterValue());
 	}
 
 	@Test
@@ -201,15 +206,18 @@ public class PrimitiveTestServiceTest {
 
 		PrimitiveTestParameter primitiveTestParameter = new PrimitiveTestParameter();
 		primitiveTestParameter.setPrimitiveTest(primitiveTest);
+		primitiveTestParameter.setParameterName("param1");
+		parameterValueDTO.setParameterValue("value");
 		Parameter parameter = new Parameter();
-		parameter.setName("param1");
-		primitiveTestParameter.setParameter(parameter);
-		primitiveTestParameter.setValue("value0");
+		parameter.setName("param2");
+		parameter.setParameterDataType(ParameterDataType.STRING);
+		parameter.setRangeVal("10");
+		
 
 		when(primitiveTestRepository.findById(1)).thenReturn(Optional.of(primitiveTest));
 		when(primitiveTestParameterRepository.findByPrimitiveTest(primitiveTest))
 				.thenReturn(Arrays.asList(primitiveTestParameter));
-		when(parameterRepository.findByName("param1")).thenReturn(parameter);
+		when(parameterRepository.findByName("param2")).thenReturn(parameter);
 
 		boolean result = primitiveTestService.updatePrimitiveTest(primitiveTestDTO);
 		assertTrue(result);

@@ -29,37 +29,36 @@ import java.util.Set;
 /**
  * Entity representing a function.
  */
-@EqualsAndHashCode(callSuper = true,exclude = "parameters")
+@EqualsAndHashCode(callSuper = true, exclude = "parameters")
 @Data
 @Entity
 @Table(name = "functions")
-public class Function extends BaseEntity{
+public class Function extends BaseEntity {
 
+	/**
+	 * The name of the function.
+	 */
+	@Column(nullable = false, unique = true)
+	private String name;
 
-    /**
-     * The name of the function.
-     */
-    @Column(nullable = false)
-    private String name;
+	/**
+	 * The module to which the function belongs.
+	 */
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "module_id", nullable = false)
+	private Module module;
 
-    /**
-     * The module to which the function belongs.
-     */
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "module_id", nullable = false)
-    private Module module;
+	/**
+	 * The category of the function.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Category category = Category.RDKV;
 
-    /**
-     * The category of the function.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category = Category.RDKV;
-
-    /**
-     * The parameters associated with the function.
-     */
-    @OneToMany(mappedBy = "function", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Parameter> parameters;
+	/**
+	 * The parameters associated with the function.
+	 */
+	@OneToMany(mappedBy = "function", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Parameter> parameters;
 
 }

@@ -41,21 +41,32 @@ public class PrimitiveTestParameter extends BaseEntity {
 	 * The primitive test.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "primitivetestid", nullable = false)
+	@JoinColumn(name = "primitivetestname", nullable = false)
 	private PrimitiveTest primitiveTest;
 
 	/**
-	 * The parameter.
+	 * The parameter name
 	 */
-	@ManyToOne(optional = false)
-	@JoinColumn(name = "parameter_id")
-	private Parameter parameter;
+	@Column(name = "parametername", nullable = false)
+	private String parameterName;
+
+	/**
+	 * The parameter type
+	 */
+	@Column(name = "parametertype", nullable = false)
+	private String parameterType;
+
+	/*
+	 * The parameter Range
+	 */
+	@Column(name = "parameterrange", nullable = false)
+	private String parameterRange;
 
 	/**
 	 * The value.
 	 */
 
-	@Column(name = "value", nullable = false)
-	private String value;
+	@Column(name = "parametervalue", nullable = false)
+	private String parameterValue;
 
 }

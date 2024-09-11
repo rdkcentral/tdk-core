@@ -65,6 +65,7 @@ import jakarta.validation.Valid;
 public class PrimitiveTestService implements IPrimitiveTestService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(PrimitiveTestService.class);
+
 	@Autowired
 	ModuleRepository moduleRepository;
 
@@ -126,8 +127,11 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 						if (param.getName().equals(parameterValueDTO.getParameterName())) {
 							PrimitiveTestParameter primitiveTestParameter = new PrimitiveTestParameter();
 							primitiveTestParameter.setPrimitiveTest(primitiveTest);
-							primitiveTestParameter.setParameter(param);
-							primitiveTestParameter.setValue(parameterValueDTO.getParameterValue());
+
+							primitiveTestParameter.setParameterName(param.getName());
+							primitiveTestParameter.setParameterType(param.getParameterDataType().toString());
+							primitiveTestParameter.setParameterRange(param.getRangeVal());
+							primitiveTestParameter.setParameterValue(parameterValueDTO.getParameterValue());
 							primitiveTestParameterRepository.save(primitiveTestParameter);
 						}
 					}
@@ -242,21 +246,23 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 
 			// Create a map of parameter names to PrimitiveTestParameters for easy lookup
 			Map<String, PrimitiveTestParameter> parameterMap = primitiveTestParameters.stream()
-					.collect(Collectors.toMap(p -> p.getParameter().getName(), p -> p));
+					.collect(Collectors.toMap(p -> p.getParameterName(), p -> p));
 
 			for (ParameterValueDTO parameterValueDTO : primitiveTestParameterList) {
 				PrimitiveTestParameter primitiveTestParameter = parameterMap.get(parameterValueDTO.getParameterName());
 				if (primitiveTestParameter != null) {
 					// If the parameter is present, update the value
-					primitiveTestParameter.setValue(parameterValueDTO.getParameterValue());
+					primitiveTestParameter.setParameterValue(parameterValueDTO.getParameterValue());
 					primitiveTestParameterRepository.save(primitiveTestParameter);
 				} else {
 					// If the parameter is not present, create a new PrimitiveTestParameter
-
+					Parameter parameter = parameterRepository.findByName(parameterValueDTO.getParameterName());
 					PrimitiveTestParameter primitiveTestParameterDetails = new PrimitiveTestParameter();
 					primitiveTestParameterDetails.setPrimitiveTest(primitiveTest);
-					primitiveTestParameterDetails.setParameter(parameterRepository.findByName(parameterValueDTO.getParameterName()));
-					primitiveTestParameterDetails.setValue(parameterValueDTO.getParameterValue());
+					primitiveTestParameterDetails.setParameterName(parameterValueDTO.getParameterName());
+					primitiveTestParameterDetails.setParameterValue(parameterValueDTO.getParameterValue());
+					primitiveTestParameterDetails.setParameterType(parameter.getParameterDataType().toString());
+					primitiveTestParameterDetails.setParameterRange(parameter.getRangeVal());
 					primitiveTestParameterRepository.save(primitiveTestParameterDetails);
 				}
 			}
@@ -310,6 +316,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 
 	@Override
 	public List<PrimitiveTestDTO> findAllByModuleName(String moduleName) {
+
 		LOGGER.info("Finding primitive test with module name: " + moduleName);
 		Module module = moduleRepository.findByName(moduleName);
 		if (module == null) {
@@ -321,6 +328,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 			LOGGER.error("Primitive test not found with module name: " + moduleName);
 			throw new ResourceNotFoundException(Constants.PRIMITIVE_TEST_WITH_MODULE_NAME, module.getName());
 		}
+
 		List<PrimitiveTestDTO> primitiveTestDTOs = new ArrayList<>();
 		for (PrimitiveTest primitiveTest : primitiveTests) {
 			PrimitiveTestDTO primitiveTestDTO = new PrimitiveTestDTO();

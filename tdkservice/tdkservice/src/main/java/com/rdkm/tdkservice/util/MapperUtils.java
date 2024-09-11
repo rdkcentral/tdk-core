@@ -534,11 +534,11 @@ public class MapperUtils {
 		List<PrimitiveTestParameterDTO> primitiveTestParameterDTOs = new ArrayList<>();
 		for (PrimitiveTestParameter primitiveTestParameter : primitiveTestParameters) {
 			PrimitiveTestParameterDTO primitiveTestParameterDTO = new PrimitiveTestParameterDTO();
-			primitiveTestParameterDTO.setParameterName(primitiveTestParameter.getParameter().getName());
-			primitiveTestParameterDTO.setParameterValue(primitiveTestParameter.getValue());
-			primitiveTestParameterDTO.setParameterrangevalue(primitiveTestParameter.getParameter().getRangeVal());
+			primitiveTestParameterDTO.setParameterName(primitiveTestParameter.getParameterName());
+			primitiveTestParameterDTO.setParameterValue(primitiveTestParameter.getParameterValue());
+			primitiveTestParameterDTO.setParameterrangevalue(primitiveTestParameter.getParameterRange());
 			primitiveTestParameterDTO
-					.setParameterType(primitiveTestParameter.getParameter().getParameterDataType().toString());
+					.setParameterType(primitiveTestParameter.getParameterType().toString());
 			primitiveTestParameterDTOs.add(primitiveTestParameterDTO);
 		}
 		LOGGER.info("Primitive test parameters converted to DTO:" + primitiveTestParameterDTOs.toString());

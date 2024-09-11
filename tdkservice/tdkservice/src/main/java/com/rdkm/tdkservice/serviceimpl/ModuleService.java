@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -76,7 +77,6 @@ import com.rdkm.tdkservice.service.IModuleService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
-
 
 /**
  * Service implementation for managing module details.
@@ -127,14 +127,15 @@ public class ModuleService implements IModuleService {
 			return false;
 		}
 
-        return module != null && module.getId() != null && module.getId() > 0;
+		return module != null && module.getId() != null && module.getId() > 0;
 
 	}
 
 	/**
 	 * Updates an existing module.
 	 *
-     * @param moduleDTO the data transfer object containing the updated module details
+	 * @param moduleDTO the data transfer object containing the updated module
+	 *                  details
 	 * @return true if the module was updated successfully, false otherwise
 	 */
 	@Override
@@ -188,7 +189,8 @@ public class ModuleService implements IModuleService {
 	 * Finds a module by its ID.
 	 *
 	 * @param id the ID of the module
-     * @return the data transfer object containing the details of the module, or null if not found
+	 * @return the data transfer object containing the details of the module, or
+	 *         null if not found
 	 */
 	@Override
 	public ModuleDTO findModuleById(Integer id) {
@@ -227,7 +229,6 @@ public class ModuleService implements IModuleService {
 	 */
 
 	@Override
-	@Transactional
 	public boolean deleteModule(Integer id) {
 		LOGGER.info("Going to delete module with ID: {}", id);
 		Module module = moduleRepository.findById(id).orElse(null);
@@ -238,7 +239,7 @@ public class ModuleService implements IModuleService {
 		List<Function> functions = functionRepository.findAllByModuleId(id);
 		LOGGER.info("Deleting functions for module ID: {}", id);
 		for (Function function : functions) {
-			LOGGER.info("Deleting function: {}", function);
+			LOGGER.info("Deleting function: {}", function.getName());
 			// Fetch parameters by function ID
 			List<Parameter> parameters = parameterRepository.findAllByFunctionId(function.getId());
 			for (Parameter parameter : parameters) {
@@ -251,18 +252,19 @@ public class ModuleService implements IModuleService {
 		try {
 			moduleRepository.deleteById(id);
 			LOGGER.info("Module deleted successfully: {}", id);
+
 			return true;
-		} catch (DeleteFailedException e) {
+		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error deleting module: {}", e.getMessage());
 			throw new DeleteFailedException();
 		}
+
 	}
+
 	@Override
 	public List<String> findAllTestGroupsFromEnum() {
 		LOGGER.info("Fetching all test groups from enum");
-        return Arrays.stream(TestGroup.values())
-                .map(TestGroup::name)
-                .collect(Collectors.toList());
+		return Arrays.stream(TestGroup.values()).map(TestGroup::name).collect(Collectors.toList());
 	}
 
 	/**
@@ -282,8 +284,7 @@ public class ModuleService implements IModuleService {
 
 		return modules.stream().map(Module::getName).collect(Collectors.toList());
 	}
-	
-	
+
 	/**
 	 * Parses and saves the XML file.
 	 *
@@ -711,5 +712,4 @@ public class ModuleService implements IModuleService {
 		parent.appendChild(comment);
 	}
 
-	
 }
