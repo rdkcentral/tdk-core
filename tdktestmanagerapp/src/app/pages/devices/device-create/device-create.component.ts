@@ -217,6 +217,7 @@ export class DeviceCreateComponent implements OnInit{
   isThunderPresent: any;
   streamingTempList:any[]=[];
   visibleStreamingList = false;
+  thunderTooltip: string = 'Please enter stbname and boxtype before you check this box';
 
   constructor( private router: Router,private fb:FormBuilder,
     private _snakebar :MatSnackBar, private boxManufactureService:BoxManufactureService, 
@@ -325,11 +326,13 @@ export class DeviceCreateComponent implements OnInit{
     const boxType = this.boxTypeValue;
     if(stbName && boxType){
       this.deviceForm.get('isThunder')?.enable();
+      this.thunderTooltip = 'Check the box for devices with Rdkservice image';
     }else{
       this.deviceForm.get('isThunder')?.disable();
       this.deviceForm.get('isThunder')?.setValue(false);
       this.showPortFile = false;
       this.isThunderchecked = false;
+      this.thunderTooltip = 'Please enter stbname and boxtype before you check this box';
     }
   }
 
