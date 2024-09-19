@@ -96,6 +96,12 @@ body, *:not(.material-icons) {
  .configbtngrp{
     display: flex;
  }
+ .form-check-inline {
+    display: flex !important;
+ }
+ .form-check-input[type=checkbox] {
+    margin-top: 10px !important;
+ }
  .check-thunder{
     display: flex;
  }

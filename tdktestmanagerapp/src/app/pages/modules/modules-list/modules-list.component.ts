@@ -62,7 +62,7 @@ export class ModulesListComponent {
   uploadFileName! :File;
   public columnDefs: ColDef[] = [
     {
-      headerName: 'Module Name',
+      headerName: 'Name',
       field: 'moduleName',
       filter: 'agTextColumnFilter',
       sort: 'asc',

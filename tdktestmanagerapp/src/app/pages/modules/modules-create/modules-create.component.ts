@@ -59,6 +59,10 @@ export class ModulesCreateComponent {
    */
   ngOnInit(): void {
     this.categoryName = this.authservice.selectedConfigVal;
+    if(this.categoryName == "RDKB"){
+      this.crashFilesArr = ['/rdklogs/logs'];
+      this.logFilesArr = ['/rdklogs/logs'];
+    }
     this.moduleservice.getAllTestGroups().subscribe((res:any) => {
       this.testGroupArr = JSON.parse(res);
     });

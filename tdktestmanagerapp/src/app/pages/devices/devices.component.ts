@@ -56,7 +56,7 @@ export class DevicesComponent {
   
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
-      headerName: 'Device Name',
+      headerName: 'Name',
       field: 'stbName',
       filter: 'agTextColumnFilter',
       flex: 1,
