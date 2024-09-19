@@ -521,7 +521,7 @@ def webaudio_getRequiredLog(ssh_method,credentials,command):
 #GET THE TIMESTAMP FROM THE LOG STRING
 #-------------------------------------------------------------------
 def getTimeStampFromString(log_string):
-    match = re.search(r"(\d{2}:\d{2}:\d{2}\.\d{6})",log_string)
+    match = re.search(r'T(\d{2}:\d{2}:\d{2}\.\d{3})', log_string)
     return match.group(1)
 
 #-------------------------------------------------------------------
@@ -549,7 +549,8 @@ def webaudio_getLogs_fromDevicelogs(obj,url,browser,grep_line,keys=[]):
    if ssh_param_dict != {} and expectedResult in result:
        tdkTestObj.setResultStatus("SUCCESS")
        print("\n Launch webaudio test url in ", browser)
-       start_time = str(datetime.utcnow()).split()[1]
+       utc_time = datetime.utcnow()
+       start_time = utc_time.strftime("%H:%M:%S.%f")[:-3]
        result = webaudio_launch_testApp(obj,url,browser)
        time.sleep(20)
        if keys !=[] and expectedResult in result:
