@@ -226,7 +226,7 @@ if result_val == expectedResult:
                   end_verify =True
               if not end_verify:
                   print("verification step2:youtube_signin")
-                  verified = verifyTextInImage("youtube_signin", screenshot)
+                  verified = verifyImageTemplate("youtube_signin", screenshot)
                   if verified:
                       print("YouTube sign-in page launched")
                       params = '{"keys":[ {"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 13,"modifiers": [],"delay":2.0}]}'
@@ -398,6 +398,9 @@ if result_val == expectedResult:
                                               print("\n Youtube is video  is paused sucessfully")
                                               print("\n =========================================================================================")
                                               tdkTestObj.setResultStatus("SUCCESS")
+                                          if not paused:
+                                              print("Video is not paused, exiting with failure message")
+                                              tdkTestObj.setResultStatus("FAILURE")                                              
                                               print("Closing youtube Application")
                                               dab_app_exit = operation_name["dab_app_exit"]
                                               tdkTestObj = obj.createTestStep('perform_operation')

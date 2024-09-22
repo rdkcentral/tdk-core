@@ -556,21 +556,34 @@ def rdkservice_getBrowserScore_SunSpider():
 #GET THE TIMESTAMP FROM THE LOG STRING
 #-------------------------------------------------------------------
 def getTimeStampFromString(log_string):
-    match = re.search(r"(\d{2}:\d{2}:\d{2}\.\d{6})",log_string)
-    return match.group(1)
+  match = re.search(r'\d{2}:\d{2}:\d{2}\.\d+', log_string)
+  if match:
+    timestamp = match.group()
+    milliseconds = timestamp.split('.')[1]
+    return timestamp[:-len(milliseconds)] + milliseconds
+  else:
+    return None
 
 #-------------------------------------------------------------------
 #GET THE TIME IN MILLISEC FROM THE STRING
 #-------------------------------------------------------------------
 def getTimeInMilliSec(time_string):
-    microsec_frm_time_string = int(time_string.split(".")[-1])
-    time_string = time_string.replace(time_string.split(".")[-1],"")
-    time_string = time_string.replace(".",":")
-    time_string = time_string + str(microsec_frm_time_string//1000)
+    microsec_frm_time_string = time_string.split(".")[-1][:3]
+    time_string = time_string.replace(time_string.split(".")[-1], "")
+    time_string = time_string.replace(".", ":")
+    time_string = time_string + str(microsec_frm_time_string)
     hours, minutes, seconds, millisec = time_string.split(':')
     time_in_millisec = int(hours) * 3600000 + int(minutes) * 60000 + int(seconds)*1000 + int(millisec)
     return time_in_millisec
-
+#-------------------------------------------------------------------
+#GET THE NUMERIC VALUE FROM THE STRING
+#-------------------------------------------------------------------
+def getNumericValue(string):
+    match = re.search(r"(\d+)", string)
+    if match:
+       return int(match.group(1))
+    else:
+       raise ValueError("No numeric part found in the value.")
 #-------------------------------------------------------------------
 #GET THE OUTPUT OF A COMMAND EXECUTED
 #-------------------------------------------------------------------
@@ -644,7 +657,27 @@ def suspend_plugin(obj,plugin):
         tdkTestObj.setResultStatus("FAILURE")
         status = "FAILURE"
     return status,start_suspend
-
+#-------------------------------------------------------------------
+#RESTORE A GIVEN PLUGIN USING RDKSHELL
+#-------------------------------------------------------------------
+def restore_plugin(obj,plugin):
+    status = expectedResult = "SUCCESS"
+    print("\n Restoring {} \n".format(plugin))
+    params = '{"callsign":"'+plugin+'"}'
+    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+    tdkTestObj.addParameter("method","org.rdk.RDKShell.restore")
+    tdkTestObj.addParameter("value",params)
+    start_restore = str(datetime.utcnow()).split()[1]
+    tdkTestObj.executeTestCase(expectedResult);
+    result = tdkTestObj.getResult();
+    if result == "SUCCESS":
+        print("\n Restored {} plugin \n".format(plugin))
+        tdkTestObj.setResultStatus("SUCCESS")
+    else:
+        print("\n Unable to Restore {} plugin \n".format(plugin))
+        tdkTestObj.setResultStatus("FAILURE")
+        status = "FAILURE"
+    return status,start_restore
 #-------------------------------------------------------------------
 #LAUNCH A GIVEN PLUGIN USING RDKSHELL
 #-------------------------------------------------------------------

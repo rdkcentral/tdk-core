@@ -35,6 +35,7 @@ cobalt_test_url = ""
 cobalt_4k_longduration_test_url=""
 #Test duration in minutes till test should be performed, it should be less than the duration of test video
 cobalt_test_duration = 720
+cobalt_hibernate_test_duration = 60
 
 ####Cobalt play and exit test details
 #Test duration in minutes till test should be performed
@@ -75,6 +76,7 @@ expected_url_pattern = "https://cdn.metrological.com/static/storm/app_redirect[1
 ####Suspend and Resume tests details
 #The maximum number of times the test should repeat:
 suspend_resume_max_count = 1000
+hibernate_resume_max_count =1000
 
 ####Random key sending test details
 #The URL used to test cobalt to play while sending random keys

