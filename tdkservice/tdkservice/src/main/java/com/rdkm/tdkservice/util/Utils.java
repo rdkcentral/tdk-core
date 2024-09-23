@@ -20,6 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,5 +57,27 @@ public class Utils {
 			LOGGER.error("Invalid category: " + category);
 			throw new ResourceNotFoundException(Constants.CATEGORY, category);
 		}
+	}
+
+	/**
+	 * This method is to convert list of strings to comma separated string
+	 * 
+	 * @param list - list of strings
+	 * @return - comma separated string
+	 */
+	public static String convertListToCommaSeparatedString(List<String> list) {
+		LOGGER.info("Inside convertListToCommaSeparatedString method with list");
+		if (list == null || list.isEmpty()) {
+			return null;
+		}
+		StringBuilder sb = new StringBuilder();
+		for (String s : list) {
+			sb.append(s);
+			if (list.indexOf(s) == list.size() - 1)
+				break;
+			sb.append(",");
+		}
+		LOGGER.info("Converted string is" + sb.toString());
+		return sb.toString();
 	}
 }

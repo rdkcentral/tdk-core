@@ -19,32 +19,58 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
-import com.rdkm.tdkservice.dto.*;
-import com.rdkm.tdkservice.enums.TestGroup;
-import com.rdkm.tdkservice.model.*;
-import com.rdkm.tdkservice.model.Module;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.rdkm.tdkservice.dto.BoxManufacturerDTO;
+import com.rdkm.tdkservice.dto.BoxManufacturerUpdateDTO;
+import com.rdkm.tdkservice.dto.BoxTypeDTO;
+import com.rdkm.tdkservice.dto.BoxTypeUpdateDTO;
+import com.rdkm.tdkservice.dto.DeviceCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
+import com.rdkm.tdkservice.dto.FunctionCreateDTO;
+import com.rdkm.tdkservice.dto.FunctionDTO;
+import com.rdkm.tdkservice.dto.ModuleCreateDTO;
+import com.rdkm.tdkservice.dto.ModuleDTO;
+import com.rdkm.tdkservice.dto.ParameterCreateDTO;
+import com.rdkm.tdkservice.dto.ParameterDTO;
+import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
+import com.rdkm.tdkservice.dto.RdkVersionDTO;
+import com.rdkm.tdkservice.dto.ScriptCreateDTO;
+import com.rdkm.tdkservice.dto.ScriptDTO;
+import com.rdkm.tdkservice.dto.ScriptListDTO;
+import com.rdkm.tdkservice.dto.ScriptTagDTO;
+import com.rdkm.tdkservice.dto.SocVendorDTO;
+import com.rdkm.tdkservice.dto.SocVendorUpdateDTO;
+import com.rdkm.tdkservice.dto.StreamingDetailsDTO;
+import com.rdkm.tdkservice.dto.StreamingDetailsUpdateDTO;
+import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserGroupDTO;
+import com.rdkm.tdkservice.dto.UserRoleDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.TestGroup;
+import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.BoxManufacturer;
 import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.Parameter;
+import com.rdkm.tdkservice.model.PrimitiveTestParameter;
 import com.rdkm.tdkservice.model.RdkVersion;
+import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.ScriptTag;
 import com.rdkm.tdkservice.model.SocVendor;
 import com.rdkm.tdkservice.model.StreamingDetails;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
-import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This class is used to populate the DTO objects from the model objects.
@@ -537,11 +563,157 @@ public class MapperUtils {
 			primitiveTestParameterDTO.setParameterName(primitiveTestParameter.getParameterName());
 			primitiveTestParameterDTO.setParameterValue(primitiveTestParameter.getParameterValue());
 			primitiveTestParameterDTO.setParameterrangevalue(primitiveTestParameter.getParameterRange());
-			primitiveTestParameterDTO
-					.setParameterType(primitiveTestParameter.getParameterType().toString());
+			primitiveTestParameterDTO.setParameterType(primitiveTestParameter.getParameterType().toString());
 			primitiveTestParameterDTOs.add(primitiveTestParameterDTO);
 		}
 		LOGGER.info("Primitive test parameters converted to DTO:" + primitiveTestParameterDTOs.toString());
 		return primitiveTestParameterDTOs;
 	}
+
+	/**
+	 * This method is used to convert the ScriptCreateDTO to Script entity
+	 * 
+	 * @param scriptCreateDTO ScriptCreateDTO
+	 * @return script Script
+	 */
+	public static Script convertToScriptEntity(ScriptCreateDTO scriptCreateDTO) {
+		Script script = new Script();
+		LOGGER.info("Converting ScriptDTO to ScriptEntity");
+		script.setName(scriptCreateDTO.getName());
+		script.setSynopsis(scriptCreateDTO.getSynopsis());
+		script.setExecutionTimeOut(scriptCreateDTO.getExecutionTimeOut());
+		script.setLongDuration(scriptCreateDTO.isLongDuration());
+		script.setSkipExecution(scriptCreateDTO.isSkipExecution());
+		if (scriptCreateDTO.isSkipExecution()) {
+			script.setSkipRemarks(scriptCreateDTO.getSkipRemarks());
+		}
+
+		script.setTestId(scriptCreateDTO.getTestId());
+		script.setObjective(scriptCreateDTO.getObjective());
+		script.setTestType(TestType.valueOf(scriptCreateDTO.getTestType()));
+		script.setApiOrInterfaceUsed(scriptCreateDTO.getApiOrInterfaceUsed());
+		script.setInputParameters(scriptCreateDTO.getInputParameters());
+		script.setAutomationApproach(scriptCreateDTO.getAutomationApproach());
+		script.setExpectedOutput(scriptCreateDTO.getExpectedOutput());
+		script.setPriority(scriptCreateDTO.getPriority());
+		script.setTestStubInterface(scriptCreateDTO.getTestStubInterface());
+		script.setReleaseVersion(scriptCreateDTO.getReleaseVersion());
+		script.setPrerequisites(scriptCreateDTO.getPrerequisites());
+		script.setRemarks(scriptCreateDTO.getRemarks());
+		LOGGER.info("Converting ScriptDTO to ScriptEntity:" + script.toString());
+		return script;
+	}
+
+	public static Script updateScript(Script script, ScriptDTO scriptUpdateDTO) {
+		LOGGER.info("Updating the script entity with the properties available in the script update DTO");
+
+		if (!Utils.isEmpty(scriptUpdateDTO.getSynopsis())) {
+			script.setSynopsis(scriptUpdateDTO.getSynopsis());
+		}
+
+		script.setExecutionTimeOut(scriptUpdateDTO.getExecutionTimeOut());
+		script.setLongDuration(scriptUpdateDTO.isLongDuration());
+		script.setSkipExecution(scriptUpdateDTO.isSkipExecution());
+		if (scriptUpdateDTO.isSkipExecution()) {
+			if (!Utils.isEmpty(scriptUpdateDTO.getSkipRemarks())) {
+				script.setSkipRemarks(scriptUpdateDTO.getSkipRemarks());
+			}
+		}
+
+		// Update the test case documentation details
+		if (!Utils.isEmpty(scriptUpdateDTO.getTestId())) {
+			script.setTestId(scriptUpdateDTO.getTestId());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getObjective())) {
+			script.setObjective(scriptUpdateDTO.getObjective());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getTestType())) {
+			script.setTestType(TestType.valueOf(scriptUpdateDTO.getTestType()));
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getApiOrInterfaceUsed())) {
+			script.setApiOrInterfaceUsed(scriptUpdateDTO.getApiOrInterfaceUsed());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getInputParameters())) {
+			script.setInputParameters(scriptUpdateDTO.getInputParameters());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getPrerequisites())) {
+			script.setPrerequisites(scriptUpdateDTO.getPrerequisites());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getAutomationApproach())) {
+			script.setAutomationApproach(scriptUpdateDTO.getAutomationApproach());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getExpectedOutput())) {
+			script.setExpectedOutput(scriptUpdateDTO.getExpectedOutput());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getPriority())) {
+			script.setPriority(scriptUpdateDTO.getPriority());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getTestStubInterface())) {
+			script.setTestStubInterface(scriptUpdateDTO.getTestStubInterface());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getRemarks())) {
+			script.setRemarks(scriptUpdateDTO.getRemarks());
+		}
+		if (!Utils.isEmpty(scriptUpdateDTO.getReleaseVersion())) {
+			script.setReleaseVersion(scriptUpdateDTO.getReleaseVersion());
+		}
+
+		LOGGER.info("Updated the script entity with the properties available in the script update DTO");
+		return script;
+
+	}
+
+	/**
+	 * This method is used to convert the Script entity to ScriptListDTO
+	 * 
+	 * @param script Script entity
+	 * @return scriptListDTO ScriptListDTO
+	 */
+	public static ScriptListDTO convertToScriptListDTO(Script script) {
+		LOGGER.info("Converting the script entity to script list DTO");
+		ScriptListDTO scriptListDTO = new ScriptListDTO();
+		scriptListDTO.setId(script.getId());
+		scriptListDTO.setName(script.getName());
+		LOGGER.info("Converted the script entity to script list DTO:" + scriptListDTO.toString());
+		return scriptListDTO;
+	}
+
+	/**
+	 * This method is used to convert the Script entity to ScriptDTO
+	 * 
+	 * @param script Script entity
+	 * @return scriptDTO ScriptDTO
+	 */
+	public static ScriptDTO convertToScriptDTO(Script script) {
+		LOGGER.info("Converting the script entity to script DTO");
+		ScriptDTO scriptDTO = new ScriptDTO();
+		scriptDTO.setId(script.getId());
+
+		if (script.getPrimitiveTest() != null) {
+			scriptDTO.setPrimitiveTestName(script.getPrimitiveTest().getName());
+		}
+
+		scriptDTO.setName(script.getName());
+		scriptDTO.setSynopsis(script.getSynopsis());
+		scriptDTO.setExecutionTimeOut(script.getExecutionTimeOut());
+		scriptDTO.setLongDuration(script.isLongDuration());
+		scriptDTO.setSkipExecution(script.isSkipExecution());
+		scriptDTO.setSkipRemarks(script.getSkipRemarks());
+		scriptDTO.setTestId(script.getTestId());
+		scriptDTO.setObjective(script.getObjective());
+		scriptDTO.setTestType(script.getTestType().name());
+		scriptDTO.setApiOrInterfaceUsed(script.getApiOrInterfaceUsed());
+		scriptDTO.setInputParameters(script.getInputParameters());
+		scriptDTO.setAutomationApproach(script.getAutomationApproach());
+		scriptDTO.setExpectedOutput(script.getExpectedOutput());
+		scriptDTO.setPriority(script.getPriority());
+		scriptDTO.setTestStubInterface(script.getTestStubInterface());
+		scriptDTO.setReleaseVersion(script.getReleaseVersion());
+		scriptDTO.setPrerequisites(script.getPrerequisites());
+		scriptDTO.setRemarks(script.getRemarks());
+		LOGGER.info("Converted the script entity to script DTO:" + scriptDTO.toString());
+		return scriptDTO;
+
+	}
+
 }

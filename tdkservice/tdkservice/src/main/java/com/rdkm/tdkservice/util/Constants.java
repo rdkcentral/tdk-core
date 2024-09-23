@@ -248,4 +248,31 @@ public class Constants {
 	// yes value
 	public static final String YES = "yes";
 
+	// Script name
+	public static final String SCRIPT_NAME = "Script name";
+
+	// Script location for RDKV
+	public static final String RDKV_FOLDER_NAME = "testscriptsRDKV";
+
+	// Script location for RDKB
+	public static final String RDKB_FOLDER_NAME = "testscriptsRDKB";
+
+	// Script location for RDKC
+	public static final String RDKC_FOLDER_NAME = "testscriptsRDKC";
+
+	// Python file extension
+	public static final String PYTHON_FILE_EXTENSION = ".py";
+
+	// Script ID
+	public static final String SCRIPT_ID = "Script id";
+
+	// Script
+	public static final String SCRIPT = "Script";
+
+	// Module name
+	public static final String MODULE = "Module";
+
+	// Excel file extension
+	public static final String EXCEL_FILE_EXTENSION = ".xlsx";
+
 }

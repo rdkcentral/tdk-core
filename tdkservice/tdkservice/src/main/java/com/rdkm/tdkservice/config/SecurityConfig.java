@@ -73,7 +73,9 @@ public class SecurityConfig {
 							.requestMatchers("/api/v1/auth/**", "/api/v1/usergroup/**", "/api/v1/userrole/**",
 									"/api/v1/boxmanufacturer/**", "/api/v1/boxtype/**", "/api/v1/socvendor/**",
 									"/api/v1/streamingdetail/**", "/api/v1/streamingdetailstemplate/**",
-									"/api/v1/device/**")
+									"/api/v1/device/**", "/api/v1/module/**", "/api/v1/function/**",
+									"/api/v1/parameter/**", "/api/v1/primitivetest/**", "/api/v1/rdkversion/**",
+									"/api/v1/script/**")
 							.permitAll().requestMatchers("/api/v1/users/**").hasAuthority("admin")
 							.requestMatchers(SWAGGER_UI).permitAll().anyRequest().authenticated())
 					.sessionManagement(manager -> manager.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

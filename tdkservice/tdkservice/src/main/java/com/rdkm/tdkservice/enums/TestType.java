@@ -20,45 +20,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.enums;
 
 /**
- * Enum for Category
- *
+ * The TestType enum is used to store test type information or data for a script.
  */
-public enum Category {
+public enum TestType {
 
-	RDKV("RDKV"), RDKB("RDKB"), RDKC("RDKC"), RDKV_RDKSERVICE("RDKV_RDKSERVICE");
-
-	private String name;
-
-	Category(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Get Category by name
-	 *
-	 * @param name
-	 * @return
-	 */
-	public static Category getCategory(String name) {
-		for (Category theme : Category.values()) {
-			if (theme.getName().equals(name)) {
-				return theme;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Get default theme
-	 *
-	 * @return
-	 */
-	public static Category getDefaultCategory() {
-		return RDKV;
-	}
+	POSITIVE, NEGATIVE;
 
 }

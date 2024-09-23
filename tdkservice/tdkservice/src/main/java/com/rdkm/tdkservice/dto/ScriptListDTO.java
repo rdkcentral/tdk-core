@@ -17,48 +17,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.enums;
+
+package com.rdkm.tdkservice.dto;
+
+import lombok.Data;
 
 /**
- * Enum for Category
- *
+ * Data Transfer Object for script list units with id and script name.
  */
-public enum Category {
+@Data
+public class ScriptListDTO {
 
-	RDKV("RDKV"), RDKB("RDKB"), RDKC("RDKC"), RDKV_RDKSERVICE("RDKV_RDKSERVICE");
+	/**
+	 * The id of the Script.
+	 */
+	private long id;
 
+	/**
+	 * The name of the Script.
+	 */
 	private String name;
-
-	Category(String name) {
-		this.name = name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * Get Category by name
-	 *
-	 * @param name
-	 * @return
-	 */
-	public static Category getCategory(String name) {
-		for (Category theme : Category.values()) {
-			if (theme.getName().equals(name)) {
-				return theme;
-			}
-		}
-		return null;
-	}
-
-	/**
-	 * Get default theme
-	 *
-	 * @return
-	 */
-	public static Category getDefaultCategory() {
-		return RDKV;
-	}
 
 }

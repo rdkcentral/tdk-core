@@ -19,7 +19,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+
+import com.rdkm.tdkservice.util.Constants;
 
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.ServletContext;
@@ -35,6 +38,11 @@ public class AppConfig {
 
 	// Static varible that stores the servlet context path
 	private static String realPath;
+
+	// Base location of the application where the scripts and other configs are
+	// stored
+	@Value("${tdkservice.baselocation}")
+	private static String baselocation;
 
 	// Servlet context
 	private final ServletContext servletContext;
@@ -68,5 +76,21 @@ public class AppConfig {
 	 */
 	public static String getRealPath() {
 		return realPath;
+	}
+
+	/**
+	 * The getBaselocation method provides a static access point to the base
+	 * location of the application where the scripts and other configs are stored.
+	 * If the base location is not set, it will be set using the real path and the
+	 * base filestore directory.
+	 * 
+	 * @return baselocation - the base location of the application where the scripts
+	 *         and other configs are stored
+	 */
+	public static String getBaselocation() {
+		if (baselocation == null) {
+			baselocation = getRealPath() + Constants.BASE_FILESTORE_DIR;
+		}
+		return baselocation;
 	}
 }

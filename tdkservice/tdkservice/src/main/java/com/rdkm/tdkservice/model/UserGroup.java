@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -36,6 +37,7 @@ public class UserGroup extends BaseEntity {
 	/**
 	 * Represents the name of the UserGroup.
 	 */
+	@Column(name = "name", unique = true, nullable = false)
 	private String name;
 
 }
