@@ -74,11 +74,6 @@ public class ModuleDTO {
     private boolean isModuleThunderEnabled;
 
     /**
-     * Indicates whether the module is advanced.
-     */
-    private boolean isModuleAdvanced;
-
-    /**
      * The category of the module.
      */
     private String moduleCategory;
