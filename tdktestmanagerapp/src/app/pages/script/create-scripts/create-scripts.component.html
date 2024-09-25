@@ -18,8 +18,11 @@ limitations under the License.
         <div class="col-md-12">
             <mat-card class="card-height">
                     <h1 class="title">Create {{selectedCategoryName}} Script</h1>
-                    <form [formGroup]="createScriptForm" class="userform mt-3">
-                        <div class="row">
+                    <mat-horizontal-stepper class="demo-stepper" [linear]="isLinear" #stepper>
+                    <mat-step [stepControl]="firstFormGroup">
+                        <form [formGroup]="firstFormGroup">
+                        <ng-template matStepLabel>Script Details</ng-template>
+                        <div class="row mt-2 row-align">
                             <div class="col">
                                 <div class="row mb-3">
                                     <label for="scriptname" class="col-md-3 col-form-label">Script Name<span style="color:red; margin-left: 0.75em;">*</span></label>
@@ -28,21 +31,26 @@ limitations under the License.
                                       placeholder="Enter script name" formControlName="scriptname">
                                     </div>
                                   </div>
-                                  <div class="row mb-3">
-                                    <label for="primitivetest" class="col-md-3 col-form-label">Primitive Test<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <div class="row mb-3">
+                                    <label for="module" class="col-md-3 col-form-label">Module<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                          <ng-multiselect-dropdown #multiSelect id="subBoxtypelist"
-                                          [placeholder]="'Select an option'" [settings]="dropdownSettings"
-                                          [data]="dropdownList" formControlName="primitivetest">
-                                         </ng-multiselect-dropdown>
-                                      
+                                        <select class="form-select" aria-label="Default select example" id="module"
+                                         formControlName="module">
+                                            <option selected>Select</option>
+                                            <option value="module 1" >module 1</option>
+                                            <option value="module 2" >module 2</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="tags" class="col-md-3 col-form-label">Tags<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="primitivetest" class="col-md-3 col-form-label">Primitive Test<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <textarea class="form-control" id="testprofile" rows="3"
-                                        formControlName="tags"></textarea>
+                                        <select class="form-select" aria-label="Default select example" id="primitivetest"
+                                         formControlName="primitivetest">
+                                            <option selected>Select</option>
+                                            <option value="primitivetest 1" >primitivetest 1</option>
+                                            <option value="primitivetest 2" >primitivetest 2</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div class="row mb-3">
@@ -60,13 +68,7 @@ limitations under the License.
                                              >
                                         </div>
                                     </div>
-                                    <label for="advancedscript" class="col-md-3 col-form-label">Advanced script</label>
-                                    <div class="col-md-8 check-thunder">
-                                        <div class="form-check form-check-inline form-check-reverse longtest">
-                                            <input class="form-check-input thunder" type="checkbox" id="advancedscript" formControlName="advancedscript"
-                                             >
-                                        </div>
-                                    </div>
+                                    
                                 </div>
                             </div>
                             <div class="col">
@@ -80,16 +82,7 @@ limitations under the License.
                                   
                                 </div>
                               </div>
-                                <div class="row mb-3">
-                                    <label for="rdkversion" class="col-md-3 col-form-label">RDK Version<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-8">
-                                          <ng-multiselect-dropdown #multiSelect id="subBoxtypelist"
-                                          [placeholder]="'Select an option'" [settings]="versionSettings"
-                                          [data]="dropdownList" formControlName="rdkversion">
-                                         </ng-multiselect-dropdown>
-                                      
-                                    </div>
-                                </div>
+                               
                                 <div class="row mb-3">
                                     <label for="executiontimeout" class="col-md-3 col-form-label">Execution TimeOut<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -97,13 +90,7 @@ limitations under the License.
                                         placeholder="Enter execution timeout (min)" formControlName="executiontimeout">
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="testprofile" class="col-md-3 col-form-label">Test Profile<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-8">
-                                        <textarea class="form-control" id="testprofile" rows="3"
-                                        formControlName="testprofile"></textarea>
-                                    </div>
-                                </div>
+                             
                                 <div class="row mb-3">
                                     <label for="synopsis" class="col-md-3 col-form-label">Synopsis<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
@@ -112,8 +99,156 @@ limitations under the License.
                                     </div>
                                 </div>
                             </div>
-                            <div class="row mb-3">
-                                <label for="scriptcontent" class="col-md-3 col-form-label">Script Content</label>
+                        </div>
+                        <div class="text-end">
+                            <button mat-button matStepperNext class="reset-btn" [disabled]="firstFormGroup.invalid">Next</button>
+                        </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [stepControl]="secondFormGroup"
+                        label="Test Case Deatils"
+                        >
+                        <form [formGroup]="secondFormGroup">
+                            <div class="row mt-2">
+                                <div class="col">
+                                    <!-- <div class="row mb-3">
+                                        <label for="testscript" class="col-md-3 col-form-label">Test Script<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                          <input type="text" class="form-control" id="testscript" autocomplete="off" 
+                                            formControlName="testScript">
+                                        </div>
+                                      </div> -->
+                                      <div class="row mb-3">
+                                        <label for="testId" class="col-md-3 col-form-label">Test Case ID<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" id="testId" autocomplete="off" 
+                                            placeholder="Enter test case ID" formControlName="testcaseID">
+                                        </div>
+                                    </div>
+                                  
+                                    <div class="row mb-3">
+                                        <label for="testobjective" class="col-md-3 col-form-label">Test Objective<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="testobjective" rows="3"
+                                            formControlName="testObjective"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="parameters" class="col-md-3 col-form-label">Input Parameters<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="parameters" rows="3"
+                                                formControlName="inputParameters"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="approach" class="col-md-3 col-form-label">Automation Approach<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8 ">
+                                            <textarea class="form-control" id="approach" rows="3"
+                                                formControlName="automationApproach"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="priority" class="col-md-3 col-form-label">Priority<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <select class="form-select" aria-label="Default select example" id="priority"
+                                             formControlName="priority">
+                                                <option selected>Select</option>
+                                                <option value="" >High</option>
+                                                <option value="" >Medium</option>
+                                                <option value="" >Low</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="teststub" class="col-md-3 col-form-label">Test Stub<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="teststub" rows="3"
+                                            formControlName="testStub"></textarea>
+                                        </div>
+                                    </div>
+                                 
+                                </div>
+                                <div class="col">
+                                  <div class="row mb-3">
+                                    <label for="testtype" class="col-md-3 col-form-label">Test Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example" id="testtype"
+                                         formControlName="testType">
+                                            <option default>Select</option>
+                                            <option value="POSITIVE" >POSITIVE</option>
+                                            <option value="NEGATIVE" >NEGATIVE</option>
+                                        </select>
+                                    </div>
+                                  </div>
+                                    <!-- <div class="row mb-3">
+                                        <label for="boxtype" class="col-md-3 col-form-label">Supported Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" id="boxtype" autocomplete="off" 
+                                            placeholder="Enter supported box type" formControlName="supportedBoxType">
+                                          
+                                        </div>
+                                    </div> -->
+                                    <div class="row mb-3">
+                                        <label for="interface" class="col-md-3 col-form-label">RDK Interface<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="interface" rows="3"
+                                            formControlName="rdkInterface"></textarea>  
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="output" class="col-md-3 col-form-label">Expected Output<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="output" rows="3"
+                                            formControlName="expectedOutput"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="testpre" class="col-md-3 col-form-label">Test Pre-requisites</label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" id="testpre" rows="3"
+                                            formControlName="testPreRequisites"></textarea>
+                                        </div>
+                                    </div>
+<!--                                    
+                                    <div class="row mb-3">
+                                        <label for="Skipped" class="col-md-3 col-form-label">Skipped</label>
+                                        <div class="col-md-8">
+                                            <select class="form-select" aria-label="Default select example" id="skipped"
+                                             formControlName="skipped">
+                                                <option default>Select</option>
+                                                <option value="no" >No</option>
+                                                <option value="yes" >Yes</option>
+                                            </select>
+                                        </div>
+                                    </div> -->
+                                    <div class="row mb-3">
+                                        <label for="remarks" class="col-md-3 col-form-label">Remarks</label>
+                                        <div class="col-md-8">
+                                          <input type="text" class="form-control" id="remarks" autocomplete="off" 
+                                          placeholder="Enter remarks" formControlName="remarks">
+                                        </div>
+                                    </div>
+                                    <div class="row mb-3">
+                                        <label for="releaseVersion" class="col-md-3 col-form-label">Update Release Version</label>
+                                        <div class="col-md-8">
+                                          <input type="text" class="form-control" id="releaseVersion" autocomplete="off" 
+                                          placeholder="Enter update release version" formControlName="releaseVersion">
+                                        </div>
+                                    </div>
+                                </div>
+                               
+                            </div>
+                        <div class="text-end">
+                            <button mat-button matStepperPrevious class="reset-btn">Back</button>
+                            <button mat-button matStepperNext class="reset-btn" [disabled]="secondFormGroup.invalid">Next</button>
+                        </div>
+                        </form>
+                    </mat-step>
+                    <mat-step [stepControl]="thirdFormGroup"
+                        label="Script">
+                        <form [formGroup]="thirdFormGroup">
+                            <label for="scriptcontent" class="col-md-3 col-form-label ">Script Content</label>
+                            <div class="row">
                                 <div style="height: 400px;">
                                     <ngx-monaco-editor 
                                       [options]="editorOptions"
@@ -123,20 +258,20 @@ limitations under the License.
                                     </ngx-monaco-editor>
                                 </div>
                             </div>
+                        </form>
+                        <div class="mt-2 text-end">
+                        <button mat-button matStepperPrevious class="reset-btn">Back</button>
+                        <button mat-button class="reset-btn">Submit</button>
                         </div>
-                       
-                        <div class="row">
-                            <div class="mt-2 mb-3 text-end">
-                                <button class="reset-btn" (click)="back()">Back</button>
-                                <button class="reset-btn" >Reset</button>
-                                <button type="submit" class="create-btn">Create</button>
-                            </div>
-                        </div>
-                    </form>
+                    </mat-step>
+                    </mat-horizontal-stepper>
             </mat-card>
         </div>
     </div>
 </div>
 
 
- 
+
+
+
+

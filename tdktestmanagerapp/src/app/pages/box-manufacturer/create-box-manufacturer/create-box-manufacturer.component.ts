@@ -49,7 +49,7 @@ export class CreateBoxManufacturerComponent implements OnInit {
 
   constructor(private router: Router, public service: BoxManufactureService,
     private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'create-boxManufacturer' ? this.commonFormName + ' ' + `${this.authservice.selectedConfigVal.toUpperCase()}` + ' ' + 'Box Manufacturer' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'create-boxManufacturer' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'Box Manufacturer' : this.commonFormName;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
 
   }

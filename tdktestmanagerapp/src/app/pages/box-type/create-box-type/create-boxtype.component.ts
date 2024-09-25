@@ -48,6 +48,7 @@ export class CreateBoxtypeComponent implements OnInit {
   configureName!: string;
   selectedSubBox: any[] = []
   userGroupName: any;
+  categoryName!: string;
 
   constructor(private formBuilder: FormBuilder, private router: Router,
     private service: BoxtypeService, private authservice: AuthService, private _snakebar: MatSnackBar) {
@@ -79,6 +80,7 @@ export class CreateBoxtypeComponent implements OnInit {
 
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
 
   }
 

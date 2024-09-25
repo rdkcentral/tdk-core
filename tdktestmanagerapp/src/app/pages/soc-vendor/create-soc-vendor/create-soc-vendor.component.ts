@@ -45,7 +45,7 @@ export class CreateSocVendorComponent {
   
   constructor(private router: Router, private route: ActivatedRoute, public service: SocVendorService,
     private _snakebar: MatSnackBar, private authservice: AuthService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'create-socvendor' ? this.commonFormName + ' ' + `${this.authservice.selectedConfigVal.toUpperCase()}` + ' ' + 'SoCVendor' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'create-socvendor' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'SoCVendor' : this.commonFormName;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
   }
 

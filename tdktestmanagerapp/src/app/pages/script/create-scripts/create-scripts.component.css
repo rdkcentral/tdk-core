@@ -24,7 +24,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     max-height: 100vh;
 }
 .card-height{
-    height: 450px !important;
+    height: 440px !important;
     overflow-y: auto;
     display: block;
 }
@@ -37,6 +37,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 25px;
 }
+.row{
+    display: flex;
+    justify-content: center;
+}
 .userform{
     margin-left: 25px;
     margin-right: 25px;
@@ -44,7 +48,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
-    color: #fff;
+    color: #fff !important;
     font-size: 0.8rem;
     padding: 8px 20px;
     border: 1px solid transparent;
@@ -81,3 +85,26 @@ http://www.apache.org/licenses/LICENSE-2.0
     display: flex;
     align-items: end;
 }
+.btn-testcase{
+    border: 1px solid #0e6f8794;
+    font-size: 0.8rem !important;
+    background-color: white;
+    border-radius: 4px;
+    padding: 5px 10px 5px 10px;
+}
+::ng-deep.mat-step-header:hover{
+    background-color: #fff !important;
+}
+::ng-deep.mat-step-icon-selected {
+    background-color: #00B2DC !important;
+}
+::ng-deep.mat-step-icon-state-edit{
+    background-color: #00B2DC !important;
+}
+hr{
+    margin-top: 0;
+}
+.temp-title{
+    font-size: 0.8rem;
+}
+

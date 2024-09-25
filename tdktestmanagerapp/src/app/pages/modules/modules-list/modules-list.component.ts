@@ -60,6 +60,16 @@ export class ModulesListComponent {
   uploadXMLForm!:FormGroup;
   uploadFormSubmitted = false;
   uploadFileName! :File;
+  configureName!: string;
+  selectedConfig!: string | null;
+  lastSelectedNodeId: string | undefined;
+  rowData: any = [];
+  isRowSelected: any;
+  selectedRow: any;
+  isCheckboxSelected: boolean = false;
+  rowIndex!: number | null;
+  selectedRowCount = 0;
+  categoryName!: string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -103,15 +113,7 @@ export class ModulesListComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  configureName!: string;
-  selectedConfig!: string | null;
-  lastSelectedNodeId: string | undefined;
-  rowData: any = [];
-  isRowSelected: any;
-  selectedRow: any;
-  isCheckboxSelected: boolean = false;
-  rowIndex!: number | null;
-  selectedRowCount = 0;
+ 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar, public dialog:MatDialog, private moduleservice:ModulesService,private renderer: Renderer2
   ) { }
@@ -120,6 +122,7 @@ export class ModulesListComponent {
   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.findallbyCategory(); 
     this.uploadXMLForm = new FormGroup({
       uploadXml: new FormControl<string | null>('', { validators: Validators.required }),

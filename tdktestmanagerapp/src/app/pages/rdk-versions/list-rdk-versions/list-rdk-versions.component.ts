@@ -66,6 +66,8 @@ export class ListRdkVersionsComponent {
   rowIndex!: number | null;
   selectedRowCount = 0;
   showUpdateButton = false;
+  categoryName!: string;
+  configureName!: string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -92,7 +94,6 @@ export class ListRdkVersionsComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  configureName!: string;
 
   constructor(private router: Router, private authservice: AuthService,
     private service: RdkVersionsService, private _snakebar: MatSnackBar
@@ -106,6 +107,7 @@ export class ListRdkVersionsComponent {
       this.rowData = JSON.parse(res);
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
   }
 

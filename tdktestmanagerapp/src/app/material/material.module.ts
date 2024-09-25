@@ -38,6 +38,10 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatDialogModule } from '@angular/material/dialog';
 import {MatChipsModule} from '@angular/material/chips';
+import { MatTreeModule } from '@angular/material/tree';
+import { MatTableModule } from '@angular/material/table'
+import { MatPaginatorModule } from '@angular/material/paginator';
+import {MatStepperModule} from '@angular/material/stepper';
 @NgModule({
   declarations: [],
   imports: [
@@ -62,7 +66,11 @@ import {MatChipsModule} from '@angular/material/chips';
     MatTabsModule,
     MatSnackBarModule,
     MatDialogModule,
-    MatChipsModule
+    MatChipsModule,
+    MatTreeModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatStepperModule
   ]
 })
 export class MaterialModule { }

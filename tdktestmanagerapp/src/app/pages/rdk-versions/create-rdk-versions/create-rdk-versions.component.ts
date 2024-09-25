@@ -47,7 +47,7 @@ export class CreateRdkVersionsComponent {
   loggedinUser: any = {};
 
   constructor(private router: Router, private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService, private service: RdkVersionsService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'create-rdkversions' ? this.commonFormName + ' ' + `${this.authservice.selectedConfigVal.toUpperCase()}` + ' ' + 'RDKVersions' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'create-rdkversions' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'RDKVersions' : this.commonFormName;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
 
   }

@@ -176,6 +176,7 @@ export class DeviceCreateComponent implements OnInit{
   agentStatusPort = "8088";
   agentMonitoPort = "8090";
   selectedDeviceCategory : string = 'RDKV';
+  categoryName : string = 'Video';
   checkOcapId: any;
   editor!: Editor;
   editor2!: Editor;
@@ -245,16 +246,19 @@ export class DeviceCreateComponent implements OnInit{
       this.showHideCreateFormV = true;
       this.showHideCreateFormB = false;
       this.showHideCreateFormC = false;
+      this.categoryName = 'Video';
     }
     if(this.configureName ==='RDKB'){
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
       this.showHideCreateFormC = false;
+      this.categoryName = 'Broadband'
     }
     if(this.configureName ==='RDKC'){
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = false;
       this.showHideCreateFormC = true;
+      this.categoryName = "Camera"
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.deviceForm = new FormGroup({

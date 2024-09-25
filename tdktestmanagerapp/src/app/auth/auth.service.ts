@@ -30,6 +30,7 @@ export class AuthService {
    */
   selectedConfigVal: string = 'RDKV';
   selectedCategory! : string ;
+  showSelectedCategory : string = 'Video' ;
   /**
    * The current route.
    */

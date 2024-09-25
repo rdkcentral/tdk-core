@@ -35,6 +35,7 @@ export class DeviceService {
   fileName!: string;
   private storageKey = 'streamData';
   typeOfboxtypeDropdown!:string;
+  showSelectedCategory : string = 'Video' ;
 
   constructor(private http: HttpClient, private authService: AuthService) { }
     

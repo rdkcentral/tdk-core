@@ -53,6 +53,7 @@ export class DevicesComponent {
   uploadXMLForm!:FormGroup;
   uploadFormSubmitted = false;
   uploadFileName! :File;
+  categoryName!: string | null;
   
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
@@ -113,14 +114,18 @@ export class DevicesComponent {
    */
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
+    const name = localStorage.getItem('deviceCategoryName');
+    this.categoryName = name
+    console.log("Device category",name);
     if(deviceCategory === null){
+      this.categoryName = name
       this.configureName = this.selectedDeviceCategory;
       localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
       this.findallbyCategory();
     }
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory;
-      this.configureName = this.selectedDeviceCategory;
+      console.log("Device category",this.configureName = this.selectedDeviceCategory);
       this.findallbyCategory();
     }
     this.uploadXMLForm = new FormGroup({
@@ -144,7 +149,17 @@ export class DevicesComponent {
    */
   ischecked(event:any):void{
     this.selectedDeviceCategory = event.target.value;
+    if(this.selectedDeviceCategory === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }
+    else if(this.selectedDeviceCategory === 'RDKC'){
+        this.categoryName = 'Camera';
+    }
+    else{
+      this.categoryName = 'Video';
+    }
     localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
+    localStorage.setItem('deviceCategoryName', this.categoryName);
     if(this.selectedDeviceCategory){
       this.configureName = this.selectedDeviceCategory;
       this.service.deviceCategory = this.selectedDeviceCategory;

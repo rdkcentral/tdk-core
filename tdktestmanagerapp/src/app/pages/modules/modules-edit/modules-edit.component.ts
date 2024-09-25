@@ -47,6 +47,7 @@ export class ModulesEditComponent {
   isAdvanced :boolean = false;
   moduleDetails:any;
   loggedinUser: any;
+  categoryName!: string;
 
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
@@ -58,6 +59,7 @@ export class ModulesEditComponent {
 
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.moduleservice.getAllTestGroups().subscribe((res:any) => {
       this.testGroupArr = JSON.parse(res);
     });

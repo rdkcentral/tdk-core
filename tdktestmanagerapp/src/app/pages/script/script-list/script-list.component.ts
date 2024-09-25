@@ -18,118 +18,236 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { AgGridAngular } from 'ag-grid-angular';
-import {
-  ColDef,
-  GridApi,
-  GridReadyEvent,
-  IMultiFilterParams,
-  RowSelectedEvent,
-  SelectionChangedEvent
-} from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
 import { ModulesService } from '../../../services/modules.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
-import { ModuleButtonComponent } from '../../../utility/component/modules-buttons/button/button.component';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { FlatTreeControl } from '@angular/cdk/tree';
+import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
+interface TreeNode {
+  name: string;
+  children?: TreeNode[];
+  testgroup:string;
+}
+
+interface FlatNode {
+  expandable: boolean;
+  name: string;
+  level: number;
+  childCount: number;
+  testgroup:string;
+}
 @Component({
   selector: 'app-script-list',
   standalone: true,
-  imports: [CommonModule,AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule,ScrollingModule
+],
   templateUrl: './script-list.component.html',
   styleUrl: './script-list.component.css'
 })
 export class ScriptListComponent {
-  public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
-  public tooltipShowDelay = 500;
-  public gridApi!: GridApi;
-  public columnDefs: ColDef[] = [
-    {
-      headerName: 'Sl No',
-      field: 'slno',
-      maxWidth: 80 ,
-    },
-    {
-      headerName: 'Module Name',
-      field: 'moduleName',
-      filter: 'agTextColumnFilter',
-      sort: 'asc',
-      width: 280,
-      filterParams: {
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Test Group',
-      field: 'testGroup',
-   
-    },
-    {
-      headerName: 'Script Count',
-      field: 'scriptCount',
-    
-    },
-    {
-      headerName: 'Action',
-      field: '',
-      sortable: false,
-      headerClass: 'no-sort',
-      cellRenderer: ModuleButtonComponent,
-      cellRendererParams: (params: any) => ({
-        onDownloadClick:this.downloadEXcel.bind(this),
-        selectedRowCount: () => this.selectedRowCount,
-      })
-    }
-  ];
-  public defaultColDef: ColDef = {
-    flex: 1,
-    menuTabs: ['filterMenuTab'],
-  };
 
-  categories = ['RDKV', 'RDKB', 'RDKC'];
-  selectedCategory: string = 'RDKV';
-  headingName: string = 'RDKV';
-  lastSelectedNodeId: string | undefined;
-  rowData: any = [];
-  isRowSelected: any;
-  selectedRow: any;
-  isCheckboxSelected: boolean = false;
-  rowIndex!: number | null;
-  selectedRowCount = 0;
+  categories = ['Video', 'Broadband', 'Camera'];
+  selectedCategory: string = 'Video';
+  headingName: string = 'Video';
   dynamicModuleName!:string;
   dynamicFunctionName!:string;
+  searchValue: string = '';
+
+  displayedColumns: string[] = ['name', 'testgroup', 'action'];
+  treeControl!: FlatTreeControl<FlatNode>;
+  treeFlattener!: MatTreeFlattener<TreeNode, FlatNode>;
+  dataSource!: MatTreeFlatDataSource<TreeNode, FlatNode>;
+  flatNodeDataSource = new MatTableDataSource<FlatNode>();
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  pageSize = 5; 
+  currentPage = 0; 
+  paginatedData: TreeNode[] = []; 
+  treeData: TreeNode[] = [
+    {
+    name: 'Aamp',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 1', testgroup:''},
+      { name: 'Script 2' , testgroup:'' },
+      { name: 'Script 3' , testgroup:''},
+    ],
+  },
+  {
+    name: 'Bluetooth',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 3',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 4',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 5',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 6',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 7',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''},
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 4' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 8',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''},
+      { name: 'Script 3' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 9',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''}
+    ]
+  },
+  {
+    name: 'module 10',
+    testgroup:'OpenSource',
+    children: [
+      { name: 'Script 1' , testgroup:''},
+      { name: 'Script 2' , testgroup:''},
+      { name: 'Script 3' , testgroup:''},
+      { name: 'Script 4' , testgroup:''},
+      { name: 'Script 5' , testgroup:''}
+    ]
+  }
+  ];
+  private _liveAnnouncer = inject(LiveAnnouncer);
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice: ModulesService,
     public dialog:MatDialog
-  ) { }
+  ) {
+    this.treeControl = new FlatTreeControl<FlatNode>(
+      node => node.level,
+      node => node.expandable
+    );
+
+    this.treeFlattener = new MatTreeFlattener(
+      this.transformer,
+      node => node.level,
+      node => node.expandable,
+      node => node.children
+    );
+
+    this.dataSource = new MatTreeFlatDataSource(this.treeControl, this.treeFlattener);
+    this.dataSource.data = this.treeData;
+    console.log(this.dataSource.data);
+    
+   }
 
   ngOnInit(): void {
     let functiondata = JSON.parse(localStorage.getItem('function') || '{}');
     this.dynamicModuleName = functiondata.moduleName;
     this.dynamicFunctionName = functiondata.functionName;
     this.authservice.selectedCategory = this.selectedCategory;
-    this.rowData =[
-      {slno:'1',moduleName:'AAMP',scriptCount:'20' ,testGroup:'OpenSource'}
-      ]
-    
+
+    this.updatePaginatedData();
+  }
+  transformer = (node: TreeNode, level: number): FlatNode => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+      testgroup: node.testgroup,
+      childCount: node.children ? node.children.length : 0
+    };
+  };
+
+  hasChild = (_: number, node: FlatNode) => node.expandable;
+
+  updatePaginatedData() {
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginatedData = this.treeData.slice(start, end);
+    this.dataSource.data = this.paginatedData;
   }
 
-  /**
-   * Event handler for when the grid is ready.
-   * @param params The grid ready event parameters.
-   */
-  onGridReady(params: GridReadyEvent<any>) {
-    this.gridApi = params.api;
+  // Handle page change event from paginator
+  onPageChange(event: any) {
+    this.currentPage = event.pageIndex;
+    this.updatePaginatedData();
   }
+
+  flattenTreeData(tree: TreeNode[]): TreeNode[] {
+    let result: TreeNode[] = [];
+    tree.forEach(node => {
+      result.push(node);
+      if (node.children) {
+        result = result.concat(this.flattenTreeData(node.children));
+      }
+    });
+    return result;
+  }
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.dataSource.filter = filterValue.trim().toLowerCase();
+  // }
   downloadEXcel(params:any):void{
 
   }
@@ -145,5 +263,33 @@ export class ScriptListComponent {
       this.authservice.selectedCategory = this.selectedCategory;
     }
     
+  }
+  announceSortChange(sortState: any) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
+  }
+  filterTree(filterValue: string) {
+    if(filterValue){
+      const filteredTreeData = this.filterRecursive(this.treeData, filterValue);
+      this.dataSource.data = filteredTreeData;
+      this.treeControl.expandAll(); // Expands all the nodes after filtering
+    }else{
+      this.treeControl.collapseAll();
+      this.ngOnInit();
+    }
+
+  }
+  filterRecursive(data: TreeNode[], filterValue: string): TreeNode[] {
+    return data
+      .map((node) => ({
+        ...node,
+        children: node.children
+          ? this.filterRecursive(node.children, filterValue)
+          : [],
+      }))
+      .filter((node) => node.name.toLowerCase().includes(filterValue.toLowerCase()) || (node.children && node.children.length > 0));
   }
 }

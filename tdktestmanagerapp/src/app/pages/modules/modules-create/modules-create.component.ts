@@ -45,7 +45,7 @@ export class ModulesCreateComponent {
   isThunder :boolean = false;
   isAdvanced :boolean = false;
   loggedinUser: any;
-
+  displayName!: string;
 
   constructor(private authservice: AuthService,private router: Router,
     private moduleservice: ModulesService,private _snakebar :MatSnackBar,
@@ -59,6 +59,7 @@ export class ModulesCreateComponent {
    */
   ngOnInit(): void {
     this.categoryName = this.authservice.selectedConfigVal;
+    this.displayName = this.authservice.showSelectedCategory;
     if(this.categoryName == "RDKB"){
       this.crashFilesArr = ['/rdklogs/logs'];
       this.logFilesArr = ['/rdklogs/logs'];

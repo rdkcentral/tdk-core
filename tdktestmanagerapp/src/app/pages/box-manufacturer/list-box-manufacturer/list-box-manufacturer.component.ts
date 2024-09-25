@@ -67,6 +67,8 @@ export class ListBoxManufacturerComponent {
   rowIndex!: number | null;
   selectedRowCount = 0;
   showUpdateButton = false;
+  categoryName!: string;
+  configureName!: string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -95,7 +97,7 @@ export class ListBoxManufacturerComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  configureName!: string;
+  
 
   constructor(private router: Router, private authservice: AuthService,
     private service: BoxManufactureService, private _snakebar: MatSnackBar
@@ -109,6 +111,7 @@ export class ListBoxManufacturerComponent {
       this.rowData = JSON.parse(res);
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
   }
 
