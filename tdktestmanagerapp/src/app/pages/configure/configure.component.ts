@@ -49,16 +49,19 @@ export class ConfigureComponent implements OnInit {
       this.rdkvVisible = false;
       this.rdkcVisible = false;
       this.service.selectedConfigVal = 'RDKB'
+      this.service.showSelectedCategory = "Broadband"
     } else if (val === 'RDKC') {
       this.rdkcVisible = true;
       this.rdkbVisible = false;
       this.rdkvVisible = false;
       this.service.selectedConfigVal = 'RDKC'
+      this.service.showSelectedCategory = "Camera"
     } else {
       this.rdkvVisible = true;
       this.rdkbVisible = false;
       this.rdkcVisible = false;
       this.service.selectedConfigVal = 'RDKV'
+      this.service.showSelectedCategory = "Video"
     }
   }
 

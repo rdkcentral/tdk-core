@@ -46,7 +46,7 @@ export class EditRdkVersionsComponent {
   constructor(private route: ActivatedRoute, private router: Router, private _snakebar: MatSnackBar,
     public service: RdkVersionsService, private authservice: AuthService) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'edit-rdkversions' ? this.commonFormName + ' ' + 'RDKVersions' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'edit-rdkversions' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'RDKVersions' : this.commonFormName;
   }
 
   /**

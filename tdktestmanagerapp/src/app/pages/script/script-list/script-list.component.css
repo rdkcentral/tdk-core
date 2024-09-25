@@ -17,6 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 0.78rem;
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+}
 .container{
     margin-bottom: 2rem;
 }
@@ -51,26 +63,43 @@ http://www.apache.org/licenses/LICENSE-2.0
     align-items: baseline;
 }
 .download-btn{
+    background-color: #fff;
+    font-size: 0.8rem;
+    padding: 5px 15px;
+    border: 1px solid #0e6f8794;
+    border-radius: 6px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    height: 33px;
+}
+.create{
     background-color: #00B2DC;
     color: #fff;
     font-size: 0.8rem;
-    padding: 7px 20px;
+    padding: 7px 10px;
     border: 1px solid transparent;
     border-radius: 6px;
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
+    height: 46px;
+}
+.upload-icon{
+    color: #00B2DC;
+    font-weight: bold;
+    font-size: 18px;
 }
 .download-icon{
-    margin-right: 5px;
+    color: #f58233;
+    font-weight: bold;
+    font-size: 18px;
 }
-
 .uploadbtn{
-    background-color: #00B2DC;
-    color: #fff;
+    background-color: #fff;
     font-size: 0.8rem;
-    padding: 7px 20px;
-    border: 1px solid transparent;
+    padding: 5px 15px;
+    border: 1px solid #0e6f8794;
     border-radius: 6px;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -78,9 +107,69 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 .btns-group{
     display: flex;
-    gap: 25px;
+    justify-content: space-around;
 }
 .tabletitle{
     font-size: 1rem;
     text-align: center;
 }
+.delete-btn{
+    border: none;
+    padding: 0px;
+    margin-right:10px;
+    border-radius: 50px;
+}
+.extra-icon, .excel-icon{
+  color: white;
+  font-size: 1rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height:24px;
+  width:24px;
+}
+
+.edit{
+    background-color: #00B2DC;
+    border-radius: 50px;
+  }
+  .view{
+    background-color: #fdb73b;
+    border-radius: 50px;
+  }
+  .download{
+    background-color: #f58233;
+    border-radius: 50px;
+  }
+  .download-xlsx{
+    background-color: green;
+    border-radius: 50px;
+  }
+  .mat-mdc-header-row{
+    background-color: #d1d4d4;
+    height: 46px;
+    font-size: 0.78rem;
+  }
+  .mdc-data-table__content{
+    font-size: 0.78rem;
+    height: 40px;
+  }
+  .mat-mdc-table {
+    box-shadow: none;
+    border: 1px solid #ddd;
+    
+}
+::ng-deep.mat-mdc-paginator-container {
+    min-height: 40px !important;
+}
+.footer-table{
+    border: 1px solid #ddd;
+}
+.parentnode{
+    position: absolute;
+    margin-top: 0.78rem;
+}
+  .mat-tree-viewport {
+    height: 400px; 
+    width: 100%;
+  }

@@ -48,7 +48,7 @@ export class CreateScriptTagComponent {
 
   constructor(private router: Router, public service: ScriptTagService,
     private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'scripttag-create' ? this.commonFormName + ' ' + `${this.authservice.selectedConfigVal.toUpperCase()}` + ' ' + 'ScriptTag' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'scripttag-create' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'ScriptTag' : this.commonFormName;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
 
   }

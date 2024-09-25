@@ -84,6 +84,7 @@ export class CreatePrimitiveTestComponent {
   public frameworkComponents: any;
   parameterListMapObj!: { parameterName: any; parameterValue: any; }[];
   errElement!: { key: any; };
+  categoryName!: string;
 
   public columnDefs: ColDef[] = [
     {
@@ -171,6 +172,7 @@ export class CreatePrimitiveTestComponent {
       selectFunction: ['', Validators.required]
     });
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.service.getlistofModules(this.configureName).subscribe(res => {
       this.moduleNames = JSON.parse(res);
     })

@@ -68,6 +68,8 @@ export class ListScriptTagComponent {
   selectedRowCount = 0;
   showUpdateButton = false;
   errormessage!: string;
+  categoryName!: string;
+  configureName!: string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -94,7 +96,6 @@ export class ListScriptTagComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  configureName!: string;
 
   constructor(private router: Router, private authservice: AuthService,
     private service: ScriptTagService, private _snakebar: MatSnackBar
@@ -108,6 +109,7 @@ export class ListScriptTagComponent {
       this.rowData = JSON.parse(res);
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
   }
 

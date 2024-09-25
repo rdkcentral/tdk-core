@@ -72,6 +72,7 @@ export class ListPrimitiveTestComponent {
   moduleNames: any;
   configureName!: string;
   names: any[] = [];
+  categoryName!: string;
 
   public columnDefs: ColDef[] = [
     {
@@ -108,6 +109,7 @@ export class ListPrimitiveTestComponent {
   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
     this.service.getlistofModules(this.configureName).subscribe(res => {
       this.moduleNames = JSON.parse(res)

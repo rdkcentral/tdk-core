@@ -53,7 +53,7 @@ export class EditScriptTagComponent {
     private authservice: AuthService
   ) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'scripttag-edit' ? this.commonFormName + ' ' + 'Script Tag' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'scripttag-edit' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'Script Tag' : this.commonFormName;
   }
   /**
    * Initializes the component.

@@ -39,6 +39,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { SocVendorService } from '../../../services/soc-vendor.service';
 import { AuthService } from '../../../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ExecFileSyncOptionsWithBufferEncoding } from 'child_process';
 
 @Component({
   selector: 'app-list-soc-vendor',
@@ -66,7 +67,8 @@ export class ListSocVendorComponent implements OnInit {
   public gridApi!: GridApi;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  showUpdateButton = false; // or true, depending on when you want to show the button
+  showUpdateButton = false; 
+  categoryName!: string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -100,6 +102,7 @@ export class ListSocVendorComponent implements OnInit {
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
     this.service.getSocVendor(this.authservice.selectedConfigVal).subscribe(res => {
       this.rowData = JSON.parse(res);

@@ -88,6 +88,7 @@ export class EditPrimitiveTestComponent {
   primitiveTestId!: number;
   errElement!: { key: any; };
   isDisabled = true
+  categoryName!: string;
 
   public columnDefs: ColDef[] = [
     {
@@ -181,6 +182,7 @@ export class EditPrimitiveTestComponent {
       this.rowData = res.primitiveTestParameters;
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
   }
 
   /**

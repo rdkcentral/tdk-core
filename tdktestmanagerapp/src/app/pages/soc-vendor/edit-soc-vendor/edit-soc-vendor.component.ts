@@ -50,7 +50,7 @@ export class EditSocVendorComponent {
   constructor(private route: ActivatedRoute, private router: Router, private _snakebar: MatSnackBar,
     public service: SocVendorService, private authservice: AuthService) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'edit-socvendor' ? this.commonFormName + ' ' + 'SoCVendor' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'edit-socvendor' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'SoCVendor' : this.commonFormName;
   }
 
    /**

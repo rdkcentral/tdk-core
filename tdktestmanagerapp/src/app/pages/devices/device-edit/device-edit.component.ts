@@ -175,6 +175,7 @@ public frameworkComponents :any;
   agentMonitoPort = "8090";
   user: any;
   selectedDeviceCategory : string = 'RDKV';
+  categoryName!: string;
   visibleDeviceconfigFile = false;
   configFileName!:string;
   editor!: Editor;
@@ -251,16 +252,19 @@ public frameworkComponents :any;
       this.showHideCreateFormV = true;
       this.showHideCreateFormB = false;
       this.showHideCreateFormC = false;
+      this.categoryName = 'Video';
     }
     if(this.configureName ==='RDKB'){
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
       this.showHideCreateFormC = false;
+      this.categoryName = 'Broadband';
     }
     if(this.configureName ==='RDKC'){
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = false;
       this.showHideCreateFormC = true;
+      this.categoryName = 'Camera';
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.editDeviceVForm = this.fb.group({

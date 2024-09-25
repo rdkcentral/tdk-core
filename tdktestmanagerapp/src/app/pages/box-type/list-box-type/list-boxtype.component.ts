@@ -63,7 +63,8 @@ export class ListBoxtypeComponent implements OnInit {
   public gridApi!: GridApi;
   rowIndex!: number | null;
   selectedRowCount = 0;
-  showUpdateButton = false; // or true, depending on when you want to show the button
+  showUpdateButton = false;
+  categoryName!: string;
   /**
    * The column definitions for the grid.
    */
@@ -115,6 +116,7 @@ export class ListBoxtypeComponent implements OnInit {
       this.rowData = JSON.parse(res);
     })
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
   }
 
   /**

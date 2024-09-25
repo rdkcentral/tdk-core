@@ -51,6 +51,7 @@ export class EditBoxTypeComponent {
   configureName!: string;
   user: any;
   selectedSubBox: any[] = []
+  categoryName!: string;
 
   constructor(private formBuilder: FormBuilder, private router: Router,
     private authservice: AuthService, private service: BoxtypeService, private _snakebar: MatSnackBar) {
@@ -81,6 +82,7 @@ export class EditBoxTypeComponent {
       allowSearchFilter: false,
     };
     this.configureName = this.authservice.selectedConfigVal;
+    this.categoryName = this.authservice.showSelectedCategory;
     this.getSubboxList();
   }
 

@@ -19,13 +19,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MONACO_PATH, MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
+import {MatStepperIntl} from '@angular/material/stepper';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 @Component({
   selector: 'app-create-scripts',
   standalone: true,
@@ -42,7 +44,9 @@ export class CreateScriptsComponent {
   dropdownSettings = {};
   boxtypeSettings = {};
   versionSettings = {};
-  createScriptForm!: FormGroup;
+  firstFormGroup!:FormGroup;
+  secondFormGroup!:FormGroup;
+  thirdFormGroup!:FormGroup;
   allsocVendors!:any[]
   dropdownList =[
     {"subBoxtypeId":1,"subBoxtypeName":"Primitive test 1"},
@@ -59,8 +63,15 @@ export class CreateScriptsComponent {
   code = this.getCode();
   editorOptions = { theme: 'vs-dark', language: 'python' };
   selectedCategoryName! : string ;
+  private _matStepperIntl = inject(MatStepperIntl);
+  optionalLabelText!: string;
+  newtestDialogRef!: MatDialogRef<any>;
+  @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
+  isLinear = true;
 
-  constructor(private authservice : AuthService,private router: Router) { }
+  constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
+    public dialog:MatDialog
+  ) { }
 
   ngOnInit(): void {
     this.dropdownSettings = {
@@ -93,21 +104,37 @@ export class CreateScriptsComponent {
     const selectedCategory = localStorage.getItem('scriptCategory');
     this.selectedCategoryName = selectedCategory?selectedCategory:'RDKV';
 
-    this.createScriptForm = new FormGroup({
-      scriptname: new FormControl<string | null>('', { validators: Validators.required }),
-      primitivetest: new FormControl<string | null>('', { validators: Validators.required }),
-      boxtype: new FormControl<string | null>('', { validators: Validators.required }),
-      rdkversion: new FormControl<string | null>('', { validators: Validators.required }),
-      executiontimeout: new FormControl<string | null>('', { validators: Validators.required }),
-      tags: new FormControl<string | null>('', { validators: Validators.required }),
-      testprofile: new FormControl<string | null>('', { validators: Validators.required }),
-      longdurationtest: new FormControl<string | null>('', { validators: Validators.required }),
-      skipexecution: new FormControl<string | null>('', { validators: Validators.required }),
-      advancedscript: new FormControl<string | null>('', { validators: Validators.required }),
-      synopsis: new FormControl<string | null>('', { validators: Validators.required }),
-      pythonEditor: new FormControl<string | null>('', { validators: Validators.required })
-    })
-
+    this.firstFormGroup = this.fb.group({
+      scriptname: ['', Validators.required],
+      module:['',Validators.required],
+      primitivetest: ['', Validators.required],
+      boxtype: ['', Validators.required],
+      executiontimeout: ['', Validators.required],
+      longdurationtest: ['', Validators.required],
+      skipexecution: ['', Validators.required],
+      synopsis: ['', Validators.required]
+    });
+    this.secondFormGroup = this.fb.group({
+      // testScript: ['', Validators.required],
+      testcaseID: ['', Validators.required],
+      testObjective: ['', Validators.required],
+      inputParameters: ['', Validators.required],
+      automationApproach: ['', Validators.required],
+      priority: [''],
+      remarks: [''],
+      testType: [''],
+      // supportedBoxType: ['', Validators.required],
+      rdkInterface: ['', Validators.required],
+      expectedOutput: [''],
+      testPreRequisites: [''],
+      // skipped: [''],
+      releaseVersion:[''],
+      testStub:['']
+    });
+    this.thirdFormGroup = this.fb.group({
+      pythonEditor: ['', Validators.required],
+  
+    });
   }
 
 
@@ -225,8 +252,10 @@ export class CreateScriptsComponent {
     localStorage.removeItem('scriptCategory');
   }
 
-
-
+  updateOptionalLabel() {
+    this._matStepperIntl.optionalLabel = this.optionalLabelText;
+    this._matStepperIntl.changes.next();
+  }
 
 
 }

@@ -54,7 +54,7 @@ export class EditBoxManufacturerComponent implements OnInit {
     private authservice: AuthService
   ) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'boxManufacturer-edit' ? this.commonFormName + ' ' + 'Box Manufacturer' : this.commonFormName;
+    this.commonFormName = this.route.snapshot.url[1].path === 'boxManufacturer-edit' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'Box Manufacturer' : this.commonFormName;
   }
 
    /**
