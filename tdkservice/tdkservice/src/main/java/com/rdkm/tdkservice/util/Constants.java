@@ -51,46 +51,24 @@ public class Constants {
 	// TDKV device config directory inside filestore
 	public static final String TDKV_DEVICE_CONFIG_DIR = "tdkvDeviceConfig";
 
-	// radio stream type
-	public static final String RADIO_STREAM_TYPE = "RADIO";
-
-	// video stream type
-	public static final String VIDEO_STREAM_TYPE = "VIDEO";
 
 	// Empty string
 	public static final String EMPTY_STRING = "";
-	// Starting with R
-	public static final String STARTING_WITH_R = "R";
-
-	// streaming Details template
-	public static final String STREAMING_TEMPLATE_DETAILS = "StreamingDetailsTemplate";
-
-	// Stream ID
-	public static final String STREAMING_DETAILS_ID = "Stream Id";
-
-	// Audio type
-	public static final String AUDIO_TYPE = "Audio Type";
-
-	// Video type
-	public static final String VIDEO_TYPE = "Video Type";
-
-	// ChannelType
-	public static final String CHANNEL_TYPE = "Channel Type";
 
 	// Category
 	public static final String CATEGORY = "Category";
 
-	// BoxManufacturer Id
-	public static final String BOXMANUFACTURER_ID = "BoxManufacturer Id";
+	// Oem Id
+	public static final String OEM_ID = "oem Id";
 
-	// BoxManufacturer Name
-	public static final String BOXMANUFACTURER_NAME = "BoxManufacturer Name";
+	// Oem Name
+	public static final String OEM_NAME = "oem Name";
 
-	// SocVendor Id
-	public static final String SOCVENDOR_ID = "SocVendor Id";
+	// Soc Id
+	public static final String SOC_ID = "Soc Id";
 
-	// Soc Vendor name
-	public static final String SOCVENDOR_NAME = "SocVendor";
+	// Soc name
+	public static final String SOC_NAME = "Soc";
 
 	// User group
 	public static final String USER_GROUP = "User Group";
@@ -102,14 +80,14 @@ public class Constants {
 	// User Role Id
 	public static final String USER_ROLE_ID = "User Role Id";
 
-	// Box type
-	public static final String BOX_TYPE = "Box type";
+	// Device type
+	public static final String DEVICE_TYPE = "Device type";
 
-	// box type id
-	public static final String BOX_TYPE_ID = "Box type id";
-	// box type type
-	public static final String BOX_TYPE_TYPE = "BoxType type";
-	// User name
+	// device type id
+	public static final String DEVICE_TYPE_ID = "Device type id";
+	// device type type
+	public static final String DEVICE_TYPE_TYPE = "DeviceType type";
+	// user name
 	public static final String USER_NAME = "User Name";
 	// User id
 	public static final String USER_ID = "User Id";
@@ -141,24 +119,14 @@ public class Constants {
 	public static final String XML_TAG_IS_THUNDER_ENABLED = "isThunderEnabled";
 	// thunder port
 	public static final String XML_TAG_THUNDER_PORT = "thunderPort";
-	// xml box type
-	public static final String XML_TAG_BOX_TYPE = "box_type";
-	// xml box manufacturer
-	public static final String XML_TAG_BOX_MANUFACTURER = "box_manufacturer";
-	// xml soc vendor
-	public static final String XML_TAG_SOC_VENDOR = "soc_vendor";
+	// xml device type
+	public static final String XML_TAG_Device_TYPE = "device_type";
+	// xml oem
+	public static final String XML_TAG_OEM = "oem";
+	// xml soc
+	public static final String XML_TAG_SOC = "soc";
 	// xml category
 	public static final String XML_TAG_CATEGORY = "category";
-	// xml recorder id
-	public static final String XML_TAG_RECORDER_ID = "recorder_id";
-	// xml gateway name
-	public static final String XML_TAG_GATEWAY_IP_device = "gateway_name";
-	// xml streams
-	public static final String XML_TAG_STREAMS = "streams";
-	// xml stream
-	public static final String XML_TAG_STREAM = "stream";
-	// xml stream id
-	public static final String XML_TAG_ID = "id";
 
 	// Db file name
 	public static final String DB_FILE_NAME = "classpath:data.sql";

@@ -19,26 +19,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 
 /**
- * This is the DTO class for download device configuration request
- * 
+ * Data Transfer Object for SocVendor. This class is used to transfer data
+ * between different parts of the application. It includes the necessary Jackson
+ * annotations to ignore unknown properties and include non-null fields when
+ * serializing to JSON.
  */
 @Data
-public class DeviceConfigDownloadDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class SocUpdateDTO {
 
 	/**
-	 * device type name for which the device configuration is to be downloaded
+	 * Represents the unique identifier for the SocVendor.
 	 */
-	@NotBlank(message = "Device name is required")
-	private String deviceTypeName;
+	private Integer socId;
 
 	/**
-	 * Device type for which the device configuration is to be downloaded
+	 * Represents the name of the SocVendor.
 	 */
-	@NotBlank(message = "Device Type is required")
-	private String deviceType;
+
+	private String socName;
+
+	/**
+	 * Represents the category of the SocVendor.
+	 */
+
+	private String socCategory;
 
 }

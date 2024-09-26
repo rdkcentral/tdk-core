@@ -60,9 +60,9 @@ public class ScriptCreateDTO {
 	private String primitiveTestName;
 
 	/**
-	 * List of box types that the script is associated with.
+	 * List of deviceTypes  that the script is associated with.
 	 */
-	private List<String> boxTypes;
+	private List<String> deviceTypes;
 
 	/**
 	 * The user group associated with the module.

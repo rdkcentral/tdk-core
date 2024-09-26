@@ -69,29 +69,22 @@ public class DeviceCreateDTO {
 	private String macId;
 
 	/**
-	 * Represents the boxTypeName of the device.
+	 * Represents the deviceTypeName of the device.
 	 */
-	private String boxTypeName;
+	private String deviceTypeName;
 	/**
-	 * Represents the boxManufacturerName of the device.
+	 * Represents the oemName of the device.
 	 */
-	private String boxManufacturerName;
+	private String oemName;
 	/**
-	 * Represents the socVendorName of the device.
+	 * Represents the socName of the device.
 	 */
-	private String socVendorName;
+	private String socName;
 	/**
 	 * Represents the deviceStatus of the device.
 	 */
 	private DeviceStatus devicestatus;
-	/**
-	 * Represents the recorderId of the device.
-	 */
-	private String recorderId;
-	/**
-	 * Represents the gatewayDeviceName of the device.
-	 */
-	private String gatewayDeviceName;
+
 	/**
 	 * Represents the isThunderEnabled of the device.
 	 */
@@ -110,10 +103,6 @@ public class DeviceCreateDTO {
 	 */
 	@NotBlank
 	private String category;
-	/**
-	 * Represents the deviceStreams of the device.
-	 */
-	private ArrayList<DeviceStreamDTO> deviceStreams;
 
 	/**
 	 * Represents the isDevicePortsConfigured of the device.

@@ -21,11 +21,11 @@ package com.rdkm.tdkservice.repository;
 
 import java.util.List;
 
+import com.rdkm.tdkservice.model.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
 
 @Repository
@@ -80,12 +80,12 @@ public interface DeviceRepositroy extends JpaRepository<Device, Integer> {
 	List<Device> findByCategory(Category category);
 
 	/**
-	 * This method is used to find a Device by its boxType.
+	 * This method is used to find a Device by its deviceType.
 	 *
-	 * @param boxType This is the boxType of the Device to be found.
+	 * @param deviceType This is the deviceType of the Device to be found.
 	 * @return Device This returns the found Device.
 	 */
-	List<Device> findByBoxType(BoxType boxType);
+	List<Device> findByDeviceType(DeviceType deviceType);
 
 	/**
 	 * This method is used to find a Device by its stbName.
@@ -104,10 +104,10 @@ public interface DeviceRepositroy extends JpaRepository<Device, Integer> {
 	List<Device> findAllByCategory(Category category);
 	
 	/**
-	 * This method is used to find all Devices by their boxType.\ and category
+	 * This method is used to find all Devices by their deviceType.\ and category
 	 *
-	 * @param boxType This is the boxType of the Devices to be found.
+	 * @param deviceType This is the deviceType of the Devices to be found.
 	 * @return List<Device> This returns the found Devices.
 	 */
-	List<Device> findByBoxTypeAndCategory(BoxType boxType, Category category);
+	List<Device> findByDeviceTypeAndCategory(DeviceType deviceType, Category category);
 }

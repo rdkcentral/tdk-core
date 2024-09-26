@@ -25,14 +25,14 @@ import org.springframework.web.multipart.MultipartFile;
 public interface IDeviceConfigService {
 
 	/**
-	 * This method is used to get therdkv device configuration file for a given box
-	 * name or box type or default device configuration file.
+	 * This method is used to get therdkv device configuration file for a given device
+	 * name or device type or default device configuration file.
 	 * 
-	 * @param boxName - the box name
-	 * @param boxtype - the box type
+	 * @param deviceTypeName - the device type name
+	 * @param deviceType - the device type
 	 * @return Resource - the device configuration file
 	 */
-	Resource getDeviceConfigFile(String boxName, String boxtype);
+	Resource getDeviceConfigFile(String deviceTypeName, String deviceType);
 
 	/**
 	 * This method is used to upload the device configuration file
@@ -46,7 +46,7 @@ public interface IDeviceConfigService {
 	/**
 	 * This method is used to delete the device configuration file
 	 * 
-	 * @param fileName - the device configuration file name
+	 * @param deviceConfigFileName - the device configuration file name
 	 * @return boolean - true if the device config file is deleted successfully
 	 *         false - if the device config file is not deleted
 	 */

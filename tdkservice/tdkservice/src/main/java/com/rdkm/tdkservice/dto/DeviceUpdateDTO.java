@@ -66,25 +66,18 @@ public class DeviceUpdateDTO {
     @Pattern(regexp = "^([0-9A-F]{2}:){5}[0-9A-F]{2}$", message = "Invalid MAC address format")
     private String macId;
     /**
-     * Represents the boxTypeName of the device.
+     * Represents the deviceTypeName of the device.
      */
-    private String boxTypeName;
+    private String deviceTypeName;
     /**
-     * Represents the boxManufacturerName of the device.
+     * Represents the oemName of the device.
      */
-    private String boxManufacturerName;
+    private String oemName;
     /**
-     * Represents the socVendorName of the device.
+     * Represents the socName of the device.
      */
-    private String socVendorName;
-    /**
-     * Represents the deviceStatus of the device.
-     */
-    private String recorderId;
-    /**
-     * Represents the gatewayIp of the device.
-     */
-    private String gatewayDeviceName;
+    private String socName;
+
     /**
      * Represents the isThunderEnabled of the device.
      */
@@ -101,10 +94,6 @@ public class DeviceUpdateDTO {
      * Represents the category of the device.
      */
     private String category;
-    /**
-     * Represents the deviceStreams of the device.
-     */
-    private List<DeviceStreamDTO> deviceStreams;
 
     /**
      * Represents the isDevicePortsConfigured of the device.

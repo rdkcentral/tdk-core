@@ -19,26 +19,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
 import lombok.Data;
 
 /**
- * This is the DTO class for download device configuration request
- * 
+ * The DeviceTypeUpdateDTO class is used to map the request body of the devicetype
+ * request.
  */
 @Data
-public class DeviceConfigDownloadDTO {
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class DeviceTypeUpdateDTO {
 
 	/**
-	 * device type name for which the device configuration is to be downloaded
+	 * Represents the unique identifier for the deviceType.
 	 */
-	@NotBlank(message = "Device name is required")
+	private Integer deviceTypeId;
+
+	/**
+	 * Represents the name of the deviceType.
+	 */
 	private String deviceTypeName;
 
 	/**
-	 * Device type for which the device configuration is to be downloaded
+	 * Represents the type of the deviceType.
 	 */
-	@NotBlank(message = "Device Type is required")
 	private String deviceType;
+
+	/**
+	 * Represents the device type category of the deviceType.
+	 */
+	private String deviceTypeCategory;
+
 
 }
