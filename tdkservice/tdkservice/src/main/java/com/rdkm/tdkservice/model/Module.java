@@ -79,16 +79,6 @@ public class Module extends BaseEntity{
     private Set<String> crashLogFiles;
 
     /**
-     * Indicates whether Thunder is enabled for the module.
-     */
-    private boolean isThunderEnabled;
-
-    /**
-     * Indicates whether the module is advanced.
-     */
-    private boolean isAdvanced;
-
-    /**
      * The category of the module.
      */
     @Enumerated(EnumType.STRING)

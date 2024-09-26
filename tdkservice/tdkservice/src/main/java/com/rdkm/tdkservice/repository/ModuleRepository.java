@@ -41,10 +41,17 @@ public interface ModuleRepository extends JpaRepository<Module, Integer> {
     Module findByName(String name);
 
     /**
-     * Finds a module by its category.
+     +     * Finds all modules by category.
+     +     * @param categories
+     +     * @return
+     +     */
+    List<Module> findAllByCategoryIn(List<Category> categories);
+
+    /**
+     * Finds all modules by category.
      *
-     * @param category the category of the module
-     * @return the module with the specified category, or null if not found
+     * @param category the category of the modules
+     * @return a list of modules with the specified category
      */
     List<Module> findAllByCategory(Category category);
 

@@ -19,9 +19,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.rdkm.tdkservice.dto.*;
+import com.rdkm.tdkservice.enums.TestGroup;
+import com.rdkm.tdkservice.model.*;
+import com.rdkm.tdkservice.model.Module;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,9 @@ import com.rdkm.tdkservice.model.StreamingDetails;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used to populate the DTO objects from the model objects.
@@ -380,8 +384,6 @@ public class MapperUtils {
 		module.setExecutionTime(dto.getExecutionTime());
 		module.setLogFileNames(dto.getModuleLogFileNames());
 		module.setCrashLogFiles(dto.getModuleCrashLogFiles());
-		module.setAdvanced(dto.isModuleAdvanced());
-		module.setThunderEnabled(dto.isModuleThunderEnabled());
 		return module;
 	}
 
@@ -439,12 +441,6 @@ public class MapperUtils {
 			TestGroup testGroup = TestGroup.valueOf(moduleDTO.getTestGroup());
 			module.setTestGroup(testGroup);
 		}
-		if (moduleDTO.getModuleCategory() != null && !moduleDTO.getModuleCategory().isEmpty()) {
-			Category category = Category.valueOf(moduleDTO.getModuleCategory());
-			module.setCategory(category);
-		}
-		module.setThunderEnabled(moduleDTO.isModuleThunderEnabled());
-		module.setAdvanced(moduleDTO.isModuleAdvanced());
 	}
 
 	/**
@@ -463,9 +459,7 @@ public class MapperUtils {
 		moduleDTO.setExecutionTime(module.getExecutionTime());
 		moduleDTO.setModuleLogFileNames(module.getLogFileNames());
 		moduleDTO.setModuleCrashLogFiles(module.getCrashLogFiles());
-		moduleDTO.setModuleThunderEnabled(module.isThunderEnabled());
-		moduleDTO.setModuleAdvanced(module.isAdvanced());
-		moduleDTO.setModuleCategory(module.getCategory() != null ? module.getCategory().name() : null);
+		moduleDTO.setModuleCategory(module.getCategory().name());
 		return moduleDTO;
 	}
 

@@ -65,11 +65,6 @@ public class ModuleCreateDTO {
     private Set<String> moduleCrashLogFiles;
 
     /**
-     * The flag indicating whether the module is advanced.
-     */
-    private boolean isModuleAdvanced;
-
-    /**
      * The category of the module.
      */
     @NotBlank(message = "Category is required")

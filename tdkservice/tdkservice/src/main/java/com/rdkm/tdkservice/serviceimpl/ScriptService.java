@@ -527,7 +527,7 @@ public class ScriptService implements IScriptService {
 	 */
 	private Category getCategoryBasedOnModule(Module module) {
 		LOGGER.info("Getting category based on module: " + module.getName());
-		if (module.getCategory().equals(Category.RDKV) && module.isThunderEnabled()) {
+		if (module.getCategory().equals(Category.RDKV_RDKSERVICE)) {
 			return Category.RDKV_RDKSERVICE;
 		} else if (module.getCategory().equals(Category.RDKV)) {
 			return Category.RDKV;

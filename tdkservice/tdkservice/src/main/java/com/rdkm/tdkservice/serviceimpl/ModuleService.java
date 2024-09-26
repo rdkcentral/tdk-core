@@ -114,11 +114,17 @@ public class ModuleService implements IModuleService {
 		LOGGER.info("UserGroup found: {}", userGroup);
 
 		Module module = MapperUtils.toModuleEntity(moduleDTO, userGroup);
-		Category category = Category.getCategory(moduleDTO.getModuleCategory());
-		if (null == category) {
-			throw new ResourceNotFoundException(Constants.CATEGORY, moduleDTO.getModuleCategory());
+
+		// Check if isThunderEnabled is true
+		if (moduleDTO.isModuleThunderEnabled()) {
+			module.setCategory(Category.RDKV_RDKSERVICE);
 		} else {
-			module.setCategory(category);
+			Category category = Category.getCategory(moduleDTO.getModuleCategory());
+			if (null == category) {
+				throw new ResourceNotFoundException(Constants.CATEGORY, moduleDTO.getModuleCategory());
+			} else {
+				module.setCategory(category);
+			}
 		}
 		try {
 			moduleRepository.save(module);
@@ -154,7 +160,14 @@ public class ModuleService implements IModuleService {
 				existingModule.setName(moduleDTO.getModuleName());
 			}
 		}
-		MapperUtils.updateModuleProperties(existingModule, moduleDTO);
+
+		// Check if isThunderEnabled is true
+		if (moduleDTO.isModuleThunderEnabled()) {
+			existingModule.setCategory(Category.RDKV_RDKSERVICE);
+		} else {
+			MapperUtils.updateModuleProperties(existingModule, moduleDTO);
+		}
+
 		try {
 			moduleRepository.save(existingModule);
 			return true;
@@ -213,7 +226,12 @@ public class ModuleService implements IModuleService {
 	@Override
 	public List<ModuleDTO> findAllByCategory(String category) {
 		LOGGER.info("Going to fetch all modules by category: {}", category);
-		List<Module> modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		List<Module> modules;
+		if (Category.RDKV.name().equals(category)) {
+			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+		} else {
+			modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		}
 		Utils.checkCategoryValid(category);
 		if (modules.isEmpty()) {
 			return Collections.emptyList();
@@ -229,6 +247,7 @@ public class ModuleService implements IModuleService {
 	 */
 
 	@Override
+	@Transactional
 	public boolean deleteModule(Integer id) {
 		LOGGER.info("Going to delete module with ID: {}", id);
 		Module module = moduleRepository.findById(id).orElse(null);
