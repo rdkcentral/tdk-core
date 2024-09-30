@@ -25,11 +25,11 @@ http://www.apache.org/licenses/LICENSE-2.0
     overflow: hidden;
     width: 80%;
     max-width: 100%;
-    min-height: 410px;
+    min-height: 455px;
 }
 
 .logo-img {
-    width: 8%;
+    width: 7%;
 }
 
 .title {
@@ -42,13 +42,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .apptitle {
     color: #fff;
-    font-size: 1.5rem !important;
+    font-size: 1.2rem !important;
     font-weight: 500;
     margin-left: 15px;
 }
 
 .container-box p {
-    font-size: 14px;
+    font-size: 0.78rem;
     line-height: 20px;
     letter-spacing: 0.3px;
     margin: 20px 0;
@@ -56,7 +56,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .container-box a {
     color: #00b2dc;
-    font-size: 14px;
+    font-size: 0.78rem;
     text-decoration: none;
     margin: 15px 0 10px;
     font-weight: 500;
@@ -108,13 +108,14 @@ http://www.apache.org/licenses/LICENSE-2.0
     transition: all 0.6s ease-in-out;
 }
 input::placeholder{
-    font-size: 12px;
+    font-size: 0.78rem;
   }
 .form-control {
     padding: .3rem .75rem;
+    font-size: 0.78rem;
   }
   .form-select{
-    font-size: 0.8rem;
+    font-size: 0.78rem;
   }
 .sign-in {
     left: 0;
@@ -239,8 +240,8 @@ input::placeholder{
 }
 
 .parent {
-    height: 75vh;
-    margin-top: 5px;
+    height: 90vh;
+    /* margin-top: 5px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -249,7 +250,7 @@ input::placeholder{
 .header {
     background-color: #0e6f87;
     color: #fff;
-    height: 60px;
+    height: 35px;
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
 

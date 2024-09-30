@@ -18,8 +18,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
-    font-size: 0.78rem;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-size: 0.78rem;
 }
 .mat-typography h1, 
 .mat-typography h2, 
@@ -27,149 +27,178 @@ body, *:not(.material-icons) {
 .mat-typography h4, 
 .mat-typography h5, 
 .mat-typography h6 {
-  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 .container{
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 .radiobox-row{
-    border: 1px solid #0000002e;
-    border-radius: 10px;
-    box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
+  border: 1px solid #0000002e;
+  border-radius: 10px;
+  box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
 }
 .download-row{
-    text-align: right;
+  text-align: right;
 }
 .heading{
-    font-size: 1rem;
-    margin-top: 8px;
+  font-size: 1rem;
+  margin-top: 8px;
 }
 
 
 .title {
-    font-size: 1rem;
-    text-align: center;
-    padding: 1px 0 1px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    margin: 0;
+  font-size: 1rem;
+  text-align: center;
+  padding: 1px 0 1px 0;
+  border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0;
 }
 
 .example-header {
-    margin-bottom: 10px;
-    display: flex;
-    justify-content: center;
-    align-items: baseline;
-}
-.download-btn{
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid #0e6f8794;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    height: 33px;
-}
-.create{
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 7px 10px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    height: 46px;
-}
-.upload-icon{
-    color: #00B2DC;
-    font-weight: bold;
-    font-size: 18px;
-}
-.download-icon{
-    color: #f58233;
-    font-weight: bold;
-    font-size: 18px;
-}
-.uploadbtn{
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid #0e6f8794;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-}
-.btns-group{
-    display: flex;
-    justify-content: space-around;
-}
-.tabletitle{
-    font-size: 1rem;
-    text-align: center;
-}
-.delete-btn{
-    border: none;
-    padding: 0px;
-    margin-right:10px;
-    border-radius: 50px;
-}
-.extra-icon, .excel-icon{
-  color: white;
-  font-size: 1rem;
+  margin-bottom: 10px;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height:24px;
-  width:24px;
+  align-items: baseline;
+}
+.download-btn{
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: 1px solid #0e6f8794;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.create{
+  background-color: #00B2DC;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 7px 20px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.upload-icon{
+  color: #00B2DC;
+  font-weight: bold;
+  font-size: 18px;
+}
+.download-icon{
+  color: #f58233;
+  font-weight: bold;
+  font-size: 18px;
+}
+.uploadbtn{
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: 1px solid #0e6f8794;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.btns-group{
+  display: flex;
+  justify-content: space-around;
+}
+.tabletitle{
+  font-size: 1rem;
+  text-align: center;
+}
+.delete-btn{
+  border: none;
+  padding: 0px;
+  margin-right:10px;
+  border-radius: 50px;
+}
+.extra-icon, .excel-icon{
+color: white;
+font-size: 1rem;
+display: flex;
+justify-content: center;
+align-items: center;
+height:24px;
+width:24px;
 }
 
 .edit{
-    background-color: #00B2DC;
-    border-radius: 50px;
-  }
-  .view{
-    background-color: #fdb73b;
-    border-radius: 50px;
-  }
-  .download{
-    background-color: #f58233;
-    border-radius: 50px;
-  }
-  .download-xlsx{
-    background-color: green;
-    border-radius: 50px;
-  }
-  .mat-mdc-header-row{
-    background-color: #d1d4d4;
-    height: 46px;
-    font-size: 0.78rem;
-  }
-  .mdc-data-table__content{
-    font-size: 0.78rem;
-    height: 40px;
-  }
-  .mat-mdc-table {
-    box-shadow: none;
-    border: 1px solid #ddd;
-    
+  background-color: #00B2DC;
+  border-radius: 50px;
+}
+.view{
+  background-color: #fdb73b;
+  border-radius: 50px;
+}
+.download{
+  background-color: #f58233;
+  border-radius: 50px;
+}
+.download-xlsx{
+  background-color: green;
+  border-radius: 50px;
+}
+.mat-mdc-header-row{
+  background-color: #d1d4d4;
+  height: 46px;
+  font-size: 0.78rem;
+}
+.mdc-data-table__content{
+  font-size: 0.78rem;
+  height: 40px;
+}
+.mat-mdc-table {
+  box-shadow: none;
+  border: 1px solid #ddd;
+  
 }
 ::ng-deep.mat-mdc-paginator-container {
-    min-height: 40px !important;
+  min-height: 40px !important;
 }
 .footer-table{
-    border: 1px solid #ddd;
+  border: 1px solid #ddd;
 }
 .parentnode{
-    position: absolute;
-    margin-top: 0.78rem;
+  position: absolute;
+  margin-top: 0.78rem;
 }
-  .mat-tree-viewport {
-    height: 400px; 
-    width: 100%;
-  }
+.mat-tree-viewport {
+  height: 310px; 
+  width: 100%;
+}
+.containerdrag {
+  margin: 10px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  width: 200px;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.name-list {
+  min-height: 200px;
+  padding: 10px;
+  border: 1px solid #ddd;
+  background-color: #f9f9f9;
+}
+
+[cdkDrag] {
+  padding: 5px;
+  margin-bottom: 5px;
+  border: 1px solid #0000003b;
+  background-color: #fff;
+  cursor: move;
+}
+.dropdown-toggle::after {
+  margin-left: .4em;
+  vertical-align: .02em;
+  font-size: 1.3rem;
+}
+.dropdown-menu li{
+  cursor: pointer;
+}

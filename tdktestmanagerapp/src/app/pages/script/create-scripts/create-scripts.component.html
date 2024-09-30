@@ -73,11 +73,11 @@ limitations under the License.
                             </div>
                             <div class="col">
                               <div class="row mb-3">
-                                <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <label for="deviceType" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 <div class="col-md-8">
                                       <ng-multiselect-dropdown #multiSelect id="subBoxtypelist"
-                                      [placeholder]="'Select an option'" [settings]="boxtypeSettings"
-                                      [data]="dropdownList" formControlName="boxtype">
+                                      [placeholder]="'Select an option'" [settings]="deviceTypeSettings"
+                                      [data]="dropdownList" formControlName="deviceType">
                                      </ng-multiselect-dropdown>
                                   
                                 </div>
@@ -111,13 +111,7 @@ limitations under the License.
                         <form [formGroup]="secondFormGroup">
                             <div class="row mt-2">
                                 <div class="col">
-                                    <!-- <div class="row mb-3">
-                                        <label for="testscript" class="col-md-3 col-form-label">Test Script<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                        <div class="col-md-8">
-                                          <input type="text" class="form-control" id="testscript" autocomplete="off" 
-                                            formControlName="testScript">
-                                        </div>
-                                      </div> -->
+                                   
                                       <div class="row mb-3">
                                         <label for="testId" class="col-md-3 col-form-label">Test Case ID<span style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
@@ -180,14 +174,7 @@ limitations under the License.
                                         </select>
                                     </div>
                                   </div>
-                                    <!-- <div class="row mb-3">
-                                        <label for="boxtype" class="col-md-3 col-form-label">Supported Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                        <div class="col-md-8">
-                                            <input type="text" class="form-control" id="boxtype" autocomplete="off" 
-                                            placeholder="Enter supported box type" formControlName="supportedBoxType">
-                                          
-                                        </div>
-                                    </div> -->
+                                 
                                     <div class="row mb-3">
                                         <label for="interface" class="col-md-3 col-form-label">RDK Interface<span style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
@@ -209,18 +196,7 @@ limitations under the License.
                                             formControlName="testPreRequisites"></textarea>
                                         </div>
                                     </div>
-<!--                                    
-                                    <div class="row mb-3">
-                                        <label for="Skipped" class="col-md-3 col-form-label">Skipped</label>
-                                        <div class="col-md-8">
-                                            <select class="form-select" aria-label="Default select example" id="skipped"
-                                             formControlName="skipped">
-                                                <option default>Select</option>
-                                                <option value="no" >No</option>
-                                                <option value="yes" >Yes</option>
-                                            </select>
-                                        </div>
-                                    </div> -->
+
                                     <div class="row mb-3">
                                         <label for="remarks" class="col-md-3 col-form-label">Remarks</label>
                                         <div class="col-md-8">

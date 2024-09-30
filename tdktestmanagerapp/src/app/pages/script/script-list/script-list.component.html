@@ -16,12 +16,8 @@ limitations under the License.
 <div class="container">
     <div class="row radiobox-row mt-1">
         <div class=" showrdkgrouprow mt-1">
-            <h1 class="title"> {{headingName}} Script Summary</h1>
-                <!-- <div class="row mt-2">
-                    <div class="download-row">
-                        <button type="button" class="download-btn" matTooltip="Download All Script Details"><i class="bi bi-download download-icon"></i> All Script Details</button>
-                    </div>
-                </div> -->
+            <h1 class="title"> {{headingName}} {{ viewName === 'testsuites' ? 'TestSuites Summary' : ' Script Summary' }} </h1>
+             
                 <div class="row mt-1">
                     <div class="col-md-3">
                             <span >Select Category</span>
@@ -30,111 +26,169 @@ limitations under the License.
                                     <option *ngFor="let option of categories" [value]="option">{{ option }}</option>
                                 </select>
                             </div>
-                          </div>
+                    </div>
                     <div class="col-md-3">
                             <span >Select View</span>
                             <div >
                                   <select class="form-select" aria-label="Default select example" id="selectBoxtype" name="selectBoxtype"
-                                  >
-                                  <option value="Scripts">Scripts</option>
-                                  <option value="TestSuites">TestSuites</option>
+                                  (change)="viewChange($event)">
+                                  <option value="scripts">Scripts</option>
+                                  <option value="testsuites">TestSuites</option>
                               </select>
                             </div>
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-6">
                         <label ></label>
-                        <div class="btns-group">
-                            <!-- <button type="button" class="download-btn" matTooltip="Download All {{selectedCategory}} Script"><i class="bi bi-download download-icon"></i>  </button> -->
+                        <div class="btns-group" *ngIf="scriptTable">
                             <button type="button" class="download-btn" matTooltip="Download All {{selectedCategory}} test cases(zip of excel files)"><i class="bi bi-download download-icon"></i> </button>
                             <button type="button" class="download-btn create" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
-                                <!-- <i class="bi bi-upload upload-icon"></i>  --> Upload {{selectedCategory}} Script
+                                 Upload {{selectedCategory}} Script
                             </button>
-                            <!-- <button class="download-btn create" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Script</button> -->
-                        </div>
-                    </div>
-                    <div class="col-md-2">
-                        <label ></label>
-                        <div class="">
                             <button class="create" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Script</button>
                         </div>
+                        <div class="btns-group" *ngIf="testsuitTable">
+                          <button type="button" class="download-btn" matTooltip="Download all suites xml in zip"><i class="bi bi-download download-icon"></i> </button>
+                          <button type="button" class="download-btn create" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
+                               Upload {{selectedCategory}} suite
+                          </button>
+                          <button *ngIf="testsuitTable && headingName !== 'Video'"  class="create" (click)="createScriptGroup()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Suite</button>
+                          <div class="" *ngIf="testsuitTable && headingName === 'Video'" >
+                            <button type="button" class="download-btn create dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                              Create {{selectedCategory}} Suite
+                            </button>
+                            <ul class="dropdown-menu">
+                              <li><a class="dropdown-item" (click)="createScriptGroup()">Thunder Enabled</a></li>
+                              <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" (click)="createScriptGroup()">Thunder Disabled</a></li>
+                            </ul>
+                          </div>
+                      </div>
                     </div>
                 </div>
-                <div class="row mt-1">
-                </div>
-                
+                <div class="row" *ngIf="scriptTable">
                     <div class="table-container mt-3" >
                         <!-- <div class="search-container">
-                            <mat-form-field appearance="outline">
-                              <mat-label>Global Search</mat-label>
-                              <input matInput [(ngModel)]="searchValue" (input)="filterTree(searchValue)" />
-                            </mat-form-field>
-                          </div> -->
-                        <div>
-                            <!-- Mat Tree to display hierarchical data -->
-                             <div class="example-container mat-elevation-z8">
-                                <cdk-virtual-scroll-viewport itemSize="48" class="mat-tree-viewport">
-                                <table mat-table [dataSource]="dataSource" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-                                    <ng-container matColumnDef="name" sticky>
-                                      <th mat-header-cell *matHeaderCellDef> 
-                                        <span [style.paddingLeft.px]="40"> Name </span>
-                                      </th>
-                                      <td mat-cell *matCellDef="let data"> 
-                                        <button mat-icon-button 
-                                                [style.visibility]="!data.expandable ? 'hidden' : ''"
-                                                [style.marginLeft.px]="data.level * 32"
-                                                (click)="treeControl.toggle(data)">
-                                          <mat-icon class="mat-icon-rtl-mirror">
-                                            {{treeControl.isExpanded(data) ? 'expand_more' : 'chevron_right'}}
-                                          </mat-icon>
-                                        </button>
-                                            <span class="parentnode">{{data.name }} <span *ngIf="data.childCount > 0" matTooltip="Script Count" > ({{data.childCount}}) </span></span>
-                                        </td>
-                                    </ng-container> 
-                                  
-                                    <ng-container matColumnDef="testgroup">
-                                      <th mat-header-cell *matHeaderCellDef> Test Group </th>
-                                      <td mat-cell *matCellDef="let data"> {{data.testgroup}} </td>
-                                    </ng-container> 
-        
-                                    <!-- Action Column -->
-                                    <ng-container matColumnDef="action" >
-                                        <th mat-header-cell *matHeaderCellDef> Action </th>
-                                        <td mat-cell *matCellDef="let node">
-                                            <ng-container *ngIf="!node.expandable">
-                                                <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" ><i class="bi bi-pencil extra-icon edit"></i></button>
-                                                <button class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" ><mat-icon class="extra-icon">delete_forever</mat-icon></button>
-                                                <button class="btn btn-primary btn-sm delete-btn" matTooltip="View" ><i class="bi bi-eye extra-icon view"></i></button>
-                                                <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download Script" ><i class="bi bi-download extra-icon download"></i></button>
-                                              </ng-container>
-                                              <ng-container *ngIf="node.expandable">
-                                                <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
-                                            </ng-container>
-                                        </td>
-                                    </ng-container>
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
-                                </table>
-                                </cdk-virtual-scroll-viewport>
-                             </div>
-                             <!-- <div class="child-node">
-                                <table mat-table [dataSource]="dataSource"  class="mat-elevation-z8">
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
-                                </table>
-                             </div> -->
-                              <div class="footer-table">
-                                <!-- <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator> -->
-                                <mat-paginator
-                                [length]="treeData.length"
-                                [pageSize]="pageSize"
-                                (page)="onPageChange($event)">
-                              </mat-paginator>
-                              </div>
-                          </div>
-                          
-                          
-                          
+                                <mat-form-field appearance="outline">
+                                  <mat-label>Global Search</mat-label>
+                                  <input matInput [(ngModel)]="searchValue" (input)="filterTree(searchValue)" />
+                                </mat-form-field>
+                              </div> -->
+                            <div>
+                                 <div class="example-container mat-elevation-z8">
+                                    <cdk-virtual-scroll-viewport itemSize="48" class="mat-tree-viewport">
+                                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
+                                        <ng-container matColumnDef="name" sticky>
+                                          <th mat-header-cell *matHeaderCellDef mat-sort-header> 
+                                            <span [style.paddingLeft.px]="40"> Name </span>
+                                          </th>
+                                          <td mat-cell *matCellDef="let data"> 
+                                            <button mat-icon-button 
+                                                    [style.visibility]="!data.expandable ? 'hidden' : ''"
+                                                    [style.marginLeft.px]="data.level * 32"
+                                                    (click)="treeControl.toggle(data)">
+                                              <mat-icon class="mat-icon-rtl-mirror">
+                                                {{treeControl.isExpanded(data) ? 'expand_more' : 'chevron_right'}}
+                                              </mat-icon>
+                                            </button>
+                                                <span class="parentnode">{{data.name }} <span *ngIf="data.childCount > 0" matTooltip="Script Count" > ({{data.childCount}}) </span></span>
+                                            </td>
+                                        </ng-container> 
+                                      
+                                        <ng-container matColumnDef="testgroup">
+                                          <th mat-header-cell *matHeaderCellDef> Test Group </th>
+                                          <td mat-cell *matCellDef="let data"> {{data.testgroup}} </td>
+                                        </ng-container> 
+            
+                                        <ng-container matColumnDef="action" >
+                                            <th mat-header-cell *matHeaderCellDef> Action </th>
+                                            <td mat-cell *matCellDef="let node">
+                                                <ng-container *ngIf="!node.expandable">
+                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" ><i class="bi bi-pencil extra-icon edit"></i></button>
+                                                    <button class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" ><mat-icon class="extra-icon">delete_forever</mat-icon></button>
+                                                    <button class="btn btn-primary btn-sm delete-btn" matTooltip="View" ><i class="bi bi-eye extra-icon view"></i></button>
+                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download Script" ><i class="bi bi-download extra-icon download"></i></button>
+                                                  </ng-container>
+                                                  <ng-container *ngIf="node.expandable">
+                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
+                                                </ng-container>
+                                            </td>
+                                        </ng-container>
+                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+                                    </table>
+                                    </cdk-virtual-scroll-viewport>
+                                 </div>
+                               
+                                  <div class="footer-table">
+                                    <mat-paginator
+                                    [length]="treeData.length"
+                                    [pageSize]="pageSize"
+                                    (page)="onPageChange($event)">
+                                  </mat-paginator>
+                                  </div>
+                            </div>
                     </div>
-               
+                </div>
+                <div class="row" *ngIf="testsuitTable">
+                  <div class="table-container mt-3" >
+                      <!-- <div class="search-container">
+                              <mat-form-field appearance="outline">
+                                <mat-label>Global Search</mat-label>
+                                <input matInput [(ngModel)]="searchValue" (input)="filterTree(searchValue)" />
+                              </mat-form-field>
+                            </div> -->
+                          <div>
+                               <div class="example-container mat-elevation-z8">
+                                  <cdk-virtual-scroll-viewport itemSize="48" class="mat-tree-viewport">
+                                  <table mat-table [dataSource]="dataSourceSuite" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
+                                      <ng-container matColumnDef="name" sticky>
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> 
+                                          <span [style.paddingLeft.px]="40"> Name </span>
+                                        </th>
+                                        <td mat-cell *matCellDef="let data"> 
+                                          <button mat-icon-button 
+                                                  [style.visibility]="!data.expandable ? 'hidden' : ''"
+                                                  [style.marginLeft.px]="data.level * 32"
+                                                  (click)="treeControlSuite.toggle(data)">
+                                            <mat-icon class="mat-icon-rtl-mirror">
+                                              {{treeControlSuite.isExpanded(data) ? 'expand_more' : 'chevron_right'}}
+                                            </mat-icon>
+                                          </button>
+                                              <span class="parentnode">{{data.name }} <span *ngIf="data.childCount > 0" matTooltip="Script Count" > ({{data.childCount}}) </span></span>
+                                          </td>
+                                      </ng-container> 
+          
+                                      <ng-container matColumnDef="action" >
+                                          <th mat-header-cell *matHeaderCellDef> Action </th>
+                                          <td mat-cell *matCellDef="let node">
+                                              <ng-container *ngIf="!node.expandable">
+             
+                                                <button class="btn btn-primary btn-sm delete-btn" matTooltip="View" ><i class="bi bi-eye extra-icon view"></i></button>
+                                                </ng-container>
+                                                <ng-container *ngIf="node.expandable">
+                                                  <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit/View Suite" ><i class="bi bi-pencil extra-icon edit"></i></button>
+                                                  <button class="btn btn-danger btn-sm delete-btn" matTooltip="Delete Suite" ><mat-icon class="extra-icon">delete_forever</mat-icon></button>
+                                                  <button  class="btn btn-primary btn-sm delete-btn"  matTooltip="Download the suite data as xml" ><i class="bi bi-download extra-icon download"></i></button>
+                                                  <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download all testcase documentation for the suite " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
+                                              </ng-container>
+                                          </td>
+                                      </ng-container>
+                                      <tr mat-header-row *matHeaderRowDef="TestSuilteColumns"></tr>
+                                      <tr mat-row *matRowDef="let row; columns: TestSuilteColumns;" ></tr>
+                                  </table>
+                                  </cdk-virtual-scroll-viewport>
+                               </div>
+                             
+                                <div class="footer-table">
+                                  <mat-paginator
+                                    [length]="treeTestSuiteData.length"
+                                    [pageSize]="pageSize"
+                                    (page)="onPageChangeSuite($event)">
+                                    </mat-paginator>
+                                </div>
+                          </div>
+                  </div>
+              </div>
         </div>
     </div>
 </div>

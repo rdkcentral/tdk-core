@@ -76,6 +76,8 @@ import { ParameterViewComponent } from './pages/modules/parameter-view/parameter
 import { ScriptListComponent } from './pages/script/script-list/script-list.component';
 import { CreateScriptsComponent } from './pages/script/create-scripts/create-scripts.component';
 import { EditPrimitiveTestComponent } from './pages/primitive-test/edit-primitive-test/edit-primitive-test.component';
+import { TestcaseCreateComponent } from './pages/script/testcase-create/testcase-create.component';
+import { CreateScriptGroupComponent } from './pages/script/create-script-group/create-script-group.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -139,7 +141,10 @@ export const routes: Routes = [
             {path: 'configure/edit-primitivetest',title:'Edit PrimitiveTest',component:EditPrimitiveTestComponent},
             {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
             {path:'script', title:'Script', component:ScriptListComponent},
-            {path:'script/create-scripts', title:'Cretae Script', component:CreateScriptsComponent}
+            {path:'script/create-scripts', title:'Cretae Script', component:CreateScriptsComponent},
+            {path:'script/testcase-create', title:'Create Testcase', component:TestcaseCreateComponent},
+            {path:'script/create-script-group', title:'Create Script Group', component:CreateScriptGroupComponent}
+
         ]
     }
 ];

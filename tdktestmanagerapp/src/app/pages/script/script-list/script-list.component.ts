@@ -27,7 +27,7 @@ import { ModulesService } from '../../../services/modules.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
+import { MatSort, Sort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { FlatTreeControl } from '@angular/cdk/tree';
 import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
@@ -39,13 +39,22 @@ interface TreeNode {
   children?: TreeNode[];
   testgroup:string;
 }
-
+interface TreeNodeTestSuite {
+  name: string;
+  children?: TreeNodeTestSuite[];
+}
 interface FlatNode {
   expandable: boolean;
   name: string;
   level: number;
   childCount: number;
   testgroup:string;
+}
+interface FlatNodeTestSuite {
+  expandable: boolean;
+  name: string;
+  level: number;
+  childCount: number;
 }
 @Component({
   selector: 'app-script-list',
@@ -56,7 +65,8 @@ interface FlatNode {
   styleUrl: './script-list.component.css'
 })
 export class ScriptListComponent {
-
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   categories = ['Video', 'Broadband', 'Camera'];
   selectedCategory: string = 'Video';
   headingName: string = 'Video';
@@ -70,8 +80,18 @@ export class ScriptListComponent {
   dataSource!: MatTreeFlatDataSource<TreeNode, FlatNode>;
   flatNodeDataSource = new MatTableDataSource<FlatNode>();
 
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  TestSuilteColumns: string[] = ['name', 'action'];
+  treeControlSuite!: FlatTreeControl<FlatNodeTestSuite>;
+  treeFlattenerSuite!: MatTreeFlattener<TreeNodeTestSuite, FlatNodeTestSuite>;
+  dataSourceSuite!: MatTreeFlatDataSource<TreeNodeTestSuite, FlatNodeTestSuite>;
+  flatNodeDataSourceSuite = new MatTableDataSource<FlatNodeTestSuite>();
+
+  private _liveAnnouncer = inject(LiveAnnouncer);
+
+  viewName!:string;
+  testsuitTable = false;
+  scriptTable = true;
+
   pageSize = 5; 
   currentPage = 0; 
   paginatedData: TreeNode[] = []; 
@@ -177,7 +197,97 @@ export class ScriptListComponent {
     ]
   }
   ];
-  private _liveAnnouncer = inject(LiveAnnouncer);
+  paginationData:TreeNodeTestSuite[]=[];
+  treeTestSuiteData: TreeNodeTestSuite[] = [
+    {
+    name: 'AAMP_LD',
+    children: [
+      { name: 'TestSuite 1'},
+      { name: 'TestSuite 2'},
+      { name: 'TestSuite 3' },
+      { name: 'TestSuite 4'},
+      { name: 'TestSuite 5' },
+      { name: 'TestSuite 6'},
+      { name: 'TestSuite 7'},
+      { name: 'TestSuite 8' },
+      { name: 'TestSuite 9'},
+      { name: 'TestSuite 10'}
+     
+    ],
+  },
+  {
+    name: 'AAMP',
+    children: [
+      { name: 'TestSuite 11'},
+
+    ]
+  },
+  {
+    name: 'BASICSUITE_Hybrid-1',
+    children: [
+      { name: 'TestSuite 12'},
+      { name: 'TestSuite 13'}
+    ]
+  },
+  {
+    name: 'BASICSUITE_IPClient-3',
+    children: [
+      { name: 'TestSuite 14'},
+      { name: 'TestSuite 15'},
+      { name: 'TestSuite 16' }
+    ]
+  },
+  {
+    name: 'BASICSUITE_IPClient-4',
+    children: [
+      { name: 'TestSuite 17'},
+      { name: 'TestSuite 18'},
+      { name: 'TestSuite 19' },
+      { name: 'TestSuite 20'}
+    ]
+  },
+  {
+    name: 'bluetooth',
+    children: [
+      { name: 'TestSuite 21'},
+      { name: 'TestSuite 22'},
+      { name: 'TestSuite 23' },
+      { name: 'TestSuite 24'},
+      { name: 'TestSuite 25' }
+    ]
+  },
+  {
+    name: 'bluetoothhal',
+    children: [
+      { name: 'TestSuite 26'},
+      { name: 'TestSuite 27'},
+      { name: 'TestSuite 28' },
+      { name: 'TestSuite 29'},
+      { name: 'TestSuite 30' },
+      { name: 'TestSuite 31'}
+
+    ]
+  },
+  {
+    name: 'ComponentSuite',
+    children: [
+      { name: 'TestSuite 32'}
+    ]
+  },
+  {
+    name: 'dshal',
+    
+    children: [
+      { name: 'TestSuite 33'}
+    ]
+  },
+  {
+    name: 'dshal_LD',
+    children: [
+      { name: 'TestSuite 34'}
+    ]
+  }
+  ];
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice: ModulesService,
@@ -199,6 +309,21 @@ export class ScriptListComponent {
     this.dataSource.data = this.treeData;
     console.log(this.dataSource.data);
     
+    this.treeControlSuite = new FlatTreeControl<FlatNodeTestSuite>(
+      node => node.level,
+      node => node.expandable
+    );
+
+    this.treeFlattenerSuite = new MatTreeFlattener(
+      this.transformerSuite,
+      node => node.level,
+      node => node.expandable,
+      node => node.children
+    );
+
+    this.dataSourceSuite = new MatTreeFlatDataSource(this.treeControlSuite, this.treeFlattenerSuite);
+    this.dataSourceSuite.data = this.treeTestSuiteData;
+
    }
 
   ngOnInit(): void {
@@ -208,6 +333,7 @@ export class ScriptListComponent {
     this.authservice.selectedCategory = this.selectedCategory;
 
     this.updatePaginatedData();
+    this.updatePaginatedDataSuite();
   }
   transformer = (node: TreeNode, level: number): FlatNode => {
     return {
@@ -218,20 +344,39 @@ export class ScriptListComponent {
       childCount: node.children ? node.children.length : 0
     };
   };
+  transformerSuite = (node: TreeNodeTestSuite, level: number): FlatNodeTestSuite => {
+    return {
+      expandable: !!node.children && node.children.length > 0,
+      name: node.name,
+      level: level,
+      childCount: node.children ? node.children.length : 0
+    };
+  };
 
   hasChild = (_: number, node: FlatNode) => node.expandable;
 
-  updatePaginatedData() {
+  updatePaginatedData() : void{
     const start = this.currentPage * this.pageSize;
     const end = start + this.pageSize;
     this.paginatedData = this.treeData.slice(start, end);
     this.dataSource.data = this.paginatedData;
   }
+  updatePaginatedDataSuite() : void{
+    const start = this.currentPage * this.pageSize;
+    const end = start + this.pageSize;
+    this.paginationData = this.treeTestSuiteData.slice(start, end);
+    this.dataSourceSuite.data = this.paginationData;
+  }
 
   // Handle page change event from paginator
-  onPageChange(event: any) {
+  onPageChange(event: any) : void{
     this.currentPage = event.pageIndex;
     this.updatePaginatedData();
+  }
+
+  onPageChangeSuite(event: any) : void{
+    this.currentPage = event.pageIndex;
+    this.updatePaginatedDataSuite();
   }
 
   flattenTreeData(tree: TreeNode[]): TreeNode[] {
@@ -244,13 +389,8 @@ export class ScriptListComponent {
     });
     return result;
   }
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.dataSource.filter = filterValue.trim().toLowerCase();
-  // }
-  downloadEXcel(params:any):void{
 
-  }
+
   createScripts():void{
     this.router.navigate(['script/create-scripts']);
   }
@@ -264,18 +404,48 @@ export class ScriptListComponent {
     }
     
   }
-  announceSortChange(sortState: any) {
+  announceSortChange(sortState: any) : void {
     if (sortState.direction) {
       this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
     } else {
       this._liveAnnouncer.announce('Sorting cleared');
     }
   }
-  filterTree(filterValue: string) {
+  ngAfterViewInit() : void {
+    if (this.sort) {
+      this.sort.sortChange.subscribe((sortState: Sort) => {
+        this.applySort(sortState);
+      });
+    }
+  }
+  applySort(sortState: Sort) {
+    const data = this.dataSource.data.slice();
+
+    if (!sortState.active || sortState.direction === '') {
+      return;
+    }
+
+    this.dataSource.data = data.sort((a, b) => {
+      let compareValue = 0;
+
+      switch (sortState.active) {
+        case 'name':
+          compareValue = a.name.localeCompare(b.name);
+          break;
+        case 'testgroup':
+          compareValue = a.testgroup?.localeCompare(b.testgroup || '') || 0;
+          break;
+      }
+
+      return sortState.direction === 'asc' ? compareValue : -compareValue;
+    });
+  }
+
+  filterTree(filterValue: string) :void{
     if(filterValue){
       const filteredTreeData = this.filterRecursive(this.treeData, filterValue);
       this.dataSource.data = filteredTreeData;
-      this.treeControl.expandAll(); // Expands all the nodes after filtering
+      this.treeControl.expandAll(); 
     }else{
       this.treeControl.collapseAll();
       this.ngOnInit();
@@ -292,4 +462,23 @@ export class ScriptListComponent {
       }))
       .filter((node) => node.name.toLowerCase().includes(filterValue.toLowerCase()) || (node.children && node.children.length > 0));
   }
+
+  viewChange(event:any): void {
+    let name = event.target.value;
+    this.viewName = name;
+    if(name === 'testsuites'){
+      this.testsuitTable = true;
+      this.scriptTable = false;
+    }else{
+      this.testsuitTable = false;
+      this.scriptTable = true;
+    }
+  }
+
+  createScriptGroup():void{
+    this.router.navigate(['script/create-script-group']);
+  }
+
+
+
 }
