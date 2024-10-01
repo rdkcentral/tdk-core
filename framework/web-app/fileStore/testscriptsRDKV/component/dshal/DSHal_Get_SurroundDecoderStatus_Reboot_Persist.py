@@ -156,7 +156,7 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         else:
             expectedResult="SUCCESS";
             print("Box type: RDKTV");
-             source_device_failure_handlings = 0;
+            source_device_failure_handlings = 0;
 
         print("\nTEST STEP 1 : Get the surround decoder enable status using dsIsSurroundDecoderEnabled API");
         if source_device_failure_handlings:
