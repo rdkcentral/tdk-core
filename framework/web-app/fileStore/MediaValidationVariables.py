@@ -104,7 +104,7 @@ html_video_test_app_url = lightning_apps_loc + "tdkhtmlplayer.html"
 #         DIFFERENT AV CODEC HLS/DASH URLs FOR CODEC TESTING
 #************************************************************************
 
-# Short duration src streams. Streams should be of maximum 15 seconds
+# Short duration src streams. Streams should be of maximum 30 seconds
 #HLS Video URL
 video_src_url_short_duration_hls  = test_streams_base_path + "HLS_H264_AAC_15Sec/master.m3u8"
 #DASH Video URL
@@ -125,6 +125,8 @@ video_src_url_short_duration_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM_
 video_src_url_short_duration_ac3 = test_streams_base_path + "DASH_H264_AC3_30Sec/master.mpd"
 #MP4 Video URL
 video_src_url_short_duration_mp4      = test_streams_base_path + "TDK_Asset_Sunrise_MP4_30Secs.mp4"
+#4K DASH Video URL
+video_src_url_short_duration_4k_dash = test_streams_base_path + "DASH_HEVC_AAC_4K_Only_30Sec/master.mpd"
 
 
 # Long duration src streams. Streams should be of minimum 5-10 minutes
