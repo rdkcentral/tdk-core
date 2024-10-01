@@ -30,6 +30,9 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rdkm.tdkservice.model.*;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.repository.*;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
@@ -53,16 +56,6 @@ import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
-import com.rdkm.tdkservice.model.BoxType;
-import com.rdkm.tdkservice.model.Module;
-import com.rdkm.tdkservice.model.PrimitiveTest;
-import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.UserGroup;
-import com.rdkm.tdkservice.repository.BoxTypeRepository;
-import com.rdkm.tdkservice.repository.ModuleRepository;
-import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
-import com.rdkm.tdkservice.repository.ScriptRepository;
-import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
@@ -83,7 +76,7 @@ public class ScriptService implements IScriptService {
 	ScriptRepository scriptRepository;
 
 	@Autowired
-	BoxTypeRepository boxTypeRepository;
+	DeviceTypeRepository deviceTypeRepository;
 
 	@Autowired
 	PrimitiveTestRepository primitiveTestRepository;
@@ -153,24 +146,24 @@ public class ScriptService implements IScriptService {
 		script.setScriptLocation(scriptLocation);
 
 		// If the file is saved successfully, save the script details
-		Script savedScriptWithBoxtypes = null;
+		Script savedScriptWithDevicetypes = null;
 		try {
 
 			script.setScriptLocation(scriptLocation);
 			Script savedScript = scriptRepository.save(script);
-			List<BoxType> boxType = this.getScriptBoxtypes(scriptCreateDTO.getBoxTypes());
-			script.setBoxTypes(boxType);
-			savedScriptWithBoxtypes = scriptRepository.save(script);
-			if (null == savedScriptWithBoxtypes) {
-				LOGGER.error("Error saving script with boxtypes");
+			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes());
+			script.setDeviceTypes(deviceTypes);
+			savedScriptWithDevicetypes = scriptRepository.save(script);
+			if (null == savedScriptWithDevicetypes) {
+				LOGGER.error("Error saving script with Device types");
 				scriptRepository.delete(savedScript);
 			}
 		} catch (Exception e) {
-			LOGGER.error("Error saving script with boxtypes: " + e.getMessage());
+			LOGGER.error("Error saving script with device types: " + e.getMessage());
 			e.printStackTrace();
-			throw new TDKServiceException("Error saving script with boxtypes: " + e.getMessage());
+			throw new TDKServiceException("Error saving script with device types: " + e.getMessage());
 		}
-		return null != savedScriptWithBoxtypes;
+		return null != savedScriptWithDevicetypes;
 
 	}
 
@@ -208,10 +201,10 @@ public class ScriptService implements IScriptService {
 			this.saveScriptFile(scriptFile, script.getScriptLocation());
 		}
 
-		// Set boxtypes in the script entity if the boxtypes are updated
-		if (null != scriptUpdateDTO.getBoxTypes() || !scriptUpdateDTO.getBoxTypes().isEmpty()) {
-			List<BoxType> boxType = this.getScriptBoxtypes(scriptUpdateDTO.getBoxTypes());
-			script.setBoxTypes(boxType);
+		// Set devicetypes in the script entity if the devicetypes are updated
+		if (null != scriptUpdateDTO.getDeviceTypes() || !scriptUpdateDTO.getDeviceTypes().isEmpty()) {
+			List<DeviceType> deviceType = this.getScriptDevicetypes(scriptUpdateDTO.getDeviceTypes());
+			script.setDeviceTypes(deviceType);
 		}
 
 		Script updatedScript = scriptRepository.save(script);
@@ -318,8 +311,8 @@ public class ScriptService implements IScriptService {
 		Script script = scriptRepository.findById(scriptId)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptId.toString()));
 		ScriptDTO scriptDTO = MapperUtils.convertToScriptDTO(script);
-		if (null != script.getBoxTypes()) {
-			scriptDTO.setBoxTypes(this.getBoxTypesAsStringList(script.getBoxTypes()));
+		if (null != script.getDeviceTypes()) {
+			scriptDTO.setDeviceTypes(this.getDeviceTypesAsStringList(script.getDeviceTypes()));
 
 		}
 		LOGGER.info("Script details: " + scriptDTO.toString());
@@ -329,7 +322,7 @@ public class ScriptService implements IScriptService {
 	/**
 	 * This method is used to get the script details by testScriptName.
 	 * 
-	 * @param moduleName - the module name
+	 * @param testScriptName - the module name
 	 * @return - the script
 	 */
 
@@ -379,17 +372,17 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Get the list of boxtypes as list of Stringbased on the boxtype name
+	 * Get the list of deviceTypes as list of Stringbased on the deviceTypes name
 	 * 
-	 * @param boxTypes
+	 * @param deviceTypes
 	 * @return
 	 */
-	private List<String> getBoxTypesAsStringList(List<BoxType> boxTypes) {
-		List<String> boxTypeList = new ArrayList<>();
-		for (BoxType boxType : boxTypes) {
-			boxTypeList.add(boxType.getName());
+	private List<String> getDeviceTypesAsStringList(List<DeviceType> deviceTypes) {
+		List<String> deviceTypeList = new ArrayList<>();
+		for (DeviceType deviceType : deviceTypes) {
+			deviceTypeList.add(deviceType.getName());
 		}
-		return boxTypeList;
+		return deviceTypeList;
 	}
 
 	/**
@@ -453,7 +446,7 @@ public class ScriptService implements IScriptService {
 	 * Validate the script file before saving it in the location
 	 * 
 	 * @param scriptFile      - the script file
-	 * @param scriptCreateDTO - the script details
+	 * @param scriptName - the script details
 	 * @param scriptLocation  - the script location
 	 */
 	private void validateScriptFile(MultipartFile scriptFile, String scriptName, String scriptLocation) {
@@ -472,23 +465,23 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Get the list of boxtypes based on the boxtype name
+	 * Get the list of deviceType based on the deviceType name
 	 * 
-	 * @param boxTypes - list of boxtype names
-	 * @return boxTypeList - list of boxtypes
+	 * @param deviceTypes - list of deviceType names
+	 * @return deviceTypes - list of deviceTypes
 	 */
-	private List<BoxType> getScriptBoxtypes(List<String> boxTypes) {
-		List<BoxType> boxTypeList = new ArrayList<>();
-		for (String boxTypeName : boxTypes) {
-			BoxType boxType = boxTypeRepository.findByName(boxTypeName);
-			if (null != boxType) {
-				boxTypeList.add(boxType);
+	private List<DeviceType> getScriptDevicetypes(List<String> deviceTypes) {
+		List<DeviceType> deviceTypeList = new ArrayList<>();
+		for (String deviceTypeName : deviceTypes) {
+			DeviceType deviceType = deviceTypeRepository.findByName(deviceTypeName);
+			if (null != deviceType) {
+				deviceTypeList.add(deviceType);
 			} else {
-				LOGGER.error("BoxType not found with the name: " + boxTypeName);
-				throw new ResourceNotFoundException(Constants.BOX_TYPE, boxTypeName);
+				LOGGER.error("deviceType not found with the name: " + deviceTypeName);
+				throw new ResourceNotFoundException(Constants.DEVICE_TYPE, deviceTypeName);
 			}
 		}
-		return boxTypeList;
+		return deviceTypeList;
 	}
 
 	/**
@@ -522,7 +515,7 @@ public class ScriptService implements IScriptService {
 	/**
 	 * Get the category based on the module
 	 * 
-	 * @param primitiveTest the primitive test
+	 * @param module the primitive test
 	 * @return category - RDKV, RDKB, RDKC, RDKV_RDKSERVICE
 	 */
 	private Category getCategoryBasedOnModule(Module module) {
@@ -543,14 +536,14 @@ public class ScriptService implements IScriptService {
 	/**
 	 * Create excel from test cases information in script.
 	 *
-	 * @param testCases the test cases
+	 * @param scripts the test cases
 	 * @param sheetName the sheet name
 	 * @return the byte array input stream
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	private ByteArrayInputStream createExcelFromTestCasesDetailsInScript(List<Script> scripts, String sheetName) {
 		LOGGER.info("Creating excel from test cases for sheet");
-		String[] headers = { "Test Script", "Test Case ID", "Test Objective", "Test Type", "Supported Box Type",
+		String[] headers = { "Test Script", "Test Case ID", "Test Objective", "Test Type", "Supported device Type",
 				"Test Prerequisites", "RDK Interface", "Input Parameters", "Automation Approach", "Expected Output",
 				"Priority", "Test Stub Interface", "Skipped", "Skip remarks", "Update Release Version", "Remarks" };
 		try {
@@ -589,11 +582,11 @@ public class ScriptService implements IScriptService {
 				dataRow.createCell(1).setCellValue(script.getTestId());
 				dataRow.createCell(2).setCellValue(script.getObjective());
 				dataRow.createCell(3).setCellValue(script.getTestType().toString());
-				if (script.getBoxTypes() == null) {
+				if (script.getDeviceTypes() == null) {
 					dataRow.createCell(4).setCellValue("");
 				} else {
 					dataRow.createCell(4).setCellValue(Utils
-							.convertListToCommaSeparatedString(this.getBoxTypesAsStringList(script.getBoxTypes())));
+							.convertListToCommaSeparatedString(this.getDeviceTypesAsStringList(script.getDeviceTypes())));
 				}
 				dataRow.createCell(5).setCellValue(script.getPrerequisites());
 				dataRow.createCell(6).setCellValue(script.getApiOrInterfaceUsed());

@@ -17,28 +17,47 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.dto;
+package com.rdkm.tdkservice.enums;
 
-import jakarta.validation.constraints.NotBlank;
-import lombok.Data;
-
-/**
- * This is the DTO class for download device configuration request
- * 
+/*
+ * Enum for DeviceTypeCategory
  */
-@Data
-public class DeviceConfigDownloadDTO {
+public enum DeviceTypeCategory {
+
+	CLIENT("CLIENT");
+
+	private String name;
+
+	DeviceTypeCategory(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
 
 	/**
-	 * device type name for which the device configuration is to be downloaded
+	 * Get Category by name
+	 * 
+	 * @param name
+	 * @return
 	 */
-	@NotBlank(message = "Device name is required")
-	private String deviceTypeName;
+	public static DeviceTypeCategory getDeviceTypeCategory(String name) {
+		for (DeviceTypeCategory deviceTypeEnum : DeviceTypeCategory.values()) {
+			if (deviceTypeEnum.getName().equals(name)) {
+				return deviceTypeEnum;
+			}
+		}
+		return null;
+	}
 
 	/**
-	 * Device type for which the device configuration is to be downloaded
+	 * Get default theme
+	 * 
+	 * @return
 	 */
-	@NotBlank(message = "Device Type is required")
-	private String deviceType;
+	public static DeviceTypeCategory getDefaultCategory() {
+		return CLIENT;
+	}
 
 }

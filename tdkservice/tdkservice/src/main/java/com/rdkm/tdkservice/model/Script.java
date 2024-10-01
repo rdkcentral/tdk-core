@@ -85,11 +85,11 @@ public class Script extends BaseEntity {
 	PrimitiveTest primitiveTest;
 
 	/**
-	 * The list of boxTypes of the script.
+	 * The list of device type of the script.
 	 */
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "script_box_type", joinColumns = @JoinColumn(name = "script", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "box_type", referencedColumnName = "name"))
-	private List<BoxType> boxTypes = new ArrayList<>();
+	@JoinTable(name = "script_device_type", joinColumns = @JoinColumn(name = "script", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "device_type", referencedColumnName = "name"))
+	private List<DeviceType> deviceTypes = new ArrayList<>();
 
 	/**
 	 * Represents the userGroup of the script.

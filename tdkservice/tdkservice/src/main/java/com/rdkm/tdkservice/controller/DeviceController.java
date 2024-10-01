@@ -48,7 +48,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsResponse;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
@@ -220,55 +219,6 @@ public class DeviceController {
 	}
 
 	/**
-	 * Retrieves all gateway devices in the system.
-	 *
-	 * @return a ResponseEntity containing the list of gateway devices if found, or
-	 *         a ResponseEntity with status NOT_FOUND and a message if no gateway
-	 *         devices are found.
-	 */
-	@Operation(summary = "Get list of gateway devices", description = "Retrieves all gateway devices in the system.")
-	@ApiResponse(responseCode = "200", description = "Gateway devices retrieved successfully")
-	@ApiResponse(responseCode = "404", description = "No gateway devices found")
-	@GetMapping("/getlistofgatewaydevices")
-	public ResponseEntity<?> getListOfGateWayDevices(@RequestParam String category) {
-		LOGGER.info("Received find box type by category request");
-		List<String> gateWayDevice = deviceService.getGatewayDeviceList(category);
-		if (null != gateWayDevice && !gateWayDevice.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.OK).body(gateWayDevice);
-		} else {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No gateway devices found");
-		}
-	}
-
-	/**
-	 * This method is used to get the streams for a device.
-	 *
-	 * @param id This is the id of the device for which the streams are to be
-	 *           fetched.
-	 * @return ResponseEntity<?> This returns the response entity.
-	 */
-	@Operation(summary = "Get streams for a device", description = "Get the streams for a specific device in the system.")
-	@ApiResponse(responseCode = "200", description = "Streams fetched successfully")
-	@ApiResponse(responseCode = "500", description = "Error in fetching streams")
-	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/getStreamsForDevice/{id}")
-	public ResponseEntity<?> getStreamsForDevice(@PathVariable Integer id) {
-		LOGGER.info("Received get streams for device request: " + id);
-		try {
-			List<StreamingDetailsResponse> streams = deviceService.getStreamsForTheDevice(id);
-			LOGGER.info("Streams fetched successfully for device: " + id);
-			return ResponseEntity.status(HttpStatus.OK).body(streams);
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("No streams found for device: " + id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-		} catch (Exception e) {
-			LOGGER.error("Error in fetching streams", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to fetch streams: " + e.getMessage());
-		}
-	}
-
-	/**
 	 * This method is used to upload the XML file for a device.
 	 *
 	 * @param file This is the XML file to be uploaded.
@@ -318,8 +268,8 @@ public class DeviceController {
 	 * This method is used to download the device configuration file exclusively
 	 * for RDKV devices and the related usecases
 	 *
-	 * @param boxName - the box name
-	 * @param boxType - the box type
+	 * @param deviceTypeName - the deviceType name
+	 * @param deviceType - the device type
 	 * @return ResponseEntity<Resource> - the response entity - HttpStatus.OK - if
 	 *         the file download is successful - HttpStatus.NOT_FOUND - if the file
 	 *         is not found
@@ -328,12 +278,12 @@ public class DeviceController {
 	@Operation(summary = "Download device configuration file", description = "Download the device configuration file for a specific device in the system.")
 	@ApiResponse(responseCode = "200", description = "Device configuration file downloaded successfully")
 	@ApiResponse(responseCode = "500", description = "Internal server error in downloading device configuration file")
-	@ApiResponse(responseCode = "400", description = "There is no file associated with the box or boxtype and no default file found.")
+	@ApiResponse(responseCode = "400", description = "There is no file associated with the  deviceType and no default file found.")
 	@GetMapping("/downloadDeviceConfigFile")
-	public ResponseEntity<Resource> downloadDeviceConfigFile(@RequestParam String boxName,
-			@RequestParam String boxType) {
-		LOGGER.info("Going to get the device config file " + boxName + " " + boxType);
-		Resource resource = deviceConfigService.getDeviceConfigFile(boxName, boxType);
+	public ResponseEntity<Resource> downloadDeviceConfigFile(@RequestParam String deviceTypeName,
+			@RequestParam String deviceType) {
+		LOGGER.info("Going to get the device config file " + deviceTypeName + " " + deviceTypeName);
+		Resource resource = deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType);
 		if (resource == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} else {

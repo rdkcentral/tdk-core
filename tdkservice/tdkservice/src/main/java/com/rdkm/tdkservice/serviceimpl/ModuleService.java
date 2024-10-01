@@ -295,7 +295,13 @@ public class ModuleService implements IModuleService {
 	@Override
 	public List<String> findAllModuleNameByCategory(String category) {
 		LOGGER.info("Going to fetch all modules by category: {}", category);
-		List<Module> modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		List<Module> modules=null;
+		if (Category.RDKV.name().equals(category)) {
+			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV,Category.RDKV_RDKSERVICE));
+		}else{
+			modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		}
+
 		Utils.checkCategoryValid(category);
 		if (modules.isEmpty()) {
 			return Collections.emptyList();

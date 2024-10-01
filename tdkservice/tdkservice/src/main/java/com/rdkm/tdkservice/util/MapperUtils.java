@@ -27,10 +27,6 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rdkm.tdkservice.dto.BoxManufacturerDTO;
-import com.rdkm.tdkservice.dto.BoxManufacturerUpdateDTO;
-import com.rdkm.tdkservice.dto.BoxTypeDTO;
-import com.rdkm.tdkservice.dto.BoxTypeUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
@@ -41,34 +37,20 @@ import com.rdkm.tdkservice.dto.ModuleDTO;
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
-import com.rdkm.tdkservice.dto.RdkVersionDTO;
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
-import com.rdkm.tdkservice.dto.ScriptTagDTO;
-import com.rdkm.tdkservice.dto.SocVendorDTO;
-import com.rdkm.tdkservice.dto.SocVendorUpdateDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsUpdateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 import com.rdkm.tdkservice.dto.UserRoleDTO;
 import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.model.BoxManufacturer;
-import com.rdkm.tdkservice.model.BoxType;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.Function;
-import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.model.PrimitiveTestParameter;
-import com.rdkm.tdkservice.model.RdkVersion;
 import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.ScriptTag;
-import com.rdkm.tdkservice.model.SocVendor;
-import com.rdkm.tdkservice.model.StreamingDetails;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
@@ -110,22 +92,23 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the BoxType object to BoxTypeDTO object.
+	 * This method is used to convert the deviceType object to deviceTypeDTO object.
 	 * 
-	 * @param boxType This is the BoxType object.
-	 * @return BoxTypeDTO This returns the BoxTypeDTO object converted from the
-	 *         BoxType object.
+	 * @param deviceType This is the deviceType object.
+	 * @return deviceType This returns the deviceTypeDTO object converted from the
+	 *         deviceType object.
 	 */
-	public static BoxTypeDTO convertToBoxTypeDTO(BoxType boxType) {
-		modelMapper.typeMap(BoxType.class, BoxTypeDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getType(), BoxTypeDTO::setType);
-			mapper.map(src -> src.getName(), BoxTypeDTO::setBoxTypeName);
-			mapper.map(src -> src.getUserGroup().getName(), BoxTypeDTO::setBoxUserGroup);
-		});
-		BoxTypeDTO boxTypeDTO = modelMapper.map(boxType, BoxTypeDTO.class);
-		LOGGER.info("Box Type DTO: {}", boxTypeDTO);
-		return boxTypeDTO;
+	public static DeviceTypeDTO convertToDeviceTypeDTO(DeviceType deviceType) {
+		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		deviceTypeDTO.setDeviceTypeId(deviceType.getId());
+		deviceTypeDTO.setDeviceTypeName(deviceType.getName());
+		deviceTypeDTO.setType(deviceType.getType().name());
+		deviceTypeDTO.setDeviceTypeCategory(deviceType.getCategory().name());
+		deviceTypeDTO.setDeviceTypeUserGroup(deviceType.getUserGroup() != null ? deviceType.getUserGroup().getName() : null);
+		LOGGER.info("Device Type DTO: {}", deviceTypeDTO);
+		return deviceTypeDTO;
 	}
+
 
 	/**
 	 * This method is used to convert the UserGroup object to UserGroupDTO object.
@@ -141,38 +124,38 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the BoxManufacturer object to
-	 * BoxManufacturerDTO object.
+	 * This method is used to convert the oem object to
+	 * oemDTO object.
 	 * 
-	 * @param boxManufacturer This is the BoxManufacturer object.
-	 * @return BoxManufacturerDTO This returns the BoxManufacturerDTO object
-	 *         converted from the BoxManufacturer object.
+	 * @param oem This is the oem object.
+	 * @return oemDTO This returns the oemDTO object
+	 *         converted from the oem object.
 	 */
-	public static BoxManufacturerDTO convertToBoxManufacturerDTO(BoxManufacturer boxManufacturer) {
-		modelMapper.typeMap(BoxManufacturer.class, BoxManufacturerDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getUserGroup().getName(), BoxManufacturerDTO::setBoxManufacturerUserGroup);
+	public static OemDTO convertToOemDTO(Oem oem) {
+		modelMapper.typeMap(Oem.class, OemDTO.class).addMappings(mapper -> {
+			mapper.map(src -> src.getUserGroup().getName(), OemDTO::setOemUserGroup);
 		});
-		BoxManufacturerDTO boxManufacturerDTO = modelMapper.map(boxManufacturer, BoxManufacturerDTO.class);
+		OemDTO oemDTO = modelMapper.map(oem, OemDTO.class);
 
-		LOGGER.info("Box Manufacturer DTO: {}", boxManufacturerDTO);
-		return boxManufacturerDTO;
+		LOGGER.info("oem DTO: {}", oemDTO);
+		return oemDTO;
 	}
 
 	/**
 	 * This method is used to convert the SocVendor object to SocVendorDTO object.
 	 * 
-	 * @param socVendor This is the SocVendor object.
+	 * @param soc This is the SocVendor object.
 	 * @return SocVendorDTO This returns the SocVendorDTO object converted from the
 	 *         SocVendor object.
 	 */
 
-	public static SocVendorDTO convertToSocVendorDTO(SocVendor socVendor) {
-		modelMapper.typeMap(SocVendor.class, SocVendorDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getUserGroup().getName(), SocVendorDTO::setSocVendorUserGroup);
+	public static SocDTO convertToSocDTO(Soc soc) {
+		modelMapper.typeMap(Soc.class, SocDTO.class).addMappings(mapper -> {
+			mapper.map(src -> src.getUserGroup().getName(), SocDTO::setSocUserGroup);
 		});
-		SocVendorDTO socVendorDTO = modelMapper.map(socVendor, SocVendorDTO.class);
-		LOGGER.info("Soc Vendor DTO: {}", socVendorDTO);
-		return socVendorDTO;
+		SocDTO socDTO = modelMapper.map(soc, SocDTO.class);
+		LOGGER.info("Soc DTO: {}", socDTO);
+		return socDTO;
 	}
 
 	/**
@@ -188,28 +171,6 @@ public class MapperUtils {
 		return userRoleDTO;
 	}
 
-	/**
-	 * This method is used to convert the StreamingDetails object to
-	 * StreamingDetailsDTO object.
-	 * 
-	 * @param streamingDetails This is the StreamingDetails object.
-	 * @return StreamingDetailsDTO This returns the StreamingDetailsDTO object
-	 *         converted from the StreamingDetails object.
-	 */
-	public static StreamingDetailsDTO convertToStreamingDetailsDTO(StreamingDetails streamingDetails) {
-		StreamingDetailsDTO streamingDetailsDTO = new StreamingDetailsDTO();
-		streamingDetailsDTO.setStreamId(streamingDetails.getId());
-		streamingDetailsDTO.setStreamingDetailsId(streamingDetails.getStreamId());
-		streamingDetailsDTO.setStreamType(streamingDetails.getStreamType().toString());
-		streamingDetailsDTO.setChannelType(
-				streamingDetails.getChannelType() != null ? streamingDetails.getChannelType().getName() : null);
-		streamingDetailsDTO.setVideoType(
-				streamingDetails.getVideoType() != null ? streamingDetails.getVideoType().getName() : null);
-		streamingDetailsDTO.setAudioType(
-				streamingDetails.getAudioType() != null ? streamingDetails.getAudioType().getName() : null);
-		LOGGER.info("Streaming Details DTO: {}", streamingDetails);
-		return streamingDetailsDTO;
-	}
 
 	/**
 	 * This method is used to convert the Device object to DeviceDTO object.
@@ -230,7 +191,6 @@ public class MapperUtils {
 		device.setLogTransferPort(deviceCreateDTO.getLogTransferPort());
 		device.setMacId(deviceCreateDTO.getMacId());
 		// device.setDeviceStatus(deviceCreateDTO.getDevicestatus());
-		device.setRecorderId(deviceCreateDTO.getRecorderId());
 		device.setThunderPort(deviceCreateDTO.getThunderPort());
 		device.setThunderEnabled(deviceCreateDTO.isThunderEnabled());
 		// isDevicePortsConfigured
@@ -261,10 +221,6 @@ public class MapperUtils {
 			device.setLogTransferPort(deviceUpdateDTO.getLogTransferPort());
 		if (!Utils.isEmpty(deviceUpdateDTO.getMacId()))
 			device.setMacId(deviceUpdateDTO.getMacId());
-		if (!Utils.isEmpty(deviceUpdateDTO.getRecorderId()))
-			device.setRecorderId(deviceUpdateDTO.getRecorderId());
-		if (!Utils.isEmpty(deviceUpdateDTO.getGatewayDeviceName()))
-			device.setGatewayIp(deviceUpdateDTO.getGatewayDeviceName());
 		if (!Utils.isEmpty(deviceUpdateDTO.getThunderPort()))
 			device.setThunderPort(deviceUpdateDTO.getThunderPort());
 		device.setThunderEnabled(deviceUpdateDTO.isThunderEnabled());
@@ -279,56 +235,55 @@ public class MapperUtils {
 				throw new ResourceNotFoundException("Category not found", deviceUpdateDTO.getCategory());
 			}
 		}
-		// set box type for update case
+		// set device type for update case
 
 	}
 
 	/**
-	 * This method is used to convert the BoxType object to BoxTypeDTO object.
+	 * This method is used to convert the deviceType object to deviceTypeUpdateDTO object.
 	 * 
-	 * @param boxType This is the BoxType object.
-	 * @return BoxTypeDTO This returns the BoxTypeDTO object converted from the
-	 *         BoxType object.
+	 * @param deviceType This is the deviceType object.
+	 * @return DeviceTypeUpdateDTO This returns the DeviceTypeUpdateDTO object converted from the
+	 *         deviceType object.
 	 */
-	public static BoxTypeUpdateDTO convertToBoxTypeUpdateDTO(BoxType boxType) {
-		BoxTypeUpdateDTO boxTypeUpdateDTO = new BoxTypeUpdateDTO();
-		boxTypeUpdateDTO.setBoxTypeName(boxType.getName());
-		boxTypeUpdateDTO.setBoxType(boxType.getType().getName());
-		boxTypeUpdateDTO.setBoxTypeCategory(boxType.getCategory().name());
-		LOGGER.info("Box type Update DTO: {}", boxTypeUpdateDTO);
-		return boxTypeUpdateDTO;
+	public static DeviceTypeUpdateDTO convertToDeviceTypeUpdateDTO(DeviceType deviceType) {
+		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
+		deviceTypeUpdateDTO.setDeviceTypeName(deviceType.getName());
+		deviceTypeUpdateDTO.setDeviceType(deviceType.getType().getName());
+		deviceTypeUpdateDTO.setDeviceTypeCategory(deviceType.getCategory().name());
+		LOGGER.info("device type Update DTO: {}", deviceTypeUpdateDTO);
+		return deviceTypeUpdateDTO;
 	}
 
 	/**
-	 * This method is used to convert the BoxManufacturer object to
-	 * BoxManufacturerUpdateDTO object.
+	 * This method is used to convert the oem object to
+	 * OemUpdateDTO object.
 	 * 
-	 * @param boxManufacturer This is the BoxManufacturer object.
-	 * @return BoxManufacturerUpdateDTO This returns the BoxManufacturerDTO object
-	 *         converted from the BoxManufacturer object.
+	 * @param oem This is the oem object.
+	 * @return OemUpdateDTO This returns the OemDTO object
+	 *         converted from the oem object.
 	 */
-	public static BoxManufacturerUpdateDTO convertToBoxManufacturerUpdateDTO(BoxManufacturer boxManufacturer) {
-		BoxManufacturerUpdateDTO boxManufacturerUpdateDTO = new BoxManufacturerUpdateDTO();
-		boxManufacturerUpdateDTO.setBoxManufacturerName(boxManufacturer.getName());
-		boxManufacturerUpdateDTO.setBoxManufacturerCategory(boxManufacturer.getCategory().name());
-		LOGGER.info("Box Manufacturer Update DTO: {}", boxManufacturer);
-		return boxManufacturerUpdateDTO;
+	public static OemUpdateDTO convertToOemUpdateDTO(Oem oem) {
+		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
+		oemUpdateDTO.setOemName(oem.getName());
+		oemUpdateDTO.setOemCategory(oem.getCategory().name());
+		LOGGER.info("oem Update DTO: {}", oem);
+		return oemUpdateDTO;
 	}
 
-	// update the socvendorUpdate
 	/**
-	 * This method is used to convert the SocVendor object to SocVendorDTO object.
+	 * This method is used to convert the Soc object to socUpdateDTO object.
 	 * 
-	 * @param socVendor This is the SocVendor object.
-	 * @return SocVendorDTO This returns the SocVendorDTO object converted from the
-	 *         SocVendor object.
+	 * @param soc This is the SocVendor object.
+	 * @return soc This returns the soc object converted from the
+	 *         soc object.
 	 */
-	public static SocVendorUpdateDTO convertToSocVendorUpdateDTO(SocVendor socVendor) {
-		SocVendorUpdateDTO socVendorUpdateDTO = new SocVendorUpdateDTO();
-		socVendorUpdateDTO.setSocVendorName(socVendor.getName());
-		socVendorUpdateDTO.setSocVendorCategory(socVendor.getCategory().name());
-		LOGGER.info("Soc Vendor Update DTO: {}", socVendor);
-		return socVendorUpdateDTO;
+	public static SocUpdateDTO convertToSocUpdateDTO(Soc soc) {
+		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		socUpdateDTO.setSocName(soc.getName());
+		socUpdateDTO.setSocCategory(soc.getCategory().name());
+		LOGGER.info("Soc  Update DTO: {}", soc);
+		return socUpdateDTO;
 
 	}
 
@@ -343,29 +298,6 @@ public class MapperUtils {
 		ModelMapper modelMapper = new ModelMapper();
 		DeviceResponseDTO deviceDTO = modelMapper.map(device, DeviceResponseDTO.class);
 		return deviceDTO;
-	}
-
-	/**
-	 * This method is used to convert the StreamingDetails object to
-	 * StreamingDetailsUpdateDTO object.
-	 * 
-	 * @param streamingDetails This is the StreamingDetails object.
-	 * @return StreamingDetailsUpdateDTO This returns the StreamingDetailsUpdateDTO
-	 *         object converted from the StreamingDetails object.
-	 */
-
-	public static StreamingDetailsUpdateDTO streamingDetailsUpdate(StreamingDetails streamingDetails) {
-		StreamingDetailsUpdateDTO streamingDetailsUpdateDTO = new StreamingDetailsUpdateDTO();
-		streamingDetailsUpdateDTO.setStreamId(streamingDetails.getStreamId());
-		streamingDetailsUpdateDTO.setChannelType(
-				streamingDetails.getChannelType() != null ? streamingDetails.getChannelType().getName() : null);
-		streamingDetailsUpdateDTO.setVideoType(
-				streamingDetails.getVideoType() != null ? streamingDetails.getVideoType().getName() : null);
-		streamingDetailsUpdateDTO.setAudioType(
-				streamingDetails.getAudioType() != null ? streamingDetails.getAudioType().getName() : null);
-		LOGGER.info("Streaming Details Update DTO: {}", streamingDetailsUpdateDTO);
-		return streamingDetailsUpdateDTO;
-
 	}
 
 	/**
@@ -385,42 +317,6 @@ public class MapperUtils {
 		module.setLogFileNames(dto.getModuleLogFileNames());
 		module.setCrashLogFiles(dto.getModuleCrashLogFiles());
 		return module;
-	}
-
-	/**
-	 * This method is used to convert the ScriptTag object to ScriptTagDTO object.
-	 * 
-	 * @param scriptTag This is the ScriptTag object.
-	 * @return ScriptTagDTO This returns the ScriptTagDTO object converted from the
-	 *         ScriptTag object.
-	 */
-	public static ScriptTagDTO convertToScriptTagDTO(ScriptTag scriptTag) {
-		ScriptTagDTO scriptTagDTO = new ScriptTagDTO();
-		scriptTagDTO.setScriptTagId(scriptTag.getId());
-		scriptTagDTO.setScriptTagName(scriptTag.getName());
-		scriptTagDTO.setScriptTagCategory(scriptTag.getCategory().name());
-		scriptTagDTO
-				.setScriptTagUserGroup(scriptTag.getUserGroup() != null ? scriptTag.getUserGroup().getName() : null);
-		LOGGER.info("Script Tag DTO: {}", scriptTagDTO);
-		return scriptTagDTO;
-	}
-
-	/**
-	 * This method is used to convert the RdkVersion object to RdkVersionDTO object.
-	 * 
-	 * @param rdkVersion This is the RdkVersion object.
-	 * @return RdkVersionDTO This returns the RdkVersionDTO object converted from
-	 *         the RdkVersion object.
-	 */
-	public static RdkVersionDTO convertToRdkVersionDTO(RdkVersion rdkVersion) {
-		RdkVersionDTO rdkVersionDTO = new RdkVersionDTO();
-		rdkVersionDTO.setRdkVersionId(rdkVersion.getId());
-		rdkVersionDTO.setBuildVersionName(rdkVersion.getName());
-		rdkVersionDTO.setRdkVersionCategory(rdkVersion.getCategory().name());
-		rdkVersionDTO
-				.setRdkVersionUserGroup(rdkVersion.getUserGroup() != null ? rdkVersion.getUserGroup().getName() : null);
-		LOGGER.info("Rdk Version DTO: {}", rdkVersionDTO);
-		return rdkVersionDTO;
 	}
 
 	/**
@@ -543,7 +439,7 @@ public class MapperUtils {
 	/**
 	 * This method is used to convert the Function object to FunctionDTO object.
 	 *
-	 * @param function This is the Function object.
+	 * @param primitiveTestParameters This is the Function object.
 	 * @return FunctionDTO This returns the FunctionDTO object converted from the
 	 *         Function object.
 	 */

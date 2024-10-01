@@ -63,9 +63,9 @@ public class ScriptDTO {
 	private String primitiveTestName;
 
 	/**
-	 * List of box types that the script is associated with.
+	 * List of device types that the script is associated with.
 	 */
-	private List<String> boxTypes;
+	private List<String> deviceTypes;
 
 	/**
 	 * true if script needs to be skipped while executing test suite

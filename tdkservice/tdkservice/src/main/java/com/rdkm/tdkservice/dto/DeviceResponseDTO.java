@@ -62,25 +62,17 @@ public class DeviceResponseDTO {
 	 */
 	private String macId;
 	/**
-	 * Represents the boxTypeName of the device.
+	 * Represents the deviceTypeName of the device.
 	 */
-	private String boxTypeName;
+	private String deviceTypeName;
 	/**
-	 * Represents the boxManufacturerName of the device.
+	 * Represents the OemName of the device.
 	 */
-	private String boxManufacturerName;
+	private String oemName;
 	/**
-	 * Represents the socVendorName of the device.
+	 * Represents the socName of the device.
 	 */
-	private String socVendorName;
-	/**
-	 * Represents the recorderId of the device.
-	 */
-	private String recorderId;
-	/**
-	 * Represents the gatewayDeviceName of the device.
-	 */
-	private String gatewayDeviceName;
+	private String socName;
 
 	/**
 	 * Represents the thunderEnabled status of the device.

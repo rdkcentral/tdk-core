@@ -19,9 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import static com.rdkm.tdkservice.enums.BoxTypeCategory.CLIENT;
-import static com.rdkm.tdkservice.enums.BoxTypeCategory.GATEWAY;
-import static com.rdkm.tdkservice.enums.BoxTypeCategory.STAND_ALONE_CLIENT;
 import static com.rdkm.tdkservice.enums.Category.getCategory;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_FILE_EXTENSION_ZIP;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_XML_FILE_EXTENSION;
@@ -51,6 +48,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.rdkm.tdkservice.model.*;
+import com.rdkm.tdkservice.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,28 +68,13 @@ import org.xml.sax.SAXException;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceStreamDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.enums.BoxTypeCategory;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.model.BoxManufacturer;
-import com.rdkm.tdkservice.model.BoxType;
-import com.rdkm.tdkservice.model.Device;
-import com.rdkm.tdkservice.model.DeviceStream;
-import com.rdkm.tdkservice.model.SocVendor;
-import com.rdkm.tdkservice.model.StreamingDetails;
-import com.rdkm.tdkservice.model.UserGroup;
-import com.rdkm.tdkservice.repository.BoxManufacturerRepository;
-import com.rdkm.tdkservice.repository.BoxTypeRepository;
-import com.rdkm.tdkservice.repository.DeviceRepositroy;
-import com.rdkm.tdkservice.repository.DeviceStreamRepository;
-import com.rdkm.tdkservice.repository.SocVendorRepository;
-import com.rdkm.tdkservice.repository.StreamingDetailsRepository;
-import com.rdkm.tdkservice.repository.UserGroupRepository;
+
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsResponse;
 import com.rdkm.tdkservice.service.IDeviceService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
@@ -110,22 +94,16 @@ public class DeviceService implements IDeviceService {
 	private DeviceRepositroy deviceRepository;
 
 	@Autowired
-	private BoxTypeRepository boxTypeRepository;
+	private DeviceTypeRepository deviceTypeRepository;
 
 	@Autowired
-	private BoxManufacturerRepository boxManufacturerRepository;
+	private OemRepository oemRepository;
 
 	@Autowired
-	private SocVendorRepository socVendorRepository;
+	private SocRepository socRepository;
 
 	@Autowired
 	private UserGroupRepository userGroupRepository;
-
-	@Autowired
-	private DeviceStreamRepository deviceStreamRepository;
-
-	@Autowired
-	private StreamingDetailsRepository streamingDetailsRepository;
 
 	/**
 	 * This method is used to create a new device. It receives a POST request at the
@@ -145,105 +123,11 @@ public class DeviceService implements IDeviceService {
 		// call setPropetietsCreateDTO meeethod here
 		setDevicePropertiesFromCreateDTO(device, deviceCreateDTO);
 		// save device return true if save success otherwise return false
-		Device savedDevice = null;
-
-		// Check if the device is a gateway and is not thunder enabled
-		if ((device.getBoxType().getType().toString().equalsIgnoreCase(GATEWAY.toString())
-				|| device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))
-				&& device.getCategory() == Category.RDKV) {
-			if (device.getRecorderId() == null || device.getRecorderId().isEmpty()) {
-				LOGGER.info("RecorderId should not be null or empty");
-				throw new MandatoryFieldException(" RecorderId should not be null or empty");
-			}
-			if (!device.isThunderEnabled() && deviceCreateDTO.getDeviceStreams() != null) {
-				LOGGER.info("Device is a gateway and is not thunder enabled");
-				// Save the device streams
-				if (deviceCreateDTO.getDeviceStreams() != null) {
-					LOGGER.info(deviceCreateDTO.getDeviceStreams().toString());
-					List<DeviceStreamDTO> deviceStreamDTOList = new ArrayList<>();
-					deviceStreamDTOList.addAll(deviceCreateDTO.getDeviceStreams());
-					saveDeviceStream(deviceStreamDTOList, device);
-				} else {
-					LOGGER.info("Device streams are null");
-					throw new MandatoryFieldException("Device streams should not be null ");
-				}
-			}
-		}
-
-		// if box type not equal to gateway and not equal to standlone client
-		if (!(device.getBoxType().getType().toString().equalsIgnoreCase(GATEWAY.toString()))
-				|| !(device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))) {
-			savedDevice = deviceRepository.save(device);
-		}
+		Device savedDevice = deviceRepository.save(device);
 
 		// save device return true if save success otherwise return false
 		return savedDevice != null;
 
-	}
-
-	/**
-	 * This method is used to save the device streams for a device. It receives a
-	 * list of stream IDs, a list of OCAP IDs, and a Device object. It then saves
-	 * the device streams for the device.
-	 *
-	 * @param deviceStreamDTOList The list of stream IDs to save.
-	 * @param deviceInstance      The list of OCAP IDs to save.
-	 * @param deviceInstance      The device for which to save the device streams.
-	 */
-	private void saveDeviceStream(List<DeviceStreamDTO> deviceStreamDTOList, Device deviceInstance) {
-		LOGGER.info("Validating device streams for device: {}", deviceInstance.getId());
-
-		Set<String> uniqueOcapIds = deviceStreamDTOList.stream().map(DeviceStreamDTO::getOcapId)
-				.collect(Collectors.toSet());
-
-		for (DeviceStreamDTO deviceStreamDTO : deviceStreamDTOList) {
-			String streamId = deviceStreamDTO.getStreamId();
-			String ocapId = deviceStreamDTO.getOcapId();
-			LOGGER.info("Validating stream with ID: {} and OCAP ID: {}", streamId, ocapId);
-
-			StreamingDetails stream = streamingDetailsRepository.findByStreamId(streamId);
-
-			if (stream == null) {
-				LOGGER.error("Stream not found with ID: {}", streamId);
-				throw new ResourceNotFoundException("Stream Id", streamId);
-			}
-			if (ocapId == null || ocapId.isEmpty()) {
-				LOGGER.error("OCAP ID is null or empty");
-				throw new MandatoryFieldException("ocapId should not be null or empty");
-			}
-			if (uniqueOcapIds.size() != deviceStreamDTOList.size()) {
-				LOGGER.error("OCAP ID values are not unique within the same device");
-				throw new ResourceAlreadyExistsException("OcapId values must be unique within the same device",
-						"OcapId");
-			}
-		}
-
-		Device savedDevice = deviceRepository.save(deviceInstance);
-
-		for (DeviceStreamDTO deviceStreamDTO : deviceStreamDTOList) {
-			String streamId = deviceStreamDTO.getStreamId();
-			String ocapId = deviceStreamDTO.getOcapId();
-			StreamingDetails stream = streamingDetailsRepository.findByStreamId(streamId);
-
-			DeviceStream existingDeviceStream = deviceStreamRepository.findByDeviceAndStreamAndOcapId(savedDevice,
-					stream, ocapId);
-			if (existingDeviceStream == null) {
-				LOGGER.info("Creating new device stream for device: {} and stream: {}", savedDevice.getId(), streamId);
-				DeviceStream deviceStream = new DeviceStream();
-				deviceStream.setDevice(savedDevice);
-				deviceStream.setStream(stream);
-				deviceStream.setOcapId(ocapId);
-				deviceStreamRepository.save(deviceStream);
-				LOGGER.info("Device stream created successfully");
-			} else {
-				LOGGER.info("Updating existing device stream for device: {} and stream: {}", savedDevice.getId(),
-						streamId);
-				existingDeviceStream.setOcapId(ocapId);
-				existingDeviceStream.setStream(stream);
-				deviceStreamRepository.save(existingDeviceStream);
-				LOGGER.info("Device stream updated successfully");
-			}
-		}
 	}
 
 	/**
@@ -266,39 +150,6 @@ public class DeviceService implements IDeviceService {
 		// call setPropetietsUpdateDTO meeethod here
 		MapperUtils.updateDeviceProperties(device, deviceUpdateDTO);
 		setDevicePropertiesFromUpdateDTO(device, deviceUpdateDTO);
-
-		// check the boxtype is gateway and category is RDKV and thunder is not enabled
-		if ((device.getBoxType().getType().toString().equalsIgnoreCase(GATEWAY.toString())
-				|| device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))
-				&& device.getCategory() == Category.RDKV) {
-			if (deviceUpdateDTO.getRecorderId() != null && !deviceUpdateDTO.getRecorderId().isEmpty()) {
-				device.setRecorderId(deviceUpdateDTO.getRecorderId());
-			} else if (device.getRecorderId() == null || device.getRecorderId().isEmpty()) {
-				LOGGER.info("RecorderId should not be null or empty");
-				throw new MandatoryFieldException(" RecorderId should not be null or empty");
-			}
-			if (!device.isThunderEnabled() && deviceUpdateDTO.getDeviceStreams() != null) {
-				LOGGER.info("Device is a gateway and is not thunder enabled");
-				List<DeviceStream> existingStreams = deviceStreamRepository.findAllByDevice(device);
-				if (!existingStreams.isEmpty()) {
-					deviceStreamRepository.deleteAll(existingStreams);
-				}
-				if (deviceUpdateDTO.getDeviceStreams() != null) {
-					LOGGER.info(deviceUpdateDTO.getDeviceStreams().toString());
-					List<DeviceStreamDTO> deviceStreamDTOList = new ArrayList<>();
-					deviceStreamDTOList.addAll(deviceUpdateDTO.getDeviceStreams());
-					saveDeviceStream(deviceStreamDTOList, device);
-				} else {
-					LOGGER.info("Device streams are null");
-					throw new MandatoryFieldException("Device streams should not be null ");
-				}
-			}
-		}
-
-		if (!(device.getBoxType().getType().toString().equalsIgnoreCase(GATEWAY.toString()))
-				|| !(device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))) {
-			deviceRepository.save(device);
-		}
 
 		return deviceUpdateDTO;
 	}
@@ -360,16 +211,8 @@ public class DeviceService implements IDeviceService {
 	public void deleteDeviceById(Integer id) {
 		LOGGER.info("Going to delete Device with id: " + id);
 		try {
-			// First, delete the associated device streams
-			Device device = deviceRepository.findById(id).orElse(null);
-			if (device != null) {
-				List<DeviceStream> deviceStreams = deviceStreamRepository.findAllByDevice(device);
-				if (!deviceStreams.isEmpty()) {
-					deviceStreamRepository.deleteAll(deviceStreams);
-				}
 				// Then, delete the device
 				deviceRepository.deleteById(id);
-			}
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error occurred while deleting Device with id: " + id, e);
 			throw new DeleteFailedException();
@@ -401,114 +244,6 @@ public class DeviceService implements IDeviceService {
 	}
 
 	/**
-	 * This method is get all gateway devices.
-	 * 
-	 * 
-	 * @return List<String> This returns a list of gateway devices.
-	 */
-	@Override
-	public List<String> getGatewayDeviceList(String category) {
-		LOGGER.info("Fetching device details");
-
-		Category categoryVariable = Category.getCategory(category);
-		if (categoryVariable == null) {
-			LOGGER.error("Invalid category: " + category);
-			throw new ResourceNotFoundException(Constants.CATEGORY, category);
-		}
-
-		List<BoxType> boxTypes = boxTypeRepository.findByType(BoxTypeCategory.GATEWAY);
-		LOGGER.info("Fetched box types: " + boxTypes);
-
-		if (boxTypes.isEmpty() || boxTypes == null) {
-			return null;
-		}
-
-		List<String> deviceStbNames = new ArrayList<>();
-		for (BoxType boxType : boxTypes) {
-			List<Device> devices = deviceRepository.findByBoxTypeAndCategory(boxType, categoryVariable);
-			if (devices != null) {
-				for (Device device : devices) {
-					deviceStbNames.add(device.getStbName());
-				}
-			}
-		}
-
-		LOGGER.info("Fetched device STB names: " + deviceStbNames);
-		return deviceStbNames;
-	}
-
-	/**
-	 * This method is used to retrieve all streams for a device.
-	 *
-	 * @param id The ID of the device to retrieve the streams for.
-	 * @return A List containing all streams for the device with the given ID.
-	 */
-	@Override
-	public List<StreamingDetailsResponse> getStreamsForTheDevice(Integer id) {
-		LOGGER.info("Starting getStreamsForTheDevice method with ID: {}", id);
-		Device device = deviceRepository.findById(id).orElseThrow(() -> {
-			LOGGER.error("Device not found with ID: {}", id);
-			return new ResourceNotFoundException("Device Id", id.toString());
-		});
-		LOGGER.info("Device found with ID: {}", id);
-		List<DeviceStream> deviceStreams = deviceStreamRepository.findAllByDevice(device);
-		LOGGER.info("Found {} device streams for device with ID: {}", deviceStreams.size(), id);
-		return deviceStreams.stream().map(deviceStream -> {
-			LOGGER.info("Processing device stream with ID: {}", deviceStream.getId());
-					if (deviceStream.getStream() != null) {
-						StreamingDetails details = streamingDetailsRepository
-					.findByStreamId(deviceStream.getStream().getStreamId());
-			if (details == null) {
-				LOGGER.error("No StreamingDetails found for stream ID: {}", deviceStream.getStream());
-				return null; // or throw an exception
-			}
-			LOGGER.info("Found streaming details for stream ID: {}", deviceStream.getStream());
-			return convertToStreamingDetailsResponse(details, deviceStream.getOcapId());
-					} else {
-						LOGGER.warn("DeviceStream with ID: {} has no associated StreamingDetails", deviceStream.getId());
-						return null;
-					}
-		}).filter(response -> response != null) // filter out null responses
-				.peek(streamingDetailsResponse -> LOGGER.info("Converted to StreamingDetailsResponse: {}",
-						streamingDetailsResponse))
-				.collect(Collectors.toList());
-	}
-
-	/**
-	 * This method is used to convert a StreamingDetails object to a
-	 * StreamingDetailsResponse object.
-	 *
-	 * @param details The StreamingDetails object to convert.
-	 * @param ocapId  The OCAP ID of the StreamingDetails object.
-	 * @return A StreamingDetailsResponse object containing the details of the
-	 *         StreamingDetails object.
-	 */
-	private StreamingDetailsResponse convertToStreamingDetailsResponse(StreamingDetails details, String ocapId) {
-		LOGGER.trace("Converting StreamingDetails to StreamingDetailsResponse");
-		StreamingDetailsResponse response = new StreamingDetailsResponse();
-		response.setStreamingDetailsId(details.getStreamId());
-		response.setOcapId(ocapId);
-		if (details.getAudioType() != null) {
-			response.setAudioType(details.getAudioType().getName());
-		} else {
-			response.setAudioType(null); // or set to a default value
-		}
-
-		if (details.getChannelType() != null) {
-			response.setChannelType(details.getChannelType().getName());
-		} else {
-			response.setChannelType(null); // or set to a default value
-		}
-		if (details.getVideoType() != null) {
-			response.setVideoType(details.getVideoType().getName());
-		} else {
-			response.setVideoType(null); // or set to a default value
-		}
-
-		return response;
-	}
-
-	/**
 	 * This method is used to convert a Device object to a DeviceDTO object.
 	 *
 	 * @param device The Device object to convert.
@@ -517,10 +252,6 @@ public class DeviceService implements IDeviceService {
 	private DeviceResponseDTO convertToDeviceDTO(Device device) {
 		LOGGER.trace("Converting Device to DeviceDTO");
 		DeviceResponseDTO deviceDTO = MapperUtils.convertToDeviceDTO(device);
-		Device gatewayDevice = deviceRepository.findByStbIp(device.getGatewayIp());
-		if (gatewayDevice != null) {
-			deviceDTO.setGatewayDeviceName(gatewayDevice.getStbName());
-		}
 		return deviceDTO;
 	}
 
@@ -576,41 +307,19 @@ public class DeviceService implements IDeviceService {
 			deviceDTO.setStbIp(getNodeTextContent(eElement, Constants.XML_TAG_CAMERA_IP));
 		}
 
-		// Set the STB name, IP, MAC ID, box type name, box manufacturer name, SoC
-		// vendor name,
+		// Set the STB name, IP, MAC ID, device type name, oem name, SoC
+		//  name,
 		// thunder enabled status, thunder port, recorder ID, and gateway device name
 		// from the XML element
 		deviceDTO.setStbName(getNodeTextContent(eElement, Constants.XML_TAG_STB_NAME));
 		deviceDTO.setStbIp(getNodeTextContent(eElement, Constants.XML_TAG_STB_IP));
 		deviceDTO.setMacId(getNodeTextContent(eElement, Constants.XML_TAG_MAC_ADDR));
-		deviceDTO.setBoxTypeName(getNodeTextContent(eElement, Constants.XML_TAG_BOX_TYPE));
-		deviceDTO.setBoxManufacturerName(getNodeTextContent(eElement, Constants.XML_TAG_BOX_MANUFACTURER));
-		deviceDTO.setSocVendorName(getNodeTextContent(eElement, Constants.XML_TAG_SOC_VENDOR));
+		deviceDTO.setDeviceTypeName(getNodeTextContent(eElement, Constants.XML_TAG_Device_TYPE));
+		deviceDTO.setOemName(getNodeTextContent(eElement, Constants.XML_TAG_OEM));
+		deviceDTO.setSocName(getNodeTextContent(eElement, Constants.XML_TAG_SOC));
 		deviceDTO.setThunderEnabled(
 				Boolean.parseBoolean(getNodeTextContent(eElement, Constants.XML_TAG_IS_THUNDER_ENABLED)));
 		deviceDTO.setThunderPort(getNodeTextContent(eElement, Constants.XML_TAG_THUNDER_PORT));
-		deviceDTO.setRecorderId(getNodeTextContent(eElement, Constants.XML_TAG_RECORDER_ID));
-		deviceDTO.setGatewayDeviceName(getNodeTextContent(eElement, Constants.XML_TAG_GATEWAY_NAME));
-
-		// Get the list of streams from the XML element
-		NodeList streamList = eElement.getElementsByTagName(Constants.XML_TAG_STREAM);
-		ArrayList<DeviceStreamDTO> deviceStreamDTOList = new ArrayList<>();
-
-		// For each stream in the list, create a DeviceStreamDTO object and add it to
-		// the list
-		for (int i = 0; i < streamList.getLength(); i++) {
-			Node streamNode = streamList.item(i);
-			if (streamNode.getNodeType() == Node.ELEMENT_NODE) {
-				Element streamElement = (Element) streamNode;
-				DeviceStreamDTO deviceStreamDTO = new DeviceStreamDTO();
-				deviceStreamDTO.setStreamId(streamElement.getAttribute(Constants.XML_TAG_ID));
-				deviceStreamDTO.setOcapId(streamElement.getTextContent());
-				deviceStreamDTOList.add(deviceStreamDTO);
-			}
-		}
-
-		// Set the list of streams in the DeviceCreateDTO object
-		deviceDTO.setDeviceStreams(deviceStreamDTOList);
 
 		return deviceDTO;
 	}
@@ -688,28 +397,28 @@ public class DeviceService implements IDeviceService {
 			throw new ResourceAlreadyExistsException("MacId: ", deviceDTO.getMacId());
 		}
 
-		// Set BoxType
-		BoxType boxType = boxTypeRepository.findByName(deviceDTO.getBoxTypeName());
-		if (boxType != null) {
-			device.setBoxType(boxType);
+		// Set DeviceType
+		DeviceType deviceType = deviceTypeRepository.findByName(deviceDTO.getDeviceTypeName());
+		if (deviceType != null) {
+			device.setDeviceType(deviceType);
 		} else {
-			throw new ResourceNotFoundException("BoxType: ", deviceDTO.getBoxTypeName());
+			throw new ResourceNotFoundException("DeviceType: ", deviceDTO.getDeviceTypeName());
 		}
 
-		// Set BoxManufacturer
-		BoxManufacturer boxManufacturer = boxManufacturerRepository.findByName(deviceDTO.getBoxManufacturerName());
-		if (boxManufacturer != null) {
-			device.setBoxManufacturer(boxManufacturer);
+		// Set OEM
+		Oem oem = oemRepository.findByName(deviceDTO.getOemName());
+		if (oem != null) {
+			device.setOem(oem);
 		} else {
-			throw new ResourceNotFoundException("BoxManufacturer: ", deviceDTO.getBoxManufacturerName());
+			throw new ResourceNotFoundException("oem: ", deviceDTO.getOemName());
 		}
 
-		// Set SocVendor
-		SocVendor socVendor = socVendorRepository.findByName(deviceDTO.getSocVendorName());
-		if (socVendor != null) {
-			device.setSocVendor(socVendor);
+		// Set Soc
+		Soc soc = socRepository.findByName(deviceDTO.getSocName());
+		if (soc != null) {
+			device.setSoc(soc);
 		} else {
-			throw new ResourceNotFoundException("SocVendor: ", deviceDTO.getSocVendorName());
+			throw new ResourceNotFoundException("Soc: ", deviceDTO.getSocName());
 		}
 
 		// Set UserGroup
@@ -732,16 +441,7 @@ public class DeviceService implements IDeviceService {
 			throw new MandatoryFieldException(" ThunderPort should not be null or empty");
 		}
 
-		// uf device box type type is Cline set gatewaydevice name
-		if ((device.getBoxType().getType().toString().equalsIgnoreCase(CLIENT.toString())
-				|| device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))
-				&& (deviceDTO.getCategory().equalsIgnoreCase(Category.RDKV.toString()))) {
-			Device gatewayDevice = deviceRepository.findByStbName(deviceDTO.getGatewayDeviceName());
-			if (gatewayDevice != null) {
-				LOGGER.info("GatewayDevice: " + gatewayDevice);
-				device.setGatewayIp(gatewayDevice.getStbIp());
-			}
-		}
+
 
 	}
 
@@ -755,31 +455,31 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromUpdateDTO(Device device, DeviceUpdateDTO deviceUpdateDTO) {
 
-		if (!Utils.isEmpty(deviceUpdateDTO.getBoxTypeName())) {
-			BoxType boxType = boxTypeRepository.findByName(deviceUpdateDTO.getBoxTypeName());
-			if (boxType != null) {
-				device.setBoxType(boxType);
+		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceTypeName())) {
+			DeviceType deviceType = deviceTypeRepository.findByName(deviceUpdateDTO.getDeviceTypeName());
+			if (deviceType != null) {
+				device.setDeviceType(deviceType);
 			} else {
-				throw new ResourceNotFoundException("BoxType: ", deviceUpdateDTO.getBoxTypeName());
+				throw new ResourceNotFoundException("DeviceType: ", deviceUpdateDTO.getDeviceTypeName());
 			}
 		}
 
-		if (!Utils.isEmpty(deviceUpdateDTO.getBoxManufacturerName())) {
-			BoxManufacturer boxManufacturer = boxManufacturerRepository
-					.findByName(deviceUpdateDTO.getBoxManufacturerName());
-			if (boxManufacturer != null) {
-				device.setBoxManufacturer(boxManufacturer);
+		if (!Utils.isEmpty(deviceUpdateDTO.getOemName())) {
+			Oem oem = oemRepository
+					.findByName(deviceUpdateDTO.getOemName());
+			if (oem != null) {
+				device.setOem(oem);
 			} else {
-				throw new ResourceNotFoundException("BoxManufacturer: ", deviceUpdateDTO.getBoxManufacturerName());
+				throw new ResourceNotFoundException("oem: ", deviceUpdateDTO.getOemName());
 			}
 		}
 
-		if (!Utils.isEmpty(deviceUpdateDTO.getSocVendorName())) {
-			SocVendor socVendor = socVendorRepository.findByName(deviceUpdateDTO.getSocVendorName());
-			if (socVendor != null) {
-				device.setSocVendor(socVendor);
+		if (!Utils.isEmpty(deviceUpdateDTO.getSocName())) {
+			Soc soc = socRepository.findByName(deviceUpdateDTO.getSocName());
+			if (soc != null) {
+				device.setSoc(soc);
 			} else {
-				throw new ResourceNotFoundException("SocVendor: ", deviceUpdateDTO.getSocVendorName());
+				throw new ResourceNotFoundException("Soc: ", deviceUpdateDTO.getSocName());
 			}
 		}
 		UserGroup userGroup = userGroupRepository.findByName(deviceUpdateDTO.getUserGroupName());
@@ -795,18 +495,6 @@ public class DeviceService implements IDeviceService {
 			}
 		}
 
-// If device box type is Client, set gateway device name
-		if ((device.getBoxType().getType().toString().equalsIgnoreCase(CLIENT.toString())
-				|| device.getBoxType().getType().toString().equalsIgnoreCase(STAND_ALONE_CLIENT.toString()))
-				&& (deviceUpdateDTO.getCategory().equalsIgnoreCase(Category.RDKV.toString()))) {
-			if (deviceUpdateDTO.getGatewayDeviceName() != null && !deviceUpdateDTO.getGatewayDeviceName().isEmpty()) {
-				Device gatewayDevice = deviceRepository.findByStbName(deviceUpdateDTO.getGatewayDeviceName());
-				if (gatewayDevice != null) {
-					LOGGER.info("GatewayDevice: " + gatewayDevice);
-					device.setGatewayIp(gatewayDevice.getStbIp());
-				}
-			}
-		}
 
 	}
 
@@ -861,35 +549,13 @@ public class DeviceService implements IDeviceService {
 				" Is Thunder enabled for STB");
 		appendElement(deviceElement, Constants.XML_TAG_THUNDER_PORT, device.getThunderPort(),
 				" Thunder port for thunder devices");
-		appendElement(deviceElement, Constants.XML_TAG_BOX_TYPE, device.getBoxType().getName(), " BoxType for STB");
-		appendElement(deviceElement, Constants.XML_TAG_BOX_MANUFACTURER, device.getBoxManufacturer().getName(),
-				" BoxManufacture for the STB");
-		appendElement(deviceElement, Constants.XML_TAG_SOC_VENDOR, device.getSocVendor().getName(),
-				" SoC vendor for the STB");
+		appendElement(deviceElement, Constants.XML_TAG_Device_TYPE, device.getDeviceType().getName(), " device type for STB");
+		appendElement(deviceElement, Constants.XML_TAG_OEM, device.getOem().getName(),
+				" oem for the STB");
+		appendElement(deviceElement, Constants.XML_TAG_SOC, device.getSoc().getName(),
+				" SoC for the STB");
 		appendElement(deviceElement, Constants.XML_TAG_CATEGORY, device.getCategory().toString(),
 				" Category for the STB");
-		appendElement(deviceElement, Constants.XML_TAG_RECORDER_ID, device.getRecorderId(), " Recorder ID for the STB");
-		appendElement(deviceElement, Constants.XML_TAG_GATEWAY_IP_device, device.getGatewayIp(),
-				" Gateway device IP for the STB");
-
-		List<DeviceStream> deviceStreams = deviceStreamRepository.findAllByDevice(device);
-		if (deviceStreams != null && !deviceStreams.isEmpty()) {
-			Element streamsElement = doc.createElement(Constants.XML_TAG_STREAMS);
-			deviceElement.appendChild(streamsElement);
-			for (DeviceStream deviceStream : deviceStreams) {
-
-				// Add a comment before each stream element
-				Comment comment = doc.createComment(" Stream details for the STB");
-				streamsElement.appendChild(comment);
-
-				Element streamElement = doc.createElement(Constants.XML_TAG_STREAM);
-				Attr attr = doc.createAttribute(Constants.XML_TAG_ID);
-				attr.setValue(deviceStream.getStream().getStreamId());
-				streamElement.setAttributeNode(attr);
-				streamElement.appendChild(doc.createTextNode(deviceStream.getOcapId()));
-				streamsElement.appendChild(streamElement);
-			}
-		}
 		return doc;
 	}
 

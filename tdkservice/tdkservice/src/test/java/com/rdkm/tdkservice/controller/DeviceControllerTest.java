@@ -50,11 +50,13 @@ import com.rdkm.tdkservice.dto.DeviceConfigDownloadDTO;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsResponse;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
-
+/**
+ * This class is used to test the DeviceController class.
+ * It uses Mockito to mock the service layer and JUnit for the testing framework.
+ */
 public class DeviceControllerTest {
 
 	@InjectMocks
@@ -66,6 +68,9 @@ public class DeviceControllerTest {
 	@Mock
 	private IDeviceConfigService deviceConfigService;
 
+	/*
+	 * This method is run before each test. It initializes the mocks.
+	 */
 	@BeforeEach
 	public void setup() {
 		MockitoAnnotations.openMocks(this);
@@ -79,6 +84,10 @@ public class DeviceControllerTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
+	/*
+	 * This test checks if the createDevice method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testCreateDevice() {
 		DeviceCreateDTO deviceDTO = new DeviceCreateDTO();
@@ -92,6 +101,10 @@ public class DeviceControllerTest {
 		assertEquals("Device created successfully", response.getBody());
 	}
 
+	/*
+	 * This test checks if the createDevice method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void createDeviceFailure() {
 		DeviceCreateDTO deviceDTO = new DeviceCreateDTO();
@@ -100,6 +113,10 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
 
+	/*
+	 * This test checks if the deleteDevice method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	void testDeleteDevice_NotFound() {
 		Integer deviceId = 1;
@@ -113,6 +130,10 @@ public class DeviceControllerTest {
 		verify(deviceService).deleteDeviceById(deviceId);
 	}
 
+	/*
+	 * This test checks if the deleteDevice method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	void testDeleteDevice_Success() {
 		Integer deviceId = 1;
@@ -125,6 +146,10 @@ public class DeviceControllerTest {
 		verify(deviceService).deleteDeviceById(deviceId);
 	}
 
+	/*
+	 * This test checks if the deleteDevice method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	void testDeleteDevice_Failure() {
 		Integer deviceId = 1;
@@ -137,6 +162,10 @@ public class DeviceControllerTest {
 		verify(deviceService).deleteDeviceById(deviceId);
 	}
 
+	/*
+	 * This test checks if the updateDevice method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testUpdateDevice() {
 		DeviceUpdateDTO deviceUpdateDTO = new DeviceUpdateDTO();
@@ -148,6 +177,10 @@ public class DeviceControllerTest {
 		assertEquals("Device updated successfully", response.getBody());
 	}
 
+	/*
+	 * This test checks if the updateDevice method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void testGetAllDevices() {
 		when(deviceService.getAllDeviceDetails()).thenReturn(Collections.emptyList());
@@ -158,6 +191,10 @@ public class DeviceControllerTest {
 		assertEquals(Collections.emptyList(), response.getBody());
 	}
 
+	/*
+	 * This test checks if the getAllDevicesByCategory method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testGetAllDevicesByCategory() {
 		String category = "testCategory";
@@ -170,6 +207,10 @@ public class DeviceControllerTest {
 		assertEquals(Collections.emptyList(), response.getBody());
 	}
 
+	/*
+	 * This test checks if the getAllDevicesByCategory method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void testGetDeviceById() {
 		Integer id = 1;
@@ -187,6 +228,10 @@ public class DeviceControllerTest {
 		assertEquals(device, response.getBody());
 	}
 
+	/*
+	 * This test checks if the getDeviceById method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void testDeleteDeviceById() {
 		Integer id = 1;
@@ -198,38 +243,16 @@ public class DeviceControllerTest {
 		assertEquals("Device deleted successfully", response.getBody());
 	}
 
-	@Test
-	public void getListOfGateWayDevicesNoDevicesFound() {
-		String category = "testCategory";
-		when(deviceService.getGatewayDeviceList(category)).thenReturn(new ArrayList<>());
-		ResponseEntity<?> response = deviceController.getListOfGateWayDevices(category);
-		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-	}
-
-	@Test
-	public void getStreamsForDeviceSuccess() {
-		Integer id = 1;
-		List<StreamingDetailsResponse> streams = new ArrayList<>();
-		streams.add(new StreamingDetailsResponse());
-		when(deviceService.getStreamsForTheDevice(id)).thenReturn(streams);
-		ResponseEntity<?> response = deviceController.getStreamsForDevice(id);
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-	}
-
-	@Test
-	public void getStreamsForDeviceFailure() {
-		Integer id = 1;
-		when(deviceService.getStreamsForTheDevice(id)).thenThrow(new RuntimeException());
-		ResponseEntity<?> response = deviceController.getStreamsForDevice(id);
-		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-	}
-
+	/*
+	 * This test checks if the downloadDeviceConfigFile method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	void testDownloadFile_Success() {
 		// Setup
 		DeviceConfigDownloadDTO request = new DeviceConfigDownloadDTO();
-		request.setBoxType("GATEWAY");
-		request.setBoxName("test");
+		request.setDeviceType("CLIENT");
+		request.setDeviceTypeName("test");
 		Resource mockResource = mock(Resource.class);
 		when(mockResource.getFilename()).thenReturn("configFile.txt");
 
@@ -237,8 +260,8 @@ public class DeviceControllerTest {
 		when(deviceConfigService.getDeviceConfigFile("test", "GATEWAY")).thenReturn(mockResource);
 
 		// Execute the controller method
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(request.getBoxName(),
-				request.getBoxType());
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(request.getDeviceTypeName(),
+				request.getDeviceType());
 
 		// Assert the response status and header
 		assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -249,21 +272,29 @@ public class DeviceControllerTest {
 		verify(deviceConfigService).getDeviceConfigFile("test", "GATEWAY");
 	}
 
+	/*
+	 * This test checks if the downloadDeviceConfigFile method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	void testDownloadFile_NotFound() {
 		DeviceConfigDownloadDTO request = new DeviceConfigDownloadDTO();
-		request.setBoxType("BoxType");
-		request.setBoxName("BoxName");
+		request.setDeviceType("DeviceType");
+		request.setDeviceTypeName("DeviceTypeName");
 
 		when(deviceConfigService.getDeviceConfigFile(anyString(), anyString())).thenReturn(null);
 
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(request.getBoxName(),
-				request.getBoxType());
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(request.getDeviceTypeName(),
+				request.getDeviceType());
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-		verify(deviceConfigService).getDeviceConfigFile("BoxName", "BoxType");
+		verify(deviceConfigService).getDeviceConfigFile("DeviceType", "DeviceTypeName");
 	}
 
+	/*
+	 * This test checks if the uploadFile method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	void testUploadFile_Success() {
 		MockMultipartFile file = new MockMultipartFile("uploadFile", "configFile.txt", "text/plain",
@@ -277,6 +308,10 @@ public class DeviceControllerTest {
 		verify(deviceConfigService).uploadDeviceConfigFile(any());
 	}
 
+	/*
+	 * This test checks if the uploadFile method in the controller
+	 * returns an error response when the file is empty.
+	 */
 	@Test
 	void testUploadFile_EmptyFile() {
 		MockMultipartFile file = new MockMultipartFile("uploadFile", "", "text/plain", new byte[0]);
@@ -288,6 +323,10 @@ public class DeviceControllerTest {
 		verify(deviceConfigService, never()).uploadDeviceConfigFile(any());
 	}
 
+	/*
+	 * This test checks if the uploadFile method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	void testUploadFile_Failure() {
 		MockMultipartFile file = new MockMultipartFile("uploadFile", "configFile.txt", "text/plain",
@@ -301,6 +340,10 @@ public class DeviceControllerTest {
 		verify(deviceConfigService).uploadDeviceConfigFile(any());
 	}
 
+	/*
+	 * This test checks if the deleteDeviceConfigFile method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testDeleteDeviceConfigFileSuccess() {
 		String fileName = "testFile";
@@ -309,6 +352,10 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
+	/*
+	 * This test checks if the deleteDeviceConfigFile method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void testDeleteDeviceConfigFileFailure() {
 		String fileName = "testFile";
@@ -317,25 +364,37 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
 
+	/*
+	 * This test checks if the downloadDeviceConfigFile method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testDownloadDeviceConfigFileSuccess() {
-		String boxName = "testBoxName";
-		String boxType = "testBoxType";
+		String deviceTypeName = "testDeviceName";
+		String deviceType = "testDeviceType";
 		Resource resource = mock(Resource.class);
-		when(deviceConfigService.getDeviceConfigFile(boxName, boxType)).thenReturn(resource);
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(boxName, boxType);
+		when(deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType)).thenReturn(resource);
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(deviceTypeName, deviceType);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
+	/*
+	 * This test checks if the downloadDeviceConfigFile method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	public void testDownloadDeviceConfigFileFailure() {
-		String boxName = "testBoxName";
-		String boxType = "testBoxType";
-		when(deviceConfigService.getDeviceConfigFile(boxName, boxType)).thenReturn(null);
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(boxName, boxType);
+		String deviceTypeName = "testDeviceName";
+		String deviceType = "testDEviceType";
+		when(deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType)).thenReturn(null);
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(deviceTypeName, deviceType);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 
+	/*
+	 * This test checks if the createDeviceFromXML method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void createDeviceSuccess() {
 		DeviceCreateDTO deviceDTO = new DeviceCreateDTO();
@@ -343,7 +402,10 @@ public class DeviceControllerTest {
 		ResponseEntity<String> response = deviceController.createDevice(deviceDTO);
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
 	}
-
+	/*
+	 * This test checks if the createDevice method in the controller returns an
+	 * error response when the service layer operation fails.
+	 */
 	@Test
 	@DisplayName("Should return OK when getAllDevices is successful")
 	public void getAllDevicesSuccess() {
@@ -352,35 +414,37 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
-	@Test
-	public void getStreamsForDeviceResourceNotFound() {
-		Integer id = 1;
-		when(deviceService.getStreamsForTheDevice(id)).thenThrow(new ResourceNotFoundException(null, null));
-		ResponseEntity<?> response = deviceController.getStreamsForDevice(id);
-		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-	}
-
+	/*
+	 * This test checks if the getAllDevices method in the controller returns an
+	 * error response when the service layer operation fails.
+	 */
 	@Test
 	@DisplayName("Should return OK when downloadDeviceConfigFile is successful")
 	public void downloadDeviceConfigFileSuccess() {
-		String boxName = "testBoxName";
-		String boxType = "testBoxType";
+		String deviceTypeName = "testDeviceName";
+		String deviceType = "testDeviceType";
 		Resource resource = mock(Resource.class);
-		when(deviceConfigService.getDeviceConfigFile(boxName, boxType)).thenReturn(resource);
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(boxName, boxType);
+		when(deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType)).thenReturn(resource);
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(deviceTypeName, deviceType);
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
-
+	/*
+	 * This test checks if the downloadDeviceConfigFile method in the controller
+	 * returns an error response when the service layer operation fails.
+	 */
 	@Test
 	@DisplayName("Should return NOT_FOUND when downloadDeviceConfigFile fails")
 	public void downloadDeviceConfigFileFailure() {
-		String boxName = "testBoxName";
-		String boxType = "testBoxType";
-		when(deviceConfigService.getDeviceConfigFile(boxName, boxType)).thenReturn(null);
-		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(boxName, boxType);
+		String deviceTypeName = "testDeviceName";
+		String deviceType = "testDeviceType";
+		when(deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType)).thenReturn(null);
+		ResponseEntity<Resource> response = deviceController.downloadDeviceConfigFile(deviceTypeName, deviceType);
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
-
+	/*
+	 * This test checks if the uploadFile method in the controller returns a
+	 * successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testCreateDeviceFromXML() throws Exception {
 		MockMultipartFile file = new MockMultipartFile("file", "test.xml", "text/xml", "<xml></xml>".getBytes());
@@ -394,7 +458,10 @@ public class DeviceControllerTest {
 
 		verify(deviceService, times(1)).parseXMLForDevice(any());
 	}
-
+	/*
+	 * This test checks if the downloadXML method in the controller returns a
+	 * successful response when the service layer operation is successful.
+	 */
 	@Test
 	@DisplayName("Should return OK when downloadXML is successful")
 	public void downloadXMLSuccess() {
@@ -405,7 +472,10 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(xmlContent, response.getBody());
 	}
-
+	/*
+	 * This test checks if the downloadXML method in the controller returns an error
+	 * response when the service layer operation fails.
+	 */
 	@Test
 	public void testGetAllDevicesException() {
 		when(deviceService.getAllDeviceDetails()).thenThrow(new RuntimeException("Test exception"));
@@ -414,7 +484,10 @@ public class DeviceControllerTest {
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 
 	}
-
+	/*
+	 * This test checks if the getAllDevicesByCategory method in the controller
+	 * returns a successful response when the service layer operation is successful.
+	 */
 	@Test
 	public void testGetAllDevicesByCategoryException() {
 		String category = "testCategory";

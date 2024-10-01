@@ -83,26 +83,26 @@ public class Device extends BaseEntity {
 	private String macId;
 
 	/**
-	 * Represents the boxType of the device.
+	 * Represents the devicetype of the device.
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "boxtype_id", nullable = false)
-	private BoxType boxType;
+	@JoinColumn(name = "devicetype_id", nullable = false)
+	private DeviceType deviceType;
 
 	/**
-	 * Represents the boxManufacturer of the device.
+	 * Represents the Oem of the device.
 	 * 
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "boxmanufacturer_id", nullable = false)
-	private BoxManufacturer boxManufacturer;
+	@JoinColumn(name = "Oem_id", nullable = false)
+	private Oem oem;
 
 	/**
-	 * Represents the socVendor of the device
+	 * Represents the soc of the device
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "socvendor_id", nullable = false)
-	private SocVendor socVendor;
+	@JoinColumn(name = "soc_id", nullable = false)
+	private Soc soc;
 
 	/**
 	 * Represents the deviceStatus of the device.
@@ -110,16 +110,6 @@ public class Device extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private DeviceStatus deviceStatus = DeviceStatus.NOT_FOUND;
-
-	/**
-	 * Represents the recorderId of the device.
-	 */
-	private String recorderId;
-
-	/**
-	 * Represents the gatewayIp of the device.
-	 */
-	private String gatewayIp;
 
 	/**
 	 * Represents the is Thunder Enabled.

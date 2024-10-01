@@ -27,7 +27,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-import com.rdkm.tdkservice.dto.StreamingDetailsResponse;
 
 public interface IDeviceService {
 	/**
@@ -77,21 +76,6 @@ public interface IDeviceService {
 	 * @param id This is the id of the Device to be deleted.
 	 */
 	public void deleteDeviceById(Integer id);
-
-	/**
-	 * This method is get all gateway devices.
-	 * 
-	 * 
-	 * @return List<String> This returns a list of gateway devices.
-	 */
-	List<String> getGatewayDeviceList(String category);
-
-	/**
-	 * This method is used to retrieve all Devices by Category.
-	 *
-	 * @return List<Device> This returns a list of all Devices.
-	 */
-	public List<StreamingDetailsResponse> getStreamsForTheDevice(Integer id);
 
 	/**
 	 * This method is used to parse the Device XML.

@@ -42,7 +42,7 @@ import com.rdkm.tdkservice.util.Utils;
 
 /**
  * This class is used to provide the service to get the device configuration
- * file for a given box name or box type or default device configuration file
+ * file for a given deviceType name or device type or default device configuration file
  * and to upload the device configuration file
  * 
  */
@@ -52,40 +52,40 @@ public class DeviceConfigService implements IDeviceConfigService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceConfigService.class);
 
 	/**
-	 * This method is used to get the device configuration file for a given box name
-	 * or box type or default device configuration file.
+	 * This method is used to get the device configuration file for a given device type name
+	 * or device type or default device configuration file.
 	 * 
-	 * @param boxName - the box name
-	 * @param boxtype - the box type
+	 * @param deviceTypeName - the device name
+	 * @param deviceType - the device type
 	 * @return Resource - the device configuration file null - if the device config
 	 *         file is not found
 	 */
 	@Override
-	public Resource getDeviceConfigFile(String boxName, String boxtype) {
-		LOGGER.info("Inside getDeviceConfigFile method with boxName: {}, boxtype: {}", boxName, boxtype);
+	public Resource getDeviceConfigFile(String deviceTypeName, String deviceType) {
+		LOGGER.info("Inside getDeviceConfigFile method with deviceTypeName: {}, deviceType: {}", deviceTypeName, deviceType);
 		String configFile;
-		// Get the device config file for the given box name
+		// Get the device config file for the given deviceType name
 		Resource resource = null;
-		if (!Utils.isEmpty(boxName)) {
-			configFile = boxName + Constants.CONFIG_FILE_EXTENSION;
+		if (!Utils.isEmpty(deviceTypeName)) {
+			configFile = deviceTypeName + Constants.CONFIG_FILE_EXTENSION;
 			resource = getDeviceConfigFileGivenName(configFile);
 			if (resource != null) {
 				return resource;
 			}
 		}
 
-		// Get the device config file for the given box type of there is no config file
-		// for the box name
-		if (resource == null && !Utils.isEmpty(boxtype)) {
-			configFile = boxtype + Constants.CONFIG_FILE_EXTENSION;
+		// Get the device config file for the given deviceType type of there is no config file
+		// for the deviceType name
+		if (resource == null && !Utils.isEmpty(deviceType)) {
+			configFile = deviceType + Constants.CONFIG_FILE_EXTENSION;
 			resource = getDeviceConfigFileGivenName(configFile);
 			if (resource != null) {
 				return resource;
 			}
 		}
 
-		// Get the default device config file if there is no config file for the box
-		// name and box type
+		// Get the default device config file if there is no config file for the deviceType
+		// name and device type
 		if (resource == null) {
 			configFile = Constants.DEFAULT_DEVICE_CONFIG_FILE;
 			resource = getDeviceConfigFileGivenName(configFile);
@@ -130,7 +130,7 @@ public class DeviceConfigService implements IDeviceConfigService {
 	/**
 	 * This method is used to delete the device configuration file
 	 * 
-	 * @param fileName - the device configuration file name
+	 * @param deviceConfigFileName - the device configuration file name
 	 * @return boolean - true if the device config file is deleted successfully
 	 *         false - if the device config file is not deleted
 	 */
