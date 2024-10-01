@@ -505,3 +505,50 @@ def memcr_checkAppHibernateRFC(datamodel):
         print('FAILURE : Failed to get the device credentials\n')
         checkAppHibernateRFC = "FAILURE"
     return checkAppHibernateRFC
+
+#---------------------------------------------------------------
+# RESTART WPEFRAMEWORK SERVICE
+#---------------------------------------------------------------
+def memcr_restart_wpeframework_service():
+    wpeframework_servicestatus = "SUCCESS"
+    status = memcr_obtainCredentials()
+    if "FAILURE" not in status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        command = 'systemctl restart wpeframework 2>/dev/null ; sleep 25s ; systemctl status wpeframework 2>/dev/null | grep active  | cut -d ";" -f 2 | cut -d " " -f 2'
+        print("COMMAND : %s" %(command))
+        output = memcr_executeInDUT(sshMethod,credentials,command)
+        output = str(output).split("\n")[1]
+        output = output.replace("s","").strip()
+        if int(output) <= 30:
+            print("SUCCESS : Successfully restarted wpeframework service with the delay of "+output+" seconds\n")
+        else:
+            print("FAILURE : Failed to restart wpeframework service with the delay of "+output+" seconds\n")
+            wpeframework_servicestatus = "FAILURE"
+    else:
+        print("FAILURE : Failed to get the device credentials\n")
+        wpeframework_servicestatus = "FAILURE"
+    return wpeframework_servicestatus
+
+#----------------------------------------------------------------------
+# VALIDATE WPEFRAMEWORK LOGS DURING HIBERNATE AND RESTORE OPERATIONS
+#----------------------------------------------------------------------
+def memcr_logValidation(log_Occurrences):
+    logValidation_status = "SUCCESS"
+    status = memcr_obtainCredentials()
+    if "FAILURE" not in status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        command = 'journalctl --since "1 min ago" -x -u wpeframework | grep -inr "'+log_Occurrences+'"'
+        print("COMMAND : %s" %(command))
+        output = memcr_executeInDUT(sshMethod,credentials,command)
+        output = str(output).split("\n")[1]
+        if len(output) and log_Occurrences in output:
+            print(output)
+            print("SUCCESS : Log entry found\n")
+        else:
+            print(output)
+            print("FAILURE : Log entry not found\n")
+            logValidation_status = "FAILURE"
+    else:
+        print("FAILURE : Failed to get the device credentials\n")
+        logValidation_status = "FAILURE"
+    return logValidation_status

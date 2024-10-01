@@ -42,6 +42,8 @@
       <function name='memcr_checkPluginStatus' />
       <function name='memcr_checkAppHibernateRFC' />
       <function name='memcr_getProcessID' />
+      <function name='memcr_restart_wpeframework_service' />
+      <function name='memcr_logValidation' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -60,6 +62,7 @@
       <parameter funName='memcr_checkPluginStatus' parameterName='params' parameterType='STRING' range='A-Z' />
       <parameter funName='memcr_checkAppHibernateRFC' parameterName='datamodel' parameterType='STRING' range='A-Z' />
       <parameter funName='memcr_getProcessID' parameterName='appname' parameterType='STRING' range='A-Z' />
+      <parameter funName='memcr_logValidation' parameterName='log_Occurrences' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>

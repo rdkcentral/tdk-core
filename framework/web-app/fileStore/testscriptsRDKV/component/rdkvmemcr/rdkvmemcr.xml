@@ -84,6 +84,16 @@
           <parameter name="appname" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="memcr_restart_wpeframework_service" id="" version="1">
+        <function>memcr_restart_wpeframework_service</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="memcr_logValidation" id=" " version="1">
+        <function>memcr_logValidation</function>
+        <parameters>
+          <parameter name="log_Occurrences" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
