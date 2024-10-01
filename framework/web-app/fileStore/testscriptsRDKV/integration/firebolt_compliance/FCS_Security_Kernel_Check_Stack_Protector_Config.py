@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2022 RDK Management
+# Copyright 2024 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>FCS_Security_Kernel_Configurations_Test</name>
+  <name>FCS_Security_Kernel_Check_Stack_Protector_Config</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,11 +33,11 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Check if expected kernel configurations are disabled</synopsis>
+  <synopsis>Check the Stack Protector are enabled in the device</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>2</execution_time>
+  <execution_time>5</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -49,26 +49,28 @@
   <!--  -->
   <box_types>
     <box_type>Video_Accelerator</box_type>
-    <box_type>RDKTV</box_type>
+    <box_type>RPI-Client</box_type>
     <!--  -->
   </box_types>
-  <rdk_versions />
+  <rdk_versions>
+    <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
+  </rdk_versions>
   <test_cases>
-    <test_case_id>FCS_Security_07</test_case_id>
-    <test_objective>Check if expected kernel configurations are disabled</test_objective>
+    <test_case_id>FCS_Security_22</test_case_id>
+    <test_objective>Check the Stack Protector are enabled in the device</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDK TV,Video Accelerator</test_setup>
+    <test_setup>Video Accelerator, RPI</test_setup>
     <pre_requisite>Security test shell script must be installed in the device</pre_requisite>
     <api_or_interface_used>systemutil</api_or_interface_used>
     <input_parameters></input_parameters>
-    <automation_approch>1.TDK Agent should be up and running in the DUT.
-2.Check if expected kernel configurations are disabled by extracting the /proc/config.gz file.</automation_approch>
-    <expected_output>Expected kernel configurations must be disabled</expected_output>
-    <priority>Medium</priority>
+    <automation_approch>Check if expected stack protector configurations are enabled by extracting the /proc/config.gz file.</automation_approch>
+    <expected_output>Stack Protector configs should be enabled</expected_output>
+    <priority>High</priority>
     <test_stub_interface>libsystemutilstub.so.0</test_stub_interface>
-    <test_script>FCS_Security_Kernel_Configurations_Test</test_script>
-    <skipped></skipped>
-    <release_version>M103</release_version>
+    <test_script>FCS_Security_Kernel_Check_Stack_Protector_Config</test_script>
+    <skipped>No</skipped>
+    <release_version>M129</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -77,62 +79,74 @@
 import tdklib;
 from tdkvutility import *
 
-#Test component to be tested
-obj = tdklib.TDKScriptingLibrary("systemutil","1");
+# Test component to be tested
+obj = tdklib.TDKScriptingLibrary("systemutil","1")
 
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'FCS_Security_Kernel_Configurations_Test');
+obj.configureTestCase(ip,port,'FCS_Security_Kernel_Check_Stack_Protector_Config');
 
-#Get the result of connection with test component and DUT
-result =obj.getLoadModuleResult();
-print("[LIB LOAD STATUS]  :  %s" %result);
+# Get the result of connection with test component and DUT
+result = obj.getLoadModuleResult()
+print("[LIB LOAD STATUS]  :  %s" % result)
 
-#Path to be extracted
+# Path to be extracted
 filePath = "/tmp"
-#Shell Script path
-shellScript = "SecurityTestTDK.sh "
-#Test option
-testOption = "KERNEL_CONFIG_CHECK "
+# Shell Script path
+shellScript = "SecurityTestTDK.sh"
+# Test option
+testOption = "check_STACK_CONFIG "
 
-#Test component to be tested
+# Test component to be tested
 if "SUCCESS" in result.upper():
     print("\nTEST STEP 1: Check if /proc/config.gz is present")
-    result,details,tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command":"ls /proc/config.gz"}, True)
+    result, details, tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": "ls /proc/config.gz"}, True)
+
     if result and details:
         print("SUCCESS: Kernel config file (/proc/config.gz) is present")
-        # Execute shell script to check and extract kernel configs
-        command = f"sh {shellScript}{testOption}{filePath}"
+
+        # Check if parsing shell script is present
+        command = f"ls {shellScript}"
         result, details, tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": command}, True)
-        if "Extracted config file could not be found" in details:
-            print(details)
+
+        if not details:
+            print(f"Parsing shell script {shellScript} is not present in DUT")
             tdkTestObj.setResultStatus("FAILURE")
         else:
-            # Check for any enabled configurations
-            test_failed = False
-            enabled_configs = []
-            # Split the details output by lines and check for "enabled"
-            config_lines = details.splitlines()
-            for line in config_lines:
-                if "is enabled" in line:
-                    enabled_configs.append(line)
-            if enabled_configs:
-                # If any configuration is enabled, the test fails
-                print("The following configurations are enabled, but they should be disabled:")
-                print('\n'.join(enabled_configs))
-                test_failed = True
-            else:
-                print("All expected kernel configurations are disabled as expected.")
-                # Set test status based on the result
-            if test_failed:
-                tdkTestObj.setResultStatus("FAILURE")
-            else:
-                tdkTestObj.setResultStatus("SUCCESS")
+            # Execute shell script
+            print("TEST STEP 2: Check if expected kernel configurations are disabled")
+            command = f"sh {shellScript} {testOption} {filePath}"
+            result, details, tdkTestObj = executeTest(obj, 'ExecuteCommand', {"command": command}, True)
 
-    # Unload the module after the test is complete
+            if "Extracted config file could not be found" in details:
+                print(details)
+                tdkTestObj.setResultStatus("FAILURE")
+            elif details:
+                # Check if any config is enabled
+                config_found = False
+                for line in details.splitlines():
+                    if "is enabled" in line:
+                        print(f"{line}.")
+                        print("Stack Protector Config is enabled as expected")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        config_found = True
+                        break  # Exit after the first enabled config is found
+                    if not config_found:
+                        print("Stack Protector Config is disabled")
+                        tdkTestObj.setResultStatus("FAILURE")
+            else:
+                print("No output from the shell script execution.")
+                tdkTestObj.setResultStatus("FAILURE")
+
+    else:
+        print("FAILURE: Kernel config file (/proc/config.gz) is not present")
+        tdkTestObj.setResultStatus("FAILURE")
+
+    # Unload the module
     obj.unloadModule("systemutil")
 
 else:
-    print("Module load failed.")
+    print("Module load failed")
+
