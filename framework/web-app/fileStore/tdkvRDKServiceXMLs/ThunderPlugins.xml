@@ -1998,8 +1998,8 @@
             <params>
                <param tag="enabled" type="bool" />
             </params>
-        </method>
-        <method name="Get_API_Version" api="getApiVersionNumber" type="method" desc="Gets the api version" />
+	</method>    
+	<method name="Get_API_Version" api="getApiVersionNumber" type="method" desc="Gets the api version" />
         <method name="Get_Friendly_Name" api="getFriendlyName" type="method" desc="Gets the human readable name for the implementation" />
         <method name="Set_Friendly_Name" api="setFriendlyName" type="method" desc="Sets a name for the implementation" >
             <params>
@@ -2467,5 +2467,55 @@
         </method>
 	<method name="Get_Available_Firmware_Files" api="getAvailableFirmwareFiles" type="method" desc="Gets a list of firmware files on the device. These files should start with the PMI or model number for that device and end with .bin"/>
 	<event name="Event_On_Archive_Logs" eventName="onArchiveLogs" eventId="client.events.1" type="event" desc="Triggered to archive the device logs and returns the status of the archive" />
+    </plugin>
+
+    <!-- HdmiCecSource Plugin Information -->
+    <plugin pluginName="HdmiCecSource" serviceName="org.rdk.HdmiCecSource" serviceVersion="1">
+	<!-- Method Definitions -->    
+	<method name="HdmiCecSource_Get_Enabled" api="getEnabled" type="method" desc="Returns if CEC is enabled">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCecSource_Set_Enabled" api="setEnabled" type="method" desc="Enables or disables CEC">
+            <params>
+                <param tag="enabled" defaultValue="null" type="bool"/>
+            </params>
+        </method>
+        <method name="HdmiCecSource_Get_Vendor_ID" api="getVendorId" type="method" desc="Gets the current vendor ID used by host device"/>
+	<method name="HdmiCecSource_Set_Vendor_ID" api="setVendorId" type="method" desc="Sets the vendor ID of the application">
+            <params>
+                <param tag="vendorid" type="string"/>
+            </params>
+        </method>
+	<method name="HdmiCecSource_Get_Active_Source_Status" api="getActiveSourceStatus" type="method" desc="Gets the active source status of the device">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCecSource_Get_OSD_Name" api="getOSDName" type="method" desc="Gets the OSD name used by host device"/>
+	<method name="HdmiCecSource_Set_OSD_Name" api="setOSDName" type="method" desc="Sets the OSD name of the application">
+            <params>
+                <param tag="name" type="string"/>
+            </params>
+        </method>
+	<method name="HdmiCecSource_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="HdmiCecSource_Set_OTP_Enabled" api="setOTPEnabled" type="method" desc="Enables or disables HDMI-CEC OTP option">
+            <params>
+                <param tag="enabled" defaultValue="null" type="bool"/>
+            </params>
+    	</method>
+	<method name="HdmiCecSource_Get_Device_List" api="getDeviceList" type="method" desc="Gets the list of CEC enabled devices connected and system information for each device. The information includes logicalAddress,OSD name and vendor ID"/>
+	<method name="HdmiCecSource_sendKeyPressEvent_Negative" api="sendKeyPressEvent" type="method" desc="Sends the CEC User Control Pressed and User Control Release message when TV remote key is pressed">
+            <params>
+		<param tag="logicalAddress" defaultValue="null"/>
+		<param tag="keyCode" defaultValue="null"/>
+            </params>
+    	</method>
+	<method name="HdmiCecSource_Send_Standby_Message" api="sendStandbyMessage" type="method" desc="Sends a CEC Standby message to the logical address of the device"/>
+	<method name="HdmiCecSource_Perform_OTP_Action" api="performOTPAction" type="method" desc="Turns on the TV and takes back the input to the device"/>	
+
+	<!-- Event Definitions -->
+	<event name="Event_On_Device_Info_Updated" eventName="onDeviceInfoUpdated" eventId="client.events.1" type="event" desc="Triggered when device system information is updated (vendorID, osdName)" />
+	<event name="Event_Standby_Message_Received" eventName="standbyMessageReceived" eventId="client.events.1" type="event" desc="Triggered when the source device changes status to STANDBY" />
+	<event name="Event_On_Active_Source_Status_Updated" eventName="onActiveSourceStatusUpdated" eventId="client.events.1" type="event" desc="Triggered when the device active source status changes"/>
     </plugin>
 </thunderPlugins>
