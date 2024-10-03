@@ -35,6 +35,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -190,5 +191,11 @@ public class Script extends BaseEntity {
 	 * Any specific remarks regarding the script
 	 */
 	private String remarks;
+	
+	/**
+	 * The list of script group of the script.
+	 */
+	@OneToMany(mappedBy = "script", cascade = CascadeType.ALL, orphanRemoval = true)
+	private List<ScriptTestSuite> scriptScriptGroup = new ArrayList<>();
 
 }

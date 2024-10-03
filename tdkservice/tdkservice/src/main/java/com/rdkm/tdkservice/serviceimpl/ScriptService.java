@@ -22,29 +22,41 @@ package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.List;
+import java.util.Set;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
-import com.rdkm.tdkservice.model.*;
-import com.rdkm.tdkservice.model.Module;
-import com.rdkm.tdkservice.repository.*;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
@@ -52,14 +64,31 @@ import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.TestType;
+import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.model.DeviceType;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.PrimitiveTest;
+import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.DeviceTypeRepository;
+import com.rdkm.tdkservice.repository.ModuleRepository;
+import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
+import com.rdkm.tdkservice.repository.ScriptRepository;
+import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
+
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.Validation;
+import jakarta.validation.Validator;
+import jakarta.validation.ValidatorFactory;
 
 /**
  * Service for scripts. This class is used to provide the service to save the
@@ -146,24 +175,19 @@ public class ScriptService implements IScriptService {
 		script.setScriptLocation(scriptLocation);
 
 		// If the file is saved successfully, save the script details
-		Script savedScriptWithDevicetypes = null;
+		Script savedScript = null;
 		try {
-
 			script.setScriptLocation(scriptLocation);
-			Script savedScript = scriptRepository.save(script);
+			// Set the device types in the script entity
 			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes());
 			script.setDeviceTypes(deviceTypes);
-			savedScriptWithDevicetypes = scriptRepository.save(script);
-			if (null == savedScriptWithDevicetypes) {
-				LOGGER.error("Error saving script with Device types");
-				scriptRepository.delete(savedScript);
-			}
+			savedScript = scriptRepository.save(script);
+
 		} catch (Exception e) {
 			LOGGER.error("Error saving script with device types: " + e.getMessage());
 			e.printStackTrace();
-			throw new TDKServiceException("Error saving script with device types: " + e.getMessage());
 		}
-		return null != savedScriptWithDevicetypes;
+		return null != savedScript;
 
 	}
 
@@ -186,6 +210,7 @@ public class ScriptService implements IScriptService {
 		// Updating the script entity with the updated script details
 		script = MapperUtils.updateScript(script, scriptUpdateDTO);
 
+		// TODO : Revisit this if script name can be changed or not
 		if (!(Utils.isEmpty(scriptUpdateDTO.getName())) && !(scriptUpdateDTO.getName().equals(script.getName()))) {
 			LOGGER.error("Script name should not be changed for the existing script: " + script.getName());
 			throw new UserInputException(
@@ -234,6 +259,26 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
+	 * This method is used to get the list of scripts based on the category.
+	 * 
+	 */
+	@Override
+	public List<ScriptListDTO> findAllScriptsByCategory(String categoryName) {
+		LOGGER.info("Getting all scripts based on the category: " + categoryName);
+		Category category = commonService.validateCategory(categoryName);
+		List<Script> scripts = scriptRepository.findAllByCategory(category);
+		List<ScriptListDTO> scriptListDTO = new ArrayList<>();
+		for (Script script : scripts) {
+			ScriptListDTO scriptDTO = MapperUtils.convertToScriptListDTO(script);
+			scriptListDTO.add(scriptDTO);
+			LOGGER.info("Script: " + script.getName() + " added to the list");
+		}
+		LOGGER.info("Returning all scripts based on the category: " + categoryName);
+		return scriptListDTO;
+
+	}
+
+	/**
 	 * This method is used to get the list of scripts based on the module.
 	 * 
 	 * @param moduleName - the module name
@@ -271,11 +316,7 @@ public class ScriptService implements IScriptService {
 		LOGGER.info("Getting all scripts based on the module");
 
 		// Get the category based on the category name
-		Category categoryValue = Category.valueOf(category);
-		if (categoryValue == null) {
-			LOGGER.error("Category not found with the name: " + category);
-			throw new ResourceNotFoundException(Constants.CATEGORY, category);
-		}
+		Category categoryValue = commonService.validateCategory(category);
 
 		// Get all the modules based on the category
 		List<Module> modules = moduleRepository.findAllByCategory(categoryValue);
@@ -312,8 +353,7 @@ public class ScriptService implements IScriptService {
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptId.toString()));
 		ScriptDTO scriptDTO = MapperUtils.convertToScriptDTO(script);
 		if (null != script.getDeviceTypes()) {
-			scriptDTO.setDeviceTypes(this.getDeviceTypesAsStringList(script.getDeviceTypes()));
-
+			scriptDTO.setDeviceTypes(commonService.getDeviceTypesAsStringList(script.getDeviceTypes()));
 		}
 		LOGGER.info("Script details: " + scriptDTO.toString());
 		return scriptDTO;
@@ -336,7 +376,7 @@ public class ScriptService implements IScriptService {
 		}
 		List<Script> scripts = new ArrayList<>();
 		scripts.add(script);
-		return createExcelFromTestCasesDetailsInScript(scripts, "TEST_CASE_" + testScriptName);
+		return commonService.createExcelFromTestCasesDetailsInScript(scripts, "TEST_CASE_" + testScriptName);
 	}
 
 	/**
@@ -356,7 +396,7 @@ public class ScriptService implements IScriptService {
 			throw new ResourceNotFoundException(Constants.MODULE, moduleName);
 		}
 		List<Script> script = scriptRepository.findAllByModule(module);
-		return createExcelFromTestCasesDetailsInScript(script, "TEST_CASE_" + moduleName);
+		return commonService.createExcelFromTestCasesDetailsInScript(script, "TEST_CASE_" + moduleName);
 	}
 
 	/**
@@ -369,20 +409,6 @@ public class ScriptService implements IScriptService {
 			LOGGER.error("Script already exists with the same name: " + scriptCreateDTO.getName());
 			throw new ResourceAlreadyExistsException(Constants.SCRIPT_NAME, scriptCreateDTO.getName());
 		}
-	}
-
-	/**
-	 * Get the list of deviceTypes as list of Stringbased on the deviceTypes name
-	 * 
-	 * @param deviceTypes
-	 * @return
-	 */
-	private List<String> getDeviceTypesAsStringList(List<DeviceType> deviceTypes) {
-		List<String> deviceTypeList = new ArrayList<>();
-		for (DeviceType deviceType : deviceTypes) {
-			deviceTypeList.add(deviceType.getName());
-		}
-		return deviceTypeList;
 	}
 
 	/**
@@ -445,9 +471,9 @@ public class ScriptService implements IScriptService {
 	/**
 	 * Validate the script file before saving it in the location
 	 * 
-	 * @param scriptFile      - the script file
-	 * @param scriptName - the script details
-	 * @param scriptLocation  - the script location
+	 * @param scriptFile     - the script file
+	 * @param scriptName     - the script details
+	 * @param scriptLocation - the script location
 	 */
 	private void validateScriptFile(MultipartFile scriptFile, String scriptName, String scriptLocation) {
 		if (scriptFile.isEmpty()) {
@@ -534,96 +560,441 @@ public class ScriptService implements IScriptService {
 	}
 
 	/**
-	 * Create excel from test cases information in script.
-	 *
-	 * @param scripts the test cases
-	 * @param sheetName the sheet name
-	 * @return the byte array input stream
-	 * @throws IOException Signals that an I/O exception has occurred.
+	 * Generate a ZIP file containing a Python script and an XML file with the test
+	 * case details
+	 * 
+	 * @param scriptName - the script name
+	 * @return - the ZIP file as a byte array
+	 * @throws IOException - the IO exception
 	 */
-	private ByteArrayInputStream createExcelFromTestCasesDetailsInScript(List<Script> scripts, String sheetName) {
-		LOGGER.info("Creating excel from test cases for sheet");
-		String[] headers = { "Test Script", "Test Case ID", "Test Objective", "Test Type", "Supported device Type",
-				"Test Prerequisites", "RDK Interface", "Input Parameters", "Automation Approach", "Expected Output",
-				"Priority", "Test Stub Interface", "Skipped", "Skip remarks", "Update Release Version", "Remarks" };
+
+	@Override
+	public byte[] generateScriptZip(String scriptName) {
+		String xmlContent;
+		File getPythonScriptFile;
 		try {
-			Workbook workBook = new XSSFWorkbook();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-
-			Sheet sheet = workBook.createSheet(sheetName);
-
-			// Create header row
-			Row headerRow = sheet.createRow(0);
-			CellStyle boldStyle = workBook.createCellStyle();
-			Font boldFont = workBook.createFont();
-			boldFont.setFontName("Arial");
-			boldFont.setFontHeightInPoints((short) 10);
-			boldFont.setBold(true);
-			boldStyle.setFont(boldFont);
-
-			for (int col = 0; col < headers.length; col++) {
-				Cell cell = headerRow.createCell(col);
-				cell.setCellValue(headers[col]);
-				cell.setCellStyle(boldStyle);
-			}
-
-			// Set the data row with Arial font size 10
-			CellStyle dataStyle = workBook.createCellStyle();
-			Font dataFont = workBook.createFont();
-			dataFont.setFontName("Arial");
-			dataFont.setFontHeightInPoints((short) 10);
-			dataStyle.setFont(dataFont);
-
-			int rowNum = 1; // Start after the header row
-			for (Script script : scripts) {
-				Row dataRow = sheet.createRow(rowNum++);
-
-				dataRow.createCell(0).setCellValue(script.getName());
-				dataRow.createCell(1).setCellValue(script.getTestId());
-				dataRow.createCell(2).setCellValue(script.getObjective());
-				dataRow.createCell(3).setCellValue(script.getTestType().toString());
-				if (script.getDeviceTypes() == null) {
-					dataRow.createCell(4).setCellValue("");
-				} else {
-					dataRow.createCell(4).setCellValue(Utils
-							.convertListToCommaSeparatedString(this.getDeviceTypesAsStringList(script.getDeviceTypes())));
-				}
-				dataRow.createCell(5).setCellValue(script.getPrerequisites());
-				dataRow.createCell(6).setCellValue(script.getApiOrInterfaceUsed());
-				dataRow.createCell(7).setCellValue(script.getInputParameters());
-				dataRow.createCell(8).setCellValue(script.getAutomationApproach());
-				dataRow.createCell(9).setCellValue(script.getExpectedOutput());
-				dataRow.createCell(10).setCellValue(script.getPriority());
-				dataRow.createCell(11).setCellValue(script.getTestStubInterface());
-				if (script.isSkipExecution()) {
-					dataRow.createCell(12).setCellValue("Yes");
-					dataRow.createCell(13).setCellValue(script.getSkipRemarks());
-				} else {
-					dataRow.createCell(12).setCellValue("No");
-					dataRow.createCell(13).setCellValue("N/A");
-
-				}
-				dataRow.createCell(14).setCellValue(script.getReleaseVersion());
-				dataRow.createCell(15).setCellValue(script.getRemarks());
-				// Apply the data style (Arial, size 10) to each cell in the row
-				for (int i = 0; i < headers.length; i++) {
-					dataRow.getCell(i).setCellStyle(dataStyle);
-				}
-			}
-
-			// Auto size the columns to fit the content
-			for (int i = 0; i < headers.length; i++) {
-				sheet.autoSizeColumn(i);
-			}
-
-			workBook.write(out);
-			workBook.close();
-
-			return new ByteArrayInputStream(out.toByteArray());
-		} catch (Exception e) {
-			LOGGER.error("Error creating excel from test cases: " + e.getMessage());
-			throw new TDKServiceException("Error creating excel from test cases: " + e.getMessage());
+			xmlContent = generateTestCaseXml(scriptName);
+			getPythonScriptFile = getPythonFile(scriptName);
+		} catch (ResourceNotFoundException e) {
+			LOGGER.error("Test script not found: " + e.getMessage());
+			throw e;
 		}
+
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		try (ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
+			ZipEntry xmlEntry = new ZipEntry(scriptName + Constants.XML_FILE_EXTENSION);
+			zipOutputStream.putNextEntry(xmlEntry);
+			zipOutputStream.write(xmlContent.getBytes());
+			zipOutputStream.closeEntry();
+
+			ZipEntry scriptEntry = new ZipEntry(getPythonScriptFile.getName());
+			zipOutputStream.putNextEntry(scriptEntry);
+			Files.copy(getPythonScriptFile.toPath(), zipOutputStream);
+			zipOutputStream.closeEntry();
+		} catch (FileNotFoundException e) {
+			LOGGER.error("File not found: " + e.getMessage());
+			throw new TDKServiceException("File not found: " + e.getMessage());
+		} catch (ZipException e) {
+			LOGGER.error("Error processing zip file: " + e.getMessage());
+			throw new TDKServiceException("Error processing zip file: " + e.getMessage());
+		} catch (IOException e) {
+			LOGGER.error("IO error: " + e.getMessage());
+			throw new TDKServiceException("IO error: " + e.getMessage());
+		}
+
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	/**
+	 * Get the python file based on the script name
+	 * 
+	 * @param scriptName - the script name
+	 * @return - the python file
+	 */
+
+	public File getPythonFile(String scriptName) {
+		Script testCase = scriptRepository.findByName(scriptName);
+		if (testCase == null) {
+			LOGGER.error("Test script not found with the name: " + scriptName);
+			throw new ResourceNotFoundException(Constants.SCRIPT_NAME, scriptName);
+		}
+		String baseDir = System.getProperty(Constants.USER_DIRECTORY); // Get the current working directory
+		Path scriptFilePath = Paths.get(baseDir, Constants.BASE_FILESTORE_FOLDER, testCase.getScriptLocation(),
+				scriptName + Constants.PYTHON_FILE_EXTENSION); // Combine base directory and relative path
+		File scriptFile = scriptFilePath.toFile();
+		if (!scriptFile.exists()) {
+			throw new ResourceNotFoundException("Script file not found at location: " , testCase.getScriptLocation());
+		}
+		return scriptFile;
+
+	}
+
+	/**
+	 * Generate test case XML based on the test script name
+	 * 
+	 * @param scriptName - the script name
+	 * @return - the test case XML
+	 */
+
+	public String generateTestCaseXml(String scriptName) {
+
+		Script testCase = scriptRepository.findByName(scriptName);
+		if (testCase == null) {
+			LOGGER.error("Test script not found with the name: " + scriptName);
+			throw new ResourceNotFoundException(Constants.SCRIPT_NAME, scriptName);
+		}
+		try {
+			DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
+
+			var doc = docBuilder.newDocument();
+			var rootElement = doc.createElement(Constants.XML);
+			doc.appendChild(rootElement);
+
+			createElement(doc, rootElement, "name", testCase.getName());
+
+			createElement(doc, rootElement, "primitive_test_name", testCase.getPrimitiveTest().getName());
+
+			createElement(doc, rootElement, "synopsis", testCase.getSynopsis());
+
+			String executionTime = String.valueOf(testCase.getExecutionTimeOut());
+			if (executionTime != null && !executionTime.isEmpty()) {
+				createElement(doc, rootElement, "execution_time", executionTime);
+			}
+			String longDuration = String.valueOf(testCase.isLongDuration());
+			if (longDuration != null && !longDuration.isEmpty()) {
+				createElement(doc, rootElement, "long_duration", longDuration);
+			}
+			String skip = String.valueOf(testCase.isSkipExecution());
+			if (skip != null && !skip.isEmpty()) {
+				createElement(doc, rootElement, "skip", skip);
+			}
+			if (testCase.isSkipExecution()) {
+				createElement(doc, rootElement, "skip_remarks", testCase.getSkipRemarks());
+			}
+			createElement(doc, rootElement, "test_case_id", testCase.getTestId());
+			createElement(doc, rootElement, "test_objective", testCase.getObjective());
+			createElement(doc, rootElement, "test_type", testCase.getTestType().toString());
+
+			// Create <box_types> element and add <box_type> child elements
+			Element deviceTypesElement = doc.createElement("device_types");
+			rootElement.appendChild(deviceTypesElement);
+
+			// Loop through the list of box types and create <box_type> elements
+			for (DeviceType deviceType : testCase.getDeviceTypes()) {
+				createElement(doc, deviceTypesElement, "device_type", deviceType.getName());
+			}
+			createElement(doc, rootElement, "pre_requisite", testCase.getPrerequisites());
+			createElement(doc, rootElement, "api_or_interface_used", testCase.getApiOrInterfaceUsed());
+			createElement(doc, rootElement, "input_parameters", testCase.getInputParameters());
+			createElement(doc, rootElement, "automation_approach", testCase.getAutomationApproach());
+			createElement(doc, rootElement, "expected_output", testCase.getExpectedOutput());
+			createElement(doc, rootElement, "priority", testCase.getPriority());
+			createElement(doc, rootElement, "test_stub_interface", testCase.getTestStubInterface());
+			createElement(doc, rootElement, "release_version", testCase.getReleaseVersion());
+			createElement(doc, rootElement, "remarks", testCase.getRemarks());
+
+			// Convert the document to a String
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			Transformer transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, Constants.YES);
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, Constants.NO);
+			transformer.setOutputProperty(OutputKeys.METHOD, Constants.XML);
+
+			DOMSource domSource = new DOMSource(doc);
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			StreamResult result = new StreamResult(outputStream);
+			transformer.transform(domSource, result);
+			return outputStream.toString();
+		} catch (Exception e) {
+			LOGGER.error("Error generating test case XML: " + e.getMessage());
+			throw new TDKServiceException("Error generating test case XML: " + e.getMessage());
+		}
+
+	}
+
+	/**
+	 * Upload a ZIP file containing a Python script and an XML file with the script
+	 * details
+	 * 
+	 * @param file - the ZIP file
+	 * @return true if the ZIP file is uploaded successfully, false otherwise
+	 */
+
+	@Override
+	public boolean uploadZipFile(MultipartFile file) {
+		LOGGER.info("Uploading zip file: " + file.getOriginalFilename());
+
+		// Validate file is a zip
+		if (!file.getContentType().equals("application/zip")
+				&& !file.getOriginalFilename().endsWith(Constants.ZIP_EXTENSION)) {
+			LOGGER.error("Only ZIP files are allowed");
+			throw new UserInputException("Only ZIP files are allowed");
+		}
+
+		try {
+			// Create a temporary file to store the uploaded zip
+			File tempZipFile = File.createTempFile("uploaded-", Constants.ZIP_EXTENSION);
+			file.transferTo(tempZipFile);
+
+			try (ZipFile zip = new ZipFile(tempZipFile)) {
+				Enumeration<? extends ZipEntry> entries = zip.entries();
+				boolean pythonFileExists = false;
+				boolean xmlFileExists = false;
+				MultipartFile pythonFile = null;
+				ScriptCreateDTO scriptCreateDTO = null;
+
+				// First pass to check if both Python (.py) and XML (.xml) files exist
+				while (entries.hasMoreElements()) {
+					ZipEntry entry = entries.nextElement();
+					// Check for Python file
+					if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
+						pythonFileExists = true;
+					}
+					// Check for XML file
+					if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
+						xmlFileExists = true;
+					}
+				}
+				// If either Python or XML file is missing, throw a UserInputException
+				if (!pythonFileExists || !xmlFileExists) {
+					LOGGER.error("Both Python and XML files are required in the ZIP file.");
+					throw new UserInputException("Both Python and XML files are required in the ZIP file.");
+				}
+
+				// Reset entries to process the files now that we know both exist
+				entries = zip.entries();
+				// Process the Python and XML files
+				while (entries.hasMoreElements()) {
+					ZipEntry entry = entries.nextElement();
+					// Handle Python file
+					if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
+						try (InputStream pyInputStream = zip.getInputStream(entry)) {
+							// Convert Python file to MultipartFile
+							pythonFile = convertScriptFileToMultipartFile(pyInputStream, entry.getName());
+						}
+					}
+					// Handle XML file
+					else if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
+						try (InputStream xmlInputStream = zip.getInputStream(entry)) {
+							// Convert XML file to ScriptCreateDTO
+							scriptCreateDTO = convertXmlToScriptCreateDTO(xmlInputStream);
+						}
+					}
+				}
+
+				// Validate that both files were processed
+				if (pythonFile != null && scriptCreateDTO != null) {
+					boolean savedScript = saveScript(pythonFile, scriptCreateDTO);
+					tempZipFile.delete();
+					LOGGER.info("Script XML saved successfully");
+					return savedScript;
+				} else {
+					LOGGER.error(
+							"Error processing the zip file, either the XML or Python file was not processed correctly.");
+					throw new TDKServiceException(
+							"Error processing the zip file: XML or Python file processing failed.");
+				}
+			}
+
+		} catch (UserInputException e) {
+			// Let UserInputException propagate to the global exception handler
+			LOGGER.error("Error uploading zip file: " + e.getMessage());
+			throw e;
+		} catch (ResourceNotFoundException e) {
+			LOGGER.error("Error uploading zip file: " + e.getMessage());
+			throw e;
+		} catch (ResourceAlreadyExistsException e) {
+			LOGGER.error("Error uploading zip file: " + e.getMessage());
+			throw e;
+		} catch (Exception e) {
+			LOGGER.error("Error uploading zip file: " + e.getMessage());
+			throw new TDKServiceException("Error uploading zip file: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Convert the XML file to ScriptCreateDTO
+	 * 
+	 * @param xmlInputStream - the XML input stream
+	 * @return - the ScriptCreateDTO
+	 */
+	private ScriptCreateDTO convertXmlToScriptCreateDTO(InputStream xmlInputStream) {
+
+		ScriptCreateDTO testCase = null;
+		// Parse XML
+		try {
+			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document document = builder.parse(xmlInputStream);
+			ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
+			Validator validator = validatorFactory.getValidator();
+
+			// Normalize XML structure
+			document.getDocumentElement().normalize();
+
+			// Extract fields from XML
+			NodeList nodeList = document.getElementsByTagName(Constants.XML);
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				Node node = nodeList.item(i);
+
+				if (node.getNodeType() == Node.ELEMENT_NODE) {
+					Element element = (Element) node;
+
+					testCase = new ScriptCreateDTO();
+					testCase.setName(getElementValue(element, "name"));
+					testCase.setPrimitiveTestName(getElementValue(element, "primitive_test_name"));
+					testCase.setExecutionTimeOut(Integer.parseInt(getElementValue(element, "execution_time")));
+					testCase.setLongDuration(Boolean.parseBoolean(getElementValue(element, "long_duration")));
+					testCase.setSkipExecution(Boolean.parseBoolean(getElementValue(element, "skip")));
+					testCase.setSynopsis(getElementValue(element, "synopsis"));
+					testCase.setTestId(getElementValue(element, "test_case_id"));
+					testCase.setObjective(getElementValue(element, "test_objective"));
+					TestType testType = TestType.valueOf(getElementValue(element, "test_type"));
+					testCase.setTestType(testType.toString());
+					testCase.setPrerequisites(getElementValue(element, "pre_requisite"));
+					testCase.setApiOrInterfaceUsed(getElementValue(element, "api_or_interface_used"));
+					testCase.setInputParameters(getElementValue(element, "input_parameters"));
+					testCase.setAutomationApproach(getElementValue(element, "automation_approach"));
+					testCase.setExpectedOutput(getElementValue(element, "expected_output"));
+					testCase.setPriority(getElementValue(element, "priority"));
+					testCase.setTestStubInterface(getElementValue(element, "test_stub_interface"));
+					testCase.setReleaseVersion(getElementValue(element, "release_version"));
+					testCase.setRemarks(getElementValue(element, "remarks"));
+
+					// Handle box_types
+					List<String> deviceType = new ArrayList<>();
+					NodeList deviceTypeNodes = element.getElementsByTagName("device_type");
+					for (int j = 0; j < deviceTypeNodes.getLength(); j++) {
+						deviceType.add(deviceTypeNodes.item(j).getTextContent());
+					}
+					testCase.setDeviceTypes(deviceType);
+					validateAndCreateScript(testCase, validator);
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error parsing XML and saving to database: " + e.getMessage());
+			throw new UserInputException(e.getMessage());
+
+		}
+		return testCase;
+
+	}
+
+	/**
+	 * Validate the script details before saving
+	 * 
+	 * @param scriptCreateDTO - the script details
+	 * @param validator       - the validator
+	 */
+	private void validateAndCreateScript(ScriptCreateDTO scriptCreateDTO, Validator validator) {
+		Set<ConstraintViolation<ScriptCreateDTO>> violations = validator.validate(scriptCreateDTO);
+		if (!violations.isEmpty()) {
+			StringBuilder sb = new StringBuilder();
+			for (ConstraintViolation<ScriptCreateDTO> violation : violations) {
+				sb.append(violation.getMessage()).append(",");
+			}
+			LOGGER.error("Validation errors: \n" + sb.toString());
+			throw new IllegalArgumentException("Validation errors: " + sb.toString());
+		}
+
+	}
+
+	/**
+	 * Convert the script file to MultipartFile
+	 * 
+	 * @param inputStream - the input stream
+	 * @param fileName    - the file name
+	 * @return - the MultipartFile
+	 * @throws IOException
+	 */
+	private MultipartFile convertScriptFileToMultipartFile(InputStream inputStream, String fileName) {
+		try {
+			LOGGER.info("Converting script file to MultipartFile: " + fileName);
+			// Read the input stream and store the content in a byte array
+			byte[] fileContent = inputStream.readAllBytes();
+
+			// Create a new MultipartFile (MockMultipartFile in this case)
+			return new MockMultipartFile(fileName, fileName, Constants.PYTHON_CONTENT, fileContent);
+		} catch (Exception e) {
+			LOGGER.error("Error converting script file to MultipartFile: " + e.getMessage());
+			throw new TDKServiceException("Error converting script file to MultipartFile: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * Create an element with the tag name and text content
+	 * 
+	 * @param doc         - the document
+	 * @param parent      - the parent element
+	 * @param tagName     - the tag name
+	 * @param textContent - the text content
+	 */
+	private void createElement(Document doc, Element parent, String tagName, String textContent) {
+		Element element = doc.createElement(tagName);
+		element.setTextContent(textContent);
+		parent.appendChild(element);
+	}
+
+	/**
+	 * Get the element value based on the tag name
+	 * 
+	 * @param parent  - the parent element
+	 * @param tagName - the tag name
+	 * @return - the element value
+	 */
+	private String getElementValue(Element parent, String tagName) {
+		NodeList nodeList = parent.getElementsByTagName(tagName);
+		if (nodeList.getLength() > 0) {
+			return nodeList.item(0).getTextContent();
+		}
+		return null;
+	}
+
+	/**
+	 * This method is used to get the script template details by primitiveTestName.
+	 *
+	 * @param primitiveTestName - the primitive test name
+	 * @return - the script
+	 */
+	@Override
+	public String scriptTemplate(String primitiveTestName) {
+
+		StringBuilder scriptBuilder = new StringBuilder();
+
+		if (primitiveTestName == null || primitiveTestName.isEmpty()) {
+			throw new MandatoryFieldException("Primitive test name cannot be null or empty");
+		}
+
+		PrimitiveTest primitiveTest = primitiveTestRepository.findByName(primitiveTestName);
+		if (primitiveTest == null) {
+			throw new ResourceNotFoundException("Primitive test name: ", primitiveTestName);
+		}
+
+		scriptBuilder.append("# use tdklib library,which provides a wrapper for tdk testcase script \r\n")
+				.append("import tdklib; \r\n\r\n")
+				.append("#Test component to be tested\r\n")
+				.append("obj = tdklib.TDKScriptingLibrary(\"").append(primitiveTest.getModule().getName()).append("\",\"1\");\r\n\r\n")
+				.append("#IP and Port of device type, No need to change,\r\n")
+				.append("#This will be replaced with corresponding DUT Ip and port while executing script\r\n")
+				.append("ip = <ipaddress>\r\n")
+				.append("port = <port>\r\n")
+				.append("obj.configureTestCase(ip,port,'');\r\n\r\n")
+				.append("#Get the result of connection with test component and DUT\r\n")
+				.append("result = obj.getLoadModuleResult();\r\n")
+				.append("print(\"[LIB LOAD STATUS]  :  %s\" %result);\r\n\r\n")
+				.append("#Prmitive test case which associated to this Script\r\n")
+				.append("tdkTestObj = obj.createTestStep('").append(primitiveTestName).append("');\r\n\r\n")
+				.append("#Execute the test case in DUT\r\n")
+				.append("tdkTestObj.executeTestCase(\"\");\r\n\r\n")
+				.append("#Get the result of execution\r\n")
+				.append("result = tdkTestObj.getResult();\r\n")
+				.append("print(\"[TEST EXECUTION RESULT] : %s\" %result);\r\n\r\n")
+				.append("#Set the result status of execution\r\n")
+				.append("tdkTestObj.setResultStatus(\"none\");\r\n\r\n")
+				.append("obj.unloadModule(\"").append(primitiveTest.getModule().getName()).append("\");");
+
+		return scriptBuilder.toString();
 	}
 
 }

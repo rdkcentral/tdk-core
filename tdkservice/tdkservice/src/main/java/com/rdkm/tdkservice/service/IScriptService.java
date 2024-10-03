@@ -102,4 +102,36 @@ public interface IScriptService {
 	 */
 	ScriptDTO findScriptById(Integer scriptId);
 
+	/**
+	 * Find all scripts by category
+	 * 
+	 * @param categoryName
+	 * @return
+	 */
+	List<ScriptListDTO> findAllScriptsByCategory(String categoryName);
+	
+	/**
+	 * This method is used to get the script details by testscriptId.
+	 * 
+	 * @param scriptId - the script id
+	 * @return - the script
+	 */
+	boolean uploadZipFile(MultipartFile file);
+
+	/**
+	 * This method is used to get the script details by testscriptId.
+	 * 
+	 * @param scriptId - the script id
+	 * @return - the script
+	 */
+	byte[] generateScriptZip(String scriptName);
+
+	/**
+	 * This method is used to get the script template details by primitiveTestName.
+	 *
+	 * @param primitiveTestName - the primitive test name
+	 * @return - the script
+	 */
+	public String scriptTemplate(String primitiveTestName);
+
 }

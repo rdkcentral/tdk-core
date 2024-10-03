@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -130,10 +131,10 @@ public class ScriptController {
 	@Operation(summary = "Delete Script", description = "Delete Script")
 	@ApiResponse(responseCode = "200", description = "Script deleted successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@DeleteMapping("/delete/{scriptId}")
-	public ResponseEntity<?> deleteScript(@PathVariable Integer scriptId) {
-		LOGGER.info("Received delete script request: " + scriptId);
-		boolean isScriptDeleted = scriptService.deleteScript(scriptId);
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<?> deleteScript(@PathVariable Integer id) {
+		LOGGER.info("Received delete script request: " + id);
+		boolean isScriptDeleted = scriptService.deleteScript(id);
 		if (isScriptDeleted) {
 			LOGGER.info("Script deleted successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Script deleted successfully");
@@ -176,17 +177,17 @@ public class ScriptController {
 	@Operation(summary = "Get Script by Id", description = "Get Script by Id")
 	@ApiResponse(responseCode = "200", description = "Script fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findbyid/{scriptId}")
-	public ResponseEntity<?> findScriptById(@PathVariable Integer scriptId) {
-		LOGGER.info("Received get script by id request for script id: " + scriptId);
-		ScriptDTO script = scriptService.findScriptById(scriptId);
+	@GetMapping("/findbyid/{id}")
+	public ResponseEntity<?> findScriptById(@PathVariable Integer id) {
+		LOGGER.info("Received get script by id request for script id: " + id);
+		ScriptDTO script = scriptService.findScriptById(id);
 		if (script != null) {
-			LOGGER.info("Script fetched successfully for script id: " + scriptId);
+			LOGGER.info("Script fetched successfully for script id: " + id);
 			return ResponseEntity.status(HttpStatus.OK).body(script);
 		} else {
 			LOGGER.error("Error in fetching script");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching script for script id: " + scriptId);
+					.body("Error in fetching script for script id: " + id);
 		}
 	}
 
@@ -263,6 +264,94 @@ public class ScriptController {
 		LOGGER.info("Downloaded test case as excel by module");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(new InputStreamResource(in));
+	}
+
+	/**
+	 * This method is used to get all the scripts by category. This will return the
+	 * list of scripts for the given category.
+	 * 
+	 * @param category - the category
+	 * @return ResponseEntity - the response entity
+	 */
+	@Operation(summary = "Get all scripts by  category", description = "Get all scripts by category")
+	@ApiResponse(responseCode = "200", description = "Scripts fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/findlistbycategory")
+	public ResponseEntity<?> findAllScriptByCategory(@RequestParam String category) {
+		LOGGER.info("Received get all scripts request for category: " + category);
+		List<ScriptListDTO> scripts = scriptService.findAllScriptsByCategory(category);
+		if (scripts != null) {
+			LOGGER.info("Scripts fetched successfully for category: " + category);
+			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+		} else {
+			LOGGER.error("Error in fetching scripts");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error in fetching scripts for category: " + category);
+		}
+	}
+
+	/**
+	 * This method is used to download the script
+	 * 
+	 * @param scriptName - the script name
+	 * @return ResponseEntity - the response entity
+	 * @throws IOException
+	 */
+	@Operation(summary = "Download Script", description = "Download Script")
+	@ApiResponse(responseCode = "200", description = "Script downloaded successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/downloadscriptdatazip")
+	public ResponseEntity<?> downloadScript(@RequestParam String scriptName) {
+		byte[] zipBytes = scriptService.generateScriptZip(scriptName);
+		if (zipBytes == null) {
+			LOGGER.error("Error in downloading script ");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading script");
+		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + scriptName + ".zip");
+		LOGGER.info("Script downloaded successfully");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(zipBytes);
+	}
+
+	/**
+	 * This method is used to upload the ZIP file
+	 * 
+	 * @param file - the ZIP file
+	 * @return ResponseEntity - the response entity
+	 */
+
+	@Operation(summary = "Upload ZIP file", description = "Upload ZIP file")
+	@ApiResponse(responseCode = "200", description = "ZIP file has been successfully processed")
+	@ApiResponse(responseCode = "500", description = "Error in processing ZIP file")
+	@PostMapping("/uploadscriptdatazip")
+	public ResponseEntity<String> uploadScript(@RequestParam("file") MultipartFile file) {
+		LOGGER.info("Received upload ZIP file request: " + file.getOriginalFilename());
+		boolean scriptUpload = scriptService.uploadZipFile(file);
+		if (scriptUpload) {
+			LOGGER.info("ZIP file has been successfully processed");
+			return ResponseEntity.status(HttpStatus.OK).body("ZIP file has been successfully processed");
+		} else {
+			LOGGER.error("Error in processing ZIP file");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in processing ZIP file");
+		}
+
+	}
+
+	/**
+	 * This method is used to get the script template details by primitive test name.
+	 *
+	 * @param primitiveTestName - the primitive test name
+	 * @return ResponseEntity - the response entity
+	 */
+	@Operation(summary = "Get Script Template", description = "Get Script Template")
+	@ApiResponse(responseCode = "200", description = "Script template fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Issue in fetching script template")
+	@GetMapping("/template/{primitiveTestName}")
+	public ResponseEntity<String> getScriptTemplate(@PathVariable String primitiveTestName) {
+		String scriptTemplate = scriptService.scriptTemplate(primitiveTestName);
+		return ResponseEntity.ok(scriptTemplate);
 	}
 
 }

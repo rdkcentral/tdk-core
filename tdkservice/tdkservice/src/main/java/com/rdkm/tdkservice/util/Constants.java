@@ -51,7 +51,6 @@ public class Constants {
 	// TDKV device config directory inside filestore
 	public static final String TDKV_DEVICE_CONFIG_DIR = "tdkvDeviceConfig";
 
-
 	// Empty string
 	public static final String EMPTY_STRING = "";
 
@@ -153,13 +152,13 @@ public class Constants {
 
 	// Primitive test name
 	public static final String PRIMITIVE_TEST_NAME = "Primitive test name";
-	
+
 	// Primitive test id
 	public static final String PRIMITIVE_TEST_ID = "Primitive test id";
 
 	// Primitive test with module name
 	public static final String PRIMITIVE_TEST_WITH_MODULE_NAME = "Primitive test with module name";
-	
+
 	// xml extension
 	public static final String XML_EXTENSION = ".xml";
 
@@ -242,5 +241,23 @@ public class Constants {
 
 	// Excel file extension
 	public static final String EXCEL_FILE_EXTENSION = ".xlsx";
+
+	// Script group name
+	public static final String TEST_SUITE = "Test suite";
+
+	// Script group id
+	public static final String TEST_SUITE_ID = "Test suite id";
+
+	public static final String NO = "no";
+
+	public static final String XML_FILE_EXTENSION = ".xml";
+
+	public static final String PYTHON_CONTENT = "text/x-python";
+
+	public static final String USER_DIRECTORY = "user.dir";
+
+	public static final String BASE_FILESTORE_FOLDER = "src/main/webapp/filestore";
+
+	public static final String ZIP_EXTENSION = ".zip";
 
 }

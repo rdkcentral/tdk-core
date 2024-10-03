@@ -17,25 +17,39 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
 package com.rdkm.tdkservice.dto;
 
+import java.util.List;
+
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * Data Transfer Object for script list units with id and script name.
+ * The TestSuiteDTO class is used to store test suite data. This class is
+ * used to transfer the data from the service layer to the controller layer.
  */
 @Data
-public class ScriptListDTO {
+public class TestSuiteDTO {
 
 	/**
-	 * The id of the Script.
+	 * The id of the test suite.
 	 */
+	@NotNull(message = "Test suite id cannot be null")
 	private Integer id;
 
 	/**
-	 * The name of the Script.
+	 * The name of the test suite.
 	 */
 	private String name;
+
+	/**
+	 * The description of the test suite.
+	 */
+	private String category;
+
+	/**
+	 * The scripts of the test suite.
+	 */
+	private List<ScriptListDTO> scripts;
 
 }

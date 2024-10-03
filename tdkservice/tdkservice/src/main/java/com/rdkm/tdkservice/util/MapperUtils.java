@@ -19,44 +19,54 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
-import com.rdkm.tdkservice.dto.*;
-import com.rdkm.tdkservice.enums.TestGroup;
-import com.rdkm.tdkservice.model.*;
-import com.rdkm.tdkservice.model.Module;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
 import com.rdkm.tdkservice.dto.ModuleDTO;
+import com.rdkm.tdkservice.dto.OemDTO;
+import com.rdkm.tdkservice.dto.OemUpdateDTO;
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
+import com.rdkm.tdkservice.dto.SocDTO;
+import com.rdkm.tdkservice.dto.SocUpdateDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 import com.rdkm.tdkservice.dto.UserRoleDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.model.PrimitiveTestParameter;
 import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.ScriptTestSuite;
+import com.rdkm.tdkservice.model.Soc;
+import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class is used to populate the DTO objects from the model objects.
@@ -104,11 +114,11 @@ public class MapperUtils {
 		deviceTypeDTO.setDeviceTypeName(deviceType.getName());
 		deviceTypeDTO.setType(deviceType.getType().name());
 		deviceTypeDTO.setDeviceTypeCategory(deviceType.getCategory().name());
-		deviceTypeDTO.setDeviceTypeUserGroup(deviceType.getUserGroup() != null ? deviceType.getUserGroup().getName() : null);
+		deviceTypeDTO
+				.setDeviceTypeUserGroup(deviceType.getUserGroup() != null ? deviceType.getUserGroup().getName() : null);
 		LOGGER.info("Device Type DTO: {}", deviceTypeDTO);
 		return deviceTypeDTO;
 	}
-
 
 	/**
 	 * This method is used to convert the UserGroup object to UserGroupDTO object.
@@ -124,12 +134,10 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the oem object to
-	 * oemDTO object.
+	 * This method is used to convert the oem object to oemDTO object.
 	 * 
 	 * @param oem This is the oem object.
-	 * @return oemDTO This returns the oemDTO object
-	 *         converted from the oem object.
+	 * @return oemDTO This returns the oemDTO object converted from the oem object.
 	 */
 	public static OemDTO convertToOemDTO(Oem oem) {
 		modelMapper.typeMap(Oem.class, OemDTO.class).addMappings(mapper -> {
@@ -170,7 +178,6 @@ public class MapperUtils {
 		LOGGER.info("User Role DTO: {}", userRoleDTO);
 		return userRoleDTO;
 	}
-
 
 	/**
 	 * This method is used to convert the Device object to DeviceDTO object.
@@ -240,11 +247,12 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the deviceType object to deviceTypeUpdateDTO object.
+	 * This method is used to convert the deviceType object to deviceTypeUpdateDTO
+	 * object.
 	 * 
 	 * @param deviceType This is the deviceType object.
-	 * @return DeviceTypeUpdateDTO This returns the DeviceTypeUpdateDTO object converted from the
-	 *         deviceType object.
+	 * @return DeviceTypeUpdateDTO This returns the DeviceTypeUpdateDTO object
+	 *         converted from the deviceType object.
 	 */
 	public static DeviceTypeUpdateDTO convertToDeviceTypeUpdateDTO(DeviceType deviceType) {
 		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
@@ -256,12 +264,11 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the oem object to
-	 * OemUpdateDTO object.
+	 * This method is used to convert the oem object to OemUpdateDTO object.
 	 * 
 	 * @param oem This is the oem object.
-	 * @return OemUpdateDTO This returns the OemDTO object
-	 *         converted from the oem object.
+	 * @return OemUpdateDTO This returns the OemDTO object converted from the oem
+	 *         object.
 	 */
 	public static OemUpdateDTO convertToOemUpdateDTO(Oem oem) {
 		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
@@ -275,8 +282,7 @@ public class MapperUtils {
 	 * This method is used to convert the Soc object to socUpdateDTO object.
 	 * 
 	 * @param soc This is the SocVendor object.
-	 * @return soc This returns the soc object converted from the
-	 *         soc object.
+	 * @return soc This returns the soc object converted from the soc object.
 	 */
 	public static SocUpdateDTO convertToSocUpdateDTO(Soc soc) {
 		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
@@ -606,4 +612,54 @@ public class MapperUtils {
 
 	}
 
+	/**
+	 * This method is used to convert the ScriptTestSuite map list to
+	 * ScriptListDTO list
+	 * 
+	 * @param testSuiteCreateDTO
+	 * @return scriptListDTOList ScriptListDTO list
+	 */
+	public static List<ScriptListDTO> getScriptList(List<ScriptTestSuite> scriptTestSuiteList) {
+		List<ScriptListDTO> scriptList = new ArrayList<>();
+		for (ScriptTestSuite scriptTestSuite : scriptTestSuiteList) {
+			ScriptListDTO scriptListDTO = new ScriptListDTO();
+			scriptListDTO.setId(scriptTestSuite.getScript().getId());
+			scriptListDTO.setName(scriptTestSuite.getScript().getName());
+			scriptList.add(scriptListDTO);
+		}
+		return scriptList;
+	}
+
+	/**
+	 * This method is used to convert the TestSuite entity to TestSuiteDTO
+	 * 
+	 * @param testSuite TestSuite entity
+	 * @return testSuite TestSuiteDTO
+	 */
+	public static TestSuiteDTO convertToTestSuiteDTO(TestSuite testSuite) {
+		TestSuiteDTO testSuiteDTO = new TestSuiteDTO();
+		testSuiteDTO.setId(testSuite.getId());
+		testSuiteDTO.setName(testSuite.getName());
+		testSuiteDTO.setCategory(testSuite.getCategory().toString());
+		return testSuiteDTO;
+	}
+
+	/**
+	 * This method is used to convert the Script entity to ScriptListDTO
+	 * 
+	 * @param script Script entity
+	 * @return scriptListDTO ScriptListDTO
+	 */
+	public static List<ScriptListDTO> getScriptListDTOFromScriptList(List<Script> script) {
+		LOGGER.info("Converting the script entity to script list DTO");
+		List<ScriptListDTO> scriptListDTOList = new ArrayList<>();
+		for (Script scriptObj : script) {
+			ScriptListDTO scriptListDTO = new ScriptListDTO();
+			scriptListDTO.setId(scriptObj.getId());
+			scriptListDTO.setName(scriptObj.getName());
+			scriptListDTOList.add(scriptListDTO);
+		}
+		return scriptListDTOList;
+
+	}
 }

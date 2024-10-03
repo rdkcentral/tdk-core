@@ -23,8 +23,10 @@ package com.rdkm.tdkservice.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Script;
 
@@ -61,5 +63,32 @@ public interface ScriptRepository extends JpaRepository<Script, Integer> {
 	 * @return Script - the script
 	 */
 	Script findByName(String testScriptName);
+
+	/**
+	 * This method is used to find the script by name and category.
+	 * 
+	 * @param name     - the name of the script
+	 * @param category - the category
+	 * @return Script - the script
+	 */
+	Script findByNameAndCategory(String name, Category category);
+
+	/**
+	 * This method is used to find all the scripts by category.
+	 * 
+	 * @param category - the category
+	 * @return List - the list of scripts
+	 */
+	List<Script> findAllByCategory(Category category);
+
+	/**
+	 * This method is used to find all the scripts by module and isLongDuration.
+	 * 
+	 * @param module         - module to which the script belongs to
+	 * @param isLongDuration - Are the scripts long duration - boolean
+	 * @return List - the list of scripts
+	 */
+	@Query("SELECT s FROM Script s WHERE s.module = ?1 AND s.isLongDuration = ?2")
+	List<Script> findAllByModuleAndIsLongDuration(Module module, boolean isLongDuration);
 
 }
