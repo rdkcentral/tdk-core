@@ -100,6 +100,12 @@ def on_message(ws, message):
         global encoded_data
         data = json.loads(message)
         encoded_data = data["params"]["imageData"]
+        with open("rdkshell_data.txt","w") as file:
+            file.write(encoded_data)
+        if not encoded_data:
+            print("FAILURE : Not enough image data")
+            ws.close()
+            print("thread terminating...")
         print("Received onScreenshotComplete for snap count %d event at %s "%(snapCount,current_time))
         snapList.append(snapCount)
         print("SNAPS COMPLETED: %d/%d"%(snapCount,snaps))
@@ -444,17 +450,49 @@ def parse_args():
         exit(0)
     return args
 
+#########################################################
+#
+# Method to retrieve region of template from main image
+#
+#########################################################
+def getTemplateLocation(main_image_path,templateLocation):
+    width,height=get_image_resolution(main_image_path)
+    widthOfTemplate = templateLocation[0]
+    heightOfTemplate = templateLocation[1]
+    if widthOfTemplate/width > 0.6 and heightOfTemplate/height < 0.3:
+        region="TopRight"
+    elif widthOfTemplate/width < 0.6 and widthOfTemplate/width > 0.3 and heightOfTemplate/height < 0.3:
+        region="TopCentre"
+    elif widthOfTemplate/width < 0.3 and heightOfTemplate/height < 0.3:
+        region="TopLeft"
+    elif heightOfTemplate/height > 0.6 and widthOfTemplate/width < 0.3:
+        region="BottomLeft"
+    elif heightOfTemplate/height < 0.6 and heightOfTemplate/height > 0.3 and widthOfTemplate/width < 0.3:
+        region="CentreLeft"
+    elif heightOfTemplate/height < 0.6 and heightOfTemplate/height > 0.3 and widthOfTemplate/width > 0.3 and widthOfTemplate/width < 0.6:
+        region="Centre"
+    elif heightOfTemplate/height < 0.6 and heightOfTemplate/height > 0.3 and widthOfTemplate/width > 0.6:
+        region="CentreRight"
+    elif heightOfTemplate/height > 0.6 and widthOfTemplate/width > 0.3 and widthOfTemplate/width < 0.6:
+        region="BottomCentre"
+    elif heightOfTemplate/height > 0.6 and widthOfTemplate/width > 0.6:
+        region="BottomRight"
+    else:
+        region="Unknown"
+    return region
+
 ###########################################################################################################
 #
 # Method to check if template image is present in main image
 #
 #  main_image_path     : main image upon which template matching should be done
 #  template_image_path : template image to be verified on main image
-#  expected_location   : location percentage on which the template image should be verified  on main image
+#  TemplateRegion      : Region of Interest on which the template image should be verified  on main image
 ###########################################################################################################
-def find_template(main_image_path, template_image_path, expected_location):
+def find_template(main_image_path, template_image_path, TemplateRegion):
     if not os.path.exists(template_image_path):
         print ("Template image not found")
+        return False
     # Read the main image and template image
     main_image = cv2.imread(main_image_path)
     template_image = cv2.imread(template_image_path)
@@ -470,16 +508,25 @@ def find_template(main_image_path, template_image_path, expected_location):
     loc = np.where(res >= threshold)
     # Check if the template is found at the expected location
     found = False
+    found_locations=[]
     for pt in zip(*loc[::-1]):
-        if (expected_location[0] <= pt[0] <= expected_location[0] + w and
-                expected_location[1] <= pt[1] <= expected_location[1] + h):
+        found_locations.append(pt)
+        region = getTemplateLocation(main_image_path,found_locations[0])
+        if TemplateRegion.upper() == region.upper():
             found = True
+            location = found_locations[0]
+            print ("Template found at co-ordinates : " , found_locations[0])
+            break
+        elif "unknown" not in region:
+            found = False
+            print ("Template found at different region : ",region)
+            print ("Template found at co-ordinates : " , found_locations[0])
             break
 
     if found:
-        print(f"Template found at expected location: {expected_location}")
+        print(f"Template found at expected region: {TemplateRegion}")
     else:
-        print(f"Template not found at expected location: {expected_location}")
+        print(f"Template not found at expected region: {TemplateRegion}")
     return found
 
 ######################################################
@@ -518,18 +565,32 @@ def verifyImageTemplate(appName,image_path):
             print ("More than one templates are present for validation")
         for template_image in template_images:
             template_image_path = os.path.dirname(os.path.abspath(__file__)) + "/Templates/" + template_image
-            coloumn_percentage = Template[template_image][0]
-            row_percentage = Template[template_image][1]
-            expected_coloumn = float(coloumn_percentage) * int(resolution_height);
-            expected_row = float(row_percentage) * int(resolution_width);
-            expected_location = [expected_coloumn, expected_row]
-            result = find_template(image_path, template_image_path, expected_location)
+            if resolution_height != 1920 and resolution_width != 1080:
+                print("Creating newTemplate for %dx%d "%(resolution_height, resolution_width))
+                #Get Template height and width
+                TemplateHeight, TemplateWidth = get_image_resolution(template_image_path)
+                newTemplateHeight = int(TemplateHeight * resolution_height / 1920)
+                newTemplateWidth = int(TemplateWidth * resolution_width / 1080)
+                print ("TemplateHeight = %d, TemplateWidth = %d "%(TemplateHeight,TemplateWidth))
+                print ("newTemplateHeight = %d , newTemplateWidth = %d"%(newTemplateHeight,newTemplateWidth))
+                def resizeImage(image_path,height,width):
+                    image = cv2.imread(image_path)
+                    print("Resizing to ",width,height)
+                    resized_image = cv2.resize(image,(height, width))
+                    resized_image_path = os.path.dirname(os.path.abspath(__file__)) + "/Templates/" + str(newTemplateHeight) + "_" + str(newTemplateWidth) + "_" + template_image
+                    cv2.imwrite(resized_image_path, resized_image)
+                    return resized_image_path
+                template_image_path = resizeImage(template_image_path,newTemplateHeight,newTemplateWidth)
+            TemplateRegion = Template[template_image]
+            result = find_template(image_path, template_image_path,TemplateRegion)
             if not result:
                 failed_template_image_paths = failed_template_image_paths + " " + os.path.basename(template_image_path)
             else:
                 print("SUCCESS while verifying template : ",os.path.basename(template_image_path))
+                print("Result from verifyImageTemplate : ",result)
                 return result
         print("FAILED while verifying template : ",failed_template_image_paths)
+        print("Result from verifyImageTemplate : ",result)
         return result
     except:
         print ("Exception occurred while fetching Template Image path")
@@ -539,15 +600,30 @@ def verifyImageTemplate(appName,image_path):
 #
 # Method to extract text from image
 #
-#  image_path : image to extract text from
+#  image_path   : image to extract text from
+#  co_ordinates : text extraction to be done from specific co-ordinates
 #######################################################################################################
-def extract_text_from_image(image_path):
+def extract_text_from_image(image_path,co_ordinates=[]):
     # Read the image using OpenCV
     image = cv2.imread(image_path)
-    # Convert the image to RGB (OpenCV uses BGR by default)
-    image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    if co_ordinates:
+        print("Got coordinates as ",co_ordinates)
+        # Define the coordinates (x, y, width, height) of the region of interest (ROI)
+        try:
+            x = co_ordinates[0]
+            y = co_ordinates[1]
+            w = co_ordinates[2]
+            h = co_ordinates[3]
+        except:
+            print ("Unable to configure co_ordinates")
+            return "NO RESULT"
+        # Crop the region of interest from the image
+        image = image[y:y+h, x:x+w]
+    # Convert the image to GRAY (OpenCV uses BGR by default)
+    gray_roi = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
     # Use pytesseract to extract text
-    extracted_text = pytesseract.image_to_string(image_rgb)
+    extracted_text = pytesseract.image_to_string(gray_roi)
     return extracted_text
 
 #######################################################################################################
@@ -579,26 +655,36 @@ def getVerificationText(appName):
 #  appName     : application for which the verification text to be obtained
 #  image_path  : image to be verified
 #######################################################################################################
-def verifyTextInImage(appName,image_path):
+def verifyTextInImage(appName,image_path,file_path=""):
     multi_text_verify_split="|"
     start = time.time()
     time_elapsed=0
     global previous_image_path
     global extracted_text
     global already_extracted
+    configValue = getVerificationText(appName)
+    coordinates = []
+    try:
+        configValue = json.loads(configValue)
+        text_to_verify = list(configValue.keys())[0]
+        coordinates = configValue[text_to_verify]
+    except:
+        coordinates = []
     if not previous_image_path:
         previous_image_path = image_path
     elif previous_image_path == image_path:
         already_extracted = True
         print ("Text was already extracted")
     if not already_extracted:
-        extracted_text = extract_text_from_image(image_path)
-        with open('extracted_text.txt', 'w', encoding='utf-8') as file:
-            file.write(extracted_text)
-        #print(extracted_text)
+        extracted_text = extract_text_from_image(image_path,coordinates)
+        if file_path:
+            print("Writing text into file ",file_path)
+            with open(file_path, 'w', encoding='utf-8') as file:
+                 file.write(extracted_text)
         time_elapsed = time.time() - start
         print(f"Time elapsed for extracting text: {time_elapsed:.2f} seconds")
-    text_to_verify = getVerificationText(appName)
+    if not coordinates:
+        text_to_verify = getVerificationText(appName)
     if multi_text_verify_split in text_to_verify:
         texts = text_to_verify.split(multi_text_verify_split)
         for text in texts:
@@ -640,14 +726,19 @@ if __name__ == "__main__":
         print ("Templates location : %s/Templates"%(pwd))
         print ("ls %s/Templates"%(pwd))
         print ("                  youtube_logo.png")
-        print ("\n[templates_verification]\nyoutube = {\"youtube_logo.png\" : [0.84010,0.07222]}\n")
-        print ("                         The co-ordinates are relative percentage of pixels in which the template must be present on the main image")
+        print ("\n[templates_verification]\nyoutube = {\"youtube_logo.png\" : \"TopRight\"}\n")
+        print ("                         The Region in which template is present is given as value")
         print ("                         Application name set as youtube")
         print ("                         YouTube logo template image name : youtube_logo.png")
-        print ("                         Example of calculation : lets say Youtube logo template's top left most pixel co-ordinate is 1613-height 72-width")
-        print ("                         Resolution of template = 1920x1080")
-        print ("                         Relative percentage of height is calculated as 1613/1920 = 0.84010")
-        print ("                         Relative percentage of width is calculated as 72/1080 = 0.07222")
+        print ("                         Example : lets say Youtube logo template's top left most pixel is present in TopRight region of the screenshot then value is TopRight")
+        print ( "Image Regions" )
+        print (" _____________________________________________")
+        print (" |   TopLeft    |   TopCentre  |  TopRight   |")
+        print (" _____________________________________________")
+        print (" |  CentreLeft  |    Centre    | CentreRight |")
+        print (" _____________________________________________")
+        print (" |  BottomLeft  | BottomCentre | BottomRight |")
+        print (" _____________________________________________")
         print ("\nUsage example: python screenCaptureUtility.py template_match")
         print ("\n")
         exit(0)

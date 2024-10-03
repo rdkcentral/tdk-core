@@ -6,3 +6,58 @@
 # Image is fetched based on the configuration done in ScreenshotTemplates.config 
 # Ex : youtube.png
 ##############################################################################################################
+
+
+Template Regions
+
+#############################################################
+#                  #                    #                   #
+#    TopLeft       #    TopCentre       #    TopRight       #
+#                  #                    #                   #
+#############################################################
+#                  #                    #                   #
+#    CentreLeft    #    Centre          #    CentreRight    #
+#                  #                    #                   #
+#############################################################
+#                  #                    #                   #
+#    BottomLeft    #    BottomCentre    #    BottomRight    #
+#                  #                    #                   #
+#############################################################
+
+
+Configuration Example
+
+#############################################################
+#                                                           #
+#                                         ################  #
+#                                         # YouTube Logo #  #
+#                                         ################  #
+#     YouTube Home Page                                     #
+#                                                           #
+#                                                           #
+#                                                           #
+#                                                           #
+#                                                           #
+#                                                           #
+#############################################################
+
+youtube = { "youtube_logo.png" : "TopRight"}
+
+
+If the template is present across regions , consider the region in which the top left most co-ordinate of the template resides in
+
+#############################################################
+#                                                           #
+#                                                           #
+#####                                                       #
+# i #                                                       #
+# c #       YouTube Home Page                               #
+# o #                                                       #
+# n #                                                       #
+# s #                                                       #
+#####                                                       #
+#                                                           #
+#                                                           #
+#############################################################
+
+youtube = { "youtube_icons.png" : "TopLeft" }
