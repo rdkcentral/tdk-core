@@ -237,6 +237,9 @@ video_src_url_dash_h264_60fps = test_streams_base_path + "DASH_H264_60fps/atfms_
 #29Fps H264 URL
 video_src_url_dash_h264_29fps = test_streams_base_path + "DASH_H264_29fps/master.mpd"
 
+#Only Audio file
+video_src_url_only_audio_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_avc_aac_fmp4_audio_1.mp4"
+
 #VP9 Codec Video URL
 # By default VP9_OPUS stream is used, if we need to test with VP9_OGG stream
 # then comment VP9_OPUS stream and uncomment VP9_OGG stream urls below
