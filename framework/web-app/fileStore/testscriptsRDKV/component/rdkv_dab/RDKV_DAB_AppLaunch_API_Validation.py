@@ -238,7 +238,7 @@ if result_val == expectedResult:
                             result = tdkTestObj.getResult()
                             end_verify =True
                          if not end_verify:
-                            verified = verifyTextInImage("youtube_signin", screenshot)
+                            verified = verifyImageTemplate("youtube_signin", screenshot)
                             if verified:
                                print("YouTube sign-in page launched")
                                params = '{"keys":[ {"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 40,"modifiers": [],"delay":2.0},{"keyCode": 13,"modifiers": [],"delay":2.0}]}'
