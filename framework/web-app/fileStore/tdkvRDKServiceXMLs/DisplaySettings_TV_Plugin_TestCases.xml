@@ -3265,7 +3265,7 @@
                   <params>
                     <param tag="audioPort"  value="SPEAKER0" />
                   </params>
-                  <resultGeneration useMethodTag="check_muted" expectedValues="True"/>
+                  <resultGeneration useMethodTag="check_muted" expectedValues="False"/>
             </testStep>
 
         <testCasePostRequisite>

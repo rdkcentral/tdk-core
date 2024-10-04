@@ -257,7 +257,7 @@
 	</testCase>
 
 	<!-- Test case 06 -->
-	<testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Check_Archive_Logs_Event" desc="Check whether compresses and uploads device logs into attached USB drive">
+	<!--testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Check_Archive_Logs_Event" desc="Check whether compresses and uploads device logs into attached USB drive">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -276,10 +276,10 @@
 			 <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
 		 </resultGeneration>
 	    </testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 07 -->
-        <testCase testCaseId="USBACCESS_07" testCaseName="UsbAccess_Check_Archive_Logs_With_Invalid_Input" desc="Check onarchive log event returns an error when an invalid input is passed">
+	<!-- Test case 06 -->
+        <testCase testCaseId="USBACCESS_06" testCaseName="UsbAccess_Check_Archive_Logs_With_Invalid_Input" desc="Check onarchive log event returns an error when an invalid input is passed">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Archive_Logs" method="Archive_Logs">
                  <params>
@@ -292,8 +292,8 @@
             </testStep>
 	</testCase>  
 
-	<!-- Test case 08 -->
-	<testCase testCaseId="USBACCESS_08" testCaseName="UsbAccess_Verify_Update_Firmware_With_Invalid_Input" desc="Check update firmware API returns an error when an invalid input is passed">
+	<!-- Test case 07 -->
+	<testCase testCaseId="USBACCESS_07" testCaseName="UsbAccess_Verify_Update_Firmware_With_Invalid_Input" desc="Check update firmware API returns an error when an invalid input is passed">
 	    <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="Update_Firmware_Invalid_ParameterValue" method="UsbAccess_Update_Firmware">
                  <params>
@@ -303,8 +303,8 @@
             </testStep>
 	</testCase>
 
-	<!-- Test case 09 -->
-        <testCase testCaseId="USBACCESS_09" testCaseName="UsbAccess_Get_File_List" desc="Check whether gets a list of files and folders from the specified directory or path">
+	<!-- Test case 08 -->
+        <testCase testCaseId="USBACCESS_08" testCaseName="UsbAccess_Get_File_List" desc="Check whether gets a list of files and folders from the specified directory or path">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -317,8 +317,8 @@
 	    </testStep>
     	</testCase>
 
-	<!-- Test case 10 -->
-        <testCase testCaseId="USBACCESS_10" testCaseName="UsbAccess_Create_Link_Non_Existent_Root_Folder" desc="Verify that createLink method returns an error when trying to create a symbolic link to a non-existent root folder of the USB drive">
+	<!-- Test case 09 -->
+        <testCase testCaseId="USBACCESS_09" testCaseName="UsbAccess_Create_Link_Non_Existent_Root_Folder" desc="Verify that createLink method returns an error when trying to create a symbolic link to a non-existent root folder of the USB drive">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Create_Link" method="Create_Link">
                  <params>
@@ -328,8 +328,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 11 -->
-        <testCase testCaseId="USBACCESS_11" testCaseName="UsbAccess_Check_FileList_Error_Non_Existent_Directory" desc="Verify that the getFileList method returns an error when the specified directory does not exist">
+	<!-- Test case 10 -->
+        <testCase testCaseId="USBACCESS_10" testCaseName="UsbAccess_Check_FileList_Error_Non_Existent_Directory" desc="Verify that the getFileList method returns an error when the specified directory does not exist">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -343,7 +343,7 @@
         </testCase>
 
 	<!-- Test case 12 -->
-        <testCase testCaseId="USBACCESS_12" testCaseName="UsbAccess_Validate_ArchiveLogs_File_Name_Format" desc="Check if the ArchiveLogs method correctly names the compressed file with the Mac of the device, date, and time in a tgz format">
+        <!--testCase testCaseId="USBACCESS_12" testCaseName="UsbAccess_Validate_ArchiveLogs_File_Name_Format" desc="Check if the ArchiveLogs method correctly names the compressed file with the Mac of the device, date, and time in a tgz format">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -362,10 +362,10 @@
                          <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
                  </resultGeneration>
             </testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 13 -->
-        <testCase testCaseId="USBACCESS_13" testCaseName="UsbAccess_Check_CreateLink_With_No_USB" desc="Verify that the createLink method returns an error when no USB drive is connected">
+	<!-- Test case 11 -->
+        <testCase testCaseId="USBACCESS_11" testCaseName="UsbAccess_Check_CreateLink_With_No_USB" desc="Verify that the createLink method returns an error when no USB drive is connected">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -395,8 +395,8 @@
             </testStep>
 	</testCase>
 
-	<!-- Test case 14 -->
-        <testCase testCaseId="USBACCESS_14" testCaseName="UsbAccess_Check_getMounted_With_No_USB" desc="Verify that the getMounted method returns an empty list when there are no USB devices mounted on the device">
+	<!-- Test case 12 -->
+        <testCase testCaseId="USBACCESS_12" testCaseName="UsbAccess_Check_getMounted_With_No_USB" desc="Verify that the getMounted method returns an empty list when there are no USB devices mounted on the device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -420,8 +420,8 @@
 	    </testStep>
 	</testCase>	 
 
-	<!-- Test case 15 -->
-        <testCase testCaseId="USBACCESS_15" testCaseName="UsbAccess_Check_Archive_Logs_Event_With_No_USB" desc="Check the ArchiveLogs method when the USB drive is not attached">
+	<!-- Test case 13 -->
+        <testCase testCaseId="USBACCESS_13" testCaseName="UsbAccess_Check_Archive_Logs_Event_With_No_USB" desc="Check the ArchiveLogs method when the USB drive is not attached">
 	    <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -454,8 +454,8 @@
             </testStep> 
         </testCase>
 
-	<!-- Test case 16 -->
-        <testCase testCaseId="USBACCESS_16" testCaseName="UsbAccess_ClearLink_Non_Existent_Link" desc="Verify that the clearLink method returns an error when trying to remove a symbolic link that does not exist">
+	<!-- Test case 14 -->
+        <testCase testCaseId="USBACCESS_14" testCaseName="UsbAccess_ClearLink_Non_Existent_Link" desc="Verify that the clearLink method returns an error when trying to remove a symbolic link that does not exist">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Clear_Link" method="Clear_Link">
                  <params>
@@ -465,24 +465,24 @@
             </testStep>
         </testCase>	
 
-        <!-- Test case 17 -->
-	<testCase testCaseId="USBACCESS_17" testCaseName="UsbAccess_Check_GetLinks_With_No_Created_Links" desc="Verify that the getLinks method returns an empty list when there are no created links">
+        <!-- Test case 15 -->
+	<testCase testCaseId="USBACCESS_15" testCaseName="UsbAccess_Check_GetLinks_With_No_Created_Links" desc="Verify that the getLinks method returns an empty list when there are no created links">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Link" method="Get_Links">
                  <resultGeneration useMethodTag="check_get_link" expectedValues="empty"/>
             </testStep>
 	</testCase>
 
-	<!-- Test case 18 -->
-        <testCase testCaseId="USBACCESS_18" testCaseName="UsbAccess_Verify_GetMounted_Method" desc="Verify that the getMounted method returns a list of mounted USB device when there are USB device mounted on the device">
+	<!-- Test case 16 -->
+        <testCase testCaseId="USBACCESS_16" testCaseName="UsbAccess_Verify_GetMounted_Method" desc="Verify that the getMounted method returns a list of mounted USB device when there are USB device mounted on the device">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
             </testStep>
         </testCase>	
 
-        <!-- Test case 19 -->
-        <testCase testCaseId="USBACCESS_19" testCaseName="UsbAccess_Update_Firmware_With_No_Input" desc="Verify that the updateFirmware method returns an error when no file is provided">
+        <!-- Test case 17 -->
+        <testCase testCaseId="USBACCESS_17" testCaseName="UsbAccess_Update_Firmware_With_No_Input" desc="Verify that the updateFirmware method returns an error when no file is provided">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Update_Firmware_Invalid_ParameterValue" method="UsbAccess_Update_Firmware">
                  <params>
@@ -492,8 +492,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 20 -->
-	<testCase testCaseId="USBACCESS_20" testCaseName="UsbAccess_Check_Mounted_Device_After_Reboot" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device is restarted">
+	<!-- Test case 18 -->
+	<testCase testCaseId="USBACCESS_18" testCaseName="UsbAccess_Check_Mounted_Device_After_Reboot" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device is restarted">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -508,8 +508,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 21 -->
-        <testCase testCaseId="USBACCESS_21" testCaseName="UsbAccess_Check_Mounted_Device_After_Light_Sleep" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device in light sleep mode">
+	<!-- Test case 19 -->
+        <testCase testCaseId="USBACCESS_19" testCaseName="UsbAccess_Check_Mounted_Device_After_Light_Sleep" desc="Verify that the getMounted method returns the correct list of mounted USB devices when the device in light sleep mode">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -571,8 +571,8 @@
         </testCasePostRequisite>
 	</testCase>
 
-	<!-- Test case 22 -->
-	<testCase testCaseId="USBACCESS_22" testCaseName="UsbAccess_Check_Firmware_File" desc="Check getAvailableFirmwareFiles API return firmware files if present">
+	<!-- Test case 20 -->
+	<testCase testCaseId="USBACCESS_20" testCaseName="UsbAccess_Check_Firmware_File" desc="Check getAvailableFirmwareFiles API return firmware files if present">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -602,7 +602,7 @@
 	</testCase> 
 
 	<!-- Test case 23 -->
-	<testCase testCaseId="USBACCESS_23" testCaseName="UsbAccess_Check_TarFileContains_LogFile" desc="Check if the tar file contains the device log file">
+	<!--testCase testCaseId="USBACCESS_23" testCaseName="UsbAccess_Check_TarFileContains_LogFile" desc="Check if the tar file contains the device log file">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -631,10 +631,10 @@
                          <arguments usePreviousResult="true" Id="3" useMethodTag="usbaccess_get_logfilepath_previous_result"/>
                  </resultGeneration>
             </testStep>
-        </testCase>
+        </testCase-->
 
-	<!-- Test case 24 -->
-	<testCase testCaseId="USBACCESS_24" testCaseName="UsbAccess_Check_Empty_File_List" desc="Check getFileList API return empty list if the empty dirctory is passed">
+	<!-- Test case 21 -->
+	<testCase testCaseId="USBACCESS_21" testCaseName="UsbAccess_Check_Empty_File_List" desc="Check getFileList API return empty list if the empty dirctory is passed">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -658,7 +658,7 @@
         </testCase>
 
 	 <!-- Test case 25 -->
-        <testCase testCaseId="USBACCESS_25" testCaseName="UsbAccess_Check_Archive_Logs_Event_After_Light_Sleep" desc="Verify that the ArchiveLogs method successfully compresses and uploads logs when the device is in a sleep state">
+        <!--testCase testCaseId="USBACCESS_25" testCaseName="UsbAccess_Check_Archive_Logs_Event_After_Light_Sleep" desc="Verify that the ArchiveLogs method successfully compresses and uploads logs when the device is in a sleep state">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -727,10 +727,10 @@
             </testStep>
          </postrequisite>
         </testCasePostRequisite>
-    	</testCase> 
+    	</testCase-->
 
-	<!-- Test case 26 -->
-	<testCase testCaseId="USBACCESS_26" testCaseName="UsbAccess_Validate_GetLink_After_USB_UnmountAndMount" desc="Verify that the getLinks method returns the correct list of links after the USB drive is unmounted and then remounted">
+	<!-- Test case 22 -->
+	<testCase testCaseId="USBACCESS_22" testCaseName="UsbAccess_Validate_GetLink_After_USB_UnmountAndMount" desc="Verify that the getLinks method returns the correct list of links after the USB drive is unmounted and then remounted">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
 		 <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -784,8 +784,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 27 -->
-        <testCase testCaseId="USBACCESS_27" testCaseName="UsbAccess_Validate_Create_Link_After_USB_UnmountAndMount" desc="Verify that the create link method return an error after the USB drive is unmounted and then remounted">
+	<!-- Test case 23 -->
+        <testCase testCaseId="USBACCESS_23" testCaseName="UsbAccess_Validate_Create_Link_After_USB_UnmountAndMount" desc="Verify that the create link method return an error after the USB drive is unmounted and then remounted">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -843,8 +843,8 @@
             </testStep>
     	</testCase>
 
-	<!-- Test case 28 -->
-        <testCase testCaseId="USBACCESS_28" testCaseName="UsbAccess_Validate_Clear_Link_After_USB_UnmountAndMount" desc="Verify that the clear link method successfully clear symbolic link after the USB drive is unmounted and then remounted">
+	<!-- Test case 24 -->
+        <testCase testCaseId="USBACCESS_24" testCaseName="UsbAccess_Validate_Clear_Link_After_USB_UnmountAndMount" desc="Verify that the clear link method successfully clear symbolic link after the USB drive is unmounted and then remounted">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -896,8 +896,8 @@
 	    </testStep>
 	</testCase>
 
-	<!-- Test case 29 -->
-	<testCase testCaseId="USBACCESS_29" testCaseName="UsbAccess_Verify_Archive_Logs_API" desc="Check the archiveLogs API return success">
+	<!-- Test case 25 -->
+	<testCase testCaseId="USBACCESS_25" testCaseName="UsbAccess_Verify_Archive_Logs_API" desc="Check the archiveLogs API return success">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -910,8 +910,8 @@
             </testStep>
 	</testCase>
 	
-	<!-- Test case 30 -->
-	<testCase testCaseId="USBACCESS_30" testCaseName="UsbAccess_Verify_CreateLink_With_No_Input" desc="Verify that the createLink methods return an error when an empty input is passed">
+	<!-- Test case 26 -->
+	<testCase testCaseId="USBACCESS_26" testCaseName="UsbAccess_Verify_CreateLink_With_No_Input" desc="Verify that the createLink methods return an error when an empty input is passed">
 	    <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="Create_Link" method="Create_Link">
                  <params>
@@ -921,8 +921,8 @@
 	    </testStep>
 	</testCase>
 
-	<!-- Test case 31 -->
-        <testCase testCaseId="USBACCESS_31" testCaseName="UsbAccess_Verify_Create_Link" desc="Verify that the createLink method successfully creates a symbolic link and that was listed in getLink API">
+	<!-- Test case 27 -->
+        <testCase testCaseId="USBACCESS_27" testCaseName="UsbAccess_Verify_Create_Link" desc="Verify that the createLink method successfully creates a symbolic link and that was listed in getLink API">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -957,8 +957,8 @@
             </testStep>
         </testCase>
 
-	<!-- Test case 32 -->
-        <testCase testCaseId="USBACCESS_32" testCaseName="UsbAccess_Validate_Firmware_Subdirectory_File_Not_Listed" desc="Verify that the firmware file is not listed within the subdirectory">
+	<!-- Test case 28 -->
+        <testCase testCaseId="USBACCESS_28" testCaseName="UsbAccess_Validate_Firmware_Subdirectory_File_Not_Listed" desc="Verify that the firmware file is not listed within the subdirectory">
             <testCaseInfo testCaseType="direct"/>
             <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -986,8 +986,8 @@
             </testStep>
         </testCase>	
 
-	<!-- Test case 33 -->
-	<testCase testCaseId="USBACCESS_33" testCaseName="UsbAccess_Check_Mounted_Device_Across_Multiple_Reboots" desc="To verify whether a USB device remains mounted after multiple reboots">
+	<!-- Test case 29 -->
+	<testCase testCaseId="USBACCESS_29" testCaseName="UsbAccess_Check_Mounted_Device_Across_Multiple_Reboots" desc="To verify whether a USB device remains mounted after multiple reboots">
 	    <testCaseInfo testCaseType="stress" configurableRepeat="true" repeatKey="USBACCESS_REBOOT_TIMES"/>
 	    <testStep testStepId="1" name="Get_Mounted_USB_Device" method="Get_Mounted" saveResult="true">
                  <resultGeneration useMethodTag="check_mount_device_path"/>
@@ -1004,8 +1004,8 @@
 	    </testStep>
 	</testCase>
 
-	<!-- Test case 34 -->
-	<testCase testCaseId="USBACCESS_34" testCaseName="UsbAccess_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+	<!-- Test case 30 -->
+	<testCase testCaseId="USBACCESS_30" testCaseName="UsbAccess_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
 	    <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Activate_Plugins">

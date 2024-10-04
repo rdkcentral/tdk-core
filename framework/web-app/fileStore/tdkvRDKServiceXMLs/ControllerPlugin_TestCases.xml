@@ -399,7 +399,7 @@
                   <params>
                     <param tag="callsign"  value="DeviceInfo" />
                   </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_ILLEGAL_STATE,5" />
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
 	     </testStep>
      <testCasePostRequisite>
          <postrequisite requisiteId="1" requisiteName="Check_Device_Info_Plugin_State">
@@ -479,8 +479,11 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="unavailable"/>
              </testStep>
              <testStep testStepId="5" name="Check_Json_Response_of_DeviceInfo_Plugin" method="Get_System_Info" pluginName="DeviceInfo" >
-                <resultGeneration useMethodTag="controller_check_error_message" arguments="check_message" expectedValues="service is not active" />
-            </testStep>
+	     	<resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                 </resultGeneration>
+	     </testStep>
              <testStep testStepId="6" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
                   <params>
                     <param tag="callsign"  value="DeviceInfo" />
@@ -603,8 +606,11 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="deactivated"/>
              </testStep>
              <testStep testStepId="3" name="Check_DeviceInfo_API_Response" method="Get_System_Info" pluginName="DeviceInfo" >
-                <resultGeneration useMethodTag="controller_check_error_message" arguments="check_message" expectedValues="service is not active" />
-            </testStep>
+	     	<resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                 </resultGeneration>
+	     </testStep>
              <testStep testStepId="4" name="Activate_DeviceInfo_Plugin" method="Activate_Plugin" >
                   <params>
                     <param tag="callsign" value="DeviceInfo" />
@@ -689,7 +695,7 @@
                   <params>
                     <param tag="callsign" value="DeviceInfo" />
                   </params>
-                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_ILLEGAL_STATE,5" />
+                  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="The service is in an illegal state!!!.,5" />
              </testStep>
              <testStep testStepId="7" name="Deactivate_DeviceInfo_Plugin" method="Deactivate_Plugin" >
                   <params>
@@ -744,44 +750,42 @@
      </testCasePostRequisite>
      </testCase>
 	 
-	 <testCase testCaseId="Controller_23" testCaseName="Activate_Invalid_callsign" desc="Validate error message by activating with invalid callsign">
-			<testCaseInfo testCaseType="direct"/>
-			<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
-					  <params>
-							<param tag="callsign" value="invalid" />
-					  </params>
-					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-			</testStep>
+     <testCase testCaseId="Controller_23" testCaseName="Activate_Invalid_callsign" desc="Validate error message by activating with invalid callsign">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+	   <params>
+	  	<param tag="callsign" value="invalid" />
+	   </params>
+	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+	</testStep>
      </testCase>
 
-     <testCase testCaseId="Controller_24" testCaseName="Activate_Empty_callsign" desc="Validate error message by activating with empty callsign">                
-			<testCaseInfo testCaseType="direct"/>
-			<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
-					  <params>
-							<param tag="callsign" value=" " />
-					  </params>
-					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-			</testStep>
+     <testCase testCaseId="Controller_24" testCaseName="Activate_Empty_callsign" desc="Validate error message by activating with empty callsign">        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Activate_Plugin" method="Activate_Plugin">
+	   <params>
+		<param tag="callsign" value=" " />
+	   </params>
+	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+	</testStep>
      </testCase>
 
      <testCase testCaseId="Controller_25" testCaseName="Deactivate_Invalid_callsign" desc="Validate error message by deactivating with invalid callsign">
-			<testCaseInfo testCaseType="direct"/>
-			<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
-					  <params>
-							<param tag="callsign" value="invalid" />
-					  </params>
-					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-			</testStep>
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+	   <params>
+		<param tag="callsign" value="invalid" />
+	   </params>
+	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+	</testStep>
       </testCase>
 
-      <testCase testCaseId="Controller_26" testCaseName="Deactivate_empty_callsign" desc="Validate error message by deactivating with empty callsign">
-			<testCaseInfo testCaseType="direct"/>
-			<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
-					  <params>
-							<param tag="callsign" value=" " />
-					  </params>
-					  <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
-			</testStep>
+     <testCase testCaseId="Controller_26" testCaseName="Deactivate_empty_callsign" desc="Validate error message by deactivating with empty callsign">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin">
+	   <params>
+		<param tag="callsign" value=" " />
+	   </params>
+	   <resultGeneration useMethodTag="controller_check_error_message" expectedValues="ERROR_UNKNOWN_KEY" arguments="check_message"/>
+	</testStep>
      </testCase>
 </testPlugin>
-
