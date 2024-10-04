@@ -985,6 +985,37 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 info["success"] = success
                 info["Test_Step_Status"] = "FAILURE"
 
+        # HdmiCecSource Events response result parser steps
+        elif tag == "hdmicecsource_check_device_info_update_event":
+            result = result[0]
+            logicalAddress = result.get("logicalAddress")
+            info["logicaladdress"] = logicalAddress
+            # Check if logicalAddress is an integer
+            status = isinstance(logicalAddress, int)
+            if "true" in str(status).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "hdmicecsource_check_activesource_update_event":
+            if len(arg) and arg[0] == "performotp":
+                # Access the last dictionary in the list using -1 index
+                result = result[-1]
+                status = result.get("status")
+                info["status"] = status
+                if "true" in str(status).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                result = result[0]
+                status = result.get("status")
+                info["status"] = status
+                if "false" in str(status).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"

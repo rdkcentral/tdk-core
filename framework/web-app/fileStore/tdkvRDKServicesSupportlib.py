@@ -1058,6 +1058,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_negative_scenario":
+            info = result
             if str(result.get("success")).lower() == "false":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
@@ -1676,10 +1677,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             info["devicelist"] = result.get("deviceList")
             success = str(result.get("success")).lower() == "true"
             status = checkNonEmptyResultData(result)
-            if success and status == "TRUE" and int(result.get("numberofdevices")) > 0 :
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg) and arg[0] == "empty_check":
+                if success and status == "TRUE" and int(result.get("numberofdevices")) == 0 :
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if success and status == "TRUE" and int(result.get("numberofdevices")) > 0 :
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
         elif tag == "hdmicecsink_set_operation_status":
             if str(result.get("success")).lower() == "true":
                 info["Test_Step_Status"] = "SUCCESS"
@@ -3407,20 +3414,34 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "hdmicec2_get_osd_name":
             success = str(result.get("success")).lower() == "true"
-            info["OSDNAME"] = result.get("name")
-            status = checkNonEmptyResultData(result.get("name"))
-            if status == "TRUE":
-                info["Test_Step_Status"] = "SUCCESS"
+            info["name"] = result.get("name")
+            if len(arg) and arg[0] == "osd_name":
+                if success and str(result.get("name")) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                status = checkNonEmptyResultData(result.get("name"))
+                if status == "TRUE":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "hdmicec2_get_vendor_id":
             success = str(result.get("success")).lower() == "true"
             vendorID = result.get("vendorid")
             info["vendorID"] = vendorID
-            status = checkNonEmptyResultData(vendorID)
-            if status == "TRUE" and str(vendorID).lower() != "000":
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg) and arg[0] == "vendor_id":
+                if success and str(vendorID) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                status = checkNonEmptyResultData(vendorID)
+                if status == "TRUE" and str(vendorID).lower() != "000":
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         # Controller Plugin Response result parser steps
         elif tag == "controller_get_plugin_state":
@@ -3494,6 +3515,11 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             message = error.get("message")
             if len(arg) and arg[0] == "check_message":
                 if message.lower() == str(expectedValues[0]).lower():
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            elif len(arg) and arg[0] == "deactivate_check_error_message":
+                if message.lower() in str(expectedValues).lower():
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -4148,6 +4174,35 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "FALSE"
             else:
                 if "username" in namespaces:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+
+        # HdmiCecSource Plugin Response result parser steps
+        elif tag == "hdmicecsource_check_enabled_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if len(arg) and arg[0] == "empty_check":
+                if str(enabled).lower() == "true":
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if str(enabled).lower() == "true":
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
+
+        elif tag == "hdmicecsource_check_active_source_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            status = testStepResults[0].get("status")
+            if len(arg) and arg[0] =="standby":
+                if "true" in str(status).lower():
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if "false" in str(status).lower():
                     result = "TRUE"
                 else:
                     result = "FALSE"
@@ -5192,6 +5247,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults2 = list(testStepResults[1].values())[0]
             info["host_edid"] = testStepResults2[0].get("host_edid")
 
+        # HdmiCecSource Plugin Response result parser steps
+        elif tag =="hdmicecsource_get_previous_vendor_id":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["vendorid"] = testStepResults[0].get("vendorID")
+        
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
