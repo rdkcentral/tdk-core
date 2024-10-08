@@ -20,12 +20,12 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <id/>
   <version>1</version>
-  <name>RDKV_WebAudio_Panner</name>
+  <name>RDKV_WebAudio_ScriptProcessor</name>
   <primitive_test_id/>
   <primitive_test_name>webaudio_prerequisite</primitive_test_name>
   <primitive_test_version>1</primitive_test_version>
   <status>FREE</status>
-  <synopsis>To get the Panner details from the device browser</synopsis>
+  <synopsis>To get the ScriptProcessorNode details from the device browser</synopsis>
   <groups_id/>
   <execution_time>20</execution_time>
   <long_duration>false</long_duration>
@@ -42,22 +42,22 @@
     <rdk_version>RDK2.0</rdk_version>
   </rdk_versions>
   <test_cases>
-    <test_case_id>WebAudio_46</test_case_id>
-    <test_objective>To get the Panner details from the device browser</test_objective>
+    <test_case_id>WebAudio_145</test_case_id>
+    <test_objective>To get the ScriptProcessorNode details from the device browser</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Video Accelerators</test_setup>
     <pre_requisite>The device must be online with wpeframework service running.
 All the variables in WebAudioVariables.py must be filled.</pre_requisite>
     <api_or_interface_used>WebAudio</api_or_interface_used>
-    <input_parameters>panner-cone-gain-nan.html, PannerNode-crash.html</input_parameters>
+    <input_parameters>scriptprocessornode.html,scriptprocessornode-0-output-channels.html,scriptprocessornode-downmix8-2channel-input.html,scriptprocessornode-upmix2-8channel-input.html,scriptprocessornode-zero-input-channels.html,scriptprocessor-offlineaudiocontext.html</input_parameters>
     <automation_approch>1. Launch the html test app in browser
 2. Check for the required logs in wpeframework log or in the webinspect page</automation_approch>
-    <expected_output>The browser should be able to get the Panner details</expected_output>
+    <expected_output>The browser should be able to get the ScriptProcessorNode details</expected_output>
     <priority>High</priority>
     <test_stub_interface>WebAudio</test_stub_interface>
-    <test_script>RDKV_WebAudio_Panner</test_script>
+    <test_script>RDKV_WebAudio_ScriptProcessor</test_script>
     <skipped>No</skipped>
-    <release_version>M126</release_version>
+    <release_version>M131</release_version>
     <remarks>None</remarks>
   </test_cases>
 </xml>
@@ -77,7 +77,7 @@ obj = tdklib.TDKScriptingLibrary("WebAudio","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_WebAudio_Panner');
+obj.configureTestCase(ip,port,'RDKV_WebAudio_ScriptProcessor');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -86,8 +86,12 @@ obj.setLoadModuleStatus(result)
 
 expectedResult = "SUCCESS"
 browser = WebAudioVariables.browser_instance
-webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/panner-cone-gain-nan.html'
-webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/PannerNode-crash.html'
+webaudio_test_url = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessornode.html'
+webaudio_test_url2 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessornode-0-output-channels.html'
+webaudio_test_url3 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessornode-downmix8-2channel-input.html'
+webaudio_test_url4 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessornode-upmix2-8channel-input.html'
+webaudio_test_url5 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessornode-zero-input-channels.html'
+webaudio_test_url6 = obj.url+WebAudioVariables.wpe_webkit_testcases_path+'/scriptprocessor-offlineaudiocontext.html'
 browser_method = browser+".1.url"
 log_check_method = WebAudioVariables.log_check_method
 current_url=''
@@ -189,8 +193,12 @@ if expectedResult in result.upper():
                     exit()
 
             files_info = [
-                {"tail_num": 8,"url": webaudio_test_url},
-                {"tail_num": 8,"url": webaudio_test_url2}
+                {"tail_num": 5,"url": webaudio_test_url},
+                {"tail_num": 5,"url": webaudio_test_url2},
+                {"tail_num": 5,"url": webaudio_test_url3},
+                {"tail_num": 5,"url": webaudio_test_url4},
+                {"tail_num": 5,"url": webaudio_test_url5},
+                {"tail_num": 5,"url": webaudio_test_url6}
             ]
 
             for file_info in files_info:
@@ -205,7 +213,7 @@ if expectedResult in result.upper():
                 except Exception as e:
                     print(f"Error processing {filename}: {e}")
                     status_dict[log_filename] = "FAILURE"
-                
+       
             print("\n Revert everything before exiting the script")
             if current_url !='':
                 tdkTestObj = obj.createTestStep('webaudio_setPluginStatus')
@@ -233,9 +241,10 @@ if expectedResult in result.upper():
     else:
         print("FAILURE: Pre-requsites are not met")
         tdkTestObj.setResultStatus("FAILURE")
-        
+
 print("############## Execution Summary #######################")
 for log_filename, status in status_dict.items():
     print(f"{log_filename}: {status}")
-
+    
 obj.unloadModule("WebAudio");
+
