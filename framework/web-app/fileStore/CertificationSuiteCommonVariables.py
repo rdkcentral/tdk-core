@@ -25,3 +25,7 @@ auth_method = "TOKEN"
 
 #Token for accessing REST API url(REST_URL) for getting the output of a command from DUT.(Only if applicable)
 auth_token = ""
+
+#IP and username of the jump server from where the DUT is ssh-able
+jumpserver_ip =""
+jumpserver_username = ""

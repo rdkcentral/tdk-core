@@ -30,6 +30,7 @@ import requests
 import json,ast
 import configparser
 import xml.etree.ElementTree as ET
+import SecurityTokenUtility
 from SecurityTokenUtility import *
 from tdkvRDKServicesSupportlib import *
 from tdkvRDKServicesEventHandlerlib import *
@@ -174,10 +175,19 @@ def executePluginTests(libobj, deviceIPAddress, devicePort, testDeviceName, test
     portNo = str(devicePort)
     # Method of sending the JSON request like (curl/others)
     global execMethod
+ 
+    # To keep the copy the DUT IP
+    global hostname
+    hostname = ""
+
+    #To keep the execution device type 
+    global dutType
+    dutType = ""
 
     # IP of the test device passed from external lib/script
     global deviceIP
     deviceIP = str(deviceIPAddress)
+    hostname = deviceIP
 
     # Name of the test device passed from external lib/script
     global deviceName
@@ -258,6 +268,18 @@ def executePluginTests(libobj, deviceIPAddress, devicePort, testDeviceName, test
     else:
         status = "FAILURE"
         print("[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile))
+    SecurityTokenUtility.deviceConfigFile=deviceConfigFile
+
+    # Check for the curl request method and override the deviceIP variable
+    if status == "SUCCESS":
+        if int(devicePort) != 9998:
+            status3,deviceIP = getDeviceConfigKeyValue("REV_PORT_GW_SERVER_IP")
+            if status3 == "SUCCESS" and deviceIP != "":
+                print("[INFO]: Device IP used for testing : ",deviceIP)
+            else:
+                status = "FAILURE"
+                print("[ERROR]: No proper REV_PORT_GW_SERVER_IP input")
+
 
     # If config file is found, then get the execMethod details.
     if status == "SUCCESS":
@@ -1365,6 +1387,7 @@ def executeCommand(testMethod,testParams):
     requestURL = "http://" + deviceIP + ":" + portNo + "/jsonrpc"
 
     #print "Cmd : ",jsonCmd
+    #print("Cmd : ",jsonCmd+requestURL)
     global testStepJSONCmd
     testStepJSONCmd = jsonCmd
     executeStatus = "SUCCESS"
@@ -1388,7 +1411,7 @@ def executeCommand(testMethod,testParams):
                     global securityEnabled
                     if securityEnabled == None:
                         # Create the Device Token config file and update the token
-                        status,deviceToken = read_token_config(deviceIP,tokenFile)
+                        status,deviceToken = read_token_config(hostname,tokenFile)
                         if status == "SUCCESS":
                             print("[INFO]: Device Security Token obtained successfully")
                         else:
@@ -1396,14 +1419,14 @@ def executeCommand(testMethod,testParams):
                         securityEnabled = True
                     else:
                         # Update the token in the device token config file
-                        status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+                        status,deviceToken  = handleDeviceTokenChange(hostname,tokenFile)
 
                     if status == "SUCCESS":
                         status,req_post,jsonResponse = postCURLRequest(requestURL,jsonCmd,responseTimeout)
                         if status == "SUCCESS":
                             if jsonResponse.get("error") != None and "Missing or invalid token" in jsonResponse.get("error").get("message"):
                                 print("\n[INFO]: Authorization issue occurred. Update Token & Re-try...")
-                                status,deviceToken  = handleDeviceTokenChange(deviceIP,tokenFile)
+                                status,deviceToken  = handleDeviceTokenChange(hostname,tokenFile)
                                 if status == "SUCCESS":
                                     status,req_post,jsonResponse = postCURLRequest(requestURL,jsonCmd,responseTimeout)
                                     if status != "SUCCESS":
@@ -1440,6 +1463,7 @@ def executeCommand(testMethod,testParams):
         print("\nJSON Command Sent : %s" %(jsonCmd))
 
     #print "Output: " , jsonResponse
+    #print("Output: " , jsonResponse)
 
     return executeStatus,jsonResponse
 
@@ -1616,7 +1640,7 @@ def getTestDeviceStatus():
             jsonResponse = json.loads(response.content,strict=False)
             if securityEnabled != None:
                 if jsonResponse.get("error") != None and "Missing or invalid token" in jsonResponse.get("error").get("message"):
-                    status,deviceToken = handleDeviceTokenChange(deviceIP,tokenFile)
+                    status,deviceToken = handleDeviceTokenChange(hostname,tokenFile)
             return "FREE"
         else:
             return "NOT_FOUND"
@@ -2324,7 +2348,7 @@ def testStepResultGeneration(testStepResponse,resultGenerationInfo, action="exec
         if action in ["eventListener","eventRegister","eventUnRegister"]:
             info = CheckAndGenerateEventResult(result,tag,arg,expectedValues)
         elif action == "externalFnCall":
-            execInfo = [ basePathLoc, deviceConfigFile, deviceIP, deviceMac, execMethod, tmURL, deviceName, deviceType ]
+            execInfo = [ basePathLoc, deviceConfigFile, hostname, deviceMac, execMethod, tmURL, deviceName, deviceType ]
             info = ExecExternalFnAndGenerateResult(tag,arg,expectedValues,execInfo)
         else:
             info = CheckAndGenerateTestStepResult(result,tag,arg,expectedValues,otherInfo)

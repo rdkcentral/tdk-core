@@ -19,6 +19,7 @@
 from pexpect import pxssh
 import CertificationSuiteCommonVariables
 import requests
+import subprocess
 
 def ssh_and_execute(ssh_method, hostname, username, password, command):
     output = ""
@@ -44,7 +45,7 @@ def ssh_and_execute(ssh_method, hostname, username, password, command):
         print(e)
     return output
 
-def ssh_and_execute_rest(hostname, username, password, command):
+def ssh_and_execute_rest(command,mac):
     output = ""
     auth_token= ""
     rest_url = ""
@@ -58,7 +59,7 @@ def ssh_and_execute_rest(hostname, username, password, command):
                 print("\nPlease configure REST api configurations in device specific config file")
             else:
                 headers = {'Content-Type': 'application/json', 'authToken': auth_token,}
-                url = str(rest_url.replace("mac",deviceMAC))
+                url = str(rest_url.replace("mac",mac))
                 command = command.replace(" grep","grep").replace("|grep",'\|grep').replace("\"","\\\"")
                 if "awk" in command:
                     command = command.replace("$","\$")
@@ -71,3 +72,22 @@ def ssh_and_execute_rest(hostname, username, password, command):
         print("\nLogin to device failed")
         print(e)
     return output
+
+def ssh_and_execute_jumpserver(cmd,mac):
+    output=""
+    jumpserver_ip = CertificationSuiteCommonVariables.jumpserver_ip
+    jumpserver_username = CertificationSuiteCommonVariables.jumpserver_username
+    cmd = cmd.replace('"','\\"')
+    command = """ssh -i /opt/remote_sshkey """ + jumpserver_username + """@""" + jumpserver_ip + """ "./execute_command.sh """ + mac + """ '""" + cmd + """' " """
+    print(command)
+    output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+    output = output.decode()
+    #To avoid the warnings from jumpserver in the actual output
+    if 'enforcement.' in output:
+        output=output.split('enforcement.')[-1].strip()
+    else:
+        output=output.split('measures.')[-1].strip()
+    output=cmd+'\n'+output
+    return output
+
+
