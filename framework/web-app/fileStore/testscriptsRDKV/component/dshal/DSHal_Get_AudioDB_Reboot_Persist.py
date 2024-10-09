@@ -76,8 +76,8 @@ audiodB - audio dB level to set and get</input_parameters>
 2 . DSHAL agent will invoke the api dsGetAudioDB and dsSetAudioDB to get and set the audio dB level and verify the same in reboot.
 3. TM checks if the status is correct and return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>Checkpoint 1.Verify the API call is success
-Checkpoint 2 Verify that the status is correct<
-Checkpoint 3 If boxtype is video_accelerator then always it should return dsERR_OPERATION_NOT_SUPPORTED/expected_output>
+Checkpoint 2 Verify that the status is correct
+Checkpoint 3 If boxtype is video_accelerator then always it should return dsERR_OPERATION_NOT_SUPPORTED</expected_output>
     <priority>High</priority>
     <test_stub_interface>libdshalstub.so.0.0.0</test_stub_interface>
     <test_script>DSHal_Get_AudioDB_Reboot_Persist</test_script>
