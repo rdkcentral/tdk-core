@@ -20,13 +20,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.dto.PrimitiveTestCreateDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestNameAndIdDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestUpdateDTO;
-
-import jakarta.validation.Valid;
 
 /**
  * The IPrimitiveTestService interface provides the methods to create, update,
@@ -40,7 +39,7 @@ public interface IPrimitiveTestService {
 	 * @param primitiveTestDTO
 	 * @return boolean
 	 */
-	boolean createPrimitiveTest(@Valid PrimitiveTestCreateDTO primitiveTestDTO);
+	boolean createPrimitiveTest(PrimitiveTestCreateDTO primitiveTestDTO);
 
 	/**
 	 * This method is used to update the primitive test.
@@ -48,14 +47,14 @@ public interface IPrimitiveTestService {
 	 * @param primitiveTestDTO
 	 * @return boolean
 	 */
-	boolean updatePrimitiveTest(@Valid PrimitiveTestUpdateDTO primitiveTestDTO);
+	boolean updatePrimitiveTest(PrimitiveTestUpdateDTO primitiveTestDTO);
 
 	/**
 	 * This method is used to delete the primitive test by id.
 	 * 
 	 * @param id
 	 */
-	void deleteById(Integer id);
+	void deleteById(UUID id);
 
 	/**
 	 * This method is used to get the primitive test details by id.
@@ -63,7 +62,7 @@ public interface IPrimitiveTestService {
 	 * @param id
 	 * @return Primitive TestDTO
 	 */
-	PrimitiveTestDTO getPrimitiveTestDetailsById(Integer id);
+	PrimitiveTestDTO getPrimitiveTestDetailsById(UUID id);
 
 	/**
 	 * This method is used to get the primitive test details by module name.

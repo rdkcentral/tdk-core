@@ -35,10 +35,6 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
-import com.rdkm.tdkservice.model.Soc;
-import com.rdkm.tdkservice.repository.SocRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -46,13 +42,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import com.rdkm.tdkservice.dto.SocCreateDTO;
+import com.rdkm.tdkservice.dto.SocDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-
+import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.UserGroup;
-
+import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 
 /**
@@ -96,7 +94,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void createSocSuccessfully() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		socDTO.setSocName("Test Soc");
 		socDTO.setSocCategory("RDKV");
 		socDTO.setSocUserGroup("UserGroup1");
@@ -121,7 +119,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void createSocFailure() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		socDTO.setSocName("Test Soc");
 
 		when(socRepository.existsByName(socDTO.getSocName())).thenReturn(false);
@@ -136,7 +134,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void createSocResourceAlreadyExists() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		socDTO.setSocName("Test Soc");
 
 		when(socRepository.existsByName(socDTO.getSocName())).thenReturn(true);
@@ -149,7 +147,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocResourceNotFound() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName("Test Soc");
 
 		when(socRepository.findById(1)).thenReturn(java.util.Optional.empty());
@@ -162,7 +160,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocResourceAlreadyExists() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName("Test Soc");
 
 		Soc soc = new Soc();
@@ -180,7 +178,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocSuccessfully() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName("Test Soc");
 		socUpdateDTO.setSocCategory("RDKV");
 
@@ -193,7 +191,7 @@ public class SocServiceTest {
 		when(socRepository.existsByName(socUpdateDTO.getSocName())).thenReturn(false);
 		when(socRepository.save(any(Soc.class))).thenReturn(soc);
 
-		SocUpdateDTO result = socService.updateSoc(socUpdateDTO, 1);
+		SocDTO result = socService.updateSoc(socUpdateDTO, 1);
 
 		assertNotNull(result);
 		assertEquals("Test Soc", result.getSocName());
@@ -205,7 +203,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocExceptionWhileSaving() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName("Test Soc");
 
 		Soc soc = new Soc();
@@ -230,7 +228,7 @@ public class SocServiceTest {
 
 		when(socRepository.findById(1)).thenReturn(java.util.Optional.of(soc));
 
-		SocDTO result = socService.findById(1);
+		SocCreateDTO result = socService.findById(1);
 
 		assertNotNull(result);
 		assertEquals("Test Soc", result.getSocName());
@@ -287,7 +285,7 @@ public class SocServiceTest {
 		String category = "RDKV";
 		when(socRepository.findByCategory(Category.getCategory(category))).thenReturn(null);
 
-		List<SocDTO> result = socService.getSOCsByCategory(category);
+		List<SocCreateDTO> result = socService.getSOCsByCategory(category);
 		assertNull(result);
 	}
 
@@ -340,7 +338,7 @@ public class SocServiceTest {
 
 		when(socRepository.findByCategory(any())).thenReturn(Arrays.asList(soc));
 
-		List<SocDTO> result = socService.getSOCsByCategory("RDKV");
+		List<SocCreateDTO> result = socService.getSOCsByCategory("RDKV");
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -377,7 +375,7 @@ public class SocServiceTest {
 		when(socRepository.findAll()).thenReturn(Arrays.asList(soc1, soc2));
 
 		// Act
-		List<SocDTO> result = socService.findAll();
+		List<SocCreateDTO> result = socService.findAll();
 
 		// Assert
 		assertEquals(2, result.size());
@@ -394,7 +392,7 @@ public class SocServiceTest {
 		when(socRepository.findAll()).thenReturn(null);
 
 		// Act
-		List<SocDTO> result = socService.findAll();
+		List<SocCreateDTO> result = socService.findAll();
 
 		// Assert
 		assertNull(result);

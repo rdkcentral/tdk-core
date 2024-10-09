@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -26,7 +28,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * Data Transfer Object for Soc. This class is used to transfer data
+ * Data Transfer Object for SocVendor. This class is used to transfer data
  * between different parts of the application. It includes the necessary Jackson
  * annotations to ignore unknown properties and include non-null fields when
  * serializing to JSON.
@@ -37,30 +39,21 @@ import lombok.Data;
 public class SocDTO {
 
 	/**
-	 * Represents the unique identifier for the SocVendor. This field is
-	 * automatically generated and managed by the system.
+	 * Represents the unique identifier for the SocVendor.
 	 */
-	private Integer socId;
+	@NotBlank(message = "Soc id is required")
+	private UUID socId;
 
 	/**
-	 * Represents the name of the SocVendor. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the name of the SocVendor.
 	 */
-	@NotBlank(message = "Soc name is required")
+
 	private String socName;
 
 	/**
-	 * Represents the category of the Soc. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the category of the SocVendor.
 	 */
-	@NotBlank(message = "Category is required")
-	private String socCategory;
 
-	/**
-	 * Represents the user group of the Soc. This field is optional and can be
-	 * null.
-	 */
-	@NotBlank(message = "Usergroup is required")
-	private String socUserGroup;
+	private String socCategory;
 
 }

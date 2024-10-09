@@ -19,72 +19,70 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * The UserDTO class is used to map the request body of the user request.
+ * The UserUpdateDTO class is used to map the request body of the user update
+ * request.
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-
+	
 	/**
-	 * Represents the unique identifier for the User. This field is automatically
-	 * generated and managed by the system.
-	 */
-	private Integer userId;
-
+     * Represents the unique identifier for the User. This field is mandatory, hence
+     * it cannot be null.
+     */
+	@NotNull(message = "User id is required")
+	private UUID userId;
+	
 	/**
-	 * Represents the username of the User. This field is mandatory, hence it cannot
-	 * be blank.
-	 */
-	@NotBlank(message = "Username is required")
+     * Represents the username of the User.
+     */
 	private String userName;
+
 	/**
-	 * Represents the password of the User. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the password of the User.
 	 */
-	@NotBlank(message = "Password is required")
-	@Size(min = 6, message = "Password must be at least 6 characters long")
 	private String password;
 
 	/**
-	 * Represents the email of the User. The email should be valid.
+	 * Represents the email of the User.
 	 */
-	@Email(message = "Email should be valid")
 	private String userEmail;
-
+	
 	/**
 	 * Represents the display name of the User.
 	 */
-	private String userDisplayName;
 
+	private String userDisplayName;
+	
 	/**
 	 * Represents the theme name of the User.
 	 */
-	private String userThemeName;
 
+	private String userThemeName;
+	
 	/**
-	 * Represents the user group of the User. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the user group of the User.
 	 */
-	@NotBlank(message = "Usergroup is required")
+
 	private String userGroupName;
 
 	/**
-	 * Represents the role of the User.
+	 * Represents the user role of the User.
 	 */
 	private String userRoleName;
 
 	/**
-	 * Represents the status of the User.
+	 * Represents the user status of the User.
 	 */
 	private String userStatus;
 

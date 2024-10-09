@@ -54,7 +54,6 @@ public class PrimitiveTestCreateDTO {
 	/*
 	 * The primitive test user group .This field is mandatory.
 	 */
-	@NotBlank(message = "Primitive Test user group is mandatory")
 	private String primitiveTestUserGroup;
 
 	/*

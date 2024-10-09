@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -33,7 +34,7 @@ public class ScriptModuleDTO {
 	/**
 	 * Id of the module
 	 */
-	private Integer moduleId;
+	private UUID moduleId;
 
 	/**
 	 * Name of the module

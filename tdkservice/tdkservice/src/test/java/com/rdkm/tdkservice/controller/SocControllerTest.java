@@ -28,9 +28,6 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
-import com.rdkm.tdkservice.service.ISocService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,6 +35,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.rdkm.tdkservice.dto.SocCreateDTO;
+import com.rdkm.tdkservice.dto.SocDTO;
+import com.rdkm.tdkservice.service.ISocService;
 
 /*
  * The class is used to test the SocVendorController class.
@@ -65,7 +66,7 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void createSocSuccessfully() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		when(socService.createSoc(socDTO)).thenReturn(true);
 
 		ResponseEntity<String> response = socController.createSoc(socDTO);
@@ -78,7 +79,7 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void createSocFailure() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		when(socService.createSoc(socDTO)).thenReturn(false);
 
 		ResponseEntity<String> response = socController.createSoc(socDTO);
@@ -91,10 +92,10 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void getAllSocsReturnsData() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		when(socService.findAll()).thenReturn(Arrays.asList(socDTO));
 
-		ResponseEntity<List<SocDTO>> response = socController.getAllSocs();
+		ResponseEntity<List<SocCreateDTO>> response = socController.getAllSocs();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(1, response.getBody().size());
@@ -107,7 +108,7 @@ public class SocControllerTest {
 	public void getAllSocsReturnsNotFound() {
 		when(socService.findAll()).thenReturn(Arrays.asList());
 
-		ResponseEntity<List<SocDTO>> response = socController.getAllSocs();
+		ResponseEntity<List<SocCreateDTO>> response = socController.getAllSocs();
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
@@ -129,10 +130,10 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void findByIdReturnsData() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		when(socService.findById(1)).thenReturn(socDTO);
 
-		ResponseEntity<SocDTO> response = socController.findById(1);
+		ResponseEntity<SocCreateDTO> response = socController.findById(1);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -142,7 +143,7 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void updateSocSuccessfully() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		when(socService.updateSoc(socUpdateDTO, 1)).thenReturn(socUpdateDTO);
 
 		ResponseEntity<?> response = socController.updateSoc(1, socUpdateDTO);
@@ -155,7 +156,7 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void updateSocFailure() {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+		SocDTO socUpdateDTO = new SocDTO();
 		when(socService.updateSoc(socUpdateDTO, 1)).thenReturn(null);
 
 		ResponseEntity<?> response = socController.updateSoc(1, socUpdateDTO);
@@ -168,7 +169,7 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void getSocsByCategoryReturnsData() {
-		SocDTO socDTO = new SocDTO();
+		SocCreateDTO socDTO = new SocCreateDTO();
 		when(socService.getSOCsByCategory("RDKV")).thenReturn(Arrays.asList(socDTO));
 
 		ResponseEntity<?> response = socController.getSOCsByCategory("RDKV");

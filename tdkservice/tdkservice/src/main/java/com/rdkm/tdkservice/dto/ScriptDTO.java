@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class ScriptDTO {
 	 * The id of the Script.
 	 */
 	@NotNull(message = "Script  id cannot be null")
-	private Integer id;
+	private UUID id;
 
 	/**
 	 * The name of the Script.

@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.model.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -29,7 +30,7 @@ import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.model.Device;
 
 @Repository
-public interface DeviceRepositroy extends JpaRepository<Device, Integer> {
+public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	/**
 	 * This method is used to check if a Device exists by its stbIp.
 	 *

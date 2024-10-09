@@ -23,6 +23,7 @@ package com.rdkm.tdkservice.controller;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -132,7 +133,7 @@ public class ScriptController {
 	@ApiResponse(responseCode = "200", description = "Script deleted successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteScript(@PathVariable Integer id) {
+	public ResponseEntity<?> deleteScript(@PathVariable UUID id) {
 		LOGGER.info("Received delete script request: " + id);
 		boolean isScriptDeleted = scriptService.deleteScript(id);
 		if (isScriptDeleted) {
@@ -178,7 +179,7 @@ public class ScriptController {
 	@ApiResponse(responseCode = "200", description = "Script fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> findScriptById(@PathVariable Integer id) {
+	public ResponseEntity<?> findScriptById(@PathVariable UUID id) {
 		LOGGER.info("Received get script by id request for script id: " + id);
 		ScriptDTO script = scriptService.findScriptById(id);
 		if (script != null) {
@@ -339,7 +340,8 @@ public class ScriptController {
 	}
 
 	/**
-	 * This method is used to get the script template details by primitive test name.
+	 * This method is used to get the script template details by primitive test
+	 * name.
 	 *
 	 * @param primitiveTestName - the primitive test name
 	 * @return ResponseEntity - the response entity

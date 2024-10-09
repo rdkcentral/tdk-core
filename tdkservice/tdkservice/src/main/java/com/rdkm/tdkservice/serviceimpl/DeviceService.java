@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -48,15 +49,12 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.rdkm.tdkservice.model.*;
-import com.rdkm.tdkservice.repository.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,15 +64,25 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
-import com.rdkm.tdkservice.dto.DeviceStreamDTO;
+import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-
-import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.DeviceType;
+import com.rdkm.tdkservice.model.Oem;
+import com.rdkm.tdkservice.model.Soc;
+import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.DeviceTypeRepository;
+import com.rdkm.tdkservice.repository.OemRepository;
+import com.rdkm.tdkservice.repository.SocRepository;
+import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IDeviceService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
@@ -142,16 +150,46 @@ public class DeviceService implements IDeviceService {
 	 *         error message if unsuccessful.
 	 */
 	@Override
-	public DeviceUpdateDTO updateDevice(DeviceUpdateDTO deviceUpdateDTO) {
+	public boolean updateDevice(DeviceUpdateDTO deviceUpdateDTO) {
 		LOGGER.info("Going to update Device with id: " + deviceUpdateDTO.getId());
 		Device device = deviceRepository.findById(deviceUpdateDTO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Device Id", deviceUpdateDTO.getId().toString()));
-
-		// call setPropetietsUpdateDTO meeethod here
+		if (!Utils.isEmpty(deviceUpdateDTO.getStbIp())) {
+			if ((deviceRepository.existsByStbIp(deviceUpdateDTO.getStbIp()))
+					&& !(deviceUpdateDTO.getStbIp().equals(device.getStbIp()))) {
+				LOGGER.info("Device with the same stbip already exists");
+				throw new ResourceAlreadyExistsException("StpIp: ", deviceUpdateDTO.getStbIp());
+			} else {
+				device.setStbIp(deviceUpdateDTO.getStbIp());
+			}
+		}
+		if (!Utils.isEmpty(deviceUpdateDTO.getStbName())) {
+			if ((deviceRepository.existsByStbName(deviceUpdateDTO.getStbName()))
+					&& !(deviceUpdateDTO.getStbName().equals(device.getStbName()))) {
+				LOGGER.info("Device with the same stbName already exists");
+				throw new ResourceAlreadyExistsException("StbName: ", deviceUpdateDTO.getStbName());
+			} else {
+				device.setStbName(deviceUpdateDTO.getStbName());
+			}
+		}
+		if (!Utils.isEmpty(deviceUpdateDTO.getMacId())) {
+			if ((deviceRepository.existsByMacId(deviceUpdateDTO.getMacId()))
+					&& !(deviceUpdateDTO.getMacId().equals(device.getMacId()))) {
+				LOGGER.info("Device with the same macid already exists");
+				throw new ResourceAlreadyExistsException("MacId: ", deviceUpdateDTO.getMacId());
+			} else {
+				device.setMacId(deviceUpdateDTO.getMacId());
+			}
+		}
 		MapperUtils.updateDeviceProperties(device, deviceUpdateDTO);
 		setDevicePropertiesFromUpdateDTO(device, deviceUpdateDTO);
-
-		return deviceUpdateDTO;
+		try {
+			deviceRepository.save(device);
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while updating Device with id: " + deviceUpdateDTO.getId(), e);
+			throw new TDKServiceException("Error occurred while updating Device with id: " + deviceUpdateDTO.getId());
+		}
+		return true;
 	}
 
 	/**
@@ -185,7 +223,7 @@ public class DeviceService implements IDeviceService {
 	 *         ID.
 	 */
 	@Override
-	public DeviceResponseDTO findDeviceById(Integer id) {
+	public DeviceResponseDTO findDeviceById(UUID id) {
 		LOGGER.info("Executing find Device by id method with id: " + id);
 		Device device = deviceRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Device Id", id.toString()));
@@ -208,11 +246,12 @@ public class DeviceService implements IDeviceService {
 	 *         deleted successfully, or an error message if the device is not found.
 	 */
 	@Override
-	public void deleteDeviceById(Integer id) {
+	public boolean deleteDeviceById(UUID id) {
 		LOGGER.info("Going to delete Device with id: " + id);
 		try {
-				// Then, delete the device
-				deviceRepository.deleteById(id);
+			// Then, delete the device
+			deviceRepository.deleteById(id);
+			return true;
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error occurred while deleting Device with id: " + id, e);
 			throw new DeleteFailedException();
@@ -260,8 +299,10 @@ public class DeviceService implements IDeviceService {
 	 *
 	 * @param file The XML file to parse.
 	 */
-	public void parseXMLForDevice(MultipartFile file) {
+	@Override
+	public boolean parseXMLForDevice(MultipartFile file) {
 		LOGGER.info("Parsing XML file for device details");
+		validateFile(file);
 		try {
 			Document doc = getDocumentFromXMLFile(file);
 			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -278,8 +319,10 @@ public class DeviceService implements IDeviceService {
 					validateAndCreateDevice(deviceDTO, validator);
 				}
 			}
+			return true;
 		} catch (ParserConfigurationException | SAXException | IOException e) {
-			e.printStackTrace();
+			LOGGER.error("Error parsing XML file", e);
+			throw new TDKServiceException("Error parsing XML file" + e.getMessage());
 		}
 	}
 
@@ -308,7 +351,7 @@ public class DeviceService implements IDeviceService {
 		}
 
 		// Set the STB name, IP, MAC ID, device type name, oem name, SoC
-		//  name,
+		// name,
 		// thunder enabled status, thunder port, recorder ID, and gateway device name
 		// from the XML element
 		deviceDTO.setStbName(getNodeTextContent(eElement, Constants.XML_TAG_STB_NAME));
@@ -441,8 +484,6 @@ public class DeviceService implements IDeviceService {
 			throw new MandatoryFieldException(" ThunderPort should not be null or empty");
 		}
 
-
-
 	}
 
 	/**
@@ -465,8 +506,7 @@ public class DeviceService implements IDeviceService {
 		}
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getOemName())) {
-			Oem oem = oemRepository
-					.findByName(deviceUpdateDTO.getOemName());
+			Oem oem = oemRepository.findByName(deviceUpdateDTO.getOemName());
 			if (oem != null) {
 				device.setOem(oem);
 			} else {
@@ -494,7 +534,6 @@ public class DeviceService implements IDeviceService {
 				throw new MandatoryFieldException(" ThunderPort should not be null or empty");
 			}
 		}
-
 
 	}
 
@@ -549,11 +588,10 @@ public class DeviceService implements IDeviceService {
 				" Is Thunder enabled for STB");
 		appendElement(deviceElement, Constants.XML_TAG_THUNDER_PORT, device.getThunderPort(),
 				" Thunder port for thunder devices");
-		appendElement(deviceElement, Constants.XML_TAG_Device_TYPE, device.getDeviceType().getName(), " device type for STB");
-		appendElement(deviceElement, Constants.XML_TAG_OEM, device.getOem().getName(),
-				" oem for the STB");
-		appendElement(deviceElement, Constants.XML_TAG_SOC, device.getSoc().getName(),
-				" SoC for the STB");
+		appendElement(deviceElement, Constants.XML_TAG_Device_TYPE, device.getDeviceType().getName(),
+				" device type for STB");
+		appendElement(deviceElement, Constants.XML_TAG_OEM, device.getOem().getName(), " oem for the STB");
+		appendElement(deviceElement, Constants.XML_TAG_SOC, device.getSoc().getName(), " SoC for the STB");
 		appendElement(deviceElement, Constants.XML_TAG_CATEGORY, device.getCategory().toString(),
 				" Category for the STB");
 		return doc;
@@ -641,7 +679,7 @@ public class DeviceService implements IDeviceService {
 	 * @throws Exception
 	 */
 	@Override
-	public Path downloadAllDevicesByCategory(String category) throws Exception {
+	public Path downloadAllDevicesByCategory(String category) {
 		LOGGER.info("Downloading all devices for category: {}", category);
 		List<Device> devices = deviceRepository.findAllByCategory(Category.valueOf(category.toUpperCase()));
 		Path zipFilePath = Paths.get("devices_" + category + DEVICE_FILE_EXTENSION_ZIP);
@@ -659,9 +697,29 @@ public class DeviceService implements IDeviceService {
 				zipOut.write(bytes, 0, bytes.length);
 				zipOut.closeEntry();
 			}
+		} catch (IOException | TransformerException | ParserConfigurationException e) {
+			LOGGER.error("Error downloading devices for category: " + category, e);
+			throw new TDKServiceException("Error downloading devices for category: " + category);
 		}
 
 		return zipFilePath;
+	}
+
+	/**
+	 * Validates the uploaded file.
+	 *
+	 * @param file the uploaded file
+	 */
+	private void validateFile(MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		if (fileName == null || !fileName.endsWith(Constants.XML_EXTENSION)) {
+			LOGGER.error("The uploaded file must have a .xml extension {}", fileName);
+			throw new UserInputException("The uploaded file must be a .xml file.");
+		}
+		if (file.isEmpty()) {
+			LOGGER.error("The uploaded file is empty");
+			throw new UserInputException("The uploaded file is empty.");
+		}
 	}
 
 }

@@ -20,11 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
-import com.rdkm.tdkservice.model.Oem;
-import com.rdkm.tdkservice.service.IOemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +39,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rdkm.tdkservice.dto.OemCreateDTO;
+import com.rdkm.tdkservice.dto.OemDTO;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
+import com.rdkm.tdkservice.service.IOemService;
+
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
@@ -64,10 +65,9 @@ public class OemController {
 	/**
 	 * Creates a new oem type.
 	 *
-	 * @param oemDTO The request object containing the details of
-	 *                               the oem.
-	 * @return ResponseEntity containing the created oem if successful,
-	 *         or an error message if unsuccessful.
+	 * @param oemDTO The request object containing the details of the oem.
+	 * @return ResponseEntity containing the created oem if successful, or an error
+	 *         message if unsuccessful.
 	 * @throws ResourceAlreadyExistsException if a device type with the same name
 	 *                                        already exists.
 	 */
@@ -76,17 +76,15 @@ public class OemController {
 	@ApiResponse(responseCode = "500", description = "Error in saving oem type data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createOemType(
-			@RequestBody @Valid OemDTO oemDTO) {
+	public ResponseEntity<String> createOemType(@RequestBody @Valid OemCreateDTO oemDTO) {
 		LOGGER.info("Received create oemDTO type request: " + oemDTO.toString());
 		boolean isOemCreated = iOemService.createOem(oemDTO);
 		if (isOemCreated) {
 			LOGGER.info("Oem created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("oem created succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED).body("Oem created succesfully");
 		} else {
 			LOGGER.error("Error in saving Oem type data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in saving Oem type data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving Oem type data");
 		}
 
 	}
@@ -94,8 +92,8 @@ public class OemController {
 	/**
 	 * Retrieves all oem types.
 	 *
-	 * @return ResponseEntity containing the list of oem types if
-	 *         found, or a NOT_FOUND status with an error message if not found.
+	 * @return ResponseEntity containing the list of oem types if found, or a
+	 *         NOT_FOUND status with an error message if not found.
 	 */
 	@Operation(summary = "Find all oem types", description = "Retrieves all oem types from the system.")
 	@ApiResponse(responseCode = "200", description = "oem types found")
@@ -125,25 +123,25 @@ public class OemController {
 	@ApiResponse(responseCode = "200", description = "oem deleted successfully")
 	@ApiResponse(responseCode = "404", description = "oem not found")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteOemType(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteOemType(@PathVariable UUID id) {
 		LOGGER.info("Received delete oem type request for ID: " + id);
 		iOemService.deleteOem(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the oem");
+		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the Oem");
 	}
 
 	/**
 	 * Retrieves a oem by its ID.
 	 *
 	 * @param id the ID of the oem to retrieve
-	 * @return a ResponseEntity containing the oem if found, or a
-	 *         NOT_FOUND status with an error message if not found
+	 * @return a ResponseEntity containing the oem if found, or a NOT_FOUND status
+	 *         with an error message if not found
 	 */
 	@Operation(summary = "Find oem by ID", description = "Retrieves a oem by its ID.")
 	@ApiResponse(responseCode = "200", description = "oem found")
 	@ApiResponse(responseCode = "500", description = "oem not found")
 
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<OemDTO> findById(@PathVariable Integer id) {
+	public ResponseEntity<OemDTO> findById(@PathVariable UUID id) {
 		LOGGER.info("Received find oem by id request: " + id);
 		OemDTO oemDTO = iOemService.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(oemDTO);
@@ -153,37 +151,35 @@ public class OemController {
 	/**
 	 * Updates the oem with the specified ID.
 	 *
-	 * @param id                     the ID of the oem to update
+	 * @param id           the ID of the oem to update
 	 * @param oemUpdateDTO the updated oem details
-	 * @return a ResponseEntity containing the updated oem if
-	 *         successful, or an error message if unsuccessful
+	 * @return a ResponseEntity containing the updated oem if successful, or an
+	 *         error message if unsuccessful
 	 */
 	@Operation(summary = "Update a oem", description = "Updates oem in the system.")
 	@ApiResponse(responseCode = "200", description = "oem updated successfully")
 	@ApiResponse(responseCode = "500", description = "Error in updating oem")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateOemType(@PathVariable Integer id,
-			@RequestBody OemUpdateDTO oemUpdateDTO) {
+	@PutMapping("/update")
+	public ResponseEntity<?> updateOemType(@RequestBody OemDTO oemUpdateDTO) {
 		LOGGER.info("Received update oemUpdateDTO request: " + oemUpdateDTO.toString());
-		OemUpdateDTO oemUpdateDTO1 = iOemService
-				.updateOem(oemUpdateDTO, id);
-		if (oemUpdateDTO1 != null) {
+		OemDTO oemUpdateDto = iOemService.updateOem(oemUpdateDTO);
+		if (oemUpdateDto != null) {
 			LOGGER.info("oem updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(oemUpdateDTO1);
-        } else {
-        	LOGGER.error("Error in updating oem");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating oem");
+			return ResponseEntity.status(HttpStatus.OK).body("Oem updated successfully");
+		} else {
+			LOGGER.error("Error in updating oem");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating oem");
 		}
-		
+
 	}
 
 	/**
 	 * Retrieves all oem by category.
 	 *
 	 * @param category the category of the oem to retrieve
-	 * @return a ResponseEntity containing the list of oem if found,
-	 *         or a NOT_FOUND status with an error message if not found
+	 * @return a ResponseEntity containing the list of oem if found, or a NOT_FOUND
+	 *         status with an error message if not found
 	 */
 	@Operation(summary = "Find oem DTO by category", description = "Retrieves all oem by category.")
 	@ApiResponse(responseCode = "200", description = "oem found")
@@ -205,8 +201,8 @@ public class OemController {
 	 * Retrieves all oems by category.
 	 *
 	 * @param category the category of the oems to retrieve
-	 * @return a ResponseEntity containing the list of oems if found,
-	 *         or a NOT_FOUND status with an error message if not found
+	 * @return a ResponseEntity containing the list of oems if found, or a NOT_FOUND
+	 *         status with an error message if not found
 	 */
 
 	@Operation(summary = "Get oem name list by category", description = "Retrieves all oems by category.")

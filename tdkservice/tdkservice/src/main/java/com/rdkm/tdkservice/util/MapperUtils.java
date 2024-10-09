@@ -29,14 +29,12 @@ import org.slf4j.LoggerFactory;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
 import com.rdkm.tdkservice.dto.ModuleDTO;
 import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
@@ -44,7 +42,6 @@ import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
 import com.rdkm.tdkservice.dto.TestSuiteDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
@@ -112,10 +109,8 @@ public class MapperUtils {
 		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
 		deviceTypeDTO.setDeviceTypeId(deviceType.getId());
 		deviceTypeDTO.setDeviceTypeName(deviceType.getName());
-		deviceTypeDTO.setType(deviceType.getType().name());
+		deviceTypeDTO.setDeviceType(deviceType.getType().name());
 		deviceTypeDTO.setDeviceTypeCategory(deviceType.getCategory().name());
-		deviceTypeDTO
-				.setDeviceTypeUserGroup(deviceType.getUserGroup() != null ? deviceType.getUserGroup().getName() : null);
 		LOGGER.info("Device Type DTO: {}", deviceTypeDTO);
 		return deviceTypeDTO;
 	}
@@ -140,9 +135,6 @@ public class MapperUtils {
 	 * @return oemDTO This returns the oemDTO object converted from the oem object.
 	 */
 	public static OemDTO convertToOemDTO(Oem oem) {
-		modelMapper.typeMap(Oem.class, OemDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getUserGroup().getName(), OemDTO::setOemUserGroup);
-		});
 		OemDTO oemDTO = modelMapper.map(oem, OemDTO.class);
 
 		LOGGER.info("oem DTO: {}", oemDTO);
@@ -158,9 +150,6 @@ public class MapperUtils {
 	 */
 
 	public static SocDTO convertToSocDTO(Soc soc) {
-		modelMapper.typeMap(Soc.class, SocDTO.class).addMappings(mapper -> {
-			mapper.map(src -> src.getUserGroup().getName(), SocDTO::setSocUserGroup);
-		});
 		SocDTO socDTO = modelMapper.map(soc, SocDTO.class);
 		LOGGER.info("Soc DTO: {}", socDTO);
 		return socDTO;
@@ -214,10 +203,6 @@ public class MapperUtils {
 	 *         object.
 	 */
 	public static void updateDeviceProperties(Device device, DeviceUpdateDTO deviceUpdateDTO) {
-		if (!Utils.isEmpty(deviceUpdateDTO.getStbIp()))
-			device.setStbIp(deviceUpdateDTO.getStbIp());
-		if (!Utils.isEmpty(deviceUpdateDTO.getStbName()))
-			device.setStbName(deviceUpdateDTO.getStbName());
 		if (!Utils.isEmpty(deviceUpdateDTO.getStbPort()))
 			device.setStbPort(deviceUpdateDTO.getStbPort());
 		if (!Utils.isEmpty(deviceUpdateDTO.getStatusPort()))
@@ -226,8 +211,6 @@ public class MapperUtils {
 			device.setAgentMonitorPort(deviceUpdateDTO.getAgentMonitorPort());
 		if (!Utils.isEmpty(deviceUpdateDTO.getLogTransferPort()))
 			device.setLogTransferPort(deviceUpdateDTO.getLogTransferPort());
-		if (!Utils.isEmpty(deviceUpdateDTO.getMacId()))
-			device.setMacId(deviceUpdateDTO.getMacId());
 		if (!Utils.isEmpty(deviceUpdateDTO.getThunderPort()))
 			device.setThunderPort(deviceUpdateDTO.getThunderPort());
 		device.setThunderEnabled(deviceUpdateDTO.isThunderEnabled());
@@ -254,8 +237,8 @@ public class MapperUtils {
 	 * @return DeviceTypeUpdateDTO This returns the DeviceTypeUpdateDTO object
 	 *         converted from the deviceType object.
 	 */
-	public static DeviceTypeUpdateDTO convertToDeviceTypeUpdateDTO(DeviceType deviceType) {
-		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
+	public static DeviceTypeDTO convertToDeviceTypeUpdateDTO(DeviceType deviceType) {
+		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 		deviceTypeUpdateDTO.setDeviceTypeName(deviceType.getName());
 		deviceTypeUpdateDTO.setDeviceType(deviceType.getType().getName());
 		deviceTypeUpdateDTO.setDeviceTypeCategory(deviceType.getCategory().name());
@@ -270,8 +253,8 @@ public class MapperUtils {
 	 * @return OemUpdateDTO This returns the OemDTO object converted from the oem
 	 *         object.
 	 */
-	public static OemUpdateDTO convertToOemUpdateDTO(Oem oem) {
-		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
+	public static OemDTO convertToOemUpdateDTO(Oem oem) {
+		OemDTO oemUpdateDTO = new OemDTO();
 		oemUpdateDTO.setOemName(oem.getName());
 		oemUpdateDTO.setOemCategory(oem.getCategory().name());
 		LOGGER.info("oem Update DTO: {}", oem);
@@ -284,8 +267,8 @@ public class MapperUtils {
 	 * @param soc This is the SocVendor object.
 	 * @return soc This returns the soc object converted from the soc object.
 	 */
-	public static SocUpdateDTO convertToSocUpdateDTO(Soc soc) {
-		SocUpdateDTO socUpdateDTO = new SocUpdateDTO();
+	public static SocDTO convertToSocUpdateDTO(Soc soc) {
+		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName(soc.getName());
 		socUpdateDTO.setSocCategory(soc.getCategory().name());
 		LOGGER.info("Soc  Update DTO: {}", soc);
@@ -613,8 +596,8 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the ScriptTestSuite map list to
-	 * ScriptListDTO list
+	 * This method is used to convert the ScriptTestSuite map list to ScriptListDTO
+	 * list
 	 * 
 	 * @param testSuiteCreateDTO
 	 * @return scriptListDTOList ScriptListDTO list
@@ -640,6 +623,7 @@ public class MapperUtils {
 		TestSuiteDTO testSuiteDTO = new TestSuiteDTO();
 		testSuiteDTO.setId(testSuite.getId());
 		testSuiteDTO.setName(testSuite.getName());
+		testSuiteDTO.setDescription(testSuite.getDescription());
 		testSuiteDTO.setCategory(testSuite.getCategory().toString());
 		return testSuiteDTO;
 	}

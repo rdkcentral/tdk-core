@@ -21,6 +21,7 @@ package com.rdkm.tdkservice.controller;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -84,7 +85,7 @@ public class TestSuiteController {
 		LOGGER.info("Received create test suite request: " + testSuiteCreateDTO.toString());
 		boolean isTestSuiteCreated = testSuiteService.createTestSuite(testSuiteCreateDTO);
 		if (isTestSuiteCreated) {
-			LOGGER.info("test suite created successfully");
+			LOGGER.info("Test suite created successfully");
 			return ResponseEntity.status(HttpStatus.CREATED).body("Test suite created successfully");
 		} else {
 			LOGGER.error("Error in creating script");
@@ -108,8 +109,8 @@ public class TestSuiteController {
 		LOGGER.info("Received update test suite request: " + testSuiteDTO.toString());
 		boolean isTestSuiteUpdated = testSuiteService.updateTestSuite(testSuiteDTO);
 		if (isTestSuiteUpdated) {
-			LOGGER.info("test suite updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("test suite updated successfully");
+			LOGGER.info("Test suite updated successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Test suite updated successfully");
 		} else {
 			LOGGER.error("Error in updating test suite");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating test suite");
@@ -127,11 +128,11 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "Scriptgroup fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getTestSuiteById(@PathVariable Integer id) {
+	public ResponseEntity<?> getTestSuiteById(@PathVariable UUID id) {
 		LOGGER.info("Received get testSuite by id request: " + id);
 		TestSuiteDTO testSuiteDTO = testSuiteService.findTestSuiteById(id);
 		if (testSuiteDTO != null) {
-			LOGGER.info("test suite fetched successfully");
+			LOGGER.info("Test suite fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTO);
 		} else {
 			LOGGER.error("Error in fetching test suite");
@@ -153,7 +154,7 @@ public class TestSuiteController {
 		LOGGER.info("Received get testSuite by category request: " + category);
 		List<TestSuiteDTO> testSuiteDTOList = testSuiteService.findAllTestSuiteByCategory(category);
 		if (testSuiteDTOList != null) {
-			LOGGER.info("test suite fetched successfully");
+			LOGGER.info("Test suite fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTOList);
 		} else {
 			LOGGER.error("Error in fetching test suite");
@@ -172,11 +173,11 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "Scriptgroup deleted successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteScript(@PathVariable Integer id) {
+	public ResponseEntity<?> deleteScript(@PathVariable UUID id) {
 		LOGGER.info("Received delete testSuite request: " + id);
 		boolean isScriptDeleted = testSuiteService.deleteTestSuite(id);
 		if (isScriptDeleted) {
-			LOGGER.info("test suite deleted successfully");
+			LOGGER.info("Test suite deleted successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("test suite deleted successfully");
 		} else {
 			LOGGER.error("Error in deleting test suite");
@@ -236,7 +237,7 @@ public class TestSuiteController {
 		}
 
 	}
-	
+
 	/**
 	 * This method is used to download the test suite as XML
 	 * 
@@ -285,6 +286,7 @@ public class TestSuiteController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in uploading test suites");
 		}
 	}
+
 	/**
 	 * This method is used to update the test suite by module name
 	 *
@@ -295,12 +297,40 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "Scriptgroup updated successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PutMapping("/updatetestsuite/{moduleName}/{category}")
-	public ResponseEntity<String> updateTestSuiteByModuleNameAndCategory(
-			@PathVariable String moduleName, @PathVariable String category) {
+	public ResponseEntity<String> updateTestSuiteByModuleNameAndCategory(@PathVariable String moduleName,
+			@PathVariable String category) {
 		LOGGER.info("Received request to update test suite for module: {} and category: {}", moduleName, category);
 		String message = testSuiteService.updateTestSuiteByModuleNameAndCategory(moduleName, category);
 		LOGGER.info("Successfully updated test suite for module: {} and category: {}", moduleName, category);
 		return ResponseEntity.ok(message);
+	}
+
+	/**
+	 * This method is used to download all the test suite as XML
+	 * 
+	 * @param category - the test suite category
+	 * @return ResponseEntity - the response entity
+	 * 
+	 */
+	@Operation(summary = "Download All TestSuite xml as zip by category", description = "Download All TestSuite As xml as zip by category")
+	@ApiResponse(responseCode = "200", description = "All TestSuite downloaded successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Issue in downloading All TestSuite")
+	@GetMapping("/downloadalltestsuitexml")
+	public ResponseEntity<?> downloadAllTestSuiteXML(@RequestParam String category) {
+		LOGGER.info("Received download all test suite XML request:");
+		ByteArrayInputStream inputStream = testSuiteService.downloadAllTestSuiteAsXML(category);
+		if (inputStream == null || inputStream.available() == 0) {
+			LOGGER.error("Error in downloading all test suite as XML");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error in downloading all test suite as XML");
+		}
+		// Prepare response with the XML file
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("Content-Disposition", "attachment; filename=" + category + Constants.ZIP_EXTENSION);
+		LOGGER.info("Downloaded all test suite xml as zip");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(new InputStreamResource(inputStream));
 	}
 
 }

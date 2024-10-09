@@ -82,28 +82,28 @@ public class Script extends BaseEntity {
 	 * The primitive test of the script.
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST, optional = false)
-	@JoinColumn(name = "primitive_test", referencedColumnName = "name")
+	@JoinColumn(name = "primitive_test_id")
 	PrimitiveTest primitiveTest;
 
 	/**
 	 * The list of device type of the script.
 	 */
 	@ManyToMany(cascade = CascadeType.PERSIST)
-	@JoinTable(name = "script_device_type", joinColumns = @JoinColumn(name = "script", referencedColumnName = "name"), inverseJoinColumns = @JoinColumn(name = "device_type", referencedColumnName = "name"))
+	@JoinTable(name = "script_device_type", joinColumns = @JoinColumn(name = "script_id"), inverseJoinColumns = @JoinColumn(name = "device_type_id"))
 	private List<DeviceType> deviceTypes = new ArrayList<>();
 
 	/**
 	 * Represents the userGroup of the script.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "user_group", referencedColumnName = "name")
+	@JoinColumn(name = "user_group_id")
 	private UserGroup userGroup;
 
 	/**
 	 * The module associated with the script.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "module", referencedColumnName = "name")
+	@JoinColumn(name = "module_id",nullable = false)
 	private Module module;
 
 	/**

@@ -20,10 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
-import com.rdkm.tdkservice.service.IDeviceTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,7 +38,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
+import com.rdkm.tdkservice.service.IDeviceTypeService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -79,14 +81,14 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "500", description = "Error in saving device type data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createDeviceType(@RequestBody @Valid DeviceTypeDTO deviceTypeDTO) {
+	public ResponseEntity<String> createDeviceType(@RequestBody @Valid DeviceTypeCreateDTO deviceTypeDTO) {
 		LOGGER.info("Received create device type request: " + deviceTypeDTO.toString());
 
 		boolean isDeviceTypeCreated = deviceTypeService.createDeviceType(deviceTypeDTO);
 
 		if (isDeviceTypeCreated) {
 			LOGGER.info("device type created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("device type created succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED).body("Device type created succesfully");
 		} else {
 			LOGGER.error("Error in saving devicetype data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving device type data");
@@ -129,10 +131,10 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "Device type deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Device type not found")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteDeviceType(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteDeviceType(@PathVariable UUID id) {
 		LOGGER.info("Received delete device type request: " + id);
 		deviceTypeService.deleteById(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the device type");
+		return ResponseEntity.status(HttpStatus.OK).body(" Device type deleted successfully");
 
 	}
 
@@ -147,7 +149,7 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "Device type found")
 	@ApiResponse(responseCode = "404", description = "Device type not found")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<DeviceTypeDTO> findById(@PathVariable Integer id) {
+	public ResponseEntity<DeviceTypeDTO> findById(@PathVariable UUID id) {
 		LOGGER.info("Received find device type by id request: " + id);
 		DeviceTypeDTO deviceTypeDTO = deviceTypeService.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTO);
@@ -166,13 +168,13 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "device type updated successfully")
 	@ApiResponse(responseCode = "404", description = "device type not found")
 	@ApiResponse(responseCode = "500", description = "Error in updating device type data")
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateDeviceType(@PathVariable Integer id, @RequestBody DeviceTypeUpdateDTO deviceTypeDTO) {
+	@PutMapping("/update")
+	public ResponseEntity<?> updateDeviceType (@RequestBody DeviceTypeDTO deviceTypeDTO) {
 		LOGGER.info("Received update device type request: " + deviceTypeDTO.toString());
-		DeviceTypeUpdateDTO deviceTypeDTO1 = deviceTypeService.updateDeviceType(deviceTypeDTO, id);
-		if (null != deviceTypeDTO1) {
-			LOGGER.info("deviceType updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTO1);
+		DeviceTypeDTO deviceTypeObjDTO = deviceTypeService.updateDeviceType(deviceTypeDTO);
+		if (null != deviceTypeObjDTO) {
+			LOGGER.info("DeviceType updated successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("DeviceType updated successfully");
 		} else {
 			LOGGER.error("Error in updating Device type data");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device type not found");

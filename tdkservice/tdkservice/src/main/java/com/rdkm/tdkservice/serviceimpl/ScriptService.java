@@ -30,10 +30,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -210,11 +212,14 @@ public class ScriptService implements IScriptService {
 		// Updating the script entity with the updated script details
 		script = MapperUtils.updateScript(script, scriptUpdateDTO);
 
-		// TODO : Revisit this if script name can be changed or not
-		if (!(Utils.isEmpty(scriptUpdateDTO.getName())) && !(scriptUpdateDTO.getName().equals(script.getName()))) {
-			LOGGER.error("Script name should not be changed for the existing script: " + script.getName());
-			throw new UserInputException(
-					"Script name should not be changed for the existing script. Please create a new script with the new name if needed.");
+		if (!Utils.isEmpty(scriptUpdateDTO.getName())) {
+			if (scriptRepository.existsByName(scriptUpdateDTO.getName())
+					&& !(scriptUpdateDTO.getName().equals(script.getName()))) {
+				LOGGER.info("Script already exists with the same name: " + scriptUpdateDTO.getName());
+				throw new ResourceAlreadyExistsException(Constants.SCRIPT, scriptUpdateDTO.getName());
+			} else {
+				script.setName(scriptUpdateDTO.getName());
+			}
 		}
 
 		// Primitive test and thus the module is not editable or changable. So there
@@ -243,7 +248,7 @@ public class ScriptService implements IScriptService {
 	 * @return - true if the script is deleted successfully, false otherwise
 	 */
 	@Override
-	public boolean deleteScript(Integer scriptId) {
+	public boolean deleteScript(UUID scriptId) {
 		LOGGER.info("Deleting script: " + scriptId.toString());
 		Script script = scriptRepository.findById(scriptId)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptId.toString()));
@@ -347,7 +352,7 @@ public class ScriptService implements IScriptService {
 	 * @param scriptId - the script id
 	 * @return - the script
 	 */
-	public ScriptDTO findScriptById(Integer scriptId) {
+	public ScriptDTO findScriptById(UUID scriptId) {
 		LOGGER.info("Getting script details by scriptId: " + scriptId);
 		Script script = scriptRepository.findById(scriptId)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, scriptId.toString()));
@@ -419,14 +424,15 @@ public class ScriptService implements IScriptService {
 	 */
 	private void saveScriptFile(MultipartFile scriptFile, String scriptLocation) {
 		try {
+			MultipartFile fileWithHeader = addHeader(scriptFile);
 			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + scriptLocation
 					+ Constants.FILE_PATH_SEPERATOR);
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
-			Path filePath = uploadPath.resolve(scriptFile.getOriginalFilename());
-			Files.copy(scriptFile.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-			LOGGER.info("File uploaded successfully: {}", scriptFile.getOriginalFilename());
+			Path filePath = uploadPath.resolve(fileWithHeader.getOriginalFilename());
+			Files.copy(fileWithHeader.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+			LOGGER.info("File uploaded successfully: {}", fileWithHeader.getOriginalFilename());
 		} catch (IOException e) {
 			e.printStackTrace();
 			LOGGER.error("Error saving file: " + e.getMessage());
@@ -437,6 +443,26 @@ public class ScriptService implements IScriptService {
 			throw new TDKServiceException("Error saving file: " + ex.getMessage());
 
 		}
+	}
+
+	/*
+	 * The method to add header to script python file
+	 */
+	private MultipartFile addHeader(MultipartFile scriptFile) throws IOException {
+
+		String fileContent = new String(scriptFile.getBytes());
+		String currentYear = Year.now().toString();
+
+		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
+
+		// Prepend the header to the file content
+		String updatedContent = header + fileContent;
+		return new MockMultipartFile(scriptFile.getName(), // Name of the file
+				scriptFile.getOriginalFilename(), // Original filename
+				scriptFile.getContentType(), // Content type (e.g., text/plain)
+				updatedContent.getBytes() // Updated content as bytes
+		);
+
 	}
 
 	/**
@@ -623,7 +649,7 @@ public class ScriptService implements IScriptService {
 				scriptName + Constants.PYTHON_FILE_EXTENSION); // Combine base directory and relative path
 		File scriptFile = scriptFilePath.toFile();
 		if (!scriptFile.exists()) {
-			throw new ResourceNotFoundException("Script file not found at location: " , testCase.getScriptLocation());
+			throw new ResourceNotFoundException("Script file not found at location: ", testCase.getScriptLocation());
 		}
 		return scriptFile;
 
@@ -972,27 +998,23 @@ public class ScriptService implements IScriptService {
 		}
 
 		scriptBuilder.append("# use tdklib library,which provides a wrapper for tdk testcase script \r\n")
-				.append("import tdklib; \r\n\r\n")
-				.append("#Test component to be tested\r\n")
-				.append("obj = tdklib.TDKScriptingLibrary(\"").append(primitiveTest.getModule().getName()).append("\",\"1\");\r\n\r\n")
-				.append("#IP and Port of device type, No need to change,\r\n")
+				.append("import tdklib; \r\n\r\n").append("#Test component to be tested\r\n")
+				.append("obj = tdklib.TDKScriptingLibrary(\"").append(primitiveTest.getModule().getName())
+				.append("\",\"1\");\r\n\r\n").append("#IP and Port of device type, No need to change,\r\n")
 				.append("#This will be replaced with corresponding DUT Ip and port while executing script\r\n")
-				.append("ip = <ipaddress>\r\n")
-				.append("port = <port>\r\n")
+				.append("ip = <ipaddress>\r\n").append("port = <port>\r\n")
 				.append("obj.configureTestCase(ip,port,'');\r\n\r\n")
 				.append("#Get the result of connection with test component and DUT\r\n")
 				.append("result = obj.getLoadModuleResult();\r\n")
 				.append("print(\"[LIB LOAD STATUS]  :  %s\" %result);\r\n\r\n")
 				.append("#Prmitive test case which associated to this Script\r\n")
 				.append("tdkTestObj = obj.createTestStep('").append(primitiveTestName).append("');\r\n\r\n")
-				.append("#Execute the test case in DUT\r\n")
-				.append("tdkTestObj.executeTestCase(\"\");\r\n\r\n")
-				.append("#Get the result of execution\r\n")
-				.append("result = tdkTestObj.getResult();\r\n")
+				.append("#Execute the test case in DUT\r\n").append("tdkTestObj.executeTestCase(\"\");\r\n\r\n")
+				.append("#Get the result of execution\r\n").append("result = tdkTestObj.getResult();\r\n")
 				.append("print(\"[TEST EXECUTION RESULT] : %s\" %result);\r\n\r\n")
 				.append("#Set the result status of execution\r\n")
-				.append("tdkTestObj.setResultStatus(\"none\");\r\n\r\n")
-				.append("obj.unloadModule(\"").append(primitiveTest.getModule().getName()).append("\");");
+				.append("tdkTestObj.setResultStatus(\"none\");\r\n\r\n").append("obj.unloadModule(\"")
+				.append(primitiveTest.getModule().getName()).append("\");");
 
 		return scriptBuilder.toString();
 	}

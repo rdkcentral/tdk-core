@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 
@@ -47,7 +48,7 @@ public interface IUserGroupService {
 	 * @param id The id of the user group to retrieve.
 	 * @return The user group with the provided id.
 	 */
-	void deleteById(Integer id);
+	void deleteById(UUID id);
 
 	/**
 	 * Updates the user group with the provided id based on the provided user group
@@ -58,6 +59,6 @@ public interface IUserGroupService {
 	 * @param id               The id of the user group to be updated.
 	 * @return The updated user group.
 	 */
-	UserGroupDTO updateUserGroup(UserGroupDTO userGroupRequest, Integer id);
+	UserGroupDTO updateUserGroup(UserGroupDTO userGroupRequest);
 
 }

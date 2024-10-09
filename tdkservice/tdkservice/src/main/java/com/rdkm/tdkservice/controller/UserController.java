@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,8 +39,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
-import com.rdkm.tdkservice.dto.UserUpdateDTO;
 import com.rdkm.tdkservice.serviceimpl.UserService;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -78,7 +79,7 @@ public class UserController {
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@PostMapping("/create")
-	public ResponseEntity<String> saveUser(@RequestBody @Valid UserDTO userRequestDTO) {
+	public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDTO userRequestDTO) {
 		LOGGER.info("Executing saveUser method with request: " + userRequestDTO.toString());
 		boolean isUserCreated = userService.createUser(userRequestDTO);
 		if (isUserCreated) {
@@ -100,7 +101,7 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "Successfully found the user")
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@GetMapping("findById/{id}")
-	public ResponseEntity<UserDTO> findUserById(@PathVariable Integer id) {
+	public ResponseEntity<UserDTO> findUserById(@PathVariable UUID id) {
 		LOGGER.info("Executing findUserById method with id: " + id);
 		UserDTO user = userService.findUserById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(user);
@@ -119,7 +120,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateUser(@Valid @RequestBody UserUpdateDTO userRequest) {
+	public ResponseEntity<?> updateUser(@Valid @RequestBody UserDTO userRequest) {
 		LOGGER.info("Executing updateUser method with request: " + userRequest.toString());
 		UserDTO updatedUser = userService.updateUser(userRequest);
 		if (null != updatedUser) {
@@ -170,7 +171,7 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteUser(@RequestParam Integer id) {
+	public ResponseEntity<String> deleteUser(@RequestParam UUID id) {
 		LOGGER.info("Executing deleteUser method with id: " + id);
 		userService.deleteUser(id);
 		return ResponseEntity.status(HttpStatus.OK).body("User got deleted successfully");

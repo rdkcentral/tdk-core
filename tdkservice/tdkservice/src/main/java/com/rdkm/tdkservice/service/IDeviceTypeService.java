@@ -20,9 +20,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
+import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
 
 /**
  * This interface defines the contract for the oemService. It provides
@@ -38,7 +39,7 @@ public interface IDeviceTypeService {
 	 * @return boolean This returns true if the deviceType was created successfully,
 	 *         false otherwise.
 	 */
-	boolean createDeviceType(DeviceTypeDTO deviceTypeDTO);
+	boolean createDeviceType(DeviceTypeCreateDTO deviceTypeDTO);
 
 	/**
 	 * This method is used to retrieve all deviceTypes.
@@ -52,7 +53,7 @@ public interface IDeviceTypeService {
 	 * 
 	 * @param id This is the id of the deviceType to be deleted.
 	 */
-	void deleteById(Integer id);
+	void deleteById(UUID id);
 
 	/**
 	 * This method is used to find a deviceType by its id.
@@ -60,7 +61,7 @@ public interface IDeviceTypeService {
 	 * @param id This is the id of the deviceType to be found.
 	 * @return id This returns the found deviceType.
 	 */
-	DeviceTypeDTO findById(Integer id);
+	DeviceTypeDTO findById(UUID id);
 
 	/**
 	 * This method is used to update a deviceType.
@@ -70,7 +71,7 @@ public interface IDeviceTypeService {
 	 * @param id             This is the id of the DeviceType to be updated.
 	 * @return deviceTypeUpdateDTO This returns the updated DeviceType.
 	 */
-	DeviceTypeUpdateDTO updateDeviceType(DeviceTypeUpdateDTO deviceTypeUpdateDTO, Integer id);
+	DeviceTypeDTO updateDeviceType(DeviceTypeDTO deviceTypeUpdateDTO);
 
 	/**
 	 * This method is used to retrieve all DeviceTypes by category.

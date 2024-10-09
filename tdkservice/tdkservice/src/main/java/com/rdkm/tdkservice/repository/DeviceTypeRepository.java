@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.enums.DeviceTypeCategory;
 import com.rdkm.tdkservice.model.DeviceType;
@@ -31,7 +32,7 @@ import com.rdkm.tdkservice.enums.Category;
  * The DeviceTypeRepository interface provides methods for device type operations.
  */
 @Repository
-public interface DeviceTypeRepository extends JpaRepository<DeviceType, Integer> {
+public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
 	/**
 	 * This method is used to find a device type by name.
 	 *
@@ -47,6 +48,8 @@ public interface DeviceTypeRepository extends JpaRepository<DeviceType, Integer>
 	 * @return a deviceType object containing the deviceType type's information
 	 */
 	DeviceType deleteByName(String name);
+	
+	
 
 	/**
 	 * This method is used to check if a device type exists by name.

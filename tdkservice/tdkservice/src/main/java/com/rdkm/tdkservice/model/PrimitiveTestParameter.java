@@ -41,7 +41,7 @@ public class PrimitiveTestParameter extends BaseEntity {
 	 * The primitive test.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "primitivetestname", nullable = false)
+	@JoinColumn(name = "primitivetest_id", nullable = false)
 	private PrimitiveTest primitiveTest;
 
 	/**

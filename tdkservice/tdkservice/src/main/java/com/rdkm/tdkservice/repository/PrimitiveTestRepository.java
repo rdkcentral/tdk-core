@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -33,7 +34,7 @@ import com.rdkm.tdkservice.model.PrimitiveTest;
  */
 
 @Repository
-public interface PrimitiveTestRepository extends JpaRepository<PrimitiveTest, Integer> {
+public interface PrimitiveTestRepository extends JpaRepository<PrimitiveTest, UUID> {
 
 	/*
 	 * This method is used to get the primitive test by name.

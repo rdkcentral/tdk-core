@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -32,7 +34,7 @@ public class FunctionDTO {
      * The unique identifier of the function.
      */
     @NotNull(message = "ID is required")
-    private Integer id;
+    private UUID id;
 
     /**
      * The name of the function.

@@ -20,9 +20,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
+import com.rdkm.tdkservice.dto.SocCreateDTO;
 import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
 
 /**
  * 
@@ -43,7 +44,7 @@ public interface ISocService {
 	 * @return boolean This returns true if the SocVendor was created successfully,
 	 *         false otherwise.
 	 */
-	boolean createSoc(SocDTO socDTO);
+	boolean createSoc(SocCreateDTO socDTO);
 
 	/**
 	 * This method is used to retrieve all SocVendors.
@@ -59,7 +60,7 @@ public interface ISocService {
 	 * @param id This is the id of the SocVendor to be deleted.
 	 */
 
-	void deleteSoc(Integer id);
+	void deleteSoc(UUID id);
 
 	/**
 	 * This method is used to find a SocVendor by its id.
@@ -68,7 +69,7 @@ public interface ISocService {
 	 * @return SocVendorDTO This returns the found SocVendor.
 	 */
 
-	SocDTO findById(Integer id);
+	SocDTO findById(UUID id);
 
 	/**
 	 * This method is used to update a Soc.
@@ -79,7 +80,7 @@ public interface ISocService {
 	 * @return SocVendorDTO This returns the updated SocVendor.
 	 */
 
-	public SocUpdateDTO updateSoc(SocUpdateDTO socUpdateDTO, Integer id);
+	public SocDTO updateSoc(SocDTO socUpdateDTO);
 
 	/**
 	 * This method is used to retrieve all SocVendors DTO by category.

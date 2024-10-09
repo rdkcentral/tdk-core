@@ -38,10 +38,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
-import com.rdkm.tdkservice.model.Oem;
-import com.rdkm.tdkservice.repository.OemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -49,11 +45,15 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
+import com.rdkm.tdkservice.dto.OemCreateDTO;
+import com.rdkm.tdkservice.dto.OemDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 
 /**
@@ -93,7 +93,7 @@ public class OemServiceTest {
 	 */
 	@Test
 	public void testCreateOem_Success() {
-		OemDTO oemDTO = new OemDTO();
+		OemCreateDTO oemDTO = new OemCreateDTO();
 		oemDTO.setOemName("Test Manufacturer");
 		oemDTO.setOemCategory("RDKV");
 		oemDTO.setOemUserGroup("UserGroup1");
@@ -116,7 +116,7 @@ public class OemServiceTest {
 	 */
 	@Test
 	public void testCreateOem_ResourceAlreadyExistsException() {
-		OemDTO oemCreateDTO = new OemDTO();
+		OemCreateDTO oemCreateDTO = new OemCreateDTO();
 		oemCreateDTO.setOemName("Test Manufacturer");
 
 		when(oemRepository.existsByName(anyString())).thenReturn(true);
@@ -130,7 +130,7 @@ public class OemServiceTest {
 	 */
 	@Test
 	public void testCreateOem_ResourceNotFoundException() {
-		OemDTO oemCreateDTO = new OemDTO();
+		OemCreateDTO oemCreateDTO = new OemCreateDTO();
 		oemCreateDTO.setOemName("Test Manufacturer");
 		oemCreateDTO.setOemCategory("Invalid Category");
 
@@ -145,7 +145,7 @@ public class OemServiceTest {
 	 */
 	@Test
 	public void testCreateOem_ExceptionWhileSaving() {
-		OemDTO oemCreateDTO = new OemDTO();
+		OemCreateDTO oemCreateDTO = new OemCreateDTO();
 		oemCreateDTO.setOemName("Test Manufacturer");
 		oemCreateDTO.setOemCategory("RDKB");
 		oemCreateDTO.setOemUserGroup("Test User Group");
@@ -168,7 +168,7 @@ public class OemServiceTest {
 		when(oemRepository.findAll()).thenReturn(Arrays.asList(oem));
 
 		// Act
-		List<OemDTO> result = oemService.getAllOem();
+		List<OemCreateDTO> result = oemService.getAllOem();
 
 		// Assert
 		assertNotNull(result);
@@ -184,7 +184,7 @@ public class OemServiceTest {
 		when(oemRepository.findAll()).thenReturn(Collections.emptyList());
 
 		// Act
-		List<OemDTO> result = oemService.getAllOem();
+		List<OemCreateDTO> result = oemService.getAllOem();
 
 		// Assert
 		assertNull(result);
@@ -243,7 +243,7 @@ public class OemServiceTest {
 		when(oemRepository.findById(id)).thenReturn(Optional.of(oem));
 
 		// Act
-		OemDTO result = oemService.findById(id);
+		OemCreateDTO result = oemService.findById(id);
 
 		// Assert
 		assertNotNull(result);
@@ -275,7 +275,7 @@ public class OemServiceTest {
 				.thenReturn(Arrays.asList(oem));
 
 		// Act
-		List<OemDTO> result = oemService.getOemsByCategory(category);
+		List<OemCreateDTO> result = oemService.getOemsByCategory(category);
 
 		// Assert
 		assertNotNull(result);
@@ -293,7 +293,7 @@ public class OemServiceTest {
 				.thenReturn(Collections.emptyList());
 
 		// Act
-		List<OemDTO> result = oemService.getOemsByCategory(category);
+		List<OemCreateDTO> result = oemService.getOemsByCategory(category);
 
 		// Assert
 		assertNull(result);
@@ -343,7 +343,7 @@ public class OemServiceTest {
 	public void testUpdateOemThrowsResourceNotFoundException() {
 		// Arrange
 		Integer id = 1;
-		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
+		OemDTO oemUpdateDTO = new OemDTO();
 		oemUpdateDTO.setOemName("Test Manufacturer");
 		when(oemRepository.findById(id)).thenReturn(Optional.empty());
 
@@ -359,7 +359,7 @@ public class OemServiceTest {
 
 		// Arrange
 		Integer id = 1;
-		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
+		OemDTO oemUpdateDTO = new OemDTO();
 		oemUpdateDTO.setOemName("Test");
 		oemUpdateDTO.setOemCategory("RDKV");
 		Oem oem = new Oem();
@@ -372,7 +372,7 @@ public class OemServiceTest {
 		when(oemRepository.existsByName(oemUpdateDTO.getOemName()))
 				.thenReturn(false);
 		when(oemRepository.save(any(Oem.class))).thenReturn(oem);
-		OemUpdateDTO result = oemService.updateOem(oemUpdateDTO, id);
+		OemDTO result = oemService.updateOem(oemUpdateDTO, id);
 
 		assertEquals("Test", result.getOemName());
 		assertEquals(Category.RDKV.name(), result.getOemCategory());

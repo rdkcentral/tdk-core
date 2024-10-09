@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
@@ -28,76 +28,77 @@ import lombok.Data;
 @Data
 public class DeviceUpdateDTO {
 
-    /**
-     * Represents the id of the device. This field is mandatory, hence it cannot
-     * be null.
-     */
-    @NotNull(message = "Device id is required")
-    private Integer id;
-    /**
-     * Represents the stbip of the device. This field is mandatory, hence it cannot
-     * be blank.
-     */
-    private String stbIp;
-    /**
-     * Represents the stbName of the device. This field is mandatory, hence it cannot
-     */
-    private String stbName;
-    /**
-     * Represents the stbPort of the device.
-     */
-    private String stbPort;
-    /**
-     * Represents the statusPort of the device.
-     */
-    private String statusPort;
-    /**
-     * Represents the agentMonitorPort of the device.
-     */
-    private String agentMonitorPort;
-    /**
-     * Represents the logTransferPort of the device.
-     */
-    private String logTransferPort;
-    /**
-     * Represents the macId of the device. This field is mandatory, hence it cannot
-     * be blank.
-     */
-    @Pattern(regexp = "^([0-9A-F]{2}:){5}[0-9A-F]{2}$", message = "Invalid MAC address format")
-    private String macId;
-    /**
-     * Represents the deviceTypeName of the device.
-     */
-    private String deviceTypeName;
-    /**
-     * Represents the oemName of the device.
-     */
-    private String oemName;
-    /**
-     * Represents the socName of the device.
-     */
-    private String socName;
+	/**
+	 * Represents the id of the device. This field is mandatory, hence it cannot be
+	 * null.
+	 */
+	@NotNull(message = "Device id is required")
+	private UUID id;
+	/**
+	 * Represents the stbip of the device. This field is mandatory, hence it cannot
+	 * be blank.
+	 */
+	private String stbIp;
+	/**
+	 * Represents the stbName of the device. This field is mandatory, hence it
+	 * cannot
+	 */
+	private String stbName;
+	/**
+	 * Represents the stbPort of the device.
+	 */
+	private String stbPort;
+	/**
+	 * Represents the statusPort of the device.
+	 */
+	private String statusPort;
+	/**
+	 * Represents the agentMonitorPort of the device.
+	 */
+	private String agentMonitorPort;
+	/**
+	 * Represents the logTransferPort of the device.
+	 */
+	private String logTransferPort;
+	/**
+	 * Represents the macId of the device. This field is mandatory, hence it cannot
+	 * be blank.
+	 */
+	@Pattern(regexp = "^([0-9A-F]{2}:){5}[0-9A-F]{2}$", message = "Invalid MAC address format")
+	private String macId;
+	/**
+	 * Represents the deviceTypeName of the device.
+	 */
+	private String deviceTypeName;
+	/**
+	 * Represents the oemName of the device.
+	 */
+	private String oemName;
+	/**
+	 * Represents the socName of the device.
+	 */
+	private String socName;
 
-    /**
-     * Represents the isThunderEnabled of the device.
-     */
-    private boolean isThunderEnabled;
-    /**
-     * Represents the thunderPort of the device.
-     */
-    private String thunderPort;
-    /**
-     * Represents the userGroupName of the device.
-     */
-    private String userGroupName;
-    /**
-     * Represents the category of the device.
-     */
-    private String category;
+	/**
+	 * Represents the isThunderEnabled of the device.
+	 */
+	private boolean isThunderEnabled;
+	/**
+	 * Represents the thunderPort of the device.
+	 */
+	private String thunderPort;
+	/**
+	 * Represents the userGroupName of the device.
+	 */
+	private String userGroupName;
+	/**
+	 * Represents the category of the device.
+	 */
+	private String category;
 
-    /**
-     * Represents the isDevicePortsConfigured of the device.
-     */
-    private boolean isDevicePortsConfigured;
+	/**
+	 * Represents the isDevicePortsConfigured of the device.
+	 */
+	private boolean isDevicePortsConfigured;
 
 }

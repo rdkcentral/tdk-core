@@ -20,26 +20,26 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
-import com.rdkm.tdkservice.model.Oem;
-import com.rdkm.tdkservice.repository.OemRepository;
-import com.rdkm.tdkservice.service.IOemService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.rdkm.tdkservice.dto.OemCreateDTO;
+import com.rdkm.tdkservice.dto.OemDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
-
+import com.rdkm.tdkservice.service.IOemService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -70,7 +70,7 @@ public class OemService implements IOemService {
 	 *         successfully, false otherwise.
 	 */
 	@Override
-	public boolean createOem(OemDTO oemDTO) {
+	public boolean createOem(OemCreateDTO oemDTO) {
 		LOGGER.info("Going to create oemDTO with name: " + oemDTO.toString());
 
 		if (oemRepository.existsByName(oemDTO.getOemName())) {
@@ -98,7 +98,7 @@ public class OemService implements IOemService {
 			return false;
 		}
 
-		return oem != null && oem.getId() > 0;
+		return oem != null && oem.getId() != null;
 
 	}
 
@@ -125,7 +125,7 @@ public class OemService implements IOemService {
 	 * @param id This is the id of the oem to be deleted.
 	 */
 	@Override
-	public void deleteOem(Integer id) {
+	public void deleteOem(UUID id) {
 		if (!oemRepository.existsById(id)) {
 			LOGGER.info("No oem found with id: " + id);
 			throw new ResourceNotFoundException(Constants.OEM_ID, id.toString());
@@ -145,7 +145,7 @@ public class OemService implements IOemService {
 	 * @return oem This returns the found oem.
 	 */
 	@Override
-	public OemDTO findById(Integer id) {
+	public OemDTO findById(UUID id) {
 		LOGGER.info("Going to find oem with id: " + id);
 		Oem oem = oemRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.OEM_ID, id.toString()));
@@ -163,12 +163,11 @@ public class OemService implements IOemService {
 	 * @return OemEMRequest This returns the updated oem.
 	 */
 	@Override
-	public OemUpdateDTO updateOem(OemUpdateDTO oemUpdateDTO,
-											  Integer id) {
-		LOGGER.info("Going to update oem with id: " + id);
+	public OemDTO updateOem(OemDTO oemUpdateDTO) {
+		LOGGER.info("Going to update oem with id: " + oemUpdateDTO.getOemId());
 
-		Oem oem = oemRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.OEM_ID, id.toString()));
+		Oem oem = oemRepository.findById(oemUpdateDTO.getOemId())
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.OEM_ID, oemUpdateDTO.getOemId().toString()));
 		if (!Utils.isEmpty(oemUpdateDTO.getOemName())) {
 			if (oemRepository.existsByName(oemUpdateDTO.getOemName())) {
 				LOGGER.info("oem already exists with the same name: "
@@ -188,9 +187,9 @@ public class OemService implements IOemService {
 		try {
 			oem = oemRepository.save(oem);
 		} catch (Exception e) {
-			LOGGER.error("Error occurred while updating oem with id: " + id, e);
+			LOGGER.error("Error occurred while updating oem with id: " + oemUpdateDTO.getOemId(), e);
 		}
-		LOGGER.info("oem updated successfully with id: " + id);
+		LOGGER.info("oem updated successfully with id: " + oemUpdateDTO.getOemId());
 
 		return MapperUtils.convertToOemUpdateDTO(oem);
 

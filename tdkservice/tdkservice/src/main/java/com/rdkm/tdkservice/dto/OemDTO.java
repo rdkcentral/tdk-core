@@ -19,45 +19,40 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * The OemDTO class is used to map the request body of the
+ * The OemUpdateDTO class is used to map the request body of the
  * oem request.
  */
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class OemDTO {
-	/**
-	 * Represents the unique identifier for the oem. This field is
-	 * automatically generated and managed by the system.
-	 */
-	private Integer OemId;
 
 	/**
-	 * Represents the name of the oem. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the unique identifier for the oem.
 	 */
-	@NotBlank(message = "Oem name is required")
+	@NotNull(message = "OemId cannot be null")
+	private UUID OemId;
+
+	/**
+	 * Represents the name of the oem.
+	 */
+
 	private String OemName;
 
 	/**
-	 * Represents the category of the oem. This field is mandatory,
-	 * hence it cannot be blank.
+	 * Represents the category of the oem.
 	 */
-	@NotBlank(message = "Oem category is required")
+
 	private String OemCategory;
-
-	/**
-	 * Represents the Oem group of the Oem. This field is mandatory,
-	 * hence it cannot be blank.
-	 */
-
-	private String OemUserGroup;
 
 }

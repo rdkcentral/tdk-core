@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import lombok.Data;
 
 /**
@@ -39,7 +41,7 @@ public class SigninResponseDTO {
 	/**
 	 * Represents the user id.
 	 */
-	private Integer userID;
+	private UUID userID;
 	/**
 	 * Represents the user name.
 	 */

@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -35,7 +36,7 @@ public class PrimitiveTestUpdateDTO {
 	 * The primitive test id .This field is mandatory.
 	 */
 	@NotNull(message = "Primitive test id mandatory")
-	private Integer primitiveTestId;
+	private UUID primitiveTestId;
 
 	/*
 	 * The primitiveTestParameters list .

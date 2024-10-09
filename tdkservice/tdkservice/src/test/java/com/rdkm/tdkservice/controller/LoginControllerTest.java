@@ -37,7 +37,7 @@ import org.springframework.http.ResponseEntity;
 import com.rdkm.tdkservice.config.JWTAuthFilter;
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 import com.rdkm.tdkservice.service.IUserGroupService;
 import com.rdkm.tdkservice.serviceimpl.LoginService;
@@ -76,7 +76,7 @@ public class LoginControllerTest {
 	 */
 	@Test
 	void testSignUpSuccess() {
-		UserDTO register = new UserDTO();
+		UserCreateDTO register = new UserCreateDTO();
 		register.setUserName("qwert");
 		register.setPassword("password");
 		register.setUserGroupName("usergroup1");
@@ -96,7 +96,7 @@ public class LoginControllerTest {
 	 */
 	@Test
 	void testSignUpWhenUserIsNull() {
-		UserDTO register = new UserDTO();
+		UserCreateDTO register = new UserCreateDTO();
 		register.setUserName("qwert");
 		register.setPassword("password");
 		register.setUserGroupName("usergroup1");

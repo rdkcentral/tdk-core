@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.model.Oem;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -33,7 +34,7 @@ import com.rdkm.tdkservice.enums.Category;
  */
 
 @Repository
-public interface OemRepository extends JpaRepository<Oem, Integer> {
+public interface OemRepository extends JpaRepository<Oem, UUID> {
 	
 	/**
 	 * This method is used to find a oem by name.

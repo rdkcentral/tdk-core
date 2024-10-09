@@ -20,9 +20,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
+import com.rdkm.tdkservice.dto.OemCreateDTO;
 import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
 
 /**
  * This is the IOemService interface and contains the methods
@@ -41,7 +42,7 @@ public interface IOemService {
 	 *         successfully, false otherwise.
 	 */
 
-	boolean createOem(OemDTO oemDTO);
+	boolean createOem(OemCreateDTO oemDTO);
 
 	/**
 	 * This method is used to retrieve all oem's.
@@ -58,7 +59,7 @@ public interface IOemService {
 	 * @param id This is the id of the oem to be deleted.
 	 */
 
-	void deleteOem(Integer id);
+	void deleteOem(UUID id);
 
 	/**
 	 * This method is used to find a oem by its id.
@@ -67,7 +68,7 @@ public interface IOemService {
 	 * @return oem This returns the found oem.
 	 */
 
-	OemDTO findById(Integer id);
+	OemDTO findById(UUID id);
 
 	/**
 	 * This method is used to update a oem.
@@ -79,7 +80,7 @@ public interface IOemService {
 	 * @return oemUpdateDTO This returns the updated oemUpdateDTO.
 	 */
 
-	OemUpdateDTO updateOem(OemUpdateDTO oemUpdateDTO, Integer id);
+	OemDTO updateOem(OemDTO oemUpdateDTO);
 
 	/**
 	 * This method is used to retrieve all oems by category.

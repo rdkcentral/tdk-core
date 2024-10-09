@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -75,7 +76,7 @@ public class UserGroupService implements IUserGroupService {
 			return false;
 		}
 
-		return userGroup != null && userGroup.getId() > 0;
+		return userGroup != null && userGroup.getId() != null;
 	}
 
 	/**
@@ -97,7 +98,7 @@ public class UserGroupService implements IUserGroupService {
 	 * This method is used to delete a UserGroup by its id.
 	 */
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(UUID id) {
 		LOGGER.info("Going to delete user group with id: " + id);
 		if (!userGroupRepository.existsById(id)) {
 			LOGGER.info("No UserGroup found with id: " + id);
@@ -120,10 +121,10 @@ public class UserGroupService implements IUserGroupService {
 	 */
 
 	@Override
-	public UserGroupDTO updateUserGroup(UserGroupDTO userGroupRequest, Integer id) {
-		LOGGER.info("Going to update user group with id: " + id);
-		UserGroup userGroup = userGroupRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_GROUP_ID, id.toString()));
+	public UserGroupDTO updateUserGroup(UserGroupDTO userGroupRequest) {
+		LOGGER.info("Going to update user group with id: " + userGroupRequest.getUserGroupId().toString());
+		UserGroup userGroup = userGroupRepository.findById(userGroupRequest.getUserGroupId())
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_GROUP_ID, userGroupRequest.getUserGroupId().toString()));
 		if (userGroupRepository.existsByName(userGroupRequest.getUserGroupName())) {
 			LOGGER.info("UserGroup already exists with the same name: " + userGroupRequest.getUserGroupName());
 			throw new ResourceAlreadyExistsException(Constants.USER_GROUP, userGroupRequest.getUserGroupName());
@@ -133,7 +134,7 @@ public class UserGroupService implements IUserGroupService {
 		try {
 			userGroup = userGroupRepository.save(userGroup);
 		} catch (Exception e) {
-			LOGGER.error("Error occurred while updating UserGroup with id: " + id, e);
+			LOGGER.error("Error occurred while updating UserGroup with id: " + userGroupRequest.getUserGroupId(), e);
 		}
 		return MapperUtils.convertToUserGroupDTO(userGroup);
 

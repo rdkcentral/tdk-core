@@ -19,22 +19,33 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
-import com.rdkm.tdkservice.dto.ParameterCreateDTO;
-import com.rdkm.tdkservice.dto.ParameterDTO;
-import com.rdkm.tdkservice.enums.ParameterDataType;
-import com.rdkm.tdkservice.service.IParameterService;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import java.util.List;
+import java.util.UUID;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import com.rdkm.tdkservice.dto.ParameterCreateDTO;
+import com.rdkm.tdkservice.dto.ParameterDTO;
+import com.rdkm.tdkservice.enums.ParameterDataType;
+import com.rdkm.tdkservice.service.IParameterService;
+
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /**
  * REST controller for managing parameter types.
@@ -143,7 +154,7 @@ public class ParameterController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
     @GetMapping("/findById/{id}")
-    public ResponseEntity<ParameterDTO> findParameterById(@PathVariable Integer id) {
+	public ResponseEntity<ParameterDTO> findParameterById(@PathVariable UUID id) {
         LOGGER.info("Retrieving parameter by ID: {}", id);
             ParameterDTO parameter = parameterService.findParameterById(id);
             if (parameter != null) {
@@ -169,7 +180,7 @@ public class ParameterController {
             @ApiResponse(responseCode = "404", description = "Parameter not found")
     })
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteParameter(@PathVariable Integer id) {
+    public ResponseEntity<String> deleteParameter(@PathVariable UUID id) {
         LOGGER.info("Deleting parameter type by ID: {}", id);
             boolean isDeleted = parameterService.deleteParameter(id);
             if (isDeleted) {

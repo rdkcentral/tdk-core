@@ -259,5 +259,29 @@ public class Constants {
 	public static final String BASE_FILESTORE_FOLDER = "src/main/webapp/filestore";
 
 	public static final String ZIP_EXTENSION = ".zip";
+	
+	// config file extension
+	public static final String CONFIG_FILE = ".config";
+	
+	//Header template
+	public static final String HEADER_TEMPLATE = "##########################################################################\r\n"
+			+ "# If not stated otherwise in this file or this component's Licenses.txt\r\n"
+			+ "# file the following copyright and licenses apply:\r\n"
+			+ "#\r\n"
+			+ "# Copyright CURRENT_YEAR RDK Management\r\n"
+			+ "#\r\n"
+			+ "# Licensed under the Apache License, Version 2.0 (the \"License\");\r\n"
+			+ "# you may not use this file except in compliance with the License.\r\n"
+			+ "# You may obtain a copy of the License at\r\n"
+			+ "#\r\n"
+			+ "# http://www.apache.org/licenses/LICENSE-2.0\r\n"
+			+ "#\r\n"
+			+ "# Unless required by applicable law or agreed to in writing, software\r\n"
+			+ "# distributed under the License is distributed on an \"AS IS\" BASIS,\r\n"
+			+ "# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n"
+			+ "# See the License for the specific language governing permissions and\r\n"
+			+ "# limitations under the License.\r\n"
+			+ "##########################################################################\r\n"
+			+ "";
 
 }

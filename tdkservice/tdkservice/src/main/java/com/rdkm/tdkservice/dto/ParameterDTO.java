@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.rdkm.tdkservice.enums.ParameterDataType;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -33,7 +35,7 @@ public class ParameterDTO {
      * The unique identifier of the parameter type.
      */
     @NotNull(message = "ID is required")
-    private Integer id;
+    private UUID id;
 
     /**
      * The name of the parameter type.

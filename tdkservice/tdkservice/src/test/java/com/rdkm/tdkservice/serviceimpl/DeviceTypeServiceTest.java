@@ -38,11 +38,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
-import com.rdkm.tdkservice.enums.DeviceTypeCategory;
-import com.rdkm.tdkservice.model.DeviceType;
-import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -50,12 +45,16 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.dao.DataIntegrityViolationException;
 
-
+import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.DeviceTypeCategory;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 
 /*
@@ -86,7 +85,7 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testCreateDeviceType_ResourceAlreadyExistsException() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
 
 		when(deviceTypeRepository.existsByName(anyString())).thenReturn(true);
@@ -102,7 +101,7 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testCreateDeviceType_ResourceNotFoundException() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
 		deviceTypeDTO.setType("InvalidType");
 
@@ -119,7 +118,7 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testCreateDeviceType_Success() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
 		deviceTypeDTO.setType(DeviceTypeCategory.CLIENT.getName());
@@ -147,7 +146,7 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testCreateDeviceType_Exception() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
 		deviceTypeDTO.setType(DeviceTypeCategory.CLIENT.getName());
 		deviceTypeDTO.setDeviceTypeCategory("RDKV");
@@ -168,7 +167,7 @@ public class DeviceTypeServiceTest {
 		when(deviceTypeRepository.findAll()).thenReturn(new ArrayList<>());
 
 		// Act
-		List<DeviceTypeDTO> result = deviceTypeService.getAllDeviceTypes();
+		List<DeviceTypeCreateDTO> result = deviceTypeService.getAllDeviceTypes();
 
 		// Assert
 		assertNull(result);
@@ -236,7 +235,7 @@ public class DeviceTypeServiceTest {
 		when(deviceTypeRepository.findById(id)).thenReturn(Optional.of(deviceType));
 
 		// Act
-		DeviceTypeDTO result = deviceTypeService.findById(id);
+		DeviceTypeCreateDTO result = deviceTypeService.findById(id);
 
 		// Assert
 		assertNotNull(result);
@@ -261,7 +260,7 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testUpdateDeviceType() {
-		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
+		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 		deviceTypeUpdateDTO.setDeviceTypeName("New Device Type");
 		deviceTypeUpdateDTO.setDeviceType(DeviceTypeCategory.CLIENT.getName());
 		deviceTypeUpdateDTO.setDeviceTypeCategory(Category.RDKB.getName());
@@ -275,7 +274,7 @@ public class DeviceTypeServiceTest {
 		when(deviceTypeRepository.existsByName(anyString())).thenReturn(false);
 		when(deviceTypeRepository.save(any(DeviceType.class))).thenReturn(existingDeviceType);
 
-		DeviceTypeUpdateDTO updatedDeviceType = deviceTypeService.updateDeviceType(deviceTypeUpdateDTO, 1);
+		DeviceTypeDTO updatedDeviceType = deviceTypeService.updateDeviceType(deviceTypeUpdateDTO, 1);
 
 		assertEquals(deviceTypeUpdateDTO.getDeviceTypeName(), updatedDeviceType.getDeviceTypeName());
 		assertEquals(deviceTypeUpdateDTO.getDeviceType(), updatedDeviceType.getDeviceType());
@@ -299,7 +298,7 @@ public class DeviceTypeServiceTest {
 
 		when(deviceTypeRepository.findByCategory(Category.getCategory(category))).thenReturn(List.of(deviceType1, deviceType2));
 
-		List<DeviceTypeDTO> result = deviceTypeService.getDeviceTypesByCategory(category);
+		List<DeviceTypeCreateDTO> result = deviceTypeService.getDeviceTypesByCategory(category);
 
 		assertEquals(2, result.size());
 	}
@@ -355,7 +354,7 @@ public class DeviceTypeServiceTest {
 		when(deviceTypeRepository.findAll()).thenReturn(List.of(deviceType1, deviceType2));
 
 		// Act
-		List<DeviceTypeDTO> result = deviceTypeService.getAllDeviceTypes();
+		List<DeviceTypeCreateDTO> result = deviceTypeService.getAllDeviceTypes();
 
 		// Assert
 		assertNotNull(result);

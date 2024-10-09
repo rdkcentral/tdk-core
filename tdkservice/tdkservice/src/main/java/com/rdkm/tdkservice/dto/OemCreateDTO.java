@@ -22,33 +22,37 @@ package com.rdkm.tdkservice.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * The OemUpdateDTO class is used to map the request body of the
+ * The OemDTO class is used to map the request body of the
  * oem request.
  */
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class OemUpdateDTO {
+public class OemCreateDTO {
 
 	/**
-	 * Represents the unique identifier for the oem.
+	 * Represents the name of the oem. This field is mandatory, hence it
+	 * cannot be blank.
 	 */
-	private Integer OemId;
-
-	/**
-	 * Represents the name of the oem.
-	 */
-
+	@NotBlank(message = "Oem name is required")
 	private String OemName;
 
 	/**
-	 * Represents the category of the oem.
+	 * Represents the category of the oem. This field is mandatory,
+	 * hence it cannot be blank.
+	 */
+	@NotBlank(message = "Oem category is required")
+	private String OemCategory;
+
+	/**
+	 * Represents the Oem group of the Oem. This field is mandatory,
+	 * hence it cannot be blank.
 	 */
 
-	private String OemCategory;
+	private String OemUserGroup;
 
 }

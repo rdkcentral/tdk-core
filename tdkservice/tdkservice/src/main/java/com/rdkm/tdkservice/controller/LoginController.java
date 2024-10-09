@@ -37,7 +37,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 import com.rdkm.tdkservice.service.ILoginService;
 import com.rdkm.tdkservice.service.IUserGroupService;
@@ -90,7 +90,7 @@ public class LoginController {
 	@ApiResponse(responseCode = "409", description = "Conflict")
 
 	@PostMapping("/signup")
-	public ResponseEntity<String> signUp(@RequestBody @Valid UserDTO registerRequest) {
+	public ResponseEntity<String> signUp(@RequestBody @Valid UserCreateDTO registerRequest) {
 		LOGGER.info("Received signup request: " + registerRequest.toString());
 		boolean isUserCreated = loginService.register(registerRequest);
 		if (isUserCreated) {

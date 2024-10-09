@@ -27,12 +27,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Repository interface for accessing Function entities.
  */
 @Repository
-public interface FunctionRepository extends JpaRepository<Function, Integer> {
+public interface FunctionRepository extends JpaRepository<Function, UUID> {
 
     /**
      * Finds a function by its name.
@@ -64,7 +65,7 @@ public interface FunctionRepository extends JpaRepository<Function, Integer> {
      * @param moduleId the ID of the module
      * @return a list of functions in the specified module
      */
-    List<Function> findAllByModuleId(Integer moduleId);
+    List<Function> findAllByModuleId(UUID moduleId);
     
 	/**
 	 * Finds all functions by their module.

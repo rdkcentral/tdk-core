@@ -20,11 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -36,35 +33,24 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * User entity class
  */
 @Data
 @Entity
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "user", uniqueConstraints = { @UniqueConstraint(columnNames = "username"),
 		@UniqueConstraint(columnNames = "email") })
-public class User implements UserDetails {
+public class User extends BaseEntity implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
-
-	/**
-	 * The unique identifier of the user.
-	 */
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
 
 	/*
 	 * The User name of the user.
@@ -89,22 +75,6 @@ public class User implements UserDetails {
 	 * The display name of the user.
 	 */
 	private String displayName;
-
-	/**
-	 * The created date of the user.
-	 */
-	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date")
-	private String createdDate;
-
-	/*
-	 * The updated date of user
-	 */
-
-	@UpdateTimestamp
-	@Column(name = "updated_at")
-	private Date updatedAt;
 
 	/**
 	 * The status of the user.

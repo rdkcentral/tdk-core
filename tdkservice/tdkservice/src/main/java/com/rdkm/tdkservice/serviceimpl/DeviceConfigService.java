@@ -26,9 +26,11 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.Year;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
@@ -42,8 +44,8 @@ import com.rdkm.tdkservice.util.Utils;
 
 /**
  * This class is used to provide the service to get the device configuration
- * file for a given deviceType name or device type or default device configuration file
- * and to upload the device configuration file
+ * file for a given deviceType name or device type or default device
+ * configuration file and to upload the device configuration file
  * 
  */
 @Service
@@ -52,47 +54,73 @@ public class DeviceConfigService implements IDeviceConfigService {
 	private static final Logger LOGGER = LoggerFactory.getLogger(DeviceConfigService.class);
 
 	/**
-	 * This method is used to get the device configuration file for a given device type name
-	 * or device type or default device configuration file.
+	 * This method is used to get the device configuration file for a given device
+	 * type name or device type or default device configuration file.
 	 * 
 	 * @param deviceTypeName - the device name
-	 * @param deviceType - the device type
+	 * @param deviceType     - the device type
 	 * @return Resource - the device configuration file null - if the device config
 	 *         file is not found
 	 */
 	@Override
 	public Resource getDeviceConfigFile(String deviceTypeName, String deviceType) {
-		LOGGER.info("Inside getDeviceConfigFile method with deviceTypeName: {}, deviceType: {}", deviceTypeName, deviceType);
-		String configFile;
-		// Get the device config file for the given deviceType name
+		LOGGER.info("Inside getDeviceConfigFile method with deviceTypeName: {}, deviceType: {}", deviceTypeName,
+				deviceType);
 		Resource resource = null;
+
+		// Try to get the device config file for the given deviceType name
 		if (!Utils.isEmpty(deviceTypeName)) {
-			configFile = deviceTypeName + Constants.CONFIG_FILE_EXTENSION;
-			resource = getDeviceConfigFileGivenName(configFile);
-			if (resource != null) {
-				return resource;
-			}
+			resource = getDeviceConfigFileGivenName(deviceTypeName + Constants.CONFIG_FILE_EXTENSION);
 		}
 
-		// Get the device config file for the given deviceType type of there is no config file
-		// for the deviceType name
+		// If not found, try to get the device config file for the given deviceType type
 		if (resource == null && !Utils.isEmpty(deviceType)) {
-			configFile = deviceType + Constants.CONFIG_FILE_EXTENSION;
-			resource = getDeviceConfigFileGivenName(configFile);
-			if (resource != null) {
-				return resource;
-			}
+			resource = getDeviceConfigFileGivenName(deviceType + Constants.CONFIG_FILE_EXTENSION);
 		}
 
-		// Get the default device config file if there is no config file for the deviceType
-		// name and device type
+		// If still not found, get the default device config file
 		if (resource == null) {
-			configFile = Constants.DEFAULT_DEVICE_CONFIG_FILE;
-			resource = getDeviceConfigFileGivenName(configFile);
-
+			resource = getDeviceConfigFileGivenName(Constants.DEFAULT_DEVICE_CONFIG_FILE);
 		}
-		return resource;
 
+		// Add header to the resource
+		try {
+			return addHeader(resource);
+		} catch (IOException e) {
+			LOGGER.error("Failed to add header to the resource: {}", e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * This method is used to add the header to the resource
+	 * 
+	 * @param resource - the device configuration file
+	 * @return Resource - the device configuration file with header
+	 * @throws IOException - if an I/O error occurs
+	 */
+	private Resource addHeader(Resource resource) throws IOException {
+		// Read the file content as a String
+		String fileContent = new String(Files.readAllBytes(resource.getFile().toPath()));
+		String currentYear = Year.now().toString();
+
+		// Prepare the header
+		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
+
+		// Prepend the header to the file content
+		String updatedContent = header + fileContent;
+
+		return new ByteArrayResource(updatedContent.getBytes()) {
+			@Override
+			public String getFilename() {
+				return resource.getFilename(); // Return the original filename
+			}
+
+			@Override
+			public long contentLength() {
+				return updatedContent.getBytes().length; // Override content length
+			}
+		};
 	}
 
 	/**
@@ -104,7 +132,7 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 */
 	public boolean uploadDeviceConfigFile(MultipartFile file) {
 		LOGGER.info("Inside uploadDeviceConfigFile method with file: {}", file.getOriginalFilename());
-
+		validateFile(file);
 		try {
 			Path uploadPath = Paths.get(AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
 					+ Constants.FILE_PATH_SEPERATOR + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR);
@@ -180,6 +208,23 @@ public class DeviceConfigService implements IDeviceConfigService {
 			return null;
 		}
 		return resource;
+	}
+
+	/**
+	 * Validates the uploaded file.
+	 *
+	 * @param file the uploaded file
+	 */
+	private void validateFile(MultipartFile file) {
+		String fileName = file.getOriginalFilename();
+		if (fileName == null || !fileName.endsWith(Constants.CONFIG_FILE)) {
+			LOGGER.error("The uploaded file must have a .config extension {}", fileName);
+			throw new UserInputException("The uploaded file must be a .config file.");
+		}
+		if (file.isEmpty()) {
+			LOGGER.error("The uploaded file is empty");
+			throw new UserInputException("The uploaded file is empty.");
+		}
 	}
 
 }

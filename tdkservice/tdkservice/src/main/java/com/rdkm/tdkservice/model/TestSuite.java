@@ -52,6 +52,12 @@ public class TestSuite extends BaseEntity {
 	@Column(nullable = false, unique = true)
 	private String name;
 
+	/*
+	 * The description for test suite
+	 */
+	@Column
+	private String description;
+	
 	/**
 	 * The description of the test suite.
 	 */
@@ -63,7 +69,7 @@ public class TestSuite extends BaseEntity {
 	 * The user group of the test suite.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "user_group", referencedColumnName = "name")
+	@JoinColumn(name = "user_group_id")
 	private UserGroup userGroup;
 
 	/**

@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -35,7 +36,7 @@ public class TestSuiteDTO {
 	 * The id of the test suite.
 	 */
 	@NotNull(message = "Test suite id cannot be null")
-	private Integer id;
+	private UUID id;
 
 	/**
 	 * The name of the test suite.
@@ -44,6 +45,12 @@ public class TestSuiteDTO {
 
 	/**
 	 * The description of the test suite.
+	 */
+	private String description;
+	
+	
+	/**
+	 * The category of the test suite.
 	 */
 	private String category;
 

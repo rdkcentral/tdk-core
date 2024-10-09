@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
+import java.util.UUID;
 
 import lombok.Data;
 
@@ -32,7 +33,7 @@ public class PrimitiveTestDTO {
 	/*
 	 * The primitive test id .
 	 */
-	private Integer primitiveTestId;
+	private UUID primitiveTestId;
 
 	/*
 	 * The primitive test name .

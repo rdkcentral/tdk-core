@@ -25,12 +25,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Repository interface for accessing ParameterType entities.
  */
 @Repository
-public interface ParameterRepository extends JpaRepository<Parameter, Integer> {
+public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 
     /**
      * Finds a parameter type by its name.
@@ -46,7 +47,7 @@ public interface ParameterRepository extends JpaRepository<Parameter, Integer> {
      * @param functionId the ID of the function
      * @return a list of parameter types with the specified function ID
      */
-	List<Parameter> findAllByFunctionId(Integer functionId);
+	List<Parameter> findAllByFunctionId(UUID functionId);
 
 	/**
 	 * Finds all parameters by function.

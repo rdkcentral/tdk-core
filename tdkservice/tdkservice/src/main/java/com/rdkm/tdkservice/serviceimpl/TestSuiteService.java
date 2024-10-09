@@ -26,6 +26,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -108,25 +111,26 @@ public class TestSuiteService implements ITestSuiteService {
 	 * @return the boolean
 	 */
 	@Override
-	public boolean createTestSuite(TestSuiteCreateDTO TestSuiteCreateDTO) {
-		LOGGER.info("Creating test suite" + TestSuiteCreateDTO.getName());
+	public boolean createTestSuite(TestSuiteCreateDTO testSuiteCreateDTO) {
+		LOGGER.info("Creating test suite" + testSuiteCreateDTO.getName());
 		TestSuite testSuite = new TestSuite();
 
 		// Check if the test suite already exists with the same name or not in the
 		// database. If it exists, throw a Resource Already exists exception
-		this.checkIfTestSuiteExists(TestSuiteCreateDTO.getName());
-		testSuite.setName(TestSuiteCreateDTO.getName());
+		this.checkIfTestSuiteExists(testSuiteCreateDTO.getName());
+		testSuite.setName(testSuiteCreateDTO.getName());
+		testSuite.setDescription(testSuiteCreateDTO.getDescription());
 
 		// Validates category and sets it to test suite
-		Category category = commonService.validateCategory(TestSuiteCreateDTO.getCategory());
+		Category category = commonService.validateCategory(testSuiteCreateDTO.getCategory());
 		testSuite.setCategory(category);
 
 		// Validates user group and sets it to test suite
-		UserGroup userGroup = commonService.validateUserGroup(TestSuiteCreateDTO.getUserGroup());
+		UserGroup userGroup = commonService.validateUserGroup(testSuiteCreateDTO.getUserGroup());
 		testSuite.setUserGroup(userGroup);
 
 		/// Validates scripts and sets it to test suite
-		List<ScriptListDTO> scriptList = TestSuiteCreateDTO.getScripts();
+		List<ScriptListDTO> scriptList = testSuiteCreateDTO.getScripts();
 		if (scriptList == null || scriptList.isEmpty() || scriptList.size() == 0) {
 			LOGGER.error("Scripts list is empty");
 			throw new UserInputException(
@@ -159,13 +163,21 @@ public class TestSuiteService implements ITestSuiteService {
 		TestSuite testSuite = testSuiteRepository.findById(testSuiteDTO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, testSuiteDTO.getId().toString()));
 
-		// TODO : Revisit this if test suite name can be changed or not
-		if (!(Utils.isEmpty(testSuiteDTO.getName())) && !(testSuiteDTO.getName().equals(testSuite.getName()))) {
-			LOGGER.error("TestSuite name should not be changed for the existing TestSuite: " + testSuite.getName());
-			throw new UserInputException(
-					"TestSuite name should not be changed for the existing script. Please create a new TestSuite with the new name if needed.");
+//		// TODO : Revisit this if test suite name can be changed or not
+		if (!Utils.isEmpty(testSuiteDTO.getName())) {
+			if (testSuiteRepository.existsByName(testSuiteDTO.getName())
+					&& !(testSuiteDTO.getName().equals(testSuite.getName()))) {
+				LOGGER.info("Test suite already exists with the same name: " + testSuiteDTO.getName());
+				throw new ResourceAlreadyExistsException(Constants.TEST_SUITE, testSuiteDTO.getName());
+			} else {
+				testSuite.setName(testSuiteDTO.getName());
+			}
 		}
 
+		if (!(Utils.isEmpty(testSuiteDTO.getDescription()))
+				&& !(testSuiteDTO.getDescription().equals(testSuite.getDescription()))) {
+			testSuite.setDescription(testSuiteDTO.getDescription());
+		}
 		// If the category is changed in the Update DTO, then validate the category and
 		// set it to test suite
 		if (testSuiteDTO.getCategory() != null && testSuiteDTO.getCategory() != testSuite.getCategory().toString()) {
@@ -208,6 +220,7 @@ public class TestSuiteService implements ITestSuiteService {
 
 		TestSuite testSuite = new TestSuite();
 		testSuite.setName(testSuiteCustomDTO.getTestSuiteName());
+		testSuite.setDescription(testSuiteCustomDTO.getDescription());
 		testSuite.setCategory(category);
 		UserGroup userGroup = commonService.validateUserGroup(testSuiteCustomDTO.getUserGroup());
 		testSuite.setUserGroup(userGroup);
@@ -300,12 +313,12 @@ public class TestSuiteService implements ITestSuiteService {
 	 * @return
 	 */
 	@Override
-	public boolean deleteTestSuite(Integer id) {
+	public boolean deleteTestSuite(UUID id) {
 		LOGGER.info("Deleting test suite with id: " + id);
-		TestSuite TestSuite = testSuiteRepository.findById(id)
+		TestSuite testSuite = testSuiteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.TEST_SUITE, id.toString()));
 		try {
-			testSuiteRepository.delete(TestSuite);
+			testSuiteRepository.delete(testSuite);
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error in deleting TestSuite data: " + e.getMessage());
 			throw new DeleteFailedException();
@@ -322,7 +335,7 @@ public class TestSuiteService implements ITestSuiteService {
 	 * @return the test suite dto
 	 */
 	@Override
-	public TestSuiteDTO findTestSuiteById(Integer testSuiteId) {
+	public TestSuiteDTO findTestSuiteById(UUID testSuiteId) {
 		LOGGER.info("Finding test suite with id: " + testSuiteId);
 		TestSuite testSuite = testSuiteRepository.findById(testSuiteId)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.TEST_SUITE_ID, testSuiteId.toString()));
@@ -404,7 +417,7 @@ public class TestSuiteService implements ITestSuiteService {
 	private void saveScriptList(List<ScriptListDTO> scriptsList, Category testSuiteCategory, TestSuite testSuite) {
 		for (int i = 0; i < scriptsList.size(); i++) {
 			ScriptTestSuite scriptTestSuite = new ScriptTestSuite();
-			Integer scriptId = scriptsList.get(i).getId();
+			UUID scriptId = scriptsList.get(i).getId();
 			String scriptName = scriptsList.get(i).getName();
 			// If any script id sent is not there in the database, then error is thrown
 			Optional<Script> scriptOptional = scriptRepository.findById(scriptId);
@@ -460,6 +473,7 @@ public class TestSuiteService implements ITestSuiteService {
 	 */
 	@Override
 	public ByteArrayInputStream downloadTestSuiteAsXML(String testSuite) {
+		LOGGER.info("Downloading test suite as XML for the test suite: " + testSuite);
 		TestSuite testSuiteObj = testSuiteRepository.findByName(testSuite);
 		if (testSuiteObj == null) {
 			LOGGER.error("Test suite not found with the name: " + testSuite);
@@ -489,7 +503,8 @@ public class TestSuiteService implements ITestSuiteService {
 	public boolean uploadTestSuiteAsXML(MultipartFile scriptFile) {
 		// Validate the uploaded file
 		validateFile(scriptFile);
-		this.checkIfTestSuiteExists(scriptFile.getOriginalFilename().replace(Constants.XML_EXTENSION,Constants.EMPTY_STRING));
+		this.checkIfTestSuiteExists(
+				scriptFile.getOriginalFilename().replace(Constants.XML_EXTENSION, Constants.EMPTY_STRING));
 		try {
 			InputStream xmlInputStream = scriptFile.getInputStream();
 			// Parse XML
@@ -635,6 +650,7 @@ public class TestSuiteService implements ITestSuiteService {
 		if (testSuite == null) {
 			testSuite = new TestSuite();
 			testSuite.setName(moduleName);
+			testSuite.setDescription(moduleName + "_testSuite");
 			testSuite.setCategory(validatedCategory);
 			testSuite.setUserGroup(module.getUserGroup());
 			LOGGER.debug("Created new TestSuite: {}", testSuite);
@@ -668,6 +684,47 @@ public class TestSuiteService implements ITestSuiteService {
 
 		// Return success message
 		return isNewTestSuite ? "Test suite created successfully" : "Test suite updated successfully";
+	}
+
+	/**
+	 * This method is used to download all the test suite as XML
+	 * 
+	 * @param category - the category
+	 * @return the test suite as XML
+	 */
+	public ByteArrayInputStream downloadAllTestSuiteAsXML(String category) {
+		LOGGER.info("Downloading all test suites as XML for the category: " + category);
+		Category categoryObj = commonService.validateCategory(category);
+		List<TestSuite> testSuiteObj = testSuiteRepository.findAllByCategory(categoryObj);
+		if (testSuiteObj == null || testSuiteObj.isEmpty()) {
+			LOGGER.error("No test suites found for the category: " + category);
+			throw new ResourceNotFoundException(Constants.TEST_SUITE, category);
+		}
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ZipOutputStream zipOut = new ZipOutputStream(out);
+
+		for (TestSuite testSuite : testSuiteObj) {
+			ByteArrayInputStream testSuiteXML = downloadTestSuiteAsXML(testSuite.getName());
+			try {
+				ZipEntry zipEntry = new ZipEntry(testSuite.getName() + ".xml");
+				zipOut.putNextEntry(zipEntry);
+				byte[] bytes = testSuiteXML.readAllBytes();
+				zipOut.write(bytes, 0, bytes.length);
+				zipOut.closeEntry();
+			} catch (Exception e) {
+				LOGGER.error("Error while creating zip file for all test suites");
+				throw new TDKServiceException("Error while creating zip file for all test suites");
+			}
+		}
+
+		try {
+			zipOut.close();
+		} catch (Exception e) {
+			LOGGER.error("Error while closing zip output stream");
+			throw new TDKServiceException("Error while closing zip output stream");
+		}
+
+		return new ByteArrayInputStream(out.toByteArray());
 	}
 
 }

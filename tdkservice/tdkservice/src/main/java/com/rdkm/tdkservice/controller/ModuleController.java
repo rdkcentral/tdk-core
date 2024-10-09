@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,12 +73,10 @@ public class ModuleController {
 	 * @return ResponseEntity with a success or failure message
 	 */
 	@Operation(summary = "Create a new module", description = "Creates a new module in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Module created successfully"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Module created successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to create module"),
 			@ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
-    })
+			@ApiResponse(responseCode = "401", description = "Unauthorized") })
 	@PostMapping("/create")
 	public ResponseEntity<String> createModule(@RequestBody @Valid ModuleCreateDTO moduleDTO) {
 		LOGGER.info("Creating new module: {}", moduleDTO);
@@ -98,14 +97,12 @@ public class ModuleController {
 	 * @return ResponseEntity with a success or failure message
 	 */
 	@Operation(summary = "Update an existing module", description = "Updates an existing module in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Module updated successfully"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Module updated successfully"),
 			@ApiResponse(responseCode = "409", description = "Module already exists"),
 			@ApiResponse(responseCode = "500", description = "Failed to update module"),
 			@ApiResponse(responseCode = "400", description = "Invalid input"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "404", description = "Module not found")
-    })
+			@ApiResponse(responseCode = "404", description = "Module not found") })
 	@PutMapping("/update")
 	public ResponseEntity<String> updateModule(@Valid @RequestBody ModuleDTO moduleDTO) {
 		LOGGER.info("Updating module: {}", moduleDTO);
@@ -125,12 +122,10 @@ public class ModuleController {
 	 * @return ResponseEntity with a list of all modules
 	 */
 	@Operation(summary = "Retrieve all modules", description = "Retrieves a list of all modules in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved all modules"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved all modules"),
 			@ApiResponse(responseCode = "404", description = "No modules found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findAll")
 	public ResponseEntity<List<ModuleDTO>> findAllModules() {
 		LOGGER.info("Retrieving all modules");
@@ -146,14 +141,12 @@ public class ModuleController {
 	 * @return ResponseEntity with the module data transfer object
 	 */
 	@Operation(summary = "Retrieve a module by its ID", description = "Retrieves a module by its ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
 			@ApiResponse(responseCode = "404", description = "Module not found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findById/{id}")
-	public ResponseEntity<ModuleDTO> findModuleById(@PathVariable Integer id) {
+	public ResponseEntity<ModuleDTO> findModuleById(@PathVariable UUID id) {
 		LOGGER.info("Retrieving module by ID: {}", id);
 		ModuleDTO module = moduleService.findModuleById(id);
 		if (module != null) {
@@ -172,12 +165,10 @@ public class ModuleController {
 	 * @return ResponseEntity with a list of modules
 	 */
 	@Operation(summary = "Retrieve a module by its category", description = "Retrieves a module by its category.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
 			@ApiResponse(responseCode = "404", description = "Module not found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findAllByCategory/{category}")
 	public ResponseEntity<List<ModuleDTO>> findAllByCategory(@PathVariable String category) {
 		LOGGER.info("Retrieving modules by category: {}", category);
@@ -190,6 +181,7 @@ public class ModuleController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
+
 	/**
 	 * Retrieves all module names by category.
 	 *
@@ -219,14 +211,12 @@ public class ModuleController {
 	 * @return ResponseEntity with a success or failure message
 	 */
 	@Operation(summary = "Delete a module by its ID", description = "Deletes a module by its ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Module deleted successfully"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Module deleted successfully"),
 			@ApiResponse(responseCode = "404", description = "Module not found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteModule(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteModule(@PathVariable UUID id) {
 		LOGGER.info("Deleting module by ID: {}", id);
 		boolean isDeleted = moduleService.deleteModule(id);
 		if (isDeleted) {
@@ -244,12 +234,10 @@ public class ModuleController {
 	 * @return ResponseEntity with a list of all test groups
 	 */
 	@Operation(summary = "Retrieve all test groups", description = "Retrieves a list of all test groups from the enum.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved test groups"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved test groups"),
 			@ApiResponse(responseCode = "404", description = "No test groups found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getAllTestGroups")
 	public ResponseEntity<List<String>> getAllTestGroups() {
 		LOGGER.info("Retrieving all test groups from enum");
@@ -262,8 +250,7 @@ public class ModuleController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 	}
-	
-	
+
 	/**
 	 * Parses and saves the XML file.
 	 *
@@ -278,14 +265,16 @@ public class ModuleController {
 			@ApiResponse(responseCode = "404", description = "No data found") })
 	@PostMapping("/parsexml")
 	public ResponseEntity<String> parseXml(@RequestParam("file") MultipartFile file) {
-		try {
-			moduleService.parseAndSaveXml(file);
-			LOGGER.info("XML parsed and data saved successfully.");
-			return ResponseEntity.status(HttpStatus.OK).body("XML parsed and data saved successfully.");
-		} catch (Exception e) {
-			LOGGER.error("Failed to parse XML: {}", e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		LOGGER.info("Received upload xml file request: " + file.getOriginalFilename());
+		boolean isXmlUploaded = moduleService.parseAndSaveXml(file);
+		if (isXmlUploaded) {
+			LOGGER.info("XML parsed and data saved successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("XML parsed and data saved successfully");
+		} else {
+			LOGGER.error("Could not upload the xml file");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Could not upload the xml  file");
 		}
+
 	}
 
 	/**
@@ -303,18 +292,18 @@ public class ModuleController {
 			@ApiResponse(responseCode = "404", description = "No data found") })
 	@GetMapping(value = "/downloadxml/{moduleName}", produces = "application/xml")
 	public ResponseEntity<?> downloadModuleXML(@PathVariable String moduleName) {
-		try {
-			String xmlContent = moduleService.generateXML(moduleName);
-			LOGGER.info("XML content: {}", xmlContent);
-			ByteArrayResource resource = new ByteArrayResource(xmlContent.getBytes());
-			LOGGER.info("XML downloaded successfully for module: {}", moduleName);
-			return ResponseEntity.status(HttpStatus.OK)
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + moduleName + ".xml")
-					.contentType(MediaType.APPLICATION_XML).body(resource);
-		} catch (Exception e) {
+		LOGGER.info("Downloading XML for module: {}", moduleName);
+		String xmlContent = moduleService.generateXML(moduleName);
+		LOGGER.info("XML content: {}", xmlContent);
+		if (xmlContent == null) {
 			LOGGER.error("Failed to download XML for module: {}", moduleName);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading module xml");
 		}
+		ByteArrayResource resource = new ByteArrayResource(xmlContent.getBytes());
+		LOGGER.info("XML downloaded successfully for module: {}", moduleName);
+		return ResponseEntity.status(HttpStatus.OK)
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + moduleName + ".xml")
+				.contentType(MediaType.APPLICATION_XML).body(resource);
 	}
 
 	/**

@@ -36,13 +36,6 @@ import lombok.EqualsAndHashCode;
 public class Soc extends BaseEntity  {
 	
 	/**
-	 * The unique identifier of the Soc.
-	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	/**
 	 * The name of the Soc.
 	 */
 	@Column(nullable = false ,unique = true)

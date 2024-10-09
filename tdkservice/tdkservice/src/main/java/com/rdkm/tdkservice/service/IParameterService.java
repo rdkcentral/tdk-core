@@ -5,6 +5,7 @@ import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.enums.ParameterDataType;
 
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Service interface for managing parameter type details.
@@ -40,7 +41,7 @@ public interface IParameterService {
      * @param id the ID of the parameter type
      * @return the data transfer object containing the details of the parameter type, or null if not found
      */
-    public ParameterDTO findParameterById(Integer id);
+    public ParameterDTO findParameterById(UUID id);
 
     /**
      * Deletes a parameter type by its ID.
@@ -48,7 +49,7 @@ public interface IParameterService {
      * @param id the ID of the parameter type
      * @return true if the parameter type was deleted successfully, false otherwise
      */
-    public boolean deleteParameter(Integer id);
+    public boolean deleteParameter(UUID id);
 
     /**
      * Finds all parameters by their function.

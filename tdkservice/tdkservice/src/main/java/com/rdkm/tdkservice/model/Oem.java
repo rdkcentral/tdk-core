@@ -26,9 +26,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -44,34 +41,25 @@ import lombok.EqualsAndHashCode;
 @Entity
 @Table(name = "oem")
 public class Oem extends BaseEntity {
+
 	/*
-	 * The unique identifier of the oem.
+	 * The name of the oem name This field is mandatory, hence it cannot be blank.
 	 */
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	/*
-	 * The name of the oem name This field is mandatory, hence it cannot be
-	 * blank.
-	 */
-	@Column(nullable = false ,unique = true)
+	@Column(nullable = false, unique = true)
 	private String name;
-	
+
 	/*
 	 * The user group of the oem.
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "user_group_id")
 	private UserGroup userGroup;
-	
+
 	/*
-	 * The category of the oem This field is mandatory, hence it cannot
-	 * be blank.
+	 * The category of the oem This field is mandatory, hence it cannot be blank.
 	 */
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
 	private Category category;
-
 
 }

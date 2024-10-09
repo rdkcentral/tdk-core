@@ -20,27 +20,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
-import com.rdkm.tdkservice.enums.DeviceTypeCategory;
-import com.rdkm.tdkservice.model.DeviceType;
-import com.rdkm.tdkservice.repository.DeviceTypeRepository;
-import com.rdkm.tdkservice.service.IDeviceTypeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.DeviceTypeCategory;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
+import com.rdkm.tdkservice.service.IDeviceTypeService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -67,12 +68,12 @@ public class DeviceTypeService implements IDeviceTypeService {
 	 * This method is used to create a new deviceType.
 	 * 
 	 * @param deviceTypeDTO This is the request object containing the details of the
-	 *                   deviceType to be created.
+	 *                      deviceType to be created.
 	 * @return boolean This returns true if the deviceType was created successfully,
 	 *         false otherwise.
 	 */
 	@Override
-	public boolean createDeviceType(DeviceTypeDTO deviceTypeDTO) {
+	public boolean createDeviceType(DeviceTypeCreateDTO deviceTypeDTO) {
 		LOGGER.info("Going to create DeviceType");
 		if (deviceTypeRepository.existsByName(deviceTypeDTO.getDeviceTypeName())) {
 			LOGGER.error("Device type already exists with the same name: " + deviceTypeDTO.getDeviceTypeName());
@@ -82,9 +83,9 @@ public class DeviceTypeService implements IDeviceTypeService {
 		DeviceType deviceType = new DeviceType();
 		deviceType.setName(deviceTypeDTO.getDeviceTypeName());
 
-		DeviceTypeCategory deviceTypeCategory = DeviceTypeCategory.getDeviceTypeCategory(deviceTypeDTO.getType());
+		DeviceTypeCategory deviceTypeCategory = DeviceTypeCategory.getDeviceTypeCategory(deviceTypeDTO.getDeviceType());
 		if (null == deviceTypeCategory) {
-			throw new ResourceNotFoundException(Constants.DEVICE_TYPE_TYPE, deviceTypeDTO.getType());
+			throw new ResourceNotFoundException(Constants.DEVICE_TYPE_TYPE, deviceTypeDTO.getDeviceType());
 		} else {
 			deviceType.setType(deviceTypeCategory);
 		}
@@ -107,7 +108,7 @@ public class DeviceTypeService implements IDeviceTypeService {
 			return false;
 		}
 		LOGGER.info("deviceType creation completed");
-		return deviceType != null && deviceType.getId() > 0;
+		return deviceType != null && deviceType.getId() != null;
 	}
 
 	/**
@@ -131,11 +132,11 @@ public class DeviceTypeService implements IDeviceTypeService {
 	 * @param id This is the id of the DeviceType to be deleted.
 	 */
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(UUID id) {
 		DeviceType deviceType = deviceTypeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DEVICE_TYPE_ID, id.toString()));
 		try {
-			deviceTypeRepository.deleteById(id);
+			deviceTypeRepository.deleteById(deviceType.getId());
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error occurred while deleting deviceType with id: " + id, e);
 			throw new DeleteFailedException();
@@ -150,7 +151,7 @@ public class DeviceTypeService implements IDeviceTypeService {
 	 * @return DeviceTypeRequest This returns the DeviceType.
 	 */
 	@Override
-	public DeviceTypeDTO findById(Integer id) {
+	public DeviceTypeDTO findById(UUID id) {
 		LOGGER.info("Executing find DeviceType by id method with id: " + id);
 		DeviceType deviceType = deviceTypeRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DEVICE_TYPE_ID, id.toString()));
@@ -167,20 +168,23 @@ public class DeviceTypeService implements IDeviceTypeService {
 	/**
 	 * This method is used to update a DeviceType.
 	 * 
-	 * @param deviceTypeUpdateDTO This is the request object containing the updated details
-	 *                   of the DeviceType.
-	 * @param id         This is the id of the DeviceType to be updated.
+	 * @param deviceTypeUpdateDTO This is the request object containing the updated
+	 *                            details of the DeviceType.
+	 * @param id                  This is the id of the DeviceType to be updated.
 	 * @return deviceTypeUpdateDTO This returns the updated DeviceType.
 	 */
 	@Override
-	public DeviceTypeUpdateDTO updateDeviceType(DeviceTypeUpdateDTO deviceTypeUpdateDTO, Integer id) {
-		DeviceType deviceType = deviceTypeRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.DEVICE_TYPE_ID, id.toString()));
+	public DeviceTypeDTO updateDeviceType(DeviceTypeDTO deviceTypeUpdateDTO) {
+		DeviceType deviceType = deviceTypeRepository.findById(deviceTypeUpdateDTO.getDeviceTypeId())
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.DEVICE_TYPE_ID,
+						deviceTypeUpdateDTO.getDeviceTypeId().toString()));
 		if (!Utils.isEmpty(deviceTypeUpdateDTO.getDeviceTypeName())
 				&& !(deviceTypeUpdateDTO.getDeviceTypeName().equals(deviceType.getName()))) {
 			if (deviceTypeRepository.existsByName(deviceTypeUpdateDTO.getDeviceTypeName())) {
-				LOGGER.info("Device Type already exists with the same name: " + deviceTypeUpdateDTO.getDeviceTypeName());
-				throw new ResourceAlreadyExistsException(Constants.DEVICE_TYPE, deviceTypeUpdateDTO.getDeviceTypeName());
+				LOGGER.info(
+						"Device Type already exists with the same name: " + deviceTypeUpdateDTO.getDeviceTypeName());
+				throw new ResourceAlreadyExistsException(Constants.DEVICE_TYPE,
+						deviceTypeUpdateDTO.getDeviceTypeName());
 			} else {
 				deviceType.setName(deviceTypeUpdateDTO.getDeviceTypeName());
 			}
@@ -244,9 +248,8 @@ public class DeviceTypeService implements IDeviceTypeService {
 	 */
 	private DeviceTypeDTO convertToDeviceTypeDTO(DeviceType deviceType) {
 		LOGGER.trace("Converting DeviceTypeDTO to DeviceType");
-        return MapperUtils.convertToDeviceTypeDTO(deviceType);
+		return MapperUtils.convertToDeviceTypeDTO(deviceType);
 
 	}
-
 
 }

@@ -22,6 +22,7 @@ package com.rdkm.tdkservice.service;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -57,7 +58,7 @@ public interface ITestSuiteService {
 	 * @param id - the test suite id
 	 * @return
 	 */
-	boolean deleteTestSuite(Integer id);
+	boolean deleteTestSuite(UUID id);
 
 	/**
 	 * Find the test suite by id.
@@ -65,7 +66,7 @@ public interface ITestSuiteService {
 	 * @param id - the test suite id
 	 * @return the test suite dto
 	 */
-	TestSuiteDTO findTestSuiteById(Integer id);
+	TestSuiteDTO findTestSuiteById(UUID id);
 
 	/**
 	 * This method is used to find all the test suites.
@@ -116,5 +117,13 @@ public interface ITestSuiteService {
 	 * @return the scripsin test suite
 	 */
 	String updateTestSuiteByModuleNameAndCategory(String moduleName,String Category);
+
+	/**
+	 * This method is used to download all the test suite as XML
+	 * 
+	 * @param category - the category
+	 * @return the test suite as XML
+	 */
+	ByteArrayInputStream downloadAllTestSuiteAsXML(String category);
 
 }

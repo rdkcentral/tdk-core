@@ -20,25 +20,26 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
-import com.rdkm.tdkservice.model.Soc;
-import com.rdkm.tdkservice.repository.SocRepository;
-import com.rdkm.tdkservice.service.ISocService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import com.rdkm.tdkservice.dto.SocCreateDTO;
+import com.rdkm.tdkservice.dto.SocDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
+import com.rdkm.tdkservice.service.ISocService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -68,7 +69,7 @@ public class SocService implements ISocService {
 	 *                                        already exists.
 	 */
 	@Override
-	public boolean createSoc(SocDTO socDTO) {
+	public boolean createSoc(SocCreateDTO socDTO) {
 		LOGGER.info("socDTO: " + socDTO);
 		if (socRepository.existsByName(socDTO.getSocName())) {
 			LOGGER.info("Soc already exists with the same name: " + socDTO.getSocName());
@@ -86,7 +87,7 @@ public class SocService implements ISocService {
 			return false;
 		}
 
-		return soc != null && soc.getId() > 0;
+		return soc != null && soc.getId() != null;
 
 	}
 
@@ -115,7 +116,7 @@ public class SocService implements ISocService {
 	 *                                   not exist.
 	 */
 	@Override
-	public void deleteSoc(Integer id) {
+	public void deleteSoc(UUID id) {
 		if (!socRepository.existsById(id)) {
 			LOGGER.info("Soc  with id: " + id + " does not exist");
 			throw new ResourceNotFoundException(Constants.SOC_ID, id.toString());
@@ -136,7 +137,7 @@ public class SocService implements ISocService {
 	 *         if not found
 	 */
 	@Override
-	public SocDTO findById(Integer id) {
+	public SocDTO findById(UUID id) {
 		LOGGER.info("Going to fetch SocVendor with id: " + id);
 		Soc soc = socRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, id.toString()));
@@ -156,10 +157,10 @@ public class SocService implements ISocService {
 	 *                                   not exist.
 	 */
 	@Override
-	public SocUpdateDTO updateSoc(SocUpdateDTO socUpdateDTO, Integer id) {
-		LOGGER.info("Going to update SocVendor with id: " + id);
-		Soc soc = socRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, id.toString()));
+	public SocDTO updateSoc(SocDTO socUpdateDTO) {
+		LOGGER.info("Going to update SocVendor with id: " + socUpdateDTO.getSocId().toString());
+		Soc soc = socRepository.findById(socUpdateDTO.getSocId())
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, socUpdateDTO.getSocId().toString()));
 		if (!Utils.isEmpty(socUpdateDTO.getSocName())) {
 			if (socRepository.existsByName(socUpdateDTO.getSocName())) {
 				LOGGER.info("Soc already exists with the same name: " + socUpdateDTO.getSocName());
@@ -177,7 +178,7 @@ public class SocService implements ISocService {
 			soc = socRepository.save(soc);
 		} catch (Exception e) {
 			LOGGER.error("Error while saving Soc: " + e.getMessage());
-			throw new RuntimeException("Error occurred while updating Soc with id: " + id, e);
+			throw new RuntimeException("Error occurred while updating Soc with id: " + socUpdateDTO.getSocId().toString(), e);
 		}
 
 		return MapperUtils.convertToSocUpdateDTO(soc);

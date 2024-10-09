@@ -22,34 +22,43 @@ package com.rdkm.tdkservice.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * Data Transfer Object for SocVendor. This class is used to transfer data
- * between different parts of the application. It includes the necessary Jackson
- * annotations to ignore unknown properties and include non-null fields when
- * serializing to JSON.
+ * The DeviceTypeDTO class is used to map the request body of the DeviceType request.
  */
+
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class SocUpdateDTO {
+public class DeviceTypeCreateDTO {
 
 	/**
-	 * Represents the unique identifier for the SocVendor.
+	 * Represents the name of the DeviceType. This field is mandatory, hence it cannot
+	 * be blank.
 	 */
-	private Integer socId;
+	@NotBlank(message = "DeviceType name is required")
+	private String deviceTypeName;
 
 	/**
-	 * Represents the name of the SocVendor.
+	 * Represents the type of the DeviceType. This field is mandatory, hence it cannot
+	 * be blank.
 	 */
-
-	private String socName;
+	@NotBlank(message = "DeviceType Type is required")
+	private String deviceType;
 
 	/**
-	 * Represents the category of the SocVendor.
+	 * Represents the category of the DeviceType. This field is mandatory, hence it
+	 * cannot be blank.
 	 */
+	@NotBlank(message = "DeviceType category is required")
+	private String deviceTypeCategory;
 
-	private String socCategory;
+	/**
+	 * Represents the user group of the DeviceType. This field is mandatory, hence it
+	 * cannot be blank.
+	 */
+	private String deviceTypeUserGroup;
 
 }

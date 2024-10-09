@@ -19,53 +19,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import java.util.List;
+import java.util.UUID;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * The DeviceTypeDTO class is used to map the request body of the DeviceType request.
+ * The DeviceTypeUpdateDTO class is used to map the request body of the devicetype
+ * request.
  */
-
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DeviceTypeDTO {
 
 	/**
-	 * Represents the unique identifier for the DeviceType.
+	 * Represents the unique identifier for the deviceType.
 	 */
-	private Integer deviceTypeId;
+	private UUID deviceTypeId;
 
 	/**
-	 * Represents the name of the DeviceType. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the name of the deviceType.
 	 */
-	@NotBlank(message = "DeviceType name is required")
 	private String deviceTypeName;
 
 	/**
-	 * Represents the type of the DeviceType. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the type of the deviceType.
 	 */
-	@NotBlank(message = "DeviceType Type is required")
-	private String type;
+	private String deviceType;
 
 	/**
-	 * Represents the category of the DeviceType. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the device type category of the deviceType.
 	 */
-	@NotBlank(message = "DeviceType category is required")
 	private String deviceTypeCategory;
 
-	/**
-	 * Represents the user group of the DeviceType. This field is mandatory, hence it
-	 * cannot be blank.
-	 */
-	private String deviceTypeUserGroup;
 
 }

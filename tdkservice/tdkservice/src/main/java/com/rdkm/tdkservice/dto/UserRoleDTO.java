@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -40,7 +42,7 @@ public class UserRoleDTO {
 	/**
 	 * Represents the unique identifier for the UserRole.
 	 */
-	private Integer userRoleId;
+	private UUID userRoleId;
 	
 	/**
 	 * Represents the name of the UserRole. This field is mandatory, hence it cannot

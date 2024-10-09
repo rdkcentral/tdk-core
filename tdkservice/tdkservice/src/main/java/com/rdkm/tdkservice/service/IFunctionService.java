@@ -19,11 +19,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.service;
 
+import java.util.List;
+import java.util.UUID;
+
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
-import com.rdkm.tdkservice.enums.Category;
-
-import java.util.List;
 
 /**
  * Service interface for managing function details.
@@ -59,7 +59,7 @@ public interface IFunctionService {
 	 * @param id the ID of the function
      * @return the data transfer object containing the details of the function, or null if not found
 	 */
-	FunctionDTO findFunctionById(Integer id);
+	FunctionDTO findFunctionById(UUID id);
 
 	/**
 	 * Deletes a function by its ID.
@@ -67,7 +67,7 @@ public interface IFunctionService {
 	 * @param id the ID of the function
 	 * @return true if the function was deleted successfully, false otherwise
 	 */
-	void deleteFunction(Integer id);
+	void deleteFunction(UUID id);
 
 	/**
 	 * Finds all functions by their category.

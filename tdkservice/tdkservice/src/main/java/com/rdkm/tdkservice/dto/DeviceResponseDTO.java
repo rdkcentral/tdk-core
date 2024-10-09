@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -32,7 +34,7 @@ public class DeviceResponseDTO {
 	/**
 	 * Represents the unique identifier for the device.
 	 */
-	private Integer id;
+	private UUID id;
 	/**
 	 * Represents the stbip of the device.
 	 */

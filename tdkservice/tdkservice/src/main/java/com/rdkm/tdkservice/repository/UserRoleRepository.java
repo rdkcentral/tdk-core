@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +30,7 @@ import com.rdkm.tdkservice.model.UserRole;
  * User role repository interface
  */
 @Repository
-public interface UserRoleRepository extends JpaRepository<UserRole, Integer> {
+public interface UserRoleRepository extends JpaRepository<UserRole, UUID> {
 	/**
 	 * This method is used to find a user role by name.
 	 *

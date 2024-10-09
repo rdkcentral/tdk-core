@@ -71,7 +71,7 @@ public class UserRoleService implements IUserRoleService {
 			return false;
 		}
 
-		return userRoleObject != null && userRoleObject.getId() > 0;
+		return userRoleObject != null && userRoleObject.getId() !=null;
 
 	}
 

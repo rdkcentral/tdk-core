@@ -19,12 +19,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import com.rdkm.tdkservice.enums.Category;
-import jakarta.validation.constraints.NotBlank;
+import java.util.Set;
+import java.util.UUID;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.util.Set;
 
 /**
  * Data Transfer Object for a module.
@@ -32,49 +31,49 @@ import java.util.Set;
 @Data
 public class ModuleDTO {
 
-    /**
-     * The unique identifier of the module.
-     */
-    @NotNull(message = "ID is required")
-    private Integer id;
+	/**
+	 * The unique identifier of the module.
+	 */
+	@NotNull(message = "ID is required")
+	private UUID id;
 
-    /**
-     * The name of the module.
-     */
-    private String moduleName;
+	/**
+	 * The name of the module.
+	 */
+	private String moduleName;
 
-    /**
-     * The test group associated with the module.
-     */
-    private String testGroup;
+	/**
+	 * The test group associated with the module.
+	 */
+	private String testGroup;
 
-    /**
-     * The execution time of the module.
-     */
-    private Integer executionTime;
+	/**
+	 * The execution time of the module.
+	 */
+	private Integer executionTime;
 
-    /**
-     * The user group associated with the module.
-     */
-    private String userGroup;
+	/**
+	 * The user group associated with the module.
+	 */
+	private String userGroup;
 
-    /**
-     * The set of log file names associated with the module.
-     */
-    private Set<String> moduleLogFileNames;
+	/**
+	 * The set of log file names associated with the module.
+	 */
+	private Set<String> moduleLogFileNames;
 
-    /**
-     * The set of crash log files associated with the module.
-     */
-    private Set<String> moduleCrashLogFiles;
+	/**
+	 * The set of crash log files associated with the module.
+	 */
+	private Set<String> moduleCrashLogFiles;
 
-    /**
-     * Indicates whether Thunder is enabled for the module.
-     */
-    private boolean isModuleThunderEnabled;
+	/**
+	 * Indicates whether Thunder is enabled for the module.
+	 */
+	private boolean isModuleThunderEnabled;
 
-    /**
-     * The category of the module.
-     */
-    private String moduleCategory;
+	/**
+	 * The category of the module.
+	 */
+	private String moduleCategory;
 }

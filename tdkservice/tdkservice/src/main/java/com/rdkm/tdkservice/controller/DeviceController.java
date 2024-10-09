@@ -22,9 +22,11 @@ package com.rdkm.tdkservice.controller;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_FILE_EXTENSION_ZIP;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_XML_FILE_EXTENSION;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,14 +49,13 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 
 /**
@@ -117,14 +118,13 @@ public class DeviceController {
 	@PutMapping("/update")
 	public ResponseEntity<String> updateDevice(@RequestBody @Valid DeviceUpdateDTO deviceUpdateDTO) {
 		LOGGER.info("Received update device request: " + deviceUpdateDTO.toString());
-		try {
-			deviceService.updateDevice(deviceUpdateDTO);
+		boolean isDeviceUpdated = deviceService.updateDevice(deviceUpdateDTO);
+		if (isDeviceUpdated) {
 			LOGGER.info("Device updated successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Device updated successfully");
-		} catch (Exception e) {
-			LOGGER.error("Error in updating device details data", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to update device: " + e.getMessage());
+		} else {
+			LOGGER.error("Failed to update device data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update device");
 		}
 	}
 
@@ -140,12 +140,13 @@ public class DeviceController {
 	@GetMapping("/findall")
 	public ResponseEntity<?> getAllDevices() {
 		LOGGER.info("Received find all devices request");
-		try {
-			return ResponseEntity.status(HttpStatus.OK).body(deviceService.getAllDeviceDetails());
-		} catch (Exception e) {
-			LOGGER.error("Error in fetching device details data", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to fetch device: " + e.getMessage());
+		List<DeviceResponseDTO> deviceDetails = deviceService.getAllDeviceDetails();
+		if (deviceDetails != null && !deviceDetails.isEmpty()) {
+			LOGGER.info("Device details fetched successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+		} else {
+			LOGGER.error("Error in fetching device details data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch devices");
 		}
 	}
 
@@ -162,13 +163,13 @@ public class DeviceController {
 	@GetMapping("/findallbycategory")
 	public ResponseEntity<?> getAllDevicesByCategory(@RequestParam String category) {
 		LOGGER.info("Received find all devices by category request: " + category);
-		try {
-			return ResponseEntity.status(HttpStatus.OK)
-					.body(deviceService.getAllDeviceDetailsByCategory(category));
-		} catch (Exception e) {
-			LOGGER.error("Error in fetching device details data:", e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to fetch device: " + e.getMessage());
+		List<DeviceResponseDTO> deviceDetails = deviceService.getAllDeviceDetailsByCategory(category);
+		if (deviceDetails != null && !deviceDetails.isEmpty()) {
+			LOGGER.info("Device details fetched successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+		} else {
+			LOGGER.error("Error in fetching device details data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch devices");
 		}
 	}
 
@@ -183,14 +184,15 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getDeviceById(@PathVariable Integer id) {
+	public ResponseEntity<?> getDeviceById(@PathVariable UUID id) {
 		LOGGER.info("Received find device by id request: " + id);
-		try {
-			return ResponseEntity.status(HttpStatus.OK).body(deviceService.findDeviceById(id));
-		} catch (Exception e) {
-			LOGGER.error("Error in fetching device details data", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to fetch device: " + e.getMessage());
+		DeviceResponseDTO deviceDetails = deviceService.findDeviceById(id);
+		if (deviceDetails != null) {
+			LOGGER.info("Device details fetched successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+		} else {
+			LOGGER.error("Error in fetching device details data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch device");
 		}
 	}
 
@@ -205,16 +207,15 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in deleting device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/deleteDeviceById/{id}")
-	public ResponseEntity<String> deleteDeviceById(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteDeviceById(@PathVariable UUID id) {
 		LOGGER.info("Received delete device request for id: " + id);
-		try {
-			deviceService.deleteDeviceById(id);
+		boolean isDeviceDeleted = deviceService.deleteDeviceById(id);
+		if (isDeviceDeleted) {
 			LOGGER.info("Device deleted successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Device deleted successfully");
-		} catch (Exception e) {
-			LOGGER.error("Error in deleting device details data", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to delete device: " + e.getMessage());
+		} else {
+			LOGGER.error("Error in deleting device details data");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete device");
 		}
 	}
 
@@ -231,14 +232,14 @@ public class DeviceController {
 	@PostMapping(value = "/uploadDeviceXML")
 	public ResponseEntity<String> createDeviceFromXML(@Valid @RequestParam("file") MultipartFile file) {
 		LOGGER.info("Received upload device XML request: " + file.getOriginalFilename());
-		try {
-			deviceService.parseXMLForDevice(file);
+		boolean isUploadedDeviceXml = deviceService.parseXMLForDevice(file);
+		if (isUploadedDeviceXml) {
 			LOGGER.info("Device created successfully from XML data");
 			return ResponseEntity.status(HttpStatus.CREATED).body("Device created successfully from XML data");
-		} catch (Exception e) {
-			LOGGER.error("Failed to create device from XML data", e);
+		} else {
+			LOGGER.error("Failed to create device from XML data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to create device from XML data: " + e.getMessage());
+					.body("Failed to create device from XML data");
 		}
 	}
 
@@ -258,18 +259,22 @@ public class DeviceController {
 	public ResponseEntity<String> downloadXML(@PathVariable String deviceName) {
 		LOGGER.info("Received download device XML request: " + deviceName);
 		String xmlContent = deviceService.downloadDeviceXML(deviceName);
+		if (xmlContent == null) {
+			LOGGER.error("Failed to download device XML");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to download device XML");
+		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + deviceName + DEVICE_XML_FILE_EXTENSION);
 		LOGGER.info("Downloaded  Device XMl successfully");
-		return ResponseEntity.ok().headers(headers).body(xmlContent);
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(xmlContent);
 	}
 
 	/**
-	 * This method is used to download the device configuration file exclusively
-	 * for RDKV devices and the related usecases
+	 * This method is used to download the device configuration file exclusively for
+	 * RDKV devices and the related usecases
 	 *
 	 * @param deviceTypeName - the deviceType name
-	 * @param deviceType - the device type
+	 * @param deviceType     - the device type
 	 * @return ResponseEntity<Resource> - the response entity - HttpStatus.OK - if
 	 *         the file download is successful - HttpStatus.NOT_FOUND - if the file
 	 *         is not found
@@ -364,23 +369,22 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "Downloaded successfully.")
 	@ApiResponse(responseCode = "500", description = "Internal server error while downloading.")
 	@GetMapping("/downloadDevicesByCategory/{category}")
-	public ResponseEntity<?> downloadAllDevicesByCategory(@PathVariable String category, HttpServletResponse response) {
+	public ResponseEntity<?> downloadAllDevicesByCategory(@PathVariable String category) {
+		LOGGER.info("Received download all devices by category request: " + category);
+		Path file = deviceService.downloadAllDevicesByCategory(category);
+		byte[] fileContent;
 		try {
-			LOGGER.info("Received download all devices by category request: " + category);
-			Path file = deviceService.downloadAllDevicesByCategory(category);
-
-			byte[] fileContent = Files.readAllBytes(file);
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=devices_" + category + DEVICE_FILE_EXTENSION_ZIP);
-			LOGGER.info("Downloaded all devices by category successfully");
-			return ResponseEntity.ok().headers(headers).body(fileContent);
-		} catch (Exception e) {
-			LOGGER.error("Error in downloading device details data", e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to download device: " + e.getMessage().getBytes());
+			fileContent = Files.readAllBytes(file);
+		} catch (IOException e) {
+			LOGGER.error("Error in downloading device by category:" + category);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Failed to download device by category:" + category);
 		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=devices_" + category + DEVICE_FILE_EXTENSION_ZIP);
+		LOGGER.info("Downloaded all devices by category successfully");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(fileContent);
 
 	}
 

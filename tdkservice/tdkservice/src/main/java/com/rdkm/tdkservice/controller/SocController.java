@@ -20,10 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.SocUpdateDTO;
-import com.rdkm.tdkservice.service.ISocService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +39,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rdkm.tdkservice.dto.SocCreateDTO;
+import com.rdkm.tdkservice.dto.SocDTO;
+import com.rdkm.tdkservice.service.ISocService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,7 +73,7 @@ public class SocController {
 	@ApiResponse(responseCode = "500", description = "Error in saving Soc data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createSoc(@RequestBody @Valid SocDTO socDTO) {
+	public ResponseEntity<String> createSoc(@RequestBody @Valid SocCreateDTO socDTO) {
 		LOGGER.info("Received create soc request: " + socDTO.toString());
 		boolean isSocVendorCreated = socService.createSoc(socDTO);
 		if (isSocVendorCreated) {
@@ -88,8 +89,8 @@ public class SocController {
 	/**
 	 * Retrieves all SOC vendors.
 	 *
-	 * @return ResponseEntity containing the list of SOCs if found, or a
-	 *         NOT_FOUND status with an error message if no SOC vendors are found.
+	 * @return ResponseEntity containing the list of SOCs if found, or a NOT_FOUND
+	 *         status with an error message if no SOC vendors are found.
 	 */
 	@Operation(summary = "Retrieve all SOC", description = "Retrieves all SOC in the system.")
 	@ApiResponse(responseCode = "200", description = "SOC retrieved successfully")
@@ -118,7 +119,7 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "Soc deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Soc not found")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteSoc(@PathVariable Integer id) {
+	public ResponseEntity<?> deleteSoc(@PathVariable UUID id) {
 		LOGGER.info("Received delete SocVendor: " + id);
 		socService.deleteSoc(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the Soc");
@@ -129,14 +130,14 @@ public class SocController {
 	 * Retrieves a Soc object by its ID.
 	 *
 	 * @param id The ID of the Soc to retrieve.
-	 * @return ResponseEntity containing the Soc object if found, or a
-	 *         NOT_FOUND status with an error message if not found.
+	 * @return ResponseEntity containing the Soc object if found, or a NOT_FOUND
+	 *         status with an error message if not found.
 	 */
 	@Operation(summary = "Find Soc by ID", description = "Retrieves a Soc by its ID.")
 	@ApiResponse(responseCode = "200", description = "Soc found")
 	@ApiResponse(responseCode = "404", description = "Soc not found")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<SocDTO> findById(@PathVariable Integer id) {
+	public ResponseEntity<SocDTO> findById(@PathVariable UUID id) {
 		LOGGER.info("Received find Soc by id request: " + id);
 		SocDTO socDTO = socService.findById(id);
 		return ResponseEntity.status(HttpStatus.OK).body(socDTO);
@@ -146,8 +147,8 @@ public class SocController {
 	/**
 	 * Updates a SocVendor entity based on the provided SocVendorUpdateRequest.
 	 * 
-	 * @param socUpdateDTO The SocVendorUpdateRequest object containing
-	 *                               the updated data.
+	 * @param socUpdateDTO The SocVendorUpdateRequest object containing the updated
+	 *                     data.
 	 * @return ResponseEntity containing the updated SocVendor entity if it exists,
 	 *         or a NOT_FOUND status if it doesn't.
 	 */
@@ -155,14 +156,13 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "Soc updated successfully")
 	@ApiResponse(responseCode = "404", description = "Soc not found")
 	@ApiResponse(responseCode = "500", description = "Error in updating Soc data")
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateSoc(@PathVariable Integer id,
-			@RequestBody SocUpdateDTO socUpdateDTO) {
-		LOGGER.info("Received update SocVendor request: " + id);
-		SocUpdateDTO socUpdateDTO1 = socService.updateSoc(socUpdateDTO, id);
-		if (socUpdateDTO1 != null) {
+	@PutMapping("/update")
+	public ResponseEntity<?> updateSoc(@RequestBody SocDTO socUpdateDTO) {
+		LOGGER.info("Received update SocVendor request: " + socUpdateDTO.toString());
+		SocDTO socUpdateDto = socService.updateSoc(socUpdateDTO);
+		if (socUpdateDto != null) {
 			LOGGER.info("Soc updated succesfully");
-			return ResponseEntity.status(HttpStatus.OK).body(socUpdateDTO1);
+			return ResponseEntity.status(HttpStatus.OK).body("Soc updated succesfully");
 		} else {
 			LOGGER.error("Error in updating soc data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating soc data");
@@ -195,11 +195,11 @@ public class SocController {
 	}
 
 	/**
-	 * Retrieves all SOC  by category.
+	 * Retrieves all SOC by category.
 	 *
-	 * @param category The category of the SOC  to retrieve.
-	 * @return ResponseEntity containing the list of SOC  if found, or a
-	 *         NOT_FOUND status with an error message if no SOCs are found.
+	 * @param category The category of the SOC to retrieve.
+	 * @return ResponseEntity containing the list of SOC if found, or a NOT_FOUND
+	 *         status with an error message if no SOCs are found.
 	 */
 
 	@Operation(summary = "Find SOC  name by category", description = "Retrieves all SOC  names list by category.")

@@ -21,7 +21,7 @@ package com.rdkm.tdkservice.service;
 
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 
 /**
  * The ILoginService interface provides methods for user authentication and
@@ -51,6 +51,6 @@ public interface ILoginService {
 	 *                        user to be registered.
 	 * @return A boolean value indicating the success of the operation.
 	 */
-	boolean register(UserDTO registerRequest);
+	boolean register(UserCreateDTO registerRequest);
 
 }

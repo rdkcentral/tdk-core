@@ -22,6 +22,7 @@ package com.rdkm.tdkservice.service;
 
 import java.io.ByteArrayInputStream;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -59,7 +60,7 @@ public interface IScriptService {
 	 * @param scriptId - the script
 	 * @return - true if the script is deleted successfully, false otherwise
 	 */
-	boolean deleteScript(Integer scriptId);
+	boolean deleteScript(UUID scriptId);
 
 	/**
 	 * This method is used to get the list of scripts based on the module.
@@ -100,7 +101,7 @@ public interface IScriptService {
 	 * @param scriptId - the script id
 	 * @return - the script
 	 */
-	ScriptDTO findScriptById(Integer scriptId);
+	ScriptDTO findScriptById(UUID scriptId);
 
 	/**
 	 * Find all scripts by category

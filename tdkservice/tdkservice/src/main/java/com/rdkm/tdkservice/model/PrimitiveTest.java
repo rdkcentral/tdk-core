@@ -50,21 +50,21 @@ public class PrimitiveTest extends BaseEntity {
 	 * The primitive test Module
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "module_name",referencedColumnName = "name")
+	@JoinColumn(name = "module_id",nullable=false)
 	private Module module;
 
 	/**
 	 * The primitive test function
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "function_name" ,referencedColumnName = "name")
+	@JoinColumn(name = "function_id" ,nullable=false)
 	private Function function;
 
 	/**
 	 * The primitive test user group
 	 */
 	@ManyToOne
-	@JoinColumn(name = "userGroup_id", nullable = true)
+	@JoinColumn(name = "userGroup_id")
 	private UserGroup userGroup;
 
 	

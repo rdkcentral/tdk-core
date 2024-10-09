@@ -28,6 +28,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
@@ -64,6 +65,7 @@ import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
@@ -133,7 +135,7 @@ public class ModuleService implements IModuleService {
 			return false;
 		}
 
-		return module != null && module.getId() != null && module.getId() > 0;
+		return module != null && module.getId() != null && module.getId() != null;
 
 	}
 
@@ -206,7 +208,7 @@ public class ModuleService implements IModuleService {
 	 *         null if not found
 	 */
 	@Override
-	public ModuleDTO findModuleById(Integer id) {
+	public ModuleDTO findModuleById(UUID id) {
 		LOGGER.info("Going to fetch module with ID: {}", id);
 		if (!moduleRepository.existsById(id)) {
 			LOGGER.error("Module with ID {} not found", id);
@@ -248,7 +250,7 @@ public class ModuleService implements IModuleService {
 
 	@Override
 	@Transactional
-	public boolean deleteModule(Integer id) {
+	public boolean deleteModule(UUID id) {
 		LOGGER.info("Going to delete module with ID: {}", id);
 		Module module = moduleRepository.findById(id).orElse(null);
 		if (module == null) {
@@ -295,10 +297,10 @@ public class ModuleService implements IModuleService {
 	@Override
 	public List<String> findAllModuleNameByCategory(String category) {
 		LOGGER.info("Going to fetch all modules by category: {}", category);
-		List<Module> modules=null;
+		List<Module> modules = null;
 		if (Category.RDKV.name().equals(category)) {
-			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV,Category.RDKV_RDKSERVICE));
-		}else{
+			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+		} else {
 			modules = moduleRepository.findAllByCategory(Category.valueOf(category));
 		}
 
@@ -317,7 +319,7 @@ public class ModuleService implements IModuleService {
 	 * @throws Exception if an error occurs while parsing the XML file
 	 */
 	@Override
-	public void parseAndSaveXml(MultipartFile file) {
+	public boolean parseAndSaveXml(MultipartFile file) {
 		LOGGER.info("Parsing and saving the XML file");
 		validateFile(file);
 		try {
@@ -325,12 +327,13 @@ public class ModuleService implements IModuleService {
 			Module module = processModule(doc);
 			moduleRepository.save(module);
 			LOGGER.info("Module saved successfully");
+			return true;
 		} catch (SAXException e) {
-			LOGGER.error("Invalid XML file format");
+			LOGGER.error("Invalid XML file format"+e.getMessage());
 			throw new UserInputException("Invalid XML file format.");
 		} catch (IOException | ParserConfigurationException | IllegalArgumentException e) {
-			LOGGER.error("Error reading the XML file");
-			throw new UserInputException("Error reading the XML file.");
+			LOGGER.error("Error reading the XML file"+e.getMessage());
+			throw new TDKServiceException("Error reading the XML file.");
 		}
 	}
 
@@ -342,22 +345,29 @@ public class ModuleService implements IModuleService {
 	 * @throws Exception if an error occurs while generating the XML file
 	 */
 	@Override
-	public String generateXML(String moduleName) throws Exception {
+	public String generateXML(String moduleName) {
 		Module module = moduleRepository.findByName(moduleName);
 		if (module == null) {
 			LOGGER.error("Module with name {} not found", moduleName);
 			throw new ResourceNotFoundException(Constants.MODULE_NAME, moduleName);
 		}
+		try {
+			Document doc = createDocument();
+			Element rootElement = createRootElement(doc);
+			Element moduleElement = createModuleElement(doc, module);
+			rootElement.appendChild(moduleElement);
 
-		Document doc = createDocument();
-		Element rootElement = createRootElement(doc);
-		Element moduleElement = createModuleElement(doc, module);
-		rootElement.appendChild(moduleElement);
+			appendFunctionsToModuleElement(doc, moduleElement, module);
+			appendParametersToModuleElement(doc, moduleElement, module);
+			return convertDocumentToXmlString(doc);
+		} catch (ParserConfigurationException e) {
+			LOGGER.error("Error creating the XML document");
+			throw new TDKServiceException("Error creating the XML document.");
+		} catch (TransformerException e) {
+			LOGGER.error("Error converting the XML document to string");
+			throw new TDKServiceException("Error converting the XML document to string.");
+		}
 
-		appendFunctionsToModuleElement(doc, moduleElement, module);
-		appendParametersToModuleElement(doc, moduleElement, module);
-
-		return convertDocumentToXmlString(doc);
 	}
 
 	/**

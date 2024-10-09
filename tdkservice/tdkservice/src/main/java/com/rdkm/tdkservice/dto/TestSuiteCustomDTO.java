@@ -25,9 +25,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * The TestSuiteCustomDTO class is used to store test suite custom data.
- * This class is used to transfer the data from the service layer to the
- * controller layer.
+ * The TestSuiteCustomDTO class is used to store test suite custom data. This
+ * class is used to transfer the data from the service layer to the controller
+ * layer.
  */
 @Data
 public class TestSuiteCustomDTO {
@@ -37,6 +37,12 @@ public class TestSuiteCustomDTO {
 	 */
 	@NotNull(message = "Test suite name cannot be null")
 	private String testSuiteName;
+
+	/**
+	 * Test suite description
+	 */
+	@NotNull(message = "Test suite description cannot be null")
+	private String description;
 
 	/**
 	 * Test suite box type

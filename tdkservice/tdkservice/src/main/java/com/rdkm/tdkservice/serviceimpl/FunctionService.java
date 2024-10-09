@@ -42,6 +42,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -97,7 +98,7 @@ public class FunctionService implements IFunctionService {
                 LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
                 return false;
             }
-            return function != null && function.getId() != null && function.getId() > 0;
+            return function != null && function.getId() != null && function.getId() != null;
     }
 
 	/**
@@ -172,7 +173,7 @@ public class FunctionService implements IFunctionService {
      * @return the data transfer object containing the details of the function, or null if not found
 	 */
 	@Override
-	public FunctionDTO findFunctionById(Integer id) {
+	public FunctionDTO findFunctionById(UUID id) {
 		LOGGER.info("Retrieving function by ID: {}", id);
         Function function = functionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Function not found for this id :: ", id.toString()));
 		FunctionDTO functionDTO = MapperUtils.convertToFunctionDTO(function);
@@ -186,7 +187,7 @@ public class FunctionService implements IFunctionService {
      * @return true if the function was deleted successfully, false otherwise
      */
     @Override
-    public void deleteFunction(Integer id) {
+    public void deleteFunction(UUID id) {
         LOGGER.info("Deleting function by ID: {}", id);
         if (!functionRepository.existsById(id)) {
             LOGGER.error("Function not found for ID: {}", id);

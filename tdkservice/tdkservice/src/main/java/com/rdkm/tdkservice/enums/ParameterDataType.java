@@ -41,5 +41,5 @@ public enum ParameterDataType {
     /**
      * Represents a float parameter type.
      */
-    FLOAT,
+    FLOAT
 }

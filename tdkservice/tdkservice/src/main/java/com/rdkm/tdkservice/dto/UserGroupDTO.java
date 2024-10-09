@@ -19,6 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.UUID;
+
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
@@ -39,7 +41,8 @@ public class UserGroupDTO {
 	/**
 	 * Represents the unique identifier for the UserGroup.
 	 */
-	private Integer userGroupId;
+	@NotBlank(message = "User group id is required")
+	private UUID userGroupId;
 	
 	/**
 	 * Represents the name of the UserGroup. This field is mandatory, hence it

@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -32,7 +33,7 @@ import com.rdkm.tdkservice.model.TestSuite;
  * Repository interface for test suite
  */
 @Repository
-public interface TestSuiteRepository extends JpaRepository<TestSuite, Integer> {
+public interface TestSuiteRepository extends JpaRepository<TestSuite, UUID> {
 
 	/**
 	 * Check if test suite exists by name

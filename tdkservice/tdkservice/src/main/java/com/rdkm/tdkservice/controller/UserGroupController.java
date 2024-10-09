@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -138,7 +139,7 @@ public class UserGroupController {
 	@ApiResponse(responseCode = "200", description = "User group deleted successfully")
 	@ApiResponse(responseCode = "404", description = "User group not found")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteUserGroup(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteUserGroup(@PathVariable UUID id) {
 		LOGGER.info("Received delete user group request for ID " + id);
 		userGroupService.deleteById(id);
 		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the userGroup");
@@ -162,10 +163,10 @@ public class UserGroupController {
 	@ApiResponse(responseCode = "404", description = "User group not found")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
-	@PutMapping("/update/{id}")
-	public ResponseEntity<?> updateUserGroup(@PathVariable Integer id, @RequestBody UserGroupDTO userGroupRequest) {
+	@PutMapping("/update")
+	public ResponseEntity<?> updateUserGroup( @RequestBody UserGroupDTO userGroupRequest) {
 		LOGGER.info("Executing updateUserGroup method with request: " + userGroupRequest.toString());
-		UserGroupDTO updatedUserGroup = userGroupService.updateUserGroup(userGroupRequest, id);
+		UserGroupDTO updatedUserGroup = userGroupService.updateUserGroup(userGroupRequest);
 		if (null != updatedUserGroup) {
 			LOGGER.info("User group updated successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(updatedUserGroup);

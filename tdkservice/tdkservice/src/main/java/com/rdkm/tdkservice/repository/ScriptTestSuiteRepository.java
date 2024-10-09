@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -33,7 +34,7 @@ import jakarta.transaction.Transactional;
  * Repository interface for script test suite
  */
 @Repository
-public interface ScriptTestSuiteRepository extends JpaRepository<ScriptTestSuite, Integer> {
+public interface ScriptTestSuiteRepository extends JpaRepository<ScriptTestSuite, UUID> {
 
 	/**
 	 * This method is used to delete all the test suite mapping for a script

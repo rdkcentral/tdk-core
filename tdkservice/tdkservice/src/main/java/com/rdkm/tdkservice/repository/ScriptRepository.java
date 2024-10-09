@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -38,7 +39,7 @@ import com.rdkm.tdkservice.model.Script;
  * being managed by the repository.
  */
 @Repository
-public interface ScriptRepository extends JpaRepository<Script, Integer> {
+public interface ScriptRepository extends JpaRepository<Script, UUID> {
 
 	/**
 	 * This method is used to check whether the script exists by name.

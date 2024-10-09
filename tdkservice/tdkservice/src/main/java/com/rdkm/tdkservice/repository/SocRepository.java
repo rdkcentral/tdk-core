@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.repository;
 
 import java.util.List;
+import java.util.UUID;
 
 import com.rdkm.tdkservice.model.Soc;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -32,7 +33,7 @@ import com.rdkm.tdkservice.enums.Category;
  * 
  */
 @Repository
-public interface SocRepository extends JpaRepository<Soc, Integer> {
+public interface SocRepository extends JpaRepository<Soc, UUID> {
 	
 	/**
 	 * Find by name

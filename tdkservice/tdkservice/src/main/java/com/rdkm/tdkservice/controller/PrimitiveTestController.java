@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -112,7 +113,7 @@ public class PrimitiveTestController {
 	/**
 	 * This method is used to delete the primitive test
 	 *
-	 * @param id - Integer
+	 * @param id - UUID
 	 * @return ResponseEntity<String> - response entity - message
 	 */
 
@@ -121,7 +122,7 @@ public class PrimitiveTestController {
 	@ApiResponse(responseCode = "500", description = "Error in deleting primitive test data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteById(@PathVariable Integer id) {
+	public ResponseEntity<String> deleteById(@PathVariable UUID id) {
 		LOGGER.info("Deleting primitive test with id: " + id);
 		primitiveTestService.deleteById(id);
 		LOGGER.info("Primitive test deleted successfully with id: " + id);
@@ -131,7 +132,7 @@ public class PrimitiveTestController {
 	/**
 	 * This method is used to get the primitive test details by id
 	 *
-	 * @param id - Integer
+	 * @param id - UUID
 	 * @return ResponseEntity<?> - response entity - message
 	 * 
 	 */
@@ -141,7 +142,7 @@ public class PrimitiveTestController {
 	@ApiResponse(responseCode = "404", description = "Primitive Test not found")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getPrimitiveTestDetails(@PathVariable Integer id) {
+	public ResponseEntity<?> getPrimitiveTestDetails(@PathVariable UUID id) {
 		LOGGER.info("Finding primitive test with id: " + id);
 		PrimitiveTestDTO primitiveTestDTO = primitiveTestService.getPrimitiveTestDetailsById(id);
 		if (primitiveTestDTO != null) {

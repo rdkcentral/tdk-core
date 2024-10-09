@@ -1,6 +1,7 @@
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.web.multipart.MultipartFile;
@@ -44,7 +45,7 @@ public interface IModuleService {
 	 * @return the data transfer object containing the details of the module, or
 	 *         null if not found
 	 */
-	public ModuleDTO findModuleById(Integer id);
+	public ModuleDTO findModuleById(UUID id);
 
 	/**
 	 * Finds a module by its category.
@@ -61,7 +62,7 @@ public interface IModuleService {
 	 * @param id the ID of the module
 	 * @return true if the module was deleted successfully, false otherwise
 	 */
-	public boolean deleteModule(Integer id);
+	public boolean deleteModule(UUID id);
 
 	/**
 	 * Finds all test groups.
@@ -81,8 +82,9 @@ public interface IModuleService {
 	 * Parses and saves the XML file.
 	 *
 	 * @param file the XML file
+	 * @return 
 	 */
-	void parseAndSaveXml(MultipartFile file);
+	boolean parseAndSaveXml(MultipartFile file);
 
 	/**
 	 * Generates the XML file.
@@ -90,7 +92,7 @@ public interface IModuleService {
 	 * @param module the module name
 	 * @return the XML file as a string
 	 */
-	String generateXML(String module) throws Exception;
+	String generateXML(String module);
 
 	/**
 	 * Generates the XML file.

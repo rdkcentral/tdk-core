@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.serviceimpl;
 
 import java.util.List;
-
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -36,8 +36,8 @@ import org.springframework.stereotype.Service;
 
 import com.rdkm.tdkservice.controller.LoginController;
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
-import com.rdkm.tdkservice.dto.UserUpdateDTO;
 import com.rdkm.tdkservice.enums.Theme;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService {
 	 *                        user to be created
 	 * @return the saved User object
 	 */
-	public boolean createUser(UserDTO userRequest) {
+	public boolean createUser(UserCreateDTO userRequest) {
 		LOGGER.info("Going to create a new user");
 		// Check if the user already exists with the same username
 		if (userRepository.existsByUsername(userRequest.getUserName())) {
@@ -141,7 +141,7 @@ public class UserService implements UserDetailsService {
 		if (null != userGroup)
 			user.setUserGroup(userGroup);
 		User savedUser = userRepository.save(user);
-		if (savedUser != null && savedUser.getId() > 0) {
+		if (savedUser != null && savedUser.getId() != null) {
 			LOGGER.info("Creating new user success");
 			return true;
 		} else {
@@ -158,7 +158,7 @@ public class UserService implements UserDetailsService {
 	 * @throws ResourceNotFoundException If the user with the provided ID does not
 	 *                                   exist.
 	 */
-	public UserDTO findUserById(Integer id) {
+	public UserDTO findUserById(UUID id) {
 		LOGGER.info("Executing findUserById method with id: " + id);
 
 		User user = userRepository.findById(id)
@@ -194,7 +194,7 @@ public class UserService implements UserDetailsService {
 	 * @throws ResourceNotFoundException If the user with the provided ID does not
 	 *                                   exist.
 	 */
-	public UserDTO updateUser(UserUpdateDTO updateUserRequest) {
+	public UserDTO updateUser(UserDTO updateUserRequest) {
 		LOGGER.info("Executing updateUser method for the user: " + updateUserRequest.toString());
 
 		// Retrieve the user from the database
@@ -259,7 +259,7 @@ public class UserService implements UserDetailsService {
 	 * @throws ResourceNotFoundException If the user with the provided ID does not
 	 *                                   exist.
 	 */
-	public void deleteUser(Integer id) {
+	public void deleteUser(UUID id) {
 		LOGGER.info("Executing deleteUser method with id: " + id);
 		if (!userRepository.existsById(id)) {
 			LOGGER.info("No User found with id: " + id);

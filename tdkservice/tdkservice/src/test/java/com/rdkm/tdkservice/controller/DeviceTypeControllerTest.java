@@ -21,7 +21,6 @@ package com.rdkm.tdkservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -34,9 +33,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeUpdateDTO;
-import com.rdkm.tdkservice.service.IDeviceTypeService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -44,6 +40,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
+import com.rdkm.tdkservice.dto.DeviceTypeDTO;
+import com.rdkm.tdkservice.service.IDeviceTypeService;
 
 /*
 * This class is used to test the DeviceTypeControllerTest class.
@@ -74,7 +74,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void createDeviceTypeSuccessfully() {
-		DeviceTypeDTO deviceTypeRequest = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeRequest = new DeviceTypeCreateDTO();
 		when(deviceTypeService.createDeviceType(deviceTypeRequest)).thenReturn(true);
 
 		ResponseEntity<String> response = deviceTypeController.createDeviceType(deviceTypeRequest);
@@ -90,7 +90,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void createDeviceTypeFailure() {
-		DeviceTypeDTO deviceTypeRequest = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeRequest = new DeviceTypeCreateDTO();
 		when(deviceTypeService.createDeviceType(deviceTypeRequest)).thenReturn(false);
 
 		ResponseEntity<String> response = deviceTypeController.createDeviceType(deviceTypeRequest);
@@ -106,7 +106,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void getAllDeviceTypesSuccessfully() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		when(deviceTypeService.getAllDeviceTypes()).thenReturn(Arrays.asList(deviceTypeDTO));
 
 		ResponseEntity<?> response = deviceTypeController.getAllDeviceTypes();
@@ -151,10 +151,10 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void findDeviceTypeByIdSuccessfully() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		when(deviceTypeService.findById(anyInt())).thenReturn(deviceTypeDTO);
 
-		ResponseEntity<DeviceTypeDTO> response = deviceTypeController.findById(1);
+		ResponseEntity<DeviceTypeCreateDTO> response = deviceTypeController.findById(1);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(deviceTypeDTO, response.getBody());
@@ -167,9 +167,9 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void updateDeviceTypeNotFound() {
-		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
+		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 
-		when(deviceTypeService.updateDeviceType(any(DeviceTypeUpdateDTO.class), anyInt())).thenReturn(null);
+		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class), anyInt())).thenReturn(null);
 
 		ResponseEntity<?> response = deviceTypeController.updateDeviceType(1, deviceTypeUpdateDTO);
 
@@ -184,9 +184,9 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void updateDeviceTypeSuccessfully() {
-		DeviceTypeUpdateDTO deviceTypeUpdateDTO = new DeviceTypeUpdateDTO();
+		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 
-		when(deviceTypeService.updateDeviceType(any(DeviceTypeUpdateDTO.class), anyInt())).thenReturn(deviceTypeUpdateDTO);
+		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class), anyInt())).thenReturn(deviceTypeUpdateDTO);
 
 		ResponseEntity<?> response = deviceTypeController.updateDeviceType(1, deviceTypeUpdateDTO);
 
@@ -212,7 +212,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void getDeviceTypesByCategorySuccessfully() {
-		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		when(deviceTypeService.getDeviceTypesByCategory(anyString())).thenReturn(Arrays.asList(deviceTypeDTO));
 
 		ResponseEntity<?> response = deviceTypeController.getDeviceTypesByCategory("category");

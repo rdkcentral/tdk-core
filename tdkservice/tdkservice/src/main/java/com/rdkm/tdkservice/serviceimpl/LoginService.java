@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import com.rdkm.tdkservice.config.JwtConfig;
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.service.ILoginService;
@@ -54,7 +54,7 @@ public class LoginService implements ILoginService {
 	 * @return User - returns user object if successfully saved
 	 */
 	@Override
-	public boolean register(UserDTO registerRequest) {
+	public boolean register(UserCreateDTO registerRequest) {
 		LOGGER.info("Registed user the user");
 		boolean registeredUser = userService.createUser(registerRequest);
 		// TODO : Place holder for email based registration

@@ -21,6 +21,7 @@ package com.rdkm.tdkservice.service;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -46,7 +47,7 @@ public interface IDeviceService {
 	 *                        details of the Device.
 	 * @return Device This returns the updated Device.
 	 */
-	public DeviceUpdateDTO updateDevice(DeviceUpdateDTO deviceUpdateDTO);
+	public boolean updateDevice(DeviceUpdateDTO deviceUpdateDTO);
 
 	/**
 	 * This method is used to retrieve all Devices.
@@ -68,21 +69,21 @@ public interface IDeviceService {
 	 * @param id This is the id of the Device to be found.
 	 * @return Device This returns the found Device.
 	 */
-	public DeviceResponseDTO findDeviceById(Integer id);
+	public DeviceResponseDTO findDeviceById(UUID id);
 
 	/**
 	 * This method is used to delete a Device by its id.
 	 *
 	 * @param id This is the id of the Device to be deleted.
 	 */
-	public void deleteDeviceById(Integer id);
+	public boolean deleteDeviceById(UUID id);
 
 	/**
 	 * This method is used to parse the Device XML.
 	 *
 	 * @param file This is the file containing the Device XML.
 	 */
-	public void parseXMLForDevice(MultipartFile file);
+	public boolean parseXMLForDevice(MultipartFile file);
 
 	/**
 	 * This method is used to download the Device XML.
@@ -98,6 +99,6 @@ public interface IDeviceService {
 	 * @param category This is the category of the Devices to be downloaded.
 	 * @return String This returns the Device XML.
 	 */
-	public Path downloadAllDevicesByCategory(String category) throws Exception;
+	public Path downloadAllDevicesByCategory(String category);
 
 }

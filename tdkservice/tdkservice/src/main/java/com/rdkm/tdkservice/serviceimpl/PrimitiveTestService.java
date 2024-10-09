@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
@@ -53,8 +54,6 @@ import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
 import com.rdkm.tdkservice.service.IPrimitiveTestService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
-
-import jakarta.validation.Valid;
 
 /**
  * The PrimitiveTestService class is used to perform the operations on primitive
@@ -89,7 +88,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 	 */
 
 	@Override
-	public boolean createPrimitiveTest(@Valid PrimitiveTestCreateDTO primitiveTestDTO) {
+	public boolean createPrimitiveTest(PrimitiveTestCreateDTO primitiveTestDTO) {
 		LOGGER.info("Creating primitive test: " + primitiveTestDTO.toString());
 		if (primitiveTestRepository.existsByName(primitiveTestDTO.getPrimitiveTestname())) {
 			LOGGER.info("Primitive test already exists with the same name: " + primitiveTestDTO.getPrimitiveTestname());
@@ -121,7 +120,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 			// parameters and then save the values in primitive test tables
 			List<ParameterValueDTO> primitiveTestParameterList = primitiveTestDTO.getPrimitiveTestParameters();
 			List<Parameter> parameter = parameterRepository.findByFunction(function);
-			if (parameter != null) {
+			if (parameter != null && primitiveTestParameterList != null) {
 				for (Parameter param : parameter) {
 					for (ParameterValueDTO parameterValueDTO : primitiveTestParameterList) {
 						if (param.getName().equals(parameterValueDTO.getParameterName())) {
@@ -153,7 +152,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 	 */
 
 	@Override
-	public void deleteById(Integer id) {
+	public void deleteById(UUID id) {
 		LOGGER.info("Deleting primitive test with id: " + id);
 		PrimitiveTest primitiveTest = primitiveTestRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PRIMITIVE_TEST_ID, id.toString()));
@@ -174,7 +173,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 	 */
 
 	@Override
-	public PrimitiveTestDTO getPrimitiveTestDetailsById(Integer id) {
+	public PrimitiveTestDTO getPrimitiveTestDetailsById(UUID id) {
 		LOGGER.info("Finding primitive test with id: " + id);
 		PrimitiveTest primitiveTest = primitiveTestRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PRIMITIVE_TEST_ID, id.toString()));
@@ -233,7 +232,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 	 */
 
 	@Override
-	public boolean updatePrimitiveTest(@Valid PrimitiveTestUpdateDTO primitiveTestDTO) {
+	public boolean updatePrimitiveTest(PrimitiveTestUpdateDTO primitiveTestDTO) {
 		LOGGER.info("Updating primitive test: " + primitiveTestDTO.toString());
 		PrimitiveTest primitiveTest = primitiveTestRepository.findById(primitiveTestDTO.getPrimitiveTestId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.PRIMITIVE_TEST_ID,

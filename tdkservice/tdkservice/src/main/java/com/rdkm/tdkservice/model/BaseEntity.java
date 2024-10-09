@@ -20,9 +20,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
@@ -44,8 +47,9 @@ public abstract class BaseEntity {
 	 * The unique identifier of the entity.
 	 */
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@GeneratedValue(strategy = GenerationType.UUID)
+	@JdbcTypeCode(SqlTypes.VARCHAR)
+	private UUID id;
 
 	/**
 	 * The date the entity was created.

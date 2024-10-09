@@ -28,9 +28,6 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.OemUpdateDTO;
-import com.rdkm.tdkservice.service.IOemService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -38,6 +35,10 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import com.rdkm.tdkservice.dto.OemCreateDTO;
+import com.rdkm.tdkservice.dto.OemDTO;
+import com.rdkm.tdkservice.service.IOemService;
 
 /*
 * This class is used to test the OemControllerTest class.
@@ -68,8 +69,8 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void createOem_success() {
-		OemDTO oemDTO = new OemDTO();
-		when(oemService.createOem(any(OemDTO.class))).thenReturn(true);
+		OemCreateDTO oemDTO = new OemCreateDTO();
+		when(oemService.createOem(any(OemCreateDTO.class))).thenReturn(true);
 
 		ResponseEntity<String> response = oemController.createOemType(oemDTO);
 
@@ -84,8 +85,8 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void createOem_failure() {
-		OemDTO oemDTO = new OemDTO();
-		when(oemService.createOem(any(OemDTO.class))).thenReturn(false);
+		OemCreateDTO oemDTO = new OemCreateDTO();
+		when(oemService.createOem(any(OemCreateDTO.class))).thenReturn(false);
 
 		ResponseEntity<String> response = oemController.createOemType(oemDTO);
 
@@ -100,7 +101,7 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void findAllOems_found() {
-		when(oemService.getAllOem()).thenReturn(Arrays.asList(new OemDTO()));
+		when(oemService.getAllOem()).thenReturn(Arrays.asList(new OemCreateDTO()));
 
 		ResponseEntity<?> response = oemController.findAllOemTypes();
 
@@ -143,10 +144,10 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void findById_found() {
-		OemDTO oemDTO = new OemDTO();
+		OemCreateDTO oemDTO = new OemCreateDTO();
 		when(oemService.findById(anyInt())).thenReturn(oemDTO);
 
-		ResponseEntity<OemDTO> response = oemController.findById(1);
+		ResponseEntity<OemCreateDTO> response = oemController.findById(1);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(oemDTO, response.getBody());
@@ -159,8 +160,8 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void updateOem_success() {
-		OemUpdateDTO oemUpdateDTO = new OemUpdateDTO();
-		when(oemService.updateOem(any(OemUpdateDTO.class), anyInt()))
+		OemDTO oemUpdateDTO = new OemDTO();
+		when(oemService.updateOem(any(OemDTO.class), anyInt()))
 				.thenReturn(oemUpdateDTO);
 
 		ResponseEntity<?> response = oemController.updateOemType(1, oemUpdateDTO);
@@ -176,10 +177,10 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void updateOem_failure() {
-		when(oemService.updateOem(any(OemUpdateDTO.class), anyInt()))
+		when(oemService.updateOem(any(OemDTO.class), anyInt()))
 				.thenReturn(null);
 
-		ResponseEntity<?> response = oemController.updateOemType(1, new OemUpdateDTO());
+		ResponseEntity<?> response = oemController.updateOemType(1, new OemDTO());
 
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
@@ -193,7 +194,7 @@ public class OemControllerTest {
 	@Test
 	public void getOemsByCategory_found() {
 		when(oemService.getOemsByCategory(anyString()))
-				.thenReturn(Arrays.asList(new OemDTO()));
+				.thenReturn(Arrays.asList(new OemCreateDTO()));
 
 		ResponseEntity<?> response = oemController.getOemsByCategory("category");
 
