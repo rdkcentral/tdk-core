@@ -1970,7 +1970,7 @@
        </testCasePostRequisite>
        </testCase>
 
-		<!-- Test case 61 -->
+	<!-- Test case 61 -->
         <testCase testCaseId="DS_61" testCaseName="Set_Mute_Invalid_audioPort" desc="Validate by setting up mute for invalid audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
@@ -1982,7 +1982,7 @@
                 </testStep>
         </testCase>
 
-		<!-- Test case 62 -->
+	<!-- Test case 62 -->
         <testCase testCaseId="DS_62" testCaseName="Set_Mute_empty_audioPort" desc="Validate by setting up mute for empty audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Set_Muted" method="Set_Muted">
@@ -1994,7 +1994,7 @@
                 </testStep>
         </testCase>
 		
-		<!-- Test case 63 -->
+	<!-- Test case 63 -->
         <testCase testCaseId="DS_63" testCaseName="Get_Dialog_Enhancement_InvalidAudioPort" desc="Validate by getting dialogEnhancement for invalid audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Dialog_Enhancement" method="Get_Dialog_Enhancement">
@@ -2027,8 +2027,8 @@
                 </testStep>
         </testCase>
 		
-		<!-- Test case 66 -->
-        <testCase testCaseId="DS_66" testCaseName="Get_Dialog_Enhancement_EmptyAudioPort" desc="Validate by getting VolumeLevel for empty audioport">
+	<!-- Test case 66 -->
+        <testCase testCaseId="DS_66" testCaseName="Get_Volume_Level_EmptyAudioPort" desc="Validate by getting VolumeLevel for empty audioport">
                 <testCaseInfo testCaseType="direct"/>
                 <testStep testStepId="1" name="Get_Volume_Level" method="Get_Volume_Level">
                           <params>
