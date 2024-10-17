@@ -2620,6 +2620,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "framerate_check_negative_scenario":
+            info = result
+            if str(result.get("success")).lower() == "false":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         elif tag == "framerate_check_display_framerate":
             success = str(result.get("success")).lower() == "true"
             status = checkNonEmptyResultData(result.get("framerate"))
@@ -2660,6 +2667,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if success and len(result.get("files")) > 0 and isclean == "false":
                 info["Test_Step_Status"] = "SUCCESS"
             elif success and ( len(result.get("files")) == 0 or result.get("files") is None ) and isclean == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "warehouse_negative_error_message_validation":
+            success = result.get("success")
+            info["success"] = success
+            message = str(result.get("error")).strip()
+            info["error"] = message
+            if str(success).lower() == "false" and any(value in message for value in expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -3043,6 +3060,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             info["friendlyname"] = result.get("friendlyname")
             success = str(result.get("success")).lower() == "true"
             if success and str(result.get("friendlyname")).lower() in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "xcast_check_negative_scenario":
+            info = result
+            if str(result.get("success")).lower() == "false":
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"

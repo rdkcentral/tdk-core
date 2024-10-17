@@ -513,5 +513,13 @@
 	 <testStep testStepId="4" name="Get_API_Version" method="Get_API_Version">
            <resultGeneration useMethodTag="xcast_check_version" expectedValues="1" />
          </testStep>
-	</testCase>
+        </testCase>
+
+	<!--- Test case 13 -->
+        <testCase testCaseId="XCast_13" testCaseName="Set_Enables_EmptyValue" desc="Checks the response when setEnabled value is set as empty">
+         <testCaseInfo testCaseType="direct"/>
+         <testStep testStepId="1" name="Set_Enabled_EmptyValue" method="Set_Enabled">
+           <resultGeneration useMethodTag="xcast_check_negative_scenario"/>
+         </testStep>
+        </testCase>
 </testPlugin>
