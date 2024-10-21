@@ -37,6 +37,28 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DisplaySettings" expectedValues="activated"/>
             </testStep>
         </prerequisite>
+	
+	<prerequisite requisiteId="2" requisiteName="Activate_HdcpProfile_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.HdcpProfile" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.HdcpProfile" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.HdcpProfile" />
+                <params>
+                  <param tag="callsign" value="org.rdk.HdcpProfile" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.HdcpProfile" />
+                <params>
+                  <param tag="plugin" value="org.rdk.HdcpProfile" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.HdcpProfile" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
     </pluginPreRequisite>
 
     <testCase testCaseId="DSWTV_1" testCaseName="Read_EDID_Without_TV" desc="Check the EDID status when TV is disconnected">
@@ -77,6 +99,27 @@
         </testStep>
         <testStep testStepId="3" name="Check_Active_Input_Status_Without_Video_Port" method="Get_Active_Input" pluginName="DisplaySettings">
             <resultGeneration useMethodTag="check_active_input" expectedValues="False"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 04 -->
+    <testCase testCaseId="DSWTV_4" testCaseName="Check_Connected_AudioPorts_Without_TV_Connected"  desc="Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_AudioPorts_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_AudioPorts">
+            <resultGeneration useMethodTag="check_empty_audio_ports" arguments="HDMI0"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 05 -->
+    <testCase testCaseId="DSWTV_5" testCaseName="Check_HDCP_Status_Without_TV_Connected"  desc="Checks getHDCPStatus API response when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+	<testStep testStepId="2" name="Get_HDCP_Status" method="Get_HDCP_Status" pluginName="HDCPProfile">
+            <resultGeneration useMethodTag="hdcpprofile_get_general_info" arguments="get_hdcp_status_without_tv">
+                <expectedValues usePreviousResult="true" Id="1" useMethodTag="display_get_isconnected_status" />
+            </resultGeneration>
         </testStep>
     </testCase>
 </testPlugin>
