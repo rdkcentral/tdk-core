@@ -93,7 +93,7 @@ def download_fca_report():
         files = re.findall(r'href=[\'"]?([^\'" >]+)', response.text)
         files = [file.split('/')[-1] for file in files]
         # Filter filenames based on starting part and extension
-        matching_files = [filename for filename in files if filename.startswith(filename_start) and filename.endswith(filename_extension)]
+        matching_files = [filename for filename in files if filename.startswith('standaloneReports') and reportID in filename and filename.endswith(filename_extension)]
         if matching_files:
             file_to_download = matching_files[0]
             download_url = os.path.join(server_url, file_to_download)
