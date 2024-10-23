@@ -67,9 +67,9 @@
     <test_type>Positive</test_type>
     <test_setup>Video_Accelerator and RPI</test_setup>
     <pre_requisite>MEMCR_APPHIBERNATE_PARAMETER needs to be configured in the device configuration file</pre_requisite>
-    <api_or_interface_used>org.rdk.RDKShell.1.getClients,org.rdk.RDKShell.1.getState,org.rdk.RDKShell.1.restore,org.rdk.RDKShell.1.kill,org.rdk.RDKShell.1.launch,org.rdk.RDKShell.1.suspend,org.rdk.RDKShell.1.getSystemResourceInfo</api_or_interface_used>
+    <api_or_interface_used>org.rdk.RDKShell.1.getClients,org.rdk.RDKShell.1.getState,org.rdk.RDKShell.1.restore,org.rdk.RDKShell.1.launch,org.rdk.RDKShell.1.suspend,org.rdk.RDKShell.1.getSystemResourceInfo</api_or_interface_used>
     <input_parameters>MEMCR_APPHIBERNATE_PARAMETER</input_parameters>
-    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service 3.Verify if the cobalt app is running if it is, terminate it 4. Launch the cobalt again 5. Check that the getSystemResourceInfo API returns resource information about the app 6. Suspend the app and verify that the getSystemResourceInfo API does not return resource information about the app while it is in hibernated state</automation_approch>
+    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service 3. Check the status of the cobalt app: if it is hibernated, restore it; if it is suspended, launch it; if it is already running, take no action 4. If it is not running at all, proceed to launch the app 5. Check that the getSystemResourceInfo API returns resource information about the app 6. Suspend the app and verify that the getSystemResourceInfo API does not return resource information about the app while it is in hibernated state</automation_approch>
     <expected_output>All the steps should execute successfully</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>Nil</test_stub_interface>
@@ -84,6 +84,7 @@
 import tdklib;
 import ast
 import time
+from rdkvmemcrlib import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkvmemcr","1",standAlone=True);
@@ -152,6 +153,8 @@ if "SUCCESS" in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     print("SUCCESS : "+method+" API call was successful\n")
 
+                    #Verify the success status for updating the flag value in the subsequent if and elif blocks
+                    successstatus = 0
                     if "cobalt" in appcheck:
                         method = "org.rdk.RDKShell.1.getState"
                         tdkTestObj = obj.createTestStep('memcr_getValue')
@@ -172,6 +175,7 @@ if "SUCCESS" in result.upper():
                             obj.unloadModule("rdkvmemcr");
                             exit()
                         else:
+                            successstatus = 1
                             tdkTestObj.setResultStatus("SUCCESS")
                             print("SUCCESS : "+method+" API call was successful\n")
 
@@ -191,55 +195,73 @@ if "SUCCESS" in result.upper():
                                 obj.unloadModule("rdkvmemcr");
                                 exit()
                             else:
+                                successstatus = 1
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print("SUCCESS : "+method+" API call was successful\n")
 
-                        method = "org.rdk.RDKShell.1.kill"
-                        value = '{ "client": "cobalt" }'
-                        tdkTestObj = obj.createTestStep('memcr_setValue')
-                        tdkTestObj.addParameter("method",method)
-                        tdkTestObj.addParameter("value",value)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        result = tdkTestObj.getResultDetails()
-                        result = ast.literal_eval(result)
-                        #Access the list of applications
-                        success = result.get("success")
-                        if str(success).lower() != "true":
+                                time.sleep(5)
+                                value = '{ "callsign": "Cobalt" }'
+                                appstate,success = memcr_launchapp(obj,value)
+                                if str(success).lower() != "true" and "resume" not in str(appstate).strip().lower():
+                                    tdkTestObj.setResultStatus("FAILURE")
+                                    print("FAILURE : "+method+" API call was unsuccessful\n")
+                                    obj.unloadModule("rdkvmemcr");
+                                    exit()
+                                else:
+                                    successstatus = 1
+                                    tdkTestObj.setResultStatus("SUCCESS")
+                                    print("SUCCESS : "+method+" API call was successful\n")
+
+                        elif appstate == "suspended":
+                            time.sleep(5)
+                            value = '{ "callsign": "Cobalt" }'
+                            appstate,success = memcr_launchapp(obj,value)
+                            if str(success).lower() != "true" and "resume" not in str(appstate).strip().lower():
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print("FAILURE : "+method+" API call was unsuccessful\n")
+                                obj.unloadModule("rdkvmemcr");
+                                exit()
+                            else:
+                                successstatus = 1
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print("SUCCESS : "+method+" API call was successful\n")
+                        else:
+                            successstatus = 1
+                            pass
+
+                    elif "cobalt" not in appcheck:
+                        time.sleep(5)
+                        value = '{ "callsign": "Cobalt" }'
+                        appstate,success = memcr_launchapp(obj,value)
+                        if str(success).lower() != "true" and "activate" not in str(appstate).strip().lower():
                             tdkTestObj.setResultStatus("FAILURE")
                             print("FAILURE : "+method+" API call was unsuccessful\n")
                             obj.unloadModule("rdkvmemcr");
                             exit()
                         else:
+                            successstatus = 1
                             tdkTestObj.setResultStatus("SUCCESS")
                             print("SUCCESS : "+method+" API call was successful\n")
 
-                    time.sleep(5)
-                    method = "org.rdk.RDKShell.1.launch"
-                    value = '{ "callsign": "Cobalt" }'
-                    tdkTestObj = obj.createTestStep('memcr_setValue')
-                    tdkTestObj.addParameter("method",method)
-                    tdkTestObj.addParameter("value",value)
-                    tdkTestObj.executeTestCase(expectedResult)
-                    result = tdkTestObj.getResultDetails()
-                    result = ast.literal_eval(result)
-                    appstate = result.get("launchType")
-                    success = result.get("success")
-                    if str(success).lower() == "true" and "activate" in str(appstate).strip().lower():
-                        tdkTestObj.setResultStatus("SUCCESS")
-                        print("SUCCESS : "+method+" API call was successful\n")
+                            method = "org.rdk.RDKShell.1.getClients"
+                            tdkTestObj = obj.createTestStep('memcr_getValue')
+                            tdkTestObj.addParameter("method",method)
+                            tdkTestObj.executeTestCase(expectedResult)
+                            result = tdkTestObj.getResultDetails()
+                            result = ast.literal_eval(result)
+                            appcheck = result.get("clients")
+                            success = result.get("success")
+                            if str(success).lower() != "true" and "cobalt" not in appcheck:
+                                tdkTestObj.setResultStatus("FAILURE")
+                                print("FAILURE : "+method+" API call was unsuccessful\n")
+                                obj.unloadModule("rdkvmemcr");
+                                exit()
+                            else:
+                                successstatus = 1
+                                tdkTestObj.setResultStatus("SUCCESS")
+                                print("SUCCESS : "+method+" API call was successful\n")
 
-                        method = "org.rdk.RDKShell.1.getClients"
-                        tdkTestObj = obj.createTestStep('memcr_getValue')
-                        tdkTestObj.addParameter("method",method)
-                        tdkTestObj.executeTestCase(expectedResult)
-                        result = tdkTestObj.getResultDetails()
-                        result = ast.literal_eval(result)
-                        appcheck = result.get("clients")
-                        success = result.get("success")
-                        if str(success).lower() == "true" and "cobalt" in appcheck:
-                            tdkTestObj.setResultStatus("SUCCESS")
-                            print("SUCCESS : "+method+" API call was successful\n")
-                    
+                    if successstatus == 1:
                             method = "org.rdk.RDKShell.1.getSystemResourceInfo"
                             tdkTestObj = obj.createTestStep('memcr_getValue')
                             tdkTestObj.addParameter("method",method)
@@ -299,12 +321,6 @@ if "SUCCESS" in result.upper():
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print("FAILURE : "+method+" API call was unsuccessful\n")
-                        else:
-                            tdkTestObj.setResultStatus("FAILURE")
-                            print("FAILURE : "+method+" API call was unsuccessful\n")
-                    else:
-                        tdkTestObj.setResultStatus("FAILURE")
-                        print("FAILURE : "+method+" API call was unsuccessful\n")
                 else:
                     tdkTestObj.setResultStatus("FAILURE")
                     print("FAILURE : "+method+" API call was unsuccessful\n")
@@ -317,4 +333,5 @@ if "SUCCESS" in result.upper():
 else:
     print("FAILURE : Module Loading Status Failure\n")
 
+#unload module
 obj.unloadModule("rdkvmemcr");

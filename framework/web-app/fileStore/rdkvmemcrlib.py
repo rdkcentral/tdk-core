@@ -17,6 +17,7 @@
 # limitations under the License.
 #########################################################################
 
+import tdklib
 import json
 import ast
 import sys
@@ -552,3 +553,23 @@ def memcr_logValidation(log_Occurrences):
         print("FAILURE : Failed to get the device credentials\n")
         logValidation_status = "FAILURE"
     return logValidation_status
+
+#----------------------------------------------------------------------
+# LAUNCH THE APP
+#----------------------------------------------------------------------
+def memcr_launchapp(obj, value):
+    try:
+        method = "org.rdk.RDKShell.1.launch"
+        expectedResult = "SUCCESS"
+        tdkTestObj = obj.createTestStep('memcr_setValue')
+        tdkTestObj.addParameter("method", method)
+        tdkTestObj.addParameter("value", value)
+        tdkTestObj.executeTestCase(expectedResult)
+        result = tdkTestObj.getResultDetails()
+        result = ast.literal_eval(str(result))
+        appstate = result["launchType"]
+        success = str(result["success"])
+        return appstate, success
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None, None

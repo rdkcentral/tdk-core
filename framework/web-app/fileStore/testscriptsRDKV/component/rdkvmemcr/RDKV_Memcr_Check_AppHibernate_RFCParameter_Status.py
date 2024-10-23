@@ -133,4 +133,5 @@ if "SUCCESS" in result.upper():
 else:
     print("FAILURE : Module Loading Status Failure\n")
 
+#unload module
 obj.unloadModule("rdkvmemcr");
