@@ -1067,7 +1067,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "lightningapp" />
             </testStep>
         </testCase>        
@@ -1081,7 +1081,7 @@
               </params>
               <resultGeneration useMethodTag="rdkshell_check_for_results" />
             </testStep>
-            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" delay="5">
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "htmlapp" />
             </testStep>
         </testCase>
