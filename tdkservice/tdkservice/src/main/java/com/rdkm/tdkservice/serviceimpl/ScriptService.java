@@ -184,7 +184,10 @@ public class ScriptService implements IScriptService {
 			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes());
 			script.setDeviceTypes(deviceTypes);
 			savedScript = scriptRepository.save(script);
-
+		} catch (ResourceNotFoundException e) {
+			// Let ResourceNotFoundException propagate to the global exception handler
+			LOGGER.error("Device type doesnt exist " + e.getMessage());
+			throw e;
 		} catch (Exception e) {
 			LOGGER.error("Error saving script with device types: " + e.getMessage());
 			e.printStackTrace();
@@ -510,10 +513,7 @@ public class ScriptService implements IScriptService {
 			LOGGER.error("Script name and file name are not same");
 			throw new UserInputException("Script name and Script file name are not the same");
 		}
-		if (!scriptFile.getOriginalFilename().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
-			LOGGER.error("Invalid file extension: " + scriptFile.getOriginalFilename());
-			throw new UserInputException("Invalid file extension: " + scriptFile.getOriginalFilename());
-		}
+		commonService.validatePythonFile(scriptFile);
 	}
 
 	/**
@@ -1017,6 +1017,50 @@ public class ScriptService implements IScriptService {
 				.append(primitiveTest.getModule().getName()).append("\");");
 
 		return scriptBuilder.toString();
+	}
+
+	/**
+	 * This method is used to get the Excel of scripts by module based on the
+	 * category.
+	 * 
+	 * @param categoryName - the category name
+	 */
+	@Override
+	public ByteArrayInputStream testCaseToExcelByCategory(String category) {
+		LOGGER.info("Received request to download test case as excel for module and category: " + category);
+		// Validate the category
+		Category categoryValue = commonService.validateCategory(category);
+		// Get all the modules based on the category
+		List<Module> modules = moduleRepository.findAllByCategory(categoryValue);
+		if (modules.isEmpty() || modules == null) {
+			LOGGER.error("No modules found for the category: " + category);
+			throw new ResourceNotFoundException("Modules for", category);
+		}
+
+		try {
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream);
+			for (Module module : modules) {
+				try {
+					ByteArrayInputStream byteArrayInputStream = testCaseToExcelByModule(module.getName());
+					ZipEntry zipEntry = new ZipEntry(module.getName() + Constants.EXCEL_FILE_EXTENSION);
+					zipOutputStream.putNextEntry(zipEntry);
+					byte[] bytes = byteArrayInputStream.readAllBytes();
+					zipOutputStream.write(bytes);
+					zipOutputStream.closeEntry();
+				} catch (Exception e) {
+					LOGGER.error("Error creating ZIP entry for module: " + module.getName(), e);
+					throw new TDKServiceException("Error creating ZIP entry for module: " + e.getMessage());
+				}
+			}
+
+			zipOutputStream.finish();
+			return new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
+
+		} catch (Exception e) {
+			LOGGER.error("Error creating ZIP file: " + e.getMessage(), e);
+			throw new TDKServiceException("Error creating ZIP file: " + e.getMessage());
+		}
 	}
 
 }

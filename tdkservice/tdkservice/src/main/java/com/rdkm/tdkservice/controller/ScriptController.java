@@ -356,4 +356,32 @@ public class ScriptController {
 		return ResponseEntity.ok(scriptTemplate);
 	}
 
+	
+	/**
+	 * This method is used to download all the test cases as Excel by Module ZIP by
+	 * Category
+	 * 
+	 * @param category - the category
+	 * @return ResponseEntity - the response entity
+	 */
+	@Operation(summary = "Download all Test Case as Module Excel  zip by Category", description = "Download all Test Case as Excel by Module ZIP by Category")
+	@ApiResponse(responseCode = "200", description = "Test case downloaded successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/downloadalltestcasezipbycategory")
+	public ResponseEntity<?> downloadAllTestCaseAsZipByCategory(@RequestParam String category) {
+		LOGGER.info("Received download all test case as excel as zip  by category : " + category);
+		ByteArrayInputStream in = scriptService.testCaseToExcelByCategory(category);
+		if (in == null || in.available() == 0) {
+			LOGGER.error("Error in downloading all test case as excel by module ZIP by category");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error in downloading all test case as excel by module ZIP by category");
+		}
+		// Prepare response with the Excel file
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=TestCase_" + category + Constants.ZIP_EXTENSION);
+		LOGGER.info("Downloaded all test case as excel by module ZIP by category");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
+				.body(new InputStreamResource(in));
+	}
 }

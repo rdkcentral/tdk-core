@@ -80,7 +80,7 @@ public interface IScriptService {
 	List<ScriptModuleDTO> findAllScriptByModuleWithCategory(String category);
 
 	/**
-	 * This method is used to get the script details by module.
+	 * This method is used to get the script details excel by module.
 	 * 
 	 * @param moduleName - the module name
 	 * @return - the script
@@ -88,7 +88,7 @@ public interface IScriptService {
 	ByteArrayInputStream testCaseToExcelByModule(String moduleName);
 
 	/**
-	 * This method is used to get the script details by testScriptName.
+	 * This method is used to get the script details excel  by testScriptName.
 	 * 
 	 * @param moduleName - the module name
 	 * @return - the script
@@ -111,19 +111,21 @@ public interface IScriptService {
 	 */
 	List<ScriptListDTO> findAllScriptsByCategory(String categoryName);
 	
+	
 	/**
-	 * This method is used to get the script details by testscriptId.
+	 * This method is used to upload the zip file.
 	 * 
-	 * @param scriptId - the script id
-	 * @return - the script
+	 * @param file - the file
+	 * @return - true if the file is uploaded successfully, false otherwise
 	 */
+	
 	boolean uploadZipFile(MultipartFile file);
 
 	/**
-	 * This method is used to get the script details by testscriptId.
+	 * This method is used to generate the script zip.
 	 * 
-	 * @param scriptId - the script id
-	 * @return - the script
+	 * @param scriptName - the script name
+	 * @return - the script zip
 	 */
 	byte[] generateScriptZip(String scriptName);
 
@@ -134,5 +136,13 @@ public interface IScriptService {
 	 * @return - the script
 	 */
 	public String scriptTemplate(String primitiveTestName);
+
+	/**
+	 * This method is used to get the script details in excel form by category.
+	 * 
+	 * @param category - the category
+	 * @return - the script
+	 */
+	ByteArrayInputStream testCaseToExcelByCategory(String category);
 
 }

@@ -22,6 +22,7 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,12 +36,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.UserGroup;
@@ -253,6 +257,51 @@ public class CommonService {
 			deviceTypeList.add(deviceType.getName());
 		}
 		return deviceTypeList;
+	}
+
+	/*
+	 * The method to add license header in the python files and config files
+	 * 
+	 * @param scriptFile
+	 * @return
+	 */
+	public MultipartFile addHeader(MultipartFile scriptFile) throws IOException {
+
+		String fileContent = new String(scriptFile.getBytes());
+		if (fileContent.contains(Constants.HEADER_FINDER)) {
+			LOGGER.info("Header already exists in the file");
+			return scriptFile;
+		}
+
+		String currentYear = Year.now().toString();
+
+		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
+
+		// Prepend the header to the file content
+		String updatedContent = header + fileContent;
+		return new MockMultipartFile(scriptFile.getName(), // Name of the file
+				scriptFile.getOriginalFilename(), // Original filename
+				scriptFile.getContentType(), // Content type (e.g., text/plain)
+				updatedContent.getBytes() // Updated content as bytes
+		);
+
+	}
+
+	/**
+	 * Validate the python file
+	 * 
+	 * @param configFile
+	 */
+	public void validatePythonFile(MultipartFile configFile) {
+		if (configFile.isEmpty()) {
+			LOGGER.error("Python file is empty");
+			throw new UserInputException("Python file is empty");
+		}
+		if (!configFile.getOriginalFilename().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
+			LOGGER.error("Invalid file extension: " + configFile.getOriginalFilename());
+			throw new UserInputException(
+					"Invalid file extension: " + configFile.getOriginalFilename() + " The File must be .py file");
+		}
 	}
 
 }
