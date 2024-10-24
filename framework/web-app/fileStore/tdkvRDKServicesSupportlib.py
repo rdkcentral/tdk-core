@@ -5885,6 +5885,14 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 print(result)
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "check_device_active_status":
+            message = "Device came online after a reset, waited for 120 seconds"
+            info["Test_Step_Message"] = message
+
+        elif tag == "initialize_pre-requisite":
+            message = "Starting the pre-requisite initialization"
+            info["Test_Step_Message"] = message
+
         elif tag == "Check_And_Enable_XDial":
             if len(arg) and arg[0] == "enable_xdial":
                 command = 'tr181 -d -s -v 1 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.XDial.Enable'
