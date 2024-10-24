@@ -35,19 +35,19 @@ public class DeviceUpdateDTO {
 	@NotNull(message = "Device id is required")
 	private UUID id;
 	/**
-	 * Represents the stbip of the device. This field is mandatory, hence it cannot
+	 * Represents the ip of the device. This field is mandatory, hence it cannot
 	 * be blank.
 	 */
-	private String stbIp;
+	private String deviceIp;
 	/**
-	 * Represents the stbName of the device. This field is mandatory, hence it
+	 * Represents the name of the device. This field is mandatory, hence it
 	 * cannot
 	 */
-	private String stbName;
+	private String deviceName;
 	/**
-	 * Represents the stbPort of the device.
+	 * Represents the port of the device.
 	 */
-	private String stbPort;
+	private String devicePort;
 	/**
 	 * Represents the statusPort of the device.
 	 */

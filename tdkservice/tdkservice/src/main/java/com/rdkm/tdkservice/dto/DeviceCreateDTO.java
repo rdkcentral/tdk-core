@@ -31,22 +31,22 @@ import lombok.Data;
 public class DeviceCreateDTO {
 
 	/**
-	 * Represents the stbip of the device. This field is mandatory, hence it cannot
+	 * Represents the deviceIp of the device. This field is mandatory, hence it cannot
 	 * be blank.
 	 */
 	@NotBlank
-	private String stbIp;
+	private String deviceIp;
 	/**
-	 * Represents the stbName of the device. This field is mandatory, hence it
+	 * Represents the deviceName of the device. This field is mandatory, hence it
 	 * cannot
 	 */
 	@NotBlank
-	private String stbName;
+	private String deviceName;
 
 	/**
-	 * Represents the stbPort of the device.
+	 * Represents the devicePort of the device.
 	 */
-	private String stbPort;
+	private String devicePort;
 	/**
 	 * Represents the statusPort of the device.
 	 */

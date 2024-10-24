@@ -154,22 +154,22 @@ public class DeviceService implements IDeviceService {
 		LOGGER.info("Going to update Device with id: " + deviceUpdateDTO.getId());
 		Device device = deviceRepository.findById(deviceUpdateDTO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException("Device Id", deviceUpdateDTO.getId().toString()));
-		if (!Utils.isEmpty(deviceUpdateDTO.getStbIp())) {
-			if ((deviceRepository.existsByStbIp(deviceUpdateDTO.getStbIp()))
-					&& !(deviceUpdateDTO.getStbIp().equals(device.getStbIp()))) {
-				LOGGER.info("Device with the same stbip already exists");
-				throw new ResourceAlreadyExistsException("StpIp: ", deviceUpdateDTO.getStbIp());
+		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceIp())) {
+			if ((deviceRepository.existsByIp(deviceUpdateDTO.getDeviceIp()))
+					&& !(deviceUpdateDTO.getDeviceIp().equals(device.getIp()))) {
+				LOGGER.info("Device with the same deviceIp already exists");
+				throw new ResourceAlreadyExistsException("deviceIp: ", deviceUpdateDTO.getDeviceIp());
 			} else {
-				device.setStbIp(deviceUpdateDTO.getStbIp());
+				device.setIp(deviceUpdateDTO.getDeviceIp());
 			}
 		}
-		if (!Utils.isEmpty(deviceUpdateDTO.getStbName())) {
-			if ((deviceRepository.existsByStbName(deviceUpdateDTO.getStbName()))
-					&& !(deviceUpdateDTO.getStbName().equals(device.getStbName()))) {
-				LOGGER.info("Device with the same stbName already exists");
-				throw new ResourceAlreadyExistsException("StbName: ", deviceUpdateDTO.getStbName());
+		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceName())) {
+			if ((deviceRepository.existsByName(deviceUpdateDTO.getDeviceName()))
+					&& !(deviceUpdateDTO.getDeviceName().equals(device.getName()))) {
+				LOGGER.info("Device with the same deviceName already exists");
+				throw new ResourceAlreadyExistsException("DeviceName: ", deviceUpdateDTO.getDeviceName());
 			} else {
-				device.setStbName(deviceUpdateDTO.getStbName());
+				device.setName(deviceUpdateDTO.getDeviceName());
 			}
 		}
 		if (!Utils.isEmpty(deviceUpdateDTO.getMacId())) {
@@ -341,21 +341,21 @@ public class DeviceService implements IDeviceService {
 
 		// If the category is RDKB, set the STB name and IP from the gateway name and IP
 		if (deviceDTO.getCategory().equalsIgnoreCase(Category.RDKB.getName())) {
-			deviceDTO.setStbName(getNodeTextContent(eElement, Constants.XML_TAG_GATEWAY_NAME));
-			deviceDTO.setStbIp(getNodeTextContent(eElement, Constants.XML_TAG_GATEWAY_IP));
+			deviceDTO.setDeviceName(getNodeTextContent(eElement, Constants.XML_TAG_GATEWAY_NAME));
+			deviceDTO.setDeviceIp(getNodeTextContent(eElement, Constants.XML_TAG_GATEWAY_IP));
 		}
 		// If the category is RDKC, set the STB name and IP from the camera name and IP
 		else if (deviceDTO.getCategory().equalsIgnoreCase(Category.RDKC.getName())) {
-			deviceDTO.setStbName(getNodeTextContent(eElement, Constants.XML_TAG_CAMERA_NAME));
-			deviceDTO.setStbIp(getNodeTextContent(eElement, Constants.XML_TAG_CAMERA_IP));
+			deviceDTO.setDeviceName(getNodeTextContent(eElement, Constants.XML_TAG_CAMERA_NAME));
+			deviceDTO.setDeviceIp(getNodeTextContent(eElement, Constants.XML_TAG_CAMERA_IP));
 		}
 
-		// Set the STB name, IP, MAC ID, device type name, oem name, SoC
+		// Set the device name, IP, MAC ID, device type name, oem name, SoC
 		// name,
 		// thunder enabled status, thunder port, recorder ID, and gateway device name
 		// from the XML element
-		deviceDTO.setStbName(getNodeTextContent(eElement, Constants.XML_TAG_STB_NAME));
-		deviceDTO.setStbIp(getNodeTextContent(eElement, Constants.XML_TAG_STB_IP));
+		deviceDTO.setDeviceName(getNodeTextContent(eElement, Constants.XML_TAG_DEVICE_NAME));
+		deviceDTO.setDeviceIp(getNodeTextContent(eElement, Constants.XML_TAG_DEVICE_IP));
 		deviceDTO.setMacId(getNodeTextContent(eElement, Constants.XML_TAG_MAC_ADDR));
 		deviceDTO.setDeviceTypeName(getNodeTextContent(eElement, Constants.XML_TAG_Device_TYPE));
 		deviceDTO.setOemName(getNodeTextContent(eElement, Constants.XML_TAG_OEM));
@@ -401,11 +401,11 @@ public class DeviceService implements IDeviceService {
 	/**
 	 * This method is used to download the device details in XML format.
 	 *
-	 * @param stbName The name of the device to download the details for.
+	 * @param  name The name of the device to download the details for.
 	 * @return A String containing the device details in XML format.
 	 */
-	public String downloadDeviceXML(String stbName) {
-		Device device = deviceRepository.findByStbName(stbName);
+	public String downloadDeviceXML(String name) {
+		Device device = deviceRepository.findByName(name);
 		try {
 			Document doc = createDeviceXMLDocument(device);
 			return convertDocumentToString(doc);
@@ -423,15 +423,15 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromCreateDTO(Device device, DeviceCreateDTO deviceDTO) {
 		// Set common properties
-		if (deviceRepository.existsByStbIp(deviceDTO.getStbIp())) {
-			LOGGER.info("Device with the same stbip already exists");
-			throw new ResourceAlreadyExistsException("StpIp: ", deviceDTO.getStbIp());
+		if (deviceRepository.existsByIp(deviceDTO.getDeviceIp())) {
+			LOGGER.info("Device with the same deviceIp already exists");
+			throw new ResourceAlreadyExistsException("DeviceIp: ", deviceDTO.getDeviceIp());
 		}
 
-		// Check if a device with the same stbName already exists
-		if (deviceRepository.existsByStbName(deviceDTO.getStbName())) {
-			LOGGER.info("Device with the same stbName already exists");
-			throw new ResourceAlreadyExistsException("StbName: ", deviceDTO.getStbName());
+		// Check if a device with the same deviceName already exists
+		if (deviceRepository.existsByName(deviceDTO.getDeviceName())) {
+			LOGGER.info("Device with the same DeviceName already exists");
+			throw new ResourceAlreadyExistsException("DeviceName: ", deviceDTO.getDeviceName());
 		}
 
 		// Check if a device with the same macid already exists
@@ -576,12 +576,12 @@ public class DeviceService implements IDeviceService {
 
 		// Add comments to the XML document
 		String nameTag = selectTag(device, Constants.XML_TAG_GATEWAY_NAME, Constants.XML_TAG_CAMERA_NAME,
-				Constants.XML_TAG_STB_NAME);
-		appendElement(deviceElement, nameTag, device.getStbName(), "  Unique name for the STB");
+				Constants.XML_TAG_DEVICE_NAME);
+		appendElement(deviceElement, nameTag, device.getName(), "  Unique name for the STB");
 
 		String ipTag = selectTag(device, Constants.XML_TAG_GATEWAY_IP, Constants.XML_TAG_CAMERA_IP,
-				Constants.XML_TAG_STB_IP);
-		appendElement(deviceElement, ipTag, device.getStbIp(), " Unique IP for the STB");
+				Constants.XML_TAG_DEVICE_IP);
+		appendElement(deviceElement, ipTag, device.getIp(), " Unique IP for the STB");
 
 		appendElement(deviceElement, Constants.XML_TAG_MAC_ADDR, device.getMacId(), " Mac Addr for the STB");
 		appendElement(deviceElement, Constants.XML_TAG_IS_THUNDER_ENABLED, String.valueOf(device.isThunderEnabled()),
@@ -690,7 +690,7 @@ public class DeviceService implements IDeviceService {
 				Document doc = createDeviceXMLDocument(device);
 				String xmlString = convertDocumentToString(doc);
 				// Add the XML content to the zip file
-				ZipEntry zipEntry = new ZipEntry(device.getStbName() + DEVICE_XML_FILE_EXTENSION);
+				ZipEntry zipEntry = new ZipEntry(device.getName() + DEVICE_XML_FILE_EXTENSION);
 				zipOut.putNextEntry(zipEntry);
 				// Write the XML content to the zip file
 				byte[] bytes = xmlString.getBytes();

@@ -88,10 +88,10 @@ public interface IDeviceService {
 	/**
 	 * This method is used to download the Device XML.
 	 *
-	 * @param stbName This is the stbName of the Device to be downloaded.
+	 * @param name This is the stbName of the Device to be downloaded.
 	 * @return String This returns the Device XML.
 	 */
-	public String downloadDeviceXML(String stbName);
+	public String downloadDeviceXML(String name);
 
 	/**
 	 * This method is used to download all Devices by Category.

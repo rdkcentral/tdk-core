@@ -32,20 +32,20 @@ import com.rdkm.tdkservice.model.Device;
 @Repository
 public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	/**
-	 * This method is used to check if a Device exists by its stbIp.
+	 * This method is used to check if a Device exists by its Ip.
 	 *
-	 * @param stbip This is the stbIp of the Device to be checked.
+	 * @param ip This is the stbIp of the Device to be checked.
 	 * @return boolean This returns true if the Device exists, false otherwise.
 	 */
-	boolean existsByStbIp(String stbip);
+	boolean existsByIp(String ip);
 
 	/**
 	 * This method is used to check if a Device exists by its stbName.
 	 *
-	 * @param stbname This is the stbName of the Device to be checked.
+	 * @param name This is the stbName of the Device to be checked.
 	 * @return boolean This returns true if the Device exists, false otherwise.
 	 */
-	boolean existsByStbName(String stbname);
+	boolean existsByName(String name);
 
 	/**
 	 * This method is used to check if a Device exists by its macId.
@@ -58,10 +58,10 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	/**
 	 * This method is used to find a Device by its stbIp.
 	 *
-	 * @param stbip This is the stbIp of the Device to be found.
+	 * @param ip This is the stbIp of the Device to be found.
 	 * @return Device This returns the found Device.
 	 */
-	Device findByStbIp(String stbip);
+	Device findByIp(String ip);
 
 	
 	/**
@@ -91,10 +91,10 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	/**
 	 * This method is used to find a Device by its stbName.
 	 *
-	 * @param stbname This is the stbName of the Device to be found.
+	 * @param name This is the stbName of the Device to be found.
 	 * @return Device This returns the found Device.
 	 */
-	Device findByStbName(String stbname);
+	Device findByName(String name);
 
 	/**
 	 * This method is used to find all Devices by their category.

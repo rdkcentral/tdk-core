@@ -38,15 +38,15 @@ public class DeviceResponseDTO {
 	/**
 	 * Represents the stbip of the device.
 	 */
-	private String stbIp;
+	private String deviceIp;
 	/**
 	 * Represents the stbName of the device.
 	 */
-	private String stbName;
+	private String deviceName;
 	/**
 	 * Represents the stbPort of the device.
 	 */
-	private String stbPort;
+	private String devicePort;
 	/**
 	 * Represents the statusPort of the device.
 	 */

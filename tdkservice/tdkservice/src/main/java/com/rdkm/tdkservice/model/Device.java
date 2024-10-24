@@ -44,19 +44,19 @@ public class Device extends BaseEntity {
 	 * Represents the stbip of the device.
 	 */
 	@Column(unique = true)
-	private String stbIp;
+	private String ip;
 
 	/**
 	 * Represents the stbName of the device.
 	 */
 	@Column(unique = true)
-	private String stbName;
+	private String name;
 
 	/**
 	 * Represents the stbPort of the device.
 	 */
 	@Column(nullable = true, columnDefinition = "varchar(255) default '8087'")
-	private String stbPort;
+	private String port;
 
 	/**
 	 * Represents the statusPort of the device.

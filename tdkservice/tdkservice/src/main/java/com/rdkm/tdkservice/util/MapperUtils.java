@@ -179,9 +179,9 @@ public class MapperUtils {
 	public static Device populateDeviceDTO(DeviceCreateDTO deviceCreateDTO) {
 
 		Device device = new Device();
-		device.setStbIp(deviceCreateDTO.getStbIp());
-		device.setStbName(deviceCreateDTO.getStbName());
-		device.setStbPort(deviceCreateDTO.getStbPort());
+		device.setIp(deviceCreateDTO.getDeviceIp());
+		device.setName(deviceCreateDTO.getDeviceName());
+		device.setPort(deviceCreateDTO.getDevicePort());
 		device.setStatusPort(deviceCreateDTO.getStatusPort());
 		device.setAgentMonitorPort(deviceCreateDTO.getAgentMonitorPort());
 		device.setLogTransferPort(deviceCreateDTO.getLogTransferPort());
@@ -203,8 +203,8 @@ public class MapperUtils {
 	 *         object.
 	 */
 	public static void updateDeviceProperties(Device device, DeviceUpdateDTO deviceUpdateDTO) {
-		if (!Utils.isEmpty(deviceUpdateDTO.getStbPort()))
-			device.setStbPort(deviceUpdateDTO.getStbPort());
+		if (!Utils.isEmpty(deviceUpdateDTO.getDevicePort()))
+			device.setPort(deviceUpdateDTO.getDevicePort());
 		if (!Utils.isEmpty(deviceUpdateDTO.getStatusPort()))
 			device.setStatusPort(deviceUpdateDTO.getStatusPort());
 		if (!Utils.isEmpty(deviceUpdateDTO.getAgentMonitorPort()))

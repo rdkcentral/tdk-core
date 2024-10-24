@@ -101,13 +101,13 @@ public class Constants {
 	public static final String XML_TAG_ROOT = "xml";
 	// device
 	public static final String XML_TAG_DEVICE = "device";
-	public static final String XML_TAG_STB_NAME = "stb_name";
+	public static final String XML_TAG_DEVICE_NAME = "device_name";
 	// gatewayname
 	public static final String XML_TAG_GATEWAY_NAME = "gateway_name";
 	// cameraname
 	public static final String XML_TAG_CAMERA_NAME = "camera_name";
-	// stb ip
-	public static final String XML_TAG_STB_IP = "stb_ip";
+	// device ip
+	public static final String XML_TAG_DEVICE_IP = "device_ip";
 	// gatewayip
 	public static final String XML_TAG_GATEWAY_IP = "gateway_ip";
 	// cameraip
