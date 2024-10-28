@@ -33,10 +33,12 @@ channel_change_duration = 720
 #The url used for testing cobalt
 cobalt_test_url = ""
 cobalt_4k_longduration_test_url=""
+#4k resolution required 
+resolution_required_4k = 2160
 #Test duration in minutes till test should be performed, it should be less than the duration of test video
 cobalt_test_duration = 720
-cobalt_hibernate_test_duration = 60
-
+cobalt_hibernate_test_duration = 360
+hibernate_test_duration = 60
 ####Cobalt play and exit test details
 #Test duration in minutes till test should be performed
 cobalt_play_and_exit_testtime = 1440

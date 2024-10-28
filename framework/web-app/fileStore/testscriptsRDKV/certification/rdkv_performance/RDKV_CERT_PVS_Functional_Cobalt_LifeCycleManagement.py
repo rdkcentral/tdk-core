@@ -105,6 +105,9 @@ if expectedResult in result.upper():
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
+        if plugin_status_needed.get("Cobalt") == "hibernated":
+          restore_plugin(obj,"Cobalt")
+          time.sleep(5)
         status = set_plugins_status(obj,plugin_status_needed)
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
@@ -127,7 +130,7 @@ if expectedResult in result.upper():
             plugin_validation_details = ["no_validation"]
         plugin_operations = json.dumps(plugin_operations_list)
         plugin_validation_details = json.dumps(plugin_validation_details)
-        tdkTestObj = obj.createTestStep('rdkservice_executeLifeCycle')
+        tdkTestObj = obj.createTestStep('rdkservice_memcrApps_executeLifeCycle')
         tdkTestObj.addParameter("plugin",plugin)
         tdkTestObj.addParameter("operations",plugin_operations)
         tdkTestObj.addParameter("validation_details",plugin_validation_details)

@@ -62,7 +62,8 @@ operations = {
     "input/key/list": {"topic": "input/key/list", "message": {}},
     "input/key-press": {"topic": "input/key-press", "message": {"keyCode": "KEY_VOLUME_UP"}},
     "input/long-key-press": {"topic": "input/long-key-press", "message": {"keyCode": "KEY_VOLUME_UP", "durationMs": 3000}},
-    "health-check/get": {"topic": "health-check/get", "message": {}}
+    "health-check/get": {"topic": "health-check/get", "message": {}},
+    "output/image":{"topic":"output/image","message": {}} 
 
     }
 #--------------------------------------------------------------------------------------------------------------------------
@@ -104,7 +105,7 @@ rdk_get_dab_validations = {
         'rdk_param': 'soundMode'
     },
     'cec': {
-        'rdk_api': 'org.rdk.HdmiCec_2.getEnabled',
+        'rdk_api': 'org.rdk.HdmiCecSource.getEnabled',
         'rdk_param': 'enabled'
     },
     'language': {

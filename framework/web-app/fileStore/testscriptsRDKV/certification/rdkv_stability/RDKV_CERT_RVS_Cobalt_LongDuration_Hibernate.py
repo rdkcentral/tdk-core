@@ -170,7 +170,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                 time.sleep(5)
                 print("\nCobalt is in hibernated state")
                 #Validating Resource usage 
-                test_time_in_mins = int(StabilityTestVariables.cobalt_hibernate_test_duration)
+                test_time_in_mins = int(StabilityTestVariables.hibernate_test_duration)
                 test_time_in_millisec = test_time_in_mins * 60 * 1000
                 time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
                 iteration = 0
