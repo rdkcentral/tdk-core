@@ -841,7 +841,11 @@
                 <param tag="callsign" defaultValue="null"/>
             </params>
         </method>
-       
+      	<method name="Restore_Application" api="restore" type="method" desc="Restore an application" >
+            <params>
+                <param tag="callsign" defaultValue="null"/>
+            </params>
+        </method> 
         <method name="DestroyApplication" api="destroy" type="method" desc="Destroys the applications" >
             <params>
                 <param tag="callsign" defaultValue="null"/>

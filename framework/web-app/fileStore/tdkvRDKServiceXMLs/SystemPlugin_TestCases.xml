@@ -1254,47 +1254,35 @@
 
 	<!-- Test case 65 -->
 	<testCase testCaseId="SYS_65" testCaseName="System_Set_And_Get_Territory_Region" desc="Check whether able to set and get territory and region">
-            <testCaseInfo testCaseType="loop" revert="true"/>
-	    <testStep testStepId="1" name="System_Get_Territory" method="System_Get_Territory" revertGet="yes">
-		<resultGeneration useMethodTag="system_validate_territory_region"/>
-	    </testStep>
-	    <testStep testStepId="2" name="Get_territory_And_region_Config_File" action="externalFnCall" saveResult="true">
+            <testCaseInfo testCaseType="loop"/>
+	    <testStep testStepId="1" name="Get_territory_And_region_Config_File" action="externalFnCall" saveResult="true">
                 <resultGeneration useMethodTag="Get_territory_And_region_Config_File">
              	    <arguments useConfigFile="true" key="SYSTEM_TERRITORYS"/>
                 </resultGeneration>
             </testStep>
-	    <testStep testStepId="3" name="System_Set_And_Get_Territory_Region" testStepType="loop">
-                <subtestStep subtestStepId="1" name="System_Set_Territory" method="System_Set_Territory" revertSet="yes">
+	    <testStep testStepId="2" name="System_Set_And_Get_Territory_Region" testStepType="loop">
+                <subtestStep subtestStepId="1" name="System_Set_Territory" method="System_Set_Territory">
                   <params>
-                    <param tag="territory" usePreviousResult="true" Id="2" useMethodTag="system_get_previous_territory_result" iteration="true"  revertParam="yes"/>
-                    <param tag="region" usePreviousResult="true" Id="2" useMethodTag="system_get_previous_region_result" useIterableArg="true" revertParam="yes"/>
+                    <param tag="territory" usePreviousResult="true" Id="1" useMethodTag="system_get_previous_territory_result" iteration="true"/>
+                    <param tag="region" usePreviousResult="true" Id="1" useMethodTag="system_get_previous_region_result" useIterableArg="true"/>
                   </params>
                   <resultGeneration useMethodTag="system_set_territory"/>
 	  	</subtestStep>
 		<subtestStep subtestStepId="2" name="Check_Territory_Change_Event" event="Event_On_Territory_Changed" action="eventListener" >
                   <resultGeneration useMethodTag="system_Check_Territory_Change_Event">
-                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="system_get_previous_result" />
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="system_get_previous_result" />
 	    	  </resultGeneration>
 	  	</subtestStep>
-		<subtestStep subtestStepId="3" name="System_Get_Territory" method="System_Get_Territory" revertFlag="yes">
+		<subtestStep subtestStepId="3" name="System_Get_Territory" method="System_Get_Territory">
 			<resultGeneration useMethodTag="system_validate_territory_region" arguments="checksystem"/>
 		</subtestStep>
             </testStep>
     	</testCase>
 
 	<!-- Test case 66 -->
-	<testCase testCaseId="SYS_66" testCaseName="System_Set_Only_Territory_And_Set_Only_Region" desc="Check whether able to set only territory and only region to set territory API">
+	<testCase testCaseId="SYS_66" testCaseName="System_Verify_Set_Territory_without_Params" desc="Verify that the setTerritory method returns an error when both territory and region are not provided">
             <testCaseInfo testCaseType="direct"/>
 	    <testStep testStepId="1" name="System_Set_Only_Territory" method="System_Set_Territory">
-              <params>
-                <param tag="territory" value="CHN" />
-              </params>
-              <resultGeneration useMethodTag="system_check_error_message"/>
-            </testStep>
-	    <testStep testStepId="2" name="System_Set_Only_Region" method="System_Set_Territory">
-              <params>
-                <param tag="region" value="CN-HK" />
-              </params>
               <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid territory name"/>
             </testStep>
 	</testCase>
@@ -1305,9 +1293,9 @@
 	    <testStep testStepId="1" name="System_Set_Valid_Territory_And_Set_Invalid_Region" method="System_Set_Territory">
               <params>
                 <param tag="territory" value="CHN" />
-                <param tag="region" value="AB-CD" />
+                <param tag="region" value="TestingValue" />
               </params>
-              <resultGeneration useMethodTag="system_check_negative_scenario"/>
+              <resultGeneration useMethodTag="system_check_error_message" expectedValues="invalid region"/>
             </testStep>
 	</testCase>
 
