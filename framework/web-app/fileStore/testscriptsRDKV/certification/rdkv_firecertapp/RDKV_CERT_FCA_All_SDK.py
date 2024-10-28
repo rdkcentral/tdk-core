@@ -144,7 +144,7 @@ if expectedResult in result.upper():
                         print ("\n URL(",new_url,") is set successfully")
                         time.sleep(20)
 
-                        sequence = "40,40,40,13,13,40,40,13,13"
+                        sequence = "40,40,40,13,13,40,40,40,13,13"
                         #Prmitive test case which associated to this Script
                         tdkTestObj = obj.createTestStep('rdkv_firecertapp_execute');
                         tdkTestObj.addParameter("sequence",sequence)
