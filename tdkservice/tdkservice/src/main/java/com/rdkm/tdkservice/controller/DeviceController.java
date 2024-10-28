@@ -145,8 +145,8 @@ public class DeviceController {
 			LOGGER.info("Device details fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
 		} else {
-			LOGGER.error("Error in fetching device details data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch devices");
+			LOGGER.error("No devices found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found");
 		}
 	}
 
@@ -168,8 +168,8 @@ public class DeviceController {
 			LOGGER.info("Device details fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
 		} else {
-			LOGGER.error("Error in fetching device details data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch devices");
+			LOGGER.error("No devices found for the category");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found for the category");
 		}
 	}
 
@@ -191,8 +191,8 @@ public class DeviceController {
 			LOGGER.info("Device details fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
 		} else {
-			LOGGER.error("Error in fetching device details data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch device");
+			LOGGER.error("No device found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device found");
 		}
 	}
 

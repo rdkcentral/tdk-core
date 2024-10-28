@@ -26,7 +26,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -37,6 +36,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -103,7 +103,7 @@ public class DeviceTypeServiceTest {
 	public void testCreateDeviceType_ResourceNotFoundException() {
 		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
-		deviceTypeDTO.setType("InvalidType");
+		deviceTypeDTO.setDeviceType("InvalidType");
 
 		when(deviceTypeRepository.existsByName(anyString())).thenReturn(false);
 
@@ -113,20 +113,20 @@ public class DeviceTypeServiceTest {
 	}
 
 	/**
-	 * This test case verifies that a device type can be successfully created when all
-	 * the required conditions are met.
+	 * This test case verifies that a device type can be successfully created when
+	 * all the required conditions are met.
 	 */
 	@Test
 	public void testCreateDeviceType_Success() {
+		UUID deviceTypeId = UUID.randomUUID();
 		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
-
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
-		deviceTypeDTO.setType(DeviceTypeCategory.CLIENT.getName());
+		deviceTypeDTO.setDeviceType(DeviceTypeCategory.CLIENT.getName());
 		deviceTypeDTO.setDeviceTypeCategory("RDKV");
 		deviceTypeDTO.setDeviceTypeUserGroup("userGroup1");
 
 		DeviceType deviceType = new DeviceType();
-		deviceType.setId(1);
+		deviceType.setId(deviceTypeId);
 		deviceType.setName("DeviceType1");
 		deviceType.setType(DeviceTypeCategory.CLIENT);
 		deviceType.setCategory(Category.RDKV);
@@ -148,7 +148,7 @@ public class DeviceTypeServiceTest {
 	public void testCreateDeviceType_Exception() {
 		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
 		deviceTypeDTO.setDeviceTypeName("DeviceType1");
-		deviceTypeDTO.setType(DeviceTypeCategory.CLIENT.getName());
+		deviceTypeDTO.setDeviceType(DeviceTypeCategory.CLIENT.getName());
 		deviceTypeDTO.setDeviceTypeCategory("RDKV");
 
 		when(deviceTypeRepository.existsByName(anyString())).thenReturn(false);
@@ -158,8 +158,8 @@ public class DeviceTypeServiceTest {
 	}
 
 	/**
-	 * This test case verifies that null is returned when there are no device types in
-	 * the repository.
+	 * This test case verifies that null is returned when there are no device types
+	 * in the repository.
 	 */
 	@Test
 	public void testGetAllDeviceTypesReturnsNull() {
@@ -167,7 +167,7 @@ public class DeviceTypeServiceTest {
 		when(deviceTypeRepository.findAll()).thenReturn(new ArrayList<>());
 
 		// Act
-		List<DeviceTypeCreateDTO> result = deviceTypeService.getAllDeviceTypes();
+		List<DeviceTypeDTO> result = deviceTypeService.getAllDeviceTypes();
 
 		// Assert
 		assertNull(result);
@@ -180,16 +180,17 @@ public class DeviceTypeServiceTest {
 	@Test
 	public void testDeleteByIdSuccess() {
 		// Arrange
-		Integer id = 1;
+		UUID deviceTypeId = UUID.randomUUID();
+
 		DeviceType deviceType = new DeviceType();
-		deviceType.setId(id);
-		when(deviceTypeRepository.findById(id)).thenReturn(Optional.of(deviceType));
+		deviceType.setId(deviceTypeId);
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(Optional.of(deviceType));
 
 		// Act
-		deviceTypeService.deleteById(id);
+		deviceTypeService.deleteById(deviceTypeId);
 
 		// Assert
-		verify(deviceTypeRepository, times(1)).deleteById(id);
+		verify(deviceTypeRepository, times(1)).deleteById(deviceTypeId);
 	}
 
 	/**
@@ -199,11 +200,11 @@ public class DeviceTypeServiceTest {
 	@Test
 	public void testDeleteByIdResourceNotFound() {
 		// Arrange
-		Integer id = 1;
-		when(deviceTypeRepository.findById(id)).thenReturn(Optional.empty());
+		UUID deviceTypeId = UUID.randomUUID();
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(Optional.empty());
 
 		// Act & Assert
-		assertThrows(ResourceNotFoundException.class, () -> deviceTypeService.deleteById(id));
+		assertThrows(ResourceNotFoundException.class, () -> deviceTypeService.deleteById(deviceTypeId));
 	}
 
 	/**
@@ -213,29 +214,33 @@ public class DeviceTypeServiceTest {
 	@Test
 	public void testDeleteByIdDeleteFailed() {
 		// Arrange
-		Integer id = 1;
+		UUID deviceTypeId = UUID.randomUUID();
 		DeviceType deviceType = new DeviceType();
-		deviceType.setId(id);
-		when(deviceTypeRepository.findById(id)).thenReturn(Optional.of(deviceType));
-		doThrow(DataIntegrityViolationException.class).when(deviceTypeRepository).deleteById(id);
+		deviceType.setId(deviceTypeId);
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(Optional.of(deviceType));
+		doThrow(DataIntegrityViolationException.class).when(deviceTypeRepository).deleteById(deviceTypeId);
 
 		// Act & Assert
-		assertThrows(DeleteFailedException.class, () -> deviceTypeService.deleteById(id));
+		assertThrows(DeleteFailedException.class, () -> deviceTypeService.deleteById(deviceTypeId));
 	}
 
 	/**
-	 * This test case verifies that a device type can be successfully found by its id.
+	 * This test case verifies that a device type can be successfully found by its
+	 * id.
 	 */
 	@Test
 	public void testFindByIdSuccess() {
 		// Arrange
-		Integer id = 1;
+		UUID deviceTypeId = UUID.randomUUID();
 		DeviceType deviceType = new DeviceType();
-		deviceType.setId(id);
-		when(deviceTypeRepository.findById(id)).thenReturn(Optional.of(deviceType));
+		deviceType.setId(deviceTypeId);
+		deviceType.setCategory(Category.getCategory("RDKV"));
+		deviceType.setType(DeviceTypeCategory.CLIENT);
+
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(Optional.of(deviceType));
 
 		// Act
-		DeviceTypeCreateDTO result = deviceTypeService.findById(id);
+		DeviceTypeDTO result = deviceTypeService.findById(deviceTypeId);
 
 		// Assert
 		assertNotNull(result);
@@ -248,11 +253,11 @@ public class DeviceTypeServiceTest {
 	@Test
 	public void testFindByIdResourceNotFound() {
 		// Arrange
-		Integer id = 1;
-		when(deviceTypeRepository.findById(id)).thenReturn(Optional.empty());
+		UUID deviceTypeId = UUID.randomUUID();
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(Optional.empty());
 
 		// Act & Assert
-		assertThrows(ResourceNotFoundException.class, () -> deviceTypeService.findById(id));
+		assertThrows(ResourceNotFoundException.class, () -> deviceTypeService.findById(deviceTypeId));
 	}
 
 	/**
@@ -260,7 +265,9 @@ public class DeviceTypeServiceTest {
 	 */
 	@Test
 	public void testUpdateDeviceType() {
+		UUID deviceTypeId = UUID.randomUUID();
 		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
+		deviceTypeUpdateDTO.setDeviceTypeId(deviceTypeId);
 		deviceTypeUpdateDTO.setDeviceTypeName("New Device Type");
 		deviceTypeUpdateDTO.setDeviceType(DeviceTypeCategory.CLIENT.getName());
 		deviceTypeUpdateDTO.setDeviceTypeCategory(Category.RDKB.getName());
@@ -270,11 +277,11 @@ public class DeviceTypeServiceTest {
 		existingDeviceType.setType(DeviceTypeCategory.CLIENT);
 		existingDeviceType.setCategory(Category.getCategory("RDKV"));
 
-		when(deviceTypeRepository.findById(anyInt())).thenReturn(java.util.Optional.of(existingDeviceType));
+		when(deviceTypeRepository.findById(deviceTypeId)).thenReturn(java.util.Optional.of(existingDeviceType));
 		when(deviceTypeRepository.existsByName(anyString())).thenReturn(false);
 		when(deviceTypeRepository.save(any(DeviceType.class))).thenReturn(existingDeviceType);
 
-		DeviceTypeDTO updatedDeviceType = deviceTypeService.updateDeviceType(deviceTypeUpdateDTO, 1);
+		DeviceTypeDTO updatedDeviceType = deviceTypeService.updateDeviceType(deviceTypeUpdateDTO);
 
 		assertEquals(deviceTypeUpdateDTO.getDeviceTypeName(), updatedDeviceType.getDeviceTypeName());
 		assertEquals(deviceTypeUpdateDTO.getDeviceType(), updatedDeviceType.getDeviceType());
@@ -282,8 +289,8 @@ public class DeviceTypeServiceTest {
 	}
 
 	/**
-	 * This test case verifies that device types can be successfully retrieved by their
-	 * category.
+	 * This test case verifies that device types can be successfully retrieved by
+	 * their category.
 	 */
 	@Test
 	public void testGetDeviceTypesByCategoryReturnsDeviceTypes() {
@@ -291,21 +298,24 @@ public class DeviceTypeServiceTest {
 		DeviceType deviceType1 = new DeviceType();
 		deviceType1.setName("DeviceType1");
 		deviceType1.setCategory(Category.getCategory(category));
+		deviceType1.setType(DeviceTypeCategory.CLIENT);
 
 		DeviceType deviceType2 = new DeviceType();
 		deviceType2.setName("DeviceType2");
 		deviceType2.setCategory(Category.getCategory(category));
+		deviceType2.setType(DeviceTypeCategory.CLIENT);
 
-		when(deviceTypeRepository.findByCategory(Category.getCategory(category))).thenReturn(List.of(deviceType1, deviceType2));
+		when(deviceTypeRepository.findByCategory(Category.getCategory(category)))
+				.thenReturn(List.of(deviceType1, deviceType2));
 
-		List<DeviceTypeCreateDTO> result = deviceTypeService.getDeviceTypesByCategory(category);
+		List<DeviceTypeDTO> result = deviceTypeService.getDeviceTypesByCategory(category);
 
 		assertEquals(2, result.size());
 	}
 
 	/**
-	 * This test case verifies that null is returned when there are no device types in
-	 * the specified category.
+	 * This test case verifies that null is returned when there are no device types
+	 * in the specified category.
 	 */
 	@Test
 	public void testGetDeviceTypeNameByCategoryReturnsNull() {
@@ -318,8 +328,8 @@ public class DeviceTypeServiceTest {
 	}
 
 	/**
-	 * This test case verifies that device type names can be successfully retrieved by
-	 * their category.
+	 * This test case verifies that device type names can be successfully retrieved
+	 * by their category.
 	 */
 	@Test
 	public void testGetDeviceTypeNameByCategoryReturnsDeviceTypeNames() {
@@ -332,7 +342,8 @@ public class DeviceTypeServiceTest {
 		deviceType2.setName("DeviceType2");
 		deviceType2.setCategory(Category.getCategory(category));
 
-		when(deviceTypeRepository.findByCategory(Category.getCategory(category))).thenReturn(List.of(deviceType1, deviceType2));
+		when(deviceTypeRepository.findByCategory(Category.getCategory(category)))
+				.thenReturn(List.of(deviceType1, deviceType2));
 
 		List<String> result = deviceTypeService.getDeviceTypeNameByCategory(category);
 
@@ -347,14 +358,16 @@ public class DeviceTypeServiceTest {
 		// Arrange
 		DeviceType deviceType1 = new DeviceType();
 		deviceType1.setName("DeviceType1");
-
+		deviceType1.setCategory(Category.getCategory("RDKV"));
+		deviceType1.setType(DeviceTypeCategory.CLIENT);
 		DeviceType deviceType2 = new DeviceType();
 		deviceType2.setName("DeviceType2");
-
+		deviceType2.setCategory(Category.getCategory("RDKV"));
+		deviceType2.setType(DeviceTypeCategory.CLIENT);
 		when(deviceTypeRepository.findAll()).thenReturn(List.of(deviceType1, deviceType2));
 
 		// Act
-		List<DeviceTypeCreateDTO> result = deviceTypeService.getAllDeviceTypes();
+		List<DeviceTypeDTO> result = deviceTypeService.getAllDeviceTypes();
 
 		// Assert
 		assertNotNull(result);

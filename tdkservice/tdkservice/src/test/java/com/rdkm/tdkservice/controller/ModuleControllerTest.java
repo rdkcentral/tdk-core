@@ -19,13 +19,16 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-import com.rdkm.tdkservice.controller.ModuleController;
-import com.rdkm.tdkservice.dto.ModuleCreateDTO;
-import com.rdkm.tdkservice.dto.ModuleDTO;
-import com.rdkm.tdkservice.service.IModuleService;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -34,154 +37,152 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import com.rdkm.tdkservice.dto.ModuleCreateDTO;
+import com.rdkm.tdkservice.dto.ModuleDTO;
+import com.rdkm.tdkservice.service.IModuleService;
 
 public class ModuleControllerTest {
 
-    @Mock
-    private IModuleService moduleService;
+	@Mock
+	private IModuleService moduleService;
 
-    @InjectMocks
-    private ModuleController moduleController;
+	@InjectMocks
+	private ModuleController moduleController;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testCreateModule_Success() {
-        ModuleCreateDTO moduleCreateDTO = new ModuleCreateDTO();
-        when(moduleService.saveModule(moduleCreateDTO)).thenReturn(true);
+	@Test
+	void testCreateModule_Success() {
+		ModuleCreateDTO moduleCreateDTO = new ModuleCreateDTO();
+		when(moduleService.saveModule(moduleCreateDTO)).thenReturn(true);
 
-        ResponseEntity<String> response = moduleController.createModule(moduleCreateDTO);
+		ResponseEntity<String> response = moduleController.createModule(moduleCreateDTO);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("Module created successfully", response.getBody());
-    }
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals("Module created successfully", response.getBody());
+	}
 
-    @Test
-    void testCreateModule_Failure() {
-        ModuleCreateDTO moduleCreateDTO = new ModuleCreateDTO();
-        when(moduleService.saveModule(moduleCreateDTO)).thenReturn(false);
+	@Test
+	void testCreateModule_Failure() {
+		ModuleCreateDTO moduleCreateDTO = new ModuleCreateDTO();
+		when(moduleService.saveModule(moduleCreateDTO)).thenReturn(false);
 
-        ResponseEntity<String> response = moduleController.createModule(moduleCreateDTO);
+		ResponseEntity<String> response = moduleController.createModule(moduleCreateDTO);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Failed to create module", response.getBody());
-    }
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		assertEquals("Failed to create module", response.getBody());
+	}
 
-    @Test
-    void testUpdateModule_Success() {
-        ModuleDTO moduleDTO = new ModuleDTO();
-        when(moduleService.updateModule(moduleDTO)).thenReturn(true);
+	@Test
+	void testUpdateModule_Success() {
+		ModuleDTO moduleDTO = new ModuleDTO();
+		when(moduleService.updateModule(moduleDTO)).thenReturn(true);
 
-        ResponseEntity<String> response = moduleController.updateModule(moduleDTO);
+		ResponseEntity<String> response = moduleController.updateModule(moduleDTO);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Module updated successfully", response.getBody());
-    }
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals("Module updated successfully", response.getBody());
+	}
 
-    @Test
-    void testUpdateModule_Failure() {
-        ModuleDTO moduleDTO = new ModuleDTO();
-        when(moduleService.updateModule(moduleDTO)).thenReturn(false);
+	@Test
+	void testUpdateModule_Failure() {
+		ModuleDTO moduleDTO = new ModuleDTO();
+		when(moduleService.updateModule(moduleDTO)).thenReturn(false);
 
-        ResponseEntity<String> response = moduleController.updateModule(moduleDTO);
+		ResponseEntity<String> response = moduleController.updateModule(moduleDTO);
 
-        assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-        assertEquals("Failed to update module", response.getBody());
-    }
+		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+		assertEquals("Failed to update module", response.getBody());
+	}
 
-    @Test
-    void testFindAllModules() {
-        List<ModuleDTO> modules = Arrays.asList(new ModuleDTO(), new ModuleDTO());
-        when(moduleService.findAllModules()).thenReturn(modules);
+	@Test
+	void testFindAllModules() {
+		List<ModuleDTO> modules = Arrays.asList(new ModuleDTO(), new ModuleDTO());
+		when(moduleService.findAllModules()).thenReturn(modules);
 
-        ResponseEntity<List<ModuleDTO>> response = moduleController.findAllModules();
+		ResponseEntity<List<ModuleDTO>> response = moduleController.findAllModules();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(modules, response.getBody());
-    }
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(modules, response.getBody());
+	}
 
-    @Test
-    void testFindModuleById_Success() {
-        Integer id = 1;
-        ModuleDTO moduleDTO = new ModuleDTO();
-        when(moduleService.findModuleById(id)).thenReturn(moduleDTO);
+	@Test
+	void testFindModuleById_Success() {
+		UUID moduleId = UUID.randomUUID();
+		ModuleDTO moduleDTO = new ModuleDTO();
+		when(moduleService.findModuleById(any(UUID.class))).thenReturn(moduleDTO);
 
-        ResponseEntity<ModuleDTO> response = moduleController.findModuleById(id);
+		ResponseEntity<?> response = moduleController.findModuleById(moduleId);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(moduleDTO, response.getBody());
-    }
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(moduleDTO, response.getBody());
+	}
 
-    @Test
-    void testFindModuleById_NotFound() {
-        Integer id = 1;
-        when(moduleService.findModuleById(id)).thenReturn(null);
+	@Test
+	void testFindModuleById_NotFound() {
+		UUID moduleId = UUID.randomUUID();
+		when(moduleService.findModuleById(any(UUID.class))).thenReturn(null);
 
-        ResponseEntity<ModuleDTO> response = moduleController.findModuleById(id);
+		ResponseEntity<?> response = moduleController.findModuleById(moduleId);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
 
-    @Test
-    void testFindAllByCategory_Success() {
-        String category = "RDKV";
-        List<ModuleDTO> modules = Arrays.asList(new ModuleDTO(), new ModuleDTO());
-        when(moduleService.findAllByCategory(category)).thenReturn(modules);
+	@Test
+	void testFindAllByCategory_Success() {
+		String category = "RDKV";
+		List<ModuleDTO> modules = Arrays.asList(new ModuleDTO(), new ModuleDTO());
+		when(moduleService.findAllByCategory(category)).thenReturn(modules);
 
-        ResponseEntity<List<ModuleDTO>> response = moduleController.findAllByCategory(category);
+		ResponseEntity<?> response = moduleController.findAllByCategory(category);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(modules, response.getBody());
-    }
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(modules, response.getBody());
+	}
 
-    @Test
-    void testFindAllByCategory_NotFound() {
-        String category = "RDKV";
-        when(moduleService.findAllByCategory(category)).thenReturn(Collections.emptyList());
+	@Test
+	void testFindAllByCategory_NotFound() {
+		String category = "RDKV";
+		when(moduleService.findAllByCategory(category)).thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<ModuleDTO>> response = moduleController.findAllByCategory(category);
+		ResponseEntity<?> response = moduleController.findAllByCategory(category);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
-    }
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+	}
 
-    @Test
-    void testDeleteModule_Success() {
-        Integer id = 1;
-        when(moduleService.deleteModule(id)).thenReturn(true);
+	@Test
+	void testDeleteModule_Success() {
+		UUID moduleId = UUID.randomUUID();
+		when(moduleService.deleteModule(any(UUID.class))).thenReturn(true);
 
-        ResponseEntity<String> response = moduleController.deleteModule(id);
+		ResponseEntity<String> response = moduleController.deleteModule(moduleId);
 
-        assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals("Module deleted successfully", response.getBody());
-    }
+		assertEquals(HttpStatus.CREATED, response.getStatusCode());
+		assertEquals("Module deleted successfully", response.getBody());
+	}
 
-    @Test
-    void testDeleteModule_NotFound() {
-        Integer id = 1;
-        when(moduleService.deleteModule(id)).thenReturn(false);
+	@Test
+	void testDeleteModule_NotFound() {
+		UUID moduleId = UUID.randomUUID();
+		when(moduleService.deleteModule(any(UUID.class))).thenReturn(false);
 
-        ResponseEntity<String> response = moduleController.deleteModule(id);
+		ResponseEntity<String> response = moduleController.deleteModule(moduleId);
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertEquals("Module not found", response.getBody());
-    }
+		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+		assertEquals("Module not found", response.getBody());
+	}
 
-    @Test
-    void testGetAllTestGroups() {
-        List<String> testGroups = Arrays.asList("E2E", "UNIT");
-        when(moduleService.findAllTestGroupsFromEnum()).thenReturn(testGroups);
+	@Test
+	void testGetAllTestGroups() {
+		List<String> testGroups = Arrays.asList("E2E", "UNIT");
+		when(moduleService.findAllTestGroupsFromEnum()).thenReturn(testGroups);
 
-        ResponseEntity<List<String>> response = moduleController.getAllTestGroups();
+		ResponseEntity<?> response = moduleController.getAllTestGroups();
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(testGroups, response.getBody());
-    }
+		assertEquals(HttpStatus.OK, response.getStatusCode());
+		assertEquals(testGroups, response.getBody());
+	}
 }

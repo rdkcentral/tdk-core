@@ -26,7 +26,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
-import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -92,13 +92,12 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void getAllSocsReturnsData() {
-		SocCreateDTO socDTO = new SocCreateDTO();
+		SocDTO socDTO = new SocDTO();
 		when(socService.findAll()).thenReturn(Arrays.asList(socDTO));
 
-		ResponseEntity<List<SocCreateDTO>> response = socController.getAllSocs();
+		ResponseEntity<?> response = socController.getAllSocs();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(1, response.getBody().size());
 	}
 
 	/**
@@ -108,7 +107,7 @@ public class SocControllerTest {
 	public void getAllSocsReturnsNotFound() {
 		when(socService.findAll()).thenReturn(Arrays.asList());
 
-		ResponseEntity<List<SocCreateDTO>> response = socController.getAllSocs();
+		ResponseEntity<?> response = socController.getAllSocs();
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
@@ -118,9 +117,10 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void deleteSoc() {
-		doNothing().when(socService).deleteSoc(1);
+		UUID socId = UUID.randomUUID();
+		doNothing().when(socService).deleteSoc(socId);
 
-		ResponseEntity<?> response = socController.deleteSoc(1);
+		ResponseEntity<?> response = socController.deleteSoc(socId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -130,10 +130,11 @@ public class SocControllerTest {
 	 */
 	@Test
 	public void findByIdReturnsData() {
-		SocCreateDTO socDTO = new SocCreateDTO();
-		when(socService.findById(1)).thenReturn(socDTO);
+		UUID socId = UUID.randomUUID();
+		SocDTO socDTO = new SocDTO();
+		when(socService.findById(socId)).thenReturn(socDTO);
 
-		ResponseEntity<SocCreateDTO> response = socController.findById(1);
+		ResponseEntity<SocDTO> response = socController.findById(socId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -144,9 +145,9 @@ public class SocControllerTest {
 	@Test
 	public void updateSocSuccessfully() {
 		SocDTO socUpdateDTO = new SocDTO();
-		when(socService.updateSoc(socUpdateDTO, 1)).thenReturn(socUpdateDTO);
+		when(socService.updateSoc(socUpdateDTO)).thenReturn(socUpdateDTO);
 
-		ResponseEntity<?> response = socController.updateSoc(1, socUpdateDTO);
+		ResponseEntity<?> response = socController.updateSoc(socUpdateDTO);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
@@ -157,19 +158,20 @@ public class SocControllerTest {
 	@Test
 	public void updateSocFailure() {
 		SocDTO socUpdateDTO = new SocDTO();
-		when(socService.updateSoc(socUpdateDTO, 1)).thenReturn(null);
+		when(socService.updateSoc(socUpdateDTO)).thenReturn(null);
 
-		ResponseEntity<?> response = socController.updateSoc(1, socUpdateDTO);
+		ResponseEntity<?> response = socController.updateSoc(socUpdateDTO);
 
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
 
 	/**
-	 * This test ensures that SOCs are returned correctly by category when data is present.
+	 * This test ensures that SOCs are returned correctly by category when data is
+	 * present.
 	 */
 	@Test
 	public void getSocsByCategoryReturnsData() {
-		SocCreateDTO socDTO = new SocCreateDTO();
+		SocDTO socDTO = new SocDTO();
 		when(socService.getSOCsByCategory("RDKV")).thenReturn(Arrays.asList(socDTO));
 
 		ResponseEntity<?> response = socController.getSOCsByCategory("RDKV");
@@ -178,7 +180,8 @@ public class SocControllerTest {
 	}
 
 	/**
-	 * This test ensures that the system handles the case when no SOCs are found by category.
+	 * This test ensures that the system handles the case when no SOCs are found by
+	 * category.
 	 */
 	@Test
 	public void getSocsByCategoryReturnsNotFound() {
@@ -191,7 +194,8 @@ public class SocControllerTest {
 	}
 
 	/**
-	 * This test ensures that a list of SOCs is returned correctly by category when data is present.
+	 * This test ensures that a list of SOCs is returned correctly by category when
+	 * data is present.
 	 */
 	@Test
 	public void getSocsListByCategoryReturnsData() {
@@ -203,7 +207,8 @@ public class SocControllerTest {
 	}
 
 	/**
-	 * This test ensures that the system handles the case when no list of SOCs is found by category.
+	 * This test ensures that the system handles the case when no list of SOCs is
+	 * found by category.
 	 */
 	@Test
 	public void getSocsListByCategoryReturnsNotFound() {

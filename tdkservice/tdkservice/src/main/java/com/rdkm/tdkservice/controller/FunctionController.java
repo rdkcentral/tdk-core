@@ -127,7 +127,7 @@ public class FunctionController {
 		LOGGER.info("Retrieving all functions");
 		List<FunctionDTO> functions = functionService.findAllFunctions();
 		LOGGER.info("Successfully retrieved all functions");
-		return ResponseEntity.ok(functions);
+		return ResponseEntity.status(HttpStatus.OK).body(functions);
 	}
 
 	/**
@@ -193,7 +193,7 @@ public class FunctionController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getlistoffunctionbymodulename/{moduleName}")
-	public ResponseEntity<List<String>> findAllFunctionNameByModule(@PathVariable String moduleName) {
+	public ResponseEntity<?> findAllFunctionNameByModule(@PathVariable String moduleName) {
 		LOGGER.info("Retrieving functions by category: {}", moduleName);
 		List<String> functions = functionService.findAllFunctionNameByModule(moduleName);
 		if (functions != null && !functions.isEmpty()) {
@@ -201,7 +201,7 @@ public class FunctionController {
 			return ResponseEntity.status(HttpStatus.OK).body(functions);
 		} else {
 			LOGGER.warn("No functions found for module name: {}", moduleName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No functions found for module");
 		}
 	}
 
@@ -219,7 +219,7 @@ public class FunctionController {
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
 	@GetMapping("/findAllByModule/{moduleName}")
-	public ResponseEntity<List<FunctionDTO>> findAllFunctionsByModule(@PathVariable String moduleName) {
+	public ResponseEntity<?> findAllFunctionsByModule(@PathVariable String moduleName) {
 		LOGGER.info("Retrieving all functions by module name: {}", moduleName);
 		List<FunctionDTO> functions = functionService.findAllFunctionsByModule(moduleName);
 		if (functions != null && !functions.isEmpty()) {
@@ -227,7 +227,7 @@ public class FunctionController {
 			return ResponseEntity.status(HttpStatus.OK).body(functions);
 		} else {
 			LOGGER.warn("No functions found for module name: {}", moduleName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No functions found for module");
 		}
 	}
 }

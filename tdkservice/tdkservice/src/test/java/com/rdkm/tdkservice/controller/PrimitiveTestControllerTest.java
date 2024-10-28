@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -99,10 +100,10 @@ public class PrimitiveTestControllerTest {
 
 	@Test
 	public void deleteById_Success() {
-		int id = 1;
-		doNothing().when(primitiveTestService).deleteById(id);
+		UUID primitiveTestId = UUID.randomUUID();
+		doNothing().when(primitiveTestService).deleteById(primitiveTestId);
 
-		ResponseEntity<String> response = primitiveTestController.deleteById(id);
+		ResponseEntity<String> response = primitiveTestController.deleteById(primitiveTestId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("Primitive test deleted successfully", response.getBody());
@@ -110,11 +111,11 @@ public class PrimitiveTestControllerTest {
 
 	@Test
 	public void getPrimitiveTestDetails_Found() {
-		int id = 1;
+		UUID primitiveTestId = UUID.randomUUID();
 		PrimitiveTestDTO primitiveTestDTO = new PrimitiveTestDTO();
-		when(primitiveTestService.getPrimitiveTestDetailsById(id)).thenReturn(primitiveTestDTO);
+		when(primitiveTestService.getPrimitiveTestDetailsById(primitiveTestId)).thenReturn(primitiveTestDTO);
 
-		ResponseEntity<?> response = primitiveTestController.getPrimitiveTestDetails(id);
+		ResponseEntity<?> response = primitiveTestController.getPrimitiveTestDetails(primitiveTestId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(primitiveTestDTO, response.getBody());
@@ -122,10 +123,10 @@ public class PrimitiveTestControllerTest {
 
 	@Test
 	public void getPrimitiveTestDetails_NotFound() {
-		int id = 1;
-		when(primitiveTestService.getPrimitiveTestDetailsById(id)).thenReturn(null);
+		UUID primitiveTestId = UUID.randomUUID();
+		when(primitiveTestService.getPrimitiveTestDetailsById(primitiveTestId)).thenReturn(null);
 
-		ResponseEntity<?> response = primitiveTestController.getPrimitiveTestDetails(id);
+		ResponseEntity<?> response = primitiveTestController.getPrimitiveTestDetails(primitiveTestId);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		assertEquals("Primitive test not found", response.getBody());

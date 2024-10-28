@@ -21,12 +21,12 @@ package com.rdkm.tdkservice.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -62,10 +62,9 @@ public class OemControllerTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-
 	/*
-	 * This test checks if the createOem method in the controller
-	 * returns a successful response when the service layer operation is successful.
+	 * This test checks if the createOem method in the controller returns a
+	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void createOem_success() {
@@ -75,13 +74,12 @@ public class OemControllerTest {
 		ResponseEntity<String> response = oemController.createOemType(oemDTO);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals("oem created successfully", response.getBody());
+		assertEquals("Oem created succesfully", response.getBody());
 	}
 
-
 	/*
-	 * This test checks if the createOem method in the controller
-	 * returns an error response when the service layer operation fails.
+	 * This test checks if the createOem method in the controller returns an error
+	 * response when the service layer operation fails.
 	 */
 	@Test
 	public void createOem_failure() {
@@ -91,27 +89,25 @@ public class OemControllerTest {
 		ResponseEntity<String> response = oemController.createOemType(oemDTO);
 
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
-		assertEquals("Error in saving oem data", response.getBody());
+		assertEquals("Error in saving Oem type data", response.getBody());
 	}
 
-
 	/*
-	 * This test checks if the findAllOems method in the controller
-	 * returns a successful response when the service layer operation is successful.
+	 * This test checks if the findAllOems method in the controller returns a
+	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void findAllOems_found() {
-		when(oemService.getAllOem()).thenReturn(Arrays.asList(new OemCreateDTO()));
+		when(oemService.getAllOem()).thenReturn(Arrays.asList(new OemDTO()));
 
 		ResponseEntity<?> response = oemController.findAllOemTypes();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
-
 	/*
-	 * This test checks if the findAllOems method in the controller
-	 * returns an error response when the service layer operation fails.
+	 * This test checks if the findAllOems method in the controller returns an error
+	 * response when the service layer operation fails.
 	 */
 	@Test
 	public void findAllOems_notFound() {
@@ -122,21 +118,20 @@ public class OemControllerTest {
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 	}
 
-
 	/*
-	 * This test checks if the deleteOem method in the controller
-	 * returns a successful response when the service layer operation is successful.
+	 * This test checks if the deleteOem method in the controller returns a
+	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void deleteOem() {
-		doNothing().when(oemService).deleteOem(anyInt());
+		UUID oemId = UUID.randomUUID();
+		doNothing().when(oemService).deleteOem(any(UUID.class));
 
-		ResponseEntity<String> response = oemController.deleteOemType(1);
+		ResponseEntity<String> response = oemController.deleteOemType(oemId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("Successfully deleted the oem", response.getBody());
+		assertEquals("Succesfully deleted the Oem", response.getBody());
 	}
-
 
 	/*
 	 * This test checks if the findById method in the controller returns a
@@ -144,67 +139,60 @@ public class OemControllerTest {
 	 */
 	@Test
 	public void findById_found() {
-		OemCreateDTO oemDTO = new OemCreateDTO();
-		when(oemService.findById(anyInt())).thenReturn(oemDTO);
+		UUID oemId = UUID.randomUUID();
+		OemDTO oemDTO = new OemDTO();
+		when(oemService.findById(any(UUID.class))).thenReturn(oemDTO);
 
-		ResponseEntity<OemCreateDTO> response = oemController.findById(1);
+		ResponseEntity<OemDTO> response = oemController.findById(oemId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(oemDTO, response.getBody());
 	}
 
-
 	/*
-	 * This test checks if the updateOem method in the controller
-	 * returns a successful response when the service layer operation is successful.
+	 * This test checks if the updateOem method in the controller returns a
+	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void updateOem_success() {
 		OemDTO oemUpdateDTO = new OemDTO();
-		when(oemService.updateOem(any(OemDTO.class), anyInt()))
-				.thenReturn(oemUpdateDTO);
+		when(oemService.updateOem(any(OemDTO.class))).thenReturn(oemUpdateDTO);
 
-		ResponseEntity<?> response = oemController.updateOemType(1, oemUpdateDTO);
+		ResponseEntity<?> response = oemController.updateOemType(oemUpdateDTO);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals(oemUpdateDTO, response.getBody());
+		assertEquals("Oem updated successfully", response.getBody());
 	}
 
-
 	/*
-	 * This test checks if the updateOem method in the controller
-	 * returns an error response when the service layer operation fails.
+	 * This test checks if the updateOem method in the controller returns an error
+	 * response when the service layer operation fails.
 	 */
 	@Test
 	public void updateOem_failure() {
-		when(oemService.updateOem(any(OemDTO.class), anyInt()))
-				.thenReturn(null);
+		when(oemService.updateOem(any(OemDTO.class))).thenReturn(null);
 
-		ResponseEntity<?> response = oemController.updateOemType(1, new OemDTO());
+		ResponseEntity<?> response = oemController.updateOemType(new OemDTO());
 
 		assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
 	}
 
-
 	/*
-	 * This test checks if the getOemsByCategory method in the
-	 * controller returns a successful response when the service layer operation is
-	 * successful.
+	 * This test checks if the getOemsByCategory method in the controller returns a
+	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void getOemsByCategory_found() {
-		when(oemService.getOemsByCategory(anyString()))
-				.thenReturn(Arrays.asList(new OemCreateDTO()));
+		when(oemService.getOemsByCategory(anyString())).thenReturn(Arrays.asList(new OemDTO()));
 
 		ResponseEntity<?> response = oemController.getOemsByCategory("category");
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
-
 	/*
-	 * This test checks if the getOemsByCategory method in the
-	 * controller returns an error response when the service layer operation fails.
+	 * This test checks if the getOemsByCategory method in the controller returns an
+	 * error response when the service layer operation fails.
 	 */
 	@Test
 	public void getOemsByCategory_notFound() {
@@ -217,13 +205,11 @@ public class OemControllerTest {
 
 	@Test
 	/*
-	 * This test checks if the getOemListByCategory method in the
-	 * controller returns a successful response when the service layer operation is
-	 * successful.
+	 * This test checks if the getOemListByCategory method in the controller returns
+	 * a successful response when the service layer operation is successful.
 	 */
 	public void getOemListByCategory_found() {
-		when(oemService.getOemListByCategory(anyString()))
-				.thenReturn(Arrays.asList("name1", "name2"));
+		when(oemService.getOemListByCategory(anyString())).thenReturn(Arrays.asList("name1", "name2"));
 
 		ResponseEntity<?> response = oemController.getOemListByCategory("category");
 
@@ -232,8 +218,8 @@ public class OemControllerTest {
 
 	@Test
 	/*
-	 * This test checks if the getOemListByCategory method in the
-	 * controller returns an error response when the service layer operation fails.
+	 * This test checks if the getOemListByCategory method in the controller returns
+	 * an error response when the service layer operation fails.
 	 */
 	public void getOemListByCategory_notFound() {
 		when(oemService.getOemListByCategory(anyString())).thenReturn(Arrays.asList());

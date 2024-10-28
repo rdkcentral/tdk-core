@@ -22,7 +22,6 @@ package com.rdkm.tdkservice.controller;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -32,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -67,7 +67,6 @@ public class DeviceTypeControllerTest {
 		MockitoAnnotations.openMocks(this);
 	}
 
-
 	/*
 	 * This test checks if the createDeviceType method in the controller returns a
 	 * successful response when the service layer operation is successful.
@@ -80,9 +79,8 @@ public class DeviceTypeControllerTest {
 		ResponseEntity<String> response = deviceTypeController.createDeviceType(deviceTypeRequest);
 
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals("Device type created successfully", response.getBody());
+		assertEquals("Device type created succesfully", response.getBody());
 	}
-
 
 	/*
 	 * This test checks if the createDeviceType method in the controller returns an
@@ -90,6 +88,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void createDeviceTypeFailure() {
+
 		DeviceTypeCreateDTO deviceTypeRequest = new DeviceTypeCreateDTO();
 		when(deviceTypeService.createDeviceType(deviceTypeRequest)).thenReturn(false);
 
@@ -99,21 +98,19 @@ public class DeviceTypeControllerTest {
 		assertEquals("Error in saving device type data", response.getBody());
 	}
 
-
 	/*
 	 * This test checks if the getAllDeviceTypes method in the controller returns a
 	 * successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void getAllDeviceTypesSuccessfully() {
-		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
+		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
 		when(deviceTypeService.getAllDeviceTypes()).thenReturn(Arrays.asList(deviceTypeDTO));
 
 		ResponseEntity<?> response = deviceTypeController.getAllDeviceTypes();
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
-
 
 	/*
 	 * This test checks if the getAllDeviceTypes method in the controller returns an
@@ -129,21 +126,22 @@ public class DeviceTypeControllerTest {
 		assertEquals("No device types found", response.getBody());
 	}
 
-
 	/*
 	 * This test checks if the deleteDeviceType method in the controller returns a
 	 * successful response when the service layer operation is successful.
 	 */
-	@Test
 	public void deleteDeviceTypeSuccessfully() {
-		doNothing().when(deviceTypeService).deleteById(anyInt());
+		UUID deviceTypeId = UUID.randomUUID(); // Create a sample UUID
 
-		ResponseEntity<String> response = deviceTypeController.deleteDeviceType(1);
+		doNothing().when(deviceTypeService).deleteById(any(UUID.class)); // Mock the service to delete by UUID
 
-		assertEquals(HttpStatus.OK, response.getStatusCode());
-		assertEquals("Successfully deleted the device", response.getBody());
+		ResponseEntity<String> response = deviceTypeController.deleteDeviceType(deviceTypeId); // Call the controller
+																								// method
+
+		assertEquals(HttpStatus.OK, response.getStatusCode()); // Assert that the status is OK
+		assertEquals("Successfully deleted the device", response.getBody()); // Assert that the response body is as
+																				// expected
 	}
-
 
 	/*
 	 * This test checks if the findDeviceTypeById method in the controller returns a
@@ -151,15 +149,15 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void findDeviceTypeByIdSuccessfully() {
-		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
-		when(deviceTypeService.findById(anyInt())).thenReturn(deviceTypeDTO);
+		UUID deviceTypeId = UUID.randomUUID();
+		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
+		when(deviceTypeService.findById(any(UUID.class))).thenReturn(deviceTypeDTO);
 
-		ResponseEntity<DeviceTypeCreateDTO> response = deviceTypeController.findById(1);
+		ResponseEntity<DeviceTypeDTO> response = deviceTypeController.findById(deviceTypeId);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals(deviceTypeDTO, response.getBody());
 	}
-
 
 	/*
 	 * This test checks if the updateDeviceType method in the controller returns an
@@ -167,16 +165,16 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void updateDeviceTypeNotFound() {
+		// UUID deviceTypeId = UUID.randomUUID();
 		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 
-		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class), anyInt())).thenReturn(null);
+		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class))).thenReturn(null);
 
-		ResponseEntity<?> response = deviceTypeController.updateDeviceType(1, deviceTypeUpdateDTO);
+		ResponseEntity<?> response = deviceTypeController.updateDeviceType(deviceTypeUpdateDTO);
 
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		assertEquals("Device type not found", response.getBody());
 	}
-
 
 	/*
 	 * This test checks if the updateDeviceType method in the controller returns a
@@ -184,15 +182,14 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void updateDeviceTypeSuccessfully() {
+		
 		DeviceTypeDTO deviceTypeUpdateDTO = new DeviceTypeDTO();
 
-		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class), anyInt())).thenReturn(deviceTypeUpdateDTO);
-
-		ResponseEntity<?> response = deviceTypeController.updateDeviceType(1, deviceTypeUpdateDTO);
+		when(deviceTypeService.updateDeviceType(any(DeviceTypeDTO.class))).thenReturn(deviceTypeUpdateDTO);
+		ResponseEntity<?> response = deviceTypeController.updateDeviceType(deviceTypeUpdateDTO);
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
-
 
 	/*
 	 * This test checks if the deleteDeviceType method in the controller returns an
@@ -200,11 +197,11 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void deleteDeviceTypeFailure() {
-		doThrow(new RuntimeException()).when(deviceTypeService).deleteById(anyInt());
+		UUID deviceTypeId = UUID.randomUUID();
+		doThrow(new RuntimeException()).when(deviceTypeService).deleteById(any((UUID.class)));
 
-		assertThrows(RuntimeException.class, () -> deviceTypeController.deleteDeviceType(1));
+		assertThrows(RuntimeException.class, () -> deviceTypeController.deleteDeviceType(deviceTypeId));
 	}
-
 
 	/*
 	 * This test checks if the getDeviceTypesByCategory method in the controller
@@ -212,7 +209,7 @@ public class DeviceTypeControllerTest {
 	 */
 	@Test
 	public void getDeviceTypesByCategorySuccessfully() {
-		DeviceTypeCreateDTO deviceTypeDTO = new DeviceTypeCreateDTO();
+		DeviceTypeDTO deviceTypeDTO = new DeviceTypeDTO();
 		when(deviceTypeService.getDeviceTypesByCategory(anyString())).thenReturn(Arrays.asList(deviceTypeDTO));
 
 		ResponseEntity<?> response = deviceTypeController.getDeviceTypesByCategory("category");
@@ -220,20 +217,19 @@ public class DeviceTypeControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
-
 	/*
 	 * This test checks if the getDeviceTypesListByCategory method in the controller
 	 * returns a successful response when the service layer operation is successful.
 	 */
 	@Test
 	public void getDeviceTypesListByCategorySuccessfully() {
-		when(deviceTypeService.getDeviceTypeNameByCategory(anyString())).thenReturn(Arrays.asList("DeviceType1", "DeviceType2"));
+		when(deviceTypeService.getDeviceTypeNameByCategory(anyString()))
+				.thenReturn(Arrays.asList("DeviceType1", "DeviceType2"));
 
 		ResponseEntity<?> response = deviceTypeController.getDeviceTypesListByCategory("category");
 
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
-
 
 	/*
 	 * This test checks if the getOtherDeviceTypesListByCategory method in the
@@ -251,7 +247,6 @@ public class DeviceTypeControllerTest {
 		assertEquals(HttpStatus.OK, response.getStatusCode());
 	}
 
-
 	/*
 	 * This test checks if the getOtherDeviceTypesListByCategory method in the
 	 * controller returns an error response when the service layer operation fails.
@@ -265,7 +260,6 @@ public class DeviceTypeControllerTest {
 		assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
 		assertEquals("No device types found", response.getBody());
 	}
-
 
 	/*
 	 * This test checks if the getDeviceTypesByCategory method in the controller

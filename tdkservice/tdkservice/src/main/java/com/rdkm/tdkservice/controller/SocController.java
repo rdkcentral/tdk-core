@@ -96,7 +96,7 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "SOC retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No SOC found")
 	@GetMapping("/findall")
-	public ResponseEntity<List<SocDTO>> getAllSocs() {
+	public ResponseEntity<?> getAllSocs() {
 		LOGGER.info("Received find all Soc request");
 		List<SocDTO> socs = socService.findAll();
 		if (socs != null && !socs.isEmpty()) {
@@ -104,7 +104,7 @@ public class SocController {
 			return ResponseEntity.status(HttpStatus.OK).body(socs);
 		} else {
 			LOGGER.error("No Soc found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(socs);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Soc found");
 		}
 	}
 

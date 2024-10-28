@@ -154,7 +154,7 @@ public class LoginController {
 		List<String> userGroupNames = userGroups.stream().map(UserGroupDTO::getUserGroupName)
 				.collect(Collectors.toList());
 		LOGGER.info("User groups found: " + userGroupNames);
-		return ResponseEntity.ok(userGroupNames);
+		return ResponseEntity.status(HttpStatus.OK).body(userGroupNames);
 	}
 
 }

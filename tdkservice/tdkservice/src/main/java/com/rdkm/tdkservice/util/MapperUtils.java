@@ -195,6 +195,7 @@ public class MapperUtils {
 		return device;
 	}
 
+
 	/**
 	 * This method is used to convert the Device object to UpdateDeviceDTO object.
 	 *
@@ -283,10 +284,12 @@ public class MapperUtils {
 	 * @return DeviceDTO This returns the DeviceDTO object converted from the Device
 	 *         object.
 	 */
+
 	public static DeviceResponseDTO convertToDeviceDTO(Device device) {
-		ModelMapper modelMapper = new ModelMapper();
-		DeviceResponseDTO deviceDTO = modelMapper.map(device, DeviceResponseDTO.class);
-		return deviceDTO;
+	    modelMapper.typeMap(Device.class, DeviceResponseDTO.class).addMappings(mapper -> {
+	        mapper.map(src -> src.getName(), DeviceResponseDTO:: setDeviceName);
+	    });
+	    return modelMapper.map(device, DeviceResponseDTO.class);
 	}
 
 	/**
