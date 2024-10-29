@@ -101,7 +101,7 @@ public class DataInitializer {
 		try (BufferedReader br = new BufferedReader(new InputStreamReader(resource.getInputStream()))) {
 			String line;
 			while ((line = br.readLine()) != null) {
-				Pattern pattern = Pattern.compile("VALUES \\('.+?', '(.+?)',");
+				Pattern pattern = Pattern.compile("VALUES \\('.+?', '.+?', '(.+?)',");
 				Matcher matcher = pattern.matcher(line);
 				if (matcher.find()) {
 					return matcher.group(1);
