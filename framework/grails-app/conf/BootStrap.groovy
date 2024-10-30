@@ -49,6 +49,9 @@ import com.comcast.rdk.socketCommuniation.SocketPortConnector
 import com.comcast.rdk.ExecutionService;
 import org.apache.shiro.crypto.hash.Sha256Hash
 
+import java.nio.file.Files
+import java.nio.file.Paths
+
 class BootStrap {
 	
 	def grailsApplication
@@ -59,11 +62,13 @@ class BootStrap {
 	def executionService
     def utilityService
 	def mailService
+
 	
     def init = { servletContext ->
 		
 		try {
 			migratetoUnifiedTM();
+			executeScript();
 		} catch (Exception e) {
 			e.printStackTrace()
 		}
@@ -453,5 +458,30 @@ class BootStrap {
 			}
 		}
 	}
+
+	def executeScript() {
+		def baseWebappsDir = System.getProperty("catalina.base")
+		def webappsPath = "${baseWebappsDir}/webapps"
+		def filePath = Paths.get(webappsPath, "deploy.txt")
+
+		// write condition if deploy.txt exists then execute the script if not skip
+		if (Files.exists(filePath)) {
+			def rootFile = grailsApplication.parentContext.getResource("/").file.getAbsolutePath()
+			def scriptPath = "${rootFile}//fileStore//config.sh".toString() // Replace with the actual path to your script
+
+			// Ensure the script is executable
+			def chmodCommand = "chmod +x ${scriptPath}"
+			chmodCommand.execute().waitFor()
+
+			def executeCommand = "nohup ${scriptPath} &"
+			Process process = executeCommand.execute()
+
+			Files.delete(filePath)
+		} else {
+			println "Skipping configfile update...."
+		}
+	}
+
+
 
 }           

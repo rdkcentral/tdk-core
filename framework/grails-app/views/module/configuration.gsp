@@ -23,7 +23,8 @@
 <head>
 <meta name="layout" content="main" />
 <title>RDK Test Suite</title>
-<style type="text/css" media="screen"></style>
+<style type="text/css" media="screen">
+</style>
 <g:javascript library="chartview" />
 <%--<g:javascript library="jquery-1.6.1.min" />
 <g:javascript library="jquery.simplemodal" />
@@ -394,8 +395,7 @@ function display(val) {
 	</div>
 	<div style="padding-top:40px;">
 	
-	<form method="POST" controller="module" action="upload"
-            enctype="multipart/form-data">
+	<form method="POST" controller="module" action="upload" enctype="multipart/form-data">
 		
 		<div style="float: left; padding-left: 10%; ">
 			<h2 style="color: #A24C15;">
@@ -406,38 +406,66 @@ function display(val) {
 		</div>
 		
 		<div style="width: 40%; margin: 0 auto; align: center;">
-		<table style="max-width: 60%;">
-		<tr>
-		<td>
-		<span style="color: #A24C15;">Upload database file(optional)</span>
-		<input type="file" name="dbFile" id="dbFile">
-		</td>
-		<td>
-		<span style="color: #A24C15;" >Enter DB Password</span>
-		<input type="password" name="dbpassword" id="dbpassword" style="height:17px;width:120px">
-		</td>
-		<tr>
-		<td>
-		<span style="color: #A24C15;">Upload War File</span>
-		<input type="file" name="warFile" id="warFile">
-		</td>
-		</tr>
-		<tr>
-		<td><label for="backupCheckbox" style="color: #A24C15;">Create Backup(optional)</label>
- 		<input type="checkbox" id="backupCheckbox" name="takeBackup" onclick="toggleBackupPath()" checked>
-        <input type="text" name="backupDir" id="backupDir"  style="display: block;height:20px;width:180px" placeholder="Enter the backup location(ex: /mnt)" title="This will take a copy of current version war file and entire rdk-test-tool floder in the mentioned path" required/></td>
-		</tr>
-		<tr>
-		<td>
-		<button type="button" onclick="uploadFile()" style="height:20px;width:100px" >Deploy WAR</button>
-		<p id="status"></p>
-		<p id="progressBar"></p>
-		</td>
-		</tr>
-		</table>
-		</div>
+            <table style="max-width: 60%;">
+                <tr>
+                    <td>
+                        <span style="color: #A24C15;">Upload database file(optional)</span>
+                        <input type="file" name="dbFile" id="dbFile">
+                    </td>
+                    <td>
+                        <span style="color: #A24C15;">Enter DB Password</span>
+                        <input type="password" name="dbpassword" id="dbpassword" style="height:17px;width:120px">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <span style="color: #A24C15;">Upload War File</span>
+                        <input type="file" name="warFile" id="warFile">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="backupCheckbox" style="color: #A24C15;">Create Backup(optional)</label>
+                        <input type="checkbox" id="backupCheckbox" name="takeBackup" onclick="toggleBackupPath()" checked>
+                        <input type="text" name="backupDir" id="backupDir" style="display: block;height:20px;width:180px" placeholder="Enter the backup location(ex: /mnt)" title="This will take a copy of current version war file and entire rdk-test-tool folder in the mentioned path" required/>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="vertical-align: top;">
+                        <button type="button" onclick="uploadFile()" style="height:20px;width:100px">Deploy WAR</button>
+                        <span style="margin-left: 10px;">
+                                <g:link controller="module" action="showLatestLogFile" target="_blank">Deployment logs</g:link>
+                                <span class="info-icon" title="Please check the logs after deployment using UI">&#8505;</span>                            </span>
+                        <p id="status"></p>
+                        <p id="progressBar"></p>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+
+      <style>
+          .info-icon {
+                      cursor: pointer;
+                      margin-left: 5px;
+                      font-size: 20px; /* Adjust the size as needed */
+                      color: blue; /* Set the color to blue */
+                  }
+                  .info-icon:hover::after {
+                      content: attr(title);
+                      position: absolute;
+                      background-color: #fff;
+                      color: #000;
+                      border: 1px solid #ccc;
+                      padding: 5px;
+                      border-radius: 5px;
+                      white-space: nowrap;
+                      z-index: 1000;
+                      font-size: 14px;
+                      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+                  }
+      </style>
 	</form>
-	
-	</div>
+
 </body>
 </html>

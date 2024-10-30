@@ -1243,6 +1243,21 @@ class ModuleController {
 		}
 		return folderSize / 1024 / 1024 // Convert to MB
 	}
+	def showLatestLogFile() {
+		def logDir = new File("/mnt/TM_BACKUP/deployment_logs")
+
+		// Create the directory if it doesn't exist
+		if (!logDir.exists()) {
+			logDir.mkdirs()
+		}
+
+		def logFiles = logDir.listFiles().findAll { it.name.startsWith("deployment_log_") && it.name.endsWith(".log") }
+		def latestLogFile = logFiles.max { it.lastModified() }
+
+		def logContent = latestLogFile ? latestLogFile.text : "No log files found."
+
+		render(view: "showLogFile", model: [logContent: logContent])
+	}
 
 
 }
