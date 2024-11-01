@@ -41,11 +41,11 @@ check_pts = ""
 check_fps = ""
 use_audioSink = ""
 use_autoVideoSink_for_fpsdisplaysink = ""
-ignore_warnings = ""
 check_audio_fps = ""
 test_streams_base_path =""
 validateFullPlayback = ""
 use_appsrc = ""
+start_westeros = ""
 
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -152,12 +152,12 @@ def getDeviceConfigValue (configKey):
         global check_fps
         global use_audioSink
         global use_autoVideoSink_for_fpsdisplaysink
-        global ignore_warnings
         global check_audio_fps
         global test_streams_base_path
         global avsync_enabled
         global validateFullPlayback
         global use_appsrc
+        global start_westeros
 
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
@@ -209,10 +209,6 @@ def getDeviceConfigValue (configKey):
             except:
                 use_autoVideoSink_for_fpsdisplaysink = "no"
             try:
-                ignore_warnings = configParser.get('device.config',"FIREBOLT_COMPLIANCE_IGNORE_WARNINGS")
-            except:
-                ignore_warnings = "no"
-            try:
                 check_audio_fps = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_AUDIO")
             except:
                 check_audio_fps = "no"
@@ -232,6 +228,10 @@ def getDeviceConfigValue (configKey):
                 checkAVStatus = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CHECK_AV_STATUS")
             except:
                 checkAVStatus = "no"
+            try:
+                start_westeros = configParser.get('device.config',"FIREBOLT_COMPLIANCE_START_WESTEROS")
+            except:
+                start_westeros = "no"
         else:
             print("DeviceConfig file not available")
             result = "FAILURE"
@@ -287,7 +287,6 @@ def getOperations ():
 
 #Function to construct the mediapipelinetest command to be executed in the DUT
 def getMediaPipelineTestCommand (test_name, test_url, arguments):
-    global ignore_warnings
     if test_streams_base_path:
         if not MediaValidationVariables.test_streams_base_path:
             test_url = test_streams_base_path + test_url
@@ -326,7 +325,6 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
         command = command  + " use_appsrc ";
     #Feature to modify hls url to aamp url based on configuration
     if (use_aamp_for_hls == "yes") or (use_aamp_for_dash == "yes"):
-        ignore_warnings = "yes"
         testUrl_list = testUrl.split();
         url_list = set()
         #Check if HLS URL is present in command
@@ -351,9 +349,8 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
                 #Change hls generic url to aamp url
                 url_updated = url.replace("https","aamps",1).replace("http","aamp",1);
                 command = command.replace(url,url_updated);
-    if (ignore_warnings == "yes"):
-        #Update GST_LOG_LEVEL to skip error statements check
-        command = "export GST_LOG_LEVEL=0;  " + command;
+    if (start_westeros == "yes"):
+        command = command + " startWesteros=yes ";
     return command
 
 #Function to check mediapipeline test execution status from output string
