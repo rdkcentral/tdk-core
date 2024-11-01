@@ -19,6 +19,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
 import com.rdkm.tdkservice.dto.ModuleDTO;
 import com.rdkm.tdkservice.enums.Category;
@@ -33,252 +55,287 @@ import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
 import com.rdkm.tdkservice.repository.ParameterRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
-import com.rdkm.tdkservice.serviceimpl.ModuleService;
-import com.rdkm.tdkservice.util.Constants;
-import com.rdkm.tdkservice.util.MapperUtils;
-import com.rdkm.tdkservice.util.Utils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 public class ModuleServiceTest {
 
-    @Mock
-    private ModuleRepository moduleRepository;
+	@Mock
+	private ModuleRepository moduleRepository;
 
-    @Mock
-    private UserGroupRepository userGroupRepository;
+	@Mock
+	private UserGroupRepository userGroupRepository;
 
-    @Mock
-    private FunctionRepository functionRepository;
+	@Mock
+	private FunctionRepository functionRepository;
 
-    @Mock
-    private ParameterRepository parameterRepository;
+	@Mock
+	private ParameterRepository parameterRepository;
 
-    @InjectMocks
-    private ModuleService moduleService;
+	@InjectMocks
+	private ModuleService moduleService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testSaveModule_Success() {
-        ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
-        Module module=new Module();
-        module.setId(1);
-        moduleDTO.setModuleName("TestModule");
-        moduleDTO.setExecutionTime(10);
-        moduleDTO.setTestGroup(TestGroup.E2E.getName());
-        moduleDTO.setModuleCategory(Category.RDKV.getName());
+	@Test
+	void testSaveModule_Success() {
+	    UUID moduleId = UUID.randomUUID();
+	    ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
 
+	    moduleDTO.setModuleName("TestModule");
+	    moduleDTO.setExecutionTime(10);
+	    moduleDTO.setTestGroup(TestGroup.E2E.getName());
+	    moduleDTO.setModuleCategory(Category.RDKV.getName());
+	    moduleDTO.setUserGroup("userGroup1");
 
-        UserGroup userGroup = new UserGroup();
-        userGroup.setName("tata");
-        moduleDTO.setUserGroup(userGroup.getName());
+	    Module module = new Module();
+	    module.setName(moduleDTO.getModuleName());
+	    module.setExecutionTime(moduleDTO.getExecutionTime());
+	    module.setCategory(Category.valueOf(moduleDTO.getModuleCategory()));
+	    module.setTestGroup(TestGroup.valueOf(moduleDTO.getTestGroup()));
+	    UserGroup userGroup = new UserGroup();
+	    userGroup.setName("userGroup1");
+	    module.setUserGroup(userGroup);
 
-        when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(false);
-        when(userGroupRepository.findByName(moduleDTO.getUserGroup().toString())).thenReturn(userGroup);
-        when(moduleRepository.save(any(Module.class))).thenReturn(new Module());
+	    when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(false);
+	    when(userGroupRepository.findByName(anyString())).thenReturn(userGroup);
 
-        Module savedModule = new Module();
-        savedModule.setId(1); // Ensure the saved module has a non-null ID
-        when(moduleRepository.save(any(Module.class))).thenReturn(savedModule);
+	    // Mock the save operation to set the id on the module
+	    when(moduleRepository.save(any(Module.class))).thenAnswer(invocation -> {
+	        Module savedModule = invocation.getArgument(0);
+	        savedModule.setId(moduleId);  // Set the id to simulate saving to DB
+	        return savedModule;
+	    });
 
-        boolean result = moduleService.saveModule(moduleDTO);
+	    boolean result = moduleService.saveModule(moduleDTO);
 
-        //assertTrue(result);
-        verify(moduleRepository).save(any(Module.class));
-    }
+	    assertTrue(result);
+	    verify(moduleRepository).save(any(Module.class));
+	}
 
-    @Test
-    void testSaveModule_AlreadyExists() {
-        ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
-        moduleDTO.setModuleName("TestModule");
+	@Test
+	void testSaveModule_AlreadyExists() {
+		ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
+		moduleDTO.setModuleName("TestModule");
 
-        when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(true);
+		when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(true);
 
-        assertThrows(ResourceAlreadyExistsException.class, () -> moduleService.saveModule(moduleDTO));
-    }
+		assertThrows(ResourceAlreadyExistsException.class, () -> moduleService.saveModule(moduleDTO));
+	}
 
-    @Test
-    void testSaveModule_InvalidCategory() {
-        ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
-        moduleDTO.setModuleName("TestModule");
-        moduleDTO.setModuleCategory("INVALID");
-        moduleDTO.setTestGroup("E2E");
-        moduleDTO.setUserGroup("tata"); // Ensure user group is set
+	@Test
+	void testSaveModule_InvalidCategory() {
+		ModuleCreateDTO moduleDTO = new ModuleCreateDTO();
+		moduleDTO.setModuleName("TestModule");
+		moduleDTO.setModuleCategory("INVALID");
+		moduleDTO.setTestGroup("E2E");
+		moduleDTO.setUserGroup("tata"); // Ensure user group is set
 
-        when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(false);
+		when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(false);
 
-        assertThrows(ResourceNotFoundException.class, () -> moduleService.saveModule(moduleDTO));
-    }
+		assertThrows(ResourceNotFoundException.class, () -> moduleService.saveModule(moduleDTO));
+	}
 
-    @Test
-    void testUpdateModule_Success() {
-        ModuleDTO moduleDTO = new ModuleDTO();
-        moduleDTO.setId(1);
-        moduleDTO.setModuleName("UpdatedModule");
-        moduleDTO.setExecutionTime(10);
-        moduleDTO.setTestGroup(TestGroup.E2E.getName());
-        moduleDTO.setModuleCategory(Category.RDKV.getName());
+	@Test
+	void testUpdateModule_Success() {
+		UUID moduleId = UUID.randomUUID();
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(moduleId);
+		moduleDTO.setModuleName("UpdatedModule");
+		moduleDTO.setExecutionTime(10);
+		moduleDTO.setTestGroup(TestGroup.E2E.getName());
+		moduleDTO.setModuleCategory(Category.RDKV.getName());
 
-        Module existingModule = new Module();
-        existingModule.setId(1);
-        existingModule.setName("OldModule");
+		Module existingModule = new Module();
+		existingModule.setId(moduleId);
+		existingModule.setName("OldModule");
 
-        when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.of(existingModule));
-        when(moduleRepository.save(any(Module.class))).thenReturn(existingModule);
+		when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.of(existingModule));
+		when(moduleRepository.save(any(Module.class))).thenReturn(existingModule);
 
-        boolean result = moduleService.updateModule(moduleDTO);
+		boolean result = moduleService.updateModule(moduleDTO);
 
-        assertTrue(result);
-        verify(moduleRepository).save(any(Module.class));
-    }
+		assertTrue(result);
+		verify(moduleRepository).save(any(Module.class));
+	}
 
-    @Test
-    void testUpdateModule_NotFound() {
-        ModuleDTO moduleDTO = new ModuleDTO();
-        moduleDTO.setId(1);
+	@Test
+	void testUpdateModule_NotFound() {
+		UUID moduleId = UUID.randomUUID();
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(moduleId);
 
-        when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.empty());
+		when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> moduleService.updateModule(moduleDTO));
-    }
+		assertThrows(ResourceNotFoundException.class, () -> moduleService.updateModule(moduleDTO));
+	}
 
-    @Test
-    void testUpdateModule_NameAlreadyExists() {
-        ModuleDTO moduleDTO = new ModuleDTO();
-        moduleDTO.setId(1);
-        moduleDTO.setModuleName("UpdatedModule");
+	@Test
+	void testUpdateModule_NameAlreadyExists() {
+		UUID moduleId = UUID.randomUUID();
+		ModuleDTO moduleDTO = new ModuleDTO();
+		moduleDTO.setId(moduleId);
+		moduleDTO.setModuleName("UpdatedModule");
 
-        Module existingModule = new Module();
-        existingModule.setId(1);
-        existingModule.setName("OldModule");
+		Module existingModule = new Module();
+		existingModule.setId(moduleId);
+		existingModule.setName("OldModule");
 
-        when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.of(existingModule));
-        when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(true);
+		when(moduleRepository.findById(moduleDTO.getId())).thenReturn(Optional.of(existingModule));
+		when(moduleRepository.existsByName(moduleDTO.getModuleName())).thenReturn(true);
 
-        assertThrows(ResourceAlreadyExistsException.class, () -> moduleService.updateModule(moduleDTO));
-    }
+		assertThrows(ResourceAlreadyExistsException.class, () -> moduleService.updateModule(moduleDTO));
+	}
 
-    @Test
-    void testFindAllModules_Success() {
-        List<Module> modules = Arrays.asList(new Module(), new Module());
+	@Test
+	void testFindAllModules_Success() {
+		// Arrange
+		Module module1 = new Module();
+		module1.setId(UUID.randomUUID());
+		module1.setName("Module1");
+		module1.setCategory(Category.RDKV);
+		module1.setTestGroup(TestGroup.E2E);
 
-        when(moduleRepository.findAll()).thenReturn(modules);
+		Module module2 = new Module();
+		module2.setId(UUID.randomUUID());
+		module2.setName("Module2");
+		module2.setCategory(Category.RDKV);
+		module2.setTestGroup(TestGroup.E2E);
 
-        List<ModuleDTO> result = moduleService.findAllModules();
+		List<Module> modules = Arrays.asList(module1, module2);
 
-        assertFalse(result.isEmpty());
-        assertEquals(modules.size(), result.size());
-    }
+		when(moduleRepository.findAll()).thenReturn(modules);
 
-    @Test
-    void testFindAllModules_Empty() {
-        when(moduleRepository.findAll()).thenReturn(Collections.emptyList());
+		// Act
+		List<ModuleDTO> result = moduleService.findAllModules();
 
-        List<ModuleDTO> result = moduleService.findAllModules();
+		// Assert
+		assertFalse(result.isEmpty());
+		assertEquals(modules.size(), result.size());
+		assertEquals("Module1", result.get(0).getModuleName());
+		assertEquals("Module2", result.get(1).getModuleName());
+	}
 
-        assertTrue(result.isEmpty());
-    }
+	@Test
+	void testFindAllModules_Empty() {
+		when(moduleRepository.findAll()).thenReturn(Collections.emptyList());
 
-    @Test
-    void testFindModuleById_Success() {
-        // Arrange
-        Integer id = 5;
-        Module module = new Module();
-        module.setId(id);
-        module.setTestGroup(TestGroup.E2E);
-        module.setCategory(Category.RDKV);
-        module.setUserGroup(new UserGroup());
-        when(moduleRepository.findById(id)).thenReturn(Optional.of(module));
+		List<ModuleDTO> result = moduleService.findAllModules();
 
-        // Act
-      //  ModuleDTO result = moduleService.findModuleById(id);
-    }
+		assertTrue(result.isEmpty());
+	}
 
-    @Test
-    void testFindModuleById_NotFound() {
-        when(moduleRepository.findById(1)).thenReturn(Optional.empty());
+	@Test
+	void testFindModuleById_Success() {
+		// Arrange
+		UUID moduleId = UUID.randomUUID();
+		Module module = new Module();
+		module.setId(moduleId);
+		module.setTestGroup(TestGroup.E2E);
+		module.setCategory(Category.RDKV);
+		module.setUserGroup(new UserGroup());
+		when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
 
-        assertThrows(ResourceNotFoundException.class, () -> moduleService.findModuleById(1));
-    }
+		// Act
+		// ModuleDTO result = moduleService.findModuleById(id);
+	}
 
-    @Test
-    void testFindAllByCategory_Success() {
-        List<Module> modules = Arrays.asList(new Module(), new Module());
+	@Test
+	void testFindModuleById_NotFound() {
+		UUID moduleId = UUID.randomUUID();
+		when(moduleRepository.findById(moduleId)).thenReturn(Optional.empty());
 
-        when(moduleRepository.findAllByCategory(Category.RDKV)).thenReturn(modules);
+		assertThrows(ResourceNotFoundException.class, () -> moduleService.findModuleById(moduleId));
+	}
 
-        List<ModuleDTO> result = moduleService.findAllByCategory("RDKV");
+	@Test
+	void testFindAllByCategory_Success() {
+		List<Module> modules = new ArrayList<>();
+		// Arrange
+		Module module1 = new Module();
+		module1.setId(UUID.randomUUID());
+		module1.setName("Module1");
+		module1.setCategory(Category.RDKV);
+		module1.setTestGroup(TestGroup.E2E);
+		modules.add(module1);
 
-        assertFalse(result.isEmpty());
-        assertEquals(modules.size(), result.size());
-    }
+		Module module2 = new Module();
+		module2.setId(UUID.randomUUID());
+		module2.setName("Module2");
+		module2.setCategory(Category.RDKV);
+		module2.setTestGroup(TestGroup.E2E);
+		modules.add(module2);
 
-    @Test
-    void testFindAllByCategory_Empty() {
-        when(moduleRepository.findAllByCategory(Category.RDKV)).thenReturn(Collections.emptyList());
+		List<Category> categories = new ArrayList<>();
+		categories.add(Category.RDKV);
+		categories.add(Category.RDKV_RDKSERVICE);
 
-        List<ModuleDTO> result = moduleService.findAllByCategory("RDKV");
+		when(moduleRepository.findAllByCategoryIn(categories)).thenReturn(modules);
 
-        assertTrue(result.isEmpty());
-    }
+		// Act
+		List<ModuleDTO> result = moduleService.findAllByCategory("RDKV");
 
-    @Test
-    void testDeleteModule_Success() {
-        Module module = new Module();
-        module.setId(1);
+		// Assert
+		assertFalse(result.isEmpty());
+		assertEquals(modules.size(), result.size());
+		assertEquals("Module1", result.get(0).getModuleName());
+		assertEquals("Module2", result.get(1).getModuleName());
+	}
 
-        when(moduleRepository.findById(1)).thenReturn(Optional.of(module));
-        when(functionRepository.findAllByModuleId(1)).thenReturn(Collections.emptyList());
+	@Test
+	void testFindAllByCategory_Empty() {
+		when(moduleRepository.findAllByCategory(Category.RDKV)).thenReturn(Collections.emptyList());
 
-        boolean result = moduleService.deleteModule(1);
+		List<ModuleDTO> result = moduleService.findAllByCategory("RDKV");
 
-        assertTrue(result);
-        verify(moduleRepository).deleteById(1);
-    }
+		assertTrue(result.isEmpty());
+	}
 
-    @Test
-    void testDeleteModule_NotFound() {
-        when(moduleRepository.findById(1)).thenReturn(Optional.empty());
+	@Test
+	void testDeleteModule_Success() {
+		UUID moduleId = UUID.randomUUID();
+		Module module = new Module();
+		module.setId(moduleId);
 
-        assertThrows(ResourceNotFoundException.class, () -> moduleService.deleteModule(1));
-    }
+		when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
+		when(functionRepository.findAllByModuleId(moduleId)).thenReturn(Collections.emptyList());
 
-    @Test
-    void testDeleteModule_WithFunctionsAndParameters() {
-        Module module = new Module();
-        module.setId(1);
+		boolean result = moduleService.deleteModule(moduleId);
 
-        Function function = new Function();
-        function.setId(1);
+		assertTrue(result);
+		verify(moduleRepository).deleteById(moduleId);
+	}
 
-        Parameter parameter = new Parameter();
-        parameter.setId(1);
+	@Test
+	void testDeleteModule_NotFound() {
+		UUID moduleId = UUID.randomUUID();
+		when(moduleRepository.findById(moduleId)).thenReturn(Optional.empty());
 
-        when(moduleRepository.findById(1)).thenReturn(Optional.of(module));
-        when(functionRepository.findAllByModuleId(1)).thenReturn(Arrays.asList(function));
-        when(parameterRepository.findAllByFunctionId(1)).thenReturn(Arrays.asList(parameter));
+		assertThrows(ResourceNotFoundException.class, () -> moduleService.deleteModule(moduleId));
+	}
 
-        boolean result = moduleService.deleteModule(1);
+	@Test
+	void testDeleteModule_WithFunctionsAndParameters() {
+		UUID moduleId = UUID.randomUUID();
+		Module module = new Module();
+		module.setId(moduleId);
 
-        assertTrue(result);
-        verify(parameterRepository).deleteById(1);
-        verify(functionRepository).deleteById(1);
-        verify(moduleRepository).deleteById(1);
-    }
+		Function function = new Function();
+		function.setId(moduleId);
+
+		Parameter parameter = new Parameter();
+		parameter.setId(moduleId);
+
+		when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
+		when(functionRepository.findAllByModuleId(moduleId)).thenReturn(Arrays.asList(function));
+		when(parameterRepository.findAllByFunctionId(moduleId)).thenReturn(Arrays.asList(parameter));
+
+		boolean result = moduleService.deleteModule(moduleId);
+
+		assertTrue(result);
+		verify(parameterRepository).deleteById(moduleId);
+		verify(functionRepository).deleteById(moduleId);
+		verify(moduleRepository).deleteById(moduleId);
+	}
 }

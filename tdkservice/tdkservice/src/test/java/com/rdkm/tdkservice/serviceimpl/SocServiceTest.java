@@ -34,6 +34,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,9 +55,8 @@ import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 
 /**
- * The SocServiceTest class contains unit tests for the SocService
- * class. It uses Mockito for mocking dependencies and JUnit for running the
- * tests.
+ * The SocServiceTest class contains unit tests for the SocService class. It
+ * uses Mockito for mocking dependencies and JUnit for running the tests.
  */
 public class SocServiceTest {
 
@@ -94,13 +94,14 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void createSocSuccessfully() {
+		UUID socId = UUID.randomUUID();
 		SocCreateDTO socDTO = new SocCreateDTO();
 		socDTO.setSocName("Test Soc");
 		socDTO.setSocCategory("RDKV");
 		socDTO.setSocUserGroup("UserGroup1");
 
 		Soc soc = new Soc();
-		soc.setId(1);
+		soc.setId(socId);
 		soc.setName(socDTO.getSocName());
 		soc.setCategory(Category.getCategory(socDTO.getSocCategory()));
 		soc.setUserGroup(new UserGroup());
@@ -147,12 +148,14 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocResourceNotFound() {
+		UUID socId = UUID.randomUUID();
 		SocDTO socUpdateDTO = new SocDTO();
+		socUpdateDTO.setSocId(socId);
 		socUpdateDTO.setSocName("Test Soc");
 
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.empty());
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.empty());
 
-		assertThrows(ResourceNotFoundException.class, () -> socService.updateSoc(socUpdateDTO, 1));
+		assertThrows(ResourceNotFoundException.class, () -> socService.updateSoc(socUpdateDTO));
 	}
 
 	/**
@@ -160,17 +163,19 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocResourceAlreadyExists() {
+		UUID socId = UUID.randomUUID();
 		SocDTO socUpdateDTO = new SocDTO();
+		socUpdateDTO.setSocId(socId);
 		socUpdateDTO.setSocName("Test Soc");
 
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.of(soc));
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.of(soc));
 		when(socRepository.existsByName(socUpdateDTO.getSocName())).thenReturn(true);
 
-		assertThrows(ResourceAlreadyExistsException.class, () -> socService.updateSoc(socUpdateDTO, 1));
+		assertThrows(ResourceAlreadyExistsException.class, () -> socService.updateSoc(socUpdateDTO));
 	}
 
 	/**
@@ -178,20 +183,22 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocSuccessfully() {
+		UUID socId = UUID.randomUUID();
 		SocDTO socUpdateDTO = new SocDTO();
+		socUpdateDTO.setSocId(socId);
 		socUpdateDTO.setSocName("Test Soc");
 		socUpdateDTO.setSocCategory("RDKV");
 
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 		soc.setCategory(Category.RDKB);
 
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.of(soc));
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.of(soc));
 		when(socRepository.existsByName(socUpdateDTO.getSocName())).thenReturn(false);
 		when(socRepository.save(any(Soc.class))).thenReturn(soc);
 
-		SocDTO result = socService.updateSoc(socUpdateDTO, 1);
+		SocDTO result = socService.updateSoc(socUpdateDTO);
 
 		assertNotNull(result);
 		assertEquals("Test Soc", result.getSocName());
@@ -203,18 +210,19 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void updateSocExceptionWhileSaving() {
+		UUID socId = UUID.randomUUID();
 		SocDTO socUpdateDTO = new SocDTO();
 		socUpdateDTO.setSocName("Test Soc");
 
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.of(soc));
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.of(soc));
 		when(socRepository.existsByName(socUpdateDTO.getSocName())).thenReturn(false);
 		when(socRepository.save(any(Soc.class))).thenThrow(RuntimeException.class);
 
-		assertThrows(RuntimeException.class, () -> socService.updateSoc(socUpdateDTO, 1));
+		assertThrows(RuntimeException.class, () -> socService.updateSoc(socUpdateDTO));
 	}
 
 	/**
@@ -222,13 +230,14 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void findByIdSuccess() {
+		UUID socId = UUID.randomUUID();
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.of(soc));
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.of(soc));
 
-		SocCreateDTO result = socService.findById(1);
+		SocDTO result = socService.findById(socId);
 
 		assertNotNull(result);
 		assertEquals("Test Soc", result.getSocName());
@@ -239,9 +248,10 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void findByIdFailure() {
-		when(socRepository.findById(1)).thenReturn(java.util.Optional.empty());
+		UUID socId = UUID.randomUUID();
+		when(socRepository.findById(socId)).thenReturn(java.util.Optional.empty());
 
-		assertThrows(ResourceNotFoundException.class, () -> socService.findById(1));
+		assertThrows(ResourceNotFoundException.class, () -> socService.findById(socId));
 	}
 
 	/**
@@ -249,11 +259,12 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void deleteSocSuccess() {
-		when(socRepository.existsById(1)).thenReturn(true);
+		UUID socId = UUID.randomUUID();
+		when(socRepository.existsById(socId)).thenReturn(true);
 
-		socService.deleteSoc(1);
+		socService.deleteSoc(socId);
 
-		verify(socRepository, times(1)).deleteById(1);
+		verify(socRepository, times(1)).deleteById(socId);
 	}
 
 	/**
@@ -261,9 +272,10 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void deleteSocFailure() {
-		when(socRepository.existsById(1)).thenReturn(false);
+		UUID socId = UUID.randomUUID();
+		when(socRepository.existsById(socId)).thenReturn(false);
 
-		assertThrows(ResourceNotFoundException.class, () -> socService.deleteSoc(1));
+		assertThrows(ResourceNotFoundException.class, () -> socService.deleteSoc(socId));
 	}
 
 	/**
@@ -271,10 +283,11 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void deleteSocException() {
-		when(socRepository.existsById(1)).thenReturn(true);
+		UUID socId = UUID.randomUUID();
+		when(socRepository.existsById(socId)).thenReturn(true);
 
-		doThrow(DataIntegrityViolationException.class).when(socRepository).deleteById(1);
-		assertThrows(DeleteFailedException.class, () -> socService.deleteSoc(1));
+		doThrow(DataIntegrityViolationException.class).when(socRepository).deleteById(socId);
+		assertThrows(DeleteFailedException.class, () -> socService.deleteSoc(socId));
 	}
 
 	/**
@@ -285,12 +298,13 @@ public class SocServiceTest {
 		String category = "RDKV";
 		when(socRepository.findByCategory(Category.getCategory(category))).thenReturn(null);
 
-		List<SocCreateDTO> result = socService.getSOCsByCategory(category);
+		List<SocDTO> result = socService.getSOCsByCategory(category);
 		assertNull(result);
 	}
 
 	/**
-	 * Test case for retrieving a list of Socs by category when the category returns null.
+	 * Test case for retrieving a list of Socs by category when the category returns
+	 * null.
 	 */
 	@Test
 	public void testGetSocsListByCategoryReturnsNull() {
@@ -315,7 +329,8 @@ public class SocServiceTest {
 	}
 
 	/**
-	 * Test case for retrieving a list of Socs by category when the category does not exist.
+	 * Test case for retrieving a list of Socs by category when the category does
+	 * not exist.
 	 */
 	@Test
 	public void testGetSocsListByCategoryThrowsResourceNotFoundException() {
@@ -332,13 +347,14 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void getSocsByCategorySuccess() {
+		UUID socId = UUID.randomUUID();
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 
 		when(socRepository.findByCategory(any())).thenReturn(Arrays.asList(soc));
 
-		List<SocCreateDTO> result = socService.getSOCsByCategory("RDKV");
+		List<SocDTO> result = socService.getSOCsByCategory("RDKV");
 
 		assertNotNull(result);
 		assertEquals(1, result.size());
@@ -349,9 +365,10 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void getSocsListByCategorySuccess() {
+		UUID socId = UUID.randomUUID();
 		Soc soc = new Soc();
 		soc.setName("Test Soc");
-		soc.setId(1);
+		soc.setId(socId);
 
 		when(socRepository.findByCategory(any())).thenReturn(Arrays.asList(soc));
 
@@ -366,6 +383,7 @@ public class SocServiceTest {
 	 */
 	@Test
 	public void testFindAll() {
+
 		// Arrange
 		Soc soc1 = new Soc();
 		soc1.setName("Soc1");
@@ -375,7 +393,7 @@ public class SocServiceTest {
 		when(socRepository.findAll()).thenReturn(Arrays.asList(soc1, soc2));
 
 		// Act
-		List<SocCreateDTO> result = socService.findAll();
+		List<SocDTO> result = socService.findAll();
 
 		// Assert
 		assertEquals(2, result.size());
@@ -392,7 +410,7 @@ public class SocServiceTest {
 		when(socRepository.findAll()).thenReturn(null);
 
 		// Act
-		List<SocCreateDTO> result = socService.findAll();
+		List<SocDTO> result = socService.findAll();
 
 		// Assert
 		assertNull(result);

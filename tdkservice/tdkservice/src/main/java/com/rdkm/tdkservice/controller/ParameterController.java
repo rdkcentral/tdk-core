@@ -56,184 +56,170 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 @RequestMapping("/api/v1/parameter")
 public class ParameterController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ParameterController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ParameterController.class);
 
-    @Autowired
-    private IParameterService parameterService;
+	@Autowired
+	private IParameterService parameterService;
 
-    /**
-     * Creates a new parameter type.
-     *
-     * @param parameterCreateDTO the parameter type creation data transfer object
-     * @return ResponseEntity with a boolean indicating success or failure
-     */
-    @Operation(summary = "Create a new parameter ", description = "Creates a new parameter in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parameter type created successfully"),
-            @ApiResponse(responseCode = "500", description = "Failed to create parameter"),
-            @ApiResponse(responseCode = "404", description = "Parameter  already exists"),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized")
-    })
-    @PostMapping("/create")
-    public ResponseEntity<String> createParameter(@RequestBody ParameterCreateDTO parameterCreateDTO) {
-        LOGGER.info("Creating new parameter : {}", parameterCreateDTO);
-            boolean isCreated = parameterService.createParameter(parameterCreateDTO);
-            if (isCreated) {
-                LOGGER.info("Parameter  created successfully: {}", parameterCreateDTO);
-                return ResponseEntity.status(HttpStatus.CREATED).body("Parameter created successfully");
-            } else {
-                LOGGER.error("Failed to create parameter : {}", parameterCreateDTO);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create parameter");
-            }
-    }
+	/**
+	 * Creates a new parameter type.
+	 *
+	 * @param parameterCreateDTO the parameter type creation data transfer object
+	 * @return ResponseEntity with a boolean indicating success or failure
+	 */
+	@Operation(summary = "Create a new parameter ", description = "Creates a new parameter in the system.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter type created successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to create parameter"),
+			@ApiResponse(responseCode = "404", description = "Parameter  already exists"),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized") })
+	@PostMapping("/create")
+	public ResponseEntity<String> createParameter(@RequestBody ParameterCreateDTO parameterCreateDTO) {
+		LOGGER.info("Creating new parameter : {}", parameterCreateDTO);
+		boolean isCreated = parameterService.createParameter(parameterCreateDTO);
+		if (isCreated) {
+			LOGGER.info("Parameter  created successfully: {}", parameterCreateDTO);
+			return ResponseEntity.status(HttpStatus.CREATED).body("Parameter created successfully");
+		} else {
+			LOGGER.error("Failed to create parameter : {}", parameterCreateDTO);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create parameter");
+		}
+	}
 
-    /**
-     * Updates an existing parameter .
-     *
-     * @param parameterDTO the parameter data transfer object
-     * @return ResponseEntity with a boolean indicating success or failure
-     */
-    @Operation(summary = "Update an existing parameter ", description = "Updates an existing parameter in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parameter updated successfully"),
-            @ApiResponse(responseCode = "500", description = "Failed to update parameter "),
-            @ApiResponse(responseCode = "400", description = "Invalid input"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "404", description = "Parameter not found")
-    })
-    @PutMapping("/update")
-    public ResponseEntity<String> updateParameter(@RequestBody ParameterDTO parameterDTO) {
-        LOGGER.info("Updating parameter : {}", parameterDTO);
-            boolean isUpdated = parameterService.updateParameter(parameterDTO);
-            if (isUpdated) {
-                LOGGER.info("Parameter  updated successfully: {}", parameterDTO);
-                return ResponseEntity.status(HttpStatus.OK).body("Parameter updated successfully");
-            } else {
-                LOGGER.error("Failed to update parameter type: {}", parameterDTO);
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update parameter ");
-            }
-    }
+	/**
+	 * Updates an existing parameter .
+	 *
+	 * @param parameterDTO the parameter data transfer object
+	 * @return ResponseEntity with a boolean indicating success or failure
+	 */
+	@Operation(summary = "Update an existing parameter ", description = "Updates an existing parameter in the system.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter updated successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to update parameter "),
+			@ApiResponse(responseCode = "400", description = "Invalid input"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "Parameter not found") })
+	@PutMapping("/update")
+	public ResponseEntity<String> updateParameter(@RequestBody ParameterDTO parameterDTO) {
+		LOGGER.info("Updating parameter : {}", parameterDTO);
+		boolean isUpdated = parameterService.updateParameter(parameterDTO);
+		if (isUpdated) {
+			LOGGER.info("Parameter  updated successfully: {}", parameterDTO);
+			return ResponseEntity.status(HttpStatus.OK).body("Parameter updated successfully");
+		} else {
+			LOGGER.error("Failed to update parameter type: {}", parameterDTO);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update parameter ");
+		}
+	}
 
-    /**
-     * Retrieves all parameter types.
-     *
-     * @return ResponseEntity with a list of all parameter types
-     */
-    @Operation(summary = "Retrieve all parameter ", description = "Retrieves a list of all parameter  in the system.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved all parameter "),
-            @ApiResponse(responseCode = "404", description = "No parameter  found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @GetMapping("/findAll")
-    public ResponseEntity<List<ParameterDTO>> findAllParameter() {
-        LOGGER.info("Retrieving all parameter ");
-            List<ParameterDTO> parameters = parameterService.findAllParameters();
-            if (parameters != null && !parameters.isEmpty()) {
-                LOGGER.info("Successfully retrieved all parameter ");
-                return ResponseEntity.status(HttpStatus.OK).body(parameters);
-            } else {
-                LOGGER.warn("No parameter types found");
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-    }
+	/**
+	 * Retrieves all parameter types.
+	 *
+	 * @return ResponseEntity with a list of all parameter types
+	 */
+	@Operation(summary = "Retrieve all parameter ", description = "Retrieves a list of all parameter  in the system.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved all parameter "),
+			@ApiResponse(responseCode = "404", description = "No parameter  found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
+	@GetMapping("/findAll")
+	public ResponseEntity<?> findAllParameter() {
+		LOGGER.info("Retrieving all parameter ");
+		List<ParameterDTO> parameters = parameterService.findAllParameters();
+		if (parameters != null && !parameters.isEmpty()) {
+			LOGGER.info("Successfully retrieved all parameter ");
+			return ResponseEntity.status(HttpStatus.OK).body(parameters);
+		} else {
+			LOGGER.error("No parameter found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No parameter found");
+		}
+	}
 
-    /**
-     * Retrieves a parameter type by its ID.
-     *
-     * @param id the ID of the parameter type
-     * @return ResponseEntity with the parameter type data transfer object
-     */
-    @Operation(summary = "Retrieve a parameter  by its ID", description = "Retrieves a parameter  by its ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved the parameter "),
-            @ApiResponse(responseCode = "404", description = "Parameter type not found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @GetMapping("/findById/{id}")
-	public ResponseEntity<ParameterDTO> findParameterById(@PathVariable UUID id) {
-        LOGGER.info("Retrieving parameter by ID: {}", id);
-            ParameterDTO parameter = parameterService.findParameterById(id);
-            if (parameter != null) {
-                LOGGER.info("Successfully retrieved parameter : {}", parameter);
-                return ResponseEntity.status(HttpStatus.OK).body(parameter);
-            } else {
-                LOGGER.warn("Parameter  not found with ID: {}", id);
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-            }
-    }
+	/**
+	 * Retrieves a parameter type by its ID.
+	 *
+	 * @param id the ID of the parameter type
+	 * @return ResponseEntity with the parameter type data transfer object
+	 */
+	@Operation(summary = "Retrieve a parameter  by its ID", description = "Retrieves a parameter  by its ID.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved the parameter "),
+			@ApiResponse(responseCode = "404", description = "Parameter type not found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
+	@GetMapping("/findById/{id}")
+	public ResponseEntity<?> findParameterById(@PathVariable UUID id) {
+		LOGGER.info("Retrieving parameter by ID: {}", id);
+		ParameterDTO parameter = parameterService.findParameterById(id);
+		if (parameter != null) {
+			LOGGER.info("Successfully retrieved parameter : {}", parameter);
+			return ResponseEntity.status(HttpStatus.OK).body(parameter);
+		} else {
+			LOGGER.error("Parameter  not found with ID: {}", id);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parameter not found");
+		}
+	}
 
-    /**
-     * Deletes a parameter type by its ID.
-     *
-     * @param id the ID of the parameter type
-     * @return ResponseEntity with a boolean indicating success or failure
-     */
-    @Operation(summary = "Delete a parameter  by its ID", description = "Deletes a parameter  by its ID.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Parameter  deleted successfully"),
-            @ApiResponse(responseCode = "500", description = "Failed to delete parameter "),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "404", description = "Parameter not found")
-    })
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteParameter(@PathVariable UUID id) {
-        LOGGER.info("Deleting parameter type by ID: {}", id);
-            boolean isDeleted = parameterService.deleteParameter(id);
-            if (isDeleted) {
-                LOGGER.info("Parameter deleted successfully: {}", id);
-                return ResponseEntity.ok("Parameter deleted successfully");
-            } else {
-                LOGGER.error("Failed to delete parameter : {}", id);
-                return ResponseEntity.internalServerError().body("Failed to delete parameter");
-            }
-    }
+	/**
+	 * Deletes a parameter type by its ID.
+	 *
+	 * @param id the ID of the parameter type
+	 * @return ResponseEntity with a boolean indicating success or failure
+	 */
+	@Operation(summary = "Delete a parameter  by its ID", description = "Deletes a parameter  by its ID.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter  deleted successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to delete parameter "),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "404", description = "Parameter not found") })
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<String> deleteParameter(@PathVariable UUID id) {
+		LOGGER.info("Deleting parameter type by ID: {}", id);
+		boolean isDeleted = parameterService.deleteParameter(id);
+		if (isDeleted) {
+			LOGGER.info("Parameter deleted successfully: {}", id);
+			return ResponseEntity.ok("Parameter deleted successfully");
+		} else {
+			LOGGER.error("Failed to delete parameter : {}", id);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete parameter");
+		}
+	}
 
-    /**
-     * Retrieves all parameters by function name.
-     *
-     * @param functionName the name of the function
-     * @return ResponseEntity with a list of all parameters
-     */
-    @Operation(summary = "Retrieve all parameters by function name", description = "Retrieves a list of all parameters by function name.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved all parameters"),
-            @ApiResponse(responseCode = "404", description = "No parameters found"),
-            @ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @GetMapping("/findAllByFunction/{functionName}")
-    public ResponseEntity<List<ParameterDTO>> findAllParametersByFunction(@PathVariable String functionName) {
-        LOGGER.info("Retrieving all parameters by function name: {}", functionName);
-        List<ParameterDTO> parameters = parameterService.findAllParametersByFunction(functionName);
-        if (parameters != null && !parameters.isEmpty()) {
-            LOGGER.info("Successfully retrieved all parameters by function name: {}", functionName);
-            return ResponseEntity.status(HttpStatus.OK).body(parameters);
-        } else {
-            LOGGER.warn("No parameters found for function name: {}", functionName);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
-    }
+	/**
+	 * Retrieves all parameters by function name.
+	 *
+	 * @param functionName the name of the function
+	 * @return ResponseEntity with a list of all parameters
+	 */
+	@Operation(summary = "Retrieve all parameters by function name", description = "Retrieves a list of all parameters by function name.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved all parameters"),
+			@ApiResponse(responseCode = "404", description = "No parameters found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
+	@GetMapping("/findAllByFunction/{functionName}")
+	public ResponseEntity<?> findAllParametersByFunction(@PathVariable String functionName) {
+		LOGGER.info("Retrieving all parameters by function name: {}", functionName);
+		List<ParameterDTO> parameters = parameterService.findAllParametersByFunction(functionName);
+		if (parameters != null && !parameters.isEmpty()) {
+			LOGGER.info("Successfully retrieved all parameters by function name: {}", functionName);
+			return ResponseEntity.status(HttpStatus.OK).body(parameters);
+		} else {
+			LOGGER.error("No parameters found for function name: {}", functionName);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No parameters found for function");
+		}
+	}
 
-    /**
-     * Retrieves all parameter enums.
-     *
-     * @return ResponseEntity with a list of all parameter enums
-     */
-    @Operation(summary = "Retrieve all parameter enums", description = "Retrieves a list of all parameter enums.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved all parameter enums"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    @GetMapping("/getListOfParameterEnums")
-    public ResponseEntity<List<ParameterDataType>> getAllParameterEnums() {
-        LOGGER.info("Retrieving all parameter enums");
-        List<ParameterDataType> parameterEnums = parameterService.getAllParameterEnums();
-        return ResponseEntity.status(HttpStatus.OK).body(parameterEnums);
-    }
-
+	/**
+	 * Retrieves all parameter enums.
+	 *
+	 * @return ResponseEntity with a list of all parameter enums
+	 */
+	@Operation(summary = "Retrieve all parameter enums", description = "Retrieves a list of all parameter enums.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved all parameter enums"),
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
+	@GetMapping("/getListOfParameterEnums")
+	public ResponseEntity<List<ParameterDataType>> getAllParameterEnums() {
+		LOGGER.info("Retrieving all parameter enums");
+		List<ParameterDataType> parameterEnums = parameterService.getAllParameterEnums();
+		return ResponseEntity.status(HttpStatus.OK).body(parameterEnums);
+	}
 
 }

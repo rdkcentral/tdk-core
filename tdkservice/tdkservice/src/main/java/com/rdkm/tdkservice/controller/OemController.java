@@ -103,7 +103,7 @@ public class OemController {
 		LOGGER.info("Received find all oem types request");
 		List<OemDTO> oemDTOList = iOemService.getAllOem();
 		if (oemDTOList != null && !oemDTOList.isEmpty()) {
-			LOGGER.info("oem types found successfully");
+			LOGGER.info("Oem types found successfully");
 			return ResponseEntity.ok(oemDTOList);
 		} else {
 			LOGGER.error("No oem types found");

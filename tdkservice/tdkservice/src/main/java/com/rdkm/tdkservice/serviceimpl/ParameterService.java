@@ -70,10 +70,6 @@ public class ParameterService implements IParameterService {
 	public boolean createParameter(ParameterCreateDTO parameterCreateDTO) {
 		LOGGER.info("Creating new parameter : {}", parameterCreateDTO);
 		Parameter parameter = new Parameter();
-		if (parameterRepository.existsByName(parameterCreateDTO.getParameterName())) {
-			LOGGER.error("Parameter with name {} already exists", parameterCreateDTO.getParameterName());
-			throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterCreateDTO.getParameterName());
-		}
 
 		Function function = functionRepository.findByName(parameterCreateDTO.getFunction());
 		if (function == null) {

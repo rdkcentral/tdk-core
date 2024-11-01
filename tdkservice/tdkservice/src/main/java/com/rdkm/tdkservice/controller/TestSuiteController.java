@@ -135,8 +135,8 @@ public class TestSuiteController {
 			LOGGER.info("Test suite fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTO);
 		} else {
-			LOGGER.error("Error in fetching test suite");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in fetching test suite");
+			LOGGER.error("No test suite found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suite found");
 		}
 	}
 
@@ -157,9 +157,8 @@ public class TestSuiteController {
 			LOGGER.info("Test suite fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTOList);
 		} else {
-			LOGGER.error("Error in fetching test suite");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching test suite by category");
+			LOGGER.error("No test suite found by category");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suite found by category");
 		}
 	}
 
@@ -178,7 +177,7 @@ public class TestSuiteController {
 		boolean isScriptDeleted = testSuiteService.deleteTestSuite(id);
 		if (isScriptDeleted) {
 			LOGGER.info("Test suite deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("test suite deleted successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Test suite deleted successfully");
 		} else {
 			LOGGER.error("Error in deleting test suite");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in deleting test suite");

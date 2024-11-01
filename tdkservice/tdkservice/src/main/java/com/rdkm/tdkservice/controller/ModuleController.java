@@ -146,7 +146,7 @@ public class ModuleController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findById/{id}")
-	public ResponseEntity<ModuleDTO> findModuleById(@PathVariable UUID id) {
+	public ResponseEntity<?> findModuleById(@PathVariable UUID id) {
 		LOGGER.info("Retrieving module by ID: {}", id);
 		ModuleDTO module = moduleService.findModuleById(id);
 		if (module != null) {
@@ -154,7 +154,7 @@ public class ModuleController {
 			return ResponseEntity.status(HttpStatus.OK).body(module);
 		} else {
 			LOGGER.warn("Module not found with ID: {}", id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found");
 		}
 	}
 
@@ -170,7 +170,7 @@ public class ModuleController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findAllByCategory/{category}")
-	public ResponseEntity<List<ModuleDTO>> findAllByCategory(@PathVariable String category) {
+	public ResponseEntity<?> findAllByCategory(@PathVariable String category) {
 		LOGGER.info("Retrieving modules by category: {}", category);
 		List<ModuleDTO> modules = moduleService.findAllByCategory(category);
 		if (modules != null && !modules.isEmpty()) {
@@ -178,7 +178,7 @@ public class ModuleController {
 			return ResponseEntity.status(HttpStatus.OK).body(modules);
 		} else {
 			LOGGER.warn("No modules found for category: {}", category);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No modules found for category");
 		}
 	}
 
@@ -192,7 +192,7 @@ public class ModuleController {
 	@ApiResponse(responseCode = "200", description = "Successfully retrieved the module")
 	@ApiResponse(responseCode = "404", description = "Module not found")
 	@GetMapping("/getlistofmodulenamebycategory/{category}")
-	public ResponseEntity<List<String>> findAllModuleNameByCategory(@PathVariable String category) {
+	public ResponseEntity<?> findAllModuleNameByCategory(@PathVariable String category) {
 		LOGGER.info("Retrieving modules by category: {}", category);
 		List<String> modules = moduleService.findAllModuleNameByCategory(category);
 		if (modules != null && !modules.isEmpty()) {
@@ -200,7 +200,7 @@ public class ModuleController {
 			return ResponseEntity.status(HttpStatus.OK).body(modules);
 		} else {
 			LOGGER.error("No modules found for category: {}", category);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No modules found for category");
 		}
 	}
 
@@ -223,7 +223,7 @@ public class ModuleController {
 			LOGGER.info("Module deleted successfully: {}", id);
 			return ResponseEntity.status(HttpStatus.CREATED).body("Module deleted successfully");
 		} else {
-			LOGGER.warn("Module not found with ID: {}", id);
+			LOGGER.error("Module not found with ID: {}", id);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Module not found");
 		}
 	}
@@ -239,15 +239,15 @@ public class ModuleController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getAllTestGroups")
-	public ResponseEntity<List<String>> getAllTestGroups() {
+	public ResponseEntity<?> getAllTestGroups() {
 		LOGGER.info("Retrieving all test groups from enum");
 		List<String> testGroups = moduleService.findAllTestGroupsFromEnum();
 		if (testGroups != null && !testGroups.isEmpty()) {
 			LOGGER.info("Successfully retrieved all test groups from enum");
 			return ResponseEntity.status(HttpStatus.OK).body(testGroups);
 		} else {
-			LOGGER.warn("No test groups found in enum");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+			LOGGER.error("No test groups found in enum");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test groups found");
 		}
 	}
 

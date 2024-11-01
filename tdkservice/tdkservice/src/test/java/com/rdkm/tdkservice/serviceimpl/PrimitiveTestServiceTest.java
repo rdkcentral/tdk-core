@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -90,7 +91,7 @@ public class PrimitiveTestServiceTest {
 		List<ParameterValueDTO> parameters = new ArrayList<>();
 		ParameterValueDTO parameterValueDTO = new ParameterValueDTO();
 		parameterValueDTO.setParameterName("param1");
-		
+
 		parameterValueDTO.setParameterValue("value1");
 		parameters.add(parameterValueDTO);
 		primitiveTestDTO.setPrimitiveTestParameters(parameters);
@@ -115,15 +116,14 @@ public class PrimitiveTestServiceTest {
 
 	@Test
 	public void testDeleteById() {
-		// Arrange
-		Integer id = 1;
+		UUID primitiveTestId = UUID.randomUUID();
 		PrimitiveTest primitiveTest = new PrimitiveTest();
-		primitiveTest.setId(id);
+		primitiveTest.setId(primitiveTestId);
 
-		when(primitiveTestRepository.findById(any(Integer.class))).thenReturn(Optional.of(primitiveTest));
+		when(primitiveTestRepository.findById(primitiveTestId)).thenReturn(Optional.of(primitiveTest));
 
 		// Act
-		primitiveTestService.deleteById(id);
+		primitiveTestService.deleteById(primitiveTestId);
 
 		// Assert
 		verify(primitiveTestRepository, times(1)).delete(primitiveTest);
@@ -132,9 +132,9 @@ public class PrimitiveTestServiceTest {
 	@Test
 	public void testGetPrimitiveTestDetailsById() {
 		// Arrange
-		Integer id = 1;
+		UUID primitiveTestId = UUID.randomUUID();
 		PrimitiveTest primitiveTest = new PrimitiveTest();
-		primitiveTest.setId(id);
+		primitiveTest.setId(primitiveTestId);
 		primitiveTest.setName("testName");
 
 		Function function = new Function();
@@ -145,7 +145,7 @@ public class PrimitiveTestServiceTest {
 		module.setName("testModule");
 		primitiveTest.setModule(module);
 
-		when(primitiveTestRepository.findById(any(Integer.class))).thenReturn(Optional.of(primitiveTest));
+		when(primitiveTestRepository.findById(primitiveTestId)).thenReturn(Optional.of(primitiveTest));
 
 		List<Parameter> parameters = new ArrayList<>();
 		Parameter parameter = new Parameter();
@@ -172,10 +172,10 @@ public class PrimitiveTestServiceTest {
 				.thenReturn(primitiveTestParameters);
 
 		// Act
-		PrimitiveTestDTO result = primitiveTestService.getPrimitiveTestDetailsById(id);
+		PrimitiveTestDTO result = primitiveTestService.getPrimitiveTestDetailsById(primitiveTestId);
 
 		// Assert
-		assertEquals(id, result.getPrimitiveTestId());
+		assertEquals(primitiveTestId, result.getPrimitiveTestId());
 		assertEquals("testName", result.getPrimitiveTestName());
 		assertEquals("testModule", result.getPrimitivetestModule());
 		assertEquals("testFunction", result.getPrimitiveTestfunction());
@@ -185,8 +185,9 @@ public class PrimitiveTestServiceTest {
 
 	@Test
 	public void testUpdatePrimitiveTest() {
+		UUID primitiveTestId = UUID.randomUUID();
 		PrimitiveTestUpdateDTO primitiveTestDTO = new PrimitiveTestUpdateDTO();
-		primitiveTestDTO.setPrimitiveTestId(1);
+		primitiveTestDTO.setPrimitiveTestId(primitiveTestId);
 		List<ParameterValueDTO> parameters = new ArrayList<>();
 		ParameterValueDTO parameterValueDTO = new ParameterValueDTO();
 		parameterValueDTO.setParameterName("param1");
@@ -212,9 +213,8 @@ public class PrimitiveTestServiceTest {
 		parameter.setName("param2");
 		parameter.setParameterDataType(ParameterDataType.STRING);
 		parameter.setRangeVal("10");
-		
 
-		when(primitiveTestRepository.findById(1)).thenReturn(Optional.of(primitiveTest));
+		when(primitiveTestRepository.findById(primitiveTestId)).thenReturn(Optional.of(primitiveTest));
 		when(primitiveTestParameterRepository.findByPrimitiveTest(primitiveTest))
 				.thenReturn(Arrays.asList(primitiveTestParameter));
 		when(parameterRepository.findByName("param2")).thenReturn(parameter);
@@ -249,6 +249,7 @@ public class PrimitiveTestServiceTest {
 
 	@Test
 	public void testFindAllByModuleName() {
+		UUID primitiveTestId = UUID.randomUUID();
 		// Arrange
 		String moduleName = "testModule";
 		Module module = new Module();
@@ -259,13 +260,13 @@ public class PrimitiveTestServiceTest {
 		function.setModule(module);
 
 		PrimitiveTest primitiveTest1 = new PrimitiveTest();
-		primitiveTest1.setId(1);
+		primitiveTest1.setId(primitiveTestId);
 		primitiveTest1.setName("test1");
 		primitiveTest1.setModule(module);
 		primitiveTest1.setFunction(function);
 
 		PrimitiveTest primitiveTest2 = new PrimitiveTest();
-		primitiveTest2.setId(2);
+		primitiveTest2.setId(primitiveTestId);
 		primitiveTest2.setName("test2");
 		primitiveTest2.setModule(module);
 		primitiveTest2.setFunction(function);

@@ -27,7 +27,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
@@ -37,6 +36,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -57,8 +57,8 @@ import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 
 /**
- * This class is used to test the OemServiceTest class. It uses Mockito
- * to mock the repository layer and JUnit for the testing framework.
+ * This class is used to test the OemServiceTest class. It uses Mockito to mock
+ * the repository layer and JUnit for the testing framework.
  */
 public class OemServiceTest {
 
@@ -93,13 +93,14 @@ public class OemServiceTest {
 	 */
 	@Test
 	public void testCreateOem_Success() {
+		UUID oemId = UUID.randomUUID();
 		OemCreateDTO oemDTO = new OemCreateDTO();
 		oemDTO.setOemName("Test Manufacturer");
 		oemDTO.setOemCategory("RDKV");
 		oemDTO.setOemUserGroup("UserGroup1");
 
 		Oem oem = new Oem();
-		oem.setId(1);
+		oem.setId(oemId);
 		oem.setName("Test Manufacturer");
 		oem.setCategory(Category.RDKV);
 		oem.setUserGroup(new UserGroup());
@@ -112,7 +113,8 @@ public class OemServiceTest {
 	}
 
 	/**
-	 * Test case for creation of an Oem when an Oem with the same name already exists.
+	 * Test case for creation of an Oem when an Oem with the same name already
+	 * exists.
 	 */
 	@Test
 	public void testCreateOem_ResourceAlreadyExistsException() {
@@ -121,8 +123,7 @@ public class OemServiceTest {
 
 		when(oemRepository.existsByName(anyString())).thenReturn(true);
 
-		assertThrows(ResourceAlreadyExistsException.class,
-				() -> oemService.createOem(oemCreateDTO));
+		assertThrows(ResourceAlreadyExistsException.class, () -> oemService.createOem(oemCreateDTO));
 	}
 
 	/**
@@ -136,12 +137,12 @@ public class OemServiceTest {
 
 		when(oemRepository.existsByName(anyString())).thenReturn(false);
 
-		assertThrows(ResourceNotFoundException.class,
-				() -> oemService.createOem(oemCreateDTO));
+		assertThrows(ResourceNotFoundException.class, () -> oemService.createOem(oemCreateDTO));
 	}
 
 	/**
-	 * Test case for creation of an Oem when an exception occurs while saving the Oem.
+	 * Test case for creation of an Oem when an exception occurs while saving the
+	 * Oem.
 	 */
 	@Test
 	public void testCreateOem_ExceptionWhileSaving() {
@@ -168,7 +169,7 @@ public class OemServiceTest {
 		when(oemRepository.findAll()).thenReturn(Arrays.asList(oem));
 
 		// Act
-		List<OemCreateDTO> result = oemService.getAllOem();
+		List<OemDTO> result = oemService.getAllOem();
 
 		// Assert
 		assertNotNull(result);
@@ -184,7 +185,7 @@ public class OemServiceTest {
 		when(oemRepository.findAll()).thenReturn(Collections.emptyList());
 
 		// Act
-		List<OemCreateDTO> result = oemService.getAllOem();
+		List<OemDTO> result = oemService.getAllOem();
 
 		// Assert
 		assertNull(result);
@@ -196,11 +197,11 @@ public class OemServiceTest {
 	@Test
 	public void testDeleteOemThrowsResourceNotFoundException() {
 		// Arrange
-		Integer id = 1;
-		when(oemRepository.existsById(id)).thenReturn(false);
+		UUID oemId = UUID.randomUUID();
+		when(oemRepository.existsById(oemId)).thenReturn(false);
 
 		// Act & Assert
-		assertThrows(ResourceNotFoundException.class, () -> oemService.deleteOem(id));
+		assertThrows(ResourceNotFoundException.class, () -> oemService.deleteOem(oemId));
 	}
 
 	/**
@@ -209,12 +210,12 @@ public class OemServiceTest {
 	@Test
 	public void testDeleteOemThrowsDeleteFailedException() {
 		// Arrange
-		Integer id = 1;
-		when(oemRepository.existsById(id)).thenReturn(true);
-		doThrow(DataIntegrityViolationException.class).when(oemRepository).deleteById(id);
+		UUID oemId = UUID.randomUUID();
+		when(oemRepository.existsById(oemId)).thenReturn(true);
+		doThrow(DataIntegrityViolationException.class).when(oemRepository).deleteById(oemId);
 
 		// Act & Assert
-		assertThrows(DeleteFailedException.class, () -> oemService.deleteOem(id));
+		assertThrows(DeleteFailedException.class, () -> oemService.deleteOem(oemId));
 	}
 
 	/**
@@ -223,12 +224,12 @@ public class OemServiceTest {
 	@Test
 	public void testDeleteOemSuccess() {
 		// Arrange
-		Integer id = 1;
-		when(oemRepository.existsById(id)).thenReturn(true);
-		doNothing().when(oemRepository).deleteById(id);
+		UUID oemId = UUID.randomUUID();
+		when(oemRepository.existsById(oemId)).thenReturn(true);
+		doNothing().when(oemRepository).deleteById(oemId);
 
 		// Act & Assert
-		assertDoesNotThrow(() -> oemService.deleteOem(id));
+		assertDoesNotThrow(() -> oemService.deleteOem(oemId));
 	}
 
 	/**
@@ -237,13 +238,13 @@ public class OemServiceTest {
 	@Test
 	public void testFindByIdReturnsOemCreateDTO() {
 		// Arrange
-		Integer id = 1;
+		UUID oemId = UUID.randomUUID();
 		Oem oem = new Oem();
 		oem.setName("Test Manufacturer");
-		when(oemRepository.findById(id)).thenReturn(Optional.of(oem));
+		when(oemRepository.findById(oemId)).thenReturn(Optional.of(oem));
 
 		// Act
-		OemCreateDTO result = oemService.findById(id);
+		OemDTO result = oemService.findById(oemId);
 
 		// Assert
 		assertNotNull(result);
@@ -255,11 +256,11 @@ public class OemServiceTest {
 	@Test
 	public void testFindByIdThrowsResourceNotFoundException() {
 		// Arrange
-		Integer id = 1;
-		when(oemRepository.findById(id)).thenReturn(Optional.empty());
+		UUID oemId = UUID.randomUUID();
+		when(oemRepository.findById(oemId)).thenReturn(Optional.empty());
 
 		// Act & Assert
-		assertThrows(ResourceNotFoundException.class, () -> oemService.findById(id));
+		assertThrows(ResourceNotFoundException.class, () -> oemService.findById(oemId));
 	}
 
 	/**
@@ -271,11 +272,10 @@ public class OemServiceTest {
 		String category = "RDKV";
 		Oem oem = new Oem();
 		oem.setName("Test Manufacturer");
-		when(oemRepository.findByCategory(Category.getCategory(category)))
-				.thenReturn(Arrays.asList(oem));
+		when(oemRepository.findByCategory(Category.getCategory(category))).thenReturn(Arrays.asList(oem));
 
 		// Act
-		List<OemCreateDTO> result = oemService.getOemsByCategory(category);
+		List<OemDTO> result = oemService.getOemsByCategory(category);
 
 		// Assert
 		assertNotNull(result);
@@ -289,18 +289,18 @@ public class OemServiceTest {
 	public void testGetOemsByCategoryReturnsNull() {
 		// Arrange
 		String category = "RDKV";
-		when(oemRepository.findByCategory(Category.getCategory(category)))
-				.thenReturn(Collections.emptyList());
+		when(oemRepository.findByCategory(Category.getCategory(category))).thenReturn(Collections.emptyList());
 
 		// Act
-		List<OemCreateDTO> result = oemService.getOemsByCategory(category);
+		List<OemDTO> result = oemService.getOemsByCategory(category);
 
 		// Assert
 		assertNull(result);
 	}
 
 	/**
-	 * Test case for retrieving a list of Oem names by category when there are some present.
+	 * Test case for retrieving a list of Oem names by category when there are some
+	 * present.
 	 */
 	@Test
 	public void testGetOemListByCategoryReturnsList() {
@@ -308,8 +308,7 @@ public class OemServiceTest {
 		String category = "RDKV";
 		Oem oem = new Oem();
 		oem.setName("Test Manufacturer");
-		when(oemRepository.findByCategory(Category.getCategory(category)))
-				.thenReturn(Arrays.asList(oem));
+		when(oemRepository.findByCategory(Category.getCategory(category))).thenReturn(Arrays.asList(oem));
 
 		// Act
 		List<String> result = oemService.getOemListByCategory(category);
@@ -326,8 +325,7 @@ public class OemServiceTest {
 	public void testGetOemListByCategoryReturnsNull() {
 		// Arrange
 		String category = "RDKV";
-		when(oemRepository.findByCategory(Category.getCategory(category)))
-				.thenReturn(Collections.emptyList());
+		when(oemRepository.findByCategory(Category.getCategory(category))).thenReturn(Collections.emptyList());
 
 		// Act
 		List<String> result = oemService.getOemListByCategory(category);
@@ -342,15 +340,16 @@ public class OemServiceTest {
 	@Test
 	public void testUpdateOemThrowsResourceNotFoundException() {
 		// Arrange
-		Integer id = 1;
+		UUID oemId = UUID.randomUUID();
 		OemDTO oemUpdateDTO = new OemDTO();
+		oemUpdateDTO.setOemId(oemId);
 		oemUpdateDTO.setOemName("Test Manufacturer");
-		when(oemRepository.findById(id)).thenReturn(Optional.empty());
+		when(oemRepository.findById(oemId)).thenReturn(Optional.empty());
 
 		// Act & Assert
-		assertThrows(ResourceNotFoundException.class,
-				() -> oemService.updateOem(oemUpdateDTO, id));
+		assertThrows(ResourceNotFoundException.class, () -> oemService.updateOem(oemUpdateDTO));
 	}
+
 	/**
 	 * Test case for successful update of a oem.
 	 */
@@ -358,21 +357,21 @@ public class OemServiceTest {
 	public void testUpdateOemSuccess() {
 
 		// Arrange
-		Integer id = 1;
+		UUID oemId = UUID.randomUUID();
 		OemDTO oemUpdateDTO = new OemDTO();
+		oemUpdateDTO.setOemId(oemId);
 		oemUpdateDTO.setOemName("Test");
 		oemUpdateDTO.setOemCategory("RDKV");
 		Oem oem = new Oem();
-		oem.setId(1);
+		oem.setId(oemId);
 		oem.setName("Test Manufacturer");
 		oem.setCategory(Category.RDKB);
 
-		when(oemRepository.findById(anyInt())).thenReturn(Optional.of(oem));
+		when(oemRepository.findById(oemId)).thenReturn(Optional.of(oem));
 
-		when(oemRepository.existsByName(oemUpdateDTO.getOemName()))
-				.thenReturn(false);
+		when(oemRepository.existsByName(oemUpdateDTO.getOemName())).thenReturn(false);
 		when(oemRepository.save(any(Oem.class))).thenReturn(oem);
-		OemDTO result = oemService.updateOem(oemUpdateDTO, id);
+		OemDTO result = oemService.updateOem(oemUpdateDTO);
 
 		assertEquals("Test", result.getOemName());
 		assertEquals(Category.RDKV.name(), result.getOemCategory());

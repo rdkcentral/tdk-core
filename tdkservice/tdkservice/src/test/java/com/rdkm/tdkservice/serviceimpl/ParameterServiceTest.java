@@ -19,8 +19,27 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
@@ -31,213 +50,202 @@ import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ParameterRepository;
-import com.rdkm.tdkservice.serviceimpl.ParameterService;
-import com.rdkm.tdkservice.util.Constants;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 public class ParameterServiceTest {
 
-    @Mock
-    private ParameterRepository parameterRepository;
+	@Mock
+	private ParameterRepository parameterRepository;
 
-    @Mock
-    private FunctionRepository functionRepository;
+	@Mock
+	private FunctionRepository functionRepository;
 
-    @InjectMocks
-    private ParameterService parameterService;
+	@InjectMocks
+	private ParameterService parameterService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testCreateParameter_Success() {
-        ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
-        parameterCreateDTO.setParameterName("NewParameter");
-        parameterCreateDTO.setFunction("TestFunction");
-        parameterCreateDTO.setParameterDataType(ParameterDataType.STRING);
-        parameterCreateDTO.setParameterRangeVal("0-100");
+	@Test
+	void testCreateParameter_Success() {
+		UUID parameterId = UUID.randomUUID();
+		ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
+		parameterCreateDTO.setParameterName("NewParameter");
+		parameterCreateDTO.setFunction("TestFunction");
+		parameterCreateDTO.setParameterDataType(ParameterDataType.STRING);
+		parameterCreateDTO.setParameterRangeVal("100");
 
-        Function function = new Function();
-        function.setName("TestFunction");
+		Function function = new Function();
+		function.setName("TestFunction");
 
-        Parameter savedParameter = new Parameter();
-        savedParameter.setId(1);
+		Parameter savedParameter = new Parameter();
+		savedParameter.setId(parameterId);
+		savedParameter.setName("NewParameter");
+		savedParameter.setFunction(function);
+		savedParameter.setParameterDataType(ParameterDataType.STRING);
 
-        when(parameterRepository.existsByName(parameterCreateDTO.getParameterName())).thenReturn(false);
-        when(functionRepository.findByName(parameterCreateDTO.getFunction())).thenReturn(function);
-        when(parameterRepository.save(any(Parameter.class))).thenReturn(savedParameter);
+		when(parameterRepository.existsByName(parameterCreateDTO.getParameterName())).thenReturn(false);
+		when(functionRepository.findByName(parameterCreateDTO.getFunction())).thenReturn(function);
 
-        boolean result = parameterService.createParameter(parameterCreateDTO);
-    }
-
-    @Test
-    void testCreateParameter_AlreadyExists() {
-        ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
-        parameterCreateDTO.setParameterName("ExistingParameter");
-
-
-        when(parameterRepository.existsByName(parameterCreateDTO.getParameterName())).thenReturn(true);
-
-        assertThrows(ResourceAlreadyExistsException.class, () -> parameterService.createParameter(parameterCreateDTO));
-    }
+		when(parameterRepository.save(any(Parameter.class))).thenAnswer(invocation -> {
+			Parameter parameter = invocation.getArgument(0);
+			parameter.setId(parameterId); // Set the id to simulate saving to DB
+			return parameter;
+		});
+		boolean result = parameterService.createParameter(parameterCreateDTO);
+		assertTrue(result);
+	}
 
 
-    @Test
-    void testCreateParameter_FunctionNotFound() {
-        ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
-        parameterCreateDTO.setFunction("NonExistentFunction");
+	@Test
+	void testCreateParameter_FunctionNotFound() {
+		ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
+		parameterCreateDTO.setFunction("NonExistentFunction");
 
-        when(functionRepository.findByName(parameterCreateDTO.getFunction())).thenReturn(null);
+		when(functionRepository.findByName(parameterCreateDTO.getFunction())).thenReturn(null);
 
-        assertThrows(ResourceNotFoundException.class, () -> parameterService.createParameter(parameterCreateDTO));
-    }
+		assertThrows(ResourceNotFoundException.class, () -> parameterService.createParameter(parameterCreateDTO));
+	}
 
-    @Test
-    void testUpdateParameter_Success() {
-        ParameterDTO parameterDTO = new ParameterDTO();
-        parameterDTO.setId(1);
-        parameterDTO.setParameterName("UpdatedParameter");
+	@Test
+	void testUpdateParameter_Success() {
+		UUID parameterId = UUID.randomUUID();
+		ParameterDTO parameterDTO = new ParameterDTO();
+		parameterDTO.setId(parameterId);
+		parameterDTO.setParameterName("UpdatedParameter");
 
-        Parameter parameter = new Parameter();
-        parameter.setId(1);
-        parameter.setName("OldParameter");
+		Parameter parameter = new Parameter();
+		parameter.setId(parameterId);
+		parameter.setName("OldParameter");
 
-        when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
-        when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(false);
+		when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
+		when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(false);
 
-        boolean result = parameterService.updateParameter(parameterDTO);
+		boolean result = parameterService.updateParameter(parameterDTO);
 
-        assertTrue(result);
-        verify(parameterRepository).save(parameter);
-    }
+		assertTrue(result);
+		verify(parameterRepository).save(parameter);
+	}
 
-    @Test
-    void testUpdateParameter_NotFound() {
-        ParameterDTO parameterDTO = new ParameterDTO();
-        parameterDTO.setId(1);
+	@Test
+	void testUpdateParameter_NotFound() {
+		UUID parameterId = UUID.randomUUID();
+		ParameterDTO parameterDTO = new ParameterDTO();
+		parameterDTO.setId(parameterId);
 
-        when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.empty());
+		when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.empty());
 
-        assertThrows(ResourceNotFoundException.class, () -> parameterService.updateParameter(parameterDTO));
-    }
+		assertThrows(ResourceNotFoundException.class, () -> parameterService.updateParameter(parameterDTO));
+	}
 
-    @Test
-    void testUpdateParameter_NameAlreadyExists() {
-        ParameterDTO parameterDTO = new ParameterDTO();
-        parameterDTO.setId(1);
-        parameterDTO.setParameterName("ExistingParameter");
+	@Test
+	void testUpdateParameter_NameAlreadyExists() {
+		UUID parameterId = UUID.randomUUID();
+		ParameterDTO parameterDTO = new ParameterDTO();
+		parameterDTO.setId(parameterId);
+		parameterDTO.setParameterName("ExistingParameter");
 
-        Parameter parameter = new Parameter();
-        parameter.setId(1);
-        parameter.setName("OldParameter");
+		Parameter parameter = new Parameter();
+		parameter.setId(parameterId);
+		parameter.setName("OldParameter");
 
-        when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
-        when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(true);
+		when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
+		when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(true);
 
-        assertThrows(ResourceAlreadyExistsException.class, () -> parameterService.updateParameter(parameterDTO));
-    }
+		assertThrows(ResourceAlreadyExistsException.class, () -> parameterService.updateParameter(parameterDTO));
+	}
 
-    @Test
-    void testFindAllParameters() {
-        List<Parameter> parameters = Arrays.asList(new Parameter(), new Parameter());
+	@Test
+	void testFindAllParameters() {
+		List<Parameter> parameters = Arrays.asList(new Parameter(), new Parameter());
 
-        when(parameterRepository.findAll()).thenReturn(parameters);
+		when(parameterRepository.findAll()).thenReturn(parameters);
 
-        List<ParameterDTO> result = parameterService.findAllParameters();
+		List<ParameterDTO> result = parameterService.findAllParameters();
 
-        assertFalse(result.isEmpty());
-        assertEquals(parameters.size(), result.size());
-    }
+		assertFalse(result.isEmpty());
+		assertEquals(parameters.size(), result.size());
+	}
 
-    @Test
-    void testFindParameterById_Success() {
-        Integer id = 1;
-        Parameter parameter = new Parameter();
-        parameter.setId(id);
+	@Test
+	void testFindParameterById_Success() {
+		UUID parameterId = UUID.randomUUID();
+		Parameter parameter = new Parameter();
+		parameter.setId(parameterId);
 
-        when(parameterRepository.findById(id)).thenReturn(Optional.of(parameter));
+		when(parameterRepository.findById(parameterId)).thenReturn(Optional.of(parameter));
 
-        ParameterDTO result = parameterService.findParameterById(id);
+		ParameterDTO result = parameterService.findParameterById(parameterId);
 
-        assertNotNull(result);
-        assertEquals(id, result.getId());
-    }
+		assertNotNull(result);
+		assertEquals(parameterId, result.getId());
+	}
 
-    @Test
-    void testFindParameterById_NotFound() {
-        Integer id = 1;
+	@Test
+	void testFindParameterById_NotFound() {
+		UUID parameterId = UUID.randomUUID();
+		when(parameterRepository.findById(parameterId)).thenReturn(Optional.empty());
 
-        when(parameterRepository.findById(id)).thenReturn(Optional.empty());
+		assertThrows(ResourceNotFoundException.class, () -> parameterService.findParameterById(parameterId));
+	}
 
-        assertThrows(ResourceNotFoundException.class, () -> parameterService.findParameterById(id));
-    }
+	@Test
+	void testDeleteParameter_Success() {
+		UUID parameterId = UUID.randomUUID();
 
-    @Test
-    void testDeleteParameter_Success() {
-        Integer id = 1;
+		doNothing().when(parameterRepository).deleteById(parameterId);
 
-        doNothing().when(parameterRepository).deleteById(id);
+		boolean result = parameterService.deleteParameter(parameterId);
 
-        boolean result = parameterService.deleteParameter(id);
+		assertTrue(result);
+		verify(parameterRepository).deleteById(parameterId);
+	}
 
-        assertTrue(result);
-        verify(parameterRepository).deleteById(id);
-    }
+	@Test
+	void testDeleteParameter_Failure() {
+		UUID parameterId = UUID.randomUUID();
 
-    @Test
-    void testDeleteParameter_Failure() {
-        Integer id = 1;
+		doThrow(new RuntimeException()).when(parameterRepository).deleteById(parameterId);
 
-        doThrow(new RuntimeException()).when(parameterRepository).deleteById(id);
+		boolean result = parameterService.deleteParameter(parameterId);
 
-        boolean result = parameterService.deleteParameter(id);
+		assertFalse(result);
+	}
 
-        assertFalse(result);
-    }
+	@Test
+	void testFindAllParametersByFunction_Success() {
+		UUID functionId = UUID.randomUUID();
+		String functionName = "TestFunction";
+		Function function = new Function();
+		function.setId(functionId);
+		function.setName(functionName);
 
-    @Test
-    void testFindAllParametersByFunction_Success() {
-        String functionName = "TestFunction";
-        Function function = new Function();
-        function.setId(1);
-        function.setName(functionName);
+		List<Parameter> parameters = Arrays.asList(new Parameter(), new Parameter());
 
-        List<Parameter> parameters = Arrays.asList(new Parameter(), new Parameter());
+		when(functionRepository.findByName(functionName)).thenReturn(function);
+		when(parameterRepository.findAllByFunctionId(function.getId())).thenReturn(parameters);
 
-        when(functionRepository.findByName(functionName)).thenReturn(function);
-        when(parameterRepository.findAllByFunctionId(function.getId())).thenReturn(parameters);
+		List<ParameterDTO> result = parameterService.findAllParametersByFunction(functionName);
 
-        List<ParameterDTO> result = parameterService.findAllParametersByFunction(functionName);
+		assertFalse(result.isEmpty());
+		assertEquals(parameters.size(), result.size());
+	}
 
-        assertFalse(result.isEmpty());
-        assertEquals(parameters.size(), result.size());
-    }
+	@Test
+	void testFindAllParametersByFunction_FunctionNotFound() {
+		String functionName = "NonExistentFunction";
 
-    @Test
-    void testFindAllParametersByFunction_FunctionNotFound() {
-        String functionName = "NonExistentFunction";
+		when(functionRepository.findByName(functionName)).thenReturn(null);
 
-        when(functionRepository.findByName(functionName)).thenReturn(null);
+		assertThrows(ResourceNotFoundException.class, () -> parameterService.findAllParametersByFunction(functionName));
+	}
 
-        assertThrows(ResourceNotFoundException.class, () -> parameterService.findAllParametersByFunction(functionName));
-    }
+	@Test
+	void testGetAllParameterEnums() {
+		List<ParameterDataType> result = parameterService.getAllParameterEnums();
 
-    @Test
-    void testGetAllParameterEnums() {
-        List<ParameterDataType> result = parameterService.getAllParameterEnums();
-
-        assertNotNull(result);
-        assertEquals(ParameterDataType.values().length, result.size());
-    }
+		assertNotNull(result);
+		assertEquals(ParameterDataType.values().length, result.size());
+	}
 }

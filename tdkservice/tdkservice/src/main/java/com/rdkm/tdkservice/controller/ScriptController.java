@@ -163,9 +163,8 @@ public class ScriptController {
 			LOGGER.info("Scripts fetched successfully  for module: " + module);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {
-			LOGGER.error("Error in fetching scripts");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching scripts for module: " + module);
+			LOGGER.error("Scripts not found for module: " + module);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Scripts not found for module");
 		}
 	}
 
@@ -186,9 +185,8 @@ public class ScriptController {
 			LOGGER.info("Script fetched successfully for script id: " + id);
 			return ResponseEntity.status(HttpStatus.OK).body(script);
 		} else {
-			LOGGER.error("Error in fetching script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching script for script id: " + id);
+			LOGGER.error("No script found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found");
 		}
 	}
 
@@ -210,9 +208,8 @@ public class ScriptController {
 			LOGGER.info("Scripts fetched successfully for category: " + category);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {
-			LOGGER.error("Error in fetching scripts");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching scripts for category: " + category);
+			LOGGER.error("No script found for category", category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found for category");
 		}
 	}
 
@@ -285,9 +282,8 @@ public class ScriptController {
 			LOGGER.info("Scripts fetched successfully for category: " + category);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {
-			LOGGER.error("Error in fetching scripts");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in fetching scripts for category: " + category);
+			LOGGER.error("No script found for category");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found for category");
 		}
 	}
 
@@ -353,10 +349,9 @@ public class ScriptController {
 	@GetMapping("/template/{primitiveTestName}")
 	public ResponseEntity<String> getScriptTemplate(@PathVariable String primitiveTestName) {
 		String scriptTemplate = scriptService.scriptTemplate(primitiveTestName);
-		return ResponseEntity.ok(scriptTemplate);
+		return ResponseEntity.status(HttpStatus.OK).body(scriptTemplate);
 	}
 
-	
 	/**
 	 * This method is used to download all the test cases as Excel by Module ZIP by
 	 * Category

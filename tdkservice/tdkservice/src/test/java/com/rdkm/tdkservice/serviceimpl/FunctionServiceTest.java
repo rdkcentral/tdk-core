@@ -19,8 +19,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
@@ -33,183 +50,183 @@ import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
 import com.rdkm.tdkservice.repository.ParameterRepository;
-import com.rdkm.tdkservice.serviceimpl.FunctionService;
-import com.rdkm.tdkservice.util.MapperUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 public class FunctionServiceTest {
 
-    @Mock
-    private FunctionRepository functionRepository;
+	@Mock
+	private FunctionRepository functionRepository;
 
-    @Mock
-    private ModuleRepository moduleRepository;
+	@Mock
+	private ModuleRepository moduleRepository;
 
-    @Mock
-    private ParameterRepository parameterRepository;
+	@Mock
+	private ParameterRepository parameterRepository;
 
-    @InjectMocks
-    private FunctionService functionService;
+	@InjectMocks
+	private FunctionService functionService;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
-    }
+	@BeforeEach
+	void setUp() {
+		MockitoAnnotations.openMocks(this);
+	}
 
-    @Test
-    void testCreateFunction_Success() {
-        FunctionCreateDTO functionCreateDTO = new FunctionCreateDTO();
-        functionCreateDTO.setFunctionName("TestFunction");
-        functionCreateDTO.setFunctionCategory("RDKV");
+	@Test
+	void testCreateFunction_Success() {
+		UUID functionId = UUID.randomUUID();
+		FunctionCreateDTO functionCreateDTO = new FunctionCreateDTO();
+		functionCreateDTO.setFunctionName("TestFunction");
+		functionCreateDTO.setFunctionCategory("RDKV");
 
-        Module module = new Module();
-        module.setName("TestModule");
-        functionCreateDTO.setModuleName(module.getName());
-        when(moduleRepository.findByName("TestModule")).thenReturn(module);
-        when(functionRepository.existsByName("TestFunction")).thenReturn(false);
+		Module module = new Module();
+		module.setName("TestModule");
+		functionCreateDTO.setModuleName(module.getName());
+		when(moduleRepository.findByName("TestModule")).thenReturn(module);
+		when(functionRepository.existsByName("TestFunction")).thenReturn(false);
+		// Mock the save operation to set the id on the function
+		when(functionRepository.save(any(Function.class))).thenAnswer(invocation -> {
+			Function savedFunction = invocation.getArgument(0);
+			savedFunction.setId(functionId); // Set the id to simulate saving to DB
+			return savedFunction;
+		});
+		boolean result = functionService.createFunction(functionCreateDTO);
+		assertTrue(result);
+		verify(functionRepository).save(any(Function.class));
+	}
 
-        boolean result = functionService.createFunction(functionCreateDTO);
+	@Test
+	void testCreateFunction_AlreadyExists() {
+		FunctionCreateDTO functionCreateDTO = new FunctionCreateDTO();
+		functionCreateDTO.setModuleName("TestModule");
+		functionCreateDTO.setFunctionName("TestFunction");
 
-        //assertTrue(result);
-        verify(functionRepository).save(any(Function.class));
-    }
+		when(functionRepository.existsByName("TestFunction")).thenReturn(true);
 
-    @Test
-    void testCreateFunction_AlreadyExists() {
-        FunctionCreateDTO functionCreateDTO = new FunctionCreateDTO();
-        functionCreateDTO.setModuleName("TestModule");
-        functionCreateDTO.setFunctionName("TestFunction");
+		assertThrows(ResourceAlreadyExistsException.class, () -> functionService.createFunction(functionCreateDTO));
+	}
 
-        when(functionRepository.existsByName("TestFunction")).thenReturn(true);
+	@Test
+	void testUpdateFunction_Success() {
+		UUID functionId = UUID.randomUUID();
+		FunctionDTO functionDTO = new FunctionDTO();
+		functionDTO.setId(functionId);
+		functionDTO.setFunctionName("UpdatedFunction");
 
-        assertThrows(ResourceAlreadyExistsException.class, () -> functionService.createFunction(functionCreateDTO));
-    }
+		Function function = new Function();
+		function.setId(functionId);
+		function.setName("OldFunction");
 
-    @Test
-    void testUpdateFunction_Success() {
-        FunctionDTO functionDTO = new FunctionDTO();
-        functionDTO.setId(1);
-        functionDTO.setFunctionName("UpdatedFunction");
+		when(functionRepository.findById(functionId)).thenReturn(Optional.of(function));
+		when(functionRepository.existsByName("UpdatedFunction")).thenReturn(false);
 
-        Function function = new Function();
-        function.setId(1);
-        function.setName("OldFunction");
+		boolean result = functionService.updateFunction(functionDTO);
 
-        when(functionRepository.findById(1)).thenReturn(Optional.of(function));
-        when(functionRepository.existsByName("UpdatedFunction")).thenReturn(false);
+		assertTrue(result);
+		verify(functionRepository).save(function);
+	}
 
-        boolean result = functionService.updateFunction(functionDTO);
+	@Test
+	void testUpdateFunction_NotFound() {
+		UUID functionId = UUID.randomUUID();
+		FunctionDTO functionDTO = new FunctionDTO();
+		functionDTO.setId(functionId);
+		functionDTO.setFunctionName("UpdatedFunction");
+		functionDTO.setFunctionCategory("RDKV");
+		functionDTO.setModuleName("TestModule");
 
-        assertTrue(result);
-        verify(functionRepository).save(function);
-    }
+		when(functionRepository.findById(functionId)).thenReturn(Optional.empty());
 
-    @Test
-    void testUpdateFunction_NotFound() {
-        FunctionDTO functionDTO = new FunctionDTO();
-        functionDTO.setId(1);
-        functionDTO.setFunctionName("UpdatedFunction");
-        functionDTO.setFunctionCategory("RDKV");
-        functionDTO.setModuleName("TestModule");
+		assertThrows(ResourceNotFoundException.class, () -> functionService.updateFunction(functionDTO));
+	}
 
-        when(functionRepository.findById(1)).thenReturn(Optional.empty());
+	@Test
+	void testFindAllFunctions() {
+		List<Function> functions = Arrays.asList(new Function(), new Function());
+		when(functionRepository.findAll()).thenReturn(functions);
 
-        assertThrows(ResourceNotFoundException.class, () -> functionService.updateFunction(functionDTO));
-    }
+		List<FunctionDTO> result = functionService.findAllFunctions();
 
-    @Test
-    void testFindAllFunctions() {
-        List<Function> functions = Arrays.asList(new Function(), new Function());
-        when(functionRepository.findAll()).thenReturn(functions);
+		assertEquals(functions.size(), result.size());
+	}
 
-        List<FunctionDTO> result = functionService.findAllFunctions();
+	@Test
+	void testFindFunctionById_Success() {
+		UUID functionId = UUID.randomUUID();
+		Function function = new Function();
+		function.setId(functionId);
+		function.setCategory(Category.RDKV);
+		function.setModule(new Module());
+		function.setName("TestFunction");
 
-        assertEquals(functions.size(), result.size());
-    }
+		when(functionRepository.findById(functionId)).thenReturn(Optional.of(function));
 
-    @Test
-    void testFindFunctionById_Success() {
-        Function function = new Function();
-        function.setId(1);
-        function.setCategory(Category.RDKV);
-        function.setModule(new Module());
-        function.setName("TestFunction");
+		FunctionDTO result = functionService.findFunctionById(functionId);
 
-        when(functionRepository.findById(1)).thenReturn(Optional.of(function));
+		assertNotNull(result);
+		assertEquals(functionId, result.getId());
+	}
 
-        FunctionDTO result = functionService.findFunctionById(1);
+	@Test
+	void testFindFunctionById_NotFound() {
+		UUID functionId = UUID.randomUUID();
+		when(functionRepository.findById(functionId)).thenReturn(Optional.empty());
 
-        assertNotNull(result);
-        assertEquals(1, result.getId());
-    }
+		assertThrows(ResourceNotFoundException.class, () -> functionService.findFunctionById(functionId));
+	}
 
-    @Test
-    void testFindFunctionById_NotFound() {
-        when(functionRepository.findById(1)).thenReturn(Optional.empty());
+	@Test
+	void testDeleteFunction_Success() {
+		UUID functionId = UUID.randomUUID();
+		when(functionRepository.existsById(functionId)).thenReturn(true);
+		when(parameterRepository.findAllByFunctionId(functionId)).thenReturn(Collections.emptyList());
 
-        assertThrows(ResourceNotFoundException.class, () -> functionService.findFunctionById(1));
-    }
+		functionService.deleteFunction(functionId);
 
-    @Test
-    void testDeleteFunction_Success() {
-        when(functionRepository.existsById(1)).thenReturn(true);
-        when(parameterRepository.findAllByFunctionId(1)).thenReturn(Collections.emptyList());
+		verify(functionRepository).deleteById(functionId);
+	}
 
-        functionService.deleteFunction(1);
+	@Test
+	void testDeleteFunction_NotFound() {
+		UUID functionId = UUID.randomUUID();
+		when(functionRepository.existsById(functionId)).thenReturn(false);
 
-        verify(functionRepository).deleteById(1);
-    }
+		assertThrows(ResourceNotFoundException.class, () -> functionService.deleteFunction(functionId));
+	}
 
-    @Test
-    void testDeleteFunction_NotFound() {
-        when(functionRepository.existsById(1)).thenReturn(false);
+	@Test
+	void testFindAllByCategory() {
+		List<Function> functions = Arrays.asList(new Function(), new Function());
+		when(functionRepository.findAllByCategory(Category.RDKV)).thenReturn(functions);
 
-        assertThrows(ResourceNotFoundException.class, () -> functionService.deleteFunction(1));
-    }
+		List<FunctionDTO> result = functionService.findAllByCategory("RDKV");
 
-    @Test
-    void testFindAllByCategory() {
-        List<Function> functions = Arrays.asList(new Function(), new Function());
-        when(functionRepository.findAllByCategory(Category.RDKV)).thenReturn(functions);
+		assertEquals(functions.size(), result.size());
+	}
 
-        List<FunctionDTO> result = functionService.findAllByCategory("RDKV");
+	@Test
+	void testFindAllByCategory_Empty() {
+		when(functionRepository.findAllByCategory(Category.RDKV)).thenReturn(Collections.emptyList());
 
-        assertEquals(functions.size(), result.size());
-    }
+		List<FunctionDTO> result = functionService.findAllByCategory("RDKV");
 
-    @Test
-    void testFindAllByCategory_Empty() {
-        when(functionRepository.findAllByCategory(Category.RDKV)).thenReturn(Collections.emptyList());
+		assertTrue(result.isEmpty());
+	}
 
-        List<FunctionDTO> result = functionService.findAllByCategory("RDKV");
+	@Test
+	void testDeleteFunction_WithParameters() {
+		UUID functionId = UUID.randomUUID();
+		Function function = new Function();
+		function.setId(functionId);
 
-        assertTrue(result.isEmpty());
-    }
+		Parameter parameter = new Parameter();
+		parameter.setId(functionId);
 
-    @Test
-    void testDeleteFunction_WithParameters() {
-        Function function = new Function();
-        function.setId(1);
+		when(functionRepository.existsById(functionId)).thenReturn(true);
+		when(parameterRepository.findAllByFunctionId(functionId)).thenReturn(Arrays.asList(parameter));
 
-        Parameter parameter = new Parameter();
-        parameter.setId(1);
+		functionService.deleteFunction(functionId);
 
-        when(functionRepository.existsById(1)).thenReturn(true);
-        when(parameterRepository.findAllByFunctionId(1)).thenReturn(Arrays.asList(parameter));
-
-        functionService.deleteFunction(1);
-
-        verify(parameterRepository).deleteById(1); // Verify correct method call
-        verify(functionRepository).deleteById(1); // Verify function deletion
-    }
+		verify(parameterRepository).deleteById(functionId); // Verify correct method call
+		verify(functionRepository).deleteById(functionId); // Verify function deletion
+	}
 
 }

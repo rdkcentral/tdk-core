@@ -343,7 +343,9 @@ public class ScriptService implements IScriptService {
 			moduleDTO.setModuleName(module.getName());
 			moduleDTO.setScripts(scripts);
 			moduleDTO.setTestGroupName(module.getTestGroup().getName());
-			scriptModuleDTOList.add(moduleDTO);
+			if (!moduleDTO.getScripts().isEmpty()) {
+				scriptModuleDTOList.add(moduleDTO);
+			}
 			LOGGER.info("Module: " + module.getName() + " added to the list");
 		}
 		return scriptModuleDTOList;
