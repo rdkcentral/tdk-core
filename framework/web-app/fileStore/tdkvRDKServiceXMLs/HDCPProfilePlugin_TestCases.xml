@@ -43,7 +43,7 @@
     	  </prerequisite>
         </pluginPreRequisite>
 
-        <testCase testCaseId="HDCP_01" testCaseName= "Get_HDCP_Details" desc="Get HDCP related data and verfiy">
+        <testCase testCaseId="HDCP_01" testCaseName= "Get_HDCP_Details" desc="Get HDCP related data and verify">
             <testCaseInfo testCaseType="direct"/>
 
             <testCasePreRequisite>
