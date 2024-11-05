@@ -19,7 +19,7 @@
     <!-- Controller Plugin Information -->
     <plugin pluginName="Controller" serviceName="Controller" serviceVersion="1" >
         <method name="Get_Plugin_Status" api="status"  type="property" desc="Provides the information about plugins" >
-            <expectedValues>activated,deactivated,suspended,resumed,unavailable</expectedValues>
+            <expectedValues>activated,deactivated,suspended,resumed,unavailable,hibernated</expectedValues>
         </method>
         <method name="Activate_Plugin" api="activate" type="method" desc="Activates a plugin" >
             <params>
