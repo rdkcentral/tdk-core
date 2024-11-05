@@ -38,7 +38,8 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DeviceInfo" expectedValues="activated"/>
             </testStep>
           </prerequisite>
-          <prerequisite requisiteId="2" requisiteName="Activate_DisplaySettings_Plugin">
+
+	  <prerequisite requisiteId="2" requisiteName="Activate_DisplaySettings_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
                   <param tag="plugin" value="org.rdk.DisplaySettings" indexOnly="true" />
@@ -59,6 +60,7 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.DisplaySettings" expectedValues="activated"/>
             </testStep>
     	  </prerequisite>
+
 	  <prerequisite requisiteId="3" requisiteName="Activate_System_Plugin">
             <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
                 <params>
@@ -80,8 +82,30 @@
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
             </testStep>
           </prerequisite>
-	  
-	  <prerequisite requisiteId="4" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+
+	  <prerequisite requisiteId="4" requisiteName="Activate_HdcpProfile_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.HdcpProfile" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.HdcpProfile" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.HdcpProfile" />
+                <params>
+                  <param tag="callsign" value="org.rdk.HdcpProfile" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.HdcpProfile" />
+                <params>
+                  <param tag="plugin" value="org.rdk.HdcpProfile" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.HdcpProfile" expectedValues="activated"/>
+            </testStep>
+    	  </prerequisite>
+
+	  <prerequisite requisiteId="5" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
 	    <event pluginName="Controller" eventName="Event_Controller_State_Changed"/>
           </prerequisite>
         </pluginPreRequisite>
@@ -383,4 +407,39 @@
                 </resultGeneration>
             </testStep>
        </testCase>
+
+       <!-- Test case 21 -->
+       <testCase testCaseId="DI_21" testCaseName="DeviceInfo_Validate_HDCP_Version" desc="Verify whether the HDCP version returned by deviceinfo API matches the HDCP version in HdcpProfile plugin or not">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+                <resultGeneration useMethodTag="display_connected_status"/>
+            </testStep>
+            <testStep testStepId="2" name="DeviceInfo_Get_Supported_HDCP" method="DeviceInfo_Get_Supported_HDCP" saveResult="true">
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+		<resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+       	    </testStep>
+	    <testStep testStepId="3" name="HdcpProfile_Get_Supported_HDCP" method="Get_STB_Supported_HDCP_Version" pluginName="HDCPProfile">
+		<resultGeneration useMethodTag="validate_hdcp_version">
+		   <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_previous_hdcp_version" />
+		</resultGeneration>
+            </testStep>
+       </testCase>
+
+       <!-- Test case 22 -->
+       <testCase testCaseId="DI_22" testCaseName="DeviceInfo_Validate_Default_Resolution" desc="Check whether the default resolution returned by deviceinfo API matches the default resolution in displaysettings plugin or not">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+                <resultGeneration useMethodTag="display_connected_status"/>
+            </testStep>
+	    <testStep testStepId="2" name="DeviceInfo_Get_Default_Resolution" method="DeviceInfo_Get_Default_Resolution" saveResult="true">
+		<resultGeneration useMethodTag="deviceinfo_get_api_info"/>
+            </testStep>
+	    <testStep testStepId="3" name="DisplaySettings_Get_Default_Resolution" method="Get_Default_Resolution" pluginName="DisplaySettings">
+                <resultGeneration useMethodTag="check_default_resolution">
+                  <expectedValues usePreviousResult="true" Id="2" useMethodTag="get_previous_default_resolution"/>
+                </resultGeneration>
+            </testStep>
+       </testCase>    
 </testPlugin>

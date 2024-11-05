@@ -728,7 +728,12 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "FAILURE"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
-
+            elif arg[0] == "get_hdcp_status_without_tv":
+                info = checkAndGetAllResultInfo(result.get("HDCPStatus"),result.get("success"))
+                if str(info["isConnected"]).lower() == expectedValues[0] and str(info["isHDCPCompliant"]).lower() == expectedValues[0] and str(info["isHDCPEnabled"]).lower() == expectedValues[0]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         # System Plugin Response result parser steps
         elif tag =="system_check_mfg_serial_number":    
@@ -1896,6 +1901,18 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if collections.Counter(result.get('supportedAudioPorts')) == collections.Counter(expectedValues):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_empty_audio_ports":
+            connectedAudioPorts = result.get('connectedAudioPorts')
+            success = result.get('success')
+            info["supportedAudioPorts"] = connectedAudioPorts
+            info["success"] = success
+            if str(success).lower() == "true" and arg[0] not in connectedAudioPorts:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "Please test after disconnecting the TV"
+                info["message"] = message
                 info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_settop_HDR_support":
@@ -3804,6 +3821,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "validate_hdcp_version":
+            output = result.get("supportedHDCPVersion")
+            success = result.get('success')
+            info["supportedHDCPVersion"] = output
+            info["success"] = success
+            if  str(success).lower() == "true" and float(output) == float(expectedValues[0]):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -5270,6 +5297,14 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             info["EDID"] = testStepResults1[0].get("EDID")
             testStepResults2 = list(testStepResults[1].values())[0]
             info["host_edid"] = testStepResults2[0].get("host_edid")
+
+        elif tag =="get_previous_hdcp_version":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["hdcp_version"] = testStepResults[0].get("supportedHDCPVersion")
+
+        elif tag =="get_previous_default_resolution":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["defaultResolution"] = testStepResults[0].get("defaultResolution")
 
         # HdmiCecSource Plugin Response result parser steps
         elif tag =="hdmicecsource_get_previous_vendor_id":
