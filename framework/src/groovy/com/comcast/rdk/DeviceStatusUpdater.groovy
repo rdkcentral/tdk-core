@@ -19,6 +19,8 @@
 package com.comcast.rdk;
 
 import static com.comcast.rdk.Constants.PYTHON_COMMAND
+import org.springframework.core.io.Resource
+import org.springframework.core.io.FileSystemResource
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 import java.util.concurrent.Future
@@ -119,9 +121,24 @@ public class DeviceStatusUpdater {
 				devIp = dev?.stbIp
 				def thunderPort = dev?.thunderPort
 				device = Device.findById(dev?.id)
-				String[] cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort]
-				Runnable statusUpdator = new ThunderDeviceStatusUpdaterTask(cmd, device, deviceStatusService,executescriptService,grailsApplication);
-				executorService.execute(statusUpdator);
+				String finalConfigFile = ""
+
+				// Get the resources
+				Resource deviceConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.stbName + ".config")
+				Resource boxTypeConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.boxType?.name + ".config")
+				
+			
+				
+				// Check if the resources exist
+				if (deviceConfigResource.exists()) {
+				    finalConfigFile = device?.stbName + ".config"  // Just the file name
+				} else if (boxTypeConfigResource.exists()) {
+				    finalConfigFile = device?.boxType?.name + ".config"  // Just the file name
+				}
+
+			String[] cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort,finalConfigFile]
+			Runnable statusUpdator = new ThunderDeviceStatusUpdaterTask(cmd, device, deviceStatusService,executescriptService,grailsApplication);
+			executorService.execute(statusUpdator);
 			}else{
 			try {
 				def resultArray = Device.executeQuery("select a.stbIp, a.stbName,a.statusPort from Device a where a.id = :devId",[devId: dev?.id])
@@ -168,7 +185,25 @@ public class DeviceStatusUpdater {
 			def scriptPath = nontdkstatus.absolutePath
 			def thunderPort = device?.thunderPort
 			def devIp = device?.stbIp
-			cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort]
+			
+			String finalConfigFile = ""
+			
+			// Get the resources
+			Resource deviceConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.stbName + ".config")
+			Resource boxTypeConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.boxType?.name + ".config")
+			
+			// Print out the resource information
+
+			
+			// Check if the resources exist
+			if (deviceConfigResource.exists()) {
+			    finalConfigFile = device?.stbName + ".config"  // Just the file name
+			} else if (boxTypeConfigResource.exists()) {
+			    finalConfigFile = device?.boxType?.name + ".config"  // Just the file name
+			} 
+
+
+			cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort, finalConfigFile]
 		}else{
 		File layoutFolder = grailsApplication.parentContext.getResource("//fileStore//calldevicestatus_cmndline.py").file
 
