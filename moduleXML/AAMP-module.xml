@@ -70,6 +70,8 @@
       <function name='TestMgr_Aamp_AampSetLicenseServerURL' />
       <function name='TestMgr_Aamp_AampSetDisable4K' />
       <function name='TestMgr_Aamp_AampGetBitrateDetails' />
+      <function name='TestMgr_Aamp_AampPersistBitRateOverSeek' />
+      <function name='TestMgr_Aamp_AampGetVideoZoom' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -101,6 +103,7 @@
       <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='DRM' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetLicenseServerURL' parameterName='license_server_url' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_Aamp_AampSetDisable4K' parameterName='disable4K' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_Aamp_AampPersistBitRateOverSeek' parameterName='enable' parameterType='STRING' range='a-z' />
     </parameters>
   </module>
 </xml>
