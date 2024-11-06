@@ -150,7 +150,7 @@
             </testStep>
             <testStep testStepId="4" name="Check_DeviceIdentification_Get_Device_Platform_Info_API_Response" method="Get_Device_Platform_Info">
                 <resultGeneration useMethodTag="controller_check_error_message" arguments="deactivate_check_error_message">
-                    <expectedValues="ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
+                    <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!." />
 		</resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Activate_DeviceIdentification_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
