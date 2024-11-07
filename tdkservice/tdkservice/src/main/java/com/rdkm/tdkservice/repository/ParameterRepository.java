@@ -33,20 +33,20 @@ import java.util.UUID;
 @Repository
 public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 
-    /**
-     * Finds a parameter type by its name.
-     *
-     * @param name the name of the parameter type
-     * @return the parameter type with the specified name, or null if not found
-     */
-    boolean existsByName(String name);
+	/**
+	 * Finds a parameter type by its name.
+	 *
+	 * @param name the name of the parameter type
+	 * @return the parameter type with the specified name, or null if not found
+	 */
+	boolean existsByName(String name);
 
-    /**
-     * Finds all parameter types by function ID.
-     *
-     * @param functionId the ID of the function
-     * @return a list of parameter types with the specified function ID
-     */
+	/**
+	 * Finds all parameter types by function ID.
+	 *
+	 * @param functionId the ID of the function
+	 * @return a list of parameter types with the specified function ID
+	 */
 	List<Parameter> findAllByFunctionId(UUID functionId);
 
 	/**
@@ -65,5 +65,13 @@ public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 	 * @return the parameter with the specified name, or null if not found
 	 */
 	Parameter findByName(String parameterName);
+
+	/**
+	 * Exist a parameter by its name and function
+	 *
+	 * @param parameterName the name of the parameter
+	 * @return the parameter with the specified name, or null if not found
+	 */
+	boolean existsByNameAndFunction(String name, Function function);
 
 }

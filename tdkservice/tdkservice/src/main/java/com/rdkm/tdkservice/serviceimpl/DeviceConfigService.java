@@ -21,6 +21,7 @@ package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
@@ -102,10 +103,18 @@ public class DeviceConfigService implements IDeviceConfigService {
 	private Resource addHeader(Resource resource) throws IOException {
 		// Read the file content as a String
 		String fileContent = new String(Files.readAllBytes(resource.getFile().toPath()));
-		String currentYear = Year.now().toString();
 
-		// Prepare the header
-		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
+		String headerFileLocation = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+				+ Constants.TDK_UTIL_FILE_LOCATION;
+		Path path = Paths.get(headerFileLocation);
+		if (!Files.exists(path)) {
+			LOGGER.error("Header file not found at location: " + headerFileLocation);
+			throw new IOException("Header file not found at location: " + headerFileLocation);
+		}
+
+		String headerContent = Files.readString(path, StandardCharsets.UTF_8);
+		String currentYear = Year.now().toString();
+		String header = headerContent.replace("CURRENT_YEAR", currentYear);
 
 		// Prepend the header to the file content
 		String updatedContent = header + fileContent;

@@ -38,6 +38,7 @@ import com.rdkm.tdkservice.controller.LoginController;
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.Theme;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -119,6 +120,10 @@ public class UserService implements UserDetailsService {
 		user.setDisplayName(userRequest.getUserDisplayName());
 		user.setPassword(passwordEncoder.encode(userRequest.getPassword()));
 
+		Category category = Category.getCategory(userRequest.getUserCategory());
+		if (category != null) {
+			user.setCategory(category);
+		}
 		// Setting User role, if empty default user role TESTER will be set
 		String userRoleName = userRequest.getUserRoleName();
 		// Default value for userrole - by default it will be tester
@@ -205,7 +210,8 @@ public class UserService implements UserDetailsService {
 		// if the update , for user update should happen for specific fields as well.
 		// So we are doing the empty check and if it is empty then no need to update
 
-		if (!Utils.isEmpty(updateUserRequest.getUserName()) && !(updateUserRequest.getUserName().equals(user.getUsername()))) {
+		if (!Utils.isEmpty(updateUserRequest.getUserName())
+				&& !(updateUserRequest.getUserName().equals(user.getUsername()))) {
 			if (userRepository.existsByUsername(updateUserRequest.getUserName())) {
 				LOGGER.info("User already exists with the same username: " + updateUserRequest.getUserName());
 				throw new ResourceAlreadyExistsException(Constants.USER_NAME, updateUserRequest.getUserName());
@@ -214,7 +220,8 @@ public class UserService implements UserDetailsService {
 			}
 		}
 
-		if (!Utils.isEmpty(updateUserRequest.getUserEmail()) && !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
+		if (!Utils.isEmpty(updateUserRequest.getUserEmail())
+				&& !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
 			if (userRepository.existsByEmail(updateUserRequest.getUserEmail())) {
 				LOGGER.info("User already exists with the same email: " + updateUserRequest.getUserEmail());
 				throw new ResourceAlreadyExistsException(Constants.EMAIL, updateUserRequest.getUserEmail());
@@ -239,6 +246,13 @@ public class UserService implements UserDetailsService {
 		if (!Utils.isEmpty(updateUserRequest.getUserThemeName())) {
 			Theme theme = Theme.valueOf(updateUserRequest.getUserThemeName().toUpperCase());
 			user.setTheme(theme);
+		}
+
+		if (!Utils.isEmpty(updateUserRequest.getUserCategory())) {
+			Category category = Category.getCategory(updateUserRequest.getUserCategory());
+			if (category != null) {
+				user.setCategory(category);
+			}
 		}
 
 		if (!Utils.isEmpty(updateUserRequest.getUserGroupName())) {
@@ -297,6 +311,39 @@ public class UserService implements UserDetailsService {
 			return true;
 		}
 		return false;
+	}
+
+	/**
+	 * This method is used to set the theme for the user
+	 * 
+	 * @param userId - UUID
+	 * @param theme  - String
+	 * @return boolean - returns true if theme is set successfully
+	 */
+	public boolean setTheme(UUID userId, String theme) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_ID, userId.toString()));
+		Theme userTheme = Theme.getTheme(theme);
+		if (userTheme != null) {
+			user.setTheme(userTheme);
+			userRepository.save(user);
+			return true;
+		} else {
+			LOGGER.error("User theme not found for the user id: " + userId);
+			throw new ResourceNotFoundException(Constants.USER_THEME, theme);
+		}
+	}
+
+	/**
+	 * This method is used to get the theme for the user
+	 * 
+	 * @param userId - UUID
+	 * @return String - returns theme for the user
+	 */
+	public String getTheme(UUID userId) {
+		User user = userRepository.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_ID, userId.toString()));
+		return user.getTheme().name();
 	}
 
 }

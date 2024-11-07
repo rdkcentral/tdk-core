@@ -22,6 +22,10 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +44,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -263,28 +268,37 @@ public class CommonService {
 	 * The method to add license header in the python files and config files
 	 * 
 	 * @param scriptFile
+	 * 
 	 * @return
 	 */
-	public MultipartFile addHeader(MultipartFile scriptFile) throws IOException {
-
-		String fileContent = new String(scriptFile.getBytes());
-		if (fileContent.contains(Constants.HEADER_FINDER)) {
-			LOGGER.info("Header already exists in the file");
-			return scriptFile;
+	public MultipartFile addHeader(MultipartFile file) throws IOException {
+		if (file == null || file.isEmpty()) {
+			LOGGER.error("Script file is null or empty");
+			throw new UserInputException("Script file is null or empty");
 		}
 
-		String currentYear = Year.now().toString();
+		String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
+		if (fileContent.contains(Constants.HEADER_FINDER)) {
+			LOGGER.info("Header already exists in the file");
+			return file;
+		}
 
-		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
+		String headerFileLocation = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+				+ Constants.TDK_UTIL_FILE_LOCATION;
+		Path path = Paths.get(headerFileLocation);
+		if (!Files.exists(path)) {
+			LOGGER.error("Header file not found at location: " + headerFileLocation);
+			throw new IOException("Header file not found at location: " + headerFileLocation);
+		}
+
+		String headerContent = Files.readString(path, StandardCharsets.UTF_8);
+		String currentYear = Year.now().toString();
+		String header = headerContent.replace("CURRENT_YEAR", currentYear);
 
 		// Prepend the header to the file content
 		String updatedContent = header + fileContent;
-		return new MockMultipartFile(scriptFile.getName(), // Name of the file
-				scriptFile.getOriginalFilename(), // Original filename
-				scriptFile.getContentType(), // Content type (e.g., text/plain)
-				updatedContent.getBytes() // Updated content as bytes
-		);
-
+		return new MockMultipartFile(file.getName(), file.getOriginalFilename(), file.getContentType(),
+				updatedContent.getBytes(StandardCharsets.UTF_8));
 	}
 
 	/**

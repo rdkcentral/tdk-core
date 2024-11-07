@@ -159,7 +159,7 @@ public class ScriptController {
 	public ResponseEntity<?> findAllScriptsByModule(@RequestParam String module) {
 		LOGGER.info("Received get all scripts request for module: " + module);
 		List<ScriptListDTO> scripts = scriptService.findAllScriptsByModule(module);
-		if (scripts != null) {
+		if (scripts != null && !scripts.isEmpty()) {
 			LOGGER.info("Scripts fetched successfully  for module: " + module);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {
@@ -204,7 +204,7 @@ public class ScriptController {
 	public ResponseEntity<?> findAllScriptByModuleWithCategory(@RequestParam String category) {
 		LOGGER.info("Received get all scripts request for category: " + category);
 		List<ScriptModuleDTO> scripts = scriptService.findAllScriptByModuleWithCategory(category);
-		if (scripts != null) {
+		if (scripts != null && !scripts.isEmpty()) {
 			LOGGER.info("Scripts fetched successfully for category: " + category);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {

@@ -287,4 +287,8 @@ public class Constants {
 			+ "##########################################################################\r\n"
 			+ "";
 
+	public static final String USER_THEME = "User Theme";
+
+	public static final String TDK_UTIL_FILE_LOCATION = "/tdkUtilFiles/HeaderFile.txt";
+
 }

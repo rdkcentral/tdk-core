@@ -62,6 +62,11 @@ public class ScriptDTO {
 	 * Primitive test name
 	 */
 	private String primitiveTestName;
+	
+	/**
+	 * The moduleName of the script.
+	 */
+	private String moduleName;
 
 	/**
 	 * List of device types that the script is associated with.
@@ -137,5 +142,10 @@ public class ScriptDTO {
 	 * Any specific remarks regarding the script
 	 */
 	private String remarks;
+	
+	/**
+	 * The script content
+	 */
+	private String scriptContent;
 
 }

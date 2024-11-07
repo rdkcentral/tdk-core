@@ -13,9 +13,12 @@ import com.rdkm.tdkservice.config.JwtConfig;
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.service.ILoginService;
+import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.JWTUtils;
 
 /**
@@ -99,9 +102,35 @@ public class LoginService implements ILoginService {
 		signinResponse.setThemeName(user.getTheme().getName());
 		signinResponse.setDisplayName(user.getDisplayName());
 		signinResponse.setUserGroupName(user.getUserGroup().getName());
+		signinResponse.setUserCategory(user.getCategory().name());
 		LOGGER.info("Finished signin request" + signinRequest.toString());
 		return signinResponse;
 
+	}
+
+	/**
+	 * This method is used to change the category preference of the user
+	 *
+	 * @param userName - String
+	 * @param category - String
+	 * @return boolean - returns true if category preference is changed successfully
+	 */
+	public boolean changeCategoryPreference(String userName, String category) {
+		LOGGER.info("The change category preference request is " + userName + " " + category);
+		User user = userRepository.findByUsername(userName);
+		if (null == user) {
+			LOGGER.error("User doesnt exists with the username: " + userName);
+			throw new ResourceNotFoundException(Constants.USER_NAME, userName);
+		}
+		user.setCategory(Category.valueOf(category));
+		User savedUser = userRepository.save(user);
+		if (savedUser != null && savedUser.getId() != null) {
+			LOGGER.info("Changing category preference success");
+			return true;
+		} else {
+			LOGGER.error("Changing category preference failed");
+			return false;
+		}
 	}
 
 }

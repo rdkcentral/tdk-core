@@ -216,4 +216,48 @@ public class UserController {
 
 	}
 
+	/*
+	 * This method is used to set the theme for the user. It receives a PUT request
+	 * at the "/settheme" endpoint with the user ID and theme in the request
+	 * parameters. The theme should be a string value. The method calls the
+	 * UserService to set the theme for the user.
+	 * 
+	 * @param userId The ID of the user whose theme is to be set.
+	 * 
+	 * @param theme The theme to be set for the user.
+	 * 
+	 * @return boolean Returns true if the theme is successfully set for the user,
+	 */
+	@Operation(summary = "API to set the theme for the user", description = "This API is used to set the theme for the user")
+	@ApiResponse(responseCode = "200", description = "Successfully set the theme")
+	@ApiResponse(responseCode = "500", description = "Internal Server Error")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@PutMapping("/settheme")
+	public boolean setTheme(@RequestParam UUID userId, @RequestParam String theme) {
+		LOGGER.info("The set theme request is " + theme);
+		boolean isThemeSet = userService.setTheme(userId, theme);
+		return isThemeSet;
+
+	}
+
+	/**
+	 * This method is used to get the theme for the user. It receives a GET request
+	 * at the "/gettheme" endpoint with the user ID in the request parameters. The
+	 * method calls the UserService to get the theme for the user.
+	 * 
+	 * @param userId The ID of the user whose theme is to be retrieved.
+	 * 
+	 * @return String The theme of the user.
+	 */
+	@Operation(summary = "API to get the theme for the user", description = "This API is used to get the theme for the user")
+	@ApiResponse(responseCode = "200", description = "Successfully retrieved the theme")
+	@ApiResponse(responseCode = "500", description = "Internal Server Error")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@GetMapping("/gettheme")
+	public String getTheme(@RequestParam UUID userId) {
+		LOGGER.info("The get theme request is " + userId);
+		String theme = userService.getTheme(userId);
+		return theme;
+	}
+
 }

@@ -75,6 +75,11 @@ public class ParameterService implements IParameterService {
 		if (function == null) {
 			throw new ResourceNotFoundException(Constants.FUNCTION_NAME, parameterCreateDTO.getFunction());
 		}
+
+		if (parameterRepository.existsByNameAndFunction(parameterCreateDTO.getParameterName(), function)) {
+			LOGGER.error("Parameter with name {} already exists", parameterCreateDTO.getParameterName());
+			throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterCreateDTO.getParameterName());
+		}
 		mapDTOCreateParameterTypeToEntity(parameter, parameterCreateDTO, function);
 		parameterRepository.save(parameter);
 		LOGGER.info("Parameter  created successfully: {}", parameter);
@@ -101,12 +106,19 @@ public class ParameterService implements IParameterService {
 
 		Parameter parameter = parameterRepository.findById(parameterDTO.getId()).orElse(null);
 		if (parameter == null) {
+			LOGGER.error("Parameter not found: {}", parameterDTO);
 			throw new ResourceNotFoundException(Constants.PARAMETER_NAME, parameterDTO.toString());
+		}
+
+		Function function = functionRepository.findByName(parameterDTO.getFunction());
+		if (function == null) {
+			LOGGER.error("Function not found: {}", parameterDTO.getFunction());
+			throw new ResourceNotFoundException(Constants.FUNCTION_NAME, parameterDTO.getFunction());
 		}
 
 		if (!Utils.isEmpty(parameterDTO.getParameterName())
 				&& !parameterDTO.getParameterName().equals(parameter.getName())) {
-			if (parameterRepository.existsByName(parameterDTO.getParameterName())) {
+			if (parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)) {
 				LOGGER.info("Parameter already exists with the same name: " + parameterDTO.getParameterName());
 				throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterDTO.getParameterName());
 			} else {
@@ -115,10 +127,6 @@ public class ParameterService implements IParameterService {
 		}
 
 		if (!Utils.isEmpty(parameterDTO.getFunction())) {
-			Function function = functionRepository.findByName(parameterDTO.getFunction());
-			if (function == null) {
-				throw new ResourceNotFoundException(Constants.FUNCTION_NAME, parameterDTO.getFunction());
-			}
 			parameter.setFunction(function);
 		}
 

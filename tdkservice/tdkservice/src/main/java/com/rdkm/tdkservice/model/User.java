@@ -26,6 +26,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.Theme;
 
 import jakarta.persistence.CascadeType;
@@ -86,6 +87,14 @@ public class User extends BaseEntity implements UserDetails {
 	 */
 	@Enumerated(EnumType.STRING)
 	private Theme theme;
+	
+	/*
+	 * The category
+	 * 
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Category category;
 
 	/**
 	 * The user group of the user.

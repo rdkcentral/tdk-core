@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.SigninRequestDTO;
@@ -157,4 +158,42 @@ public class LoginController {
 		return ResponseEntity.status(HttpStatus.OK).body(userGroupNames);
 	}
 
+	
+	/**
+	 * This method is used to change the category preference of a user. It receives a
+	 * POST request at the "/changecategorypreference" endpoint with the username and
+	 * category in the request parameters. The username is the username of the user
+	 * whose category preference is to be changed. The category is the new category
+	 * preference of the user.
+	 *
+	 * @param userName The username of the user whose category preference is to be
+	 *                 changed.
+	 * @param category The new category preference of the user.
+	 * @return ResponseEntity<String> If the category preference is successfully
+	 *         changed, it returns a 200 status code with a success message. If there
+	 *         is an error in changing the category preference, it returns a 400
+	 *         status code with an error message.
+	 * @throws Exception If any exception occurs during the execution of the method,
+	 *                   it is thrown to the caller to handle.
+	 */
+	@Operation(summary = "API to change the category preference", description = "This API is used to change the category preference of a user")
+	@ApiResponse(responseCode = "200", description = "Successfully updated the category preference")
+	@ApiResponse(responseCode = "500", description = "Internal Server Error")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@ApiResponse(responseCode = "404", description = "User not found")
+	@ApiResponse(responseCode = "409", description = "Conflict")
+	@ApiResponse(responseCode = "401", description = "Unauthorized")
+	@ApiResponse(responseCode = "403", description = "Forbidden")
+	@PostMapping("/changecategorypreference")
+	public ResponseEntity<String> changeCategoryPreference(@RequestParam String userName, @RequestParam String category) {
+		LOGGER.info("The change category preference request is " + userName + " " + category);
+		boolean isCategoryChanged = loginService.changeCategoryPreference(userName, category);
+		if (isCategoryChanged) {
+			LOGGER.info("Category preference change is successful");
+			return ResponseEntity.status(HttpStatus.OK).body("Successfully updated the category preference");
+		} else {
+			LOGGER.error("Category preference change failed");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update the category preference");
+		}
+	}
 }

@@ -29,7 +29,7 @@ import lombok.Data;
  */
 @Data
 public class SigninResponseDTO {
-	
+
 	/**
 	 * Represents the token generated for the user.
 	 */
@@ -62,10 +62,14 @@ public class SigninResponseDTO {
 	 * Represents the display name.
 	 */
 	private String displayName;
+
+	/**
+	 * Represents the user category.
+	 */
+	private String userCategory;
 	/**
 	 * Represents the user group name.
 	 */
 	private String userGroupName;
 
-	
 }

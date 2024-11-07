@@ -95,6 +95,7 @@ public class MapperUtils {
 		userDTO.setUserGroupName(user.getUserGroup() != null ? user.getUserGroup().getName() : null);
 		userDTO.setUserRoleName(user.getUserRole() != null ? user.getUserRole().getName() : null);
 		userDTO.setUserStatus(user.getStatus());
+		userDTO.setUserCategory(user.getCategory().name());
 		return userDTO;
 	}
 
@@ -195,7 +196,6 @@ public class MapperUtils {
 		return device;
 	}
 
-
 	/**
 	 * This method is used to convert the Device object to UpdateDeviceDTO object.
 	 *
@@ -286,10 +286,10 @@ public class MapperUtils {
 	 */
 
 	public static DeviceResponseDTO convertToDeviceDTO(Device device) {
-	    modelMapper.typeMap(Device.class, DeviceResponseDTO.class).addMappings(mapper -> {
-	        mapper.map(src -> src.getName(), DeviceResponseDTO:: setDeviceName);
-	    });
-	    return modelMapper.map(device, DeviceResponseDTO.class);
+		modelMapper.typeMap(Device.class, DeviceResponseDTO.class).addMappings(mapper -> {
+			mapper.map(src -> src.getName(), DeviceResponseDTO::setDeviceName);
+		});
+		return modelMapper.map(device, DeviceResponseDTO.class);
 	}
 
 	/**
@@ -577,6 +577,7 @@ public class MapperUtils {
 
 		scriptDTO.setName(script.getName());
 		scriptDTO.setSynopsis(script.getSynopsis());
+		scriptDTO.setModuleName(script.getModule().getName());
 		scriptDTO.setExecutionTimeOut(script.getExecutionTimeOut());
 		scriptDTO.setLongDuration(script.isLongDuration());
 		scriptDTO.setSkipExecution(script.isSkipExecution());

@@ -64,6 +64,13 @@ public class UserCreateDTO {
 	 * Represents the theme name of the User.
 	 */
 	private String userThemeName;
+	
+	
+	/**
+	 * Represents the user category.
+	 */
+	@NotBlank(message = "Category is required")
+	private String userCategory;
 
 	/**
 	 * Represents the user group of the User. This field is mandatory, hence it

@@ -75,6 +75,11 @@ public class UserDTO {
 	 */
 
 	private String userGroupName;
+	
+	/**
+	 * Represents the user category.
+	 */
+	private String userCategory;
 
 	/**
 	 * Represents the user role of the User.

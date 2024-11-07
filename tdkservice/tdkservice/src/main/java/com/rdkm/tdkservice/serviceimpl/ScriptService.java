@@ -23,9 +23,11 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -49,6 +51,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +68,8 @@ import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
+import com.rdkm.tdkservice.dto.ScriptResponseDTO;
+import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
@@ -76,11 +81,15 @@ import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.PrimitiveTest;
 import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.ScriptTestSuite;
+import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
 import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
+import com.rdkm.tdkservice.repository.ScriptTestSuiteRepository;
+import com.rdkm.tdkservice.repository.TestSuiteRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
@@ -119,7 +128,16 @@ public class ScriptService implements IScriptService {
 	private ModuleRepository moduleRepository;
 
 	@Autowired
+	TestSuiteRepository testSuiteRepository;
+
+	@Autowired
+	ScriptTestSuiteRepository scriptTestSuiteRepository;
+
+	@Autowired
 	CommonService commonService;
+
+	@Autowired
+	TestSuiteService testSuiteService;
 
 	/**
 	 * Save the script file and the script details. The script file will be saved in
@@ -192,6 +210,27 @@ public class ScriptService implements IScriptService {
 			LOGGER.error("Error saving script with device types: " + e.getMessage());
 			e.printStackTrace();
 		}
+		if (null != savedScript) {
+			TestSuite testSuite = testSuiteRepository.findByName(module.getName());
+			if (null != testSuite) {
+				ScriptTestSuite scriptTestSuite = new ScriptTestSuite();
+				scriptTestSuite.setScript(savedScript);
+				scriptTestSuite.setTestSuite(testSuite);
+				scriptTestSuiteRepository.save(scriptTestSuite);
+				// scriptTestSuite.setScriptOrder(null);
+
+			} else {
+				TestSuiteCreateDTO testSuiteCreateDTO = new TestSuiteCreateDTO();
+				testSuiteCreateDTO.setName(module.getName());
+				testSuiteCreateDTO.setDescription("TestSuite For " + module.getName());
+				testSuiteCreateDTO.setCategory(category.getName());
+				List<ScriptListDTO> scriptListDTO = findAllScriptsByModule(module.getName());
+				testSuiteCreateDTO.setScripts(scriptListDTO);
+				testSuiteService.createTestSuite(testSuiteCreateDTO);
+
+			}
+		}
+
 		return null != savedScript;
 
 	}
@@ -259,6 +298,10 @@ public class ScriptService implements IScriptService {
 			scriptRepository.delete(script);
 			this.deleteScriptFile(script.getName() + Constants.PYTHON_FILE_EXTENSION, script.getScriptLocation());
 			LOGGER.info("Script deleted successfully: " + scriptId.toString());
+			TestSuite testSuite = testSuiteRepository.findByName(script.getModule().getName());
+			if (testSuite.getScriptTestSuite() == null || testSuite.getScriptTestSuite().isEmpty()) {
+				testSuiteRepository.delete(testSuite);
+			}
 			return true;
 		} catch (Exception e) {
 			LOGGER.error("Error deleting script: " + e.getMessage());
@@ -333,7 +376,7 @@ public class ScriptService implements IScriptService {
 		// If no modules are found for the category, then throw an exception
 		if (modules.isEmpty()) {
 			LOGGER.error("No modules found for the category: " + category);
-			throw new TDKServiceException("No modules found for the category: " + category);
+			return null;
 		}
 
 		for (Module module : modules) {
@@ -365,8 +408,22 @@ public class ScriptService implements IScriptService {
 		if (null != script.getDeviceTypes()) {
 			scriptDTO.setDeviceTypes(commonService.getDeviceTypesAsStringList(script.getDeviceTypes()));
 		}
-		LOGGER.info("Script details: " + scriptDTO.toString());
-		return scriptDTO;
+
+		// Get the script file based on the script name
+		File scriptFile = getPythonFile(script.getName());
+		if (!scriptFile.exists()) {
+			LOGGER.error("Script file not found: " + script.getName());
+			throw new ResourceNotFoundException("Script file", script.getName());
+		}
+		try {
+			// Option 1b: Store script content as base64 encoded string (if necessary)
+			String scriptContentBase64 = Files.readString(scriptFile.toPath(), StandardCharsets.UTF_8);
+			scriptDTO.setScriptContent(scriptContentBase64);
+			return scriptDTO;
+		} catch (Exception e) {
+			LOGGER.error("Error reading script file: " + e.getMessage());
+			throw new TDKServiceException("Error reading script file: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -429,7 +486,7 @@ public class ScriptService implements IScriptService {
 	 */
 	private void saveScriptFile(MultipartFile scriptFile, String scriptLocation) {
 		try {
-			MultipartFile fileWithHeader = addHeader(scriptFile);
+			MultipartFile fileWithHeader = commonService.addHeader(scriptFile);
 			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + scriptLocation
 					+ Constants.FILE_PATH_SEPERATOR);
 			if (!Files.exists(uploadPath)) {
@@ -448,26 +505,6 @@ public class ScriptService implements IScriptService {
 			throw new TDKServiceException("Error saving file: " + ex.getMessage());
 
 		}
-	}
-
-	/*
-	 * The method to add header to script python file
-	 */
-	private MultipartFile addHeader(MultipartFile scriptFile) throws IOException {
-
-		String fileContent = new String(scriptFile.getBytes());
-		String currentYear = Year.now().toString();
-
-		String header = Constants.HEADER_TEMPLATE.replace("CURRENT_YEAR", currentYear);
-
-		// Prepend the header to the file content
-		String updatedContent = header + fileContent;
-		return new MockMultipartFile(scriptFile.getName(), // Name of the file
-				scriptFile.getOriginalFilename(), // Original filename
-				scriptFile.getContentType(), // Content type (e.g., text/plain)
-				updatedContent.getBytes() // Updated content as bytes
-		);
-
 	}
 
 	/**
@@ -1062,6 +1099,35 @@ public class ScriptService implements IScriptService {
 		} catch (Exception e) {
 			LOGGER.error("Error creating ZIP file: " + e.getMessage(), e);
 			throw new TDKServiceException("Error creating ZIP file: " + e.getMessage());
+		}
+	}
+
+	/*
+	 * This method is used to create default test suite for existing module .return -
+	 * void
+	 * 
+	 */
+	public void defaultTestSuiteCreationForExistingModule() {
+		String[] categories = { "RDKV", "RDKB", "RDKC" };
+
+		for (String category : categories) {
+
+			List<ScriptModuleDTO> scripts = findAllScriptByModuleWithCategory(category);
+			if (scripts != null && !scripts.isEmpty()) {
+				for (ScriptModuleDTO scriptModuleDTO : scripts) {
+
+					TestSuiteCreateDTO testSuiteCerateDTO = new TestSuiteCreateDTO();
+					testSuiteCerateDTO.setName(scriptModuleDTO.getModuleName());
+					testSuiteCerateDTO.setDescription("TestSuite For " + scriptModuleDTO.getModuleName());
+					testSuiteCerateDTO.setCategory(category);
+					testSuiteCerateDTO.setScripts(scriptModuleDTO.getScripts());
+					TestSuite testSuite = testSuiteRepository.findByName(testSuiteCerateDTO.getName());
+					if (testSuite == null) {
+						testSuiteService.createTestSuite(testSuiteCerateDTO);
+					}
+
+				}
+			}
 		}
 	}
 
