@@ -59,7 +59,7 @@
     <test_case_id>RDKV_STABILITY_66</test_case_id>
     <test_objective>The objective of this test is to do the stability testing by playing a 4K video from Cobalt for a given amount of time and get the cpu load in every 5 mins.</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RPI,Accelerator</test_setup>
+    <test_setup>Accelerator</test_setup>
     <pre_requisite>1. Wpeframework process should be up and running in the device.</pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>1. Time upto which the video should play.
@@ -180,9 +180,15 @@ if expectedResult in (result.upper() and pre_condition_status):
              print("\n 4k resolution is Supported\n")
              supp_resolutions_dict = eval(supp_resolutions)
              supp_resolutions  = supp_resolutions_dict.get("supportedResolutions")
+             supp_resolutions  = sorted(supp_resolutions)
              print(supp_resolutions)
-             resolution_4k = supp_resolutions[len(supp_resolutions)-1];
-             print(resolution_4k)
+             resolution_4k = [res for res in supp_resolutions if res.startswith("2160p")]
+             # If there are multiple 4K resolutions, take the last one
+             if resolution_4k:
+                resolution_4k = resolution_4k[-1]
+             else:
+                resolution_4k = None  # No 4K resolution found
+             print("resolution_4k=",resolution_4k)             
              params ='{\
                        "videoDisplay": "HDMI0",\
                        "resolution": "'+ resolution_4k +'"}'
