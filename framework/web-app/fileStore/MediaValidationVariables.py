@@ -130,6 +130,13 @@ video_src_url_short_duration_ac3 = test_streams_base_path + "DASH_H264_AC3_30Sec
 video_src_url_short_duration_mp4      = test_streams_base_path + "TDK_Asset_Sunrise_MP4_30Secs.mp4"
 #4K DASH Video URL
 video_src_url_short_duration_4k_dash = test_streams_base_path + "DASH_HEVC_AAC_4K_Only_30Sec/master.mpd"
+#4K MKV URL
+video_src_url_4k_av1_mkv = test_streams_base_path + "TDK_Asset_Waterfall_4K_MKV.mkv"
+#MKV Audio URL
+audio_src_url_mkv = test_streams_base_path + "TDK_Asset_Waterfall_Audio_MKV.mkv"
+#4K VP9 URL
+video_src_url_webm_4k_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM/4k.webm"
+
 
 
 # Long duration src streams. Streams should be of minimum 5-10 minutes
@@ -352,6 +359,12 @@ audio_src_url_dts = test_streams_base_path + "TDK_Asset_Sunrise_DTS.dts"
 
 # Invalid stream URL for testing error scenarios
 video_src_url_invalid = test_streams_base_path + "test_stream_invalid.mpd"
+
+#4K VP9 Video URL
+video_src_url_4k_vp9 = test_streams_base_path + "TDK_Asset_Sunrise_VP9_2160p.webm"
+
+#4K VP9 Video URL
+video_src_url_short_duration_4k_vp9  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_2160p_30Sec.webm"
 
 
 
