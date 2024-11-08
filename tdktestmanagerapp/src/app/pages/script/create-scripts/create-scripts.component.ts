@@ -42,7 +42,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 export class CreateScriptsComponent {
 
   dropdownSettings = {};
-  boxtypeSettings = {};
+  deviceTypeSettings = {};
   versionSettings = {};
   firstFormGroup!:FormGroup;
   secondFormGroup!:FormGroup;
@@ -83,7 +83,7 @@ export class CreateScriptsComponent {
       itemsShowLimit: 3,
       allowSearchFilter: true,
     };
-    this.boxtypeSettings = {
+    this.deviceTypeSettings = {
       singleSelection: false,
       idField: 'subBoxtypeId',
       textField: 'subBoxtypeName',
@@ -102,20 +102,19 @@ export class CreateScriptsComponent {
       allowSearchFilter: true,
     };
     const selectedCategory = localStorage.getItem('scriptCategory');
-    this.selectedCategoryName = selectedCategory?selectedCategory:'RDKV';
+    this.selectedCategoryName = selectedCategory?selectedCategory:'Video';
 
     this.firstFormGroup = this.fb.group({
       scriptname: ['', Validators.required],
       module:['',Validators.required],
       primitivetest: ['', Validators.required],
-      boxtype: ['', Validators.required],
+      deviceType: ['', Validators.required],
       executiontimeout: ['', Validators.required],
       longdurationtest: ['', Validators.required],
       skipexecution: ['', Validators.required],
       synopsis: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
-      // testScript: ['', Validators.required],
       testcaseID: ['', Validators.required],
       testObjective: ['', Validators.required],
       inputParameters: ['', Validators.required],
@@ -123,11 +122,9 @@ export class CreateScriptsComponent {
       priority: [''],
       remarks: [''],
       testType: [''],
-      // supportedBoxType: ['', Validators.required],
       rdkInterface: ['', Validators.required],
       expectedOutput: [''],
       testPreRequisites: [''],
-      // skipped: [''],
       releaseVersion:[''],
       testStub:['']
     });
@@ -243,16 +240,16 @@ export class CreateScriptsComponent {
     `;
   }
   // You can also change editor options dynamically if needed
-  onCodeChange(value: string) {
+  onCodeChange(value: string) : void{
     
   }
 
-  back(){
+  back(): void{
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
   }
 
-  updateOptionalLabel() {
+  updateOptionalLabel() : void{
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
   }

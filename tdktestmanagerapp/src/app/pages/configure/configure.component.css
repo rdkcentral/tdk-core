@@ -17,12 +17,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
- *:not(.material-icons) {
+*:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif !important;
     /* font-family: 'Roboto Slab', serif; */
     /* font-family: 'IBM Plex Serif', serif; */
 }
-
+.container{
+    margin-bottom: 2rem;
+}
 .radiobox-row {
     border-radius: 10px;
     box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
@@ -38,18 +40,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .showrdkgrouprow {
     padding: 0px 40px 5px 40px;
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+    margin-left: 0px;
 }
 
 .heading {
     font-size: 0.85rem;
     margin-top: 8px;
-    /* font-family: Roboto, "Helvetica Neue", sans-serif !important; */
+    margin-right: 20px;
 }
 .commonlist{
     margin-left: 5px;
 }
 .rdkgroup {
-    margin-left: 75px;
+    font-size: 0.85rem;
+    display: inline-flex;
+    justify-content: center;
+    align-items: baseline;
     font-size: 0.85rem;
 }
 
@@ -83,4 +92,35 @@ http://www.apache.org/licenses/LICENSE-2.0
 .form-check-input:checked {
     background-color: #0e6f87;
     border-color: #0e6f87;
+}
+.card-height {
+    height: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #0e6f8794;
+}
+[data-letters]:before {
+    content:attr(data-letters);
+    display:inline-block;
+    font-size:0.8em;
+    width:2.5em;
+    height:2.5em;
+    line-height:2.5em;
+    text-align:center;
+    border-radius:50%;
+    background:#f58233;
+    vertical-align:middle;
+    margin-right:1em;
+    color:white;
+}
+.cat-title{
+    font-size: 1rem;
+    text-decoration: underline;
+    cursor: pointer;
+    color: #fff;
+    font-weight: 400;
+}
+.desc{
+    margin-top: 10px;
 }

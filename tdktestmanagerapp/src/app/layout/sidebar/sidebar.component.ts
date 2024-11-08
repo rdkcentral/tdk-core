@@ -65,7 +65,8 @@ export class SidebarComponent implements OnInit {
           event.url === '/configure/modules-create' || event.url === '/configure/function-create' || event.url === '/configure/parmeter-create' || event.url === '/configure/scripttag-list' || 
           event.url === '/configure/scripttag-create' || event.url === '/configure/scripttag-edit' || event.url === '/configure/list-rdkversions' ||
           event.url === '/configure/create-rdkversions' || event.url === '/configure/edit-rdkversions' || event.url === '/configure/list-primitivetest' || event.url === '/configure/create-primitivetest' || event.url === '/configure/edit-primitivetest' || 
-          event.url === '/configure/modules-edit' || event.url === '/configure/parameter-edit' || event.url === '/configure/function-edit' || event.url ==='/script' || event.url ==='/script/create-scripts' && this.sidenav) {
+          event.url === '/configure/modules-edit' || event.url === '/configure/parameter-edit' || event.url === '/configure/function-edit' || event.url ==='/script' || event.url ==='/script/create-scripts' ||
+          event.url === '/script/testcase-create' || event.url === '/script/create-script-group' && this.sidenav) {
           this.sidenav.close();
         } else {
           this.sidenav.open();

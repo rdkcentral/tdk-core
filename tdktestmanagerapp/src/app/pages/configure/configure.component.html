@@ -14,7 +14,7 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row radiobox-row mt-4">
+    <!-- <div class="row radiobox-row mt-4">
         <div class="col-md-12 radiobox">
             <h3 class="heading">Choose the configuration category :</h3>
             <div class="rdkgroup">
@@ -184,5 +184,223 @@ limitations under the License.
                 </div>
             </div>
         </div>
+    </div> -->
+
+    <div class="row radiobox-row mt-3">
+        <div class="rdkgroup">
+            <h3 class="heading">Select the configuration category :</h3>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
+                    (change)="ischecked('RDKV')" checked>
+                <label class="form-check-label" for="rdkv">Video</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
+                    (change)="ischecked('RDKB')">
+                <label class="form-check-label" for="rdkb">Broadband</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
+                    (change)="ischecked('RDKC')">
+                <label class="form-check-label" for="rdkc">Camera</label>
+            </div>
+        </div>
+    
+
+<div class="row showrdkgrouprow" *ngIf="rdkvVisible">
+   <div class="row">
+        <div class="col" >
+            <mat-card class="card-height">
+                <div>
+                    <a data-letters="BT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a>    
+                </div>
+               <span class="desc">Option to add box type</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="BM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a>
+                <span class="desc">Option to add box manufacturers</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="M"class="cat-title" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+            </mat-card>
+        </div>
+
+   </div>
+   <div class="row mt-3">
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="PT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a>
+            <span class="desc">Option to add Primitive Test</span>
+        </mat-card>
     </div>
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="SV" class="cat-title" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a>
+             <span class="desc">Option to add SoC vendors</span> 
+        </mat-card>
+    </div>
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="RC" class="cat-title" routerLinkActive="active" (click)="navigationToUser('rdkcertification')">RDK Certification</a>
+             <span class="desc">Option to add rdk certification</span> 
+        </mat-card>
+    </div>
+   </div>
+    <div class="row" *ngIf="privileges == 'admin'">
+        <div class="text-center mt-3">
+            <h3 class="heading">Common Configuration</h3>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="G" class="cat-title" routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a>
+                <span class="desc">Option to add Groups</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="UM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('usermanagement')">User Management</a>
+                <span class="desc">Option to manages users</span>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<div class="row showrdkgrouprow" *ngIf="rdkbVisible">
+    <div class="row">
+        <div class="col" >
+            <mat-card class="card-height">
+                <div>
+                    <a data-letters="BT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a>    
+                </div>
+               <span class="desc">Option to add box type</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="BM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a>
+                <span class="desc">Option to add box manufacturers</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="M"class="cat-title" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+            </mat-card>
+        </div>
+
+   </div>
+   <div class="row mt-3">
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="PT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a>
+            <span class="desc">Option to add Primitive Test</span>
+        </mat-card>
+    </div>
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="SV" class="cat-title" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a>
+             <span class="desc">Option to add SoC vendors</span> 
+        </mat-card>
+    </div>
+
+   </div>
+    <div class="row" *ngIf="privileges == 'admin'">
+        <div class="text-center mt-3">
+            <h3 class="heading">Common Configuration</h3>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="G" class="cat-title" routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a>
+                <span class="desc">Option to add Groups</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="UM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('usermanagement')">User Management</a>
+                <span class="desc">Option to manages users</span>
+            </mat-card>
+        </div>
+    </div>
+</div>
+<div class="row showrdkgrouprow" *ngIf="rdkcVisible">
+    <div class="row">
+        <div class="col" >
+            <mat-card class="card-height">
+                <div>
+                    <a data-letters="BT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxtype')">Box Type</a>    
+                </div>
+               <span class="desc">Option to add box type</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="BM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('boxmanufacturers')">Box Manufacturers</a>
+                <span class="desc">Option to add box manufacturers</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="M"class="cat-title" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+            </mat-card>
+        </div>
+
+   </div>
+   <div class="row mt-3">
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="PT" class="cat-title" routerLinkActive="active" (click)="navigationToUser('prmitivetest')">Primitive Test</a>
+            <span class="desc">Option to add Primitive Test</span>
+        </mat-card>
+    </div>
+    <div class="col" >
+        <mat-card class="card-height">
+            
+            <a data-letters="SV" class="cat-title" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC Vendors</a>
+             <span class="desc">Option to add SoC vendors</span> 
+        </mat-card>
+    </div>
+
+   </div>
+    <div class="row" *ngIf="privileges == 'admin'">
+        <div class="text-center mt-3">
+            <h3 class="heading">Common Configuration</h3>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="G" class="cat-title" routerLinkActive="active" (click)="navigationToUser('groups')">Groups</a>
+                <span class="desc">Option to add Groups</span>
+            </mat-card>
+        </div>
+        <div class="col" >
+            <mat-card class="card-height">
+                
+                <a data-letters="UM" class="cat-title" routerLinkActive="active" (click)="navigationToUser('usermanagement')">User Management</a>
+                <span class="desc">Option to manages users</span>
+            </mat-card>
+        </div>
+    </div>
+</div>
+</div>
 </div>
