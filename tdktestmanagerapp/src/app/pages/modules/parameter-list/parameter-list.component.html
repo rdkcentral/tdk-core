@@ -12,26 +12,26 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="container-fluid">
-    <div class="row mt-2">
-        <div class="col-md-12">
-            <h1 class="title">{{configureName.toUpperCase()}} - {{dynamicModuleName}} - {{dynamicFunctionName}} - Parameter List</h1>
+<div class="container">
+    <div class="row borders-btm mt-2">
+        <div class="col-md-11">
+            <h1 class="title">{{categoryName}} - {{dynamicModuleName}} - {{dynamicFunctionName}} - Parameter List</h1>
+        </div>
+        <div class="col-md-1">
+            <div class="btns-grp">
+                <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
+                <button class="create-btn" (click)="createParameterName()" matTooltip="Create Parameter">
+                    <i class="bi bi-plus-circle-fill icon-size"></i>
+                </button>
+            </div>
         </div>
     </div>
     <div class="row table-sec mt-2">
-        <div class="col-md-12 text-end">
-            <button class="back-btn" (click)="goBack()">Back</button>
-            <button class="create-btn" (click)="createParameterName()">Create Parameter</button>
-        </div>
-    </div>
-    <div class="row table-sec mt-2">
-        <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 80%; height: 395px;" [columnDefs]="columnDefs"
+            <ag-grid-angular style="width: 100%; height: 395px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
                 [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true"
                  [context]="this"></ag-grid-angular>
-        </div>
     </div>
 </div>

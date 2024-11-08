@@ -20,12 +20,12 @@ limitations under the License.
                 <h1 class="title">Create TestSuite</h1>
                 <form [formGroup]="testSuiteFrom" (ngSubmit)="testSuiteSubmit()">
                     <div class="row form-row mt 2">
-                        <div class="col-md-10">
+                        <div class="col-md-6">
                             <div class="row mb-1">
                                 <div class="col-md-2">
-                                    <label for="suitename" class="col-form-label">Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="suitename" class="col-form-label name-lable">Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-10">
                                     <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name">
                                     <div *ngIf="testSuiteFormSubmitted && testSuiteFrom.controls['testSuiteName']?.errors" class="text-danger">
                                         <small *ngIf="testSuiteFrom.controls['testSuiteName']?.errors?.['required']">Please enter testsuite name.</small>
@@ -34,13 +34,29 @@ limitations under the License.
                                  
                             </div>
                         </div>
-                        <div class="col-md-2"></div>
+                        <div class="col-md-6">
+                            <div class="row mb-1">
+                                <div class="col-md-2">
+                                    <label for="desc" class="col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                </div>
+                                <div class="col-md-10">
+                                    <textarea rows="5" class="form-control" id="desc" formControlName="description" autocomplete="off" placeholder="Enter description"></textarea>
+                                    <!-- <input type="text" class="form-control" id="suitename" formControlName="testSuiteName" autocomplete="off" placeholder="Enter testsuite name"> -->
+                                    <div *ngIf="testSuiteFormSubmitted && testSuiteFrom.controls['testSuiteName']?.errors" class="text-danger">
+                                        <small *ngIf="testSuiteFrom.controls['testSuiteName']?.errors?.['required']">Please enter description.</small>
+                                    </div>
+                                </div>
+                                 
+                            </div>
+                        </div>
                         <div class="row">
                             <span class="col-form-label">All Scripts</span>
                             <div class="col sort-search">
                                   <button type="button" (click)="toggleSortOrder()" class="sort-button">
-                                    <i class="bi sort-icon" [ngClass]="sortOrder === 'asc' ? 'bi-arrow-up-short' : 'bi-arrow-down-short'"></i>
+                                    <i class="bi sort-icon" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
                                   </button>
+                                  <span class="info"><mat-icon class="info-icon" matTooltip ="Select the required scripts from here . 
+                                    Then drag and drop in the next table. Multi select is also supported">info</mat-icon></span>
                                 <div class="searchrow">
                                     <input 
                                     type="text" 
@@ -50,9 +66,18 @@ limitations under the License.
                                   />
                                 </div>
                             </div>
-                            <div class="col"></div>
+                            <div class="col">
+                                <div class="col sort-search">
+                                    <button type="button" (click)="toggleSortRightSide()" class="sort-button">
+                                      <i class="bi sort-icon" [ngClass]="sortOrderRight === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'"></i>
+                                    </button>
+                                    <span class="info"><mat-icon class="info-icon" matTooltip ="Select and Drag the scripts for ordering. 
+                                        You can also use the sort option to order as per the module">info</mat-icon></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="row">
+                           
                             <div class="col">
                                 <div
                                     id="container1"
@@ -72,7 +97,7 @@ limitations under the License.
                                                 [ngClass]="{ 'selected': selectedItems.has(name) }"
                                                 class="draggable-item"
                                                 >
-                                            {{ name }}
+                                            {{ name.name }}
                                         </div>
                                 </div>
                             </div>
@@ -80,23 +105,28 @@ limitations under the License.
                                 <div
                                     id="container2"
                                     cdkDropList
-                                    [cdkDropListData]="container2"
+                                    [cdkDropListData]="container2ScriptArr"
                                     [cdkDropListConnectedTo]="['container1']"
                                     class="name-list"
                                     (cdkDropListDropped)="drop($event)"
                                     >
-                                    <div *ngIf="container2.length === 0" class="nodata">
-                                        <span>Select and Drag and Drop scripts here...</span>
+                                    <div *ngIf="container2ScriptArr.length === 0" class="nodata">
+                                        <span>Drag & Drop scripts here...</span>
                                     </div>
                                     <div
-                                    *ngFor="let name of container2"
+                                    *ngFor="let item of container2"
                                     cdkDrag
-                                    (click)="selectItem($event, name)"
-                                    [ngClass]="{ 'selected': selectedItems.has(name) }"
+                                    (click)="selectItem($event, item)"
+                                    [ngClass]="{ 'selected': selectedItems.has(item) }"
                                     class="draggable-item"
+                                    
                                   >
-                                    {{ name }}
+                                    {{ item.name }}
                                   </div>
+                                </div>
+
+                                <div *ngIf="(testSuiteFrom.get('container2Scripts')?.hasError('container2Empty') && (testSuiteFrom.get('container2Scripts')?.touched || testSuiteFormSubmitted))">
+                                    <small class="script-err">Add at least one script.</small>
                                 </div>
                             </div>
                         </div>

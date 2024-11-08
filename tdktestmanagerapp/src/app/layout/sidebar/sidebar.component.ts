@@ -53,10 +53,10 @@ export class SidebarComponent implements OnInit {
       if (event instanceof NavigationEnd) {
         if (event.url === '/configure' || event.url === '/configure/user-management' || event.url === '/configure/create-user' ||
           event.url === '/configure/edit-user' || event.url === '/configure/create-group' || event.url === '/configure/group-add' ||
-          event.url === `/configure/group-edit/${localStorage.getItem('userGroupId')}` || event.url === '/configure/list-boxManufacturer' ||
-          event.url === '/configure/create-boxManufacturer' || event.url === '/configure/boxManufacturer-edit' || event.url === '/configure/list-socvendor' ||
-          event.url === '/configure/create-socvendor' || event.url === '/configure/edit-socvendor' ||
-          event.url === '/configure/list-boxtype' || event.url === '/configure/create-boxtype' || event.url === '/configure/edit-boxtype' ||
+          event.url === `/configure/group-edit/${localStorage.getItem('userGroupId')}` || event.url === '/configure/list-oem' ||
+          event.url === '/configure/create-oem' || event.url === '/configure/oem-edit' || event.url === '/configure/list-soc' ||
+          event.url === '/configure/create-soc' || event.url === '/configure/edit-soc' ||
+          event.url === '/configure/list-devicetype' || event.url === '/configure/create-devicetype' || event.url === '/configure/edit-devicetype' ||
           event.url === '/devices' || event.url === '/devices/device-create' || event.url === '/configure/list-streamdetails' ||
           event.url === '/configure/create-streamdetails' || event.url === '/configure/create-radiostreamdetails' || event.url === '/configure/edit-radiostreamdetails' ||
           event.url === '/cofigure/edit-streamdetails' || event.url === '/cofigure/edit-streamdetails' ||
@@ -65,8 +65,8 @@ export class SidebarComponent implements OnInit {
           event.url === '/configure/modules-create' || event.url === '/configure/function-create' || event.url === '/configure/parmeter-create' || event.url === '/configure/scripttag-list' || 
           event.url === '/configure/scripttag-create' || event.url === '/configure/scripttag-edit' || event.url === '/configure/list-rdkversions' ||
           event.url === '/configure/create-rdkversions' || event.url === '/configure/edit-rdkversions' || event.url === '/configure/list-primitivetest' || event.url === '/configure/create-primitivetest' || event.url === '/configure/edit-primitivetest' || 
-          event.url === '/configure/modules-edit' || event.url === '/configure/parameter-edit' || event.url === '/configure/function-edit' || event.url ==='/script' || event.url ==='/script/create-scripts' ||
-          event.url === '/script/testcase-create' || event.url === '/script/create-script-group' && this.sidenav) {
+          event.url === '/configure/modules-edit' || event.url === '/configure/parameter-edit' || event.url === '/configure/function-edit' || event.url ==='/script' || event.url ==='/script/create-scripts' || event.url === '/execution' ||
+          event.url === '/script/create-script-group' || event.url ==='/script/edit-scripts' || event.url ==='/script/custom-testsuite' || event.url === '/script/edit-testsuite' && this.sidenav) {
           this.sidenav.close();
         } else {
           this.sidenav.open();

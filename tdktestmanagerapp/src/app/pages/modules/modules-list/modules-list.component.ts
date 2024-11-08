@@ -40,11 +40,12 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { MatDialog } from '@angular/material/dialog';
 import { ModulesViewComponent } from '../modules-view/modules-view.component';
 import { ModulesService } from '../../../services/modules.service';
+import { MaterialModule } from '../../../material/material.module';
 
 @Component({
   selector: 'app-modules-list',
   standalone: true,
-  imports: [ RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './modules-list.component.html',
   styleUrl: './modules-list.component.css'
 })

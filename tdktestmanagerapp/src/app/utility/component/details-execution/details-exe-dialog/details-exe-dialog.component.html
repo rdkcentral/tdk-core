@@ -1,0 +1,103 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <h1 class="view-title">Execution Details :</h1>
+        <div>
+          <div class="row mt-2">
+            <div>
+                <table class="table table-bordered border-table">
+                    <tbody>
+                          <tr>
+                            <th class="details-row heading">Device Name</th>
+                            <td class="details-row">RPI4-TVM</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">IP</th>
+                            <td class="details-row">100.2.2.2</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">Date of Execution</th>
+                            <td class="details-row">24-10-2024 10:55</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">Execution Time(min)</th>
+                            <td class="details-row">2:20</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">Device Details</th>
+                            <td class="details-row">REALTEK_TDKCI-20241024051846_RERUN_1234600</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">Overall Status</th>
+                            <td class="details-row">SUCCESS</td>
+                          </tr>
+                          <tr>
+                            <th class="details-row heading">Execution Type</th>
+                            <td class="details-row">Single script</td>
+                          </tr>
+                    </tbody>
+                </table>
+            </div>
+          </div>
+          <h2 class="summary">Execution Summary</h2>
+          <div>
+            <table class="table table-bordered border-table">
+                <thead>
+                  <tr>
+                    <th class="details-row heading" scope="col">Total Scripts</th>
+                    <th class="details-row heading" scope="col">Executed</th>
+                    <th class="details-row heading" scope="col">Success</th>
+                    <th class="details-row heading" scope="col">Failure</th>
+                    <th class="details-row heading" scope="col">NA</th>
+                    <th class="details-row heading" scope="col">Skipped</th>
+                    <th class="details-row heading" scope="col">Pending</th>
+                    <th class="details-row heading" scope="col">Undefined</th>
+                    <th class="details-row heading" scope="col">Overall Pass %</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="details-row">3</td>
+                    <td class="details-row">3</td>
+                    <td class="details-row">3</td>
+                    <td class="details-row">0</td>
+                    <td class="details-row">0</td>
+                    <td class="details-row">0</td>
+                    <td class="details-row">0</td>
+                    <td class="details-row">0</td>
+                    <td class="details-row overallpercnt">10</td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+          <div class="row">
+            <div class="mt-2 text-end mb-2">
+              <button
+                class="view-btn close"
+                (click)="onClose()"
+                *ngIf="!data.cancel"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

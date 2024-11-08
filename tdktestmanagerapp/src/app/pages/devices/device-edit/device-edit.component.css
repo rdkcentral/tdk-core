@@ -59,7 +59,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
-    margin-top: 15px;
+    margin-top: 8px;
     margin-right: 10px;
 }
 .reset-btn {
@@ -74,10 +74,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 .config-input{
     width: 185px;
+    font-size: 0.8rem;
 }
 .config-input:read-only { 
     background-color: #e9ecef;
     cursor: auto;
+    font-size: 0.8rem;
  }
  .configbtngrp{
     display: flex;
@@ -100,7 +102,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin: 10px 0px 0px 20px;
     padding: 5px 10px;
     border: 1px solid #00B2DC;
-    height: 45px;
+    height: 35px;
 }
 .delete-config:hover{
     background-color: transparent;
@@ -135,6 +137,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     display: block;
     border: 1px solid #ddd;
     border-radius: 5px;
+    font-size: 0.8rem;
 }
 .existModal-body{
     height: 59%;
@@ -213,6 +216,6 @@ http://www.apache.org/licenses/LICENSE-2.0
     color: #00B2DC;
 }
 .device-input, .config-editbtn, .config-input{
-    height: 45px;
+    height: 35px;
     margin: 10px 4px 0px 4px;
 }

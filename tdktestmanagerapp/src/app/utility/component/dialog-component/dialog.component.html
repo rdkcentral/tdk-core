@@ -13,38 +13,6 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<!-- <h1 mat-dialog-title class="dialog-title" class="divCenter">View Details</h1>
-<div mat-dialog-content class="divCenter">
-    <div class="row offset-1">
-            <div class="col viewdata">
-                <div>id : {{data.id}}</div>
-                <div>stbName : {{data.stbName}}</div>
-                <div>agentMonitorPort : {{data.agentMonitorPort}}</div>
-                <div>boxManufacturerName : {{data.boxManufacturerName}}</div>
-                <div>boxTypeName : {{data.boxTypeName}}</div>
-                <div>category : {{data.category}}</div>
-                <div>gatewayDeviceName : {{data.gatewayDeviceName?data.gatewayDeviceName:'-'}}</div>
-                <div>logTransferPort : {{data.logTransferPort?data.logTransferPort:'-'}}</div>
-                <div>macId : {{data.macId}}</div>
-            </div>
-            <div class="col viewdata">
-                <div>recorderId : {{data.recorderId?data.recorderId:'-'}}</div>
-                <div>socVendorName : {{data.socVendorName}}</div>
-                <div>statusPort : {{data.statusPort}}</div>
-                <div>stbIp : {{data.stbIp}}</div>
-                <div>stbPort : {{data.stbPort}}</div>
-                <div>thunderEnabled : {{data.thunderEnabled}}</div>
-                <div>thunderPort : {{data.thunderPort?data.thunderPort:'-'}}</div>
-                <div>userGroupName : {{data.userGroupName}}</div>
-            </div>
-    </div>
-
-
-</div>
-<div mat-dialog-actions class="divCenter">
-    <button mat-button mat-dialog-close (click)="onCancelDelete()" *ngIf="!data.cancel">Cancel</button>
-</div> -->
-
 <div class="container">
   <div class="row mt-2">
     <div class="col-md-12">
@@ -61,9 +29,9 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="stbname"
-                  value="{{ data.stbName }}"
+                  value="{{ data.deviceName }}"
                   disabled
                 />
               </div>
@@ -77,9 +45,9 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="stbip"
-                  value="{{ data.stbIp }}"
+                  value="{{ data.deviceIp }}"
                   disabled
                 />
               </div>
@@ -91,7 +59,7 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="macaddr"
                   value="{{ data.macId }}"
                   disabled
@@ -99,41 +67,24 @@ limitations under the License.
               </div>
             </div>
             <div class="row mb-3">
-              <label for="boxtype" class="col-md-3 col-form-label"
-                >Box Type<span style="color: red; margin-left: 0.75em"
+              <label for="devicetype" class="col-md-3 col-form-label"
+                >Device Type<span style="color: red; margin-left: 0.75em"
                   >*</span
                 ></label
               >
               <div class="col-md-8">
                 <select
-                  class="form-select"
+                  class="form-select text-size"
                   aria-label="Default select example"
-                  id="boxtype"
+                  id="devicetype"
                   disabled
                 >
-                  <option value="{{ data.boxTypeName }}">
-                    {{ data.boxTypeName }}
+                  <option value="{{ data.deviceTypeName }}">
+                    {{ data.deviceTypeName }}
                   </option>
                 </select>
               </div>
             </div>
-            <div class="row mb-3" *ngIf="data.recorderId !== ''">
-              <label for="macaddr" class="col-md-3 col-form-label"
-                >Recorder Id<span style="color: red; margin-left: 0.75em"
-                  >*</span
-                ></label
-              >
-              <div class="col-md-8">
-                <input
-                  type="text"
-                  class="form-control"
-                  id="macaddr"
-                  value="{{ data.recorderId ? data.recorderId : '' }}"
-                  disabled
-                />
-              </div>
-            </div>
-
             <div class="row mb-3" *ngIf="data.thunderEnabled === true">
               <label for="isthunderEnabled" class="col-md-3 col-form-label"
                 >Is Thunder Enabled</label
@@ -161,7 +112,7 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="thunderport"
                   value="{{ data.thunderPort ? data.thunderPort : '' }}"
                   disabled
@@ -203,57 +154,40 @@ limitations under the License.
           <div class="col">
             <div class="row mb-3">
               <label
-                for="boxManufacturer"
+                for="oem"
                 class="col-md-3 offset-1 col-form-label"
-                >Box Manufacturer<span style="color: red; margin-left: 0.75em"
+                >OEM<span style="color: red; margin-left: 0.75em"
                   >*</span
                 ></label
               >
               <div class="col-md-8">
                 <select
-                  class="form-select"
+                  class="form-select text-size"
                   aria-label="Default select example"
-                  id="boxManufacturer"
+                  id="oem"
                   disabled
                 >
-                  <option value="{{ data.boxManufacturerName }}">
-                    {{ data.boxManufacturerName }}
+                  <option value="{{ data.oemName }}">
+                    {{ data.oemName }}
                   </option>
                 </select>
               </div>
             </div>
             <div class="row mb-3">
-              <label for="socvendor" class="col-md-3 offset-1 col-form-label"
-                >SoC Vendor<span style="color: red; margin-left: 0.75em"
+              <label for="soc" class="col-md-3 offset-1 col-form-label"
+                >SoC<span style="color: red; margin-left: 0.75em"
                   >*</span
                 ></label
               >
               <div class="col-md-8">
                 <select
-                  class="form-select"
+                  class="form-select text-size"
                   aria-label="Default select example"
-                  id="socvendor"
+                  id="soc"
                   disabled
                 >
-                  <option value="{{ data.socVendorName }}">
-                    {{ data.socVendorName }}
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div class="row mb-3">
-              <label for="gateway" class="col-md-3 offset-1 col-form-label"
-                >Gateway</label
-              >
-              <div class="col-md-8">
-                <select
-                  class="form-select"
-                  aria-label="Default select example"
-                  id="gateway"
-                  disabled
-                >
-                  <option value="{{ data.gatewayDeviceName }}">
-                    {{ data.gatewayDeviceName }}
+                  <option value="{{ data.socName }}">
+                    {{ data.socName }}
                   </option>
                 </select>
               </div>
@@ -268,7 +202,7 @@ limitations under the License.
               <div class="col-md-8">
                 <div class="form-check form-check-inline form-check-reverse">
                   <input
-                    class="form-check-input thunder"
+                    class="form-check-input thunder text-size"
                     type="checkbox"
                     checked="{{
                       data.devicePortsConfigured === true ? 'true' : 'false'
@@ -286,7 +220,7 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="agentport"
                   value="{{ data.stbPort ? data.stbPort : '' }}"
                   disabled
@@ -302,7 +236,7 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="agentstatusport"
                   value="{{ data.statusPort ? data.statusPort : '' }}"
                   disabled
@@ -318,7 +252,7 @@ limitations under the License.
               <div class="col-md-8">
                 <input
                   type="text"
-                  class="form-control"
+                  class="form-control text-size"
                   id="agentmonitorport"
                   value="{{
                     data.agentMonitorPort ? data.agentMonitorPort : ''
@@ -329,26 +263,7 @@ limitations under the License.
             </div>
           </div>
         </div>
-        <div class="row table-sec mt-3" *ngIf="showTable">
-          <div class="ag-table mb-3">
-            <ag-grid-angular
-              style="width: 100%; height: 320px"
-              [columnDefs]="columnDefs"
-              [defaultColDef]="defaultColDef"
-              [suppressRowClickSelection]="true"
-              [rowData]="rowData"
-              [class]="themeClass"
-              [pagination]="false"
-              [paginationPageSize]="paginationPageSize"
-              [paginationPageSizeSelector]="paginationPageSizeSelector"
-              (gridReady)="onGridReady($event)"
-              [tooltipShowDelay]="tooltipShowDelay"
-              [animateRows]="true"
-              [context]="this"
-              [components]="frameworkComponents"
-            ></ag-grid-angular>
-          </div>
-        </div>
+
         <div class="row">
           <div class="mt-2 text-end mb-2">
             <button

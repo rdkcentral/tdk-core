@@ -45,7 +45,6 @@ export class UserEditComponent implements OnInit {
     private usermanageserice: UserManagementService,
     private _snakebar: MatSnackBar) {
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
-
     if (!this.user) {
       this.router.navigate(['/user-management']);
     }
@@ -97,7 +96,7 @@ export class UserEditComponent implements OnInit {
       return
     } else {
       let obj = {
-        userId: +this.user.userId,
+        userId: this.user.userId,
         userName: this.editUserForm.value.username,
         password: this.editUserForm.value.userpassword,
         userEmail: this.editUserForm.value.useremail,

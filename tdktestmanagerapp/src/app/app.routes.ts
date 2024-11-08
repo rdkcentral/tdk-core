@@ -31,27 +31,10 @@ import { UserEditComponent } from './pages/user-management/user-edit/user-edit.c
 import { GroupListComponent } from './pages/create-group/group-list/group-list.component';
 import { GroupAddComponent } from './pages/create-group/group-add/group-add.component';
 import { GroupEditComponent } from './pages/create-group/group-edit/group-edit.component';
-import { ListBoxManufacturerComponent } from './pages/box-manufacturer/list-box-manufacturer/list-box-manufacturer.component';
-import { CreateBoxManufacturerComponent } from './pages/box-manufacturer/create-box-manufacturer/create-box-manufacturer.component';
 import { roleGuard } from './auth/role.guard';
-import { EditBoxManufacturerComponent } from './pages/box-manufacturer/edit-box-manufacturer/edit-box-manufacturer.component';
-import { ListSocVendorComponent } from './pages/soc-vendor/list-soc-vendor/list-soc-vendor.component';
-import { CreateSocVendorComponent } from './pages/soc-vendor/create-soc-vendor/create-soc-vendor.component';
-import { EditSocVendorComponent } from './pages/soc-vendor/edit-soc-vendor/edit-soc-vendor.component';
-import { ListBoxtypeComponent } from './pages/box-type/list-box-type/list-boxtype.component';
-import { CreateBoxtypeComponent } from './pages/box-type/create-box-type/create-boxtype.component';
-import { EditBoxTypeComponent } from './pages/box-type/edit-box-type/edit-box-type.component';
 import { authGuard } from './auth/auth.guard';
 import { DevicesComponent } from './pages/devices/devices.component';
 import { DeviceCreateComponent } from './pages/devices/device-create/device-create.component';
-import { ListStreamDetailsComponent } from './pages/stream-details/list-stream-details/list-stream-details.component';
-import { CreateStreamDetailsComponent } from './pages/stream-details/create-stream-details/create-stream-details.component';
-import { CreateRadioStreamDetailsComponent } from './pages/stream-details/create-radio-stream-details/create-radio-stream-details.component';
-import { EditStreamDetailsComponent } from './pages/stream-details/edit-stream-details/edit-stream-details.component';
-import { EditRadioStreamDetailsComponent } from './pages/stream-details/edit-radio-stream-details/edit-radio-stream-details.component';
-import { StreamingtemplatesListComponent } from './pages/streaming-templates/streamingtemplates-list/streamingtemplates-list.component';
-import { StreamingtemplatesCreateComponent } from './pages/streaming-templates/streamingtemplates-create/streamingtemplates-create.component';
-import { StreamingtemplatesEditComponent } from './pages/streaming-templates/streamingtemplates-edit/streamingtemplates-edit.component';
 import { DeviceEditComponent } from './pages/devices/device-edit/device-edit.component';
 import { ModulesListComponent } from './pages/modules/modules-list/modules-list.component';
 import { ParameterListComponent } from './pages/modules/parameter-list/parameter-list.component';
@@ -59,12 +42,6 @@ import { FunctionListComponent } from './pages/modules/function-list/function-li
 import { ModulesCreateComponent } from './pages/modules/modules-create/modules-create.component';
 import { FunctionCreateComponent } from './pages/modules/function-create/function-create.component';
 import { ParameterCreateComponent } from './pages/modules/parameter-create/parameter-create.component';
-import { ListScriptTagComponent } from './pages/script-tag/list-script-tag/list-script-tag.component';
-import { CreateScriptTagComponent } from './pages/script-tag/create-script-tag/create-script-tag.component';
-import { EditScriptTagComponent } from './pages/script-tag/edit-script-tag/edit-script-tag.component';
-import { CreateRdkVersionsComponent } from './pages/rdk-versions/create-rdk-versions/create-rdk-versions.component';
-import { ListRdkVersionsComponent } from './pages/rdk-versions/list-rdk-versions/list-rdk-versions.component';
-import { EditRdkVersionsComponent } from './pages/rdk-versions/edit-rdk-versions/edit-rdk-versions.component';
 import { ListPrimitiveTestComponent } from './pages/primitive-test/list-primitive-test/list-primitive-test.component';
 import { CreatePrimitiveTestComponent } from './pages/primitive-test/create-primitive-test/create-primitive-test.component';
 import { ModulesEditComponent } from './pages/modules/modules-edit/modules-edit.component';
@@ -76,8 +53,20 @@ import { ParameterViewComponent } from './pages/modules/parameter-view/parameter
 import { ScriptListComponent } from './pages/script/script-list/script-list.component';
 import { CreateScriptsComponent } from './pages/script/create-scripts/create-scripts.component';
 import { EditPrimitiveTestComponent } from './pages/primitive-test/edit-primitive-test/edit-primitive-test.component';
-import { TestcaseCreateComponent } from './pages/script/testcase-create/testcase-create.component';
+import { ListOemComponent } from './pages/oem/list-oem/list-oem.component';
+import { CreateOemComponent } from './pages/oem/create-oem/create-oem.component';
+import { EditOemComponent } from './pages/oem/edit-oem/edit-oem.component';
+import { ListSocComponent } from './pages/soc/list-soc/list-soc.component';
+import { CreateSocComponent } from './pages/soc/create-soc/create-soc.component';
+import { EditSocComponent } from './pages/soc/edit-soc/edit-soc.component';
+import { ListDeviceTypeComponent } from './pages/device-type/list-device-type/list-device-type.component';
+import { CreateDeviceTypeComponent } from './pages/device-type/create-device-type/create-device-type.component';
+import { EditDeviceTypeComponent } from './pages/device-type/edit-device-type/edit-device-type.component';
+import { ExecutionComponent } from './pages/execution/execution.component';
 import { CreateScriptGroupComponent } from './pages/script/create-script-group/create-script-group.component';
+import { EditScriptsComponent } from './pages/script/edit-scripts/edit-scripts.component';
+import { CustomTestsuiteComponent } from './pages/script/custom-testsuite/custom-testsuite.component';
+import { EditTestsuiteComponent } from './pages/script/edit-testsuite/edit-testsuite.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -98,26 +87,18 @@ export const routes: Routes = [
             { path: 'configure/create-group', title: 'Group List', component: GroupListComponent, data: { role: ['admin'] }, canActivate: [roleGuard] },
             { path: 'configure/group-add', title: 'Group Add', component: GroupAddComponent },
             { path: 'configure/group-edit/:id', title: 'Group Edit', component: GroupEditComponent },
-            { path: 'configure/list-boxManufacturer', title: 'BoxManufacturer', component: ListBoxManufacturerComponent },
-            { path: 'configure/create-boxManufacturer', title: 'BoxManufacturer Add', component: CreateBoxManufacturerComponent },
-            { path: 'configure/boxManufacturer-edit', title: 'BoxManufacturer Edit', component: EditBoxManufacturerComponent },
-            { path: 'configure/list-socvendor', title: 'SocVendor', component: ListSocVendorComponent },
-            { path: 'configure/create-socvendor', title: 'SocVendor Add', component: CreateSocVendorComponent },
-            { path: 'configure/edit-socvendor', title: 'SocVendor Edit', component: EditSocVendorComponent },
-            { path: 'configure/list-boxtype', title: 'BoxType', component: ListBoxtypeComponent },
-            { path: 'configure/create-boxtype', title: 'BoxType Add', component: CreateBoxtypeComponent },
-            { path: 'configure/edit-boxtype', title: 'BoxType Edit', component: EditBoxTypeComponent },
-            { path: 'configure/list-streamdetails', title: 'StreamDetails', component: ListStreamDetailsComponent },
-            { path: 'configure/create-streamdetails', title: 'StreamDetails Add', component: CreateStreamDetailsComponent },
-            { path: 'configure/create-radiostreamdetails', title: 'RadioStreamDetails Add', component: CreateRadioStreamDetailsComponent },
-            { path: 'cofigure/edit-streamdetails', title: 'StreamDetails Edit', component: EditStreamDetailsComponent },
-            { path: 'configure/edit-radiostreamdetails', title: 'RadioStreamDetails Edit', component: EditRadioStreamDetailsComponent },
+            { path: 'configure/list-oem', title: 'OEM', component: ListOemComponent},
+            { path: 'configure/create-oem', title: 'OEM Add', component: CreateOemComponent },
+            { path: 'configure/oem-edit', title: 'OEM Edit', component: EditOemComponent },
+            { path: 'configure/list-soc', title: 'Soc', component: ListSocComponent },
+            { path: 'configure/create-soc', title: 'Soc Add', component: CreateSocComponent },
+            { path: 'configure/edit-soc', title: 'Soc Edit', component: EditSocComponent },
+            { path: 'configure/list-devicetype', title: 'DeviceType', component: ListDeviceTypeComponent },
+            { path: 'configure/create-devicetype', title: 'DeviceType Add', component: CreateDeviceTypeComponent },
+            { path: 'configure/edit-devicetype', title: 'DeviceType Edit', component: EditDeviceTypeComponent },
             { path: 'devices', title: 'Devices', component: DevicesComponent },
             { path: 'devices/device-create', title: 'Device Create', component: DeviceCreateComponent },
             { path: 'devices/device-edit', title: 'Device Edit', component: DeviceEditComponent },
-            { path: 'configure/streamingtemplates-list', title: 'StreamingTemplates', component: StreamingtemplatesListComponent },
-            { path: 'configure/streamingtemplates-create', title: 'StreamingTemplatesCreate', component: StreamingtemplatesCreateComponent },
-            { path: 'configure/streamingtemplates-edit', title: 'StreamingTemplatesEdit', component: StreamingtemplatesEditComponent },
             { path: 'configure/modules-list', title: 'Modules', component: ModulesListComponent },
             {path: 'configure/function-list', title: 'Function', component:FunctionListComponent},
             {path: 'configure/parameter-list', title: 'Parameter', component:ParameterListComponent},
@@ -130,21 +111,16 @@ export const routes: Routes = [
             {path: 'configure/parmeter-create', title: 'Parmeter Create', component:ParameterCreateComponent},
             {path: 'configure/parameter-edit', title: 'Parmeter Edit', component:ParameterEditComponent},
             {path: 'configure/parameter-view', title: 'Parmeter View', component:ParameterViewComponent},
-            {path: 'configure/scripttag-list', title: 'Script Tags ', component:ListScriptTagComponent},
-            {path: 'configure/scripttag-create', title: 'ScriptTags Create', component: CreateScriptTagComponent},
-            {path: 'configure/scripttag-edit', title: 'ScriptTags Edit', component: EditScriptTagComponent},
-            {path: 'configure/list-rdkversions',title:'List RDK Versions',component:ListRdkVersionsComponent},
-            {path: 'configure/create-rdkversions',title:'Create RDK Versions',component:CreateRdkVersionsComponent},
-            {path: 'configure/edit-rdkversions',title:'Edit RDK Versions',component:EditRdkVersionsComponent},
             {path: 'configure/list-primitivetest',title:'List PrimitiveTest',component:ListPrimitiveTestComponent},
-            // {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
             {path: 'configure/edit-primitivetest',title:'Edit PrimitiveTest',component:EditPrimitiveTestComponent},
             {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
             {path:'script', title:'Script', component:ScriptListComponent},
             {path:'script/create-scripts', title:'Cretae Script', component:CreateScriptsComponent},
-            {path:'script/testcase-create', title:'Create Testcase', component:TestcaseCreateComponent},
-            {path:'script/create-script-group', title:'Create Script Group', component:CreateScriptGroupComponent}
-
+            {path:'script/edit-scripts', title:'Edit Script', component:EditScriptsComponent},
+            {path:'script/create-script-group', title:'Create Script Group', component:CreateScriptGroupComponent},
+            {path:'execution', title:'Execution', component: ExecutionComponent},
+            {path:'script/custom-testsuite', title:'Custom TestSuite', component:CustomTestsuiteComponent},
+            {path:'script/edit-testsuite',title:'Edit TestSuite',component:EditTestsuiteComponent}
         ]
     }
 ];

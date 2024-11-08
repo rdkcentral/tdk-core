@@ -87,3 +87,16 @@ li.nav-item :hover {
 .nav-link{
     padding: 0px 0px 0px 0px;
 }
+.menuitem-logout{
+    min-height: 40px;
+}
+.logout-text{
+    font-size: 0.8rem;
+}
+.logout-icon{
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    margin-right: 5px !important;
+    color: #00B2DC !important;
+}

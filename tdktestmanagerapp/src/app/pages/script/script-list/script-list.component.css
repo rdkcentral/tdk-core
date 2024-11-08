@@ -40,27 +40,72 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
 .download-row{
   text-align: right;
 }
-.heading{
-  font-size: 1rem;
+.heading,.headingView{
+  font-size: 0.78rem;
   margin-top: 8px;
+  margin-bottom: 0;
 }
-
-
+.headingView{
+  margin-left: 80px;
+}
+.rdkgroup,.viewgroup{
+  margin-left: 20px;
+}
+.rdkradio{
+  border: 2px solid #0e6f87;
+}
+.form-check-input:checked {
+  background-color: #0e6f87;
+  border-color: #0e6f87;
+}
+.borders-btm{
+  border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px; 
+  margin: 0 0 0 7px;
+  width: 99%;
+}
 .title {
   font-size: 1rem;
   text-align: center;
-  padding: 1px 0 1px 0;
-  border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-  border-image-slice: 1;
-  border-image-width: 0px 0px 4px 0px;
-  margin: 0;
+  margin-bottom: 10px;
 }
-
+.btns-group{
+  display: flex;
+  margin-left: -5px;
+}
+.testsuite-btn{
+  display: flex;
+  margin-left: -95px;
+}
 .example-header {
   margin-bottom: 10px;
   display: flex;
   justify-content: center;
   align-items: baseline;
+}
+.search{
+  font-size: 0.8rem;
+  display: flex;
+  margin-right: 5px;
+}
+.search-header {
+  margin-bottom: 1px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+.seach-input{
+  width: 60%;
+}
+.info-icon{
+  font-size: 20px;
+  color: #00B2DC;
+  margin-left: 8px;
+}
+.fiter-input:focus{
+  border: 1px solid #0e6f8794;
+  box-shadow: none;
 }
 .download-btn{
   background-color: #fff;
@@ -71,6 +116,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   font-weight: 500;
   letter-spacing: 0.5px;
   cursor: pointer;
+  margin-right: 15px;
 }
 .create{
   background-color: #00B2DC;
@@ -89,7 +135,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   font-size: 18px;
 }
 .download-icon{
-  color: #f58233;
+  color: #00B2DC;
   font-weight: bold;
   font-size: 18px;
 }
@@ -103,10 +149,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   letter-spacing: 0.5px;
   cursor: pointer;
 }
-.btns-group{
-  display: flex;
-  justify-content: space-around;
-}
+
 .tabletitle{
   font-size: 1rem;
   text-align: center;
@@ -118,7 +161,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   border-radius: 50px;
 }
 .extra-icon, .excel-icon{
-color: white;
+background-color: white;
 font-size: 1rem;
 display: flex;
 justify-content: center;
@@ -128,24 +171,26 @@ width:24px;
 }
 
 .edit{
-  background-color: #00B2DC;
-  border-radius: 50px;
+  color: #00B2DC;
+  font-size: 1.3rem;
 }
-.view{
-  background-color: #fdb73b;
-  border-radius: 50px;
+.delete-icon{
+  color: red;
+  font-size: 1.3rem;
 }
 .download{
-  background-color: #f58233;
-  border-radius: 50px;
+  color: #00B2DC;
+  font-size: 1.3rem;
+  padding-left: 5px;
 }
 .download-xlsx{
-  background-color: green;
-  border-radius: 50px;
+  color: green;
+  font-size: 1.1rem;
+  padding-left: 5px;
 }
 .mat-mdc-header-row{
   background-color: #d1d4d4;
-  height: 46px;
+  height: 36px;
   font-size: 0.78rem;
 }
 .mdc-data-table__content{
@@ -165,7 +210,7 @@ width:24px;
 }
 .parentnode{
   position: absolute;
-  margin-top: 0.78rem;
+  margin-top: 0.5rem;
 }
 .mat-tree-viewport {
   height: 310px; 
@@ -201,4 +246,156 @@ width:24px;
 }
 .dropdown-menu li{
   cursor: pointer;
+}
+.mat-mdc-row {
+  height: auto;
+  line-height: 1.6;
+}
+.mat-mdc-icon-button.mat-mdc-button-base {
+  width: 30px;
+  height: 30px;
+  padding: 5px;
+}
+.radiobox{
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+}
+.mat-expansion-panel-header{
+  height: 38px;
+  font-weight: 400;
+}
+.table-heading{
+  background-color: #d1d4d4;
+  margin: 0;
+  height: 35px;
+  display: flex;
+  align-items: center;
+}
+.sort-button{
+  background:none;
+  border: none;
+}
+.icon-sortng{
+  font-size: 1rem;
+}
+.icon-sortng:hover{
+  font-size: 1rem;
+}
+.search-div{
+  position: absolute;
+  z-index: 1;
+  height: 80px;
+  width: 200px;
+  background-color: #fff;
+  box-shadow: 1px 1px 1px 1px #ddd;
+  border-radius: 5px;
+  border: 1px solid #c9c8c8;
+  left: 20%;
+}
+.search-input{
+    position: relative;
+    display: flex;
+    align-items: center;
+    top: 30%;
+    margin: 0 10px 0 10px;
+    width: 90%;
+}
+.search-side{
+  border: 1px solid #0e6f8794;
+  background: none;
+}
+.xlsx-btm{
+  margin-left: 45px;
+}
+.no-arrow::after {
+  display: none;
+}
+.accord-row{
+  margin: 0;
+  cursor: default;
+}
+.accord-head{
+  margin-bottom: 0;
+}
+.accor-title{
+  padding: 0 0 0 0px;
+  cursor: default;
+  z-index: 0;
+}
+.accor-testgroup{
+  padding: 0 0 0 20px;
+  cursor: default;
+  z-index: 0;
+}
+.accordion-button:focus{
+  box-shadow: none;
+}
+
+.border-column{
+  border-right: 1px solid #aaa;
+}
+.filter-btn{
+  float: inline-end;
+}
+.collapse-icon{
+  color: black;
+  font-size: 1rem;
+  transition: transform 0.3s ease;
+  transform: rotate(180deg);
+}
+::ng-deep.mat-mdc-option{
+  min-height: 35px !important;
+  font-size: 0.8rem !important;
+  border-bottom: 1px solid #ddd;
+}
+.accordion-body{
+  padding-top: 0px !important;
+  display: flex;
+  justify-content: center;
+}
+.dropdown-toggle::after {
+  margin-left: .5em;
+  vertical-align: .1em;
+  font-size: 1.3rem;
+  color: #00B2DC;
+}
+.modal-footer{
+  border-top: none;
+  padding: 1rem 1.45rem 2rem 2rem;
+}
+.custom-modal{
+  max-width: 800px;
+  margin-top: 100px;
+}
+.modaltitle{
+  margin: 0 10px 0px 10px;
+  border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  padding: 10px 5px 5px 5px;
+}
+.noRecord{
+  width: 100%; 
+  height: 250px; 
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+}
+.modal-btns {
+  background-color: #00B2DC;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: 1px solid #0e6f8794;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 15px;
+}
+.custom-title{
+  margin-bottom: 0;
+  font-size: 1rem;
 }

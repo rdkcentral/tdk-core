@@ -45,135 +45,34 @@ import { InputComponent } from '../ag-grid-buttons/input/input.component';
 
 export class DialogDelete implements OnInit{
 
-  public columnDefs: ColDef[] = [
-    {
-      headerName: 'Steam Id',
-      field: 'streamingDetailsId',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'subMenu',
-          },
-          {
-            filter: 'agSetColumnFilter',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Channel Type',
-      field: 'channelType',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Audio Format',
-      field: 'audioType',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Video Format',
-      field: 'videoType',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Ocap Id',
-      field: 'ocapId',
-      cellRenderer:'inputCellRenderer',
-    }
-  ];
-  public defaultColDef: ColDef = {
-    flex: 1,
-    menuTabs: ['filterMenuTab'],
-  };
   uploadConfigForm!: FormGroup;
   configData:any;
   configFileName!:string;
   stbNameChange!: string;
   visibleDeviceconfigFile = false;
   newFileName!: string;
-  rowData:any = [];
-  public frameworkComponents :any;
-  public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 5;
-  public paginationPageSizeSelector: number[] | boolean = [5,10, 50, 100];
-  public tooltipShowDelay = 500;
-  gridApi!: any;
-  isGateway!: any;
-  isrecorderId = false;
-  showTable= false;
+
+
 
   constructor(
     public dialogRef: MatDialogRef<DialogDelete>,
     @Inject(MAT_DIALOG_DATA) public data: any ,private service:DeviceService,private fb:FormBuilder) {
-      this.frameworkComponents = {
-        inputCellRenderer: InputComponent
-      }
+      
     }
 
   ngOnInit(): void {
     this.visibilityConfigFile();
-    this.getTableUpdateData();
     this.uploadConfigForm = this.fb.group({
       editorFilename:['',{disabled: true}],
       editorContent: [''],
     });
   }
-  onGridReady(params: any) {
-    this.gridApi = params.api;
-  }
+
   onCancelDelete(): void {
-    localStorage.removeItem('streamData');
-    this.dialogRef.close(false); // Send false on selecting Cancel
+    this.dialogRef.close(false); 
   }
 
-  onConfirmDelete(): void {
-    this.dialogRef.close(true); // Send true on selecting Delete|Okay
-  }
+
   visibilityConfigFile(): void{
     let boxNameConfig = this.data.stbName;
     let boxTypeConfig = this.data.boxTypeName; 
@@ -192,17 +91,7 @@ export class DialogDelete implements OnInit{
         this.visibleDeviceconfigFile = false;
         this.newFileName =`${boxNameConfig}.config`;
       }
-
       this.readFileContent(res.content);
-      // this.uploadConfigForm.patchValue({
-      //   editorFilename: this.configFileName,
-      //   editorContent: this.configData
-      // })
-      // this.readDeviceFileContent(res.content); 
-      // this.uploadDeviceConfigForm.patchValue({
-      //   editorFilename: this.stbNameChange+'.config',
-      //   editorContent: this.configData
-      // })
     })
   }
   readFileContent(file:Blob): void{
@@ -224,27 +113,5 @@ export class DialogDelete implements OnInit{
   formatContent(content:any){
     return content.replace(/#/g, '<br># ');
   }
-  // isBoxtypeGateway(value:any){
-  //   this.service.isBoxtypeGateway(value).subscribe(res=>{
-  //     this.isGateway = res;
-  //     if(this.isGateway === 'true'){
-  //       this.isrecorderId = true;
-  //       this.showTable = true;
-  //       // this.getTableUpdateData();
-  //     }else{
-  //       this.isrecorderId = false;
-  //       this.showTable = false;
-  //     }
-  //   })
-  // }
-  getTableUpdateData(){
-    this.service.getStreamsForDeviceForUpdate(this.data.id).subscribe(res=>{
-      this.rowData = JSON.parse(res);
-      if(this.rowData.length>0){
-        this.showTable = true;
-      }else{
-        this.showTable = false;
-      }
-    })
-  }
+
 }

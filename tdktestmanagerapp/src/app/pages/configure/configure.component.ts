@@ -48,20 +48,20 @@ export class ConfigureComponent implements OnInit {
       this.rdkbVisible = true;
       this.rdkvVisible = false;
       this.rdkcVisible = false;
-      this.service.selectedConfigVal = 'RDKB'
-      this.service.showSelectedCategory = "Broadband"
+      this.service.selectedConfigVal = 'RDKB';
+      this.service.showSelectedCategory = "Broadband";
     } else if (val === 'RDKC') {
       this.rdkcVisible = true;
       this.rdkbVisible = false;
       this.rdkvVisible = false;
-      this.service.selectedConfigVal = 'RDKC'
-      this.service.showSelectedCategory = "Camera"
+      this.service.selectedConfigVal = 'RDKC';
+      this.service.showSelectedCategory = "Camera";
     } else {
       this.rdkvVisible = true;
       this.rdkbVisible = false;
       this.rdkcVisible = false;
-      this.service.selectedConfigVal = 'RDKV'
-      this.service.showSelectedCategory = "Video"
+      this.service.selectedConfigVal = 'RDKV';
+      this.service.showSelectedCategory = "Video";
     }
   }
 
@@ -76,14 +76,14 @@ export class ConfigureComponent implements OnInit {
     if (val === 'usermanagement') {
       this.router.navigate(["configure/user-management"]);
     }
-    if (val === 'boxmanufacturers') {
-      this.router.navigate(["configure/list-boxManufacturer"]);
+    if (val === 'oem') {
+      this.router.navigate(["configure/list-oem"]);
     }
     if (val === 'socvendors') {
-      this.router.navigate(["configure/list-socvendor"]);
+      this.router.navigate(["configure/list-soc"]);
     }
-    if (val === 'boxtype') {
-      this.router.navigate(["configure/list-boxtype"]);
+    if (val === 'devicetype') {
+      this.router.navigate(["configure/list-devicetype"]);
     }
     if (val === 'streamingdetails') {
       this.router.navigate(['configure/list-streamdetails']);
@@ -109,6 +109,8 @@ export class ConfigureComponent implements OnInit {
    * Initializes the component.
    */ 
   ngOnInit(): void {
+    this.service.selectedConfigVal = 'RDKV'
+    this.service.showSelectedCategory = "Video"
     this.privileges = this.service.getPrivileges();
   }
 }

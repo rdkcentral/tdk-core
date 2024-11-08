@@ -13,15 +13,23 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container-fluid">
-    <div class="row mt-2">
-        <div class="col-md-12">
+<div class="container">
+    <div class="row borders-btm mt-2">
+        <div class="col-md-11">
             <h1 class="title">{{categoryName}} Primitive Test</h1>
+        </div>
+        <div class="col-md-1">
+            <div class="btns-grp text-end">
+                <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
+                <button class="create-btn" (click)="createPrimitiveTest()" matTooltip="Create {{categoryName}} Primitive Test">
+                    <i class="bi bi-plus-circle-fill icon-size"></i>
+                </button>
+            </div>
         </div>
     </div>
     <div class="row mt-2">
-        <div class="col-md-6 select-fun">
-            <label for="moduleName" class="col-md-3 col-form-label offset-1">Select Module Name
+        <div class="col-md-7 select-fun">
+            <label for="moduleName" class="col-md-3 col-form-label">Select Module Name
                 <span style="color:red; margin-left: 0.75em;">*</span>
             </label>
             <select class="form-select" aria-label="Default select example" id="selectBoxtype" name="selectBoxtype"
@@ -30,23 +38,16 @@ limitations under the License.
                     {{item}}
                 </option>
             </select>
+        </div>
 
-        </div>
-        <div class="col-md-6 text-end">
-            <button class="back-btn" (click)="goBack()">Back</button>
-            <button class="create-btn" (click)="createPrimitiveTest()">Create {{categoryName}} Primitive
-                Test</button>
-        </div>
     </div>
 
-    <div class="row table-sec mt-3">
-        <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 80%; height: 390px;" [columnDefs]="columnDefs"
+    <div class="row table-sec mt-2">
+            <ag-grid-angular style="width: 100%; height: 390px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
                 [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true" (rowSelected)="onRowSelected($event) "
                 (selectionChanged)="onSelectionChanged($event) " [context]="this"></ag-grid-angular>
-        </div>
     </div>
 </div>

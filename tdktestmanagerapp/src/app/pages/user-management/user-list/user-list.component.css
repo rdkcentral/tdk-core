@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 .container-fluid{
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .title {
     font-size: 1rem;
@@ -34,19 +34,27 @@ http://www.apache.org/licenses/LICENSE-2.0
     width: 99%;
     margin: auto;
 }
-
-.create-btn {
-    background-color: #00B2DC;
-    color: #fff;
+.btn-grp{
+    position: absolute;
+    top: 5px;
+    right: 38px;
+}
+.create-btn,
+.back-btn {
+    background-color: #fff;
     font-size: 0.8rem;
-    padding: 8px 20px;
-    border: 1px solid transparent;
-    border-radius: 8px;
+    padding: 5px 15px;
+    border: 1px solid #0e6f8794;
+    border-radius: 6px;
     font-weight: 500;
     letter-spacing: 0.5px;
     cursor: pointer;
 }
-
-.back {
+.icon-size{
+    color: #00B2DC;
+    font-weight: bold;
+    font-size: 18px;
+}
+.back-btn {
     margin-right: 10px;
 }

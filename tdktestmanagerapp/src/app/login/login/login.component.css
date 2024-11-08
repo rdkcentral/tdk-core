@@ -34,7 +34,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .title {
     color: #00273F;
-    font-size: 1.3rem;
+    font-size: 1.1rem;
     text-align: center;
     padding-top: 10px;
     margin-bottom: 0;
@@ -66,7 +66,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .container-box button {
     background-color: #00B2DC;
     color: #fff;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
     padding: 8px 30px;
     border: 1px solid transparent;
     border-radius: 8px;
@@ -87,15 +87,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .container-box form {
     background-color: #fff;
-    display: flex;
+    display: flex !important;
     justify-content: center;
     flex-direction: column;
     padding: 0 40px;
-    height: 70%;
+    height: 75%;
 }
 
 .registerform {
-    /* height: 90% !important; */
     margin-top: 10px !important;
     overflow-y: auto;
     display: block !important;
@@ -241,7 +240,6 @@ input::placeholder{
 
 .parent {
     height: 90vh;
-    /* margin-top: 5px; */
     display: flex;
     justify-content: center;
     align-items: center;

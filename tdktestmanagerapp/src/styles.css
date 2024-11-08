@@ -28,8 +28,6 @@ body {
 }
 html,body,*:not(.material-icons){
   font-family: Roboto, "Helvetica Neue", sans-serif;
-  /* font-family: 'Roboto Slab', serif; */
-  /* font-family: 'IBM Plex Serif', serif; */
 }
 .mat-typography h1, 
 .mat-typography h2, 
@@ -38,8 +36,13 @@ html,body,*:not(.material-icons){
 .mat-typography h5, 
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
-  /* font-family: 'IBM Plex Serif', serif; */
 }
+.ag-header-cell, .ag-header-group-cell, .ag-header, .ag-header-row{
+  height: 38px !important;
+  min-height: 38px !important;
+}
+
+
 .material-icons {
   font-family: 'Material Icons' !important;
 }
@@ -88,10 +91,10 @@ html,body,*:not(.material-icons){
   .title , .title2,.streaming-details{
     color: #fff;
   }
-  .radiobox-row{
+  /* .radiobox-row{
     border: 1px solid #ddd;
     color: #fff;
-  }
+  } */
   .ag-theme-quartz {
     --ag-header-background-color: #000;
     --ag-background-color: #000;
@@ -146,9 +149,9 @@ html,body,*:not(.material-icons){
   .title {
     color: #00273F;
   }
-  .radiobox-row {
+  /* .radiobox-row {
     border: 1px solid #0000002e;
-  } 
+  }  */
   .light-footer1{
     fill: #00B2DC;
   }
@@ -240,8 +243,8 @@ html,body,*:not(.material-icons){
 .view-btn {
   background-color: #00B2DC !important;
   color: #fff;
-  font-size: 1rem;
-  padding: 10px 30px;
+  font-size: 0.8rem;
+  padding: 8px 20px;
   border: 1px solid transparent;
   border-radius: 8px;
   font-weight: 500;
@@ -263,13 +266,10 @@ html,body,*:not(.material-icons){
   padding: 8px 20px !important;
 }
 
-/* .ag-theme-quartz .ag-header-cell:not(.no-sort) .ag-header-icon {
-  display: block !important;
-  opacity: 1 !important;
-} */
-
 ::ng-deep .mat-focused{
   border: 1px solid #ddd !important;
 }
-
+.text-size{
+  font-size: 0.8rem !important;
+}
 

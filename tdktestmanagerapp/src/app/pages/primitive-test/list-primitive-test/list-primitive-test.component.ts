@@ -38,6 +38,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AuthService } from '../../../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrimitiveTestService } from '../../../services/primitive-test.service';
+import { MaterialModule } from '../../../material/material.module';
 
 /**
  * Component for listing primitive tests.
@@ -45,7 +46,7 @@ import { PrimitiveTestService } from '../../../services/primitive-test.service';
 @Component({
   selector: 'app-list-primitive-test',
   standalone: true,
-  imports: [FooterComponent, RouterLink, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular],
+  imports: [FooterComponent,MaterialModule, RouterLink, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular],
   templateUrl: './list-primitive-test.component.html',
   styleUrl: './list-primitive-test.component.css'
 })

@@ -81,7 +81,8 @@ export class FunctionEditComponent {
           }, 1000);
         },
         error:(err)=>{
-          this._snakebar.open(err.error?err.error:(JSON.parse(err.error)).message, '', {
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

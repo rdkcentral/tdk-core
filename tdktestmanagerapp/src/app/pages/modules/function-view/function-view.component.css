@@ -27,7 +27,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .chip-btn{
     background-color: #00B2DC;
     color: #fff;
-    font-size: 1.3rem;
+    font-size: 0.8rem;
     border: 1px solid transparent;
     border-radius: 3px;
     letter-spacing: 0.5px;
@@ -37,7 +37,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .chip-cancel-btn{
     background: none;
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.8rem;
     border: none;
     cursor: pointer;
 }
@@ -45,4 +45,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     position: absolute;
     bottom: 40px;
     right: 25px;
+}
+.input-text{
+    font-size: 0.8rem;
 }

@@ -28,16 +28,14 @@ import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef,IMultiFilterParams } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
-import { BoxManufactureService } from '../../../services/box-manufacture.service';
 import { DeviceService } from '../../../services/device.service';
-import { SocVendorService } from '../../../services/soc-vendor.service';
-import { BoxtypeService } from '../../../services/boxtype.service';
 import { InputComponent } from '../../../utility/component/ag-grid-buttons/input/input.component';
-import { StreamingTemplatesService } from '../../../services/streaming-templates.service';
 import {  Editor, NgxEditorModule } from 'ngx-editor';
-import { Modal } from 'bootstrap';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
+import { OemService } from '../../../services/oem.service';
+import { DevicetypeService } from '../../../services/devicetype.service';
+import { SocService } from '../../../services/soc.service';
 
 @Component({
   selector: 'app-device-create',
@@ -59,9 +57,9 @@ export class DeviceCreateComponent implements OnInit{
   showPortFile = false;
   showConfigPort = false;
   showConfigPortB = false;
-  allBoxType:any;
-  allboxManufacture:any;
-  allsocVendors:any;
+  allDeviceType:any;
+  alloem:any;
+  allsoc:any;
   allGatewayDevices:any;
   streamingTable= false;
   errormessage!:string;
@@ -189,7 +187,7 @@ export class DeviceCreateComponent implements OnInit{
   configFileName!:string;
   stbNameChange: any;
   filesList:any[]=[];
-  boxTypeValue: any;
+  deviceTypeValue: any;
   visibleDeviceconfigFile = false;
   deviceEditor = true;
   uploadConfigSec = false;
@@ -214,16 +212,16 @@ export class DeviceCreateComponent implements OnInit{
   uploadExistConfigHeading!: string;
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
-  selectedBoxType:any;
+  selectedDeviceType:any;
   isThunderPresent: any;
   streamingTempList:any[]=[];
   visibleStreamingList = false;
-  thunderTooltip: string = 'Please enter stbname and boxtype before you check this box';
+  thunderTooltip: string = 'Please enter devicename and boxtype before you check this box';
 
   constructor( private router: Router,private fb:FormBuilder,
-    private _snakebar :MatSnackBar, private boxManufactureService:BoxManufactureService, 
-    private service:DeviceService, private socVendorService:SocVendorService, private boxtypeService:BoxtypeService,
-    private streamingService :StreamingTemplatesService, private renderer:Renderer2,public dialog:MatDialog
+    private _snakebar :MatSnackBar, private oemService:OemService, 
+    private service:DeviceService, private socService:SocService, private deviceTypeService:DevicetypeService,
+    private renderer:Renderer2,public dialog:MatDialog
   ) { 
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     this.frameworkComponents = {
@@ -262,29 +260,27 @@ export class DeviceCreateComponent implements OnInit{
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.deviceForm = new FormGroup({
-      stbname: new FormControl<string | null>('', { validators: Validators.required }),
-      stbip: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
+      devicename: new FormControl<string | null>('', { validators: Validators.required }),
+      deviceip: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
-      boxtype: new FormControl<string | null>('', { validators: Validators.required }),
-      boxmanufacturer: new FormControl<string | null>('', { validators: Validators.required }),
-      socvendor: new FormControl<string | null>('', { validators: Validators.required}),
-      gateway: new FormControl<string | null>(''),
+      devicetype: new FormControl<string | null>('', { validators: Validators.required }),
+      oem: new FormControl<string | null>('', { validators: Validators.required }),
+      soc: new FormControl<string | null>('', { validators: Validators.required}),
       streamingTemp: new FormControl<string | null>(''),
       thunderport:new FormControl<string | null>(''),
       isThunder: new FormControl<boolean | null>({value: false, disabled: true}),
       configuredevicePorts:new FormControl<boolean | null>(false),
       agentport: new FormControl<string | null>(this.agentport),
       agentstatusport: new FormControl<string | null>(this.agentStatusPort),
-      agentmonitorport: new FormControl<string | null>(this.agentMonitoPort),
-      recorderId: new FormControl<string | null>('')
+      agentmonitorport: new FormControl<string | null>(this.agentMonitoPort)
     })
     this.rdkBForm = new FormGroup({
       gatewayName: new FormControl<string | null>('', { validators: Validators.required }),
       gatewayIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
-      boxtype: new FormControl<string | null>('', { validators: Validators.required }),
-      boxmanufacturer: new FormControl<string | null>('', { validators: Validators.required }),
-      socvendor: new FormControl<string | null>('', { validators: Validators.required}),
+      devicetype: new FormControl<string | null>('', { validators: Validators.required }),
+      oem: new FormControl<string | null>('', { validators: Validators.required }),
+      soc: new FormControl<string | null>('', { validators: Validators.required}),
       agentPortb: new FormControl<string | null>(''),
       agentStatusportB:new FormControl<string | null>(''),
       agentMonitorportB:new FormControl<string | null>('')
@@ -293,19 +289,16 @@ export class DeviceCreateComponent implements OnInit{
       cameraName: new FormControl<string | null>('', { validators: Validators.required }),
       stbIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
-      boxtype: new FormControl<string | null>('', { validators: Validators.required }),
-      boxmanufacturer: new FormControl<string | null>('', { validators: Validators.required }),
-      socvendor: new FormControl<string | null>('', { validators: Validators.required}),
+      devicetype: new FormControl<string | null>('', { validators: Validators.required }),
+      oem: new FormControl<string | null>('', { validators: Validators.required }),
+      soc: new FormControl<string | null>('', { validators: Validators.required}),
       agentPortb: new FormControl<string | null>(this.agentport),
       agentStatusportB:new FormControl<string | null>(this.agentStatusPort),
       agentMonitorportB: new FormControl<string | null>(this.agentMonitoPort)
     })
-    this.streamingService.getstreamingdetails().subscribe(res=>{
-      this.rowData = res;
-    })
-    this.getAllboxType();
-    this.getAllboxmanufacture();
-    this.getAllsocVendors();
+    this.getAlldeviceType();
+    this.getAllOem();
+    this.getAllsoc();
     this.editor = new Editor();
     this.editor2 = new Editor();
     this.uploadConfigForm = this.fb.group({
@@ -318,7 +311,6 @@ export class DeviceCreateComponent implements OnInit{
       editorContent: ['',[Validators.required]],
       uploadConfigFileModal:['']
     });
-    this.getTemplatelist();
 
   }
 
@@ -327,8 +319,8 @@ export class DeviceCreateComponent implements OnInit{
    */
   checkIsThunderValidity(): void{
     const stbName = this.stbNameChange;
-    const boxType = this.boxTypeValue;
-    if(stbName && boxType){
+    const deviceType = this.deviceTypeValue;
+    if(stbName && deviceType){
       this.deviceForm.get('isThunder')?.enable();
       this.thunderTooltip = 'Check the box for devices with Rdkservice image';
     }else{
@@ -336,7 +328,7 @@ export class DeviceCreateComponent implements OnInit{
       this.deviceForm.get('isThunder')?.setValue(false);
       this.showPortFile = false;
       this.isThunderchecked = false;
-      this.thunderTooltip = 'Please enter stbname and boxtype before you check this box';
+      this.thunderTooltip = 'Please enter devicename and boxtype before you check this box';
     }
   }
 
@@ -347,36 +339,28 @@ export class DeviceCreateComponent implements OnInit{
   onGridReady(params: any): void {
     this.gridApi = params.api;
   }
-  /**
-   * The method render the list of streaming template.
-   */
-  getTemplatelist():void{
-    this.service.streamingTemplateList().subscribe(res=>{
-      this.streamingTempList = JSON.parse(res);
-    })
-  }
  /**
    * list of all boxtype.
    */
-  getAllboxType(): void{
-    this.boxtypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
-      this.allBoxType = (JSON.parse(res));
+  getAlldeviceType(): void{
+    this.deviceTypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
+      this.allDeviceType = (JSON.parse(res));
     })
   }
    /**
    * list of all boxmanufacturer.
    */
-  getAllboxmanufacture(): void{
-    this.boxManufactureService.getboxManufactureByList(this.selectedDeviceCategory).subscribe(res=>{
-      this.allboxManufacture = JSON.parse(res); 
+  getAllOem(): void{
+    this.oemService.getOemByList(this.selectedDeviceCategory).subscribe(res=>{
+      this.alloem = JSON.parse(res); 
     })
   }
    /**
    * list of all socVendors.
    */
-  getAllsocVendors(): void{
-    this.socVendorService.getSocVendor(this.selectedDeviceCategory).subscribe(res=>{
-      this.allsocVendors = JSON.parse(res);  
+  getAllsoc(): void{
+    this.socService.getSoc(this.selectedDeviceCategory).subscribe(res=>{
+      this.allsoc = JSON.parse(res);  
     })
   }
   /**
@@ -395,57 +379,18 @@ export class DeviceCreateComponent implements OnInit{
       }
     }
   }
-  streamTempChange(event:any):void{
-    const tempName = event.target.value;
-    if(tempName != null || tempName != ''){
-      this.service.streamingDetailsByTemplate(tempName).subscribe(res=>{
-        this.rowData = JSON.parse(res);
-      })
-    }
-    if(tempName === null || tempName === ''){
-      this.streamingService.getstreamingdetails().subscribe(res=>{
-        this.rowData = res;
-      })
-    }
-  }
+
   /**
-   * This methos is change the boxtype 
+   * This methos is change the devicetype 
   */ 
-    boxtypeChange(event:any): void{
+    devicetypeChange(event:any): void{
       this.visibleDeviceconfigFile = false;
       let value = event.target.value;
-      this.boxTypeValue = value;
-      const dropdown = event.target as HTMLSelectElement
+      this.deviceTypeValue = value;
       this.checkIsThunderValidity();
-      this.service.isBoxtypeGateway(value).subscribe(res=>{
-        this.isGateway = res;
-        if(this.isGateway === 'true'){
-          this.isrecorderId = true;
-        }else{
-          this.isrecorderId = false;
-        }
-      })
-      const selectedType = this.allBoxType.find((item:any) => item.boxTypeName === dropdown.value)
-      this.selectedBoxType = selectedType;
-      localStorage.setItem('boxtypeDropdown',JSON.stringify(selectedType));
-      if( selectedType.type === 'CLIENT' || selectedType.type ==='STAND_ALONE_CLIENT'){
-        this.visibleGateway = true;
-        this.visibleStreamingList = false;
-        this.service.getlistofGatewayDevices(this.selectedDeviceCategory).subscribe(res=>{
-          this.allGatewayDevices = JSON.parse(res)
-        })
-      }else{
-        this.visibleGateway = false;
-        this.visibleStreamingList = true;
-      }
       if(this.isThunderchecked){
         this.showPortFile = true;
         this.visibilityConfigFile();
-      }
-      if (this.selectedBoxType.type ==='STAND_ALONE_CLIENT' || this.selectedBoxType.type ==='GATEWAY') {
-        this.streamingTable = !this.isThunderchecked;
-      } else if (this.selectedBoxType.type ==="CLIENT") {
-        this.streamingTable = false;
       }
     }
   /**
@@ -456,16 +401,9 @@ export class DeviceCreateComponent implements OnInit{
     this.isThunderchecked = !this.isThunderchecked;
     if(this.isThunderchecked){
       this.showPortFile = true;
-      this.streamingTable = false;
       this.visibilityConfigFile();
     }else{
       this.showPortFile = false;
-      this.streamingTable = false;
-    }
-    if (this.selectedBoxType.type ==='STAND_ALONE_CLIENT' || this.selectedBoxType.type ==='GATEWAY') {
-      this.streamingTable = !this.isThunderchecked;
-    } else if (this.selectedBoxType.type ==="CLIENT") {
-      this.streamingTable = false;
     }
   }
 
@@ -473,9 +411,9 @@ export class DeviceCreateComponent implements OnInit{
    * Show the Config file or device.config file beased on stbname and boxtype
   */  
   visibilityConfigFile(): void{
-    let boxNameConfig = this.deviceForm.value.stbname;
-    let boxTypeConfig = this.deviceForm.value.boxtype; 
-    this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig)
+    let boxNameConfig = this.deviceForm.value.devicename;
+    let deviceTypeConfig = this.deviceForm.value.devicetype; 
+    this.service.downloadDeviceConfigFile(boxNameConfig,deviceTypeConfig)
     .subscribe({ 
       next:(res)=>{
       this.configFileName = res.filename;
@@ -484,11 +422,11 @@ export class DeviceCreateComponent implements OnInit{
       }else{
         this.visibleDeviceconfigFile = false;
       }
-      if(this.configFileName === `${boxTypeConfig}.config`){
+      if(this.configFileName === `${deviceTypeConfig}.config`){
         this.visibleDeviceconfigFile = true;
-        this.newFileName =`${boxTypeConfig}.config`;
+        this.newFileName =`${deviceTypeConfig}.config`;
       }
-      if(this.configFileName !== `${boxNameConfig}.config` && this.configFileName !== `${boxTypeConfig}.config`){
+      if(this.configFileName !== `${boxNameConfig}.config` && this.configFileName !== `${deviceTypeConfig}.config`){
         this.visibleDeviceconfigFile = false;
         this.newFileName =`${boxNameConfig}.config`;
       }
@@ -511,7 +449,7 @@ export class DeviceCreateComponent implements OnInit{
    * Reading the configfile
   */ 
   readFileContent(file:Blob): void{
-    let boxNameConfig = this.deviceForm.value.stbname;
+    let boxNameConfig = this.deviceForm.value.devicename;
     const reader = new FileReader();
     reader.onload = ()=>{
       let htmlContent = reader.result
@@ -588,6 +526,7 @@ export class DeviceCreateComponent implements OnInit{
    * Go back to the previous page.
    */
   goBack(): void{
+    localStorage.removeItem('deviceCategory');
     this.router.navigate(["/devices"]);
   }
   /**
@@ -604,34 +543,17 @@ export class DeviceCreateComponent implements OnInit{
     if(this.deviceForm.invalid){
      return
     }else{
-     if(this.streamingTable==true){
-      const tableData :any[]=[];
-      this.gridApi.forEachNode((element: any) => {
-       tableData.push(element.data)
-       this.streamingMapObj = tableData.map((streamingDetailsId: any, ocapId: any) => ({streamId: streamingDetailsId.streamingDetailsId ,ocapId: streamingDetailsId.ocapId}));
-      });
-      this.rowData.forEach((row:any)=>{
-      row.showError = !row.ocapId
-      })
-     for (let i = 0; i < this.streamingMapObj.length; i++) {
-      this.checkOcapId = this.streamingMapObj[i];
-     }
-      this.streamingMapObj = [...this.streamingMapObj]
-    }
-
      let obj ={
-      stbIp : this.deviceForm.value.stbip,
-      stbName : this.deviceForm.value.stbname,
-      stbPort: this.deviceForm.value.agentport,
+      deviceIp : this.deviceForm.value.deviceip,
+      deviceName : this.deviceForm.value.devicename,
+      devicePort: this.deviceForm.value.agentport,
       statusPort: this.deviceForm.value.agentstatusport,
       agentMonitorPort: this.deviceForm.value.agentmonitorport,
       macId: this.deviceForm.value.macaddr,
-      boxTypeName: this.deviceForm.value.boxtype,
-      boxManufacturerName: this.deviceForm.value.boxmanufacturer,
-      socVendorName: this.deviceForm.value.socvendor,
+      deviceTypeName: this.deviceForm.value.devicetype,
+      oemName: this.deviceForm.value.oem,
+      socName: this.deviceForm.value.soc,
       devicestatus : "FREE",
-      recorderId : this.deviceForm.value.recorderId,
-      gatewayDeviceName : this.deviceForm.value.gateway,
       thunderPort : this.deviceForm.value.thunderport,
       userGroupName : this.loggedinUser.userGroupName,
       category : this.selectedDeviceCategory,
@@ -651,7 +573,8 @@ export class DeviceCreateComponent implements OnInit{
         }, 1000);
       },
       error:(err)=>{
-        this._snakebar.open(err.error?err.error:(JSON.parse(err.error)).message, '', {
+        let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -671,13 +594,13 @@ export class DeviceCreateComponent implements OnInit{
       return
      }else{
       let rdkbObj={
-        stbIp : this.rdkBForm.value.gatewayIp,
-        stbName : this.rdkBForm.value.gatewayName,
+        deviceIp : this.rdkBForm.value.gatewayIp,
+        deviceName : this.rdkBForm.value.gatewayName,
         macId: this.rdkBForm.value.macaddr,
-        boxTypeName: this.rdkBForm.value.boxtype,
-        boxManufacturerName: this.rdkBForm.value.boxmanufacturer,
-        socVendorName: this.rdkBForm.value.socvendor,
-        stbPort: this.rdkBForm.value.agentPortb,
+        deviceTypeName: this.rdkBForm.value.devicetype,
+        oemName: this.rdkBForm.value.oem,
+        socName: this.rdkBForm.value.soc,
+        devicePort: this.rdkBForm.value.agentPortb,
         statusPort: this.rdkBForm.value.agentStatusportB,
         agentMonitorPort: this.rdkBForm.value.agentMonitorportB,
         devicestatus : "FREE",
@@ -716,13 +639,13 @@ export class DeviceCreateComponent implements OnInit{
       return
      }else{
       let rdkcObj = {
-        stbName:this.rdkCForm.value.cameraName,
-        stbIp: this.rdkCForm.value.stbIp,
+        deviceName:this.rdkCForm.value.cameraName,
+        deviceIp: this.rdkCForm.value.stbIp,
         macId: this.rdkCForm.value.macaddr,
-        boxTypeName: this.rdkCForm.value.boxtype,
-        boxManufacturerName: this.rdkCForm.value.boxmanufacturer,
-        socVendorName: this.rdkCForm.value.socvendor,
-        stbPort: this.rdkCForm.value.agentPortb,
+        deviceTypeName: this.rdkCForm.value.devicetype,
+        oemName: this.rdkCForm.value.oem,
+        socName: this.rdkCForm.value.soc,
+        devicePort: this.rdkCForm.value.agentPortb,
         statusPort:this.rdkCForm.value.agentStatusportB,
         agentMonitorPort:this.rdkCForm.value.agentMonitorportB,
         category : this.selectedDeviceCategory
@@ -762,9 +685,9 @@ export class DeviceCreateComponent implements OnInit{
       this.uploadConfigForm.get('editorFilename')?.disable();
     }
     if(this.configFileName ==='sampleDevice.config'){
-      let boxNameConfig = this.deviceForm.value.stbname;
-      let boxTypeConfig = this.deviceForm.value.boxtype;
-      this.fileNameArray.push(boxNameConfig,boxTypeConfig);
+      let boxNameConfig = this.deviceForm.value.devicename;
+      let deviceTypeConfig = this.deviceForm.value.devicetype;
+      this.fileNameArray.push(boxNameConfig,deviceTypeConfig);
       this.currentIndex = (this.currentIndex + 1) % this.fileNameArray.length;
       this.uploadConfigForm.patchValue({
         editorFilename: `${this.fileNameArray[this.currentIndex]}.config`,
@@ -1073,7 +996,7 @@ export class DeviceCreateComponent implements OnInit{
     this.newDeviceDialogRef.close();
   }
   downloadConfigFile(){
-    this.service.downloadDeviceConfigFile(this.stbNameChange,this.boxTypeValue).subscribe({
+    this.service.downloadDeviceConfigFile(this.stbNameChange,this.deviceTypeValue).subscribe({
       next:(res)=>{
         const filename = res.filename;
         const blob = new Blob([res.content], { type: res.content.type || 'application/json' });

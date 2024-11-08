@@ -24,3 +24,8 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 bootstrapApplication(AppComponent, appConfig)
   .catch((err) => console.error(err));
+(window as any).MonacoEnvironment = {
+  getWorkerUrl : function(moduleId:any, label:any){
+    return `./assets/monaco-editor/min/vs/base/worker/workerMain.js`
+  }
+}

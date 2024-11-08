@@ -50,12 +50,12 @@ export class UsergroupService {
     return this.http.post(`${apiUrl}api/v1/usergroup/create`, params, { headers, responseType: 'text' })
   }
 
-  updateUserGroup(id: any, data: any): Observable<any> {
+  updateUserGroup(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/usergroup/update/${id}`, data, { headers })
+    return this.http.put(`${apiUrl}api/v1/usergroup/update`, data, { headers, responseType: 'text' })
   }
 
   deleteUserGroup(id: any): Observable<any> {

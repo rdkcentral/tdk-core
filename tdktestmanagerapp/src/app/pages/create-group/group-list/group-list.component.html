@@ -17,14 +17,20 @@ limitations under the License.
     <div class="row mt-2">
         <div class="col-md-12">
             <h1 class="title">User Groups List</h1>
+            <div class="btn-grp text-end">
+                <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
+                <button class="create-btn" (click)="createGroup()" matTooltip="Create Group">
+                    <i class="bi bi-plus-circle-fill icon-size"></i>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="row table-sec">
+    <!-- <div class="row table-sec">
         <div class="col-md-12 text-end">
             <button class="back-btn" (click)="goBack()">Back</button>
-            <button class="create-btn" (click)="createGroup()">Create Group</button>
+            <button class="create-btn" ></button>
         </div>
-    </div>
+    </div> -->
     <div class="row table-sec mt-2">
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
             <ag-grid-angular style="width: 80%; height: 395px;" [columnDefs]="columnDefs"

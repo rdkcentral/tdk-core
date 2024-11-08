@@ -37,8 +37,8 @@ limitations under the License.
     <mat-icon class="material-icons">account_circle</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
-    <a mat-menu-item routerLink="/change-password"><mat-icon>vpn_key</mat-icon>Change Password</a>
-    <button mat-menu-item (click)="logOut()"><mat-icon>exit_to_app</mat-icon>Sign Out</button>
+    <a mat-menu-item routerLink="/change-password" class="menuitem-logout"><mat-icon class="logout-icon">vpn_key</mat-icon><span class="logout-text">Change Password</span></a>
+    <button mat-menu-item (click)="logOut()"><mat-icon class="logout-icon">exit_to_app</mat-icon><span class="logout-text">Sign Out</span></button>
   </mat-menu>
 </mat-toolbar>
 <nav class="navbar navbar-expand-lg header">
@@ -51,8 +51,8 @@ limitations under the License.
     <div class="displaymenu" id="navbarText">
       <ul class="navbar-nav menulist">
         <li class="nav-item">
-          <a class="nav-link text-white menugap" aria-current="page" routerLink="/execution"
-            routerLinkActive="active">EXECUTION</a>
+          <a class="nav-link text-white menugap" routerLink="/execution" routerLinkActive="active"
+          [routerLinkActiveOptions]="{exact:false}">EXECUTION</a>
         </li>
         <li class="nav-item">
           <a class="nav-link text-white menugap" routerLink="/analysis" routerLinkActive="active">ANALYSIS</a>

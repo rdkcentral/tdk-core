@@ -39,12 +39,13 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ParameterViewComponent } from '../parameter-view/parameter-view.component';
+import { MaterialModule } from '../../../material/material.module';
 
 
 @Component({
   selector: 'app-parameter-list',
   standalone: true,
-  imports: [ RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './parameter-list.component.html',
   styleUrl: './parameter-list.component.css'
 })
@@ -107,6 +108,7 @@ export class ParameterListComponent {
   selectedRowCount = 0;
   dynamicModuleName!:string;
   dynamicFunctionName!:string;
+  categoryName: any;
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice: ModulesService,
@@ -121,6 +123,7 @@ export class ParameterListComponent {
     this.dynamicFunctionName = functiondata.functionName;
     this.configureName = this.authservice.selectedConfigVal;
     this.parameterByFunction();
+    this.categoryName = this.authservice.showSelectedCategory;
   }
   parameterByFunction():void{
     this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe((data) => {

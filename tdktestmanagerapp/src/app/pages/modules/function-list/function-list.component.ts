@@ -40,11 +40,12 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FunctionViewComponent } from '../function-view/function-view.component';
+import { MaterialModule } from '../../../material/material.module';
 
 @Component({
   selector: 'app-function-list',
   standalone: true,
-  imports: [ RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './function-list.component.html',
   styleUrl: './function-list.component.css'
 })
@@ -93,6 +94,7 @@ export class FunctionListComponent {
   rowIndex!: number | null;
   selectedRowCount = 0;
   dynamicModuleName!:string;
+  categoryName: any;
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice:ModulesService, public dialog:MatDialog,
@@ -106,7 +108,7 @@ export class FunctionListComponent {
     this.dynamicModuleName = data.moduleName;
     this.configureName = this.authservice.selectedConfigVal;
     this.functionListByModule();
-    
+    this.categoryName = this.authservice.showSelectedCategory;
   }
   /**
    * Function to get the list of function by module name.
