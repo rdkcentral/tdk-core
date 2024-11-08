@@ -42,6 +42,8 @@ import { MatTreeModule } from '@angular/material/tree';
 import { MatTableModule } from '@angular/material/table'
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatStepperModule} from '@angular/material/stepper';
+import { MatExpansionModule } from '@angular/material/expansion';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -70,7 +72,8 @@ import {MatStepperModule} from '@angular/material/stepper';
     MatTreeModule,
     MatTableModule,
     MatPaginatorModule,
-    MatStepperModule
+    MatStepperModule,
+    MatExpansionModule
   ]
 })
 export class MaterialModule { }

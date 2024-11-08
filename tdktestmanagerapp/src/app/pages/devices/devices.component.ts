@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 
 import { CommonModule } from '@angular/common';
-import { Component, ElementRef, Input, Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef,Renderer2, ViewChild } from '@angular/core';
 import { AgGridAngular } from 'ag-grid-angular';
 import { ColDef,GridApi,GridReadyEvent,IMultiFilterParams } from 'ag-grid-community';
 import '../../../../node_modules/ag-grid-community/styles/ag-grid.css';
@@ -58,22 +58,22 @@ export class DevicesComponent {
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'stbName',
+      field: 'deviceName',
       filter: 'agTextColumnFilter',
       flex: 1,
       sortable: true,
     },
     {
       headerName: 'Device IP',
-      field: 'stbIp',
+      field: 'deviceIp',
       filter: 'agTextColumnFilter',
       flex: 1,
       filterParams: {
       } as IMultiFilterParams,
     },
     {
-      headerName: 'Box Type',
-      field: 'boxTypeName',
+      headerName: 'Device Type',
+      field: 'deviceTypeName',
       filter: 'agTextColumnFilter',
       flex: 1,
       filterParams: {
@@ -116,7 +116,7 @@ export class DevicesComponent {
     const deviceCategory = localStorage.getItem('deviceCategory');
     const name = localStorage.getItem('deviceCategoryName');
     this.categoryName = name
-    console.log("Device category",name);
+    console.log("Device category",deviceCategory);
     if(deviceCategory === null){
       this.categoryName = name
       this.configureName = this.selectedDeviceCategory;
@@ -125,7 +125,7 @@ export class DevicesComponent {
     }
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory;
-      console.log("Device category",this.configureName = this.selectedDeviceCategory);
+      // console.log("Device category",this.configureName = this.selectedDeviceCategory);
       this.findallbyCategory();
     }
     this.uploadXMLForm = new FormGroup({
@@ -138,33 +138,34 @@ export class DevicesComponent {
    */
   findallbyCategory(){
     this.service.findallbyCategory(this.selectedDeviceCategory).subscribe(res=>{
-      // this.rowData =JSON.parse(res);
-      let data = JSON.parse(res)
-      this.rowData = data.sort((a: any, b: any) =>a.stbName.toString().localeCompare(b.stbName.toString()));
+      let data = JSON.parse(res);
+      this.rowData = data.sort((a: any, b: any) =>a.deviceName.toString().localeCompare(b.deviceName.toString()));
     })
   }
   /**
    * Handles the event when a device category is checked.
    * @param event - The event object containing the checked value.
    */
-  ischecked(event:any):void{
-    this.selectedDeviceCategory = event.target.value;
-    if(this.selectedDeviceCategory === 'RDKB'){
+  ischecked(val:any):void{
+    this.rowData = [];
+    if(val === 'RDKB'){
       this.categoryName = 'Broadband';
+      this.selectedDeviceCategory = 'RDKB';
+      this.findallbyCategory();
     }
-    else if(this.selectedDeviceCategory === 'RDKC'){
+    else if(val === 'RDKC'){
         this.categoryName = 'Camera';
+        this.selectedDeviceCategory = 'RDKC';
+        this.findallbyCategory();
     }
     else{
+      this.selectedDeviceCategory = 'RDKV';
       this.categoryName = 'Video';
+      this.findallbyCategory();
     }
     localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
     localStorage.setItem('deviceCategoryName', this.categoryName);
-    if(this.selectedDeviceCategory){
-      this.configureName = this.selectedDeviceCategory;
-      this.service.deviceCategory = this.selectedDeviceCategory;
-      this.findallbyCategory();
-    }
+ 
   }
   gridOptions = {
     domLayout: 'autoHeight'
@@ -193,10 +194,7 @@ export class DevicesComponent {
    * @returns The edited user object.
    */
   userEdit(user: any): void {
-    localStorage.setItem('user', JSON.stringify(user))
-    this.service.getStreamsForDeviceForUpdate(user.id).subscribe(res=>{
-     this.service.saveStreamingData(res)
-    })
+    localStorage.setItem('user', JSON.stringify(user));
     this.router.navigate(['/devices/device-edit'])
   }
 
@@ -304,9 +302,6 @@ export class DevicesComponent {
     }
   }
   openModal(params:any){
-    this.service.getStreamsForDeviceForUpdate(params.id).subscribe(res=>{
-      this.service.saveStreamingData(res)
-     })
     this.dialog.open( DialogDelete,{
       width: '99%',
       height: '93vh',
@@ -314,18 +309,16 @@ export class DevicesComponent {
       panelClass: 'custom-modalbox',
       data:{
         agentMonitorPort: params.agentMonitorPort,
-        boxManufacturerName : params.boxManufacturerName,
-        boxTypeName : params.boxTypeName,
+        oemName : params.oemName,
+        deviceTypeName : params.deviceTypeName,
         category :  params.category,
-        gatewayDeviceName :  params.gatewayDeviceName,
         id :  params.id,
         logTransferPort  :  params.logTransferPort,
         macId :  params.macId,
-        recorderId :  params.recorderId,
-        socVendorName :  params.socVendorName,
+        socName :  params.socName,
         statusPort :  params.statusPort,
-        stbIp : params.stbIp,
-        stbName :   params.stbName,
+        deviceIp : params.deviceIp,
+        deviceName :   params.deviceName,
         stbPort :  params.stbPort,
         thunderEnabled :  params.thunderEnabled,
         thunderPort :  params.thunderPort,
@@ -333,14 +326,16 @@ export class DevicesComponent {
         devicePortsConfigured: params.devicePortsConfigured
       }
     })
+    
+    
   }
   downloadXML(params:any):void{
-    if(params.stbName){
-      this.service.downloadDevice(params.stbName).subscribe(blob => {
+    if(params.deviceName){
+      this.service.downloadDevice(params.deviceName).subscribe(blob => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${params.stbName}.xml`; 
+        a.download = `${params.deviceName}.xml`; 
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -348,5 +343,6 @@ export class DevicesComponent {
       });
     }
   }
+
 
 }

@@ -26,9 +26,7 @@ limitations under the License.
                 <div class="col-md-7">
                   <input type="text" class="form-control" id="name" formControlName="name"
                     placeholder="Enter {{placeholderName}}">
-                  <div
-                    *ngIf="formSubmitted && createUpdateForm.controls['name']?.errors && createUpdateForm.controls['name'].dirty || createUpdateForm.controls['name'].touched"
-                    class="text-danger">
+                    <div *ngIf="formSubmitted && createUpdateForm.controls['name']?.errors" class="text-danger">
                     <small *ngIf="createUpdateForm.controls['name']?.errors?.['required']">
                       please enter {{validationName}} name
                     </small>

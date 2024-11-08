@@ -17,6 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+    font-size: 0.78rem;
+  }
+  .mat-typography h1, 
+  .mat-typography h2, 
+  .mat-typography h3, 
+  .mat-typography h4, 
+  .mat-typography h5, 
+  .mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  }
 .container{
     margin-bottom: 2rem;
 }
@@ -107,4 +119,6 @@ hr{
 .temp-title{
     font-size: 0.8rem;
 }
-
+.next-btn:disabled{
+    background-color: gray;
+}

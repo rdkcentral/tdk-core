@@ -34,55 +34,52 @@ interface customcellRenderparams extends ICellRendererParams{
   imports: [MaterialModule, CommonModule],
   template: `
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
-    <button *ngIf="editShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" (click)="onEditClick($event)"><i class="bi bi-pencil extra-icon edit"></i></button>
-  
-    <button *ngIf="deleteShowHide" class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="extra-icon">delete_forever</mat-icon></button>
-   
-    <button *ngIf="viewShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button>
-  
-    <button *ngIf="functionShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Functions and Parameters" (click)="onFunctionClick($event)"><i class="bi bi-gear extra-icon create"></i></button>
-   
-    <button *ngIf="paraMeterShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Parameters" (click)="onParameterClick($event)"><i class="bi bi-braces extra-icon create"></i></button>
-   
-    <button *ngIf="downloadShowHide" class="btn btn-primary btn-sm delete-btn" matTooltip="Download Module" ><i class="bi bi-download extra-icon download"></i></button>
-    <button *ngIf="downloadExcel" class="btn btn-primary btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
+    <button *ngIf="editShowHide" class="btn btn-sm delete-btn" matTooltip="Edit" (click)="onEditClick($event)"><mat-icon class="extra-icon edit">edit</mat-icon></button>
+    &nbsp;
+    <button *ngIf="deleteShowHide" class="btn btn-sm delete-btn" matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="extra-icon delete-icon">delete_forever</mat-icon></button>
+    &nbsp;
+    <button *ngIf="viewShowHide" class="btn btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button>
+    &nbsp;
+    <button *ngIf="functionShowHide" class="btn btn-sm delete-btn" matTooltip="Functions and Parameters" (click)="onFunctionClick($event)"><i class="bi bi-gear extra-icon create"></i></button>
+    &nbsp;
+    <button *ngIf="paraMeterShowHide" class="btn btn-sm delete-btn" matTooltip="Parameters" (click)="onParameterClick($event)"><i class="bi bi-braces extra-icon create"></i></button>
+    &nbsp;
+    <button *ngIf="downloadShowHide" class="btn btn-sm delete-btn" matTooltip="Download Module" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
+    &nbsp;
+    <button *ngIf="downloadExcel" class="btn btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
   `,  
   styles:[
     `.delete-btn{
         border: none;
         padding: 0px;
-        margin-right:10px;
-        border-radius: 50px;
+        background:none;
     }
-    .extra-icon, .excel-icon{
-      color: white;
-      font-size: 1rem;
+    .extra-icon{
+      font-size: 1.3rem;
       display: flex;
       justify-content: center;
       align-items: center;
-      height:24px;
-      width:24px;
     }
 
     .edit{
-      background-color: #00B2DC;
-      border-radius: 50px;
+      color: #00B2DC;
+    }
+    .delete-icon{
+      color: red;
     }
     .view{
-      background-color: #fdb73b;
-      border-radius: 50px;
+      color: #fdb73b;
     }
     .create{
-      background-color: #92c849;
-      border-radius: 50px;
+      color: #92c849;
+      
     }
     .download{
-      background-color: #f58233;
-      border-radius: 50px;
+      color: #00B2DC;
     }
     .download-xlsx{
-      background-color: green;
-      border-radius: 50px;
+      color: green;
+
     }
     `
   ]

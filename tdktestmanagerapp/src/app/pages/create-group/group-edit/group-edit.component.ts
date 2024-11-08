@@ -64,14 +64,14 @@ export class GroupEditComponent {
    * Handles the form submission event.
    * @param e The form submission event.
    */  
-  onFormSubmitted(e: any): void {
+  onFormSubmitted(groupName: any): void {
     let obj = {
-      userGroupId: this.id,
-      userGroupName: e
+      userGroupId: this.record.userGroupId,
+      userGroupName: groupName
     }
-    this.service.updateUserGroup(this.id, obj).subscribe({
+    this.service.updateUserGroup(obj).subscribe({
       next: (res) => {
-        this._snakebar.open('User group updated successfully', '', {
+        this._snakebar.open(res, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
@@ -79,7 +79,7 @@ export class GroupEditComponent {
         setTimeout(() => {
           this.router.navigate(["configure/create-group"]);
         }, 1000);
-
+ 
       },
       error: (err) => {
         let errmsg = JSON.parse(err.error);
@@ -91,7 +91,7 @@ export class GroupEditComponent {
           verticalPosition: 'top'
         })
       }
-
+ 
     })
   }
 

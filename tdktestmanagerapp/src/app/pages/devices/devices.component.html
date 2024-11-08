@@ -16,42 +16,48 @@ limitations under the License.
 <div class="container">
     <div class="row radiobox-row mt-1">
         <div class="col-md-12 radiobox">
-            <h3 class="heading">Choose the device category :</h3>
+            <h3 class="heading">Select the device category :</h3>
             <div class="rdkgroup">
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDeviceCategory" (change)="ischecked($event)" >
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDeviceCategory" (change)="ischecked('RDKV')" >
                     <label class="form-check-label" for="rdkv">Video</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDeviceCategory"(change)="ischecked($event)">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDeviceCategory"(change)="ischecked('RDKB')">
                     <label class="form-check-label" for="rdkb">Broadband</label>
                 </div>
                 <div class="form-check form-check-inline">
-                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDeviceCategory" (change)="ischecked($event)">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDeviceCategory" (change)="ischecked('RDKC')">
                     <label class="form-check-label" for="rdkc">Camera</label>
                 </div>
             </div>
         </div>
-        <div class="row showrdkgrouprow">
-            <h1 class="title"> {{categoryName}} Device Summary</h1>
-            <div>
-                <div class="row mt-1">
-                    <div class="col">
-                        <button type="button" class="download-btn" (click)="downloadAllDevice()"><i class="bi bi-download download-icon"></i> Download all the {{categoryName}} Device Details</button>
-                    </div>
-                    <div class="col example-header">
-                        <span class="search">Search:<mat-icon class="info-icon" matTooltip ="Search by device name, device IP or boxtype">info</mat-icon></span>
-                        <input type="text" class="form-control" id="filter-text-box" 
-                        (input)="onFilterTextBoxChanged()" placeholder="Search...">
-                    </div>
-                    <div class="col">
-                        <button type="button" class="uploadbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                            Upload Device XML File
+        <!-- <div class="row showrdkgrouprow"> -->
+            <div class="row borders-btm">
+                <div class="col-md-11">
+                    <h1 class="title"> {{categoryName}} Device Summary</h1>
+                </div>
+                <div class="col-md-1">
+                    <div class="btns-grp">
+                        <button type="button" class="download-btn" (click)="downloadAllDevice()" matTooltip="Download all the {{categoryName}} Device Details">
+                            <i class="bi bi-cloud-arrow-down-fill download-icon"></i> 
+                        </button>
+                        <button type="button" class="download-btn" matTooltip="Upload Device XML File" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                            <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
                           </button>
-                        <button  class="download-btn create" (click)="createDevice()">Create </button>
+                        <button  class="download-btn " matTooltip="Create" (click)="createDevice()"><i class="bi bi-plus-circle-fill download-icon"></i> </button>
                     </div>
                 </div>
-                <div style="width: 100%; height: 395px; margin-top: 5px;" [class]="themeClass">
+            </div>
+                <div class="row mt-2">
+                    <div class="col example-header">
+                        <span class="search">Search:<mat-icon class="info-icon" matTooltip ="Search by device name, device IP or boxtype">info</mat-icon></span>
+                        <input type="text" class="form-control seach-input" id="filter-text-box" 
+                        (input)="onFilterTextBoxChanged()" placeholder="Search...">
+                    </div>
+                    <div class="col"></div>
+                </div>
+                <div style="width: 100%; height: auto; margin-top: 5px;" [class]="themeClass">
                     <ag-grid-angular
                     [columnDefs]="columnDefs"
                     [defaultColDef]="{sortable: true}"
@@ -63,11 +69,10 @@ limitations under the License.
                     [animateRows]="true"
                     [context]="this"
                     [domLayout]="'autoHeight'"
+                   
                   ></ag-grid-angular>
                 </div>
-             
-            </div>
-        </div>
+        <!-- </div> -->
     </div>
 </div>
  <!-- Modal Start-->
@@ -93,8 +98,8 @@ limitations under the License.
             </div>
         </div>
         <div class="modal-footer">
-          <button type="button" class="download-btn" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="download-btn">Upload</button>
+          <button type="button" class="modal-btns" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="modal-btns">Upload</button>
         </div>
         </form>
       </div>

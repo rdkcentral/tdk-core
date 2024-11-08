@@ -17,13 +17,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-*:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif !important;
-    /* font-family: 'Roboto Slab', serif; */
-    /* font-family: 'IBM Plex Serif', serif; */
+
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 .container{
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 .radiobox-row {
     border-radius: 10px;
@@ -47,48 +54,29 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .heading {
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     margin-top: 8px;
     margin-right: 20px;
 }
-.commonlist{
-    margin-left: 5px;
+.commonheading{
+    font-weight: 500;
+    text-decoration: underline;
 }
 .rdkgroup {
-    font-size: 0.85rem;
     display: inline-flex;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: baseline;
     font-size: 0.85rem;
+    margin-left: 40px;
 }
 
 .rdkradio {
-    border: 2px solid;
+    border: 2px solid #0e6f8794;
 }
 
 .form-check-inline {
     margin-right: 3rem;
 }
-
-.rdklist {
-    list-style: none;
-    text-decoration: underline;
-    line-height: 2;
-    font-size: 0.85rem;
-    cursor: pointer;
-}
-
-.rdk2ndlist,
-.rdkcommonlist {
-    list-style: none;
-    line-height: 2;
-    font-size: 0.85rem;
-}
-
-.rdkcommonlist {
-    margin-left: 15px;
-}
-
 .form-check-input:checked {
     background-color: #0e6f87;
     border-color: #0e6f87;
@@ -100,20 +88,14 @@ http://www.apache.org/licenses/LICENSE-2.0
     align-items: center;
     background-color: #0e6f8794;
 }
-[data-letters]:before {
-    content:attr(data-letters);
-    display:inline-block;
-    font-size:0.8em;
-    width:2.5em;
-    height:2.5em;
-    line-height:2.5em;
-    text-align:center;
-    border-radius:50%;
-    background:#f58233;
-    vertical-align:middle;
-    margin-right:1em;
-    color:white;
+.card-hgt{
+    height: 110px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none;
 }
+
 .cat-title{
     font-size: 1rem;
     text-decoration: underline;
@@ -121,6 +103,74 @@ http://www.apache.org/licenses/LICENSE-2.0
     color: #fff;
     font-weight: 400;
 }
-.desc{
-    margin-top: 10px;
+
+.circle{
+    display: flex;
+    height: 40px;
+    width: 40px;
+    border-radius: 50px;
+    background-color: #0e6f8794;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.icon-right,.icon-conf{
+    font-size: 1.5rem;
+    color: #fff;
+}
+.card-height-3{
+    display: flex;
+    border-bottom: 1px solid #ddd;
+    height: 70px;
+    align-items: center;
+    cursor: pointer;
+}
+.card-height-3:hover{
+    /* border-bottom: 2px solid #555; */
+    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+}
+.card-height-3 .arrow-icon{
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+.card-height-3:hover .arrow-icon{
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+
+.category-title3{
+    font-size: 0.9rem;
+    text-decoration: none;
+    cursor: pointer;
+    color: #000;
+    font-weight: 400;
+    letter-spacing: .5px;
+    line-height: 2pc;
+}
+
+.text-group{
+    margin-left: 40px;
+}
+.arrow-icon{
+    font-size: 2rem;
+    position: absolute;
+    left: 46%;
+}
+.arrow-icon-right{
+    font-size: 2rem;
+    position: absolute;
+    right: 10%;
+}
+.card-height-3 .arrow-icon-right{
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+}
+.card-height-3:hover .arrow-icon-right{
+    visibility: visible;
+    opacity: 1;
+    transition: visibility 0s, opacity 0.5s linear;
 }

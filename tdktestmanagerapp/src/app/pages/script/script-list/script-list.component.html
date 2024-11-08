@@ -14,182 +14,333 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row radiobox-row mt-1">
-        <div class=" showrdkgrouprow mt-1">
-            <h1 class="title"> {{headingName}} {{ viewName === 'testsuites' ? 'TestSuites Summary' : ' Script Summary' }} </h1>
-             
-                <div class="row mt-1">
-                    <div class="col-md-3">
-                            <span >Select Category</span>
-                            <div >
-                                <select class="form-select" [(ngModel)]="selectedCategory" (change)="onCategoryChange(selectedCategory)" name="dropdown" id="dropdown">
-                                    <option *ngFor="let option of categories" [value]="option">{{ option }}</option>
-                                </select>
-                            </div>
-                    </div>
-                    <div class="col-md-3">
-                            <span >Select View</span>
-                            <div >
-                                  <select class="form-select" aria-label="Default select example" id="selectBoxtype" name="selectBoxtype"
-                                  (change)="viewChange($event)">
-                                  <option value="scripts">Scripts</option>
-                                  <option value="testsuites">TestSuites</option>
-                              </select>
-                            </div>
-                    </div>
-                    <div class="col-md-6">
-                        <label ></label>
-                        <div class="btns-group" *ngIf="scriptTable">
-                            <button type="button" class="download-btn" matTooltip="Download All {{selectedCategory}} test cases(zip of excel files)"><i class="bi bi-download download-icon"></i> </button>
-                            <button type="button" class="download-btn create" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
-                                 Upload {{selectedCategory}} Script
-                            </button>
-                            <button class="create" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Script</button>
-                        </div>
-                        <div class="btns-group" *ngIf="testsuitTable">
-                          <button type="button" class="download-btn" matTooltip="Download all suites xml in zip"><i class="bi bi-download download-icon"></i> </button>
-                          <button type="button" class="download-btn create" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
-                               Upload {{selectedCategory}} suite
+  <div class="row radiobox-row mt-1">
+      <div class="col-md-12 radiobox">
+        <h3 class="heading">Select Category :</h3>
+        <div class="rdkgroup">
+            <div class="form-check form-check-inline">
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
+              (change)="categoryChange('RDKV')" checked>
+          <label class="form-check-label" for="rdkv">Video</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
+              (change)="categoryChange('RDKB')">
+          <label class="form-check-label" for="rdkb">Broadband</label>
+            </div>
+            <div class="form-check form-check-inline">
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
+              (change)="categoryChange('RDKC')">
+          <label class="form-check-label" for="rdkc">Camera</label>
+            </div>
+        </div>
+        <h3 class="headingView">Select View :</h3>
+        <div class="viewgroup">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="scripts" value="scripts"  [(ngModel)]="viewName" (change)="viewChange(viewName)">
+                <label class="form-check-label" for="scripts">Scripts</label>
+            </div>
+            <div class="form-check form-check-inline">
+                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="testsuites" value="testsuites" [(ngModel)]="viewName" (change)="viewChange(viewName)">
+                <label class="form-check-label" for="testsuites">TestSuites</label>
+            </div>
+        </div>
+    </div>
+      <div class="showrdkgrouprow">
+        <div class="row borders-btm">
+          <div class="col-md-10">
+            <h1 class="title"> {{categoryName}} {{ viewName === 'testsuites' ? 'TestSuites' : ' Scripts' }} </h1>
+          </div>
+          <div class="col-md-2">
+            <div class="btns-group" *ngIf="scriptTable">
+              <button type="button" class="download-btn" (click)="downloadTestCases()" matTooltip="Download All {{selectedCategory}} test cases(zip of excel files)"><i class="bi bi-cloud-arrow-down-fill download-icon"></i> </button>
+              <button type="button" class="download-btn " data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
+                   <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
+              </button>
+              <button class="download-btn" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">
+                <i class="bi bi-plus-circle-fill download-icon"></i>
+              </button>
+          </div>
+          <div  *ngIf="testsuitTable" [ngClass]="testsuitTable?'testsuite-btn':'btns-group'">
+            <button type="button" class="download-btn" matTooltip="Download all suites xml in zip" (click)="downloadAllSuitesZIP()"><i class="bi bi-cloud-arrow-down-fill download-icon"></i> </button>
+            <button type="button" class="download-btn" data-bs-toggle="modal" data-bs-target="#testSuiteModal" matTooltip="Upload {{selectedCategory}} Script">
+              <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
+            </button>
+            <button type="button" class="download-btn" matTooltip="Update Test Suite"><i class="bi bi-arrow-repeat download-icon"></i> </button>
+           
+            <button *ngIf="testsuitTable && categoryName !== 'Video'"  class="download-btn" (click)="createScriptGroup()" matTooltip="Create {{selectedCategory}} Suite">
+              <i class="bi bi-plus-circle-fill download-icon"></i>
+            </button>
+            <button *ngIf="testsuitTable && categoryName === 'Video'"  type="button" class="download-btn dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" matTooltip="Create {{selectedCategory}} Suite">
+                
+              <i class="bi bi-plus-circle-fill download-icon"></i>
+            </button>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" (click)="createScriptGroup()">RDKV_RDKService</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="createScriptGroup()">RDKV</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item" (click)="customTestSuite()">Custom TestSuite</a></li>
+            </ul>
+          </div>
+          </div>
+        </div>
+        <div class="row mt-2">
+          <div class="col search-header">
+              <span class="search">Search:</span>
+              <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="globalSearchTerm"
+              (input)="globalSearch()" placeholder="Search...">
+          </div>
+          <div class="col"></div>
+        </div>
+              <div class="row" *ngIf="scriptTable">
+                  <div class="table-container mt-2" >
+                    <div class="row table-heading">
+                      <div class="col border-column">
+                        <span>Module & Scripts </span>
+                        
+                          <button type="button" (click)="scriptSorting()" class="sort-button">
+                            <i class="bi sort-icon icon-sortng" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'  "></i>
                           </button>
-                          <button *ngIf="testsuitTable && headingName !== 'Video'"  class="create" (click)="createScriptGroup()" matTooltip="Create {{selectedCategory}} Script">Create {{selectedCategory}} Suite</button>
-                          <div class="" *ngIf="testsuitTable && headingName === 'Video'" >
-                            <button type="button" class="download-btn create dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                              Create {{selectedCategory}} Suite
+                         
+                            <button type="button" class="sort-button filter-btn" (click)="toggleFilterInput()" #filterButton>
+                              <i class="bi bi-filter icon-sortng"></i>
                             </button>
-                            <ul class="dropdown-menu">
-                              <li><a class="dropdown-item" (click)="createScriptGroup()">Thunder Enabled</a></li>
-                              <li><hr class="dropdown-divider"></li>
-                              <li><a class="dropdown-item" (click)="createScriptGroup()">Thunder Disabled</a></li>
-                            </ul>
+                          
+                            <!-- Show the filter input if filter is toggled -->
+                            <!-- <div class="search-div" *ngIf="showFilterInput">
+                              <input  type="search" class="form-control search-input" placeholder="Filter..." [(ngModel)]="filterText" />
+                            </div> -->
+                            <div class="search-div" *ngIf="showFilterInput">
+                              <div class="input-group search-input">
+                                <span class="input-group-text search-side" id="basic-addon1"><i class="bi bi-search"></i></span>
+                                <input #filterInput type="text" class="form-control fiter-input" placeholder="Filter..." [(ngModel)]="filterText" (keyup)="filterScript()"  aria-describedby="basic-addon1">
+                              </div>
+                            </div>
+                      </div>
+                      <div class="col border-column"><span>Test Group</span></div>
+                      <div class="col">Action</div>
+                    </div>
+                    <div class="row">
+                      <div class="accordion" id="accordionExample">
+                        <div class="row accord-row">
+                          <div class="accordion-item" *ngFor="let parent of scriptFilteredData">
+                         
+                              <h2 class="accordion-header d-flex align-items-center accord-head">
+                                <div class="col">
+    
+                                  <button class="accordion-button no-arrow collapsed flex-grow-1 accor-title" type="button" (click)="$event.stopPropagation()">
+                                    {{ parent.moduleName }} 
+                                    <span *ngIf="parent.scripts">
+                                      ({{ parent.scripts.length > 0 ? parent.scripts.length : '0' }})
+                                    </span>
+                                  </button>                                    
+                                </div>
+                                <div class="col">
+                                <button class="accordion-button no-arrow collapsed flex-grow-1 accor-testgroup" type="button" (click)="$event.stopPropagation()">
+                                  {{ parent.testGroupName }} 
+                                </button>
+                                </div>
+                                <div class="col">
+                                  <button  class="btn btn-primary btn-sm delete-btn xlsx-btm" matTooltip="Download testcases(excel) " (click)="downloadXML(parent)">
+                                    <i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i>
+                                  </button>
+                                </div>
+                                
+                                  <button class="btn btn-link ms-auto" (click)="togglePanel(parent)">
+                                    <i class="bi collapse-icon" [ngClass]="parent.expanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                  </button>
+                              </h2>
+                            <div [class.show]="parent.expanded" class="accordion-collapse collapse">
+                              <div class="accordion-body">
+                                <div style="width: 90%; height: 300px; margin-top: 5px;" [class]="themeClass">
+                                  <ag-grid-angular
+                                  style="width: 100%; height: 100%;"
+                                  [columnDefs]="columnDefs"
+                                  [defaultColDef]="{sortable: true}"
+                                  [rowData]="parent.scripts"
+                                  [pagination]="true"
+                                  [paginationPageSize]="scriptPageSize"
+                                  [paginationPageSizeSelector]="scriptPageSelector"
+                                  [animateRows]="true"
+                                  [context]="this"
+                                  [gridOptions]="gridOptions"
+                                  (gridReady)="onGridReady($event)"
+                                ></ag-grid-angular>
+                              </div>
+                            
+                              </div>
+                            </div>
+                           
                           </div>
+                        </div>
                       </div>
                     </div>
-                </div>
-                <div class="row" *ngIf="scriptTable">
-                    <div class="table-container mt-3" >
-                        <!-- <div class="search-container">
-                                <mat-form-field appearance="outline">
-                                  <mat-label>Global Search</mat-label>
-                                  <input matInput [(ngModel)]="searchValue" (input)="filterTree(searchValue)" />
-                                </mat-form-field>
-                              </div> -->
-                            <div>
-                                 <div class="example-container mat-elevation-z8">
-                                    <cdk-virtual-scroll-viewport itemSize="48" class="mat-tree-viewport">
-                                    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" >
-                                        <ng-container matColumnDef="name" sticky>
-                                          <th mat-header-cell *matHeaderCellDef mat-sort-header> 
-                                            <span [style.paddingLeft.px]="40"> Name </span>
-                                          </th>
-                                          <td mat-cell *matCellDef="let data"> 
-                                            <button mat-icon-button 
-                                                    [style.visibility]="!data.expandable ? 'hidden' : ''"
-                                                    [style.marginLeft.px]="data.level * 32"
-                                                    (click)="treeControl.toggle(data)">
-                                              <mat-icon class="mat-icon-rtl-mirror">
-                                                {{treeControl.isExpanded(data) ? 'expand_more' : 'chevron_right'}}
-                                              </mat-icon>
-                                            </button>
-                                                <span class="parentnode">{{data.name }} <span *ngIf="data.childCount > 0" matTooltip="Script Count" > ({{data.childCount}}) </span></span>
-                                            </td>
-                                        </ng-container> 
-                                      
-                                        <ng-container matColumnDef="testgroup">
-                                          <th mat-header-cell *matHeaderCellDef> Test Group </th>
-                                          <td mat-cell *matCellDef="let data"> {{data.testgroup}} </td>
-                                        </ng-container> 
-            
-                                        <ng-container matColumnDef="action" >
-                                            <th mat-header-cell *matHeaderCellDef> Action </th>
-                                            <td mat-cell *matCellDef="let node">
-                                                <ng-container *ngIf="!node.expandable">
-                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit" ><i class="bi bi-pencil extra-icon edit"></i></button>
-                                                    <button class="btn btn-danger btn-sm delete-btn" matTooltip="Delete" ><mat-icon class="extra-icon">delete_forever</mat-icon></button>
-                                                    <button class="btn btn-primary btn-sm delete-btn" matTooltip="View" ><i class="bi bi-eye extra-icon view"></i></button>
-                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download Script" ><i class="bi bi-download extra-icon download"></i></button>
-                                                  </ng-container>
-                                                  <ng-container *ngIf="node.expandable">
-                                                    <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
-                                                </ng-container>
-                                            </td>
-                                        </ng-container>
-                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                        <tr mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
-                                    </table>
-                                    </cdk-virtual-scroll-viewport>
-                                 </div>
-                               
-                                  <div class="footer-table">
-                                    <mat-paginator
-                                    [length]="treeData.length"
-                                    [pageSize]="pageSize"
-                                    (page)="onPageChange($event)">
-                                  </mat-paginator>
-                                  </div>
-                            </div>
                     </div>
-                </div>
-                <div class="row" *ngIf="testsuitTable">
-                  <div class="table-container mt-3" >
-                      <!-- <div class="search-container">
-                              <mat-form-field appearance="outline">
-                                <mat-label>Global Search</mat-label>
-                                <input matInput [(ngModel)]="searchValue" (input)="filterTree(searchValue)" />
-                              </mat-form-field>
-                            </div> -->
-                          <div>
-                               <div class="example-container mat-elevation-z8">
-                                  <cdk-virtual-scroll-viewport itemSize="48" class="mat-tree-viewport">
-                                  <table mat-table [dataSource]="dataSourceSuite" matSort (matSortChange)="announceSortChange($event)" class="mat-elevation-z8">
-                                      <ng-container matColumnDef="name" sticky>
-                                        <th mat-header-cell *matHeaderCellDef mat-sort-header sortActionDescription="Sort by name"> 
-                                          <span [style.paddingLeft.px]="40"> Name </span>
-                                        </th>
-                                        <td mat-cell *matCellDef="let data"> 
-                                          <button mat-icon-button 
-                                                  [style.visibility]="!data.expandable ? 'hidden' : ''"
-                                                  [style.marginLeft.px]="data.level * 32"
-                                                  (click)="treeControlSuite.toggle(data)">
-                                            <mat-icon class="mat-icon-rtl-mirror">
-                                              {{treeControlSuite.isExpanded(data) ? 'expand_more' : 'chevron_right'}}
-                                            </mat-icon>
-                                          </button>
-                                              <span class="parentnode">{{data.name }} <span *ngIf="data.childCount > 0" matTooltip="Script Count" > ({{data.childCount}}) </span></span>
-                                          </td>
-                                      </ng-container> 
-          
-                                      <ng-container matColumnDef="action" >
-                                          <th mat-header-cell *matHeaderCellDef> Action </th>
-                                          <td mat-cell *matCellDef="let node">
-                                              <ng-container *ngIf="!node.expandable">
-             
-                                                <button class="btn btn-primary btn-sm delete-btn" matTooltip="View" ><i class="bi bi-eye extra-icon view"></i></button>
-                                                </ng-container>
-                                                <ng-container *ngIf="node.expandable">
-                                                  <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Edit/View Suite" ><i class="bi bi-pencil extra-icon edit"></i></button>
-                                                  <button class="btn btn-danger btn-sm delete-btn" matTooltip="Delete Suite" ><mat-icon class="extra-icon">delete_forever</mat-icon></button>
-                                                  <button  class="btn btn-primary btn-sm delete-btn"  matTooltip="Download the suite data as xml" ><i class="bi bi-download extra-icon download"></i></button>
-                                                  <button  class="btn btn-primary btn-sm delete-btn" matTooltip="Download all testcase documentation for the suite " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
-                                              </ng-container>
-                                          </td>
-                                      </ng-container>
-                                      <tr mat-header-row *matHeaderRowDef="TestSuilteColumns"></tr>
-                                      <tr mat-row *matRowDef="let row; columns: TestSuilteColumns;" ></tr>
-                                  </table>
-                                  </cdk-virtual-scroll-viewport>
-                               </div>
-                             
-                                <div class="footer-table">
-                                  <mat-paginator
-                                    [length]="treeTestSuiteData.length"
-                                    [pageSize]="pageSize"
-                                    (page)="onPageChangeSuite($event)">
-                                    </mat-paginator>
+                    <div *ngIf="scriptFilteredData.length == 0" class="noRecord">
+                      <span>{{noScriptFound}}</span>
+                    </div>
+                    <mat-paginator
+                    [length]="scriptFilteredData.length"
+                    [pageSize]="allPageSize"
+                    [pageSizeOptions]="[5,7, 10, 20]"
+                    (page)="onPageChange($event)">
+                  </mat-paginator>
+              </div>
+              
+              <div class="row" *ngIf="testsuitTable">
+                  <div class="table-container mt-2" >
+                      <div class="row table-heading">
+                        <div class="col border-column">
+                          <span>Module & Scripts </span>
+                          
+                            <button type="button" (click)="toggleSortSuite()" class="sort-button">
+                              <i class="bi sort-icon icon-sortng" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'  "></i>
+                            </button>
+                           
+                              <button type="button" class="sort-button filter-btn" (click)="toggleFilterInput()" #filterButton>
+                                <i class="bi bi-filter icon-sortng"></i>
+                              </button>
+                            
+                              <!-- Show the filter input if filter is toggled -->
+                              <!-- <div class="search-div" *ngIf="showFilterInput">
+                                <input  type="search" class="form-control search-input" placeholder="Filter..." [(ngModel)]="filterText" (keyup)="applyFilter()" />
+                              </div> -->
+                              <div class="search-div" *ngIf="showFilterInput">
+                                <div class="input-group search-input">
+                                  <span class="input-group-text search-side" id="basic-addon1"><i class="bi bi-search"></i></span>
+                                  <input #filterInput type="text" class="form-control" placeholder="Filter..." [(ngModel)]="filterText" aria-describedby="basic-addon1">
                                 </div>
+                              </div>
+                        </div>
+                        <div class="col border-column"><span>Description</span></div>
+                        <div class="col">Action</div>
+                      </div>
+                      <div class="row">
+                        <div class="accordion" id="accordionExample">
+                          <div class="row accord-row">
+                            <div class="accordion-item" *ngFor="let testSuite of paginatedSuiteData">
+                           
+                                <h2 class="accordion-header d-flex align-items-center accord-head">
+                                  <div class="col">
+                                    <button class="accordion-button no-arrow collapsed flex-grow-1 accor-title" type="button" (click)="$event.stopPropagation()">
+                                      {{ testSuite.name }} 
+                                      <span *ngIf="testSuite.scripts">
+                                        ({{ testSuite.scripts.length > 0 ? testSuite.scripts.length : '0' }})
+                                      </span>
+                                    </button>
+                                  </div>
+                                  <div class="col">
+                                  <button class="accordion-button no-arrow collapsed flex-grow-1 accor-testgroup" type="button" (click)="$event.stopPropagation()">
+                                    {{ testSuite.description }} 
+                                  </button>
+                                  </div>
+                                  <div class="col">
+                                      <button  class="btn btn-primary btn-sm delete-btn xlsx-btm"  matTooltip="Edit/View Suite" (click)="editTestSuite(testSuite)"><mat-icon class="excel-icon edit">edit</mat-icon></button>
+                                      <button  class="btn btn-primary btn-sm delete-btn"  matTooltip="Delete Suite"><mat-icon class="delete-icon excel-icon" (click)="deleteSuite(testSuite)">delete_forever</mat-icon></button>
+                                      <button  class="btn btn-primary btn-sm delete-btn"  matTooltip="Download the suite data as XML" (click)="downloadSuiteXML(testSuite)"><i class="bi bi-cloud-arrow-down-fill excel-icon download"></i></button>
+                                      <button  class="btn btn-primary btn-sm delete-btn " matTooltip="Download all testcases documentaion for the suite" (click)="downloadSuiteExcel(testSuite)">
+                                          <i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i>
+                                      </button>
+                                  </div>
+                                  
+                                    <button class="btn btn-link ms-auto" (click)="toggleTestSuite(testSuite)">
+                                      <i class="bi collapse-icon" [ngClass]="testSuite.expanded ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                    </button>
+                                </h2>
+                              <div [class.show]="testSuite.expanded" class="accordion-collapse collapse">
+                                <div class="accordion-body">
+                                  <div style="width: 90%; min-height: 300px; margin-top: 5px; display: flex; justify-content: center;" [class]="themeClass">
+                                    <ag-grid-angular
+                                    style="width: 80%; height: 100%;"
+                                    [columnDefs]="testSutiteColumn"
+                                    [defaultColDef]="{sortable: true}"
+                                    [rowData]="testSuite.scripts"
+                                    [pagination]="true"
+                                    [paginationPageSize]="testsuitePageSize"
+                                    [paginationPageSizeSelector]="testSuitePageSelector"
+                                    [animateRows]="true"
+                                    [gridOptions]="gridOptions"
+                                    (gridReady)="onGridReady($event)"
+                                  ></ag-grid-angular>
+                                </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div *ngIf="paginatedSuiteData.length == 0" class="noRecord">
+                        <span>{{noScriptFound}}</span>
+                      </div>
+                      <mat-paginator
+                      [length]="testSuiteFilteredData.length"
+                      [pageSize]="allPageSize"
+                      [pageSizeOptions]="[5,7, 10, 20]"
+                      (page)="onPageChange($event)">
+                    </mat-paginator>
+                    </div>
+            </div>
+      </div>
+  </div>
+
+<!-- Modal Start-->
+<div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal-dialog custom-modal">
+  <div class="modal-content">
+    <form [formGroup]="uploadScriptForm" (ngSubmit)="uploadScriptSubmit()">
+    <div class="modal-header modaltitle">
+      <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Script Zip File</h1>
+      <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="container mt-4">
+            <div class="row mb-3"> 
+                <label for="uploadfile" class="col-md-4  col-form-label">Select the script Zip file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadZip" (change)="onFileChange($event)">
+                        <div *ngIf="uploadScriptForm && uploadScriptForm.controls['uploadZip']?.errors" class="text-danger">
+                            <small *ngIf="uploadScriptForm.controls['uploadZip']?.errors?.['required']">Please select the script zip file.</small>
+                        </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="download-btn modal-btns " data-bs-dismiss="modal">Close</button>
+      <button type="submit" class="download-btn modal-btns ">Upload</button>
+    </div>
+    </form>
+  </div>
+</div>
+</div>
+<!--TestSuite Modal Start-->
+<div class="modal fade" #testSuiteModal id="testSuiteModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="testSuiteModalLabel" aria-hidden="true">
+  <div class="modal-dialog custom-modal">
+    <div class="modal-content">
+      <form [formGroup]="uploadtestSuiteForm" (ngSubmit)="testSuiteFileSubmit()">
+      <div class="modal-header modaltitle">
+        <h1 class="modal-title custom-title" id="testSuiteModalLabel">Upload TestSuite XML File</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div class="container mt-4">
+              <div class="row mb-3"> 
+                  <label for="uploadfile" class="col-md-4  col-form-label">Select the testsuite xml file<span style="color:red; margin-left: 0.75em;">*</span></label>
+                      <div class="col-md-8">
+                          <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadXML" (change)="testSuiteXMLFile($event)">
+                          <div *ngIf="xmlFormSubmitted && uploadtestSuiteForm.controls['uploadXML']?.errors" class="text-danger">
+                              <small *ngIf="uploadtestSuiteForm.controls['uploadXML']?.errors?.['required']">Please select the testsuite xml file.</small>
                           </div>
                   </div>
               </div>
-        </div>
+          </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="download-btn modal-btns " data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="download-btn modal-btns ">Upload</button>
+      </div>
+      </form>
     </div>
-</div>
-
+  </div>
+  </div>

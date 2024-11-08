@@ -38,11 +38,12 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { UsergroupService } from '../../../services/usergroup.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MaterialModule } from '../../../material/material.module';
 
 @Component({
   selector: 'app-group-list',
   standalone: true,
-  imports: [FooterComponent, RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [FooterComponent,MaterialModule, RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './group-list.component.html',
   styleUrl: './group-list.component.css'
 })

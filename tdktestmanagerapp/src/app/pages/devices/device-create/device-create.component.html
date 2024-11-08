@@ -24,21 +24,21 @@ limitations under the License.
                         <div class="row">
                             <div class="col">
                                 <div class="row mb-3">
-                                    <label for="stbname" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="devicename" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                      <input type="text" class="form-control" id="stbname" formControlName="stbname" autocomplete="off" placeholder="Enter stb name" [(ngModel)]="stbNameChange" (keyup)="valuechange($event)">
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['stbname']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['stbname']?.errors?.['required']">Please enter Stb name.</small>
+                                      <input type="text" class="form-control" id="devicename" formControlName="devicename" autocomplete="off" placeholder="Enter device name" [(ngModel)]="stbNameChange" (keyup)="valuechange($event)">
+                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['devicename']?.errors" class="text-danger">
+                                            <small *ngIf="deviceForm.controls['devicename']?.errors?.['required']">Please enter device name.</small>
                                         </div>
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="stbip" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="deviceip" class="col-md-3 col-form-label">Stb IP<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                      <input type="text" class="form-control" id="stbip" formControlName="stbip" autocomplete="off" placeholder="Enter stb ip">
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['stbip']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['stbip']?.errors?.['required']">Please enter Stb IP.</small>
-                                            <small *ngIf="deviceForm.controls['stbip']?.errors?.['pattern']">Please enter valid Stb IP.</small>
+                                      <input type="text" class="form-control" id="deviceip" formControlName="deviceip" autocomplete="off" placeholder="Enter device ip">
+                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['deviceip']?.errors" class="text-danger">
+                                            <small *ngIf="deviceForm.controls['deviceip']?.errors?.['required']">Please enter device IP.</small>
+                                            <small *ngIf="deviceForm.controls['deviceip']?.errors?.['pattern']">Please enter valid device IP.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -53,26 +53,16 @@ limitations under the License.
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)">
                                             <option value="" default>Select</option>
-                                            @for (item of allBoxType; track $index) {
-                                                <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                            @for (item of allDeviceType; track $index) {
+                                                <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['boxtype']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="row mb-3" *ngIf="isrecorderId"> 
-                                    <label for="macaddr" class="col-md-3 col-form-label">Recorder Id<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-8">
-                                        <input type="text" class="form-control" id="macaddr" formControlName="recorderId"
-                                        autocomplete="off" placeholder="Enter recorder id">
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['recorderId']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['recorderId']?.errors?.['required']">Please enter recorder id.</small>
+                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['devicetype']?.errors" class="text-danger">
+                                            <small *ngIf="deviceForm.controls['devicetype']?.errors?.['required']">Please select device type.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -85,7 +75,7 @@ limitations under the License.
                                              (change)="thunderChecked($event)">
                                           </div>
                                           <span class="thunder-hints">
-                                            <!-- <strong>Hints :</strong> Please enter stbname and boxtype before you check this box -->
+                                            <!-- <strong>Hints :</strong> Please enter stbname and devicetype before you check this box -->
                                           </span>
                                     </div>
                                   </div>
@@ -120,59 +110,30 @@ limitations under the License.
                             </div>
                             <div class="col">
                               <div class="row mb-3">
-                                <label for="boxManufacturer" class="col-md-3 offset-1 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <label for="oem" class="col-md-3 offset-1 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
                                 <div class="col-md-8">
-                                    <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                    <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                         <option value="" default>Select</option>
-                                        @for (item of allboxManufacture; track $index) {
-                                            <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                        @for (item of alloem; track $index) {
+                                            <option value="{{item.oemName}}">{{item.oemName}}</option>
                                         }
                                     </select>
-                                    <div *ngIf="deviceFormSubmitted && deviceForm.controls['boxmanufacturer']?.errors" class="text-danger">
-                                        <small *ngIf="deviceForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                    <div *ngIf="deviceFormSubmitted && deviceForm.controls['oem']?.errors" class="text-danger">
+                                        <small *ngIf="deviceForm.controls['oem']?.errors?.['required']">Please select oem.</small>
                                     </div>
                                 </div>
                               </div>
                                   <div class="row mb-3">
-                                    <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                        <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
-                                            @for (item of allsocVendors; track $index) {
-                                                <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                            @for (item of allsoc; track $index) {
+                                                <option value="{{item.socName}}">{{item.socName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['socvendor']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="row mb-3" *ngIf="visibleGateway">
-                                    <label for="gateway" class="col-md-3 offset-1 col-form-label">Gateway</label>
-                                    <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="gateway" formControlName="gateway">
-                                            <option value="" default>Select</option>
-                                            @for (item of allGatewayDevices; track $index) {
-                                                <option value="{{item}}">{{item}}</option>
-                                            }
-                                          </select>
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['gateway']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['gateway']?.errors?.['required']">Please select gateway.</small>
-                                        </div>
-                                    </div>
-                                  </div>
-                                  <div class="row mb-3" *ngIf="visibleStreamingList">
-                                    <label for="streamingTemp" class="col-md-3 offset-1 col-form-label">Streaming Template</label>
-                                    <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="streamingTemp" 
-                                          formControlName="streamingTemp" (change)="streamTempChange($event)">
-                                            <option value="" default>Select</option>
-                                            @for (item of streamingTempList; track $index) {
-                                                <option value="{{item}}">{{item}}</option>
-                                            }
-                                          </select>
-                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['streamingTemp']?.errors" class="text-danger">
-                                            <small *ngIf="deviceForm.controls['streamingTemp']?.errors?.['required']">Please select streaming template.</small>
+                                        <div *ngIf="deviceFormSubmitted && deviceForm.controls['soc']?.errors" class="text-danger">
+                                            <small *ngIf="deviceForm.controls['soc']?.errors?.['required']">Please select soc vendor.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -214,33 +175,8 @@ limitations under the License.
                                   </div>
                             </div>
                         </div>
-                        <div class="row table-sec mt-3" *ngIf="streamingTable">
-                          <div><h6 class="streaming-details">Streaming Details</h6></div>
-                          <div class="mandatory-field">
-                            <span style="color:red">All fields are required !</span>
-                          </div>
-                          <div class="ag-table mb-3">
-                              <ag-grid-angular
-                              style="width: 100%; height: 320px;"
-                              [columnDefs]="columnDefs"
-                              [defaultColDef]="defaultColDef"
-                              [suppressRowClickSelection]="true"
-                              [rowHeight]="rowHeight"
-                              [rowData]="rowData"
-                              [class]="themeClass"
-                              [pagination]="false"
-                              [paginationPageSize]="paginationPageSize"
-                              [paginationPageSizeSelector]="paginationPageSizeSelector"
-                              (gridReady)="onGridReady($event)"
-                              [animateRows]="true"
-                             
-                              [context]="this"
-                              [components]="frameworkComponents"
-                            ></ag-grid-angular>
-                          </div>
-                      </div>
                         <div class="row">
-                            <div class="mt-4 text-end">
+                            <div class="mt-1 mb-3 text-end">
                                 <button class="reset-btn" (click)="goBack()">Back</button>
                                 <button class="reset-btn" (click)="reset()">Reset</button>
                                 <button type="submit" class="create-btn">Create</button>
@@ -282,30 +218,30 @@ limitations under the License.
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)">
                                             <option value="" default>Select</option>
-                                            @for (item of allBoxType; track $index) {
-                                                <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                            @for (item of allDeviceType; track $index) {
+                                                <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['boxtype']?.errors" class="text-danger">
-                                            <small *ngIf="rdkBForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
+                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['devicetype']?.errors" class="text-danger">
+                                            <small *ngIf="rdkBForm.controls['devicetype']?.errors?.['required']">Please select device type.</small>
                                         </div>
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="boxManufacturer" class="col-md-3 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="oem" class="col-md-3 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                        <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                             <option value="" default>Select</option>
-                                            @for (item of allboxManufacture; track $index) {
-                                                <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                            @for (item of alloem; track $index) {
+                                                <option value="{{item.oemName}}">{{item.oemName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['boxmanufacturer']?.errors" class="text-danger">
-                                            <small *ngIf="rdkBForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['oem']?.errors" class="text-danger">
+                                            <small *ngIf="rdkBForm.controls['oem']?.errors?.['required']">Please select oem.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -313,16 +249,16 @@ limitations under the License.
                             <div class="col">
                            
                                   <div class="row mb-3">
-                                    <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                        <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
-                                            @for (item of allsocVendors; track $index) {
-                                                <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                            @for (item of allsoc; track $index) {
+                                                <option value="{{item.socName}}">{{item.socName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['socvendor']?.errors" class="text-danger">
-                                            <small *ngIf="rdkBForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
+                                        <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['soc']?.errors" class="text-danger">
+                                            <small *ngIf="rdkBForm.controls['soc']?.errors?.['required']">Please select soc vendor.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -409,30 +345,30 @@ limitations under the License.
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="boxtype" class="col-md-3 col-form-label">Box Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="boxtype" formControlName="boxtype" (change)="boxtypeChange($event)">
+                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)">
                                             <option value="" default>Select</option>
-                                            @for (item of allBoxType; track $index) {
-                                                <option value="{{item.boxTypeName}}">{{item.boxTypeName}}</option>
+                                            @for (item of allDeviceType; track $index) {
+                                                <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['boxtype']?.errors" class="text-danger">
-                                            <small *ngIf="rdkCForm.controls['boxtype']?.errors?.['required']">Please select box type.</small>
+                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['devicetype']?.errors" class="text-danger">
+                                            <small *ngIf="rdkCForm.controls['devicetype']?.errors?.['required']">Please select device type.</small>
                                         </div>
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="boxManufacturer" class="col-md-3 col-form-label">Box Manufacturer<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="oem" class="col-md-3 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="boxManufacturer" formControlName="boxmanufacturer">
+                                        <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                             <option value="" default>Select</option>
-                                            @for (item of allboxManufacture; track $index) {
-                                                <option value="{{item.boxManufacturerName}}">{{item.boxManufacturerName}}</option>
+                                            @for (item of alloem; track $index) {
+                                                <option value="{{item.oemName}}">{{item.oemName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['boxmanufacturer']?.errors" class="text-danger">
-                                            <small *ngIf="rdkCForm.controls['boxmanufacturer']?.errors?.['required']">Please select box manufacturer.</small>
+                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['oem']?.errors" class="text-danger">
+                                            <small *ngIf="rdkCForm.controls['oem']?.errors?.['required']">Please select oem.</small>
                                         </div>
                                     </div>
                                   </div>
@@ -440,16 +376,16 @@ limitations under the License.
                             <div class="col">
                            
                                   <div class="row mb-3">
-                                    <label for="socvendor" class="col-md-3 offset-1 col-form-label">SoC Vendor<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example"  id="socvendor" formControlName="socvendor">
+                                        <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
-                                            @for (item of allsocVendors; track $index) {
-                                                <option value="{{item.socVendorName}}">{{item.socVendorName}}</option>
+                                            @for (item of allsoc; track $index) {
+                                                <option value="{{item.socName}}">{{item.socName}}</option>
                                             }
                                           </select>
-                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['socvendor']?.errors" class="text-danger">
-                                            <small *ngIf="rdkCForm.controls['socvendor']?.errors?.['required']">Please select soc vendor.</small>
+                                        <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['soc']?.errors" class="text-danger">
+                                            <small *ngIf="rdkCForm.controls['soc']?.errors?.['required']">Please select soc vendor.</small>
                                         </div>
                                     </div>
                                   </div>

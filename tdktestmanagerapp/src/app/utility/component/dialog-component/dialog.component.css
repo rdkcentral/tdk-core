@@ -17,6 +17,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+body, *:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+font-family: Roboto, "Helvetica Neue", sans-serif !important;
+}
 
 .divCenter {
   text-align: center;

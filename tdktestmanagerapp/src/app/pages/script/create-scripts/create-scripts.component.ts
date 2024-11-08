@@ -28,6 +28,11 @@ import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
 import {MatStepperIntl} from '@angular/material/stepper';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { ModulesService } from '../../../services/modules.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { DevicetypeService } from '../../../services/devicetype.service';
+import { PrimitiveTestService } from '../../../services/primitive-test.service';
+import { ScriptsService } from '../../../services/scripts.service';
 @Component({
   selector: 'app-create-scripts',
   standalone: true,
@@ -41,26 +46,15 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 })
 export class CreateScriptsComponent {
 
-  dropdownSettings = {};
-  deviceTypeSettings = {};
-  versionSettings = {};
   firstFormGroup!:FormGroup;
   secondFormGroup!:FormGroup;
   thirdFormGroup!:FormGroup;
+  configureName!: string;
+  allDeviceType:any;
+  selectedDeviceCategory : string = 'RDKV';
   allsocVendors!:any[]
-  dropdownList =[
-    {"subBoxtypeId":1,"subBoxtypeName":"Primitive test 1"},
-    {"subBoxtypeId":2,"subBoxtypeName":"Primitive test 2"},
-    {"subBoxtypeId":3,"subBoxtypeName":"Primitive test 3"},
-    {"subBoxtypeId":4,"subBoxtypeName":"Primitive test 4"},
-    {"subBoxtypeId":5,"subBoxtypeName":"Primitive test 5"},
-    {"subBoxtypeId":6,"subBoxtypeName":"Primitive test 6"},
-    {"subBoxtypeId":7,"subBoxtypeName":"Primitive test 7"},
-    {"subBoxtypeId":8,"subBoxtypeName":"Primitive test 8"},
-    {"subBoxtypeId":9,"subBoxtypeName":"Primitive test 9"},
-    {"subBoxtypeId":10,"subBoxtypeName":"Primitive test 10"},
-  ];
-  code = this.getCode();
+  deviceTypeSettings = {};
+  sampleFile:string = '';
   editorOptions = { theme: 'vs-dark', language: 'python' };
   selectedCategoryName! : string ;
   private _matStepperIntl = inject(MatStepperIntl);
@@ -68,50 +62,50 @@ export class CreateScriptsComponent {
   newtestDialogRef!: MatDialogRef<any>;
   @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
   isLinear = true;
+  allModules:any;
+  allPrimitiveTest:any[]=[];
+  userGroupName:any;
+  deviceNameArr: any[]=[]
+  defaultPrimitive:any;
+  changePriorityValue!:string;
+  longDurationValue!:boolean;
+  skipExecutionValue! :boolean;
 
   constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
-    public dialog:MatDialog
-  ) { }
+    public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
+    private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
+    this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+   }
 
   ngOnInit(): void {
-    this.dropdownSettings = {
-      singleSelection: true,
-      idField: 'subBoxtypeId',
-      textField: 'subBoxtypeName',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-    };
     this.deviceTypeSettings = {
       singleSelection: false,
-      idField: 'subBoxtypeId',
-      textField: 'subBoxtypeName',
+      idField: 'deviceTypeId',
+      textField: 'deviceTypeName',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
       itemsShowLimit: 3,
-      allowSearchFilter: true,
+      allowSearchFilter: false,
     };
-    this.versionSettings = {
-      singleSelection: false,
-      idField: 'subBoxtypeId',
-      textField: 'subBoxtypeName',
-      selectAllText: 'Select All',
-      unSelectAllText: 'UnSelect All',
-      itemsShowLimit: 3,
-      allowSearchFilter: true,
-    };
-    const selectedCategory = localStorage.getItem('scriptCategory');
-    this.selectedCategoryName = selectedCategory?selectedCategory:'Video';
+    const selectedCategory = localStorage.getItem('category');
+    if(selectedCategory === 'RDKB'){
+      this.selectedCategoryName = 'Broadband';
+    }else if(selectedCategory === 'RDKC'){
+      this.selectedCategoryName = 'Camera';
+    }else{
+      this.selectedCategoryName = 'Video';
+    }
+    this.getAllModules();
+    this.getAlldeviceType();
 
     this.firstFormGroup = this.fb.group({
       scriptname: ['', Validators.required],
       module:['',Validators.required],
-      primitivetest: ['', Validators.required],
-      deviceType: ['', Validators.required],
+      primitiveTest: [{value:this.defaultPrimitive, disabled: true}],
+      devicetype: ['', Validators.required],
       executiontimeout: ['', Validators.required],
-      longdurationtest: ['', Validators.required],
-      skipexecution: ['', Validators.required],
+      longdurationtest: [''],
+      skipexecution: [''],
       synopsis: ['', Validators.required]
     });
     this.secondFormGroup = this.fb.group({
@@ -119,139 +113,184 @@ export class CreateScriptsComponent {
       testObjective: ['', Validators.required],
       inputParameters: ['', Validators.required],
       automationApproach: ['', Validators.required],
-      priority: [''],
-      remarks: [''],
-      testType: [''],
+      priority: ['',Validators.required],
+      testStub:['',Validators.required],
+      testType: ['',Validators.required],
       rdkInterface: ['', Validators.required],
-      expectedOutput: [''],
+      expectedOutput: ['',Validators.required],
       testPreRequisites: [''],
+      remarks: [''],
       releaseVersion:[''],
-      testStub:['']
     });
     this.thirdFormGroup = this.fb.group({
-      pythonEditor: ['', Validators.required],
-  
+      pythonEditor: [ this.sampleFile, Validators.required],
     });
+    this.firstFormGroup.get('module')?.valueChanges.subscribe(value => {
+      if(value){
+        this.getAllPrimitiveTest(value);
+        this.firstFormGroup.get('primitiveTest')?.enable();
+
+      }else{
+        this.allPrimitiveTest = [];
+        this.firstFormGroup.get('primitiveTest')?.disable();
+      }
+    });
+
+  }
+  getAllModules(): void{
+    this.configureName=this.authservice.selectedConfigVal;
+    this.modulesService.findallbyCategory(this.configureName).subscribe(res=>{
+      this.allModules = JSON.parse(res);
+    })
   }
 
+getSelectedModule(event: any) {
+    this.allPrimitiveTest = [];
+    let selectedValue = event.target.value;
+    if(!selectedValue){
+      this.firstFormGroup.get('primitiveTest')?.disable();
+    }else{
+      this.getAllPrimitiveTest(selectedValue);
+    }
+  }
 
-  getCode() {
-    return `
-      # use tdklib library,which provides a wrapper for tdk testcase script
-      import tdklib;
-      import aampUtilitylib;
-      from time import sleep;
+getAllPrimitiveTest(value: any): void{
+    this.primitiveTestService.getParameterNames(value).subscribe({
+      next: (res) => {
+        this.allPrimitiveTest = JSON.parse(res); 
+        for (let i = 0; i < this.allPrimitiveTest.length; i++) {
+          this.defaultPrimitive = this.allPrimitiveTest[0].primitiveTestName;
+          this.getCode();
+        }
+      },
+      error: (err) => {
+        let errmsg = JSON.parse(err.error);
+        this._snakebar.open(errmsg.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+      })
+    }
+  })
+}
+onChangePrimitive(event:any){
+  let primitiveValue = event.target.value;
+  this.defaultPrimitive = primitiveValue;
+  this.getCode();
+}
 
-      streamType="hlsstream"
-      expectedResult="SUCCESS"
-      #pattern to be searched for event validation
-      pattern="AAMP_EVENT_TUNED"
-      
-      #Test component to be tested
-      aampObj = tdklib.TDKScriptingLibrary("aamp","2.0");
-      sysObj = tdklib.TDKScriptingLibrary("systemutil","2.0");
-      
-      #IP and Port of box, No need to change,
-      #This will be replaced with correspoing Box Ip and port while executing script
-      ip = <ipaddress>
-      port = <port>
-      
-      aampObj.configureTestCase(ip,port,'Aamp_HLS_GetPlayback_Duration');
-      sysObj.configureTestCase(ip,port,'Aamp_HLS_GetPlayback_Duration');
-      
-      #Get the result of connection with test component and STB
-      aampLoadStatus = aampObj.getLoadModuleResult();
-      print "AAMP module loading status : %s" %aampLoadStatus;
-      sysLoadStatus = sysObj.getLoadModuleResult();
-      print "SystemUtil module loading status : %s" %sysLoadStatus;
-      
-      aampObj.setLoadModuleStatus(aampLoadStatus);
-      sysObj.setLoadModuleStatus(sysLoadStatus);
-      
-      if ("SUCCESS" in aampLoadStatus.upper()) and ("SUCCESS" in sysLoadStatus.upper()):
-      
-          #fetch Aamp stream from config file
-          tuneURL=aampUtilitylib.getAampTuneURL(streamType);
-          #Prmitive test case which associated to this Script
-          tdkTestObj = aampObj.createTestStep('Aamp_AampTune');
-          tdkTestObj.addParameter("URL",tuneURL);
-      
-          #Execute the test case in STB
-          tdkTestObj.executeTestCase(expectedResult);
-          #Get the result of execution
-          result = tdkTestObj.getResult();
-          if expectedResult in result:
-              print "AAMP Tune is success"
-              #Search events in Log
-              result=aampUtilitylib.searchAampEvents(sysObj, pattern);
-              if expectedResult in result:
-                  print "AAMP Tune events are verified"
-                  print "[TEST EXECUTION RESULT] : %s" %result;
-                  #Set the result status of execution
-                  tdkTestObj.setResultStatus("SUCCESS");
-                  sleep(10);
-      
-                  tdkTestObj = aampObj.createTestStep('Aamp_AampGetPlaybackDuration');
-                  tdkTestObj.addParameter("URL",tuneURL);
-                  tdkTestObj.executeTestCase(expectedResult);
-                  result = tdkTestObj.getResult();
-                  details = tdkTestObj.getResultDetails();
-                  if expectedResult in result:
-                      print "AAMP Get Playback Duration is executed successfully"
-                      print "[TEST EXECUTION RESULT] : %s" %result;
-                      print details;
-                      #Set the result status of execution
-                      tdkTestObj.setResultStatus("SUCCESS");
-                  else:
-                      print "AAMP Get Playback Duration returns invalid duration"
-                      print "[TEST EXECUTION RESULT] : %s" %result;
-                      print details;
-                      #Set the result status of execution
-                      tdkTestObj.setResultStatus("FAILURE");
-              else:
-                  print "No AAMP events are received"
-                  #Set the result status of execution
-                  tdkTestObj.setResultStatus("FAILURE");
-              #AampTuneStop call
-              tdkTestObj = aampObj.createTestStep('Aamp_AampStop');
-              #Execute the test case in STB
-              tdkTestObj.executeTestCase(expectedResult);
-              #Get the result of execution
-              result = tdkTestObj.getResult();
-              if expectedResult in result:
-                  print "AAMP Stop Success"
-                  tdkTestObj.setResultStatus("SUCCESS")
-              else:
-                  print "AAMP Stop Failure"
-                  tdkTestObj.setResultStatus("FAILURE")
-      
-          else:
-              print "AAMP Tune is Failure"
-              print "[TEST EXECUTION RESULT] : %s" %result;
-              #Set the result status of execution
-              tdkTestObj.setResultStatus("FAILURE");
-      
-          #Unload Module
-          aampObj.unloadModule("aamp");
-          sysObj.unloadModule("systemutil");
-      else:
-          print "Failed to load aamp/systemutil module";
-      
-    `;
+longDuration(event:any){
+  this.longDurationValue = event.target.checked;
+}
+
+skipExecution(event:any){
+  this.skipExecutionValue = event.target.checked;
+}
+
+changePriority(event:any){
+  const priorityValue = event.target.value;
+  this.changePriorityValue = priorityValue;
+}
+getCode() {
+  let temp = this.defaultPrimitive;
+  if(temp){
+    this.scriptservice.scriptTemplate(temp).subscribe(res=>{
+      this.sampleFile = res;
+    })
+  }
+
+  }
+
+  getAlldeviceType(): void{
+    this.configureName=this.authservice.selectedConfigVal;
+    this.deviceTypeService.getfindallbycategory(this.configureName).subscribe(res=>{
+      this.allDeviceType = (JSON.parse(res));
+    })
+  }
+  onItemSelect(item:any){
+    if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
+      this.deviceNameArr.push(item.deviceTypeName);
+    }
+  }
+  onDeSelect(item:any){
+    let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
+    this.deviceNameArr = filterDevice;
+  }
+  onSelectAll(items: any[]){
+   let devices = this.allDeviceType.filter(
+    (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
+   );
+   this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
+  }
+  onDeSelectAll(item:any){
+    this.deviceNameArr=[];
   }
   // You can also change editor options dynamically if needed
-  onCodeChange(value: string) : void{
-    
+  onCodeChange(value: string) {
+    let val = value;
   }
 
-  back(): void{
+  back(){
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
   }
 
-  updateOptionalLabel() : void{
+  updateOptionalLabel() {
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
+  }
+  onSubmit() {
+      const scriptCreateData = {
+        name: this.firstFormGroup.value.scriptname,
+        synopsis : this.firstFormGroup.value.synopsis,
+        executionTimeOut : this.firstFormGroup.value.executiontimeout,
+        primitiveTestName: this.defaultPrimitive,
+        deviceTypes: this.deviceNameArr,
+        skipExecution:this.firstFormGroup.value.skipexecution,
+        longDuration:this.firstFormGroup.value.longdurationtest,
+        testId: this.secondFormGroup.value.testcaseID,
+        objective:this.secondFormGroup.value.testObjective,
+        testType:this.secondFormGroup.value.testType ,
+        apiOrInterfaceUsed:this.secondFormGroup.value.rdkInterface,
+        inputParameters:this.secondFormGroup.value.inputParameters,
+        prerequisites:this.secondFormGroup.value.testPreRequisites,
+        automationApproach:this.secondFormGroup.value.automationApproach,
+        expectedOutput:this.secondFormGroup.value.expectedOutput,
+        priority:this.changePriorityValue,
+        testStubInterface:this.secondFormGroup.value.testStub,
+        releaseVersion:this.secondFormGroup.value.releaseVersion,
+        remarks:this.secondFormGroup.value.remarks,
+        userGroup:this.userGroupName.userGroupName,
+      };
+      const pythonContent = this.thirdFormGroup.value.pythonEditor;
+      const filename = `${this.firstFormGroup.value.scriptname}.py`;
+      const scriptFile = new File([pythonContent],filename,{type: 'text/x-python'});
+      this.scriptservice.createScript(scriptCreateData,scriptFile).subscribe({
+        next: (res) => {
+          this._snakebar.open(res, '', {
+            duration: 2000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+          })
+          setTimeout(() => {
+            this.router.navigate(["/script"]);
+          }, 1000);
+        },
+        error: (err) => {
+          let errmsg =JSON.parse(err.error) ;
+          this._snakebar.open(errmsg.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+        })
+      }
+    })
+  }
+
+  goBack(){
+    this.router.navigate(["/script"]);
   }
 
 

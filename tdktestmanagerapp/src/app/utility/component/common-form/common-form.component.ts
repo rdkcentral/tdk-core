@@ -61,14 +61,14 @@ export class CommonFormComponent implements OnChanges{
         this.createUpdateForm.controls['name'].patchValue(this.initialValue.userGroupName);
       }
     }
-    if(this.route.snapshot.url[1].path ==='boxManufacturer-edit'){
+    if(this.route.snapshot.url[1].path ==='oem-edit'){
       if (changes['initialValue'] && this.initialValue) {
-        this.createUpdateForm.controls['name'].patchValue(this.initialValue.boxManufacturerName);
+        this.createUpdateForm.controls['name'].patchValue(this.initialValue.oemName);
       }
     }
-    if(this.route.snapshot.url[1].path ==='edit-socvendor'){
+    if(this.route.snapshot.url[1].path ==='edit-soc'){
       if (changes['initialValue'] && this.initialValue) {
-        this.createUpdateForm.controls['name'].patchValue(this.initialValue.socVendorName);
+        this.createUpdateForm.controls['name'].patchValue(this.initialValue.socName);
       }
     }
     if(this.route.snapshot.url[1].path ==='scripttag-edit'){
@@ -85,7 +85,7 @@ export class CommonFormComponent implements OnChanges{
   }
   onSubmit(): void {
     if (this.createUpdateForm.invalid) {
-      return
+      return;
     }else{
       this.formSubmitted.emit(this.createUpdateForm.value.name);
     }
@@ -94,11 +94,11 @@ export class CommonFormComponent implements OnChanges{
     if(this.route.snapshot.url[1].path ==='group-add' || this.route.snapshot.url[1].path ==='group-edit'){
       this.router.navigate(['configure/create-group']);
     }
-    if(this.route.snapshot.url[1].path ==='create-boxManufacturer'|| this.route.snapshot.url[1].path === 'boxManufacturer-edit'){
-      this.router.navigate(['configure/list-boxManufacturer']);
+    if(this.route.snapshot.url[1].path ==='create-oem'|| this.route.snapshot.url[1].path === 'oem-edit'){
+      this.router.navigate(['configure/list-oem']);
     }
-    if(this.route.snapshot.url[1].path ==='create-socvendor'|| this.route.snapshot.url[1].path === 'edit-socvendor'){
-      this.router.navigate(['configure/list-socvendor']);
+    if(this.route.snapshot.url[1].path ==='create-soc'|| this.route.snapshot.url[1].path === 'edit-soc'){
+      this.router.navigate(['configure/list-soc']);
     }
     if(this.route.snapshot.url[1].path ==='scripttag-create'|| this.route.snapshot.url[1].path === 'scripttag-edit'){
       this.router.navigate(['configure/scripttag-list']);

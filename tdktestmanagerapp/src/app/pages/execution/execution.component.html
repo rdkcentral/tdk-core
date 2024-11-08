@@ -1,0 +1,155 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+<div class="container-fluid">
+    <div class="row ">
+        <div class="col-md-2 col-sidebar">
+            <div class="sidebar">
+                <div class="execution-drop">
+                    <button type="button" class="download-btn  execution-select" (click)="openDialog()" >
+                        {{executeName}}
+                      </button>
+                      <!-- <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" >Execute Now</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" (click)="openScheduleDialog('Schedule Execution')">Schedule Execution</a></li>
+                      </ul> -->
+                    <!-- <select class="form-select execution-select" aria-label="Default select example" (change)="onChangeExecute($event)">
+                        <option selected disabled>Select execution</option>
+                        @for (item of executionList; track $index) {
+                            <option value="{{item.name}}">{{item.name}}</option>
+                        }
+                      </select> -->
+                </div>
+                <div class="accordion accor-margin" id="accordionExample">
+                    <div class="row accord-row">
+                      <div class="accordion-item" *ngFor="let parent of paginatedParentData">
+                          <h2 class="accordion-header d-flex align-items-center accord-head">
+                            <div class="col">
+                              <!-- <button class="accordion-button no-arrow collapsed flex-grow-1 accor-title" type="button" (click)="$event.stopPropagation()">
+                                {{ parent.title }} 
+                              </button> -->
+                              <i class="bi bi-folder-fill folder-icon"></i><span > {{ parent.name }} </span>
+                              <div class="row-arrows">
+                                <button class="btn btn-link ms-auto" (click)="togglePanel(parent)">
+                                    <i class="bi collapse-icon" [ngClass]="parent.isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+                                </button>
+                              </div>
+                            </div>
+                          </h2>
+                        <div [class.show]="parent.isOpen" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <ul class="ul-item">
+                                    <li class="li-item" *ngFor="let child of parent.childData" >
+                                        {{child.name}}
+                                        <span *ngIf="child.isthunder === true"><i class="bi bi-lightning-charge-fill thunder-icon"></i></span>
+                                        <button mat-icon-button [matMenuTriggerFor]="menu" class="context-btn">
+                                            <mat-icon class="dot-icon">more_vert</mat-icon>
+                                        </button>
+                                          <mat-menu #menu="matMenu" class="mat-contxtmenu">
+                                            <button mat-menu-item class="context-item">
+                                              <span>Enable TDK</span>
+                                            </button>
+                                            <button mat-menu-item class="context-item">
+                                              <span>Disable TDK</span>
+                                            </button>
+                                            <button mat-menu-item class="context-item">
+                                              <span>Copy Device IP</span>
+                                            </button>
+                                            <button mat-menu-item class="context-item">
+                                                <span>Install TDK</span>
+                                              </button>
+                                          </mat-menu>
+                                    </li>
+                                
+                                </ul>
+                            </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-10">
+            <div class="radiobox">
+                <h3 class="heading">Select the device category :</h3>
+                <div class="rdkgroup">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" checked>
+                        <label class="form-check-label" for="rdkv">Video</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" >
+                        <label class="form-check-label" for="rdkb">Broadband</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" >
+                        <label class="form-check-label" for="rdkc">Camera</label>
+                    </div>
+                </div>
+            </div>
+            
+           
+                <div class=" example-header">
+                    <!-- <span class="search">Search:</span>
+                    <input type="text" class="form-control seach-input" id="filter-text-box" 
+                     placeholder="Search..."> -->
+                     <span class="search">Search :</span>
+                     <div class="input-group">
+                       <div class="input-group-text"><i class="bi bi-search"></i></div>
+                       <input type="text" class="form-control seach-input" id="filter-text-box"
+                       (input)="onFilterTextBoxChanged()" placeholder="">
+                     </div>
+                </div>
+            
+            <div class="container mt-3">
+                <!-- TABS CONTAINER -->
+                <mat-tab-group animationDuration="0ms" mat-align-tabs="start">
+                    <mat-tab label="Execution History">
+                        <div style="width: 100%; height: 368px;" [class]="themeClass">
+                            <ag-grid-angular
+                                style="width: 100%; height: 100%;"
+                                [columnDefs]="columnDefs"
+                                [defaultColDef]="{sortable: true}"
+                                [rowData]="rowData"
+                                [pagination]="true"
+                                [paginationPageSize]="paginationPageSize"
+                                [paginationPageSizeSelector]="paginationPageSizeSelector"
+                                [animateRows]="true"
+                                [context]="this"
+                                (gridReady)="onGridReady($event)"
+                                [gridOptions]="gridOptions"
+                            ></ag-grid-angular>
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Execution Schedules">
+                        <div style="width: 100%; height: 368px;" [class]="themeClass">
+                            <ag-grid-angular
+                                style="width: 100%; height: 100%;"
+                                [columnDefs]="columnSchudle"
+                                [defaultColDef]="{sortable: true}"
+                                [rowData]="rowDataSchudle"
+                                [pagination]="true"
+                                [paginationPageSize]="paginationPageSize"
+                                [paginationPageSizeSelector]="paginationPageSizeSelector"
+                                [animateRows]="true"
+                                [context]="this"
+                                [gridOptions]="gridOptions"
+                            ></ag-grid-angular>
+                        </div>
+                    </mat-tab>
+                  </mat-tab-group>
+        </div>
+    </div>
+</div>
