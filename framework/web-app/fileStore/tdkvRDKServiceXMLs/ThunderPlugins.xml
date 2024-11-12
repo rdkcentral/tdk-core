@@ -1179,6 +1179,11 @@
                 <param tag="frmmode" type="int"/>
             </params>
         </method>
+        <method name="Set_Frm_Mode_Negative"  api="setFrmMode"  type="method" version="2" desc="Sets the auto framerate mode with empty value" >
+            <params>
+                <param tag="frmmode" defaultValue="null"/>
+            </params>
+        </method>
         <method name="Get_Display_FrameRate"  api="getDisplayFrameRate"  type="method" version="2" desc="Returns the current display frame rate values" />
         <method name="Set_Display_FrameRate"  api="setDisplayFrameRate"  type="method" version="2" desc="Sets the display framerate values" >
             <params>
