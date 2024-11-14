@@ -30,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -51,7 +52,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @RequestMapping("/api/v1/rdkcertification")
 public class RDKCertificationController {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(RDKCertificationController.class);
+	private static final Logger LOGGER =LoggerFactory.getLogger(RDKCertificationController.class);
 
 	@Autowired
 	IRDKCertificationService rdkCertificationService;
@@ -89,7 +90,7 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "200", description = "Config file downloaded successfully")
 	@ApiResponse(responseCode = "500", description = "Error in downloading config file")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/download")
+	@GetMapping("/download")
 	public ResponseEntity<?> downloadConfigFile(@RequestParam String fileName) {
 		LOGGER.info("Inside downloadConfigFile method with fileName: {}");
 		Resource resource = rdkCertificationService.downloadConfigFile(fileName);
@@ -114,7 +115,7 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "200", description = "Config file names found")
 	@ApiResponse(responseCode = "500", description = "Error in getting config file names")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/getall")
+	@GetMapping("/getall")
 	public ResponseEntity<?> getAllConfigFileNames() {
 		LOGGER.info("Inside getAllConfigFileNames method");
 		List<String> configFileNames = rdkCertificationService.getAllConfigFileNames();
@@ -124,6 +125,29 @@ public class RDKCertificationController {
 		} else {
 			LOGGER.error("No config file names found");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file names found");
+		}
+	}
+	
+	/**
+	 * API to get config file content
+	 * 
+	 * @param fileName
+	 * @return ResponseEntity<?>
+	 */
+	@Operation(summary = "Get config file content", description = "Get config file content by file name.")
+	@ApiResponse(responseCode = "200", description = "Config file content found")
+	@ApiResponse(responseCode = "500", description = "Error in getting config file content")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getconfigfilecontent")
+	public ResponseEntity<?> getConfigFileContent(@RequestParam String fileName) {
+		LOGGER.info("Inside getConfigFileContent method with fileName: {}");
+		String configFileContent = rdkCertificationService.getConfigFileContent(fileName);
+		if (configFileContent != null) {
+			LOGGER.info("Config file content found successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(configFileContent);
+		} else {
+			LOGGER.error("No config file content found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file content found");
 		}
 	}
 

@@ -52,6 +52,16 @@ public interface IRDKCertificationService {
 	 */
 	List<String> getAllConfigFileNames();
 
+	
+	/**
+	 * Method to get the content of the config file
+	 * 
+	 * @param fileName
+	 * @return String
+	 * 
+	 */
+	String getConfigFileContent(String fileName);
+
 
 
 }

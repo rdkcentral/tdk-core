@@ -65,11 +65,13 @@ public class FunctionService implements IFunctionService {
 	/**
 	 * Creates a new function.
 	 *
-     * @param functionCreateDTO the data transfer object containing the function details
+	 * @param functionCreateDTO the data transfer object containing the function
+	 *                          details
 	 * @return true if the function was created successfully, false otherwise
 	 */
 	@Override
 	public boolean createFunction(FunctionCreateDTO functionCreateDTO) {
+
 		LOGGER.info("Creating new function: {}", functionCreateDTO);
 
 		Module module = moduleRepository.findByName(functionCreateDTO.getModuleName());
@@ -78,33 +80,33 @@ public class FunctionService implements IFunctionService {
 			throw new ResourceAlreadyExistsException(Constants.FUNCTION_NAME, functionCreateDTO.getFunctionName());
 		}
 
-            if (module == null) {
-                LOGGER.error("Module not found: {}", functionCreateDTO.getModuleName());
-                throw new ResourceNotFoundException(Constants.MODULE_NAME, functionCreateDTO.getModuleName());
-            }
-            Category category = Category.getCategory(functionCreateDTO.getFunctionCategory());
-            if (null == category) {
-                throw new ResourceNotFoundException(Constants.CATEGORY, functionCreateDTO.getFunctionCategory());
-            } else {
-                module.setCategory(category);
-            }
-            Function function = new Function();
-            MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
-            LOGGER.info("Function created successfully: {}", function);
-            try {
-                functionRepository.save(function);
-                LOGGER.info("Function created successfully: {}", function);
-            } catch (Exception e) {
-                LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
-                return false;
-            }
-            return function != null && function.getId() != null && function.getId() != null;
-    }
+		if (module == null) {
+			LOGGER.error("Module not found: {}", functionCreateDTO.getModuleName());
+			throw new ResourceNotFoundException(Constants.MODULE_NAME, functionCreateDTO.getModuleName());
+		}
+		Category category = Category.getCategory(functionCreateDTO.getFunctionCategory());
+		if (null == category) {
+			throw new ResourceNotFoundException(Constants.CATEGORY, functionCreateDTO.getFunctionCategory());
+		}
+		Function function = new Function();
+
+		MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
+		LOGGER.info("Function created successfully: {}", function);
+		try {
+			functionRepository.save(function);
+			LOGGER.info("Function created successfully: {}", function);
+		} catch (Exception e) {
+			LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
+			return false;
+		}
+		return function != null && function.getId() != null && function.getId() != null;
+	}
 
 	/**
 	 * Updates an existing function.
 	 *
-     * @param functionDTO the data transfer object containing the updated function details
+	 * @param functionDTO the data transfer object containing the updated function
+	 *                    details
 	 * @return true if the function was updated successfully, false otherwise
 	 */
 	@Override
@@ -125,7 +127,8 @@ public class FunctionService implements IFunctionService {
 			function.setModule(module);
 		}
 
-            if (!Utils.isEmpty(functionDTO.getFunctionName()) && !functionDTO.getFunctionName().equals(function.getName())) {
+		if (!Utils.isEmpty(functionDTO.getFunctionName())
+				&& !functionDTO.getFunctionName().equals(function.getName())) {
 			if (functionRepository.existsByName(functionDTO.getFunctionName())) {
 				LOGGER.info("Function already exists with the same name: " + functionDTO.getFunctionName());
 				throw new ResourceAlreadyExistsException(Constants.FUNCTION_NAME, functionDTO.getFunctionName());
@@ -155,13 +158,15 @@ public class FunctionService implements IFunctionService {
 	/**
 	 * Finds all functions.
 	 *
-     * @return a list of data transfer objects containing the details of all functions
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions
 	 */
 	@Override
 	public List<FunctionDTO> findAllFunctions() {
 		LOGGER.info("Retrieving all functions");
 		List<Function> functions = functionRepository.findAll();
-        List<FunctionDTO> functionDTOs = functions.stream().map(MapperUtils::convertToFunctionDTO).collect(Collectors.toList());
+		List<FunctionDTO> functionDTOs = functions.stream().map(MapperUtils::convertToFunctionDTO)
+				.collect(Collectors.toList());
 		LOGGER.info("Retrieved {} functions", functionDTOs.size());
 		return functionDTOs;
 	}
@@ -170,55 +175,60 @@ public class FunctionService implements IFunctionService {
 	 * Finds a function by its ID.
 	 *
 	 * @param id the ID of the function
-     * @return the data transfer object containing the details of the function, or null if not found
+	 * @return the data transfer object containing the details of the function, or
+	 *         null if not found
 	 */
 	@Override
 	public FunctionDTO findFunctionById(UUID id) {
 		LOGGER.info("Retrieving function by ID: {}", id);
-        Function function = functionRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Function not found for this id :: ", id.toString()));
+		Function function = functionRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Function not found for this id :: ", id.toString()));
 		FunctionDTO functionDTO = MapperUtils.convertToFunctionDTO(function);
 		LOGGER.info("Retrieved function: {}", functionDTO);
 		return functionDTO;
 	}
-    /**
-     * Deletes a function by its ID.
-     *
-     * @param id the ID of the function
-     * @return true if the function was deleted successfully, false otherwise
-     */
-    @Override
-    public void deleteFunction(UUID id) {
-        LOGGER.info("Deleting function by ID: {}", id);
-        if (!functionRepository.existsById(id)) {
-            LOGGER.error("Function not found for ID: {}", id);
-            throw new ResourceNotFoundException("Function id :: ", id.toString());
-        }
-        try {
-            List<Parameter> parameters = parameterRepository.findAllByFunctionId(id);
-            for (Parameter parameter : parameters) {
-                parameterRepository.deleteById(parameter.getId());
-                LOGGER.info("Deleted parameter with ID: {}", parameter.getId());
-            }
-            functionRepository.deleteById(id);
-            LOGGER.info("Function deleted successfully: {}", id);
-        } catch (DataIntegrityViolationException e) {
-            LOGGER.error("Failed to delete function by ID: {}", id, e);
-            throw new DeleteFailedException();
-        }
-    }
+
+	/**
+	 * Deletes a function by its ID.
+	 *
+	 * @param id the ID of the function
+	 * @return true if the function was deleted successfully, false otherwise
+	 */
+	@Override
+	public void deleteFunction(UUID id) {
+		LOGGER.info("Deleting function by ID: {}", id);
+		if (!functionRepository.existsById(id)) {
+			LOGGER.error("Function not found for ID: {}", id);
+			throw new ResourceNotFoundException("Function id :: ", id.toString());
+		}
+		try {
+			List<Parameter> parameters = parameterRepository.findAllByFunctionId(id);
+			for (Parameter parameter : parameters) {
+				parameterRepository.deleteById(parameter.getId());
+				LOGGER.info("Deleted parameter with ID: {}", parameter.getId());
+			}
+			functionRepository.deleteById(id);
+			LOGGER.info("Function deleted successfully: {}", id);
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error("Failed to delete function by ID: {}", id, e);
+			throw new DeleteFailedException();
+		}
+	}
 
 	/**
 	 * Finds all functions by their category.
 	 *
 	 * @param category the category of the functions
-     * @return a list of data transfer objects containing the details of all functions in the specified category
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions in the specified category
 	 */
 	@Override
 	public List<FunctionDTO> findAllByCategory(String category) {
 		LOGGER.info("Retrieving all functions by category: {}", category);
 		Utils.checkCategoryValid(category);
 		List<Function> functions = functionRepository.findAllByCategory(Category.getCategory(category));
-        List<FunctionDTO> functionDTOs = functions.stream().map(MapperUtils::convertToFunctionDTO).collect(Collectors.toList());
+		List<FunctionDTO> functionDTOs = functions.stream().map(MapperUtils::convertToFunctionDTO)
+				.collect(Collectors.toList());
 		LOGGER.info("Retrieved {} functions by category {}", functionDTOs.size(), category);
 		return functionDTOs;
 	}
@@ -227,7 +237,8 @@ public class FunctionService implements IFunctionService {
 	 * Finds all functions by module.
 	 *
 	 * @param moduleName the name of the module
-     * @return a list of data transfer objects containing the details of all functions in the specified module
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions in the specified module
 	 */
 	@Override
 	public List<FunctionDTO> findAllFunctionsByModule(String moduleName) {
@@ -238,9 +249,7 @@ public class FunctionService implements IFunctionService {
 			throw new ResourceNotFoundException("Module", moduleName);
 		}
 		List<Function> functions = functionRepository.findAllByModuleId(module.getId());
-        return functions.stream()
-                .map(MapperUtils::convertToFunctionDTO)
-                .collect(Collectors.toList());
+		return functions.stream().map(MapperUtils::convertToFunctionDTO).collect(Collectors.toList());
 	}
 
 	/**

@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -354,6 +355,13 @@ public class TestSuiteService implements ITestSuiteService {
 		LOGGER.info("Finding all test suites by category" + categoryName);
 		Category category = commonService.validateCategory(categoryName);
 		List<TestSuite> testSuiteList = testSuiteRepository.findAllByCategory(category);
+		if (Category.RDKV.equals(category)) {
+			testSuiteList = testSuiteRepository
+					.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+		} else {
+			testSuiteList = testSuiteRepository.findAllByCategory(category);
+		}
+
 		List<TestSuiteDTO> testSuiteDTOList = new ArrayList<TestSuiteDTO>();
 		if (testSuiteList != null && !testSuiteList.isEmpty()) {
 			for (TestSuite testSuite : testSuiteList) {
@@ -480,6 +488,7 @@ public class TestSuiteService implements ITestSuiteService {
 			throw new ResourceNotFoundException(Constants.TEST_SUITE, testSuite);
 		}
 		String categoryName = testSuiteObj.getCategory().name();
+		String testSuiteDesc = testSuiteObj.getDescription();
 		List<ScriptTestSuite> scriptTestSuiteList = scriptTestSuiteRepository.findAllByTestSuite(testSuiteObj);
 		if (scriptTestSuiteList.isEmpty()) {
 			LOGGER.error("No scripts found for the test suite: " + testSuite);
@@ -489,7 +498,7 @@ public class TestSuiteService implements ITestSuiteService {
 		for (ScriptTestSuite scriptTestSuite : scriptTestSuiteList) {
 			scriptList.add(scriptTestSuite.getScript());
 		}
-		return downloadTestSuiteXML(scriptList, categoryName);
+		return downloadTestSuiteXML(scriptList, categoryName, testSuiteDesc);
 
 	}
 
@@ -519,6 +528,9 @@ public class TestSuiteService implements ITestSuiteService {
 			NodeList categoryList = document.getElementsByTagName("category");
 			String category = categoryList.item(0).getTextContent();
 
+			NodeList description = document.getElementsByTagName("description");
+			String desc = description.item(0).getTextContent();
+
 			// Extract scripts
 			NodeList scriptNodes = document.getElementsByTagName("script_name");
 
@@ -528,6 +540,7 @@ public class TestSuiteService implements ITestSuiteService {
 					.setName(scriptFile.getOriginalFilename().replace(Constants.XML_EXTENSION, Constants.EMPTY_STRING));
 			Category testSuiteCategory = commonService.validateCategory(category);
 			testSuite.setCategory(testSuiteCategory);
+			testSuite.setDescription(desc);
 			testSuiteRepository.save(testSuite);
 			for (int i = 0; i < scriptNodes.getLength(); i++) {
 				String scriptName = scriptNodes.item(i).getTextContent();
@@ -557,7 +570,7 @@ public class TestSuiteService implements ITestSuiteService {
 	 * @param categoryName - the category name
 	 * @return the test suite as XML
 	 */
-	public ByteArrayInputStream downloadTestSuiteXML(List<Script> scriptList, String categoryName) {
+	public ByteArrayInputStream downloadTestSuiteXML(List<Script> scriptList, String categoryName, String description) {
 		DocumentBuilderFactory documentFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder documentBuilder;
 		try {
@@ -576,6 +589,10 @@ public class TestSuiteService implements ITestSuiteService {
 			Element categoryElement = document.createElement("category");
 			categoryElement.appendChild(document.createTextNode(categoryName));
 			testSuiteElement.appendChild(categoryElement);
+
+			Element descriptionElement = document.createElement("description");
+			descriptionElement.appendChild(document.createTextNode(description));
+			testSuiteElement.appendChild(descriptionElement);
 
 			// Create <scripts> element and append it to <test_suite>
 			Element scriptElement = document.createElement("scripts");

@@ -329,6 +329,14 @@ public class MapperUtils {
 			TestGroup testGroup = TestGroup.valueOf(moduleDTO.getTestGroup());
 			module.setTestGroup(testGroup);
 		}
+		if (!moduleDTO.isModuleThunderEnabled()) {
+			Category category = Category.getCategory(moduleDTO.getModuleCategory());
+			if (null == category) {
+				throw new ResourceNotFoundException(Constants.CATEGORY, moduleDTO.getModuleCategory());
+			} else {
+				module.setCategory(category);
+			}
+		}
 	}
 
 	/**
@@ -348,6 +356,9 @@ public class MapperUtils {
 		moduleDTO.setModuleLogFileNames(module.getLogFileNames());
 		moduleDTO.setModuleCrashLogFiles(module.getCrashLogFiles());
 		moduleDTO.setModuleCategory(module.getCategory().name());
+		if (module.getCategory() == Category.RDKV_RDKSERVICE) {
+			moduleDTO.setModuleThunderEnabled(true);
+		}
 		return moduleDTO;
 	}
 

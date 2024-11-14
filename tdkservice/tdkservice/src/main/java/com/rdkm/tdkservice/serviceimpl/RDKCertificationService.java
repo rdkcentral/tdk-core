@@ -144,4 +144,30 @@ public class RDKCertificationService implements IRDKCertificationService {
 		return configFileNames;
 	}
 
+	/**
+	 * Method to get the content of the config file
+	 * 
+	 * @param fileName
+	 * @return String
+	 * 
+	 */
+	@Override
+	public String getConfigFileContent(String fileName) {
+		LOGGER.info("Inside getConfigFileContent method with fileName: {}", fileName);
+		String fileContent = "";
+		try {
+			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.RDK_CERTIFICATION_CONFIG_PATH + Constants.FILE_PATH_SEPERATOR + fileName
+					+ Constants.PYTHON_FILE_EXTENSION;
+			File file = new File(filePath);
+			if (file.exists()) {
+				fileContent = new String(Files.readAllBytes(file.toPath()));
+
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error in getting config file content: " + e.getMessage());
+			throw new TDKServiceException("Error in getting config file content: " + e.getMessage());
+		}
+		return fileContent;
+	}
 }
