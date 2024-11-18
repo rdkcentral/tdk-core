@@ -321,21 +321,11 @@ public class ModuleServiceTest {
 		Module module = new Module();
 		module.setId(moduleId);
 
-		Function function = new Function();
-		function.setId(moduleId);
-
-		Parameter parameter = new Parameter();
-		parameter.setId(moduleId);
-
 		when(moduleRepository.findById(moduleId)).thenReturn(Optional.of(module));
-		when(functionRepository.findAllByModuleId(moduleId)).thenReturn(Arrays.asList(function));
-		when(parameterRepository.findAllByFunctionId(moduleId)).thenReturn(Arrays.asList(parameter));
 
 		boolean result = moduleService.deleteModule(moduleId);
 
 		assertTrue(result);
-		verify(parameterRepository).deleteById(moduleId);
-		verify(functionRepository).deleteById(moduleId);
 		verify(moduleRepository).deleteById(moduleId);
 	}
 }

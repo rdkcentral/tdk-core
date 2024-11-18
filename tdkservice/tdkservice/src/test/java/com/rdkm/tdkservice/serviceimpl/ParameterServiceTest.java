@@ -97,7 +97,6 @@ public class ParameterServiceTest {
 		assertTrue(result);
 	}
 
-
 	@Test
 	void testCreateParameter_FunctionNotFound() {
 		ParameterCreateDTO parameterCreateDTO = new ParameterCreateDTO();
@@ -113,14 +112,22 @@ public class ParameterServiceTest {
 		UUID parameterId = UUID.randomUUID();
 		ParameterDTO parameterDTO = new ParameterDTO();
 		parameterDTO.setId(parameterId);
-		parameterDTO.setParameterName("UpdatedParameter");
+		parameterDTO.setParameterName("OldParameter");
+		parameterDTO.setFunction("TestFunction");
 
+		Function function = new Function();
+		function.setName("TestFunction");
 		Parameter parameter = new Parameter();
 		parameter.setId(parameterId);
-		parameter.setName("OldParameter");
+		parameter.setParameterDataType(ParameterDataType.FLOAT);
+		parameter.setRangeVal("33");
+		parameter.setName("OldParameter1");
+		parameter.setFunction(function);
 
-		when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
-		when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(false);
+		when(parameterRepository.findById(parameterId)).thenReturn(Optional.of(parameter));
+		when(functionRepository.findByName(parameterDTO.getFunction())).thenReturn(function);
+		when(parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)).thenReturn(false);
+
 
 		boolean result = parameterService.updateParameter(parameterDTO);
 
@@ -144,14 +151,21 @@ public class ParameterServiceTest {
 		UUID parameterId = UUID.randomUUID();
 		ParameterDTO parameterDTO = new ParameterDTO();
 		parameterDTO.setId(parameterId);
-		parameterDTO.setParameterName("ExistingParameter");
+		parameterDTO.setParameterName("OldParameter");
+		parameterDTO.setFunction("TestFunction");
 
+		Function function = new Function();
+		function.setName("TestFunction");
 		Parameter parameter = new Parameter();
 		parameter.setId(parameterId);
-		parameter.setName("OldParameter");
+		parameter.setParameterDataType(ParameterDataType.FLOAT);
+		parameter.setRangeVal("33");
+		parameter.setName("OldParameter1");
+		parameter.setFunction(function);
 
-		when(parameterRepository.findById(parameterDTO.getId())).thenReturn(Optional.of(parameter));
-		when(parameterRepository.existsByName(parameterDTO.getParameterName())).thenReturn(true);
+		when(parameterRepository.findById(parameterId)).thenReturn(Optional.of(parameter));
+		when(functionRepository.findByName(parameterDTO.getFunction())).thenReturn(function);
+		when(parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)).thenReturn(true);
 
 		assertThrows(ResourceAlreadyExistsException.class, () -> parameterService.updateParameter(parameterDTO));
 	}

@@ -58,4 +58,12 @@ public interface TestSuiteRepository extends JpaRepository<TestSuite, UUID> {
 	 * @return - test suite
 	 */
 	TestSuite findByName(String testSuiteName);
+
+	/**
+	 * Find all test suites by category in
+	 * 
+	 * @param asList - list of categories
+	 * @return list of {@link com.rdkm.tdkservice.model.TestSuite}
+	 */
+	List<TestSuite> findAllByCategoryIn(List<Category> asList);
 }

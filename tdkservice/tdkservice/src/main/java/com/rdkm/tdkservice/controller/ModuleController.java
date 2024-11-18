@@ -183,6 +183,30 @@ public class ModuleController {
 	}
 
 	/**
+	 * Retrieves a module by its category.(Seperately for rdkv and rdkvservice)
+	 *
+	 * @param category the category of the module
+	 * @return ResponseEntity with a list of modules
+	 */
+	@Operation(summary = "Retrieve a module by its category", description = "Retrieves a module by its category.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved the module"),
+			@ApiResponse(responseCode = "404", description = "Module not found"),
+			@ApiResponse(responseCode = "401", description = "Unauthorized"),
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
+	@GetMapping("/findbycategory/{category}")
+	public ResponseEntity<?> findByCategory(@PathVariable String category) {
+		LOGGER.info("Retrieving modules by category: {}", category);
+		List<String> modules = moduleService.findByCategory(category);
+		if (modules != null && !modules.isEmpty()) {
+			LOGGER.info("Successfully retrieved modules by category: {}", category);
+			return ResponseEntity.status(HttpStatus.OK).body(modules);
+		} else {
+			LOGGER.error("No modules found for category: {}", category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No modules found for category");
+		}
+	}
+
+	/**
 	 * Retrieves all module names by category.
 	 *
 	 * @param category the category of the module

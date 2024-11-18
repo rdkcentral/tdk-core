@@ -249,7 +249,6 @@ public class ModuleService implements IModuleService {
 	 */
 
 	@Override
-	@Transactional
 	public boolean deleteModule(UUID id) {
 		LOGGER.info("Going to delete module with ID: {}", id);
 		Module module = moduleRepository.findById(id).orElse(null);
@@ -257,29 +256,14 @@ public class ModuleService implements IModuleService {
 			LOGGER.error("Module with ID {} not found", id);
 			throw new ResourceNotFoundException(Constants.MODULE_NAME, id.toString());
 		}
-		List<Function> functions = functionRepository.findAllByModuleId(id);
-		LOGGER.info("Deleting functions for module ID: {}", id);
-		for (Function function : functions) {
-			LOGGER.info("Deleting function: {}", function.getName());
-			// Fetch parameters by function ID
-			List<Parameter> parameters = parameterRepository.findAllByFunctionId(function.getId());
-			for (Parameter parameter : parameters) {
-				LOGGER.info("Deleting parameter with ID: {}", parameter.getId());
-				parameterRepository.deleteById(parameter.getId());
-			}
-			LOGGER.info("Deleting function with ID: {}", function.getId());
-			functionRepository.deleteById(function.getId());
-		}
 		try {
 			moduleRepository.deleteById(id);
-			LOGGER.info("Module deleted successfully: {}", id);
-
-			return true;
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error deleting module: {}", e.getMessage());
 			throw new DeleteFailedException();
 		}
-
+		LOGGER.info("Module deleted successfully: {}", id);
+		return true;
 	}
 
 	@Override
@@ -329,10 +313,10 @@ public class ModuleService implements IModuleService {
 			LOGGER.info("Module saved successfully");
 			return true;
 		} catch (SAXException e) {
-			LOGGER.error("Invalid XML file format"+e.getMessage());
+			LOGGER.error("Invalid XML file format" + e.getMessage());
 			throw new UserInputException("Invalid XML file format.");
 		} catch (IOException | ParserConfigurationException | IllegalArgumentException e) {
-			LOGGER.error("Error reading the XML file"+e.getMessage());
+			LOGGER.error("Error reading the XML file" + e.getMessage());
 			throw new TDKServiceException("Error reading the XML file.");
 		}
 	}
@@ -745,6 +729,23 @@ public class ModuleService implements IModuleService {
 	private void addComment(Document doc, Element parent, String commentText) {
 		Comment comment = doc.createComment(" " + commentText + " ");
 		parent.appendChild(comment);
+	}
+
+	/**
+	 * Finds all module names by category.
+	 *
+	 * @param category the category of the module
+	 * @return a list of all module names
+	 */
+	@Override
+	public List<String> findByCategory(String category) {
+		LOGGER.info("Going to fetch all modules by category: {}", category);
+		Utils.checkCategoryValid(category);
+		List<Module> modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		if (modules.isEmpty()) {
+			return Collections.emptyList();
+		}
+		return modules.stream().map(Module::getName).collect(Collectors.toList());
 	}
 
 }

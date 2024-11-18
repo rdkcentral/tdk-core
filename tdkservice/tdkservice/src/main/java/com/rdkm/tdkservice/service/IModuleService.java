@@ -101,4 +101,11 @@ public interface IModuleService {
 	 * @return the XML file as a string
 	 */
 	ByteArrayResource downloadModulesAsZip(String category) throws Exception;
+
+	/**
+	 * Finds all module names by category.
+	 *
+	 * @return a list of all module names
+	 */
+	public List<String> findByCategory(String category);
 }

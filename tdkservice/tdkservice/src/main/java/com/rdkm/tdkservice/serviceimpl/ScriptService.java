@@ -34,6 +34,7 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -370,7 +371,13 @@ public class ScriptService implements IScriptService {
 		Category categoryValue = commonService.validateCategory(category);
 
 		// Get all the modules based on the category
-		List<Module> modules = moduleRepository.findAllByCategory(categoryValue);
+		List<Module> modules;
+
+		if (Category.RDKV.equals(categoryValue)) {
+			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
+		} else {
+			modules = moduleRepository.findAllByCategory(categoryValue);
+		}
 
 		List<ScriptModuleDTO> scriptModuleDTOList = new ArrayList<>();
 		// If no modules are found for the category, then throw an exception
@@ -678,14 +685,15 @@ public class ScriptService implements IScriptService {
 	 */
 
 	public File getPythonFile(String scriptName) {
+
 		Script testCase = scriptRepository.findByName(scriptName);
 		if (testCase == null) {
 			LOGGER.error("Test script not found with the name: " + scriptName);
 			throw new ResourceNotFoundException(Constants.SCRIPT_NAME, scriptName);
 		}
-		String baseDir = System.getProperty(Constants.USER_DIRECTORY); // Get the current working directory
-		Path scriptFilePath = Paths.get(baseDir, Constants.BASE_FILESTORE_FOLDER, testCase.getScriptLocation(),
-				scriptName + Constants.PYTHON_FILE_EXTENSION); // Combine base directory and relative path
+		Path scriptFilePath = Paths
+				.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + testCase.getScriptLocation()
+						+ Constants.FILE_PATH_SEPERATOR + scriptName + Constants.PYTHON_FILE_EXTENSION);
 		File scriptFile = scriptFilePath.toFile();
 		if (!scriptFile.exists()) {
 			throw new ResourceNotFoundException("Script file not found at location: ", testCase.getScriptLocation());
@@ -1103,8 +1111,8 @@ public class ScriptService implements IScriptService {
 	}
 
 	/*
-	 * This method is used to create default test suite for existing module .return -
-	 * void
+	 * This method is used to create default test suite for existing module .return
+	 * - void
 	 * 
 	 */
 	public void defaultTestSuiteCreationForExistingModule() {
