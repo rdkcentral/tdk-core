@@ -18,8 +18,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FooterComponent } from '../../../layout/footer/footer.component';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -32,7 +30,6 @@ import {
   SelectionChangedEvent
 } from 'ag-grid-community';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import { ButtonComponent } from '../../../utility/component/ag-grid-buttons/button/button.component';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -43,7 +40,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-group-list',
   standalone: true,
-  imports: [FooterComponent,MaterialModule, RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule,CommonModule, ReactiveFormsModule, AgGridAngular],
   templateUrl: './group-list.component.html',
   styleUrl: './group-list.component.css'
 })

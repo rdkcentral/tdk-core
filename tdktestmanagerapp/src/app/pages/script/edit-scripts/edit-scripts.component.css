@@ -92,8 +92,8 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-radius: 4px;
     padding: 5px 10px 5px 10px;
 }
-::ng-deep.mat-step-header:hover{
-    background-color: #fff !important;
+::ng-deep.cdk-program-focused{
+    background-color: transparent !important;
 }
 ::ng-deep.mat-step-icon-selected {
     background-color: #00B2DC !important;
@@ -109,4 +109,8 @@ hr{
 }
 .next-btn:disabled{
     background-color: gray;
+}
+::ng-deep .multiselect-dropdown span.selected-item{
+    width: 100% !important;
+    max-width: 100% !important;
 }

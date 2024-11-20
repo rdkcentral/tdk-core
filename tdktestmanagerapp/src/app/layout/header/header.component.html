@@ -19,10 +19,10 @@ limitations under the License.
   <div class="divider"></div>
 
   <div class="thememode">
+    <!-- <button (click)="toggleTheme()">Toggle Theme</button> -->
     <mat-slide-toggle [checked]="isChecked" (click)="toggleTheme()">
-      <!-- <mat-icon class="themeicon">wb_sunny</mat-icon> -->
       <button mat-icon-button class="theme-btn">
-        @if (themeService.themeSignal()==='dark') {
+        @if (currentTheme ==='DARK') {
           <i class="bi bi-brightness-high-fill moon themeicon"></i>
         }
         @else {
@@ -38,6 +38,7 @@ limitations under the License.
   </button>
   <mat-menu #menu="matMenu">
     <a mat-menu-item routerLink="/change-password" class="menuitem-logout"><mat-icon class="logout-icon">vpn_key</mat-icon><span class="logout-text">Change Password</span></a>
+    <a mat-menu-item routerLink="/prefered-category" class="menuitem-logout"><mat-icon class="logout-icon">group_add</mat-icon><span class="logout-text">Prefered Category</span></a>
     <button mat-menu-item (click)="logOut()"><mat-icon class="logout-icon">exit_to_app</mat-icon><span class="logout-text">Sign Out</span></button>
   </mat-menu>
 </mat-toolbar>

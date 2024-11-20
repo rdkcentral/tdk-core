@@ -24,11 +24,12 @@ import { CommonModule } from '@angular/common';
 import { FormGroup, ReactiveFormsModule, Validators, FormBuilder, AbstractControl } from '@angular/forms';
 import { LoginService } from '../../services/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MaterialModule } from '../../material/material.module';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [FooterComponent, RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [FooterComponent,MaterialModule, RouterLink, ReactiveFormsModule, CommonModule],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })

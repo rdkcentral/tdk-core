@@ -28,15 +28,16 @@ import { ButtonComponent } from '../../utility/component/ag-grid-buttons/button/
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeviceService } from '../../services/device.service';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDelete } from '../../utility/component/dialog-component/dialog.component';
+import { LoaderComponent } from '../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-devices',
   standalone: true,
-  imports: [CommonModule,AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule,AgGridAngular, LoaderComponent,FormsModule, ReactiveFormsModule, MaterialModule],
   templateUrl: './devices.component.html',
   styleUrl: './devices.component.css'
 })
@@ -52,9 +53,14 @@ export class DevicesComponent {
   selectedDeviceCategory : string = 'RDKV';
   uploadXMLForm!:FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName! :File;
+  uploadFileName! :File | null ;
   categoryName!: string | null;
-  
+  uploadFileError: string | null = null;
+  loggedinUser:any;
+  preferedCategory!:string;
+  userCategory!:string;
+  loaderDisplay = false;
+
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -96,8 +102,11 @@ export class DevicesComponent {
   ];
 
 
-  constructor(private router: Router, private service:DeviceService,
+  constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
     private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
+      this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+      this.userCategory = this.loggedinUser.userCategory;
+      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
   }
   
   /**
@@ -113,23 +122,21 @@ export class DevicesComponent {
    * Initializes the component and performs necessary setup tasks.
    */
   ngOnInit(): void {
-    const deviceCategory = localStorage.getItem('deviceCategory');
+    const deviceCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     const name = localStorage.getItem('deviceCategoryName');
-    this.categoryName = name
-    console.log("Device category",deviceCategory);
+    this.categoryName = name;
+    this.categoryChange(deviceCategory);
     if(deviceCategory === null){
-      this.categoryName = name
+      this.categoryName = name;
       this.configureName = this.selectedDeviceCategory;
-      localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
       this.findallbyCategory();
     }
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory;
-      // console.log("Device category",this.configureName = this.selectedDeviceCategory);
       this.findallbyCategory();
     }
-    this.uploadXMLForm = new FormGroup({
-      uploadXml: new FormControl<string | null>('', { validators: Validators.required }),
+    this.uploadXMLForm = this.fb.group({
+      uploadXml: [null, Validators.required]
     })
   }
 
@@ -137,9 +144,17 @@ export class DevicesComponent {
    * Finds all devices by category.
    */
   findallbyCategory(){
-    this.service.findallbyCategory(this.selectedDeviceCategory).subscribe(res=>{
-      let data = JSON.parse(res);
-      this.rowData = data.sort((a: any, b: any) =>a.deviceName.toString().localeCompare(b.deviceName.toString()));
+    this.loaderDisplay = true;
+    this.service.findallbyCategory(this.selectedDeviceCategory).subscribe({
+      next: (res) => {
+        let data = JSON.parse(res);
+        this.rowData = data;
+        this.rowData = data.sort((a: any, b: any) =>a.deviceName.toString().localeCompare(b.deviceName.toString()));
+        this.loaderDisplay = false;
+      },
+      error: (err) => {
+        this.loaderDisplay = false;
+      }
     })
   }
   /**
@@ -148,6 +163,9 @@ export class DevicesComponent {
    */
   ischecked(val:any):void{
     this.rowData = [];
+    this.categoryChange(val);
+  }
+  categoryChange(val:any){
     if(val === 'RDKB'){
       this.categoryName = 'Broadband';
       this.selectedDeviceCategory = 'RDKB';
@@ -165,8 +183,8 @@ export class DevicesComponent {
     }
     localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
     localStorage.setItem('deviceCategoryName', this.categoryName);
- 
   }
+
   gridOptions = {
     domLayout: 'autoHeight'
   };
@@ -213,7 +231,10 @@ export class DevicesComponent {
               horizontalPosition: 'end',
               verticalPosition: 'top'
               })
-              this.ngOnInit();
+              const rowToRemove = this.rowData.find((row:any) => row.id === data.id);
+              if (rowToRemove) {
+                this.gridApi.applyTransaction({ remove: [rowToRemove] });
+              }
           },
           error:(err)=>{
             this._snakebar.open(err.error, '', {
@@ -226,7 +247,6 @@ export class DevicesComponent {
         })
       }
     }
-
   }
 
   /**
@@ -243,11 +263,17 @@ export class DevicesComponent {
   onFileChange(event:any){
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if (file && file.type === 'text/xml') {
-      this.uploadFileName = file;
-    } else {
-      alert('Please select a valid XML file.');
+    if(file){
+      if (file.type === 'text/xml') {
+        this.uploadXMLForm.patchValue({ file: file });
+        this.uploadFileName = file;
+        this.uploadFileError = null;
+      } else {
+        this.uploadXMLForm.patchValue({ file: null });
+        this.uploadFileError = 'Please upload a valid XML file.';
+      }
     }
+
   }
 
   /**
@@ -256,9 +282,9 @@ export class DevicesComponent {
   uploadXMLSubmit(){
     this.uploadFormSubmitted = true;
     if(this.uploadXMLForm.invalid){
-      return
      }else{
       if(this.uploadFileName){
+        this.uploadFileError = null;
         this.service.uploadXMLFile(this.uploadFileName).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
@@ -271,8 +297,8 @@ export class DevicesComponent {
               this.ngOnInit();
           },
           error:(err)=>{
-            let errmsg = err.error;
-            this._snakebar.open(errmsg, '', {
+            let errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

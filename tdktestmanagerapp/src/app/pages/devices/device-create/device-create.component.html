@@ -463,22 +463,10 @@ limitations under the License.
           <button type="button" class="btn btn-outline-primary btn-sm delete-config"  matTooltip ="Download config file" (click)="downloadConfigFile()">
             <i class="bi bi-download download-icon"></i>
           </button>
-  
-          <!-- <button type="button" class="btn btm-secondary btn-sm toggleBtn" (click)="toggleMaximize()" 
-            matTooltip ="" >
-            <i [class]=" 'bi ' + (isMaximized ? 'bi-fullscreen-exit toggleIcon' : 'bi-fullscreen toggleIcon') "></i>
-          </button> -->
-  
-
         </div>
         <div class="existModal-body">
           <div class="row">
             <div class="col changefile-name">
-              <!-- <input type="text" id="configFilename" class="form-control config-input" formControlName="editorFilename"  [readOnly]="!isEditingFile">
-              <button type="button" class="btn bbtn-outline-primary btn-sm delete-config config-editbtn" (click)="toggleIsEdit()" 
-              data-bs-toggle="tooltip" [attr.data-bs-title]="toolTipText" data-bs-placement="bottom" >
-              <i [class]=" 'bi ' + (isEditingFile ? 'bi-check-circle' : 'bi-pencil') "></i>
-            </button> -->
             </div>
             <div class="col uploadconfig">
               <button type="button" class="download-btn backEditor" (click)="backToExistingEditor()" *ngIf="backToExistEditorbtn">Back</button>

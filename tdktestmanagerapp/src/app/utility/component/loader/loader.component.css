@@ -126,3 +126,78 @@ div ul li:nth-child(4){
 .load2-txt span{
     font-size: 0.75rem;
 }
+
+.page{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+.load-title{
+    color: black;
+    font-size: 0.6rem;
+}
+.ring{
+    width:80px;
+    height: 80px;
+    border: 1px solid transparent;
+    border-radius: 50%;
+    position: absolute;
+}
+.ring:nth-child(1){
+    border-bottom: 5px solid rgb(0, 178, 220);
+    animation:  rotate1 2s linear infinite
+}
+@keyframes rotate1 {
+    from {
+        transform: rotateX(50deg) rotateZ(110deg);
+      }
+      to {
+        transform: rotateX(50deg) rotateZ(470deg);
+      }
+}
+.ring:nth-child(2) {
+    border-bottom: 5px solid rgb(253, 183, 59);
+    animation: rotate2 2s linear infinite;
+  }
+  
+  @keyframes rotate2 {
+    from {
+      transform: rotateX(20deg) rotateY(50deg) rotateZ(20deg);
+    }
+    to {
+      transform: rotateX(20deg)rotateY(50deg)  rotateZ(380deg);
+    }
+  }
+
+  .ring:nth-child(3) {
+    border-bottom: 5px solid rgb(146, 200, 73);
+    animation: rotate3 2s linear infinite;
+  }
+  
+  @keyframes rotate3 {
+    from {
+      transform: rotateX(40deg) rotateY(130deg) rotateZ(450deg);
+    }
+    to {
+      transform: rotateX(40deg) rotateY(130deg) rotateZ(90deg);
+    }
+  }
+  .ring:nth-child(4) {
+    border-bottom: 5px solid rgb(245, 130, 51);
+    animation: rotate4 2s linear infinite;
+  }
+  
+  @keyframes rotate4 {
+    from {
+      transform: rotateX(70deg) rotateZ(270deg);
+    }
+    to {
+      transform: rotateX(70deg)  rotateZ(630deg);
+    }
+  }

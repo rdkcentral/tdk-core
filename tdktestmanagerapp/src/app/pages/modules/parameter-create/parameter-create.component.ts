@@ -96,9 +96,11 @@ export class ParameterCreateComponent {
           }, 2000);
         },
         error:(err)=>{
-          this._snakebar.open(err, '', {
-            duration: 3000,
-            panelClass: ['error-msg'],
+          let errmsg = JSON.parse(err.error)
+          this._snakebar.open(errmsg.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
             verticalPosition: 'top'
           })
         }

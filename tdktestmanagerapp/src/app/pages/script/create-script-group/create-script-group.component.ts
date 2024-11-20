@@ -27,6 +27,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Router } from '@angular/router';
 import { ScriptsService } from '../../../services/scripts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-create-script-group',
@@ -49,14 +50,37 @@ export class CreateScriptGroupComponent {
   selectedCategory:any;
   testSuiteArr:any[] = [];
   loggedinUser: any;
-  
-  constructor(private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
+  onlyVideoCategory!:string;
+  onlyVideoCategoryName!:string;
+  categoryName!:string;
+
+  constructor(private authservice : AuthService,private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar ) {
-    this.selectedCategory = localStorage.getItem('category');
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
   }
 
   ngOnInit(): void {
+    this.onlyVideoCategory = this.authservice.videoCategoryOnly;
+    localStorage.setItem('onlyVideoCategory',this.onlyVideoCategory);
+    let category = localStorage.getItem('category') || '';
+    this.selectedCategory = category?category:'RDKV';
+    this.selectedCategory = this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory;
+
+    if(this.onlyVideoCategory){
+      if(this.onlyVideoCategory === 'RDKV_RDKSERVICE'){
+        this.onlyVideoCategoryName = 'Video-Thunder';
+      }else if(this.onlyVideoCategory === 'RDKV'){
+        this.onlyVideoCategoryName = 'Video';
+      }
+    }else{
+      if(this.selectedCategory == 'RDKB'){
+        this.categoryName = 'Broadband';
+      }
+       if(this.selectedCategory == 'RDKC'){
+        this.categoryName = 'Camera';
+      }
+    }
+
     this.testSuiteFrom = this.fb.group({
       search: [''],
       testSuiteName: ['', Validators.required],
@@ -144,7 +168,6 @@ export class CreateScriptGroupComponent {
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
   }
   goBack():void{
-    localStorage.removeItem('category');
     this.router.navigate(['/script']);
   }
   reset():void{
@@ -158,7 +181,7 @@ export class CreateScriptGroupComponent {
       let obj = {
         name:this.testSuiteFrom.value.testSuiteName,
         description: this.testSuiteFrom.value.description,
-        category: this.selectedCategory,
+        category: this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory,
         userGroup: this.loggedinUser.userGroupName,
         scripts:this.testSuiteFrom.value.container2Scripts
       }
@@ -170,7 +193,7 @@ export class CreateScriptGroupComponent {
             verticalPosition: 'top'
           })
           setTimeout(() => {
-            localStorage.removeItem('category');
+            localStorage.getItem('viewName');
             this.router.navigate(["/script"]);
           }, 1000);
         },
@@ -181,8 +204,8 @@ export class CreateScriptGroupComponent {
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
-        })
-      }
+          })
+        }
       })
     }
   }

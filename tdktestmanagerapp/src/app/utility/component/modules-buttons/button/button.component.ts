@@ -44,7 +44,7 @@ interface customcellRenderparams extends ICellRendererParams{
     &nbsp;
     <button *ngIf="paraMeterShowHide" class="btn btn-sm delete-btn" matTooltip="Parameters" (click)="onParameterClick($event)"><i class="bi bi-braces extra-icon create"></i></button>
     &nbsp;
-    <button *ngIf="downloadShowHide" class="btn btn-sm delete-btn" matTooltip="Download Module" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
+    <button *ngIf="downloadShowHide" class="btn btn-sm delete-btn" matTooltip="Download Module XML" (click)="onModuleXMLClick($event)"><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
     &nbsp;
     <button *ngIf="downloadExcel" class="btn btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download testcases(excel) " ><i class="bi bi-file-earmark-excel excel-icon download-xlsx"></i></button>
   `,  
@@ -65,7 +65,7 @@ interface customcellRenderparams extends ICellRendererParams{
       color: #00B2DC;
     }
     .delete-icon{
-      color: red;
+      color: #dc3545;
     }
     .view{
       color: #fdb73b;
@@ -188,4 +188,10 @@ export class ModuleButtonComponent implements OnInit{
       this.params.onDownloadClick(this.params.node.data);
     }
   }
+  onModuleXMLClick($event:any){
+    if (this.params.onModuleXMLClick instanceof Function) {
+      this.params.onModuleXMLClick(this.params.node.data);
+    }
+  }
+  
 }

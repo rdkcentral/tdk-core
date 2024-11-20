@@ -69,15 +69,16 @@ limitations under the License.
                         <div class="col-md-8">
                             <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadXml" (change)="onFileChange($event)">
                             <div *ngIf="uploadFormSubmitted && uploadXMLForm.controls['uploadXml']?.errors" class="text-danger">
-                                <small *ngIf="uploadXMLForm.controls['uploadXml']?.errors?.['required']">Please select the module xml file.</small>
+                                <small *ngIf="uploadXMLForm.controls['uploadXml']?.errors?.['required']">Please upload the module xml file.</small>
                             </div>
+                            <small *ngIf="uploadFileError" class="errorupload">{{uploadFileError}}</small>
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="download-btn">Upload</button>
-          <button type="button" class="download-btn" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="download-btn modal-btns" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="download-btn modal-btns">Upload</button>
         </div>
         </form>
       </div>

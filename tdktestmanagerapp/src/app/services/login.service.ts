@@ -58,5 +58,12 @@ export class LoginService {
     return this.http.post(`${apiUrl}api/v1/users/changepassword`, data, { headers, responseType: 'text' })
   }
 
+  changePrefernce(username:any,category:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.post(`${apiUrl}api/v1/auth/changecategorypreference?userName=${username}&category=${category}`,{}, { headers, responseType: 'text' })
+
+  }
 
 }

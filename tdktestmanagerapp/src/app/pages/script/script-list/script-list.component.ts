@@ -18,24 +18,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, inject, Output, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ApplicationRef, ChangeDetectorRef, Component, ElementRef, EventEmitter, HostListener, NgZone, Output, Renderer2, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../auth/auth.service';
-import { ModulesService } from '../../../services/modules.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef,GridApi,GridReadyEvent,IMultiFilterParams } from 'ag-grid-community';
+import { ColDef,GridApi,GridReadyEvent } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
-import { MatTableDataSource } from '@angular/material/table';
-import { FlatTreeControl } from '@angular/cdk/tree';
-import { MatTreeFlatDataSource, MatTreeFlattener } from '@angular/material/tree';
-import { LiveAnnouncer } from '@angular/cdk/a11y';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ButtonComponent } from '../../../utility/component/ag-grid-buttons/button/button.component';
 import { ScriptsService } from '../../../services/scripts.service';
@@ -44,7 +39,6 @@ interface Script {
   id: string;
   name: string;
 }
-
 interface Module {
   moduleId: string;
   moduleName: string;
@@ -72,7 +66,9 @@ export class ScriptListComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild('filterInput') filterInput!: ElementRef;
+  @ViewChild('filterInputSuite') filterInputSuite!: ElementRef;
   @ViewChild('filterButton') filterButton!: ElementRef;
+  @ViewChild('filterButtonSuite') filterButtonSuite!: ElementRef;
   @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
   @ViewChild('testSuiteModal', {static: false}) testSuiteModal?:ElementRef;
   categories = ['Video', 'Broadband', 'Camera'];
@@ -82,8 +78,8 @@ export class ScriptListComponent {
   uploadtestSuiteForm!:FormGroup;
   uploadFormSubmitted = false;
   xmlFormSubmitted = false;
-  uploadFileName! :File;
-  xmlFileName!:File;
+  uploadFileName! :File | null;
+  xmlFileName!:File | null;
   viewName: string = 'scripts';
   testsuitTable = false;
   scriptTable = true;
@@ -100,8 +96,10 @@ export class ScriptListComponent {
   currentPage = 0;
   paginatedSuiteData:SuiteModule[]=[];
   filterText: string = '';
+  filterTextSuite: string = '';
   globalSearchTerm: string = '';
-  showFilterInput: boolean = false;
+  showFilterInput = false;
+  showFilterInputsuite = false;
   scriptFilteredData: Module[] = [];
   testSuiteFilteredData:SuiteModule[]=[];
   scriptDataArr : Module[] = [];
@@ -112,7 +110,10 @@ export class ScriptListComponent {
   gridColumnApi: any;
   noScriptFound!:string;
   scriptDetails:any;
-  @Output() dataEvent = new EventEmitter<any>();
+  uploadFileError: string | null = null;
+  loggedinUser:any;
+  preferedCategory!:string;
+  userCategory!:string;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Sl. No.',
@@ -127,7 +128,6 @@ export class ScriptListComponent {
       width:455,
       sortable: true
     },
-
     {
       headerName: 'Action',
       field: '',
@@ -138,8 +138,6 @@ export class ScriptListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.editScript.bind(this),
         onDeleteClick: this.deleteScript.bind(this),
-        onViewClick: this.openModal.bind(this),
-        // onDownloadClick: this.downloadXML.bind(this),
         onDownloadZip: this.downloadScriptZip.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
@@ -159,48 +157,49 @@ export class ScriptListComponent {
       flex: 1,
       sortable: true
     }
-
-    // {
-    //   headerName: 'Action',
-    //   field: '',
-    //   sortable: false,
-    //   headerClass: 'no-sort',
-    //   cellRenderer: ButtonComponent,
-    //   cellRendererParams: (params: any) => ({
-    //     onEditClick: this.editTestSuite.bind(this),
-    //     onDeleteClick: this.deleteTestSuite.bind(this),
-    //     onViewClick: this.openModal.bind(this),
-    //     onDownloadClick: this.downloadXML.bind(this),
-    //     onDownloadScriptClick: this.downloadScript.bind(this),
-    //     selectedRowCount: () => this.selectedRowCount,
-    //   })
-    // }
   ];
   gridOptions = {
-    // domLayout: 'autoHeight' 
     rowHeight: 30
   };
 
-  constructor(private router: Router, private authservice: AuthService,
+  constructor(private router: Router, private authservice: AuthService,private fb:FormBuilder,
     private _snakebar: MatSnackBar, public dialog: MatDialog, private cdRef: ChangeDetectorRef, 
-    private scriptservice: ScriptsService, private renderer: Renderer2) { }
+    private scriptservice: ScriptsService, private renderer: Renderer2,private appRef: ApplicationRef) { 
+      this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+      this.userCategory = this.loggedinUser.userCategory;
+      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
+    }
 
   ngOnInit(): void {
-    this.selectedCategory = this.authservice.selectedConfigVal;
-    localStorage.setItem('category', this.selectedCategory);
-    this.findallScriptsByCategory(this.selectedCategory);
-    this.scriptSorting();
+    let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
+    let localViewName = localStorage.getItem('viewName') || '';
+    let localcategoryName = localStorage.getItem('categoryname') || '';
+    this.selectedCategory = localcategory?localcategory:'RDKV';
+    this.viewName = localViewName?localViewName:'scripts';
+    this.categoryName = localcategoryName?localcategoryName:'Video';
+    if(this.viewName === 'testsuites'){
+      this.testsuitTable = true;
+      this.scriptTable = false;
+      this.allTestSuilteListByCategory();
+      this.toggleSortSuite();
+    }else{
+      this.testsuitTable = false;
+      this.scriptTable = true;
+      this.findallScriptsByCategory(this.selectedCategory);
+      this.scriptSorting();
+    }
+    this.viewChange(this.viewName);
+    this.categoryChange(localcategory);
     this.uploadScriptForm = new FormGroup({
       uploadZip: new FormControl<string | null>('', { validators: Validators.required }),
     })
-    this.uploadtestSuiteForm = new FormGroup({
-      uploadXML: new FormControl<string | null>('', { validators: Validators.required }),
+    this.uploadtestSuiteForm = this.fb.group({
+      uploadXML: [null, Validators.required]
     }) 
   }
 
   onGridReady(params:GridReadyEvent<any>) {
     this.gridApi = params.api;
-    // this.gridColumnApi = params.columnApi;
   }
   findallScriptsByCategory(category:any){
     this.scriptservice.getallbymodules(category).subscribe({
@@ -212,54 +211,83 @@ export class ScriptListComponent {
         let errmsg = err.error;
         this.noScriptFound = errmsg;
       }
-
     })
   }
  
   categoryChange(val: string): void {
     this.scriptDataArr=[];
     this.scriptFilteredData =[];
-    if (val === 'RDKB') {
-      this.categoryName = 'Broadband';
-      this.selectedCategory = 'RDKB';
-      this.findallScriptsByCategory(this.selectedCategory);
-      localStorage.setItem('category', this.selectedCategory);
-    } else if (val === 'RDKC') {
-      this.categoryName = 'Camera';
-      this.selectedCategory = 'RDKC';
-      this.findallScriptsByCategory(this.selectedCategory);
-      localStorage.setItem('category', this.selectedCategory);
-    } else {
-      this.selectedCategory = 'RDKV';
-      this.categoryName = 'Video';
-      this.findallScriptsByCategory(this.selectedCategory);
-      localStorage.setItem('category', this.selectedCategory);
+    this.testSuiteDataArr = [];
+    this.paginatedSuiteData = [];
+    this.viewName = localStorage.getItem('viewName') || '{}';
+    if(this.viewName ==='testsuites'){
+      if (val === 'RDKB') {
+        this.categoryName = 'Broadband';
+        this.selectedCategory = 'RDKB';
+        this.authservice.selectedCategory = this.selectedCategory;
+        this.allTestSuilteListByCategory();
+      } else if (val === 'RDKC') {
+        this.categoryName = 'Camera';
+        this.selectedCategory = 'RDKC';
+        this.authservice.selectedCategory = this.selectedCategory;
+        this.allTestSuilteListByCategory();
+      } else {
+        this.selectedCategory = 'RDKV';
+        this.categoryName = 'Video';
+        this.authservice.selectedCategory = this.selectedCategory;
+        this.allTestSuilteListByCategory();
+      }
     }
-    if (this.selectedCategory) {
-      this.authservice.selectedCategory = this.selectedCategory;
+    if(this.viewName ==='scripts'){
+      if (val === 'RDKB') {
+        this.categoryName = 'Broadband';
+        this.selectedCategory = 'RDKB';
+        this.findallScriptsByCategory(this.selectedCategory);
+      } else if (val === 'RDKC') {
+        this.categoryName = 'Camera';
+        this.selectedCategory = 'RDKC';
+        this.findallScriptsByCategory(this.selectedCategory);
+      } else {
+        this.selectedCategory = 'RDKV';
+        this.categoryName = 'Video';
+        this.findallScriptsByCategory(this.selectedCategory);
+      }
     }
-
+    localStorage.setItem('category', this.selectedCategory);
+    localStorage.setItem('categoryname',this.categoryName);
+    this.authservice.videoCategoryOnly = "";
   }
 
 
   viewChange(name: string): void {
     this.viewName = name;
+    this.globalSearchTerm ='';
     localStorage.setItem('viewName',this.viewName);
     if (name === 'testsuites') {
       this.testsuitTable = true;
       this.scriptTable = false;
       this.allTestSuilteListByCategory();
-    } else {
+    } 
+    if (name === 'scripts') {
       this.testsuitTable = false;
       this.scriptTable = true;
+      this.findallScriptsByCategory(this.selectedCategory);
     }
   }
   allTestSuilteListByCategory(){
     this.scriptservice.getAllTestSuite(this.selectedCategory).subscribe({
       next:(res)=>{
-        this.testSuiteDataArr = JSON.parse(res);
-        this.applyFilterSuite();
-        this.toggleSortSuite();
+        if(res){
+          this.testSuiteDataArr = JSON.parse(res);
+          this.cdRef.detectChanges();
+          this.applyFilterSuite();
+          this.toggleSortSuite();
+          
+        }else{
+          this.cdRef.detectChanges();
+          this.testSuiteDataArr =[];
+        }
+
       },
       error:(err)=>{
         let errmsg = JSON.parse(err.error);
@@ -267,23 +295,15 @@ export class ScriptListComponent {
       }
     })
   }
-  ngAfterViewInit() {
-    // setTimeout(() => {
-    //   if (this.paginator) {
-    //     this.paginator.page.subscribe(() => this.paginateParentData());
-    //     this.applyFilter();
-    //     this.toggleSortOrder();
-    //   }
-    // });
-    // setTimeout(() => {
-    //   if (this.paginator) {
-    //     this.paginator.page.subscribe(() => this.paginateSuiteData());
-    //     this.applyFilterSuite();
-    //     this.toggleSortSuite();
-    //   }
-    // });
+  scriptDataPagination(){
+    if (!this.paginator) {
+      return;
+    }
+    const start = this.paginator.pageIndex * this.paginator.pageSize;
+    const end = start + this.paginator.pageSize;
+    this.scriptFilteredData = this.scriptFilteredData.slice(start, end);
+    this.cdRef.detectChanges();
   }
-
  
   paginateSuiteData() {
     if (!this.paginator) {
@@ -292,14 +312,15 @@ export class ScriptListComponent {
     const start = this.paginator.pageIndex * this.paginator.pageSize;
     const end = start + this.paginator.pageSize;
     this.paginatedSuiteData = this.testSuiteFilteredData.slice(start, end);
-    console.log(this.paginatedSuiteData);
-    
     this.cdRef.detectChanges();
   }
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex;
-    // this.scriptData();
-    this.paginateSuiteData();
+    if(this.viewName ==='testsuites'){
+      this.paginateSuiteData();
+    }else{
+      this.scriptDataPagination();
+    }
   }
   scriptSorting(){
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -310,6 +331,7 @@ export class ScriptListComponent {
         return b.moduleName.localeCompare(a.moduleName);
       }
     });
+    this.scriptDataPagination();
   }
   toggleSortSuite(){
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -330,6 +352,14 @@ export class ScriptListComponent {
       this.scriptSorting();
     }
   }
+  toggleFilterInputSuite(){
+    this.showFilterInputsuite = !this.showFilterInputsuite;
+    if (!this.showFilterInputsuite) {
+      this.filterTextSuite = '';
+      this.applyFilterSuite();
+      this.toggleSortSuite();
+    }
+  }
   filterScript(){
     if (this.filterText) {
       this.scriptFilteredData = this.scriptDataArr.filter((parent: any) =>
@@ -340,11 +370,12 @@ export class ScriptListComponent {
       this.scriptSorting();
     }
     this.paginator.firstPage();
+    this.scriptDataPagination();
   }
   applyFilterSuite() {
-    if (this.filterText) {
+    if (this.filterTextSuite) {
       this.testSuiteFilteredData = this.testSuiteDataArr.filter((parent: any) =>
-        parent.name.toLowerCase().includes(this.filterText.toLowerCase())
+        parent.name.toLowerCase().includes(this.filterTextSuite.toLowerCase())
       );
     } else {
       this.testSuiteFilteredData = [...this.testSuiteDataArr];
@@ -356,7 +387,29 @@ export class ScriptListComponent {
   
   globalSearch() {
       const searchTerm = this.globalSearchTerm.toLowerCase();
-      if(searchTerm){
+      if(this.viewName ==='testsuites'){
+        if(searchTerm){
+          this.paginatedSuiteData = this.testSuiteDataArr.map((suite:SuiteModule)=>{
+            const filteredScripts = suite.scripts.filter((script) =>
+              script.name.toLowerCase().includes(searchTerm)
+            );
+            return {
+              ...suite,
+              scripts: filteredScripts, 
+              expanded: filteredScripts.length > 0,
+            };
+          });
+          this.paginatedSuiteData = this.paginatedSuiteData.filter(
+            (suite) => suite.scripts.length > 0
+          );
+        }else{
+          this.paginatedSuiteData = [...this.testSuiteDataArr];
+          this.paginateSuiteData();
+        }
+
+      }else{
+        
+        if(searchTerm){
         this.scriptFilteredData = this.scriptDataArr.map((module:Module) => {
           const filteredScripts = module.scripts.filter((script) =>
             script.name.toLowerCase().includes(searchTerm)
@@ -372,16 +425,53 @@ export class ScriptListComponent {
         );
       }else{
         this.scriptFilteredData= [...this.scriptDataArr];
+        this.scriptDataPagination();
       }
-
+      }
     }
+  /**
+   * Closes the modal  by click on button .
+   */
+  close(){
+    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'padding-right');
+    
+  }
 
+  closeSuiteModal(){
+    this.uploadtestSuiteForm.value.uploadXML = '';
+    (this.testSuiteModal?.nativeElement as HTMLElement).style.display = 'none';
+    this.renderer.removeStyle(document.body, 'overflow');
+    this.renderer.removeStyle(document.body, 'padding-right');
+    
+  }
+  /**
+   * Handles the file change event when a file is selected for upload.
+   * @param event - The file change event object.
+   */
+  onFileChange(event:any){
+    this.uploadFileName = event.target.files[0].name;
+    const file: File = event.target.files[0];
+    if(file){
+      if (file.name.endsWith('.zip')) {
+        this.uploadScriptForm.patchValue({ file: file });
+        this.uploadFileName = file;
+        this.uploadFileError = null;
+      } else {
+        this.uploadScriptForm.patchValue({ file: null });
+        this.uploadFileError = 'Please upload a valid zip file.';
+      }
+    }  
+  }
+  
   uploadScriptSubmit(){
     this.uploadFormSubmitted = true;
     if(this.uploadScriptForm.invalid){
       return
      }else{
       if(this.uploadFileName){
+        this.uploadFileError = null;
         this.scriptservice.uploadZipFile(this.uploadFileName).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
@@ -394,8 +484,8 @@ export class ScriptListComponent {
               this.ngOnInit();
           },
           error:(err)=>{
-            let errmsg = err.error;
-            this._snakebar.open(errmsg, '', {
+            let errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -409,42 +499,18 @@ export class ScriptListComponent {
       }
      }
   }
-
-  /**
-   * Closes the modal  by click on button .
-   */
-  close(){
-    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
-    this.renderer.removeStyle(document.body, 'overflow');
-    this.renderer.removeStyle(document.body, 'padding-right');
-  }
-
-  closeSuiteModal(){
-    (this.testSuiteModal?.nativeElement as HTMLElement).style.display = 'none';
-    this.renderer.removeStyle(document.body, 'overflow');
-    this.renderer.removeStyle(document.body, 'padding-right');
-  }
-  /**
-   * Handles the file change event when a file is selected for upload.
-   * @param event - The file change event object.
-   */
-  onFileChange(event:any){
-    this.uploadFileName = event.target.files[0].name;
-    const file: File = event.target.files[0];
-    if (file && file.name.endsWith('.zip')) {
-      this.uploadFileName = file;
-    } else {
-      alert('Please select a valid ZIP file.');
-    }
-       
-  }
   testSuiteXMLFile(event:any){
     this.xmlFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
-    if (file && file.type === 'text/xml') {
-      this.xmlFileName = file;
-    } else {
-      alert('Please select a valid XML file.');
+    if(file){
+      if (file.type === 'text/xml') {
+        this.uploadtestSuiteForm.patchValue({ file: file });
+        this.xmlFileName = file;
+        this.uploadFileError = null;
+      } else {
+        this.uploadtestSuiteForm.patchValue({ file: null });
+        this.uploadFileError = 'Please upload a valid XML file.';
+      }
     }
   }
   testSuiteFileSubmit(){
@@ -453,6 +519,7 @@ export class ScriptListComponent {
       return
      }else{
       if(this.xmlFileName){
+        this.uploadFileError = null;
         this.scriptservice.uploadTestSuiteXML(this.xmlFileName).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
@@ -466,8 +533,8 @@ export class ScriptListComponent {
               this.allTestSuilteListByCategory();
           },
           error:(err)=>{
-            let errmsg = err.error;
-            this._snakebar.open(errmsg, '', {
+            let errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -489,16 +556,18 @@ export class ScriptListComponent {
   createScriptGroup(): void {
     this.router.navigate(['script/create-script-group']);
   }
+  createScriptVideo(value:string){
+    let onlyVideoCategory = value;
+    this.authservice.videoCategoryOnly = onlyVideoCategory;
+    this.router.navigate(['script/create-script-group']);
+  }
   customTestSuite(){
     this.router.navigate(['script/custom-testsuite']);
   }
   editScript(editData: any): void {
-    console.log(editData.id);
-    
     this.scriptservice.scriptFindbyId(editData.id).subscribe(res=>{
       this.scriptDetails = JSON.parse(res);
       localStorage.setItem('scriptDetails', JSON.stringify(this.scriptDetails));
-      console.log(this.scriptDetails);
       this.router.navigate(['script/edit-scripts']);
     })
   }
@@ -541,9 +610,7 @@ export class ScriptListComponent {
         window.URL.revokeObjectURL(url);
       })
   }
-  openModal() {
 
-  }
   downloadXML(params: any): void {
     if (params.moduleName) {
       this.scriptservice.downloadTestcases(params.moduleName).subscribe(blob => {
@@ -576,7 +643,6 @@ export class ScriptListComponent {
 
   downloadTestCases(){
     this.category =  this.authservice.selectedConfigVal;
-    console.log("Testcase:", this.category);
     this.scriptservice.downloadTestCasesZip( this.category).subscribe(blob => {
       const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
       const url = window.URL.createObjectURL(xmlBlob);
@@ -643,10 +709,15 @@ export class ScriptListComponent {
               horizontalPosition: 'end',
               verticalPosition: 'top'
               })
-              this.allTestSuilteListByCategory();
+              const rowToRemove = this.paginatedSuiteData.find((row:any) => row.id === params.id);
+              if (rowToRemove) {
+                this.cdRef.detectChanges();
+                this.allTestSuilteListByCategory();
+              }
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            let errmsg = JSON.parse(err.error)
+            this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -658,28 +729,8 @@ export class ScriptListComponent {
     }
   }
   editTestSuite(testSuiteData:any){
-    // this.dataEvent.emit(testSuiteData);
     this.router.navigate(['script/edit-testsuite'], {state:{testSuiteData}});
   }
-  // downloadChildData(parent: any) {
-  //   const csvRows = [];
-  //   const headers = Object.keys(parent.childData[0]);
-  //   csvRows.push(headers.join(','));
-
-  //   for (const row of parent.childData) {
-  //     csvRows.push(headers.map(header => row[header]).join(','));
-  //   }
-
-  //   const csvData = csvRows.join('\n');
-  //   const blob = new Blob([csvData], { type: 'text/csv' });
-  //   const url = window.URL.createObjectURL(blob);
-  //   const a = document.createElement('a');
-  //   a.href = url;
-  //   a.download = `${parent.title}.csv`;
-  //   a.click();
-  //   window.URL.revokeObjectURL(url);
-  // }
-
   @HostListener('document:click', ['$event'])
   onClickOutside(event: Event) {
     if (

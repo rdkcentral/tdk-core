@@ -161,7 +161,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   border-radius: 50px;
 }
 .extra-icon, .excel-icon{
-background-color: white;
+/* background-color: white; */
 font-size: 1rem;
 display: flex;
 justify-content: center;
@@ -266,7 +266,6 @@ width:24px;
   font-weight: 400;
 }
 .table-heading{
-  background-color: #d1d4d4;
   margin: 0;
   height: 35px;
   display: flex;
@@ -339,7 +338,6 @@ width:24px;
   float: inline-end;
 }
 .collapse-icon{
-  color: black;
   font-size: 1rem;
   transition: transform 0.3s ease;
   transform: rotate(180deg);
@@ -398,4 +396,8 @@ width:24px;
 .custom-title{
   margin-bottom: 0;
   font-size: 1rem;
+}
+.errorupload{
+  color: #dc3545;
+  font-size: 0.8rem;
 }

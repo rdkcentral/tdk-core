@@ -77,7 +77,7 @@ export class EditScriptsComponent {
   ngOnInit(): void {
     this.deviceTypeSettings = {
       singleSelection: false,
-      idField: 'deviceTypeId',
+      idField: 'deviceTypeName',
       textField: 'deviceTypeName',
       selectAllText: 'Select All',
       unSelectAllText: 'UnSelect All',
@@ -94,12 +94,13 @@ export class EditScriptsComponent {
     }
     this.getAllModules();
     this.getAlldeviceType();
-
+    this.allDeviceType = this.scriptDeatilsObj.deviceTypes.map((deviceType: string) => ({ deviceTypeId: deviceType, deviceTypeName: deviceType }));
+    
     this.firstFormGroup = this.fb.group({
       scriptname: [this.scriptDeatilsObj.name, [Validators.required]],
       module:[{value:this.scriptDeatilsObj.moduleName, disabled: true}],
       primitiveTest: [{value:this.scriptDeatilsObj.primitiveTestName, disabled: true}],
-      devicetype: [this.scriptDeatilsObj.deviceTypes, [Validators.required]],
+      devicetype: [[], [Validators.required]],
       executiontimeout: [this.scriptDeatilsObj.executionTimeOut, [Validators.required]],
       longdurationtest: [this.scriptDeatilsObj.longDuration],
       skipexecution: [this.scriptDeatilsObj.skipExecution],
@@ -124,6 +125,8 @@ export class EditScriptsComponent {
     });
     this.getAllPrimitiveTest(this.scriptDeatilsObj.moduleName);
     this.code = this.scriptDeatilsObj.scriptContent;
+    this.firstFormGroup.patchValue({ devicetype: this.scriptDeatilsObj.deviceTypes });
+    this.deviceNameArr = this.firstFormGroup.value.devicetype;
   }
   getAllModules(): void{
     this.configureName=this.authservice.selectedConfigVal;
@@ -180,14 +183,15 @@ changePriority(event:any){
   }
 
   onSelectAll(items: any[]){
-   let devices = this.allDeviceType.filter(
-    (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
-   );
-   this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
+    let devices = this.allDeviceType.filter(
+      (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
+     );
+     this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
   }
   onDeSelectAll(item:any){
     this.deviceNameArr=[];
   }
+
   // You can also change editor options dynamically if needed
   onCodeChange(value: string) {
     let val = value;

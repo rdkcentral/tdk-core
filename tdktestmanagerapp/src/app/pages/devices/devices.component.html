@@ -57,6 +57,9 @@ limitations under the License.
                     </div>
                     <div class="col"></div>
                 </div>
+                <div class="row" *ngIf="loaderDisplay">
+                    <app-loader></app-loader>
+                </div>
                 <div style="width: 100%; height: auto; margin-top: 5px;" [class]="themeClass">
                     <ag-grid-angular
                     [columnDefs]="columnDefs"
@@ -91,15 +94,17 @@ limitations under the License.
                         <div class="col-md-8">
                             <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadXml" (change)="onFileChange($event)">
                             <div *ngIf="uploadFormSubmitted && uploadXMLForm.controls['uploadXml']?.errors" class="text-danger">
-                                <small *ngIf="uploadXMLForm.controls['uploadXml']?.errors?.['required']">Please select the device xml file.</small>
+                                <small *ngIf="uploadXMLForm.controls['uploadXml']?.errors?.['required']">Please upload the device xml file.</small>
+                                
                             </div>
+                            <small *ngIf="uploadFileError" class="errorupload">{{uploadFileError}}</small>
                     </div>
                 </div>
             </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="modal-btns" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="modal-btns">Upload</button>
+          <button type="submit" class="modal-btns" >Upload</button>
         </div>
         </form>
       </div>

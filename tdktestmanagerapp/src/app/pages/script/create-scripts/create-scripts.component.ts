@@ -20,11 +20,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MONACO_PATH, MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
-import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
 import {MatStepperIntl} from '@angular/material/stepper';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -70,14 +69,18 @@ export class CreateScriptsComponent {
   changePriorityValue!:string;
   longDurationValue!:boolean;
   skipExecutionValue! :boolean;
+  selectedCategory! : string;
 
-  constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
+
+  constructor(private router: Router, private fb : FormBuilder,
     public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
     private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
    }
 
   ngOnInit(): void {
+   let category = localStorage.getItem('category') || '';
+   this.selectedCategory = category?category:'RDKV';
     this.deviceTypeSettings = {
       singleSelection: false,
       idField: 'deviceTypeId',
@@ -138,8 +141,7 @@ export class CreateScriptsComponent {
 
   }
   getAllModules(): void{
-    this.configureName=this.authservice.selectedConfigVal;
-    this.modulesService.findallbyCategory(this.configureName).subscribe(res=>{
+    this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res=>{
       this.allModules = JSON.parse(res);
     })
   }
@@ -203,8 +205,7 @@ getCode() {
   }
 
   getAlldeviceType(): void{
-    this.configureName=this.authservice.selectedConfigVal;
-    this.deviceTypeService.getfindallbycategory(this.configureName).subscribe(res=>{
+    this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res=>{
       this.allDeviceType = (JSON.parse(res));
     })
   }
@@ -233,7 +234,6 @@ getCode() {
 
   back(){
     this.router.navigate(["/script"]);
-    localStorage.removeItem('scriptCategory');
   }
 
   updateOptionalLabel() {

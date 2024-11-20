@@ -17,7 +17,7 @@ limitations under the License.
     <div class="row mt-1">
         <div class="col-md-12">
             <mat-card class="card-height">
-                <h1 class="title">Create TestSuite</h1>
+                <h1 class="title">Create {{onlyVideoCategoryName?onlyVideoCategoryName:categoryName}} TestSuite</h1>
                 <form [formGroup]="testSuiteFrom" (ngSubmit)="testSuiteSubmit()">
                     <div class="row form-row mt 2">
                         <div class="col-md-6">

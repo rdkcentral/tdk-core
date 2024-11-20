@@ -18,19 +18,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef,IMultiFilterParams } from 'ag-grid-community';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { DeviceService } from '../../../services/device.service';
 import { InputComponent } from '../../../utility/component/ag-grid-buttons/input/input.component';
-import {  Editor, NgxEditorModule } from 'ngx-editor';
+import { Editor, NgxEditorModule } from 'ngx-editor';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { saveAs } from 'file-saver';
 import { OemService } from '../../../services/oem.service';
@@ -40,8 +35,7 @@ import { SocService } from '../../../services/soc.service';
 @Component({
   selector: 'app-device-create',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,
-    AgGridAngular,NgxEditorModule, FormsModule],
+  imports: [CommonModule,ReactiveFormsModule,MaterialModule,NgxEditorModule, FormsModule],
   templateUrl: './device-create.component.html',
   styleUrl: './device-create.component.css'
 })
@@ -60,9 +54,6 @@ export class DeviceCreateComponent implements OnInit{
   allDeviceType:any;
   alloem:any;
   allsoc:any;
-  allGatewayDevices:any;
-  streamingTable= false;
-  errormessage!:string;
   rowData:any = [];
   public themeClass: string = "ag-theme-quartz";
   public paginationPageSize = 5;
@@ -72,96 +63,6 @@ export class DeviceCreateComponent implements OnInit{
   showHideCreateFormB = false;
   showHideCreateFormC = false;
   rowHeight = 41;
-
-  public columnDefs: ColDef[] = [
-    {
-      headerName: 'Steam Id',
-      field: 'streamingDetailsId',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'subMenu',
-          },
-          {
-            filter: 'agSetColumnFilter',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Channel Type',
-      field: 'channelType',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Audio Type',
-      field: 'audioType',
-      filter: 'agMultiColumnFilter',
-      valueGetter:(params)=>params.data.audioType ?params.data.audioType:'NA',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Video Type',
-      field: 'videoType',
-      filter: 'agMultiColumnFilter',
-      valueGetter:(params)=>params.data.videoType ?params.data.videoType:'NA',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
-    {
-      headerName: 'Ocap Id',
-      field: 'ocapId',
-      cellRenderer:'inputCellRenderer',
-   
-    }
-  ];
-  public defaultColDef: ColDef = {
-    flex: 1,
-    autoHeight: true,
-    menuTabs: ['filterMenuTab'],
-  };
   configureName!: string;
   isGateway!: any;
   isrecorderId = false;
@@ -173,7 +74,7 @@ export class DeviceCreateComponent implements OnInit{
   agentport = "8087";
   agentStatusPort = "8088";
   agentMonitoPort = "8090";
-  selectedDeviceCategory : string = 'RDKV';
+  selectedDeviceCategory! : string;
   categoryName : string = 'Video';
   checkOcapId: any;
   editor!: Editor;
@@ -181,7 +82,6 @@ export class DeviceCreateComponent implements OnInit{
   uploadConfigForm!: FormGroup;
   uploadDeviceConfigForm!:  FormGroup;
   uploadFormSubmitted = false;
-  isMaximized = false;
   isEditingFile = false;
   configData:any;
   configFileName!:string;
@@ -203,7 +103,6 @@ export class DeviceCreateComponent implements OnInit{
   uploadFileNameConfig!: string;
   fileNameArray:string[]=[];
   currentIndex: number = 0;
-  extension: string = '.config';
   newFileName!: string;
   existingConfigEditor = true;
   uploadExistingConfig = false;
@@ -212,16 +111,13 @@ export class DeviceCreateComponent implements OnInit{
   uploadExistConfigHeading!: string;
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
-  selectedDeviceType:any;
   isThunderPresent: any;
-  streamingTempList:any[]=[];
-  visibleStreamingList = false;
   thunderTooltip: string = 'Please enter devicename and boxtype before you check this box';
 
   constructor( private router: Router,private fb:FormBuilder,
     private _snakebar :MatSnackBar, private oemService:OemService, 
     private service:DeviceService, private socService:SocService, private deviceTypeService:DevicetypeService,
-    private renderer:Renderer2,public dialog:MatDialog
+    public dialog:MatDialog
   ) { 
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     this.frameworkComponents = {
@@ -234,7 +130,7 @@ export class DeviceCreateComponent implements OnInit{
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
     if(deviceCategory){
-      this.selectedDeviceCategory = deviceCategory;
+      this.selectedDeviceCategory = deviceCategory
       this.configureName = deviceCategory;
     }
     if(deviceCategory===null){
@@ -694,27 +590,6 @@ export class DeviceCreateComponent implements OnInit{
       })
     }
   }
-  /**
-   * The method is editor modal will get maximize and minimize
-   */
-  toggleMaximize():void{
-    this.isMaximized = !this.isMaximized;
-    const modalElement = document.querySelector('.modal');
-    if(this.isMaximized){
-      this.renderer.addClass(modalElement, 'modal-maximized');
-    }else{
-      this.renderer.removeClass(modalElement, 'modal-maximized')
-    }
-  }
-  toggleMaximizeDevice():void{
-    this.isMaximized = !this.isMaximized;
-    const modalElement = document.querySelector('.modal');
-    if(this.isMaximized){
-      this.renderer.addClass(modalElement, 'modal-maximized-device');
-    }else{
-      this.renderer.removeClass(modalElement, 'modal-maximized-device')
-    }
-  }
   onExistConfigChange(event:Event):void{
     let fileInput = event.target as HTMLInputElement;
     if(fileInput && fileInput.files){
@@ -729,7 +604,7 @@ export class DeviceCreateComponent implements OnInit{
       const content = e.target?.result as string;
       this.uploadExistFileContent = content
       this.uploadConfigForm.patchValue({
-        editorFilename: this.configFileName,
+        editorFilename: this.configFileName === 'sampleDevice.config'? this.newFileName: '',
         editorContent: this.uploadExistFileContent,
       })
     }

@@ -17,21 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { CommonModule, JsonPipe } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
-import { Component, ElementRef, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, Renderer2, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AgGridAngular } from 'ag-grid-angular';
-import {
-  ColDef,
-  IMultiFilterParams,
-} from 'ag-grid-community';
-
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { DeviceService } from '../../../services/device.service';
 import { InputComponent } from '../../../utility/component/ag-grid-buttons/input/input.component';
 import {  Editor, NgxEditorModule } from 'ngx-editor';
@@ -43,7 +34,7 @@ import { SocService } from '../../../services/soc.service';
 @Component({
   selector: 'app-device-edit',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,NgxEditorModule,MaterialModule,AgGridAngular],
+  imports: [CommonModule,ReactiveFormsModule,NgxEditorModule,MaterialModule],
   templateUrl: './device-edit.component.html',
   styleUrl: './device-edit.component.css'
 })
@@ -64,8 +55,6 @@ export class DeviceEditComponent {
   allDeviceType:any;
   allOem:any;
   allsoc:any;
-  allGatewayDevices:any;
-  errormessage:any;
   rowData:any = [];
   public themeClass: string = "ag-theme-quartz";
   public paginationPageSize = 5;
@@ -86,7 +75,7 @@ public frameworkComponents :any;
   agentStatusPort = "8088";
   agentMonitoPort = "8090";
   user: any;
-  selectedDeviceCategory : string = 'RDKV';
+  selectedDeviceCategory! : string;
   categoryName!: string;
   visibleDeviceconfigFile = false;
   configFileName!:string;
@@ -98,11 +87,9 @@ public frameworkComponents :any;
   stbNameChange!: string;
   configData:any;
   deviceTypeValue!: string;
-  configDevicePorts = false;
   existConfigSubmitted = false;
   uploadExistConfigHeading!: string;
   uploadExistFileContent!: string;
-  isMaximized = false;
   isEditingFile = false;
   fileNameArray:string[]=[];
   currentIndex: number = 0;
@@ -121,10 +108,7 @@ public frameworkComponents :any;
   showUploadButton = true;
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
-  localBoxType:any;
   selectedDeviceType:any;
-  devicetypeInitial: any;
-  thunderCheckInitial = false;
   newFileName!: string;
   findboxType: any[] = [];
 
@@ -138,7 +122,6 @@ public frameworkComponents :any;
     this.frameworkComponents = {
       inputCellRenderer: InputComponent
     }
- 
   }
 
   /**
@@ -289,16 +272,7 @@ public frameworkComponents :any;
     this.visibleDeviceconfigFile = false;
     let value = event.target.value;
     this.deviceTypeValue = value;
-    const dropdown = event.target as HTMLSelectElement
     this.checkIsThunderValidity();
-    this.service.isBoxtypeGateway(value).subscribe(res=>{
-      this.isGateway = res;
-      if(this.isGateway === 'true'){
-        this.isrecorderId = true;
-      }else{
-        this.isrecorderId = false;
-      }
-    })
     if(this.isThunderchecked){
       this.showPortFile = true;
       this.visibilityConfigFile();
@@ -673,27 +647,7 @@ public frameworkComponents :any;
         })
       }
     }
-    /**
-     * The method is editor modal will get maximize and minimize
-     */
-    toggleMaximize():void{
-      this.isMaximized = !this.isMaximized;
-      const modalElement = document.querySelector('.modal');
-      if(this.isMaximized){
-        this.renderer.addClass(modalElement, 'modal-maximized');
-      }else{
-        this.renderer.removeClass(modalElement, 'modal-maximized')
-      }
-    }
-    toggleMaximizeDevice():void{
-      this.isMaximized = !this.isMaximized;
-      const modalElement = document.querySelector('.modal');
-      if(this.isMaximized){
-        this.renderer.addClass(modalElement, 'modal-maximized-device');
-      }else{
-        this.renderer.removeClass(modalElement, 'modal-maximized-device')
-    }
-  }
+
   replaceTags(content:string):string{
       const replacepara = content.replace(/<\/?p>/g,'\n');
       const replacebreakes = replacepara.replace(/<br\s*\/?>/g,'\n');

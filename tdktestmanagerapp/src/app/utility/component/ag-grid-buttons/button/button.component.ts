@@ -61,7 +61,7 @@ interface customcellRenderparams extends ICellRendererParams{
       color: #00B2DC;
     }
     .delete-icon{
-      color: red;
+      color: #dc3545;
     }
     .view{
       color: #fdb73b;

@@ -22,11 +22,12 @@ import { MaterialModule } from '../../material/material.module';
 import { CommonModule } from '@angular/common';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../auth/auth.service';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-configure',
   standalone: true,
-  imports: [CommonModule, MaterialModule, RouterLink, RouterLinkActive],
+  imports: [CommonModule, FormsModule, MaterialModule, RouterLink, RouterLinkActive],
   templateUrl: './configure.component.html',
   styleUrl: './configure.component.css'
 })
@@ -35,15 +36,26 @@ export class ConfigureComponent implements OnInit {
   rdkbVisible = false;
   rdkcVisible = false;
   privileges!: string | null;
+  loggedInUser:any;
+  defaultCategory!:string;
+  selectedCategory!:string;
+  preferedCategory!:string;
 
-  constructor(private router: Router, private service: AuthService) { }
+  constructor(private router: Router, private service: AuthService) { 
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+    this.defaultCategory = this.loggedInUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
+  }
 
    /**
    * Handles the checkbox change event.
    * @param val - The value of the checkbox.
    */
   ischecked(val: any): void {
-    this.service.selectedConfigVal = 'RDKV'
+    this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
+    this.categoryChange(val);
+  }
+  categoryChange(val:any){
     if (val === 'RDKB') {
       this.rdkbVisible = true;
       this.rdkvVisible = false;
@@ -109,8 +121,9 @@ export class ConfigureComponent implements OnInit {
    * Initializes the component.
    */ 
   ngOnInit(): void {
-    this.service.selectedConfigVal = 'RDKV'
-    this.service.showSelectedCategory = "Video"
+    this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
+    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.defaultCategory;
+    this.categoryChange(this.selectedCategory);
     this.privileges = this.service.getPrivileges();
   }
 }
