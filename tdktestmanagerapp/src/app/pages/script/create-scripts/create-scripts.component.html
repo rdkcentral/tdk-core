@@ -95,7 +95,7 @@ limitations under the License.
                                         <label for="executiontimeout" class="col-md-3 col-form-label">Execution
                                             TimeOut(minutes)<span style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" id="executiontimeout"
+                                            <input inputmode="numeric" oninput="this.value = this.value.replace(/\D+/g, '')" class="form-control" id="executiontimeout"
                                                 autocomplete="off" placeholder="Enter execution timeout (min)"
                                                 formControlName="executiontimeout">
                                         </div>

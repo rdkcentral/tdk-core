@@ -17,10 +17,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Component, inject, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import { MaterialModule } from '../../../material/material.module';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../../auth/auth.service';
 import { Router } from '@angular/router';
@@ -30,7 +29,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-modules-create',
   standalone: true,
-  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
   templateUrl: './modules-create.component.html',
   styleUrl: './modules-create.component.css'
 })
@@ -72,7 +71,6 @@ export class ModulesCreateComponent {
       testGroup: new FormControl<string | null>('', { validators: Validators.required }),
       executionTime: new FormControl<string | null>('', { validators: Validators.required }),
       thundrShowHide: new FormControl<boolean | null>({value: false, disabled: false}),
-      isAdvanced: new FormControl<boolean | null>({value: false, disabled: false}),
       crashFilesPath: new FormControl<string | null>(''),
       logFilesPath: new FormControl<string | null>('')
     })
@@ -91,8 +89,7 @@ export class ModulesCreateComponent {
           moduleLogFileNames:this.logFilesArr?this.logFilesArr:[],
           moduleCrashLogFiles:this.crashFilesArr?this.crashFilesArr:[],
           moduleCategory: this.categoryName,
-          moduleThunderEnabled:this.isThunder?true:false,
-          moduleAdvanced: this.isAdvanced?true:false
+          moduleThunderEnabled:this.isThunder?true:false
         }
         this.moduleservice.createModule(moduleObj).subscribe({
           next:(res)=>{

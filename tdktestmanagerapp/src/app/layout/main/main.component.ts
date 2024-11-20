@@ -37,5 +37,14 @@ import { CommonModule } from '@angular/common';
  * Represents the MainComponent of the application.
  */
 export class MainComponent {
+  
+  currentTheme:any;
+
   themeService :ThemeService = inject(ThemeService)
+
+  ngOnInit(): void {
+    this.themeService.currentTheme.subscribe(res=>{
+      this.currentTheme = res;
+    })
+  }
 }

@@ -37,21 +37,55 @@ import { ThemeService } from '../../services/theme.service';
  */
 export class HeaderComponent implements OnInit {
 
-  /**
-   * Represents the logged in user.
-   */
   loggedInUser: any = {};
   isChecked = false;
-  constructor(private loginService: LoginService, private router: Router,
-    private service: AuthService, public themeService: ThemeService
-  ) { }
+  userloggedIn:any;
+  currentTheme: string = 'LIGHT';
+
+  constructor(private loginService: LoginService, private router: Router,private service: AuthService, 
+    public themeService: ThemeService) { 
+    this.userloggedIn = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+  }
 
   /**
    * Initializes the component.
    */
   ngOnInit(): void {
     this.loggedInUser = this.loginService.getAuthenticatedUser();
-    if(JSON.parse(localStorage.getItem('theme')||'') === 'dark'){
+    if(this.userloggedIn.userID){
+      this.themeService.getTheme(this.userloggedIn.userID);
+    }
+    this.themeService.currentTheme.subscribe(theme => {
+      this.currentTheme = theme;
+      this.applyTheme(theme);
+      if(this.currentTheme == 'DARK'){
+        this.isChecked = !this.isChecked;
+        this.isChecked = true;
+      }else{
+        this.isChecked = false;
+      }
+    });
+    if(this.currentTheme == 'DARK'){
+      this.isChecked = !this.isChecked;
+      this.isChecked = true;
+    }else{
+      this.isChecked = false;
+    }
+  }
+  applyTheme(theme: string): void {
+    if (theme === 'DARK') {
+      document.body.classList.add('dark');
+      document.body.classList.remove('light');
+    } else {
+      document.body.classList.add('light');
+      document.body.classList.remove('dark');
+    }
+  }
+  toggleTheme(): void {
+    const newTheme = this.currentTheme === 'LIGHT' ? 'DARK' : 'LIGHT';
+    this.themeService.themeUpdateService(this.userloggedIn.userID, newTheme);
+    if(this.currentTheme == 'DARK'){
+      this.isChecked = !this.isChecked;
       this.isChecked = true;
     }else{
       this.isChecked = false;
@@ -63,14 +97,8 @@ export class HeaderComponent implements OnInit {
    */
   logOut() {
     this.loginService.logoutUser();
+    localStorage.removeItem('preferedCategory');
     this.router.navigate(['/']);
-    localStorage.removeItem('theme');
-    const theme = this.themeService.selectedTheme;
-    if (theme === "dark") {
-      this.isChecked = true;
-    }else {
-      this.isChecked = false;
-    }
   }
 
   /**
@@ -83,16 +111,5 @@ export class HeaderComponent implements OnInit {
     this.service.selectedCategory = 'RDKV';
     localStorage.removeItem('scriptCategory');
   }
-  toggleTheme(){
-    this.themeService.selectedTheme = this.themeService.themeSignal();
-    this.themeService.updateTheme();
-    this.isChecked = !this.isChecked;
-    if(this.isChecked){
-      this.isChecked = true;
-      localStorage.setItem('theme', 'dark');
-    }else{
-      this.isChecked = false;
-      localStorage.setItem('theme', 'light');
-    }
-  }
+
 }

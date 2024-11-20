@@ -68,7 +68,7 @@ export class ModulesEditComponent {
       testGroup: new FormControl<string | null>(this.moduleDetails.testGroup, { validators: Validators.required }),
       executionTime: new FormControl<string | null>(this.moduleDetails.executionTime, { validators: Validators.required }),
       thundrShowHide: new FormControl<boolean | null>({value: this.isThunder?this.isThunder:this.moduleDetails.moduleThunderEnabled, disabled: false}),
-      isAdvanced: new FormControl<boolean | null>({value: this.isAdvanced?this.isAdvanced:this.moduleDetails.moduleAdvanced, disabled: false}),
+      // isAdvanced: new FormControl<boolean | null>({value: this.isAdvanced?this.isAdvanced:this.moduleDetails.moduleAdvanced, disabled: false}),
       crashFiles: new FormControl<string | null>(''),
       logFiles: new FormControl<string | null>('')
     })
@@ -81,10 +81,10 @@ export class ModulesEditComponent {
     this.isThunder = inputEle.checked;
   }
   
-  isAdvancedCheck(event: any):void{
-    const inputEle = event.target as HTMLInputElement;
-    this.isAdvanced = inputEle.checked;
-  }
+  // isAdvancedCheck(event: any):void{
+  //   const inputEle = event.target as HTMLInputElement;
+  //   this.isAdvanced = inputEle.checked;
+  // }
     /**
    * Removes a crash file from the `crashFilesArr` array at the specified index.
    * @param index - The index of the crash file to remove.

@@ -27,6 +27,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ScriptsService } from '../../../services/scripts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-edit-testsuite',
@@ -50,10 +51,12 @@ export class EditTestsuiteComponent {
   loggedinUser: any;
   testSuiteEidtData:any;
   viewName!:string;
+  onlyVideoCategory!:string;
+  onlyVideoCategoryName!:string;
+  categoryName!:string;
 
   constructor(private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
-    private _snakebar: MatSnackBar,private route: ActivatedRoute ) {
-    this.selectedCategory = localStorage.getItem('category');
+    private _snakebar: MatSnackBar,private route: ActivatedRoute,private authservice : AuthService ) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
     const dataString = this.router.getCurrentNavigation();
     this.testSuiteEidtData = dataString?.extras.state?.['testSuiteData'];
@@ -61,7 +64,28 @@ export class EditTestsuiteComponent {
   }
 
   ngOnInit(): void {
-    this.container2ScriptArr = this.testSuiteEidtData.scripts;
+    this.onlyVideoCategory = localStorage.getItem('onlyVideoCategory')||'';
+    let category = localStorage.getItem('category') || '';
+    this.selectedCategory = category?category:'RDKV';
+    this.selectedCategory = this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory;
+    if(this.onlyVideoCategory){
+      if(this.onlyVideoCategory === 'RDKV_RDKSERVICE'){
+        this.onlyVideoCategoryName = 'Video-Thunder';
+      }else if(this.onlyVideoCategory === 'RDKV'){
+        this.onlyVideoCategoryName = 'Video';
+      }
+    }else{
+      if(this.selectedCategory == 'RDKB'){
+        this.categoryName = 'Broadband';
+      }
+       if(this.selectedCategory == 'RDKC'){
+        this.categoryName = 'Camera';
+      }
+    }
+
+    if(this.testSuiteEidtData){
+      this.container2ScriptArr = this.testSuiteEidtData.scripts?this.testSuiteEidtData.scripts:[];
+    }
     this.testSuiteEditFrom = this.fb.group({
       search: [''],
       testSuiteName: [this.testSuiteEidtData?this.testSuiteEidtData.name:'', Validators.required],
@@ -74,7 +98,10 @@ export class EditTestsuiteComponent {
   allScripts(){
     this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res=>{
       this.container1 = JSON.parse(res);
+      const idsToRemove = new Set(this.container2ScriptArr.map((obj) => obj.id));
+      this.container1 = this.container1.filter((obj) => !idsToRemove.has(obj.id));
     })
+
   }
 
    // Handle multi-select using Ctrl (Cmd on Mac) + click
@@ -150,7 +177,6 @@ export class EditTestsuiteComponent {
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
   }
   goBack():void{
-    localStorage.removeItem('category');
     this.router.navigate(['/script']);
   }
   reset():void{
@@ -167,7 +193,7 @@ export class EditTestsuiteComponent {
         description: this.testSuiteEditFrom.value.description,
         category: this.selectedCategory,
         userGroup: this.loggedinUser.userGroupName,
-        scripts:this.testSuiteEditFrom.value.container2Scripts
+        scripts:this.container2ScriptArr?this.container2ScriptArr:this.testSuiteEditFrom.value.container2Scripts
       }
       this.scriptservice.updateTestSuite(obj).subscribe({
         next: (res) => {
@@ -177,7 +203,6 @@ export class EditTestsuiteComponent {
             verticalPosition: 'top'
           })
           setTimeout(() => {
-            localStorage.removeItem('category');
             this.router.navigate(["/script"]);
           }, 1000);
         },

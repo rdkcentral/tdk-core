@@ -54,24 +54,22 @@ html,body,*:not(.material-icons){
 }
 
 /* darl-light theme css start  */
-.dark{
+.DARK{
   mat-toolbar {
     background-color:#272F3C;
     color: #fff;
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
   }
   .header {
-    /* background-color: #0d0d0e94; */
     background-color: #272f3cf2;
     border-bottom: 1px solid #00b2dc5c;
   }
   .mat-mdc-menu-panel .mat-mdc-menu-content{
-    /* background-color: #272F3C !important; */
     --mat-menu-container-color: #272F3C !important;
     color: #fff !important;
   }
   footer {
-    background-color: #272F3C;
+    background-color: #222;
   }
   .light-footer1{
     fill: gray;
@@ -88,13 +86,22 @@ html,body,*:not(.material-icons){
     background-color: #272F3C;
     padding-bottom: 10px;
   }
-  .title , .title2,.streaming-details{
+  .title ,.search,.headingView, .title2,.streaming-details,.collapse-icon, .mat-mdc-select{
     color: #fff;
   }
-  /* .radiobox-row{
-    border: 1px solid #ddd;
+  ::ng-deep.mat-mdc-icon-button[disabled], .mat-mdc-paginator-icon{
+    fill: #fff !important;
+  }
+  .table-heading,.accordion-item,.accordion-button,.extra-icon, .excel-icon{
+    background-color: #111212;
     color: #fff;
-  } */
+  }
+  .script-pagination{
+    background-color: #111212;
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+  }
   .ag-theme-quartz {
     --ag-header-background-color: #000;
     --ag-background-color: #000;
@@ -108,7 +115,7 @@ html,body,*:not(.material-icons){
   .form-control, .multiselect-dropdown, .form-select ,.form-select:focus{
     color: #fff;
   }
-  .col-form-label{
+  .col-form-label,.form-check-label,.text-group, .text-group a{
     color: #fff;
   }
   input::placeholder{
@@ -127,8 +134,11 @@ html,body,*:not(.material-icons){
   .thunder-hints{
     color: #8db0f2;
   }
+  .heading{
+    color: #fff;
+  }
 }
-.light{
+.LIGHT{
   mat-toolbar {
     background-color: #0e6f87;
     color: #fff;
@@ -136,6 +146,9 @@ html,body,*:not(.material-icons){
   }
   .header {
     background-color: #0e6f8794;
+  }
+  footer{
+    background-color: #0e6f87;
   }
   .active {
     font-weight: 500;
@@ -149,14 +162,8 @@ html,body,*:not(.material-icons){
   .title {
     color: #00273F;
   }
-  /* .radiobox-row {
-    border: 1px solid #0000002e;
-  }  */
-  .light-footer1{
-    fill: #00B2DC;
-  }
-  .light-footer2{
-    fill: #0e6f87;
+  .table-heading{
+    background-color: #d1d4d4;
   }
   .ag-theme-quartz {
     --ag-header-background-color: rgb(209, 212, 212);
@@ -188,10 +195,27 @@ html,body,*:not(.material-icons){
   .thunder-hints{
     color: blue;
   }
+  .collapse-icon{
+    color: #222;
+  }
+  .extra-icon, .excel-icon{
+    background-color: #fff;
+  }
+  ::ng-deep.mat-mdc-icon-button[disabled], .mat-mdc-paginator-icon{
+    color: #333;
+  }
+  .light-footer1{
+    fill: #00B2DC;
+  }
+  .light-footer2{
+    fill: #0e6f87;
+  }
 }
 
 /* darl-light theme css end  */
-
+footer{
+  background-color: #0e6f87;
+}
 .col-form-label{
   font-size: 0.8rem !important;
 }

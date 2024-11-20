@@ -67,6 +67,10 @@ import { CreateScriptGroupComponent } from './pages/script/create-script-group/c
 import { EditScriptsComponent } from './pages/script/edit-scripts/edit-scripts.component';
 import { CustomTestsuiteComponent } from './pages/script/custom-testsuite/custom-testsuite.component';
 import { EditTestsuiteComponent } from './pages/script/edit-testsuite/edit-testsuite.component';
+import { PreferedCategoryComponent } from './pages/prefered-category/prefered-category.component';
+import { ListRdkCertificationComponent } from './pages/rdk-certification/list-rdk-certification/list-rdk-certification.component';
+import { CreateRdkCertificationComponent } from './pages/rdk-certification/create-rdk-certification/create-rdk-certification.component';
+import { EditRdkCertificationComponent } from './pages/rdk-certification/edit-rdk-certification/edit-rdk-certification.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -74,6 +78,7 @@ export const routes: Routes = [
     { path: 'register', title: 'Register', component: RegisterComponent },
     { path: 'forgot-password', title: 'Forgot-password', component: ForgotPasswordComponent },
     { path: 'change-password', title: 'Change-password', component: ChangePasswordComponent, canActivate: [authGuard] },
+    { path: 'prefered-category', title: 'prefered-category', component: PreferedCategoryComponent, canActivate: [authGuard] },
     {
         path: '',
         component: MainComponent,
@@ -120,7 +125,10 @@ export const routes: Routes = [
             {path:'script/create-script-group', title:'Create Script Group', component:CreateScriptGroupComponent},
             {path:'execution', title:'Execution', component: ExecutionComponent},
             {path:'script/custom-testsuite', title:'Custom TestSuite', component:CustomTestsuiteComponent},
-            {path:'script/edit-testsuite',title:'Edit TestSuite',component:EditTestsuiteComponent}
+            {path:'script/edit-testsuite',title:'Edit TestSuite',component:EditTestsuiteComponent},
+            {path:'configure/list-rdk-certifications',title:'List RDK Certifications', component:ListRdkCertificationComponent},
+            {path:'configure/create-rdk-certifications',title:'Create RDK Certifications', component:CreateRdkCertificationComponent},
+            {path:'configure/edit-rdk-certifications', title:'Edit RDK Certifications', component:EditRdkCertificationComponent}
         ]
     }
 ];

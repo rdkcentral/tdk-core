@@ -33,12 +33,12 @@ export class FooterComponent {
   isChecked = false;
 
   constructor(private themeService: ThemeService) { 
-    const theme = this.themeService.selectedTheme;
-    if (theme === "dark") {
-      this.isChecked = true;
-    }else {
-      this.isChecked = false;
-    }
+    const theme = this.themeService.currentTheme;
+    // if (theme === "dark") {
+    //   this.isChecked = true;
+    // }else {
+    //   this.isChecked = false;
+    // }
     
   }
 

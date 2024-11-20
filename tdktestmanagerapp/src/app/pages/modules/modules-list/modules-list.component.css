@@ -63,6 +63,16 @@ body, *:not(.material-icons) {
     letter-spacing: 0.5px;
     cursor: pointer;
 }
+.modal-btns {
+    background-color: #00B2DC;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: 5px 15px;
+    border: 1px solid #0e6f8794;
+    border-radius: 6px;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+  }
 .icon-size{
     color: #00B2DC;
     font-weight: bold;
@@ -92,4 +102,8 @@ body, *:not(.material-icons) {
 }
 .table-sec{
     padding: 0 25px;
+}
+.errorupload{
+    color: #dc3545;
+    font-size: 0.8rem;
 }

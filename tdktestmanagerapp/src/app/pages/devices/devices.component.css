@@ -47,7 +47,7 @@ body, *:not(.material-icons) {
 .heading{
     margin-top: 8px;
     margin-bottom: 0;
-    font-size: 0.78rem;
+    font-size: 0.8rem;
 }
 .rdkgroup{
     margin-left: 30px;
@@ -186,4 +186,8 @@ body, *:not(.material-icons) {
 }
 .back-btn {
     margin-right: 10px;
+}
+.errorupload{
+    color: #dc3545;
+    font-size: 0.8rem;
 }

@@ -113,7 +113,7 @@ limitations under the License.
                             </div>
                             <div class="text-end">
                                 <button mat-button matStepperPrevious class="reset-btn" (click)="goBack()">Back</button>
-                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="firstFormGroup.invalid" >Next</button>
+                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="!firstFormGroup.valid" >Next</button>
                             </div>
                         </form>
                     </mat-step>

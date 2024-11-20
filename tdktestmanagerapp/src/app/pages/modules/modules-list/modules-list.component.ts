@@ -19,8 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { RouterLink } from '@angular/router';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
@@ -31,7 +30,6 @@ import {
   SelectionChangedEvent
 } from 'ag-grid-community';
 import { Router } from '@angular/router';
-import { HttpClientModule } from '@angular/common/http';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -45,7 +43,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-modules-list',
   standalone: true,
-  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular],
   templateUrl: './modules-list.component.html',
   styleUrl: './modules-list.component.css'
 })
@@ -60,7 +58,7 @@ export class ModulesListComponent {
   selectedDeviceCategory : string = 'RDKV';
   uploadXMLForm!:FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName! :File;
+  uploadFileName! :File | null;
   configureName!: string;
   selectedConfig!: string | null;
   lastSelectedNodeId: string | undefined;
@@ -71,6 +69,7 @@ export class ModulesListComponent {
   rowIndex!: number | null;
   selectedRowCount = 0;
   categoryName!: string;
+  uploadFileError: string | null = null;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -105,6 +104,7 @@ export class ModulesListComponent {
         onDeleteClick: this.delete.bind(this),
         onViewClick:this.openModal.bind(this),
         onFunctionClick:this.createFunction.bind(this),
+        onModuleXMLClick :this.downloadModuleXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
       })
@@ -114,19 +114,26 @@ export class ModulesListComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
- 
-  constructor(private router: Router, private authservice: AuthService, 
+  loggedInUser:any;
+  defaultCategory!:string;
+  preferedCategory!:string;
+
+  constructor(private router: Router, private authservice: AuthService, private fb:FormBuilder,
     private _snakebar: MatSnackBar, public dialog:MatDialog, private moduleservice:ModulesService,private renderer: Renderer2
-  ) { }
+  ) {
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+    this.defaultCategory = this.loggedInUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
+   }
   /**
    * Initializes the component.
   */
   ngOnInit(): void {
-    this.configureName = this.authservice.selectedConfigVal;
+    this.configureName = this.preferedCategory?this.preferedCategory:this.defaultCategory;
     this.categoryName = this.authservice.showSelectedCategory;
     this.findallbyCategory(); 
-    this.uploadXMLForm = new FormGroup({
-      uploadXml: new FormControl<string | null>('', { validators: Validators.required }),
+    this.uploadXMLForm = this.fb.group({
+      uploadXml: [null, Validators.required]
     })   
   }
  /**
@@ -205,7 +212,8 @@ export class ModulesListComponent {
             })
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            let errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -256,13 +264,31 @@ export class ModulesListComponent {
     }
 
   }
-
+   /**
+   * Handles the file change event when a file is selected for upload.
+   * @param event - The file change event object.
+   */
+   onFileChange(event:any){
+    this.uploadFileName = event.target.files[0].name;
+    const file: File = event.target.files[0];
+    if(file){
+      if (file.type === 'text/xml') {
+        this.uploadXMLForm.patchValue({ file: file });
+        this.uploadFileName = file;
+        this.uploadFileError = null;
+      } else {
+        this.uploadXMLForm.patchValue({ file: null });
+        this.uploadFileError = 'Please upload a valid XML file.';
+      }
+    }
+  }
   uploadXMLSubmit(){
     this.uploadFormSubmitted = true;
     if(this.uploadXMLForm.invalid){
       return
      }else{
       if(this.uploadFileName){
+        this.uploadFileError = null;
         this.moduleservice.uploadXMLFile(this.uploadFileName).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
@@ -275,8 +301,8 @@ export class ModulesListComponent {
               this.ngOnInit();
           },
           error:(err)=>{
-            let errmsg = err.error;
-            this._snakebar.open(errmsg, '', {
+            let errmsg = JSON.parse(err.error);
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -290,7 +316,20 @@ export class ModulesListComponent {
       }
      }
   }
-
+  downloadModuleXML(params:any){
+    if(params.moduleName){
+      this.moduleservice.downloadXMLModule(params.moduleName).subscribe(blob => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${params.moduleName}.xml`; 
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      });
+    }
+  }
   /**
    * Creates a function and stores the user data in the local storage.
    * Navigates to the '/configure/function-list' route.
@@ -311,19 +350,7 @@ export class ModulesListComponent {
     this.router.navigate(['/configure/parameter-list']);
   }
 
-   /**
-   * Handles the file change event when a file is selected for upload.
-   * @param event - The file change event object.
-   */
-   onFileChange(event:any){
-    this.uploadFileName = event.target.files[0].name;
-    const file: File = event.target.files[0];
-    if (file && file.type === 'text/xml') {
-      this.uploadFileName = file;
-    } else {
-      alert('Please select a valid XML file.');
-    }
-  }
+
 
   /**
    * Closes the modal  by click on button .

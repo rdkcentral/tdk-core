@@ -58,10 +58,9 @@ body,
   border-image-width: 0px 0px 4px 0px;
   margin: 0 25px;
 }
-/* .row-section{
-    display: flex;
-    justify-content: end;
-} */
+.first-container{
+  margin: 0 auto;
+}
 .sec-row{
     max-width: 100%;
     margin: 0 15px 0 20px;
@@ -70,7 +69,8 @@ body,
   display: flex;
   justify-content: flex-start;
   align-items: baseline;
-  padding: 8px 0 0 30px;
+  padding: 8px 0 0 25px;
+  height: 40px;
 }
 .radiobox-row {
   border: 1px solid #0000002e;
@@ -78,7 +78,7 @@ body,
   box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
 }
 .rdkgroup {
-  margin-left: 20px;
+  margin-left: 35px;
 }
 .rdkradio {
   border: 2px solid #0e6f87;
@@ -96,8 +96,8 @@ body,
     align-items: end;
     justify-content: flex-start;
 }
-.check-thunder{
-    padding-left: 0;
+.label-title{
+  padding-left: 20px;
 }
 .titlemodule{
     font-size: 0.88rem;
@@ -148,4 +148,16 @@ body,
 }
 .reset-btn{
   margin-right: 12px;
+}
+.btn-grp{
+  padding-right: 0;
+}
+.module-section{
+  display: block;
+  height: 210px;
+  overflow-y: auto;
+}
+.error-row{
+  text-align: end;
+  margin-right: 25px;
 }

@@ -22,7 +22,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MaterialModule } from '../../../material/material.module';
-import { HttpClientModule } from '@angular/common/http';
 import { CommonFormComponent } from '../../../utility/component/common-form/common-form.component';
 import { UsergroupService } from '../../../services/usergroup.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -30,7 +29,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-group-edit',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, HttpClientModule, MaterialModule, CommonFormComponent],
+  imports: [ReactiveFormsModule, CommonModule, MaterialModule, CommonFormComponent],
   templateUrl: './group-edit.component.html',
   styleUrl: './group-edit.component.css'
 })

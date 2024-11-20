@@ -150,7 +150,7 @@ export class ScriptsService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/getlistofmodulenamebycategory/${category}`, { headers, responseType: 'text' }); 
+    return this.http.get(`${apiUrl}api/v1/module/findbycategory/${category}`, { headers, responseType: 'text' }); 
   }
 
   getAllTestSuite(category:string):Observable<any>{
@@ -201,6 +201,14 @@ export class ScriptsService {
       'Authorization': this.authService.getApiToken()
     });
    return this.http.post(`${apiUrl}api/v1/testsuite/update`,data,  { headers,responseType: 'text'  });
+  
+  }
+
+  createCustomTestSuite(data:any): Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+   return this.http.post(`${apiUrl}api/v1/testsuite/createCustomTestSuite`,data,  { headers,responseType: 'text'  });
   
   }
 

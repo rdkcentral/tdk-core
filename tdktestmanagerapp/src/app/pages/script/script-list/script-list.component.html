@@ -19,17 +19,17 @@ limitations under the License.
         <h3 class="heading">Select Category :</h3>
         <div class="rdkgroup">
             <div class="form-check form-check-inline">
-              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
-              (change)="categoryChange('RDKV')" checked>
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedCategory"
+              (change)="categoryChange('RDKV')" >
           <label class="form-check-label" for="rdkv">Video</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedCategory"
               (change)="categoryChange('RDKB')">
           <label class="form-check-label" for="rdkb">Broadband</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
+              <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedCategory"
               (change)="categoryChange('RDKC')">
           <label class="form-check-label" for="rdkc">Camera</label>
             </div>
@@ -63,7 +63,7 @@ limitations under the License.
           </div>
           <div  *ngIf="testsuitTable" [ngClass]="testsuitTable?'testsuite-btn':'btns-group'">
             <button type="button" class="download-btn" matTooltip="Download all suites xml in zip" (click)="downloadAllSuitesZIP()"><i class="bi bi-cloud-arrow-down-fill download-icon"></i> </button>
-            <button type="button" class="download-btn" data-bs-toggle="modal" data-bs-target="#testSuiteModal" matTooltip="Upload {{selectedCategory}} Script">
+            <button type="button" class="download-btn" data-bs-toggle="modal" data-bs-target="#testSuiteModal" matTooltip="Upload {{selectedCategory}} testsuites">
               <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
             </button>
             <button type="button" class="download-btn" matTooltip="Update Test Suite"><i class="bi bi-arrow-repeat download-icon"></i> </button>
@@ -76,9 +76,9 @@ limitations under the License.
               <i class="bi bi-plus-circle-fill download-icon"></i>
             </button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" (click)="createScriptGroup()">RDKV_RDKService</a></li>
+              <li><a class="dropdown-item" (click)="createScriptVideo('RDKV_RDKSERVICE')">Video-Thunder</a></li>
               <li><hr class="dropdown-divider"></li>
-              <li><a class="dropdown-item" (click)="createScriptGroup()">RDKV</a></li>
+              <li><a class="dropdown-item" (click)="createScriptVideo('RDKV')">Video</a></li>
               <li><hr class="dropdown-divider"></li>
               <li><a class="dropdown-item" (click)="customTestSuite()">Custom TestSuite</a></li>
             </ul>
@@ -89,7 +89,7 @@ limitations under the License.
           <div class="col search-header">
               <span class="search">Search:</span>
               <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="globalSearchTerm"
-              (input)="globalSearch()" placeholder="Search...">
+              (input)="globalSearch()" placeholder="Search script or testsuites">
           </div>
           <div class="col"></div>
         </div>
@@ -107,10 +107,6 @@ limitations under the License.
                               <i class="bi bi-filter icon-sortng"></i>
                             </button>
                           
-                            <!-- Show the filter input if filter is toggled -->
-                            <!-- <div class="search-div" *ngIf="showFilterInput">
-                              <input  type="search" class="form-control search-input" placeholder="Filter..." [(ngModel)]="filterText" />
-                            </div> -->
                             <div class="search-div" *ngIf="showFilterInput">
                               <div class="input-group search-input">
                                 <span class="input-group-text search-side" id="basic-addon1"><i class="bi bi-search"></i></span>
@@ -180,25 +176,28 @@ limitations under the License.
                     <div *ngIf="scriptFilteredData.length == 0" class="noRecord">
                       <span>{{noScriptFound}}</span>
                     </div>
-                    <mat-paginator
-                    [length]="scriptFilteredData.length"
-                    [pageSize]="allPageSize"
-                    [pageSizeOptions]="[5,7, 10, 20]"
-                    (page)="onPageChange($event)">
-                  </mat-paginator>
+                    <div class="script-paginator">
+                      <mat-paginator
+                      [length]="scriptFilteredData.length"
+                      [pageSize]="allPageSize"
+                      [pageSizeOptions]="[5,7, 10, 20]"
+                      (page)="onPageChange($event)" class="script-pagination">
+                    </mat-paginator>
+                    </div>
+
               </div>
               
               <div class="row" *ngIf="testsuitTable">
                   <div class="table-container mt-2" >
                       <div class="row table-heading">
                         <div class="col border-column">
-                          <span>Module & Scripts </span>
+                          <span>Testsuites</span>
                           
                             <button type="button" (click)="toggleSortSuite()" class="sort-button">
                               <i class="bi sort-icon icon-sortng" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'  "></i>
                             </button>
                            
-                              <button type="button" class="sort-button filter-btn" (click)="toggleFilterInput()" #filterButton>
+                              <button type="button" class="sort-button filter-btn" (click)="toggleFilterInputSuite()" #filterButtonSuite>
                                 <i class="bi bi-filter icon-sortng"></i>
                               </button>
                             
@@ -206,10 +205,10 @@ limitations under the License.
                               <!-- <div class="search-div" *ngIf="showFilterInput">
                                 <input  type="search" class="form-control search-input" placeholder="Filter..." [(ngModel)]="filterText" (keyup)="applyFilter()" />
                               </div> -->
-                              <div class="search-div" *ngIf="showFilterInput">
+                              <div class="search-div" *ngIf="showFilterInputsuite">
                                 <div class="input-group search-input">
                                   <span class="input-group-text search-side" id="basic-addon1"><i class="bi bi-search"></i></span>
-                                  <input #filterInput type="text" class="form-control" placeholder="Filter..." [(ngModel)]="filterText" aria-describedby="basic-addon1">
+                                  <input #filterInputSuite type="text" class="form-control" placeholder="Filter..." [(ngModel)]="filterTextSuite" (keyup)="applyFilterSuite()" aria-describedby="basic-addon1">
                                 </div>
                               </div>
                         </div>
@@ -273,12 +272,14 @@ limitations under the License.
                       <div *ngIf="paginatedSuiteData.length == 0" class="noRecord">
                         <span>{{noScriptFound}}</span>
                       </div>
-                      <mat-paginator
-                      [length]="testSuiteFilteredData.length"
-                      [pageSize]="allPageSize"
-                      [pageSizeOptions]="[5,7, 10, 20]"
-                      (page)="onPageChange($event)">
-                    </mat-paginator>
+                      <div class="script-paginator">
+                        <mat-paginator
+                        [length]="testSuiteFilteredData.length"
+                        [pageSize]="allPageSize"
+                        [pageSizeOptions]="[5,7, 10, 20]"
+                        (page)="onPageChange($event)" class="script-pagination">
+                      </mat-paginator>
+                      </div>
                     </div>
             </div>
       </div>
@@ -302,6 +303,7 @@ limitations under the License.
                         <div *ngIf="uploadScriptForm && uploadScriptForm.controls['uploadZip']?.errors" class="text-danger">
                             <small *ngIf="uploadScriptForm.controls['uploadZip']?.errors?.['required']">Please select the script zip file.</small>
                         </div>
+                        <small *ngIf="uploadFileError" class="errorupload">{{uploadFileError}}</small>
                 </div>
             </div>
         </div>
@@ -332,12 +334,13 @@ limitations under the License.
                           <div *ngIf="xmlFormSubmitted && uploadtestSuiteForm.controls['uploadXML']?.errors" class="text-danger">
                               <small *ngIf="uploadtestSuiteForm.controls['uploadXML']?.errors?.['required']">Please select the testsuite xml file.</small>
                           </div>
+                          <small *ngIf="uploadFileError" class="errorupload">{{uploadFileError}}</small>
                   </div>
               </div>
           </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="download-btn modal-btns " data-bs-dismiss="modal">Close</button>
+        <button type="button" class="download-btn modal-btns " (click)="closeSuiteModal()">Close</button>
         <button type="submit" class="download-btn modal-btns ">Upload</button>
       </div>
       </form>

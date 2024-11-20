@@ -22,7 +22,7 @@ import { Component } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
 import { AgGridAngular } from 'ag-grid-angular';
-import { ColDef,GridApi,GridReadyEvent,IDateFilterParams,IMultiFilterParams } from 'ag-grid-community';
+import { ColDef,GridApi,GridReadyEvent,IDateFilterParams } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { ButtonComponent } from '../../utility/component/ag-grid-buttons/button/button.component';

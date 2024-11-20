@@ -18,17 +18,17 @@ limitations under the License.
             <h3 class="heading">Select the configuration category :</h3>
             <div class="form-check form-check-inline">
                 <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
-                    (change)="ischecked('RDKV')" checked>
+                    [(ngModel)]="selectedCategory"  (change)="ischecked('RDKV')">
                 <label class="form-check-label" for="rdkv">Video</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB"
-                    (change)="ischecked('RDKB')">
+                    [(ngModel)]="selectedCategory" (change)="ischecked('RDKB')">
                 <label class="form-check-label" for="rdkb">Broadband</label>
             </div>
             <div class="form-check form-check-inline">
                 <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC"
-                    (change)="ischecked('RDKC')">
+                    [(ngModel)]="selectedCategory" (change)="ischecked('RDKC')">
                 <label class="form-check-label" for="rdkc">Camera</label>
             </div>
         </div>
@@ -91,7 +91,7 @@ limitations under the License.
                         </div>
                     </div>
 
-                    <div class="card-height-3">
+                    <div class="card-height-3" routerLink="/configure/list-rdk-certifications">
                         <span class="circle"><i class="bi bi-award-fill icon-right"></i></span>
                         <div class="text-group">
                             <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('rdkcertification')">RDK Certification</a>
@@ -188,6 +188,16 @@ limitations under the License.
                             <i class="bi bi-arrow-right-short arrow-icon-right"></i>
                             <div>
                                 <span class="desc">Option to add SoC</span> 
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-height-3 rdkBcertify">
+                        <span class="circle"><i class="bi bi-award-fill icon-right"></i></span>
+                        <div class="text-group">
+                            <a class="category-title3 rdkBlink" >RDK Certification</a>
+                            <i class="bi bi-arrow-right-short arrow-icon-right"></i>
+                            <div>
+                                <span class="desc">Option to add rdk certification</span> 
                             </div>
                         </div>
                     </div>

@@ -147,4 +147,12 @@ export class ModulesService {
     return this.http.post(`${apiUrl}api/v1/module/parsexml`, formData,{ headers, responseType: 'text' });
   }
   
+  downloadXMLModule(moduleName:any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/module/downloadxml/${moduleName}`, { headers, responseType: 'blob' })
+
+  }
+
 }

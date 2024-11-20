@@ -17,7 +17,7 @@ limitations under the License.
     <div class="row mt-1">
         <div class="col-md-12">
             <mat-card class="card-height">
-                <h1 class="title">Update TestSuite</h1>
+                <h1 class="title">Update {{onlyVideoCategoryName?onlyVideoCategoryName:categoryName}} TestSuite</h1>
                 <form [formGroup]="testSuiteEditFrom" (ngSubmit)="testSuiteEditSubmit()">
                     <div class="row form-row mt 2">
                         <div class="col-md-6">
@@ -134,7 +134,7 @@ limitations under the License.
                     <div class="row form-row">
                         <div class="mt-3 mb-3 text-end">
                             <button class="reset-btn" (click)="goBack()">Back</button>
-                            <button class="reset-btn" (click)="reset()">Reset</button>
+                            <!-- <button class="reset-btn" (click)="reset()">Reset</button> -->
                             <button type="submit" class="create-btn">Update</button>
                         </div>
                     </div>

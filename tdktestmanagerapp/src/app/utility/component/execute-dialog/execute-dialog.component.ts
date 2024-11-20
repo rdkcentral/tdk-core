@@ -18,20 +18,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { HttpClientModule } from '@angular/common/http';
 import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { ScriptsService } from '../../../services/scripts.service';
-import { RouterOutlet } from '@angular/router';
 import { LoaderComponent } from '../loader/loader.component';
 
 @Component({
   selector: 'app-execute-dialog',
   standalone: true,
-  imports: [CommonModule,RouterOutlet,LoaderComponent,HttpClientModule,ReactiveFormsModule,FormsModule, MaterialModule,NgMultiSelectDropDownModule],
+  imports: [CommonModule,LoaderComponent,ReactiveFormsModule,FormsModule, MaterialModule,NgMultiSelectDropDownModule],
   templateUrl: './execute-dialog.component.html',
   styleUrl: './execute-dialog.component.css'
 })
@@ -104,10 +102,10 @@ export class ExecuteDialogComponent {
   formSubmit(){
     this.showLoader = true;
     this.showLogs = false;
-   setTimeout(() => {
-    this.showLogs = true;
-    this.showLoader = false;
-   }, 3000);
+  //  setTimeout(() => {
+  //   this.showLogs = true;
+  //   this.showLoader = false;
+  //  }, 3000);
   }
   
   scheduleOpen(){
