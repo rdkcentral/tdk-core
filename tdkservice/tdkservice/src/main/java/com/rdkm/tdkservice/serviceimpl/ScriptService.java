@@ -23,7 +23,6 @@ package com.rdkm.tdkservice.serviceimpl;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -32,7 +31,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
@@ -52,7 +50,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.apache.poi.util.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,7 +66,6 @@ import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
-import com.rdkm.tdkservice.dto.ScriptResponseDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestType;
@@ -93,6 +89,7 @@ import com.rdkm.tdkservice.repository.ScriptTestSuiteRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IScriptService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -599,7 +596,7 @@ public class ScriptService implements IScriptService {
 		String testGroupFolderName = commonService.getFolderBasedOnModuleType(module.getTestGroup());
 		if (!Utils.isEmpty(categoryFolderName) && !Utils.isEmpty(moduleFolderName)
 				&& !Utils.isEmpty(testGroupFolderName)) {
-			filePath = String.format("%s/%s/%s", categoryFolderName, moduleFolderName, testGroupFolderName);
+			filePath = String.format("%s/%s/%s", categoryFolderName, testGroupFolderName, moduleFolderName);
 		} else {
 			LOGGER.error("Invalid folder names: categoryFolderName: " + categoryFolderName + " moduleFolderName: "
 					+ moduleFolderName + " testGroupFolderName: " + testGroupFolderName);

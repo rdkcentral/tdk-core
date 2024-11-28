@@ -22,12 +22,12 @@ package com.rdkm.tdkservice.repository;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.model.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.DeviceType;
 
 @Repository
 public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
@@ -63,7 +63,6 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	 */
 	Device findByIp(String ip);
 
-	
 	/**
 	 * This method is used to find a Device by its macId.
 	 *
@@ -103,7 +102,7 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	 * @return List<Device> This returns the found Devices.
 	 */
 	List<Device> findAllByCategory(Category category);
-	
+
 	/**
 	 * This method is used to find all Devices by their deviceType.\ and category
 	 *
@@ -111,4 +110,12 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	 * @return List<Device> This returns the found Devices.
 	 */
 	List<Device> findByDeviceTypeAndCategory(DeviceType deviceType, Category category);
+
+	/**
+	 * This method is used to find a Device by its deviceIP and port.
+	 *
+	 * @param deviceIP This is the deviceIP of the Device to be found.
+	 * @param port     This is the port of the Device to be found.
+	 */
+	Device findByIpAndPort(String deviceIP, String port);
 }

@@ -28,6 +28,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 
 public interface IDeviceService {
 	/**
@@ -100,5 +101,37 @@ public interface IDeviceService {
 	 * @return String This returns the Device XML.
 	 */
 	public Path downloadAllDevicesByCategory(String category);
+
+	/**
+	 * This method is used to get the status of all the devices in the given
+	 * category
+	 * 
+	 * @param category- category of the devices say RDKV, RDKB, RDKC
+	 * @return List of device status response DTOs
+	 */
+	public List<DeviceStatusResponseDTO> getAllDeviceStatus(String category);
+
+	/**
+	 * This method is used to get the details of a device
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return String-
+	 */
+	public String getDeviceDetails(String deviceIp);
+
+	/**
+	 * This method is used to get the Thunder ports of a device
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return String-
+	 */
+	String getThunderDevicePorts(String deviceIp);
+
+	/**
+	 * This method is used to get the device type of a device
+	 * 
+	 * @param deviceIp- IP of the device
+	 */
+	String getDeviceType(String deviceIp);
 
 }

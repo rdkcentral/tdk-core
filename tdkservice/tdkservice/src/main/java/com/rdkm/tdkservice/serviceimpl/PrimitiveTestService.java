@@ -26,6 +26,8 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -347,6 +349,78 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 		}
 		LOGGER.info("Primitive test found  " + primitiveTestDTOs.toString());
 		return primitiveTestDTOs;
+	}
+
+	/**
+	 * This method is used to get the primitive test details by module name
+	 *
+	 * @param testName - String
+	 * @param idVal    - String
+	 * @return String - list of primitive test details
+	 */
+	@Override
+	public JSONObject getJson(String testName) {
+		LOGGER.info("Finding primitive test with module name: " + testName);
+		PrimitiveTest primitiveTest = this.getPrimitiveTest(testName);
+
+		try {
+			return this.getJsonData(primitiveTest, null);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	/**
+	 * This method is used to get the primitive test details by module name
+	 *
+	 * @param primitiveTestName - String
+	 * @return List<PrimitiveTestDTO> - list of primitive test details
+	 */
+	public PrimitiveTest getPrimitiveTest(String primitiveTestName) {
+		LOGGER.info("Finding primitive test with module name: " + primitiveTestName);
+		PrimitiveTest primitiveTest = primitiveTestRepository.findByName(primitiveTestName);
+		if (primitiveTest == null) {
+			LOGGER.error("Primitive test not found with  name: " + primitiveTestName);
+			throw new ResourceNotFoundException(Constants.PRIMITIVE_TEST_WITH_MODULE_NAME, primitiveTestName);
+		}
+		return primitiveTest;
+	}
+
+	
+	/**
+	 * This method is used to get the primitive test details as json data
+	 *
+	 * @param primitiveTest - PrimitiveTest
+	 * @param idValue       - String
+	 * @return JSONObject - list of primitive test details
+	 */
+	private JSONObject getJsonData(PrimitiveTest primitiveTest, String idValue) throws JSONException {
+
+		LOGGER.info("getJsonData ::::::::: " + (primitiveTest != null ? primitiveTest.getName() : "null"));
+		JSONObject outData = new JSONObject();
+
+		if (primitiveTest != null && primitiveTest.getFunction() != null
+				&& primitiveTest.getFunction().getName() != null) {
+			outData.put("module", primitiveTest.getModule().getName().trim());
+			outData.put("method", primitiveTest.getFunction().getName().trim());
+			JSONObject paramsObj = new JSONObject();
+			List<PrimitiveTestParameter> parameters = primitiveTest.getParameters();
+
+			for (PrimitiveTestParameter parameter : parameters) {
+				String paramName = parameter.getParameterName();
+				String paramValue = parameter.getParameterValue();
+
+				if (paramName != null) {
+					paramsObj.put(paramName, paramValue.trim());
+				}
+			}
+
+			outData.put("params", paramsObj);
+		}
+
+		return outData;
 	}
 
 }
