@@ -1,0 +1,193 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2016 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+package com.rdkm.tdkservice.service.utilservices;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.FutureTask;
+import java.util.concurrent.TimeUnit;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import com.rdkm.tdkservice.util.Utils;
+
+/**
+ * The ScriptExecutorService class provides the methods to execute a script.
+ */
+@Service
+public class ScriptExecutorService {
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(ScriptExecutorService.class);
+
+	private final ExecutorService executorService = Executors.newCachedThreadPool();
+
+	/**
+	 * Executes a script with the given command and wait time.
+	 *
+	 * @param command  the command to execute as an array of strings
+	 * @param waittime the maximum time to wait for the script to complete, in
+	 *                 minutes
+	 * @return the output of the script, or null if an error occurs
+	 */
+	public String executeScript(String[] command, int waittime) {
+
+		// Initialize the process variable
+		Process process;
+		try {
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
+			process = processBuilder.start();
+
+			// Create StreamReaderJob instances to read the process's input and error
+			// streams
+			StreamReaderJob dataReader = new StreamReaderJob(process.getInputStream());
+			StreamReaderJob errorReader = new StreamReaderJob(process.getErrorStream());
+
+			// Create FutureTask instances to handle the reading of the streams concurrently
+			FutureTask<String> dataReaderTask = new FutureTask<>(dataReader);
+			FutureTask<String> errorReaderTask = new FutureTask<>(errorReader);
+			executorService.execute(dataReaderTask);
+			executorService.execute(errorReaderTask);
+
+			if (waittime == 0) {
+				process.waitFor();
+			} else {
+				process.waitFor(waittime, TimeUnit.MINUTES);
+			}
+
+			String outputData;
+			String errorData;
+			outputData = dataReaderTask.get();
+			errorData = errorReaderTask.get();
+
+			if (errorData != null && !errorData.isEmpty()) {
+				LOGGER.error("Error Data: " + errorData);
+			}
+
+			process.destroy();
+			return outputData;
+		} catch (IOException e) {
+			LOGGER.error("Error executing script: " + e.getMessage());
+			return null;
+		} catch (InterruptedException e) {
+			LOGGER.error("Script execution interrupted: " + e.getMessage());
+			return null;
+		} catch (Exception e) {
+			LOGGER.error("Error reading script output: " + e.getMessage());
+			return null;
+		}
+	}
+
+	/**
+	 * Executes a test script with the given command, wait time, and output file.
+	 *
+	 * @param command    the command to execute as an array of strings
+	 * @param waittime   the maximum time to wait for the script to complete, in
+	 *                   minutes
+	 * @param outputFile the name of the file to write the output to
+	 * @return the output of the script
+	 */
+	public String executeTestScript(String[] command, final int waittime, String outputFile) {
+		String outputData = "";
+		Process process;
+
+		try {
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
+			process = processBuilder.start();
+			StringBuilder dataRead = new StringBuilder("");
+
+			// Create StreamReaderJob instances to read the process's input and error
+			// streams
+			StreamReaderJob dataReader = new StreamReaderJob(process.getInputStream(), outputFile, dataRead);
+			StreamReaderJob errorReader = new StreamReaderJob(process.getErrorStream(), outputFile, dataRead);
+
+			// Create FutureTask instances to handle the reading of the streams concurrently
+			FutureTask<String> dataReaderTask = new FutureTask<>(dataReader);
+			FutureTask<String> errorReaderTask = new FutureTask<>(errorReader);
+			executorService.execute(dataReaderTask);
+			executorService.execute(errorReaderTask);
+
+			String successData = null;
+			String errorData = null;
+			if (waittime == 0) {
+				int exitCode = process.waitFor();
+			} else {
+				process.waitFor(waittime, TimeUnit.MINUTES);
+			}
+
+			LOGGER.info("The data is " + dataRead);
+			successData = dataReaderTask.get();
+			outputData = successData;
+
+			errorData = errorReaderTask.get();
+			process.destroy();
+			if (!Utils.isEmpty(errorData) && !outputData.trim().contains(errorData.trim())) {
+				outputData += "\n" + errorData;
+			}
+
+			System.out.println(outputData);
+		} catch (IOException e) {
+			LOGGER.error("Error executing script: " + e.getMessage());
+//			return null;
+		} catch (InterruptedException e) {
+			LOGGER.error("Script execution interrupted: " + e.getMessage());
+//			return null;
+		} catch (Exception e) {
+			LOGGER.error("Error reading script output: " + e.getMessage());
+//			return null;
+		}
+		return outputData;
+
+	}
+
+	/**
+	 * Executes a test script with the given command and output file.
+	 *
+	 * @param command    the command to execute as an array of strings
+	 * @param outputFile the name of the file to write the output to
+	 */
+	@Async
+	public void executeTestScript(String[] command, String outputFile) {
+		ProcessBuilder processBuilder = new ProcessBuilder(command);
+		processBuilder.redirectErrorStream(true); // Merge error stream with input stream
+
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(outputFile))) {
+			Process process = processBuilder.start();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			String line;
+
+			while ((line = reader.readLine()) != null) {
+				System.out.println(line);
+				writer.write(line);
+				writer.newLine();
+			}
+
+			int exitCode = process.waitFor();
+		} catch (IOException | InterruptedException e) {
+			LOGGER.error("Error executing script: " + e.getMessage());
+		}
+	}
+}

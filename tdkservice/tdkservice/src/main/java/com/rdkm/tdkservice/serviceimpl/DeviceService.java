@@ -49,6 +49,8 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +67,7 @@ import org.xml.sax.SAXException;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
@@ -401,7 +404,7 @@ public class DeviceService implements IDeviceService {
 	/**
 	 * This method is used to download the device details in XML format.
 	 *
-	 * @param  name The name of the device to download the details for.
+	 * @param name The name of the device to download the details for.
 	 * @return A String containing the device details in XML format.
 	 */
 	public String downloadDeviceXML(String name) {
@@ -720,6 +723,144 @@ public class DeviceService implements IDeviceService {
 			LOGGER.error("The uploaded file is empty");
 			throw new UserInputException("The uploaded file is empty.");
 		}
+	}
+
+	/**
+	 * This method is used to get the status of all the devices in the given
+	 * category
+	 * 
+	 * @param category- category of the devices say RDKV, RDKB, RDKC
+	 * @return List of device status response DTOs
+	 */
+	public List<DeviceStatusResponseDTO> getAllDeviceStatus(String category) {
+		LOGGER.info("Fetching device statuses for category: " + category);
+		List<DeviceStatusResponseDTO> deviceStatusResponseDTOs = new ArrayList<>();
+		try {
+			List<Device> devices = deviceRepository.findByCategory(Category.getCategory(category));
+			if (devices == null || devices.isEmpty()) {
+				LOGGER.warn("No devices found for category: " + category);
+				return deviceStatusResponseDTOs;
+			}
+			for (Device device : devices) {
+				DeviceStatusResponseDTO deviceStatusResponseDTO = new DeviceStatusResponseDTO();
+				deviceStatusResponseDTO.setName(device.getName());
+				deviceStatusResponseDTO.setStatus(device.getDeviceStatus().toString());
+				deviceStatusResponseDTO.setIp(device.getIp());
+				deviceStatusResponseDTO.setDeviceType(device.getDeviceType().getName());
+				deviceStatusResponseDTO.setThunderEnabled(device.isThunderEnabled());
+				deviceStatusResponseDTOs.add(deviceStatusResponseDTO);
+			}
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Invalid category: " + category, e);
+			throw new ResourceNotFoundException(Constants.CATEGORY, category);
+		} catch (Exception e) {
+			LOGGER.error("An unexpected error occurred while fetching device statuses", e);
+			throw new TDKServiceException("An unexpected error occurred while fetching device statuses");
+		}
+		return deviceStatusResponseDTOs;
+	}
+
+	/**
+	 * This method is used to get the device details for the given device IP
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return JSON object containing the device details
+	 */
+	@Override
+	public String getDeviceDetails(String deviceIp) {
+		JSONObject devicDetailsJSON = new JSONObject();
+
+		if (deviceIp == null) {
+			LOGGER.error("Device IP is null");
+			throw new UserInputException("Device IP cannot be null");
+		}
+		Device device = deviceRepository.findByIp(deviceIp);
+		try {
+			if (device != null) {
+				devicDetailsJSON.put("status", "SUCCESS");
+				devicDetailsJSON.put("devicename", device.getName());
+				devicDetailsJSON.put("mac", device.getMacId());
+				devicDetailsJSON.put("category", device.getCategory().getName());
+				devicDetailsJSON.put("boxtype", device.getDeviceType().getName());
+			} else {
+				devicDetailsJSON.put("status", "FAILURE");
+				devicDetailsJSON.put("remarks", "No valid device found with provided data");
+			}
+
+		} catch (JSONException e) {
+
+		}
+		return devicDetailsJSON.toString();
+	}
+
+	
+	/**
+	 * This method is used to get the thunder device ports for the given device IP
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return JSON object containing the thunder device ports
+	 */
+	@Override
+	public String getThunderDevicePorts(String deviceIp) {
+		JSONObject thunderDevicePortsJSON = new JSONObject();
+		try {
+			if (deviceIp == null) {
+				LOGGER.error("Device IP is null");
+				throw new UserInputException("Device IP cannot be null");
+
+			}
+			Device device = deviceRepository.findByIp(deviceIp);
+			if (device != null) {
+				if (device.isThunderEnabled()) {
+					if (device.getThunderPort() == null || device.getThunderPort().isEmpty()) {
+						thunderDevicePortsJSON.put("Result", "Thunder port is not configured");
+					} else {
+						thunderDevicePortsJSON.put("thunderPort", device.getThunderPort());
+
+					}
+				} else {
+					thunderDevicePortsJSON.put("Result", "Device is not thunder enabled");
+
+				}
+
+			} else {
+				thunderDevicePortsJSON.put("Result", "Device not found");
+			}
+		} catch (JSONException e) {
+			LOGGER.error("Error occurred while creating JSON object", e);
+			throw new TDKServiceException("Error occurred while creating JSON object");
+
+		}
+		return thunderDevicePortsJSON.toString();
+
+	}
+
+	
+	/**
+	 * This method is used to get the device type for the given device IP
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return JSON object containing the device type
+	 */
+	@Override
+	public String getDeviceType(String deviceIp) {
+		JSONObject deviceTypeJSON = new JSONObject();
+		Device device = deviceRepository.findByIp(deviceIp);
+		try {
+			if (device != null) {
+				deviceTypeJSON.put("deviceip", deviceIp);
+				deviceTypeJSON.put("status", "SUCCESS");
+				deviceTypeJSON.put("boxtype", device.getDeviceType());
+			} else {
+				deviceTypeJSON.put("status", "FAILURE");
+				deviceTypeJSON.put("remarks", "No valid device found with provided data");
+
+			}
+		} catch (JSONException e) {
+			LOGGER.error("");
+		}
+
+		return deviceTypeJSON.toString();
 	}
 
 }

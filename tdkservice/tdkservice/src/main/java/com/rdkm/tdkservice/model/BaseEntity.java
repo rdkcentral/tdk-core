@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -55,15 +56,14 @@ public abstract class BaseEntity {
 	 * The date the entity was created.
 	 */
 	@CreationTimestamp
-	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date")
-	private LocalDateTime createdDate;
+	@Column(name = "created_date", updatable = false)
+	private Instant createdDate;
 
 	/**
 	 * The date the entity was last updated.
 	 */
 	@UpdateTimestamp
 	@Column(name = "updated_at")
-	private LocalDateTime updatedAt;
+	private Instant updatedAt;
 
 }

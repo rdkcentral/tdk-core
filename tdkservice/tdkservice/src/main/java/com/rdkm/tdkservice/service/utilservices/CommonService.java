@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.serviceimpl;
+package com.rdkm.tdkservice.service.utilservices;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -45,14 +45,17 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.config.ExecutionConfig;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.UserGroup;
+import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
@@ -67,6 +70,15 @@ public class CommonService {
 
 	@Autowired
 	UserGroupRepository userGroupRepository;
+
+	@Autowired
+	ScriptRepository scriptRepository;
+
+	@Autowired
+	private ExecutionConfig executionConfig;
+
+	@Autowired
+	private AppConfig appConfig;
 
 	/**
 	 * This method is used to get the folder name based on the module type.
@@ -264,8 +276,17 @@ public class CommonService {
 		return deviceTypeList;
 	}
 
+	public List<DeviceType> getDeviceType(String scriptName) {
+		Script script = scriptRepository.findByName(scriptName);
+		if (script == null) {
+			LOGGER.error("Script not found with the name: " + scriptName);
+			throw new ResourceNotFoundException(Constants.SCRIPT_NAME, scriptName);
+		}
+		return script.getDeviceTypes();
+	}
+
 	/*
-	 * The method to add license header in the python files and config files
+	 * /* The method to add license header in the python files and config files
 	 * 
 	 * @param scriptFile
 	 * 
@@ -316,6 +337,148 @@ public class CommonService {
 			throw new UserInputException(
 					"Invalid file extension: " + configFile.getOriginalFilename() + " The File must be .py file");
 		}
+	}
+
+	/**
+	 * Retrieves the host IP address based on the specified IP type.
+	 *
+	 * @param ipType the type of IP address (e.g., "IPv4" or "IPv6")
+	 * @return the host IP address as a String
+	 */
+	public String getHostIpAddress(String ipType) {
+		String nwInterfaceName = "";
+		if (ipType.equals(Constants.IPV4)) {
+			nwInterfaceName = executionConfig.getIPV4Interface();
+		} else if (ipType.equals(Constants.IPV6)) {
+			nwInterfaceName = executionConfig.getIPV6Interface();
+		}
+		String hostIPAddress = InetUtilityService.getIPAddress(ipType, nwInterfaceName);
+		return hostIPAddress;
+
+	}
+
+	/**
+	 * This method is used to get the base log path.
+	 * 
+	 * @return
+	 */
+	public String getBaseLogPath() {
+		String logBasePath = "";
+		String logBasePathFromConfig = executionConfig.getExecutionLogBasePath();
+
+		if (Utils.isEmpty(logBasePathFromConfig)) {
+			logBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
+		} else {
+			logBasePath = logBasePathFromConfig;
+		}
+		return logBasePath;
+	}
+
+	/**
+	 * This method is used to delete the file.
+	 * 
+	 * @param deleteFilePath
+	 * @return
+	 */
+	public boolean deleteFile(String deleteFilePath) {
+		boolean isFileDeleted = false;
+
+		Path tempScriptPath = Paths.get(deleteFilePath);
+		try {
+			if (Files.exists(tempScriptPath)) {
+				Files.delete(tempScriptPath);
+				if (!Files.exists(tempScriptPath)) {
+					isFileDeleted = true;
+
+				}
+				LOGGER.info("File deleted: " + deleteFilePath);
+			}
+		} catch (IOException e) {
+			LOGGER.error("Failed to delete file: " + deleteFilePath, e);
+		}
+		return isFileDeleted;
+
+	}
+
+	/**
+	 * This method is used to get the base URL for the TM.
+	 * 
+	 * @return
+	 */
+	public String getTMBaseURL() {
+		String tmBaseURL = "";
+		// Get the base URL for the TMr
+		String urlFromConfig = appConfig.getBaseURL();
+		if (Utils.isEmpty(urlFromConfig)) {
+			// TO DO: Get the base URL from code
+		} else {
+			tmBaseURL = urlFromConfig;
+		}
+		return tmBaseURL;
+	}
+
+	/**
+	 * This method is used to get the python command.
+	 * 
+	 * @return
+	 */
+	public String getPythonCommand() {
+		return executionConfig.getPythonCommand();
+	}
+
+	/**
+	 * This method is used to validate the script device device type.
+	 * 
+	 * @param device
+	 * @param script
+	 * @return
+	 */
+	public boolean validateScriptDeviceDeviceType(Device device, Script script) {
+
+		List<DeviceType> deviceTypes = this.getDeviceType(script.getName());
+		if (null == deviceTypes) {
+			return true;
+		} else {
+			for (DeviceType deviceType : deviceTypes) {
+				if (deviceType.equals(device.getDeviceType())) {
+					return true;
+				}
+			}
+		}
+		return false;
+
+	}
+
+	/**
+	 * This method is used to check if the script is marked to be skipped.
+	 * 
+	 * @param script
+	 * @return
+	 */
+	public boolean isScriptMarkedToBeSkipped(Script script) {
+		if (script.isSkipExecution()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * This method is used to validate the script device category.
+	 * 
+	 * @param device
+	 * @param script
+	 * @return
+	 */
+	public boolean vaidateScriptDeviceCategory(Device device, Script script) {
+		boolean isCategoryMatch = false;
+ 
+		// TODO: Revisit this logic for RDKVRDKService
+		if (device.isThunderEnabled()) {
+			isCategoryMatch = script.getModule().getCategory().equals(Category.RDKV_RDKSERVICE);
+		} else {
+			isCategoryMatch = script.getModule().getCategory().equals(device.getCategory());
+		}
+		return isCategoryMatch;
 	}
 
 }

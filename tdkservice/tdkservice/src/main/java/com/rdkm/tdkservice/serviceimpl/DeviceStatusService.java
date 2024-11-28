@@ -1,0 +1,265 @@
+/*
+ * If not stated otherwise in this file or this component's Licenses.txt file the
+ * following copyright and licenses apply:
+ *
+ * Copyright 2016 RDK Management
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+package com.rdkm.tdkservice.serviceimpl;
+
+import java.io.File;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.config.ExecutionConfig;
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.DeviceStatus;
+import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.service.utilservices.InetUtilityService;
+import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
+import com.rdkm.tdkservice.util.Constants;
+
+/**
+ * This class is used to update the status of the device
+ */
+@Service
+public class DeviceStatusService {
+
+	public static final Logger LOGGER = LoggerFactory.getLogger(DeviceStatusService.class);
+
+	@Autowired
+	private ExecutionConfig executionConfig;
+
+	@Autowired
+	ScriptExecutorService scriptExecutorService;
+
+	@Autowired
+	CommonService commonService;
+
+	@Autowired
+	private DeviceRepositroy deviceRepository;
+
+	/**
+	 * This method updates the status for all devices at a fixed rate. It fetches
+	 * the list of all devices from the repository, attempts to update their status,
+	 * and saves the updated status back to the repository.
+	 * 
+	 * @return boolean - true if the status update was successful for all devices,
+	 *         false otherwise
+	 */
+	@Scheduled(fixedRate = 30000)
+	public void updateAllDeviceStatus() {
+		LOGGER.debug("Updating status for all devices");
+		List<Device> devices = deviceRepository.findAll();
+		for (Device device : devices) {
+			try {
+				DeviceStatus deviceStatus = fetchDeviceStatus(device);
+				if (deviceStatus != null) {
+
+					// If the device is busy in the device entity, then no need to change the status
+					// because it is set via the execution logic
+					// If the device status fetched via script is busy, then we can change it.
+					// Because in TDK enabled devices, the script will return busy state
+					if (device.isThunderEnabled()) {
+						if (device.getDeviceStatus().equals(DeviceStatus.BUSY)) {
+							continue;
+						} else {
+							device.setDeviceStatus(deviceStatus);
+						}
+					} else {
+						device.setDeviceStatus(deviceStatus);
+					}
+
+					deviceRepository.save(device);
+				} else {
+					LOGGER.warn("Failed to fetch status for device: " + device.getName());
+				}
+			} catch (
+
+			Exception e) {
+				LOGGER.error("Error updating status for device: " + device.getName(), e);
+			}
+		}
+		LOGGER.debug("Status updated for all devices");
+
+	}
+
+	/**
+	 * This method is used to fetch the status of the device
+	 * 
+	 * @param device- device for which the status needs to be fetched
+	 * @return DeviceStatus- status of the device
+	 */
+	public DeviceStatus fetchDeviceStatus(Device device) {
+		LOGGER.debug("Fetching device status for device: " + device.getName());
+		String[] scriptExecutionCommand = null;
+		// Get the python command from the execution configuration
+		String pythonCommand = executionConfig.getPythonCommand();
+
+		String deviceStatusOutput = null;
+		if (device.isThunderEnabled()) {
+			String pythonScriptPath = this.getAbsolutePath("callthunderdevicestatus_cmndline.py");
+			if (pythonScriptPath == null) {
+				LOGGER.error(" Thunder device status Script file not found ");
+				return null;
+			}
+			scriptExecutionCommand = new String[] { pythonCommand, pythonScriptPath, device.getIp(),
+					device.getThunderPort() };
+
+		} else {
+			String pythonScriptPath = this.getAbsolutePath("calldevicestatus_cmndline.py");
+			if (pythonScriptPath == null) {
+				LOGGER.error(" Thunder device status Script file not found ");
+				return null;
+			}
+			String hostIPAddress;
+			// Check if the device is RDKV and has an IPv6 address, then fetch the host IPv6
+			// and by default fetch the host IPv4
+			if (device.getCategory() == Category.RDKV && InetUtilityService.isIPv6Address(device.getIp())) {
+				hostIPAddress = commonService.getHostIpAddress(Constants.IPV6);
+			} else {
+				hostIPAddress = commonService.getHostIpAddress(Constants.IPV4);
+			}
+			scriptExecutionCommand = new String[] { pythonCommand, pythonScriptPath, device.getIp(), device.getPort(),
+					hostIPAddress, device.getName() };
+
+		}
+
+		deviceStatusOutput = scriptExecutorService.executeScript(scriptExecutionCommand, 1);
+
+		DeviceStatus deviceStatus = getDeviceStatusFromOutput(deviceStatusOutput);
+		LOGGER.debug("Device status fetched for device: " + device.getName() + " is: " + deviceStatus.toString());
+		// System.out.println("Device status fetched for device: " + device.getName() +
+		// " is: " + deviceStatus.toString());
+		return deviceStatus;
+	}
+
+	/**
+	 * This method is used to get the absolute path of the script file
+	 * 
+	 * @param scriptFileName - name of the script file
+	 * @return String - absolute path of the script file
+	 */
+	private String getAbsolutePath(String scriptFileName) {
+		LOGGER.debug("Getting absolute path of the script file: " + scriptFileName);
+		String thunderStatusFilePath = AppConfig.getBaselocation() + "/" + scriptFileName;
+		File statusCheckerFile = new File(thunderStatusFilePath);
+		if (!statusCheckerFile.exists()) {
+			LOGGER.error("Script file not found at location: " + thunderStatusFilePath);
+			return null;
+		}
+		String pythonScriptPath = statusCheckerFile.getAbsolutePath();
+		LOGGER.debug("Absolute path of the script file: " + pythonScriptPath);
+		return pythonScriptPath;
+	}
+
+	/**
+	 * This method is used to get the device status from the output of the device
+	 * status script
+	 * 
+	 * @param deviceStatusOutput - output of the device status script
+	 * @return DeviceStatus - status of the device
+	 */
+	public DeviceStatus getDeviceStatusFromOutput(String deviceStatusOutput) {
+		LOGGER.debug("Mapping device status from output of the device status script: " + deviceStatusOutput);
+		DeviceStatus deviceStatus;
+		if (deviceStatusOutput == null) {
+			return DeviceStatus.NOT_FOUND;
+		}
+		switch (deviceStatusOutput.trim()) {
+		case Constants.BUSY:
+			deviceStatus = DeviceStatus.BUSY;
+			break;
+		case Constants.FREE:
+			deviceStatus = DeviceStatus.FREE;
+			break;
+		case Constants.NOT_FOUND:
+			deviceStatus = DeviceStatus.NOT_FOUND;
+			break;
+		case Constants.HANG:
+			deviceStatus = DeviceStatus.HANG;
+			break;
+		case Constants.TDK_DISABLED:
+			deviceStatus = DeviceStatus.TDK_DISABLED;
+			break;
+		default:
+			deviceStatus = DeviceStatus.NOT_FOUND;
+			break;
+		}
+		LOGGER.debug("Device status mapped to: " + deviceStatus);
+		return deviceStatus;
+	}
+
+	/**
+	 * This method is used to set the status of the device
+	 * 
+	 * @param deviceStatus - status to be set
+	 * @param device       - device for which the status needs to be set
+	 * @return boolean - true if the status was set successfully
+	 */
+	public boolean setDeviceStatus(DeviceStatus deviceStatus, Device device) {
+		try {
+			// Fetch the device from the repository
+			Device existingDevice = deviceRepository.findById(device.getId()).orElse(null);
+			if (existingDevice == null) {
+				LOGGER.warn("Device not found: " + device.getName());
+				return false;
+			}
+
+			// Update the device status
+			existingDevice.setDeviceStatus(deviceStatus);
+
+			// Save the updated device back to the repository
+			deviceRepository.save(existingDevice);
+			LOGGER.debug("Device status updated successfully for device: " + device.getName());
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("Error updating device status for device: " + device.getName(), e);
+			return false;
+		}
+
+	}
+
+	/**
+	 * This method is used to fetch and update the status of the device
+	 * 
+	 * @param device - device for which the status needs to be fetched and updated
+	 * @return boolean - true if the status was fetched and updated successfully
+	 */
+	public boolean fetchAndUpdateDeviceStatus(Device device) {
+		try {
+			// Fetch the device status
+			DeviceStatus deviceStatus = fetchDeviceStatus(device);
+			if (deviceStatus != null) {
+				// Update the device status in the database
+				return setDeviceStatus(deviceStatus, device);
+			} else {
+				LOGGER.warn("Failed to fetch status for device: " + device.getName());
+				return false;
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error fetching and updating status for device: " + device.getName(), e);
+			return false;
+		}
+	}
+
+}

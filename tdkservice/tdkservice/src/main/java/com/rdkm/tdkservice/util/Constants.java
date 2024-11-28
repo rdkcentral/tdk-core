@@ -43,7 +43,7 @@ public class Constants {
 	public static final String CONFIG_FILE_EXTENSION = ".config";
 
 	// Base filestore directory
-	public static final String BASE_FILESTORE_DIR = "filestore";
+	public static final String BASE_FILESTORE_DIR = "fileStore";
 
 	// Slash as file path seperator
 	public static final String FILE_PATH_SEPERATOR = "/";
@@ -259,36 +259,110 @@ public class Constants {
 	public static final String BASE_FILESTORE_FOLDER = "src/main/webapp/filestore";
 
 	public static final String ZIP_EXTENSION = ".zip";
-	
+
 	// config file extension
 	public static final String CONFIG_FILE = ".config";
 	// config file path
 	public static final String RDK_CERTIFICATION_CONFIG_PATH = "rdkCertificationConfigs";
 	// Header finder to add HEader template
-	public static final String  HEADER_FINDER="If not stated otherwise in this file or this component's Licenses.txt";
-	//Header template
+	public static final String HEADER_FINDER = "If not stated otherwise in this file or this component's Licenses.txt";
+	// Header template
 	public static final String HEADER_TEMPLATE = "##########################################################################\r\n"
 			+ "# If not stated otherwise in this file or this component's Licenses.txt\r\n"
-			+ "# file the following copyright and licenses apply:\r\n"
-			+ "#\r\n"
-			+ "# Copyright CURRENT_YEAR RDK Management\r\n"
-			+ "#\r\n"
+			+ "# file the following copyright and licenses apply:\r\n" + "#\r\n"
+			+ "# Copyright CURRENT_YEAR RDK Management\r\n" + "#\r\n"
 			+ "# Licensed under the Apache License, Version 2.0 (the \"License\");\r\n"
 			+ "# you may not use this file except in compliance with the License.\r\n"
-			+ "# You may obtain a copy of the License at\r\n"
-			+ "#\r\n"
-			+ "# http://www.apache.org/licenses/LICENSE-2.0\r\n"
-			+ "#\r\n"
+			+ "# You may obtain a copy of the License at\r\n" + "#\r\n"
+			+ "# http://www.apache.org/licenses/LICENSE-2.0\r\n" + "#\r\n"
 			+ "# Unless required by applicable law or agreed to in writing, software\r\n"
 			+ "# distributed under the License is distributed on an \"AS IS\" BASIS,\r\n"
 			+ "# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\r\n"
 			+ "# See the License for the specific language governing permissions and\r\n"
 			+ "# limitations under the License.\r\n"
-			+ "##########################################################################\r\n"
-			+ "";
+			+ "##########################################################################\r\n" + "";
 
 	public static final String USER_THEME = "User Theme";
 
 	public static final String TDK_UTIL_FILE_LOCATION = "/tdkUtilFiles/HeaderFile.txt";
+
+	public static final String NEW_LINE = "\n";
+
+	// Python default command
+	public static final String PYTHON = "python";
+
+	// Busy status
+	public static final String BUSY = "BUSY";
+
+	// Free status
+	public static final String FREE = "FREE";
+
+	// Not found status
+	public static final String NOT_FOUND = "NOT_FOUND";
+
+	// HANG status
+	public static final String HANG = "HANG";
+
+	// TDK_DISABLED status
+	public static final String TDK_DISABLED = "TDK_DISABLED";
+
+	// IPV6_INTERFACE
+	public static final String IPV6 = "IPV6";
+
+	// IPV4_INTERFACE
+	public static final String IPV4 = "IPV4";
+
+	// PERCENTAGE
+	public static final String PERCENTAGE = "%";
+
+	public static final String COLON = ":";
+
+	public static final String KEY_LASTDAY = "L";
+	public static final String KEY_ENTERNEW_LINE = "\r\n";
+	public static final String GREATERTHAN = ">";
+	public static final String LESSTHAN = "<";
+	public static final String HTML_GREATERTHAN = "&gt;";
+	public static final String HTML_LESSTHAN = "&lt;";
+	public static final String HTML_REPLACEBR = "</?br\\b[^>]*>";
+	public static final String HTML_PATTERN = "<span(.*?)</span>";
+	public static final String HTML_PATTERN_AFTERSPAN = "</?span\\b[^>]*>";
+	// CURLY_BRACKET_OPEN
+	public static final String CURLY_BRACKET_OPEN = "{";
+
+	public static final String STATUS_NONE = "none";
+
+	public static final String CONFIGURE_TESTCASE_REPLACE_TOKEN = "configureTestCase(ip,port,";
+	public static final String REPLACE_BY_TOKEN = ",ip,port,";
+	public static final String LEFT_PARANTHESIS = "(";
+	public static final String RIGHT_PARANTHESIS = ")";
+	public static final String CURLY_BRACKET_CLOSE = "}";
+	public static final String SQUARE_BRACKET_OPEN = "[";
+	public static final String SQUARE_BRACKET_CLOSE = "]";
+
+	public static final String COMMA_SEPERATOR = ",";
+	public static final String SINGLE_QUOTES = "'";
+	public static final String UNDERSCORE = "_";
+
+	public static final String METHOD_TOKEN = "configureTestCase";
+
+	public static final String LOGS = "logs";
+
+	public static final String TEMP_SCRIPT_FILE_KEYWORD = "tempScript";
+
+	public static final String PORT_REPLACE_TOKEN = "<port>";
+
+	public static final String IP_REPLACE_TOKEN = "<ipaddress>";
+
+	public static final String EXECUTION_KEYWORD = "execution";
+
+	public static final String RESULT = "result";
+
+	public static final String RERUN_APPENDER = "_RERUN";
+
+	public static final String SCRIPT_END_PY_CODE = "\nprint(\"SCRIPTEND#!@~\");";
+
+	public static final String ERROR_TAG_PY_COMMENT = "#TDK_@error";
+
+	public static final String END_TAG_PY_COMMENT = "SCRIPTEND#!@~";
 
 }

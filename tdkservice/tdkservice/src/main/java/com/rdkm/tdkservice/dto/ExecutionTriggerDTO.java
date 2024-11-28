@@ -1,0 +1,92 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+package com.rdkm.tdkservice.dto;
+
+import java.util.List;
+
+import lombok.Data;
+
+/**
+ * Represents the execution trigger DTO. This class is used to transfer
+ * execution trigger information.
+ */
+@Data
+public class ExecutionTriggerDTO {
+
+	/*
+	 * Represents the list of devices.
+	 */
+	private List<String> deviceList;
+
+	/*
+	 * Represents the list of scripts.
+	 */
+	private List<String> scriptList;
+
+	/*
+	 * Represents the test suite.
+	 */
+	private String testSuite;
+
+	// Execution type - CI/OnDemand/Sanity
+	/*
+	 * Represents the test type.
+	 */
+	private String testType;
+
+	/*
+	 * Represents the user.
+	 */
+	private String user;
+	/*
+	 * Represents the category.
+	 */
+	private String category;
+
+	/*
+	 * Represents the execution name.
+	 */
+	private String executionName;
+
+	/*
+	 * Represents the execution repeat count.
+	 */
+	private int repeatCount;
+
+	/*
+	 * Represents the is rerun on failure.
+	 */
+	private boolean isRerunOnFailure;
+
+	/*
+	 * Represents the is device Logs Needed.
+	 */
+	private int isDeviceLogsNeeded;
+
+	/*
+	 * Represents the is performance logs needed.
+	 */
+	private int isPerformanceLogsNeeded;
+
+	/*
+	 * Represents the is diagnostic logs needed.
+	 */
+	private int isDiagnosticLogsNeeded;
+}

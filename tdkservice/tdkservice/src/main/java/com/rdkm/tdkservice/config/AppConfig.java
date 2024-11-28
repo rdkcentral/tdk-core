@@ -44,6 +44,9 @@ public class AppConfig {
 	@Value("${tdkservice.baselocation}")
 	private static String baselocation;
 
+	@Value("${tdkservice.baseURL}")
+	private  String baseURL;
+
 	// Servlet context
 	private final ServletContext servletContext;
 
@@ -76,6 +79,10 @@ public class AppConfig {
 	 */
 	public static String getRealPath() {
 		return realPath;
+	}
+
+	public  String getBaseURL() {
+		return baseURL;
 	}
 
 	/**

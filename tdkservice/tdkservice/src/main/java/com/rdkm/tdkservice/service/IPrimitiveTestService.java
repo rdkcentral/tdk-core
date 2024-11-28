@@ -22,6 +22,8 @@ package com.rdkm.tdkservice.service;
 import java.util.List;
 import java.util.UUID;
 
+import org.json.JSONObject;
+
 import com.rdkm.tdkservice.dto.PrimitiveTestCreateDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestNameAndIdDTO;
@@ -80,5 +82,13 @@ public interface IPrimitiveTestService {
 	 * 
 	 */
 	List<PrimitiveTestDTO> findAllByModuleName(String moduleName);
+
+	/**
+	 * This method is used to get the primitive test details by testName.
+	 * 
+	 * @param testName
+	 * @return JSONObject
+	 */
+	JSONObject getJson(String testName);
 
 }

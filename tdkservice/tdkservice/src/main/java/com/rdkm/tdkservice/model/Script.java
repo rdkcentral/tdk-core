@@ -31,6 +31,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
@@ -88,7 +89,7 @@ public class Script extends BaseEntity {
 	/**
 	 * The list of device type of the script.
 	 */
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
 	@JoinTable(name = "script_device_type", joinColumns = @JoinColumn(name = "script_id"), inverseJoinColumns = @JoinColumn(name = "device_type_id"))
 	private List<DeviceType> deviceTypes = new ArrayList<>();
 
@@ -195,7 +196,7 @@ public class Script extends BaseEntity {
 	/**
 	 * The list of script group of the script.
 	 */
-	@OneToMany(mappedBy = "script", cascade = CascadeType.ALL, orphanRemoval = true)
+	@OneToMany(mappedBy = "script", cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<ScriptTestSuite> scriptScriptGroup = new ArrayList<>();
 
 }

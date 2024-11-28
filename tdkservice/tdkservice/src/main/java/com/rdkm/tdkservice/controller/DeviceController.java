@@ -50,6 +50,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
@@ -385,6 +386,30 @@ public class DeviceController {
 				"attachment; filename=devices_" + category + DEVICE_FILE_EXTENSION_ZIP);
 		LOGGER.info("Downloaded all devices by category successfully");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(fileContent);
+
+	}
+	
+	/**
+	 * This method is used to get the status of all devices in a category.
+	 *
+	 * @param category This is the category of the devices.
+	 * @return ResponseEntity<?> This returns the response entity.
+	 */
+	@Operation(summary = "Get All device status", description = "Get the status of all devices in the system.")
+	@ApiResponse(responseCode = "200", description = "device status fetched successfully")
+	@ApiResponse(responseCode = "500", description = "Error in fetching device status data")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "404", description = "No devices found for the category")
+	public ResponseEntity<?> getAllDeviceStatus(String category) {
+		LOGGER.info("Received request to fetch status for all devices in category: " + category);
+		List<DeviceStatusResponseDTO> deviceStatusList = deviceService.getAllDeviceStatus(category);
+		if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
+			LOGGER.info("Fetched status for all devices in category: " + category);
+			return ResponseEntity.status(HttpStatus.OK).body(deviceStatusList);
+		} else {
+			LOGGER.error("No devices found in the category  " + category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found in the category: " + category);
+		}
 
 	}
 
