@@ -136,7 +136,8 @@ video_src_url_4k_av1_mkv = test_streams_base_path + "TDK_Asset_Waterfall_4K_MKV.
 audio_src_url_mkv = test_streams_base_path + "TDK_Asset_Waterfall_Audio_MKV.mkv"
 #4K VP9 URL
 video_src_url_webm_4k_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM/4k.webm"
-
+#4K AV1 URL
+video_src_url_4k_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV1_2160p.mp4"
 
 
 # Long duration src streams. Streams should be of minimum 5-10 minutes
@@ -574,6 +575,7 @@ codec_audio_dts = "sdk"
 codec_audio_m4a = "sdk"
 codec_audio_wav_pcm = "sdk"
 codec_mkv       = "sdk"
+codec_4k_av1    =  "sdk"
 
 
 #*********************************************************************
