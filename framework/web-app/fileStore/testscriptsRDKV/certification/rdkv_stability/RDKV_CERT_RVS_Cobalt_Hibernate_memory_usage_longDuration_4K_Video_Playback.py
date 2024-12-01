@@ -137,7 +137,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"resumed","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
         print("\n Error while getting status of plugins")

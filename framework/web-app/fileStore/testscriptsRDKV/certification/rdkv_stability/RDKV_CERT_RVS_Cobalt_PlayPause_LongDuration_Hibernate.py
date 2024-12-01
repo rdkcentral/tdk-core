@@ -137,7 +137,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"resumed","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
         print("\n Error while getting status of plugins")
@@ -153,7 +153,13 @@ if expectedResult in (result.upper() and pre_condition_status):
             status = "FAILURE"
     cobal_launch_status = launch_cobalt(obj)    
     validation_dict = get_validation_params(obj)
-    if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "":
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "" and ssh_param_dict != {} :
         time.sleep(30)
         print("\nPre conditions for the test are set successfully")
         print("\n Set the cobalt in Hibernate state by suspending it.")
@@ -182,10 +188,10 @@ if expectedResult in (result.upper() and pre_condition_status):
                 time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
                 iteration = 0
                 completed = True
-                while int(round(time.time() * 1000)) < time_limit:
-                   print("\n Validating the cobalt Hibernate state ")
+                while int(round(time.time() * 1000)) < time_limit:                   
                    # Check Cobalt's state every 15 minutes 
                    if (iteration % 4) == 0: 
+                       print("\n Validating the cobalt Hibernate state ")
                        tdkTestObj.setResultStatus("SUCCESS")
                        tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
                        tdkTestObj.addParameter("plugin","Cobalt")
@@ -222,6 +228,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                  tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                  tdkTestObj.addParameter("method","Cobalt.1.deeplink")
                                  tdkTestObj.addParameter("value",cobalt_test_url)
+                                 video_start_time = str(datetime.utcnow()).split()[1][:-3]
                                  tdkTestObj.executeTestCase(expectedResult)
                                  cobalt_result = tdkTestObj.getResult()
                                  time.sleep(10)
@@ -231,7 +238,7 @@ if expectedResult in (result.upper() and pre_condition_status):
                                    params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
                                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
                                    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                                   tdkTestObj.addParameter("value",params)
+                                   tdkTestObj.addParameter("value",params)                                   
                                    tdkTestObj.executeTestCase(expectedResult)
                                    result1 = tdkTestObj.getResult()
                                    time.sleep(40)
@@ -244,97 +251,114 @@ if expectedResult in (result.upper() and pre_condition_status):
                                    result2 = tdkTestObj.getResult()
                                    time.sleep(50)
                                    if "SUCCESS" == (result1 and result2):
-                                       result_val = ""
-                                       tdkTestObj.setResultStatus("SUCCESS")
-                                       if validation_dict["validation_required"]:
-                                          if validation_dict["password"] == "None":
-                                             password = ""
-                                          else:
-                                             password = validation_dict["password"]
-                                          credentials = validation_dict["host_name"]+','+validation_dict["user_name"]+','+password
-                                          print("\n check whether video is playing")
-                                          tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
-                                          tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
-                                          tdkTestObj.addParameter("credentials",credentials)
-                                          tdkTestObj.addParameter("video_validation_script",validation_dict["video_validation_script"])
-                                          tdkTestObj.executeTestCase(expectedResult)
-                                          result_val = tdkTestObj.getResultDetails()
-                                       else:
-                                          print("\n Validation is not required, proceeding the test \n")
-                                       if result_val == "SUCCESS" or not validation_dict["validation_required"]:
-                                          tdkTestObj.setResultStatus("SUCCESS")
-                                          if validation_dict["validation_required"]:
-                                             print("\nVideo playback is happening\n")
-                                             print("\n Pause video for 10 seconds \n")
-                                             params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
-                                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                                             tdkTestObj.addParameter("value",params)
-                                             tdkTestObj.executeTestCase(expectedResult)
-                                             result = tdkTestObj.getResult()
-                                             if result == "SUCCESS":
-                                                tdkTestObj.setResultStatus("SUCCESS")
-                                                if validation_dict["validation_required"]:
-                                                   print("\n Check video is paused")
-                                                   tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
-                                                   tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
-                                                   tdkTestObj.addParameter("credentials",credentials)
-                                                   tdkTestObj.addParameter("video_validation_script",validation_dict["video_validation_script"])
-                                                   tdkTestObj.executeTestCase(expectedResult)
-                                                   result_val = tdkTestObj.getResultDetails()
-                                                else:
-                                                    result_val = "FAILURE"
-                                                if result_val != "SUCCESS":
-                                                    print("\n Video is paused")
-                                                    time.sleep(10)
-                                                    print("\n Play the video \n")
-                                                    params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
-                                                    tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                                    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                                                    tdkTestObj.addParameter("value",params)
-                                                    tdkTestObj.executeTestCase(expectedResult)
-                                                    result = tdkTestObj.getResult()
-                                                    if result == "SUCCESS":
-                                                        tdkTestObj.setResultStatus("SUCCESS")
-                                                        if validation_dict["validation_required"]:
-                                                           print("Check whether video is playing")
-                                                           tdkTestObj = obj.createTestStep('rdkservice_validateProcEntry')
-                                                           tdkTestObj.addParameter("sshmethod",validation_dict["ssh_method"])
-                                                           tdkTestObj.addParameter("credentials",credentials)
-                                                           tdkTestObj.addParameter("video_validation_script",validation_dict["video_validation_script"])
-                                                           tdkTestObj.executeTestCase(expectedResult)
-                                                           result_val = tdkTestObj.getResultDetails()
-                                                           if result_val == "SUCCESS" :
-                                                              print("\nVideo playback is happening\n")
-                                                              tdkTestObj.setResultStatus("SUCCESS")
-                                                           else:
-                                                              print("\n Video playback is not happening \n")
+                                      print("\n Check video is started \n")
+                                      command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                      tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                      tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                      tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                      tdkTestObj.addParameter("command",command)
+                                      tdkTestObj.executeTestCase(expectedResult)
+                                      result = tdkTestObj.getResult()
+                                      output = tdkTestObj.getResultDetails()
+                                      if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                         video_playing_log = output.split('\n')[1]
+                                         video_play_starttime_in_millisec = getTimeInMilliSec(video_start_time)
+                                         video_played_time = getTimeStampFromString(video_playing_log)
+                                         video_played_time_in_millisec = getTimeInMilliSec(video_played_time)
+                                         if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                                            print("\n Video started Playing\n")
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            time.sleep(10)
+                                            print("\n Pausing Video \n")
+                                            params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
+                                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                            tdkTestObj.addParameter("value",params)
+                                            pause_start_time = str(datetime.utcnow()).split()[1][:-3]
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            result = tdkTestObj.getResult()
+                                            if result == "SUCCESS":
+                                               time.sleep(20)
+                                               tdkTestObj.setResultStatus("SUCCESS")
+                                               print("\n Check video is paused \n")
+                                               command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
+                                               tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                               tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                               tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                               tdkTestObj.addParameter("command",command)
+                                               tdkTestObj.executeTestCase(expectedResult)
+                                               result = tdkTestObj.getResult()
+                                               output = tdkTestObj.getResultDetails()
+                                               if output != "EXCEPTION" and expectedResult in result and "old: PLAYING" in output:
+                                                  pause_log = output.split('\n')[1]
+                                                  pause_starttime_in_millisec = getTimeInMilliSec(pause_start_time)
+                                                  video_pausedtime = getTimeStampFromString(pause_log)
+                                                  video_pausedtime_in_millisec = getTimeInMilliSec(video_pausedtime)
+                                                  time_for_video_pause = video_pausedtime_in_millisec - pause_starttime_in_millisec
+                                                  if video_pausedtime_in_millisec > pause_starttime_in_millisec:
+                                                      print("\n Video is paused \n")
+                                                      tdkTestObj.setResultStatus("SUCCESS")
+                                                      #Play video
+                                                      print("\n Play video \n")
+                                                      params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
+                                                      tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                                      tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                                      tdkTestObj.addParameter("value",params)
+                                                      play_start_time = str(datetime.utcnow()).split()[1][:-3]
+                                                      tdkTestObj.executeTestCase(expectedResult)
+                                                      result = tdkTestObj.getResult()
+                                                      if result == "SUCCESS":
+                                                          print("\n Check video is playing \n")
+                                                          time.sleep(20)
+                                                          command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                                          tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                                          tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                                          tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                                          tdkTestObj.addParameter("command",command)
+                                                          tdkTestObj.executeTestCase(expectedResult)
+                                                          result = tdkTestObj.getResult()
+                                                          output = tdkTestObj.getResultDetails()
+                                                          if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                                             playing_log = output.split('\n')[1]
+                                                             play_starttime_in_millisec = getTimeInMilliSec(play_start_time)
+                                                             video_playedtime = getTimeStampFromString(playing_log)
+                                                             print("\n Played time",video_playedtime)
+                                                             video_playedtime_in_millisec = getTimeInMilliSec(video_playedtime)
+                                                             if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                                                                print("\n Video started Playing\n")
+                                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                             else:
+                                                                 print("\n Video is not Playing\n")
+                                                                 tdkTestObj.setResultStatus("FAILURE")
+                                                                 exit()
+                                                          else:
+                                                              print("\n Video play related logs are not available")
                                                               tdkTestObj.setResultStatus("FAILURE")
-                                                        else:
-                                                           print("\nPause and Play operation is completed \n")
-                                                           tdkTestObj.setResultStatus("SUCCESS")
-                                                    else:
-                                                       print("Unable to play from pause")
-                                                       tdkTestObj.setResultStatus("FAILURE")
-                                                else:
-                                                   print("Video is not paused")
-                                                   tdkTestObj.setResultStatus("FAILURE")
-                                             else:
-                                                 print("Unable to pause the video")
-                                                 tdkTestObj.setResultStatus("FAILURE")
-                                       else:
-                                          print("Video is not playing")
+                                                      else:
+                                                          print("\n Error while executing generateKey method \n")
+                                                          tdkTestObj.setResultStatus("FAILURE")
+                                                  else:
+                                                     print("\n Video is not paused  \n")
+                                                     tdkTestObj.setResultStatus("FAILURE")
+                                               else:
+                                                  print("\n Video pause related logs are not available")
+                                                  tdkTestObj.setResultStatus("FAILURE")
+                                  
+                                         else:
+                                            print("\n Video is not started playing \n")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                      else:
+                                          print("\n Video play related logs are not available \n")
                                           tdkTestObj.setResultStatus("FAILURE")
                                    else:
-                                      print("Unable to click OK")
-                                      tdkTestObj.setResultStatus("FAILURE")
+                                       print("\n Error while executing generateKey method \n")
+                                       tdkTestObj.setResultStatus("FAILURE")
                                  else:
                                     print("Unable to load the cobalt_test_url")
                                     tdkTestObj.setResultStatus("FAILURE")
-                        else:
-                            print("\n Failed to launch Cobalt  ")
-                            tdkTestObj.setResultStatus("FAILURE")
-
+                             else:
+                                print("\n Failed to launch Cobalt  ")
+                                tdkTestObj.setResultStatus("FAILURE")
                    else:
                       print("\nFailed to restore Cobalt from  hibernated state .")   
             else:

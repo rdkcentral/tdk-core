@@ -58,7 +58,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKV_STABILITY_71/test_case_id>
+    <test_case_id>RDKV_STABILITY_71</test_case_id>
     <test_objective>The objective of this test is to do the stability testing by placing Cobalt in hibernated state for a given amount of time and get the cpu load.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RPI,Accelerator</test_setup>
@@ -123,15 +123,18 @@ obj.setLoadModuleStatus(result);
 pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
-if expectedResult in (result.upper() and pre_condition_status):    
+if expectedResult in (result.upper() and pre_condition_status):  
+    cobalt_test_url = PerformanceTestVariables.cobalt_test_url;  
     print("Check Pre conditions")
+    if cobalt_test_url == "":
+        print("\n Please configure the cobalt_test_url value\n")
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"resumed","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
         print("\n Error while getting status of plugins")
@@ -146,10 +149,17 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     cobal_launch_status = launch_cobalt(obj)    
-    if status == "SUCCESS" and cobal_launch_status == "SUCCESS":
+    validation_dict = get_validation_params(obj)
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} and cobalt_test_url != "" and ssh_param_dict != {}:
         time.sleep(30)
         print("\nPre conditions for the test are set successfully")
-        print("\n Set the cobalt in Hibernated state by suspending it.")
+        print("\n Set the cobalt in Hibernate state by suspending it.")
         print("\nSuspend the Cobalt plugin :\n")
         params = '{"callsign":"Cobalt"}'
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
@@ -170,15 +180,15 @@ if expectedResult in (result.upper() and pre_condition_status):
                 time.sleep(5)
                 print("\nCobalt is in hibernated state")
                 #Validating Resource usage 
-                test_time_in_mins = int(StabilityTestVariables.hibernate_test_duration)
+                test_time_in_mins = int(StabilityTestVariables.cobalt_hibernate_test_duration)
                 test_time_in_millisec = test_time_in_mins * 60 * 1000
                 time_limit = int(round(time.time() * 1000)) + test_time_in_millisec
                 iteration = 0
                 completed = True
-                while int(round(time.time() * 1000)) < time_limit:
+                while int(round(time.time() * 1000)) < time_limit:                   
                    # Check Cobalt's state every 15 minutes 
                    if (iteration % 4) == 0: 
-                       print("\n Checking Cobalt Hibernated state.")
+                       print("\n Validating the cobalt Hibernate state ")
                        tdkTestObj.setResultStatus("SUCCESS")
                        tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
                        tdkTestObj.addParameter("plugin","Cobalt")
@@ -186,44 +196,173 @@ if expectedResult in (result.upper() and pre_condition_status):
                        result = tdkTestObj.getResult()
                        cobalt_status = tdkTestObj.getResultDetails()                                  
                        if cobalt_status != 'hibernated':
-                            # If Cobalt is not in hibernated state, stop the test case and break the loop
+                            # If Cobalt is not in hibernation, fail the test case and break the loop
+                            print("\n cobalt exited from Hibernate state")
                             tdkTestObj.setResultStatus("FAILURE")
                             completed = False
-                            break
-                   iteration += 1
-                   # Check resource usage after each iteration
-                   print("\n ##### Validating CPU load and memory usage #####\n")
-                   print("Iteration : ", iteration)
-                   tdkTestObj = obj.createTestStep('rdkservice_validateResourceUsage')
-                   tdkTestObj.executeTestCase(expectedResult)
-                   status = tdkTestObj.getResult()
-                   result = tdkTestObj.getResultDetails()
-                   if expectedResult in status and result != "ERROR":
-                       tdkTestObj.setResultStatus("SUCCESS")
-                       cpuload = result.split(',')[0]
-                       memory_usage = result.split(',')[1]
-                       result_dict = {}
-                       result_dict["iteration"] = iteration
-                       result_dict["cpu_load"] = float(cpuload)
-                       result_dict["memory_usage"] = float(memory_usage)
-                       result_dict_list.append(result_dict)
-                   else:
-                      completed = False
-                      print("\n Error while validating Resource usage")
-                      tdkTestObj.setResultStatus("FAILURE")
-                      break
+                            break                   
+                   iteration += 1                   
                    time.sleep(test_interval)
                 if completed:
-                   print("Cobalt remained in hibernated state for the configured time")
                    print("\nsuccessfully completed the {} times in {} minutes".format(iteration,test_time_in_mins))
-                cpu_mem_info_dict["cpuMemoryDetails"] = result_dict_list
-                json.dump(cpu_mem_info_dict,json_file)
-                json_file.close()
+                   print("Cobalt remained in hibernated state for the configured time and trying to restore the app\n")
+                   restore_status,start_restore =restore_plugin(obj,"Cobalt")
+                   if restore_status == expectedResult:
+                        time.sleep(10)
+                        tdkTestObj = obj.createTestStep('rdkservice_getPluginStatus')
+                        tdkTestObj.addParameter("plugin","Cobalt")
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        cobalt_status = tdkTestObj.getResultDetails()
+                        if cobalt_status == 'suspended' and expectedResult in result:
+                             print("\nCobalt suspended Successfully\n")
+                             tdkTestObj.setResultStatus("SUCCESS")                   
+                             cobal_launch_status = launch_cobalt(obj)
+                             time.sleep(5)
+                             if cobal_launch_status  == expectedResult:
+                                 print("\nCobalt Launched Successfully\n")
+                                 print("\n Set the URL : {} using Cobalt deeplink method \n".format(cobalt_test_url))
+                                 tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                 tdkTestObj.addParameter("method","Cobalt.1.deeplink")
+                                 tdkTestObj.addParameter("value",cobalt_test_url)
+                                 tdkTestObj.executeTestCase(expectedResult)
+                                 cobalt_result = tdkTestObj.getResult()
+                                 time.sleep(10)
+                                 if(cobalt_result == expectedResult):
+                                   tdkTestObj.setResultStatus("SUCCESS")
+                                   print("Clicking OK to play video")
+                                   params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                                   tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                   tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                   tdkTestObj.addParameter("value",params)
+                                   video_start_time = str(datetime.utcnow()).split()[1]
+                                   tdkTestObj.executeTestCase(expectedResult)
+                                   result1 = tdkTestObj.getResult()
+                                   time.sleep(40)
+                                   #Skip if Ad is playing by pressing OK
+                                   params = '{"keys":[ {"keyCode": 13,"modifiers": [],"delay":1.0}]}'
+                                   tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                   tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                   tdkTestObj.addParameter("value",params)
+                                   tdkTestObj.executeTestCase(expectedResult)
+                                   result2 = tdkTestObj.getResult()
+                                   time.sleep(50)
+                                   if "SUCCESS" == (result1 and result2):
+                                      print("\n Check video is started \n")
+                                      command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                      tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                      tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                      tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                      tdkTestObj.addParameter("command",command)
+                                      tdkTestObj.executeTestCase(expectedResult)
+                                      result = tdkTestObj.getResult()
+                                      output = tdkTestObj.getResultDetails()
+                                      if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                         video_playing_log = output.split('\n')[1]
+                                         video_play_starttime_in_millisec = getTimeInMilliSec(video_start_time)
+                                         video_played_time = getTimeStampFromString(video_playing_log)
+                                         video_played_time_in_millisec = getTimeInMilliSec(video_played_time)
+                                         if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                                            print("\n Video started Playing\n")
+                                            tdkTestObj.setResultStatus("SUCCESS")
+                                            time.sleep(10)
+                                            print("\n Pausing Video \n")
+                                            params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
+                                            tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                            tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                            tdkTestObj.addParameter("value",params)
+                                            pause_start_time = str(datetime.utcnow()).split()[1]
+                                            tdkTestObj.executeTestCase(expectedResult)
+                                            result = tdkTestObj.getResult()
+                                            if result == "SUCCESS":
+                                               time.sleep(20)
+                                               tdkTestObj.setResultStatus("SUCCESS")
+                                               print("\n Check video is paused \n")
+                                               command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PLAYING.*new.*PAUSED | tail -1'
+                                               tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                               tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                               tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                               tdkTestObj.addParameter("command",command)
+                                               tdkTestObj.executeTestCase(expectedResult)
+                                               result = tdkTestObj.getResult()
+                                               output = tdkTestObj.getResultDetails()
+                                               if output != "EXCEPTION" and expectedResult in result and "old: PLAYING" in output:
+                                                  pause_log = output.split('\n')[1]
+                                                  pause_starttime_in_millisec = getTimeInMilliSec(pause_start_time)
+                                                  video_pausedtime = getTimeStampFromString(pause_log)
+                                                  video_pausedtime_in_millisec = getTimeInMilliSec(video_pausedtime)
+                                                  time_for_video_pause = video_pausedtime_in_millisec - pause_starttime_in_millisec
+                                                  if video_pausedtime_in_millisec > pause_starttime_in_millisec:
+                                                      print("\n Video is paused \n")
+                                                      tdkTestObj.setResultStatus("SUCCESS")
+                                                      #Play video
+                                                      print("\n Play video \n")
+                                                      params = '{"keys":[ {"keyCode": 32,"modifiers": [],"delay":1.0}]}'
+                                                      tdkTestObj = obj.createTestStep('rdkservice_setValue')
+                                                      tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
+                                                      tdkTestObj.addParameter("value",params)
+                                                      play_start_time = str(datetime.utcnow()).split()[1]
+                                                      tdkTestObj.executeTestCase(expectedResult)
+                                                      result = tdkTestObj.getResult()
+                                                      if result == "SUCCESS":
+                                                          print("\n Check video is playing \n")
+                                                          time.sleep(20)
+                                                          command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                                          tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                                          tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                                          tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                                          tdkTestObj.addParameter("command",command)
+                                                          tdkTestObj.executeTestCase(expectedResult)
+                                                          result = tdkTestObj.getResult()
+                                                          output = tdkTestObj.getResultDetails()
+                                                          if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                                             playing_log = output.split('\n')[1]
+                                                             play_starttime_in_millisec = getTimeInMilliSec(play_start_time)
+                                                             video_playedtime = getTimeStampFromString(playing_log)
+                                                             print("\n Played time",video_playedtime)
+                                                             video_playedtime_in_millisec = getTimeInMilliSec(video_playedtime)
+                                                             if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                                                                print("\n Video started Playing\n")
+                                                                tdkTestObj.setResultStatus("SUCCESS")
+                                                             else:
+                                                                 print("\n Video is not Playing\n")
+                                                                 tdkTestObj.setResultStatus("FAILURE")
+                                                                 exit()
+                                                          else:
+                                                              print("\n Video play related logs are not available")
+                                                              tdkTestObj.setResultStatus("FAILURE")
+                                                      else:
+                                                          print("\n Error while executing generateKey method \n")
+                                                          tdkTestObj.setResultStatus("FAILURE")
+                                                  else:
+                                                     print("\n Video is not paused  \n")
+                                                     tdkTestObj.setResultStatus("FAILURE")
+                                               else:
+                                                  print("\n Video pause related logs are not available")
+                                                  tdkTestObj.setResultStatus("FAILURE")
+                                  
+                                         else:
+                                            print("\n Video is not started playing \n")
+                                            tdkTestObj.setResultStatus("FAILURE")
+                                      else:
+                                          print("\n Video play related logs are not available \n")
+                                          tdkTestObj.setResultStatus("FAILURE")
+                                   else:
+                                       print("\n Error while executing generateKey method \n")
+                                       tdkTestObj.setResultStatus("FAILURE")
+                                 else:
+                                    print("Unable to load the cobalt_test_url")
+                                    tdkTestObj.setResultStatus("FAILURE")
+                             else:
+                                print("\n Failed to launch Cobalt  ")
+                                tdkTestObj.setResultStatus("FAILURE")
+                   else:
+                      print("\nFailed to restore Cobalt from  hibernated state .")   
             else:
-                print("\n Cobalt is not in  hibernated state.")
+                print("\n Cobalt in not in  Hibernated state.")
                 tdkTestObj.setResultStatus("FAILURE")
         else:
-            print("\n Failed to hibernate the cobalt app")
+            print("\n Failed to Hiberante the cobalt app")
             tdkTestObj.setResultStatus("FAILURE")    
         print("\n Exit from Cobalt \n")
         tdkTestObj = obj.createTestStep('rdkservice_setPluginStatus')

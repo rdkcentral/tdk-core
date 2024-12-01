@@ -153,6 +153,7 @@ if expectedResult in result.upper():
                     output = tdkTestObj.getResultDetails()
                     if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
                         print("\n Video started Playing\n")
+                        tdkTestObj.setResultStatus("SUCCESS")
                         command = 'cat /opt/logs/wpeframework.log | grep -inr crash'
                         print("COMMAND : %s" %(command))
                         #Primitive test case which associated to this Script
