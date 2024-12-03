@@ -1,0 +1,2987 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="NetworkManager" pluginVersion="1">
+    <pluginPreRequisite>
+      <!-- Activate NetworkManager plugin -->
+      <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+            <params>
+              <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+            <params>
+              <param tag="callsign" value="org.rdk.NetworkManager" />
+            </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+            <params>
+              <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+
+      <!-- Event Registration -->
+      <prerequisite requisiteId="2" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+            <event pluginName="NetworkManager" eventName="Event_On_Interface_StateChange"/>
+	    <event pluginName="NetworkManager" eventName="Event_On_AvailableSSIDs"/>
+	    <event pluginName="NetworkManager" eventName="Event_On_WiFiStateChange"/>
+	    <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+      </prerequisite>
+    </pluginPreRequisite>
+
+    <!-- Test case 01 -->
+    <testCase testCaseId="NM_01" testCaseName="NetworkManager_Get_Device_Interfaces" desc="Gets list of interfaces supported by device" >
+	<testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces">
+        	<resultGeneration useMethodTag="networkmanager_get_interface_info" arguments="get_all_info" />
+        </testStep>
+    </testCase>
+ 
+    <!-- Test case 02 -->
+    <testCase testCaseId="NM_02" testCaseName="NetworkManager_Get_Primary/Default_Interface" desc="Gets primary/default interface of the device" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
+                <resultGeneration useMethodTag="networkmanager_get_interface_info" arguments="get_interface_names" />
+	</testStep>
+	<testStep testStepId="2" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_interface_names" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 03 -->
+    <testCase testCaseId="NM_03" testCaseName="NetworkManager_Validate_Public_IPv4_IP" desc="Validate public IPv4 IP address of the device" >
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Get_Public_IP_Address" action="externalFnCall" saveResult="true">
+                <resultGeneration useMethodTag="system_check_public_ip_address"/>
+        </testStep>
+	<testStep testStepId="2" name="Get_Public_IPv4_IP" method="NetworkManager_Get_Public_IP">
+		<params>
+            		<param tag="ipversion" value="IPv4"/>
+          	</params>
+		<resultGeneration useMethodTag="networkmanager_get_publicip" arguments="check_ipv4">
+			<expectedValues usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_previous_public_ip"/>
+		</resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 04 -->
+    <testCase testCaseId="NM_04" testCaseName="NetworkManager_Get_Public_IPv6_IP" desc="Validate public IPv6 IP address of the device" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Public_IPv6_IP" method="NetworkManager_Get_Public_IP">
+                <params>
+                        <param tag="ipversion" value="IPv6"/>
+                </params>
+                <resultGeneration useMethodTag="networkmanager_get_publicip" arguments="check_ipv6"/>
+        </testStep>
+    </testCase>
+    
+    <!-- Test case 05 -->
+    <testCase testCaseId="NM_05" testCaseName="NetworkManager_Ping_IPv4_Endpoint"  desc="Pings the specified end point" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Ping_Endpoint" method="NetworkManager_Ping">
+                <params>
+                  	<param tag="endpoint"  useConfigFile="true" key="PING_IP" />
+			<param tag="ipversion" value="IPv4" />
+			<param tag="count" value="10" />
+                </params>
+                <resultGeneration useMethodTag="networkmanager_get_ping_response">
+                    <expectedValues value="10" useConfigFile="true" key="PING_IP"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 06 --> 
+    <testCase testCaseId="NM_06" testCaseName="NetworkManager_Trace_IPv4_Endpoint"  desc="Traces the specified end point" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Endpoint" method="NetworkManager_Trace">
+                <params>
+                        <param tag="endpoint"  useConfigFile="true" key="TRACE_IP" />
+                        <param tag="ipversion" value="IPv4" />
+                        <param tag="packets" value="10" />
+                </params>
+                <resultGeneration useMethodTag="networkmanager_get_trace_response">
+                    <expectedValues useConfigFile="true" key="TRACE_IP"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 07 -->
+    <testCase testCaseId="NM_07" testCaseName="NetworkManager_Check_Internet_IPv4_Connectivity"  desc="Seeks whether the device has internet connectivity" >
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Check_Internet_IPv4_Connectivity" method="NetworkManager_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value="IPv4" />
+                </params>
+		<resultGeneration useMethodTag="networkmanager_check_networkconnectivity" expectedValues="true"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 08 -->
+    <testCase testCaseId="NM_08" testCaseName="NetworkManager_Check_Internet_IPv6_Connectivity"  desc="Seeks whether the device has internet connectivity" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_Internet_IPv6_Connectivity" method="NetworkManager_IsConnectedToInternet">
+                <params>
+                        <param tag="ipversion" value="IPv6" />
+                </params>
+                <resultGeneration useMethodTag="networkmanager_check_networkconnectivity" expectedValues="true"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 09 -->
+    <testCase testCaseId="NM_09" testCaseName="NetworkManager_GetAvailableInterfaces_With_Enabled/Disabled_Interface"  desc="Verify that the GetAvailableInterfaces method returns the correct list of available interfaces when interface is enabled or disabled" >
+        <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true" revertGet="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+	</testStep>
+	<testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State" revertSet="yes">
+                <params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME"/>
+			<param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" revertFlag="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+		<resultGeneration useMethodTag="get_enabled_status_validation">
+			<expectedValues usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" />
+		</resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces">
+		<resultGeneration useMethodTag="networkmanager_check_interface_status">
+			<arguments useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+			<expectedValues usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" />
+		</resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 10 -->
+    <testCase testCaseId="NM_10" testCaseName="NetworkManager_Check_On_Interface_StateChange_Event"  desc="Check if the event is triggered upon a change in the interface state" >
+        <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true" revertGet="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State" revertSet="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME"/>
+                        <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="3" name="Check_On_Interface_StateChange_Event" event="Event_On_Interface_StateChange" action="eventListener" delay="3">
+		<resultGeneration useMethodTag="networkmanager_check_oninterfacestatechange_event">
+			<expectedValues value="INTERFACE_REMOVED,INTERFACE_ADDED" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME"/>
+		</resultGeneration>
+        </testStep>
+	<testStep testStepId="4" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" revertFlag="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 11 -->
+    <testCase testCaseId="NM_11" testCaseName="NetworkManager_Wifi_Start_Stop_Scan"  desc="Check if the start and stop wifi scan methods can successfully initiate and stop the wifi scanning process">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>	    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="2" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan" delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 12 -->
+    <testCase testCaseId="NM_12" testCaseName="NetworkManager_Check_On_AvailableSSIDs_Event"  desc="Check if the event is triggered when initiating a wifi scan">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+		<resultGeneration useMethodTag="networkmanager_check_onavailablessids_event"/>
+	</testStep>
+	<testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+    
+    <!-- Test case 13 -->
+    <testCase testCaseId="NM_13" testCaseName="NetworkManager_SetandGet_Primary/Default_Interface" desc="Check GetPrimaryInterface method returns the correct primary/default network interface after using the SetPrimaryInterface method">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
+                <resultGeneration useMethodTag="networkmanager_get_interface_info" arguments="get_interface_names" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" saveResult="true" >
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_interface_names" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Set_Primary/Default_Interface" method="NetworkManager_Set_Primary_Interface">
+                <params>
+                  <param tag="interface"  usePreviousResult="true" Id="2" useMethodTag="networkmanager_get_previous_primary_interface"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation" />
+        </testStep>
+        <testStep testStepId="4" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="networkmanager_get_previous_primary_interface" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 14 -->
+    <testCase testCaseId="NM_14" testCaseName="NetworkManager_Get_Interface_State"  desc="Ensure that the GetInterfaceState method successfully returns the state when provided with a valid network interface">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_INTERFACE_DETAILS" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 15 -->
+    <testCase testCaseId="NM_15" testCaseName="NetworkManager_SetandGet_Interface_State"  desc="Check GetInterfaceState method returns the correct interface state after using the SetInterfaceState method">
+        <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true" revertGet="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+	</testStep>
+	<testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State" revertSet="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME"/>
+                        <param tag="enabled" usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" revertFlag="yes">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_ENABLE_DISABLE_INTERFACENAME" />
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues usePreviousResult="true" Id="1" useMethodTag="toggle_enabled_status" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+   
+    <!-- Test case 16 -->
+    <testCase testCaseId="NM_16" testCaseName="NetworkManager_Get_IPSettings_IPv4"  desc="Gets the IP setting for the given interface">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_IPSettings" method="NetworkManager_Get_IPSettings">
+                <params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_INTERFACE_DETAILS"/>
+			<param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 17 -->
+    <testCase testCaseId="NM_17" testCaseName="NetworkManager_Wifi_Connect_Disconnect"  desc="Check if the connect and disconnect wifi methods can successfully establish and terminate the wifi connection">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+		<resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+			<expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+		<params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="5" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+    </testCase>  
+ 
+    <!-- Test case 18 -->
+    <testCase testCaseId="NM_18" testCaseName="NetworkManager_Check_Get_Connected_SSID"  desc="Ensure that the GetConnectedSSID method successfully returns the correct SSID information when all parameters are valid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="6" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 19 -->
+    <testCase testCaseId="NM_19" testCaseName="NetworkManager_Get_Supported_Security_Modes"  desc="Returns the Wifi security modes that the device supports">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Supported_Security_Modes" method="NetworkManager_Get_Supported_Security_Modes">
+                <resultGeneration useMethodTag="networkmanager_check_supported_security_modes"/>
+	</testStep>
+    </testCase>
+    
+    <!-- Test case 20 -->
+    <testCase testCaseId="NM_20" testCaseName="NetworkManager_Check_On_WifiStateChange_Event"  desc="Check whether the wifistatechange event is triggered upon connecting to and disconnecting from wifi">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
+                        <expectedValues value="5,WIFI_STATE_CONNECTED"/>
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="6" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="3">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="8" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
+                        <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 21 -->
+    <testCase testCaseId="NM_21" testCaseName="NetworkManager_Check_WifiConnect_With_Invalid_SSID_Passphrase"  desc="Check if passing an invalid SSID and passphrase to the wifi connection triggers a failed event">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event"/>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_INVALID_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_INVALID_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
+                        <expectedValues value="9,WIFI_STATE_CONNECTION_FAILED"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+    
+    <!-- Test case 22 -->
+    <testCase testCaseId="NM_22" testCaseName="NetworkManager_Check_On_AvailableSSIDs_Event_Not_Triggered"  desc="Check if the onAvailableSSID event is triggered after stopping the wifi scan">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5" >
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event"/>
+        </testStep>
+	<testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="4" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5" >
+                <resultGeneration useMethodTag="check_event_unavailability" arguments="check_empty_event"/>
+	</testStep>
+    </testCase>
+    
+    <!-- Test case 23 -->
+    <testCase testCaseId="NM_23" testCaseName="NetworkManager_SetandGet_Stun_Endpoint"  desc="Check GetStunEndpoint method returns the correct endpoint after using the SetStunEndpoint method">
+        <testCaseInfo testCaseType="setandget" revert="true"/>
+        <testStep testStepId="1" name="Get_Stun_Endpoint" method="NetworkManager_Get_Stun_Endpoint" saveResult="true" revertGet="yes">
+                <resultGeneration useMethodTag="networkmanager_get_stun_endpoint"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Stun_Endpoint" method="NetworkManager_Set_Stun_Endpoint" revertSet="yes">
+                <params>
+                        <param tag="endpoint" usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_previous_stun_endpoint" revertParam="yes"/>
+			<param tag="port" usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_previous_stun_endpoint" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Stun_Endpoint" method="NetworkManager_Get_Stun_Endpoint" revertFlag="yes">
+                <resultGeneration useMethodTag="networkmanager_get_stun_endpoint" arguments="check_endpoint">
+                        <expectedValues usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_previous_stun_endpoint"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 24 -->
+    <testCase testCaseId="NM_24" testCaseName="NetworkManager_2.4GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 2.4GHz wifi network and vice versa">
+    	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
+    	<testCasePreRequisite>
+	<prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+	<testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+		<params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+		<params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+	</testStep>
+	</prerequisite>
+
+	<prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="callsign" value="org.rdk.RDKShell" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>	
+	
+	<prerequisite requisiteId="3" requisiteName="Activate_WebKitBrowser_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="callsign" value="WebKitBrowser" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="4" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" saveResult="true" >
+                <resultGeneration useMethodTag="webkitbrowser_get_state" />
+            </testStep>
+            <testStep testStepId="5" name="Resume_WebKitBrowser" method="Set_WebKitBrowser_State" pluginName="WebKitBrowser" >
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <params>
+                  <param tag="state" useDefault="true" />
+                </params>
+            </testStep>
+            <testStep testStepId="6" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" delay="5">
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="resumed" />
+            </testStep>
+          </prerequisite>
+
+	  <prerequisite requisiteId="4" requisiteName="Load_WebkitBrowser_Lightningapp_URL">
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="IP_CHANGE_LIGHTNING_APP_SUPPORT"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_WebkitBrowser_URL" saveResult="true" action="externalFnCall" >
+                    <resultGeneration useMethodTag="webkitbrowser_get_url" />
+            </testStep>
+            <testStep testStepId="3" name="Set_WebkitBrowser_URL" method="Set_Browser_URL" pluginName="WebKitBrowser">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" >
+              </conditionalExecution>
+              <params>
+                <param tag="url" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+              </params>
+            </testStep>
+            <testStep testStepId="4" name="Check_WebkitBrowser_Load_Finished_Event" pluginName="WebKitBrowser" event="Event_Load_Finished" action="eventListener" delay="10" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+                <resultGeneration useMethodTag="webkitbrowser_check_load_finished_event">
+			<expectedValues useDefault="true" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_WebkitBrowser_URL" method="Get_Browser_URL" pluginName="WebKitBrowser">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <resultGeneration useMethodTag="webkitbrowser_check_url">
+                        <expectedValues usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+              </resultGeneration>
+            </testStep>
+          </prerequisite>
+    	</testCasePreRequisite>
+
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="6" name="Set_Default_Interface_Wifi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
+        </testStep>
+	<testStep testStepId="7" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" delay="50">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="wlan0"/>
+                </resultGeneration>
+	</testStep>
+	<testStep testStepId="8" name="Set_Default_Interface_Ethernet" method="NetworkManager_Set_Interface_State" ipChangeStep="yes">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+
+    	<testCasePostRequisite>
+	<postrequisite requisiteId="1" requisiteName="Setting_Primary/Default_Interface_Ethernet">
+	<testStep testStepId="1" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" saveResult="true">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="eth0"/>
+                </resultGeneration>
+	</testStep>
+	<testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="NetworkManager_Set_Interface_State" ipChangeStep="yes">
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanage_check_primary_interface"/>
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+	<testStep testStepId="3" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanage_check_primary_interface"/>
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="eth0"/>
+                </resultGeneration>
+	</testStep>
+	</postrequisite>
+    	</testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case 25 -->
+    <testCase testCaseId="NM_25" testCaseName="NetworkManager_5GHz_Wifi_Connect_Disconnect"  desc="Check if the connect and disconnect wifi methods can successfully establish and terminate the 5GHz wifi connection">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE_5GHZ"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 26 -->
+    <testCase testCaseId="NM_26" testCaseName="NetworkManager_Check_5GHz_Get_Connected_SSID"  desc="Ensure that the GetConnectedSSID method successfully returns the correct 5Ghz SSID information when all parameters are valid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>    
+	
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE_5GHZ"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="6" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase> 
+
+    <!-- Test case 27 -->
+    <testCase testCaseId="NM_27" testCaseName="NetworkManager_5GHz_Interface_Switch_Test"  desc="Check if the device can switch between ethernet and a 5GHz wifi network and vice versa">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="IP_CHANGE_LIGHTNING_APP_SUPPORT" useMethodTag="wifi_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+	</prerequisite>
+
+	<prerequisite requisiteId="2" requisiteName="Activate_RDKShell_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="callsign" value="org.rdk.RDKShell" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+	
+	<prerequisite requisiteId="3" requisiteName="Activate_WebKitBrowser_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="callsign" value="WebKitBrowser" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,WebKitBrowser" />
+                <params>
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,WebKitBrowser" />
+            </testStep>
+            <testStep testStepId="4" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" saveResult="true" >
+                <resultGeneration useMethodTag="webkitbrowser_get_state" />
+            </testStep>
+            <testStep testStepId="5" name="Resume_WebKitBrowser" method="Set_WebKitBrowser_State" pluginName="WebKitBrowser" >
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <params>
+                  <param tag="state" useDefault="true" />
+                </params>
+            </testStep>
+            <testStep testStepId="6" name="Is_WebKitBrowser_Resumed" method="Get_WebKitBrowser_State" pluginName="WebKitBrowser" delay="5">
+                <conditionalExecution enable="true" Id="4" useMethodTag="webkitbrowser_check_state" arguments="isSuspended" />
+                <resultGeneration useMethodTag="webkitbrowser_get_state" expectedValues="resumed" />
+            </testStep>
+          </prerequisite>
+
+	  <prerequisite requisiteId="4" requisiteName="Load_WebkitBrowser_Lightningapp_URL">
+            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
+                <resultGeneration useMethodTag="get_configfile_value">
+                        <arguments useConfigFile="true" key="IP_CHANGE_LIGHTNING_APP_SUPPORT"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="2" name="Get_WebkitBrowser_URL" saveResult="true" action="externalFnCall" >
+                    <resultGeneration useMethodTag="webkitbrowser_get_url" />
+            </testStep>
+            <testStep testStepId="3" name="Set_WebkitBrowser_URL" method="Set_Browser_URL" pluginName="WebKitBrowser">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" >
+              </conditionalExecution>
+              <params>
+                <param tag="url" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+              </params>
+            </testStep>
+            <testStep testStepId="4" name="Check_WebkitBrowser_Load_Finished_Event" pluginName="WebKitBrowser" event="Event_Load_Finished" action="eventListener" delay="10" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+                <resultGeneration useMethodTag="webkitbrowser_check_load_finished_event">
+			<expectedValues useDefault="true" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Get_WebkitBrowser_URL" method="Get_Browser_URL" pluginName="WebKitBrowser">
+              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
+              <resultGeneration useMethodTag="webkitbrowser_check_url">
+                        <expectedValues usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+              </resultGeneration>
+            </testStep>
+          </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE_5GHZ"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="6" name="Set_Default_Interface_Wifi" action="externalFnCall" ipChangeStep="yes">
+                <resultGeneration useMethodTag="disable_ethernet_interface"/>
+        </testStep>
+        <testStep testStepId="7" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" delay="50">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="wlan0"/>
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="8" name="Set_Default_Interface_Ethernet" method="NetworkManager_Set_Interface_State" ipChangeStep="yes">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+
+        <testCasePostRequisite>
+        <postrequisite requisiteId="1" requisiteName="Setting_Primary/Default_Interface_Ethernet">
+        <testStep testStepId="1" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" saveResult="true">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="eth0"/>
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="2" name="Set_Default_Interface_Ethernet" method="NetworkManager_Set_Interface_State" ipChangeStep="yes">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanage_check_primary_interface"/>
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanage_check_primary_interface"/>
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues value="eth0"/>
+                </resultGeneration>
+        </testStep>
+        </postrequisite>
+        </testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case 28 -->
+    <testCase testCaseId="NM_28" testCaseName="NetworkManager_SetInterfaceState_Without_Enable_Parameter"  desc="Check if the SetInterfaceState method returns an error when enabled parameter is not provided">
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="SetInterfaceState_Without_Enable_Parameter" method="NetworkManager_Set_Interface_State">
+		<params>
+                        <param tag="interface" value="eth0"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 29 -->
+    <testCase testCaseId="NM_29" testCaseName="NetworkManager_SetInterfaceState_Without_Parameter"  desc="Check if the SetInterfaceState method returns an error when parameter is not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_Without_Parameter" method="NetworkManager_Set_Interface_State">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 30 -->
+    <testCase testCaseId="NM_30" testCaseName="NetworkManager_GetInterfaceState_With_Invalid_Parameter"  desc="Check if the GetInterfaceState method returns an error when invalid parameter is provided">
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="GetInterfaceState_With_Invalid_Parameter" method="NetworkManager_Get_Interface_State_Negative">
+		<params>
+                        <param tag="interface" value="Invalid"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 31 -->
+    <testCase testCaseId="NM_31" testCaseName="NetworkManager_Check_Primary_Interface_After_LightSleep" desc="Checks the primary interface after the device has been put in sleep mode and then woken up" >
+            <testCaseInfo testCaseType="setandget" revert="true" />
+	    <testCasePreRequisite>
+	    <prerequisite requisiteId="1" requisiteName="Activate_System_Plugin">    
+	    <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="callsign" value="org.rdk.System" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.System" />
+                <params>
+                  <param tag="plugin" value="org.rdk.System" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.System" expectedValues="activated"/>
+            </testStep>
+            </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" saveResult="true" pluginName="System" >
+                <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="system_get_preferred_standby_mode" />
+            </testStep>
+            <testStep testStepId="3" name="Set_Preferred_StandBy_Mode" method="Set_Preferred_StandBy_Mode" pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="system_check_preferred_standby_mode" arguments="isNotEqual,LIGHT_SLEEP" />
+                <params>
+                  <param tag="standbyMode" value="LIGHT_SLEEP" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="4" name="Check_power_state" method="Get_Power_State" saveResult="true" revertGet="yes" pluginName="System">
+                <resultGeneration useMethodTag="system_get_power_state" />
+            </testStep>
+            <testStep testStepId="5" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="4" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="6" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
+		    <resultGeneration useMethodTag="networkmanager_get_interface_info" arguments="get_interface_names" />
+            </testStep>		    
+	    <testStep testStepId="7" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" saveResult="true" >
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface" >
+			<expectedValues usePreviousResult="true" Id="6" useMethodTag="networkmanager_get_interface_names" />         
+	        </resultGeneration>
+            </testStep>
+            <testStep testStepId="8" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"   value="STANDBY" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="9" name="Get_Power_State" method="Get_Power_State"  pluginName="System">
+                <resultGeneration useMethodTag="system_get_power_state">
+                    <expectedValues value="STANDBY"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="10" name="Set_Power_State" method="Set_Power_State" revertSet="yes" pluginName="System">
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"   value="ON" revertParam="yes" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="11" name="Get_Power_State" method="Get_Power_State" revertFlag="yes" pluginName="System">
+                <resultGeneration useMethodTag="system_get_power_state">
+                    <expectedValues value="ON"/>
+                </resultGeneration>
+            </testStep>
+            <testStep testStepId="12" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+                    <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                            <expectedValues usePreviousResult="true" Id="7" useMethodTag="networkmanager_get_previous_primary_interface"/>
+                    </resultGeneration>
+            </testStep>
+       	    <testCasePostRequisite>
+            <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+            <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="system_get_power_state"  />
+            </testStep>
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            </postrequisite>
+            </testCasePostRequisite>
+    </testCase>
+
+    <!-- Test case 32 -->
+    <testCase testCaseId="NM_32" testCaseName="NetworkManager_Set_Primary/Default_Interface_Twice" desc="check if the SetPrimaryInterface method successfully sets the primary interface when the interface is already set as primary" >
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Device_Interfaces" method="NetworkManager_Get_Available_Interfaces" saveResult="true">
+                <resultGeneration useMethodTag="networkmanager_get_interface_info" arguments="get_interface_names" />
+        </testStep>
+        <testStep testStepId="2" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface" saveResult="true" >
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues usePreviousResult="true" Id="1" useMethodTag="networkmanager_get_interface_names" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Set_Primary/Default_Interface" method="NetworkManager_Set_Primary_Interface">
+                <params>
+                  <param tag="interface"  usePreviousResult="true" Id="2" useMethodTag="networkmanager_get_previous_primary_interface"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation" />
+        </testStep>
+	<testStep testStepId="4" name="Set_Primary/Default_Interface" method="NetworkManager_Set_Primary_Interface">
+                <params>
+                  <param tag="interface"  usePreviousResult="true" Id="2" useMethodTag="networkmanager_get_previous_primary_interface"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation" />
+        </testStep>
+        <testStep testStepId="5" name="Get_Primary/Default_Interface" method="NetworkManager_Get_Primary_Interface">
+                <resultGeneration useMethodTag="networkmanager_get_primary_interface" arguments="check_interface">
+                    <expectedValues usePreviousResult="true" Id="2" useMethodTag="networkmanager_get_previous_primary_interface" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 33 -->
+    <testCase testCaseId="NM_33" testCaseName="NetworkManager_Start_And_Stop_Internet_Connectivity_Monitoring" desc="Check if able to start/stop the internet connectivity monitoring process for valid endpoint">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+             <params>
+                 <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+        <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="NetworkManager_Start_Connectivity_Monitoring" >
+             <params>
+                 <param tag="interval" value="7" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Connectivity_Monitoring" method="NetworkManager_Stop_Connectivity_Monitoring" delay="7">
+             <resultGeneration useMethodTag="network_check_results"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 34 -->
+    <testCase testCaseId="NM_34" testCaseName="NetworkManager_Check_Logging_Level"  desc="Checks whether able to set and get various logging level" >
+            <testCaseInfo testCaseType="loop" revert="true"/>
+            <testStep testStepId="1" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" saveResult="true" revertGet="yes" >
+                    <resultGeneration useMethodTag="rdkshell_check_log_level"/>
+            </testStep>
+            <testStep testStepId="2" name="Check_Logging_Level" testStepType="loop" >
+              <subtestStep subtestStepId="1" name="Set_Log_Level" method="NetworkManager_Set_Log_Level" revertSet="yes">
+                  <params>
+                    <param tag="level" value="0,1,2,3,4" iteration="true" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="success_status_validation" />
+              </subtestStep>
+              <subtestStep subtestStepId="3" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" revertFlag="yes" >
+                  <resultGeneration useMethodTag="rdkshell_check_log_level" >
+                    <expectedValues useIterableValue="true" />
+                  </resultGeneration>
+              </subtestStep>
+            </testStep>
+     </testCase>
+
+     <!-- Test case 35 -->
+     <testCase testCaseId="NM_35" testCaseName="NetworkManager_Set_Lowest_Logging_Level"  desc="Check if able to set and get the lowest logging level" >
+            <testCaseInfo testCaseType="setandget" revert="true"/>
+            <testStep testStepId="1" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" saveResult="true" revertGet="yes" >
+                    <resultGeneration useMethodTag="networkmanager_check_log_level" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Log_Level" method="NetworkManager_Set_Log_Level" revertSet="yes">
+                  <params>
+                    <param tag="level" value="0" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="success_status_validation" />
+            </testStep>
+            <testStep testStepId="3" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" revertFlag="yes" >
+                  <resultGeneration useMethodTag="networkmanager_check_log_level" >
+                    <expectedValues value="0" />
+                  </resultGeneration>
+              </testStep>
+     </testCase>
+
+     <!-- Test case 36 -->
+     <testCase testCaseId="NM_36" testCaseName="NetworkManager_Set_Mid-range_Logging_Level"  desc="Check if able to set and get the mid-range logging level" >
+            <testCaseInfo testCaseType="setandget" revert="true"/>
+            <testStep testStepId="1" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" saveResult="true" revertGet="yes" >
+                    <resultGeneration useMethodTag="networkmanager_check_log_level" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Log_Level" method="NetworkManager_Set_Log_Level" revertSet="yes">
+                  <params>
+                    <param tag="level" value="2" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="success_status_validation" />
+            </testStep>
+            <testStep testStepId="3" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" revertFlag="yes" >
+                  <resultGeneration useMethodTag="networkmanager_check_log_level" >
+                    <expectedValues value="2" />
+                  </resultGeneration>
+              </testStep>
+     </testCase>
+
+     <!-- Test case 37 -->
+     <testCase testCaseId="NM_37" testCaseName="NetworkManager_Set_Highest_Logging_Level"  desc="Check if able to set and get the highest logging level" >
+            <testCaseInfo testCaseType="setandget" revert="true"/>
+            <testStep testStepId="1" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" saveResult="true" revertGet="yes" >
+                    <resultGeneration useMethodTag="networkmanager_check_log_level" />
+            </testStep>
+            <testStep testStepId="2" name="Set_Log_Level" method="NetworkManager_Set_Log_Level" revertSet="yes">
+                  <params>
+                    <param tag="level" value="4" revertParam="yes" />
+                  </params>
+                  <resultGeneration useMethodTag="success_status_validation" />
+            </testStep>
+            <testStep testStepId="3" name="Get_Log_Level" method="NetworkManager_Get_Log_Level" revertFlag="yes" >
+                  <resultGeneration useMethodTag="networkmanager_check_log_level" >
+                    <expectedValues value="4" />
+                  </resultGeneration>
+              </testStep>
+     </testCase> 
+     
+     <!-- Test case 38 -->
+     <testCase testCaseId="NM_38" testCaseName="NetworkManager_Start_Internet_Connectivity_Monitoring" desc="Check if able to start the internet connectivity monitoring process for valid endpoint">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+             <params>
+                 <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+        <testStep testStepId="2" name="Start_Connectivity_Monitoring" method="NetworkManager_Start_Connectivity_Monitoring" >
+             <params>
+                 <param tag="interval" value="7" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 39 -->
+    <testCase testCaseId="NM_39" testCaseName="NetworkManager_Stop_Internet_Connectivity_Monitoring" desc="Check if able to stop the internet connectivity monitoring process for valid endpoint">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Stop_Connectivity_Monitoring" method="NetworkManager_Stop_Connectivity_Monitoring" >
+             <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 40 -->
+    <testCase testCaseId="NM_40" testCaseName="NetworkManager_Check_Wifi_State" desc="Returns the current Wifi State">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+             <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_state" />
+        </testStep>
+    </testCase>
+
+     <!-- Test case 41 -->
+     <testCase testCaseId="NM_41" testCaseName="NetworkManager_Connect_Wifi_And_Check_Wifi_State" desc="Check the wifi state on connecting/disconnecting to the wifi ssid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+             <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+              </testStep>
+              <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+              <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+              </testStep>
+             </prerequisite>
+             </testCasePreRequisite>
+	     <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+		     <resultGeneration useMethodTag="success_status_validation"/>
+	     </testStep>
+	     <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+		     <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+			     <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                     </resultGeneration>
+             </testStep>
+             <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+	             <resultGeneration useMethodTag="success_status_validation"/>
+	     </testStep>
+             <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+	             <params>
+		      <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+	              <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+	              <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+	             </params>
+              <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+	      <testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                 <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+              </testStep>
+	      <testStep testStepId="6" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+	        <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
+	           <expectedValues value="5,WIFI_STATE_CONNECTED"/>
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="3">
+	        <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep> 
+              <testStep testStepId="8" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+	         <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
+	            <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
+                 </resultGeneration>		 
+	      </testStep>
+     </testCase>
+     
+     <!-- Test case 42 -->
+     <testCase testCaseId="NM_42" testCaseName="NetworkManager_Set_Single_Connectivity_Test_Endpoints" desc="Check if able to set the valid single test endpoint">
+	     <testCaseInfo testCaseType="direct"/>
+             <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+             <params>
+		     <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+     </testCase>
+
+     <!-- Test case 43 -->
+     <testCase testCaseId="NM_43" testCaseName="NetworkManager_Set_Five_Connectivity_Test_Endpoints" desc="Check if able to set upto 5 endpoints">
+             <testCaseInfo testCaseType="direct"/>
+             <testStep testStepId="1" name="Set_Connectivity_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints">
+             <params>
+                     <param tag="endpoints" useConfigFile="true" key="NETWORKMANAGER_MAX_CONNECTIVITY_TEST_ENDPOINTS" />
+             </params>
+             <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+     </testCase>
+
+     <!-- Test case 44 -->
+     <testCase testCaseId="NM_44" testCaseName="NetworkManager_Check_Wifi_State_On_Connecting_To_Wifi" desc="Check the wifi state on connecting to the wifi ssid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+             <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+              </testStep>
+              <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+              <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+              </testStep>
+             </prerequisite>
+             </testCasePreRequisite>
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                     <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                             <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                     </resultGeneration>
+             </testStep>
+             <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                     <params>
+                      <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                      <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                      <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                     </params>
+              <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+                <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
+                   <expectedValues value="3,WIFI_STATE_PAIRING"/>
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="6" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                 <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+     </testCase>
+
+     <!-- Test case 45 -->
+     <testCase testCaseId="NM_45" testCaseName="NetworkManager_Start_Scan_And_Check_Wifi_State" desc="Check the wifi state on scanning for the wifi">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+             <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+              </testStep>
+              <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+              <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+              </testStep>
+             </prerequisite>
+             </testCasePreRequisite>
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                     <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                             <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                     </resultGeneration>
+             </testStep>
+	     <testStep testStepId="3" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" >
+                <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
+                   <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
+                </resultGeneration>
+             </testStep>
+             <testStep testStepId="4" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+     </testCase>
+
+     <!-- Test case 46 -->
+     <testCase testCaseId="NM_46" testCaseName="NetworkManager_Check_Wifi_State_On_Connecting_To_Invalid_Wifi_SSID" desc="Check the wifi state on connecting to the invalid wifi ssid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+             <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+              </testStep>
+              <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+              <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+              </testStep>
+             </prerequisite>
+             </testCasePreRequisite>
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                     <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                             <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                     </resultGeneration>
+             </testStep>
+             <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="2">
+                     <params>
+                      <param tag="ssid" useConfigFile="true" key="WIFI_INVALID_SSID_NAME"/>
+                      <param tag="passphrase" useConfigFile="true" key="WIFI_INVALID_PASSPHRASE"/>
+                      <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                     </params>
+              <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+	      <testStep testStepId="5" name="Check_Wifi_State" method="NetworkManager_Get_Wifi_State" delay="2">
+                <resultGeneration useMethodTag="networkmanager_check_wifi_state" arguments="check_wifi_expected_state">
+                   <expectedValues value="2,WIFI_STATE_DISCONNECTED"/>
+                </resultGeneration>
+              </testStep>
+     </testCase>
+
+     <!-- Test case 47 -->
+     <testCase testCaseId="NM_47" testCaseName="NetworkManager_SetandGet_Connectivity_Test_Endpoints"  desc="Check GetConnectivityTestEndpoints method returns the correct test endpoint set using the SetConnectivityTestEndpoints method">
+        <testCaseInfo testCaseType="setandget" revert="true"/>
+        <testStep testStepId="1" name="Get_Connectivity_Test_Endpoints" method="NetworkManager_Get_Connectivity_Test_Endpoints" saveResult="true" revertGet="yes">
+                <resultGeneration useMethodTag="networkmanager_get_connectivity_test_endpoint"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Connectivity_Endpoints" method="NetworkManager_Set_Connectivity_Test_Endpoints" revertSet="yes">
+                <params>
+                        <param tag="endpoints" useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS" revertParam="yes"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Connectivity_Test_Endpoints" method="NetworkManager_Get_Connectivity_Test_Endpoints" revertFlag="yes">
+                <resultGeneration useMethodTag="networkmanager_get_connectivity_test_endpoint" arguments="check_endpoints">
+                        <expectedValues useConfigFile="true" key="CONNECTIVITY_TEST_ENDPOINTS"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+    
+    <!-- Test case 48 -->
+    <testCase testCaseId="NM_48" testCaseName="NetworkManager_Check_WiFi_StateChange_Event_On_Connecting_To_Wifi" desc="Check the wifi state change event on connecting to the wifi ssid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+             <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+              </testStep>
+              <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+              <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+              </testStep>
+             </prerequisite>
+             </testCasePreRequisite>
+             <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                     <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                             <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                     </resultGeneration>
+             </testStep>
+             <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                     <resultGeneration useMethodTag="success_status_validation"/>
+             </testStep>
+             <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                     <params>
+                      <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                      <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                      <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                     </params>
+              <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+	      <testStep testStepId="5" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" delay="5" clear="false">
+                <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
+                        <expectedValues value="4,WIFI_STATE_CONNECTING"/>
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="6" name="Check_On_WiFiStateChange_Event" event="Event_On_WiFiStateChange" action="eventListener" >
+                <resultGeneration useMethodTag="networkmanager_check_onwifistatechange_event">
+                        <expectedValues value="5,WIFI_STATE_CONNECTED"/>
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="7" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" >
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                 <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+              </testStep>
+              <testStep testStepId="8" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect">
+                <resultGeneration useMethodTag="success_status_validation"/>
+              </testStep>
+     </testCase>
+
+     <!-- Test case 49 -->
+     <testCase testCaseId="NM_49" testCaseName="NetworkManager_Set_Invalid_Interface_State" desc="check if the SetInterfaceState method returns error on setting the invalid interface name" >
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Set_Interface_State" method="NetworkManager_Set_Interface_State" >
+                <params>
+                        <param tag="interface" value="invalid"/>
+                        <param tag="enabled" value="True"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase> 
+    
+    <!-- Test case 50 -->
+    <testCase testCaseId="NM_50" testCaseName="NetworkManager_GetInterfaceState_With_Empty_Parameter"  desc="Check if the GetInterfaceState method returns an error when empty parameter is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetInterfaceState_With_Empty_Parameter" method="NetworkManager_Get_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value=""/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 51 -->
+    <testCase testCaseId="NM_51" testCaseName="NetworkManager_Ping_Invalid_Endpoint"  desc="Pings the invalid endpoint" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Ping_Host" method="NetworkManager_Ping" timeoutKey="CUSTOM_TIMEOUT_FOR_PING_AND_TRACE">
+                <params>
+                  <param tag="endpoint" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT" />
+                  <param tag="ipversion" value="IPv4" />
+                </params>
+                <resultGeneration useMethodTag="networkmanager_get_ping_response" arguments="validate_error_message" expectedValues="could not ping endpoint,0.42.42.42"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 52 -->
+    <testCase testCaseId="NM_52" testCaseName="NetworkManager_Ping_Endpoint_With_Invalid_IPVersion"  desc="Pings the endpoint with invalid ipversion" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Ping_Host" method="NetworkManager_Ping" timeoutKey="CUSTOM_TIMEOUT_FOR_PING_AND_TRACE">
+                <params>
+                  <param tag="endpoint"  useConfigFile="true" key="PING_IP" />
+                  <param tag="ipversion"   value="invalid" />
+                </params>
+                <resultGeneration useMethodTag="networkmanager_get_ping_response" arguments="validate_error_message" >
+		   <expectedValues value="could not ping endpoint" useConfigFile="true" key="PING_IP"/>
+	        </resultGeneration>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 53 -->
+    <testCase testCaseId="NM_53" testCaseName="NetworkManager_Remove_Invalid_SSID"  desc="Check if RemoveKnownSSID method returns an error when parameter is provided with invalid ssid" >
+           <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+            <testStep testStepId="1" name="Remove_Known_SSID" method="NetworkManager_Remove_Known_SSID" >
+                <params>
+                  <param tag="ssid"   value="invalid" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 54 -->
+    <testCase testCaseId="NM_54" testCaseName="NetworkManager_Remove_Empty_SSID"  desc="Check if RemoveKnownSSID method returns an error when parameter is provided with empty ssid" >
+           <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+            <testStep testStepId="1" name="Remove_Known_SSID" method="NetworkManager_Remove_Known_SSID" >
+                <params>
+                  <param tag="ssid"   value="" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 55 -->
+    <testCase testCaseId="NM_55" testCaseName="NetworkManager_GetInterfaceState_Without_Parameter"  desc="Check if the GetInterfaceState method returns an error when interface parameter is not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetInterfaceState_Without_Parameter" method="NetworkManager_Get_Interface_State_Negative">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+	
+    <!-- Test case 56 -->
+    <testCase testCaseId="NM_56" testCaseName="NetworkManager_Check_Get_Known_SSID"  desc="Check if the GetKnownSSIDs method returns the connected SSID name">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_name">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="4" name="Wifi_Connect" method="NetworkManager_Wifi_Connect"  delay="3">
+                <params>
+                  <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                  <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+                  <param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="5" name="Check_Get_Connected_SSID" method="NetworkManager_Get_Connected_SSID" delay="5">
+                <resultGeneration useMethodTag="networkmanager_get_connected_ssid" arguments="check_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="6" name="Check_Get_Known_SSID" method="NetworkManager_Get_Known_SSID">
+                <resultGeneration useMethodTag="networkmanager_get_known_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="7" name="Wifi_Disconnect" method="NetworkManager_Wifi_DisConnect"  delay="5">
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+    </testCase>
+    
+    <!-- Test case 57 -->
+    <testCase testCaseId="NM_57" testCaseName="NetworkManager_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+             <testCaseInfo testCaseType="direct" />
+             <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+            <testStep testStepId="1" name="Deactivate_Network_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.NetworkManager" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.networkmanager,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_Network_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.NetworkManager" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.networkmanager,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 58 -->
+    <testCase testCaseId="NM_58" testCaseName="NetworkManager_Wifi_Connect_Without_Parameter"  desc="Check if the WifiConnect method returns an error when parameter is not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Wifi_Connect_Without_Parameter" method="NetworkManager_Wifi_Connect">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 59 -->
+    <testCase testCaseId="NM_59" testCaseName="NetworkManager_GetIPSettings_With_Invalid_Parameter"  desc="Check if the GetIPSettings method returns an error when invalid interface parameter is provided">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="GetIPSettings_With_Invalid_Parameter" method="NetworkManager_Get_IPSettings">
+		<params>
+                        <param tag="interface" value="invalid"/>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 60 -->
+    <testCase testCaseId="NM_60" testCaseName="NetworkManager_Verify_Wifi_Connect_Error" desc="Verify that the WifiConnect method returns an error when the plugin is in a deactivated state">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	    
+	    <testStep testStepId="1" name="Deactivate_NetworkManager_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.NetworkManager" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.networkmanager,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_NetworkManager_Wifi_Connect_API_Response" method="NetworkManager_Wifi_Connect">
+		 <resultGeneration useMethodTag="controller_check_error_message">
+		     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+		     <arguments value="deactivate_check_error_message"/>
+		 </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Activate_NetworkManager_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.NetworkManager" />
+                  </params>
+            </testStep>
+            <testStep testStepId="6" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.networkmanager,activated,requested"/>
+            </testStep>
+            <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 61 -->
+    <testCase testCaseId="NM_61" testCaseName="NetworkManager_SetInterfaceState_Without_Interface_Parameter"  desc="Check if the SetInterfaceState method returns an error when interface parameter is not provided">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="SetInterfaceState_Without_Interface_Parameter" method="NetworkManager_Set_Interface_State">
+                <params>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 62 -->
+    <testCase testCaseId="NM_62" testCaseName="NetworkManager_SetInterfaceState_With_Invalid_Parameters"  desc="Check if the SetInterfaceState method returns an error when both interface and enabled parameters are provided with invalid values">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetInterfaceState_With_Invalid_Parameters" method="NetworkManager_Set_Interface_State_Negative">
+                <params>
+                        <param tag="interface" value="invalid"/>
+                        <param tag="enabled" value="invalid"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 63 -->
+    <testCase testCaseId="NM_63" testCaseName="NetworkManager_Add_and_Remove_SSID"  desc="Check that an SSID can be added and then removed successfully">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+	<testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+	</testCasePreRequisite>
+
+	<testStep testStepId="1" name="Get_Known_SSID_List" method="NetworkManager_Get_Known_SSID" saveResult="true">
+		<resultGeneration useMethodTag="networkmanager_check_ssid_list">
+			<arguments useConfigFile="true" key="WIFI_SSID_NAME"/>
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="2" name="Remove_Known_SSID" method="NetworkManager_Remove_Known_SSID" >
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_ssid_presence_value"/>
+		<params>
+			<param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+		</params>
+		<resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="3" name="Get_Known_SSID_List" method="NetworkManager_Get_Known_SSID" delay="3">
+		<conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_ssid_presence_value"/>
+		<resultGeneration useMethodTag="networkmanager_check_empty_ssid_list">
+			<arguments useConfigFile="true" key="WIFI_SSID_NAME" />
+		</resultGeneration>
+	</testStep>
+	<testStep testStepId="4" name="Add_to_Known_SSID" method="NetworkManager_AddToKnownSSIDs">
+		<params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+			<param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+		<resultGeneration useMethodTag="success_status_validation"/>
+	</testStep>
+	<testStep testStepId="5" name="Get_Known_SSID_List" method="NetworkManager_Get_Known_SSID" delay="2">
+                <resultGeneration useMethodTag="networkmanager_get_known_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+	<testStep testStepId="6" name="Remove_Known_SSID" method="NetworkManager_Remove_Known_SSID" >
+                <params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="7" name="Get_Known_SSID_List" method="NetworkManager_Get_Known_SSID" delay="2">
+                <resultGeneration useMethodTag="networkmanager_check_empty_ssid_list">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 64 -->
+    <testCase testCaseId="NM_64" testCaseName="NetworkManager_SetStunEndpoint_With_Invalid_Endpoint"  desc="Check if the SetStunEndpoint method throws an error when an invalid endpoint parameter is passed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetStunEndpoint_With_Invalid_Endpoint" method="NetworkManager_Set_Stun_Endpoint">
+                <params>
+			<param tag="endpoint" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+			<param tag="port" useConfigFile="true" key="NETWORKMANAGER_TEST_PORT"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 65 -->
+    <testCase testCaseId="NM_65" testCaseName="NetworkManager_SetStunEndpoint_With_Invalid_Port"  desc="Check if the SetStunEndpoint method throws an error when an invalid port parameter is passed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetStunEndpoint_With_Invalid_Port" method="NetworkManager_Set_Stun_Endpoint">
+                <params>
+                        <param tag="endpoint" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="port" useConfigFile="true" key="NETWORKMANAGER_INVALID_PORT"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 66 -->
+    <testCase testCaseId="NM_66" testCaseName="NetworkManager_SetStunEndpoint_Without_Endpoint"  desc="Check if the SetStunEndpoint method throws an error when endpoint parameter is not passed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetStunEndpoint_Without_Endpoint" method="NetworkManager_Set_Stun_Endpoint">
+                <params>
+                        <param tag="port" useConfigFile="true" key="NETWORKMANAGER_TEST_PORT"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 67 -->
+    <testCase testCaseId="NM_67" testCaseName="NetworkManager_SetStunEndpoint_Without_Port"  desc="Check if the SetStunEndpoint method throws an error when port parameter is not passed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetStunEndpoint_Without_Port" method="NetworkManager_Set_Stun_Endpoint">
+		<params>
+			<param tag="endpoint" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 68 -->
+    <testCase testCaseId="NM_68" testCaseName="NetworkManager_SetStunEndpoint_Without_Parameters"  desc="Check if the SetStunEndpoint method throws an error when parameters are not passed">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetStunEndpoint_Without_Parameters" method="NetworkManager_Set_Stun_Endpoint">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 69 -->
+    <testCase testCaseId="NM_69" testCaseName="NetworkManager_AddToKnownSSIDs_With_Empty_SSID"  desc="Check if the AddToKnownSSIDs method returns an error when the SSID parameter is empty">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="AddToKnownSSIDs_With_Empty_SSID" method="NetworkManager_AddToKnownSSIDs">
+		<params>
+                        <param tag="ssid" value=""/>
+                        <param tag="passphrase" useConfigFile="true" key="WIFI_PASSPHRASE"/>
+			<param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 70 -->
+    <testCase testCaseId="NM_70" testCaseName="NetworkManager_AddToKnownSSIDs_With_Empty_Passphrase"  desc="Check if the AddToKnownSSIDs method returns an error when the passphrase parameter is empty">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="AddToKnownSSIDs_With_Empty_Passphrase" method="NetworkManager_AddToKnownSSIDs">
+		<params>
+                        <param tag="ssid" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                        <param tag="passphrase" value=""/>
+			<param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 71 -->
+    <testCase testCaseId="NM_71" testCaseName="NetworkManager_AddToKnownSSIDs_With_Empty_SSID_Passphrase"  desc="Check if the AddToKnownSSIDs method returns an error when the SSID and passphrase parameters are empty">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="AddToKnownSSIDs_With_Empty_SSID_Passphrase" method="NetworkManager_AddToKnownSSIDs">
+		<params>
+                        <param tag="ssid" value=""/>
+                        <param tag="passphrase" value=""/>
+			<param tag="security" useConfigFile="true" key="WIFI_SECURITY_MODE"/>
+                </params>
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 72 -->
+    <testCase testCaseId="NM_72" testCaseName="NetworkManager_AddToKnownSSIDs_Without_Parameters"  desc="Check if the AddToKnownSSIDs method returns an error when parameters are not provided">
+	<testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="AddToKnownSSIDs_Without_Parameters" method="NetworkManager_AddToKnownSSIDs">
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 73 -->
+    <testCase testCaseId="NM_73" testCaseName="NetworkManager_SetIPSettings_With_Empty_Interface"  desc="Check if the SetIPSettings method returns an error when the interface parameter is empty">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Empty_Interface" method="NetworkManager_SetIPSettings">
+                <params>
+                        <param tag="interface" value=""/>
+                        <param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+			<param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+			<param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+			<param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+			<param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+			<param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+			<param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 74 -->
+    <testCase testCaseId="NM_74" testCaseName="NetworkManager_SetIPSettings_With_Invalid_Interface"  desc="Check if the SetIPSettings method returns an error when the interface parameter is invalid">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Invalid_Interface" method="NetworkManager_SetIPSettings">
+                <params>
+			<param tag="interface" value="invalid"/>
+			<param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+                        <param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+                        <param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 75 -->
+    <testCase testCaseId="NM_75" testCaseName="NetworkManager_SetIPSettings_With_Empty_Ipversion"  desc="Check if the SetIPSettings method returns an error when the ipversion parameter is empty">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Empty_Ipversion" method="NetworkManager_SetIPSettings">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+			<param tag="ipversion" value=""/>
+			<param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+                        <param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 76 -->
+    <testCase testCaseId="NM_76" testCaseName="NetworkManager_SetIPSettings_With_Invalid_Ipversion"  desc="Check if the SetIPSettings method returns an error when the ipversion parameter is invalid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Invalid_Ipversion" method="NetworkManager_SetIPSettings">
+                <params>
+                        <param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+			<param tag="ipversion" value="invalid"/>
+			<param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+                        <param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 77 -->
+    <testCase testCaseId="NM_77" testCaseName="NetworkManager_SetIPSettings_With_Invalid_Ipaddress"  desc="Check if the SetIPSettings method returns an error when the ipaddress parameter is invalid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Invalid_Ipaddress" method="NetworkManager_SetIPSettings">
+                <params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+			<param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+			<param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+			<param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+			<param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+                        <param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 78 -->
+    <testCase testCaseId="NM_78" testCaseName="NetworkManager_SetIPSettings_With_Invalid_Gateway"  desc="Check if the SetIPSettings method returns an error when the gateway parameter is invalid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Invalid_Gateway" method="NetworkManager_SetIPSettings">
+                <params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+                        <param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+                        <param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+			<param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+			<param tag="primarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+			<param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 79 -->
+    <testCase testCaseId="NM_79" testCaseName="NetworkManager_SetIPSettings_With_Invalid_PrimaryDNS"  desc="Check if the SetIPSettings method returns an error when the primarydns parameter is invalid">
+	<testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>    
+	<testStep testStepId="1" name="SetIPSettings_With_Invalid_PrimaryDNS" method="NetworkManager_SetIPSettings">
+                <params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+                        <param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+                        <param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+			<param tag="primarydns"  useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_TEST_SECONDARY_DNS"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 80 -->
+    <testCase testCaseId="NM_80" testCaseName="NetworkManager_SetIPSettings_With_Invalid_SecondaryDNS"  desc="Check if the SetIPSettings method returns an error when the secondarydns parameter is invalid">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testStep testStepId="1" name="SetIPSettings_With_Invalid_SecondaryDNS" method="NetworkManager_SetIPSettings">
+		<params>
+			<param tag="interface" useConfigFile="true" key="NETWORKMANAGER_TEST_INTERFACE"/>
+                        <param tag="ipversion" useConfigFile="true" key="NETWORKMANAGER_TEST_IPVERSION"/>
+                        <param tag="autoconfig" useConfigFile="true" key="NETWORKMANAGER_TEST_AUTOCONFIG"/>
+                        <param tag="ipaddress" useConfigFile="true" key="NETWORKMANAGER_TEST_IPADDRESS"/>
+                        <param tag="prefix" useConfigFile="true" key="NETWORKMANAGER_TEST_PREFIX"/>
+                        <param tag="gateway" useConfigFile="true" key="NETWORKMANAGER_TEST_GATEWAY"/>
+                        <param tag="primarydns"  useConfigFile="true" key="NETWORKMANAGER_TEST_PRIMARY_DNS"/>
+                        <param tag="secondarydns" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 81 -->
+    <testCase testCaseId="NM_81" testCaseName="NetworkManager_Check_GetAvailableInterfaces_Error"  desc="Check if the GetAvailableInterfaces method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_GetAvailableInterfaces_API_Response" method="NetworkManager_Get_Available_Interfaces" PluginOnStep="yes">
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 82 -->
+    <testCase testCaseId="NM_82" testCaseName="NetworkManager_Check_GetPrimaryInterface_Error"  desc="Check if the GetPrimaryInterface method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_GetPrimaryInterface_API_Response" method="NetworkManager_Get_Primary_Interface" PluginOnStep="yes">
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 83 -->
+    <testCase testCaseId="NM_83" testCaseName="NetworkManager_Check_GetPublicIP_Error"  desc="Check if the GetPublicIP method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_GetPublicIP_API_Response" method="NetworkManager_Get_Public_IP" PluginOnStep="yes">
+                <params>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 84 -->
+    <testCase testCaseId="NM_84" testCaseName="NetworkManager_Check_Ping_Error"  desc="Check if the Ping method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_Ping_API_Response" method="NetworkManager_Ping" PluginOnStep="yes">
+                <params>
+                        <param tag="endpoint"  useConfigFile="true" key="PING_IP" />
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="10" />
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 85 -->
+    <testCase testCaseId="NM_85" testCaseName="NetworkManager_Check_Trace_Error"  desc="Check if the Trace method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_Trace_API_Response" method="NetworkManager_Trace" PluginOnStep="yes">
+                <params>
+                        <param tag="endpoint"  useConfigFile="true" key="TRACE_IP" />
+                        <param tag="ipversion" value="IPv4"/>
+                        <param tag="count" value="10" />
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 86 -->
+    <testCase testCaseId="NM_86" testCaseName="NetworkManager_Check_IsConnectedToInternet_Error"  desc="Check if the IsConnectedToInternet method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_IsConnectedToInternet_API_Response" method="NetworkManager_IsConnectedToInternet" PluginOnStep="yes">
+                <params>
+                        <param tag="ipversion" value="IPv4"/>
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 87 -->
+    <testCase testCaseId="NM_87" testCaseName="NetworkManager_Check_GetInterfaceState_Error"  desc="Check if the GetInterfaceState method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_GetInterfaceState_API_Response" method="NetworkManager_Get_Interface_State" PluginOnStep="yes">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 88 -->
+    <testCase testCaseId="NM_88" testCaseName="NetworkManager_Check_SetInterfaceState_Error"  desc="Check if the SetInterfaceState method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_SetInterfaceState_API_Response" method="NetworkManager_Set_Interface_State" PluginOnStep="yes">
+                <params>
+                        <param tag="interface" value="eth0"/>
+                        <param tag="enabled" value="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 89 -->
+    <testCase testCaseId="NM_89" testCaseName="NetworkManager_Check_StopWiFiScan_Error"  desc="Check if the StopWiFiScan method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_StopWiFiScan_API_Response" method="NetworkManager_Stop_Wifi_Scan" PluginOnStep="yes">
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 90 -->
+    <testCase testCaseId="NM_90" testCaseName="NetworkManager_Check_WiFiDisconnect_Error"  desc="Check if the WiFiDisconnect method returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" />
+                   </testStep>
+                   <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.NetworkManager" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.NetworkManager" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.NetworkManager" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.NetworkManager" expectedValues="deactivated"/>
+                   </testStep>
+                </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Check_WiFiDisconnect_API_Response" method="NetworkManager_Wifi_DisConnect" PluginOnStep="yes">
+                <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 91 -->
+    <testCase testCaseId="NM_91" testCaseName="NetworkManager_SSID_Frequency_Checker_2.4GHz"  desc="Scan for 2.4GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 2.4GHz band">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+	<prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+		<params>
+                        <param tag="frequency" value="2.4"/>
+                </params>
+		<resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+		<resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_frequency" expectedValues="2.4"/>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 92 -->
+    <testCase testCaseId="NM_92" testCaseName="NetworkManager_SSID_Frequency_Checker_5GHz"  desc="Scan for 5GHz SSIDs and verify that all SSIDs listed in the onAvailableSSIDs event are on the 5GHz band">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+		<params>
+                        <param tag="frequency" value="5"/>
+                </params>
+		<resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="check_scanned_ssid_frequency" expectedValues="5"/>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 93 -->
+    <testCase testCaseId="NM_93" testCaseName="NetworkManager_Scan_Specific_SSID_2.4GHz"  desc="This test case checks if NetworkManager can scan for a specific SSID on the 2.4GHz band and confirm its presence">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+	<testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <params>
+			<param tag="frequency" value="2.4"/>
+			<param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+		<resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="validate_scan_for_specific_ssid">
+			<expectedValues  useConfigFile="true" key="WIFI_SSID_NAME" />
+		</resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 94 -->
+    <testCase testCaseId="NM_94" testCaseName="NetworkManager_Scan_Specific_SSID_5GHz"  desc="This test case checks if NetworkManager can scan for a specific SSID on the 5GHz band and confirm its presence">
+        <testCaseInfo testCaseType="direct" configurableTest="true" testKey="NETWORKMANAGER_ETHERNET_CABLECONNECTED_STATUS" useMethodTag="networkmanager_check_feature_applicability" arguments="yes"/>
+        <testCasePreRequisite>
+        <prerequisite requisiteId="1" requisiteName="Enable_Wifi_Interface">
+        <testStep testStepId="1" name="Get_Interface_State" method="NetworkManager_Get_Interface_State" saveResult="true">
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Set_Interface_State" method="NetworkManager_Set_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                        <param tag="enabled" value="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="3" name="Get_Interface_State" method="NetworkManager_Get_Interface_State">
+                <conditionalExecution enable="true" Id="1" useMethodTag="networkmanager_get_wifi_state"/>
+                <params>
+                        <param tag="interface" value="wlan0"/>
+                </params>
+                <resultGeneration useMethodTag="get_enabled_status_validation">
+                        <expectedValues value="true" />
+                </resultGeneration>
+        </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+        <testStep testStepId="1" name="Start_Wifi_Scan" method="NetworkManager_Start_Wifi_Scan">
+                <params>
+                        <param tag="frequency" value="5"/>
+                        <param tag="ssids" useConfigFile="true" key="WIFI_SSID_NAME_5GHZ"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_On_AvailableSSIDs_Event" event="Event_On_AvailableSSIDs" action="eventListener" delay="5">
+                <resultGeneration useMethodTag="networkmanager_check_onavailablessids_event" arguments="validate_scan_for_specific_ssid">
+                        <expectedValues  useConfigFile="true" key="WIFI_SSID_NAME_5GHZ" />
+                </resultGeneration>
+        </testStep>
+        <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+</testPlugin>

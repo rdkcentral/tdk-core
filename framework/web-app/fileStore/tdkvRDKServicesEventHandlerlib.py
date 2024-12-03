@@ -1016,6 +1016,109 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
+        # Network Manager Events response result parser steps
+        elif tag == "networkmanager_check_oninterfacestatechange_event":
+            result = result[0]
+            interface = result.get("interface")
+            status = result.get("status")
+            info["interface"] = interface
+            info["status"] = status
+            if interface in expectedValues and status in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_onavailablessids_event":
+            ssids = []
+            status = []
+            frequencies = []
+            for ssid_info in result:
+                if ssid_info.get("ssids"):
+                    status.append("TRUE")
+                else:
+                    status.append("FALSE")
+            if "TRUE" in status:
+                for ssid_info in result:
+                    for ssid_data in ssid_info.get("ssids"):
+                        if "\\x00" not in str(ssid_data.get("ssid")):
+                            ssids.append(str(ssid_data.get("ssid")))
+                            frequencies.append(str(ssid_data.get("frequency")))
+            else:
+                message = "Available ssids list is empty"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+
+            if len(arg) and arg[0] == "check_scanned_ssid_name":
+                if not ssids and "TRUE" not in status:
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    ssid_found = 0
+                    for ssid in ssids:
+                        if ssid in expectedValues:
+                            ssid_found = 1
+                            break
+                    info["ssids"] = ssids
+                    if ssid_found == 1:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+
+            elif len(arg) and arg[0] == "check_scanned_ssid_frequency":
+                if not ssids and "TRUE" not in status:
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["result"] =  dict(list(zip(ssids,frequencies)))
+                    resultStatus = "TRUE"
+                    for frequency in frequencies:
+                        if frequency not in expectedValues:
+                            resultStatus = "FALSE"
+                            break
+                    if "FALSE" not in resultStatus:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+
+            elif len(arg) and arg[0] == "validate_scan_for_specific_ssid":
+                if not ssids and "TRUE" not in status:
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["ssid"] = ssids
+                    if len(ssids) == 1:
+                        if expectedValues[0] in ssids:
+                            message = "Successfully scanned and detected the specific SSID"
+                            info["message"] = message
+                        else:
+                            message = "Failed to scan and detect the specific SSID"
+                            info["message"] = message
+                            info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        message ="Expecting a specific SSID, but more than one SSID is present"
+                        info["message"] = message
+                        info["Test_Step_Status"] = "FAILURE"
+
+            else:
+                info["ssids"] = ssids
+                if not ssids and "TRUE" not in status:
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "SUCCESS"
+
+        elif tag == "networkmanager_check_onwifistatechange_event":
+            for eventResult in result:
+                if str(eventResult.get("state")) in str(expectedValues[0]) and str(eventResult.get("status")) in str(expectedValues[1]):
+                    info = eventResult
+                    info["Test_Step_Status"] = "SUCCESS"
+                    break;
+                else:
+                    info = eventResult
+                    info["Test_Step_Status"] = "FAILURE"
+
+        # Common Events response result parser steps
+        elif tag == "check_event_unavailability":
+            if len(arg) and arg[0] == "check_empty_event":
+                if result:
+                    info["Test_Step_Status"] = "FAILURE"
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"

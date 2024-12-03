@@ -3845,6 +3845,273 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # NetworkManager Plugin Response result parser steps
+        elif tag == "networkmanager_get_interface_info":
+            status,macAddressStatus = [],[]
+            interfaces_info = result.get("interfaces")
+            success = str(result.get("success")).lower() == "true"
+            info["success"] = success
+            for interface in interfaces_info:
+                status.append(checkNonEmptyResultData(list(interface.values())))
+                macAddress = interface.get("mac")
+            if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", macAddress.lower()) is None:
+                macAddressStatus.append("False")
+            if success and "FALSE" not in status and len(interfaces_info) != 0 and "FALSE" not in macAddressStatus:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+            
+            if arg[0] == "get_all_info":
+                info["interfaces"] = interfaces_info
+
+            elif arg[0] == "get_interface_names":
+                interface_names = []
+                for interface in interfaces_info:
+                    interface_names.append(interface.get("name"))
+                interface_names = [ str(name) for name in interface_names if str(name).strip() ]
+                info["interface_names"] = interface_names
+
+        elif tag == "networkmanager_get_primary_interface":
+            default_interface = result.get("interface")
+            success = str(result.get("success")).lower() == "true"
+            info["default_interface"] = default_interface
+            info["success"] = success
+            if len(arg) and arg[0] == "check_interface":
+                if success and default_interface in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_publicip":
+            ipaddress = result.get("ipaddress")
+            success = str(result.get("success")).lower() == "true"
+            info["ipaddress"] = ipaddress
+            info["success"] = success
+            if arg[0] == "check_ipv4":
+                # Validate IPv4 IP address using regex
+                pattern = r"^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+                status = bool(re.match(pattern, ipaddress))
+                if success and status and str(ipaddress) == str(expectedValues[0]):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            elif arg[0] == "check_ipv6": 
+                # Validate IPv6 IP address using regex
+                pattern = r"^([0-9a-fA-F]{1,4}:){7}([0-9a-fA-F]{1,4}|:)$"
+                status = bool(re.match(pattern, ipaddress))
+                if status and success:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_ping_response":
+            if len(arg) and arg[0] == "validate_error_message":
+                if str(result.get("success")).lower() == "false" and str(result.get('error')).lower() == str(expectedValues[0]).lower() and result.get("endpoint") == expectedValues[1]:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:        
+                endpoint = result.get("endpoint")
+                tx_packets = int(result.get("packetsTransmitted"))
+                rx_packets = int(result.get("packetsReceived"))
+                packets_loss = result.get("packetLoss")
+                success = str(result.get("success")).lower() == "true"
+                info["endpoint"] = endpoint
+                info["packetsTransmitted"] = tx_packets
+                info["packetsReceived"] = rx_packets
+                info["packetsloss"] = packets_loss
+                info["success"] = success
+                if success and endpoint == expectedValues[1] and tx_packets == int(expectedValues[0]) and rx_packets == int(expectedValues[0]) and int(packets_loss) == 0:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_trace_response":
+            endpoint = result.get("endpoint")
+            traceroute = result.get("results")
+            success = str(result.get("success")).lower() == "true"
+            info["endpoint"] = endpoint
+            info["traceroute"] = traceroute
+            info["success"] = success
+            if success and endpoint == expectedValues[0]:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_networkconnectivity":
+            connected = str(result.get("connected")).lower()
+            success = str(result.get("success")).lower() == "true"
+            info["connected"] = connected
+            info["success"] = success
+            if success and connected == expectedValues[0]:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_interface_status":
+            status,macAddressStatus = [],[]
+            isenabled_status = None
+            interfaces_info = result.get("interfaces")
+            success = str(result.get("success")).lower() == "true"
+            info["success"] = success
+            info["interfaces"] = interfaces_info
+            # Loop through the interfaces to find and get configured isEnabled status
+            for interface in interfaces_info:
+                status.append(checkNonEmptyResultData(list(interface.values())))
+                macAddress = interface.get("mac")
+                if interface["name"] == arg[0]:
+                    isenabled_status = interface["enabled"]
+            if re.match("[0-9a-f]{2}([-:])[0-9a-f]{2}(\\1[0-9a-f]{2}){4}$", macAddress.lower()) is None:
+                macAddressStatus.append("False")
+            if success and "FALSE" not in status and len(interfaces_info) != 0 and "FALSE" not in macAddressStatus and str(isenabled_status).lower() in str(expectedValues[0]).lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_connected_ssid":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if len(arg) and arg[0] == "check_ssid":
+                if str(result.get("success")).lower() == "true" and str(result.get("ssid")) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_known_ssid":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if str(result.get("success")).lower() == "true" and str(expectedValues[0]) in result.get("ssids"):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_supported_security_modes":
+            info["supported_security_modes"] = result.get("security_modes")
+            success = str(result.get("success")).lower() == "true"
+            status = checkNonEmptyResultData(result)
+            if "FALSE" not in status and success:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_stun_endpoint":
+            endpoint = result.get("endpoint")
+            port = result.get("port")
+            success = str(result.get("success")).lower() == "true"
+            info["endpoint"] = endpoint
+            info["port"] = port
+            info["success"] = success
+            if len(arg) and arg[0] == "check_endpoint":
+                if success and endpoint in expectedValues and str(port) in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if success and endpoint and port:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+       
+        elif tag == "networkmanager_check_log_level":
+            success = str(result.get("success")).lower() == "true"
+            info["level"] = result.get("level")
+            if success and str(result.get("level")) in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_wifi_state":
+            info = checkAndGetAllResultInfo(result)
+            state = result.get("state")
+            status = str(result.get("status")).lower()
+            success = str(result.get("success")).lower() == "true"
+            if len(arg) and arg[0] == "check_wifi_state":
+                  expectedValues = [ value.lower() for value in expectedValues ]
+                  if success:
+                       for index, value in enumerate(expectedValues):
+                            if index == state and value == status:
+                                info["Test_Step_Status"] = "SUCCESS"
+                                break
+                            else:
+                                info["Test_Step_Status"] = "FAILURE"
+                  else:
+                      info["Test_Step_Status"] = "FAILURE"
+        
+            elif len(arg) and arg[0] == "check_wifi_expected_state":
+                if success:
+                    if state == int(expectedValues[0]) and status == str(expectedValues[1]).lower():
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                else: 
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_get_connectivity_test_endpoint":
+            endpoints = result.get("endpoints")
+            success = str(result.get("success")).lower() == "true"
+            info["endpoints"] = ",".join(endpoints)
+            info["success"] = success
+            if len(arg) and arg[0] == "check_endpoints":
+                endpointStatus = endpoints == expectedValues
+                if success and endpointStatus:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+            else:
+                if success and endpoints:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_ssid_list":
+            info["success"] = result.get("success")
+            info["ssids"] = result.get("ssids")
+            if str(result.get("success")).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+                if arg[0] in result.get("ssids"):
+                    info["configured_ssid_presence"] = "yes"
+                else:
+                    info["configured_ssid_presence"] = "no"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "networkmanager_check_empty_ssid_list":
+            info["success"] = result.get("success")
+            info["ssids"] = result.get("ssids")
+            if str(result.get("success")).lower() == "true":
+                if arg[0] in result.get("ssids"):
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        # Common Response result parser steps
+        elif tag == "check_result_values":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+
+        elif tag == "success_status_validation":
+            info["success"] = result.get("success")
+            if str(result.get("success")).lower() == "true":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "get_enabled_status_validation":
+            enabled = result.get("enabled")
+            success = str(result.get("success")).lower() == "true"
+            info["enabled"] = enabled
+            info["success"] = success
+            if success and str(enabled) in expectedValues:
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "success_negative_status_validation":
+            info = result
+            if str(result.get("success")).lower() == "false":
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+        
         # DWTV Response result parser steps
         elif tag == "empty_result_validation":
             if result:
@@ -4301,6 +4568,31 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                     result = "TRUE"
                 else:
                     result = "FALSE"
+
+        # NetworkMnager Plugin Response result parser steps
+        elif tag == "networkmanager_get_wifi_state":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower() == "false":
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "networkmanage_check_primary_interface":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("default_interface")
+            if str(default_interface).lower() != "eth0":
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "networkmanager_get_ssid_presence_value":
+            testStepResults = list(testStepResults[0].values())[0]
+            configured_ssid_presence = testStepResults[0].get("configured_ssid_presence")
+            if str(configured_ssid_presence).lower() == "yes":
+                result = "TRUE"
+            else:
+                result = "FALSE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -5374,6 +5666,40 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["vendorid"] = testStepResults[0].get("vendorID")
 
+        # NetworkManager Plugin Response result parser steps
+        elif tag == "networkmanager_get_interface_names":
+            testStepResults = list(testStepResults[0].values())[0]
+            interface_names = testStepResults[0].get("interface_names")
+            interface_names = [ name for name in interface_names if name.strip() ]
+            info["interface_names"] = ",".join(interface_names)
+        
+        elif tag == "networkmanager_get_previous_public_ip":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["PUBLIC_IP"] = testStepResults[0].get("PUBLIC_IP")
+
+        elif tag == "networkmanager_get_previous_primary_interface":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["interface"] = testStepResults[0].get("default_interface")
+
+        elif tag == "networkmanager_get_previous_stun_endpoint":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            info["endpoint"] = testStepResults1[0].get("endpoint")
+            testStepResults2 = list(testStepResults[0].values())[0]
+            info["port"] = testStepResults2[0].get("port")
+
+        elif tag == "networkmanager_get_previous_connectivity_test_endpoint":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["endpoints"] = testStepResults[0].get("endpoints")
+
+        # Common Response result parser steps
+        elif tag =="toggle_enabled_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            enabled = testStepResults[0].get("enabled")
+            if str(enabled).lower() == "true":
+                info["enabled"] = False
+            else:
+                info["enabled"] = True
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -5491,6 +5817,12 @@ def checkTestCaseApplicability(methodTag,configKeyData,arguments):
                 result = "FALSE"
 
         elif tag == "system_check_feature_applicability":
+            if str(arg[0]).lower() in str(keyData).lower():
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "networkmanager_check_feature_applicability":
             if str(arg[0]).lower() in str(keyData).lower():
                 result = "TRUE"
             else:

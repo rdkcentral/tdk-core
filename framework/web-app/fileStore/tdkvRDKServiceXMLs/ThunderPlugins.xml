@@ -2549,4 +2549,142 @@
 	<event name="Event_Standby_Message_Received" eventName="standbyMessageReceived" eventId="client.events.1" type="event" desc="Triggered when the source device changes status to STANDBY" />
 	<event name="Event_On_Active_Source_Status_Updated" eventName="onActiveSourceStatusUpdated" eventId="client.events.1" type="event" desc="Triggered when the device active source status changes"/>
     </plugin>
+    
+    <!-- NetworkManager Plugin Information -->
+    <plugin pluginName="NetworkManager" serviceName="org.rdk.NetworkManager" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="NetworkManager_Get_Available_Interfaces" api="GetAvailableInterfaces" type="method" desc="Get device supported list of available interface including their state"/>
+        <method name="NetworkManager_Get_Primary_Interface" api="GetPrimaryInterface" type="method" desc="Gets the primary/default network interface for the device"/>
+        <method name="NetworkManager_Get_Public_IP" api="GetPublicIP" type="method" desc="Gets the public IP Address of the device">
+            <params>
+                <param tag="ipversion" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Ping" api="Ping" type="method" desc="Pings the specified endpoint with the specified number of packets">
+            <params>
+                <param tag="endpoint" type="string"/>
+                <param tag="ipversion" type="string"/>
+                <param tag="count" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Trace" api="Trace" type="method" desc="Traces the specified endpoint with the specified number of packets using traceroute">
+            <params>
+                <param tag="endpoint" type="string"/>
+                <param tag="ipversion" type="string"/>
+                <param tag="packets" type="int"/>
+            </params>
+        </method>
+        <method name="NetworkManager_IsConnectedToInternet" api="IsConnectedToInternet" type="method" desc="Seeks whether the device has internet connectivity. This API might take up to 3s to validate internet connectivity">
+            <params>
+                <param tag="ipversion" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Get_Interface_State" api="GetInterfaceState" type="method" desc="Gets the current Status of the specified interface">
+            <params>
+                <param tag="interface" type="string"/>
+            </params>
+            <expectedValues>True,False</expectedValues>
+        </method>
+	<method name="NetworkManager_Get_Interface_State_Negative" api="GetInterfaceState" type="method" desc="Gets the current Status of the specified interface">
+            <params>
+                <param tag="interface" type="string"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Set_Interface_State" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface">
+            <params>
+                <param tag="interface" type="string"/>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Set_Interface_State_Negative" api="SetInterfaceState" type="method" desc="Enable or disable the specified interface">
+            <params>
+                <param tag="interface"/>
+                <param tag="enabled"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Start_Wifi_Scan" api="StartWiFiScan" type="method" desc="Initiates WiFi scanning">
+            <params>
+                <param tag="frequency"/>
+                <param tag="ssids" type="list"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Stop_Wifi_Scan" api="StopWiFiScan" type="method" desc="Stops WiFi scanning"/>
+	<method name="NetworkManager_Get_IPSettings" api="GetIPSettings" type="method" desc="Gets the IP setting for the given interface">
+            <params>
+                <param tag="interface" type="string"/>
+                <param tag="ipversion" type="string"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Wifi_Connect" api="WiFiConnect" type="method" desc="Initiates request to connect to the specified SSID with the given passphrase">
+            <params>
+		<param tag="ssid" type="string"/>
+		<param tag="passphrase" type="string"/>
+                <param tag="security" type="int"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Wifi_DisConnect" api="WiFiDisconnect" type="method" desc="Disconnects from the currently connected SSID"/>
+	<method name="NetworkManager_Get_Connected_SSID" api="GetConnectedSSID" type="method" desc="Returns the connected SSID information"/>
+	<method name="NetworkManager_Get_Supported_Security_Modes" api="GetSupportedsecurityModes" type="method" desc="Returns the wifi security modes that the device supports"/>
+	<method name="NetworkManager_Get_Stun_Endpoint" api="GetStunEndpoint" type="method" desc="Get the STUN endpoint that is used to identify public IP of the device"/>
+	<method name="NetworkManager_Set_Stun_Endpoint" api="SetStunEndpoint" type="method" desc="Set the STUN endpoint to be used to identify public IP of the device">
+            <params>
+                <param tag="endpoint" type="string"/>
+                <param tag="port" type="int"/>
+            </params>
+    	</method>
+	<method name="NetworkManager_Set_Primary_Interface" api="SetPrimaryInterface" type="method" desc="Sets the primary/default interface for the device">
+            <params>
+                <param tag="interface" type="string"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Start_Connectivity_Monitoring" api="StartConnectivityMonitoring" type="method" desc="Enable a continuous monitoring of internet connectivity with heart beat interval thats given">
+            <params>
+                <param tag="interval" type="int"/>
+            </params>
+        </method>
+	<method name="NetworkManager_Remove_Known_SSID" api="RemoveKnownSSID" type="method" desc="Remove given SSID from saved SSIDs list" />
+        <method name="NetworkManager_Stop_Connectivity_Monitoring" api="StopConnectivityMonitoring" type="method" desc="Stops the connectivity monitoring" />
+	<method name="NetworkManager_Get_Connectivity_Test_Endpoints" api="GetConnectivityTestEndpoints" type="method" desc="Gets currently used test endpoints" />
+        <method name="NetworkManager_Set_Connectivity_Test_Endpoints" api="SetConnectivityTestEndpoints" type="method" desc="sets the list of endpoints">
+            <params>
+                <param tag="endpoints"  defaultValue="null" type="list"/>
+            </params>
+        </method>
+        <method name="NetworkManager_Get_Log_Level" api="getLogLevel" type="method" desc="Returns the currently set logging level" >
+                <expectedValues>0,1,2,3,4</expectedValues>
+        </method>
+        <method name="NetworkManager_Set_Log_Level" api="setLogLevel" type="method" desc="Sets the logging level" >
+            <params>
+                <param tag="level" defaultValue="null" type="int"/>
+            </params>
+    	</method>
+	<method name="NetworkManager_Get_Wifi_State" api="GetWifiState" type="method" desc="Returns the current Wifi State" >
+            <expectedValues>WIFI_STATE_UNINSTALLED,WIFI_STATE_DISABLED,WIFI_STATE_DISCONNECTED,WIFI_STATE_PAIRING,WIFI_STATE_CONNECTING,WIFI_STATE_CONNECTED,WIFI_STATE_SSID_NOT_FOUND,WIFI_STATE_SSID_CHANGED,WIFI_STATE_CONNECTION_LOST,WIFI_STATE_CONNECTION_FAILED,WIFI_STATE_CONNECTION_INTERRUPTED,WIFI_STATE_INVALID_CREDENTIALS,WIFI_STATE_AUTHENTICATION_FAILED,WIFI_STATE_ERROR</expectedValues>
+    	</method>
+	<method name="NetworkManager_Get_Known_SSID" api="GetKnownSSIDs" type="method" desc="Gets list of saved SSIDs. This method returns all the SSIDs that are saved as array"/>
+	<method name="NetworkManager_AddToKnownSSIDs" api="AddToKnownSSIDs"  type="method" desc="Saves the SSID, passphrase, and security mode for upcoming and future sessions">
+            <params>
+		<param tag="ssid" type="string"/>
+		<param tag="passphrase" type="string"/>
+		<param tag="security" type="int"/>
+            </params>
+    	</method>
+	<method name="NetworkManager_SetIPSettings" api="SetIPSettings"  type="method" desc="Sets the IP settings for the given interface">
+            <params>
+                <param tag="interface" type="string"/>
+                <param tag="ipversion" type="string"/>
+		<param tag="autoconfig" type="bool"/>
+		<param tag="ipaddress" type="string"/>
+		<param tag="prefix" type="int"/>
+		<param tag="gateway" type="string"/>
+		<param tag="primarydns" type="string"/>
+		<param tag="secondarydns" type="string"/>
+            </params>
+        </method>	
+	
+	<!-- Event Definitions -->
+	<event name="Event_On_Interface_StateChange" eventName="onInterfaceStateChange" eventId="client.events.1" type="event" desc="Triggered when an interface state is changed"/>
+	<event name="Event_On_AvailableSSIDs" eventName="onAvailableSSIDs" eventId="client.events.1" type="event" desc="Triggered when scan completes or when scan cancelled"/>
+	<event name="Event_On_WiFiStateChange" eventName="onWiFiStateChange" eventId="client.events.1" type="event" desc="Triggered when WIFI connection state get changed"/>
+    </plugin>
 </thunderPlugins>
