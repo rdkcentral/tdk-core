@@ -138,10 +138,10 @@ if "SUCCESS" in dshalloadModuleStatus.upper():
         expectederrorVal = "dsERR_OPERATION_NOT_SUPPORTED";
         print(details);
         if expectederrorVal in details:
-            printk("EnableMS12Config API returned an expected value : dsERR_OPERATION_NOT_SUPPORTED");
+            print("EnableMS12Config API returned an expected value : dsERR_OPERATION_NOT_SUPPORTED");
             tdkTestObj.setResultStatus("SUCCESS");
         else:
-            printk("EnableMS12Config API returned an error value other than the expected value : dsERR_OPERATION_NOT_SUPPORTED");
+            print("EnableMS12Config API returned an error value other than the expected value : dsERR_OPERATION_NOT_SUPPORTED");
             tdkTestObj.setResultStatus("FAILURE");
     else:
         print(details);
