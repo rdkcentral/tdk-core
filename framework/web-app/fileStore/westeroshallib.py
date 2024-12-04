@@ -44,23 +44,23 @@ def getDefaultDisplaySize(westerosObj):
         westerosConfigFile = configFilePath+'/'+deviceConfig
         #if device specific config file doesn't exist, test for 720p window size
         if not os.path.exists(westerosConfigFile):
-            print ("Default display Size is 720p")
-            return 1280,720
+            print ("Default display Size is 1080p")
+            return 1920,1080
 
         configParser = configparser.ConfigParser()
         configParser.read(r'%s' % westerosConfigFile)
         display_size = configParser.get('westeros-config', 'displaySize')
 
-        if display_size == "1080p":
-            print ("Display Size set as 1080p")
-            return 1920,1080
+        if display_size == "720p":
+            print ("Display Size set as 720p")
+            return 1280,720
         elif display_size == "2160p":
             print ("Display Size set as 2160p")
             return 3840,2160
         else:
-            return 1280,720
+            return 1920,1080
 
     except Exception as e:
         print (e);
-        print ("Testing for 720p window size")
-        return 1280,720
+        print ("Testing for 1080p window size")
+        return 1920,1080
