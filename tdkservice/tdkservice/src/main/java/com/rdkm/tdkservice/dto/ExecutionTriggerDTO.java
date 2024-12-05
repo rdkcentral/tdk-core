@@ -17,6 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
 package com.rdkm.tdkservice.dto;
 
 import java.util.List;
@@ -43,9 +44,8 @@ public class ExecutionTriggerDTO {
 	/*
 	 * Represents the test suite.
 	 */
-	private String testSuite;
+	private List<String> testSuite;
 
-	// Execution type - CI/OnDemand/Sanity
 	/*
 	 * Represents the test type.
 	 */
@@ -78,15 +78,15 @@ public class ExecutionTriggerDTO {
 	/*
 	 * Represents the is device Logs Needed.
 	 */
-	private int isDeviceLogsNeeded;
+	private boolean isDeviceLogsNeeded;
 
 	/*
 	 * Represents the is performance logs needed.
 	 */
-	private int isPerformanceLogsNeeded;
+	private boolean isPerformanceLogsNeeded;
 
 	/*
 	 * Represents the is diagnostic logs needed.
 	 */
-	private int isDiagnosticLogsNeeded;
+	private boolean isDiagnosticLogsNeeded;
 }

@@ -28,8 +28,11 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
+import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
+import com.rdkm.tdkservice.dto.ScriptNameModuleNameMappingResponse;
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 
 /**
  * Service for scripts.
@@ -88,7 +91,7 @@ public interface IScriptService {
 	ByteArrayInputStream testCaseToExcelByModule(String moduleName);
 
 	/**
-	 * This method is used to get the script details excel  by testScriptName.
+	 * This method is used to get the script details excel by testScriptName.
 	 * 
 	 * @param moduleName - the module name
 	 * @return - the script
@@ -110,15 +113,14 @@ public interface IScriptService {
 	 * @return
 	 */
 	List<ScriptListDTO> findAllScriptsByCategory(String categoryName);
-	
-	
+
 	/**
 	 * This method is used to upload the zip file.
 	 * 
 	 * @param file - the file
 	 * @return - true if the file is uploaded successfully, false otherwise
 	 */
-	
+
 	boolean uploadZipFile(MultipartFile file);
 
 	/**
@@ -145,4 +147,27 @@ public interface IScriptService {
 	 */
 	ByteArrayInputStream testCaseToExcelByCategory(String category);
 
+	/**
+	 * This method is used to get the list of script names by category.
+	 *
+	 * @param category - the category
+	 * @return - the list of script names by category
+	 */
+	public List<ScriptDetailsResponse> getListofScriptNamesByCategory(String category, boolean isThunderEnabled);
+
+	/**
+	 * This method is used to get the list of test suite names by category.
+	 *
+	 * @param category - the category
+	 * @return - the list of test suite names by category
+	 */
+	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled);
+
+	/**
+	 * This method is used to get the list of script names by module name.
+	 *
+	 *
+	 * @return - the list of script names by module name
+	 */
+	public List<ScriptNameModuleNameMappingResponse> getScriptNameModuleNameMapping();
 }

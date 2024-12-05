@@ -20,6 +20,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -79,5 +84,74 @@ public class Utils {
 		}
 		LOGGER.info("Converted string is" + sb.toString());
 		return sb.toString();
+	}
+
+	/**
+	 * Converts a given LocalDateTime to a UTC formatted string.
+	 *
+	 * @param executionDate the LocalDateTime to be converted
+	 * @return the UTC formatted string representation of the given LocalDateTime,
+	 *         or null if an error occurs during conversion
+	 */
+	public static String convertToUTCString(LocalDateTime executionDate) {
+		// Define the date-time formatter for UTC string
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+		try {
+			// Convert LocalDateTime to UTC string
+			String utcDate = executionDate.toInstant(ZoneOffset.UTC).atOffset(ZoneOffset.UTC).format(formatter);
+			return utcDate;
+		} catch (Exception e) {
+			// Log the error if any exception occurs
+			LOGGER.error("Error converting LocalDateTime to UTC string", e);
+			return null;
+		}
+	}
+
+	/**
+	 * Converts the given Instant to an Instant without milliseconds.
+	 * 
+	 * @param time the Instant to be converted, may be null
+	 * @return the Instant truncated to seconds, or null if the input is null
+	 */
+	public static Instant convertInstantToWithoutMilliseconds(Instant time) {
+		if (time == null) {
+			return null;
+		}
+		return time.truncatedTo(ChronoUnit.SECONDS);
+
+	}
+
+	/**
+	 * Generates a formatted date and time stamp based on the current date and time.
+	 * The format used is "MMddyyyyHHmmss".
+	 *
+	 * @return A string representing the current date and time in the format "MMddyyyyHHmmss".
+	 */
+	public static String getFormatedDateStamp() {
+		LocalDateTime now = LocalDateTime.now();
+
+		// Define the desired format
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyyyHHmmss");
+
+		// Format the current date and time
+		String formattedDateTime = now.format(formatter);
+
+		// Print the formatted date and time
+		return formattedDateTime;
+	}
+
+	/**
+	 * Generates a timestamp in UTC formatted as MMDDYYHHMMSS.
+	 *
+	 * @return A string representing the current date and time in UTC in the format MMDDYYHHMMSS.
+	 */
+	public static String getTimeStampInUTCForExecutionName() {
+		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+
+		// Format the date and time in the format MMDDYYHHMMSS
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMddyyHHmmss");
+		String formattedDateTime = now.format(formatter);
+		return formattedDateTime;
+
 	}
 }

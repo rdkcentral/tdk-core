@@ -17,28 +17,48 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
+package com.rdkm.tdkservice.dto;
 
-import java.util.UUID;
+import java.time.Instant;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.Data;
 
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
-
-/**
- * Repository for the ExecutionDevice entity.
- */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
+@Data
+public class ExecutionListDTO {
 
 	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
+	 * The unique identifier for the execution.
 	 */
-	ExecutionDevice findByExecution(Execution execution);
+	private String executionId;
+
+	/**
+	 * The name of the execution.
+	 */
+	private String executionName;
+
+	/**
+	 * The date and time when the execution was performed.
+	 */
+	private Instant executionDate;
+
+	/**
+	 * The name of the script or test suite that was executed.
+	 */
+	private String scriptTestSuite;
+
+	/**
+	 * The device on which the execution was performed.
+	 */
+	private String device;
+
+	/**
+	 * The status of the execution (
+	 */
+	private String status;
+
+	/**
+	 * The user who initiated the execution.
+	 */
+	private String user;
 
 }

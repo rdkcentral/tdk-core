@@ -19,9 +19,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import com.rdkm.tdkservice.enums.ExecutionResultStatus;
 import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionResult;
+
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,4 +46,24 @@ public interface ExecutionResultRepository extends JpaRepository<ExecutionResult
 	 * @return the list of execution result
 	 */
 	List<ExecutionResult> findByExecution(Execution execution);
+
+	/**
+	 * Find the top 5 execution result by script order by date of execution desc.
+	 * 
+	 * @param script   the script
+	 * @param pageable the pageable
+	 * @return the list of execution result
+	 */
+	@Query("SELECT er FROM ExecutionResult er WHERE er.script = :script AND er.result IN ('SUCCESS', 'FAILURE') ORDER BY er.dateOfExecution DESC")
+	List<ExecutionResult> findTop5ByScriptOrderByDateOfExecutionDesc(@Param("script") String script, Pageable pageable);
+
+	/**
+	 * Find the execution result by execution and result.
+	 * 
+	 * @param execution the execution
+	 * @param failure   the failure
+	 * @return the list of execution result
+	 */
+	List<ExecutionResult> findByExecutionAndResult(Execution execution, ExecutionResultStatus failure);
+
 }

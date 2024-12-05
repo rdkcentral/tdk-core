@@ -26,9 +26,9 @@ import java.util.UUID;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.DeviceCreateDTO;
-import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
+import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 
 public interface IDeviceService {
 	/**
@@ -133,5 +133,23 @@ public interface IDeviceService {
 	 * @param deviceIp- IP of the device
 	 */
 	String getDeviceType(String deviceIp);
+
+	/**
+	 * This method is used to get the devices by category and thunder status
+	 * 
+	 * @param category-         category of the devices say RDKV, RDKB, RDKC
+	 * @param isThunderEnabled- true if thunder is enabled, false otherwise
+	 * @return List of device response DTOs
+	 */
+	public List<DeviceResponseDTO> getDevicesByCategoryAndThunderStatus(String category, Boolean isThunderEnabled);
+
+	/**
+	 * This method is used to set the thunder enabled status for the device with the
+	 * given id.
+	 * 
+	 * @param id The ID of the device to set the thunder enabled status for.
+	 * 
+	 */
+	boolean toggleThunderEnabledstatus(String deviceIP);
 
 }

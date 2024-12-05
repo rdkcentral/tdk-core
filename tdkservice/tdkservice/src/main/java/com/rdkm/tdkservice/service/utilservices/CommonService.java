@@ -19,9 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.service.utilservices;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -29,6 +27,7 @@ import java.nio.file.Paths;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
@@ -40,6 +39,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -60,6 +60,9 @@ import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
 
+import static com.rdkm.tdkservice.service.utilservices.CommonService.LOGGER;
+import static com.rdkm.tdkservice.util.Constants.*;
+
 /**
  * This class is used to provide common services.
  */
@@ -79,6 +82,9 @@ public class CommonService {
 
 	@Autowired
 	private AppConfig appConfig;
+
+	@Value("${fileStore.location:webapp/filestore/}")
+	private String fileStoreLocation;
 
 	/**
 	 * This method is used to get the folder name based on the module type.
@@ -358,20 +364,24 @@ public class CommonService {
 	}
 
 	/**
-	 * This method is used to get the base log path.
+	 * This method is used to get the base log path. If it is available in the
+	 * config file , then that path is taken, other wise the base log path in
+	 * fileStore/logs directory is taken
 	 * 
-	 * @return
+	 * @return - base log path
 	 */
 	public String getBaseLogPath() {
-		String logBasePath = "";
-		String logBasePathFromConfig = executionConfig.getExecutionLogBasePath();
-
-		if (Utils.isEmpty(logBasePathFromConfig)) {
-			logBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
-		} else {
-			logBasePath = logBasePathFromConfig;
+		LOGGER.info("Getting base log path");
+		String defaultLogBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + TM_CONFIG_FILE;
+		Properties prop = loadPropertiesFromFile(configFilePath);
+		if (prop != null) {
+			LOGGER.info("Log path from config file: {}", prop.getProperty(LOGS_PATH, defaultLogBasePath));
+			return prop.getProperty(LOGS_PATH, defaultLogBasePath);
 		}
-		return logBasePath;
+		LOGGER.info("Default log path: {}", defaultLogBasePath);
+		return defaultLogBasePath;
+
 	}
 
 	/**
@@ -471,14 +481,67 @@ public class CommonService {
 	 */
 	public boolean vaidateScriptDeviceCategory(Device device, Script script) {
 		boolean isCategoryMatch = false;
- 
-		// TODO: Revisit this logic for RDKVRDKService
 		if (device.isThunderEnabled()) {
 			isCategoryMatch = script.getModule().getCategory().equals(Category.RDKV_RDKSERVICE);
 		} else {
 			isCategoryMatch = script.getModule().getCategory().equals(device.getCategory());
 		}
 		return isCategoryMatch;
+	}
+
+	/**
+	 * This method is used to get the execution log file path.
+	 * 
+	 * @param executionID
+	 * @param executionResultID
+	 * @return
+	 */
+	public String getExecutionLogFilePath(String executionID, String executionResultID) {
+		String logBasePath = this.getBaseLogPath();
+		return logBasePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD + Constants.UNDERSCORE
+				+ executionID + Constants.FILE_PATH_SEPERATOR + Constants.RESULT + Constants.UNDERSCORE
+				+ executionResultID + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_LOGS
+				+ Constants.FILE_PATH_SEPERATOR + executionResultID + "_executionlogs.log";
+	}
+
+	/**
+	 * Method to get real path for logs from the tm.config file
+	 * 
+	 * @param realPath The default real path if no configuration found
+	 * @return The real path to use
+	 */
+	// TODO :Change this method for common service
+	public String getRealPathForLogsFromTMConfig(String realPath) {
+		String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
+		Properties prop = loadPropertiesFromFile(configFilePath);
+		if (prop != null) {
+			return prop.getProperty(LOGS_PATH, realPath);
+		}
+		return realPath;
+	}
+
+	/**
+	 * Method to load properties from a file
+	 * 
+	 * @param filePath The path to the configuration file
+	 * @return The loaded properties, or null if the file does not exist or an error
+	 *         occurs
+	 */
+	private Properties loadPropertiesFromFile(String filePath) {
+		LOGGER.info("Loading properties from file: {}", filePath);
+		File configFile = new File(filePath);
+		if (!configFile.exists() || !Files.exists(configFile.toPath())) {
+			LOGGER.info("No Config File !!! ");
+			return null;
+		}
+		try (InputStream is = new FileInputStream(configFile)) {
+			Properties prop = new Properties();
+			prop.load(is);
+			return prop;
+		} catch (IOException e) {
+			LOGGER.error("Error reading config file: {}", configFile, e);
+		}
+		return null;
 	}
 
 }

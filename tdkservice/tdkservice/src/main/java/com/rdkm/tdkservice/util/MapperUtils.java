@@ -30,6 +30,8 @@ import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
+import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
+import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
 import com.rdkm.tdkservice.dto.ModuleCreateDTO;
@@ -47,11 +49,13 @@ import com.rdkm.tdkservice.dto.UserDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
 import com.rdkm.tdkservice.dto.UserRoleDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.ScheduleStatus;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.DeviceType;
+import com.rdkm.tdkservice.model.ExecutionSchedule;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Oem;
@@ -660,5 +664,37 @@ public class MapperUtils {
 		}
 		return scriptListDTOList;
 
+	}
+
+	/**
+	 * This method is used to convert the ExecutionScheduleDTO to ExecutionSchedule
+	 * 
+	 * @param executionScheduleDTO ExecutionScheduleDTO
+	 * @return ExecutionSchedule ExecutionSchedule
+	 */
+	public static ExecutionSchedule convertToExecutionSchedule(ExecutionScheduleDTO executionScheduleDTO) {
+		ExecutionSchedule executionSchedule = new ExecutionSchedule();
+		ExecutionTriggerDTO executionTriggerDTO = executionScheduleDTO.getExecutionTriggerDTO();
+		executionSchedule.setExecutionTime(executionScheduleDTO.getExecutionTime());
+		List<String> deviceList = executionTriggerDTO.getDeviceList();
+		String deviceListString = String.join(",", deviceList);
+		List<String> scriptList = executionTriggerDTO.getScriptList();
+		String scriptListString = String.join(",", scriptList);
+		String testSuiteString = String.join(",", executionTriggerDTO.getTestSuite());
+		executionSchedule.setTestSuite(testSuiteString);
+		executionSchedule.setDeviceList(deviceListString);
+		executionSchedule.setScriptList(scriptListString);
+		executionSchedule.setScheduleType(executionScheduleDTO.getScheduleType());
+		executionSchedule.setTestType(executionTriggerDTO.getTestType());
+		executionSchedule.setUser(executionTriggerDTO.getUser());
+		executionSchedule.setCategory(executionTriggerDTO.getCategory());
+		executionSchedule.setExecutionName("Job_" + Utils.getTimeStampInUTCForExecutionName());
+		executionSchedule.setRepeatCount(executionTriggerDTO.getRepeatCount());
+		executionSchedule.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());
+		executionSchedule.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());
+		executionSchedule.setPerformanceLogsNeeded(executionTriggerDTO.isPerformanceLogsNeeded());
+		executionSchedule.setDiagnosticLogsNeeded(executionTriggerDTO.isDiagnosticLogsNeeded());
+		executionSchedule.setScheduleStatus(ScheduleStatus.SCHEDULED);
+		return executionSchedule;
 	}
 }

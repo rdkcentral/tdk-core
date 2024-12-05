@@ -17,28 +17,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
+package com.rdkm.tdkservice.dto;
 
-import java.util.UUID;
+import java.util.List;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.Data;
 
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
-
-/**
- * Repository for the ExecutionDevice entity.
- */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
+@Data
+public class ExecutionNameRequestDTO {
 
 	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
+	 * Represents the test suite id.
 	 */
-	ExecutionDevice findByExecution(Execution execution);
+	@NotEmpty(message = "Device names list should not be empty")
+	List<String> deviceNames;
+
+	/**
+	 * Represents the test suite id.
+	 */
+	String testType;
 
 }

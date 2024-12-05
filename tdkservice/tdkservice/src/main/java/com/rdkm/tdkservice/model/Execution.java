@@ -89,7 +89,7 @@ public class Execution extends BaseEntity {
 
 	/*
 	 * The user
-	 * 
+	 *
 	 */
 	@ManyToOne
 	private User user;
@@ -113,6 +113,21 @@ public class Execution extends BaseEntity {
 	 * Represents the execution repeat count.
 	 */
 	private int repeatCount;
+
+	/*
+	 * Represents the is device Logs Needed.
+	 */
+	private boolean isDeviceLogsNeeded = false;
+
+	/*
+	 * Represents the is performance logs needed.
+	 */
+	private boolean isPerformanceLogsNeeded = false;
+
+	/*
+	 * Represents the is diagnostic logs needed.
+	 */
+	private boolean isDiagnosticLogsNeeded = false;
 
 	/*
 	 * Represents the execution category.

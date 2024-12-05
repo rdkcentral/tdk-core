@@ -21,10 +21,15 @@ package com.rdkm.tdkservice.repository;
 
 import java.util.UUID;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.User;
 
 /**
  * Repository class for Execution entity.
@@ -46,5 +51,44 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * @param executionName
 	 */
 	boolean existsByName(String executionName);
+
+	/**
+	 * This method is used to find the execution by name and category.
+	 * 
+	 * @param name
+	 * @param category
+	 */
+	Page<Execution> findByCategory(Category category, Pageable pageable);
+
+	/**
+	 * This method is used to find the execution by device name
+	 * 
+	 * @param deviceName - name of the device
+	 * @param pageable   - pageable object
+	 * @return Pagination for execution
+	 */
+	@Query("SELECT ed.execution FROM ExecutionDevice ed WHERE ed.device.name LIKE %:deviceName%")
+	Page<Execution> findByDeviceName(String deviceName, Pageable pageable);
+
+	/**
+	 * This method is used to search the execution by script test suite name and
+	 * category.
+	 * 
+	 * @param scriptTestSuite - script test suite name or part of it
+	 * @param category        - category of the execution
+	 * @param pageable        - pageable object
+	 * @return Pagination for execution
+	 */
+	Page<Execution> findByscripttestSuiteNameContainingAndCategory(String scriptTestSuite, Category category,
+			Pageable pageable);
+
+	/**
+	 * This method is used to find the execution by user
+	 * 
+	 * @param user     - user object
+	 * @param pageable - pageable object
+	 * @return Pagination for execution
+	 */
+	Page<Execution> findByUserAndCategory(User user, Category category, Pageable pageable);
 
 }

@@ -18,40 +18,64 @@
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import java.time.LocalDate;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.rdkm.tdkservice.dto.ExecutionDetailsDTO;
+import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionListDTO;
+import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionMethodResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionResultDTO;
+import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.enums.ExecutionMethodResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
 import com.rdkm.tdkservice.enums.ExecutionResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionTriggerStatus;
+import com.rdkm.tdkservice.enums.ExecutionType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.ScriptTestSuite;
+import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
@@ -59,13 +83,13 @@ import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.service.IExecutionService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
 
 /*
  * The ExecutionService class is used to handle the execution related operations
  */
-
 @Service
 public class ExecutionService implements IExecutionService {
 
@@ -96,7 +120,13 @@ public class ExecutionService implements IExecutionService {
 	private UserRepository userRepository;
 
 	@Autowired
+	private CommonService commonService;
+
+	@Autowired
 	private DeviceStatusService deviceStatusService;
+
+	@Autowired
+	private ExecutionDeviceRepository executionDeviceRepository;
 
 	/**
 	 * This method is used to trigger the execution of the scripts or test suite
@@ -108,10 +138,20 @@ public class ExecutionService implements IExecutionService {
 	@Override
 	public ExecutionResponseDTO triggerExecution(ExecutionTriggerDTO executionTriggerDTO) {
 		LOGGER.info("Triggering execution with details: {}", executionTriggerDTO);
-
 		// Checks if the trigger request is valid
 		this.checkValidTriggerRequest(executionTriggerDTO);
+		ExecutionResponseDTO response = this.startExecution(executionTriggerDTO);
+		return response;
+	}
 
+	/**
+	 * The execution part with out the validation to be used in scheduler as well as
+	 * in triggered execution
+	 * 
+	 * @param executionTriggerDTO
+	 * @return ExecutionResponseDTO
+	 */
+	public ExecutionResponseDTO startExecution(ExecutionTriggerDTO executionTriggerDTO) {
 		// Prepare the response string
 		StringBuilder responseLogs = new StringBuilder();
 
@@ -123,6 +163,7 @@ public class ExecutionService implements IExecutionService {
 
 		ExecutionDetailsDTO executionDetailsDTO = null;
 		List<String> scriptsListFromRequest = executionTriggerDTO.getScriptList();
+		List<String> testSuiteListFromRequest = executionTriggerDTO.getTestSuite();
 
 		// Script Execution - Single and Multiple
 		if (null != scriptsListFromRequest && !scriptsListFromRequest.isEmpty()) {
@@ -136,20 +177,25 @@ public class ExecutionService implements IExecutionService {
 			} else if (scriptsList.size() == 1) {
 				LOGGER.info("The request came for single script execution");
 				response = singleScriptExecution(executionDetailsDTO);
-
 			}
 		}
 
-		// Suite Execution
-		if (!Utils.isEmpty(executionTriggerDTO.getTestSuite())) {
-			LOGGER.info("The request came for Test Suite execution");
-			String testSuiteName = executionTriggerDTO.getTestSuite();
-			TestSuite testSuite = this.getValidTestSuite(testSuiteName, responseLogs);
+		// Test suite Execution - Single and Multiple
+		if (null != testSuiteListFromRequest && !testSuiteListFromRequest.isEmpty()) {
+			LOGGER.info("The request came for  Test suite execution");
+			List<TestSuite> testSuiteList = this.getValidTestSuiteList(testSuiteListFromRequest, responseLogs);
 			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, deviceList, null,
-					testSuite);
-			response = testSuiteExecution(executionDetailsDTO);
-		}
+					testSuiteList);
+			if (testSuiteList.size() > 1) {
+				LOGGER.info("The request came for multi testsuite execution");
+				response = multiTestSuiteExecution(executionDetailsDTO);
+			} else if (testSuiteList.size() == 1) {
+				LOGGER.info("The request came for single testsuite execution");
+				response = testSuiteExecution(executionDetailsDTO);
 
+			}
+
+		}
 		response = this.appendResponseLogs(response, responseLogs);
 
 		return response;
@@ -209,8 +255,9 @@ public class ExecutionService implements IExecutionService {
 					executionDetailsDTO.getTestType());
 			LOGGER.info("Execution script on " + script.getName() + "the device" + device.getName());
 			executionAsyncService.prepareAndExecuteSingleScript(device, script, executionDetailsDTO.getUser(),
-					executionName, executionDetailsDTO.getCategory(), executionDetailsDTO.getRepeatCount(),
-					executionDetailsDTO.isRerunOnFailure());
+					executionName, executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
+					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isPerformanceLogsNeeded(),
+					executionDetailsDTO.isDiagnosticLogsNeeded());
 			LOGGER.info(" Asynchronous Execution of script on " + script.getName() + "the device" + device.getName()
 					+ " triggered");
 
@@ -242,11 +289,10 @@ public class ExecutionService implements IExecutionService {
 	 */
 	private String getExecutionName(String executionName, Device device, String testType) {
 		String baseExecutionName = executionName;
-		// TODO: Advanced use cases later - For CI API triggere, SOC , OEM etc
 		if (!Utils.isEmpty(executionName)) {
-			baseExecutionName = executionName + "_" + device.getName();
+			baseExecutionName = executionName;
 		} else {
-			baseExecutionName = device.getName() + "_" + LocalDate.now();
+			baseExecutionName = this.getExecutionNameFromDeviceAndTestType(device, testType);
 		}
 		return baseExecutionName;
 	}
@@ -263,7 +309,6 @@ public class ExecutionService implements IExecutionService {
 		StringBuilder responseLogs = new StringBuilder();
 		boolean isExecutionTriggered = false;
 		for (Device device : executionDetailsDTO.getDeviceList()) {
-
 			if (!checkDeviceAvailabilityForExecution(device)) {
 				LOGGER.error("Device: {} is not available for execution\n", device.getName());
 				responseLogs.append("Device: " + device.getName()
@@ -276,7 +321,10 @@ public class ExecutionService implements IExecutionService {
 			responseLogs.append("MultiScript execution on device triggered: ").append(device.getName())
 					.append("triggered .\n");
 			executionAsyncService.prepareAndExecuteMultiScript(device, executionDetailsDTO.getScriptList(),
-					executionDetailsDTO.getUser(), executionName, executionDetailsDTO.getCategory(), null);
+					executionDetailsDTO.getUser(), executionName, executionDetailsDTO.getCategory(), null,
+					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
+					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
+					executionDetailsDTO.isPerformanceLogsNeeded());
 		}
 
 		// If atleast one script execution is triggered in one box, then return the
@@ -295,10 +343,28 @@ public class ExecutionService implements IExecutionService {
 
 	}
 
+	/**
+	 * Executes the test suite based on the provided execution details.
+	 *
+	 * @param executionDetailsDTO the details of the execution including test suite,
+	 *                            devices, user, etc.
+	 * @return ExecutionResponseDTO containing the response logs and execution
+	 *         status.
+	 *
+	 *         This method performs the following steps: 1. Logs the start of the
+	 *         test suite execution. 2. Retrieves the list of scripts from the test
+	 *         suite. 3. Iterates over each device in the execution details: a.
+	 *         Checks if the device is available for execution. b. If the device is
+	 *         not available, logs an error and appends a message to the response
+	 *         logs. c. If the device is available, prepares and executes the
+	 *         scripts asynchronously on the device. 4. Creates and returns an
+	 *         ExecutionResponseDTO with the accumulated response logs and a
+	 *         triggered status.
+	 */
 	private ExecutionResponseDTO testSuiteExecution(ExecutionDetailsDTO executionDetailsDTO) {
-		LOGGER.info("Executing test suite: {}", executionDetailsDTO.getTestSuite().getName());
+		LOGGER.info("Executing test suite: {}", executionDetailsDTO.getTestSuite().get(0).getName());
 		// Get script list from Test suite
-		TestSuite testSuite = executionDetailsDTO.getTestSuite();
+		TestSuite testSuite = executionDetailsDTO.getTestSuite().get(0);
 		List<ScriptTestSuite> scriptList = testSuite.getScriptTestSuite();
 		List<Script> scripts = new ArrayList<>();
 		for (ScriptTestSuite scriptTestSuite : scriptList) {
@@ -307,16 +373,70 @@ public class ExecutionService implements IExecutionService {
 
 		StringBuilder responseLogs = new StringBuilder();
 		for (Device device : executionDetailsDTO.getDeviceList()) {
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution\n", device.getName());
+				responseLogs.append("Device: " + device.getName()
+						+ " is not available for execution, So not triggering excution in it\n");
+				continue;
+			}
 			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			responseLogs.append("TestSuite execution on device: ").append(device.getName()).append(".");
 			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, executionDetailsDTO.getUser(),
-					executionName, executionDetailsDTO.getCategory(), testSuite.getName());
+					executionName, executionDetailsDTO.getCategory(), testSuite.getName(),
+					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
+					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
+					executionDetailsDTO.isDiagnosticLogsNeeded());
+
+		}
+		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
+				ExecutionTriggerStatus.TRIGGERED);
+
+		return executionResponseDTO;
+
+	}
+
+	/**
+	 * Executes multiple test suites on the provided devices.
+	 * 
+	 * @param executionDetailsDTO the details of the execution, including test
+	 *                            suites, devices, user, and other parameters.
+	 * @return an ExecutionResponseDTO containing the response logs and the status
+	 *         of the execution trigger.
+	 */
+	private ExecutionResponseDTO multiTestSuiteExecution(ExecutionDetailsDTO executionDetailsDTO) {
+		LOGGER.info("Starting multiTestSuite excecution");
+		List<TestSuite> testSuiteList = executionDetailsDTO.getTestSuite();
+		StringBuilder responseLogs = new StringBuilder();
+		Set<Script> scriptSet = new HashSet<>();
+		List<ScriptTestSuite> scriptList = new ArrayList<>();
+		for (TestSuite testSuite : testSuiteList) {
+			scriptList.addAll(testSuite.getScriptTestSuite());
+		}
+		for (ScriptTestSuite scriptTestSuite : scriptList) {
+			scriptSet.add(scriptTestSuite.getScript());
+		}
+		List<Script> scripts = new ArrayList<>(scriptSet);
+
+		for (Device device : executionDetailsDTO.getDeviceList()) {
+			if (!checkDeviceAvailabilityForExecution(device)) {
+				LOGGER.error("Device: {} is not available for execution\n", device.getName());
+				responseLogs.append("Device: " + device.getName()
+						+ " is not available for execution, So not triggering excution in it\n");
+				break;
+			}
+			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
+					executionDetailsDTO.getTestType());
+			responseLogs.append("Multitestsuite execution on device: ").append(device.getName()).append(".");
+			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, executionDetailsDTO.getUser(),
+					executionName, executionDetailsDTO.getCategory(), Constants.MULTI_TEST_SUITE,
+					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
+					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
+					executionDetailsDTO.isPerformanceLogsNeeded());
 		}
 
 		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
 				ExecutionTriggerStatus.TRIGGERED);
-
 		return executionResponseDTO;
 
 	}
@@ -337,29 +457,6 @@ public class ExecutionService implements IExecutionService {
 			return true;
 		}
 		return false;
-	}
-
-	/**
-	 * This method is used to get the valid test suite, if the test suite is not
-	 * found then it will append the response string with the test suite name not
-	 * found and if no test suite found then it will throw ResourceNotFoundException
-	 * 
-	 * @param testSuiteName - the test suite name
-	 * @param responseLogs  - the response logs
-	 * @return TestSuite - the test suite
-	 */
-	private TestSuite getValidTestSuite(String testSuiteName, StringBuilder responseLogs) {
-		TestSuite testSuite = null;
-		if (!Utils.isEmpty(testSuiteName)) {
-			testSuite = testSuiteRepository.findByName(testSuiteName);
-			if (testSuite == null) {
-				LOGGER.error("TestSuite not found with name: {}", testSuiteName);
-				responseLogs.append("TestSuite: " + testSuiteName + " not found.");
-				throw new ResourceNotFoundException("TestSuite", testSuiteName);
-			}
-		}
-		return testSuite;
-
 	}
 
 	/**
@@ -482,40 +579,6 @@ public class ExecutionService implements IExecutionService {
 	}
 
 	/**
-	 * This method is used to convert the trigger DTO to execution details DTO
-	 * 
-	 * @param executionTriggerDTO - the execution trigger DTO
-	 * @param deviceList          - the device list
-	 * @param scriptList          - the script list
-	 * @param testSuite           - the test suite
-	 * @return ExecutionDetailsDTO - the execution details DTO
-	 */
-
-	private ExecutionDetailsDTO convertTriggerDTOToExecutionDetailsDTO(ExecutionTriggerDTO executionTriggerDTO,
-			List<Device> deviceList, List<Script> scriptList, TestSuite testSuite) {
-
-		ExecutionDetailsDTO executionDetailsDTO = new ExecutionDetailsDTO();
-		executionDetailsDTO.setCategory(executionTriggerDTO.getCategory());
-		executionDetailsDTO.setDeviceList(deviceList);
-		executionDetailsDTO.setExecutionName(executionTriggerDTO.getExecutionName());
-		executionDetailsDTO.setTestType(executionTriggerDTO.getTestType());
-		executionDetailsDTO.setScriptList(scriptList);
-
-		executionDetailsDTO.setTestSuite(testSuite);
-		executionDetailsDTO.setRepeatCount(executionTriggerDTO.getRepeatCount());
-		executionDetailsDTO.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());
-		if (executionTriggerDTO.getUser() != null) {
-			User user = userRepository.findByUsername(executionTriggerDTO.getUser());
-			if (null != user) {
-				executionDetailsDTO.setUser(user);
-			}
-
-		}
-		return executionDetailsDTO;
-
-	}
-
-	/**
 	 * This method is used to get the valid script list, if the script is not found
 	 * then it will append the response string with the script name not found and if
 	 * no scripts found then it will throw ResourceNotFoundException
@@ -541,6 +604,73 @@ public class ExecutionService implements IExecutionService {
 		}
 		return scriptList;
 
+	}
+
+	/**
+	 * This method is used to convert the trigger DTO to execution details DTO
+	 * 
+	 * @param executionTriggerDTO - the execution trigger DTO
+	 * @param deviceList          - the device list
+	 * @param scriptList          - the script list
+	 * @param testSuite           - the test suite
+	 * @return ExecutionDetailsDTO - the execution details DTO
+	 */
+	private ExecutionDetailsDTO convertTriggerDTOToExecutionDetailsDTO(ExecutionTriggerDTO executionTriggerDTO,
+			List<Device> deviceList, List<Script> scriptList, List<TestSuite> testSuite) {
+		LOGGER.debug("Converting ExecutionTriggerDTO to ExecutionDetailsDTO");
+		ExecutionDetailsDTO executionDetailsDTO = new ExecutionDetailsDTO();
+		executionDetailsDTO.setCategory(executionTriggerDTO.getCategory());
+		executionDetailsDTO.setDeviceList(deviceList);
+		executionDetailsDTO.setExecutionName(executionTriggerDTO.getExecutionName());
+		executionDetailsDTO.setTestType(executionTriggerDTO.getTestType());
+		executionDetailsDTO.setScriptList(scriptList);
+
+		executionDetailsDTO.setTestSuite(testSuite);
+		executionDetailsDTO.setRepeatCount(executionTriggerDTO.getRepeatCount());
+		executionDetailsDTO.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());
+		if (executionTriggerDTO.getUser() != null) {
+			User user = userRepository.findByUsername(executionTriggerDTO.getUser());
+			if (null != user) {
+				executionDetailsDTO.setUser(user);
+			}
+
+		}
+		executionDetailsDTO.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());
+		executionDetailsDTO.setPerformanceLogsNeeded(executionTriggerDTO.isPerformanceLogsNeeded());
+		executionDetailsDTO.setDiagnosticLogsNeeded(executionTriggerDTO.isDiagnosticLogsNeeded());
+		LOGGER.debug("Converted ExecutionTriggerDTO to ExecutionDetailsDTO");
+		return executionDetailsDTO;
+
+	}
+
+	/**
+	 * Retrieves a list of valid TestSuite objects based on the provided list of
+	 * test suite names.
+	 * 
+	 * @param testSuiteListFromRequest A list of test suite names to be validated
+	 *                                 and retrieved.
+	 * @param responseLogs             A StringBuilder object to append logs for any
+	 *                                 test suites that are not found.
+	 * @return A list of valid TestSuite objects.
+	 * @throws ResourceNotFoundException If no valid test suites are found in the
+	 *                                   provided list.
+	 */
+	private List<TestSuite> getValidTestSuiteList(List<String> testSuiteListFromRequest, StringBuilder responseLogs) {
+		List<TestSuite> testSuiteList = new ArrayList<>();
+		for (String testSuiteName : testSuiteListFromRequest) {
+			TestSuite testSuite = testSuiteRepository.findByName(testSuiteName);
+			if (testSuite == null) {
+				LOGGER.error("TestSuite not found with name: {}", testSuiteName);
+				responseLogs.append("TestSuite: " + testSuiteName + " not found.");
+			} else {
+				testSuiteList.add(testSuite);
+			}
+		}
+		if (testSuiteList.isEmpty()) {
+			LOGGER.error("No valid/available Test Suites found in the request");
+			throw new ResourceNotFoundException("Test Suites in the request", testSuiteListFromRequest.toString());
+		}
+		return testSuiteList;
 	}
 
 	/**
@@ -575,7 +705,7 @@ public class ExecutionService implements IExecutionService {
 	 * @param executionTriggerDTO
 	 * @return
 	 */
-	private void checkValidTriggerRequest(ExecutionTriggerDTO executionTriggerDTO) {
+	public void checkValidTriggerRequest(ExecutionTriggerDTO executionTriggerDTO) {
 		// Checking for scripts or test suite is null or empty
 		if ((executionTriggerDTO.getScriptList() == null || executionTriggerDTO.getScriptList().isEmpty())
 				&& (executionTriggerDTO.getTestSuite() == null || executionTriggerDTO.getTestSuite().isEmpty())) {
@@ -591,7 +721,7 @@ public class ExecutionService implements IExecutionService {
 		}
 
 		// Both script list and test suite cannot be non empty
-		if (!executionTriggerDTO.getScriptList().isEmpty() && !Utils.isEmpty(executionTriggerDTO.getTestSuite())) {
+		if (!executionTriggerDTO.getScriptList().isEmpty() && !executionTriggerDTO.getTestSuite().isEmpty()) {
 			LOGGER.error("Both scripts and test suite cannot be provided in the  same request");
 			throw new UserInputException("Both scripts and test suite cannot be provided in the  same request");
 		}
@@ -675,7 +805,6 @@ public class ExecutionService implements IExecutionService {
 					executionRepository.save(execution);
 				}
 
-				// TO DO: Status of the execution device need to decide
 			}
 			executionResultRepository.save(executionResult);
 
@@ -688,9 +817,6 @@ public class ExecutionService implements IExecutionService {
 
 		}
 		return true;
-
-		// Convert execID to UUID
-
 	}
 
 	/**
@@ -704,65 +830,29 @@ public class ExecutionService implements IExecutionService {
 	 */
 	@Override
 	@Transactional
-	public void saveLoadModuleStatus(String execId, String statusData, String execDevice, String execResult) {
+	public boolean saveLoadModuleStatus(String execId, String statusData, String execDevice, String execResult) {
 		Logger LOGGER = LoggerFactory.getLogger(ExecutionService.class);
-		try {
-			LOGGER.info("Finding execution with id: {}", execId);
-			Execution execution = executionRepository.findById(UUID.fromString(execId))
-					.orElseThrow(() -> new RuntimeException("Execution not found with id: " + execId));
+		LOGGER.info("Finding execution with id: {}", execId);
+		Execution execution = executionRepository.findById(UUID.fromString(execId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution ID", execId));
 
-			if (execution != null && !ExecutionOverallResultStatus.FAILURE.equals(execution.getResult())) {
-				LOGGER.info("Updating execution result to: {}", statusData);
-				execution.setResult(ExecutionOverallResultStatus.valueOf(statusData.toUpperCase().trim()));
-				executionRepository.save(execution);
-			}
-
-			LOGGER.info("Finding execution result with id: {}", execResult);
-			ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(execResult))
-					.orElseThrow(() -> new RuntimeException("ExecutionResult not found with id: " + execResult));
-
-			if (executionResult != null && !ExecutionResultStatus.FAILURE.equals(executionResult.getResult())) {
-				LOGGER.info("Updating execution result to: {}", statusData);
-				executionResult.setResult(ExecutionResultStatus.valueOf(statusData.toUpperCase().trim()));
-				executionResultRepository.save(executionResult);
-			}
-
-//			if (execution != null && Result.FAILURE.equals(execution.getResult())) {
-//				LOGGER.info("Execution result is FAILURE, retrieving all execution results");
-//				List<ExecutionResult> allExecutionResults = executionResultRepository.findAllByExecution(execution);
-//				List<ExecutionResult> naExecutionResults = executionResultRepository
-//						.findAllByExecutionAndResult(execution, Result.NOT_APPLICABLE);
-//				List<ExecutionResult> successExecutionResults = executionResultRepository
-//						.findAllByExecutionAndResult(execution, Result.SUCCESS);
-//				List<ExecutionResult> skippedExecutionResults = executionResultRepository
-//						.findAllByExecutionAndResult(execution, Result.SKIPPED);
-//
-//				int totalScriptsCount = allExecutionResults.size();
-//				int naScriptsCount = naExecutionResults.size();
-//				int successScriptsCount = successExecutionResults.size();
-//				int skippedScriptsCount = skippedExecutionResults.size();
-//				int naAndSkippedAndSuccessSum = naScriptsCount + skippedScriptsCount + successScriptsCount;
-//
-//				LOGGER.info("Total scripts count: {}", totalScriptsCount);
-//				LOGGER.info("NA scripts count: {}", naScriptsCount);
-//				LOGGER.info("Success scripts count: {}", successScriptsCount);
-//				LOGGER.info("Skipped scripts count: {}", skippedScriptsCount);
-//				LOGGER.info("NA, Skipped, and Success sum: {}", naAndSkippedAndSuccessSum);
-//
-//				boolean setAsSuccess = false;
-//				if (successScriptsCount > 0 && totalScriptsCount == naAndSkippedAndSuccessSum) {
-//					setAsSuccess = true;
-//				}
-//
-//				if (setAsSuccess) {
-//					LOGGER.info("Setting execution result to SUCCESS");
-//					execution.setResult(Result.SUCCESS);
-//					executionRepository.save(execution);
-//				}
-//			}
-		} catch (Exception e) {
-			LOGGER.error("Exception occurred while saving load module status", e);
+		if (execution != null && !ExecutionOverallResultStatus.FAILURE.equals(execution.getResult())) {
+			LOGGER.info("Updating execution result to: {}", statusData);
+			execution.setResult(ExecutionOverallResultStatus.valueOf(statusData.toUpperCase().trim()));
+			executionRepository.save(execution);
 		}
+
+		LOGGER.info("Finding execution result with id: {}", execResult);
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(execResult))
+				.orElseThrow(() -> new ResourceNotFoundException("ExecutionResult  ID", execResult));
+
+		if (executionResult != null && !ExecutionResultStatus.FAILURE.equals(executionResult.getResult())) {
+			LOGGER.info("Updating execution result to: {}", statusData);
+			executionResult.setResult(ExecutionResultStatus.valueOf(statusData.toUpperCase().trim()));
+			executionResultRepository.save(executionResult);
+		}
+		return true;
+
 	}
 
 	/**
@@ -775,11 +865,8 @@ public class ExecutionService implements IExecutionService {
 	@Override
 	public JSONObject getClientPort(String deviceIP, String port) {
 		JSONObject resultNode = new JSONObject();
-
 		if (deviceIP != null && port != null) {
-			// Assuming DeviceRepository is a Spring Data JPA repository
 			Device device = deviceRepository.findByIpAndPort(deviceIP, port);
-
 			if (device != null) {
 				// Adding properties to the JsonObject
 				try {
@@ -790,8 +877,824 @@ public class ExecutionService implements IExecutionService {
 				}
 			}
 		}
-
 		// Return the JSON response
 		return resultNode;
 	}
+
+	/**
+	 * This method is used to get the executions by category
+	 * 
+	 * @param category - the category RDKV, B, C
+	 * @param page     - the page number
+	 * @param size     - size in page
+	 * @param sortBy   - by default it is createdDate
+	 * @param sortDir  - by default it is desc
+	 */
+	@Override
+	public ExecutionListResponseDTO getExecutionsByCategory(String categoryName, int page, int size, String sortBy,
+			String sortDir) {
+		LOGGER.info("Fetching executions by category: {} for size{} and page number{} ", categoryName, size, page);
+		Category category = Category.valueOf(categoryName);
+		if (category == null) {
+			throw new UserInputException("Invalid category name provided");
+		}
+
+		Pageable pageable = getPageable(page, size, sortBy, sortDir);
+		Page<Execution> pageExecutions = executionRepository.findByCategory(category, pageable);
+		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
+
+		return executionListResponseDTO;
+	}
+
+	/**
+	 * This method is to search executions based on test suite name and script name
+	 * 
+	 * @param scriptTestSuiteName - full script name or testsuite name or partial
+	 *                            name for search query
+	 * @param categoryName        - RDKV, RDKB, RDKC
+	 * @param page                - the page number
+	 * @param size                - size in page
+	 * @param sortBy              - by default it is createdDate
+	 * @param sortDir             - by default it is desc
+	 */
+	@Override
+	public ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
+			int size, String sortBy, String sortDir) {
+		LOGGER.info("Searching executions by test suite or script  name: {} for size{} and page number{} ",
+				testSuiteName, size, page);
+
+		Category category = Category.valueOf(categoryName);
+		if (category == null) {
+			throw new UserInputException("Invalid category name provided");
+		}
+
+		Pageable pageable = getPageable(page, size, sortBy, sortDir);
+		// Search the executions based on the test suite name or script
+		Page<Execution> pageExecutions = executionRepository.findByscripttestSuiteNameContainingAndCategory(
+				testSuiteName, Category.valueOf(categoryName), pageable);
+
+		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
+
+		return executionListResponseDTO;
+	}
+
+	/**
+	 * This method is used to get the executions by device name with pagination
+	 * 
+	 * @param deviceName   - the device name
+	 * @param categoryName - RDKV, RDKB, RDKC
+	 * @param page         - the page number
+	 * @param size         - size in page
+	 * @param sortBy       - by default it is date
+	 * @param sortDir      - by default it is desc
+	 * @return response DTO
+	 */
+	@Override
+	public ExecutionListResponseDTO getExecutionsByDeviceName(String deviceName, String categoryName, int page,
+			int size, String sortBy, String sortDir) {
+		LOGGER.info("Fetching executions by device name: {} for size{} and page number{} ", deviceName, size, page);
+		Pageable pageable = getPageable(page, size, sortBy, sortDir);
+		Page<Execution> pageExecutions = executionRepository.findByDeviceName(deviceName, pageable);
+		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
+		return executionListResponseDTO;
+	}
+
+	/**
+	 * This method is used to get the executions by user with pagination
+	 * 
+	 * @param username     - the username
+	 * @param categoryName - RDKV, RDKB, RDKC
+	 * @param page         - the page number
+	 * @param size         - size in page
+	 * @param sortBy       - by default it is date
+	 * @param sortDir      - by default it is desc
+	 * @return response DTO
+	 */
+	@Override
+	public ExecutionListResponseDTO getExecutionsByUser(String username, String categoryName, int page, int size,
+			String sortBy, String sortDir) {
+		LOGGER.info("Fetching executions by user: {} for size{} and page number{} ", username, size, page);
+		User user = userRepository.findByUsername(username);
+		if (user == null) {
+			throw new ResourceNotFoundException("User", username);
+		}
+
+		Category category = Category.valueOf(categoryName);
+		if (category == null) {
+			throw new UserInputException("Invalid category name provided");
+		}
+
+		Pageable pageable = getPageable(page, size, sortBy, sortDir);
+		Page<Execution> pageExecutions = executionRepository.findByUserAndCategory(user, category, pageable);
+		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
+		return executionListResponseDTO;
+
+	}
+
+	/**
+	 * This method is used to get the pageable object
+	 * 
+	 * @param page    - the page number
+	 * @param size    - size in page
+	 * @param sortBy  - by default it is createdDate
+	 * @param sortDir - by default it is desc
+	 * @return Pageable - the pageable object
+	 */
+	private Pageable getPageable(int page, int size, String sortBy, String sortDir) {
+		Sort sort = sortDir.equalsIgnoreCase(Sort.Direction.ASC.name()) ? Sort.by(sortBy).ascending()
+				: Sort.by(sortBy).descending();
+		return PageRequest.of(page, size, sort);
+	}
+
+	/**
+	 * This method is to convert the pagination based execution search data to
+	 * response DTO
+	 * 
+	 * @param pageExecutions - Execution pagination data
+	 * @return Final Execution list response
+	 */
+	private ExecutionListResponseDTO getExecutionListResponseFromSearchResult(Page<Execution> pageExecutions) {
+		List<Execution> listOfExecutions = pageExecutions.getContent();
+		List<ExecutionListDTO> executionListDTO = getExecutionDTOListFromExecutionList(listOfExecutions);
+		if (executionListDTO.isEmpty()) {
+			return null;
+		}
+		ExecutionListResponseDTO executionListResponseDTO = new ExecutionListResponseDTO();
+		executionListResponseDTO.setExecutions(executionListDTO);
+		executionListResponseDTO.setCurrentPage(pageExecutions.getNumber());
+		executionListResponseDTO.setTotalItems(pageExecutions.getTotalElements());
+		executionListResponseDTO.setTotalPages(pageExecutions.getTotalPages());
+		return executionListResponseDTO;
+
+	}
+
+	/*
+	 * This method is used to get the execution dto list from the execution list
+	 * 
+	 * @param executionList - the execution list
+	 * 
+	 * @return List<ExecutionListDTO> - the execution list DTO
+	 */
+	private List<ExecutionListDTO> getExecutionDTOListFromExecutionList(List<Execution> executionList) {
+		List<ExecutionListDTO> executionListDTO = new ArrayList<>();
+		for (Execution execution : executionList) {
+			ExecutionListDTO executionDTO = new ExecutionListDTO();
+			executionDTO.setExecutionName(execution.getName());
+			executionDTO.setExecutionDate(Utils.convertInstantToWithoutMilliseconds(execution.getCreatedDate()));
+			executionDTO.setStatus(this.getStatusFromExecution(execution));
+			// Find ExecutionDevice for execution
+			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+			if (executionDevice != null) {
+				executionDTO.setDevice(executionDevice.getDevice().getName());
+			}
+
+			User user = execution.getUser();
+			if (user != null) {
+				executionDTO.setUser(user.getUsername());
+			}
+			executionDTO.setExecutionId(execution.getId().toString());
+			ExecutionType executionType = execution.getExecutionType();
+			String scriptTestSuite = null;
+			if (executionType != null) {
+				if ((executionType.equals(ExecutionType.SINGLESCRIPT))
+						|| (executionType.equals(ExecutionType.TESTSUITE))) {
+					scriptTestSuite = execution.getScripttestSuiteName();
+				} else if (executionType.equals(ExecutionType.MULTISCRIPT)) {
+					scriptTestSuite = "Multiple Scripts";
+				}
+
+			}
+			if (scriptTestSuite == null) {
+				scriptTestSuite = "N/A";
+			}
+			executionDTO.setScriptTestSuite(scriptTestSuite);
+
+			executionListDTO.add(executionDTO);
+		}
+
+		return executionListDTO;
+
+	}
+
+	/**
+	 * Retrieves the status from the given Execution object.
+	 *
+	 * This method checks the execution status and result of the provided Execution
+	 * object and returns the corresponding status as a string. The possible
+	 * statuses are: - INPROGRESS: If the execution status is INPROGRESS. - ABORTED:
+	 * If the execution status is ABORTED. - SUCCESS: If the execution status is
+	 * COMPLETED and the result is SUCCESS. - FAILURE: If the execution status is
+	 * COMPLETED and the result is FAILURE, or if none of the above conditions are
+	 * met.
+	 *
+	 * @param execution the Execution object from which to retrieve the status
+	 * @return a string representing the status of the execution
+	 */
+	private String getStatusFromExecution(Execution execution) {
+		if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
+			return ExecutionProgressStatus.INPROGRESS.toString();
+		} else if (execution.getExecutionStatus() == ExecutionProgressStatus.ABORTED) {
+			return ExecutionProgressStatus.ABORTED.toString();
+		} else if (execution.getExecutionStatus() == ExecutionProgressStatus.COMPLETED) {
+			if (execution.getResult() == ExecutionOverallResultStatus.SUCCESS) {
+				return ExecutionOverallResultStatus.SUCCESS.toString();
+			} else if (execution.getResult() == ExecutionOverallResultStatus.FAILURE) {
+				return ExecutionOverallResultStatus.FAILURE.toString();
+			}
+		}
+		return ExecutionOverallResultStatus.FAILURE.toString();
+
+	}
+
+	/**
+	 * Retrieves the execution logs for a given execution result ID.
+	 *
+	 * @param executionResultID the ID of the execution result for which logs are to
+	 *                          be fetched
+	 * @return a string containing the execution remarks followed by the content of
+	 *         the execution log file
+	 * @throws ResourceNotFoundException if the execution result ID is not found or
+	 *                                   if the log file does not exist
+	 */
+	@Override
+	public String getExecutionLogs(String executionResultID) {
+		LOGGER.info("Fetching execution logs for exec with Id: {}", executionResultID);
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResultID))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResultID));
+		String executionID = executionResult.getExecution().getId().toString();
+
+		String executionLogfile = commonService.getExecutionLogFilePath(executionID,
+				executionResult.getId().toString());
+		String executionRemarks = executionResult.getExecutionRemarks();
+		File logFile = new File(executionLogfile);
+		if (logFile.exists()) {
+
+			try {
+				String logFileData = new String(Files.readAllBytes(logFile.toPath()));
+				return executionRemarks + logFileData;
+			} catch (IOException e) {
+				LOGGER.error("Error reading log file: {}", executionLogfile, e);
+				return executionRemarks;
+			}
+		} else {
+			LOGGER.warn("Log file does not exist: {}", executionLogfile);
+			throw new ResourceNotFoundException("Log file for the execution", "");
+
+		}
+	}
+
+	/**
+	 * Retrieves the execution name based on the provided ExecutionNameRequestDTO.
+	 * 
+	 * @param nameRequestDTO the DTO containing the list of device names and test
+	 *                       type
+	 * @return the generated execution name
+	 * 
+	 *         The method performs the following steps: 1. Logs the initiation of
+	 *         the execution name retrieval process. 2. Extracts the list of device
+	 *         names from the request DTO. 3. Initializes an empty string for the
+	 *         execution name. 4. Checks if the list of devices is not empty: - If
+	 *         there are multiple devices, logs the process and generates an
+	 *         execution name for multiple devices. - If there is a single device,
+	 *         logs the process, retrieves the device from the repository, and
+	 *         generates an execution name based on the device and test type.
+	 */
+	@Override
+	public String getExecutionName(ExecutionNameRequestDTO nameRequestDTO) {
+		// Implementation logic to handle the list of devices
+		LOGGER.info("Going to get the Execution Name");
+		List<String> devices = nameRequestDTO.getDeviceNames();
+		String executionName = "";
+
+		if (!devices.isEmpty()) {
+			if (devices.size() > 1) {
+				LOGGER.info("Going to generate device name for multiple devices execution");
+				executionName = "Multiple" + Constants.UNDERSCORE + Utils.getTimeStampInUTCForExecutionName();
+			} else if (devices.size() == 1) {
+				LOGGER.info("Going to generate device name for single devices execution");
+				Device device = deviceRepository.findByName(devices.getFirst());
+				executionName = this.getExecutionNameFromDeviceAndTestType(device, nameRequestDTO.getTestType());
+			}
+		}
+
+		return executionName;
+
+	}
+
+	/**
+	 * Generates an execution name based on the provided device and test type.
+	 *
+	 * @param device   the device object containing information about the OEM and
+	 *                 SOC
+	 * @param testType the type of test being executed
+	 * @return a string representing the execution name, which includes the SOC
+	 *         name, OEM name, test type, and a timestamp in UTC format. If the OEM
+	 *         or SOC is null, the device name is used instead. If the test type is
+	 *         empty, only the timestamp is appended.
+	 */
+	private String getExecutionNameFromDeviceAndTestType(Device device, String testType) {
+		String executionName;
+		Oem oem = device.getOem();
+		Soc soc = device.getSoc();
+		if (oem != null && soc != null) {
+			executionName = soc.getName() + Constants.UNDERSCORE + oem.getName() + Constants.UNDERSCORE;
+		} else {
+			executionName = device.getName() + Constants.UNDERSCORE;
+		}
+		if (!Utils.isEmpty(testType)) {
+			executionName += testType + Constants.UNDERSCORE + Utils.getTimeStampInUTCForExecutionName();
+		} else {
+			executionName += Utils.getTimeStampInUTCForExecutionName();
+		}
+		return executionName;
+	}
+
+	/**
+	 * This method is used to get the trend analysis
+	 * 
+	 * @param executionResultId - the execution result ID
+	 * @return List of String - the trend analysis
+	 */
+	@Override
+	public List<String> getTrendAnalysis(UUID executionResultId) {
+		LOGGER.info("Fetching script trend for executionResultId: {}", executionResultId);
+		ExecutionResult executionResult;
+		try {
+			executionResult = executionResultRepository.findById(executionResultId)
+					.orElseThrow(() -> new ResourceNotFoundException("ExecutionResult", executionResultId.toString()));
+		} catch (ResourceNotFoundException e) {
+			LOGGER.error("ExecutionResult not found with id: {}", executionResultId);
+			throw e;
+		} catch (Exception e) {
+			LOGGER.error("Error fetching ExecutionResult with id: {}", executionResultId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+		String scriptName = executionResult.getScript();
+		List<ExecutionResult> results;
+		try {
+			Pageable pageable = PageRequest.of(0, 5);
+			results = executionResultRepository.findTop5ByScriptOrderByDateOfExecutionDesc(scriptName, pageable);
+		} catch (Exception e) {
+			LOGGER.error("Error fetching script trend for script: {}", scriptName, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+		List<String> trend = results.stream().map(ExecutionResult::getResult).map(Enum::name).toList();
+		LOGGER.info("Successfully fetched script trend for executionResultId: {}", executionResultId);
+		return trend;
+	}
+
+	/**
+	 * This method is used to get the execution result
+	 * 
+	 * @param execResultId - the execution result ID
+	 * @return ExecutionResultResponseDTO - the execution result response
+	 * @throws ResourceNotFoundException - if the execution result is not found
+	 */
+	@Override
+	public ExecutionResultResponseDTO getExecutionResult(UUID execResultId) {
+		LOGGER.info("Fetching execution result for  execResultId: {}" + execResultId);
+		StringBuilder responseLogs = new StringBuilder();
+		ExecutionResult executionResult;
+		try {
+			executionResult = executionResultRepository.findById(execResultId)
+					.orElseThrow(() -> new ResourceNotFoundException("ExecutionResult", execResultId.toString()));
+		} catch (ResourceNotFoundException e) {
+			LOGGER.error("ExecutionResult not found with id: {}", execResultId);
+			throw e;
+
+		} catch (Exception e) {
+			LOGGER.error("Error fetching ExecutionResult with id: {}", execResultId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+		ExecutionResultResponseDTO response = new ExecutionResultResponseDTO();
+		response.setScript(executionResult.getScript());
+		response.setTimeTaken(executionResult.getExecutionTime());
+		response.setExecutionTrend(getTrendAnalysis(execResultId));
+
+		if (executionResult.getResult() == ExecutionResultStatus.INPROGRESS) {
+			response.setLogs(responseLogs.append(executionResult.getExecutionRemarks()).toString());
+		} else if (executionResult.getResult() == ExecutionResultStatus.SUCCESS) {
+			response.setLogs(responseLogs.append(executionResult.getExecutionRemarks()).append("Execution Logs :\n")
+					// Add execution logs // getExecutionLogs(execResultId.toString())).toString()
+					.append("").toString());
+		}
+
+		List<ExecutionMethodResult> methodResults;
+		try {
+			methodResults = executionMethodResultRepository.findByExecutionResult(executionResult);
+			int methodCount = methodResults.size();
+			response.setTestCaseCount(methodCount);
+
+		} catch (Exception e) {
+			LOGGER.error("Error fetching ExecutionMethodResults for ExecutionResult with id: {}", execResultId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+
+		if (methodResults != null) {
+			List<ExecutionMethodResultResponseDTO> methodResponse = new ArrayList<>();
+			for (ExecutionMethodResult result : methodResults) {
+				ExecutionMethodResultResponseDTO method = new ExecutionMethodResultResponseDTO();
+				method.setFunctionName(result.getFunctionName());
+				method.setActualResult(result.getActualResult().name());
+				method.setExpectedResult(result.getExpectedResult().name());
+				method.setResultStatus(result.getMethodResult().name());
+				methodResponse.add(method);
+			}
+			response.setExecutionMethodResult(methodResponse);
+		}
+
+		LOGGER.info("Successfully fetched execution result for execId: {}, execResultId: {}", execResultId);
+		return response;
+	}
+
+	/**
+	 * This method is used to abort the execution
+	 * 
+	 * @param execId - the execution ID
+	 */
+
+	@Override
+	public boolean abortExecution(UUID execId) {
+		LOGGER.info("Aborting execution with id: {}", execId);
+		Execution execution = executionRepository.findById(execId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", execId.toString()));
+		if (execution.getExecutionStatus() == ExecutionProgressStatus.COMPLETED) {
+			LOGGER.error("Execution with id: {} is already completed", execId);
+			throw new UserInputException("Execution is already completed");
+		}
+		try {
+			execution.setAbortRequested(true);
+			executionRepository.save(execution);
+		} catch (Exception e) {
+			LOGGER.error("Error aborting execution with id: {}", execId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+		return true;
+	}
+
+	/**
+	 * Repeats the execution of a given execution ID.
+	 *
+	 * @param execId the UUID of the execution to be repeated
+	 * @return true if the execution is successfully repeated
+	 * @throws ResourceNotFoundException if the execution, execution device, or
+	 *                                   scripts are not found
+	 * @throws TDKServiceException       if there is an error during the execution
+	 *                                   repetition process
+	 */
+	@Override
+	public boolean repeatExecution(UUID execId) {
+		LOGGER.info("Repeating execution with id: {}", execId);
+		Execution execution = executionRepository.findById(execId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", execId.toString()));
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		if (executionDevice == null) {
+			LOGGER.error("Execution Device not found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
+		}
+		List<ExecutionResult> executionResult = executionResultRepository.findByExecution(execution);
+		List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
+		List<Script> scripts = getValidScriptList(scriptNames, new StringBuilder());
+		if (scripts == null || scripts.isEmpty()) {
+			LOGGER.error("No valid scripts found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Scripts", "Execution ID: " + execId.toString());
+		}
+		try {
+			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
+					.collect(Collectors.toList());
+			String execName = getNextRepeatExecutionName(execution.getName(), executionNames);
+			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts,
+					execution.getUser(), execName, execution.getCategory().name(), execution.getTestType(), 1, false,
+					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
+					execution.isPerformanceLogsNeeded());
+			LOGGER.info("Successfully repeated execution with id: {}", execId);
+		} catch (Exception e) {
+			LOGGER.error("Error repeating execution with id: {}", execId, e);
+			throw new TDKServiceException("Error repeating execution with id: " + execId + e.getMessage());
+		}
+		return true;
+	}
+
+	/**
+	 * Re-runs the failed scripts for a given execution ID.
+	 *
+	 * @param execId the UUID of the execution whose failed scripts need to be
+	 *               re-run
+	 * @return true if the failed scripts were successfully re-run
+	 * @throws ResourceNotFoundException if the execution, execution device, or
+	 *                                   failed scripts are not found
+	 * @throws TDKServiceException       if there is an error during the re-run
+	 *                                   process
+	 */
+	@Override
+	public boolean reRunFailedScript(UUID execId) {
+		LOGGER.info("Re-running failed scripts for execution with id: {}", execId);
+		Execution execution = executionRepository.findById(execId).orElseThrow(
+				() -> new ResourceNotFoundException("Execution", "id: " + execId.toString() + " not found"));
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		if (executionDevice == null) {
+			LOGGER.error("Execution Device not found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
+		}
+		List<ExecutionResult> failedResults = executionResultRepository.findByExecutionAndResult(execution,
+				ExecutionResultStatus.FAILURE);
+		if (failedResults.isEmpty() || failedResults == null) {
+			LOGGER.error("No failed scripts found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Failed Scripts", "Execution ID: " + execId.toString());
+		}
+		try {
+			List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
+			List<Script> scripts = getValidScriptList(failedScripts, new StringBuilder());
+			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
+					.collect(Collectors.toList());
+			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
+			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts,
+					execution.getUser(), execName, execution.getCategory().name(), execution.getTestType(), 1, false,
+					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
+					execution.isDiagnosticLogsNeeded());
+			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);
+		} catch (Exception e) {
+			LOGGER.error("Error re-running failed scripts for execution with id: {}", execId, e);
+			throw new TDKServiceException(
+					"Error re-running failed scripts for execution with id: " + execId + e.getMessage());
+		}
+		return true;
+	}
+
+	/**
+	 * This method is used to delete single the execution detail
+	 * 
+	 * @param id - the execution ID
+	 * @return ExecutionDetailsResponse
+	 * @throws ResourceNotFoundException - if the execution is not found
+	 */
+
+	@Override
+	@Transactional
+	public boolean deleteExecution(UUID id) {
+		LOGGER.info("Deleting execution with id: {}", id);
+		Execution execution = executionRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", id.toString()));
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+		for (ExecutionResult executionResult : executionResults) {
+			List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
+					.findByExecutionResult(executionResult);
+			if (executionMethodResults != null && !executionMethodResults.isEmpty()) {
+				executionMethodResultRepository.deleteAll(executionMethodResults);
+			}
+		}
+		// Delete execution results
+		if (executionResults != null && !executionResults.isEmpty()) {
+			executionResultRepository.deleteAll(executionResults);
+		}
+
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		if (executionDevice != null) {
+			executionDeviceRepository.delete(executionDevice);
+		}
+		try {
+			executionRepository.delete(execution);
+
+			// TODO integrate log deletion
+			LOGGER.info("Successfully deleted execution with id: {}", id);
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("Error deleting execution with id: {}", id, e);
+			throw new TDKServiceException("Error deleting execution with id: " + id);
+		}
+	}
+
+	/**
+	 * This method is used to delete the execution details list
+	 * 
+	 * @param id - the execution ID
+	 * @return ExecutionDetailsResponse
+	 * @throws ResourceNotFoundException - if the execution is not found
+	 */
+
+	@Override
+	@Transactional
+	public boolean deleteExecutions(List<UUID> ids) {
+		LOGGER.info("Deleting executions with ids: {}", ids);
+		try {
+			for (UUID id : ids) {
+				deleteExecution(id);
+			}
+			LOGGER.info("Successfully deleted executions with ids: {}", ids);
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("Error deleting executions with ids: {}", ids, e);
+			throw new TDKServiceException("Error deleting executions with ids: " + ids);
+		}
+	}
+
+	/**
+	 * Generates the next repeat execution name based on the current execution name
+	 * and a list of existing execution names.
+	 *
+	 * @param currentExecutionName   the current execution name to base the new name
+	 *                               on
+	 * @param existingExecutionNames a list of existing execution names to check for
+	 *                               repeat counts
+	 * @return the next repeat execution name in the format
+	 *         "baseName_R{nextRepeatNumber}"
+	 */
+	public String getNextRepeatExecutionName(String currentExecutionName, List<String> existingExecutionNames) {
+		// Extract the base name before "_R"
+		String baseName = currentExecutionName.split("_R")[0];
+
+		// Initialize the maximum repeat count
+		int maxRepeatCount = 0;
+
+		// Iterate through existing execution names
+		for (String existingName : existingExecutionNames) {
+			if (existingName.startsWith(baseName + "_R")) {
+				try {
+					// Extract the number after "_R"
+					String suffix = existingName.substring((baseName + "_R").length());
+					int repeatNumber = Integer.parseInt(suffix);
+
+					// Update the maximum repeat count
+					if (repeatNumber > maxRepeatCount) {
+						maxRepeatCount = repeatNumber;
+					}
+				} catch (NumberFormatException e) {
+					// Ignore names that do not conform to the pattern
+					continue;
+				}
+			}
+		}
+
+		// Generate the next execution name
+		return baseName + "_R" + (maxRepeatCount + 1);
+	}
+
+	/**
+	 * Generates the next rerun execution name based on the current execution name
+	 * and a list of existing execution names.
+	 * 
+	 * @param currentExecutionName   The name of the current execution.
+	 * @param existingExecutionNames A list of existing execution names.
+	 * @return The next rerun execution name.
+	 * 
+	 *         This method checks if the current execution name already contains
+	 *         "RERUN". If it does, it extracts the base name and the current rerun
+	 *         count. If it does not, it initializes the base name with "_RERUN"
+	 *         appended to the current execution name.
+	 * 
+	 *         It then iterates through the list of existing execution names to find
+	 *         the maximum rerun count for the given base name. Finally, it
+	 *         generates the next rerun execution name by incrementing the maximum
+	 *         rerun count by 1.
+	 */
+	public String getNextRerunExecutionName(String currentExecutionName, List<String> existingExecutionNames) {
+		// Initialize the base name for rerun
+		String baseName;
+		int currentRerunCount = 0;
+
+		// Check if the current execution name already contains "RERUN"
+		if (currentExecutionName.contains("RERUN")) {
+			int rerunIndex = currentExecutionName.lastIndexOf("RERUN");
+			baseName = currentExecutionName.substring(0, rerunIndex + 5); // Include "RERUN"
+			String suffix = currentExecutionName.substring(rerunIndex + 5);
+			if (suffix.matches("\\d+")) {
+				currentRerunCount = Integer.parseInt(suffix);
+			}
+		} else {
+			baseName = currentExecutionName + "_RERUN";
+		}
+
+		// Initialize the maximum rerun count
+		int maxRerunCount = currentRerunCount;
+
+		// Iterate through the existing execution names
+		for (String existingName : existingExecutionNames) {
+			if (existingName.startsWith(baseName)) {
+				try {
+					// Check if the name ends with a number (e.g., _RERUN2, _R1_RERUN3)
+					String suffix = existingName.substring(baseName.length());
+					if (suffix.matches("\\d+")) {
+						int rerunNumber = Integer.parseInt(suffix);
+						maxRerunCount = Math.max(maxRerunCount, rerunNumber);
+					}
+				} catch (NumberFormatException e) {
+					// Ignore names that do not conform to the expected pattern
+					continue;
+				}
+			}
+		}
+
+		// Generate the next rerun execution name
+		String name = baseName + (maxRerunCount + 1);
+		return name;
+	}
+
+	/**
+	 * Retrieves the execution details for a given execution ID.
+	 *
+	 * @param id the UUID of the execution to retrieve details for
+	 * @return an ExecutionDetailsResponseDTO containing the details of the
+	 *         execution
+	 * @throws ResourceNotFoundException if the execution or execution device is not
+	 *                                   found
+	 */
+	@Override
+	public ExecutionDetailsResponseDTO getExecutionDetails(UUID id) {
+		LOGGER.info("Fetching execution details for id: {}", id);
+		Execution execution = executionRepository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", "id" + id));
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		if (executionDevice == null) {
+			LOGGER.error("Execution Device not found for execution with id: {}", id);
+			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + id + " not found");
+		}
+		Device device = executionDevice.getDevice();
+		ExecutionDetailsResponseDTO response = new ExecutionDetailsResponseDTO();
+		response.setDeviceName(device.getName());
+		response.setDeviceIP(device.getIp());
+		response.setDeviceMac(device.getMacId());
+		// TODO integrae device details
+		response.setDeviceDetails("MOCK DATA");
+		response.setTotalExecutionTime(execution.getExecutionTime());
+		response.setDateOfExecution(execution.getCreatedDate());
+		response.setExecutionType(execution.getExecutionType().name());
+		response.setScriptTestSuite(execution.getScripttestSuiteName());
+		response.setExecutionStatus(execution.getExecutionStatus().name());
+		response.setResult(execution.getResult().name());
+		response.setSummary(getExecutionSummary(execution));
+		response.setExecutionResults(getExecutionResults(execution));
+		return response;
+	}
+
+	/**
+	 * Converts a list of ExecutionResult objects to a list of ExecutionResultDTO
+	 * objects.
+	 *
+	 * @param execution the Execution object containing the list of ExecutionResult
+	 *                  objects
+	 * @return a list of ExecutionResultDTO objects
+	 */
+	private List<ExecutionResultDTO> getExecutionResults(Execution execution) {
+		List<ExecutionResult> results = execution.getExecutionResults();
+		List<ExecutionResultDTO> resultDTO = new ArrayList<>();
+		for (ExecutionResult result : results) {
+			ExecutionResultDTO resultDTOObj = new ExecutionResultDTO();
+			resultDTOObj.setExecutionResultID(result.getId());
+			resultDTOObj.setName(result.getScript());
+			resultDTOObj.setStatus(result.getResult().name());
+
+			resultDTO.add(resultDTOObj);
+		}
+		return resultDTO;
+	}
+
+	/**
+	 * Generates an execution summary for the given execution.
+	 *
+	 * @param execution the execution object containing details of the execution
+	 * @return an ExecutionSummaryResponseDTO object containing the summary of the
+	 *         execution
+	 */
+	private ExecutionSummaryResponseDTO getExecutionSummary(Execution execution) {
+
+		ExecutionSummaryResponseDTO summary = new ExecutionSummaryResponseDTO();
+		summary.setTotalScripts(execution.getScriptCount());
+		summary.setExecuted(execution.getExecutedScriptCount());
+		summary.setInProgressCount((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.INPROGRESS).count());
+		summary.setSuccess((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.SUCCESS).count());
+		summary.setFailure((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.FAILURE).count());
+		summary.setPending((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.PENDING).count());
+		summary.setNa((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.NA).count());
+		summary.setTimeout((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.TIMEOUT).count());
+		return summary;
+
+	}
+	
+	/**
+	 * This method is used to get the unique users.
+	 * 
+	 * @return List of String - the list of unique users
+	 */
+
+	@Override
+	public List<String> getUniqueUsers() {
+		LOGGER.info("Fetching unique users");
+		List<Execution> executions = executionRepository.findAll();
+		Set<User> users = new HashSet<>();
+		for (Execution execution : executions) {
+			if (execution.getUser() != null) {
+				users.add(execution.getUser());
+			}
+		}
+		List<String> uniqueUsers = users.stream().map(User::getUsername).toList();
+		LOGGER.info("Successfully fetched unique users");
+		return uniqueUsers;
+	}
+
 }

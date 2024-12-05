@@ -24,6 +24,7 @@ package com.rdkm.tdkservice.util;
  */
 public class Constants {
 
+	public static final String LINE_STRING = "======";
 	// Default user role for the user if not provided
 	public static final String DEFAULT_USER_ROLE = "tester";
 
@@ -357,6 +358,8 @@ public class Constants {
 
 	public static final String RESULT = "result";
 
+	public static final String EXECUTION_LOGS = "executionLogs";
+
 	public static final String RERUN_APPENDER = "_RERUN";
 
 	public static final String SCRIPT_END_PY_CODE = "\nprint(\"SCRIPTEND#!@~\");";
@@ -365,4 +368,34 @@ public class Constants {
 
 	public static final String END_TAG_PY_COMMENT = "SCRIPTEND#!@~";
 
+	public static final String IPV6_INTERFACE = "ipv6.interface";
+	public static final String IPV4_INTERFACE = "ipv4.interface";
+	public static final String PYTHON3 = "python3";
+	public static final String CONSOLE_FILE_TRANSFER_SCRIPT = "//filestore//callConsoleLogTransfer.py";
+	public static final String CONSOLE_FILE_UPLOAD_SCRIPT = "//filestore//callConsoleLogUpload.py";
+
+	public static final String LOG_UPLOAD_IPV4 = "log.upload.ipv4";
+	public static final String LOG_UPLOAD_IPV6 = "log.upload.ipv6";
+	public static final String REST_MECHANISM = "REST";
+	public static final String TM_URL = "tmURL";
+	public static final String FILE_TRANSFER_SCRIPT_RDKSERVICE = "transfer_thunderdevice_logs.py"; // Update path
+	public static final String SLASH_VERSION_TXT_FILE = "/version.txt"; // Update as necessary
+	public static final String ROOT_STRING = "root"; // Example path, change as necessary
+	public static final String NONE_STRING = "none";
+	public static final String TM_CONFIG_FILE = "tm.config";
+	// AgentConsoleLog.txt
+	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsoleLog.txt";
+	// logs.path
+	public static final String LOGS_PATH = "logs.path";
+	public static final String HTML_BR = "<br/>";
+
+	public static final String MULTI_TEST_SUITE = "MultiTestSuite";
+	public static final String DEVICE_LOGS = "deviceLogs";
+	public static final String AGENT_LOGS = "agentLogs";
+	public static final String DEVICE_INFO_LOGS = "deviceinfo";
+
+	public static final String THUNDER_DEFAULT_PORT = "9998";
+
+	public static final String FILE_TRANSFER_SCRIPT = "filetransfer.py";
+	public static final String FILE_UPLOAD_SCRIPT = "fileupload.py";
 }
