@@ -6510,7 +6510,7 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["FIRMWARE_UPGRADE_STATUS"] = "false"
 
         elif tag == "system_check_public_ip_address":
-            command = 'curl ifconfig.me'
+            command = 'curl -s ifconfig.me'
             output = executeCommand(execInfo, command)
             output = str(output).split("\n")
             if output[1]:
@@ -6707,34 +6707,16 @@ def executeCommand(execInfo, command, device="test-device"):
         except pxssh.ExceptionPxssh as e:
             print("Login to device failed")
             print(e)
-    elif sshMethod.upper() == "REST":
-        auth_token= ""
-        rest_url = ""
-        try:
-            print("\nFetching config file values for REST api call")
-            rest_url = CertificationSuiteCommonVariables.rest_url
-            auth_method = CertificationSuiteCommonVariables.auth_method
-            if auth_method == "TOKEN":
-                auth_token = CertificationSuiteCommonVariables.auth_token
-                if auth_token =="" or rest_url == "":
-                    print("\n[ERROR]: Missing REST API configurations")
-                else:
-                    headers = {'Content-Type': 'application/json', 'authToken': auth_token,}
-                    url = str(rest_url.replace("mac",deviceMAC))
-                    command = command.replace(" grep","grep").replace("|grep",'\|grep').replace("\"","\\\"")
-                    if "awk" in command:
-                        command = command.replace("$","\$")
-                    command = "\"" + command + "\"";
-                    print("Executing command: ",command)
-                    response = requests.post(url, headers=headers, data=command, timeout=20)
-                    #print response.content
-                    output = response.content
-                    #output = command + '\n' + output;
-        except Exception as e:
-            print("Login to device failed")
-            print(e)
     else:
-        print("\n[ERROR]: Invalid SSH Method")
+        try:
+            lib = importlib.import_module("SSHUtility")
+            method = "ssh_and_execute_" + sshMethod
+            method_to_call = getattr(lib, method)
+            output = method_to_call(command,deviceMAC)
+            print(output)
+        except Exception as e:
+            output = "EXCEPTION"
+            print("Exception Occurred: ",e)
 
     return output
 

@@ -22,21 +22,38 @@ import json
 import configparser
 from configparser import SafeConfigParser
 from SSHUtility import *
-
+import importlib
 
 # Method to SSH to the DUT and get the WPE Secutity Token
 def get_WPE_ThunderSecurity_Token(deviceIP):
     token  = "None"
     status = "SUCCESS"
-    ssh_method = "directSSH"
+    ssh_method = getDeviceConfigKeyValue(deviceConfigFile,"SSH_METHOD")
+    device_mac = getDeviceConfigKeyValue(deviceConfigFile,"DEVICE_MAC")
     host_name  = deviceIP
-    user_name  = "root"
-    password   = "None"
+    user_name  = getDeviceConfigKeyValue(deviceConfigFile,"SSH_USERNAME")
+    password   = getDeviceConfigKeyValue(deviceConfigFile,"SSH_PASSWORD")
     command    = "WPEFrameworkSecurityUtility"
+
     try:
-        output = ssh_and_execute(ssh_method,host_name,user_name,password,command)
-        if output != "EXCEPTION" and len(output.split('\n')) > 2:
-            output = output.split('\n')[1]
+        lib = importlib.import_module("SSHUtility")
+        if ssh_method == "directSSH":
+            method = "ssh_and_execute"
+        else:
+            method = "ssh_and_execute_" + ssh_method
+        method_to_call = getattr(lib, method)
+        try:
+            if ssh_method == "directSSH":
+                output = ssh_and_execute(ssh_method,host_name,user_name,password,command)
+                if output != "EXCEPTION" and "token" in output:
+                    output = output.split('\n')[1]
+            else:
+                output = method_to_call(command,device_mac)
+        except Exception as e:
+            output = "EXCEPTION"
+            print("Exception Occurred: ",e)
+            status = "FAILURE"
+        if output != "EXCEPTION" and "token" in output:
             token  = str(json.loads(output).get("token"))
         else:
             status = "FAILURE"
@@ -141,3 +158,25 @@ def handleDeviceTokenChange(deviceIP,token_config):
         status = "FAILURE"
         token = "None"
     return status,token
+
+def getDeviceConfigKeyValue(deviceConfigFile,key):
+    value  = ""
+    status = "SUCCESS"
+    deviceConfig  = "device.config"
+    try:
+        # If the key is none object or empty then exception
+        # will be thrown
+        if key is None or key == "":
+            status = "FAILURE"
+            print("\nException Occurred: [%s] key is None or empty" %(inspect.stack()[0][3]))
+        # Parse the device configuration file and read the
+        # data. But if the data is empty it is taken as such
+        else:
+            config = configparser.ConfigParser()
+            config.read(deviceConfigFile)
+            value = str(config.get(deviceConfig,key))
+    except Exception as e:
+        status = "FAILURE"
+        print("\nException Occurred: [%s] %s" %(inspect.stack()[0][3],e))
+
+    return value
