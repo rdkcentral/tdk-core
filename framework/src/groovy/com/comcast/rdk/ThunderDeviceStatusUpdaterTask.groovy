@@ -26,6 +26,7 @@ class ThunderDeviceStatusUpdaterTask implements Runnable {
 	def executescriptService
 	def executionService
 	def grailsApplication
+	def finalConfigFile
 
 	public ThunderDeviceStatusUpdaterTask(String[] cmd,Device device,def deviceStatusService,def executescriptService,def grailsApplication){
 		this.cmd = cmd;
@@ -46,7 +47,8 @@ class ThunderDeviceStatusUpdaterTask implements Runnable {
 						          cmd[0],
 						          cmd[1],
 						          devIp,
-								  cmd[3]
+								  cmd[3],
+								  cmd[4]
 					             ]
 			cmd = cmdArray
 		} catch (Exception e) {
