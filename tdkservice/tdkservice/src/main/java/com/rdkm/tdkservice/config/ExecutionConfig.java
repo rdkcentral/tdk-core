@@ -24,6 +24,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 
+import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
 
 /**
@@ -57,7 +58,7 @@ public class ExecutionConfig {
 
 	public String getPythonCommand() {
 		if (Utils.isEmpty(pythonCommand)) {
-			return "python";
+			return Constants.PYTHON3;
 		}
 		return pythonCommand;
 	}

@@ -743,7 +743,7 @@ public class DeviceService implements IDeviceService {
 			}
 			for (Device device : devices) {
 				DeviceStatusResponseDTO deviceStatusResponseDTO = new DeviceStatusResponseDTO();
-				deviceStatusResponseDTO.setName(device.getName());
+				deviceStatusResponseDTO.setDeviceName(device.getName());
 				deviceStatusResponseDTO.setStatus(device.getDeviceStatus().toString());
 				deviceStatusResponseDTO.setIp(device.getIp());
 				deviceStatusResponseDTO.setDeviceType(device.getDeviceType().getName());
@@ -793,7 +793,6 @@ public class DeviceService implements IDeviceService {
 		return devicDetailsJSON.toString();
 	}
 
-	
 	/**
 	 * This method is used to get the thunder device ports for the given device IP
 	 * 
@@ -835,7 +834,6 @@ public class DeviceService implements IDeviceService {
 
 	}
 
-	
 	/**
 	 * This method is used to get the device type for the given device IP
 	 * 
@@ -861,6 +859,57 @@ public class DeviceService implements IDeviceService {
 		}
 
 		return deviceTypeJSON.toString();
+	}
+
+	/**
+	 * This method is used to get the device details for the given device IP
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return JSON object containing the device details
+	 */
+	public List<DeviceResponseDTO> getDevicesByCategoryAndThunderStatus(String category, Boolean isThunderEnabled) {
+		LOGGER.info("Fetching devices for category: {} with Thunder status: {}", category, isThunderEnabled);
+		List<Device> devices;
+		if (isThunderEnabled != null) {
+			devices = deviceRepository.findByCategoryAndIsThunderEnabled(Category.valueOf(category.toUpperCase()),
+					isThunderEnabled);
+		} else {
+			devices = deviceRepository.findByCategory(Category.valueOf(category.toUpperCase()));
+		}
+		if (devices.isEmpty()) {
+			LOGGER.warn("No devices found for category: {} with Thunder status: {}", category, isThunderEnabled);
+			return Collections.emptyList();
+		}
+		return devices.stream().map(device -> {
+			DeviceResponseDTO dto = new DeviceResponseDTO();
+			dto.setDeviceName(device.getName());
+			dto.setDeviceIp(device.getIp());
+			dto.setMacId(device.getMacId());
+			dto.setId(device.getId());
+			return dto;
+		}).collect(Collectors.toList());
+	}
+
+	/**
+	 * This method is used to set the thunder enabled status for the device with the
+	 * given id.
+	 * 
+	 * @param id The ID of the device to set the thunder enabled status for.
+	 * 
+	 */
+	@Override
+	public boolean toggleThunderEnabledstatus(String deviceIP) {
+		LOGGER.info("Setting Thunder enabled status for device with ip: {}", deviceIP);
+		Device device = deviceRepository.findByIp(deviceIP);
+		if (device == null) {
+			LOGGER.error("Device not found with IP: {}", deviceIP);
+			throw new ResourceNotFoundException("Device IP", deviceIP);
+		}
+
+		device.setThunderEnabled(!device.isThunderEnabled());
+		deviceRepository.save(device);
+		LOGGER.info("Completed setting Thunder enabled status for device with ip: {}", deviceIP);
+		return true;
 	}
 
 }

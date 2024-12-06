@@ -17,28 +17,31 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
+package com.rdkm.tdkservice.dto;
 
-import java.util.UUID;
+import lombok.Data;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
-
-/**
- * Repository for the ExecutionDevice entity.
- */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
+@Data
+public class ExecutionMethodResultResponseDTO {
 
 	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
+	 * The name of the function that was executed.
 	 */
-	ExecutionDevice findByExecution(Execution execution);
+	private String functionName;
+
+	/**
+	 * The actual result produced by the function execution.
+	 */
+	private String actualResult;
+
+	/**
+	 * The expected result that the function was supposed to produce.
+	 */
+	private String expectedResult;
+
+	/**
+	 * The status of the result (e.g., "PASS", "FAIL").
+	 */
+	private String resultStatus;
 
 }

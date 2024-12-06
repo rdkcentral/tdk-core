@@ -1,4 +1,3 @@
-
 /*
 * If not stated otherwise in this file or this component's Licenses.txt file the
 * following copyright and licenses apply:
@@ -22,40 +21,47 @@ package com.rdkm.tdkservice.dto;
 
 import lombok.Data;
 
-/**
- * Represents the device status response DTO. This class is used to transfer
- * device status information.
- * 
- * Fields: - ip: The IP address of the device. - name: The name of the device. -
- * status: The current status of the device. - isThunderEnabled: Indicates
- * whether Thunder is enabled on the device.
- */
 @Data
-public class DeviceStatusResponseDTO {
+public class ExecutionSummaryResponseDTO {
 
-	/**
-	 * The IP address of the device.
-	 */
-	String ip;
+/**
+ * The total number of scripts in the execution summary.
+ */
+private int totalScripts;
 
-	/**
-	 * The name of the device.
-	 */
-	String deviceName;
+/**
+ * The number of scripts that have been executed.
+ */
+private int executed;
 
-	/**
-	 * The current status of the device.
-	 */
-	String status;
-	
-	/**
-	 * Device type name
-	 */
-	String deviceType;
+/**
+ * The number of scripts that executed successfully.
+ */
+private int success;
 
-	/**
-	 * Indicates whether Thunder is enabled on the device.
-	 */
-	boolean isThunderEnabled;
+/**
+ * The number of scripts that failed during execution.
+ */
+private int failure;
+
+/**
+ * The number of scripts that were not applicable (N/A).
+ */
+private int na;
+
+/**
+ * The number of scripts that timed out during execution.
+ */
+private int timeout;
+
+/**
+ * The number of scripts that are pending execution.
+ */
+private int pending;
+
+/*
+ * The number of scripts that will be Inprogress.
+ */
+private int inProgressCount;
 
 }

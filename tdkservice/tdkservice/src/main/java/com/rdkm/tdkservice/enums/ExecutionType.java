@@ -25,5 +25,5 @@ package com.rdkm.tdkservice.enums;
 
 public enum ExecutionType {
 
-	SINGLESCRIPT, MULTISCRIPT, TESTSUITE;
+	SINGLESCRIPT, MULTISCRIPT, TESTSUITE, MULTITESTSUITE;
 }

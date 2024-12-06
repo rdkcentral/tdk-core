@@ -48,8 +48,10 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
+import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
 
@@ -378,5 +380,84 @@ public class ScriptController {
 		LOGGER.info("Downloaded all test case as excel by module ZIP by category");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(new InputStreamResource(in));
+	}
+
+	/**
+	 * This method is used to get the list of script by category.
+	 *
+	 * @param category         - the category
+	 * @param isThunderEnabled - the isThunderEnabled
+	 * @return List<String> - the list of script
+	 */
+	@Operation(summary = "Get List of Script by Category", description = "Get List of Script by Category")
+	@ApiResponse(responseCode = "200", description = "List of script fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getListofScriptByCategory")
+	public ResponseEntity<?> getListofScriptByCategory(@RequestParam String category,
+			@RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category,
+				isThunderEnabled);
+
+		try {
+			List<ScriptDetailsResponse> scripts = scriptService.getListofScriptNamesByCategory(category,
+					isThunderEnabled);
+
+			if (scripts == null || scripts.isEmpty()) {
+				LOGGER.warn("No scripts found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("No scripts found for the specified category and Thunder setting");
+			}
+
+			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category,
+					isThunderEnabled);
+			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Invalid category: {}", category, e);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + category);
+		} catch (Exception e) {
+			LOGGER.error("Error fetching scripts for category: {} and isThunderEnabled: {}", category, isThunderEnabled,
+					e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching scripts");
+		}
+	}
+
+	/**
+	 * This method is used to get the list of test suite by category.
+	 *
+	 * @param category         - the category
+	 * @param isThunderEnabled - the isThunderEnabled
+	 * @return List<String> - the list of test suite
+	 */
+	@Operation(summary = "Get List of Test Suite by Category", description = "Get List of Test Suite by Category")
+	@ApiResponse(responseCode = "200", description = "List of test suite fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getListofTestSuiteByCategory")
+	public ResponseEntity<?> getListofTestSuiteByCategory(@RequestParam String category,
+			@RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category,
+				isThunderEnabled);
+
+		try {
+			List<TestSuiteDetailsResponse> testSuites = scriptService.getListofTestSuiteNamesByCategory(category,
+					isThunderEnabled);
+
+			if (testSuites == null || testSuites.isEmpty()) {
+				LOGGER.warn("No test suites found for category: {} and isThunderEnabled: {}", category,
+						isThunderEnabled);
+				return ResponseEntity.status(HttpStatus.NOT_FOUND)
+						.body("No test suites found for the specified category and Thunder setting");
+			}
+
+			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category,
+					isThunderEnabled);
+			return ResponseEntity.status(HttpStatus.OK).body(testSuites);
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Invalid category: {}", category, e);
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + category);
+		} catch (Exception e) {
+			LOGGER.error("Error fetching test suites for category: {} and isThunderEnabled: {}", category,
+					isThunderEnabled, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching test suites");
+		}
 	}
 }

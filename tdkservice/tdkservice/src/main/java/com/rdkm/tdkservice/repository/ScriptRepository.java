@@ -92,4 +92,12 @@ public interface ScriptRepository extends JpaRepository<Script, UUID> {
 	@Query("SELECT s FROM Script s WHERE s.module = ?1 AND s.isLongDuration = ?2")
 	List<Script> findAllByModuleAndIsLongDuration(Module module, boolean isLongDuration);
 
+	/**
+	 * This method is used to find all the scripts by category.
+	 * 
+	 * @param name - the name of the category
+	 * @return List - the list of scripts
+	 */
+	List<Script> findAllByCategory(String name);
+
 }

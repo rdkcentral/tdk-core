@@ -17,75 +17,107 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.dto;
+package com.rdkm.tdkservice.model;
 
-import java.util.List;
+import java.time.Instant;
 
-import com.rdkm.tdkservice.model.Device;
-import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.TestSuite;
-import com.rdkm.tdkservice.model.User;
+import com.rdkm.tdkservice.enums.ScheduleStatus;
+import com.rdkm.tdkservice.enums.ScheduleType;
 
+import jakarta.persistence.Entity;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
- * Represents the execution details DTO.
+ * Represents an execution schedule entity. This class is used to store the
+ * details of an execution schedule.
  */
 @Data
-public class ExecutionDetailsDTO {
+@EqualsAndHashCode(callSuper = true)
+@Entity
+public class ExecutionSchedule extends BaseEntity {
 
-	/*
-	 * Represents the list of devices.
+	/**
+	 * The time at which the execution is scheduled.
 	 */
-	private List<Device> deviceList;
-	/*
+	private Instant executionTime;
+
+	/**
+	 * The type of schedule.
+	 * 
+	 * @see com.rdkm.tdkservice.enums.ScheduleType
+	 */
+	private ScheduleType scheduleType;
+
+	/**
+	 * The cron expression for scheduling.
+	 */
+	private String cronExpression;
+
+	/**
+	 * The status of the schedule.
+	 * 
+	 * @see com.rdkm.tdkservice.enums.ScheduleStatus
+	 */
+	private ScheduleStatus scheduleStatus;
+
+	/**
+	 * The list of devices for the execution.
+	 */
+	private String deviceList;
+
+	/**
 	 * Represents the list of scripts.
 	 */
-	private List<Script> scriptList;
-	/*
+	private String scriptList;
+
+	/**
 	 * Represents the test suite.
 	 */
-	private List<TestSuite> testSuite;
+	private String testSuite;
 
-	/*
+	/**
 	 * Represents the test type.
 	 */
 	private String testType;
-	/*
+
+	/**
 	 * Represents the user.
 	 */
-	private User user;
-	/*
+	private String user;
+
+	/**
 	 * Represents the category.
 	 */
 	private String category;
-	/*
+
+	/**
 	 * Represents the execution name.
 	 */
 	private String executionName;
-	/*
+
+	/**
 	 * Represents the execution repeat count.
 	 */
 	private int repeatCount;
 
-	/*
-	 * Represents the is rerun on failure.
+	/**
+	 * Represents whether to rerun on failure.
 	 */
 	private boolean isRerunOnFailure;
 
-	/*
-	 * Represents the is device Logs Needed.
+	/**
+	 * Represents whether device logs are needed.
 	 */
 	private boolean isDeviceLogsNeeded;
 
-	/*
-	 * Represents the is performance logs needed.
+	/**
+	 * Represents whether performance logs are needed.
 	 */
 	private boolean isPerformanceLogsNeeded;
 
-	/*
-	 * Represents the is diagnostic logs needed.
+	/**
+	 * Represents whether diagnostic logs are needed.
 	 */
 	private boolean isDiagnosticLogsNeeded;
-
 }

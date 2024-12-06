@@ -25,7 +25,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.Instant;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -58,7 +57,6 @@ import com.rdkm.tdkservice.repository.ExecutionResultRepository;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
 import com.rdkm.tdkservice.util.Constants;
-import com.rdkm.tdkservice.util.Utils;
 
 /**
  * This class is used to execute the scripts asynchronously.
@@ -102,13 +100,13 @@ public class ExecutionAsyncService {
 	 */
 	@Async
 	public void prepareAndExecuteSingleScript(Device device, Script script, User user, String executionName,
-			String category, int repeatCount, boolean isRerunOnFailure) {
+			int repeatCount, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
+			boolean isDiagnosticLogsNeeded) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
 		// Busy lock the device before execution
 		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
 		try {
-			// String baseExecutionName = getExecutionName(executionName, device, testType);
-			String realExecutionName;
+			String realExecutionName = "";
 
 			if (repeatCount == 0) {
 				repeatCount = 1;
@@ -122,7 +120,8 @@ public class ExecutionAsyncService {
 				}
 
 				ExecutionEntities executionEntities = this.getExecutionEntitiesForExecution(device, script, user,
-						realExecutionName, category, isRerunOnFailure);
+						realExecutionName, isRerunOnFailure, isDeviceLogsNeeded, isPerformanceLogsNeeded,
+						isDiagnosticLogsNeeded);
 				boolean executionStatus = executeScriptinDevice(script, executionEntities.getExecution(),
 						executionEntities.getExecutionResult().get(0), executionEntities.getExecutionDevice());
 				this.setFinalStatusOfExecution(executionEntities.getExecution());
@@ -131,7 +130,8 @@ public class ExecutionAsyncService {
 					// For the rerun on Failure, add _RERUN in the execution name
 					realExecutionName = realExecutionName + Constants.RERUN_APPENDER;
 					ExecutionEntities executionEntitiesForFailureRerun = this.getExecutionEntitiesForExecution(device,
-							script, user, realExecutionName, category, isRerunOnFailure);
+							script, user, realExecutionName, isRerunOnFailure, isDeviceLogsNeeded,
+							isPerformanceLogsNeeded, isDiagnosticLogsNeeded);
 					executeScriptinDevice(script, executionEntitiesForFailureRerun.getExecution(),
 							executionEntitiesForFailureRerun.getExecutionResult().get(0),
 							executionEntitiesForFailureRerun.getExecutionDevice());
@@ -163,135 +163,157 @@ public class ExecutionAsyncService {
 
 	@Async
 	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, User user, String executionName,
-			String category, String testSuiteName) {
+			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
+			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
 		try {
-			List<Script> applicableScripts = new ArrayList<>();
-			List<Script> invalidScripts = new ArrayList<>();
-			int scriptcount = scriptList.size();
-			for (Script script : scriptList) {
+			for (int repeatIndex = 0; repeatIndex < repeatCount; repeatIndex++) {
+				String currentExecutionName = executionName;
 
-				if ((commonService.validateScriptDeviceDeviceType(device, script))
-						&& (commonService.vaidateScriptDeviceCategory(device, script))
-						&& !commonService.isScriptMarkedToBeSkipped(script)) {
-					applicableScripts.add(script);
+				// Use the provided execution name for the first execution
+				if (repeatIndex == 0) {
+					currentExecutionName = executionName;
 				} else {
-					invalidScripts.add(script);
+					// Append _R<i> for subsequent executions
+					currentExecutionName = executionName + "_R" + repeatIndex;
 				}
-			}
 
-			double executionStartTime = System.currentTimeMillis();
+				List<Script> applicableScripts = new ArrayList<>();
+				List<Script> invalidScripts = new ArrayList<>();
+				int scriptCount = scriptList.size();
 
-			// Create and save Execution for the device
-			Execution execution = new Execution();
-			execution.setCategory(device.getCategory());
-			// TODO: Is created date enough for the execution date
-			if (testSuiteName == null) {
-				execution.setExecutionType(ExecutionType.MULTISCRIPT);
-				execution.setScripttestSuiteName("Multiple Scripts");
-			} else {
-				execution.setExecutionType(ExecutionType.TESTSUITE);
-				execution.setScripttestSuiteName(testSuiteName);
-			}
-			execution.setName(this.getExecutionName(executionName, device));
-			execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
-			execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
-			execution.setScriptCount(scriptcount);
-			execution.setUser(user);
-			executionRepository.save(execution);
+				for (Script script : scriptList) {
+					if ((commonService.validateScriptDeviceDeviceType(device, script))
+							&& (commonService.vaidateScriptDeviceCategory(device, script))
+							&& !commonService.isScriptMarkedToBeSkipped(script)) {
+						applicableScripts.add(script);
+					} else {
+						invalidScripts.add(script);
+					}
+				}
 
-			// Create and save ExecutionDevice
-			ExecutionDevice executionDevice = new ExecutionDevice();
-			executionDevice.setDevice(device);
-			executionDevice.setExecution(execution);
-			// TODO : Integrate this later
-			executionDevice.setBuildName("BuildName");
-			executionDeviceRepository.save(executionDevice);
-			// List to hold ExecutionResults for the current device
-			// List<ExecutionResult> execResultList = new ArrayList<>();
-			List<ExecutionResult> execResultList = new ArrayList<>();
+				double executionStartTime = System.currentTimeMillis();
 
-			List<ExecutionResult> inValidExecutionResults = new ArrayList<>();
-			if (!invalidScripts.isEmpty() && null != invalidScripts) {
-				inValidExecutionResults = handleInvalidScripts(invalidScripts, execution, device);
-			}
+				// Create and save Execution for the device
+				Execution execution = new Execution();
+				execution.setCategory(device.getCategory());
+				if (testSuiteName == null) {
+					execution.setExecutionType(ExecutionType.MULTISCRIPT);
+					execution.setScripttestSuiteName("Multiple Scripts");
+				} else if (Constants.MULTI_TEST_SUITE.equals(testSuiteName)) {
+					execution.setExecutionType(ExecutionType.MULTITESTSUITE);
+					execution.setScripttestSuiteName(testSuiteName);
+				} else {
+					execution.setExecutionType(ExecutionType.TESTSUITE);
+					execution.setScripttestSuiteName(testSuiteName);
+				}
+				execution.setName(currentExecutionName);
+				execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
+				execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
+				execution.setScriptCount(scriptCount);
+				execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
+				execution.setDiagnosticLogsNeeded(isDiagnosticsLogsNeeded);
+				execution.setPerformanceLogsNeeded(isPerformanceNeeded);
+				execution.setUser(user);
+				executionRepository.save(execution);
 
-			List<ExecutionResult> executableResultList = new ArrayList<>();
-			if (!applicableScripts.isEmpty() && null != applicableScripts) {
-				executableResultList = handleApplicableScripts(applicableScripts, device, execution, executionDevice);
-			}
+				// Create and save ExecutionDevice
+				ExecutionDevice executionDevice = new ExecutionDevice();
+				executionDevice.setDevice(device);
+				executionDevice.setExecution(execution);
+				executionDevice.setBuildName("BuildName");
+				executionDeviceRepository.save(executionDevice);
 
-			// TODO: Changed this logic , check if this one will work correctly
-			// Confirm if it really necessary
-			execResultList.addAll(inValidExecutionResults);
-			execResultList.addAll(executableResultList);
-			execution.setExecutionResults(execResultList);
-			Execution savedExecution = executionRepository.save(execution);
-			UUID executionId = savedExecution.getId();
+				List<ExecutionResult> execResultList = new ArrayList<>();
+				List<ExecutionResult> inValidExecutionResults = new ArrayList<>();
+				if (!invalidScripts.isEmpty()) {
+					inValidExecutionResults = handleInvalidScripts(invalidScripts, execution, device);
+				}
 
-			int executedScript = 0;
-			// Sequentially execute scripts for the current device
-			for (Script script : applicableScripts) {
-				// Find ExecutionResult using execution object
-				for (ExecutionResult execRes : executableResultList) {
+				List<ExecutionResult> executableResultList = new ArrayList<>();
+				if (!applicableScripts.isEmpty()) {
+					executableResultList = handleApplicableScripts(applicableScripts, device, execution,
+							executionDevice);
+				}
 
-					if (this.isExecutionAborted(executionId)) {
+				execResultList.addAll(inValidExecutionResults);
+				execResultList.addAll(executableResultList);
+				execution.setExecutionResults(execResultList);
+				executionRepository.save(execution);
 
-						for (ExecutionResult execResults : executableResultList) {
-							if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
-									|| execResults.getResult() == ExecutionResultStatus.PENDING) {
-								execResults.setResult(ExecutionResultStatus.ABORTED);
-								execResults.setExecutionRemarks("Execution aborted by user");
-								executionResultRepository.save(execResults);
+				UUID executionId = execution.getId();
+				int executedScript = 0;
+
+				for (Script script : applicableScripts) {
+					for (ExecutionResult execRes : executableResultList) {
+						if (this.isExecutionAborted(executionId)) {
+							for (ExecutionResult execResults : executableResultList) {
+								if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
+										|| execResults.getResult() == ExecutionResultStatus.PENDING) {
+									execResults.setResult(ExecutionResultStatus.ABORTED);
+									execResults.setExecutionRemarks("Execution aborted by user");
+									executionResultRepository.save(execResults);
+								}
 							}
+							execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+							executionRepository.save(execution);
+							LOGGER.info("Execution aborted for device: {}", device.getName());
+							break;
 						}
-						execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
-						executionRepository.save(execution);
-						LOGGER.info("Execution aborted for device: {}", device.getName());
+
+						if (execRes.getScript().equals(script.getName())) {
+							execRes.setExecutionRemarks("Executing script: " + script.getName() + " on device: "
+									+ device.getName() + " is completed");
+							executionResultRepository.save(execRes);
+
+							boolean executionResult = executeScriptinDevice(script, execution, execRes,
+									executionDevice);
+
+							if (executionResult) {
+								LOGGER.info("Execution result success for {} on device: {}", script.getName(),
+										device.getName());
+							} else {
+								LOGGER.info("Execution result failed for {} on device: {}", script.getName(),
+										device.getName());
+							}
+
+							executedScript++;
+							execution.setExecutedScriptCount(executedScript);
+							executionRepository.save(execution);
+						}
+					}
+					if (this.isExecutionAborted(executionId)) {
 						break;
 					}
+				}
 
-					if (execRes.getScript().equals(script.getName())) {
-						execRes.setExecutionRemarks("Executing script: " + script.getName() + " on device: "
-								+ device.getName() + " is completed");
-						executionResultRepository.save(execRes);
+				if (executableResultList != null) {
+					double realExecTime = this.getRealExcetionTime(executableResultList);
+					double roundOfValue = this.roundOfToThreeDecimals(realExecTime);
+					execution.setRealExecutionTime(roundOfValue);
+				}
 
-						boolean executionResult = executeScriptinDevice(script, execution, execRes, executionDevice);
+				double executionEndTime = System.currentTimeMillis();
+				double executionTime = this.computeTimeDifference(executionStartTime, executionEndTime);
+				execution.setExecutionTime(executionTime);
+				executionRepository.save(execution);
+				Execution finalExecutionStatus = this.setFinalStatusOfExecution(execution);
 
-						if (executionResult) {
-							LOGGER.info("Execution result success for{} on device: {}", script.getName(),
-									device.getName());
-						} else {
-							LOGGER.info("Execution result success for {} on device: {}", script.getName(),
-									device.getName());
-						}
-
-						executedScript++;
-						execution.setExecutedScriptCount(executedScript);
-						executionRepository.save(execution);
-
+				if (isRerunOnFailure && (finalExecutionStatus.getResult() == ExecutionOverallResultStatus.FAILURE)) {
+					List<String> failedScriptName = executableResultList.stream()
+							.filter(result -> result.getResult() == ExecutionResultStatus.FAILURE)
+							.map(ExecutionResult::getScript).toList();
+					List<Script> failedScripts = applicableScripts.stream()
+							.filter(script -> failedScriptName.contains(script.getName())).toList();
+					if (!failedScripts.isEmpty()) {
+						String rerunExecutionName = currentExecutionName + "_RERUN";
+						LOGGER.info("Starting Rerun due to failure: execution name: {}", rerunExecutionName);
+						prepareAndExecuteMultiScript(device, failedScripts, user, rerunExecutionName, category,
+								testSuiteName, 1, false, isDeviceLogsNeeded, isDiagnosticsLogsNeeded,
+								isPerformanceNeeded);
 					}
 				}
-
-				if (this.isExecutionAborted(executionId)) {
-					break;
-				}
 			}
-
-			// If executable result list is null then no need for execution time logic
-			if (executableResultList != null) {
-				double realExecTime = this.getRealExcetionTime(executableResultList);
-				double roundOfValue = this.roundOfToThreeDecimals(realExecTime);
-				execution.setRealExecutionTime(roundOfValue);
-			}
-
-			double executionEndTime = System.currentTimeMillis();
-			double executiontime = this.computeTimeDifference(executionStartTime, executionEndTime);
-			execution.setExecutionTime(executiontime);
-			executionRepository.save(execution);
-
-			this.setFinalStatusOfExecution(execution);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			LOGGER.error("Error in executing scripts: {} on device: {}", device.getName());
@@ -330,7 +352,6 @@ public class ExecutionAsyncService {
 		String output = "";
 
 		Device device = executionDevice.getDevice();
-
 		StringBuilder remarksString = new StringBuilder();
 		remarksString.append("Execution started in device: ").append(device.getName()).append(" for script: ")
 				.append(script.getName()).append("\n");
@@ -378,7 +399,6 @@ public class ExecutionAsyncService {
 			if (!script.isLongDuration()) {
 				waittime = script.getExecutionTimeOut();
 			}
-
 			// A standardized path for storing the logs
 			String executionLogfile = getExecutionLogFilePath(execution.getId().toString(),
 					executionResult.getId().toString());
@@ -429,6 +449,18 @@ public class ExecutionAsyncService {
 			// Delete the temporary script file after execution
 			deleteTemporaryFile(temporaryScriptPath);
 
+			// Create and call transferSTBLogRdkService
+			if (execution.isDeviceLogsNeeded()) {
+				// TODO integrated
+
+				if (device.isThunderEnabled()) {
+//					fileService.transferSTBLogRdkService(fileTransferRequest);
+				} else {
+					// TODO transfer device logs
+//					fileService.logTransfer(fileTransferRequest);
+				}
+			}
+
 		} catch (Exception e) {
 			finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
 			executionResult.setResult(ExecutionResultStatus.FAILURE);
@@ -437,8 +469,24 @@ public class ExecutionAsyncService {
 			LOGGER.error("Error in executing script: {} on device: {} due to ", script.getName(), device.getName(), e);
 		}
 
-		// TODO : Revisit the logic for all cases including multi script
 		return finalExecutionResultStatus == ExecutionResultStatus.SUCCESS;
+	}
+
+	/*
+	 * 
+	 * This method is used to get the execution log file path**
+	 * 
+	 * @param executionID
+	 * 
+	 * @param executionResultID
+	 * 
+	 * @return String
+	 */
+	private String getExecutionLogFilePath(String executionID, String executionResultID) {
+		String logBasePath = commonService.getBaseLogPath();
+		return logBasePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD + Constants.UNDERSCORE
+				+ executionID + Constants.FILE_PATH_SEPERATOR + Constants.RESULT + Constants.UNDERSCORE
+				+ executionResultID + Constants.FILE_PATH_SEPERATOR + executionResultID + "_executionlogs.log";
 	}
 
 	/*
@@ -447,7 +495,7 @@ public class ExecutionAsyncService {
 	 * @param execution
 	 * 
 	 */
-	private void setFinalStatusOfExecution(Execution executionObject) {
+	private Execution setFinalStatusOfExecution(Execution executionObject) {
 
 		Execution execution = executionRepository.findById(executionObject.getId()).orElse(null);
 
@@ -467,7 +515,7 @@ public class ExecutionAsyncService {
 			execution.setResult(ExecutionOverallResultStatus.FAILURE);
 			execution.setExecutionStatus(ExecutionProgressStatus.COMPLETED);
 			executionRepository.save(execution);
-			return;
+			return execution;
 		}
 
 		for (ExecutionResult result : executionResults) {
@@ -486,8 +534,6 @@ public class ExecutionAsyncService {
 			}
 		}
 
-		// TO DO : Revisit this logic on the go
-		// ABHIJA CHANGE
 		if (failureCount > 0) {
 			execution.setResult(ExecutionOverallResultStatus.FAILURE);
 		} else if (scriptTimeoutCount > 0) {
@@ -499,32 +545,14 @@ public class ExecutionAsyncService {
 		}
 
 		executionRepository.save(execution);
+		return execution;
 
 	}
 
 	/*
-	 * This method is used to get execution name
 	 * 
-	 * @param executionName
-	 * 
-	 * @param device
-	 * 
-	 */
-
-	private String getExecutionName(String executionName, Device device) {
-		String baseExecutionName = executionName;
-		// TODO: Advanced use cases later - For CI API triggere, SOC , OEM etc
-		if (!Utils.isEmpty(executionName)) {
-			baseExecutionName = executionName + "_" + device.getName();
-		} else {
-			baseExecutionName = device.getName() + "_" + LocalDate.now();
-		}
-		return baseExecutionName;
-	}
-
-	/*
-	 * 
-	 * This method is used to get execution entities for the execution
+	 * This method is used to get execution entities for the execution as a code
+	 * optimisaation for Single script execution
 	 * 
 	 * @param device
 	 * 
@@ -542,11 +570,9 @@ public class ExecutionAsyncService {
 	 * 
 	 */
 	private ExecutionEntities getExecutionEntitiesForExecution(Device device, Script script, User user,
-			String executionName, String category, boolean isRerunOnFailure) {
-
+			String executionName, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
+			boolean isDiagnosticLogsNeeded) {
 		Execution execution = new Execution();
-
-		// TODO check logic for date - created date
 		execution.setName(executionName);
 		execution.setCategory(device.getCategory());
 		execution.setExecutionType(ExecutionType.SINGLESCRIPT);
@@ -556,6 +582,9 @@ public class ExecutionAsyncService {
 		execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
 		execution.setScriptCount(1);
 		execution.setUser(user);
+		execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
+		execution.setPerformanceLogsNeeded(isPerformanceLogsNeeded);
+		execution.setDiagnosticLogsNeeded(isDiagnosticLogsNeeded);
 		executionRepository.save(execution);
 
 		// Create and save ExecutionDevice
@@ -567,7 +596,6 @@ public class ExecutionAsyncService {
 		executionDeviceRepository.save(executionDevice);
 
 		ExecutionResult executionResult = new ExecutionResult();
-		// TODO to correct time zone
 		executionResult.setDateOfExecution(Instant.now());
 		executionResult.setExecution(execution);
 		executionResult.setScript(script.getName());
@@ -659,7 +687,6 @@ public class ExecutionAsyncService {
 			LOGGER.info("Executing script: {} on device: {}", script.getName(), device.getName());
 
 			ExecutionResult executionResult = new ExecutionResult();
-			// to do add date check
 			executionResult.setDateOfExecution(Instant.now());
 			executionResult.setExecution(execution);
 			executionResult.setScript(script.getName());
@@ -699,20 +726,6 @@ public class ExecutionAsyncService {
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + false
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR;
-	}
-
-	/**
-	 * This method is used to get the execution log file path
-	 * 
-	 * @param executionID
-	 * @param executionResultID
-	 * @return String
-	 */
-	private String getExecutionLogFilePath(String executionID, String executionResultID) {
-		String logBasePath = commonService.getBaseLogPath();
-		return logBasePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD + Constants.UNDERSCORE
-				+ executionID + Constants.FILE_PATH_SEPERATOR + Constants.RESULT + Constants.UNDERSCORE
-				+ executionResultID + Constants.FILE_PATH_SEPERATOR + executionResultID + "_executionlogs.log";
 	}
 
 	/**

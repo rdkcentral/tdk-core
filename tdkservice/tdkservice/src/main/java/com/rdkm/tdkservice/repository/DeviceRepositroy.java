@@ -118,4 +118,12 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	 * @param port     This is the port of the Device to be found.
 	 */
 	Device findByIpAndPort(String deviceIP, String port);
+	/**
+	 * Finds a list of devices by their category and thunder enabled status.
+	 *
+	 * @param category the category of the devices to find
+	 * @param isThunderEnabled the thunder enabled status of the devices to find
+	 * @return a list of devices that match the given category and thunder enabled status
+	 */
+	List<Device> findByCategoryAndIsThunderEnabled(Category category, Boolean isThunderEnabled);
 }

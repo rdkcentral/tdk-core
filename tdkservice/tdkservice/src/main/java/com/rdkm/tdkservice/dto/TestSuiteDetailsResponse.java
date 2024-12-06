@@ -17,28 +17,26 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
+package com.rdkm.tdkservice.dto;
 
 import java.util.UUID;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class TestSuiteDetailsResponse {
 
-/**
- * Repository for the ExecutionDevice entity.
- */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
-
-	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
+	/*
+	 * Represent the testuite id
 	 */
-	ExecutionDevice findByExecution(Execution execution);
+	private UUID id;
 
+	/*
+	 * Represent the testuite name
+	 */
+	private String testSuiteName;
 }

@@ -25,9 +25,11 @@ import static com.rdkm.tdkservice.util.Constants.DEVICE_XML_FILE_EXTENSION;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -388,7 +390,7 @@ public class DeviceController {
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(fileContent);
 
 	}
-	
+
 	/**
 	 * This method is used to get the status of all devices in a category.
 	 *
@@ -400,7 +402,8 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching device status data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "404", description = "No devices found for the category")
-	public ResponseEntity<?> getAllDeviceStatus(String category) {
+	@GetMapping("/getalldevicestatus")
+	public ResponseEntity<?> getAllDeviceStatus(@RequestParam String category) {
 		LOGGER.info("Received request to fetch status for all devices in category: " + category);
 		List<DeviceStatusResponseDTO> deviceStatusList = deviceService.getAllDeviceStatus(category);
 		if (deviceStatusList != null && !deviceStatusList.isEmpty()) {
@@ -411,6 +414,70 @@ public class DeviceController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found in the category: " + category);
 		}
 
+	}
+
+	/**
+	 * Retrieves a list of devices based on the specified category and thunder
+	 * status.
+	 *
+	 * @param category         the category of the devices to retrieve
+	 * @param isThunderEnabled optional parameter to filter devices by their thunder
+	 *                         status
+	 * @return a ResponseEntity containing a list of DeviceResponseDTO objects if
+	 *         devices are found, or an appropriate HTTP status code if no devices
+	 *         are found or an error occurs
+	 */
+	@Operation(summary = "Get devices by category and thunder status", description = "Get devices by category and thunder status in the system.")
+	@ApiResponse(responseCode = "200", description = "Devices fetched successfully")
+	@ApiResponse(responseCode = "500", description = "Error in fetching device data")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "404", description = "No devices found for the category")
+	@GetMapping("/getdevicebycategoryandthunderstatus")
+	public ResponseEntity<List<DeviceResponseDTO>> getDevicesByCategoryAndThunderStatus(@RequestParam String category,
+			@RequestParam(required = false) Boolean isThunderEnabled) {
+		try {
+			// Validate category
+			if (category == null || category.isEmpty()) {
+				return ResponseEntity.badRequest().body(Collections.emptyList());
+			}
+			// Fetch devices
+			List<DeviceResponseDTO> devices = deviceService.getDevicesByCategoryAndThunderStatus(category,
+					isThunderEnabled);
+
+			// Check if devices are found
+			if (devices.isEmpty()) {
+				return ResponseEntity.noContent().build();
+			}
+			return ResponseEntity.ok(devices);
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		}
+	}
+
+	/**
+	 * This method is used to toggle the thunder enabled status of a device.
+	 *
+	 * @param deviceIp This is the IP of the device.
+	 * @return ResponseEntity<String> This returns the response message.
+	 */
+	@Operation(summary = "Toggle Thunder Enabled Status", description = "Toggle the thunder enabled status of a device.")
+	@ApiResponse(responseCode = "200", description = "Thunder enabled status toggled successfully")
+	@ApiResponse(responseCode = "500", description = "Error in toggling thunder enabled status")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/toggleThunderEnabledStatus")
+	public ResponseEntity<String> toggleThunderEnabledStatus(@RequestParam String deviceIp) {
+		LOGGER.info("Received toggle thunder enabled status request for device: " + deviceIp);
+		boolean status = deviceService.toggleThunderEnabledstatus(deviceIp);
+		if (status) {
+			LOGGER.info("Thunder enabled status toggled successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Thunder enabled status toggled successfully");
+		} else {
+			LOGGER.error("Failed to toggle thunder enabled status");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to toggle thunder enabled status");
+		}
 	}
 
 }

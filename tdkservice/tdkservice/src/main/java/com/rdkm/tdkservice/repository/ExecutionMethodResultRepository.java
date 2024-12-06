@@ -22,11 +22,22 @@ package com.rdkm.tdkservice.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
+import com.rdkm.tdkservice.model.ExecutionResult;
 
+import java.util.List;
 import java.util.UUID;
 
 /**
  * Represents the execution method result repository.
  */
 public interface ExecutionMethodResultRepository extends JpaRepository<ExecutionMethodResult, UUID> {
+
+	/**
+	 * Find the execution method result by execution result.
+	 * 
+	 * @param executionResult the execution result
+	 * @return the list of execution method result
+	 */
+	List<ExecutionMethodResult> findByExecutionResult(ExecutionResult executionResult);
+	
 }

@@ -1,4 +1,3 @@
-
 /*
 * If not stated otherwise in this file or this component's Licenses.txt file the
 * following copyright and licenses apply:
@@ -20,42 +19,46 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.time.Instant;
+
 import lombok.Data;
 
-/**
- * Represents the device status response DTO. This class is used to transfer
- * device status information.
- * 
- * Fields: - ip: The IP address of the device. - name: The name of the device. -
- * status: The current status of the device. - isThunderEnabled: Indicates
- * whether Thunder is enabled on the device.
- */
 @Data
-public class DeviceStatusResponseDTO {
+public class ExecutionSchedulesResponseDTO {
 
 	/**
-	 * The IP address of the device.
-	 */
-	String ip;
+ * The unique identifier for the execution schedule.
+ */
+private String id;
 
-	/**
-	 * The name of the device.
-	 */
-	String deviceName;
+/**
+ * The time at which the execution is scheduled to occur.
+ */
+private Instant executionTime;
 
-	/**
-	 * The current status of the device.
-	 */
-	String status;
-	
-	/**
-	 * Device type name
-	 */
-	String deviceType;
+/**
+ * The name of the job associated with the execution schedule.
+ */
+private String jobName;
 
-	/**
-	 * Indicates whether Thunder is enabled on the device.
-	 */
-	boolean isThunderEnabled;
+/**
+ * The name of the script or test suite that is scheduled to be executed.
+ */
+private String scriptTestSuite;
+
+/**
+ * The device on which the execution is scheduled to be performed.
+ */
+private String device;
+
+/**
+ * Additional details about the execution schedule.
+ */
+private String details;
+
+/**
+ * The status of the execution schedule (e.g., "PENDING", "COMPLETED").
+ */
+private String status;
 
 }

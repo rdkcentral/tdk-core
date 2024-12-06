@@ -17,28 +17,38 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
+package com.rdkm.tdkservice.dto;
 
-import java.util.UUID;
+import java.time.Instant;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
+import com.rdkm.tdkservice.enums.ScheduleType;
 
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
+import lombok.Data;
 
 /**
- * Repository for the ExecutionDevice entity.
+ * Data Transfer Object for Execution Schedule. This class is used to transfer
+ * execution schedule data between processes.
  */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
+@Data
+public class ExecutionScheduleDTO {
 
 	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
+	 * The time at which the execution is scheduled.
 	 */
-	ExecutionDevice findByExecution(Execution execution);
+	private Instant executionTime;
+
+	/**
+	 * The type of schedule.
+	 * 
+	 * @see com.rdkm.tdkservice.enums.ScheduleType
+	 */
+	private ScheduleType scheduleType;
+
+	/**
+	 * The trigger details for the execution.
+	 * 
+	 * @see ExecutionTriggerDTO
+	 */
+	private ExecutionTriggerDTO executionTriggerDTO;
 
 }

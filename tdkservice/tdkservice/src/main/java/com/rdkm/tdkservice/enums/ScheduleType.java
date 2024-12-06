@@ -17,28 +17,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-package com.rdkm.tdkservice.repository;
 
-import java.util.UUID;
-
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
+package com.rdkm.tdkservice.enums;
 
 /**
- * Repository for the ExecutionDevice entity.
+ * Represents the schedule type.
  */
-@Repository
-public interface ExecutionDeviceRepository extends JpaRepository<ExecutionDevice, UUID> {
+public enum ScheduleType {
 
-	/**
-	 * Finds the ExecutionDevice by execution.
-	 * 
-	 * @param execution the execution
-	 * @return ExecutionDevice
-	 */
-	ExecutionDevice findByExecution(Execution execution);
+	ONCE, REPEAT
 
 }
