@@ -154,20 +154,4 @@ public interface IScriptService {
 	 * @return - the list of script names by category
 	 */
 	public List<ScriptDetailsResponse> getListofScriptNamesByCategory(String category, boolean isThunderEnabled);
-
-	/**
-	 * This method is used to get the list of test suite names by category.
-	 *
-	 * @param category - the category
-	 * @return - the list of test suite names by category
-	 */
-	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled);
-
-	/**
-	 * This method is used to get the list of script names by module name.
-	 *
-	 *
-	 * @return - the list of script names by module name
-	 */
-	public List<ScriptNameModuleNameMappingResponse> getScriptNameModuleNameMapping();
 }

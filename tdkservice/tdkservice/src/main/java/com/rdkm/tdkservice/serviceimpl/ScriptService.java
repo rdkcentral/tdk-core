@@ -1155,7 +1155,6 @@ public class ScriptService implements IScriptService {
 			LOGGER.error("Invalid category: {}", category);
 			throw new UserInputException("Invalid category: " + category);
 		}
-
 		List<Script> scripts = new ArrayList<>();
 
 		if (isThunderEnabled) {
@@ -1163,7 +1162,7 @@ public class ScriptService implements IScriptService {
 				LOGGER.error("The category {} cannot be thunder enabled", category);
 				throw new UserInputException("The category " + category + " cannot be thunder enabled");
 			}
-			scripts = scriptRepository.findAllByCategory(Category.RDKV_RDKSERVICE.name());
+			scripts = scriptRepository.findAllByCategory(Category.RDKV_RDKSERVICE);
 		} else {
 			if (category.equalsIgnoreCase(Category.RDKV.name())) {
 				scripts = scriptRepository.findAllByCategory(Category.valueOf(category));
@@ -1173,76 +1172,8 @@ public class ScriptService implements IScriptService {
 				scripts = scriptRepository.findAllByCategory(Category.valueOf(category));
 			}
 		}
-
-		if (scripts.isEmpty()) {
-			LOGGER.warn("No scripts found for category: {} with Thunder enabled: {}", category, isThunderEnabled);
-			return Collections.emptyList();
-		}
-
-		return scripts.stream().map(script -> new ScriptDetailsResponse(script.getId(), script.getName()))
+		return scripts.stream()
+				.map(MapperUtils::convertToScriptDetailsResponse)
 				.collect(Collectors.toList());
 	}
-
-	/**
-	 * This method is used to get the list of test suite names based on the category
-	 *
-	 * @param category - the category
-	 * @return - the list of test suite names
-	 */
-	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled) {
-		LOGGER.info("Fetching test suite names for category: {} with Thunder enabled: {}", category, isThunderEnabled);
-
-		if (!category.equalsIgnoreCase("RDKV") && !category.equalsIgnoreCase("RDKB")
-				&& !category.equalsIgnoreCase("RDKC")) {
-			LOGGER.error("Invalid category: {}", category);
-			throw new UserInputException("Invalid category: " + category);
-		}
-
-		List<TestSuite> testSuites = new ArrayList<>();
-
-		if (isThunderEnabled) {
-			if (!category.equalsIgnoreCase(Category.RDKV.name())) {
-				LOGGER.error("The category {} cannot be thunder enabled", category);
-				throw new UserInputException("The category " + category + " cannot be thunder enabled");
-			}
-			testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(Category.RDKV_RDKSERVICE.name()));
-		} else {
-			if (category.equalsIgnoreCase(Category.RDKV.name())) {
-				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
-			} else if (category.equalsIgnoreCase(Category.RDKB.name())) {
-				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
-			} else if (category.equalsIgnoreCase(Category.RDKC.name())) {
-				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
-			}
-		}
-
-		if (testSuites.isEmpty()) {
-			LOGGER.warn("No test suites found for category: {} with Thunder enabled: {}", category, isThunderEnabled);
-			return Collections.emptyList();
-		}
-
-		return testSuites.stream()
-				.map(testSuite -> new TestSuiteDetailsResponse())
-				.collect(Collectors.toList());
-	}
-
-	/**
-	 * This method is used to get the list of script names based on the Module mapping
-	 *
-	 * @param category - the category
-	 * @return - the list of script names
-	 */
-	@Override
-	public List<ScriptNameModuleNameMappingResponse> getScriptNameModuleNameMapping() {
-		List<ScriptNameModuleNameMappingResponse> scriptNameModuleNameMappings = new ArrayList<>();
-		List<Script> scripts = scriptRepository.findAll();
-		for (Script script : scripts) {
-			ScriptNameModuleNameMappingResponse scriptNameModuleNameMapping = new ScriptNameModuleNameMappingResponse();
-			scriptNameModuleNameMapping.setScriptName(script.getName());
-			scriptNameModuleNameMapping.setModuleName(script.getModule().getName());
-			scriptNameModuleNameMappings.add(scriptNameModuleNameMapping);
-		}
-		return scriptNameModuleNameMappings;
-	}
-
 }

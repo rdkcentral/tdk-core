@@ -22,32 +22,11 @@ package com.rdkm.tdkservice.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rdkm.tdkservice.dto.*;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rdkm.tdkservice.dto.DeviceCreateDTO;
-import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
-import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
-import com.rdkm.tdkservice.dto.FunctionCreateDTO;
-import com.rdkm.tdkservice.dto.FunctionDTO;
-import com.rdkm.tdkservice.dto.ModuleCreateDTO;
-import com.rdkm.tdkservice.dto.ModuleDTO;
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.ParameterCreateDTO;
-import com.rdkm.tdkservice.dto.ParameterDTO;
-import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
-import com.rdkm.tdkservice.dto.ScriptCreateDTO;
-import com.rdkm.tdkservice.dto.ScriptDTO;
-import com.rdkm.tdkservice.dto.ScriptListDTO;
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDTO;
-import com.rdkm.tdkservice.dto.UserDTO;
-import com.rdkm.tdkservice.dto.UserGroupDTO;
-import com.rdkm.tdkservice.dto.UserRoleDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.ScheduleStatus;
 import com.rdkm.tdkservice.enums.TestGroup;
@@ -696,5 +675,31 @@ public class MapperUtils {
 		executionSchedule.setDiagnosticLogsNeeded(executionTriggerDTO.isDiagnosticLogsNeeded());
 		executionSchedule.setScheduleStatus(ScheduleStatus.SCHEDULED);
 		return executionSchedule;
+	}
+
+	/**
+	 * This method is used to convert script to ScriptDetailsResponse
+	 * @param script
+	 * @return
+	 */
+	public static ScriptDetailsResponse convertToScriptDetailsResponse(Script script) {
+		ScriptDetailsResponse response = new ScriptDetailsResponse();
+		response.setId(script.getId());
+		response.setScriptName(script.getName());
+
+		return response;
+	}
+
+	/**
+	 * This method is used to convert the TestSuite entity to TestSuiteDetailsResponse
+	 *
+	 * @param testSuite TestSuite entity
+	 * @return testSuite TestSuiteDetailsResponse
+	 */
+	public static TestSuiteDetailsResponse convertToTestSuiteDetailsResponse(TestSuite testSuite) {
+		TestSuiteDetailsResponse response = new TestSuiteDetailsResponse();
+		response.setId(testSuite.getId());
+		response.setTestSuiteName(testSuite.getName());
+		return response;
 	}
 }

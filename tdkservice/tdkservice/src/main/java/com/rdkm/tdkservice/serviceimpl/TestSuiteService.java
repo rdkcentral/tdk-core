@@ -28,6 +28,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -41,6 +42,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
+import com.rdkm.tdkservice.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +53,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import com.rdkm.tdkservice.dto.ScriptListDTO;
-import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
-import com.rdkm.tdkservice.dto.TestSuiteCustomDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -743,6 +741,43 @@ public class TestSuiteService implements ITestSuiteService {
 		}
 
 		return new ByteArrayInputStream(out.toByteArray());
+	}
+
+	/**
+	 *
+	 * @param category
+	 * @param isThunderEnabled
+	 * @return
+	 */
+	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled) {
+		LOGGER.info("Fetching test suite names for category: {} with Thunder enabled: {}", category, isThunderEnabled);
+
+		if (!category.equalsIgnoreCase("RDKV") && !category.equalsIgnoreCase("RDKB")
+				&& !category.equalsIgnoreCase("RDKC")) {
+			LOGGER.error("Invalid category: {}", category);
+			throw new UserInputException("Invalid category: " + category);
+		}
+
+		List<TestSuite> testSuites = new ArrayList<>();
+
+		if (isThunderEnabled) {
+			if (!category.equalsIgnoreCase(Category.RDKV.name())) {
+				LOGGER.error("The category {} cannot be thunder enabled", category);
+				throw new UserInputException("The category " + category + " cannot be thunder enabled");
+			}
+			testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(Category.RDKV_RDKSERVICE.name()));
+		} else {
+			if (category.equalsIgnoreCase(Category.RDKV.name())) {
+				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
+			} else if (category.equalsIgnoreCase(Category.RDKB.name())) {
+				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
+			} else if (category.equalsIgnoreCase(Category.RDKC.name())) {
+				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
+			}
+		}
+		return testSuites.stream()
+				.map(MapperUtils::convertToTestSuiteDetailsResponse)
+				.collect(Collectors.toList());
 	}
 
 }

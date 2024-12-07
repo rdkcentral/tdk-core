@@ -19,14 +19,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.service.IFileService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,6 +54,7 @@ import com.rdkm.tdkservice.service.IExecutionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This class is used to handle the execution related operations.
@@ -61,6 +68,9 @@ public class ExecutionController {
 
 	@Autowired
 	private IExecutionService executionService;
+
+	@Autowired
+	private IFileService fileService;
 
 	/**
 	 * This method is used to trigger the execution.
@@ -517,4 +527,225 @@ public class ExecutionController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to get users users");
 		}
 	}
+
+	/**
+	 * This method is used to get the execution result details.
+	 *
+	 * @param execResultId
+	 *
+	 * @return ResponseEntity<?>
+	 */
+	@Operation(summary = "Upload Logs")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Logs uploaded successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to upload logs")
+	})
+	@PostMapping("/uploadLogs")
+	public ResponseEntity<String> uploadLogs(@RequestParam MultipartFile logFile, @RequestParam String fileName) {
+		try {
+			LOGGER.info("Fetching upload logs");
+			String uploaded = fileService.uploadLogs(logFile, fileName);
+			return ResponseEntity.ok(uploaded);
+		} catch (Exception e) {
+			 LOGGER.error("Failed to upload logs: {}", e.getMessage());
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to upload logs: " + e.getMessage());
+		}
+	}
+
+	/**
+	 * This method is used to get the image name or current firmware version based on execution ID.
+	 * @param executionId
+	 * @return
+	 */
+	@Operation(summary= "Fetches the image name or current firmware version based on execution ID.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved the image name"),
+			@ApiResponse(responseCode = "400", description = "Bad request, invalid parameters"),
+			@ApiResponse(responseCode = "500", description = "Internal server error")
+	})
+	@GetMapping("/getDeviceImageName")
+	public ResponseEntity<String> getImageName(@RequestParam String executionId) {
+		try {
+			LOGGER.info("Going to get image name");
+			String imageName = fileService.getImageName(executionId);
+			if (imageName.isEmpty()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image name or firmware version not found.");
+			}
+			return ResponseEntity.ok(imageName);
+		} catch (Exception e) {
+			// Log the error (optional, depending on logging setup)
+			LOGGER.error("Error fetching image name for executionId: {}", executionId, e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("An error occurred while processing the request.");
+		}
+	}
+
+	/**
+	 * Endpoint to download a device log file.
+	 *
+	 * @param executionId     The execution ID
+	 * @param executionResId  The execution resource ID
+	 * @param fileName        The name of the log file to download
+	 * @return ResponseEntity with the file resource or error message
+	 */
+
+	@Operation(summary = "Download a specific log file", description = "Fetches and returns a specific log file based on execution ID, executionResId, and file name.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved the log file"),
+			@ApiResponse(responseCode = "404", description = "Log file not found"),
+			@ApiResponse(responseCode = "500", description = "Internal server error")
+	})
+	@GetMapping("/downloadDeviceLogFile")
+	public ResponseEntity<?> downloadDeviceLogFile(
+			@RequestParam String executionId,
+			@RequestParam String executionResId,
+			@RequestParam String fileName) {
+
+		LOGGER.info("Inside downloadLogFile controller with fileName: {}", fileName);
+		Resource resource = null;
+		try {
+			// Call service method to retrieve the log file resource
+			resource = fileService.downloadDeviceLogFile(executionId, executionResId, fileName);
+		} catch (ResourceNotFoundException ex) {
+			// Log and return not found error if the file doesn't exist
+			LOGGER.error("Log file not found: {}", fileName);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("Log file not found: " + fileName);
+		} catch (Exception e) {
+			// Log and return internal server error for other exceptions
+			LOGGER.error("Error in downloading log file: {}", e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error in downloading log file");
+		}
+
+		if (resource != null && resource.exists()) {
+			LOGGER.info("Log file downloaded successfully");
+			return ResponseEntity.status(HttpStatus.OK)
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+					.header("Access-Control-Expose-Headers", "content-disposition")
+					.body(resource);
+		} else {
+			LOGGER.error("Error in downloading log file: {}", fileName);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error in downloading log file");
+		}
+	}
+
+	/**
+	 * Endpoint to download all device log files as a zip.
+	 *
+	 * @param executionId   The execution ID.
+	 * @param executionResId The execution result ID.
+	 * @return A ResponseEntity containing the zip file.
+	 * @throws IOException If there is an error during file reading or zip creation.
+	 */
+	@Operation(summary = "Download all device log files as a zip", description = "Fetches and returns all log files for the specified execution ID and execution result ID as a zip file.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved the log files as a zip"),
+			@ApiResponse(responseCode = "500", description = "Internal server error")
+	})
+	@GetMapping("/downloadAllDeviceLogFiles")
+	public ResponseEntity<byte[]> downloadDeviceLogs(@RequestParam("executionId") String executionId,
+													 @RequestParam("executionResId") String executionResId) throws IOException, IOException {
+		LOGGER.info("Inside download all device log files as a zip");
+		byte[] zipFile = fileService.downloadAllDeviceLogFiles(executionId, executionResId);
+
+		// Set headers for downloading the zip file
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("attachment", "device_logs.zip");
+
+		return new ResponseEntity<>(zipFile, headers, HttpStatus.OK);
+	}
+
+	/**
+	 * Endpoint to get the log file names for a given executionId and executionResId.
+	 *
+	 * @param executionId    The execution ID.
+	 * @param executionResId The execution result ID.
+	 * @return A ResponseEntity containing the list of log file names.
+	 */
+	@Operation(summary = "Get the log file names", description = "Fetches the list of log file names for the specified execution ID and execution result ID.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Successfully retrieved log file names"),
+			@ApiResponse(responseCode = "204", description = "No log files found"),
+			@ApiResponse(responseCode = "500", description = "Internal server error")
+	})
+	@GetMapping("/getDeviceLogFileNames")
+	public ResponseEntity<List<String>> getDeviceLogFileNames(@RequestParam("executionId") String executionId,
+														@RequestParam("executionResId") String executionResId) {
+		List<String> logFileNames = fileService.getDeviceLogFileNames(executionId, executionResId);
+		if (logFileNames.isEmpty()) {
+			return  ResponseEntity.status(HttpStatus.NO_CONTENT).body(logFileNames); // Return 204 NO CONTENT if no files found
+		}
+		return ResponseEntity.ok(logFileNames);
+	}
+
+	/**
+		 * Endpoint to get the content of the agent log file for a given execution ID and execution result ID.
+		 *
+		 * @param executionId     The execution ID.
+		 * @param executionResId  The execution result ID.
+		 * @param baseLogPath     The base log path.
+		 * @return The content of the log file as a String.
+		 */
+	@GetMapping("/getAgentLogContent")
+	public ResponseEntity<String> getAgentLogContent(@RequestParam("executionId") String executionId,
+														 @RequestParam("executionResId") String executionResId,
+														 @RequestParam("baseLogPath") String baseLogPath) {
+			String logContent = fileService.getAgentLogContent(executionId, executionResId, baseLogPath);
+
+			if (logContent.equals("Log file not found")) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body(logContent);  // 404 if file not found
+			} else if (logContent.equals("Error reading log file")) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(logContent); // 500 on error
+			}
+
+			return ResponseEntity.ok(logContent);  // Return the log content with 200 OK
+	}
+	/**
+	 * Endpoint to download an agent log file for a specific execution ID and result ID.
+	 *
+	 * @param executionId   The execution ID associated with the log file.
+	 * @param executionResId The result ID associated with the log file.
+	 * @param fileName      The name of the agent log file to be downloaded.
+	 * @return ResponseEntity with the file resource or an error message if the file is not found or an error occurs.
+	 */
+	@Operation(summary = "Download an agent log file for a specific execution ID and result ID")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Agent log file downloaded successfully"),
+			@ApiResponse(responseCode = "404", description = "Agent log file not found"),
+			@ApiResponse(responseCode = "500", description = "Error downloading agent log file")
+	})
+	@GetMapping("/downloadAgentLog")
+	public ResponseEntity<?> downloadAgentLogFile(
+			@RequestParam String executionId,
+			@RequestParam String executionResId,
+			@RequestParam String fileName) {
+
+		LOGGER.info("Inside downloadAgentLogFile controller with fileName: {}", fileName);
+
+		try {
+			// Call the service method to download the agent log file
+			Resource resource = fileService.downloadAgentLogFile(executionId, executionResId, fileName);
+
+			// Prepare the response headers for file download
+			return ResponseEntity.ok()
+					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+					.header("Access-Control-Expose-Headers", "content-disposition")
+					.contentType(MediaType.APPLICATION_OCTET_STREAM)
+					.body(resource);
+		} catch (ResourceNotFoundException ex) {
+			// Log and return not found response
+			LOGGER.error("Agent log file not found: {}", fileName);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Agent log file not found: " + fileName);
+		} catch (Exception e) {
+			// Log and return internal server error response
+			LOGGER.error("Error downloading agent log file: {}", e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error downloading agent log file: " + e.getMessage());
+		}
+	}
+
+
 }

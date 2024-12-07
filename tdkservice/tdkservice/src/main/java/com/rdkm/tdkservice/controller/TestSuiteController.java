@@ -23,6 +23,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -330,6 +331,31 @@ public class TestSuiteController {
 		LOGGER.info("Downloaded all test suite xml as zip");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(new InputStreamResource(inputStream));
+	}
+
+	/**
+	 *  This method used to get List of Test Suite by Category
+	 * @param category
+	 * @param isThunderEnabled
+	 * @return
+	 */
+	@Operation(summary = "Get List of Test Suite by Category", description = "Get List of Test Suite by Category")
+	@ApiResponse(responseCode = "200", description = "List of test suite fetched successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getListofTestSuiteByCategory")
+	public ResponseEntity<?> getListofTestSuiteByCategory(@RequestParam String category,
+														  @RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+
+		List<TestSuiteDetailsResponse> testSuites = testSuiteService.getListofTestSuiteNamesByCategory(category, isThunderEnabled);
+
+		if (testSuites != null) {
+			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			return ResponseEntity.status(HttpStatus.OK).body(testSuites);
+		} else {
+			LOGGER.warn("No test suites found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suites found for the specified category and Thunder setting");
+		}
 	}
 
 }

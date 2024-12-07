@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
@@ -126,4 +127,12 @@ public interface ITestSuiteService {
 	 */
 	ByteArrayInputStream downloadAllTestSuiteAsXML(String category);
 
-}
+	/**
+	 *
+	 * @param category
+	 * @param isThunderEnabled
+	 * @return
+	 */
+	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled);
+
+	}

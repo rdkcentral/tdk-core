@@ -394,70 +394,17 @@ public class ScriptController {
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getListofScriptByCategory")
 	public ResponseEntity<?> getListofScriptByCategory(@RequestParam String category,
-			@RequestParam boolean isThunderEnabled) {
-		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category,
-				isThunderEnabled);
+													   @RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category, isThunderEnabled);
 
-		try {
-			List<ScriptDetailsResponse> scripts = scriptService.getListofScriptNamesByCategory(category,
-					isThunderEnabled);
+		List<ScriptDetailsResponse> scripts = scriptService.getListofScriptNamesByCategory(category, isThunderEnabled);
 
-			if (scripts == null || scripts.isEmpty()) {
-				LOGGER.warn("No scripts found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body("No scripts found for the specified category and Thunder setting");
-			}
-
-			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category,
-					isThunderEnabled);
+		if (scripts != null) {
+			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
-		} catch (IllegalArgumentException e) {
-			LOGGER.error("Invalid category: {}", category, e);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + category);
-		} catch (Exception e) {
-			LOGGER.error("Error fetching scripts for category: {} and isThunderEnabled: {}", category, isThunderEnabled,
-					e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching scripts");
-		}
-	}
-
-	/**
-	 * This method is used to get the list of test suite by category.
-	 *
-	 * @param category         - the category
-	 * @param isThunderEnabled - the isThunderEnabled
-	 * @return List<String> - the list of test suite
-	 */
-	@Operation(summary = "Get List of Test Suite by Category", description = "Get List of Test Suite by Category")
-	@ApiResponse(responseCode = "200", description = "List of test suite fetched successfully")
-	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/getListofTestSuiteByCategory")
-	public ResponseEntity<?> getListofTestSuiteByCategory(@RequestParam String category,
-			@RequestParam boolean isThunderEnabled) {
-		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category,
-				isThunderEnabled);
-
-		try {
-			List<TestSuiteDetailsResponse> testSuites = scriptService.getListofTestSuiteNamesByCategory(category,
-					isThunderEnabled);
-
-			if (testSuites == null || testSuites.isEmpty()) {
-				LOGGER.warn("No test suites found for category: {} and isThunderEnabled: {}", category,
-						isThunderEnabled);
-				return ResponseEntity.status(HttpStatus.NOT_FOUND)
-						.body("No test suites found for the specified category and Thunder setting");
-			}
-
-			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category,
-					isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.OK).body(testSuites);
-		} catch (IllegalArgumentException e) {
-			LOGGER.error("Invalid category: {}", category, e);
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid category: " + category);
-		} catch (Exception e) {
-			LOGGER.error("Error fetching test suites for category: {} and isThunderEnabled: {}", category,
-					isThunderEnabled, e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error fetching test suites");
+		} else {
+			LOGGER.warn("No scripts found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No scripts found for the specified category and Thunder setting");
 		}
 	}
 }

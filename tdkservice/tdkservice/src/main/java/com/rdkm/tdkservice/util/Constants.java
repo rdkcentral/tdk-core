@@ -370,8 +370,7 @@ public class Constants {
 
 	public static final String IPV6_INTERFACE = "ipv6.interface";
 	public static final String IPV4_INTERFACE = "ipv4.interface";
-	public static final String PYTHON3 = "python3";
-	public static final String CONSOLE_FILE_TRANSFER_SCRIPT = "//filestore//callConsoleLogTransfer.py";
+	public static final String PYTHON_COMMAND = "python_command";
 	public static final String CONSOLE_FILE_UPLOAD_SCRIPT = "//filestore//callConsoleLogUpload.py";
 
 	public static final String LOG_UPLOAD_IPV4 = "log.upload.ipv4";
@@ -384,7 +383,7 @@ public class Constants {
 	public static final String NONE_STRING = "none";
 	public static final String TM_CONFIG_FILE = "tm.config";
 	// AgentConsoleLog.txt
-	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsoleLog.txt";
+	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsoleLog.log";
 	// logs.path
 	public static final String LOGS_PATH = "logs.path";
 	public static final String HTML_BR = "<br/>";
@@ -395,7 +394,6 @@ public class Constants {
 	public static final String DEVICE_INFO_LOGS = "deviceinfo";
 
 	public static final String THUNDER_DEFAULT_PORT = "9998";
-
-	public static final String FILE_TRANSFER_SCRIPT = "filetransfer.py";
 	public static final String FILE_UPLOAD_SCRIPT = "fileupload.py";
+	public static final String PYTHON3="python3";
 }

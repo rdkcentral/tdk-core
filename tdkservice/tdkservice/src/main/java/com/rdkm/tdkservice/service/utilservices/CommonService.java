@@ -544,4 +544,140 @@ public class CommonService {
 		return null;
 	}
 
+	/**
+	 * Method to get the configuration property from the specified file
+	 *
+	 * @param configFile The configuration file
+	 * @param key        The key to search for in the configuration file
+	 * @return The value of the configuration property
+	 */
+	public String getConfigProperty(File configFile, String key) {
+		Properties prop = loadPropertiesFromFile(configFile.getPath());
+		if (prop != null) {
+			LOGGER.info(" properties key" + prop.getProperty(key));
+			return prop.getProperty(key);
+		}
+		return null;
+	}
+
+	/**
+	 * Method to get the TM URL from the configuration file
+	 * @return The TM URL
+	 */
+	public String getTMUrlFromConfigFile() {
+		String tmUrl = Constants.TM_URL;
+		try {
+			// get tm.config file using base location
+			String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
+			LOGGER.info("configFilePath: {}", configFilePath);
+			// get the TM URL from the config file
+			tmUrl = getConfigProperty(new File(configFilePath), Constants.TM_URL);
+			LOGGER.info("TM URL from config file: {}", tmUrl);
+		} catch (Exception e) {
+			LOGGER.error("Error getting TM URL from config file: " + e.getMessage());
+		}
+		return tmUrl;
+	}
+
+	/**
+	 * Get the device log file path for the given execution result
+	 *
+	 * @param executionId
+	 * @param executionResultId
+	 * @param baseLogPath
+	 * @return deviceLogsPath
+	 */
+	public String getDeviceLogsPathForTheExecution(String executionId, String executionResultId, String baseLogPath) {
+		String deviceLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId + Constants.FILE_PATH_SEPERATOR + Constants.RESULT
+				+ Constants.UNDERSCORE + executionResultId + Constants.FILE_PATH_SEPERATOR + Constants.DEVICE_LOGS
+				+ Constants.FILE_PATH_SEPERATOR;
+		return deviceLogsPath;
+	}
+
+	/**
+	 * Get file names from directory
+	 *
+	 * @param directoryPath
+	 * @param executionId
+	 * @return fileNames
+	 */
+	public List<String> getFilenamesFromDirectory(String directoryPath, String executionId) {
+		List<String> fileNames = new ArrayList<>();
+		File directory = new File(directoryPath);
+
+		if (directory.exists() && directory.isDirectory()) {
+			File[] files = directory.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					if (file.isFile()) {
+						fileNames.add(file.getName());
+					}
+				}
+			}
+		} else {
+			LOGGER.warn("Directory does not exist or is not a directory: {}", directoryPath);
+		}
+
+		return fileNames;
+	}
+
+	/**
+	 * Get the base file path for the upload log API
+	 *
+	 * @return String
+	 */
+	public String getBaseFilePathForUploadLogAPI() {
+		String baseLogFilePath = this.getBaseLogPath();
+		String logsPath = baseLogFilePath + Constants.FILE_PATH_SEPERATOR + "uploadedlogs";
+		return logsPath;
+	}
+
+	/**
+	 * Get the agent log path for the given execution result
+	 * @param executionId
+	 * @param executionResultId
+	 * @param baseLogPath
+	 * @return agentLogsPath
+	 */
+	public String getAgentLogPath(String executionId, String executionResultId, String baseLogPath) {
+		String agentLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId + Constants.FILE_PATH_SEPERATOR + Constants.RESULT
+				+ Constants.UNDERSCORE + executionResultId + Constants.FILE_PATH_SEPERATOR + Constants.AGENT_LOGS
+				+ Constants.FILE_PATH_SEPERATOR;
+		return agentLogsPath;
+
+	}
+
+	/**
+	 * Get the version log file path for the given execution
+	 * @param executionId
+	 * @return versionLogsPath
+	 */
+	public String getVersionLogFilePathForTheExecution(String executionId) {
+		String baseLogPath = this.getBaseLogPath();
+		String versionLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId + Constants.FILE_PATH_SEPERATOR + Constants.DEVICE_INFO_LOGS
+				+ Constants.FILE_PATH_SEPERATOR;
+		return versionLogsPath;
+	}
+
+	/**
+	 * Get the python3 command from the config file
+	 * @return python3Command
+	 */
+	public String getPythonCommandFromConfig() {
+		String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
+		String pythonCommand = getConfigProperty(new File(configFilePath), PYTHON_COMMAND);
+
+		// Check if the value from the config is null or empty
+		if (pythonCommand == null || pythonCommand.isEmpty()) {
+			// Provide a default Python 3 command
+			pythonCommand = PYTHON3;
+		}
+
+		return pythonCommand;
+	}
+
+
 }
