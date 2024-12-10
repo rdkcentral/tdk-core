@@ -28,6 +28,7 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.slf4j.Logger;
@@ -1433,6 +1434,7 @@ public class ExecutionService implements IExecutionService {
 	@Transactional
 	public boolean deleteExecution(UUID id) {
 		LOGGER.info("Deleting execution with id: {}", id);
+		this.deleteAllFilesForTheExecution(id.toString());
 		Execution execution = executionRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Execution", id.toString()));
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
@@ -1462,6 +1464,29 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Error deleting execution with id: {}", id, e);
 			throw new TDKServiceException("Error deleting execution with id: " + id);
 		}
+	}
+
+	/**
+	 * This method is used to delete the execution related files for the given
+	 * execution
+	 * 
+	 * @param executionId - the execution ID
+	 */
+	private void deleteAllFilesForTheExecution(String executionId) {
+		LOGGER.info("Deleting all files for the execution with id: {}", executionId);
+		String logBasePath = commonService.getBaseLogPath();
+		String executionBasePath = logBasePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId;
+		// Delete the execution folder
+		File executionFolder = new File(executionBasePath);
+		if (executionFolder.exists()) {
+			try {
+				FileUtils.deleteDirectory(executionFolder);
+			} catch (IOException e) {
+				LOGGER.error("Error deleting execution folder: {}", executionBasePath, e);
+			}
+		}
+
 	}
 
 	/**
@@ -1675,7 +1700,7 @@ public class ExecutionService implements IExecutionService {
 		return summary;
 
 	}
-	
+
 	/**
 	 * This method is used to get the unique users.
 	 * 

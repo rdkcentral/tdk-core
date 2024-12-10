@@ -37,6 +37,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import com.jayway.jsonpath.internal.Utils;
 import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
@@ -81,6 +82,9 @@ public class ExecutionAsyncService {
 
 	@Autowired
 	private DeviceStatusService deviceStatusService;
+
+	@Autowired
+	private FileTransferService fileTransferService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionService.class);
 
@@ -160,7 +164,6 @@ public class ExecutionAsyncService {
 	 * @param testSuiteName This is the name of the test suite.
 	 * 
 	 */
-
 	@Async
 	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, User user, String executionName,
 			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
@@ -215,13 +218,26 @@ public class ExecutionAsyncService {
 				execution.setDiagnosticLogsNeeded(isDiagnosticsLogsNeeded);
 				execution.setPerformanceLogsNeeded(isPerformanceNeeded);
 				execution.setUser(user);
-				executionRepository.save(execution);
+				Execution savedExecution = executionRepository.save(execution);
 
 				// Create and save ExecutionDevice
 				ExecutionDevice executionDevice = new ExecutionDevice();
 				executionDevice.setDevice(device);
 				executionDevice.setExecution(execution);
-				executionDevice.setBuildName("BuildName");
+
+				String executionID = savedExecution.getId().toString();
+				boolean isVersionFileTransfered = fileTransferService.getVersionFileForTheDevice(executionID, device);
+
+				if (!isVersionFileTransfered) {
+					LOGGER.warn("Version file is not transferred for the device: {}", device.getName());
+				}
+
+				String buildName = fileTransferService.getImageName(executionID);
+				if (Utils.isEmpty(buildName)) {
+					buildName = Constants.BUILD_NAME_FAILED;
+				}
+
+				executionDevice.setBuildName(buildName);
 				executionDeviceRepository.save(executionDevice);
 
 				List<ExecutionResult> execResultList = new ArrayList<>();
@@ -256,6 +272,7 @@ public class ExecutionAsyncService {
 								}
 							}
 							execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+							execution.setAbortRequested(true);
 							executionRepository.save(execution);
 							LOGGER.info("Execution aborted for device: {}", device.getName());
 							break;
@@ -333,19 +350,14 @@ public class ExecutionAsyncService {
 		return execution.isAbortRequested();
 	}
 
-	/*
+	/**
 	 * The method is used to execute the script in the device
 	 * 
-	 * @param script
-	 * 
-	 * @param execution
-	 * 
-	 * @param executionResult
-	 * 
-	 * @param executionDevice
-	 * 
-	 * return boolean
-	 * 
+	 * @param script          - the script to be executed
+	 * @param execution       - the execution object
+	 * @param executionResult - the execution result object
+	 * @param executionDevice - the execution device object return boolean - true if
+	 *                        the script is executed successfully, false otherwise
 	 */
 	private boolean executeScriptinDevice(Script script, Execution execution, ExecutionResult executionResult,
 			ExecutionDevice executionDevice) {
@@ -405,7 +417,7 @@ public class ExecutionAsyncService {
 
 			LOGGER.info("Execution log file path: " + executionLogfile);
 
-			String[] commands = { commonService.getPythonCommand(), temporaryScriptPath };
+			String[] commands = { commonService.getPythonCommandFromConfig(), temporaryScriptPath };
 
 			double currentTimeMillisBeforeExecution = System.currentTimeMillis();
 
@@ -418,7 +430,7 @@ public class ExecutionAsyncService {
 					currentTimeMillisAfterExecution);
 			executionResult.setExecutionTime(executiontime);
 
-			LOGGER.info("Execution output: " + output);
+			LOGGER.debug("Execution output: " + output);
 			// Update the execution result based on the output
 
 			// If there is a TDK_error string , add it as failure
@@ -449,16 +461,9 @@ public class ExecutionAsyncService {
 			// Delete the temporary script file after execution
 			deleteTemporaryFile(temporaryScriptPath);
 
-			// Create and call transferSTBLogRdkService
 			if (execution.isDeviceLogsNeeded()) {
-				// TODO integrated
+				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
 
-				if (device.isThunderEnabled()) {
-//					fileService.transferSTBLogRdkService(fileTransferRequest);
-				} else {
-					// TODO transfer device logs
-//					fileService.logTransfer(fileTransferRequest);
-				}
 			}
 
 		} catch (Exception e) {
@@ -472,14 +477,12 @@ public class ExecutionAsyncService {
 		return finalExecutionResultStatus == ExecutionResultStatus.SUCCESS;
 	}
 
-	/*
+	/**
 	 * 
 	 * This method is used to get the execution log file path**
 	 * 
 	 * @param executionID
-	 * 
 	 * @param executionResultID
-	 * 
 	 * @return String
 	 */
 	private String getExecutionLogFilePath(String executionID, String executionResultID) {
@@ -489,7 +492,7 @@ public class ExecutionAsyncService {
 				+ executionResultID + Constants.FILE_PATH_SEPERATOR + executionResultID + "_executionlogs.log";
 	}
 
-	/*
+	/**
 	 * This method is used to set final status of execution
 	 * 
 	 * @param execution
@@ -549,23 +552,17 @@ public class ExecutionAsyncService {
 
 	}
 
-	/*
+	/**
 	 * 
 	 * This method is used to get execution entities for the execution as a code
 	 * optimisaation for Single script execution
 	 * 
 	 * @param device
-	 * 
 	 * @param script
-	 * 
 	 * @param user
-	 * 
 	 * @param executionName
-	 * 
 	 * @param category
-	 * 
 	 * @param isRerunOnFailure
-	 * 
 	 * @return ExecutionEntities
 	 * 
 	 */
@@ -585,14 +582,26 @@ public class ExecutionAsyncService {
 		execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
 		execution.setPerformanceLogsNeeded(isPerformanceLogsNeeded);
 		execution.setDiagnosticLogsNeeded(isDiagnosticLogsNeeded);
-		executionRepository.save(execution);
+		Execution savedExecution = executionRepository.save(execution);
 
 		// Create and save ExecutionDevice
 		ExecutionDevice executionDevice = new ExecutionDevice();
 		executionDevice.setDevice(device);
 		executionDevice.setExecution(execution);
-		// TODO Integrated build details Rahim
-		executionDevice.setBuildName("BuildName");
+		// Before saving the execution device, get the latest build name from the device
+		String executionID = savedExecution.getId().toString();
+		boolean isVersionFileTransfered = fileTransferService.getVersionFileForTheDevice(executionID, device);
+
+		if (!isVersionFileTransfered) {
+			LOGGER.warn("Version file is not transferred for the device: {}", device.getName());
+		}
+
+		String buildName = fileTransferService.getImageName(executionID);
+		if (Utils.isEmpty(buildName)) {
+			buildName = Constants.BUILD_NAME_FAILED;
+		}
+
+		executionDevice.setBuildName(buildName);
 		executionDeviceRepository.save(executionDevice);
 
 		ExecutionResult executionResult = new ExecutionResult();
@@ -613,11 +622,10 @@ public class ExecutionAsyncService {
 
 	}
 
-	/*
+	/**
 	 * This method is used to get real execution time
 	 * 
 	 * @param executableResultList
-	 * 
 	 * @return double
 	 */
 	private double getRealExcetionTime(List<ExecutionResult> executableResultList) {
@@ -712,7 +720,7 @@ public class ExecutionAsyncService {
 	private String prepareReplacementString(Device device, Execution execution, ExecutionDevice executionDevice,
 			ExecutionResult executionResult, Script script) {
 		return Constants.METHOD_TOKEN + Constants.LEFT_PARANTHESIS + Constants.SINGLE_QUOTES
-				+ commonService.getTMBaseURL() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ commonService.getTMUrlFromConfigFile() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
 				+ Constants.SINGLE_QUOTES + AppConfig.getRealPath() + Constants.SINGLE_QUOTES
 				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + commonService.getBaseLogPath()
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + execution.getId()

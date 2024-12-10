@@ -33,7 +33,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Set;
@@ -69,9 +68,7 @@ import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
-import com.rdkm.tdkservice.dto.ScriptNameModuleNameMappingResponse;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
@@ -1172,8 +1169,23 @@ public class ScriptService implements IScriptService {
 				scripts = scriptRepository.findAllByCategory(Category.valueOf(category));
 			}
 		}
-		return scripts.stream()
-				.map(MapperUtils::convertToScriptDetailsResponse)
-				.collect(Collectors.toList());
+		return scripts.stream().map(MapperUtils::convertToScriptDetailsResponse).collect(Collectors.toList());
+	}
+
+	/**
+	 * This method is used to get the module for the given script name
+	 * 
+	 * @param scriptName - the script
+	 * @return - the module - the module entity
+	 */
+	@Override
+	public Module getModuleByScriptName(String scriptName) {
+		LOGGER.info("Getting module by script name: " + scriptName);
+		Script script = scriptRepository.findByName(scriptName);
+		if (script == null) {
+			LOGGER.error("Script not found with the name: " + scriptName);
+			return null;
+		}
+		return script.getModule();
 	}
 }

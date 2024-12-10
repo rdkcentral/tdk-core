@@ -28,7 +28,6 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import com.rdkm.tdkservice.config.AppConfig;
-import com.rdkm.tdkservice.config.ExecutionConfig;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.model.Device;
@@ -45,9 +44,6 @@ import com.rdkm.tdkservice.util.Constants;
 public class DeviceStatusService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(DeviceStatusService.class);
-
-	@Autowired
-	private ExecutionConfig executionConfig;
 
 	@Autowired
 	ScriptExecutorService scriptExecutorService;
@@ -113,7 +109,7 @@ public class DeviceStatusService {
 		LOGGER.debug("Fetching device status for device: " + device.getName());
 		String[] scriptExecutionCommand = null;
 		// Get the python command from the execution configuration
-		String pythonCommand = executionConfig.getPythonCommand();
+		String pythonCommand = commonService.getPythonCommandFromConfig();
 
 		String deviceStatusOutput = null;
 		if (device.isThunderEnabled()) {

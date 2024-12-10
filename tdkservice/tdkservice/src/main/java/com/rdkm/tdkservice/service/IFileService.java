@@ -26,39 +26,43 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * The IFileService interface is used to provide the services for the
- * file transfer.
+ * The IFileService interface is used to provide the services for the file
+ * transfer.
  */
 public interface IFileService {
 
 	/**
-	 *	This method is used to get the list of log file names.
+	 * This method is used to get the list of log file names.
+	 * 
 	 * @param executionId
 	 * @param executionResId
-	 * @return	List<String>
+	 * @return List<String>
 	 */
 	List<String> getDeviceLogFileNames(String executionId, String executionResId);
 
 	/**
 	 * This method is used to download the log file.
+	 * 
 	 * @param executionId
 	 * @param executionResId
 	 * @param fileName
 	 * @return Resource
 	 */
-	Resource downloadDeviceLogFile(String executionId, String executionResId, String fileName);
+	Resource downloadDeviceLogFile(String executionResId, String fileName);
 
 	/**
-	 *	This method is used to download all the log files.
+	 * This method is used to download all the log files.
+	 * 
 	 * @param executionId
 	 * @param executionResId
 	 * @return byte[]
 	 * @throws IOException
 	 */
-	byte[] downloadAllDeviceLogFiles(String executionId, String executionResId) throws IOException;
+	byte[] downloadAllDeviceLogFiles(String executionId) throws IOException;
 
 	/**
-	 *	This method is used to upload the log file.
+	 * This method is used to upload the log file.
+	 * 
 	 * @param logFile
 	 * @param fileName
 	 * @return String
@@ -67,26 +71,29 @@ public interface IFileService {
 
 	/**
 	 * This method is used to get the image name.
+	 * 
 	 * @param executionId
 	 * @return String
 	 */
-    String getImageName(String executionId);
+	String getImageName(String executionId);
 
 	/**
 	 * This method is used to get the list of log file names.
+	 * 
 	 * @param executionId
 	 * @param executionResultId
 	 * @param baseLogPath
 	 * @return String
 	 */
-	String getAgentLogContent(String executionId, String executionResultId, String baseLogPath);
+	String getAgentLogContent(String executionResultId);
 
 	/**
 	 * This method is used to download the agentLog file
+	 * 
 	 * @param executionId
 	 * @param executionResId
 	 * @param fileName
 	 * @return
 	 */
-	Resource downloadAgentLogFile(String executionId, String executionResId, String fileName);
+	Resource downloadAgentLogFile(String executionResId);
 }

@@ -395,5 +395,9 @@ public class Constants {
 
 	public static final String THUNDER_DEFAULT_PORT = "9998";
 	public static final String FILE_UPLOAD_SCRIPT = "fileupload.py";
-	public static final String PYTHON3="python3";
+	public static final String PYTHON3 = "python3";
+
+	public static final String BUILD_NAME_FAILED = "Build name fetching failed";
+	public static final String DEFAULT_IPV4_INTERFACE = "eth0";
+	public static final String DEFAULT_IPV6_INTERFACE = "sit1";
 }

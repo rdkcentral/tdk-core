@@ -19,17 +19,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import com.rdkm.tdkservice.config.AppConfig;
-import com.rdkm.tdkservice.config.ExecutionConfig;
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.model.Device;
-import com.rdkm.tdkservice.model.Module;
-import com.rdkm.tdkservice.repository.DeviceRepositroy;
-import com.rdkm.tdkservice.repository.ModuleRepository;
-import com.rdkm.tdkservice.service.IFileService;
-import com.rdkm.tdkservice.service.utilservices.CommonService;
-import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
-import com.rdkm.tdkservice.util.Constants;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,32 +60,29 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.*;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import static com.rdkm.tdkservice.util.Constants.*;
+import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.ExecutionRepository;
+import com.rdkm.tdkservice.repository.ExecutionResultRepository;
+import com.rdkm.tdkservice.service.IFileService;
+import com.rdkm.tdkservice.service.IScriptService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
+import com.rdkm.tdkservice.util.Constants;
 
 /**
- *This method is used to transfer the log files for thunder enabled/disabled devices
+ * This method is used to transfer the log files for thunder enabled/disabled
+ * devices
  */
 @Service
 public class FileTransferService implements IFileService {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(FileTransferService.class);
-
-	@Autowired
-	private ModuleRepository moduleRepository;
 
 	@Autowired
 	private DeviceRepositroy deviceRepository;
@@ -77,76 +94,92 @@ public class FileTransferService implements IFileService {
 	private ScriptExecutorService scriptExecutorService;
 
 	@Autowired
-	private ExecutionConfig executionConfig;
+	private ExecutionResultRepository executionResultRepository;
 
 	@Autowired
-	private AppConfig appConfig;
+	private ExecutionRepository executionRepository;
+
+	@Autowired
+	private IScriptService scriptService;
+
+	/**
+	 * This method is to transfer the device logs for the execution
+	 * 
+	 * @param execution       - the execution entity
+	 * @param executionResult - the execution result entity
+	 * @param device          - the device entity
+	 */
+	public void transferDeviceLogs(Execution execution, ExecutionResult executionResult, Device device) {
+		LOGGER.info("Starting transferDeviceLogs for the execution: {} and execution result {}", execution.getName(),
+				executionResult.getId().toString());
+		if (device.isThunderEnabled()) {
+			transferDeviceLogsForThunderEnabled(execution, executionResult, device);
+		} else {
+			transferDeviceLogsForTDKEnabled(execution, executionResult, device);
+		}
+	}
 
 	/**
 	 * Transfer device logs for thunder enabled devices This will transfer logs from
-	 * the device based on the module configuration
-	 * @param moduleName
-	 * @param executionId
-	 * @param executionResultId
+	 * the device based on the log files added in module configuration
+	 * 
+	 * @param moduleName        - module name
+	 * @param executionId       - execution ID
+	 * @param executionResultId - execution result ID
 	 */
-	public void transferDeviceLogsForThunderEnabled(String moduleName, UUID executionId, UUID executionResultId,
-			String deviceIP) {
+	public void transferDeviceLogsForThunderEnabled(Execution execution, ExecutionResult executionResult,
+			Device device) {
 		try {
-			LOGGER.info("Starting transferSTBLogRdkService for request: {}", executionId.toString());
+			LOGGER.info("Starting transferSTBLogRdkService for the execution: {} and execution result {}",
+					execution.getName(), executionResult.getId().toString());
+
+			String scriptName = executionResult.getScript();
+
+			Module module = scriptService.getModuleByScriptName(scriptName);
+			if (module == null) {
+				LOGGER.error("Module not found for script: {}", scriptName);
+				return;
+			}
+
+			List<String> deviceLogFiles = new ArrayList<>(module.getLogFileNames());
+			LOGGER.info("Device log files retrieved from module: {}", deviceLogFiles);
+			if (deviceLogFiles.isEmpty()) {
+				LOGGER.warn("No log files found for the module: {}", module.getName());
+				return;
+			}
+
 			String baseLogPath = commonService.getBaseLogPath();
-
-			Module module = null;
-			try {
-				module = moduleRepository.findByName(moduleName);
-				LOGGER.info("Module retrieved: {}", module.getName());
-			} catch (Exception e) {
-				LOGGER.error("Error retrieving module for name {}: {}", moduleName, e.getMessage(), e);
-			}
-
-			List<String> deviceLogFiles = null;
-			if (module != null) {
-				deviceLogFiles = new ArrayList<>(module.getLogFileNames());
-				LOGGER.info("Device log files retrieved from module: {}", deviceLogFiles);
-			}
-
-			String deviceLogFilesPath = commonService.getDeviceLogsPathForTheExecution(executionId.toString(),
-					executionResultId.toString(), baseLogPath);
+			String deviceLogFilesPath = commonService.getDeviceLogsPathForTheExecution(execution.getId().toString(),
+					executionResult.getId().toString(), baseLogPath);
 
 			new File(deviceLogFilesPath).mkdirs();
 			LOGGER.info("Ensured directory exists at: {}", deviceLogFilesPath);
-
-			Device device = null;
-			try {
-				device = deviceRepository.findByIp(deviceIP);
-				LOGGER.info("Device retrieved: {}", device);
-			} catch (Exception e) {
-				LOGGER.error("Error retrieving device for IP {}: {}", deviceIP, e.getMessage(), e);
-			}
 
 			if (deviceLogFiles != null) {
 				LOGGER.info("Processing {} log files.", deviceLogFiles.size());
 				for (String name : deviceLogFiles) {
 					LOGGER.info("Processing log file: {}", name);
 
-					File deviceLogTransferScriptFile = new File(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-							+ FILE_TRANSFER_SCRIPT_RDKSERVICE);
+					File deviceLogTransferScriptFile = new File(AppConfig.getBaselocation()
+							+ Constants.FILE_PATH_SEPERATOR + Constants.FILE_TRANSFER_SCRIPT_RDKSERVICE);
 					LOGGER.info("Device log transfer script file located at: {}", deviceLogTransferScriptFile);
 
 					String deviceLogTransferScriptFilePath = deviceLogTransferScriptFile.getAbsolutePath();
 					LOGGER.info("Device log transfer script file absolute path: {}", deviceLogTransferScriptFilePath);
 
-					String[] fname = name.split("/");
-					LOGGER.debug("Split file name: {}", (Object) fname);
+					String[] fnameArray = name.split("/");
+					LOGGER.debug("Split file name: {}", (Object) fnameArray);
 
-					String fileName = fname[fname.length - 1];
+					String fileName = fnameArray[fnameArray.length - 1];
 					LOGGER.info("Extracted file name: {}", fileName);
 
 					if (!deviceLogTransferScriptFilePath.isEmpty()) {
 						assert device != null;
-						String[] cmd = commandForTransferThunderEnabledLogFiles(commonService.getPythonCommandFromConfig(), deviceLogTransferScriptFilePath, device.getIp(), name,
-								deviceLogFilesPath, fileName);
+						String[] cmd = commandForTransferThunderEnabledLogFiles(
+								commonService.getPythonCommandFromConfig(), deviceLogTransferScriptFilePath,
+								device.getIp(), name, deviceLogFilesPath, fileName);
 						try {
-							String outputData = scriptExecutorService.executeScript(cmd, 1);
+							scriptExecutorService.executeScript(cmd, 1);
 						} catch (Exception e) {
 							LOGGER.error("Error executing script: {}", e.getMessage(), e);
 						}
@@ -154,8 +187,6 @@ public class FileTransferService implements IFileService {
 						LOGGER.warn("Device log transfer script file path is empty, skipping execution.");
 					}
 				}
-			} else {
-				LOGGER.warn("No device log files to process.");
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error in transferDeviceLogsForThunderEnabled: {}", e.getMessage(), e);
@@ -163,7 +194,219 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * Prepare command for file transfer
+	 * This method is to transfer the device logs for TDK enabled devices
+	 * 
+	 * @param moduleName
+	 * @param deviceIp
+	 * @param execId
+	 * @param execResultId
+	 */
+	public void transferDeviceLogsForTDKEnabled(Execution execution, ExecutionResult executionResult, Device device) {
+		try {
+			// Fetch device details
+			String baseLogPath = commonService.getBaseLogPath();
+
+			// Fetch module and log file names
+			String scriptName = executionResult.getScript();
+			Module module = scriptService.getModuleByScriptName(scriptName);
+			if (module == null) {
+				LOGGER.error("Module not found for script: {}", scriptName);
+				return;
+			}
+
+			Set<String> deviceLogFiles = (module != null)
+					? module.getLogFileNames().stream().map(Object::toString).collect(Collectors.toSet())
+					: Collections.emptySet();
+
+			// Generate STB log file path
+			String deviceDestinationFilePath = commonService.getDeviceLogsPathForTheExecution(
+					execution.getId().toString(), executionResult.getId().toString(), baseLogPath);
+
+			// Fetch script details
+			String transferScriptName = getFileTransferScriptNameForTDKEnabled();
+			String fileTransferScriptPath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ transferScriptName;
+			String tmUrl = commonService.getTMUrlFromConfigFile();
+			LOGGER.info(" deviceLogFiles: {}", deviceLogFiles);
+			if (deviceLogFiles.isEmpty()) {
+				LOGGER.warn("No log files found for the module: {}", module.getName());
+				return;
+			}
+			for (String logFileName : deviceLogFiles) {
+				try {
+					LOGGER.info("Processing device log file: {}", logFileName);
+
+					// Sanitize file name
+					String sanitizedFileName = logFileName.replaceAll("//", "_").replaceAll("/", "_");
+					LOGGER.info(" sanitizedFileName: {}", sanitizedFileName);
+					// Prepare command for file transfer
+					List<String> cmdList = new ArrayList<>(Arrays.asList(commonService.getPythonCommandFromConfig(),
+							fileTransferScriptPath, device.getIp(), device.getAgentMonitorPort(), logFileName,
+							executionResult.getId().toString() + "_" + sanitizedFileName, tmUrl));
+					LOGGER.info(" cmdList: {}", cmdList);
+					// Execute the script
+					String outputData = scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
+					LOGGER.info(" outputDat: {}", outputData);
+					// Copy logs into the specified directory
+					Thread.sleep(1000);
+					copyDeviceLogsIntoDir(deviceDestinationFilePath, execution.getId().toString(),
+							executionResult.getId().toString());
+
+					LOGGER.info("File transfer and log copying completed for: {}", logFileName);
+
+				} catch (Exception e) {
+					LOGGER.error("Error processing log file {}: {}", logFileName, e.getMessage(), e);
+				}
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error in transferDeviceLogsForTDKEnabled: {}", e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * This method is to transfer the version.txt file for the device used in the
+	 * execution
+	 * 
+	 * @param executionID - execution ID of the execution entity
+	 * @param device      - the device entity
+	 */
+	public boolean getVersionFileForTheDevice(String executionID, Device device) {
+		LOGGER.info("Starting getVersionFileForTheDevice for request: {} and device {}", executionID, device.getIp());
+		if (device.isThunderEnabled()) {
+			return createVersionFileForThunderEnabled(executionID, device);
+		} else {
+			return createVersionFileForThunderDisabled(executionID, device);
+		}
+	}
+
+	/**
+	 * This method is to transfer the version.txt file for thunder enabled devices
+	 * to the destination location
+	 * 
+	 * @param executionId
+	 * @param deviceIP
+	 * @return boolean
+	 */
+	private boolean createVersionFileForThunderEnabled(String executionId, Device device) {
+		LOGGER.info("Creating version file for thunder enabled devices");
+		try {
+
+			boolean versionFileStatus = false;
+
+			String versionFilePath = commonService.getVersionLogFilePathForTheExecution(executionId);
+			LOGGER.info("Creating version file path: {}", versionFilePath);
+
+			if (createDirectories(versionFilePath)) {
+
+				String versionFileName = executionId + "_version.txt";
+				String versionFileAbsolutePath = versionFilePath + versionFileName;
+
+				File versionFile = new File(versionFileAbsolutePath);
+
+				boolean versionFileTransferredStatus = transferFileForThunderEnabled(device.getIp(), versionFilePath,
+						versionFileName, Constants.SLASH_VERSION_TXT_FILE);
+				LOGGER.info("transferThunderFile status: {}", versionFileTransferredStatus);
+
+				if (!versionFileTransferredStatus) {
+					String thunderVersionDetails = retrieveFirmwareVersionForThunderEnabled(device);
+
+					versionFileStatus = createVersionFile(versionFile, thunderVersionDetails);
+					LOGGER.info("Version file created: {}", versionFileStatus);
+				} else {
+					LOGGER.info("Version file transferred successfully.");
+					versionFileStatus = true;
+				}
+			}
+			return versionFileStatus;
+		} catch (Exception e) {
+			LOGGER.error("Exception in createThunderVersionFile", e);
+			return false;
+		}
+	}
+
+	/**
+	 * This method is to do version transfer for thunder disabled devices
+	 * 
+	 * @param executionID - execution ID of the execution entity
+	 * @param device      - the device entity
+	 * @return boolean status of the version file creation
+	 */
+	private boolean createVersionFileForThunderDisabled(String executionID, Device device) {
+		try {
+			String versionFileName = executionID + Constants.UNDERSCORE + "version.txt";
+			String versionFilePath = commonService.getVersionLogFilePathForTheExecution(executionID);
+
+			// Build the command list for file transfer
+			List<String> cmdList = buildCommandListForFileTransfer(device, "/version.txt", versionFileName);
+
+			// Log the command being executed
+			LOGGER.info("Executing command: {}", String.join(" ", cmdList));
+
+			// Execute the script
+			String outputData = scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
+			LOGGER.info("Script executed successfully. Output data: {}", outputData);
+
+			// Copy version logs into the specified directory
+			copyVersionLogsIntoDir(versionFilePath, executionID);
+
+			return true;
+		} catch (Exception e) {
+			LOGGER.error("Error occurred during version transfer script execution: {}", e.getMessage(), e);
+			return false;
+		}
+	}
+
+	/**
+	 * Get image name from file
+	 * 
+	 * @param executionId
+	 * @return image name
+	 */
+	public String getImageName(String executionId) {
+		LOGGER.info("Getting image name for executionId: {}", executionId);
+		String imageNameValue = "";
+		try {
+			String filePath = commonService.getVersionLogFilePathForTheExecution(executionId);
+			String versionFileName = executionId + Constants.UNDERSCORE + "version.txt";
+			filePath = filePath + versionFileName;
+			File file = new File(filePath);
+
+			if (file.exists() && file.isFile()) { // Check if it's a file
+				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+					String line;
+					while ((line = br.readLine()) != null) {
+						if (line.startsWith("imagename:")) {
+							imageNameValue = line.split(":", 2)[1].trim();
+							break; // Exit the loop once the imagename is found
+						} else if (line.startsWith("currentFWVersion:")) {
+							imageNameValue = line.split(":", 2)[1].trim();
+							break; // Exit the loop once the currentFWVersion is found
+						}
+					}
+				}
+			} else {
+				if (file.exists()) {
+					LOGGER.warn("The path points to a directory, not a file: {}", filePath);
+				} else {
+					LOGGER.warn("File not found: {}", filePath);
+				}
+			}
+		} catch (IOException e) {
+			LOGGER.error("Error reading image name: {}", e.getMessage(), e);
+		}
+
+		// Log the obtained image name value
+		if (!imageNameValue.isEmpty()) {
+			LOGGER.info("Image name obtained: {}", imageNameValue);
+		} else {
+			LOGGER.info("No valid image name or firmware version found in file: {}", executionId);
+		}
+
+		return imageNameValue;
+	}
+
+	/**
+	 * Prepare command for file transfer of thunder enabled device logs
 	 * 
 	 * @param pythonCommand
 	 * @param scriptFilePath
@@ -173,12 +416,12 @@ public class FileTransferService implements IFileService {
 	 * @param fileNameToBeSaved
 	 * @return Array of the python command
 	 */
-	private String[] commandForTransferThunderEnabledLogFiles(String pythonCommand, String scriptFilePath, String deviceIP,
-			String fileNameToBeTransferred, String destinationPath, String fileNameToBeSaved) {
+	private String[] commandForTransferThunderEnabledLogFiles(String pythonCommand, String scriptFilePath,
+			String deviceIP, String fileNameToBeTransferred, String destinationPath, String fileNameToBeSaved) {
 		LOGGER.debug(
 				"Preparing command with parameters: pythonCommand={}, scriptFilePath={}, deviceIP={}, fileNameToBeTransferred={}, destinationPath={}, fileNameToBeSaved={}",
 				pythonCommand, scriptFilePath, deviceIP, fileNameToBeTransferred, destinationPath, fileNameToBeSaved);
-		return new String[] { pythonCommand, scriptFilePath, deviceIP, ROOT_STRING, NONE_STRING,
+		return new String[] { pythonCommand, scriptFilePath, deviceIP, Constants.ROOT_STRING, Constants.NONE_STRING,
 				fileNameToBeTransferred, destinationPath, fileNameToBeSaved };
 	}
 
@@ -187,7 +430,7 @@ public class FileTransferService implements IFileService {
 	 * say wpeframework logs, thunder logs etc.
 	 * 
 	 * @param executionId
-	 * @param executionResId    return list of filenames
+	 * @param executionResId return list of filenames
 	 */
 	@Override
 	public List<String> getDeviceLogFileNames(String executionId, String executionResId) {
@@ -209,15 +452,17 @@ public class FileTransferService implements IFileService {
 	/**
 	 * Method to download a log file
 	 *
-	 * @param executionId The execution ID
+	 * @param executionId    The execution ID
 	 * @param executionResId The execution resource ID
-	 * @param fileName The name of the file to download
+	 * @param fileName       The name of the file to download
 	 * @return Resource
 	 */
 	@Override
-	public Resource downloadDeviceLogFile(String executionId, String executionResId, String fileName) {
+	public Resource downloadDeviceLogFile(String executionResId, String fileName) {
 		LOGGER.info("Inside downloadDeviceLogFile method with fileName: {}", fileName);
-
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
+		String executionId = executionResult.getExecution().getId().toString();
 		// Get log file names for the execution
 		List<String> logFileNames = this.getDeviceLogFileNames(executionId, executionResId);
 		if (!logFileNames.contains(fileName)) {
@@ -234,23 +479,32 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * Download all log files
-	 *  This method is used to download all the log files for the given execution ID
+	 * Download all log files This method is used to download all the log files for
+	 * the given execution ID
+	 * 
 	 * @param
 	 * @param executionId
-	 * @param executionResId
-	 * return byte[]
+	 * @param executionResId return byte[]
 	 */
 	@Override
-	public byte[] downloadAllDeviceLogFiles(String executionId, String executionResId) throws IOException {
-		List<String> logFileNames = this.getDeviceLogFileNames(executionId, executionResId);
+	public byte[] downloadAllDeviceLogFiles(String executionId) throws IOException {
+		LOGGER.info("Inside downloadDeviceLogFile method with executionId: {}", executionId);
+		Optional<Execution> execution = executionRepository.findById(UUID.fromString(executionId));
+		UUID executionResId = execution.flatMap(exec -> exec.getExecutionResults().stream().findFirst()) // Retrieve the
+																											// first
+																											// ExecutionResult
+				.map(ExecutionResult::getId) // Get the ID of the first ExecutionResult
+				.orElseThrow(() -> new FileNotFoundException("No execution results found for the given execution ID."));
+
+		List<String> logFileNames = this.getDeviceLogFileNames(executionId, String.valueOf(executionResId));
 
 		if (logFileNames.isEmpty()) {
 			throw new FileNotFoundException("No log files found for the given execution ID and executionRes ID.");
 		}
 
 		String baselogpath = commonService.getBaseLogPath();
-		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId, executionResId, baselogpath);
+		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId,
+				String.valueOf(executionResId), baselogpath);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ZipOutputStream zos = new ZipOutputStream(baos)) {
@@ -278,6 +532,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is used to get the image name.
+	 * 
 	 * @param executionID
 	 * @param executionResultID
 	 * @param executionResultID
@@ -294,16 +549,15 @@ public class FileTransferService implements IFileService {
 					.toString();
 			LOGGER.info("Script path: {}", scriptPath);
 			String logTransferFileNameForTheExecution = executionResultID + Constants.UNDERSCORE
-					+ AGENT_CONSOLE_LOG_FILE;
+					+ Constants.AGENT_CONSOLE_LOG_FILE;
 
 			List<String> cmdList = buildCommandListForAgentLogTransfer(scriptPath, deviceIP,
-					device.getAgentMonitorPort(), AGENT_CONSOLE_LOG_FILE, logTransferFileNameForTheExecution, device);
+					device.getAgentMonitorPort(), Constants.AGENT_CONSOLE_LOG_FILE, logTransferFileNameForTheExecution,
+					device);
 
-			String output=scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 2);
+			scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 2);
 			String agentLogTransferFilePath = commonService.getAgentLogPath(executionID, executionResultID,
 					baseLogPath);
-			// TODO : Need to check for the sleep time and then the wait time to be added
-			Thread.sleep(4000);
 			copyAgentconsoleLogIntoDir(agentLogTransferFilePath, executionResultID);
 
 		} catch (Exception e) {
@@ -320,7 +574,7 @@ public class FileTransferService implements IFileService {
 	private String getAgentConsoleFileTransferScriptName(Device device) {
 		// String scriptName = Constants.CONSOLE_FILE_TRANSFER_SCRIPT;
 		// TODO CONSOLE_FILE_TRANSFER_SCRIPT is for tftp, now we are not implementing
-		return CONSOLE_FILE_UPLOAD_SCRIPT;
+		return Constants.CONSOLE_FILE_UPLOAD_SCRIPT;
 	}
 
 	/**
@@ -337,7 +591,7 @@ public class FileTransferService implements IFileService {
 			LOGGER.info("Log directory: {}", logDir);
 			if (logDir.isDirectory()) {
 				for (File file : Objects.requireNonNull(logDir.listFiles())) {
-					if (file.getName().contains(AGENT_CONSOLE_LOG_FILE)) {
+					if (file.getName().contains(Constants.AGENT_CONSOLE_LOG_FILE)) {
 						String[] logFileName = file.getName().split(Constants.UNDERSCORE);
 						if (logFileName.length >= 3 && executionResultId.equals(logFileName[0])) {
 							new File(logTransferFilePath).mkdirs();
@@ -356,8 +610,9 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * Build command list
-	 * This method is to build the command list for agent log transfer
+	 * Build command list This method is to build the command list for agent log
+	 * transfer
+	 * 
 	 * @param scriptPath
 	 * @param deviceIP
 	 * @param agentMonitorPort
@@ -379,39 +634,6 @@ public class FileTransferService implements IFileService {
 		cmdList.add(urlFromConfigFile);
 		LOGGER.info("Script cmdList path: {}", cmdList);
 		return cmdList;
-	}
-
-	/**
-	 * This method is to do version transfer for thunder disabled devices
-	 * @param executionID
-	 * @param deviceName
-	 * @return
-	 */
-	private boolean createVersionFileForThunderDisabled(String executionID, String deviceName) {
-		try {
-			String versionFileName = executionID + Constants.UNDERSCORE + "version.txt";
-			String versionFilePath = commonService.getVersionLogFilePathForTheExecution(executionID);
-
-			Device device = deviceRepository.findByName(deviceName);
-
-			// Build the command list for file transfer
-			List<String> cmdList = buildCommandListForFileTransfer(device, "/version.txt", versionFileName);
-
-			// Log the command being executed
-			LOGGER.info("Executing command: {}", String.join(" ", cmdList));
-
-			// Execute the script
-			String outputData = scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
-			LOGGER.info("Script executed successfully. Output data: {}", outputData);
-
-			// Copy version logs into the specified directory
-			copyVersionLogsIntoDir(versionFilePath, executionID);
-
-			return true;
-		} catch (Exception e) {
-			LOGGER.error("Error occurred during version transfer script execution: {}", e.getMessage(), e);
-			return false;
-		}
 	}
 
 	/**
@@ -463,6 +685,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is used to upload file content
+	 * 
 	 * @param uploadedFile
 	 * @return
 	 * @throws IOException
@@ -475,6 +698,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * Write content to the file
+	 * 
 	 * @param logFile
 	 * @param fileContent
 	 * @throws IOException
@@ -489,7 +713,9 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * This method is to build command list for file transfer for thunder disabled
+	 * This method is to build command list for file transfer for thunder disabled.
+	 * After the python script is executed, the file will be transferred from the
+	 * box to the server via upload API.
 	 * 
 	 * @param device         - Device entity
 	 * @param sourceFilePath - source file path in the device
@@ -500,7 +726,8 @@ public class FileTransferService implements IFileService {
 	private List<String> buildCommandListForFileTransfer(Device device, String sourceFilePath, String targetFileName) {
 		List<String> cmdList = new ArrayList<>();
 		cmdList.add(commonService.getPythonCommandFromConfig());
-		cmdList.add(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + getFileTransferScriptNameForTDKEnabled());
+		cmdList.add(
+				AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + getFileTransferScriptNameForTDKEnabled());
 		cmdList.add(device.getIp());
 		cmdList.add(device.getAgentMonitorPort());
 		cmdList.add(sourceFilePath);
@@ -517,7 +744,7 @@ public class FileTransferService implements IFileService {
 	/**
 	 * Get file transfer script name based on the device type
 	 * 
-	 * @param  - the device entity
+	 * @param - the device entity
 	 * @return the file transfer script name
 	 */
 	private String getFileTransferScriptNameForTDKEnabled() {
@@ -542,7 +769,8 @@ public class FileTransferService implements IFileService {
 			}
 
 			Files.walk(Paths.get(baseLogUploadPathForUploadAPI)).filter(Files::isRegularFile)
-					.forEach(filePath -> transferThunderDisabledVersionFile(filePath.toFile(), logTransferFilePath, executionId));
+					.forEach(filePath -> transferThunderDisabledVersionFile(filePath.toFile(), logTransferFilePath,
+							executionId));
 		} catch (IOException e) {
 			LOGGER.error("Error while accessing log directory: {}", e.getMessage(), e);
 		}
@@ -582,52 +810,8 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * This method is to transfer the version.txt file for thunder enabled devices
-	 * to the destination location
-	 * @param executionId
-	 * @param executionDeviceId
-	 * @param deviceIP
-	 * @return boolean
-	 */
-	public boolean createVersionFileForThunderEnabled(String executionId, String executionDeviceId, String deviceIP) {
-		LOGGER.info("Creating version file for thunder enabled devices");
-		try {
-
-			boolean versionFileStatus = false;
-
-			String versionFilePath = commonService.getVersionLogFilePathForTheExecution(executionId);
-			LOGGER.info("Creating version file path: {}", versionFilePath);
-
-			if (createDirectories(versionFilePath)) {
-
-				String versionFileName = executionId + "_version.txt";
-				String versionFileAbsolutePath = versionFilePath + versionFileName;
-
-				File versionFile = new File(versionFileAbsolutePath);
-
-				boolean versionFileTransferredStatus = transferFileForThunderEnabled(deviceIP, versionFilePath,
-						versionFileName, SLASH_VERSION_TXT_FILE);
-				LOGGER.info("transferThunderFile status: {}", versionFileTransferredStatus);
-
-				if (!versionFileTransferredStatus) {
-					String thunderVersionDetails = retrieveFirmwareVersionForThunderEnabled(deviceIP);
-
-					versionFileStatus = createVersionFile(versionFile, thunderVersionDetails);
-					LOGGER.info("Version file created: {}", versionFileStatus);
-				} else {
-					LOGGER.info("Version file transferred successfully.");
-					versionFileStatus = true;
-				}
-			}
-			return versionFileStatus;
-		} catch (Exception e) {
-			LOGGER.error("Exception in createThunderVersionFile", e);
-			return false;
-		}
-	}
-
-	/**
 	 * This method is to transfer the file for thunder enabled devices
+	 * 
 	 * @param deviceIP
 	 * @param destinationPath
 	 * @param fileNameToBeSaved
@@ -641,9 +825,9 @@ public class FileTransferService implements IFileService {
 
 		try {
 			String transferScriptFilePath = getScriptFilePathForThunderEnabledFiletransfer();
-			String pythonCommand = executionConfig.getPythonCommand();
-			String[] cmd = commandForTransferThunderEnabledLogFiles(pythonCommand, transferScriptFilePath, deviceIP, fileNameToBeTransferred,
-					destinationPath, fileNameToBeSaved);
+			String pythonCommand = commonService.getPythonCommandFromConfig();
+			String[] cmd = commandForTransferThunderEnabledLogFiles(pythonCommand, transferScriptFilePath, deviceIP,
+					fileNameToBeTransferred, destinationPath, fileNameToBeSaved);
 			String exitCode = scriptExecutorService.executeScript(cmd, 1);
 			LOGGER.info("Thunder enabled file transfer Script exit code: {}", exitCode);
 			fileTransferredStatus = verifyFileTransfer(destinationPath, fileNameToBeTransferred);
@@ -662,14 +846,16 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is to get the script file path for thunder enabled file transfer
+	 * 
 	 * @return String
 	 */
 	private String getScriptFilePathForThunderEnabledFiletransfer() {
-		return AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + FILE_TRANSFER_SCRIPT_RDKSERVICE;
+		return AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.FILE_TRANSFER_SCRIPT_RDKSERVICE;
 	}
 
 	/**
-	 *  This method is to verify the file transfer
+	 * This method is to verify the file transfer
+	 * 
 	 * @param destinationPath
 	 * @param fileNameToBeTransferred
 	 * @return boolean
@@ -685,6 +871,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * THis method is to rename the transferred file
+	 * 
 	 * @param destinationPath
 	 * @param fileNameToBeTransferred
 	 * @param fileNameToBeSaved
@@ -702,6 +889,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is to create directories
+	 * 
 	 * @param path
 	 * @return boolean
 	 */
@@ -716,6 +904,7 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is to create the version file
+	 * 
 	 * @param versionFile
 	 * @param content
 	 * @return boolean
@@ -738,18 +927,16 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is to retrieve the firmware version for thunder enabled devices
+	 * 
 	 * @param deviceIP
 	 * @return String
 	 */
-	public String retrieveFirmwareVersionForThunderEnabled(String deviceIP) {
+	public String retrieveFirmwareVersionForThunderEnabled(Device device) {
 		String thunderVersionDetailsFormatted = "";
-		String thunderPort = Constants.THUNDER_DEFAULT_PORT;
+		String thunderPort = device.getThunderPort() != null ? device.getThunderPort() : Constants.THUNDER_DEFAULT_PORT;
+		String deviceIP = device.getIp();
 
-		Device dev = deviceRepository.findByIp(deviceIP);
-		if (dev != null) {
-			thunderPort = dev.getThunderPort();
-		}
-
+		// TODO: Fix this code with HttpClient
 		try {
 			String urlString = "http://" + deviceIP + ":" + thunderPort + "/jsonrpc";
 			URL url = new URL(urlString);
@@ -793,91 +980,27 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * This method is to transfer the device logs for TDK enabled devices
-	 * @param moduleName
-	 * @param deviceIp
-	 * @param execId
-	 * @param execResultId
-	 */
-	public void transferDeviceLogsForTDKEnabled(String moduleName, String deviceIp, UUID execId, UUID execResultId) {
-		try {
-			// Fetch device details
-			Device device = deviceRepository.findByIp(deviceIp);
-			String baseLogPath = commonService.getBaseLogPath();
-
-			// Fetch module and log file names
-			Module module = moduleRepository.findByName(moduleName);
-			Set<String> deviceLogFiles = (module != null)
-					? module.getLogFileNames().stream()
-					.map(Object::toString) // Convert each Object to String
-					.collect(Collectors.toSet())
-					: Collections.emptySet();
-
-			// Generate STB log file path
-			String deviceDestinationFilePath = commonService.getDeviceLogsPathForTheExecution(
-					execId.toString(), execResultId.toString(), baseLogPath);
-
-			// Fetch script details
-			String scriptName = getFileTransferScriptNameForTDKEnabled();
-			String fileTransferScriptPath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + scriptName;
-			String tmUrl = commonService.getTMUrlFromConfigFile();
-			LOGGER.info(" deviceLogFiles: {}",deviceLogFiles);
-			for (String logFileName : deviceLogFiles) {
-				try {
-					LOGGER.info("Processing device log file: {}", logFileName);
-
-					// Sanitize file name
-					String sanitizedFileName = logFileName.replaceAll("//", "_").replaceAll("/", "_");
-					LOGGER.info(" sanitizedFileName: {}",sanitizedFileName);
-					// Prepare command for file transfer
-					List<String> cmdList = new ArrayList<>(Arrays.asList(
-							commonService.getPythonCommandFromConfig(),
-							fileTransferScriptPath,
-							device.getIp(),
-							device.getAgentMonitorPort(),
-							logFileName,
-							execResultId + "_" + sanitizedFileName,
-							tmUrl
-					));
-					LOGGER.info(" cmdList: {}",cmdList);
-					// Execute the script
-					String outputData = scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
-					LOGGER.info(" outputDat: {}",outputData);
-					// Copy logs into the specified directory
-					copyDeviceLogsIntoDir(deviceDestinationFilePath, execId, execResultId);
-
-					LOGGER.info("File transfer and log copying completed for: {}", logFileName);
-
-				} catch (Exception e) {
-					LOGGER.error("Error processing log file {}: {}", logFileName, e.getMessage(), e);
-				}
-			}
-		} catch (Exception e) {
-			LOGGER.error("Error in transferDeviceLogsForTDKEnabled: {}", e.getMessage(), e);
-		}
-	}
-
-	/**
-	 *This method is to copy the device logs into the specified directory
+	 * This method is to copy the device logs into the specified directory
+	 * 
 	 * @param deviceLogDestPath
 	 * @param executionId
 	 * @param executionResultId
 	 */
-	public void copyDeviceLogsIntoDir(String deviceLogDestPath, UUID executionId, UUID executionResultId) {
+	public void copyDeviceLogsIntoDir(String deviceLogDestPath, String executionId, String executionResultId) {
 		try {
 			// Get the base log path
-			String baseLogPath =commonService.getBaseFilePathForUploadLogAPI();
+			String baseLogPath = commonService.getBaseFilePathForUploadLogAPI();
 			File logDir = new File(baseLogPath);
 			if (logDir.isDirectory()) {
 				for (File file : Objects.requireNonNull(logDir.listFiles())) {
 					// Skip unwanted files
-					if (file.getName().matches(".*(version\\.txt|benchmark\\.log|memused\\.log|cpu\\.log|AgentConsoleLog\\.log).*")) {
+					if (file.getName().matches(
+							".*(version\\.txt|benchmark\\.log|memused\\.log|cpu\\.log|AgentConsoleLog\\.log).*")) {
 						continue;
 					}
 
 					String[] logFileName = file.getName().split("_");
-					if (logFileName.length >= 3 &
-							executionResultId.toString().equals(logFileName[0])) {
+					if (logFileName.length >= 3 & executionResultId.toString().equals(logFileName[0])) {
 
 						String sanitizedFileName = file.getName().replaceAll("\\s", "").replaceAll("\\$:", "Undefined");
 
@@ -901,65 +1024,30 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * Get image name from file
-	 * @param executionId
-	 * @return image name
-	 */
-	public String getImageName(String executionId) {
-		LOGGER.info("Getting image name for executionId: {}", executionId);
-		String imageNameValue = "";
-		try {
-			String filePath = commonService.getVersionLogFilePathForTheExecution(executionId);
-			File file = new File(filePath);
-
-			if (file.exists() && file.isFile()) { // Check if it's a file
-				try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-					String line;
-					while ((line = br.readLine()) != null) {
-						if (line.startsWith("imagename:")) {
-							imageNameValue = line.split(":", 2)[1].trim();
-							break; // Exit the loop once the imagename is found
-						} else if (line.startsWith("currentFWVersion:")) {
-							imageNameValue = line.split(":", 2)[1].trim();
-							break; // Exit the loop once the currentFWVersion is found
-						}
-					}
-				}
-			} else {
-				if (file.exists()) {
-					LOGGER.warn("The path points to a directory, not a file: {}", filePath);
-				} else {
-					LOGGER.warn("File not found: {}", filePath);
-				}
-			}
-		} catch (IOException e) {
-			LOGGER.error("Error reading image name: {}", e.getMessage(), e);
-		}
-
-		// Log the obtained image name value
-		if (!imageNameValue.isEmpty()) {
-			LOGGER.info("Image name obtained: {}", imageNameValue);
-		} else {
-			LOGGER.info("No valid image name or firmware version found in file: {}", executionId);
-		}
-
-		return imageNameValue;
-	}
-
-	/**
 	 * This method get the agent log file content
-	 * @param executionId
+	 * 
 	 * @param executionResultId
-	 * @param baseLogPath
 	 * @return String
 	 */
 	@Override
-	public String getAgentLogContent(String executionId, String executionResultId, String baseLogPath) {
-		// Generate the agent logs path using the existing method
-		LOGGER.info("Getting agent log content for executionId: {}, executionResultId: {}", executionId, executionResultId);
-		String agentLogPath = commonService.getAgentLogPath(executionId, executionResultId, baseLogPath);
+	public String getAgentLogContent(String executionResultId) {
+		LOGGER.info("Getting agent log content for executionResultId: {}", executionResultId);
 
-		File file = new File(agentLogPath);
+		// Retrieve execution result details
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResultId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID", executionResultId));
+		String executionId = executionResult.getExecution().getId().toString();
+
+		// Construct the path to the log file
+		String baseLogPath = commonService.getBaseLogPath();
+		String agentLogsDirectory = commonService.getAgentLogPath(executionId, executionResultId, baseLogPath);
+
+		// Construct the full path to AGENT_CONSOLE_LOG_FILE
+		String logFilePath = Paths
+				.get(agentLogsDirectory, executionResultId + Constants.UNDERSCORE + Constants.AGENT_CONSOLE_LOG_FILE)
+				.toString();
+
+		File file = new File(logFilePath);
 		StringBuilder fileContent = new StringBuilder();
 
 		// Check if the file exists and is a file
@@ -983,23 +1071,25 @@ public class FileTransferService implements IFileService {
 
 	/**
 	 * This method is to download the agent log file
-	 * @param executionId
+	 * 
 	 * @param executionResId
-	 * @param fileName
 	 * @return Resource
 	 */
 	@Override
-	public Resource downloadAgentLogFile(String executionId, String executionResId, String fileName) {
-		LOGGER.info("Inside downloadAgentLogFile method with fileName: {}", fileName);
+	public Resource downloadAgentLogFile(String executionResId) {
+		LOGGER.info("Inside downloadAgentLogFile method ");
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
+		String executionId = executionResult.getExecution().getId().toString();
 
 		// Determine the path for the agent log file
 		String baseLogPath = commonService.getBaseLogPath();
 		String agentLogsDirectory = commonService.getAgentLogPath(executionId, executionResId, baseLogPath);
-
+		String logTransferFileNameForTheExecution = executionResId + Constants.UNDERSCORE
+				+ Constants.AGENT_CONSOLE_LOG_FILE;
 		// Use the helper method to get the resource
-		return getFileAsResource(agentLogsDirectory, fileName);
+		return getFileAsResource(agentLogsDirectory, logTransferFileNameForTheExecution);
 	}
-
 
 	/**
 	 * Helper method to retrieve a file as a Resource.
@@ -1034,7 +1124,5 @@ public class FileTransferService implements IFileService {
 
 		return resource;
 	}
-
-
 
 }

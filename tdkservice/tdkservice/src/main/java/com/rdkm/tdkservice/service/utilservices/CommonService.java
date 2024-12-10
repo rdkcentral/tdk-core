@@ -19,7 +19,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.service.utilservices;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -39,13 +44,11 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.config.AppConfig;
-import com.rdkm.tdkservice.config.ExecutionConfig;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestGroup;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -60,9 +63,6 @@ import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
 
-import static com.rdkm.tdkservice.service.utilservices.CommonService.LOGGER;
-import static com.rdkm.tdkservice.util.Constants.*;
-
 /**
  * This class is used to provide common services.
  */
@@ -76,15 +76,6 @@ public class CommonService {
 
 	@Autowired
 	ScriptRepository scriptRepository;
-
-	@Autowired
-	private ExecutionConfig executionConfig;
-
-	@Autowired
-	private AppConfig appConfig;
-
-	@Value("${fileStore.location:webapp/filestore/}")
-	private String fileStoreLocation;
 
 	/**
 	 * This method is used to get the folder name based on the module type.
@@ -354,9 +345,10 @@ public class CommonService {
 	public String getHostIpAddress(String ipType) {
 		String nwInterfaceName = "";
 		if (ipType.equals(Constants.IPV4)) {
-			nwInterfaceName = executionConfig.getIPV4Interface();
+
+			nwInterfaceName = this.getInterfaceFromConfigFile(Constants.IPV4);
 		} else if (ipType.equals(Constants.IPV6)) {
-			nwInterfaceName = executionConfig.getIPV6Interface();
+			nwInterfaceName = this.getInterfaceFromConfigFile(Constants.IPV6);
 		}
 		String hostIPAddress = InetUtilityService.getIPAddress(ipType, nwInterfaceName);
 		return hostIPAddress;
@@ -373,13 +365,14 @@ public class CommonService {
 	public String getBaseLogPath() {
 		LOGGER.info("Getting base log path");
 		String defaultLogBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
-		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + TM_CONFIG_FILE;
-		Properties prop = loadPropertiesFromFile(configFilePath);
-		if (prop != null) {
-			LOGGER.info("Log path from config file: {}", prop.getProperty(LOGS_PATH, defaultLogBasePath));
-			return prop.getProperty(LOGS_PATH, defaultLogBasePath);
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
+		String logsPath = getConfigProperty(new File(configFilePath), Constants.PYTHON_COMMAND);
+
+		// Check if the value from the config is null or empty
+		if (Utils.isEmpty(logsPath)) {
+			// Provide a default logpath - fileStore/logs
+			logsPath = defaultLogBasePath;
 		}
-		LOGGER.info("Default log path: {}", defaultLogBasePath);
 		return defaultLogBasePath;
 
 	}
@@ -408,32 +401,6 @@ public class CommonService {
 		}
 		return isFileDeleted;
 
-	}
-
-	/**
-	 * This method is used to get the base URL for the TM.
-	 * 
-	 * @return
-	 */
-	public String getTMBaseURL() {
-		String tmBaseURL = "";
-		// Get the base URL for the TMr
-		String urlFromConfig = appConfig.getBaseURL();
-		if (Utils.isEmpty(urlFromConfig)) {
-			// TO DO: Get the base URL from code
-		} else {
-			tmBaseURL = urlFromConfig;
-		}
-		return tmBaseURL;
-	}
-
-	/**
-	 * This method is used to get the python command.
-	 * 
-	 * @return
-	 */
-	public String getPythonCommand() {
-		return executionConfig.getPythonCommand();
 	}
 
 	/**
@@ -505,22 +472,6 @@ public class CommonService {
 	}
 
 	/**
-	 * Method to get real path for logs from the tm.config file
-	 * 
-	 * @param realPath The default real path if no configuration found
-	 * @return The real path to use
-	 */
-	// TODO :Change this method for common service
-	public String getRealPathForLogsFromTMConfig(String realPath) {
-		String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
-		Properties prop = loadPropertiesFromFile(configFilePath);
-		if (prop != null) {
-			return prop.getProperty(LOGS_PATH, realPath);
-		}
-		return realPath;
-	}
-
-	/**
 	 * Method to load properties from a file
 	 * 
 	 * @param filePath The path to the configuration file
@@ -554,7 +505,7 @@ public class CommonService {
 	public String getConfigProperty(File configFile, String key) {
 		Properties prop = loadPropertiesFromFile(configFile.getPath());
 		if (prop != null) {
-			LOGGER.info(" properties key" + prop.getProperty(key));
+			LOGGER.info(" properties key for getting the property from config file" + prop.getProperty(key));
 			return prop.getProperty(key);
 		}
 		return null;
@@ -562,13 +513,15 @@ public class CommonService {
 
 	/**
 	 * Method to get the TM URL from the configuration file
+	 * 
 	 * @return The TM URL
 	 */
 	public String getTMUrlFromConfigFile() {
 		String tmUrl = Constants.TM_URL;
 		try {
 			// get tm.config file using base location
-			String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
+			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.TM_CONFIG_FILE;
 			LOGGER.info("configFilePath: {}", configFilePath);
 			// get the TM URL from the config file
 			tmUrl = getConfigProperty(new File(configFilePath), Constants.TM_URL);
@@ -580,12 +533,51 @@ public class CommonService {
 	}
 
 	/**
+	 * Method to get the interface from the configuration file
+	 * 
+	 * @param ipType The IP type (e.g., "IPv4" or "IPv6")
+	 * @return The interface
+	 */
+	public String getInterfaceFromConfigFile(String ipType) {
+		LOGGER.debug("Getting interface from config file for IP type: {}", ipType);
+		String key = "";
+		String defaultInterface = "";
+		if (ipType.equals(Constants.IPV4)) {
+			key = Constants.IPV4_INTERFACE;
+			defaultInterface = Constants.DEFAULT_IPV4_INTERFACE;
+		} else if (ipType.equals(Constants.IPV6)) {
+			key = Constants.IPV6_INTERFACE;
+			defaultInterface = Constants.DEFAULT_IPV6_INTERFACE;
+
+		} else {
+			return null;
+		}
+		String value = "";
+		try {
+			// get tm.config file using base location
+			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.TM_CONFIG_FILE;
+			LOGGER.debug("configFilePath: {}", configFilePath);
+			// get the TM URL from the config file
+			value = getConfigProperty(new File(configFilePath), key);
+			if (Utils.isEmpty(value)) {
+				value = defaultInterface;
+			}
+
+			LOGGER.debug("Interface from congs is", value);
+		} catch (Exception e) {
+			LOGGER.error("Error getting TM URLinterface from config file: " + e.getMessage());
+		}
+		return value;
+
+	}
+
+	/**
 	 * Get the device log file path for the given execution result
 	 *
-	 * @param executionId
-	 * @param executionResultId
-	 * @param baseLogPath
-	 * @return deviceLogsPath
+	 * @param executionId       the execution ID
+	 * @param executionResultId the execution result ID
+	 * @param baseLogPath       the base log path
 	 */
 	public String getDeviceLogsPathForTheExecution(String executionId, String executionResultId, String baseLogPath) {
 		String deviceLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
@@ -635,6 +627,7 @@ public class CommonService {
 
 	/**
 	 * Get the agent log path for the given execution result
+	 * 
 	 * @param executionId
 	 * @param executionResultId
 	 * @param baseLogPath
@@ -651,6 +644,7 @@ public class CommonService {
 
 	/**
 	 * Get the version log file path for the given execution
+	 * 
 	 * @param executionId
 	 * @return versionLogsPath
 	 */
@@ -663,21 +657,21 @@ public class CommonService {
 	}
 
 	/**
-	 * Get the python3 command from the config file
-	 * @return python3Command
+	 * Get the python command from the config file
+	 * 
+	 * @return Python command , if not found return the default python
 	 */
 	public String getPythonCommandFromConfig() {
-		String configFilePath = AppConfig.getBaselocation() + File.separator + TM_CONFIG_FILE;
-		String pythonCommand = getConfigProperty(new File(configFilePath), PYTHON_COMMAND);
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
+		String pythonCommand = getConfigProperty(new File(configFilePath), Constants.PYTHON_COMMAND);
 
 		// Check if the value from the config is null or empty
 		if (pythonCommand == null || pythonCommand.isEmpty()) {
 			// Provide a default Python 3 command
-			pythonCommand = PYTHON3;
+			pythonCommand = Constants.PYTHON3;
 		}
 
 		return pythonCommand;
 	}
-
 
 }

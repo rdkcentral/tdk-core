@@ -31,8 +31,8 @@ import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
-import com.rdkm.tdkservice.dto.ScriptNameModuleNameMappingResponse;
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
+
+import com.rdkm.tdkservice.model.Module;
 
 /**
  * Service for scripts.
@@ -154,4 +154,12 @@ public interface IScriptService {
 	 * @return - the list of script names by category
 	 */
 	public List<ScriptDetailsResponse> getListofScriptNamesByCategory(String category, boolean isThunderEnabled);
+
+	/**
+	 * This method is used to get the module for the given script name
+	 * 
+	 * @param scriptName - the script
+	 * @return - the module - the module entity
+	 */
+	Module getModuleByScriptName(String scriptName);
 }
