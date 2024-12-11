@@ -433,10 +433,12 @@ public class FileTransferService implements IFileService {
 	 * @param executionResId return list of filenames
 	 */
 	@Override
-	public List<String> getDeviceLogFileNames(String executionId, String executionResId) {
+	public List<String> getDeviceLogFileNames(String executionResId) {
 		try {
-			LOGGER.debug("Getting log file names with parameters: executionId={}, executionResId={}", executionId,
-					executionResId);
+			LOGGER.debug("Getting log file names with parameters:executionResId={}",executionResId);
+			ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResId))
+					.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
+			String executionId = executionResult.getExecution().getId().toString();
 			String baselogpath = commonService.getBaseLogPath();
 			String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId, executionResId,
 					baselogpath);
@@ -464,7 +466,7 @@ public class FileTransferService implements IFileService {
 				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
 		String executionId = executionResult.getExecution().getId().toString();
 		// Get log file names for the execution
-		List<String> logFileNames = this.getDeviceLogFileNames(executionId, executionResId);
+		List<String> logFileNames = this.getDeviceLogFileNames(executionResId);
 		if (!logFileNames.contains(fileName)) {
 			LOGGER.error("Log file not found: {}", fileName);
 			throw new ResourceNotFoundException("Log file", fileName);
@@ -483,20 +485,16 @@ public class FileTransferService implements IFileService {
 	 * the given execution ID
 	 * 
 	 * @param
-	 * @param executionId
-	 * @param executionResId return byte[]
+	 * @param executionResultId return byte[]
 	 */
 	@Override
-	public byte[] downloadAllDeviceLogFiles(String executionId) throws IOException {
-		LOGGER.info("Inside downloadDeviceLogFile method with executionId: {}", executionId);
-		Optional<Execution> execution = executionRepository.findById(UUID.fromString(executionId));
-		UUID executionResId = execution.flatMap(exec -> exec.getExecutionResults().stream().findFirst()) // Retrieve the
-																											// first
-																											// ExecutionResult
-				.map(ExecutionResult::getId) // Get the ID of the first ExecutionResult
-				.orElseThrow(() -> new FileNotFoundException("No execution results found for the given execution ID."));
+	public byte[] downloadAllDeviceLogFiles(String executionResultId) throws IOException {
+		LOGGER.info("Inside downloadDeviceLogFile method with executionResultId: {}", executionResultId);
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResultId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResultId));
+		String executionId = executionResult.getExecution().getId().toString();
 
-		List<String> logFileNames = this.getDeviceLogFileNames(executionId, String.valueOf(executionResId));
+		List<String> logFileNames = this.getDeviceLogFileNames(executionResultId);
 
 		if (logFileNames.isEmpty()) {
 			throw new FileNotFoundException("No log files found for the given execution ID and executionRes ID.");
@@ -504,7 +502,7 @@ public class FileTransferService implements IFileService {
 
 		String baselogpath = commonService.getBaseLogPath();
 		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId,
-				String.valueOf(executionResId), baselogpath);
+				executionResultId, baselogpath);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ZipOutputStream zos = new ZipOutputStream(baos)) {

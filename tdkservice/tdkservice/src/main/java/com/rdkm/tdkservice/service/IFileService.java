@@ -34,11 +34,10 @@ public interface IFileService {
 	/**
 	 * This method is used to get the list of log file names.
 	 * 
-	 * @param executionId
 	 * @param executionResId
 	 * @return List<String>
 	 */
-	List<String> getDeviceLogFileNames(String executionId, String executionResId);
+	List<String> getDeviceLogFileNames(String executionResId);
 
 	/**
 	 * This method is used to download the log file.
@@ -58,7 +57,7 @@ public interface IFileService {
 	 * @return byte[]
 	 * @throws IOException
 	 */
-	byte[] downloadAllDeviceLogFiles(String executionId) throws IOException;
+	byte[] downloadAllDeviceLogFiles(String executionResultId) throws IOException;
 
 	/**
 	 * This method is used to upload the log file.

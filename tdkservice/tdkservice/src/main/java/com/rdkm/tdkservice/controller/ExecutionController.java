@@ -624,8 +624,7 @@ public class ExecutionController {
 	/**
 	 * Endpoint to download all device log files as a zip.
 	 *
-	 * @param executionId    The execution ID.
-	 * @param executionResId The execution result ID.
+	 * @param executionResultId The execution result ID.
 	 * @return A ResponseEntity containing the zip file.
 	 * @throws IOException If there is an error during file reading or zip creation.
 	 */
@@ -634,10 +633,10 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved the log files as a zip"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/downloadAllDeviceLogFiles")
-	public ResponseEntity<byte[]> downloadDeviceLogs(@RequestParam("executionId") String executionId)
+	public ResponseEntity<byte[]> downloadDeviceLogs(@RequestParam("executionResultId") String executionResultId)
 			throws IOException, IOException {
 		LOGGER.info("Inside download all device log files as a zip");
-		byte[] zipFile = fileService.downloadAllDeviceLogFiles(executionId);
+		byte[] zipFile = fileService.downloadAllDeviceLogFiles(executionResultId);
 
 		// Set headers for downloading the zip file
 		HttpHeaders headers = new HttpHeaders();
@@ -650,9 +649,7 @@ public class ExecutionController {
 	/**
 	 * Endpoint to get the log file names for a given executionId and
 	 * executionResId.
-	 *
-	 * @param executionId    The execution ID.
-	 * @param executionResId The execution result ID.
+	 * @param executionResultId The execution result ID.
 	 * @return A ResponseEntity containing the list of log file names.
 	 */
 	@Operation(summary = "Get the log file names", description = "Fetches the list of log file names for the specified execution ID and execution result ID.")
@@ -660,9 +657,8 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "204", description = "No log files found"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getDeviceLogFileNames")
-	public ResponseEntity<List<String>> getDeviceLogFileNames(@RequestParam("executionId") String executionId,
-			@RequestParam("executionResId") String executionResId) {
-		List<String> logFileNames = fileService.getDeviceLogFileNames(executionId, executionResId);
+	public ResponseEntity<List<String>> getDeviceLogFileNames(@RequestParam("executionResultId") String executionResultId) {
+		List<String> logFileNames = fileService.getDeviceLogFileNames(executionResultId);
 		if (logFileNames.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(logFileNames); // Return 204 NO CONTENT if no files
 																					// found
