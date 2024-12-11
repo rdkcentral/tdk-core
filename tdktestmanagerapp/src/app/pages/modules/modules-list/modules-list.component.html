@@ -20,7 +20,7 @@ limitations under the License.
                 <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
                 <button type="button" class="create-btn dwnld-btn" (click)="dowloadAllModule()" matTooltip=" Download all the {{categoryName}} Module Details">
                     <i class="bi bi-cloud-arrow-down-fill icon-size"></i> </button>
-                <button type="button" class="create-btn dwnld-btn" data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload Module XML File">
+                <button type="button" class="create-btn dwnld-btn" data-bs-toggle="modal" data-bs-target="#moduleListModal" matTooltip="Upload Module XML File">
                     <i class="bi bi-cloud-arrow-up-fill icon-size"></i>
                   </button>
                 <button class="create-btn" (click)="createModule()" matTooltip="Create {{categoryName}} Module">
@@ -54,12 +54,12 @@ limitations under the License.
         </div>
     </div>
     <!-- Modal Start-->
- <div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+ <div class="modal fade" #moduleListModal id="moduleListModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="moduleListModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-modal">
       <div class="modal-content">
         <form [formGroup]="uploadXMLForm" (ngSubmit)="uploadXMLSubmit()">
         <div class="modal-header modaltitle">
-          <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Module XML File</h1>
+          <h1 class="modal-title custom-title" id="moduleListModalLabel">Upload Module XML File</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">

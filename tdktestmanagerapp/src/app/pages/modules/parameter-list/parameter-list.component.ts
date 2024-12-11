@@ -20,7 +20,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
@@ -45,7 +44,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-parameter-list',
   standalone: true,
-  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './parameter-list.component.html',
   styleUrl: './parameter-list.component.css'
 })
@@ -135,14 +134,14 @@ export class ParameterListComponent {
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
     /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-    onRowSelected(event: RowSelectedEvent) {
+    onRowSelected(event: RowSelectedEvent):void{
       this.isRowSelected = event.node.isSelected();
       this.rowIndex = event.rowIndex
     }
@@ -151,7 +150,7 @@ export class ParameterListComponent {
      * Event handler for when the selection is changed.
      * @param event The selection changed event.
   */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent):void{
       this.selectedRowCount = event.api.getSelectedNodes().length;
       const selectedNodes = event.api.getSelectedNodes();
       this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -164,7 +163,7 @@ export class ParameterListComponent {
   /**
    * Creates a new box manufacturer.
    */
-  createParameterName() {
+  createParameterName() :void{
     this.router.navigate(['/configure/parmeter-create']);
   }
   
@@ -173,7 +172,7 @@ export class ParameterListComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(parameter: any): any {
+  userEdit(parameter: any):void{
       localStorage.setItem('parameters', JSON.stringify(parameter));
       this.router.navigate(['configure/parameter-edit']);
   }
@@ -181,7 +180,7 @@ export class ParameterListComponent {
    * Deletes a record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) {
+  delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
       if(data){
         this.moduleservice.deleteParameter(data.id).subscribe({
@@ -194,7 +193,6 @@ export class ParameterListComponent {
               horizontalPosition: 'end',
               verticalPosition: 'top'
               })
-              // this.parameterByFunction();
           },
           error:(err)=>{
             this._snakebar.open(err.error, '', {
@@ -207,10 +205,11 @@ export class ParameterListComponent {
         })
       }
     }
-
   }
-
-  openModal(data:any){
+  /**
+   * Open modal for view the parameters.
+   */
+  openModal(data:any):void{
     this.dialog.open( ParameterViewComponent,{
       width: '99%',
       height: '93vh',
@@ -228,7 +227,7 @@ export class ParameterListComponent {
   /**
    * Navigates back to the previous page.
    */
-  goBack() {
+  goBack():void{
     this.router.navigate(["/configure/function-list"]);
   }
 

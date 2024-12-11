@@ -49,7 +49,7 @@ import { MaterialModule } from '../../../material/material.module';
 })
 export class ModulesListComponent {
 
-  @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
+  @ViewChild('moduleListModal', {static: false}) moduleListModal?:ElementRef;
   public themeClass: string = "ag-theme-quartz";
   public paginationPageSize = 7;
   public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
@@ -129,7 +129,7 @@ export class ModulesListComponent {
    * Initializes the component.
   */
   ngOnInit(): void {
-    this.configureName = this.preferedCategory?this.preferedCategory:this.defaultCategory;
+    this.configureName = this.authservice.selectedConfigVal;
     this.categoryName = this.authservice.showSelectedCategory;
     this.findallbyCategory(); 
     this.uploadXMLForm = this.fb.group({
@@ -139,25 +139,24 @@ export class ModulesListComponent {
  /**
    * Finds all devices by category.
    */
- findallbyCategory(){
+ findallbyCategory():void{
   this.moduleservice.findallbyCategory(this.configureName).subscribe(res=>{
     let data = JSON.parse(res);
     this.rowData = data;
-    // this.rowData = data.sort((a: any, b: any) =>a.stbName.toString().localeCompare(b.stbName.toString()));
   })
 }
   /**
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
     /**
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-    onRowSelected(event: RowSelectedEvent) {
+    onRowSelected(event: RowSelectedEvent) :void{
       this.isRowSelected = event.node.isSelected();
       this.rowIndex = event.rowIndex
     }
@@ -166,7 +165,7 @@ export class ModulesListComponent {
      * Event handler for when the selection is changed.
      * @param event The selection changed event.
   */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent):void{
       this.selectedRowCount = event.api.getSelectedNodes().length;
       const selectedNodes = event.api.getSelectedNodes();
       this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -179,7 +178,7 @@ export class ModulesListComponent {
   /**
    * Creates a new box manufacturer.
    */
-  createModule() {
+  createModule():void{
     this.router.navigate(['/configure/modules-create']);
   }
   
@@ -188,16 +187,15 @@ export class ModulesListComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(modules: any): any {
+  userEdit(modules: any):void{
       localStorage.setItem('modules', JSON.stringify(modules))
-      // this.service.currentUrl = user.userGroupId;
       this.router.navigate(['configure/modules-edit']);
   }
   /**
    * Deletes a record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) {
+  delete(data: any) :void{
     if (confirm("Are you sure to delete ?")) {
       if(data){
         this.moduleservice.deleteModule(data.id).subscribe({
@@ -232,7 +230,7 @@ export class ModulesListComponent {
    * @param data - The data to be displayed.
    */
 
-  openModal(data:any){
+  openModal(data:any):void{
     this.dialog.open( ModulesViewComponent,{
       width: '99%',
       height: '93vh',
@@ -251,7 +249,7 @@ export class ModulesListComponent {
     
   }
 
-  dowloadAllModule(){
+  dowloadAllModule():void{
     if(this.rowData.length > 0){
       this.moduleservice.downloadModuleByCategory(this.selectedDeviceCategory);
     }else{
@@ -262,13 +260,12 @@ export class ModulesListComponent {
         verticalPosition: 'top'
       })
     }
-
   }
    /**
    * Handles the file change event when a file is selected for upload.
    * @param event - The file change event object.
    */
-   onFileChange(event:any){
+   onFileChange(event:any):void{
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
     if(file){
@@ -282,7 +279,7 @@ export class ModulesListComponent {
       }
     }
   }
-  uploadXMLSubmit(){
+  uploadXMLSubmit():void{
     this.uploadFormSubmitted = true;
     if(this.uploadXMLForm.invalid){
       return
@@ -316,7 +313,10 @@ export class ModulesListComponent {
       }
      }
   }
-  downloadModuleXML(params:any){
+  /**
+   * download as xml file based on module name.
+   */  
+  downloadModuleXML(params:any):void{
     if(params.moduleName){
       this.moduleservice.downloadXMLModule(params.moduleName).subscribe(blob => {
         const url = window.URL.createObjectURL(blob);
@@ -336,7 +336,7 @@ export class ModulesListComponent {
    * 
    * @param data - The data to be stored in the local storage.
    */
-  createFunction(data:any){
+  createFunction(data:any):void{
     localStorage.setItem('modules', JSON.stringify(data));
     this.router.navigate(['/configure/function-list']);
   }
@@ -345,25 +345,22 @@ export class ModulesListComponent {
    * Creates a parameter and navigates to the parameter list page.
    * @param data - The data to be stored in the local storage.
    */
-  createParameter(data:any){
+  createParameter(data:any):void{
     localStorage.setItem('user', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
-
-
-
   /**
    * Closes the modal  by click on button .
    */
-  close(){
-    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
+  close():void{
+    (this.moduleListModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
   }
   /**
    * Navigates back to the previous page.
    */
-  goBack() {
+  goBack() :void{
     this.router.navigate(["/configure"]);
   }
 

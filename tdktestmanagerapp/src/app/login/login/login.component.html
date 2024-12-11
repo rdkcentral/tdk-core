@@ -16,8 +16,7 @@ limitations under the License.
 <nav class="navbar navbar-expand-lg header">
   <div class="container-fluid">
     <a class="navbar-brand"></a>
-    <img src="assets/logo/rdkLogo.png" alt="TDK_logo" class="logo-img img-fluid" /> <span class="apptitle">TDK Test
-      Development Kit</span>
+    <img src="assets/logo/TDKLogoFinal.png" alt="TDK_logo" class="logo-img img-fluid" />
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
       aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
@@ -33,41 +32,42 @@ limitations under the License.
       <div class="parent">
         <div class="container container-box" [ngClass]="isSigninVisible?'active':''" id="container-box">
           <div class="form-container sign-up" *ngIf="registerVisible && currentForm === 'register'">
-
             <h1 class="title">Register User</h1>
             @if (showHideRegForm) {
             <form [formGroup]="registerForm" (ngSubmit)="onRegister()" class="registerform">
               <div class="row mb-1">
-                <label for="regusername" class="col-md-4 col-form-label">User Name</label>
+                <label for="regusername" class="col-md-4 col-form-label">User Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="regusername" formControlName="regusername"
                     placeholder="Enter User Name">
-                  <div *ngIf="regSubmitted && registerForm.controls['regusername']?.errors" class="text-danger">
+                  <div *ngIf="regSubmitted && registerForm.controls['regusername']?.errors " class="text-danger">
                     <small *ngIf="registerForm.controls['regusername']?.errors?.['required']">Please enter user
                       name.</small>
-                    <small *ngIf="registerForm.controls['regusername']?.errors?.['minlength']">User name minimum 4
+                    <small *ngIf="registerForm.controls['regusername']?.errors?.['minlength']">User name minimum 3
                       characters.</small>
+                  </div>
+                  <div *ngIf="backendErrors['regusername']" class="error">
+                      <small class="backend-error">{{ backendErrors['regusername'] }}</small> 
                   </div>
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="regpassword" class="col-md-4 col-form-label">Password</label>
+                <label for="regpassword" class="col-md-4 col-form-label">Password<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="password" id="regpassword" class="form-control" formControlName="regpassword"
                     placeholder="Enter Password">
                   <div *ngIf="regSubmitted && registerForm.controls['regpassword']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['regpassword']?.errors?.['required']">Please enter
                       password.</small>
-                    <small *ngIf="registerForm.controls['regpassword']?.errors?.['minlength']">Password minimum 4
-                      characters.</small>
+                    <small *ngIf="registerForm.controls['regpassword']?.errors?.['minlength']">Password must be at least 6 characters long.</small>
                   </div>
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="retypepassword" class="col-md-4 col-form-label">Retype Password</label>
+                <label for="retypepassword" class="col-md-4 col-form-label">Retype Password<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="password" id="retypepassword" class="form-control" formControlName="retypepassword"
-                    placeholder="Enter Password">
+                    placeholder="Enter Retype Password">
                   <div *ngIf="regSubmitted && registerForm.controls['retypepassword']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['retypepassword']?.errors?.['required']">Please enter
                       password.</small>
@@ -77,19 +77,22 @@ limitations under the License.
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="regemail" class="col-md-4 col-form-label">Email</label>
+                <label for="regemail" class="col-md-4 col-form-label">Email<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
-                  <input type="email" id="regemail" class="form-control" formControlName="regemail"
+                  <input type="text" id="regemail" class="form-control" formControlName="regemail"
                     placeholder="Enter Email">
                   <div *ngIf="regSubmitted && registerForm.controls['regemail']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['regemail']?.errors?.['required']">Please enter email.</small>
                     <small *ngIf="registerForm.controls['regemail']?.errors?.['pattern']">Please enter valid
                       email.</small>
                   </div>
+                  <div *ngIf="backendErrors['regemail']" class="error">
+                   <small class="backend-error">{{ backendErrors['regemail'] }}</small> 
+                  </div>
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="displayname" class="col-md-4 col-form-label">Display Name</label>
+                <label for="displayname" class="col-md-4 col-form-label">Display Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="displayname" formControlName="displayname"
                     placeholder="Enter Display Name">
@@ -100,7 +103,7 @@ limitations under the License.
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="groupname" class="col-md-4 col-form-label">User Group</label>
+                <label for="groupname" class="col-md-4 col-form-label">User Group<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <select class="form-select" aria-label="Default select example" id="usergroup"
                     formControlName="usergroup">
@@ -115,11 +118,22 @@ limitations under the License.
                   </div>
                 </div>
               </div>
-              @if (showhideErrExists) {
-              <div class="err text-danger text-center">
-                <small>{{errormessageExist}}</small>
+
+              <div class="row mb-1">
+                <label for="preferCategoty" class="col-md-4 col-form-label">Prefered Category<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                  <select class="form-select" aria-label="Default select example" id="preferCategoty"
+                    formControlName="preferCategoty" (change)="changeCategory($event)">
+                    <option value="" default>Select</option>
+                    <option value="RDKV">Video</option>
+                    <option value="RDKB">Broadband</option>
+                    <option value="RDKC">Camera</option>
+                  </select>
+                  <div *ngIf="regSubmitted && registerForm.controls['preferCategoty']?.errors" class="text-danger">
+                    <small *ngIf="registerForm.controls['preferCategoty']?.errors?.['required']">Please select prefer categoty.</small>
+                  </div>
+                </div>
               </div>
-              }
               <div class="row mt-1">
                 <div class="text-end">
                   <button type="submit" class="registerme-btn">Register Me</button>
@@ -144,11 +158,11 @@ limitations under the License.
                 <input type="radio" class="btn-check" name="btnradio" id="usersignin" checked>
                 <label class="btn btn-outline-primary logingOptionlbl" for="usersignin">User Sign In</label>
 
-                <input type="radio" class="btn-check" name="btnradio" id="ldapsignin" (change)="isUserchecked($event)">
+                <input type="radio" class="btn-check" name="btnradio" id="ldapsignin" disabled>
                 <label class="btn btn-outline-primary logingOptionlbl" for="ldapsignin">LDAP Sign In</label>
               </div>
             </div>
-            <form [formGroup]="signinForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="signinform">
               <div class="row mb-4">
                 <label for="username" class="col-md-4 col-form-label">User Name</label>
                 <div class="col-md-8">
@@ -208,8 +222,6 @@ limitations under the License.
                     placeholder="Enter User Name">
                   <div *ngIf="ldapSubmitted && ldapForm.controls['username'].errors" class="text-danger">
                     <small *ngIf="ldapForm.controls['username'].errors['required']">Please enter user name.</small>
-                    <small *ngIf="ldapForm.controls['username'].errors['minlength']">User name minimum 4
-                      characters.</small>
                   </div>
                 </div>
               </div>
@@ -220,8 +232,6 @@ limitations under the License.
                     placeholder="Enter Password">
                   <div *ngIf="ldapSubmitted && ldapForm.controls['password'].errors" class="text-danger">
                     <small *ngIf="ldapForm.controls['password'].errors['required']">Please enter password.</small>
-                    <small *ngIf="ldapForm.controls['password'].errors['minlength']">Password minimum 4
-                      characters.</small>
                   </div>
                 </div>
               </div>

@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { FooterComponent } from '../../layout/footer/footer.component';
 import { RegisterService } from '../../services/register.service';
@@ -104,7 +104,7 @@ export class LoginComponent implements OnInit {
   /**
    * Represents the showHideRegForm of the application.
    */
-  showHideRegForm = true;
+  showHideRegForm = false;
   /**
    * Represents the errormessageExist of the application.
    */
@@ -117,6 +117,8 @@ export class LoginComponent implements OnInit {
    * Represents the allGroupName of the application.
    */
   allGroupName: any = [];
+  categorySelect!:string;
+  backendErrors: { [key: string]: string } = {};
 
   constructor(private fb: FormBuilder, private router: Router,
     private registerservice: RegisterService,
@@ -130,8 +132,8 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
 
     this.signinForm = this.fb.group({
-      username: ['', [Validators.required, Validators.minLength(4)]],
-      password: ['', [Validators.required, Validators.minLength(4)]]
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     })
 
     this.ldapForm = this.fb.group({
@@ -141,19 +143,79 @@ export class LoginComponent implements OnInit {
 
     let emailregex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     this.registerForm = this.fb.group({
-      regusername: ['', [Validators.required, Validators.minLength(4)]],
+      regusername: ['', [Validators.required, Validators.minLength(3)]],
       regemail: ['', [Validators.required, Validators.pattern(emailregex)]],
-      displayname: ['', [Validators.required]],
-      regpassword: ['', [Validators.required, Validators.minLength(4)]],
+      displayname: ['', [Validators.required, this.noSpacesValidator]],
+      regpassword: ['', [Validators.required, Validators.minLength(6)]],
       retypepassword: ['', Validators.required],
       usergroup: ['', [Validators.required]],
+      preferCategoty:['', [Validators.required]]
     }, { validators: this.passwordMatchValidator('regpassword', 'retypepassword') })
 
     this.loginservice.getuserGroup().subscribe(res => {
       this.allGroupName = res;
-    })
-
-   
+    });
+    this.registerForm.get('regusername')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.registerForm.get('regusername')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.registerForm.get('regpassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.registerForm.get('regpassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.registerForm.get('retypepassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.registerForm.get('retypepassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.registerForm.get('regemail')?.valueChanges.subscribe((value) => {
+      const trimmedValue = value?.trim();
+      if (value && value !== trimmedValue) {
+        this.registerForm.get('regemail')?.setValue(trimmedValue, { emitEvent: false });
+      }
+    });
+    this.displayname.valueChanges.subscribe(value => {
+      if (value && value.startsWith(' ')) {
+        this.displayname.setValue(value.trimStart(), { emitEvent: false });
+      }
+    });
+    this.signinForm.get('username')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.signinForm.get('username')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.signinForm.get('password')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.signinForm.get('password')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+  }
+  get displayname(): AbstractControl {
+    return this.registerForm.get('displayname')!;
+  }
+  /**
+   * This method is no space is allow.
+   */
+  noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+    return value.startsWith(' ') ? { noLeadingSpaces: true } : null;
   }
   /**
    * Validates if the password and retype password fields match.
@@ -189,7 +251,6 @@ export class LoginComponent implements OnInit {
     this.registerVisible = false;
     this.signinVisible = true;
   }
-
   /**
    * Registers the user.
    * Sets the visibility of the signin and register components accordingly.
@@ -200,13 +261,21 @@ export class LoginComponent implements OnInit {
     this.signinVisible = false;
   }
   /**
+   * Change the category click on radio button.
+   */
+  changeCategory(event:any):void{
+    let val = event.target.value;
+    this.categorySelect = val;
+  }
+  /**
    * Toggles the form based on the provided form name.
    * @param formName - The name of the form to toggle.
    */
   toogleForm(formName: string): void {
-    this.currentForm = formName
+    this.currentForm = formName;
     if (this.currentForm === 'register') {
-      this.isSigninVisible = true
+      this.regSubmitted = false;
+      this.isSigninVisible = true;
       this.registerVisible = true;
       this.signinVisible = false;
       this.ldapScreenVisible = false;
@@ -214,9 +283,11 @@ export class LoginComponent implements OnInit {
       this.showHideRegForm = true;
       this.ngOnInit();
     } else {
-      this.isSigninVisible = false
+      this.submitted = false;
+      this.isSigninVisible = false;
       this.registerVisible = false;
       this.signinVisible = true;
+      this.ngOnInit();
     }
   }
 
@@ -263,7 +334,7 @@ export class LoginComponent implements OnInit {
           this.authservice.sendToken(res.token);
           this.authservice.setPrivileges(res.userRoleName)
           localStorage.setItem("loggedinUser", JSON.stringify(loggedinUser));
-          this.router.navigate(["/configure"]);
+          this.router.navigate(["/execution"]);
         },
         error: (err) => {
           let errmsg = err.error;
@@ -305,28 +376,39 @@ export class LoginComponent implements OnInit {
         userEmail: this.registerForm.value.regemail,
         userDisplayName: this.registerForm.value.displayname,
         password: this.registerForm.value.regpassword,
-        userGroupName: this.registerForm.value.usergroup
+        userGroupName: this.registerForm.value.usergroup,
+        userCategory:this.categorySelect
       }
-
       this.registerservice.registerUser(signUpData).subscribe({
         next: (res: any) => {
           this.registerSuccess = res;
           this.showHideRegSucess = true;
           this.showHideRegForm = false;
-          this.registerForm.reset();
+          this.regSubmitted = false;
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this.errormessageExist = errmsg.message ? errmsg.message : errmsg.password;
-          if (this.errormessageExist) {
-            this.showhideErrExists = true;
-            setTimeout(() => {
-              this.showhideErrExists = false;
-            }, 3500);
-          }
+          this.backendErrors = this.parseBackendErrors(errmsg.message);
+          setTimeout(() => {
+            this.backendErrors = {};
+          }, 2000);
         }
       })
     }
+  }
+  /**
+   * Handles backend error for username and email is already exist.
+   */  
+  parseBackendErrors(message: string): { [key: string]: string } {
+    const errors: { [key: string]: string } = {};
+    if (message.includes("User Name")) {
+      errors['regusername'] = message;
+    }
+
+    if (message.includes("Email")) {
+      errors['regemail'] = message;
+    }
+    return errors;
   }
 
 

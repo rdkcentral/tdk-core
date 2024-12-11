@@ -91,13 +91,6 @@ export class EditDeviceTypeComponent {
   }
 
   /**
-   * Resets the update device type form.
-   */
-  reset() :void{
-    this.updateDeviceTypeForm.reset()
-  }
-
-  /**
    * Navigates back to the list of device types.
    */
   goBack():void {

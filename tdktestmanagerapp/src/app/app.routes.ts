@@ -20,10 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login/login.component';
 import { ForgotPasswordComponent } from './login/forgot-password/forgot-password.component';
-import { RegisterComponent } from './login/register/register.component';
 import { MainComponent } from './layout/main/main.component';
 import { ConfigureComponent } from './pages/configure/configure.component';
-import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { ChangePasswordComponent } from './login/change-password/change-password.component';
 import { UserListComponent } from './pages/user-management/user-list/user-list.component';
 import { UserAddComponent } from './pages/user-management/user-add/user-add.component';
@@ -71,20 +69,20 @@ import { PreferedCategoryComponent } from './pages/prefered-category/prefered-ca
 import { ListRdkCertificationComponent } from './pages/rdk-certification/list-rdk-certification/list-rdk-certification.component';
 import { CreateRdkCertificationComponent } from './pages/rdk-certification/create-rdk-certification/create-rdk-certification.component';
 import { EditRdkCertificationComponent } from './pages/rdk-certification/edit-rdk-certification/edit-rdk-certification.component';
+import { AnalysisComponent } from './pages/analysis/analysis.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
     { path: 'login', title: 'Login', component: LoginComponent },
-    { path: 'register', title: 'Register', component: RegisterComponent },
     { path: 'forgot-password', title: 'Forgot-password', component: ForgotPasswordComponent },
     { path: 'change-password', title: 'Change-password', component: ChangePasswordComponent, canActivate: [authGuard] },
-    { path: 'prefered-category', title: 'prefered-category', component: PreferedCategoryComponent, canActivate: [authGuard] },
+    
     {
         path: '',
         component: MainComponent,
         canActivate: [authGuard],
         children: [
-            { path: 'dashboard', title: 'Dashboard', component: DashboardComponent },
+            { path: 'prefered-category', title: 'prefered-category', component: PreferedCategoryComponent, canActivate: [authGuard] },
             { path: 'configure', title: 'Configure', component: ConfigureComponent },
             { path: 'configure/user-management', title: 'UserManagement', component: UserListComponent, data: { role: ['admin'] }, canActivate: [roleGuard] },
             { path: 'configure/create-user', title: 'Create User', component: UserAddComponent },
@@ -128,7 +126,8 @@ export const routes: Routes = [
             {path:'script/edit-testsuite',title:'Edit TestSuite',component:EditTestsuiteComponent},
             {path:'configure/list-rdk-certifications',title:'List RDK Certifications', component:ListRdkCertificationComponent},
             {path:'configure/create-rdk-certifications',title:'Create RDK Certifications', component:CreateRdkCertificationComponent},
-            {path:'configure/edit-rdk-certifications', title:'Edit RDK Certifications', component:EditRdkCertificationComponent}
+            {path:'configure/edit-rdk-certifications', title:'Edit RDK Certifications', component:EditRdkCertificationComponent},
+            {path:'analysis', title:'Analysis', component:AnalysisComponent}
         ]
     }
 ];

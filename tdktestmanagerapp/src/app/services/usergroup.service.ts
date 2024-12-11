@@ -65,4 +65,7 @@ export class UsergroupService {
     return this.http.delete(`${apiUrl}api/v1/usergroup/delete/${id}`, { headers, responseType: 'text' });
   }
 
+  appVersion(): Observable<any> {
+    return this.http.get(`${apiUrl}api/v1/users/getappversion`,{responseType: 'text' });
+  }
 }

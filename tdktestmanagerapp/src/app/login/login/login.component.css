@@ -85,19 +85,21 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-color: #fff;
 }
 
-.container-box form {
+.signinform {
     background-color: #fff;
     display: flex !important;
     justify-content: center;
     flex-direction: column;
-    padding: 0 40px;
+    padding: 0 35px;
     height: 75%;
 }
 
 .registerform {
-    margin-top: 10px !important;
-    overflow-y: auto;
+    margin-top: 30px !important;
     display: block !important;
+    height: 70%;
+    overflow-y: auto;
+    padding: 10px 35px 0px 35px;
 }
 
 .form-container {
@@ -239,17 +241,19 @@ input::placeholder{
 }
 
 .parent {
-    height: 90vh;
+    height: 88vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
 .header {
-    background-color: #0e6f87;
-    color: #fff;
-    height: 35px;
-    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
+    background-color: #fff;
+    background-image: linear-gradient(160deg, #ffffff 10%, #00b2dc 100%);
+    color: #000;
+    box-shadow: 0px 2px 3px rgb(1 38 69 / 33%);
+    height: 45px;
+
 }
 
 .signinbtn {
@@ -302,4 +306,8 @@ input::placeholder{
 
 .subtitle {
     font-size: 0.9rem;
+}
+.backend-error{
+    font-size: 0.8rem;
+    color: #dc3545;
 }

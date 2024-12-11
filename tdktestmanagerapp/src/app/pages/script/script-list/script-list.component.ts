@@ -69,7 +69,7 @@ export class ScriptListComponent {
   @ViewChild('filterInputSuite') filterInputSuite!: ElementRef;
   @ViewChild('filterButton') filterButton!: ElementRef;
   @ViewChild('filterButtonSuite') filterButtonSuite!: ElementRef;
-  @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
+  @ViewChild('scriptModal', {static: false}) scriptModal?:ElementRef;
   @ViewChild('testSuiteModal', {static: false}) testSuiteModal?:ElementRef;
   categories = ['Video', 'Broadband', 'Camera'];
   selectedCategory : string = 'RDKV';
@@ -89,12 +89,11 @@ export class ScriptListComponent {
   public themeClass: string = "ag-theme-quartz";
   scriptPageSize = 7;
   testsuitePageSize = 7;
-  scriptPageSelector: number[] | boolean = [7, 15, 30, 50];
-  testSuitePageSelector: number[] | boolean = [7, 15, 30, 50];
   public gridApi!: GridApi;
   allPageSize = 7;
   currentPage = 0;
   paginatedSuiteData:SuiteModule[]=[];
+  paginatedScriptData:Module[]=[];
   filterText: string = '';
   filterTextSuite: string = '';
   globalSearchTerm: string = '';
@@ -169,7 +168,16 @@ export class ScriptListComponent {
       this.userCategory = this.loggedinUser.userCategory;
       this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
     }
-
+  /**
+   * Initializes the component. This method is called once the component has been initialized.
+   * It sets up the initial state of the component by determining the selected category, view name, 
+   * and category name from either the component's properties or local storage. 
+   * Depending on the view name, it configures the visibility of the test suite and script tables 
+   * and triggers the appropriate data fetching and sorting methods.
+   * It also initializes the forms for uploading scripts and test suites.
+   * 
+   * @returns {void}
+   */
   ngOnInit(): void {
     let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     let localViewName = localStorage.getItem('viewName') || '';
@@ -197,15 +205,38 @@ export class ScriptListComponent {
       uploadXML: [null, Validators.required]
     }) 
   }
-
+  /**
+   * Event handler for the grid's "ready" event.
+   * 
+   * This method is called when the grid has finished initializing and is ready to be interacted with.
+   * It sets the grid API instance to the component's `gridApi` property.
+   * 
+   * @param params - The event parameters containing the grid API instance.
+   */
   onGridReady(params:GridReadyEvent<any>) {
     this.gridApi = params.api;
   }
+  /**
+   * Finds all scripts by the given category.
+   * 
+   * This method calls the script service to fetch all scripts associated with the specified category.
+   * The fetched scripts are then parsed and stored in `scriptDataArr` and `scriptFilteredData`.
+   * If an error occurs during the fetch, the error message is stored in `noScriptFound`.
+   * 
+   * @param category - The category to filter scripts by.
+   */  
   findallScriptsByCategory(category:any){
     this.scriptservice.getallbymodules(category).subscribe({
       next:(res)=>{
-        this.scriptDataArr = JSON.parse(res);
-        this.scriptFilteredData = this.scriptDataArr;
+        if(res){
+          this.scriptDataArr = JSON.parse(res);
+          this.cdRef.detectChanges();
+          this.filterScript();
+          this.scriptSorting();
+        }else{
+          this.cdRef.detectChanges();
+          this.scriptDataArr =[];
+        }
       },
       error:(err)=>{
         let errmsg = err.error;
@@ -213,12 +244,28 @@ export class ScriptListComponent {
       }
     })
   }
- 
+  /**
+   * Handles the change of category selection and updates the relevant data and view accordingly.
+   * 
+   * This method clears existing data arrays and sets the view name from local storage.
+   * Depending on the view name ('testsuites' or 'scripts') and the selected category ('RDKB', 'RDKC', or other),
+   * it updates the category name, selected category, and calls the appropriate methods to fetch data.
+   * 
+   * @param val - The selected category value ('RDKB', 'RDKC', or other).
+   * 
+   * Side Effects:
+   * - Updates `scriptDataArr`, `scriptFilteredData`, `testSuiteDataArr`, and `paginatedSuiteData` to empty arrays.
+   * - Sets `viewName` from local storage.
+   * - Updates `categoryName`, `selectedCategory`, and `authservice.selectedCategory` based on the selected category.
+   * - Calls `allTestSuilteListByCategory` or `findallScriptsByCategory` based on the view name and selected category.
+   * - Updates local storage with the selected category and category name.
+   * - Resets `authservice.videoCategoryOnly` to an empty string.
+   */ 
   categoryChange(val: string): void {
     this.scriptDataArr=[];
-    this.scriptFilteredData =[];
     this.testSuiteDataArr = [];
     this.paginatedSuiteData = [];
+    this.paginatedScriptData = [];
     this.viewName = localStorage.getItem('viewName') || '{}';
     if(this.viewName ==='testsuites'){
       if (val === 'RDKB') {
@@ -257,8 +304,14 @@ export class ScriptListComponent {
     localStorage.setItem('categoryname',this.categoryName);
     this.authservice.videoCategoryOnly = "";
   }
-
-
+  /**
+   * Changes the current view based on the provided name.
+   * Updates the view name, clears the global search term, and stores the view name in local storage.
+   * Depending on the view name, it toggles the visibility of the testsuite and script tables,
+   * and fetches the relevant data by category.
+   *
+   * @param name - The name of the view to switch to. Expected values are 'testsuites' or 'scripts'.
+   */
   viewChange(name: string): void {
     this.viewName = name;
     this.globalSearchTerm ='';
@@ -274,6 +327,19 @@ export class ScriptListComponent {
       this.findallScriptsByCategory(this.selectedCategory);
     }
   }
+  /**
+   * Fetches all test suites for the selected category from the script service.
+   * 
+   * This method makes an HTTP request to retrieve all test suites associated with the currently
+   * selected category. Upon receiving a response, it updates the `testSuiteDataArr` with the 
+   * parsed data and triggers change detection. It also applies filters and sorting to the test 
+   * suite data. If no data is received, it clears the `testSuiteDataArr` and triggers change 
+   * detection.
+   * 
+   * In case of an error, it parses the error message and sets the `noScriptFound` property.
+   * 
+   * @returns {void}
+   */  
   allTestSuilteListByCategory(){
     this.scriptservice.getAllTestSuite(this.selectedCategory).subscribe({
       next:(res)=>{
@@ -295,16 +361,35 @@ export class ScriptListComponent {
       }
     })
   }
+  /**
+   * Paginates the script data based on the current page index and page size of the paginator.
+   * If the paginator is not available, the function returns without making any changes.
+   * 
+   * The function calculates the start and end indices for the current page and slices the 
+   * `scriptFilteredData` array accordingly. After updating the `scriptFilteredData`, it triggers 
+   * change detection to update the view.
+   * 
+   * @returns {void}
+   */  
   scriptDataPagination(){
     if (!this.paginator) {
       return;
     }
     const start = this.paginator.pageIndex * this.paginator.pageSize;
     const end = start + this.paginator.pageSize;
-    this.scriptFilteredData = this.scriptFilteredData.slice(start, end);
+    this.paginatedScriptData = this.scriptFilteredData.slice(start, end);
     this.cdRef.detectChanges();
   }
- 
+  /**
+   * Paginates the filtered test suite data based on the current page index and page size.
+   * Updates the `paginatedSuiteData` property with the sliced data and triggers change detection.
+   * 
+   * @remarks
+   * This method relies on the `paginator` object to determine the current page index and page size.
+   * If the `paginator` is not available, the method returns early without performing any operations.
+   * 
+   * @returns {void}
+   */ 
   paginateSuiteData() {
     if (!this.paginator) {
       return;
@@ -314,14 +399,31 @@ export class ScriptListComponent {
     this.paginatedSuiteData = this.testSuiteFilteredData.slice(start, end);
     this.cdRef.detectChanges();
   }
+  /**
+   * Handles the page change event from the paginator.
+   * Updates the current page index and triggers the appropriate data pagination method.
+   *
+   * @param event - The page change event object.
+   */  
   onPageChange(event: any): void {
     this.currentPage = event.pageIndex;
     if(this.viewName ==='testsuites'){
       this.paginateSuiteData();
-    }else{
-      this.scriptDataPagination();
     }
   }
+  onPageChangeScript(event: any): void {
+    this.currentPage = event.pageIndex;
+    this.scriptDataPagination();
+  }
+  /**
+   * Sorts the script data based on the module name in ascending or descending order.
+   * The sort order toggles between 'asc' (ascending) and 'desc' (descending) each time the method is called.
+   * After sorting, the script data is paginated.
+   *
+   * @remarks
+   * This method modifies the `sortOrder` property of the component and sorts the `scriptFilteredData` array.
+   * It then calls the `scriptDataPagination` method to update the pagination of the sorted data.
+   */  
   scriptSorting(){
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.scriptFilteredData.sort((a, b) => {
@@ -333,6 +435,11 @@ export class ScriptListComponent {
     });
     this.scriptDataPagination();
   }
+  /**
+   * Toggles the sort order of the test suite data between ascending and descending.
+   * Sorts the `testSuiteFilteredData` array based on the current sort order.
+   * After sorting, it calls the `paginateSuiteData` method to update the displayed data.
+   */  
   toggleSortSuite(){
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
     this.testSuiteFilteredData.sort((a, b) => {
@@ -344,6 +451,11 @@ export class ScriptListComponent {
     });
     this.paginateSuiteData();
   }
+   /**
+   * Toggles the visibility of the filter input field.
+   * If the filter input is hidden, it resets the filter text,
+   * applies the filter to the script list, and sorts the scripts.
+   */ 
   toggleFilterInput() {
     this.showFilterInput = !this.showFilterInput;
     if (!this.showFilterInput) {
@@ -352,6 +464,11 @@ export class ScriptListComponent {
       this.scriptSorting();
     }
   }
+  /**
+   * Toggles the visibility of the filter input field for test suites.
+   * If the filter input is hidden, it resets the filter text,
+   * applies the filter to the test suite list, and sorts the test suites.
+   */  
   toggleFilterInputSuite(){
     this.showFilterInputsuite = !this.showFilterInputsuite;
     if (!this.showFilterInputsuite) {
@@ -360,6 +477,16 @@ export class ScriptListComponent {
       this.toggleSortSuite();
     }
   }
+  /**
+   * Filters the script data based on the provided filter text.
+   * 
+   * If `filterText` is provided, it filters the `scriptDataArr` to include only those
+   * items whose `moduleName` includes the `filterText` (case insensitive).
+   * If `filterText` is not provided, it resets the filtered data to the original `scriptDataArr`
+   * and sorts the scripts.
+   * 
+   * After filtering, it resets the paginator to the first page and updates the paginated data.
+   */  
   filterScript(){
     if (this.filterText) {
       this.scriptFilteredData = this.scriptDataArr.filter((parent: any) =>
@@ -372,6 +499,16 @@ export class ScriptListComponent {
     this.paginator.firstPage();
     this.scriptDataPagination();
   }
+  /**
+   * Applies a filter to the test suite data based on the filter text.
+   * 
+   * If `filterTextSuite` is provided, it filters the `testSuiteDataArr` to include only those
+   * items whose `name` property includes the `filterTextSuite` (case-insensitive).
+   * If `filterTextSuite` is not provided, it resets the filtered data to the original array
+   * and toggles the sorting of the suite.
+   * 
+   * After filtering, it resets the paginator to the first page and paginates the filtered data.
+   */  
   applyFilterSuite() {
     if (this.filterTextSuite) {
       this.testSuiteFilteredData = this.testSuiteDataArr.filter((parent: any) =>
@@ -384,7 +521,19 @@ export class ScriptListComponent {
     this.paginator.firstPage();
     this.paginateSuiteData(); 
   }
-  
+  /**
+   * Performs a global search on the test suites or scripts based on the view name.
+   * 
+   * If the view name is 'testsuites', it filters the test suites and their scripts
+   * based on the global search term. If the search term is empty, it resets the 
+   * paginated suite data to the original test suite data array.
+   * 
+   * If the view name is not 'testsuites', it filters the scripts within the modules
+   * based on the global search term. If the search term is empty, it resets the 
+   * script filtered data to the original script data array.
+   * 
+   * @returns {void}
+   */  
   globalSearch() {
       const searchTerm = this.globalSearchTerm.toLowerCase();
       if(this.viewName ==='testsuites'){
@@ -410,7 +559,7 @@ export class ScriptListComponent {
       }else{
         
         if(searchTerm){
-        this.scriptFilteredData = this.scriptDataArr.map((module:Module) => {
+        this.paginatedScriptData = this.scriptDataArr.map((module:Module) => {
           const filteredScripts = module.scripts.filter((script) =>
             script.name.toLowerCase().includes(searchTerm)
           );
@@ -420,11 +569,11 @@ export class ScriptListComponent {
             expanded: filteredScripts.length > 0,
           };
         });
-        this.scriptFilteredData = this.scriptFilteredData.filter(
+        this.paginatedScriptData = this.paginatedScriptData.filter(
           (module) => module.scripts.length > 0
         );
       }else{
-        this.scriptFilteredData= [...this.scriptDataArr];
+        this.paginatedScriptData = [...this.scriptDataArr];
         this.scriptDataPagination();
       }
       }
@@ -433,12 +582,14 @@ export class ScriptListComponent {
    * Closes the modal  by click on button .
    */
   close(){
-    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
+    (this.scriptModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
     
   }
-
+  /**
+   * Closes the modal  by click on button .
+   */
   closeSuiteModal(){
     this.uploadtestSuiteForm.value.uploadXML = '';
     (this.testSuiteModal?.nativeElement as HTMLElement).style.display = 'none';
@@ -464,7 +615,21 @@ export class ScriptListComponent {
       }
     }  
   }
-  
+  /**
+   * Handles the submission of the upload script form.
+   * 
+   * This method sets the form submission flag to true and checks if the form is valid.
+   * If the form is invalid, it returns early. If the form is valid and a file name is provided,
+   * it attempts to upload the file using the script service.
+   * 
+   * On successful upload, it displays a success message using the snackbar, closes the form,
+   * and reinitializes the component.
+   * 
+   * On upload error, it parses the error message, displays it using the snackbar, reinitializes
+   * the component, closes the form, and resets the upload form.
+   * 
+   * @returns {void}
+   */  
   uploadScriptSubmit(){
     this.uploadFormSubmitted = true;
     if(this.uploadScriptForm.invalid){
@@ -499,6 +664,17 @@ export class ScriptListComponent {
       }
      }
   }
+  /**
+   * Handles the file input event for uploading a test suite XML file.
+   * 
+   * @param event - The file input event containing the selected file.
+   * 
+   * This method performs the following actions:
+   * - Extracts the file name from the event and assigns it to `xmlFileName`.
+   * - Checks if the file is of type 'text/xml'.
+   *   - If the file is a valid XML file, it updates the form with the file and clears any upload errors.
+   *   - If the file is not a valid XML file, it resets the form file value and sets an upload error message.
+   */  
   testSuiteXMLFile(event:any){
     this.xmlFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
@@ -513,6 +689,21 @@ export class ScriptListComponent {
       }
     }
   }
+  /**
+   * Submits the test suite file.
+   * 
+   * This method handles the submission of the test suite XML file. It first sets the `xmlFormSubmitted` flag to true.
+   * If the form is invalid, it returns early. Otherwise, it proceeds to check if the `xmlFileName` is present.
+   * 
+   * If the `xmlFileName` is present, it calls the `uploadTestSuiteXML` method of the `scriptservice` to upload the file.
+   * On successful upload, it displays a success message using `_snakebar`, resets the form, closes the suite modal, and
+   * refreshes the list of test suites by category.
+   * 
+   * In case of an error during the upload, it parses the error message, displays it using `_snakebar`, reinitializes the component,
+   * closes the modal, and resets the form.
+   * 
+   * @returns {void}
+   */  
   testSuiteFileSubmit(){
     this.xmlFormSubmitted = true;
     if(this.uploadtestSuiteForm.invalid){
@@ -548,22 +739,46 @@ export class ScriptListComponent {
       }
      }
   }
-
+  /**
+   * Navigates to the 'create-scripts' page.
+   * This method is triggered to initiate the creation of new scripts.
+   */
   createScripts(): void {
     this.router.navigate(['script/create-scripts']);
   }
-
+  /**
+   * Navigates to the 'create-script-group' route.
+   * This method is used to initiate the creation of a new script group.
+   */
   createScriptGroup(): void {
     this.router.navigate(['script/create-script-group']);
   }
+  /**
+   * Navigates to the script creation group page with the specified video category.
+   *
+   * @param value - The category of the video to be used for script creation.
+   */  
   createScriptVideo(value:string){
     let onlyVideoCategory = value;
     this.authservice.videoCategoryOnly = onlyVideoCategory;
     this.router.navigate(['script/create-script-group']);
   }
+  /**
+   * Navigates to the custom test suite page.
+   * This method uses the Angular Router to navigate to the 'script/custom-testsuite' route.
+   */  
   customTestSuite(){
     this.router.navigate(['script/custom-testsuite']);
   }
+  /**
+   * Edits a script by fetching its details using the provided edit data.
+   * 
+   * This method retrieves the script details from the server based on the 
+   * provided `editData`'s `id`, parses the response, stores the script details 
+   * in the local storage, and navigates to the script editing page.
+   * 
+   * @param editData - The data containing the ID of the script to be edited.
+   */  
   editScript(editData: any): void {
     this.scriptservice.scriptFindbyId(editData.id).subscribe(res=>{
       this.scriptDetails = JSON.parse(res);
@@ -571,6 +786,17 @@ export class ScriptListComponent {
       this.router.navigate(['script/edit-scripts']);
     })
   }
+  /**
+   * Deletes a script after user confirmation.
+   * 
+   * @param data - The data object containing the script information.
+   * 
+   * This method prompts the user for confirmation before proceeding to delete the script.
+   * If the user confirms, it calls the script service to delete the script by its ID.
+   * 
+   * On successful deletion, it displays a success message using the snackbar and refreshes the script list by category.
+   * On error, it displays an error message using the snackbar.
+   */  
   deleteScript(data:any) {
     if (confirm("Are you sure to delete ?")) {
       if(data){
@@ -596,7 +822,16 @@ export class ScriptListComponent {
       }
     }
   }
-
+  /**
+   * Downloads a script as a ZIP file.
+   *
+   * This method triggers the download of a ZIP file containing the script specified
+   * in the `downloadData` parameter. It creates a blob from the response, generates
+   * a URL for the blob, and programmatically creates and clicks an anchor element
+   * to initiate the download.
+   *
+   * @param downloadData - An object containing the name of the script to be downloaded.
+   */
   downloadScriptZip(downloadData:any){
     this.scriptservice.downloadSriptZip(downloadData.name).subscribe(blob=>{
         const xmlBlob = new Blob([blob], { type: 'application/zip' });
@@ -610,7 +845,16 @@ export class ScriptListComponent {
         window.URL.revokeObjectURL(url);
       })
   }
-
+  /**
+   * Downloads an XML file for the specified module.
+   *
+   * @param params - The parameters containing the module name.
+   * @param params.moduleName - The name of the module for which to download the XML file.
+   *
+   * This method calls the `downloadTestcases` service method with the provided module name,
+   * subscribes to the resulting blob, and creates a downloadable XML file.
+   * The file is named using the module name with an `.xlsx` extension.
+   */
   downloadXML(params: any): void {
     if (params.moduleName) {
       this.scriptservice.downloadTestcases(params.moduleName).subscribe(blob => {
@@ -625,7 +869,16 @@ export class ScriptListComponent {
       });
     }
   }
-
+  /**
+   * Downloads a script file.
+   *
+   * @param params - The parameters containing the script name.
+   * @param params.name - The name of the script to be downloaded.
+   *
+   * This method calls the `downloadScript` service method with the provided script name,
+   * subscribes to the resulting blob, and creates a downloadable script file.
+   * The file is named using the script name with an `.zip` extension.
+   */
   downloadScript(params:any):void{
     if(params.name){
       this.scriptservice.downloadScript(params.name).subscribe(blob => {
@@ -640,7 +893,17 @@ export class ScriptListComponent {
       });
     }
   }
-
+  /**
+   * Downloads test cases as a ZIP file.
+   * 
+   * This method retrieves the selected configuration value from the authentication service,
+   * requests the test cases ZIP file from the script service, and triggers a download of the file.
+   * 
+   * The downloaded file is named using the format `Testcase_<category>.zip`, where `<category>` 
+   * is the selected configuration value.
+   * 
+   * @returns {void}
+   */
   downloadTestCases(){
     this.category =  this.authservice.selectedConfigVal;
     this.scriptservice.downloadTestCasesZip( this.category).subscribe(blob => {
@@ -655,6 +918,16 @@ export class ScriptListComponent {
     });
 
   }
+  /**
+   * Initiates the download of all test suite XML files as a ZIP archive for the selected category.
+   * 
+   * This method calls the `downloadalltestsuitexmlZip` service method, which returns a blob containing
+   * the ZIP file. The blob is then converted into a downloadable URL, and an anchor element is created
+   * and triggered to start the download. The anchor element is removed from the DOM after the download
+   * is initiated, and the object URL is revoked to free up memory.
+   * 
+   * @returns {void}
+   */  
   downloadAllSuitesZIP(){
     this.scriptservice.downloadalltestsuitexmlZip(this.selectedCategory).subscribe(blob => {
       const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
@@ -668,7 +941,18 @@ export class ScriptListComponent {
       window.URL.revokeObjectURL(url);
     });
   }
-
+  /**
+   * Downloads a test suite XML file based on the provided parameters.
+   * 
+   * @param params - An object containing the parameters for the download.
+   * @param params.name - The name of the test suite to be downloaded.
+   * 
+   * This method uses the `scriptservice` to download the test suite XML file.
+   * It creates a temporary anchor element to trigger the download of the file.
+   * The file is named using the `params.name` value with an `.xml` extension.
+   * After the download is triggered, the temporary anchor element is removed
+   * from the document and the object URL is revoked.
+   */
   downloadSuiteXML(params:any){
     if(params.name){
       this.scriptservice.downloadTestSuiteXML(params.name).subscribe(blob => {
@@ -683,6 +967,12 @@ export class ScriptListComponent {
       });
     }
   }
+  /**
+   * Downloads an Excel file for the given test suite.
+   *
+   * @param params - An object containing the parameters for the download.
+   * @param params.name - The name of the test suite to download.
+   */  
   downloadSuiteExcel(params:any){
     if(params.name){
       this.scriptservice.downloadTestSuiteXLSX(params.name).subscribe(blob => {
@@ -698,6 +988,20 @@ export class ScriptListComponent {
       });
     }
   }
+  /**
+   * Deletes a test suite after user confirmation.
+   * 
+   * @param params - The parameters containing the ID of the test suite to be deleted.
+   * 
+   * The function first asks for user confirmation before proceeding with the deletion.
+   * If the user confirms and the `params` object contains an `id`, it calls the `deleteTestSuite` method
+   * from the `scriptservice` to delete the test suite.
+   * 
+   * On successful deletion, it displays a success message using `_snakebar` and updates the view by 
+   * calling `allTestSuilteListByCategory` after detecting changes with `cdRef.detectChanges`.
+   * 
+   * If an error occurs during the deletion process, it parses the error message and displays it using `_snakebar`.
+   */  
   deleteSuite(params:any){
     if (confirm("Are you sure to delete ?")) {
       if(params.id){
@@ -717,7 +1021,7 @@ export class ScriptListComponent {
           },
           error:(err)=>{
             let errmsg = JSON.parse(err.error)
-            this._snakebar.open(errmsg, '', {
+            this._snakebar.open(errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -728,10 +1032,22 @@ export class ScriptListComponent {
       }
     }
   }
+  /**
+   * Navigates to the edit test suite page with the provided test suite data.
+   *
+   * @param testSuiteData - The data of the test suite to be edited.
+   */  
   editTestSuite(testSuiteData:any){
     this.router.navigate(['script/edit-testsuite'], {state:{testSuiteData}});
   }
+
   @HostListener('document:click', ['$event'])
+  /**
+   * Handles the click event outside of the filter input and filter button.
+   * If the click is detected outside of these elements, it hides the filter input.
+   *
+   * @param event - The click event triggered by the user.
+   */
   onClickOutside(event: Event) {
     if (
       this.showFilterInput &&
@@ -743,10 +1059,20 @@ export class ScriptListComponent {
       this.showFilterInput = false;
     }
   }
+  /**
+   * Toggles the expansion state of a given parent panel and updates the component's panel open state.
+   *
+   * @param parent - The parent object whose expanded state is to be toggled.
+   */  
   togglePanel(parent: any) {
     parent.expanded = !parent.expanded;
     this.panelOpenState = !this.panelOpenState;
   }
+  /**
+   * Toggles the expanded state of a test suite and updates the suite panel state.
+   * 
+   * @param suite - The test suite object whose expanded state is to be toggled.
+   */  
   toggleTestSuite(suite:any){
     suite.expanded = !suite.expanded;
     this.suitePanelOpen = !this.suitePanelOpen;

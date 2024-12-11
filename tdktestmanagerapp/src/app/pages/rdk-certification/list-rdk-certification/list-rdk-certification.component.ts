@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Component, ElementRef,Renderer2, ViewChild } from '@angular/core';
+import { Component, ElementRef, Renderer2, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -46,9 +46,12 @@ import { CdkStepperModule } from '@angular/cdk/stepper';
   templateUrl: './list-rdk-certification.component.html',
   styleUrl: './list-rdk-certification.component.css'
 })
+/**
+ * Component for listing RDK certifications.
+ */
 export class ListRdkCertificationComponent {
 
-  @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
+  @ViewChild('certificateModal', { static: false }) certificateModal?: ElementRef;
   public rowSelection: 'single' | 'multiple' = 'single';
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
@@ -64,21 +67,35 @@ export class ListRdkCertificationComponent {
   selectedRowCount = 0;
   showUpdateButton = false;
   categoryName!: string;
-  uploadConfigurationForm!:FormGroup;
+  uploadConfigurationForm!: FormGroup;
   uploadFormSubmitted = false;
-  uploadFileName! :File;
+  uploadFileName!: File;
+  configureName!: string;
 
   /**
-   * The column definitions for the grid.
+   * Column definitions for the ag-Grid table in the RDK Certification List component.
+   * 
+   * @type {ColDef[]}
+   * @property {ColDef} columnDefs[].headerName - The header name of the column.
+   * @property {ColDef} columnDefs[].field - The field name of the column.
+   * @property {ColDef} columnDefs[].filter - The filter type for the column.
+   * @property {ColDef} columnDefs[].flex - The flex property to adjust column width.
+   * @property {IMultiFilterParams} columnDefs[].filterParams - Parameters for the filter.
+   * @property {boolean} columnDefs[].sortable - Indicates if the column is sortable.
+   * @property {any} columnDefs[].cellRenderer - The component used to render cells in this column.
+   * @property {Function} columnDefs[].cellRendererParams - Function to return parameters for the cell renderer.
+   * @property {Function} columnDefs[].cellRendererParams.onEditClick - Callback for the edit button click event.
+   * @property {Function} columnDefs[].cellRendererParams.onDownloadClick - Callback for the download button click event.
+   * @property {Function} columnDefs[].cellRendererParams.selectedRowCount - Function to get the count of selected rows.
    */
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
-      field: 'name',   
-      filter: 'agTextColumnFilter',  
+      field: 'name',
+      filter: 'agTextColumnFilter',
       flex: 1,
       filterParams: {} as IMultiFilterParams
-  },
+    },
     {
       headerName: 'Action',
       field: '',
@@ -86,7 +103,8 @@ export class ListRdkCertificationComponent {
       cellRenderer: ButtonComponent,
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
-        onDownloadClick:this.downloadConfigFile.bind(this),
+        onDownloadClick: this.downloadConfigFile.bind(this),
+        onDeleteClick: this.delete.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
     }
@@ -95,19 +113,23 @@ export class ListRdkCertificationComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  configureName!: string;
 
   constructor(private http: HttpClient, private router: Router, private renderer: Renderer2,
-    private authservice: AuthService, private service:RdkService, private _snakebar: MatSnackBar) { }
-
+    private authservice: AuthService, private service: RdkService, private _snakebar: MatSnackBar) { }
 
   /**
-   * Initializes the component.
+   * Initializes the component by fetching all RDK certifications and setting up the form.
+   * 
+   * - Fetches all RDK certifications from the service and maps them to `rowData`.
+   * - Sets the `configureName` and `categoryName` from the authentication service.
+   * - Initializes the `uploadConfigurationForm` with a required `uploadConfig` control.
+   * 
+   * @returns {void}
    */
   ngOnInit(): void {
     this.service.getallRdkCertifications().subscribe(res => {
-      const certificationNames = JSON.parse(res); 
-      this.rowData = certificationNames.map((name: any) => ({ name })); 
+      const certificationNames = JSON.parse(res);
+      this.rowData = certificationNames.map((name: any) => ({ name }));
     })
     this.configureName = this.authservice.selectedConfigVal;
     this.categoryName = this.authservice.showSelectedCategory;
@@ -118,16 +140,18 @@ export class ListRdkCertificationComponent {
 
   /**
    * Event handler for when the grid is ready.
-   * @param params The grid ready event parameters.
+   * 
+   * @param {GridReadyEvent<any>} params - The event parameters containing the grid API.
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>) : void {
     this.gridApi = params.api;
   }
 
   /**
-   * Edit the user.
-   * @param user The user to edit.
-   * @returns The edited user.
+   * Navigates to the edit RDK certifications page after storing the user information in local storage.
+   *
+   * @param user - The user object containing information to be stored in local storage.
+   * @returns void
    */
   userEdit(user: any): void {
     localStorage.setItem('user', JSON.stringify(user))
@@ -135,17 +159,25 @@ export class ListRdkCertificationComponent {
   }
 
   /**
-   * Create Rdk certifications
+   * Navigates to the "create RDK certifications" configuration page.
+   * This method is triggered when the user wants to create a new RDK certification.
+   * It uses the Angular Router to navigate to the specified route.
    */
-  createRdkCertification():void {
+  createRdkCertification(): void {
     this.router.navigate(["configure/create-rdk-certifications"]);
   }
 
-   /**
-   * Handles the file change event when a file is selected for upload.
-   * @param event - The file change event object.
+
+  /**
+   * Handles the file input change event.
+   * 
+   * This method is triggered when a user selects a file. It checks if the selected file
+   * is a Python (.py) file. If it is, the file is assigned to `uploadFileName`. Otherwise,
+   * an alert is shown to the user indicating that a valid Python file must be selected.
+   * 
+   * @param event - The file input change event containing the selected file.
    */
-   onFileChange(event:any){
+  onFileChange(event: any) : void {
     this.uploadFileName = event.target.files[0].name;
     const file: File = event.target.files[0];
     if (file && file.name.toLowerCase().endsWith('.py')) {
@@ -155,44 +187,54 @@ export class ListRdkCertificationComponent {
     }
   }
 
-   /**
-   * Closes the modal  by click on button .
+
+  /**
+   * Closes the certificate modal by setting its display style to 'none'.
+   * Also removes the 'overflow' and 'padding-right' styles from the document body.
    */
-   close(){
-    (this.staticBackdrop?.nativeElement as HTMLElement).style.display = 'none';
+  close(): void {
+    (this.certificateModal?.nativeElement as HTMLElement).style.display = 'none';
     this.renderer.removeStyle(document.body, 'overflow');
     this.renderer.removeStyle(document.body, 'padding-right');
   }
 
-
   /**
+   * Handles the submission of the upload configuration form.
    * 
-   * @returns 
+   * This method sets the `uploadFormSubmitted` flag to true and checks if the form is valid.
+   * If the form is invalid, it returns early. If the form is valid and a file name is provided,
+   * it calls the `uploadConfigFile` method of the service with the file name.
+   * 
+   * On successful upload, it displays a success message using `_snakebar`, closes the form,
+   * and reinitializes the component by calling `ngOnInit`.
+   * 
+   * On error, it displays an error message using `_snakebar`, reinitializes the component,
+   * closes the form, and resets the upload configuration form.
    */
-  uploadConfigurationSubmit(){
+  uploadConfigurationSubmit() : void {
     this.uploadFormSubmitted = true;
-    if(this.uploadConfigurationForm.invalid){
+    if (this.uploadConfigurationForm.invalid) {
       return
-     }else{
-      if(this.uploadFileName){
+    } else {
+      if (this.uploadFileName) {
         this.service.uploadConfigFile(this.uploadFileName).subscribe({
-          next:(res)=>{
+          next: (res) => {
             this._snakebar.open(res, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top'
             })
-              this.close();
-              this.ngOnInit();
+            this.close();
+            this.ngOnInit();
           },
-          error:(err)=>{
+          error: (err) => {
             let errmsg = err.error;
             this._snakebar.open(errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
             })
             this.ngOnInit();
             this.close();
@@ -200,28 +242,36 @@ export class ListRdkCertificationComponent {
           }
         })
       }
-     }
+    }
   }
 
   /**
+   * Downloads a configuration file based on the provided parameters.
    * 
-   * @param params 
+   * @param params - The parameters containing the name of the configuration file to download.
+   * 
+   * If the `params` object contains a `name` property, this method will call the `downloadConfig` 
+   * method of the service with the provided name. Upon successful download, it will create a 
+   * Blob from the response content and trigger a file save with the appropriate filename.
+   * 
+   * In case of an error during the download process, an error message will be displayed using 
+   * a snackbar with a duration of 2000 milliseconds.
    */
-  downloadConfigFile(params:any):void{
-    if(params.name){
+  downloadConfigFile(params: any): void {
+    if (params.name) {
       this.service.downloadConfig(params.name).subscribe({
-        next:(res)=>{
+        next: (res) => {
           const filename = res.filename;
           const blob = new Blob([res.content], { type: res.content.type || 'application/json' });
-          saveAs(blob, filename); 
+          saveAs(blob, filename);
         },
-        error:(err)=>{
+        error: (err) => {
           let errmsg = err.error;
           this._snakebar.open(errmsg, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
           })
         }
       })
@@ -229,14 +279,45 @@ export class ListRdkCertificationComponent {
   }
 
   /**
-   * Go back to the previous page.
-   */  
-  goBack():void {
+   * Navigates back to the configuration page and sets the selected configuration
+   * value and category in the authentication service.
+   *
+   * @remarks
+   * This method updates the `selectedConfigVal` to 'RDKV' and the `showSelectedCategory`
+   * to 'Video' in the `authservice`. It then navigates to the '/configure' route.
+   */
+  goBack(): void {
     this.authservice.selectedConfigVal = 'RDKV';
     this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
 
+  delete(data: any):void{
+    if (confirm("Are you sure to delete ?")) {
+      console.log("Data",data);
+      this.service.deleteRdkCertification(data.name).subscribe({
+        next: (res) => {
+          this.rowData = this.rowData.filter((row: any) => row.name !== data.name);
+          this.rowData = [...this.rowData];
+          this._snakebar.open(res, '', {
+            duration: 1000,
+            panelClass: ['success-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        },
+        error: (err) => {
+          let errmsg = err.error;
+          this._snakebar.open(errmsg, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      })
+    }
 
+  }
 
 }

@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Renderer2, TemplateRef, ViewChild } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { Router } from '@angular/router';
@@ -111,8 +111,8 @@ export class DeviceCreateComponent implements OnInit{
   uploadExistConfigHeading!: string;
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
-  isThunderPresent: any;
-  thunderTooltip: string = 'Please enter devicename and boxtype before you check this box';
+  isThunderPresent = false;
+  // thunderTooltip: string = 'Please enter devicename and boxtype before you check this box';
 
   constructor( private router: Router,private fb:FormBuilder,
     private _snakebar :MatSnackBar, private oemService:OemService, 
@@ -129,6 +129,7 @@ export class DeviceCreateComponent implements OnInit{
    */
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
+    console.log(this.isThunderPresent);
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory
       this.configureName = deviceCategory;
@@ -160,11 +161,11 @@ export class DeviceCreateComponent implements OnInit{
       deviceip: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
-      oem: new FormControl<string | null>('', { validators: Validators.required }),
-      soc: new FormControl<string | null>('', { validators: Validators.required}),
+      oem: new FormControl<string | null>(''),
+      soc: new FormControl<string | null>(''),
       streamingTemp: new FormControl<string | null>(''),
       thunderport:new FormControl<string | null>(''),
-      isThunder: new FormControl<boolean | null>({value: false, disabled: true}),
+      isThunder: new FormControl<boolean | null>({value: false, disabled: false}),
       configuredevicePorts:new FormControl<boolean | null>(false),
       agentport: new FormControl<string | null>(this.agentport),
       agentstatusport: new FormControl<string | null>(this.agentStatusPort),
@@ -175,8 +176,8 @@ export class DeviceCreateComponent implements OnInit{
       gatewayIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
-      oem: new FormControl<string | null>('', { validators: Validators.required }),
-      soc: new FormControl<string | null>('', { validators: Validators.required}),
+      oem: new FormControl<string | null>(''),
+      soc: new FormControl<string | null>(''),
       agentPortb: new FormControl<string | null>(''),
       agentStatusportB:new FormControl<string | null>(''),
       agentMonitorportB:new FormControl<string | null>('')
@@ -186,8 +187,8 @@ export class DeviceCreateComponent implements OnInit{
       stbIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
-      oem: new FormControl<string | null>('', { validators: Validators.required }),
-      soc: new FormControl<string | null>('', { validators: Validators.required}),
+      oem: new FormControl<string | null>(''),
+      soc: new FormControl<string | null>(''),
       agentPortb: new FormControl<string | null>(this.agentport),
       agentStatusportB:new FormControl<string | null>(this.agentStatusPort),
       agentMonitorportB: new FormControl<string | null>(this.agentMonitoPort)
@@ -207,26 +208,89 @@ export class DeviceCreateComponent implements OnInit{
       editorContent: ['',[Validators.required]],
       uploadConfigFileModal:['']
     });
-
+    this.deviceForm.get('thunderport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.deviceForm.get('thunderport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.deviceForm.get('agentport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.deviceForm.get('agentport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.deviceForm.get('agentstatusport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.deviceForm.get('agentstatusport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.deviceForm.get('agentmonitorport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.deviceForm.get('agentmonitorport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentPortb')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentPortb')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentStatusportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentStatusportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentMonitorportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentMonitorportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentPortb')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentPortb')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentStatusportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentStatusportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentMonitorportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentMonitorportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
   }
 
-  /**
-   * The method to check thunder enable or disable.
-   */
-  checkIsThunderValidity(): void{
-    const stbName = this.stbNameChange;
-    const deviceType = this.deviceTypeValue;
-    if(stbName && deviceType){
-      this.deviceForm.get('isThunder')?.enable();
-      this.thunderTooltip = 'Check the box for devices with Rdkservice image';
-    }else{
-      this.deviceForm.get('isThunder')?.disable();
-      this.deviceForm.get('isThunder')?.setValue(false);
-      this.showPortFile = false;
-      this.isThunderchecked = false;
-      this.thunderTooltip = 'Please enter devicename and boxtype before you check this box';
-    }
-  }
+
 
   /**
    * Event handler for when the grid is ready.
@@ -263,7 +327,7 @@ export class DeviceCreateComponent implements OnInit{
    * This methos is change the value of stbname inputfield
   */
   valuechange(event:any):void{
-    this.checkIsThunderValidity();
+    this.visibilityConfigFile();
     this.stbNameChange = event.target.value;
     if(this.isThunderchecked){
       this.showPortFile = true;
@@ -283,11 +347,7 @@ export class DeviceCreateComponent implements OnInit{
       this.visibleDeviceconfigFile = false;
       let value = event.target.value;
       this.deviceTypeValue = value;
-      this.checkIsThunderValidity();
-      if(this.isThunderchecked){
-        this.showPortFile = true;
-        this.visibilityConfigFile();
-      }
+      this.visibilityConfigFile();
     }
   /**
    * Isthunder is checked or unchecked 
@@ -296,11 +356,15 @@ export class DeviceCreateComponent implements OnInit{
     this.isThunderPresent = event.target.checked;
     this.isThunderchecked = !this.isThunderchecked;
     if(this.isThunderchecked){
+      this.isThunderPresent = true;
       this.showPortFile = true;
-      this.visibilityConfigFile();
+      console.log(this.isThunderPresent);
     }else{
       this.showPortFile = false;
+      this.isThunderPresent = false;
+      console.log(this.isThunderPresent);
     }
+    this.visibilityConfigFile();
   }
 
   /**
@@ -309,7 +373,7 @@ export class DeviceCreateComponent implements OnInit{
   visibilityConfigFile(): void{
     let boxNameConfig = this.deviceForm.value.devicename;
     let deviceTypeConfig = this.deviceForm.value.devicetype; 
-    this.service.downloadDeviceConfigFile(boxNameConfig,deviceTypeConfig)
+    this.service.downloadDeviceConfigFile(boxNameConfig,deviceTypeConfig,this.isThunderPresent)
     .subscribe({ 
       next:(res)=>{
       this.configFileName = res.filename;
@@ -431,6 +495,13 @@ export class DeviceCreateComponent implements OnInit{
   reset(): void{
     this.deviceForm.reset();
   }
+  resetFormB(): void{
+    this.rdkBForm.reset();
+  }
+  resetFormC(): void{
+    this.rdkCForm.reset();
+  }
+  
   /**
    * Submit the device form of RDKV category.
    */
@@ -453,7 +524,6 @@ export class DeviceCreateComponent implements OnInit{
       thunderPort : this.deviceForm.value.thunderport,
       userGroupName : this.loggedinUser.userGroupName,
       category : this.selectedDeviceCategory,
-      deviceStreams : this.streamingMapObj?this.streamingMapObj:null,
       thunderEnabled :this.isThunderchecked,
       configuredevicePorts:this.configDevicePorts
     }
@@ -470,7 +540,8 @@ export class DeviceCreateComponent implements OnInit{
       },
       error:(err)=>{
         let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+        let errmessage = errmsg.message?errmsg.message:errmsg.macId;
+          this._snakebar.open(errmessage, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -623,7 +694,7 @@ export class DeviceCreateComponent implements OnInit{
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.isThunderPresent).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -657,7 +728,7 @@ export class DeviceCreateComponent implements OnInit{
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.isThunderPresent).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -681,6 +752,9 @@ export class DeviceCreateComponent implements OnInit{
       })
     }
   }
+  /**
+   * The method is upload the configfile of fileupload
+   */
   onModalFileChange(event:Event):void{
     let fileInput = event.target as HTMLInputElement;
     if(fileInput && fileInput.files){
@@ -715,7 +789,7 @@ export class DeviceCreateComponent implements OnInit{
         const editorContent  = this.replaceTags(content);
         const contentBlob = new Blob([editorContent], {type:'text/plain'});
         const contentFile = new File([contentBlob],editorFilename);
-        this.service.uploadConfigFile(contentFile).subscribe({
+        this.service.uploadConfigFile(contentFile,this.isThunderPresent).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
               duration: 3000,
@@ -744,7 +818,7 @@ export class DeviceCreateComponent implements OnInit{
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.isThunderPresent).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -852,26 +926,41 @@ export class DeviceCreateComponent implements OnInit{
     }
 
   }
+  /**
+   * open the existing device config modal onclick button.
+  */
   existDeviceDialog(): void {
     this.dialogRef = this.dialog.open(this.dialogTemplate, {
       width: '90vw', 
       height: '90vh' 
     });
   }
+  /**
+   * close the existing device config modal.
+  */
   closeDialog(): void {
     this.dialogRef.close();
   }
+  /**
+   * open the device config modal onclick button.
+  */
   openNewDeviceDialog(): void {
     this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
       width: '90vw', 
       height: '90vh'
     });
   }
+  /**
+   * close the device config modal.
+  */
   closeNewDeviceDialog(): void {
     this.newDeviceDialogRef.close();
   }
+  /**
+   * Download the  configuration file.
+  */
   downloadConfigFile(){
-    this.service.downloadDeviceConfigFile(this.stbNameChange,this.deviceTypeValue).subscribe({
+    this.service.downloadDeviceConfigFile(this.stbNameChange,this.deviceTypeValue,this.isThunderPresent).subscribe({
       next:(res)=>{
         const filename = res.filename;
         const blob = new Blob([res.content], { type: res.content.type || 'application/json' });

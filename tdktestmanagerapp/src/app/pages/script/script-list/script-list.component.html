@@ -54,7 +54,7 @@ limitations under the License.
           <div class="col-md-2">
             <div class="btns-group" *ngIf="scriptTable">
               <button type="button" class="download-btn" (click)="downloadTestCases()" matTooltip="Download All {{selectedCategory}} test cases(zip of excel files)"><i class="bi bi-cloud-arrow-down-fill download-icon"></i> </button>
-              <button type="button" class="download-btn " data-bs-toggle="modal" data-bs-target="#staticBackdrop" matTooltip="Upload {{selectedCategory}} Script">
+              <button type="button" class="download-btn " data-bs-toggle="modal" data-bs-target="#scriptModal" matTooltip="Upload {{selectedCategory}} Script">
                    <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
               </button>
               <button class="download-btn" (click)="createScripts()" matTooltip="Create {{selectedCategory}} Script">
@@ -120,7 +120,7 @@ limitations under the License.
                     <div class="row">
                       <div class="accordion" id="accordionExample">
                         <div class="row accord-row">
-                          <div class="accordion-item" *ngFor="let parent of scriptFilteredData">
+                          <div class="accordion-item" *ngFor="let parent of paginatedScriptData">
                          
                               <h2 class="accordion-header d-flex align-items-center accord-head">
                                 <div class="col">
@@ -149,7 +149,7 @@ limitations under the License.
                               </h2>
                             <div [class.show]="parent.expanded" class="accordion-collapse collapse">
                               <div class="accordion-body">
-                                <div style="width: 90%; height: 300px; margin-top: 5px;" [class]="themeClass">
+                                <div style="width: 95%; height: 330px; margin-top: 5px;" [class]="themeClass">
                                   <ag-grid-angular
                                   style="width: 100%; height: 100%;"
                                   [columnDefs]="columnDefs"
@@ -157,7 +157,7 @@ limitations under the License.
                                   [rowData]="parent.scripts"
                                   [pagination]="true"
                                   [paginationPageSize]="scriptPageSize"
-                                  [paginationPageSizeSelector]="scriptPageSelector"
+                                  
                                   [animateRows]="true"
                                   [context]="this"
                                   [gridOptions]="gridOptions"
@@ -173,15 +173,15 @@ limitations under the License.
                       </div>
                     </div>
                     </div>
-                    <div *ngIf="scriptFilteredData.length == 0" class="noRecord">
+                    <div *ngIf="paginatedScriptData.length == 0" class="noRecord">
                       <span>{{noScriptFound}}</span>
                     </div>
                     <div class="script-paginator">
                       <mat-paginator
                       [length]="scriptFilteredData.length"
                       [pageSize]="allPageSize"
-                      [pageSizeOptions]="[5,7, 10, 20]"
-                      (page)="onPageChange($event)" class="script-pagination">
+                      [pageSizeOptions]="[5, 7, 10, 20]"
+                      (page)="onPageChangeScript($event)" class="script-pagination">
                     </mat-paginator>
                     </div>
 
@@ -257,7 +257,7 @@ limitations under the License.
                                     [rowData]="testSuite.scripts"
                                     [pagination]="true"
                                     [paginationPageSize]="testsuitePageSize"
-                                    [paginationPageSizeSelector]="testSuitePageSelector"
+                                    
                                     [animateRows]="true"
                                     [gridOptions]="gridOptions"
                                     (gridReady)="onGridReady($event)"
@@ -276,7 +276,7 @@ limitations under the License.
                         <mat-paginator
                         [length]="testSuiteFilteredData.length"
                         [pageSize]="allPageSize"
-                        [pageSizeOptions]="[5,7, 10, 20]"
+                        [pageSizeOptions]="[5, 7, 10, 20]"
                         (page)="onPageChange($event)" class="script-pagination">
                       </mat-paginator>
                       </div>
@@ -284,14 +284,14 @@ limitations under the License.
             </div>
       </div>
   </div>
-
+</div>
 <!-- Modal Start-->
-<div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" #scriptModal id="scriptModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="scriptModalLabel" aria-hidden="true">
 <div class="modal-dialog custom-modal">
   <div class="modal-content">
     <form [formGroup]="uploadScriptForm" (ngSubmit)="uploadScriptSubmit()">
     <div class="modal-header modaltitle">
-      <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Script Zip File</h1>
+      <h1 class="modal-title custom-title" id="scriptModalLabel">Upload Script Zip File</h1>
       <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
     </div>
     <div class="modal-body">

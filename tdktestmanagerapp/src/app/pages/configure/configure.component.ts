@@ -55,6 +55,10 @@ export class ConfigureComponent implements OnInit {
     this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
     this.categoryChange(val);
   }
+  /**
+   * Handles the radiobutton of category change event.
+   * @param val - The value of the radiobutton.
+   */
   categoryChange(val:any){
     if (val === 'RDKB') {
       this.rdkbVisible = true;

@@ -188,7 +188,7 @@ export class CreatePrimitiveTestComponent {
    * Method to get the selected module name
    * @param event 
    */
-  getModuleSelected(event: any) {
+  getModuleSelected(event: any) :void{
     this.selectedValue = event.target.value;
     this.service.getlistofFunction(this.selectedValue).subscribe(res => {
       this.functionNames = JSON.parse(res)
@@ -199,7 +199,7 @@ export class CreatePrimitiveTestComponent {
    * Method to get the selected function name
    * @param event 
    */
-  getFunctionSelected(event: any) {
+  getFunctionSelected(event: any) :void{
     this.selectedFunctionValue = event.target.value;
     this.service.getParameterList(this.selectedFunctionValue).subscribe(res => {
       this.rowData = JSON.parse(res);
@@ -210,7 +210,7 @@ export class CreatePrimitiveTestComponent {
    * Method to get the grid ready
    * @param params 
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
 
@@ -275,7 +275,7 @@ export class CreatePrimitiveTestComponent {
    * row selection event
    * @param event 
    */
-  onRowSelected(event: RowSelectedEvent) {
+  onRowSelected(event: RowSelectedEvent):void{
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
@@ -284,7 +284,7 @@ export class CreatePrimitiveTestComponent {
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent):void{
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';

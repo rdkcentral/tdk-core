@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { Component, inject } from '@angular/core';
 import { FooterComponent } from '../footer/footer.component';
-import { RouterOutlet } from '@angular/router';
 import { HeaderComponent } from '../header/header.component';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { ThemeService } from '../../services/theme.service';
@@ -28,7 +27,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-main',
   standalone: true,
-  imports: [CommonModule,RouterOutlet, HeaderComponent, SidebarComponent, FooterComponent],
+  imports: [CommonModule, HeaderComponent, SidebarComponent, FooterComponent],
   templateUrl: './main.component.html',
   styleUrl: './main.component.css'
 })

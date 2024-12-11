@@ -34,15 +34,17 @@ interface customcellRenderparams extends ICellRendererParams{
   imports: [MaterialModule,CommonModule],
   template: `
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
-    <button  class="btn  btn-sm delete-btn" (click)="onEditClick($event)" matTooltip="{{textforedit}}"><mat-icon class="extra-icon edit">edit</mat-icon></button>
+    <button   class="btn  btn-sm delete-btn" (click)="onEditClick($event)" matTooltip="{{textforedit}}"><mat-icon class="extra-icon edit">edit</mat-icon></button>
     &nbsp;
-    <button  class="btn  btn-sm delete-btn" (click)="onDeleteClick($event)" matTooltip="Delete"><mat-icon class="delete-icon extra-icon">delete_forever</mat-icon></button>
+    <button *ngIf="deleteShowHide" class="btn  btn-sm delete-btn" (click)="onDeleteClick($event)" matTooltip="Delete"><mat-icon class="delete-icon extra-icon">delete_forever</mat-icon></button>
     &nbsp;
     <button *ngIf="viewShowHide"  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="View"><mat-icon class=" view extra-icon">remove_red_eye</mat-icon></button>
     &nbsp;
     <button *ngIf="downloadShowHide" class="btn  btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download XML" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
     &nbsp;
     <button *ngIf="downloadSriptZip" class="btn  btn-sm delete-btn" (click)="onDownloadZip($event)" matTooltip="Download Zip" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
+    &nbsp;
+    <button *ngIf="downloadConfigShow" class="btn  btn-sm delete-btn download-config" (click)="onDownloadClick($event)" matTooltip="Download Config File" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
 
   `,  
   styles:[
@@ -69,6 +71,9 @@ interface customcellRenderparams extends ICellRendererParams{
     .download{
       color: #00B2DC;
     }
+    .download-config{
+      margin-left: -15px;
+    }
     `
   ]
 })
@@ -81,6 +86,8 @@ export class ButtonComponent implements OnInit{
   viewShowHide = true;
   textforedit!:string;
   downloadSriptZip = false;
+  deleteShowHide = true;
+  downloadConfigShow =  false;
 
   agInit(params:customcellRenderparams): void {
     this.params = params;
@@ -110,14 +117,21 @@ export class ButtonComponent implements OnInit{
       this.route.snapshot.url[1].path === 'list-soc' ||
       this.route.snapshot.url[1].path === 'create-group' ||
       this.route.snapshot.url[1].path === 'user-management' ||
-      this.route.snapshot.url[1].path === 'list-primitivetest'){
+      this.route.snapshot.url[1].path === 'list-primitivetest' ){
         this.viewShowHide = false;
         this.textforedit = 'Edit/View';
       }else{
         this.viewShowHide = true;
         this.textforedit = 'Edit';
       }
+      if(this.route.snapshot.url[1].path === 'list-rdk-certifications'){
+        this.deleteShowHide = true;
+        this.viewShowHide = false;
+        this.downloadConfigShow = true;
+        this.viewShowHide = false;
+      }
     }
+
   }
   //** Condition for disable edit and delete button to own user */
   isButtonDisabled(): boolean {

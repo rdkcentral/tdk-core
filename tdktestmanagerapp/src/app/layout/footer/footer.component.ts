@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { Component } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 import { CommonModule } from '@angular/common';
+import { UsergroupService } from '../../services/usergroup.service';
 
 @Component({
   selector: 'app-footer',
@@ -31,20 +32,25 @@ import { CommonModule } from '@angular/common';
 export class FooterComponent {
 
   isChecked = false;
+  vesionName!:string;
 
-  constructor(private themeService: ThemeService) { 
+  constructor(private themeService: ThemeService, private userservice: UsergroupService) { 
     const theme = this.themeService.currentTheme;
-    // if (theme === "dark") {
-    //   this.isChecked = true;
-    // }else {
-    //   this.isChecked = false;
-    // }
-    
   }
-
+  /**
+   * Initializes the component
+   */
   ngOnInit(): void {
- 
-
+    this.getAppVersion();
   }
-
+  /**
+   * This method is for getting the version name.
+   */
+  getAppVersion():void{
+    this.userservice.appVersion().subscribe(res=>{
+      this.vesionName = res;
+      console.log(this.vesionName);
+      
+    })
+  }
 }

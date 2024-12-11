@@ -17,43 +17,57 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif !important;
-    font-size: 0.78rem !important;
+body,
+*:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+  font-size: 0.78rem !important;
 }
-.mat-typography h1, 
-  .mat-typography h2, 
-  .mat-typography h3, 
-  .mat-typography h4, 
-  .mat-typography h5, 
-  .mat-typography h6 {
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4,
+.mat-typography h5,
+.mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
 .title {
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 5px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    margin: 0 2px;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0px 0 5px 0;
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0 2px;
 }
-.radiobox{
+.radiobox {
   display: flex;
   justify-content: start;
   align-items: baseline;
   padding: 0 20px;
   font-size: 0.78rem;
 }
-.heading{
+.heading {
   margin-top: 8px;
   margin-bottom: 0;
   font-size: 0.78rem;
 }
-.rdkgroup{
+::ng-deep .ag-cell.selectable {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+  -ms-user-select: text !important;
+}
+.rdkgroup {
   margin-left: 30px;
 }
-.rdkradio{
+.rdkradio {
   border: 2px solid #0e6f87;
 }
 .form-check-inline {
@@ -63,72 +77,70 @@ body, *:not(.material-icons) {
   background-color: #0e6f87;
   border-color: #0e6f87;
 }
-.sidebar{
-    height: 85vh;
-    box-shadow: 3px 0px 5px 0px #aaa;
-    overflow: auto;
+.sidebar {
+  height: 93vh;
+  box-shadow: 3px 0px 5px 0px #aaa;
+  overflow: auto;
 }
-.category{
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin: 0.5rem 0;
+.category {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 0.5rem 0;
 }
-.cat-select{
-    width: 70%;
-    margin-left: 10px;
+.cat-select {
+  width: 70%;
+  margin-left: 10px;
 }
 .no-arrow::after {
-    display: none;
-  }
-  .accord-row{
-    margin: 0;
-    cursor: default;
-  }
-  .accord-head{
-    margin-bottom: 0;
-  }
-  .row-arrows{
-    float: right;
-  }
-  .accordion-body {
-    padding-top: 0;
-    padding-bottom: 0;
-    padding-right: 0;
+  display: none;
 }
-.ul-item{
-    padding-left: 0;
-    margin-bottom: 0;
-    list-style: circle;
+.accord-row {
+  margin: 0;
+  cursor: default;
 }
-.li-item{
-    text-decoration: underline;
-    line-height: 1.8;
-    word-wrap: break-word;
-    cursor: pointer;
-    color: #2626b8;
-    font-size: 0.74rem;
-    /* display: inline-flex; */
+.accord-head {
+  margin-bottom: 0;
 }
-.col-sidebar{
-    padding-left: 0;
+.row-arrows {
+  float: right;
 }
-.accor-margin{
-    margin-top: 15px;
+.accordion-body {
+  padding-top: 0;
+  padding-bottom: 0;
+  padding-right: 0;
 }
-.folder-icon{
-   color: #fdb73b; 
+.ul-item {
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none;
 }
-.execution-drop{
+.li-item {
+  line-height: 1.8;
+  word-wrap: break-word;
+  cursor: pointer;
+  color: #2626b8;
+  font-size: 0.74rem;
+}
+.col-sidebar {
+  padding-left: 0;
+}
+.accor-margin {
+  margin-top: 15px;
+}
+.folder-icon {
+  color: #fdb73b;
+}
+.execution-drop {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
-.execution-select{
+.execution-select {
   width: 85%;
   text-align: center;
-  background: #00B2DC;
-  border: #00B2DC;
+  background: #00b2dc;
+  border: #00b2dc;
   color: #fff;
   border-radius: 5px;
   font-size: 0.8rem;
@@ -136,78 +148,183 @@ body, *:not(.material-icons) {
 }
 .dropdown-toggle::after {
   margin-left: 15%;
-  vertical-align: .1em;
+  vertical-align: 0.1em;
   font-size: 1.3rem;
   color: #fff;
 }
 ::ng-deep .mat-mdc-tab.mdc-tab {
   flex-grow: 0 !important;
 }
-::ng-deep .mdc-tab--active{
+::ng-deep .mdc-tab--active {
   border-bottom: 47px solid #dddddd6e !important;
   border-right: 25px solid transparent !important;
 }
-::ng-deep .mat-mdc-tab-group, .mat-mdc-tab-nav-bar {
+::ng-deep .mat-mdc-tab-group,
+.mat-mdc-tab-nav-bar {
   --mdc-tab-indicator-active-indicator-color: transparent !important;
   --mat-tab-header-active-focus-indicator-color: transparent !important;
   --mat-tab-header-active-hover-indicator-color: transparent !important;
 }
 ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #0e6f87 !important;
   font-size: 0.8rem !important;
 }
-::ng-deep .mdc-tab,.mat-mdc-tab-label-container, .mdc-tab__content, .mat-mdc-tab{
+::ng-deep .mdc-tab,
+.mat-mdc-tab-label-container,
+.mdc-tab__content,
+.mat-mdc-tab {
   height: 35px !important;
 }
-::ng-deep.mat-mdc-tab-labels{
+::ng-deep.mat-mdc-tab-labels {
   height: 35px !important;
 }
-.dropdown-item:hover{
-  background-color: #00B2DC;
+::ng-deep.mat-mdc-icon-button .mat-mdc-button-touch-target {
+  height: 30px !important;
+  width: 30px !important;
+}
+.dropdown-item:hover {
+  background-color: #00b2dc;
   color: #fff;
   cursor: pointer;
 }
-.thunder-icon{
-  color: #00B2DC;
+.thunder-icon {
+  color: #00b2dc;
 }
-.context-btn{
-    padding: 4px;
-    width: 20px;
-    height: 20px;
-    position: absolute;
+.context-btn {
+  padding: 4px;
+  width: 20px;
+  height: 20px;
+  position: absolute;
 }
-.dot-icon{
+.dot-icon {
   font-size: 0.8rem;
   width: 20px;
   height: 20px;
   display: flex;
 }
-.context-item{
+.context-item {
   min-height: 30px;
 }
-.context-item span{
+.context-item span {
   font-size: 0.7rem;
 }
-::ng-deep .mat-contxtmenu{
+::ng-deep .mat-contxtmenu {
   position: absolute !important;
   top: -35px !important;
 }
 
-.example-header {
+.status-group {
+  padding: 0;
+}
+.free,
+.busy,
+.hang {
+  height: 9px;
+  width: 9px;
+  border-radius: 50%;
+  display: inline-flex;
+}
+.spinner {
+  height: 11px;
+  width: 11px;
+}
+.free {
+  background-color: #79ff4d;
+}
+.busy {
+  background-color: gray;
+}
+.hang {
+  background-color: #e2e204;
+}
+.device-name {
+  padding-left: 5px;
+}
+.loader-row {
+  margin-right: 0;
+}
+::ng-deep .multiselect-dropdown .selected-item {
+  max-width: 100% !important;
+}
+
+/* filterby search css start */
+.filterby {
   display: flex;
-  justify-content: end;
-  align-items: center;
-  width: 30%;
+  align-items: baseline;
   position: absolute;
-  right: 30px;
+  z-index: 10;
+  right: 33%;
   top: 50px;
-  z-index: 9999;
 }
-.search{
-  width: 75px;
-  font-size: 0.8rem;
-  font-weight: 400;
+.userby{
+  display: flex;
+  align-items: baseline;
+  position: absolute;
+  z-index: 10;
+  right: 13%;
+  top: 50px;
 }
-.seach-input{
-  width: 60%;
+.user-dropdown{
+  width: 150px;
+  margin-left: 5px;
+}
+.filter-drop-down {
+  margin-left: 5px;
+}
+.search-bar {
+  display: flex;
+  align-items: baseline;
+  position: absolute;
+  z-index: 10;
+  right: 30px;
+}
+.search {
+  word-break: break-word;
+  width: 102px;
+}
+.searchby {
+  display: flex;
+  position: relative;
+  top: 10px;
+}
+.seach-input {
+  width: 250px;
+}
+.search-btn {
+  border: 1px solid #0e6f8794;
+}
+/* filterby search css end */
+
+.table-footer{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  background: white;  
+  position: sticky;
+  bottom: 0;
+  z-index: 10;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  border-top: none;
+}
+.delete-date{
+  padding-left: 5px;
+  cursor: pointer;
+}
+.refresh-btn {
+  background-color: #fff;
+  height: 30px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.refresh-icon{
+  color: #00b2dc;
+  font-weight: bold;
+}
+::ng-deep .multiline-tooltip{
+  white-space: pre-line !important;
+  word-wrap: break-word !important;
+  text-align: left !important;
 }

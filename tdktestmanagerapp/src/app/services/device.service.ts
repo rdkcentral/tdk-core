@@ -100,11 +100,11 @@ export class DeviceService {
     return this.http.post(`${apiUrl}api/v1/device/uploadDeviceXML`, formData, { headers, responseType: 'text' });
   }
 
-  downloadDeviceConfigFile(deviceTypeName: string, deviceType: string): Observable<any> {
+  downloadDeviceConfigFile(deviceTypeName: string, deviceType: string, isThunder: boolean): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/downloadDeviceConfigFile?deviceTypeName=${deviceTypeName}&deviceType=${deviceType}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
+    return this.http.get(`${apiUrl}api/v1/device/downloadDeviceConfigFile?deviceTypeName=${deviceTypeName}&deviceType=${deviceType}&isThunderEnabled=${isThunder}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
       map((response: HttpResponse<Blob>) => {
         const contentDisposition = response.headers.get('content-disposition');
         let filename = 'device.config';
@@ -131,13 +131,13 @@ export class DeviceService {
       saveAs(blob, `device_${category}.zip`);
     });
   }
-  uploadConfigFile(file: File): Observable<any> {
+  uploadConfigFile(file: File,isThunder:boolean): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
     const formData: FormData = new FormData();
     formData.append('uploadFile', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/device/uploadDeviceConfigFile`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/device/uploadDeviceConfigFile?isThunderEnabled=${isThunder}`, formData, { headers, responseType: 'text' });
   }
 
   deleteDeviceConfigFile(deviceConfigFileName: any) {

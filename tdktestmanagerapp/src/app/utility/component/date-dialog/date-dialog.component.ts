@@ -1,0 +1,107 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+import { CommonModule } from '@angular/common';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
+import { ExecutionService } from '../../../services/execution.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
+
+@Component({
+  selector: 'app-date-dialog',
+  standalone: true,
+  imports: [BsDatepickerModule, CommonModule, FormsModule],
+  templateUrl: './date-dialog.component.html',
+  styleUrl: './date-dialog.component.css',
+  encapsulation: ViewEncapsulation.None,
+})
+export class DateDialogComponent {
+  selectedDate: Date[] | null = null;
+  utcDateRange: string[] | null = null;
+  fromDate :any
+  toDate :any;
+  bsConfig = {
+    rangeInputFormat: 'YYYY-MM-DD',
+    maxDate: new Date(),
+  };
+
+  constructor(private executionservice:ExecutionService,private _snakebar: MatSnackBar,
+    public dialogRef: MatDialogRef<DateDialogComponent>,
+  ){}
+  /**
+   * Handles date change time event.
+   *
+   * @param dateRange - The dateRange change date and time action.
+   */
+  onDateChange(dateRange: Date[] | null): void {
+    if (dateRange && dateRange.length === 2) {
+      this.utcDateRange = dateRange.map((date) => {
+        const utcDate = new Date(
+          Date.UTC(
+            date.getFullYear(),
+            date.getMonth(),
+            date.getDate(),
+            date.getHours(),
+            date.getMinutes(),
+            date.getSeconds(),
+            date.getMilliseconds()
+          )
+        );
+        return utcDate.toISOString();
+      });
+      this.fromDate = this.utcDateRange[0];
+      this.toDate = this.utcDateRange[1];
+    } 
+  }
+  /**
+   * Handles the delete date from to date.
+   *
+   */
+  deleteData(): void {
+    if (this.selectedDate) {
+      this.executionservice.datewiseDeleteExe(this.fromDate, this.toDate).subscribe({
+        next:(res)=>{
+          this._snakebar.open(res, '', {
+            duration: 3000,
+            panelClass: ['success-msg'],
+            verticalPosition: 'top'
+          })
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg.message,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      })
+    } 
+  }
+  /**
+   * Close the dialog.
+   *
+   */
+  close():void{
+    this.dialogRef.close();
+  }
+}

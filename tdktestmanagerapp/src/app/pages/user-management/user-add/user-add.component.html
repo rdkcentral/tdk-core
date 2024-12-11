@@ -41,7 +41,7 @@ limitations under the License.
                                     <label for="useremail" class="col-md-3 col-form-label">Email<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <input type="email" id="useremail" class="form-control"
+                                        <input type="text" id="useremail" class="form-control"
                                             formControlName="useremail" autocomplete="off" placeholder="Enter Email">
                                         <div *ngIf="userFormSubmitted && userForm.controls['useremail']?.errors"
                                             class="text-danger">
@@ -58,7 +58,7 @@ limitations under the License.
                                     <div class="col-md-8">
                                         <input type="text" class="form-control" id="displayname"
                                             formControlName="displayname" autocomplete="off"
-                                            placeholder="Enter Display Name">
+                                            placeholder="Enter Display Name" >
                                         <div *ngIf="userFormSubmitted && userForm.controls['displayname']?.errors"
                                             class="text-danger">
                                             <small *ngIf="userForm.controls['displayname']?.errors?.['required']">Please

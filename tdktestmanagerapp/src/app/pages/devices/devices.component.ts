@@ -32,12 +32,11 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { MaterialModule } from '../../material/material.module';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogDelete } from '../../utility/component/dialog-component/dialog.component';
-import { LoaderComponent } from '../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-devices',
   standalone: true,
-  imports: [CommonModule,AgGridAngular, LoaderComponent,FormsModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule,AgGridAngular,FormsModule, ReactiveFormsModule, MaterialModule],
   templateUrl: './devices.component.html',
   styleUrl: './devices.component.css'
 })
@@ -327,6 +326,9 @@ export class DevicesComponent {
       })
     }
   }
+ /**
+   * open the modal when click on view button in device table
+  */  
   openModal(params:any){
     this.dialog.open( DialogDelete,{
       width: '99%',
@@ -345,16 +347,17 @@ export class DevicesComponent {
         statusPort :  params.statusPort,
         deviceIp : params.deviceIp,
         deviceName :   params.deviceName,
-        stbPort :  params.stbPort,
+        devicePort :  params.devicePort,
         thunderEnabled :  params.thunderEnabled,
         thunderPort :  params.thunderPort,
         userGroupName :  params.userGroupName,
         devicePortsConfigured: params.devicePortsConfigured
       }
     })
-    
-    
   }
+   /**
+   * Download device details as xml format based on device name
+   */
   downloadXML(params:any):void{
     if(params.deviceName){
       this.service.downloadDevice(params.deviceName).subscribe(blob => {

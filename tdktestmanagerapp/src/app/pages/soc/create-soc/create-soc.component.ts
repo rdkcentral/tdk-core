@@ -20,8 +20,8 @@ export class CreateSocComponent {
   commonFormName = 'Create';
   loggedinUser: any={};
   errormessage!: string;
-  validationName = 'soc';
-  placeholderName = 'Soc Name';
+  validationName = 'SoC';
+  placeholderName = 'SoC Name';
   labelName = 'Name';
   
   constructor(private router: Router, private route: ActivatedRoute, public service: SocService,
@@ -56,8 +56,7 @@ export class CreateSocComponent {
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
-          this._snakebar.open(this.errormessage, '', {
+          this._snakebar.open(errmsg.socName?errmsg.socName:errmsg.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

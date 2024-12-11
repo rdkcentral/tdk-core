@@ -84,8 +84,7 @@ export class CreateOemComponent implements OnInit{
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
-          this._snakebar.open(this.errormessage, '', {
+          this._snakebar.open(errmsg.OemName?errmsg.OemName:errmsg.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

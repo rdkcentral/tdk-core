@@ -34,6 +34,8 @@ limitations under the License.
                                         <small
                                             *ngIf="createPrimitiveTestForm.controls['testName']?.errors?.['required']">Please
                                             enter test name.</small>
+                                            <small
+                                            *ngIf="createPrimitiveTestForm.controls['testName']?.errors?.['minlength']">Test Name must be at least 4 characters long.</small>
                                     </div>
                                 </div>
                             </div>

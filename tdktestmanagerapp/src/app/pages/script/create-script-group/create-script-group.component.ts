@@ -58,7 +58,9 @@ export class CreateScriptGroupComponent {
     private _snakebar: MatSnackBar ) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
   }
-
+  /**
+   * Initialize the component
+   */ 
   ngOnInit(): void {
     this.onlyVideoCategory = this.authservice.videoCategoryOnly;
     localStorage.setItem('onlyVideoCategory',this.onlyVideoCategory);
@@ -89,13 +91,15 @@ export class CreateScriptGroupComponent {
     });
     this.allScripts();
   }
-
+  /**
+   * Method to get all scripts of leftside container
+   */ 
   allScripts(){
     this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res=>{
       this.container1 = JSON.parse(res);
     })
   }
-  // Handle multi-select using Ctrl (Cmd on Mac) + click
+// Handle multi-select using Ctrl (Cmd on Mac) + click
   selectItem(event: MouseEvent, item: string) :void{
     if (event.ctrlKey || event.metaKey) {
       if (this.selectedItems.has(item)) {
@@ -108,7 +112,9 @@ export class CreateScriptGroupComponent {
       this.selectedItems.add(item);
     }
   }
-
+  /**
+   * Method to drag and drop functionality
+   */ 
   drop(event: CdkDragDrop<string[]>) :void{
     const selectedArray = Array.from(this.selectedItems);
     if (event.previousContainer === event.container) {
@@ -143,6 +149,9 @@ export class CreateScriptGroupComponent {
       }
     });
   }
+  /**
+   * Method to toggle scorting asc/desc
+   */   
   toggleSortOrder() :void{
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   }
@@ -157,22 +166,35 @@ export class CreateScriptGroupComponent {
       }
     });
   }
-
+  /**
+   * Validation for rightside container
+   */ 
   container2Validator() {
     return (control: AbstractControl): ValidationErrors | null => {
       return this.container2ScriptArr.length > 0 ? null : { container2Empty: true };
     };
   }
-
+  /**
+   * Method to toggle scorting asc/desc
+   */ 
   toggleSortRightSide() :void{
     this.sortOrderRight = this.sortOrderRight === 'asc' ? 'desc' : 'asc';
   }
+  /**
+   * Navigates back to the list of scripts.
+   */  
   goBack():void{
     this.router.navigate(['/script']);
   }
+  /**
+   * Resets the form.
+   */  
   reset():void{
     this.testSuiteFrom.reset();
   }
+  /**
+   * Method to create a testsuite
+   */  
   testSuiteSubmit():void{
     this.testSuiteFormSubmitted = true;
     if(this.testSuiteFrom.invalid){
@@ -209,9 +231,4 @@ export class CreateScriptGroupComponent {
       })
     }
   }
-
-
-
-
-
 }

@@ -19,17 +19,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 body, *:not(.material-icons) {
     font-family: Roboto, "Helvetica Neue", sans-serif;
-    /* font-family: 'IBM Plex Serif', serif; */
 }
 .main-heading{
-    height: 35px;
+    height: 50px;
 }
 .divider {
     flex: 1 1 auto;
 }
 
 .logo-img {
-    width: 7%;
+    width: 10%;
+    margin-top: 8px;
 }
 
 .apptitle {
@@ -37,20 +37,25 @@ body, *:not(.material-icons) {
     font-weight: 500;
     margin-left: 15px;
 }
-
+.user-btn{
+    padding-left: 0;
+}
 .displayname {
-    font-size: 0.85rem;
-    font-weight: 400;
+    font-size: 0.8rem;
+    font-weight: 500;
+    border: 1px solid #ddd;
+    border-radius: 50px;
+    padding: 0 0 0 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
 }
 .theme-btn{
-    padding-left: 0px;
-}
-.thememode {
-    margin-right: 30px;
+    padding-right: 0;
 }
 
 .themeicon {
-    color: #fff;
     font-size: 1rem;
     display: flex;
     justify-content: center;
@@ -78,14 +83,16 @@ body, *:not(.material-icons) {
 }
 
 li.nav-item :hover {
-    font-weight: 500;
-    text-shadow: 1px 1px 1px black;
+    font-weight: 600;
+    text-shadow: 1px 1px 1px #fff;
 }
 .header {
    height: 30px;
 }
 .nav-link{
     padding: 0px 0px 0px 0px;
+    width: 100px;
+    text-align: center;
 }
 .menuitem-logout{
     min-height: 40px;

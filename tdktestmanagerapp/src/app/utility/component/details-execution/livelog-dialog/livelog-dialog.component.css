@@ -17,15 +17,28 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Component } from '@angular/core';
 
-@Component({
-  selector: 'app-register',
-  standalone: true,
-  imports: [],
-  templateUrl: './register.component.html',
-  styleUrl: './register.component.css'
-})
-export class RegisterComponent {
-
+.download-btn {
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+  border: 1px solid #0e6f8794;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-left: 15px;
+}
+.download-icon {
+  color: #00b2dc;
+  font-weight: bold;
+  font-size: 18px;
+}
+.livelog-area{
+    width: 100%;
+    border: 1px solid #0e6f8794;
+    text-align: justify;
+}
+.spinner{
+  color: #00b2dc !important;
+  margin-left: 10px;
 }

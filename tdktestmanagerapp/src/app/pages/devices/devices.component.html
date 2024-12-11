@@ -32,7 +32,6 @@ limitations under the License.
                 </div>
             </div>
         </div>
-        <!-- <div class="row showrdkgrouprow"> -->
             <div class="row borders-btm">
                 <div class="col-md-11">
                     <h1 class="title"> {{categoryName}} Device Summary</h1>
@@ -57,9 +56,6 @@ limitations under the License.
                     </div>
                     <div class="col"></div>
                 </div>
-                <div class="row" *ngIf="loaderDisplay">
-                    <app-loader></app-loader>
-                </div>
                 <div style="width: 100%; height: auto; margin-top: 5px;" [class]="themeClass">
                     <ag-grid-angular
                     [columnDefs]="columnDefs"
@@ -74,8 +70,7 @@ limitations under the License.
                     [domLayout]="'autoHeight'"
                    
                   ></ag-grid-angular>
-                </div>
-        <!-- </div> -->
+            </div>
     </div>
 </div>
  <!-- Modal Start-->

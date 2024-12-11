@@ -119,46 +119,13 @@ limitations under the License.
                 />
               </div>
             </div>
-            <!-- <div class="row mb-3">
-              <label for="deviceconfigfile" class="col-md-3 col-form-label"
-                >Device Config File<span style="color: red; margin-left: 0.75em"
-                  >*</span
-                ></label
-              >
-              <div class="col-md-8">
-                <div class="configbtngrp">
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary newconfigfile"
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"
-                    disabled
-                  >
-                    <span>{{
-                      configFileName === "device.config" ? "Create New" : ""
-                    }}</span>
-                    {{ configFileName }} File
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-outline-secondary newconfigfile"
-                    *ngIf="visibleDeviceconfigFile"
-                    disabled
-                  >
-                    Create New Device.config File
-                  </button>
-                </div>
-              </div>
-            </div> -->
           </div>
           <div class="col">
             <div class="row mb-3">
               <label
                 for="oem"
                 class="col-md-3 offset-1 col-form-label"
-                >OEM<span style="color: red; margin-left: 0.75em"
-                  >*</span
-                ></label
+                >OEM</label
               >
               <div class="col-md-8">
                 <select
@@ -175,9 +142,7 @@ limitations under the License.
             </div>
             <div class="row mb-3">
               <label for="soc" class="col-md-3 offset-1 col-form-label"
-                >SoC<span style="color: red; margin-left: 0.75em"
-                  >*</span
-                ></label
+                >SoC</label
               >
               <div class="col-md-8">
                 <select
@@ -222,7 +187,7 @@ limitations under the License.
                   type="text"
                   class="form-control text-size"
                   id="agentport"
-                  value="{{ data.stbPort ? data.stbPort : '' }}"
+                  value="{{ data.devicePort ? data.devicePort : '' }}"
                   disabled
                 />
               </div>

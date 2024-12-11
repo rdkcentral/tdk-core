@@ -70,7 +70,9 @@ export class ParameterEditComponent {
         this.parameterType = JSON.parse(data);
       })
     }
-
+  /**
+   * Handles the form submission for update parameter.
+   */
     updateParaFormSubmit():void{
       this.paraFormSubmitted = true;
       if(this.updateParameterForm.invalid){
@@ -109,14 +111,7 @@ export class ParameterEditComponent {
   /**
    * Navigates back to the parameter list page.
    */
-  goBack(){
+  goBack():void{
     this.router.navigate(["/configure/parameter-list"]);
-  }
-
-  /**
-   * Resets the parameter form to its initial state.
-   */
-  reset(){
-    this.updateParameterForm.reset();
   }
 }

@@ -10,8 +10,8 @@ describe('ListRdkCertificationComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ListRdkCertificationComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(ListRdkCertificationComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

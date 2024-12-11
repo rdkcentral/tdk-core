@@ -117,6 +117,7 @@ public frameworkComponents :any;
     private service:DeviceService, private socService:SocService, private devicetypeService:DevicetypeService,
     private renderer:Renderer2, public dialog:MatDialog) { 
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log(this.user);
     
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.frameworkComponents = {
@@ -164,8 +165,8 @@ public frameworkComponents :any;
       stbip: [this.user.deviceIp, [Validators.required, Validators.pattern(ipregexp)]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
-      oem: [this.user.oemName, [Validators.required]],
-      soc: [this.user.socName, [Validators.required]],
+      oem: [this.user.oemName],
+      soc: [this.user.socName],
       gateway: [this.user.gatewayDeviceName],
       thunderport:[this.user.thunderPort],
       isThunder: [this.user.thunderEnabled],
@@ -181,8 +182,8 @@ public frameworkComponents :any;
       gatewayIp: [this.user.deviceIp, [Validators.required]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
-      oem: [this.user.oemName, [Validators.required]],
-      soc: [this.user.socName, [Validators.required]],
+      oem: [this.user.oemName],
+      soc: [this.user.socName],
       agentPortb: [this.user.stbPort?this.user.stbPort:this.agentport],
       agentStatusportB: [this.user.statusPort?this.user.statusPort:this.agentStatusPort],
       agentMonitorportB: [this.user.agentMonitorPort?this.user.agentMonitorPort:this.agentMonitoPort]
@@ -193,8 +194,8 @@ public frameworkComponents :any;
       stbIp:[this.user.deviceIp, [Validators.required]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
-      oem: [this.user.oemName, [Validators.required]],
-      soc: [this.user.socName, [Validators.required]],
+      oem: [this.user.oemName],
+      soc: [this.user.socName],
       agentPortb: [this.user.stbPort?this.user.stbPort:this.agentport],
       agentStatusportB:[this.user.statusPort?this.user.statusPort:this.agentStatusPort],
       agentMonitorportB:[this.user.agentMonitorPort?this.user.agentMonitorPort:this.agentMonitoPort]
@@ -216,6 +217,86 @@ public frameworkComponents :any;
       editorFilename:['',{disabled: true}],
       editorContent: [''],
       uploadConfigFile:['']
+    });
+    this.editDeviceVForm.get('thunderport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.editDeviceVForm.get('thunderport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.editDeviceVForm.get('agentport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.editDeviceVForm.get('agentport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.editDeviceVForm.get('agentstatusport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.editDeviceVForm.get('agentstatusport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.editDeviceVForm.get('agentmonitorport')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.editDeviceVForm.get('agentmonitorport')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentPortb')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentPortb')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentStatusportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentStatusportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkBForm.get('agentMonitorportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkBForm.get('agentMonitorportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentPortb')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentPortb')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentStatusportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentStatusportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.rdkCForm.get('agentMonitorportB')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
+      if (cleanedValue !== value) {
+        this.rdkCForm.get('agentMonitorportB')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
     });
   }
 
@@ -334,7 +415,6 @@ public frameworkComponents :any;
    * This methos is change the value of deviceName inputfield
   */
   valuechange(event:any):void{
-    // this.checkIsThunderValidity();
     this.stbNameChange = event.target.value;
     if(this.isThunderchecked){
       this.showPortFile = true;
@@ -367,7 +447,7 @@ public frameworkComponents :any;
     visibilityConfigFile(): void{
       let boxNameConfig = this.stbNameChange;
       let boxTypeConfig = this.deviceTypeValue;
-      this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig)
+      this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig,this.user.thunderEnabled)
       .subscribe((res)=>{ 
         this.configFileName = res.filename;
         if(this.configFileName !== `${boxNameConfig}.config` && this.stbNameChange !== undefined && this.stbNameChange !== ""){
@@ -461,14 +541,6 @@ public frameworkComponents :any;
     localStorage.removeItem('streamData');
     this.router.navigate(["/devices"]);
   }
-
-  /**
-   * Resets the form to its initial state.
-   */
-  reset(){
-    this.editDeviceVForm.reset();
-  }
-
   /**
    * Downloads a device file.
    */
@@ -486,8 +558,9 @@ public frameworkComponents :any;
       });
     }
   }
-
-  
+  /**
+   * The submit method is update device for categort RDKV
+   */
   EditDeviceVSubmit(){
     this.editDeviceVFormSubmitted = true;
     if(this.editDeviceVForm.invalid){
@@ -538,6 +611,9 @@ public frameworkComponents :any;
     })
     }
   }
+  /**
+   * The submit method is update device for categort RDKB
+   */
   editDeviceBSubmit(){
     this.editDeviceVFormSubmitted = true;
     if(this.editDeviceVForm.invalid){
@@ -582,6 +658,9 @@ public frameworkComponents :any;
     })
     }
   }
+  /**
+   * The submit method is update device for categort RDKC
+   */  
   editDeviceCSubmit(){
     this.rdkcFormSubmitted = true;
     if(this.rdkCForm.invalid){
@@ -625,9 +704,7 @@ public frameworkComponents :any;
       })
     }
   }
-
-
-    /**
+  /**
    * Edit icon will show/hide in editor modal
    */
     toggleIsEdit():void{
@@ -663,7 +740,7 @@ public frameworkComponents :any;
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -695,7 +772,7 @@ public frameworkComponents :any;
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -848,7 +925,7 @@ public frameworkComponents :any;
         const editorContent  = this.replaceTags(content);
         const contentBlob = new Blob([editorContent], {type:'text/plain'});
         const contentFile = new File([contentBlob],editorFilename);
-        this.service.uploadConfigFile(contentFile).subscribe({
+        this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
           next:(res)=>{
             this._snakebar.open(res, '', {
               duration: 3000,
@@ -877,7 +954,7 @@ public frameworkComponents :any;
       const editorContent  = this.replaceTags(content);
       const contentBlob = new Blob([editorContent], {type:'text/plain'});
       const contentFile = new File([contentBlob],editorFilename);
-      this.service.uploadConfigFile(contentFile).subscribe({
+      this.service.uploadConfigFile(contentFile,this.user.thunderEnabled).subscribe({
         next:(res)=>{
           this._snakebar.open(res, '', {
             duration: 3000,
@@ -901,22 +978,33 @@ public frameworkComponents :any;
       })
     }
   }  
-
+  /**
+   * The method is open the existing device config modal onclick button
+   */
   existDeviceDialog(): void {
     this.dialogRef = this.dialog.open(this.dialogTemplate, {
       width: '90vw', 
       height: '90vh' 
     });
   }
+    /**
+   * The method is close the exeisting device config modal
+   */
   closeDialog(): void {
     this.dialogRef.close();
   }
+    /**
+   * The method is open the device config modal onclick button
+   */
   openNewDeviceDialog(): void {
     this.newDeviceDialogRef = this.dialog.open(this.newDeviceTemplate, {
       width: '90vw', 
       height: '90vh'
     });
   }
+  /**
+   * The method is close the device config modal
+   */
   closeNewDeviceDialog(): void {
     this.newDeviceDialogRef.close();
   }
