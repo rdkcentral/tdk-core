@@ -47,6 +47,11 @@ public class ExecutionDetailsResponseDTO {
 	private String deviceDetails;
 
 	/**
+	 * The image name of the image flashed in the device under test
+	 */
+	private String deviceImageName;
+
+	/**
 	 * The date and time when the execution was performed.
 	 */
 	private Instant dateOfExecution;
@@ -75,6 +80,11 @@ public class ExecutionDetailsResponseDTO {
 	 * The result of the execution.
 	 */
 	private String result;
+
+	/**
+	 * The real execution time for executing the scripts
+	 */
+	private double realExecutionTime;
 
 	/**
 	 * A summary of the execution, encapsulated in an ExecutionSummaryResponseDTO

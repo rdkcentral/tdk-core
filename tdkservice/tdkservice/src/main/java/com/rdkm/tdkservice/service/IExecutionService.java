@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.json.JSONObject;
@@ -29,6 +30,7 @@ import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 
 public interface IExecutionService {
@@ -220,4 +222,13 @@ public interface IExecutionService {
 	 * @return List of String - the list of unique users
 	 */
 	public List<String> getUniqueUsers();
+
+	/**
+	 * 
+	 * This method is to get the module wise summary
+	 * 
+	 * @param executionId - the execution id
+	 * @return the module wise summary
+	 */
+	Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId);
 }

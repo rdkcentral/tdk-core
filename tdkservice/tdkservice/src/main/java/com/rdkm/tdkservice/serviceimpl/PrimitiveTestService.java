@@ -40,6 +40,7 @@ import com.rdkm.tdkservice.dto.PrimitiveTestDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestNameAndIdDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestUpdateDTO;
+import com.rdkm.tdkservice.enums.ParameterDataType;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -354,8 +355,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 	/**
 	 * This method is used to get the primitive test details by module name
 	 *
-	 * @param testName - String
-	 * @param idVal    - String
+	 * @param testName - String -primitive test name
 	 * @return String - list of primitive test details
 	 */
 	@Override
@@ -366,8 +366,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 		try {
 			return this.getJsonData(primitiveTest, null);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOGGER.error("Error in getting primitive test data: " + e.getMessage());
 		}
 		return null;
 	}
@@ -388,17 +387,18 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 		return primitiveTest;
 	}
 
-	
 	/**
-	 * This method is used to get the primitive test details as json data
+	 * This method is used to get the primitive test details as json data in the
+	 * format required by python script
 	 *
-	 * @param primitiveTest - PrimitiveTest
-	 * @param idValue       - String
+	 * @param primitiveTest - PrimitiveTest - primitive test object
+	 * @param idValue       - String - id value
 	 * @return JSONObject - list of primitive test details
 	 */
 	private JSONObject getJsonData(PrimitiveTest primitiveTest, String idValue) throws JSONException {
 
-		LOGGER.info("getJsonData ::::::::: " + (primitiveTest != null ? primitiveTest.getName() : "null"));
+		LOGGER.info(
+				"Going to get the primitive test data" + (primitiveTest != null ? primitiveTest.getName() : "null"));
 		JSONObject outData = new JSONObject();
 
 		if (primitiveTest != null && primitiveTest.getFunction() != null
@@ -411,10 +411,21 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 			for (PrimitiveTestParameter parameter : parameters) {
 				String paramName = parameter.getParameterName();
 				String paramValue = parameter.getParameterValue();
+				String parameterType = parameter.getParameterType();
 
-				if (paramName != null) {
+				if ((ParameterDataType.INTEGER.toString()).equals(parameterType)) {
+					paramsObj.put(paramName, Integer.parseInt(paramValue));
+
+				} else if ((ParameterDataType.DOUBLE.toString()).equals(parameterType)) {
+					paramsObj.put(paramName, Double.parseDouble(paramValue));
+
+				} else if ((ParameterDataType.FLOAT.toString()).equals(parameterType)) {
+					paramsObj.put(paramName, Float.parseFloat(paramValue));
+
+				} else {
 					paramsObj.put(paramName, paramValue.trim());
 				}
+
 			}
 
 			outData.put("params", paramsObj);

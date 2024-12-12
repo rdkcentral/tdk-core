@@ -43,7 +43,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -95,9 +94,6 @@ public class FileTransferService implements IFileService {
 
 	@Autowired
 	private ExecutionResultRepository executionResultRepository;
-
-	@Autowired
-	private ExecutionRepository executionRepository;
 
 	@Autowired
 	private IScriptService scriptService;
@@ -261,6 +257,47 @@ public class FileTransferService implements IFileService {
 		} catch (Exception e) {
 			LOGGER.error("Error in transferDeviceLogsForTDKEnabled: {}", e.getMessage(), e);
 		}
+	}
+
+	/**
+	 * This method retrieves device details from a version file associated with a
+	 * given execution ID. It constructs the file path using the execution ID,
+	 * checks if the file exists, and reads its contents.
+	 *
+	 * @param executionId The unique identifier for the execution.
+	 * @return A string containing the contents of the version file, or an error
+	 *         message if the file does not exist or cannot be read.
+	 */
+	public String getDeviceDetailsFromVersionFile(String executionId) {
+		LOGGER.info("Getting device details from version file for execution ID: {}", executionId);
+		String versionFilePath = commonService.getVersionLogFilePathForTheExecution(executionId);
+		String versionFileName = executionId + "_version.txt";
+		String versionFileAbsolutePath = versionFilePath + versionFileName;
+
+		File versionFile = new File(versionFileAbsolutePath);
+		if (!versionFile.exists()) {
+			return "Device version details not available";
+		}
+
+		StringBuilder deviceDetails = new StringBuilder();
+
+		try (BufferedReader br = new BufferedReader(new FileReader(versionFile))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				deviceDetails.append(line).append(System.lineSeparator());
+			}
+		} catch (IOException e) {
+			// Log the error and return a user-friendly message
+			LOGGER.error("Error reading file: " + e.getMessage());
+			return "Error reading version file";
+		}
+
+		if (deviceDetails.length() == 0) {
+			return "Device version details not available";
+		}
+		LOGGER.info("Device version details: {}", deviceDetails.toString());
+
+		return deviceDetails.toString();
 	}
 
 	/**
@@ -435,7 +472,7 @@ public class FileTransferService implements IFileService {
 	@Override
 	public List<String> getDeviceLogFileNames(String executionResId) {
 		try {
-			LOGGER.debug("Getting log file names with parameters:executionResId={}",executionResId);
+			LOGGER.debug("Getting log file names with parameters:executionResId={}", executionResId);
 			ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResId))
 					.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
 			String executionId = executionResult.getExecution().getId().toString();
@@ -501,8 +538,8 @@ public class FileTransferService implements IFileService {
 		}
 
 		String baselogpath = commonService.getBaseLogPath();
-		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId,
-				executionResultId, baselogpath);
+		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId, executionResultId,
+				baselogpath);
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		try (ZipOutputStream zos = new ZipOutputStream(baos)) {

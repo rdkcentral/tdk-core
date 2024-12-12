@@ -18,12 +18,16 @@
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import static org.assertj.core.api.Assertions.entry;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -71,6 +75,7 @@ import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.ScriptTestSuite;
 import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.TestSuite;
@@ -84,6 +89,7 @@ import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.service.IExecutionService;
+import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.Utils;
@@ -128,6 +134,12 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private ExecutionDeviceRepository executionDeviceRepository;
+
+	@Autowired
+	private FileTransferService fileTransferService;
+
+	@Autowired
+	private IScriptService scriptService;
 
 	/**
 	 * This method is used to trigger the execution of the scripts or test suite
@@ -496,27 +508,6 @@ public class ExecutionService implements IExecutionService {
 		return executionResponseDTO;
 	}
 
-	/**
-	 * This method is used to get the valid devices for the script based on the
-	 * category
-	 * 
-	 * @param deviceList     - the device list
-	 * @param script         - the script
-	 * @param responseString - the response string
-	 * @return List<Device> - the valid devices
-	 */
-
-	private boolean vaidateScriptDeviceCategory(Device device, Script script) {
-		boolean isCategoryMatch = false;
-
-		// TODO: Revisit this logic for RDKVRDKService
-		if (device.isThunderEnabled()) {
-			isCategoryMatch = script.getModule().getCategory().equals(Category.RDKV);
-		} else {
-			isCategoryMatch = script.getModule().getCategory().equals(device.getCategory());
-		}
-		return isCategoryMatch;
-	}
 
 	/**
 	 * This method is used to get the valid devices for the script based on the
@@ -531,7 +522,7 @@ public class ExecutionService implements IExecutionService {
 			StringBuilder responseString) {
 		List<Device> validDevices = new ArrayList<>();
 		for (Device device : deviceList) {
-			if (vaidateScriptDeviceCategory(device, script)) {
+			if (commonService.vaidateScriptDeviceCategory(device, script)) {
 				validDevices.add(device);
 			} else {
 				LOGGER.error("Device: {} and Script: {} combination is invalid and belongs to different category\n",
@@ -1457,7 +1448,6 @@ public class ExecutionService implements IExecutionService {
 		try {
 			executionRepository.delete(execution);
 
-			// TODO integrate log deletion
 			LOGGER.info("Successfully deleted execution with id: {}", id);
 			return true;
 		} catch (Exception e) {
@@ -1638,8 +1628,9 @@ public class ExecutionService implements IExecutionService {
 		response.setDeviceName(device.getName());
 		response.setDeviceIP(device.getIp());
 		response.setDeviceMac(device.getMacId());
-		// TODO integrae device details
-		response.setDeviceDetails("MOCK DATA");
+		response.setDeviceDetails(fileTransferService.getDeviceDetailsFromVersionFile(id.toString()));
+		response.setDeviceImageName(executionDevice.getBuildName());
+		response.setRealExecutionTime(execution.getRealExecutionTime());
 		response.setTotalExecutionTime(execution.getExecutionTime());
 		response.setDateOfExecution(execution.getCreatedDate());
 		response.setExecutionType(execution.getExecutionType().name());
@@ -1697,6 +1688,12 @@ public class ExecutionService implements IExecutionService {
 				.filter(r -> r.getResult() == ExecutionResultStatus.NA).count());
 		summary.setTimeout((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getResult() == ExecutionResultStatus.TIMEOUT).count());
+		summary.setSkipped((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.SKIPPED).count());
+		summary.setAborted((int) execution.getExecutionResults().stream()
+				.filter(r -> r.getResult() == ExecutionResultStatus.ABORTED).count());
+		summary.setSuccessPercentage((double) summary.getSuccess() / summary.getTotalScripts() * 100);
+
 		return summary;
 
 	}
@@ -1720,6 +1717,120 @@ public class ExecutionService implements IExecutionService {
 		List<String> uniqueUsers = users.stream().map(User::getUsername).toList();
 		LOGGER.info("Successfully fetched unique users");
 		return uniqueUsers;
+	}
+
+	/**
+	 * 
+	 * This method is to get the module wise summary
+	 * 
+	 * @param executionId - the execution id
+	 * @return the module wise summary
+	 */
+	@Override
+	public Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId) {
+		LOGGER.info("Fetching execution summary for id: {}", executionId);
+
+		Execution execution = executionRepository.findById(executionId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution with id", executionId.toString()));
+
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+		if (executionResults.isEmpty()) {
+			LOGGER.error("No execution results found for execution with id: {}", executionId);
+			return null;
+		}
+
+		// Map to store module-wise summary and the module name
+		Map<String, ExecutionSummaryResponseDTO> moduleSummaryMap = new HashMap<>();
+
+		for (ExecutionResult executionResult : executionResults) {
+			String scriptName = executionResult.getScript();
+			Module module = scriptService.getModuleByScriptName(scriptName);
+			String moduleName = module.getName();
+
+			ExecutionSummaryResponseDTO executionSummaryResponseDTO = null;
+			if (moduleSummaryMap.containsKey(moduleName)) {
+				executionSummaryResponseDTO = moduleSummaryMap.get(moduleName);
+
+			} else {
+				executionSummaryResponseDTO = new ExecutionSummaryResponseDTO();
+			}
+			executionSummaryResponseDTO.setTotalScripts(executionSummaryResponseDTO.getTotalScripts() + 1);
+			this.setExecutionSummaryCount(executionSummaryResponseDTO, executionResult.getResult());
+
+			moduleSummaryMap.put(moduleName, executionSummaryResponseDTO);
+		}
+
+		moduleSummaryMap.put(Constants.TOTAL_KEYWORD, this.getExecutionSummary(execution));
+		if (moduleSummaryMap.isEmpty()) {
+			LOGGER.error("No module-wise summary found for execution with id: {}", executionId);
+			return null;
+		} else {
+			LOGGER.info("Successfully fetched module-wise summary for execution with id: {}", executionId);
+			// loop through the map and calculate percentage and assign it to the object
+			// executionSummaryResponseDTO
+			for (Map.Entry<String, ExecutionSummaryResponseDTO> entry : moduleSummaryMap.entrySet()) {
+				String moduleName = entry.getKey();
+				ExecutionSummaryResponseDTO summaryDTO = entry.getValue();
+
+				// Calculate total scripts (excluding "Total Execution" entry)
+				int totalScripts = summaryDTO.getTotalScripts();
+
+				// Calculate percentages (assuming all counters are non-zero)
+				if (totalScripts > 0) {
+					summaryDTO.setSuccessPercentage((double) summaryDTO.getSuccess() / totalScripts * 100);
+				}
+
+				// Update the map with the modified DTO
+				moduleSummaryMap.put(moduleName, summaryDTO);
+			}
+
+		}
+		LOGGER.info("Successfully fetched execution summary for id: {}", executionId);
+
+		return moduleSummaryMap;
+
+	}
+
+	/**
+	 * This method is used to get the execution summary count assigned to the
+	 * ExecutionSummaryResponseDTO object based on the ExecutionResultStatus
+	 * 
+	 * @param executionSummaryResponseDTO - the execution summary response DTO
+	 * @param status                      - the execution
+	 */
+	private void setExecutionSummaryCount(ExecutionSummaryResponseDTO executionSummaryResponseDTO,
+			ExecutionResultStatus status) {
+		switch (status) {
+		case SUCCESS:
+			executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
+			break;
+		case FAILURE:
+			executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
+			break;
+		case INPROGRESS:
+			executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);
+			break;
+		case PENDING:
+			executionSummaryResponseDTO.setPending(executionSummaryResponseDTO.getPending() + 1);
+			break;
+		case NA:
+			executionSummaryResponseDTO.setNa(executionSummaryResponseDTO.getNa() + 1);
+			break;
+		case TIMEOUT:
+			executionSummaryResponseDTO.setTimeout(executionSummaryResponseDTO.getTimeout() + 1);
+			break;
+		case SKIPPED:
+			executionSummaryResponseDTO.setSkipped(executionSummaryResponseDTO.getSkipped() + 1);
+			break;
+		case ABORTED:
+			executionSummaryResponseDTO.setAborted(executionSummaryResponseDTO.getAborted() + 1);
+			break;
+
+		default:
+			// Do nothing
+			break;
+		}
+
 	}
 
 }

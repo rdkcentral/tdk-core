@@ -21,10 +21,9 @@ package com.rdkm.tdkservice.controller;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.service.IFileService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,19 +41,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.service.IExecutionService;
+import com.rdkm.tdkservice.service.IFileService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * This class is used to handle the execution related operations.
@@ -447,7 +449,7 @@ public class ExecutionController {
 	@Operation(summary = "Get the execution details")
 	@ApiResponse(responseCode = "200", description = "Execution details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get Execution details")
-	@GetMapping("/{id}")
+	@GetMapping("/getExecutionDetails/{id}")
 	public ResponseEntity<?> getExecutionDetails(@PathVariable UUID id) {
 		LOGGER.info("Fetching execution details for ID: {}", id);
 		ExecutionDetailsResponseDTO response = executionService.getExecutionDetails(id);
@@ -494,7 +496,7 @@ public class ExecutionController {
 	@Operation(summary = "Delete the executions by IDs")
 	@ApiResponse(responseCode = "201", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Executions not found")
-	@DeleteMapping("/deletelistofexecutions")
+	@PostMapping("/deletelistofexecutions")
 	public ResponseEntity<String> deleteExecutions(@RequestBody List<UUID> ids) {
 		LOGGER.info("Deleting executions by IDs: {}", ids);
 		boolean isDeleted = executionService.deleteExecutions(ids);
@@ -649,6 +651,7 @@ public class ExecutionController {
 	/**
 	 * Endpoint to get the log file names for a given executionId and
 	 * executionResId.
+	 * 
 	 * @param executionResultId The execution result ID.
 	 * @return A ResponseEntity containing the list of log file names.
 	 */
@@ -657,7 +660,8 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "204", description = "No log files found"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getDeviceLogFileNames")
-	public ResponseEntity<List<String>> getDeviceLogFileNames(@RequestParam("executionResultId") String executionResultId) {
+	public ResponseEntity<List<String>> getDeviceLogFileNames(
+			@RequestParam("executionResultId") String executionResultId) {
 		List<String> logFileNames = fileService.getDeviceLogFileNames(executionResultId);
 		if (logFileNames.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(logFileNames); // Return 204 NO CONTENT if no files
@@ -723,6 +727,25 @@ public class ExecutionController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body("Error downloading agent log file: " + e.getMessage());
 		}
+	}
+
+	/**
+	 * This method is used to get the module wise execution summary.
+	 * 
+	 * @param executionId - ID of the execution entity
+	 * @return ResponseEntity<?>
+	 */
+	@Operation(summary = "Get the module wise execution summary")
+	@ApiResponse(responseCode = "200", description = "Module wise summary fetched successfully")
+	@ApiResponse(responseCode = "404", description = "Execution data with this condition is not found")
+	@GetMapping("/getModulewiseExecutionSummary")
+	public ResponseEntity<?> getModulewiseExecutionSummary(@RequestParam UUID executionId) {
+		LOGGER.info("Get module wise summary called for the executionId {}", executionId.toString());
+		Map<String, ExecutionSummaryResponseDTO> executionSummaryMap = executionService
+				.getModulewiseExecutionSummary(executionId);
+		return executionSummaryMap != null ? ResponseEntity.ok(executionSummaryMap)
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+
 	}
 
 }

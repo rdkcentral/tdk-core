@@ -24,44 +24,59 @@ import lombok.Data;
 @Data
 public class ExecutionSummaryResponseDTO {
 
-/**
- * The total number of scripts in the execution summary.
- */
-private int totalScripts;
+	/**
+	 * The total number of scripts in the execution summary.
+	 */
+	private int totalScripts;
 
-/**
- * The number of scripts that have been executed.
- */
-private int executed;
+	/**
+	 * The number of scripts that have been executed.
+	 */
+	private int executed;
 
-/**
- * The number of scripts that executed successfully.
- */
-private int success;
+	/**
+	 * The number of scripts that executed successfully.
+	 */
+	private int success;
 
-/**
- * The number of scripts that failed during execution.
- */
-private int failure;
+	/**
+	 * The number of scripts that failed during execution.
+	 */
+	private int failure;
 
-/**
- * The number of scripts that were not applicable (N/A).
- */
-private int na;
+	/**
+	 * The number of scripts that were not applicable (N/A).
+	 */
+	private int na;
 
-/**
- * The number of scripts that timed out during execution.
- */
-private int timeout;
+	/**
+	 * The number of scripts that timed out during execution.
+	 */
+	private int timeout;
 
-/**
- * The number of scripts that are pending execution.
- */
-private int pending;
+	/**
+	 * The number of scripts that are pending execution.
+	 */
+	private int pending;
 
-/*
- * The number of scripts that will be Inprogress.
- */
-private int inProgressCount;
+	/**
+	 * The number of scripts that will be Inprogress.
+	 */
+	private int inProgressCount;
+
+	/**
+	 * The number of scripts that are skipped.
+	 */
+	private int skipped;
+
+	/**
+	 * The number of scripts that are aborted.
+	 */
+	private int aborted;
+
+	/**
+	 * The success percentage of the execution
+	 */
+	private double successPercentage;
 
 }

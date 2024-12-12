@@ -400,4 +400,7 @@ public class Constants {
 	public static final String BUILD_NAME_FAILED = "Build name fetching failed";
 	public static final String DEFAULT_IPV4_INTERFACE = "eth0";
 	public static final String DEFAULT_IPV6_INTERFACE = "sit1";
+
+	// The total keyword to be used in DTO
+	public static final String TOTAL_KEYWORD = "Total";
 }
