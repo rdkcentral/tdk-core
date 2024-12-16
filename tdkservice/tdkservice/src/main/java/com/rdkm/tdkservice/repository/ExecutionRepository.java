@@ -19,6 +19,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.sql.Date;
+import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
@@ -90,5 +93,14 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * @return Pagination for execution
 	 */
 	Page<Execution> findByUserAndCategory(User user, Category category, Pageable pageable);
+
+	/**
+	 * This method is used to get execution list between date ranges
+	 * 
+	 * @param fromDate - start {@link Date}
+	 * @param toDate   - end {@link Date}
+	 */
+	@Query("SELECT ex From  Execution ex WHERE ex.createdDate BETWEEN :fromDate AND :toDate")
+	List<Execution> executionListInDateRange(Instant fromDate, Instant toDate);
 
 }

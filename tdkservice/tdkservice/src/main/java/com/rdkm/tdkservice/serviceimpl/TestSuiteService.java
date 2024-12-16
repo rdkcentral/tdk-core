@@ -165,15 +165,19 @@ public class TestSuiteService implements ITestSuiteService {
 
 //		// TODO : Revisit this if test suite name can be changed or not
 		if (!Utils.isEmpty(testSuiteDTO.getName())) {
-			if (testSuiteRepository.existsByName(testSuiteDTO.getName())
-					&& !(testSuiteDTO.getName().equals(testSuite.getName()))) {
-				LOGGER.info("Test suite already exists with the same name: " + testSuiteDTO.getName());
-				throw new ResourceAlreadyExistsException(Constants.TEST_SUITE, testSuiteDTO.getName());
-			} else {
+			TestSuite newTestSuite = testSuiteRepository.findByName(testSuiteDTO.getName());
+			if (newTestSuite != null && testSuiteDTO.getName().equalsIgnoreCase(newTestSuite.getName())) {
 				testSuite.setName(testSuiteDTO.getName());
+			} else if (newTestSuite == null && !(testSuiteDTO.getName().equals(testSuite.getName()))) {
+
+				if (testSuiteRepository.existsByName(testSuiteDTO.getName())) {
+					LOGGER.info("Test Suite already exists with the same name: " + testSuiteDTO.getName());
+					throw new ResourceAlreadyExistsException(Constants.TEST_SUITE, testSuiteDTO.getName());
+				} else {
+					testSuite.setName(testSuiteDTO.getName());
+				}
 			}
 		}
-
 		if (!(Utils.isEmpty(testSuiteDTO.getDescription()))
 				&& !(testSuiteDTO.getDescription().equals(testSuite.getDescription()))) {
 			testSuite.setDescription(testSuiteDTO.getDescription());
@@ -775,9 +779,7 @@ public class TestSuiteService implements ITestSuiteService {
 				testSuites = testSuiteRepository.findAllByCategory(Category.valueOf(category));
 			}
 		}
-		return testSuites.stream()
-				.map(MapperUtils::convertToTestSuiteDetailsResponse)
-				.collect(Collectors.toList());
+		return testSuites.stream().map(MapperUtils::convertToTestSuiteDetailsResponse).collect(Collectors.toList());
 	}
 
 }

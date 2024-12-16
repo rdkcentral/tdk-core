@@ -260,4 +260,21 @@ public class UserController {
 		return theme;
 	}
 
+	/**
+	 * This method is used to get the value of app.version in tm.config file
+	 * 
+	 * @return String - the value of app.version in tm.config file
+	 */
+	@Operation(summary = "API to get the value of app.version in tm.config file", description = "This API is used to get the value of app.version in tm.config file")
+	@ApiResponse(responseCode = "200", description = "Successfully retrieved the value of app.version in tm.config file")
+	@ApiResponse(responseCode = "500", description = "Internal Server Error")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@GetMapping("/getappversion")
+	public String getAppVersion() {
+		LOGGER.info("Inside getAppVersion method");
+		String appVersion = userService.getAppVersion();
+		LOGGER.info("App version is: " + appVersion);
+		return appVersion;
+	}
+
 }

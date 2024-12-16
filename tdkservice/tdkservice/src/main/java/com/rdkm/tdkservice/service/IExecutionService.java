@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -231,4 +232,13 @@ public interface IExecutionService {
 	 * @return the module wise summary
 	 */
 	Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId);
+
+	/**
+	 * This method is used to delete the executions by date range
+	 * 
+	 * @param fromDate
+	 * @param toDate
+	 * @return
+	 */
+	public int deleteExecutionsByDateRange(Instant fromDate, Instant toDate);
 }

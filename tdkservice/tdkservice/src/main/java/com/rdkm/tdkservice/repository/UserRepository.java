@@ -71,4 +71,13 @@ public interface UserRepository extends JpaRepository<User, UUID> {
 	 */
 	boolean existsByEmail(String email);
 
+	/*
+	 * This method is used to get the user by usermail
+	 * 
+	 * @param user email
+	 * 
+	 * @return User
+	 */
+	User findByEmail(String userEmail);
+
 }

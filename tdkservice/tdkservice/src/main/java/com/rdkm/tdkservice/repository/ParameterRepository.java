@@ -74,4 +74,12 @@ public interface ParameterRepository extends JpaRepository<Parameter, UUID> {
 	 */
 	boolean existsByNameAndFunction(String name, Function function);
 
+	/**
+	 * Find by name and function
+	 * 
+	 * @param parameterName
+	 * @return
+	 */
+	Parameter findByNameAndFunction(String name, Function function);
+
 }

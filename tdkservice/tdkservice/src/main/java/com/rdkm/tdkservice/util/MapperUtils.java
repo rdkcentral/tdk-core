@@ -165,9 +165,13 @@ public class MapperUtils {
 		Device device = new Device();
 		device.setIp(deviceCreateDTO.getDeviceIp());
 		device.setName(deviceCreateDTO.getDeviceName());
+		Utils.validateInteger(deviceCreateDTO.getDevicePort(), "Device port");
 		device.setPort(deviceCreateDTO.getDevicePort());
+		Utils.validateInteger(deviceCreateDTO.getStatusPort(), "Status port");
 		device.setStatusPort(deviceCreateDTO.getStatusPort());
+		Utils.validateInteger(deviceCreateDTO.getAgentMonitorPort(), "Agent port");
 		device.setAgentMonitorPort(deviceCreateDTO.getAgentMonitorPort());
+		Utils.validateInteger(deviceCreateDTO.getLogTransferPort(), "Log transfer port");
 		device.setLogTransferPort(deviceCreateDTO.getLogTransferPort());
 		device.setMacId(deviceCreateDTO.getMacId());
 		// device.setDeviceStatus(deviceCreateDTO.getDevicestatus());
@@ -679,6 +683,7 @@ public class MapperUtils {
 
 	/**
 	 * This method is used to convert script to ScriptDetailsResponse
+	 * 
 	 * @param script
 	 * @return
 	 */
@@ -691,7 +696,8 @@ public class MapperUtils {
 	}
 
 	/**
-	 * This method is used to convert the TestSuite entity to TestSuiteDetailsResponse
+	 * This method is used to convert the TestSuite entity to
+	 * TestSuiteDetailsResponse
 	 *
 	 * @param testSuite TestSuite entity
 	 * @return testSuite TestSuiteDetailsResponse

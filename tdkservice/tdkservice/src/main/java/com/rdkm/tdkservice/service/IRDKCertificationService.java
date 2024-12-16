@@ -62,6 +62,14 @@ public interface IRDKCertificationService {
 	 */
 	String getConfigFileContent(String fileName);
 
+	/**
+     * Method to delete a config file
+     * 
+     * @param fileName
+     * @return boolean
+     */
+	boolean deleteConfigFile(String fileName);
+
 
 
 }

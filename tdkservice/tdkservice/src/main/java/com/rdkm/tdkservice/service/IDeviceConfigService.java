@@ -32,7 +32,7 @@ public interface IDeviceConfigService {
 	 * @param deviceType - the device type
 	 * @return Resource - the device configuration file
 	 */
-	Resource getDeviceConfigFile(String deviceTypeName, String deviceType);
+	Resource getDeviceConfigFile(String deviceTypeName, String deviceType ,boolean isThunderEnabled);
 
 	/**
 	 * This method is used to upload the device configuration file
@@ -41,7 +41,7 @@ public interface IDeviceConfigService {
 	 * @return boolean - true if the device config file is uploaded successfully
 	 *         false - if the device config file is not uploaded successfully
 	 */
-	boolean uploadDeviceConfigFile(MultipartFile file);
+	boolean uploadDeviceConfigFile(MultipartFile file ,boolean isThunderEnabled);
 
 	/**
 	 * This method is used to delete the device configuration file
@@ -50,6 +50,6 @@ public interface IDeviceConfigService {
 	 * @return boolean - true if the device config file is deleted successfully
 	 *         false - if the device config file is not deleted
 	 */
-	boolean deleteDeviceConfigFile(String deviceConfigFileName);
+	boolean deleteDeviceConfigFile(String deviceConfigFileName ,boolean isThunderEnabled);
 
 }

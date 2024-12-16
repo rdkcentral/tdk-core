@@ -166,13 +166,19 @@ public class DeviceService implements IDeviceService {
 				device.setIp(deviceUpdateDTO.getDeviceIp());
 			}
 		}
+
 		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceName())) {
-			if ((deviceRepository.existsByName(deviceUpdateDTO.getDeviceName()))
-					&& !(deviceUpdateDTO.getDeviceName().equals(device.getName()))) {
-				LOGGER.info("Device with the same deviceName already exists");
-				throw new ResourceAlreadyExistsException("DeviceName: ", deviceUpdateDTO.getDeviceName());
-			} else {
+			DeviceType newDeviceType = deviceTypeRepository.findByName(deviceUpdateDTO.getDeviceName());
+			if (newDeviceType != null && deviceUpdateDTO.getDeviceName().equalsIgnoreCase(newDeviceType.getName())) {
 				device.setName(deviceUpdateDTO.getDeviceName());
+			} else if (newDeviceType == null && !(deviceUpdateDTO.getDeviceName().equals(device.getName()))) {
+
+				if (deviceTypeRepository.existsByName(deviceUpdateDTO.getDeviceName())) {
+					LOGGER.info("Device Type already exists with the same name: " + deviceUpdateDTO.getDeviceName());
+					throw new ResourceAlreadyExistsException("DeviceName: ", deviceUpdateDTO.getDeviceName());
+				} else {
+					device.setName(deviceUpdateDTO.getDeviceName());
+				}
 			}
 		}
 		if (!Utils.isEmpty(deviceUpdateDTO.getMacId())) {
@@ -426,6 +432,8 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromCreateDTO(Device device, DeviceCreateDTO deviceDTO) {
 		// Set common properties
+		
+		
 		if (deviceRepository.existsByIp(deviceDTO.getDeviceIp())) {
 			LOGGER.info("Device with the same deviceIp already exists");
 			throw new ResourceAlreadyExistsException("DeviceIp: ", deviceDTO.getDeviceIp());

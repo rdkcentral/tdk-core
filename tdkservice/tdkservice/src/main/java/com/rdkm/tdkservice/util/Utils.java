@@ -32,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.UserInputException;
 
 /**
  * This class is used to store the utility methods used in the application
@@ -87,6 +88,20 @@ public class Utils {
 	}
 
 	/**
+	 * Helper method to validate a string is an integer.
+	 * 
+	 * @param value     The string value to validate.
+	 * @param fieldName The name of the field being validated.
+	 */
+	public static void validateInteger(String value,String field) {
+		try {
+			Integer.parseInt(value);
+		} catch (NumberFormatException e) {
+			throw new UserInputException(field+ " value need to be integer ");
+		}
+	}
+
+	/**
 	 * Converts a given LocalDateTime to a UTC formatted string.
 	 *
 	 * @param executionDate the LocalDateTime to be converted
@@ -125,7 +140,8 @@ public class Utils {
 	 * Generates a formatted date and time stamp based on the current date and time.
 	 * The format used is "MMddyyyyHHmmss".
 	 *
-	 * @return A string representing the current date and time in the format "MMddyyyyHHmmss".
+	 * @return A string representing the current date and time in the format
+	 *         "MMddyyyyHHmmss".
 	 */
 	public static String getFormatedDateStamp() {
 		LocalDateTime now = LocalDateTime.now();
@@ -143,7 +159,8 @@ public class Utils {
 	/**
 	 * Generates a timestamp in UTC formatted as MMDDYYHHMMSS.
 	 *
-	 * @return A string representing the current date and time in UTC in the format MMDDYYHHMMSS.
+	 * @return A string representing the current date and time in UTC in the format
+	 *         MMDDYYHHMMSS.
 	 */
 	public static String getTimeStampInUTCForExecutionName() {
 		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);

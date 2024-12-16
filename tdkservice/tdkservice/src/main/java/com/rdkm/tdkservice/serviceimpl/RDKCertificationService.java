@@ -101,7 +101,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 		Path path = Paths.get(configFileLocation).resolve(fileName + Constants.PYTHON_FILE_EXTENSION);
 		if (!Files.exists(path)) {
 			LOGGER.error("Python config file not found: {}", fileName);
-			throw new ResourceNotFoundException("Python Config file",fileName);
+			throw new ResourceNotFoundException("Python Config file", fileName);
 		}
 		Resource resource = null;
 		try {
@@ -170,5 +170,35 @@ public class RDKCertificationService implements IRDKCertificationService {
 			throw new TDKServiceException("Error in getting config file content: " + e.getMessage());
 		}
 		return fileContent;
+	}
+
+	
+	/**
+	 * Method to delete a config file
+	 * 
+	 * @param fileName
+	 * @return boolean
+	 */
+	@Override
+	public boolean deleteConfigFile(String fileName) {
+		LOGGER.info("Inside deleteConfigFile method with fileName: {}", fileName);
+		try {
+			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.RDK_CERTIFICATION_CONFIG_PATH + Constants.FILE_PATH_SEPERATOR + fileName
+					+ Constants.PYTHON_FILE_EXTENSION;
+			File file = new File(filePath);
+			if (file.exists()) {
+				file.delete();
+				LOGGER.info("Config file deleted successfully");
+				return true;
+			} else {
+				LOGGER.error("Config file not found for the name: {}", fileName);
+				return false;
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error in deleting config file: " + e.getMessage());
+			throw new TDKServiceException("Error in deleting config file: " + e.getMessage());
+		}
+
 	}
 }

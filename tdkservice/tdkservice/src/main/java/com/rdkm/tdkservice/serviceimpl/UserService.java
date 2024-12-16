@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -34,6 +35,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.controller.LoginController;
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
@@ -43,12 +45,16 @@ import com.rdkm.tdkservice.enums.Theme;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.model.UserRole;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.repository.UserRoleRepository;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -75,6 +81,9 @@ public class UserService implements UserDetailsService {
 
 	@Autowired
 	private UserGroupRepository userGroupRepository;
+
+	@Autowired
+	CommonService commonService;
 
 	/**
 	 * This method is used to load a user by their username.
@@ -210,23 +219,33 @@ public class UserService implements UserDetailsService {
 		// if the update , for user update should happen for specific fields as well.
 		// So we are doing the empty check and if it is empty then no need to update
 
-		if (!Utils.isEmpty(updateUserRequest.getUserName())
-				&& !(updateUserRequest.getUserName().equals(user.getUsername()))) {
-			if (userRepository.existsByUsername(updateUserRequest.getUserName())) {
-				LOGGER.info("User already exists with the same username: " + updateUserRequest.getUserName());
-				throw new ResourceAlreadyExistsException(Constants.USER_NAME, updateUserRequest.getUserName());
-			} else {
+		if (!Utils.isEmpty(updateUserRequest.getUserName())) {
+			User newUser = userRepository.findByUsername(updateUserRequest.getUserName());
+			if (newUser != null && updateUserRequest.getUserName().equalsIgnoreCase(newUser.getUsername())) {
 				user.setUsername(updateUserRequest.getUserName());
+			} else if (newUser == null && !(updateUserRequest.getUserName().equals(user.getUsername()))) {
+
+				if (userRepository.existsByUsername(updateUserRequest.getUserName())) {
+					LOGGER.info("User name already exists with the same name: " + updateUserRequest.getUserName());
+					throw new ResourceAlreadyExistsException(Constants.USER_NAME, updateUserRequest.getUserName());
+				} else {
+					user.setUsername(updateUserRequest.getUserName());
+				}
 			}
 		}
 
-		if (!Utils.isEmpty(updateUserRequest.getUserEmail())
-				&& !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
-			if (userRepository.existsByEmail(updateUserRequest.getUserEmail())) {
-				LOGGER.info("User already exists with the same email: " + updateUserRequest.getUserEmail());
-				throw new ResourceAlreadyExistsException(Constants.EMAIL, updateUserRequest.getUserEmail());
-			} else {
+		if (!Utils.isEmpty(updateUserRequest.getUserEmail())) {
+			User newUser = userRepository.findByEmail(updateUserRequest.getUserEmail());
+			if (newUser != null && updateUserRequest.getUserEmail().equalsIgnoreCase(newUser.getEmail())) {
 				user.setEmail(updateUserRequest.getUserEmail());
+			} else if (newUser == null && !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
+
+				if (userRepository.existsByUsername(updateUserRequest.getUserEmail())) {
+					LOGGER.info("Email already exists with the same name: " + updateUserRequest.getUserEmail());
+					throw new ResourceAlreadyExistsException(Constants.EMAIL, updateUserRequest.getUserEmail());
+				} else {
+					user.setEmail(updateUserRequest.getUserEmail());
+				}
 			}
 		}
 
@@ -344,6 +363,32 @@ public class UserService implements UserDetailsService {
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_ID, userId.toString()));
 		return user.getTheme().name();
+	}
+
+	/**
+	 * This method is used to get the app version
+	 * 
+	 * @return String - returns the app version
+	 */
+	public String getAppVersion() {
+		LOGGER.info("Getting the current app version");
+
+		String tmConfigFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+				+ Constants.TM_CONFIG_FILE;
+		String appVersion;
+		try {
+			appVersion = commonService.getConfigProperty(new File(tmConfigFilePath), Constants.APP_VERSION);
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while getting the app version from the configuration file", e);
+			throw new TDKServiceException("Failed to get app version" + e.getMessage());
+		}
+
+		if (appVersion == null) {
+			LOGGER.error("App version is null");
+			throw new UserInputException("App version not configured");
+		}
+
+		return appVersion;
 	}
 
 }

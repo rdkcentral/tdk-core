@@ -67,6 +67,7 @@ import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
@@ -153,13 +154,19 @@ public class ModuleService implements IModuleService {
 			LOGGER.error("Module with ID {} not found", moduleDTO.getId());
 			throw new ResourceNotFoundException(Constants.MODULE_NAME, moduleDTO.getId().toString());
 		}
-		if (!Utils.isEmpty(moduleDTO.getModuleName())
-				&& !(moduleDTO.getModuleName().equals(existingModule.getName()))) {
-			if (moduleRepository.existsByName(moduleDTO.getModuleName())) {
-				LOGGER.info("Module already exists with the same name: " + moduleDTO.getModuleName());
-				throw new ResourceAlreadyExistsException(Constants.MODULE_NAME, moduleDTO.getModuleName());
-			} else {
+
+		if (!Utils.isEmpty(moduleDTO.getModuleName())) {
+			Module newModule = moduleRepository.findByName(moduleDTO.getModuleName());
+			if (newModule != null && moduleDTO.getModuleName().equalsIgnoreCase(newModule.getName())) {
 				existingModule.setName(moduleDTO.getModuleName());
+			} else if (newModule == null && !(moduleDTO.getModuleName().equals(existingModule.getName()))) {
+
+				if (moduleRepository.existsByName(moduleDTO.getModuleName())) {
+					LOGGER.info("Module already exists with the same name: " + moduleDTO.getModuleName());
+					throw new ResourceAlreadyExistsException(Constants.MODULE_NAME, moduleDTO.getModuleName());
+				} else {
+					existingModule.setName(moduleDTO.getModuleName());
+				}
 			}
 		}
 

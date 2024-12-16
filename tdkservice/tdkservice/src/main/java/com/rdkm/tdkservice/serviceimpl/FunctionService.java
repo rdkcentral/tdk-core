@@ -127,13 +127,18 @@ public class FunctionService implements IFunctionService {
 			function.setModule(module);
 		}
 
-		if (!Utils.isEmpty(functionDTO.getFunctionName())
-				&& !functionDTO.getFunctionName().equals(function.getName())) {
-			if (functionRepository.existsByName(functionDTO.getFunctionName())) {
-				LOGGER.info("Function already exists with the same name: " + functionDTO.getFunctionName());
-				throw new ResourceAlreadyExistsException(Constants.FUNCTION_NAME, functionDTO.getFunctionName());
-			} else {
+		if (!Utils.isEmpty(functionDTO.getFunctionName())) {
+			Function newFunction = functionRepository.findByName(functionDTO.getFunctionName());
+			if (newFunction != null && functionDTO.getFunctionName().equalsIgnoreCase(newFunction.getName())) {
 				function.setName(functionDTO.getFunctionName());
+			} else if (newFunction == null && !(functionDTO.getFunctionName().equals(function.getName()))) {
+
+				if (functionRepository.existsByName(functionDTO.getFunctionName())) {
+					LOGGER.info("Function already exists with the same name: " + functionDTO.getFunctionName());
+					throw new ResourceAlreadyExistsException(Constants.FUNCTION_NAME, functionDTO.getFunctionName());
+				} else {
+					function.setName(functionDTO.getFunctionName());
+				}
 			}
 		}
 

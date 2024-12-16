@@ -64,26 +64,28 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 *         file is not found
 	 */
 	@Override
-	public Resource getDeviceConfigFile(String deviceTypeName, String deviceType) {
+	public Resource getDeviceConfigFile(String deviceTypeName, String deviceType, boolean isThunderEnabled) {
 		LOGGER.info("Inside getDeviceConfigFile method with deviceTypeName: {}, deviceType: {}", deviceTypeName,
 				deviceType);
 		Resource resource = null;
 
 		// Try to get the device config file for the given deviceType name
 		if (!Utils.isEmpty(deviceTypeName)) {
-			resource = getDeviceConfigFileGivenName(deviceTypeName + Constants.CONFIG_FILE_EXTENSION);
+			resource = getDeviceConfigFileGivenName(deviceTypeName + Constants.CONFIG_FILE_EXTENSION, isThunderEnabled);
 		}
 
 		// If not found, try to get the device config file for the given deviceType type
 		if (resource == null && !Utils.isEmpty(deviceType)) {
-			resource = getDeviceConfigFileGivenName(deviceType + Constants.CONFIG_FILE_EXTENSION);
+			resource = getDeviceConfigFileGivenName(deviceType + Constants.CONFIG_FILE_EXTENSION, isThunderEnabled);
 		}
 
 		// If still not found, get the default device config file
-		if (resource == null) {
-			resource = getDeviceConfigFileGivenName(Constants.DEFAULT_DEVICE_CONFIG_FILE);
+		if (resource == null && isThunderEnabled) {
+			resource = getDeviceConfigFileGivenName(Constants.THUNDER_DEVICE_CONFIG_FILE,
+					isThunderEnabled);
+		} else {
+			resource = getDeviceConfigFileGivenName(Constants.DEFAULT_DEVICE_CONFIG_FILE, isThunderEnabled);
 		}
-
 		// Add header to the resource
 		try {
 			return addHeader(resource);
@@ -139,12 +141,17 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 * @return boolean - true if the device config file is uploaded successfully
 	 *         false - if the device config file is not uploaded successfully
 	 */
-	public boolean uploadDeviceConfigFile(MultipartFile file) {
+	public boolean uploadDeviceConfigFile(MultipartFile file, boolean isThunderEnabled) {
 		LOGGER.info("Inside uploadDeviceConfigFile method with file: {}", file.getOriginalFilename());
 		validateFile(file);
+		String path = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR;
+		if (isThunderEnabled) {
+			path = path + Constants.THUNDER_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		} else {
+			path = path + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		}
 		try {
-			Path uploadPath = Paths.get(AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
-					+ Constants.FILE_PATH_SEPERATOR + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR);
+			Path uploadPath = Paths.get(path);
 			if (!Files.exists(uploadPath)) {
 				Files.createDirectories(uploadPath);
 			}
@@ -172,10 +179,16 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 *         false - if the device config file is not deleted
 	 */
 	@Override
-	public boolean deleteDeviceConfigFile(String deviceConfigFileName) {
+	public boolean deleteDeviceConfigFile(String deviceConfigFileName, boolean isThunderEnabled) {
 		LOGGER.info("Inside deleteDeviceConfigFile method with deviceConfigFileName: {}", deviceConfigFileName);
-		Path filePath = Paths.get(AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR + Constants.FILE_PATH_SEPERATOR
-				+ Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR + deviceConfigFileName);
+
+		String path = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR;
+		if (isThunderEnabled) {
+			path = path + Constants.THUNDER_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		} else {
+			path = path + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		}
+		Path filePath = Paths.get(path).resolve(deviceConfigFileName + Constants.CONFIG_FILE_EXTENSION);
 		try {
 			Files.delete(filePath);
 			LOGGER.info("File deleted successfully: {}", deviceConfigFileName);
@@ -200,14 +213,18 @@ public class DeviceConfigService implements IDeviceConfigService {
 	 * @return Resource - the device configuration file null - if the device config
 	 *         file is not found
 	 */
-	private Resource getDeviceConfigFileGivenName(String configFileName) {
+	private Resource getDeviceConfigFileGivenName(String configFileName, boolean isThunderEnabled) {
 		LOGGER.info("Inside getDeviceConfigFileGivenName method with configFileName: {}", configFileName);
-		String configFileLocation = AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
-				+ Constants.FILE_PATH_SEPERATOR + Constants.TDKV_DEVICE_CONFIG_DIR;
-		Path path = Paths.get(configFileLocation).resolve(configFileName);
+		String path = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR;
+		if (isThunderEnabled) {
+			path = path + Constants.THUNDER_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		} else {
+			path = path + Constants.TDKV_DEVICE_CONFIG_DIR + Constants.FILE_PATH_SEPERATOR;
+		}
+		Path pathFile = Paths.get(path).resolve(configFileName);
 		Resource resource = null;
 		try {
-			resource = new UrlResource(path.toUri());
+			resource = new UrlResource(pathFile.toUri());
 		} catch (MalformedURLException e) {
 			LOGGER.error("Device config file not found: {}", configFileName);
 		}

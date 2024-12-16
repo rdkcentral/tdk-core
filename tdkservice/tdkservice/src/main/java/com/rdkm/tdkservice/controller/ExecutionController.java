@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.controller;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -496,7 +497,7 @@ public class ExecutionController {
 	@Operation(summary = "Delete the executions by IDs")
 	@ApiResponse(responseCode = "201", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Executions not found")
-	@PostMapping("/deletelistofexecutions")
+	@DeleteMapping("/deletelistofexecutions")
 	public ResponseEntity<String> deleteExecutions(@RequestBody List<UUID> ids) {
 		LOGGER.info("Deleting executions by IDs: {}", ids);
 		boolean isDeleted = executionService.deleteExecutions(ids);
@@ -507,6 +508,25 @@ public class ExecutionController {
 			LOGGER.error("Executions not found with IDs: {}", ids);
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Executions not found");
 		}
+	}
+
+	/**
+     * This method is used to delete the executions by date range
+     * 
+     * @param fromDate
+     * @param toDate
+     * @return deletedCount
+     */
+	@Operation(summary = "Delete the executions by date range")
+	@ApiResponse(responseCode = "200", description = "Executions deleted successfully")
+	@ApiResponse(responseCode = "500", description = "Failed to delete executions")
+	@DeleteMapping("/deletebydaterange")
+	public ResponseEntity<String> deleteExecutionsByDateRange(@RequestParam Instant fromDate,
+			@RequestParam Instant toDate) {
+		int deletedCount = executionService.deleteExecutionsByDateRange(fromDate, toDate);
+		LOGGER.info("Deleted {} executions successfully.", deletedCount);
+		return ResponseEntity.status(HttpStatus.OK).body(deletedCount + " executions deleted successfully.");
+
 	}
 
 	/**

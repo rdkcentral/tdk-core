@@ -144,13 +144,13 @@ public class Script extends BaseEntity {
 	/**
 	 * API or interface used
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false,columnDefinition = "TEXT")
 	private String apiOrInterfaceUsed;
 
 	/**
 	 * Input parameters
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false,columnDefinition = "TEXT")
 	private String inputParameters;
 
 	/**

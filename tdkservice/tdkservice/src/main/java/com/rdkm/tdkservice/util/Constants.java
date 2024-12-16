@@ -38,7 +38,10 @@ public class Constants {
 	public static final String FILESTORE_LOCATION = "classpath:/filestore/";
 
 	// Default device config file name in filestore
-	public static final String DEFAULT_DEVICE_CONFIG_FILE = "sampleDevice.config";
+	public static final String DEFAULT_DEVICE_CONFIG_FILE = "sampleThunderDisabled.config";
+
+	// Default device config file name in filestore
+	public static final String THUNDER_DEVICE_CONFIG_FILE = "sampleThunderEnabled.config";
 
 	// Config file extension
 	public static final String CONFIG_FILE_EXTENSION = ".config";
@@ -403,4 +406,7 @@ public class Constants {
 
 	// The total keyword to be used in DTO
 	public static final String TOTAL_KEYWORD = "Total";
+	public static final String THUNDER_DEVICE_CONFIG_DIR = "tdkvRDKServiceConfig";
+	
+	public static final String APP_VERSION = "app.version";
 }

@@ -23,6 +23,7 @@ import static org.assertj.core.api.Assertions.entry;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -507,7 +508,6 @@ public class ExecutionService implements IExecutionService {
 		executionResponseDTO.setExecutionTriggerStatus(executionTriggerStatus);
 		return executionResponseDTO;
 	}
-
 
 	/**
 	 * This method is used to get the valid devices for the script based on the
@@ -1833,4 +1833,30 @@ public class ExecutionService implements IExecutionService {
 
 	}
 
+	/**
+	 * This method is used to delete the executions by date range
+	 * 
+	 * @param fromDate the start date
+	 * @param toDate   end date
+	 * @return total executions
+	 */
+	@Override
+	public int deleteExecutionsByDateRange(Instant fromDate, Instant toDate) {
+		LOGGER.info("Deleting executions between dates: {} and {}", fromDate, toDate);
+		List<Execution> executions = executionRepository.executionListInDateRange(fromDate, toDate);
+		if (executions.isEmpty()) {
+			LOGGER.info("No executions found between dates: {} and {}", fromDate, toDate);
+			return 0;
+		}
+		try {
+			for (Execution execution : executions) {
+				deleteExecution(execution.getId());
+			}
+			LOGGER.info("Successfully deleted executions between dates: {} and {}", fromDate, toDate);
+			return executions.size();
+		} catch (Exception e) {
+			LOGGER.error("Error deleting executions between dates: {} and {}", fromDate, toDate, e);
+			throw new TDKServiceException("Error deleting executions between dates: " + fromDate + " and " + toDate);
+		}
+	}
 }

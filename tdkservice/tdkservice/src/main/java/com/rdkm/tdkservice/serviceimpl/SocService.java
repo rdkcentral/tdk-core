@@ -62,11 +62,10 @@ public class SocService implements ISocService {
 	/**
 	 * Creates a new SOC vendor.
 	 *
-	 * @param socDTO The request object containing the details of the SOC
-	 *                     vendor.
-	 * @return true if the SOC  is created successfully, false otherwise.
-	 * @throws ResourceAlreadyExistsException if a SOC  with the same name
-	 *                                        already exists.
+	 * @param socDTO The request object containing the details of the SOC vendor.
+	 * @return true if the SOC is created successfully, false otherwise.
+	 * @throws ResourceAlreadyExistsException if a SOC with the same name already
+	 *                                        exists.
 	 */
 	@Override
 	public boolean createSoc(SocCreateDTO socDTO) {
@@ -112,8 +111,8 @@ public class SocService implements ISocService {
 	 * Deletes a SOC vendor by ID.
 	 *
 	 * @param id the ID of the SOC to delete
-	 * @throws ResourceNotFoundException if the SOC with the provided ID does
-	 *                                   not exist.
+	 * @throws ResourceNotFoundException if the SOC with the provided ID does not
+	 *                                   exist.
 	 */
 	@Override
 	public void deleteSoc(UUID id) {
@@ -132,7 +131,7 @@ public class SocService implements ISocService {
 	/**
 	 * Retrieves a SOC by its ID.
 	 *
-	 * @param id the ID of the SOC  to retrieve
+	 * @param id the ID of the SOC to retrieve
 	 * @return the SOC vendor if found, or a NOT_FOUND status with an error message
 	 *         if not found
 	 */
@@ -148,11 +147,9 @@ public class SocService implements ISocService {
 	/**
 	 * Updates a SOC vendor based on the provided SocVendorUpdateDTO.
 	 *
-	 * @param socUpdateDTO The DTO containing the updated details of the SOC
-	 *                           vendor.
-	 * @param id                 The ID of the SOC to be updated.
-	 * @return SocUpdateDTO The DTO representation of the updated SOC vendor
-	 *         object.
+	 * @param socUpdateDTO The DTO containing the updated details of the SOC vendor.
+	 * @param id           The ID of the SOC to be updated.
+	 * @return SocUpdateDTO The DTO representation of the updated SOC vendor object.
 	 * @throws ResourceNotFoundException If the SOC vendor with the provided ID does
 	 *                                   not exist.
 	 */
@@ -161,13 +158,18 @@ public class SocService implements ISocService {
 		LOGGER.info("Going to update SocVendor with id: " + socUpdateDTO.getSocId().toString());
 		Soc soc = socRepository.findById(socUpdateDTO.getSocId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, socUpdateDTO.getSocId().toString()));
+
 		if (!Utils.isEmpty(socUpdateDTO.getSocName())) {
-			if (socRepository.existsByName(socUpdateDTO.getSocName())) {
-				LOGGER.info("Soc already exists with the same name: " + socUpdateDTO.getSocName());
-				throw new ResourceAlreadyExistsException(Constants.SOC_NAME,
-						socUpdateDTO.getSocName());
-			} else {
+			Soc newSoc = socRepository.findByName(socUpdateDTO.getSocName());
+			if (newSoc != null && newSoc.getName().equalsIgnoreCase(socUpdateDTO.getSocName())) {
 				soc.setName(socUpdateDTO.getSocName());
+			} else {
+				if (socRepository.existsByName(socUpdateDTO.getSocName())) {
+					LOGGER.info("Soc already exists with the same name: " + socUpdateDTO.getSocName());
+					throw new ResourceAlreadyExistsException(Constants.SOC_NAME, socUpdateDTO.getSocName());
+				} else {
+					soc.setName(socUpdateDTO.getSocName());
+				}
 			}
 		}
 
@@ -178,7 +180,8 @@ public class SocService implements ISocService {
 			soc = socRepository.save(soc);
 		} catch (Exception e) {
 			LOGGER.error("Error while saving Soc: " + e.getMessage());
-			throw new RuntimeException("Error occurred while updating Soc with id: " + socUpdateDTO.getSocId().toString(), e);
+			throw new RuntimeException(
+					"Error occurred while updating Soc with id: " + socUpdateDTO.getSocId().toString(), e);
 		}
 
 		return MapperUtils.convertToSocUpdateDTO(soc);
@@ -186,7 +189,7 @@ public class SocService implements ISocService {
 	}
 
 	/**
-	 * Retrieves all SOC  DTO by category.
+	 * Retrieves all SOC DTO by category.
 	 *
 	 * @param category the category of the SOC to retrieve
 	 * @return a list of all SOC with the specified category
@@ -211,7 +214,7 @@ public class SocService implements ISocService {
 	 * Retrieves all SOC names by category.
 	 *
 	 * @param category the category of the SOC vendors to retrieve
-	 * @return a list of all SOC  with the specified category
+	 * @return a list of all SOC with the specified category
 	 */
 
 	@Override

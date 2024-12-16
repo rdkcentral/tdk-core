@@ -37,6 +37,7 @@ import com.rdkm.tdkservice.enums.ParameterDataType;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ParameterRepository;
@@ -116,13 +117,17 @@ public class ParameterService implements IParameterService {
 			throw new ResourceNotFoundException(Constants.FUNCTION_NAME, parameterDTO.getFunction());
 		}
 
-		if (!Utils.isEmpty(parameterDTO.getParameterName())
-				&& !parameterDTO.getParameterName().equals(parameter.getName())) {
-			if (parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)) {
-				LOGGER.info("Parameter already exists with the same name: " + parameterDTO.getParameterName());
-				throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterDTO.getParameterName());
-			} else {
+		if (!Utils.isEmpty(parameterDTO.getParameterName())) {
+			Parameter newParameter = parameterRepository.findByNameAndFunction(parameterDTO.getParameterName(),function);
+			if (newParameter != null && parameterDTO.getParameterName().equalsIgnoreCase(newParameter.getName())) {
 				parameter.setName(parameterDTO.getParameterName());
+			} else if (newParameter == null && !(parameterDTO.getParameterName().equals(parameter.getName()))) {
+				if (parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)) {
+					LOGGER.info("Parameter already exists with the same name: " + parameterDTO.getParameterName());
+					throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterDTO.getParameterName());
+				} else {
+					parameter.setName(parameterDTO.getParameterName());
+				}
 			}
 		}
 

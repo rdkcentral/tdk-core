@@ -36,6 +36,7 @@ import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Oem;
+import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
@@ -45,9 +46,8 @@ import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
 
 /**
- * This class provides the implementation for the OemService
- * interface. It provides methods to perform CRUD operations on OemService
- * entities.
+ * This class provides the implementation for the OemService interface. It
+ * provides methods to perform CRUD operations on OemService entities.
  */
 
 @Service
@@ -64,20 +64,18 @@ public class OemService implements IOemService {
 	/**
 	 * This method is used to create a new oem.
 	 * 
-	 * @param oemDTO This is the request object containing the
-	 *                               details of the oem to be created.
-	 * @return boolean This returns true if the oem was created
-	 *         successfully, false otherwise.
+	 * @param oemDTO This is the request object containing the details of the oem to
+	 *               be created.
+	 * @return boolean This returns true if the oem was created successfully, false
+	 *         otherwise.
 	 */
 	@Override
 	public boolean createOem(OemCreateDTO oemDTO) {
 		LOGGER.info("Going to create oemDTO with name: " + oemDTO.toString());
 
 		if (oemRepository.existsByName(oemDTO.getOemName())) {
-			LOGGER.info("oem already exists with the same name: "
-					+ oemDTO.getOemName());
-			throw new ResourceAlreadyExistsException(Constants.OEM_NAME,
-					oemDTO.getOemName());
+			LOGGER.info("oem already exists with the same name: " + oemDTO.getOemName());
+			throw new ResourceAlreadyExistsException(Constants.OEM_NAME, oemDTO.getOemName());
 		}
 		Oem oem = new Oem();
 		oem.setName(oemDTO.getOemName());
@@ -105,8 +103,7 @@ public class OemService implements IOemService {
 	/**
 	 * This method is used to retrieve all oems.
 	 * 
-	 * @return List<oemRequest> This returns a list of all
-	 *         oems.
+	 * @return List<oemRequest> This returns a list of all oems.
 	 */
 	@Override
 	public List<OemDTO> getAllOem() {
@@ -156,10 +153,9 @@ public class OemService implements IOemService {
 	/**
 	 * This method is used to update a oem.
 	 * 
-	 * @param oemUpdateDTO This is the request object containing the
-	 *                               updated details of the oem.
-	 * @param id                     This is the id of the oem to be
-	 *                               updated.
+	 * @param oemUpdateDTO This is the request object containing the updated details
+	 *                     of the oem.
+	 * @param id           This is the id of the oem to be updated.
 	 * @return OemEMRequest This returns the updated oem.
 	 */
 	@Override
@@ -168,20 +164,22 @@ public class OemService implements IOemService {
 
 		Oem oem = oemRepository.findById(oemUpdateDTO.getOemId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.OEM_ID, oemUpdateDTO.getOemId().toString()));
+
 		if (!Utils.isEmpty(oemUpdateDTO.getOemName())) {
-			if (oemRepository.existsByName(oemUpdateDTO.getOemName())) {
-				LOGGER.info("oem already exists with the same name: "
-						+ oemUpdateDTO.getOemName());
-				throw new ResourceAlreadyExistsException(Constants.OEM_NAME,
-						oemUpdateDTO.getOemName());
+			Oem newOem = oemRepository.findByName(oemUpdateDTO.getOemName());
+			if (newOem != null && newOem.getName().equalsIgnoreCase(oemUpdateDTO.getOemName())) {
+				newOem.setName(oemUpdateDTO.getOemName());
 			} else {
-				oem.setName(oemUpdateDTO.getOemName());
+				if (oemRepository.existsByName(oemUpdateDTO.getOemName())) {
+					LOGGER.info("Soc already exists with the same name: " + oemUpdateDTO.getOemName());
+					throw new ResourceAlreadyExistsException(Constants.OEM_NAME, oemUpdateDTO.getOemName());
+				} else {
+					oem.setName(oemUpdateDTO.getOemName());
+				}
 			}
 		}
-
 		if (!Utils.isEmpty(oemUpdateDTO.getOemCategory())) {
-			oem
-					.setCategory(Category.getCategory(oemUpdateDTO.getOemCategory()));
+			oem.setCategory(Category.getCategory(oemUpdateDTO.getOemCategory()));
 		}
 
 		try {
@@ -205,8 +203,7 @@ public class OemService implements IOemService {
 	@Override
 	public List<OemDTO> getOemsByCategory(String category) {
 		LOGGER.info("Going to get all oems by category: " + category);
-		List<Oem> oems = oemRepository
-				.findByCategory(Category.getCategory(category));
+		List<Oem> oems = oemRepository.findByCategory(Category.getCategory(category));
 		if (oems.isEmpty() || oems == null) {
 			return null;
 		}
@@ -223,8 +220,7 @@ public class OemService implements IOemService {
 	@Override
 	public List<String> getOemListByCategory(String category) {
 		LOGGER.info("Going to get all oems by category: " + category);
-		List<Oem> oems = oemRepository
-				.findByCategory(Category.getCategory(category));
+		List<Oem> oems = oemRepository.findByCategory(Category.getCategory(category));
 		if (oems.isEmpty() || oems == null) {
 			return null;
 		}

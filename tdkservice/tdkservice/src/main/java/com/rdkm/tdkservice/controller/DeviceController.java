@@ -289,9 +289,9 @@ public class DeviceController {
 	@ApiResponse(responseCode = "400", description = "There is no file associated with the  deviceType and no default file found.")
 	@GetMapping("/downloadDeviceConfigFile")
 	public ResponseEntity<Resource> downloadDeviceConfigFile(@RequestParam String deviceTypeName,
-			@RequestParam String deviceType) {
+			@RequestParam String deviceType, @RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Going to get the device config file " + deviceTypeName + " " + deviceTypeName);
-		Resource resource = deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType);
+		Resource resource = deviceConfigService.getDeviceConfigFile(deviceTypeName, deviceType, isThunderEnabled);
 		if (resource == null) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		} else {
@@ -318,13 +318,14 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Internal server error in uploading device configuration file")
 	@ApiResponse(responseCode = "400", description = "When the file is empty")
 	@PostMapping("/uploadDeviceConfigFile")
-	public ResponseEntity<String> uploadFile(@RequestParam("uploadFile") MultipartFile file) {
+	public ResponseEntity<String> uploadFile(@RequestParam("uploadFile") MultipartFile file,
+			@RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Received upload device config file request: " + file.getOriginalFilename());
 		if (file.isEmpty()) {
 			LOGGER.error("Please select a file to upload.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Please select a file to upload.");
 		}
-		boolean isfileUploaded = deviceConfigService.uploadDeviceConfigFile(file);
+		boolean isfileUploaded = deviceConfigService.uploadDeviceConfigFile(file, isThunderEnabled);
 		if (isfileUploaded) {
 			LOGGER.info("File upload is succesful");
 			return ResponseEntity.status(HttpStatus.OK).body("File upload is succesful");
@@ -350,9 +351,10 @@ public class DeviceController {
 	@ApiResponse(responseCode = "400", description = "No such file exists")
 	@ApiResponse(responseCode = "500", description = "Internal server error in deleting device configuration file")
 	@DeleteMapping("/deleteDeviceConfigFile")
-	public ResponseEntity<String> deleteDeviceConfigFile(@RequestParam String deviceConfigFileName) {
+	public ResponseEntity<String> deleteDeviceConfigFile(@RequestParam String deviceConfigFileName,
+			@RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Received delete device config file request: " + deviceConfigFileName);
-		boolean isFileDeleted = deviceConfigService.deleteDeviceConfigFile(deviceConfigFileName);
+		boolean isFileDeleted = deviceConfigService.deleteDeviceConfigFile(deviceConfigFileName, isThunderEnabled);
 		if (isFileDeleted) {
 			return ResponseEntity.status(HttpStatus.OK).body("File deleted successfully");
 		} else {

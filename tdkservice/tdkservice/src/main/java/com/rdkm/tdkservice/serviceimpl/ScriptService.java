@@ -255,12 +255,17 @@ public class ScriptService implements IScriptService {
 		script = MapperUtils.updateScript(script, scriptUpdateDTO);
 
 		if (!Utils.isEmpty(scriptUpdateDTO.getName())) {
-			if (scriptRepository.existsByName(scriptUpdateDTO.getName())
-					&& !(scriptUpdateDTO.getName().equals(script.getName()))) {
-				LOGGER.info("Script already exists with the same name: " + scriptUpdateDTO.getName());
-				throw new ResourceAlreadyExistsException(Constants.SCRIPT, scriptUpdateDTO.getName());
-			} else {
+			Script newScript = scriptRepository.findByName(scriptUpdateDTO.getName());
+			if (newScript != null && scriptUpdateDTO.getName().equalsIgnoreCase(newScript.getName())) {
 				script.setName(scriptUpdateDTO.getName());
+			} else if (newScript == null && !(scriptUpdateDTO.getName().equals(script.getName()))) {
+
+				if (scriptRepository.existsByName(scriptUpdateDTO.getName())) {
+					LOGGER.info("Module already exists with the same name: " + scriptUpdateDTO.getName());
+					throw new ResourceAlreadyExistsException(Constants.SCRIPT, scriptUpdateDTO.getName());
+				} else {
+					script.setName(scriptUpdateDTO.getName());
+				}
 			}
 		}
 

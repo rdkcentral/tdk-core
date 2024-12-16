@@ -30,6 +30,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,13 +53,14 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 @RequestMapping("/api/v1/rdkcertification")
 public class RDKCertificationController {
 
-	private static final Logger LOGGER =LoggerFactory.getLogger(RDKCertificationController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(RDKCertificationController.class);
 
 	@Autowired
 	IRDKCertificationService rdkCertificationService;
 
 	/**
-	 * API to create a new config file ,update an existing config file and upload also
+	 * API to create a new config file ,update an existing config file and upload
+	 * also
 	 * 
 	 * @param file
 	 * @return ResponseEntity<String>
@@ -127,7 +129,7 @@ public class RDKCertificationController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file names found");
 		}
 	}
-	
+
 	/**
 	 * API to get config file content
 	 * 
@@ -148,6 +150,29 @@ public class RDKCertificationController {
 		} else {
 			LOGGER.error("No config file content found");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file content found");
+		}
+	}
+
+	/**
+	 * API to delete a config file
+	 * 
+	 * @param fileName
+	 * @return ResponseEntity<String>
+	 */
+	@Operation(summary = "Delete a config file", description = "Delete a config file in the system.")
+	@ApiResponse(responseCode = "200", description = "Config file deleted successfully")
+	@ApiResponse(responseCode = "500", description = "Error in deleting config file")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@DeleteMapping("/delete")
+	public ResponseEntity<String> deleteConfigFile(@RequestParam String fileName) {
+		LOGGER.info("Inside deleteConfigFile method with fileName: {}", fileName);
+		boolean isConfigFileDeleted = rdkCertificationService.deleteConfigFile(fileName);
+		if (isConfigFileDeleted) {
+			LOGGER.info("Config file deleted successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Config file deleted successfully");
+		} else {
+			LOGGER.error("Error in deleting config file");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Config file not found for the name");
 		}
 	}
 
