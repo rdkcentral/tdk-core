@@ -372,8 +372,8 @@
         </testCase>
      <!-- Test case 17 -->
         <testCase testCaseId="DISP_17" testCaseName= "DisplayInfo_Check_Resolution_PostChange_Event" desc="Checks for the Resolution Post Change event">
-            <testCaseInfo testCaseType="loop" revert="true"  />
-            <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <testCaseInfo testCaseType="loop" revert="true"/>
+	    <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
             </testStep>
             <testStep testStepId="2" name="Get_Supported_Resolutions" method="Get_Supported_Resolutions" saveResult="true" pluginName="DisplaySettings">
@@ -381,31 +381,42 @@
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                 </params>
                 <resultGeneration useMethodTag="display_supported_resolutions"/>
-            </testStep>
-            <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" revertGet="yes" pluginName="DisplaySettings">
+	    </testStep>
+	    <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertGet="yes" pluginName="DisplaySettings">
                 <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                 </params>
                 <resultGeneration useMethodTag="check_current_resolution"/>
-            </testStep>
+	    </testStep>
             <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
-              <subtestStep subtestStepId="1" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes" pluginName="DisplaySettings">
+	      <subtestStep subtestStepId="1" name="Retrieve_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" pluginName="DisplaySettings">
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+                <resultGeneration useMethodTag="check_current_resolution"/>
+              </subtestStep>	    
+	      <subtestStep subtestStepId="2" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes" pluginName="DisplaySettings">
                   <params>
                     <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                     <param tag="resolution" usePreviousResult="true" Id="2" iteration="true" useMethodTag="display_info_get_supported_resolution_list" revertParam="yes"/>
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
-              <subtestStep subtestStepId="2" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertFlag="yes" pluginName="DisplaySettings" delay="3" >
+              <subtestStep subtestStepId="3" name="Get_Resolution"  method="Get_Current_Resolution" saveResult="true" revertFlag="yes" pluginName="DisplaySettings" delay="3" >
                   <resultGeneration useMethodTag="check_current_resolution" arguments="check_expected_resolution">
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
-              <subtestStep subtestStepId="3" name="Check_Updated_PostRequisite_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
-                  <resultGeneration useMethodTag="displayinfo_check_pre_post_resolution_change_event" expectedValues="postresolutionchange" />
+              <subtestStep subtestStepId="4" name="Check_Updated_PostRequisite_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
+		  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution"/>
+		  <resultGeneration useMethodTag="displayinfo_check_pre_post_resolution_change_event" expectedValues="postresolutionchange" />
+	      </subtestStep>
+	      <subtestStep subtestStepId="5" name="Check_Updated_PostRequisite_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
+                  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution" arguments="check_resolution"/>
+                  <resultGeneration useMethodTag="rdkshell_check_on_userinactivity_event" arguments="check_empty_event"/>
               </subtestStep>
             </testStep>
-        </testCase> 
+        </testCase>
      <!-- Test case 18 -->
         <testCase testCaseId="DISP_18" testCaseName="DisplayInfo_Check_HDMI_Connection_Status_Without_TV" desc="Checks the HDMI connection status when TV is not connected" >
             <testCaseInfo testCaseType="direct"/>
@@ -559,30 +570,39 @@
                 </params>
                 <resultGeneration useMethodTag="display_supported_resolutions"/>
             </testStep>
-            <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" revertGet="yes" pluginName="DisplaySettings">
+	    <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertGet="yes" pluginName="DisplaySettings">
                 <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                 </params>
                 <resultGeneration useMethodTag="check_current_resolution"/>
             </testStep>
-            <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
-              <subtestStep subtestStepId="1" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes" pluginName="DisplaySettings">
+	    <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
+	      <subtestStep subtestStepId="1" name="Retrieve_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" pluginName="DisplaySettings">
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+                <resultGeneration useMethodTag="check_current_resolution"/>
+              </subtestStep>	    
+	      <subtestStep subtestStepId="2" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes" pluginName="DisplaySettings">
                   <params>
                     <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                     <param tag="resolution" usePreviousResult="true" Id="2" iteration="true" useMethodTag="display_info_get_supported_resolution_list" revertParam="yes"/>
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
-              <subtestStep subtestStepId="2" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertFlag="yes" pluginName="DisplaySettings" delay="3" >
+              <subtestStep subtestStepId="3" name="Get_Resolution"  method="Get_Current_Resolution" saveResult="true" revertFlag="yes" pluginName="DisplaySettings" delay="3" >
                   <resultGeneration useMethodTag="check_current_resolution" arguments="check_expected_resolution">
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
-              </subtestStep>
-              <subtestStep subtestStepId="3" name="Check_Updated_PreResolution_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
-                  <resultGeneration useMethodTag="displayinfo_check_pre_post_resolution_change_event" expectedValues="preresolutionchange" />
+	      </subtestStep>
+	      <subtestStep subtestStepId="4" name="Check_Updated_PreResolution_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
+		  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution"/>    
+		  <resultGeneration useMethodTag="displayinfo_check_pre_post_resolution_change_event" expectedValues="preresolutionchange" />
+	      </subtestStep>
+	      <subtestStep subtestStepId="5" name="Check_Updated_PreResolution_Change_Event" event="Event_Pre_Post_Resolution_Change" action="eventListener" delay="2" >
+                  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution" arguments="check_resolution"/>
+                  <resultGeneration useMethodTag="rdkshell_check_on_userinactivity_event" arguments="check_empty_event"/>
               </subtestStep>
             </testStep>
         </testCase>
 </testPlugin>
-
-

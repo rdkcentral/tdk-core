@@ -4216,6 +4216,21 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 result = "TRUE"
             else:
                 result = "FALSE"
+                
+        elif tag == "get_previous_resolution":
+            testStepResults1 = list(testStepResults[0].values())[0]
+            resolution1 = testStepResults1[0].get("resolution")
+            resolution2 = testStepResults1[1].get("resolution")
+            if len(arg) and arg[0] == "check_resolution":
+                if resolution1 == resolution2:
+                    result = "TRUE"
+                else:
+                    result = "FALSE"
+            else:
+                if resolution1 == resolution2:
+                    result = "FALSE"
+                else:
+                    result = "TRUE"
 
         # PersistentStore Plugin Response result parser steps
         elif tag == "persistentstore_get_previous_namespace":
