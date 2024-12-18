@@ -151,5 +151,14 @@ public interface IDeviceService {
 	 * 
 	 */
 	boolean toggleThunderEnabledstatus(String deviceIP);
+	
+
+	/**
+	 * This method is used to get the device status
+	 * 
+	 * @param deviceIp - IP of the device
+	 * @return DeviceResponse DTO - device status
+	 */
+	public DeviceStatusResponseDTO getDeviceStatus(String deviceIp);
 
 }

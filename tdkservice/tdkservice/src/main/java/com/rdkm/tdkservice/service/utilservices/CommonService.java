@@ -673,5 +673,27 @@ public class CommonService {
 
 		return pythonCommand;
 	}
+	
+	
+	/**
+	 * This method checks if the given directory exists and is not empty
+	 * @param directoryPath - the directory path
+	 * @return boolean - true if the directory exists and is not empty, false otherwise
+	 */
+	public boolean checkAFolderExists(String directoryPath) {
+		File directory = new File(directoryPath);
+		// Check if the directory exists
+		LOGGER.info("Checking if the directory exists: {}", directoryPath);
+		if (!directory.exists()) {
+			LOGGER.error("Directory does not exist: {}", directoryPath);
+			return false; // Directory doesn't exist
+		}
+		// Check if the directory is empty
+		if (directory.listFiles().length == 0) {
+			LOGGER.error("Directory is empty: {}", directoryPath);
+			return false; // Directory exists but is empty
+		}
+		return true; 
+	}
 
 }

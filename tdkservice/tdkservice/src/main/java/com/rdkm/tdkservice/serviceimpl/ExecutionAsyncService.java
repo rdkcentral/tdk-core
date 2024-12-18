@@ -43,6 +43,7 @@ import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
 import com.rdkm.tdkservice.enums.ExecutionResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionStatus;
 import com.rdkm.tdkservice.enums.ExecutionType;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.model.Device;
@@ -122,23 +123,38 @@ public class ExecutionAsyncService {
 					// For repeat of the base execution, add a suffix R1, R2, R3 etc
 					realExecutionName = executionName + "_R" + i;
 				}
+				double executionStartTime = System.currentTimeMillis();
 
 				ExecutionEntities executionEntities = this.getExecutionEntitiesForExecution(device, script, user,
 						realExecutionName, isRerunOnFailure, isDeviceLogsNeeded, isPerformanceLogsNeeded,
 						isDiagnosticLogsNeeded);
+
 				boolean executionStatus = executeScriptinDevice(script, executionEntities.getExecution(),
 						executionEntities.getExecutionResult().get(0), executionEntities.getExecutionDevice());
+				double executionEndTime = System.currentTimeMillis();
+				double executionTime = this
+						.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
+
+				double realExecutionTime = this.getRealExcetionTime(executionEntities.getExecutionResult());
+				this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
 				this.setFinalStatusOfExecution(executionEntities.getExecution());
 
 				if (isRerunOnFailure && !executionStatus) {
 					// For the rerun on Failure, add _RERUN in the execution name
 					realExecutionName = realExecutionName + Constants.RERUN_APPENDER;
+					executionStartTime = System.currentTimeMillis();
 					ExecutionEntities executionEntitiesForFailureRerun = this.getExecutionEntitiesForExecution(device,
 							script, user, realExecutionName, isRerunOnFailure, isDeviceLogsNeeded,
 							isPerformanceLogsNeeded, isDiagnosticLogsNeeded);
+
 					executeScriptinDevice(script, executionEntitiesForFailureRerun.getExecution(),
 							executionEntitiesForFailureRerun.getExecutionResult().get(0),
 							executionEntitiesForFailureRerun.getExecutionDevice());
+					executionEndTime = System.currentTimeMillis();
+					executionTime = this
+							.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
+					realExecutionTime = this.getRealExcetionTime(executionEntitiesForFailureRerun.getExecutionResult());
+					this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
 					this.setFinalStatusOfExecution(executionEntitiesForFailureRerun.getExecution());
 				}
 			}
@@ -149,6 +165,21 @@ public class ExecutionAsyncService {
 		}
 		// Unlock the device with the current status
 		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
+	}
+
+	/**
+	 * This method is used to set the execution time
+	 * 
+	 * @param executionObject   - the execution object
+	 * @param executionTime     - the execution time
+	 * @param executionRealTime - the real time for script execution
+	 */
+	private void setExecutionTime(Execution executionObject, double executionTime, double executionRealTime) {
+		Execution execution = executionRepository.findById(executionObject.getId()).orElse(null);
+		execution.setExecutionTime(executionTime);
+		execution.setRealExecutionTime(executionRealTime);
+		executionRepository.save(execution);
 
 	}
 
@@ -170,6 +201,9 @@ public class ExecutionAsyncService {
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
 		try {
+			if (repeatCount == 0) {
+				repeatCount = 1;
+			}
 			for (int repeatIndex = 0; repeatIndex < repeatCount; repeatIndex++) {
 				String currentExecutionName = executionName;
 
@@ -368,6 +402,8 @@ public class ExecutionAsyncService {
 		remarksString.append("Execution started in device: ").append(device.getName()).append(" for script: ")
 				.append(script.getName()).append("\n");
 		executionResult.setExecutionRemarks(remarksString.toString());
+		executionResult.setResult(ExecutionResultStatus.INPROGRESS);
+		executionResult.setStatus(ExecutionStatus.INPROGRESS);
 		executionResultRepository.save(executionResult);
 		ExecutionResultStatus finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
 		try {
@@ -387,6 +423,7 @@ public class ExecutionAsyncService {
 						.append("There is something wrong with the script, Please check the script is there or not\n");
 				executionResult.setExecutionRemarks(remarksString.toString());
 				executionResult.setResult(ExecutionResultStatus.FAILURE);
+				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
 				return false;
 			}
@@ -412,7 +449,7 @@ public class ExecutionAsyncService {
 				waittime = script.getExecutionTimeOut();
 			}
 			// A standardized path for storing the logs
-			String executionLogfile = getExecutionLogFilePath(execution.getId().toString(),
+			String executionLogfile = commonService.getExecutionLogFilePath(execution.getId().toString(),
 					executionResult.getId().toString());
 
 			LOGGER.info("Execution log file path: " + executionLogfile);
@@ -436,7 +473,9 @@ public class ExecutionAsyncService {
 			// If there is a TDK_error string , add it as failure
 			if (output.contains(Constants.ERROR_TAG_PY_COMMENT)) {
 				executionResult.setResult(ExecutionResultStatus.FAILURE);
+				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
+				deleteTemporaryFile(temporaryScriptPath);
 				return false;
 			}
 
@@ -449,13 +488,16 @@ public class ExecutionAsyncService {
 				} else {
 					executionResult.setResult(ExecutionResultStatus.FAILURE);
 				}
+				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
+				deleteTemporaryFile(temporaryScriptPath);
 				return false;
 			}
 
 			ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId()).get();
 			finalExecutionResultStatus = finalExecutionResult.getResult();
 			executionResult.setResult(finalExecutionResultStatus);
+			executionResult.setStatus(ExecutionStatus.COMPLETED);
 			executionResultRepository.save(executionResult);
 
 			// Delete the temporary script file after execution
@@ -469,27 +511,13 @@ public class ExecutionAsyncService {
 		} catch (Exception e) {
 			finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
 			executionResult.setResult(ExecutionResultStatus.FAILURE);
+			executionResult.setStatus(ExecutionStatus.COMPLETED);
 			executionResult.setExecutionRemarks("Execution failed due to some issue in TM");
 			executionResultRepository.save(executionResult);
 			LOGGER.error("Error in executing script: {} on device: {} due to ", script.getName(), device.getName(), e);
 		}
 
 		return finalExecutionResultStatus == ExecutionResultStatus.SUCCESS;
-	}
-
-	/**
-	 * 
-	 * This method is used to get the execution log file path**
-	 * 
-	 * @param executionID
-	 * @param executionResultID
-	 * @return String
-	 */
-	private String getExecutionLogFilePath(String executionID, String executionResultID) {
-		String logBasePath = commonService.getBaseLogPath();
-		return logBasePath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD + Constants.UNDERSCORE
-				+ executionID + Constants.FILE_PATH_SEPERATOR + Constants.RESULT + Constants.UNDERSCORE
-				+ executionResultID + Constants.FILE_PATH_SEPERATOR + executionResultID + "_executionlogs.log";
 	}
 
 	/**

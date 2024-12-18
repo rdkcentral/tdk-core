@@ -18,11 +18,10 @@
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import static org.assertj.core.api.Assertions.entry;
-
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,6 +62,7 @@ import com.rdkm.tdkservice.enums.ExecutionMethodResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
 import com.rdkm.tdkservice.enums.ExecutionResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionStatus;
 import com.rdkm.tdkservice.enums.ExecutionTriggerStatus;
 import com.rdkm.tdkservice.enums.ExecutionType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -74,9 +74,9 @@ import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.ScriptTestSuite;
 import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.TestSuite;
@@ -179,11 +179,14 @@ public class ExecutionService implements IExecutionService {
 		List<String> scriptsListFromRequest = executionTriggerDTO.getScriptList();
 		List<String> testSuiteListFromRequest = executionTriggerDTO.getTestSuite();
 
+		// Check if the devices are available for execution
+		List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
+
 		// Script Execution - Single and Multiple
 		if (null != scriptsListFromRequest && !scriptsListFromRequest.isEmpty()) {
 			LOGGER.info("The request came for  script execution");
 			List<Script> scriptsList = this.getValidScriptList(scriptsListFromRequest, responseLogs);
-			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, deviceList,
+			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, freeDevices,
 					scriptsList, null);
 			if (scriptsList.size() > 1) {
 				LOGGER.info("The request came for multiple script execution");
@@ -303,7 +306,7 @@ public class ExecutionService implements IExecutionService {
 	 */
 	private String getExecutionName(String executionName, Device device, String testType) {
 		String baseExecutionName = executionName;
-		if (!Utils.isEmpty(executionName)) {
+		if (!Utils.isEmpty(executionName) && !executionName.contains(Constants.MULTIPLE_KEY_WORD)) {
 			baseExecutionName = executionName;
 		} else {
 			baseExecutionName = this.getExecutionNameFromDeviceAndTestType(device, testType);
@@ -680,7 +683,7 @@ public class ExecutionService implements IExecutionService {
 			Device device = deviceRepository.findByName(deviceName);
 			if (device == null) {
 				LOGGER.error("Device not found with name: {}", deviceName);
-				responseString.append("Device: " + deviceName + " not found.");
+				responseString.append("Device: " + deviceName + " not found.\n");
 			} else {
 				deviceList.add(device);
 			}
@@ -689,6 +692,29 @@ public class ExecutionService implements IExecutionService {
 			throw new ResourceNotFoundException("Device/s in the request", devices.toString());
 		}
 		return deviceList;
+	}
+
+	/**
+	 * This method is used to get the execution name based on the device
+	 * 
+	 * @param deviceList - the device list
+	 * @return String - the execution name
+	 */
+	private List<Device> filterFreeDevices(List<Device> deviceList, StringBuilder responseString) {
+		LOGGER.info("Filtering devices based on the availability");
+		List<Device> availableDevices = new ArrayList<>();
+		for (Device device : deviceList) {
+			if (device.getDeviceStatus().equals(DeviceStatus.FREE)) {
+				availableDevices.add(device);
+			} else {
+				responseString.append("Device: " + device.getName() + " is not available for execution\n");
+			}
+		}
+		if (availableDevices.isEmpty()) {
+			LOGGER.error("Device not available for execution");
+			throw new ResourceNotFoundException("Device not available for execution", "");
+		}
+		return availableDevices;
 	}
 
 	/**
@@ -1117,20 +1143,24 @@ public class ExecutionService implements IExecutionService {
 
 		String executionLogfile = commonService.getExecutionLogFilePath(executionID,
 				executionResult.getId().toString());
-		String executionRemarks = executionResult.getExecutionRemarks();
+		String executionRemarks = executionResult.getExecutionRemarks() + "\n";
 		File logFile = new File(executionLogfile);
 		if (logFile.exists()) {
+			StringBuilder logFileData = new StringBuilder(executionRemarks); // Start with execution remarks
 
-			try {
-				String logFileData = new String(Files.readAllBytes(logFile.toPath()));
-				return executionRemarks + logFileData;
+			try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					logFileData.append("\n").append(line); // Add line with newline character
+				}
+				return logFileData.toString();
 			} catch (IOException e) {
 				LOGGER.error("Error reading log file: {}", executionLogfile, e);
 				return executionRemarks;
 			}
 		} else {
 			LOGGER.warn("Log file does not exist: {}", executionLogfile);
-			throw new ResourceNotFoundException("Log file for the execution", "");
+			return ("Log file for the execution doesnt't exist");
 
 		}
 	}
@@ -1161,7 +1191,8 @@ public class ExecutionService implements IExecutionService {
 		if (!devices.isEmpty()) {
 			if (devices.size() > 1) {
 				LOGGER.info("Going to generate device name for multiple devices execution");
-				executionName = "Multiple" + Constants.UNDERSCORE + Utils.getTimeStampInUTCForExecutionName();
+				executionName = Constants.MULTIPLE_KEY_WORD + Constants.UNDERSCORE
+						+ Utils.getTimeStampInUTCForExecutionName();
 			} else if (devices.size() == 1) {
 				LOGGER.info("Going to generate device name for single devices execution");
 				Device device = deviceRepository.findByName(devices.getFirst());
@@ -1185,11 +1216,16 @@ public class ExecutionService implements IExecutionService {
 	 *         empty, only the timestamp is appended.
 	 */
 	private String getExecutionNameFromDeviceAndTestType(Device device, String testType) {
+		LOGGER.info("Generating execution name based on device and test type");
 		String executionName;
 		Oem oem = device.getOem();
 		Soc soc = device.getSoc();
 		if (oem != null && soc != null) {
 			executionName = soc.getName() + Constants.UNDERSCORE + oem.getName() + Constants.UNDERSCORE;
+		} else if (oem != null && soc == null) {
+			executionName = oem.getName() + Constants.UNDERSCORE;
+		} else if (soc != null && oem == null) {
+			executionName = soc.getName() + Constants.UNDERSCORE;
 		} else {
 			executionName = device.getName() + Constants.UNDERSCORE;
 		}
@@ -1198,6 +1234,7 @@ public class ExecutionService implements IExecutionService {
 		} else {
 			executionName += Utils.getTimeStampInUTCForExecutionName();
 		}
+		LOGGER.info("Generated Execution Name: {}", executionName);
 		return executionName;
 	}
 
@@ -1245,7 +1282,6 @@ public class ExecutionService implements IExecutionService {
 	@Override
 	public ExecutionResultResponseDTO getExecutionResult(UUID execResultId) {
 		LOGGER.info("Fetching execution result for  execResultId: {}" + execResultId);
-		StringBuilder responseLogs = new StringBuilder();
 		ExecutionResult executionResult;
 		try {
 			executionResult = executionResultRepository.findById(execResultId)
@@ -1262,13 +1298,15 @@ public class ExecutionService implements IExecutionService {
 		response.setScript(executionResult.getScript());
 		response.setTimeTaken(executionResult.getExecutionTime());
 		response.setExecutionTrend(getTrendAnalysis(execResultId));
+		String executionLogs = null;
+		executionLogs = this.getExecutionLogs(execResultId.toString());
 
-		if (executionResult.getResult() == ExecutionResultStatus.INPROGRESS) {
-			response.setLogs(responseLogs.append(executionResult.getExecutionRemarks()).toString());
-		} else if (executionResult.getResult() == ExecutionResultStatus.SUCCESS) {
-			response.setLogs(responseLogs.append(executionResult.getExecutionRemarks()).append("Execution Logs :\n")
-					// Add execution logs // getExecutionLogs(execResultId.toString())).toString()
-					.append("").toString());
+		if (!Utils.isEmpty(executionLogs)) {
+			response.setLogs(executionLogs);
+		} else if (executionResult.getExecutionRemarks() != null) {
+			response.setLogs(executionResult.getExecutionRemarks().toString());
+		} else {
+			response.setLogs("No logs found for this execution");
 		}
 
 		List<ExecutionMethodResult> methodResults;
@@ -1295,8 +1333,63 @@ public class ExecutionService implements IExecutionService {
 			response.setExecutionMethodResult(methodResponse);
 		}
 
+		// Check if logs are available and set the status in the response
+		response.setAgentLogsAbvailable(this.checkLogExists(Constants.AGENTLOGTYPE, executionResult));
+		response.setDeviceLogsAvailable(this.checkLogExists(Constants.DEVICELOGTYPE, executionResult));
+		response.setCrashLogsAvailable(this.checkLogExists(Constants.CRASHLOGTYPE, executionResult));
+
 		LOGGER.info("Successfully fetched execution result for execId: {}, execResultId: {}", execResultId);
 		return response;
+	}
+
+	/**
+	 * This method is used to check the log exists or not
+	 * 
+	 * @param logtype         - Device, Crash, Agent
+	 * @param executionResult - the execution result
+	 * @return boolean - true if the log exists, false otherwise
+	 */
+	private boolean checkLogExists(String logtype, ExecutionResult executionResult) {
+		LOGGER.info("Checking if the log exists for log type: {}", logtype);
+		String executionID = executionResult.getExecution().getId().toString();
+		String executionResultID = executionResult.getId().toString();
+		if (logtype.equalsIgnoreCase(Constants.DEVICELOGTYPE)) {
+			return checkDeviceLogsExists(executionID, executionResultID);
+		} else if (logtype.equalsIgnoreCase(Constants.AGENTLOGTYPE)) {
+			return checkAgentLogsExists(executionID, executionResultID);
+		} else if (logtype.equalsIgnoreCase(Constants.CRASHLOGTYPE)) {
+			return false;
+		} else {
+			return false;
+		}
+
+	}
+
+	/**
+	 * This method is used to check the device logs exists or not
+	 * 
+	 * @param executionID       - the execution ID
+	 * @param executionResultID - the execution result ID
+	 * @return boolean - true if the device logs exists, false otherwise
+	 */
+	private boolean checkDeviceLogsExists(String executionID, String executionResultID) {
+		String baseLogPath = commonService.getBaseLogPath();
+		String devicelogsDirectoryPath = commonService.getDeviceLogsPathForTheExecution(executionID, executionResultID,
+				baseLogPath);
+		return commonService.checkAFolderExists(devicelogsDirectoryPath);
+	}
+
+	/**
+	 * This method is used to check the agent logs exists or not
+	 * 
+	 * @param executionID       - the execution ID
+	 * @param executionResultID - the execution result ID
+	 * @return boolean - true if the agent logs exists, false otherwise
+	 */
+	private boolean checkAgentLogsExists(String executionID, String executionResultID) {
+		String baseLogPath = commonService.getBaseLogPath();
+		String agentLogsDirectoryPath = commonService.getAgentLogPath(executionID, executionResultID, baseLogPath);
+		return commonService.checkAFolderExists(agentLogsDirectoryPath);
 	}
 
 	/**
@@ -1344,6 +1437,23 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
+
+		Device device = executionDevice.getDevice();
+		if (device == null) {
+			LOGGER.error("Device not found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
+		}
+
+		if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
+			LOGGER.error("Execution with id: {} is already in progress", execId);
+			throw new UserInputException("Execution is already in progress");
+		}
+
+		if (!device.getDeviceStatus().equals(DeviceStatus.FREE)) {
+			LOGGER.error("Device with name: {} is not available for execution", device.getName());
+			throw new UserInputException("Device selected is not available for execution");
+		}
+
 		List<ExecutionResult> executionResult = executionResultRepository.findByExecution(execution);
 		List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
 		List<Script> scripts = getValidScriptList(scriptNames, new StringBuilder());
@@ -1388,11 +1498,23 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
+		
+		Device device = executionDevice.getDevice();
+		if (device == null) {
+			LOGGER.error("Device not found for execution with id: {}", execId);
+			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
+		}
+		
+		if (!device.getDeviceStatus().equals(DeviceStatus.FREE)) {
+			LOGGER.error("Device with name: {} is not available for execution", device.getName());
+			throw new UserInputException("Device selected is not available for execution");
+		}
+		
 		List<ExecutionResult> failedResults = executionResultRepository.findByExecutionAndResult(execution,
 				ExecutionResultStatus.FAILURE);
 		if (failedResults.isEmpty() || failedResults == null) {
 			LOGGER.error("No failed scripts found for execution with id: {}", execId);
-			throw new ResourceNotFoundException("Failed Scripts", "Execution ID: " + execId.toString());
+			throw new ResourceNotFoundException("Failed Scripts", "for Execution ID: " + execId.toString());
 		}
 		try {
 			List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
@@ -1657,7 +1779,11 @@ public class ExecutionService implements IExecutionService {
 			ExecutionResultDTO resultDTOObj = new ExecutionResultDTO();
 			resultDTOObj.setExecutionResultID(result.getId());
 			resultDTOObj.setName(result.getScript());
-			resultDTOObj.setStatus(result.getResult().name());
+			if (null != result.getStatus() && result.getStatus() == ExecutionStatus.INPROGRESS) {
+				resultDTOObj.setStatus(ExecutionResultStatus.INPROGRESS.name());
+			} else {
+				resultDTOObj.setStatus(result.getResult().name());
+			}
 
 			resultDTO.add(resultDTOObj);
 		}

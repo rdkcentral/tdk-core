@@ -409,4 +409,15 @@ public class Constants {
 	public static final String THUNDER_DEVICE_CONFIG_DIR = "tdkvRDKServiceConfig";
 	
 	public static final String APP_VERSION = "app.version";
+	
+	// The device log type
+	public static final String DEVICELOGTYPE = "deviceLog";
+	
+	// The agent log type
+	public static final String AGENTLOGTYPE = "agentLog";
+	
+	// The crash log type
+	public static final String CRASHLOGTYPE = "crashLog";
+	
+	public static final String MULTIPLE_KEY_WORD = "Multiple";
 }

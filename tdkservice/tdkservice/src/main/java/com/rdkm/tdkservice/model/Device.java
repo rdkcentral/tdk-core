@@ -94,14 +94,14 @@ public class Device extends BaseEntity {
 	 * 
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "Oem_id", nullable = false)
+	@JoinColumn(name = "Oem_id", nullable = true)
 	private Oem oem;
 
 	/**
 	 * Represents the soc of the device
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
-	@JoinColumn(name = "soc_id", nullable = false)
+	@JoinColumn(name = "soc_id", nullable = true)
 	private Soc soc;
 
 	/**

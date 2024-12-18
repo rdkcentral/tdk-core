@@ -165,14 +165,24 @@ public class MapperUtils {
 		Device device = new Device();
 		device.setIp(deviceCreateDTO.getDeviceIp());
 		device.setName(deviceCreateDTO.getDeviceName());
-		Utils.validateInteger(deviceCreateDTO.getDevicePort(), "Device port");
-		device.setPort(deviceCreateDTO.getDevicePort());
-		Utils.validateInteger(deviceCreateDTO.getStatusPort(), "Status port");
-		device.setStatusPort(deviceCreateDTO.getStatusPort());
-		Utils.validateInteger(deviceCreateDTO.getAgentMonitorPort(), "Agent port");
-		device.setAgentMonitorPort(deviceCreateDTO.getAgentMonitorPort());
-		Utils.validateInteger(deviceCreateDTO.getLogTransferPort(), "Log transfer port");
-		device.setLogTransferPort(deviceCreateDTO.getLogTransferPort());
+		if (null != deviceCreateDTO.getDevicePort() && !deviceCreateDTO.getDevicePort().isEmpty()) {
+			Utils.validateInteger(deviceCreateDTO.getDevicePort(), "Device port");
+			device.setPort(deviceCreateDTO.getDevicePort());
+		}
+
+		if (null != deviceCreateDTO.getStatusPort() && !deviceCreateDTO.getStatusPort().isEmpty()) {
+			Utils.validateInteger(deviceCreateDTO.getStatusPort(), "Status port");
+			device.setStatusPort(deviceCreateDTO.getStatusPort());
+		}
+		if (null != deviceCreateDTO.getAgentMonitorPort() && !deviceCreateDTO.getAgentMonitorPort().isEmpty()) {
+			Utils.validateInteger(deviceCreateDTO.getAgentMonitorPort(), "Agent port");
+			device.setAgentMonitorPort(deviceCreateDTO.getAgentMonitorPort());
+		}
+		if (null != deviceCreateDTO.getLogTransferPort() && !deviceCreateDTO.getLogTransferPort().isEmpty()) {
+			Utils.validateInteger(deviceCreateDTO.getLogTransferPort(), "Log transfer port");
+			device.setLogTransferPort(deviceCreateDTO.getLogTransferPort());
+		}
+
 		device.setMacId(deviceCreateDTO.getMacId());
 		// device.setDeviceStatus(deviceCreateDTO.getDevicestatus());
 		device.setThunderPort(deviceCreateDTO.getThunderPort());

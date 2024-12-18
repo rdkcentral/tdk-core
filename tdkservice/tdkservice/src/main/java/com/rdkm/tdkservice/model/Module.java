@@ -65,7 +65,7 @@ public class Module extends BaseEntity{
     /**
      * The set of log file paths associated with the module.
      */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "module_log_file_paths", joinColumns = @JoinColumn(name = "module_id"))
     @Column(name = "log_file_path")
     private Set<String> logFileNames;
@@ -73,7 +73,7 @@ public class Module extends BaseEntity{
     /**
      * The set of crash log file paths associated with the module.
      */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "module_crash_log_paths", joinColumns = @JoinColumn(name = "module_id"))
     @Column(name = "crash_log_path")
     private Set<String> crashLogFiles;

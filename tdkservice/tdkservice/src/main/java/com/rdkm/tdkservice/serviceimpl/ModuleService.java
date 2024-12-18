@@ -173,9 +173,9 @@ public class ModuleService implements IModuleService {
 		// Check if isThunderEnabled is true
 		if (moduleDTO.isModuleThunderEnabled()) {
 			existingModule.setCategory(Category.RDKV_RDKSERVICE);
-		} else {
-			MapperUtils.updateModuleProperties(existingModule, moduleDTO);
 		}
+
+		MapperUtils.updateModuleProperties(existingModule, moduleDTO);
 
 		try {
 			moduleRepository.save(existingModule);

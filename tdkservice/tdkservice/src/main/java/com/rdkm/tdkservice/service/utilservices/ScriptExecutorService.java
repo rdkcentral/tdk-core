@@ -23,6 +23,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.FutureTask;
@@ -110,57 +113,45 @@ public class ScriptExecutorService {
 	 * @param outputFile the name of the file to write the output to
 	 * @return the output of the script
 	 */
-	public String executeTestScript(String[] command, final int waittime, String outputFile) {
-		String outputData = "";
+	public String executeTestScript(String[] command, final int waitTime, String outputFile) {
 		Process process;
-
 		try {
+			// Ensure the log file is created initially
+			Path logFilePath = Paths.get(outputFile);
+			Files.createDirectories(logFilePath.getParent());
+			if (!Files.exists(logFilePath)) {
+				Files.createFile(logFilePath);
+			}
+
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
+			processBuilder.environment().put("PYTHONUNBUFFERED", "1");
 			process = processBuilder.start();
-			StringBuilder dataRead = new StringBuilder("");
+			// Stream logs in real-time
+			ExecutorService executorService = Executors.newFixedThreadPool(2);
+			StreamReaderJob outputReader = new StreamReaderJob(process.getInputStream(), outputFile);
+			StreamReaderJob errorReader = new StreamReaderJob(process.getErrorStream(), outputFile);
 
-			// Create StreamReaderJob instances to read the process's input and error
-			// streams
-			StreamReaderJob dataReader = new StreamReaderJob(process.getInputStream(), outputFile, dataRead);
-			StreamReaderJob errorReader = new StreamReaderJob(process.getErrorStream(), outputFile, dataRead);
-
-			// Create FutureTask instances to handle the reading of the streams concurrently
-			FutureTask<String> dataReaderTask = new FutureTask<>(dataReader);
+			FutureTask<String> dataReaderTask = new FutureTask<>(outputReader);
 			FutureTask<String> errorReaderTask = new FutureTask<>(errorReader);
 			executorService.execute(dataReaderTask);
 			executorService.execute(errorReaderTask);
 
-			String successData = null;
-			String errorData = null;
-			if (waittime == 0) {
-				int exitCode = process.waitFor();
+			if (waitTime > 0) {
+				process.waitFor(waitTime, TimeUnit.MINUTES);
 			} else {
-				process.waitFor(waittime, TimeUnit.MINUTES);
+				process.waitFor();
 			}
 
-			LOGGER.info("The data is " + dataRead);
-			successData = dataReaderTask.get();
-			outputData = successData;
+			dataReaderTask.get();
+			errorReaderTask.get();
 
-			errorData = errorReaderTask.get();
 			process.destroy();
-			if (!Utils.isEmpty(errorData) && !outputData.trim().contains(errorData.trim())) {
-				outputData += "\n" + errorData;
-			}
-
-			System.out.println(outputData);
-		} catch (IOException e) {
-			LOGGER.error("Error executing script: " + e.getMessage());
-//			return null;
-		} catch (InterruptedException e) {
-			LOGGER.error("Script execution interrupted: " + e.getMessage());
-//			return null;
+			executorService.shutdown();
+			return Files.readString(logFilePath); // Return the log content
 		} catch (Exception e) {
-			LOGGER.error("Error reading script output: " + e.getMessage());
-//			return null;
+			LOGGER.error("Error executing script", e);
+			return null;
 		}
-		return outputData;
-
 	}
 
 	/**

@@ -20,9 +20,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import java.time.Instant;
-import java.util.Date;
 
 import com.rdkm.tdkservice.enums.ExecutionResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionStatus;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -55,6 +55,12 @@ public class ExecutionResult extends BaseEntity {
 	@Enumerated(EnumType.STRING)
 	ExecutionResultStatus result;
 
+	/**
+	 * The status of the execution script.
+	 */
+	@Enumerated(EnumType.STRING)
+	ExecutionStatus status;
+
 	/*
 	 * The date of execution of the script
 	 */
@@ -65,17 +71,17 @@ public class ExecutionResult extends BaseEntity {
 	 */
 	double executionTime;
 
-	/*
+	/**
 	 * The output location of the execution
 	 */
 	String executionOutputLocation;
 
-	/*
+	/**
 	 * For storing the remarks of the execution,or reason other than the logs
 	 */
 	String executionRemarks;
 
-	/*
+	/**
 	 * The execution entity reference
 	 */
 	@ManyToOne

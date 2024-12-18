@@ -70,6 +70,7 @@ import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -168,12 +169,12 @@ public class DeviceService implements IDeviceService {
 		}
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceName())) {
-			DeviceType newDeviceType = deviceTypeRepository.findByName(deviceUpdateDTO.getDeviceName());
+			Device newDeviceType = deviceRepository.findByName(deviceUpdateDTO.getDeviceName());
 			if (newDeviceType != null && deviceUpdateDTO.getDeviceName().equalsIgnoreCase(newDeviceType.getName())) {
 				device.setName(deviceUpdateDTO.getDeviceName());
 			} else if (newDeviceType == null && !(deviceUpdateDTO.getDeviceName().equals(device.getName()))) {
 
-				if (deviceTypeRepository.existsByName(deviceUpdateDTO.getDeviceName())) {
+				if (deviceRepository.existsByName(deviceUpdateDTO.getDeviceName())) {
 					LOGGER.info("Device Type already exists with the same name: " + deviceUpdateDTO.getDeviceName());
 					throw new ResourceAlreadyExistsException("DeviceName: ", deviceUpdateDTO.getDeviceName());
 				} else {
@@ -432,8 +433,7 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromCreateDTO(Device device, DeviceCreateDTO deviceDTO) {
 		// Set common properties
-		
-		
+
 		if (deviceRepository.existsByIp(deviceDTO.getDeviceIp())) {
 			LOGGER.info("Device with the same deviceIp already exists");
 			throw new ResourceAlreadyExistsException("DeviceIp: ", deviceDTO.getDeviceIp());
@@ -888,6 +888,12 @@ public class DeviceService implements IDeviceService {
 			LOGGER.warn("No devices found for category: {} with Thunder status: {}", category, isThunderEnabled);
 			return Collections.emptyList();
 		}
+
+		devices = getFreeDevices(devices);
+		if (devices.isEmpty()) {
+			LOGGER.warn("No free devices found for category: {} with Thunder status: {}", category, isThunderEnabled);
+			return Collections.emptyList();
+		}
 		return devices.stream().map(device -> {
 			DeviceResponseDTO dto = new DeviceResponseDTO();
 			dto.setDeviceName(device.getName());
@@ -896,6 +902,26 @@ public class DeviceService implements IDeviceService {
 			dto.setId(device.getId());
 			return dto;
 		}).collect(Collectors.toList());
+	}
+
+	/**
+	 * This method is used to get the free devices from the list of devices.
+	 * 
+	 * @param devices List of devices
+	 * @return List of free devices
+	 */
+	private List<Device> getFreeDevices(List<Device> devices) {
+		List<Device> freeDevices = new ArrayList<>();
+		for (Device device : devices) {
+			if (device.getDeviceStatus().equals(DeviceStatus.FREE)) {
+				freeDevices.add(device);
+			}
+		}
+		if (freeDevices.isEmpty()) {
+			LOGGER.warn("No free devices found");
+		}
+		return freeDevices;
+
 	}
 
 	/**
@@ -918,6 +944,33 @@ public class DeviceService implements IDeviceService {
 		deviceRepository.save(device);
 		LOGGER.info("Completed setting Thunder enabled status for device with ip: {}", deviceIP);
 		return true;
+	}
+	
+	
+	/**
+	 * This method is used to get the device details for the given device IP
+	 * 
+	 * @param deviceIp- IP of the device
+	 * @return JSON object containing the device details
+	 */
+	@Override
+	public DeviceStatusResponseDTO getDeviceStatus(String deviceIp) {
+		LOGGER.info("Fetching device status for device with IP: {}", deviceIp);
+		Device device = deviceRepository.findByIp(deviceIp);
+		if (device == null) {
+			LOGGER.error("Device not found with IP: {}", deviceIp);
+			throw new ResourceNotFoundException("Device IP", deviceIp);
+		}
+		DeviceStatusResponseDTO deviceStatusResponseDTO = new DeviceStatusResponseDTO();
+		deviceStatusResponseDTO.setDeviceName(device.getName());
+		deviceStatusResponseDTO.setStatus(device.getDeviceStatus().toString());
+		deviceStatusResponseDTO.setIp(device.getIp());
+		deviceStatusResponseDTO.setDeviceType(device.getDeviceType().getName());
+		deviceStatusResponseDTO.setThunderEnabled(device.isThunderEnabled());
+		LOGGER.info("Fetching device status for device : {} with status {}", device.getName(),
+				device.getDeviceStatus());
+		return deviceStatusResponseDTO;
+
 	}
 
 }

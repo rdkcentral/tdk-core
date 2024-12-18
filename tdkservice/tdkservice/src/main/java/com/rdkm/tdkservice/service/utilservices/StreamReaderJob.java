@@ -44,48 +44,24 @@ public class StreamReaderJob implements Callable<String> {
 
 	public static final Logger LOGGER = LoggerFactory.getLogger(StreamReaderJob.class);
 
-	/**
-	 * Holds the input stream. Can be data/error.
-	 */
-	InputStream inputStream = null;
-	String outputFileName = null;
-	String intialData = "";
-	StringBuilder dataRead = new StringBuilder("");
+	private InputStream inputStream;
+	private String outputFileName;
 
 	/**
 	 * Constructor that takes the input stream.
-	 * 
+	 *
 	 * @param inputStream The input stream of data.
 	 */
 	public StreamReaderJob(InputStream inputStream) {
 		this.inputStream = inputStream;
 	}
 
-	/**
-	 * Constructor that takes the input stream and the output file name.
-	 * 
-	 * @param inputStream    The input stream of data.
-	 * @param outputFileName The output file name.
-	 */
 	public StreamReaderJob(InputStream inputStream, String outputFileName) {
 		this.inputStream = inputStream;
 		this.outputFileName = outputFileName;
 	}
 
-	/**
-	 * Constructor that takes the input stream, the output file name and the data
-	 * read.
-	 * 
-	 * @param inputStream    The input stream of data.
-	 * @param outputFileName The output file name.
-	 * @param dataRead       The data read.
-	 */
-	public StreamReaderJob(InputStream inputStream, String outputFileName, StringBuilder dataRead) {
-		this.inputStream = inputStream;
-		this.outputFileName = outputFileName;
-		this.dataRead = dataRead;
-	}
-
+	
 	/**
 	 * This method will be called by the invoking thread. Reads the data from the
 	 * input stream and adds the content to a String buffer. On the end of the
@@ -95,32 +71,19 @@ public class StreamReaderJob implements Callable<String> {
 	 */
 	@Override
 	public String call() throws Exception {
-
-		InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
-		BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
-		try {
-			String data = "";
-			while ((data = bufferedReader.readLine()) != null) {
-				dataRead.append(data);
-				dataRead.append(Constants.NEW_LINE);
-
+		StringBuilder stringBuilder = new StringBuilder();
+		try (BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream))) {
+			String line;
+			while ((line = bufferedReader.readLine()) != null) {
+				stringBuilder.append(line).append(System.lineSeparator());
 				if (outputFileName != null) {
-					writeToOutputFile(outputFileName, data + Constants.NEW_LINE);
+					writeToOutputFile(outputFileName, line + System.lineSeparator());
 				}
 			}
-			// LOGGER.info("The data is " + dataRead);
 		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				bufferedReader.close();
-				inputStreamReader.close();
-				inputStream.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			LOGGER.error("Error reading input stream", e);
 		}
-		return dataRead.toString();
+		return stringBuilder.toString();
 	}
 
 	/**
@@ -129,70 +92,16 @@ public class StreamReaderJob implements Callable<String> {
 	 * @param fileName The output file name.
 	 * @param data     The data to be written to the file.
 	 */
-	public void writeToOutputFile(String fileName, String data) {
+	private void writeToOutputFile(String fileName, String data) {
 		try {
-
-			if (data == null || fileName == null) {
-				return;
+			Path filePath = Paths.get(fileName);
+			Files.createDirectories(filePath.getParent());
+			if (!Files.exists(filePath)) {
+				Files.createFile(filePath);
 			}
-
-			Path opFilePath = Paths.get(fileName);
-			Path parentDir = opFilePath.getParent();
-
-			if (parentDir != null) {
-				Files.createDirectories(parentDir);
-			}
-
-			if (!Files.exists(opFilePath)) {
-				Files.createFile(opFilePath);
-			}
-
-//			if(data.contains("SCRIPTEND#!@~")){
-//				data = data.replace("SCRIPTEND#!@~","");
-//			}
-//			
-//			if(data.contains(Constants.TDK_ERROR)){
-//				data = data.replace(Constants.TDK_ERROR,"");
-//			}
-//			
-//			
-//			String htmlData = "";
-//			data?.eachLine { line ->
-//				htmlData += (line + "<br/>" )
-//			}
-
-			for (int i = 0; i < 2; i++) {
-				try {
-					boolean append = true;
-					BufferedWriter buffWriter = Files.newBufferedWriter(opFilePath,
-							append ? StandardOpenOption.APPEND : StandardOpenOption.CREATE);
-					buffWriter.write(data);
-					buffWriter.flush();
-					buffWriter.close();
-					break;
-				} catch (FileNotFoundException ex) {
-					LOGGER.error("File not found exception: " + ex.getMessage());
-					Thread.sleep(1000);
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * This method deletes the output file.
-	 * 
-	 * @param fileName The output
-	 */
-	public void deleteOutputFile(String fileName) {
-		try {
-			File opFile = new File(fileName);
-			if (opFile.exists()) {
-				opFile.delete();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			Files.writeString(filePath, data, StandardOpenOption.APPEND);
+		} catch (IOException e) {
+			LOGGER.error("Error writing to log file", e);
 		}
 	}
 }

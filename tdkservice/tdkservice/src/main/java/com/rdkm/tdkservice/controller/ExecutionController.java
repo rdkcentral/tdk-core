@@ -497,7 +497,7 @@ public class ExecutionController {
 	@Operation(summary = "Delete the executions by IDs")
 	@ApiResponse(responseCode = "201", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Executions not found")
-	@DeleteMapping("/deletelistofexecutions")
+	@PostMapping("/deletelistofexecutions")
 	public ResponseEntity<String> deleteExecutions(@RequestBody List<UUID> ids) {
 		LOGGER.info("Deleting executions by IDs: {}", ids);
 		boolean isDeleted = executionService.deleteExecutions(ids);

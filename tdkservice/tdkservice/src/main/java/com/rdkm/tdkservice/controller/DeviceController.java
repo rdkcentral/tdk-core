@@ -481,5 +481,30 @@ public class DeviceController {
 					.body("Failed to toggle thunder enabled status");
 		}
 	}
+	
+	
+	/**
+	 * This method is used to get the status of a device by device name.
+	 *
+	 * @param deviceName This is the name of the device.
+	 * @return ResponseEntity<?> This returns the response entity.
+	 */
+	@Operation(summary = "Get device status by device name", description = "Get the status of a device by device name in the system.")
+	@ApiResponse(responseCode = "200", description = "device status fetched successfully")
+	@ApiResponse(responseCode = "500", description = "Error in fetching device status data")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@GetMapping("/getDeviceStatusByName")
+	public ResponseEntity<?> getDeviceStatusByName(@RequestParam String deviceName) {
+		LOGGER.info("Received request to fetch status for device: " + deviceName);
+		DeviceStatusResponseDTO deviceStatus = deviceService.getDeviceStatus(deviceName);
+		if (deviceStatus != null) {
+			LOGGER.info("Fetched status for device: " + deviceName);
+			return ResponseEntity.status(HttpStatus.OK).body(deviceStatus);
+		} else {
+			LOGGER.error("No device found with name: " + deviceName);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device found with name: " + deviceName);
+		}
+	}
+	
 
 }
