@@ -4005,4 +4005,87 @@
          </postrequisite>
        </testCasePostRequisite>
        </testCase>
+       <!-- Test case 113 -->
+       <testCase testCaseId="DS_113" testCaseName="Set_Invalid_Resolution" desc="Validate by setting up invalid resolution">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="HDMI0" />
+                                <param tag="resolution" value = "7" />
+                                <param tag="persist" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 114 -->
+       <testCase testCaseId="DS_114" testCaseName="Set_Empty_Resolution" desc="Validate by setting up empty resolution">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="HDMI0" />
+                                <param tag="resolution" value = "" />
+                                <param tag="persist" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 115 -->
+       <testCase testCaseId="DS_115" testCaseName="Set_InvalidDataType_Resolution" desc="Validate by setting up invalid data type in resolution">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="HDMI0" />
+                                <param tag="resolution" value = "invalid" />
+                                <param tag="persist" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 116 -->
+       <testCase testCaseId="DS_116" testCaseName="Set_Empty_VideoDisplay" desc="Validate by setting up empty videoDisplay">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="" />
+                                <param tag="resolution" value = "720p" />
+                                <param tag="persist" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 117 -->
+       <testCase testCaseId="DS_117" testCaseName="Set_Invalid_VideoDisplay" desc="Validate by setting up invalid videoDisplay">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="invalid" />
+                                <param tag="resolution" value = "720p" />
+                                <param tag="persist" value = "true" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 118 -->
+       <testCase testCaseId="DS_118" testCaseName="Set_Invalid_Persist" desc="Validate by setting up invalid persist">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution_Negative" method="Set_Current_Resolution_Negative">
+                          <params>
+                                <param tag="videoDisplay" value="HDMI0" />
+                                <param tag="resolution" value = "720p" />
+                                <param tag="persist" value = "invalid" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
+       <!-- Test case 119 -->
+       <testCase testCaseId="DS_119" testCaseName="Set_Resolution_WithoutParameter" desc="Validate set currentResolution API without passing the parameter">
+                <testCaseInfo testCaseType="direct"/>
+                <testStep testStepId="1" name="Set_Current_Resolution" method="Set_Current_Resolution">
+                          <params>
+                                <param tag="videoDisplay" value="HDMI0" />
+                                <param tag="persist" value = "invalid" />
+                          </params>
+                          <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
+                </testStep>
+       </testCase>
 </testPlugin>
