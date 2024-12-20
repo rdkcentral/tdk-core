@@ -862,7 +862,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>true</defaultValue>
+               <defaultValue>false</defaultValue>
                <!-- the range of values acceptable -->
                <expectedValues>true,false</expectedValues>
         </parameter>
@@ -2284,7 +2284,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0.0.0.0</defaultValue>
+               <defaultValue>127.0.0.1</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2300,7 +2300,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0.0.0.0</defaultValue>
+               <defaultValue>127.0.0.1</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2318,7 +2318,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0</defaultValue>
+               <defaultValue>8000</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
@@ -2336,7 +2336,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>0</defaultValue>
+               <defaultValue>8000</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
