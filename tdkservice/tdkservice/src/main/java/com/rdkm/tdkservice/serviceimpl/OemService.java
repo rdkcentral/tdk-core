@@ -167,7 +167,7 @@ public class OemService implements IOemService {
 
 		if (!Utils.isEmpty(oemUpdateDTO.getOemName())) {
 			Oem newOem = oemRepository.findByName(oemUpdateDTO.getOemName());
-			if (newOem != null && newOem.getName().equalsIgnoreCase(oemUpdateDTO.getOemName())) {
+			if (newOem != null && oem.getName().equalsIgnoreCase(oemUpdateDTO.getOemName())) {
 				newOem.setName(oemUpdateDTO.getOemName());
 			} else {
 				if (oemRepository.existsByName(oemUpdateDTO.getOemName())) {

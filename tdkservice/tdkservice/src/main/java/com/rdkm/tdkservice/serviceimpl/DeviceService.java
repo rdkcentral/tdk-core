@@ -170,10 +170,9 @@ public class DeviceService implements IDeviceService {
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceName())) {
 			Device newDeviceType = deviceRepository.findByName(deviceUpdateDTO.getDeviceName());
-			if (newDeviceType != null && deviceUpdateDTO.getDeviceName().equalsIgnoreCase(newDeviceType.getName())) {
+			if (newDeviceType != null && deviceUpdateDTO.getDeviceName().equalsIgnoreCase(device.getName())) {
 				device.setName(deviceUpdateDTO.getDeviceName());
-			} else if (newDeviceType == null && !(deviceUpdateDTO.getDeviceName().equals(device.getName()))) {
-
+			} else {
 				if (deviceRepository.existsByName(deviceUpdateDTO.getDeviceName())) {
 					LOGGER.info("Device Type already exists with the same name: " + deviceUpdateDTO.getDeviceName());
 					throw new ResourceAlreadyExistsException("DeviceName: ", deviceUpdateDTO.getDeviceName());
@@ -945,8 +944,7 @@ public class DeviceService implements IDeviceService {
 		LOGGER.info("Completed setting Thunder enabled status for device with ip: {}", deviceIP);
 		return true;
 	}
-	
-	
+
 	/**
 	 * This method is used to get the device details for the given device IP
 	 * 

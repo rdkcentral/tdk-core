@@ -28,9 +28,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
@@ -108,8 +110,8 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "200", description = "Execution Schedule deleted successfully")
 	@ApiResponse(responseCode = "500", description = "Error in deleting the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/delete")
-	public ResponseEntity<?> deleteExecutionSchedule(@RequestBody UUID executionScueduleID) {
+	@GetMapping("/delete")
+	public ResponseEntity<?> deleteExecutionSchedule(@RequestParam UUID executionScueduleID) {
 		LOGGER.info("Deleting the execution schedule");
 		boolean executionSchedule = executionScheduleService.deleteScheduleExecution(executionScueduleID);
 		if (executionSchedule) {

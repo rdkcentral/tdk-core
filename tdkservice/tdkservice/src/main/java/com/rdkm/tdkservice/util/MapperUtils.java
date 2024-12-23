@@ -681,7 +681,7 @@ public class MapperUtils {
 		executionSchedule.setTestType(executionTriggerDTO.getTestType());
 		executionSchedule.setUser(executionTriggerDTO.getUser());
 		executionSchedule.setCategory(executionTriggerDTO.getCategory());
-		executionSchedule.setExecutionName("Job_" + Utils.getTimeStampInUTCForExecutionName());
+		executionSchedule.setExecutionName(Constants.JOB + executionTriggerDTO.getExecutionName());
 		executionSchedule.setRepeatCount(executionTriggerDTO.getRepeatCount());
 		executionSchedule.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());
 		executionSchedule.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());

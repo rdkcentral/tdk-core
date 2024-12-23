@@ -256,10 +256,9 @@ public class ScriptService implements IScriptService {
 
 		if (!Utils.isEmpty(scriptUpdateDTO.getName())) {
 			Script newScript = scriptRepository.findByName(scriptUpdateDTO.getName());
-			if (newScript != null && scriptUpdateDTO.getName().equalsIgnoreCase(newScript.getName())) {
+			if (newScript != null && scriptUpdateDTO.getName().equalsIgnoreCase(script.getName())) {
 				script.setName(scriptUpdateDTO.getName());
-			} else if (newScript == null && !(scriptUpdateDTO.getName().equals(script.getName()))) {
-
+			} else {
 				if (scriptRepository.existsByName(scriptUpdateDTO.getName())) {
 					LOGGER.info("Module already exists with the same name: " + scriptUpdateDTO.getName());
 					throw new ResourceAlreadyExistsException(Constants.SCRIPT, scriptUpdateDTO.getName());

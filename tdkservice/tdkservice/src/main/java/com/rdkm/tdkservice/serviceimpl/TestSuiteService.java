@@ -166,9 +166,9 @@ public class TestSuiteService implements ITestSuiteService {
 //		// TODO : Revisit this if test suite name can be changed or not
 		if (!Utils.isEmpty(testSuiteDTO.getName())) {
 			TestSuite newTestSuite = testSuiteRepository.findByName(testSuiteDTO.getName());
-			if (newTestSuite != null && testSuiteDTO.getName().equalsIgnoreCase(newTestSuite.getName())) {
+			if (newTestSuite != null && testSuiteDTO.getName().equalsIgnoreCase(testSuite.getName())) {
 				testSuite.setName(testSuiteDTO.getName());
-			} else if (newTestSuite == null && !(testSuiteDTO.getName().equals(testSuite.getName()))) {
+			} else {
 
 				if (testSuiteRepository.existsByName(testSuiteDTO.getName())) {
 					LOGGER.info("Test Suite already exists with the same name: " + testSuiteDTO.getName());

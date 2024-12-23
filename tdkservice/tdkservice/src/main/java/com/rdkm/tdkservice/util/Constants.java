@@ -420,4 +420,6 @@ public class Constants {
 	public static final String CRASHLOGTYPE = "crashLog";
 	
 	public static final String MULTIPLE_KEY_WORD = "Multiple";
+	
+	public static final String JOB = "Job_";
 }

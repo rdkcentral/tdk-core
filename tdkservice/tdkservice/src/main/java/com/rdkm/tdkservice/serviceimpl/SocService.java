@@ -161,7 +161,7 @@ public class SocService implements ISocService {
 
 		if (!Utils.isEmpty(socUpdateDTO.getSocName())) {
 			Soc newSoc = socRepository.findByName(socUpdateDTO.getSocName());
-			if (newSoc != null && newSoc.getName().equalsIgnoreCase(socUpdateDTO.getSocName())) {
+			if (newSoc != null && soc.getName().equalsIgnoreCase(socUpdateDTO.getSocName())) {
 				soc.setName(socUpdateDTO.getSocName());
 			} else {
 				if (socRepository.existsByName(socUpdateDTO.getSocName())) {

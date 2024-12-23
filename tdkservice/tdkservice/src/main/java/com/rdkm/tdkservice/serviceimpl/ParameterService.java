@@ -118,10 +118,11 @@ public class ParameterService implements IParameterService {
 		}
 
 		if (!Utils.isEmpty(parameterDTO.getParameterName())) {
-			Parameter newParameter = parameterRepository.findByNameAndFunction(parameterDTO.getParameterName(),function);
-			if (newParameter != null && parameterDTO.getParameterName().equalsIgnoreCase(newParameter.getName())) {
+			Parameter newParameter = parameterRepository.findByNameAndFunction(parameterDTO.getParameterName(),
+					function);
+			if (newParameter != null && parameterDTO.getParameterName().equalsIgnoreCase(parameter.getName())) {
 				parameter.setName(parameterDTO.getParameterName());
-			} else if (newParameter == null && !(parameterDTO.getParameterName().equals(parameter.getName()))) {
+			} else {
 				if (parameterRepository.existsByNameAndFunction(parameterDTO.getParameterName(), function)) {
 					LOGGER.info("Parameter already exists with the same name: " + parameterDTO.getParameterName());
 					throw new ResourceAlreadyExistsException(Constants.PARAMETER_NAME, parameterDTO.getParameterName());

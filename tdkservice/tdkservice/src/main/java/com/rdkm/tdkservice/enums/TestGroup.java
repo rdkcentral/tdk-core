@@ -24,63 +24,56 @@ package com.rdkm.tdkservice.enums;
  */
 public enum TestGroup {
 
+	/**
+	 * Represents the end-to-end test group.
+	 */
+	E2E("E2E"),
 
-    /**
-     * Represents the open source test group.
-     */
-    OPENSOURCE("OpenSource"),
+	/**
+	 * Represents the certification test group.
+	 */
+	CERTIFICATION("Certification"),
 
-    /**
-     * Represents the end-to-end test group.
-     */
-    E2E("E2E"),
+	/**
+	 * Represents the component test group.
+	 */
+	COMPONENT("Component");
 
-    /**
-     * Represents the certification test group.
-     */
-    CERTIFICATION("Certification"),
+	/**
+	 * The name of the test group.
+	 */
+	private String name;
 
-    /**
-     * Represents the component test group.
-     */
-    COMPONENT("Component");
+	/**
+	 * Constructor for TestGroup.
+	 *
+	 * @param name the name of the test group
+	 */
+	TestGroup(String name) {
+		this.name = name;
+	}
 
+	/**
+	 * Gets the name of the test group.
+	 *
+	 * @return the name of the test group
+	 */
+	public String getName() {
+		return name;
+	}
 
-    /**
-     * The name of the test group.
-     */
-    private String name;
-
-    /**
-     * Constructor for TestGroup.
-     *
-     * @param name the name of the test group
-     */
-    TestGroup(String name) {
-        this.name = name;
-    }
-
-    /**
-     * Gets the name of the test group.
-     *
-     * @return the name of the test group
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Gets the TestGroup enum based on the name.
-     *
-     * @param name the name of the test group
-     * @return the corresponding TestGroup enum, or null if not found
-     */
-    public static TestGroup getTestGroup(String name) {
-        for (TestGroup testGroup : TestGroup.values()) {
-            if (testGroup.getName().equals(name)) {
-                return testGroup;
-            }
-        }
-        return null;
-    }
+	/**
+	 * Gets the TestGroup enum based on the name.
+	 *
+	 * @param name the name of the test group
+	 * @return the corresponding TestGroup enum, or null if not found
+	 */
+	public static TestGroup getTestGroup(String name) {
+		for (TestGroup testGroup : TestGroup.values()) {
+			if (testGroup.getName().equals(name)) {
+				return testGroup;
+			}
+		}
+		return null;
+	}
 }

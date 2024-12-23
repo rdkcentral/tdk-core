@@ -181,11 +181,9 @@ public class DeviceTypeService implements IDeviceTypeService {
 		if (!Utils.isEmpty(deviceTypeUpdateDTO.getDeviceTypeName())) {
 			DeviceType newDeviceType = deviceTypeRepository.findByName(deviceTypeUpdateDTO.getDeviceTypeName());
 			if (newDeviceType != null
-					&& deviceTypeUpdateDTO.getDeviceTypeName().equalsIgnoreCase(newDeviceType.getName())) {
+					&& deviceTypeUpdateDTO.getDeviceTypeName().equalsIgnoreCase(deviceType.getName())) {
 				deviceType.setName(deviceTypeUpdateDTO.getDeviceTypeName());
-			} else if (newDeviceType == null
-					&& !(deviceTypeUpdateDTO.getDeviceTypeName().equals(deviceType.getName()))) {
-
+			} else {
 				if (deviceTypeRepository.existsByName(deviceTypeUpdateDTO.getDeviceTypeName())) {
 					LOGGER.info("Device Type already exists with the same name: "
 							+ deviceTypeUpdateDTO.getDeviceTypeName());

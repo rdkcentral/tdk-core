@@ -221,9 +221,9 @@ public class UserService implements UserDetailsService {
 
 		if (!Utils.isEmpty(updateUserRequest.getUserName())) {
 			User newUser = userRepository.findByUsername(updateUserRequest.getUserName());
-			if (newUser != null && updateUserRequest.getUserName().equalsIgnoreCase(newUser.getUsername())) {
+			if (newUser != null && updateUserRequest.getUserName().equalsIgnoreCase(user.getUsername())) {
 				user.setUsername(updateUserRequest.getUserName());
-			} else if (newUser == null && !(updateUserRequest.getUserName().equals(user.getUsername()))) {
+			} else {
 
 				if (userRepository.existsByUsername(updateUserRequest.getUserName())) {
 					LOGGER.info("User name already exists with the same name: " + updateUserRequest.getUserName());
@@ -236,9 +236,9 @@ public class UserService implements UserDetailsService {
 
 		if (!Utils.isEmpty(updateUserRequest.getUserEmail())) {
 			User newUser = userRepository.findByEmail(updateUserRequest.getUserEmail());
-			if (newUser != null && updateUserRequest.getUserEmail().equalsIgnoreCase(newUser.getEmail())) {
+			if (newUser != null && updateUserRequest.getUserEmail().equalsIgnoreCase(user.getEmail())) {
 				user.setEmail(updateUserRequest.getUserEmail());
-			} else if (newUser == null && !(updateUserRequest.getUserEmail().equals(user.getEmail()))) {
+			} else {
 
 				if (userRepository.existsByUsername(updateUserRequest.getUserEmail())) {
 					LOGGER.info("Email already exists with the same name: " + updateUserRequest.getUserEmail());

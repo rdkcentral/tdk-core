@@ -180,13 +180,13 @@ public class ExecutionService implements IExecutionService {
 		List<String> testSuiteListFromRequest = executionTriggerDTO.getTestSuite();
 
 		// Check if the devices are available for execution
-		List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
+	//	List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
 
 		// Script Execution - Single and Multiple
 		if (null != scriptsListFromRequest && !scriptsListFromRequest.isEmpty()) {
 			LOGGER.info("The request came for  script execution");
 			List<Script> scriptsList = this.getValidScriptList(scriptsListFromRequest, responseLogs);
-			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, freeDevices,
+			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, deviceList,
 					scriptsList, null);
 			if (scriptsList.size() > 1) {
 				LOGGER.info("The request came for multiple script execution");
@@ -1444,31 +1444,42 @@ public class ExecutionService implements IExecutionService {
 			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
 		}
 
-		if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
-			LOGGER.error("Execution with id: {} is already in progress", execId);
-			throw new UserInputException("Execution is already in progress");
-		}
-
-		if (!device.getDeviceStatus().equals(DeviceStatus.FREE)) {
-			LOGGER.error("Device with name: {} is not available for execution", device.getName());
-			throw new UserInputException("Device selected is not available for execution");
-		}
-
-		List<ExecutionResult> executionResult = executionResultRepository.findByExecution(execution);
-		List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
-		List<Script> scripts = getValidScriptList(scriptNames, new StringBuilder());
-		if (scripts == null || scripts.isEmpty()) {
-			LOGGER.error("No valid scripts found for execution with id: {}", execId);
-			throw new ResourceNotFoundException("Scripts", "Execution ID: " + execId.toString());
-		}
 		try {
+			List<ExecutionResult> executionResult = executionResultRepository.findByExecution(execution);
+			List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
+
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRepeatExecutionName(execution.getName(), executionNames);
-			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts,
-					execution.getUser(), execName, execution.getCategory().name(), execution.getTestType(), 1, false,
-					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
-					execution.isPerformanceLogsNeeded());
+			List<String> deviceList = new ArrayList<>();
+			deviceList.add(device.getName());
+			List<String> testSuiteList = new ArrayList<>();
+			if (execution.getExecutionType() == ExecutionType.TESTSUITE) {
+				testSuiteList.add(execution.getScripttestSuiteName());
+
+			}
+			ExecutionTriggerDTO executionTriggerDTO = new ExecutionTriggerDTO();
+			executionTriggerDTO.setDeviceList(deviceList);
+			if (testSuiteList == null || testSuiteList.isEmpty()) {
+				executionTriggerDTO.setScriptList(scriptNames);
+			}
+			if (null != testSuiteList && !testSuiteList.isEmpty()) {
+				executionTriggerDTO.setTestSuite(testSuiteList);
+			}
+			if (null != execution.getTestType()) {
+				executionTriggerDTO.setTestType(execution.getTestType());
+			}
+			if (null != execution.getUser()) {
+				executionTriggerDTO.setUser(execution.getUser().getUsername());
+			}
+			executionTriggerDTO.setCategory(execution.getCategory().name());
+			executionTriggerDTO.setExecutionName(execName);
+			executionTriggerDTO.setRepeatCount(1);
+			executionTriggerDTO.setRerunOnFailure(false);
+			executionTriggerDTO.setDeviceLogsNeeded(true);
+			executionTriggerDTO.setDiagnosticLogsNeeded(true);
+			executionTriggerDTO.setPerformanceLogsNeeded(true);
+			this.startExecution(executionTriggerDTO);
 			LOGGER.info("Successfully repeated execution with id: {}", execId);
 		} catch (Exception e) {
 			LOGGER.error("Error repeating execution with id: {}", execId, e);
@@ -1498,18 +1509,18 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
-		
+
 		Device device = executionDevice.getDevice();
 		if (device == null) {
 			LOGGER.error("Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Device", "for Execution ID: " + execId.toString());
 		}
-		
+
 		if (!device.getDeviceStatus().equals(DeviceStatus.FREE)) {
 			LOGGER.error("Device with name: {} is not available for execution", device.getName());
 			throw new UserInputException("Device selected is not available for execution");
 		}
-		
+
 		List<ExecutionResult> failedResults = executionResultRepository.findByExecutionAndResult(execution,
 				ExecutionResultStatus.FAILURE);
 		if (failedResults.isEmpty() || failedResults == null) {
@@ -1929,9 +1940,11 @@ public class ExecutionService implements IExecutionService {
 		switch (status) {
 		case SUCCESS:
 			executionSummaryResponseDTO.setSuccess(executionSummaryResponseDTO.getSuccess() + 1);
+			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
 			break;
 		case FAILURE:
 			executionSummaryResponseDTO.setFailure(executionSummaryResponseDTO.getFailure() + 1);
+			executionSummaryResponseDTO.setExecuted(executionSummaryResponseDTO.getExecuted() + 1);
 			break;
 		case INPROGRESS:
 			executionSummaryResponseDTO.setInProgressCount(executionSummaryResponseDTO.getInProgressCount() + 1);

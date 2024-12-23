@@ -157,9 +157,9 @@ public class ModuleService implements IModuleService {
 
 		if (!Utils.isEmpty(moduleDTO.getModuleName())) {
 			Module newModule = moduleRepository.findByName(moduleDTO.getModuleName());
-			if (newModule != null && moduleDTO.getModuleName().equalsIgnoreCase(newModule.getName())) {
+			if (newModule != null && moduleDTO.getModuleName().equalsIgnoreCase(existingModule.getName())) {
 				existingModule.setName(moduleDTO.getModuleName());
-			} else if (newModule == null && !(moduleDTO.getModuleName().equals(existingModule.getName()))) {
+			} else{
 
 				if (moduleRepository.existsByName(moduleDTO.getModuleName())) {
 					LOGGER.info("Module already exists with the same name: " + moduleDTO.getModuleName());
