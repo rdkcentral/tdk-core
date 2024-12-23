@@ -421,7 +421,7 @@
                <!-- whether set value will be retained and set should be followed by a get or not -->
                <persistentSet>false</persistentSet>
                <!--default value of the param after factory reset -->
-               <defaultValue>XB3</defaultValue>
+               <defaultValue>ER</defaultValue>
         </parameter>
         <parameter>
                 <!--the tr-181 parameter name -->
