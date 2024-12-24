@@ -2775,4 +2775,50 @@
                 </params>
         </method>
     </plugin>
+
+    <!-- MiracastService Plugin Information -->
+    <plugin pluginName="MiracastService" serviceName="org.rdk.MiracastService" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="MiracastService_getEnable" api="getEnable" type="method" desc="To get the enable status of the Miracast feature">
+            <expectedValues>True,False</expectedValues>
+        </method>
+        <method name="MiracastService_setEnable" api="setEnable" type="method" desc="To enable/disable the Miracast feature">
+            <params>
+                <param tag="enabled" type="bool"/>
+            </params>
+        </method>
+        <method name="MiracastService_acceptClientConnection" api="acceptClientConnection" type="method" desc="To accept /reject new client connection requests for the Miracast feature">
+            <params>
+                <param tag="requestStatus" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastService_setLogging" api="setLogging" type="method" desc="Enable/Disable/Reduce the Logging level for Miracast">
+            <params>
+                <param tag="level" type="string"/>
+            </params>
+        </method>
+    </plugin>
+
+    <!-- MiracastPlayer Plugin Information -->
+    <plugin pluginName="MiracastPlayer" serviceName="org.rdk.MiracastPlayer" serviceVersion="1">
+        <!-- Method Definitions -->
+        <method name="MiracastPlayer_setLogging" api="setLogging" type="method" desc="Enable/Disable/Reduce the Logging level for Miracast">
+            <params>
+                <param tag="level" type="string"/>
+            </params>
+        </method>
+        <method name="MiracastPlayer_setVideoRectangle" api="setVideoRectangle" type="method" desc="Set the Video Rectangle">
+            <params>
+                <param tag="X" type="int"/>
+                <param tag="Y" type="int"/>
+                <param tag="W" type="int"/>
+                <param tag="H" type="int"/>
+            </params>
+        </method>
+        <method name="MiracastPlayer_setPlayerState" api="setPlayerState" type="method" desc="To set the Miracast Player to STOP/PLAY/PAUSE">
+            <params>
+                <param tag="state" type="string"/>
+            </params>
+        </method>
+    </plugin>
 </thunderPlugins>
