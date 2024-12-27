@@ -70,7 +70,8 @@ public class SocService implements ISocService {
 	@Override
 	public boolean createSoc(SocCreateDTO socDTO) {
 		LOGGER.info("socDTO: " + socDTO);
-		if (socRepository.existsByName(socDTO.getSocName())) {
+		Category categoryValue = Category.getCategory(socDTO.getSocCategory());
+		if (socRepository.existsByNameAndCategory(socDTO.getSocName(), categoryValue)) {
 			LOGGER.info("Soc already exists with the same name: " + socDTO.getSocName());
 			throw new ResourceAlreadyExistsException(Constants.SOC_NAME, socDTO.getSocName());
 		}
@@ -156,15 +157,16 @@ public class SocService implements ISocService {
 	@Override
 	public SocDTO updateSoc(SocDTO socUpdateDTO) {
 		LOGGER.info("Going to update SocVendor with id: " + socUpdateDTO.getSocId().toString());
+		Category categoryValue = Category.getCategory(socUpdateDTO.getSocCategory());
 		Soc soc = socRepository.findById(socUpdateDTO.getSocId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, socUpdateDTO.getSocId().toString()));
 
 		if (!Utils.isEmpty(socUpdateDTO.getSocName())) {
-			Soc newSoc = socRepository.findByName(socUpdateDTO.getSocName());
+			Soc newSoc = socRepository.findByNameAndCategory(socUpdateDTO.getSocName(),categoryValue);
 			if (newSoc != null && soc.getName().equalsIgnoreCase(socUpdateDTO.getSocName())) {
 				soc.setName(socUpdateDTO.getSocName());
 			} else {
-				if (socRepository.existsByName(socUpdateDTO.getSocName())) {
+				if (socRepository.existsByNameAndCategory(socUpdateDTO.getSocName(), categoryValue)) {
 					LOGGER.info("Soc already exists with the same name: " + socUpdateDTO.getSocName());
 					throw new ResourceAlreadyExistsException(Constants.SOC_NAME, socUpdateDTO.getSocName());
 				} else {
@@ -174,7 +176,7 @@ public class SocService implements ISocService {
 		}
 
 		if (socUpdateDTO.getSocCategory() != null) {
-			soc.setCategory(Category.getCategory(socUpdateDTO.getSocCategory()));
+			soc.setCategory(categoryValue);
 		}
 		try {
 			soc = socRepository.save(soc);

@@ -43,7 +43,7 @@ public interface OemRepository extends JpaRepository<Oem, UUID> {
 	 * @return a oem object containing the oem's
 	 *         information
 	 */
-	Oem findByName(String oem);
+	Oem findByNameAndCategory(String oem, Category category);
 
 	/**
 	 * This method is used to delete a oem by name.
@@ -60,7 +60,7 @@ public interface OemRepository extends JpaRepository<Oem, UUID> {
 	 * @param name the name of the oem to check
 	 * @return a boolean value indicating whether the oem exists
 	 */
-	boolean existsByName(String name);
+	boolean existsByNameAndCategory(String name, Category category);
 
 	/**
 	 * This method is used to find a list of Oems by category.

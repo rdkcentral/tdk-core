@@ -36,12 +36,13 @@ import com.rdkm.tdkservice.enums.Category;
 public interface SocRepository extends JpaRepository<Soc, UUID> {
 	
 	/**
-	 * Find by name
+	 * Find by name and category
 	 * 
 	 * @param socVendorType
 	 * @return
 	 */
-	Soc findByName(String socVendorType);
+	
+	Soc findByNameAndCategory(String socName, Category category);
 
 	/**
 	 * Delete by name
@@ -52,14 +53,13 @@ public interface SocRepository extends JpaRepository<Soc, UUID> {
 	Soc deleteByName(String name);
 
 	/**
-	 * Check if name exists
+	 * Check if name exists by category
 	 * 
 	 * @param name
 	 * @return
 	 */
-
-	boolean existsByName(String name);
-
+	boolean existsByNameAndCategory(String name, Category category);
+	
 	/**
 	 * Find by category
 	 * 

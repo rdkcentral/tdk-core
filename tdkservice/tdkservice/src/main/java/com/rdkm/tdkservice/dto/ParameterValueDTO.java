@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 /*
  * The ParameterValueDTO class to pass parameter name and value for create and update operations.
@@ -31,14 +30,14 @@ public class ParameterValueDTO {
 	/*
 	 * The parameter name .
 	 */
-	@NotBlank(message = "Parameter name is mandatory")
+
 	private String parameterName;
 
 	/*
 	 * The parameter value .
 	 * 
 	 */
-	@NotBlank(message = "Parameter value is mandatory")
+
 	private String parameterValue;
 
 }

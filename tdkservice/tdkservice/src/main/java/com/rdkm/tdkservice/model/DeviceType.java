@@ -29,6 +29,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -38,13 +39,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "device_type")
+@Table(name = "device_type", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
 public class DeviceType extends BaseEntity {
 
 	/*
 	 * The name of the device type.
 	 */
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String name;
 
 	/*

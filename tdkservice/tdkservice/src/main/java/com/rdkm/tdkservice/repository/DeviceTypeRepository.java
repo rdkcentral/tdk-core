@@ -39,7 +39,7 @@ public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
 	 * @param deviceType the name of the device type to find
 	 * @return a deviceType object containing the device type's information
 	 */
-	DeviceType findByName(String deviceType);
+	DeviceType findByNameAndCategory(String name, Category category);
 
 	/**
 	 * This method is used to delete a device type by name.
@@ -57,7 +57,7 @@ public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
 	 * @param name the name of the device type to check
 	 * @return a boolean value indicating whether the device type exists
 	 */
-	boolean existsByName(String name);
+	boolean existsByNameAndCategory(String name, Category category);
 
 	/**
 	 * This method is used to find a list of device types by category.

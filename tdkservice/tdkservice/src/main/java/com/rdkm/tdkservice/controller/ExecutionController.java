@@ -234,6 +234,33 @@ public class ExecutionController {
 	}
 
 	/**
+	 * This method is to search executions based on execution name
+	 * 
+	 * @param executionName - full execution name or partial name for search query
+	 * @param categoryName  - RDKV, RDKB, RDKC
+	 * @param page          - the page number
+	 * @param size          - size in page
+	 * @param sortBy        - by default it is date
+	 * @param sortDir       - by default it is desc
+	 * @return ExecutionListResponseDTO
+	 */
+	@Operation(summary = "Search executions based on  execution name")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to fetch execution details"),
+			@ApiResponse(responseCode = "400", description = "Execution data with this condition is not found") })
+	@GetMapping("/getExecutionsByExecutionName/{executionName}")
+	public ResponseEntity<?> getExecutionsByExecutionName(@PathVariable String executionName,
+			@RequestParam String categoryName, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy,
+			@RequestParam(defaultValue = "desc") String sortDir) {
+		LOGGER.info("Fetching executions for execution name: " + executionName);
+		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByExecutionName(executionName,
+				categoryName, page, size, sortBy, sortDir);
+		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+	}
+
+	/**
 	 * This method is used to get the executions by device name with pagination
 	 * 
 	 * @param deviceName   - the device name
@@ -395,20 +422,20 @@ public class ExecutionController {
 		}
 	}
 
-	/*
+	/**
 	 * This method is used to repeat the execution
 	 * 
-	 * @param execId
-	 * 
-	 * @return ResponseEntity
+	 * @param execId - the execution ID
+	 * @param user   - the user name
+	 * @return ResponseEntity - the response
 	 */
 	@Operation(summary = "Repeat the execution")
 	@ApiResponse(responseCode = "200", description = "Execution repeated successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to repeat the execution")
 	@PostMapping("/repeatExecution")
-	public ResponseEntity<?> repeatExecution(@RequestParam UUID execId) {
+	public ResponseEntity<?> repeatExecution(@RequestParam UUID execId, @RequestParam String user) {
 		LOGGER.info("Repeat execution called");
-		boolean isRepeated = executionService.repeatExecution(execId);
+		boolean isRepeated = executionService.repeatExecution(execId, user);
 		if (isRepeated) {
 			LOGGER.info("Execution repeated successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("The execution will be repeated");
@@ -430,9 +457,9 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Execution rerun successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to rerun the failed script")
 	@PostMapping("/rerunFailedScript")
-	public ResponseEntity<?> reRunFailedScript(@RequestParam UUID execId) {
+	public ResponseEntity<?> reRunFailedScript(@RequestParam UUID execId, @RequestParam String user) {
 		LOGGER.info("Rerun failed script called");
-		boolean isRerun = executionService.reRunFailedScript(execId);
+		boolean isRerun = executionService.reRunFailedScript(execId, user);
 		if (isRerun) {
 			LOGGER.info("Execution rerun successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("The failed script will be rerun");
@@ -513,12 +540,12 @@ public class ExecutionController {
 	}
 
 	/**
-     * This method is used to delete the executions by date range
-     * 
-     * @param fromDate
-     * @param toDate
-     * @return deletedCount
-     */
+	 * This method is used to delete the executions by date range
+	 * 
+	 * @param fromDate
+	 * @param toDate
+	 * @return deletedCount
+	 */
 	@Operation(summary = "Delete the executions by date range")
 	@ApiResponse(responseCode = "200", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to delete executions")

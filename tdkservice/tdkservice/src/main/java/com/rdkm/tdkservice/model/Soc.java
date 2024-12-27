@@ -32,13 +32,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @EqualsAndHashCode(callSuper = true)
-@Table(name = "soc")
+@Table(name = "soc", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
 public class Soc extends BaseEntity  {
 	
 	/**
 	 * The name of the Soc.
 	 */
-	@Column(nullable = false ,unique = true)
+	@Column(nullable = false)
 	private String name;
 	
 	/**

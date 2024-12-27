@@ -162,7 +162,7 @@ public class ExecutionService implements IExecutionService {
 	 * The execution part with out the validation to be used in scheduler as well as
 	 * in triggered execution
 	 * 
-	 * @param executionTriggerDTO
+	 * @param executionTriggerDTO 
 	 * @return ExecutionResponseDTO
 	 */
 	public ExecutionResponseDTO startExecution(ExecutionTriggerDTO executionTriggerDTO) {
@@ -180,13 +180,19 @@ public class ExecutionService implements IExecutionService {
 		List<String> testSuiteListFromRequest = executionTriggerDTO.getTestSuite();
 
 		// Check if the devices are available for execution
-	//	List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
+		List<Device> freeDevices = this.filterFreeDevices(deviceList, responseLogs);
+		if (freeDevices.isEmpty()) {
+			LOGGER.error("No valid devices found for execution");
+			ExecutionResponseDTO executionResponseDTO = createExecutionResponseDTO(responseLogs.toString(),
+					ExecutionTriggerStatus.NOTTRIGGERED);
+			return executionResponseDTO;
+		}
 
 		// Script Execution - Single and Multiple
 		if (null != scriptsListFromRequest && !scriptsListFromRequest.isEmpty()) {
 			LOGGER.info("The request came for  script execution");
 			List<Script> scriptsList = this.getValidScriptList(scriptsListFromRequest, responseLogs);
-			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, deviceList,
+			executionDetailsDTO = this.convertTriggerDTOToExecutionDetailsDTO(executionTriggerDTO, freeDevices,
 					scriptsList, null);
 			if (scriptsList.size() > 1) {
 				LOGGER.info("The request came for multiple script execution");
@@ -712,6 +718,7 @@ public class ExecutionService implements IExecutionService {
 		}
 		if (availableDevices.isEmpty()) {
 			LOGGER.error("Device not available for execution");
+			responseString.append("No devices available for execution\n");
 			throw new ResourceNotFoundException("Device not available for execution", "");
 		}
 		return availableDevices;
@@ -976,7 +983,35 @@ public class ExecutionService implements IExecutionService {
 		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
 		return executionListResponseDTO;
 	}
+	/**
+	 * This method is used to get the executions by execution name with pagination
+	 * 
+	 * @param executionName - the execution name
+	 * @param categoryName  - RDKV, RDKB, RDKC
+	 * @param page          - the page number
+	 * @param size          - size in page
+	 * @param sortBy        - by default it is date
+	 * @param sortDir       - by default it is desc
+	 * @return executionListResponseDTO
+	 */
+	@Override
+	public ExecutionListResponseDTO getExecutionsByExecutionName(String executionName, String categoryName, int page,
+			int size, String sortBy, String sortDir) {
+		LOGGER.info("Fetching executions by execution name: {} for size{} and page number{} ", executionName, size,
+				page);
+		Category category = Category.valueOf(categoryName);
+		if (category == null) {
+			throw new UserInputException("Invalid category name provided");
+		}
+		Pageable pageable = getPageable(page, size, sortBy, sortDir);
+		Page<Execution> pageExecutions = executionRepository.findByNameContainingAndCategory(executionName, category,
+				pageable);
+		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
+		return executionListResponseDTO;
 
+	}
+
+	
 	/**
 	 * This method is used to get the executions by user with pagination
 	 * 
@@ -1079,6 +1114,8 @@ public class ExecutionService implements IExecutionService {
 					scriptTestSuite = execution.getScripttestSuiteName();
 				} else if (executionType.equals(ExecutionType.MULTISCRIPT)) {
 					scriptTestSuite = "Multiple Scripts";
+				} else if (executionType.equals(ExecutionType.MULTITESTSUITE)) {
+					scriptTestSuite = "MultiTestSuite";
 				}
 
 			}
@@ -1428,7 +1465,7 @@ public class ExecutionService implements IExecutionService {
 	 *                                   repetition process
 	 */
 	@Override
-	public boolean repeatExecution(UUID execId) {
+	public boolean repeatExecution(UUID execId,String user) {
 		LOGGER.info("Repeating execution with id: {}", execId);
 		Execution execution = executionRepository.findById(execId)
 				.orElseThrow(() -> new ResourceNotFoundException("Execution", execId.toString()));
@@ -1469,8 +1506,10 @@ public class ExecutionService implements IExecutionService {
 			if (null != execution.getTestType()) {
 				executionTriggerDTO.setTestType(execution.getTestType());
 			}
-			if (null != execution.getUser()) {
+			if (Utils.isEmpty(user) && null != execution.getUser()) {
 				executionTriggerDTO.setUser(execution.getUser().getUsername());
+			} else {
+				executionTriggerDTO.setUser(user);
 			}
 			executionTriggerDTO.setCategory(execution.getCategory().name());
 			executionTriggerDTO.setExecutionName(execName);
@@ -1500,7 +1539,7 @@ public class ExecutionService implements IExecutionService {
 	 *                                   process
 	 */
 	@Override
-	public boolean reRunFailedScript(UUID execId) {
+	public boolean reRunFailedScript(UUID execId, String user) {
 		LOGGER.info("Re-running failed scripts for execution with id: {}", execId);
 		Execution execution = executionRepository.findById(execId).orElseThrow(
 				() -> new ResourceNotFoundException("Execution", "id: " + execId.toString() + " not found"));
@@ -1527,6 +1566,14 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("No failed scripts found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Failed Scripts", "for Execution ID: " + execId.toString());
 		}
+		User triggerUser = null;
+		if (Utils.isEmpty(user)) {
+			LOGGER.error("User not found for execution with id: {}", execId);
+			triggerUser = execution.getUser();
+			
+		} else {
+			triggerUser = userRepository.findByUsername(user);
+		}
 		try {
 			List<String> failedScripts = failedResults.stream().map(ExecutionResult::getScript).toList();
 			List<Script> scripts = getValidScriptList(failedScripts, new StringBuilder());
@@ -1534,7 +1581,7 @@ public class ExecutionService implements IExecutionService {
 					.collect(Collectors.toList());
 			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
 			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts,
-					execution.getUser(), execName, execution.getCategory().name(), execution.getTestType(), 1, false,
+					triggerUser, execName, execution.getCategory().name(), execution.getTestType(), 1, false,
 					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
 					execution.isDiagnosticLogsNeeded());
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);

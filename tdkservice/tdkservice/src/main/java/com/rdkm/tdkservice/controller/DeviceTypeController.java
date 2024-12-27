@@ -88,7 +88,7 @@ public class DeviceTypeController {
 
 		if (isDeviceTypeCreated) {
 			LOGGER.info("device type created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Device type created succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED).body("Device Type created succesfully");
 		} else {
 			LOGGER.error("Error in saving devicetype data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving device type data");
@@ -134,7 +134,7 @@ public class DeviceTypeController {
 	public ResponseEntity<String> deleteDeviceType(@PathVariable UUID id) {
 		LOGGER.info("Received delete device type request: " + id);
 		deviceTypeService.deleteById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(" Device type deleted successfully");
+		return ResponseEntity.status(HttpStatus.OK).body("Device Type deleted successfully");
 
 	}
 
@@ -174,10 +174,10 @@ public class DeviceTypeController {
 		DeviceTypeDTO deviceTypeObjDTO = deviceTypeService.updateDeviceType(deviceTypeDTO);
 		if (null != deviceTypeObjDTO) {
 			LOGGER.info("DeviceType updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("DeviceType updated successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Device Type updated successfully");
 		} else {
 			LOGGER.error("Error in updating Device type data");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device type not found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device Type not found");
 		}
 
 	}
@@ -251,7 +251,7 @@ public class DeviceTypeController {
 		List<String> deviceTypeDTO = deviceTypeService.getDeviceTypeNameByCategory(category);
 		deviceTypeDTO.remove(devicetype);
 		if (null != deviceTypeDTO && !deviceTypeDTO.isEmpty()) {
-			LOGGER.info("device types found");
+			LOGGER.info("Device types found");
 			return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTO);
 		} else {
 			LOGGER.error("No device types found");

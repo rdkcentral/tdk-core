@@ -199,7 +199,7 @@ public class ScriptService implements IScriptService {
 		try {
 			script.setScriptLocation(scriptLocation);
 			// Set the device types in the script entity
-			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes());
+			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes(), category);
 			script.setDeviceTypes(deviceTypes);
 			savedScript = scriptRepository.save(script);
 		} catch (ResourceNotFoundException e) {
@@ -279,7 +279,8 @@ public class ScriptService implements IScriptService {
 
 		// Set devicetypes in the script entity if the devicetypes are updated
 		if (null != scriptUpdateDTO.getDeviceTypes() || !scriptUpdateDTO.getDeviceTypes().isEmpty()) {
-			List<DeviceType> deviceType = this.getScriptDevicetypes(scriptUpdateDTO.getDeviceTypes());
+			List<DeviceType> deviceType = this.getScriptDevicetypes(scriptUpdateDTO.getDeviceTypes(),
+					script.getCategory());
 			script.setDeviceTypes(deviceType);
 		}
 
@@ -571,10 +572,10 @@ public class ScriptService implements IScriptService {
 	 * @param deviceTypes - list of deviceType names
 	 * @return deviceTypes - list of deviceTypes
 	 */
-	private List<DeviceType> getScriptDevicetypes(List<String> deviceTypes) {
+	private List<DeviceType> getScriptDevicetypes(List<String> deviceTypes, Category category) {
 		List<DeviceType> deviceTypeList = new ArrayList<>();
 		for (String deviceTypeName : deviceTypes) {
-			DeviceType deviceType = deviceTypeRepository.findByName(deviceTypeName);
+			DeviceType deviceType = deviceTypeRepository.findByNameAndCategory(deviceTypeName, category);
 			if (null != deviceType) {
 				deviceTypeList.add(deviceType);
 			} else {

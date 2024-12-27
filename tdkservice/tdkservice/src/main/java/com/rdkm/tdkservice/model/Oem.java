@@ -29,6 +29,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -39,13 +40,13 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "oem")
+@Table(name = "oem",uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
 public class Oem extends BaseEntity {
 
 	/*
 	 * The name of the oem name This field is mandatory, hence it cannot be blank.
 	 */
-	@Column(nullable = false, unique = true)
+	@Column(nullable = false)
 	private String name;
 
 	/*

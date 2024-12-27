@@ -66,7 +66,7 @@ public class PrimitiveTestParameter extends BaseEntity {
 	 * The value.
 	 */
 
-	@Column(name = "parametervalue", nullable = false)
+	@Column(name = "parametervalue")
 	private String parameterValue;
 
 }

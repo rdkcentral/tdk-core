@@ -81,7 +81,7 @@ public class OemController {
 		boolean isOemCreated = iOemService.createOem(oemDTO);
 		if (isOemCreated) {
 			LOGGER.info("Oem created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Oem created succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED).body("OEM created succesfully");
 		} else {
 			LOGGER.error("Error in saving Oem type data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving Oem type data");
@@ -107,7 +107,7 @@ public class OemController {
 			return ResponseEntity.ok(oemDTOList);
 		} else {
 			LOGGER.error("No oem types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No oem types found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEM types found");
 		}
 
 	}
@@ -126,7 +126,7 @@ public class OemController {
 	public ResponseEntity<String> deleteOemType(@PathVariable UUID id) {
 		LOGGER.info("Received delete oem type request for ID: " + id);
 		iOemService.deleteOem(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the Oem");
+		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the OEM");
 	}
 
 	/**
@@ -166,7 +166,7 @@ public class OemController {
 		OemDTO oemUpdateDto = iOemService.updateOem(oemUpdateDTO);
 		if (oemUpdateDto != null) {
 			LOGGER.info("oem updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Oem updated successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("OEM updated successfully");
 		} else {
 			LOGGER.error("Error in updating oem");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating oem");
@@ -193,7 +193,7 @@ public class OemController {
 			return ResponseEntity.status(HttpStatus.OK).body(oemDTOList);
 		} else {
 			LOGGER.error("No oem found for the category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No oems found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEMs found");
 		}
 	}
 
@@ -217,7 +217,7 @@ public class OemController {
 			return ResponseEntity.status(HttpStatus.OK).body(oemListByCategory);
 		} else {
 			LOGGER.error("No oem found for the category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No oems found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEMs found");
 		}
 	}
 

@@ -38,10 +38,10 @@ public class Constants {
 	public static final String FILESTORE_LOCATION = "classpath:/filestore/";
 
 	// Default device config file name in filestore
-	public static final String DEFAULT_DEVICE_CONFIG_FILE = "sampleThunderDisabled.config";
+	public static final String DEFAULT_DEVICE_CONFIG_FILE = "sampleDevice.config";
 
 	// Default device config file name in filestore
-	public static final String THUNDER_DEVICE_CONFIG_FILE = "sampleThunderEnabled.config";
+	public static final String THUNDER_DEVICE_CONFIG_FILE = "sampleDevice.config";
 
 	// Config file extension
 	public static final String CONFIG_FILE_EXTENSION = ".config";

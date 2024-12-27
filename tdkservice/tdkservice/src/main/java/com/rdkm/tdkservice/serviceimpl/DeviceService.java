@@ -450,8 +450,15 @@ public class DeviceService implements IDeviceService {
 			throw new ResourceAlreadyExistsException("MacId: ", deviceDTO.getMacId());
 		}
 
+		Category category = Category.valueOf(deviceDTO.getCategory().toUpperCase());
+		if (category != null) {
+			device.setCategory(category);
+		} else {
+			throw new ResourceNotFoundException("Category not found", deviceDTO.getCategory());
+		}
+
 		// Set DeviceType
-		DeviceType deviceType = deviceTypeRepository.findByName(deviceDTO.getDeviceTypeName());
+		DeviceType deviceType = deviceTypeRepository.findByNameAndCategory(deviceDTO.getDeviceTypeName(), category);
 		if (deviceType != null) {
 			device.setDeviceType(deviceType);
 		} else {
@@ -459,33 +466,20 @@ public class DeviceService implements IDeviceService {
 		}
 
 		// Set OEM
-		Oem oem = oemRepository.findByName(deviceDTO.getOemName());
+		Oem oem = oemRepository.findByNameAndCategory(deviceDTO.getOemName(), category);
 		if (oem != null) {
 			device.setOem(oem);
-		} else {
-			throw new ResourceNotFoundException("oem: ", deviceDTO.getOemName());
 		}
-
 		// Set Soc
-		Soc soc = socRepository.findByName(deviceDTO.getSocName());
+		Soc soc = socRepository.findByNameAndCategory(deviceDTO.getSocName(), category);
 		if (soc != null) {
 			device.setSoc(soc);
-		} else {
-			throw new ResourceNotFoundException("Soc: ", deviceDTO.getSocName());
 		}
 
 		// Set UserGroup
 		UserGroup userGroup = userGroupRepository.findByName(deviceDTO.getUserGroupName());
 		if (userGroup != null) {
 			device.setUserGroup(userGroup);
-		}
-
-		// Set Category
-		Category category = Category.valueOf(deviceDTO.getCategory().toUpperCase());
-		if (category != null) {
-			device.setCategory(category);
-		} else {
-			throw new ResourceNotFoundException("Category not found", deviceDTO.getCategory());
 		}
 
 		// Check if thunder is enabled and port is set
@@ -506,8 +500,10 @@ public class DeviceService implements IDeviceService {
 	 */
 	private void setDevicePropertiesFromUpdateDTO(Device device, DeviceUpdateDTO deviceUpdateDTO) {
 
+		Category categoryValue = Category.getCategory(deviceUpdateDTO.getCategory());
 		if (!Utils.isEmpty(deviceUpdateDTO.getDeviceTypeName())) {
-			DeviceType deviceType = deviceTypeRepository.findByName(deviceUpdateDTO.getDeviceTypeName());
+			DeviceType deviceType = deviceTypeRepository.findByNameAndCategory(deviceUpdateDTO.getDeviceTypeName(),
+					categoryValue);
 			if (deviceType != null) {
 				device.setDeviceType(deviceType);
 			} else {
@@ -516,21 +512,17 @@ public class DeviceService implements IDeviceService {
 		}
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getOemName())) {
-			Oem oem = oemRepository.findByName(deviceUpdateDTO.getOemName());
+			Oem oem = oemRepository.findByNameAndCategory(deviceUpdateDTO.getOemName(), categoryValue);
 			if (oem != null) {
 				device.setOem(oem);
-			} else {
-				throw new ResourceNotFoundException("oem: ", deviceUpdateDTO.getOemName());
-			}
+			} 
 		}
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getSocName())) {
-			Soc soc = socRepository.findByName(deviceUpdateDTO.getSocName());
+			Soc soc = socRepository.findByNameAndCategory(deviceUpdateDTO.getSocName(), categoryValue);
 			if (soc != null) {
 				device.setSoc(soc);
-			} else {
-				throw new ResourceNotFoundException("Soc: ", deviceUpdateDTO.getSocName());
-			}
+			} 
 		}
 		UserGroup userGroup = userGroupRepository.findByName(deviceUpdateDTO.getUserGroupName());
 		if (null != userGroup)

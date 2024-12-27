@@ -75,7 +75,8 @@ public class DeviceTypeService implements IDeviceTypeService {
 	@Override
 	public boolean createDeviceType(DeviceTypeCreateDTO deviceTypeDTO) {
 		LOGGER.info("Going to create DeviceType");
-		if (deviceTypeRepository.existsByName(deviceTypeDTO.getDeviceTypeName())) {
+		Category category = Category.getCategory(deviceTypeDTO.getDeviceTypeCategory());
+		if (deviceTypeRepository.existsByNameAndCategory(deviceTypeDTO.getDeviceTypeName(), category)) {
 			LOGGER.error("Device type already exists with the same name: " + deviceTypeDTO.getDeviceTypeName());
 			throw new ResourceAlreadyExistsException(Constants.DEVICE_TYPE, deviceTypeDTO.getDeviceTypeName());
 		}
@@ -90,10 +91,7 @@ public class DeviceTypeService implements IDeviceTypeService {
 			deviceType.setType(deviceTypeCategory);
 		}
 
-		Category category = Category.getCategory(deviceTypeDTO.getDeviceTypeCategory());
-		if (null == category) {
-			throw new ResourceNotFoundException(Constants.CATEGORY, deviceTypeDTO.getDeviceTypeCategory());
-		} else {
+		if (deviceTypeDTO.getDeviceTypeCategory() != null) {
 			deviceType.setCategory(category);
 		}
 
@@ -175,16 +173,18 @@ public class DeviceTypeService implements IDeviceTypeService {
 	 */
 	@Override
 	public DeviceTypeDTO updateDeviceType(DeviceTypeDTO deviceTypeUpdateDTO) {
+		Category category = Category.getCategory(deviceTypeUpdateDTO.getDeviceTypeCategory());
 		DeviceType deviceType = deviceTypeRepository.findById(deviceTypeUpdateDTO.getDeviceTypeId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.DEVICE_TYPE_ID,
 						deviceTypeUpdateDTO.getDeviceTypeId().toString()));
 		if (!Utils.isEmpty(deviceTypeUpdateDTO.getDeviceTypeName())) {
-			DeviceType newDeviceType = deviceTypeRepository.findByName(deviceTypeUpdateDTO.getDeviceTypeName());
+			DeviceType newDeviceType = deviceTypeRepository
+					.findByNameAndCategory(deviceTypeUpdateDTO.getDeviceTypeName(), category);
 			if (newDeviceType != null
 					&& deviceTypeUpdateDTO.getDeviceTypeName().equalsIgnoreCase(deviceType.getName())) {
 				deviceType.setName(deviceTypeUpdateDTO.getDeviceTypeName());
 			} else {
-				if (deviceTypeRepository.existsByName(deviceTypeUpdateDTO.getDeviceTypeName())) {
+				if (deviceTypeRepository.existsByNameAndCategory(deviceTypeUpdateDTO.getDeviceTypeName(), category)) {
 					LOGGER.info("Device Type already exists with the same name: "
 							+ deviceTypeUpdateDTO.getDeviceTypeName());
 					throw new ResourceAlreadyExistsException(Constants.DEVICE_TYPE,
@@ -199,7 +199,7 @@ public class DeviceTypeService implements IDeviceTypeService {
 			deviceType.setType(DeviceTypeCategory.getDeviceTypeCategory(deviceTypeUpdateDTO.getDeviceType()));
 		}
 		if (deviceTypeUpdateDTO.getDeviceTypeCategory() != null) {
-			deviceType.setCategory(Category.getCategory(deviceTypeUpdateDTO.getDeviceTypeCategory()));
+			deviceType.setCategory(category);
 		}
 		try {
 			deviceType = deviceTypeRepository.save(deviceType);

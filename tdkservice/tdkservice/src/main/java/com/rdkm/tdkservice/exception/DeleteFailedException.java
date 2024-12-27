@@ -37,7 +37,7 @@ public class DeleteFailedException extends RuntimeException {
 	 */
 
 	public String getMessage() {
-		return "Delete operation failed, The entity has dependent records";
+		return "Delete operation failed.The entity has dependent records";
 	}
 
 }

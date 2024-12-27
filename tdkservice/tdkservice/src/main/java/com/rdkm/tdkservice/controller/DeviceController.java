@@ -328,7 +328,7 @@ public class DeviceController {
 		boolean isfileUploaded = deviceConfigService.uploadDeviceConfigFile(file, isThunderEnabled);
 		if (isfileUploaded) {
 			LOGGER.info("File upload is succesful");
-			return ResponseEntity.status(HttpStatus.OK).body("File upload is succesful");
+			return ResponseEntity.status(HttpStatus.OK).body("File uploaded successfully");
 		} else {
 			LOGGER.error("Could not upload the device config file");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

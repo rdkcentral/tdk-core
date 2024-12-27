@@ -73,13 +73,14 @@ public class OemService implements IOemService {
 	public boolean createOem(OemCreateDTO oemDTO) {
 		LOGGER.info("Going to create oemDTO with name: " + oemDTO.toString());
 
-		if (oemRepository.existsByName(oemDTO.getOemName())) {
+		Category category = Category.getCategory(oemDTO.getOemCategory());
+
+		if (oemRepository.existsByNameAndCategory(oemDTO.getOemName(), category)) {
 			LOGGER.info("oem already exists with the same name: " + oemDTO.getOemName());
 			throw new ResourceAlreadyExistsException(Constants.OEM_NAME, oemDTO.getOemName());
 		}
 		Oem oem = new Oem();
 		oem.setName(oemDTO.getOemName());
-		Category category = Category.getCategory(oemDTO.getOemCategory());
 		if (category != null) {
 			oem.setCategory(category);
 		} else {
@@ -161,16 +162,17 @@ public class OemService implements IOemService {
 	@Override
 	public OemDTO updateOem(OemDTO oemUpdateDTO) {
 		LOGGER.info("Going to update oem with id: " + oemUpdateDTO.getOemId());
+		Category categoryValue = Category.getCategory(oemUpdateDTO.getOemCategory());
 
 		Oem oem = oemRepository.findById(oemUpdateDTO.getOemId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.OEM_ID, oemUpdateDTO.getOemId().toString()));
 
 		if (!Utils.isEmpty(oemUpdateDTO.getOemName())) {
-			Oem newOem = oemRepository.findByName(oemUpdateDTO.getOemName());
+			Oem newOem = oemRepository.findByNameAndCategory(oemUpdateDTO.getOemName(), categoryValue);
 			if (newOem != null && oem.getName().equalsIgnoreCase(oemUpdateDTO.getOemName())) {
 				newOem.setName(oemUpdateDTO.getOemName());
 			} else {
-				if (oemRepository.existsByName(oemUpdateDTO.getOemName())) {
+				if (oemRepository.existsByNameAndCategory(oemUpdateDTO.getOemName(), categoryValue)) {
 					LOGGER.info("Soc already exists with the same name: " + oemUpdateDTO.getOemName());
 					throw new ResourceAlreadyExistsException(Constants.OEM_NAME, oemUpdateDTO.getOemName());
 				} else {

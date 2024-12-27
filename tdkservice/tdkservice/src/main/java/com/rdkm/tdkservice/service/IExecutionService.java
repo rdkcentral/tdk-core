@@ -149,7 +149,7 @@ public interface IExecutionService {
 	 * @param execId
 	 * @return
 	 */
-	boolean repeatExecution(UUID execId);
+	boolean repeatExecution(UUID execId, String user);
 
 	/**
 	 * This method is used to rerun the failed script
@@ -157,7 +157,7 @@ public interface IExecutionService {
 	 * @param execId
 	 * @return
 	 */
-	public boolean reRunFailedScript(UUID execId);
+	public boolean reRunFailedScript(UUID execId, String user);
 
 	/*
 	 * This method is used to delete the execution
@@ -202,7 +202,21 @@ public interface IExecutionService {
 	 */
 	public ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
 			int size, String sortBy, String sortDir);
-
+	/**
+	 * This method is used to get the executions by executionName with
+	 * pagination
+	 * 
+	 * @param executionName - executionName
+	 * @param categoryName        - RDKV, RDKB, RDKC
+	 * @param page                - the page number
+	 * @param size                - size in page
+	 * @param sortBy              - by default it is date
+	 * @param sortDir             - by default it is desc
+	 * @return response DTO
+	 */
+	public ExecutionListResponseDTO getExecutionsByExecutionName(String executionName, String categoryName, int page,
+			int size, String sortBy, String sortDir);
+	
 	/**
 	 * This method is used to get the executions by user with pagination
 	 * 

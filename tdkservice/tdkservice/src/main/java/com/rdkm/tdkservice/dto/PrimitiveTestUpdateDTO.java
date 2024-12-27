@@ -41,6 +41,6 @@ public class PrimitiveTestUpdateDTO {
 	/*
 	 * The primitiveTestParameters list .
 	 */
-	@Valid
+	
 	private List<ParameterValueDTO> primitiveTestParameters;
 }

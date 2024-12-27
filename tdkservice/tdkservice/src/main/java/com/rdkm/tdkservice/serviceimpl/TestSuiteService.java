@@ -256,7 +256,8 @@ public class TestSuiteService implements ITestSuiteService {
 				continue;
 			}
 
-			DeviceType boxtype = deviceTypeRepository.findByName(testSuiteCustomDTO.getDeviceType());
+			DeviceType boxtype = deviceTypeRepository.findByNameAndCategory(testSuiteCustomDTO.getDeviceType(),
+					category);
 			if (boxtype == null) {
 				LOGGER.error("DeviceType is not available with the name " + testSuiteCustomDTO.getDeviceType());
 				// if the device type is not available in the database, then throw an exception

@@ -86,6 +86,16 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 			Pageable pageable);
 
 	/**
+	 * This method is used to search the execution by name and category.
+	 * 
+	 * @param scriptTestSuite - script test suite name or part of it
+	 * @param category        - category of the execution
+	 * @param pageable        - pageable object
+	 * @return Pagination for execution
+	 */
+	Page<Execution> findByNameContainingAndCategory(String scriptTestSuite, Category category, Pageable pageable);
+
+	/**
 	 * This method is used to find the execution by user
 	 * 
 	 * @param user     - user object

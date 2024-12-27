@@ -200,6 +200,7 @@ public class ExecutionAsyncService {
 			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
+		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
 		try {
 			if (repeatCount == 0) {
 				repeatCount = 1;
@@ -367,9 +368,13 @@ public class ExecutionAsyncService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
 			LOGGER.error("Error in executing scripts: {} on device: {}", device.getName());
 			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
 		}
+		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
 	}
 
 	/*

@@ -78,7 +78,7 @@ public class SocController {
 		boolean isSocVendorCreated = socService.createSoc(socDTO);
 		if (isSocVendorCreated) {
 			LOGGER.info("Soc created succesfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Soc created succesfully");
+			return ResponseEntity.status(HttpStatus.CREATED).body("SoC created succesfully");
 		} else {
 			LOGGER.error("Error in saving soc data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving soc data");
@@ -104,7 +104,7 @@ public class SocController {
 			return ResponseEntity.status(HttpStatus.OK).body(socs);
 		} else {
 			LOGGER.error("No Soc found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Soc found");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found");
 		}
 	}
 
@@ -122,7 +122,7 @@ public class SocController {
 	public ResponseEntity<?> deleteSoc(@PathVariable UUID id) {
 		LOGGER.info("Received delete SocVendor: " + id);
 		socService.deleteSoc(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the Soc");
+		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the SoC");
 
 	}
 
@@ -162,7 +162,7 @@ public class SocController {
 		SocDTO socUpdateDto = socService.updateSoc(socUpdateDTO);
 		if (socUpdateDto != null) {
 			LOGGER.info("Soc updated succesfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Soc updated succesfully");
+			return ResponseEntity.status(HttpStatus.OK).body("SoC updated succesfully");
 		} else {
 			LOGGER.error("Error in updating soc data");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating soc data");
@@ -190,7 +190,7 @@ public class SocController {
 			return ResponseEntity.status(HttpStatus.OK).body(socs);
 		} else {
 			LOGGER.error("No Soc vs found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No socs found with category: " + category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found with category: " + category);
 		}
 	}
 
@@ -214,7 +214,7 @@ public class SocController {
 			return ResponseEntity.status(HttpStatus.OK).body(socsList);
 		} else {
 			LOGGER.error("No Socs found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Socs found with category: " + category);
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found with category: " + category);
 		}
 
 	}

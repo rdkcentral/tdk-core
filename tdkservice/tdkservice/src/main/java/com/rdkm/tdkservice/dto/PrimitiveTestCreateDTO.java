@@ -59,7 +59,6 @@ public class PrimitiveTestCreateDTO {
 	/*
 	 * The primitive test parameters .
 	 */
-	@Valid
 	private List<ParameterValueDTO> primitiveTestParameters;
 
 }
