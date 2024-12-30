@@ -348,6 +348,14 @@ audio_src_url_mp4_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_t
 audio_src_url_mp4_eac3 = test_streams_base_path + "DASH_H264_EC3/atfms_291_dash_tdk_avc_eac3_fmp4_ac3.mp4"
 audio_src_url_webm_opus = test_streams_base_path + "DASH_VP9_OPUS_WebM/audio.webm"
 
+# Only Audio short duration streams
+audio_src_url_short_duration_aac = test_streams_base_path + "DASH_H264_AAC_15Sec/audio.mp4"
+audio_src_url_short_duration_ac3 = test_streams_base_path + "TDK_Asset_AC3_Audio_only_15sec.mp4"
+audio_src_url_short_duration_eac3 = test_streams_base_path + "TDK_Asset_EAC3_Audio_only_15sec.mp4"
+audio_src_url_short_duration_webm_opus = test_streams_base_path + "TDK_Asset_OPUS_Audio_only_15sec.webm"
+audio_src_url_short_duration_wav = test_streams_base_path + "TDK_Asset_Sunrise_WAV_15sec.wav"
+
+
 # Basic WAV PCM Audio format stream
 audio_src_url_wav_pcm = test_streams_base_path + "TDK_Asset_Sunrise_WAV_Audio.wav"
 
