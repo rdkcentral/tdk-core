@@ -158,25 +158,26 @@
                 </resultGeneration>
             </testStep>
             <testStep testStepId="2" name="Get_WebkitBrowser_URL" saveResult="true" action="externalFnCall" >
+		    <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
                     <resultGeneration useMethodTag="webkitbrowser_get_url" />
             </testStep>
             <testStep testStepId="3" name="Set_WebkitBrowser_URL" method="Set_Browser_URL" pluginName="WebKitBrowser">
               <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" >
               </conditionalExecution>
               <params>
-                <param tag="url" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+                <param tag="url" usePreviousResult="true" Id="1,2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
               </params>
             </testStep>
             <testStep testStepId="4" name="Check_WebkitBrowser_Load_Finished_Event" pluginName="WebKitBrowser" event="Event_Load_Finished" action="eventListener" delay="10" >
                 <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
                 <resultGeneration useMethodTag="webkitbrowser_check_load_finished_event">
-			<expectedValues useDefault="true" usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url"/>
+			<expectedValues useDefault="true" usePreviousResult="true" Id="1,2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url"/>
                 </resultGeneration>
             </testStep>
             <testStep testStepId="5" name="Get_WebkitBrowser_URL" method="Get_Browser_URL" pluginName="WebKitBrowser">
               <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
               <resultGeneration useMethodTag="webkitbrowser_check_url">
-                        <expectedValues usePreviousResult="true" Id="2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
+                        <expectedValues usePreviousResult="true" Id="1,2" useMethodTag="webkitbrowser_lightningapp_get_loaded_url" />
               </resultGeneration>
             </testStep>
           </prerequisite>

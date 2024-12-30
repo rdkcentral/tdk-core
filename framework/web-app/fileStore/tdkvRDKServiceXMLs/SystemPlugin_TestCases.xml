@@ -1004,7 +1004,9 @@
               <resultGeneration useMethodTag="system_check_set_operation"  />
             </testStep>
             <testStep testStepId="3" name="Get_System_Uptime" method="Get_System_Uptime">
-                <resultGeneration useMethodTag="system_check_uptime"/>
+                    <resultGeneration useMethodTag="system_check_uptime">
+                            <expectedValues useConfigFile="true" key="SYSTEM_UPTIME_IN_SECONDS" />
+                    </resultGeneration>
             </testStep>
        </testCase>
        <testCase testCaseId="SYS_53" testCaseName="System_Check_On_TimeZoneDST_Changed_Event" desc="Checks whether time zone setting is persist after reboot">

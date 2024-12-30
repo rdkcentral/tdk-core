@@ -1598,31 +1598,35 @@ def newEventHandler(eventMethod,testStepInfo):
     return eventParams,execStatus,response
 
 
-
-
 def handleDeviceReboot():
     #Reboot handling restore websocket & plugin status
-    timeout = time.time() + 60*5   # 5 minutes from now
-    print("\nWaiting for the device to come up...")
-    time.sleep(30)
-    deviceStatus = "DOWN"
-    while True:
-        status = getTestDeviceStatus()
-        if status == "FREE":
-            deviceStatus = "UP"
-            break;
-        elif time.time() > timeout:
-            deviceStatus = "DOWN"
-            print("Device is not coming up event after 5 mins")
-            break;
-        time.sleep(5)
+    rebootTimeStatus,rebootWaitTime = getDeviceConfigKeyValue("MAX_REBOOT_WAIT_TIME")
+    if rebootTimeStatus == "SUCCESS" and str(rebootWaitTime).strip() != "":
+        timeout = time.time() + 60*int(rebootWaitTime)   # 5 minutes from now
+        print(f"\nWaiting {rebootWaitTime} mins for the device to come up after reboot...")
+        time.sleep(30)
+        deviceStatus = "DOWN"
+        while True:
+            status = getTestDeviceStatus()
+            if status == "FREE":
+                deviceStatus = "UP"
+                break;
+            elif time.time() > timeout:
+                deviceStatus = "DOWN"
+                print(f"Device is not coming up even after {rebootWaitTime} mins")
+                break;
+            time.sleep(5)
 
-    if deviceStatus == "UP":
-        print("Device is UP. Setting back pre-requisites if any...")
-        setUpStatus = setUpPreRequisitesBack()
-        return setUpStatus
+        if deviceStatus == "UP":
+            print("Device is UP. Setting back pre-requisites if any...")
+            setUpStatus = setUpPreRequisitesBack()
+            return setUpStatus
+        else:
+            return "FAILURE"
     else:
-        return "FAILURE"
+        status = "FAILURE"
+        print("[ERROR]: No proper MAX_REBOOT_WAIT_TIME input")
+
 
 
 def getTestDeviceStatus():

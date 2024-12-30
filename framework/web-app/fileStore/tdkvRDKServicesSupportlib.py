@@ -775,7 +775,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "system_check_uptime":
             info["systemUptime"] = result.get("systemUptime")
             success = str(result.get("success")).lower() == "true"
-            if success and int(float(result.get("systemUptime"))) < 60:
+            if success and int(float(result.get("systemUptime"))) <= int(expectedValues[0]):
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
@@ -2963,7 +2963,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             resolution = result.replace("Resolution","")
             fps_data = re.split('(p|i)',str(expectedValues[0]))[2]
             if fps_data == "60":
-                expectedValues = str(expectedValues[0])[0:-2]
+                if str(resolution).lower() != "2160p":
+                   expectedValues = str(expectedValues[0])[0:-2]
             if str(resolution).lower() in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
             else:
