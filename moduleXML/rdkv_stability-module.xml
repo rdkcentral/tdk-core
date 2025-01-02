@@ -41,6 +41,7 @@
       <function name='rdkservice_validateResourceUsage' />
       <function name='rdkservice_executeLifeCycle' />
       <function name='rdkservice_launchAndDestroy' />
+      <function name='rdkservice_memcrApps_executeLifeCycle' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -59,6 +60,9 @@
       <parameter funName='rdkservice_executeLifeCycle' parameterName='plugin' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_executeLifeCycle' parameterName='operations' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_executeLifeCycle' parameterName='validation_details' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_memcrApps_executeLifeCycle' parameterName='plugin' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_memcrApps_executeLifeCycle' parameterName='operations' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_memcrApps_executeLifeCycle' parameterName='validation_details' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_launchAndDestroy' parameterName='plugin' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_launchAndDestroy' parameterName='uri' parameterType='STRING' range='a-z' />
     </parameters>

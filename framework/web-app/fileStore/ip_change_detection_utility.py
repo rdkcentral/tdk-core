@@ -404,6 +404,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
 # Function to set default interface
 def set_default_interface(obj,interface,start_time_needed = False):
     status = expectedResult = "SUCCESS"
+    deviceAvailability =  'Yes'
     print("Set {} as default interface".format(interface))
     params = '{ "interface":"'+interface+'", "persist":true}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue');

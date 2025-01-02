@@ -130,13 +130,20 @@ if expectedResult in (result.upper() and pre_condition_status):
             status = "FAILURE"
     cobal_launch_status = launch_cobalt(obj)
     validation_dict = get_validation_params(obj)
-    if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} :
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
+    if status == "SUCCESS" and cobal_launch_status == "SUCCESS" and validation_dict != {} and ssh_param_dict != {}:
         time.sleep(30)
         print("\nPre conditions for the test are set successfully")
         print("\n Set the URL : {} using Cobalt deeplink method".format(cobalt_test_url))
         tdkTestObj = obj.createTestStep('rdkservice_setValue')
         tdkTestObj.addParameter("method","Cobalt.1.deeplink")
         tdkTestObj.addParameter("value",cobalt_test_url)
+        video_start_time = str(datetime.utcnow()).split()[1][:-3]
         tdkTestObj.executeTestCase(expectedResult)
         cobalt_result = tdkTestObj.getResult()
         time.sleep(10)
@@ -185,6 +192,35 @@ if expectedResult in (result.upper() and pre_condition_status):
                             tdkTestObj.setResultStatus("FAILURE")
                             print("Video playback is not happening")
                             completed =  False
+                            break
+                    else:
+                        print("\n Proc validation is None so proceeding with wpeframework validation\n")
+                        tdkTestObj.setResultStatus("SUCCESS")
+                        print ("\n Check video is started \n")
+                        command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                        tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                        tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                        tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                        tdkTestObj.addParameter("command",command)
+                        tdkTestObj.executeTestCase(expectedResult)
+                        result = tdkTestObj.getResult()
+                        output = tdkTestObj.getResultDetails()
+                        if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                           video_playing_log = output.split('\n')[1]
+                           video_play_starttime_in_millisec = getTimeInMilliSec(video_start_time)
+                           video_played_time=getTimeStampFromString(video_playing_log)         
+                           video_played_time_in_millisec = getTimeInMilliSec(video_played_time)
+                           if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                              print("\n ====================================================================================================")
+                              print("\n Youtube is launched and video started playing")
+                              tdkTestObj.setResultStatus("SUCCESS")
+                           else:
+                               print("\n Video is not started playing \n")
+                               tdkTestObj.setResultStatus("FAILURE")
+                               break                          
+                        else:
+                            tdkTestObj.setResultStatus("FAILURE")
+                            print("\n  Video play related logs are not available \n")
                             break
                     result_dict = {}
                     iteration += 1

@@ -91,6 +91,8 @@
 import tdklib;
 import StabilityTestVariables
 from StabilityTestUtility import *
+import rdkv_performancelib
+from web_socket_util import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True);
@@ -120,6 +122,12 @@ pre_condition_status = check_device_state(obj)
 
 expectedResult = "SUCCESS"
 if expectedResult in (result.upper() and pre_condition_status):
+    tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
+    tdkTestObj.addParameter("realpath",obj.realpath)
+    tdkTestObj.addParameter("deviceIP",obj.IP)
+    tdkTestObj.executeTestCase(expectedResult)
+    result = tdkTestObj.getResult()
+    ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
     cobalt_test_url = StabilityTestVariables.cobalt_test_url;
     print("Check Pre conditions")
     #No need to revert any values if the pre conditions are already set.
@@ -128,7 +136,7 @@ if expectedResult in (result.upper() and pre_condition_status):
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","DeviceInfo":"activated","Cobalt":"deactivated"}
+    plugin_status_needed = {"WebKitBrowser":"deactivated","DeviceInfo":"activated","Cobalt":"resumed"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"
@@ -142,7 +150,8 @@ if expectedResult in (result.upper() and pre_condition_status):
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
     validation_dict = get_validation_params(obj)
-    if status == "SUCCESS" and validation_dict != {} :
+    if status == "SUCCESS" and validation_dict != {} and ssh_param_dict != {} :
+        print("\n preconditions are set successfully")
         if validation_dict["validation_required"]:
             if validation_dict["password"] == "None":
                 password = ""
@@ -158,6 +167,8 @@ if expectedResult in (result.upper() and pre_condition_status):
             cobalt_launch_status = launch_cobalt(obj)
             if cobalt_launch_status in expectedResult:
                print("\n Cobalt launched successfully ,trying to hibernate it")
+               thunder_port = rdkv_performancelib.devicePort
+               event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 7,"method": "org.rdk.RDKShell.1.register","params": {"event": "onHibernated", "id": "client.events.1" }}','{"jsonrpc": "2.0","id": 8,"method": "org.rdk.RDKShell.1.register","params": {"event": "onRestored", "id": "client.events.1" }}'],"/jsonrpc",False)
                suspend_status,start_suspend = suspend_plugin(obj,"Cobalt")
                time.sleep(30)
                if suspend_status == expectedResult:
@@ -193,13 +204,14 @@ if expectedResult in (result.upper() and pre_condition_status):
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
                             tdkTestObj.addParameter("value",params)
+                            video_start_time = str(datetime.utcnow()).split()[1]
                             tdkTestObj.executeTestCase(expectedResult)
                             result1 = tdkTestObj.getResult()
                             time.sleep(50)
                             #Clicking OK to skip Ad
                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
                             tdkTestObj.addParameter("method","org.rdk.RDKShell.1.generateKey")
-                            tdkTestObj.addParameter("value",params)
+                            tdkTestObj.addParameter("value",params)                            
                             tdkTestObj.executeTestCase(expectedResult)
                             result2 = tdkTestObj.getResult()
                             time.sleep(60)
@@ -222,6 +234,34 @@ if expectedResult in (result.upper() and pre_condition_status):
                                       tdkTestObj.setResultStatus("FAILURE")
                                       print("Video playback is not happening")
                                       break
+                                else:
+                                    print("Proc validation is None so proceeding with wpeframework validation\n")
+                                    print ("\n Check video is started \n")
+                                    command = 'cat /opt/logs/wpeframework.log | grep -inr State.*changed.*old.*PAUSED.*new.*PLAYING | tail -1'
+                                    tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
+                                    tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
+                                    tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
+                                    tdkTestObj.addParameter("command",command)
+                                    tdkTestObj.executeTestCase(expectedResult)
+                                    result = tdkTestObj.getResult()
+                                    output = tdkTestObj.getResultDetails()
+                                    if output != "EXCEPTION" and expectedResult in result and "old: PAUSED" in output:
+                                       video_playing_log = output.split('\n')[1]
+                                       video_play_starttime_in_millisec = getTimeInMilliSec(video_start_time)
+                                       video_played_time=getTimeStampFromString(video_playing_log)         
+                                       video_played_time_in_millisec = getTimeInMilliSec(video_played_time)
+                                       if video_played_time_in_millisec > video_play_starttime_in_millisec:
+                                          print("\n ====================================================================================================")
+                                          print("\n Youtube is launched and video started playing")
+                                          tdkTestObj.setResultStatus("SUCCESS")
+                                       else:
+                                           print("\n Video is not started playing \n")
+                                           tdkTestObj.setResultStatus("FAILURE")
+                                           break
+                                    else:
+                                        tdkTestObj.setResultStatus("FAILURE")
+                                        print("\n  Video play related logs are not available \n")
+                                        break
                                 if result_val == "SUCCESS":
                                    tdkTestObj.setResultStatus("SUCCESS")
                                    print("\n Validate resource Usage")
