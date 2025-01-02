@@ -291,7 +291,7 @@
             </testStep>
         </testCase>
 
-        <testCase testCaseId="DS_15" testCaseName= "SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution changed event">
+	<testCase testCaseId="DS_15" testCaseName= "SetAndGet_All_Supported_Resolutions" desc="Set and get all the supported resolution by both TV and STB, also checks for the resolution changed event">
             <testCaseInfo testCaseType="loop" revert="true" />
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true">
                 <resultGeneration useMethodTag="display_connected_status"/>
@@ -302,14 +302,20 @@
                 </params>
                 <resultGeneration useMethodTag="display_supported_resolutions"/>
             </testStep>
-            <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" revertGet="yes">
+	    <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertGet="yes">
                 <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                 </params>
                 <resultGeneration useMethodTag="check_current_resolution"/>
-            </testStep>
-            <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
-              <subtestStep subtestStepId="1" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes">
+            </testStep> 
+	    <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
+              <subtestStep subtestStepId="1" name="Retrieve_Current_Resolution"  method="Get_Current_Resolution" saveResult="true">
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+                <resultGeneration useMethodTag="check_current_resolution"/>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes">
                   <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                   <param tag="resolution" usePreviousResult="true" Id="2" iteration="true" useMethodTag="get_supported_resolutions" revertParam="yes"/>
@@ -317,20 +323,25 @@
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
-              <subtestStep subtestStepId="2" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertFlag="yes" delay="3" >
+              <subtestStep subtestStepId="3" name="Get_Resolution"  method="Get_Current_Resolution" saveResult="true" revertFlag="yes" delay="3" >
                   <resultGeneration useMethodTag="check_current_resolution" arguments="check_expected_resolution">
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
-              <subtestStep subtestStepId="3" name="Check_Resolution_Changed_Event" event="Event_Resolution_Changed" action="eventListener" delay="3" >
+              <subtestStep subtestStepId="4" name="Check_Resolution_Changed_Event" event="Event_Resolution_Changed" action="eventListener" delay="3" >
+                  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution"/>
                   <resultGeneration useMethodTag="displaysettings_check_resolution_changed_event" >
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
+	      </subtestStep>
+	      <subtestStep subtestStepId="5" name="Check_Resolution_Changed_Event" event="Event_Resolution_Changed" action="eventListener" delay="3" >
+                  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution" arguments="check_resolution"/>
+                  <resultGeneration useMethodTag="rdkshell_check_on_userinactivity_event" arguments="check_empty_event"/>
               </subtestStep>
             </testStep>
         </testCase>
-
-        <testCase testCaseId="DS_16" testCaseName= "Enable_And_Disable_Dolby_Volume_Mode"  desc="Check whether dolby volume mode can enable and disable ">
+	
+	<testCase testCaseId="DS_16" testCaseName= "Enable_And_Disable_Dolby_Volume_Mode"  desc="Check whether dolby volume mode can enable and disable ">
             <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="DISPLAYSETTINGS_SUPPORTED_FEATURES" useMethodTag="displaysetting_check_feature_applicability" arguments="DolbyVolume"/>
             <testStep testStepId="1" name="Get_Dolby_Volume_Mode" method="Get_Dolby_Volume_Mode" saveResult="true" revertGet="yes" >
               <resultGeneration useMethodTag="check_dolby_volume_mode" >
@@ -973,14 +984,20 @@
                 </params>
                 <resultGeneration useMethodTag="display_supported_resolutions"/>
             </testStep>
-            <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" revertGet="yes">
+            <testStep testStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertGet="yes">
                 <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                 </params>
                 <resultGeneration useMethodTag="check_current_resolution"/>
             </testStep>
-            <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
-              <subtestStep subtestStepId="1" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes">
+	    <testStep testStepId="4" name="Set_Resolution" testStepType="loop" >
+	      <subtestStep subtestStepId="1" name="Retrieve_Current_Resolution"  method="Get_Current_Resolution" saveResult="true">
+                <params>
+                  <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
+                </params>
+                <resultGeneration useMethodTag="check_current_resolution"/>
+              </subtestStep>
+              <subtestStep subtestStepId="2" name="Set_Resolution" method="Set_Current_Resolution" revertSet="yes">
                   <params>
                   <param tag="videoDisplay" usePreviousResult="true" Id="1" useMethodTag="set_video_display"/>
                   <param tag="resolution" usePreviousResult="true" Id="2" iteration="true" useMethodTag="get_supported_resolutions" revertParam="yes"/>
@@ -988,14 +1005,19 @@
                   </params>
                   <resultGeneration useMethodTag="display_settings_check_set_operation" />
               </subtestStep>
-              <subtestStep subtestStepId="2" name="Get_Current_Resolution"  method="Get_Current_Resolution" revertFlag="yes" delay="3" >
+              <subtestStep subtestStepId="3" name="Get_Current_Resolution"  method="Get_Current_Resolution" saveResult="true" revertFlag="yes" delay="3" >
                   <resultGeneration useMethodTag="check_current_resolution"  arguments="check_expected_resolution">
                     <expectedValues useIterableValue="true" />
                   </resultGeneration>
               </subtestStep>
-              <subtestStep subtestStepId="3" name="Check_Resolution_PreChange_Event" event="Event_Resolution_PreChange" action="eventListener" delay="2" >
-                  <resultGeneration useMethodTag="displaysettings_check_resolution_prechange_event" >
+              <subtestStep subtestStepId="4" name="Check_Resolution_PreChange_Event" event="Event_Resolution_PreChange" action="eventListener" delay="2" >
+		  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution"/>    
+		  <resultGeneration useMethodTag="displaysettings_check_resolution_prechange_event" >
                   </resultGeneration>
+	      </subtestStep>
+	      <subtestStep subtestStepId="5" name="Check_Resolution_PreChange_Event" event="Event_Resolution_PreChange" action="eventListener" delay="3" >
+                  <conditionalExecution enable="true" subId="1,3" useMethodTag="get_previous_resolution" arguments="check_resolution"/>
+                  <resultGeneration useMethodTag="rdkshell_check_on_userinactivity_event" arguments="check_empty_event"/>
               </subtestStep>
             </testStep>
         </testCase>
