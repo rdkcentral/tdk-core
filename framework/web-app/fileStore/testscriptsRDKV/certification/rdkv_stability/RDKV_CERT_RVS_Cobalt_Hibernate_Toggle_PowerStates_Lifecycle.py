@@ -81,7 +81,7 @@ In a loop given number of times
     <test_stub_interface>rdkv_stability</test_stub_interface>
     <test_script>RDKV_CERT_RVS_Cobalt_Hibernate_Toggle_PowerStates_Lifecycle</test_script>
     <skipped>No</skipped>
-    <release_version>M131</release_version>
+    <release_version>M132</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
