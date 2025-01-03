@@ -1307,4 +1307,23 @@
             <resultGeneration useMethodTag="system_check_negative_scenario"/>
         </testStep>
     </testCase>
+
+    <!-- Test case 37 -->
+    <testCase testCaseId="HdmiCecSource_37" testCaseName="Set_Invalid_OSD_Name" desc="Validate by setting up invalid OSD Name">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_OSD_Name" method="HdmiCecSource_Set_OSD_Name_Negative">
+            <params>
+                <param tag="name" value="123" />
+            </params>
+            <resultGeneration useMethodTag="system_check_negative_scenario" />
+        </testStep>
+    </testCase>
+
+    <!-- Test case 38 -->
+    <testCase testCaseId="HdmiCecSource_38" testCaseName="Set_Empty_VendorID" desc="Validate by setting up empty Vendor ID">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="HdmiCecSource_Set_Vendor_ID" method="HdmiCecSource_Set_Vendor_ID">
+            <resultGeneration useMethodTag="system_check_negative_scenario" />
+        </testStep>
+    </testCase>
 </testPlugin>

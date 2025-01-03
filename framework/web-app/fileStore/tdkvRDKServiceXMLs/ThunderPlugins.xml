@@ -1411,6 +1411,13 @@
                 <param tag="persist" defaultValue="null" type="bool"/>
             </params>
         </method>
+	<method name="Set_Current_Resolution_Negative" api="setCurrentResolution" type="method" desc="Set the current resolution with empty values">
+            <params>
+                <param tag="videoDisplay" defaultValue="null"/>
+                <param tag="resolution" defaultValue="null"/>
+                <param tag="persist" defaultValue="null"/>
+            </params>
+        </method>
 	<method name="Get_Connected_AudioPorts" api="getConnectedAudioPorts" type="method" desc="Get the connected audio port details"/>
 	<method name="Get_Supported_AudioPorts" api="getSupportedAudioPorts" type="method" desc="Get the supported audio port details"/>
 	<method name="Get_Supported_AudioModes" api="getSupportedAudioModes" type="method" desc="Get the supported audio modes details">
@@ -2502,6 +2509,11 @@
 	<method name="HdmiCecSource_Set_OSD_Name" api="setOSDName" type="method" desc="Sets the OSD name of the application">
             <params>
                 <param tag="name" type="string"/>
+            </params>
+        </method>
+	<method name="HdmiCecSource_Set_OSD_Name_Negative" api="setOSDName" type="method" desc="Sets negative value as the OSD name of the application">
+            <params>
+                <param tag="name" type="int"/>
             </params>
         </method>
 	<method name="HdmiCecSource_Get_OTP_Enabled" api="getOTPEnabled" type="method" desc="Returns HDMI-CEC OTP option enabled status">
