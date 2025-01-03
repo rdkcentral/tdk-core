@@ -37,7 +37,9 @@ export class FunctionViewComponent {
     public dialogRef: MatDialogRef<FunctionViewComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     }
-
+  /**
+   * This method is close the modal.
+   */
   onCancelDelete(): void {
     this.dialogRef.close(false); 
   }

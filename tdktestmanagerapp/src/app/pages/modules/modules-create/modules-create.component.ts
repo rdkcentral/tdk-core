@@ -42,7 +42,6 @@ export class ModulesCreateComponent {
   crashFilesArr: string[] = ['/opt/logs'];
   logFilesArr: string[] = ['/opt/logs'];
   isThunder :boolean = false;
-  isAdvanced :boolean = false;
   loggedinUser: any;
   displayName!: string;
 
@@ -75,7 +74,9 @@ export class ModulesCreateComponent {
       logFilesPath: new FormControl<string | null>('')
     })
   }
-
+  /**
+   * This method is Submit the create module form.
+   */
   moduleSubmit():void{
     this.moduleFormSubmitted = true;
     if(this.createModuleForm.invalid){
@@ -88,7 +89,7 @@ export class ModulesCreateComponent {
           userGroup: this.loggedinUser.userGroupName,
           moduleLogFileNames:this.logFilesArr?this.logFilesArr:[],
           moduleCrashLogFiles:this.crashFilesArr?this.crashFilesArr:[],
-          moduleCategory: this.categoryName,
+          moduleCategory: this.loggedinUser.userCategory,
           moduleThunderEnabled:this.isThunder?true:false
         }
         this.moduleservice.createModule(moduleObj).subscribe({
@@ -105,7 +106,8 @@ export class ModulesCreateComponent {
           },
           error:(err)=>{
             let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            let errmessage = errmsg.moduleName? errmsg.moduleName:errmsg.message;
+            this._snakebar.open(errmessage, '', {
               duration: 2000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',
@@ -137,11 +139,6 @@ export class ModulesCreateComponent {
     const inputEle = event.target as HTMLInputElement;
     this.isThunder = inputEle.checked;
     
-  }
-  
-  isAdvancedCheck(event: any):void{
-    const inputEle = event.target as HTMLInputElement;
-    this.isAdvanced = inputEle.checked;
   }
   /**
    * Removes a crash file from the `crashFilesArr` array at the specified index.
@@ -184,12 +181,14 @@ export class ModulesCreateComponent {
       
     }
   }
+  /**
+   * remove logs to the logFilesArr array.
+   */  
   modifyLogs(item: any, index: number):void{
     if(item != ""){
       this.createModuleForm.get('logFilesPath')?.setValue(item);
       this.removeLogs(index);
     }
   }
-
 
 }

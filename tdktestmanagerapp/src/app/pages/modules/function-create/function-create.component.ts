@@ -59,7 +59,9 @@ export class FunctionCreateComponent {
       moduleName: new FormControl<string | null>({value: this.dynamicModuleName, disabled: true}, { validators: Validators.required}),
     })
   }
-
+  /**
+   * This method is Submit the create function form.
+   */
   functionSubmit():void{    
     this.functionFormSubmitted = true;
     if(this.functionForm.invalid){
@@ -84,7 +86,8 @@ export class FunctionCreateComponent {
         },
         error:(err)=>{
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          let errmessage = errmsg.moduleName? errmsg.moduleName:errmsg.message;
+          this._snakebar.open(errmessage, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -98,14 +101,14 @@ export class FunctionCreateComponent {
   /**
    * Navigates back to the function list page.
    */
-  goBack(){
+  goBack():void{
     this.router.navigate(["/configure/function-list"]);
   }
 
   /**
    * Resets the function form to its initial state.
    */
-  reset(){
+  reset():void{
     this.functionForm.reset();
   }
 

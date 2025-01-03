@@ -20,7 +20,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { RouterLink } from '@angular/router';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
@@ -45,7 +44,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-function-list',
   standalone: true,
-  imports: [ RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './function-list.component.html',
   styleUrl: './function-list.component.css'
 })
@@ -129,7 +128,7 @@ export class FunctionListComponent {
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-    onRowSelected(event: RowSelectedEvent) {
+    onRowSelected(event: RowSelectedEvent):void{
       this.isRowSelected = event.node.isSelected();
       this.rowIndex = event.rowIndex
     }
@@ -138,7 +137,7 @@ export class FunctionListComponent {
      * Event handler for when the selection is changed.
      * @param event The selection changed event.
   */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent) :void{
       this.selectedRowCount = event.api.getSelectedNodes().length;
       const selectedNodes = event.api.getSelectedNodes();
       this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -151,7 +150,7 @@ export class FunctionListComponent {
   /**
    * Creates a new box manufacturer.
    */
-  goTocreateFunctionPage() {
+  goTocreateFunctionPage() :void{
     this.router.navigate(['/configure/function-create']);
   }
   
@@ -160,7 +159,7 @@ export class FunctionListComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(functions: any): any {
+  userEdit(functions: any):void{
       localStorage.setItem('functions', JSON.stringify(functions));
       this.router.navigate(['configure/function-edit']);
   }
@@ -168,7 +167,7 @@ export class FunctionListComponent {
    * Deletes a record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) {
+  delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
       if(data){
         this.moduleservice.deleteFunction(data.id).subscribe({
@@ -195,10 +194,11 @@ export class FunctionListComponent {
         })
       }
     }
-
   }
-
-  openModal(data:any){
+  /**
+   * Open view modal click on view icon on function list table.
+   */
+  openModal(data:any):void{
     this.dialog.open( FunctionViewComponent,{
       width: '99%',
       height: '93vh',
@@ -210,14 +210,17 @@ export class FunctionListComponent {
       }
     })
   }
-  createParameter(data:any){
+  /**
+   * Navigates to parameter list page.
+   */
+  createParameter(data:any):void{
     localStorage.setItem('function', JSON.stringify(data));
     this.router.navigate(['/configure/parameter-list']);
   }
   /**
    * Navigates back to the previous page.
    */
-  goBack() {
+  goBack() :void{
     this.router.navigate(["/configure/modules-list"]);
   }
 

@@ -37,7 +37,9 @@ export class ParameterViewComponent {
     public dialogRef: MatDialogRef<ParameterViewComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     }
-
+  /**
+   * close modal.
+   */
   onCancelDelete(): void {
     this.dialogRef.close(false); 
   }

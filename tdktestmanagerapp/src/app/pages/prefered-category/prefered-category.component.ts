@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { Component } from '@angular/core';
 import { FooterComponent } from '../../layout/footer/footer.component';
 import { MaterialModule } from '../../material/material.module';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoginService } from '../../services/login.service';
@@ -29,7 +29,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 @Component({
   selector: 'app-prefered-category',
   standalone: true,
-  imports: [FooterComponent,MaterialModule, RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [FooterComponent,MaterialModule, ReactiveFormsModule, CommonModule],
   templateUrl: './prefered-category.component.html',
   styleUrl: './prefered-category.component.css'
 })
@@ -49,7 +49,9 @@ export class PreferedCategoryComponent {
       this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
       this.userCategory = this.loggedinUser.userCategory;
   }
-
+    /**
+   * Initializes the component.
+   */
   ngOnInit(): void {
     this.categorySelect = this.preferedCategory?this.preferedCategory:this.userCategory;
     this.categoryForm = this.fb.group({
@@ -57,13 +59,17 @@ export class PreferedCategoryComponent {
     });
     
   }
-
+    /**
+   * Change the category click on radio button.
+   */
   changeCategory(event:any):void{
     let val = event.target.value;
     console.log(val);
     this.categorySelect = val?val:this.loggedinUser.userCategory;
   }
-
+   /**
+   * Handles the form submission event.
+   */
   categorySubmit():void{
     this.submitted = true;
     if(this.categoryForm.invalid){
@@ -93,5 +99,11 @@ export class PreferedCategoryComponent {
         }
       })
     }
+  }
+  /**
+   * Navigate to configure page.
+   */
+  back():void{
+    this.router.navigate(["/configure"]);
   }
 }

@@ -1,0 +1,87 @@
+/*
+* If not stated otherwise in this file or this component's Licenses.txt file the
+* following copyright and licenses apply:
+*
+* Copyright 2024 RDK Management
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*
+http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+body, *:not(.material-icons) {
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+.mat-typography h1, 
+.mat-typography h2, 
+.mat-typography h3, 
+.mat-typography h4, 
+.mat-typography h5, 
+.mat-typography h6 {
+  font-family: Roboto, "Helvetica Neue", sans-serif !important;
+}
+.container{
+    margin-bottom: 2rem;
+}
+.radiobox-row{
+    border: 1px solid #0000002e;
+    border-radius: 10px;
+    box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
+  }
+.radiobox{
+    display: flex;
+    justify-content: start;
+    align-items: baseline;
+    padding: 0 30px;
+    font-size: 0.78rem;
+}
+
+.heading{
+    margin-top: 8px;
+    margin-bottom: 0;
+    font-size: 0.8rem;
+}
+.rdkgroup{
+    margin-left: 30px;
+}
+.rdkradio{
+    border: 2px solid #0e6f87;
+}
+.form-check-inline {
+    margin-right: 2rem;
+}
+.form-check-input:checked {
+    background-color: #0e6f87;
+    border-color: #0e6f87;
+}
+.borders-btm{
+    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px; 
+    margin:0;
+    width: 100%;
+}
+.title {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: 10px;
+}
+.main-margin{
+    margin: 0;
+}
+.common-style{
+    display: flex;
+    justify-content: center;
+}
+.viewgroup{
+    font-size: 0.8rem;
+    margin-left: 23px;
+}

@@ -72,6 +72,9 @@ export class HeaderComponent implements OnInit {
       this.isChecked = false;
     }
   }
+  /**
+   * This method is add class and remove class based on theme selection.
+   */
   applyTheme(theme: string): void {
     if (theme === 'DARK') {
       document.body.classList.add('dark');
@@ -81,6 +84,9 @@ export class HeaderComponent implements OnInit {
       document.body.classList.remove('dark');
     }
   }
+  /**
+   * This method is toggle themecolor from light to dark and vice-versa.
+   */  
   toggleTheme(): void {
     const newTheme = this.currentTheme === 'LIGHT' ? 'DARK' : 'LIGHT';
     this.themeService.themeUpdateService(this.userloggedIn.userID, newTheme);
@@ -107,6 +113,9 @@ export class HeaderComponent implements OnInit {
   navigateToPage() {
     this.service.selectedConfigVal = 'RDKV';
   }
+  /**
+   * Navigates to a script page.
+   */
   navigateToScript(){
     this.service.selectedCategory = 'RDKV';
     localStorage.removeItem('scriptCategory');

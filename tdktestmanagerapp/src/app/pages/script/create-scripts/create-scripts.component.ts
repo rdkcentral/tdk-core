@@ -77,7 +77,9 @@ export class CreateScriptsComponent {
     private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
    }
-
+  /**
+   * Initialize the component and forms
+   */ 
   ngOnInit(): void {
    let category = localStorage.getItem('category') || '';
    this.selectedCategory = category?category:'RDKV';
@@ -140,13 +142,16 @@ export class CreateScriptsComponent {
     });
 
   }
+  /**
+   * Method to get all modules
+   */   
   getAllModules(): void{
     this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res=>{
       this.allModules = JSON.parse(res);
     })
   }
 
-getSelectedModule(event: any) {
+getSelectedModule(event: any):void{
     this.allPrimitiveTest = [];
     let selectedValue = event.target.value;
     if(!selectedValue){
@@ -155,7 +160,9 @@ getSelectedModule(event: any) {
       this.getAllPrimitiveTest(selectedValue);
     }
   }
-
+  /**
+   * Method to get primitive test based on module select
+   */ 
 getAllPrimitiveTest(value: any): void{
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
@@ -176,71 +183,100 @@ getAllPrimitiveTest(value: any): void{
     }
   })
 }
-onChangePrimitive(event:any){
+  /**
+   * onChange primitive test 
+   */ 
+onChangePrimitive(event:any):void{
   let primitiveValue = event.target.value;
   this.defaultPrimitive = primitiveValue;
   this.getCode();
 }
-
-longDuration(event:any){
+  /**
+   * Method to get longDuration value
+   */ 
+longDuration(event:any):void{
   this.longDurationValue = event.target.checked;
 }
-
-skipExecution(event:any){
+  /**
+   * Method to get skipExecution value
+   */ 
+skipExecution(event:any):void{
   this.skipExecutionValue = event.target.checked;
 }
-
-changePriority(event:any){
+  /**
+   * Method to get priority value 
+   */ 
+changePriority(event:any):void{
   const priorityValue = event.target.value;
   this.changePriorityValue = priorityValue;
 }
-getCode() {
+  /**
+   * Method to get pycode value from monaco editor 
+   */ 
+getCode():void{
   let temp = this.defaultPrimitive;
   if(temp){
     this.scriptservice.scriptTemplate(temp).subscribe(res=>{
       this.sampleFile = res;
     })
   }
-
-  }
-
-  getAlldeviceType(): void{
+}
+  /**
+   * Method to get all device type
+   */ 
+getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res=>{
       this.allDeviceType = (JSON.parse(res));
     })
   }
-  onItemSelect(item:any){
+  /**
+   * Method to select device type
+   */   
+  onItemSelect(item:any):void{
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
   }
-  onDeSelect(item:any){
+  /**
+   * Method to deselect device type
+   */  
+  onDeSelect(item:any):void{
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
   }
-  onSelectAll(items: any[]){
+  /**
+   * Method to selectall device type
+   */  
+  onSelectAll(items: any[]):void{
    let devices = this.allDeviceType.filter(
     (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
    );
    this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
   }
-  onDeSelectAll(item:any){
+  /**
+   * Method to deselectall device type
+   */   
+  onDeSelectAll(item:any):void{
     this.deviceNameArr=[];
   }
-  // You can also change editor options dynamically if needed
-  onCodeChange(value: string) {
+// You can also change editor options dynamically if needed
+  onCodeChange(value: string) :void{
     let val = value;
   }
-
-  back(){
+  /**
+   * Navigate to sscript page
+   */ 
+  back():void{
     this.router.navigate(["/script"]);
   }
-
-  updateOptionalLabel() {
+  updateOptionalLabel() :void{
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
   }
-  onSubmit() {
+  /**
+   * Submission for create script
+   */     
+  onSubmit():void{
       const scriptCreateData = {
         name: this.firstFormGroup.value.scriptname,
         synopsis : this.firstFormGroup.value.synopsis,
@@ -288,8 +324,10 @@ getCode() {
       }
     })
   }
-
-  goBack(){
+  /**
+   * Navigate to script page
+   */ 
+  goBack():void{
     this.router.navigate(["/script"]);
   }
 

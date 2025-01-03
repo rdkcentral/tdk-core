@@ -56,7 +56,9 @@ export class ModulesEditComponent {
     this.moduleDetails = data;
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
    }
-
+  /**
+   * Initializes the component and sets up the initial values.
+   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
     this.categoryName = this.authservice.showSelectedCategory;
@@ -68,7 +70,6 @@ export class ModulesEditComponent {
       testGroup: new FormControl<string | null>(this.moduleDetails.testGroup, { validators: Validators.required }),
       executionTime: new FormControl<string | null>(this.moduleDetails.executionTime, { validators: Validators.required }),
       thundrShowHide: new FormControl<boolean | null>({value: this.isThunder?this.isThunder:this.moduleDetails.moduleThunderEnabled, disabled: false}),
-      // isAdvanced: new FormControl<boolean | null>({value: this.isAdvanced?this.isAdvanced:this.moduleDetails.moduleAdvanced, disabled: false}),
       crashFiles: new FormControl<string | null>(''),
       logFiles: new FormControl<string | null>('')
     })
@@ -80,11 +81,7 @@ export class ModulesEditComponent {
     const inputEle = event.target as HTMLInputElement;
     this.isThunder = inputEle.checked;
   }
-  
-  // isAdvancedCheck(event: any):void{
-  //   const inputEle = event.target as HTMLInputElement;
-  //   this.isAdvanced = inputEle.checked;
-  // }
+
     /**
    * Removes a crash file from the `crashFilesArr` array at the specified index.
    * @param index - The index of the crash file to remove.
@@ -107,7 +104,6 @@ export class ModulesEditComponent {
       if (value) {
         this.crashFilesArr.push(value);
         this.updateModuleForm.get('crashFiles')?.setValue('');
-        
       }
     
     }
@@ -119,10 +115,11 @@ export class ModulesEditComponent {
       if (value) {
         this.logFilesArr.push(value);
         this.updateModuleForm.get('logFiles')?.setValue('');
-        
       }
     }
-
+  /**
+   * This method is Submit the Update the module form.
+   */
   moduleUpdate():void{
     this.moduleFormSubmitted = true;
     if(this.updateModuleForm.invalid){
@@ -148,7 +145,6 @@ export class ModulesEditComponent {
           verticalPosition: 'top'
           })
           setTimeout(() => {
-            // this.updateModuleForm.reset();
             this.router.navigate(["configure/modules-list"]);
           }, 1000);
         },
@@ -163,15 +159,13 @@ export class ModulesEditComponent {
         }
       })
     }
-
   }
-
+  /**
+   * Navigates back to the modules list page.
+   */
   goBack():void{
     this.router.navigate(["/configure/modules-list"]);
     localStorage.removeItem('modules');
   }
 
-  reset():void{
-    this.updateModuleForm.reset();
-  }
 }

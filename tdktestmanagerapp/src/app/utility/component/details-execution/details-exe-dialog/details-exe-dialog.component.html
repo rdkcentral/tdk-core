@@ -16,81 +16,360 @@ limitations under the License.
 <div class="container">
     <div class="row mt-2">
       <div class="col-md-12">
-        <h1 class="view-title">Execution Details :</h1>
+        <button type="button" class="download-btn refresh" matTooltip="Click here to update" (click)="dataUpdate()"
+        *ngIf ="data.executionStatus === 'INPROGRESS'">
+          <i class="bi bi-arrow-clockwise download-icon"></i>
+        </button>
+        <h1 class="view-title">Execution Details</h1>
+        <div class="download-dropdown">
+          <span class="download-label">Download</span>
+          <select class="form-select select-filter" aria-label="Default select example"
+             id="priority">
+            <option value="" default>Select</option>
+            <option value="excel">Result excel- Raw report</option>
+            <option value="xml">Result Excel - Consolidated report</option>
+            <option value="zip">Result XML</option>
+            <option value="">Execution logs - zip </option>
+            <option value="">Execution logs for failure - zip </option>
+          </select>
+        </div>
         <div>
           <div class="row mt-2">
-            <div>
-                <table class="table table-bordered border-table">
-                    <tbody>
-                          <tr>
-                            <th class="details-row heading">Device Name</th>
-                            <td class="details-row">RPI4-TVM</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">IP</th>
-                            <td class="details-row">100.2.2.2</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">Date of Execution</th>
-                            <td class="details-row">24-10-2024 10:55</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">Execution Time(min)</th>
-                            <td class="details-row">2:20</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">Device Details</th>
-                            <td class="details-row">REALTEK_TDKCI-20241024051846_RERUN_1234600</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">Overall Status</th>
-                            <td class="details-row">SUCCESS</td>
-                          </tr>
-                          <tr>
-                            <th class="details-row heading">Execution Type</th>
-                            <td class="details-row">Single script</td>
-                          </tr>
-                    </tbody>
-                </table>
+            <div class="col-md-8" >
+              <button (click)="flipCard()" class="btn btn-sm view-module">View Module Details</button>
+                <div class="flip-card">
+                  <div class="flip-card-inner" [class.flipped]="isFlipped">
+                    <div class="flip-card-front">
+                      <mat-card class="card-height">
+                          <div class="details-sec mt-2">
+                            <table class="details-table">
+                              <tbody>
+                                    <tr >
+                                      <th class="details-row heading">Device Name</th>
+                                      <td class="details-row">{{data.deviceName}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">IP / MAC</th>
+                                      <td class="details-row">{{data.deviceIP}} / {{data.deviceMac}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Date of Execution</th>
+                                      <td class="details-row">{{convertDate(data.dateOfExecution)}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Total execution time(min)</th>
+                                      <td class="details-row">{{data.totalExecutionTime}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Script execution time(min)</th>
+                                      <td class="details-row">{{data.realExecutionTime}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading dev-details">Device Details</th>
+                                      <td class="details-device">
+                                        <div [innerHtml]="devideDetails"></div>
+                                      </td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Execution Status</th>
+                                      <td class="details-row">{{data.executionStatus}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Overall Result</th>
+                                      <td class="details-row">{{data.result}}</td>
+                                    </tr>
+                                    <tr >
+                                      <th class="details-row heading">Execution Type</th>
+                                      <td class="details-row">{{data.executionType}}</td>
+                                    </tr>
+                                    @if(data.executionType === 'SINGLESCRIPT' || data.executionType === 'MULTISCRIPT'){
+                                      <tr >
+                                        <th class="details-row heading">Script Name</th>
+                                        <td class="details-row">{{data.scriptTestSuite}}</td>
+                                      </tr>
+                                    }
+                                    @else{
+                                      <tr >
+                                        <th class="details-row heading">Testsuite Name</th>
+                                        <td class="details-row">{{data.scriptTestSuite}}</td>
+                                      </tr>
+                                    }
+                              </tbody>
+                          </table>
+                          </div>
+                      </mat-card>
+                    </div>
+                    <div class="flip-card-back">
+                      <mat-card class="card-height">
+                        <table class="module-table mt-3">
+                          <thead>
+                            <tr class="method-head">
+                              <th>Module Name</th>
+                              <th>TotalScripts</th>
+                              <th>Success</th>
+                              <th>Failure</th>
+                              <th>Aborted</th>
+                              <th>Executed</th>
+                              <th>In Progress</th>
+                              <th>NA</th>
+                              <th>Pending</th>
+                              <th>Skipped</th>
+                              <th>Timeout</th>
+                              <th>Success Percentage</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr  class="method" *ngFor="let key of moduleTableTitle">
+                              <td>{{key.name }}</td>
+                              <td>{{ key.totalScripts}}</td>
+                              <td>{{ key.success}}</td>
+                              <td>{{ key.failure}}</td>
+                              <td>{{ key.aborted}}</td>
+                              <td>{{ key.executed}}</td>
+                              <td>{{ key.inProgressCount}}</td>
+                              <td>{{ key.na}}</td>
+                              <td>{{ key.pending}}</td>
+                              <td>{{ key.skipped}}</td>
+                              <td>{{ key.timeout}}</td>
+                              <td class="passvalue">{{ key.successPercentage}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </mat-card>
+                    </div>
+                  </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+              <mat-card class="summary-card">
+                <h2 class="summary"> Summary</h2>
+                <apx-chart
+                    [series]="chartOptions.series"
+                    [chart]="chartOptions.chart"
+                    [labels]="chartOptions.labels"
+                    [legend]="chartOptions.legend"
+                    [colors]="chartOptions.dcolors!" 
+                    [dataLabels]="chartOptions.dataLabels">
+                  </apx-chart>
+                  <div class="total">
+                    <span>Total Scripts : {{data.summary.totalScripts}} </span>
+                    <span class="overall">Overall Pass % : {{data.summary.successPercentage}}</span>
+                  </div>
+              </mat-card>
             </div>
           </div>
-          <h2 class="summary">Execution Summary</h2>
-          <div>
-            <table class="table table-bordered border-table">
-                <thead>
-                  <tr>
-                    <th class="details-row heading" scope="col">Total Scripts</th>
-                    <th class="details-row heading" scope="col">Executed</th>
-                    <th class="details-row heading" scope="col">Success</th>
-                    <th class="details-row heading" scope="col">Failure</th>
-                    <th class="details-row heading" scope="col">NA</th>
-                    <th class="details-row heading" scope="col">Skipped</th>
-                    <th class="details-row heading" scope="col">Pending</th>
-                    <th class="details-row heading" scope="col">Undefined</th>
-                    <th class="details-row heading" scope="col">Overall Pass %</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td class="details-row">3</td>
-                    <td class="details-row">3</td>
-                    <td class="details-row">3</td>
-                    <td class="details-row">0</td>
-                    <td class="details-row">0</td>
-                    <td class="details-row">0</td>
-                    <td class="details-row">0</td>
-                    <td class="details-row">0</td>
-                    <td class="details-row overallpercnt">10</td>
-                  </tr>
-                </tbody>
-              </table>
+          <div class="row">
+            <div class="table-container mt-2" >
+              <div class="row seach-section" *ngIf="data.executionType !== 'SINGLESCRIPT'">
+                <div class="col">
+                  <div class="row mt-1 mb-2 row-align">
+                    <label for="device" class="col-md-5 col-form-label">Filter by</label>
+                    <div class="col-md-7">
+                      <select class="form-select select-filter" aria-label="Default select example"
+                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
+                          <option value="all" default>Select</option>
+                          <option value="SUCCESS">SUCCESS</option>
+                          <option value="FAILURE">FAILURE</option>
+                      </select>
+                    </div>
+                  </div>
+                  <!-- <div class="row mb-2">
+                    <label for="device" class="col-md-5 col-form-label">Trigger a New Execution from Here</label>
+                    <div class="col-md-7">
+                      <select class="form-select select-filter" aria-label="Default select example"
+                          id="priority">
+                          <option value="all" default>Select</option>
+                          <option value="Success">Success</option>
+                          <option value="Failure">Failure</option>
+                      </select>
+                    </div>
+                  </div> -->
+                </div>
+                <div class="col">
+                  <div class="btns-option">
+                    <button type="button" class="download-btn" (click)="clearSelections()" matTooltip="Clear Filters">
+                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
+                    <button type="button" class="download-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
+                    <button type="button" class="download-btn" matTooltip="Rerun Of Failure Scripts" (click)="rerunFailure()">
+                      <i class="bi bi-arrow-repeat download-icon"></i>
+                    </button>
+                  </div>
+                  <!-- <div class="btns-trigger">
+                    <button type="button" class="trigger-btn">Trigger Execution</button>
+                  </div> -->
+                </div>
+              </div>
+              <div class="row table-heading">
+                <div class="col-md-1 border-column">
+                  <span><input type="checkbox" id="selectAll" [checked]="allChecked" 
+                    (change)="toggleAll($event)" /></span>
+                </div>
+                <div class="col-md-6 border-column">
+                  <span>Script Name</span>
+                </div>
+                <div class="col-md-3 border-column"><span>Status</span></div>
+                <div class="col-md-2">Action</div>
+              </div>
+              <div class="row">
+                <div class="accordion" id="accordionExample">
+                  <div class="row accord-row">
+                    <div class="accordion-item" *ngFor="let parent of filteredData; let i = index">
+                   
+                        <h2 class="accordion-header d-flex align-items-center accord-head">
+                          <div class="col-md-1">
+                            <input type="checkbox" [checked]="parent.checked" 
+                            (change)="toggleCheckbox(i, $event)"/>                                 
+                          </div>
+                          <div class="col-md-6">
+                            <button class="accordion-button no-arrow collapsed flex-grow-1 accor-title" type="button" (click)="$event.stopPropagation()">
+                              {{ parent.name }} 
+                            </button>                                    
+                          </div>
+                          <div class="col-md-3">
+                          <button class="accordion-button no-arrow collapsed flex-grow-1 accor-testgroup" type="button" (click)="$event.stopPropagation()">
+                            {{ parent.status }} 
+                          </button>
+                          </div>
+                          <div class="col-md-2">
+                            <button  class="btn btn-sm delete-btn" matTooltip="Download Script" >
+                              <i class="bi bi-cloud-arrow-down-fill extra-icon download"></i>
+                            </button>
+                            <button class="btn btn-sm view-icon" matTooltip="View Details"  (click)="togglePanel(parent, parent.executionResultID)">
+                              <i class="bi collapse-icon details" [ngClass]="parent.expanded ? 'bi-journal-minus' : 'bi-journal-plus'"></i>
+                            </button>
+                          </div>
+                        </h2>
+                      <div [class.show]="parent.expanded" class="accordion-collapse collapse">
+                        <div class="accordion-body" >
+                          <mat-card class="details-card">
+                            <h2 class="details-heading">Execution details</h2>
+                              <div class="details-sec">
+                                <table class="script-table" *ngIf="parent.details">
+                                  <tbody >
+                                        <tr *ngFor="let detail of parent.details | keyvalue">
+                                          <div *ngIf="detail.key === 'timeTaken'">
+                                            <th class="details-row heading">TimeTaken(min)</th>
+                                            <td class="details-row script-td">{{ detail.value }}</td>
+                                          </div>
+                                          <div *ngIf="detail.key === 'testCaseCount'">
+                                            <th class="details-row heading">TestCase Count</th>
+                                            <td class="details-row script-td">{{ detail.value }}</td>
+                                          </div>
+                                        </tr>
+                                  </tbody>
+                              </table>
+                              </div>
+                              <h2 class="details-heading">Method Results</h2>
+                              <div class="method-sec">
+                                <table class="method-table" *ngIf="parent.details">
+                                  <thead>
+                                    <tr class="method-head">
+                                      <th>Function Name</th>
+                                      <th>ExpectedResult</th>
+                                      <th>ActualResult</th>
+                                      <th>Status</th>
+                                    </tr>
+                                  </thead>
+                                  <tbody class="method-table-body"> 
+                                    <tr *ngFor="let obj of parent.details.executionMethodResult" class="method">
+                                      <td> {{obj.functionName}} </td>
+                                      <td> {{obj.expectedResult}} </td>
+                                      <td> {{obj.actualResult}} </td>
+                                      <td> {{obj.resultStatus}} </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                              <h2 class="details-heading">Logs</h2>
+                              <div class="details-sec" >
+                                <table class="script-table" *ngIf="parent.details">
+                                  <tbody >
+                                        <tr *ngFor="let detail of parent.details | keyvalue" >
+                                          @if (parent.status !== 'INPROGRESS') {
+                                            <div *ngIf="detail.key === 'logs'" class="logs-table">
+                                              <th class="details-row heading">Log Data</th>
+                                              <td class="logs script-td" >
+                                                <div [innerHTML]="formatLogs" class="format-text"></div>
+                                              </td>
+                                            </div>
+                                          }
+                                          @if (parent.status === 'INPROGRESS') {
+                                            <div *ngIf="detail.key === 'logs'" class="logs-table">
+                                              <th class="details-row heading">Log Data</th>
+                                              <td class="details-row script-td">
+                                                <button type="button" class="download-btn log-btn"  matTooltip="Live Logs" (click)="liveLogs()">
+                                                  View Live Logs</button>
+                                              </td>
+                                            </div>
+                                          }
+                                        </tr>
+                                        <tr *ngFor="let detail of parent.details | keyvalue">
+                                          <div *ngIf="detail.key === 'deviceLogsAvailable'" class="logs-table">
+                                            <th class="details-row heading">Device Log Files</th>
+                                            <td *ngIf="detail.value === false" class="details-row script-td">No device Logs available</td>
+                                            <td *ngIf="detail.value === true" class="details-row script-td">
+                                              <button type="button" class="download-btn log-btn"  matTooltip="Log Files" (click)="logFiles()">
+                                                View Log Files
+                                              </button>
+                                            </td>
+                                          </div>
+                                        </tr>
+                                        <tr *ngFor="let detail of parent.details | keyvalue">
+                                          <div *ngIf="detail.key === 'agentLogsAbvailable'" class="logs-table">
+                                            <th class="details-row heading">Agent Log Files</th>
+                                            <td *ngIf="detail.value === false" class="details-row script-td">No agent Logs abvailable</td>
+                                            <td *ngIf="detail.value === true" class="details-row script-td">{{detail.value}}</td>
+                                          </div>
+                                        </tr>
+                                        <tr *ngFor="let detail of parent.details | keyvalue">
+                                          <div *ngIf="detail.key === 'crashLogsAvailable'" class="logs-table">
+                                            <th class="details-row heading">Crash Log Files</th>
+                                            <td *ngIf="detail.value === false" class="details-row script-td">No crash Logs abvailable</td>
+                                            <td *ngIf="detail.value === true" class="details-row script-td">{{detail.value}}</td>
+                                          </div>
+                                        </tr>
+                                  </tbody>
+                              </table>
+                              </div>
+                              <h2 class="details-heading">Script Execution Result Trend</h2>
+                              <div class="details-sec trend-row">
+                                <table class="script-table" *ngIf="parent.details">
+                                  <tbody>
+                                        <tr >
+                                          <th class="details-row heading">Trend</th>
+                                          <td class="details-row">
+                                            <div class="trend-container">
+                                              <div *ngFor="let trend of parent.details.executionTrend" class="status-item">
+                                                  <div
+                                                  class="status-circle"
+                                                  [ngClass]="{
+                                                    'success': trend === 'SUCCESS',
+                                                    'failure': trend === 'FAILURE'
+                                                  }"
+                                                  ></div>
+                                              </div>
+                                            </div>
+
+                                          </td>
+                                        </tr>
+                                  </tbody>
+                              </table>
+                              </div>
+                          </mat-card>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div class="row">
             <div class="mt-2 text-end mb-2">
               <button
                 class="view-btn close"
                 (click)="onClose()"
-                *ngIf="!data.cancel"
+                
               >
                 Close
               </button>
@@ -100,4 +379,3 @@ limitations under the License.
       </div>
     </div>
   </div>
-  

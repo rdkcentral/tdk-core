@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../utility/global-constants';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, Subject, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
 const apiUrl: string = GlobalConstants.apiUrl;
@@ -31,6 +31,8 @@ const apiUrl: string = GlobalConstants.apiUrl;
 export class LoginService {
 
   isloggedIn = false;
+  private logoutSubject = new Subject<void>();
+  onLogout$ = this.logoutSubject.asObservable();
 
   constructor(private http: HttpClient, private authService: AuthService) { }
 
@@ -45,7 +47,9 @@ export class LoginService {
     const current_user = <string>localStorage.getItem('loggedinUser');
     return JSON.parse(current_user);
   }
+
   logoutUser(): void {
+    this.logoutSubject.next();
     this.isloggedIn = false;
     localStorage.clear();
   }

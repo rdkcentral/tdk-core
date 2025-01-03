@@ -56,7 +56,9 @@ export class FunctionEditComponent {
         moduleName: new FormControl<string | null>({value: this.functionData.moduleName, disabled: true}, { validators: Validators.required}),
       })
     }
-
+  /**
+   * This method is Submit the update the function form.
+   */
     updateFunctionSubmit():void{
       this.functionFormSubmitted = true;
       if(this.updateFunctionForm.invalid){
@@ -94,14 +96,8 @@ export class FunctionEditComponent {
   /**
    * Navigates back to the function list page.
    */
-  goBack(){
+  goBack():void{
     this.router.navigate(["/configure/function-list"]);
   }
 
-  /**
-   * Resets the function form to its initial state.
-   */
-  reset(){
-    this.updateFunctionForm.reset();
-  }
 }

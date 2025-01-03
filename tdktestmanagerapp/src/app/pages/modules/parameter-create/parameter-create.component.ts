@@ -111,14 +111,14 @@ export class ParameterCreateComponent {
   /**
    * Navigates back to the parameter list page.
    */
-  goBack(){
+  goBack():void{
     this.router.navigate(["/configure/parameter-list"]);
   }
 
   /**
    * Resets the parameter form to its initial state.
    */
-  reset(){
+  reset():void{
     this.parameterForm.reset();
   }
 

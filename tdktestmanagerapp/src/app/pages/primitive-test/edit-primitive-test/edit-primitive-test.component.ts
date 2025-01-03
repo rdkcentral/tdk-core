@@ -189,7 +189,7 @@ export class EditPrimitiveTestComponent {
    * Method to update the primitive test.
    * @returns 
    */
-  editPrimitiveTest() {
+  editPrimitiveTest():void{
     this.submitted = true;
     if (this.editPrimitiveTestForm.invalid) {
       return
@@ -249,7 +249,7 @@ export class EditPrimitiveTestComponent {
    * Method to get the grid ready.
    * @param params 
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
 
@@ -257,7 +257,7 @@ export class EditPrimitiveTestComponent {
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent) {
+  onRowSelected(event: RowSelectedEvent):void{
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
@@ -266,7 +266,7 @@ export class EditPrimitiveTestComponent {
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent):void{
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -275,14 +275,6 @@ export class EditPrimitiveTestComponent {
       this.gridApi.refreshCells({ force: true })
     }
   }
-
-  /**
-   * Resets the form.
-   */
-  reset(): void {
-    this.editPrimitiveTestForm.reset();
-  }
-
   /**
    * Navigates back to the list of box types.
    */

@@ -46,7 +46,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-list-primitive-test',
   standalone: true,
-  imports: [FooterComponent,MaterialModule, RouterLink, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular],
+  imports: [MaterialModule, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular],
   templateUrl: './list-primitive-test.component.html',
   styleUrl: './list-primitive-test.component.css'
 })
@@ -124,7 +124,7 @@ export class ListPrimitiveTestComponent {
    * Method to get the selected value.
    * @param event 
    */
-  getSelectedValue(event: any) {
+  getSelectedValue(event: any):void{
     this.selectedValue = event.target.value;
     this.getParameterDetails(this.selectedValue);
   }
@@ -133,7 +133,7 @@ export class ListPrimitiveTestComponent {
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>) :void{
     this.gridApi = params.api;
 
   }
@@ -141,7 +141,7 @@ export class ListPrimitiveTestComponent {
    * Deletes a record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) {
+  delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
       this.service.deletePrimitiveTest(data.primitiveTestId).subscribe({
         next: (res) => {
@@ -172,7 +172,7 @@ export class ListPrimitiveTestComponent {
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent) {
+  onRowSelected(event: RowSelectedEvent):void{
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
@@ -181,7 +181,7 @@ export class ListPrimitiveTestComponent {
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent) :void{
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -196,7 +196,7 @@ export class ListPrimitiveTestComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(user: any): any {
+  userEdit(user: any):void{
     localStorage.setItem('user', JSON.stringify(user))
     this.service.getParameterListUpdate(user.primitiveTestId).subscribe(res => {
       this.service.allPassedData.next(JSON.parse(res));
@@ -208,14 +208,14 @@ export class ListPrimitiveTestComponent {
   /**
    * Navigates to the create primitive test page.
    */
-  createPrimitiveTest() {
+  createPrimitiveTest():void{
     this.router.navigate(['/configure/create-primitivetest']);
   }
 
   /**
    * Method to get the parameter details.
    */
- getParameterDetails(selectedValue:any) {
+ getParameterDetails(selectedValue:any):void{
     this.service.getParameterNames(selectedValue).subscribe({
       next: (res) => {
         this.rowData = JSON.parse(res);
@@ -229,7 +229,7 @@ export class ListPrimitiveTestComponent {
   /**
    * Navigates back to the previous page.
    */
-  goBack() {
+  goBack() :void{
     this.authservice.selectedConfigVal = 'RDKV';
     this.router.navigate(["/configure"]);
   }

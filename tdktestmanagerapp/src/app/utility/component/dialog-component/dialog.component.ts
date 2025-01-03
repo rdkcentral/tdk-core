@@ -20,26 +20,17 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
-import { AgGridAngular } from 'ag-grid-angular';
 import { HttpClientModule } from '@angular/common/http';
 import { DeviceService } from '../../../services/device.service';
-import {
-  ColDef,
-  IMultiFilterParams,
-} from 'ag-grid-community';
-import { InputComponent } from '../ag-grid-buttons/input/input.component';
-/**
- * @title Dialog elements
- */
 
 @Component({
   selector: 'dialog-data',
   templateUrl: 'dialog.component.html',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,AgGridAngular],
+  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule],
   encapsulation: ViewEncapsulation.None
 })
 
@@ -52,14 +43,14 @@ export class DialogDelete implements OnInit{
   visibleDeviceconfigFile = false;
   newFileName!: string;
 
-
-
   constructor(
     public dialogRef: MatDialogRef<DialogDelete>,
     @Inject(MAT_DIALOG_DATA) public data: any ,private service:DeviceService,private fb:FormBuilder) {
       
     }
-
+/**
+ * Initialize the component
+ */
   ngOnInit(): void {
     this.visibilityConfigFile();
     this.uploadConfigForm = this.fb.group({
@@ -67,16 +58,20 @@ export class DialogDelete implements OnInit{
       editorContent: [''],
     });
   }
-
+/**
+ * This methos is for close the dialog box
+ */
   onCancelDelete(): void {
     this.dialogRef.close(false); 
   }
-
-
+/**
+ * This method is for view the config file
+ */
   visibilityConfigFile(): void{
     let boxNameConfig = this.data.stbName;
     let boxTypeConfig = this.data.boxTypeName; 
-    this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig)
+    let isThunder = false;
+    this.service.downloadDeviceConfigFile(boxNameConfig,boxTypeConfig, isThunder)
     .subscribe((res)=>{ 
       this.configFileName = res.filename;
       if(this.configFileName !== `${boxNameConfig}.config` && this.stbNameChange !== undefined && this.stbNameChange !== ""){
@@ -94,6 +89,9 @@ export class DialogDelete implements OnInit{
       this.readFileContent(res.content);
     })
   }
+  /**
+ * This method is for read the content of config file
+ */
   readFileContent(file:Blob): void{
     let boxNameConfig = this.data.stbname;
     const reader = new FileReader();
@@ -109,7 +107,9 @@ export class DialogDelete implements OnInit{
     }
     reader.readAsText(file)
   }
-
+/**
+ * This methos is for format the content
+ */
   formatContent(content:any){
     return content.replace(/#/g, '<br># ');
   }

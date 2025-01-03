@@ -19,7 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, AbstractControlOptions, FormBuilder, FormControl, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -42,11 +42,14 @@ export class UserAddComponent implements OnInit {
   allGroupName: any;
   allRoles: any
   errormessage!: string;
+  loggedInUser:any;
 
   constructor(private http: HttpClient, private fb: FormBuilder, private router: Router,
     private usermanageserice: UserManagementService,
     private _snakebar: MatSnackBar
-  ) { }
+  ) { 
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+  }
 
 
    /**
@@ -60,7 +63,7 @@ export class UserAddComponent implements OnInit {
     this.userForm = new FormGroup({
       username: new FormControl<string | null>('', { validators: [Validators.required, Validators.minLength(4)] }),
       useremail: new FormControl<string | null>('', { validators: [Validators.required, Validators.pattern(emailregex)] }),
-      displayname: new FormControl<string | null>('', { validators: Validators.required }),
+      displayname: new FormControl<string | null>('', { validators: [Validators.required,this.noLeadingSpacesValidator] }),
       userpassword: new FormControl<string | null>('', { validators: [Validators.required, Validators.minLength(6)] }),
       retypepassword: new FormControl<string | null>('', { validators: Validators.required }),
       usergroupname: new FormControl<string | null>('', { validators: Validators.required }),
@@ -75,7 +78,52 @@ export class UserAddComponent implements OnInit {
     this.usermanageserice.getAllRole().subscribe(res => {
       this.allRoles = res;
     })
+    this.userForm.get('username')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.userForm.get('username')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.userForm.get('useremail')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.userForm.get('useremail')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.userForm.get('userpassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.userForm.get('userpassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.userForm.get('retypepassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.userForm.get('retypepassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.displayname.valueChanges.subscribe(value => {
+      if (value && value.startsWith(' ')) {
+        this.displayname.setValue(value.trimStart(), { emitEvent: false });
+      }
+    });
+  }
+  
+  get displayname(): AbstractControl {
+    return this.userForm.get('displayname')!;
+  }
 
+  noLeadingSpacesValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value || '';
+    return value.startsWith(' ') ? { noLeadingSpaces: true } : null;
   }
 
     /**
@@ -127,7 +175,8 @@ export class UserAddComponent implements OnInit {
         userEmail: this.userForm.value.useremail,
         userGroupName: this.userForm.value.usergroupname,
         userRoleName: this.userForm.value.rolename,
-        userDisplayName: this.userForm.value.displayname
+        userDisplayName: this.userForm.value.displayname,
+        userCategory: this.loggedInUser.userCategory
       }
       this.usermanageserice.createUser(obj).subscribe({
         next: (res) => {
@@ -145,8 +194,7 @@ export class UserAddComponent implements OnInit {
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this.errormessage = errmsg.message ? errmsg.message : errmsg.password;
-          this._snakebar.open(this.errormessage, '', {
+          this._snakebar.open(errmsg.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

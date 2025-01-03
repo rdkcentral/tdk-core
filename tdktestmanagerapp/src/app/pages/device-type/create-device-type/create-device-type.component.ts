@@ -93,13 +93,11 @@ export class CreateDeviceTypeComponent implements OnInit {
           })
           setTimeout(() => {
             this.router.navigate(["configure/list-devicetype"]);
-
           }, 1000);
-
         },
         error: (err) => {
           let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(errmsg.deviceTypeName?errmsg.deviceTypeName:errmsg.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

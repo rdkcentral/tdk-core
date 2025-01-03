@@ -12,21 +12,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-
-<nav class="navbar navbar-expand-lg header">
-    <div class="container-fluid">
-      <a class="navbar-brand"></a>
-      <img src="assets/logo/rdkLogo.png" alt="TDK_logo" class="logo-img img-fluid" /> <span class="apptitle">TDK Test
-        Development Kit</span>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-        aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarText">
-      </div>
-    </div>
-  </nav>
-  
   <div class="container-fluid">
     <div class="row">
       <div class="col">
@@ -54,7 +39,7 @@ limitations under the License.
                 </div>
                 <div class="row" style="margin-bottom: 0.5rem;">
                   <div class="mt-2 resetpwdbtn">
-                    <button class="back-btn" routerLink="/configure" matTooltip="Back">Back</button>
+                    <button class="back-btn" (click)="back()" matTooltip="Back">Back</button>
                     <button type="submit">Submit</button>
                   </div>
                 </div>

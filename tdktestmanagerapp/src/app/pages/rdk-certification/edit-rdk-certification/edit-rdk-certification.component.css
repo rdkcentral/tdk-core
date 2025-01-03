@@ -26,6 +26,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 25px;
 }
+
 .container-box {
     background-color: #fff;
     border-radius: 10px;
@@ -35,6 +36,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     min-height: 320px;
 
 }
+
 .container-box form {
     display: flex;
     justify-content: center;
@@ -42,6 +44,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     padding: 30px 18%;
     height: 90%;
 }
+
 .reset-btn {
     background-color: #00B2DC;
     color: #fff !important;

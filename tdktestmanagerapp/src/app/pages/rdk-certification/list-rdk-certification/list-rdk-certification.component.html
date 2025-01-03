@@ -21,10 +21,12 @@ limitations under the License.
         </div>
         <div class="col-md-1">
             <div class="btns-grp text-end">
-                <button class="back-btn" (click)="goBack()" matTooltip="Back"><i class="bi bi-arrow-return-left icon-size"></i></button>
-                <button type="button" class="download-btn" matTooltip="Upload Configuration File" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                <button class="back-btn" (click)="goBack()" matTooltip="Back"><i
+                        class="bi bi-arrow-return-left icon-size"></i></button>
+                <button type="button" class="download-btn" matTooltip="Upload Configuration File" data-bs-toggle="modal"
+                    data-bs-target="#certificateModal">
                     <i class="bi bi-cloud-arrow-up-fill download-icon"></i>
-                  </button>
+                </button>
                 <button class="create-btn" (click)="createRdkCertification()" matTooltip="Create RDK Certification">
                     <i class="bi bi-plus-circle-fill icon-size"></i>
                 </button>
@@ -32,40 +34,46 @@ limitations under the License.
         </div>
     </div>
     <div class="row table-sec mt-2">
-            <ag-grid-angular style="width: 100%; height: 395px;" [columnDefs]="columnDefs"
-                [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowSelection]="rowSelection"
-                [rowData]="rowData" [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
-                [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
-                [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true" [context]="this">
-            </ag-grid-angular>
+        <ag-grid-angular style="width: 100%; height: 395px;" [columnDefs]="columnDefs" [defaultColDef]="defaultColDef"
+            [suppressRowClickSelection]="true" [rowSelection]="rowSelection" [rowData]="rowData" [class]="themeClass"
+            [pagination]="true" [paginationPageSize]="paginationPageSize"
+            [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
+            [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true" [context]="this">
+        </ag-grid-angular>
     </div>
 </div>
-<div class="modal fade" #staticBackdrop id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+<div class="modal fade" #certificateModal id="certificateModal" data-bs-backdrop="static" data-bs-keyboard="false"
+    tabindex="-1" aria-labelledby="certificateModalLabel" aria-hidden="true">
     <div class="modal-dialog custom-modal">
-      <div class="modal-content">
-        <form [formGroup]="uploadConfigurationForm" (ngSubmit)="uploadConfigurationSubmit()">
-        <div class="modal-header modaltitle">
-          <h1 class="modal-title custom-title" id="staticBackdropLabel">Upload Configuration File</h1>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-            <div class="container mt-4">
-                <div class="row mb-3"> 
-                    <label for="uploadfile" class="col-md-4  col-form-label">Select Config Python File<span style="color:red; margin-left: 0.75em;">*</span></label>
-                        <div class="col-md-8">
-                            <input class="form-control form-control-sm" id="uploadfile" type="file" formControlName="uploadConfig" (change)="onFileChange($event)">
-                            <div *ngIf="uploadFormSubmitted && uploadConfigurationForm.controls['uploadConfig']?.errors" class="text-danger">
-                                <small *ngIf="uploadConfigurationForm.controls['uploadConfig']?.errors?.['required']">Please select the python file.</small>
+        <div class="modal-content">
+            <form [formGroup]="uploadConfigurationForm" (ngSubmit)="uploadConfigurationSubmit()">
+                <div class="modal-header modaltitle">
+                    <h1 class="modal-title custom-title" id="certificateModalLabel">Upload Configuration File</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="container mt-4">
+                        <div class="row mb-3">
+                            <label for="uploadfile" class="col-md-4  col-form-label">Select Config Python File<span
+                                    style="color:red; margin-left: 0.75em;">*</span></label>
+                            <div class="col-md-8">
+                                <input class="form-control form-control-sm" id="uploadfile" type="file"
+                                    formControlName="uploadConfig" (change)="onFileChange($event)">
+                                <div *ngIf="uploadFormSubmitted && uploadConfigurationForm.controls['uploadConfig']?.errors"
+                                    class="text-danger">
+                                    <small
+                                        *ngIf="uploadConfigurationForm.controls['uploadConfig']?.errors?.['required']">Please
+                                        select the python file.</small>
+                                </div>
                             </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <div class="modal-footer">
+                    <button type="button" class="modal-btns" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="modal-btns">Upload Config File</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="modal-btns" data-bs-dismiss="modal">Close</button>
-          <button type="submit" class="modal-btns">Upload Config File</button>
-        </div>
-        </form>
-      </div>
     </div>
 </div>

@@ -29,9 +29,10 @@ limitations under the License.
                                         formControlName="fileName" placeholder="Enter file name">
                                     <div *ngIf="submitted && certificationFormGroup.controls['fileName']?.errors"
                                         class="text-danger">
-                                        <small
-                                            *ngIf="certificationFormGroup.controls['fileName']?.errors?.['required']">Please
+                                        <small *ngIf="certificationFormGroup.controls['fileName']?.errors?.['required']">Please
                                             enter file  name.</small>
+                                        <small *ngIf="certificationFormGroup.controls['fileName']?.errors?.['cannotContainSpace']">Please
+                                            enter valid file name.</small>
                                     </div>
                                 </div>
                             </div>

@@ -26,12 +26,12 @@ limitations under the License.
                                         style="color:red; margin-left: 0.75em;">*</span></label>
                                 <div class="col-md-7">
                                     <input type="text" class="form-control" id="devicetypeName"
-                                        formControlName="devicetypeName" placeholder="Enter device name">
+                                        formControlName="devicetypeName" placeholder="Enter device type name">
                                     <div *ngIf="submitted && createDeviceTypeForm.controls['devicetypeName']?.errors"
                                         class="text-danger">
                                         <small
                                             *ngIf="createDeviceTypeForm.controls['devicetypeName']?.errors?.['required']">Please
-                                            enter device  name.</small>
+                                            enter device type name.</small>
                                         <small *ngIf="createDeviceTypeForm.controls['devicetypeName']?.errors?.['minlength']">
                                             Device type name should be 3 characters.</small>
                                     </div>

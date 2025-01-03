@@ -107,5 +107,10 @@ export class RdkService {
     )
 
   }
-
+  deleteRdkCertification(name: any): Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.delete(`${apiUrl}api/v1/rdkcertification/delete?fileName=${name}`, { headers, responseType: 'text' });
+  }
 }

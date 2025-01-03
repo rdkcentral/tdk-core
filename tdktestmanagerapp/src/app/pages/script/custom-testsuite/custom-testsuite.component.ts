@@ -52,8 +52,10 @@ export class CustomTestsuiteComponent {
     private fb:FormBuilder,private authservice: AuthService,private _snakebar: MatSnackBar){
       this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     }
-
-  ngOnInit() {
+  /**
+   * Initializes the component.
+  */
+  ngOnInit() :void{
     this.masterSelected = false;
     this.customFormGroup = this.fb.group({
       category:[],
@@ -68,37 +70,52 @@ export class CustomTestsuiteComponent {
     this.getAllModule(this.getCategory);
     this.getAlldeviceType();
   }
-
+  /**
+   * Validation for empty array for module.
+  */
   arrayNotEmptyValidator(control: any) {
     return Array.isArray(control.value) && control.value.length > 0 ? null : { required: true };
   }
-
-  categoryChange(val:any){
+  /**
+   * category change click on radio button
+  */
+  categoryChange(val:any):void{
     this.selectedVideoCategory = val;
     this.getAllModule(this.selectedVideoCategory);
     this.customFormGroup.controls['modules'].setValue([]);
     this.updateSelectAllCheckbox();
   }
-
-  getAllModule(category:string){
+  /**
+   * method for get all module list
+  */
+  getAllModule(category:string):void{
     this.scriptservice.getModuleCustomTestSuite(category).subscribe(res=>{
       this.modulesArr = JSON.parse(res);
     })
   }
+  /**
+   * method for get all device type list
+  */  
   getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.getCategory).subscribe(res=>{
       this.allDeviceType = JSON.parse(res);
     })
   }
+  /**
+   * method for change device type
+  */  
   devicetypeChange(event:any): void{
     let value = event.target.value;
   }
+  /**
+   * method for check module
+  */   
   modulesChecked(item: string): boolean {
     const modules = this.customFormGroup.value.modules || [];
     return modules.includes(item);
   }
   // when checkbox change, add/remove the item from the array
-  onChange(event:any, item:any){
+  onChange(event:any, item:any):void{
     const isChecked = event.target.checked;
     let selectedModules: string[] = this.customFormGroup.value.modules || [];
 
@@ -115,28 +132,38 @@ export class CustomTestsuiteComponent {
     this.customFormGroup.controls['modules'].setValue([...selectedModules]);
     this.updateSelectAllCheckbox();
   }
-
-  checkUncheckAll(event:any,) {
+  /**
+   * method for check/uncheck all module
+  */ 
+  checkUncheckAll(event:any) :void{
     const isChecked = event.target.checked;
     const allModules = isChecked ? [...this.modulesArr] : [];
     this.customFormGroup.controls['modules'].setValue(allModules);
   }
-
+  /**
+   * Update for check all module
+  */ 
   updateSelectAllCheckbox(): void {
     const selectAllCheckbox = document.querySelector('.selectall input[type="checkbox"]') as HTMLInputElement;
     const selectedModules = this.customFormGroup.value.modules || [];
     selectAllCheckbox.checked = selectedModules.length === this.modulesArr.length;
     selectAllCheckbox.indeterminate = selectedModules.length > 0 && selectedModules.length < this.modulesArr.length;
   }
-
+  /**
+   * method for durationChecked
+  */ 
   durationChecked(event:any):void{
     let duration = event.target.checked;
   }
-
+  /**
+   * Navigate to script page
+  */ 
   goBack():void{
     this.router.navigate(['/script']);
   }
-
+  /**
+   * Submission for customSuite create
+  */ 
   customFormSubmit():void{
     this.formSubmitted= true;
     if(this.customFormGroup.invalid){

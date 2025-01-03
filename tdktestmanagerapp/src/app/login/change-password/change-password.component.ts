@@ -29,7 +29,7 @@ import { MaterialModule } from '../../material/material.module';
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [FooterComponent,MaterialModule, RouterLink, ReactiveFormsModule, CommonModule],
+  imports: [FooterComponent, MaterialModule, RouterLink, ReactiveFormsModule, CommonModule],
   templateUrl: './change-password.component.html',
   styleUrl: './change-password.component.css'
 })
@@ -45,15 +45,15 @@ export class ChangePasswordComponent implements OnInit {
   /**
    * Represents the showNewPassword of the application.
    */
-  public showPasswordOnPress: boolean | undefined;
+  public showPasswordOnPress: boolean = true;
   /**
    * Represents the showConfirmPassword of the application.
    */
-  public showNewPasswordOnPress: boolean | undefined;
+  public showNewPasswordOnPress:boolean = true;
   /**
    * Represents the showConfirmPassword of the application.
    */
-  public showConfirmPasswordOnPress: boolean | undefined;
+  public showConfirmPasswordOnPress:boolean = true;
   /**
    * Represents the passwordIcon of the application.
    */
@@ -88,11 +88,43 @@ export class ChangePasswordComponent implements OnInit {
 
     this.changePasswordForm = this.formBuilder.group({
       username: ['', [Validators.required, Validators.minLength(4)]],
-      oldpassword: ['', [Validators.required, Validators.minLength(4)]],
-      newpassword: ['', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/)]],
-      confirmpassword: ['', Validators.required]
+      oldpassword: ['', [Validators.required, Validators.minLength(6)]],
+      newpassword: ['', [Validators.required, Validators.minLength(6)]],
+      confirmpassword: ['', Validators.required],
     }, { validators: this.passwordMatchValidator('newpassword', 'confirmpassword') });
 
+    this.changePasswordForm.get('username')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.changePasswordForm.get('username')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.changePasswordForm.get('oldpassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.changePasswordForm.get('oldpassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.changePasswordForm.get('newpassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.changePasswordForm.get('newpassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
+    this.changePasswordForm.get('confirmpassword')?.valueChanges.subscribe((value) => {
+      const cleanedValue = value.replace(/\s+/g, '');
+      if (cleanedValue !== value) {
+        this.changePasswordForm.get('confirmpassword')?.setValue(cleanedValue, {
+          emitEvent: false,
+        });
+      }
+    });
   }
 
   /**
@@ -124,7 +156,7 @@ export class ChangePasswordComponent implements OnInit {
   /**
   * Method to reset the password.
   */
-  resetPassword():void {
+  resetPassword(): void {
     this.submitted = true;
     if (this.changePasswordForm.invalid) {
       return
@@ -143,7 +175,6 @@ export class ChangePasswordComponent implements OnInit {
           })
           setTimeout(() => {
             this.router.navigate(["/"]);
-
           }, 1000);
 
         },
@@ -164,28 +195,36 @@ export class ChangePasswordComponent implements OnInit {
   /**
    * Method to view the password.
    */
-  viewPassword() :void{
+  viewPassword(): void {
     this.showPasswordOnPress = !this.showPasswordOnPress;
-    this.visible = !this.visible;
+    if (this.showPasswordOnPress) {
+      this.showPasswordOnPress = true;
+    }
   }
   /**
    * Method to view the new password.
    */
-  viewNewPassword():void {
+
+  viewNewPassword(): void {
     this.showNewPasswordOnPress = !this.showNewPasswordOnPress;
-    this.visible = !this.visible;
+    if (this.showNewPasswordOnPress) {
+      this.showNewPasswordOnPress = true;
+    }
   }
+
   /**
    * Method to view the confirm password.
    */
-  viewConfirmPassword():void {
+  viewConfirmPassword() : void {
     this.showConfirmPasswordOnPress = !this.showConfirmPasswordOnPress;
-    this.visible = !this.visible;
+    if (this.showConfirmPasswordOnPress) {
+      this.showConfirmPasswordOnPress = true;
+    }
   }
   /**
    * Method to reset the form.
    */
-  reset() :void{
+  reset(): void {
     this.changePasswordForm.reset();
   }
 

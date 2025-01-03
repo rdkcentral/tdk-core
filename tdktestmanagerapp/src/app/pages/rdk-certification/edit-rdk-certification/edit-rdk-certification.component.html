@@ -20,18 +20,18 @@ limitations under the License.
                 <div class="container container-box" id="container-box">
                     <div class="form-container create-group">
                         <h1 class="title">Update RDK Certification</h1>
-                        <form [formGroup]="certificationFormGroup" >
+                        <form [formGroup]="certificationFormGroup">
                             <div class="row mb-4">
                                 <label for="fileName" class="col-md-3 col-form-label offset-1">File Name<span
                                         style="color:red; margin-left: 0.75em;">*</span></label>
                                 <div class="col-md-7">
-                                    <input type="text" class="form-control" id="fileName"
-                                        formControlName="fileName" placeholder="Enter file name">
+                                    <input type="text" class="form-control" id="fileName" formControlName="fileName"
+                                        placeholder="Enter file name">
                                     <div *ngIf="submitted && certificationFormGroup.controls['fileName']?.errors"
                                         class="text-danger">
                                         <small
                                             *ngIf="certificationFormGroup.controls['fileName']?.errors?.['required']">Please
-                                            enter file  name.</small>
+                                            enter file name.</small>
                                     </div>
                                 </div>
                             </div>

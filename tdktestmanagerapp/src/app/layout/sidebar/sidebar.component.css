@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 :host {
-    min-height: 85vh;
+    min-height: 87vh;
     display: flex;
     flex-direction: column;
 }

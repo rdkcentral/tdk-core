@@ -102,33 +102,35 @@ export class UserEditComponent implements OnInit {
         userEmail: this.editUserForm.value.useremail,
         userGroupName: this.editUserForm.value.usergroupname,
         userRoleName: this.editUserForm.value.rolename,
-        userDisplayName: this.editUserForm.value.userDisplayName
+        userDisplayName: this.editUserForm.value.userDisplayName,
+        userCategory: this.user.userCategory
       }
       this.usermanageserice.updateUser(obj).subscribe({
-        next: (res => {
-          if (res.status == 200) {
+        next: (res) => {
+          if (res.status === 200) {
             this._snakebar.open('Update Successfully !!!', '', {
               duration: 3000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
+              verticalPosition: 'top',
+            });
             setTimeout(() => {
-              this.router.navigate(["configure/user-management"]);
+              this.router.navigate(['configure/user-management']);
               this.editUserForm.reset();
             }, 1000);
-          } else {
-            this._snakebar.open('', 'Something went wrong', {
-              duration: 3000,
-              panelClass: ['err-msg'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            })
           }
-        })
-
-
-      })
+        },
+        error: (err) => {
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg.message, '', {
+            duration: 4000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+ 
     }
   }
 

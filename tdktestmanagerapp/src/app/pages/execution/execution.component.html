@@ -17,31 +17,20 @@ limitations under the License.
         <div class="col-md-2 col-sidebar">
             <div class="sidebar">
                 <div class="execution-drop">
-                    <button type="button" class="download-btn  execution-select" (click)="openDialog()" >
+                    <button type="button" class="download-btn  execution-select" (click)="openDialog('normalExecutionClick')" >
                         {{executeName}}
-                      </button>
-                      <!-- <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" >Execute Now</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" (click)="openScheduleDialog('Schedule Execution')">Schedule Execution</a></li>
-                      </ul> -->
-                    <!-- <select class="form-select execution-select" aria-label="Default select example" (change)="onChangeExecute($event)">
-                        <option selected disabled>Select execution</option>
-                        @for (item of executionList; track $index) {
-                            <option value="{{item.name}}">{{item.name}}</option>
-                        }
-                      </select> -->
+                    </button>
                 </div>
                 <div class="accordion accor-margin" id="accordionExample">
                     <div class="row accord-row">
-                      <div class="accordion-item" *ngFor="let parent of paginatedParentData">
+                      <div class="accordion-item" *ngFor="let parent of deviceStausArray">
                           <h2 class="accordion-header d-flex align-items-center accord-head">
                             <div class="col">
-                              <!-- <button class="accordion-button no-arrow collapsed flex-grow-1 accor-title" type="button" (click)="$event.stopPropagation()">
-                                {{ parent.title }} 
-                              </button> -->
-                              <i class="bi bi-folder-fill folder-icon"></i><span > {{ parent.name }} </span>
+                              <i class="bi bi-folder-fill folder-icon"></i><span> {{ parent.name }} </span>
                               <div class="row-arrows">
+                                <button type="button" class="refresh-btn" matTooltip="Refresh" (click)="refreshDevice()">
+                                  <i class="bi bi-arrow-clockwise refresh-icon" ></i>
+                              </button>
                                 <button class="btn btn-link ms-auto" (click)="togglePanel(parent)">
                                     <i class="bi collapse-icon" [ngClass]="parent.isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
                                 </button>
@@ -49,22 +38,36 @@ limitations under the License.
                             </div>
                           </h2>
                         <div [class.show]="parent.isOpen" class="accordion-collapse collapse show">
-                            <div class="accordion-body">
+                            <div class="accordion-body status-group">
                                 <ul class="ul-item">
                                     <li class="li-item" *ngFor="let child of parent.childData" >
-                                        {{child.name}}
-                                        <span *ngIf="child.isthunder === true"><i class="bi bi-lightning-charge-fill thunder-icon"></i></span>
+                                      <span *ngIf="child.status === 'BUSY'">
+                                        <div class="spinner-border spinner-border-sm text-warning spinner" role="status">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                      </span>
+                                      <span *ngIf="child.status === 'FREE'"><span class="free"></span></span>
+                                      <span *ngIf="child.status === 'NOT_FOUND'"><span class="busy"></span></span>
+                                      <span *ngIf="child.status === 'HANG'"><span class="hang"></span></span>
+
+                                        <a class="device-name" [matTooltip]="'Name: ' + child.deviceName + '\nIP: ' + child.ip + '\nDeviceType: ' + child.deviceType + '\nStatus: ' + child.status"
+                                        matTooltipClass="multiline-tooltip" (click)="openModalExecute(child)"
+                                           >
+                                            {{child.deviceName}}
+                                        </a>
+
+                                        <span *ngIf="child.thunderEnabled === true"><i class="bi bi-lightning-charge-fill thunder-icon"></i></span>
                                         <button mat-icon-button [matMenuTriggerFor]="menu" class="context-btn">
                                             <mat-icon class="dot-icon">more_vert</mat-icon>
                                         </button>
                                           <mat-menu #menu="matMenu" class="mat-contxtmenu">
-                                            <button mat-menu-item class="context-item">
-                                              <span>Enable TDK</span>
+                                            <button mat-menu-item class="context-item" *ngIf="child.thunderEnabled === false" (click)="enableDisable(child.ip)">
+                                              <span>Enable Thunder</span>
                                             </button>
-                                            <button mat-menu-item class="context-item">
-                                              <span>Disable TDK</span>
+                                            <button mat-menu-item class="context-item" *ngIf="child.thunderEnabled === true" (click)="enableDisable(child.ip)">
+                                              <span>Disable Thunder</span>
                                             </button>
-                                            <button mat-menu-item class="context-item">
+                                            <button mat-menu-item class="context-item" (click)="copyToClipboard(child.ip)">
                                               <span>Copy Device IP</span>
                                             </button>
                                             <button mat-menu-item class="context-item">
@@ -86,63 +89,97 @@ limitations under the License.
                 <h3 class="heading">Select the device category :</h3>
                 <div class="rdkgroup">
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" checked>
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKV')">
                         <label class="form-check-label" for="rdkv">Video</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" >
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKB')">
                         <label class="form-check-label" for="rdkb">Broadband</label>
                     </div>
                     <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" >
+                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKC')">
                         <label class="form-check-label" for="rdkc">Camera</label>
                     </div>
                 </div>
             </div>
-            
-           
-                <div class=" example-header">
-                    <!-- <span class="search">Search:</span>
-                    <input type="text" class="form-control seach-input" id="filter-text-box" 
-                     placeholder="Search..."> -->
-                     <span class="search">Search :</span>
-                     <div class="input-group">
-                       <div class="input-group-text"><i class="bi bi-search"></i></div>
-                       <input type="text" class="form-control seach-input" id="filter-text-box"
-                       (input)="onFilterTextBoxChanged()" placeholder="">
-                     </div>
+            <div class="example-header" *ngIf="tabName !=='Execution Schedules'">
+              <div class="filterby">
+                <label for="filterDropdown">Filter By:</label>
+                <div class="filter-drop-down">
+                  <select id="filterDropdown" class="form-select" (change)="onFilterChange($event)">
+                    <option value="" default>Select</option>
+                    <option value="ExecutionName">Execution Name</option>
+                    <option value="Scripts/Testsuite">Scripts/Testsuite</option>
+                    <option value="Device">Device</option>
+                    <option value="User">User</option>
+                  </select>
                 </div>
+              </div>
+      
+              <div class="search-bar" *ngIf="selectedCategory === 'Device' || selectedCategory === 'Scripts/Testsuite' || selectedCategory === 'ExecutionName'">
+                <label class="search">Search any {{ selectedCategory }}</label>
+                <div class="searchby">
+                  <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="searchValue"
+                    placeholder="">
+                    <button class="btn btn-sm search-btn" (click)="onSearchClick()"><i class="bi bi-search"></i></button>
+                </div>
+              </div>
+      
+              <div class="search-user" *ngIf="selectedCategory === 'User'">
+                <div class="userby">
+                  <label for="dynamicDropdown">Search User:</label>
+                  <div class="user-drop-down">
+                    <select id="dynamicDropdown" class="form-select user-dropdown" [(ngModel)]="selectedOption" (change)="onUserChange()">
+                      <option value="" default>Select</option>
+                      <option *ngFor="let item of dynamicList" [value]="item">{{ item }}</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
             
             <div class="container mt-3">
                 <!-- TABS CONTAINER -->
-                <mat-tab-group animationDuration="0ms" mat-align-tabs="start">
+                <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
                     <mat-tab label="Execution History">
-                        <div style="width: 100%; height: 368px;" [class]="themeClass">
+                        <div style="width: 100%; height: 370px;" [class]="themeClass">
                             <ag-grid-angular
-                                style="width: 100%; height: 100%;"
-                                [columnDefs]="columnDefs"
-                                [defaultColDef]="{sortable: true}"
-                                [rowData]="rowData"
-                                [pagination]="true"
-                                [paginationPageSize]="paginationPageSize"
-                                [paginationPageSizeSelector]="paginationPageSizeSelector"
-                                [animateRows]="true"
-                                [context]="this"
-                                (gridReady)="onGridReady($event)"
-                                [gridOptions]="gridOptions"
-                            ></ag-grid-angular>
+                            style="width: 100%; height: 100%;"
+                            [rowData]="rowData"
+                            [columnDefs]="columnDefs"
+                            [defaultColDef]="{sortable: true}"
+                            [pagination]="false"
+                            [gridOptions]="gridOptions"
+                            rowSelection="multiple"
+                            (gridReady)="onGridReady($event)"
+                          ></ag-grid-angular>
+
+                        </div>
+                        <div class="table-footer">
+                          <div class="col-md-3">
+                            <a class="delete-date" (click)="deleteDateModal()">Delete execution with date</a>
+                          </div>
+                          <div class="col-md-9">
+                            <mat-paginator
+                            [length]="totalItems"
+                            [pageSize]="pageSize"
+                            [pageSizeOptions]="[5, 10, 20]"
+                            (page)="onPageChange($event)"
+                            [showFirstLastButtons]="true"
+                          ></mat-paginator>
+                          </div>
                         </div>
                     </mat-tab>
                     <mat-tab label="Execution Schedules">
-                        <div style="width: 100%; height: 368px;" [class]="themeClass">
+                        <div style="width: 100%; height: 385px;" [class]="themeClass">
                             <ag-grid-angular
                                 style="width: 100%; height: 100%;"
                                 [columnDefs]="columnSchudle"
                                 [defaultColDef]="{sortable: true}"
                                 [rowData]="rowDataSchudle"
                                 [pagination]="true"
-                                [paginationPageSize]="paginationPageSize"
-                                [paginationPageSizeSelector]="paginationPageSizeSelector"
+                                [paginationPageSize]="schedulePageSize"
+                                [paginationPageSizeSelector]="schedulePageSizeSelector"
                                 [animateRows]="true"
                                 [context]="this"
                                 [gridOptions]="gridOptions"

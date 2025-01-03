@@ -33,8 +33,6 @@ interface customcellRenderparams extends ICellRendererParams{
   standalone: true,
   imports: [MaterialModule,CommonModule],
   template: `
-    <button  class="btn  btn-sm delete-btn"  matTooltip="Execution Status Viewer" ><i class="bi bi-table icons viewer"></i></button>
-    &nbsp;
     <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Excel)" ><i class="bi bi-file-earmark-excel-fill icons report"></i></button>
     &nbsp;
     <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Zip)" ><i class="bi bi-file-earmark-zip-fill icons zip"></i></button>

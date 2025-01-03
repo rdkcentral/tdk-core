@@ -17,7 +17,6 @@ limitations under the License.
     <div class="row mt-1">
         <div class="col-md-12">
             <mat-card class="card-height">
-                <!-- <mat-card-content> -->
                     <h1 class="title">Create {{categoryName}} Device</h1>
                     <div *ngIf="showHideCreateFormV">
                     <form [formGroup]="deviceForm" (ngSubmit)="deviceVSubmit()" class="userform mt-3">
@@ -55,7 +54,7 @@ limitations under the License.
                                   <div class="row mb-3">
                                     <label for="devicetype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)">
+                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="devicetype" (change)="devicetypeChange($event)" >
                                             <option value="" default>Select</option>
                                             @for (item of allDeviceType; track $index) {
                                                 <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
@@ -68,14 +67,13 @@ limitations under the License.
                                   </div>
                                  
                                   <div class="row mb-3">
-                                    <span  class="col-md-3 col-form-label">Is Thunder Enabled <span class="thunder-info"><i class="bi bi-info-circle" [matTooltip]="thunderTooltip"></i></span></span>
+                                    <span  class="col-md-3 col-form-label">Is Thunder Enabled <span class="thunder-info"></span></span>
                                     <div class="col-md-8 check-thunder">
                                         <div class="form-check form-check-inline form-check-reverse">
                                             <input class="form-check-input thunder" type="checkbox" id="isthunderEnabled" formControlName="isThunder"
                                              (change)="thunderChecked($event)">
                                           </div>
                                           <span class="thunder-hints">
-                                            <!-- <strong>Hints :</strong> Please enter stbname and devicetype before you check this box -->
                                           </span>
                                     </div>
                                   </div>
@@ -84,18 +82,18 @@ limitations under the License.
                                     <span class="thunderport-info"><i class="bi bi-info-circle" matTooltip ="Thunder Port"></i></span>
                                   </span>
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" id="thunderport" formControlName="thunderport" autocomplete="off" placeholder="Enter thunder port">
+                                        <input type="text" class="form-control" id="thunderport" formControlName="thunderport" autocomplete="off" placeholder="Ex: 8080">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['thunderport']?.errors" class="text-danger">
                                             <small *ngIf="deviceForm.controls['thunderport']?.errors?.['required']">Please enter thunder port.</small>
                                         </div>
                                     </div>
                                   </div>
-                                  <div class="row mb-3" *ngIf="showPortFile"> 
-                                    <span for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File<span style="color:red; margin-left: 0.75em;">*</span>
-                                      <span class="deviceconfig-info"><i class="bi bi-info-circle" matTooltip ="Device Config File"></i></span>
+                                  <div class="row mb-3"> 
+                                    <span for="deviceconfigfile" class="col-md-3  col-form-label">Device Config File
+                                      <!-- <span class="deviceconfig-info"><i class="bi bi-info-circle" matTooltip ="Device Config File"></i></span> -->
                                   </span>
                                     <div class="col-md-8">
-                                      <div class="configbtngrp">
+                                      <div class="configbtngrp" *ngIf="stbNameChange">
                                         <button type="button" class="btn btn-outline-secondary newconfigfile" 
                                           (click)="existDeviceDialog()">
                                           <span>{{configFileName ==='sampleDevice.config'? 'Create New Device Config': configFileName }}</span> File
@@ -103,14 +101,13 @@ limitations under the License.
                                         <button type="button" class="btn btn-outline-secondary newconfigfile" 
                                           *ngIf="visibleDeviceconfigFile" (click)="openNewDeviceDialog()">Create New Device Config File
                                         </button>
-                               
                                       </div>
                                     </div>
                                   </div>
                             </div>
                             <div class="col">
                               <div class="row mb-3">
-                                <label for="oem" class="col-md-3 offset-1 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                <label for="oem" class="col-md-3 offset-1 col-form-label">OEM</label>
                                 <div class="col-md-8">
                                     <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                         <option value="" default>Select</option>
@@ -124,7 +121,7 @@ limitations under the License.
                                 </div>
                               </div>
                                   <div class="row mb-3">
-                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
@@ -232,7 +229,7 @@ limitations under the License.
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="oem" class="col-md-3 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="oem" class="col-md-3 col-form-label">OEM</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                             <option value="" default>Select</option>
@@ -249,7 +246,7 @@ limitations under the License.
                             <div class="col">
                            
                                   <div class="row mb-3">
-                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
@@ -303,7 +300,7 @@ limitations under the License.
                         <div class="row">
                             <div class="mt-2 text-end">
                                 <button class="reset-btn" (click)="goBack()">Back</button>
-                                <button class="reset-btn" (click)="reset()">Reset</button>
+                                <button class="reset-btn" (click)="resetFormB()">Reset</button>
                                 <button type="submit" class="create-btn">Create</button>
                             </div>
                         </div>
@@ -359,7 +356,7 @@ limitations under the License.
                                     </div>
                                   </div>
                                   <div class="row mb-3">
-                                    <label for="oem" class="col-md-3 col-form-label">OEM<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="oem" class="col-md-3 col-form-label">OEM</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="oem" formControlName="oem">
                                             <option value="" default>Select</option>
@@ -376,7 +373,7 @@ limitations under the License.
                             <div class="col">
                            
                                   <div class="row mb-3">
-                                    <label for="soc" class="col-md-3 offset-1 col-form-label">Soc<span style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="soc" class="col-md-3 offset-1 col-form-label">SoC</label>
                                     <div class="col-md-8">
                                         <select class="form-select" aria-label="Default select example"  id="soc" formControlName="soc">
                                             <option value="" default>Select</option>
@@ -430,13 +427,12 @@ limitations under the License.
                         <div class="row">
                             <div class="mt-1 btns-grps text-end">
                                 <button class="reset-btn" (click)="goBack()">Back</button>
-                                <button class="reset-btn" (click)="reset()">Reset</button>
+                                <button class="reset-btn" (click)="resetFormC()">Reset</button>
                                 <button type="submit" class="create-btn">Create</button>
                             </div>
                         </div>
                     </form>
                     </div>
-                <!-- </mat-card-content> -->
             </mat-card>
         </div>
     </div>
@@ -485,9 +481,6 @@ limitations under the License.
                   <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
                           <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" (change)="onExistConfigChange($event)">
-                          <!-- <div *ngIf="submitted && uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors" class="text-danger">
-                              <small *ngIf="uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors?.['required']">Please select the config file.</small>
-                          </div> -->
                   </div>
               </div>
           </div>
@@ -511,13 +504,6 @@ limitations under the License.
         <form [formGroup]="uploadDeviceConfigForm" (ngSubmit)="configDeviceFileUpload()">
         <div class="config-header newdevice-header">
           <h1 class="modal-title device-title" id="staticBackdropLabel">{{uploadCreateHeading}}</h1>
-  
-          <!-- <button type="button" class="btn btm-secondary btn-sm toggleBtn" (click)="toggleMaximizeDevice()" 
-           data-bs-placement="bottom" title="{{isMaximized?'Exit FullScreen':'FullScreen'}}">
-           <i [class]=" 'bi ' + (isMaximized ? 'bi-fullscreen-exit toggleIcon' : 'bi-fullscreen toggleIcon') "></i></button>
-  
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        -->
         </div>
         <div class="existModal-body">
           <div class="row">
@@ -546,9 +532,6 @@ limitations under the License.
                   <label for="uploadConfigFileModal" class="col-md-4  col-form-label">Upload Configuration file<span style="color:red; margin-left: 0.75em;">*</span></label>
                       <div class="col-md-8">
                           <input class="form-control form-control-sm" id="uploadConfigFileModal" type="file" formControlName="uploadConfigFileModal" (change)="onModalFileChange($event)">
-                          <!-- <div *ngIf="submitted && uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors" class="text-danger">
-                              <small *ngIf="uploadDeviceConfigForm.controls['uploadConfigFileModal']?.errors?.['required']">Please select the config file.</small>
-                          </div> -->
                   </div>
               </div>
           </div>

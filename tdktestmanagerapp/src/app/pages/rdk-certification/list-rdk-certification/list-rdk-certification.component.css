@@ -17,35 +17,41 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-.container-fluid{
+.container-fluid {
     margin-bottom: 1rem;
 }
+
 .header {
     background-color: #0e6f87;
     color: #fff;
     height: 60px;
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
+
 .apptitle {
     color: #fff;
     font-size: 1rem !important;
     font-weight: 500;
     margin-left: 15px;
 }
-.borders-btm{
+
+.borders-btm {
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
     border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px; 
+    border-image-width: 0px 0px 4px 0px;
 }
+
 .title {
     font-size: 1rem;
     text-align: center;
-    margin-bottom: 17px;
+    margin-bottom: 10px;
 }
-.btns-grp{
+
+.btns-grp {
     display: flex;
-    margin-left: -35px;
+    margin-left: -100px;
 }
+
 .groupListTitle {
     color: #00273F;
     font-size: 1rem;
@@ -67,7 +73,8 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 140px;
 }
-.download-btn{
+
+.download-btn {
     background-color: #fff;
     font-size: 0.8rem;
     padding: 5px 15px;
@@ -78,7 +85,8 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 15px;
 }
-.modal-btns{
+
+.modal-btns {
     background-color: #00B2DC;
     color: #fff;
     font-size: 0.8rem;
@@ -89,35 +97,42 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 15px;
 }
-.modal-footer{
+
+.modal-footer {
     border-top: none;
     padding: 1rem 1.45rem 2rem 2rem;
 }
-.custom-modal{
+
+.custom-modal {
     max-width: 800px;
     margin-top: 100px;
 }
-.modaltitle{
+
+.modaltitle {
     margin: 0 10px 0px 10px;
     border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
     padding: 10px 5px 5px 5px;
 }
-.custom-title{
+
+.custom-title {
     margin-bottom: 0;
     font-size: 1rem;
 }
-.download-icon{
+
+.download-icon {
     color: #00B2DC;
     font-weight: bold;
     font-size: 18px;
 }
-.icon-size{
+
+.icon-size {
     color: #00B2DC;
     font-weight: bold;
     font-size: 18px;
-  }
+}
+
 .back-btn {
     margin-right: 10px;
 }

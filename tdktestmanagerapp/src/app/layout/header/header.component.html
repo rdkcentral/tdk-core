@@ -14,14 +14,45 @@ limitations under the License.
 -->
 
 <mat-toolbar class="main-heading">
-  <img src="assets/logo/rdkLogo.png" alt="TDK_logo" class="logo-img img-fluid" /><span class="apptitle">TDK Test
-    Development Kit</span>
-  <div class="divider"></div>
+  <img src="assets/logo/TDKLogoFinal.png" alt="TDK_logo" class="logo-img img-fluid" />
+  <div class="divider">
+    <nav class="navbar navbar-expand-lg header">
+      <div class="container">
+        <a class="navbar-brand"></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
+          aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="displaymenu" id="navbarText">
+          <ul class="navbar-nav menulist">
+            <li class="nav-item">
+              <a class="nav-link  menugap" routerLink="/execution" routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact:false}">EXECUTION</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  menugap" routerLink="/analysis" routerLinkActive="active" 
+              [routerLinkActiveOptions]="{exact:false}">ANALYSIS</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  menugap" routerLink="/script"(click)="navigateToScript()" routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact:false}">SCRIPT</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  menugap" routerLink="/devices" routerLinkActive="active"
+                [routerLinkActiveOptions]="{exact:false}">DEVICES</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link  menugap" routerLink="/configure" (click)="navigateToPage()"
+                routerLinkActive="active" [routerLinkActiveOptions]="{exact:false}">CONFIGURE</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </div>
 
   <div class="thememode">
-    <!-- <button (click)="toggleTheme()">Toggle Theme</button> -->
-    <mat-slide-toggle [checked]="isChecked" (click)="toggleTheme()">
-      <button mat-icon-button class="theme-btn">
+      <button mat-icon-button class="theme-btn" (click)="toggleTheme()">
         @if (currentTheme ==='DARK') {
           <i class="bi bi-brightness-high-fill moon themeicon"></i>
         }
@@ -29,11 +60,10 @@ limitations under the License.
           <i class="bi bi-moon-stars-fill moon themeicon"></i>
         }
     </button>
-    </mat-slide-toggle>
   </div>
 
-  <span class="displayname">Welcome, {{loggedInUser.displayName}} </span>
-  <button mat-icon-button [matMenuTriggerFor]="menu">
+  <span class="displayname">Welcome, {{loggedInUser.displayName}} 
+  <button mat-icon-button [matMenuTriggerFor]="menu" class="user-btn">
     <mat-icon class="material-icons">account_circle</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
@@ -41,39 +71,5 @@ limitations under the License.
     <a mat-menu-item routerLink="/prefered-category" class="menuitem-logout"><mat-icon class="logout-icon">group_add</mat-icon><span class="logout-text">Prefered Category</span></a>
     <button mat-menu-item (click)="logOut()"><mat-icon class="logout-icon">exit_to_app</mat-icon><span class="logout-text">Sign Out</span></button>
   </mat-menu>
+</span>
 </mat-toolbar>
-<nav class="navbar navbar-expand-lg header">
-  <div class="container">
-    <a class="navbar-brand"></a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarText"
-      aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="displaymenu" id="navbarText">
-      <ul class="navbar-nav menulist">
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/execution" routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact:false}">EXECUTION</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/analysis" routerLinkActive="active">ANALYSIS</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/script"(click)="navigateToScript()" routerLinkActive="active"
-          [routerLinkActiveOptions]="{exact:false}">SCRIPT</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/devices" routerLinkActive="active"
-            [routerLinkActiveOptions]="{exact:false}">DEVICES</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/configure" (click)="navigateToPage()"
-            routerLinkActive="active" [routerLinkActiveOptions]="{exact:false}">CONFIGURE</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link text-white menugap" routerLink="/dashboard" routerLinkActive="active">DASHBOARD</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>

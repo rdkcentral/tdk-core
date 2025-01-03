@@ -135,7 +135,7 @@ export class EditScriptsComponent {
     })
   }
 
-changeModule(event:any){
+changeModule(event:any): void {
   let moduleName = event.target.value;
   this.getAllPrimitiveTest(moduleName);
 }
@@ -155,11 +155,11 @@ getAllPrimitiveTest(value: any): void{
     }
   })
 }
-onChangePrimitive(event:any){
+onChangePrimitive(event:any): void {
   let primitiveValue = event.target.value;
   this.defaultPrimitive = primitiveValue;
 }
-changePriority(event:any){
+changePriority(event:any): void {
   const priorityValue = event.target.value;
   this.changePriorityValue = priorityValue;
 }
@@ -171,42 +171,47 @@ changePriority(event:any){
     })
   }
 
-  onItemSelect(item:any){
+  onItemSelect(item:any): void {
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
   }
 
-  onDeSelect(item:any){
+  onDeSelect(item:any): void {
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
   }
 
-  onSelectAll(items: any[]){
+  onSelectAll(items: any[]): void {
     let devices = this.allDeviceType.filter(
       (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
      );
      this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
   }
-  onDeSelectAll(item:any){
+  onDeSelectAll(item:any): void {
     this.deviceNameArr=[];
   }
 
   // You can also change editor options dynamically if needed
-  onCodeChange(value: string) {
+  onCodeChange(value: string): void {
     let val = value;
   }
-
-  back(){
+  /**
+   * navigate to script page
+  */ 
+  back(): void {
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
   }
 
-  updateOptionalLabel() {
+  updateOptionalLabel() : void {
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
   }
-  onSubmit() {
+  /**
+   * Submission for customSuite update
+  */   
+  onSubmit(): void {
     const scriptUpdateData = {
       id:this.scriptDeatilsObj.id,
       name: this.firstFormGroup.value.scriptname,
@@ -255,11 +260,13 @@ changePriority(event:any){
     }
   })
 }
-
-goBack(){
+  /**
+   * Navigate to script page
+  */ 
+goBack(): void {
   localStorage.removeItem('scriptDetails');
   this.router.navigate(["/script"]);
-  }
+}
 
 
 }

@@ -52,17 +52,20 @@ html,body,*:not(.material-icons){
 .light-footer2{
   fill: #0e6f87;
 }
-
+::ng-deep .multiline-tooltip .mat-tooltip {
+  white-space: pre-line; /* Enables \n to render as new lines */
+  max-width: 300px; /* Optional: Adjust tooltip width */
+  word-wrap: break-word; /* Optional: Handle long content */
+}
 /* darl-light theme css start  */
 .DARK{
   mat-toolbar {
     background-color:#272F3C;
-    color: #fff;
+    color: #fff !important;
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
   }
   .header {
     background-color: #272f3cf2;
-    border-bottom: 1px solid #00b2dc5c;
   }
   .mat-mdc-menu-panel .mat-mdc-menu-content{
     --mat-menu-container-color: #272F3C !important;
@@ -78,9 +81,15 @@ html,body,*:not(.material-icons){
     fill: #272F3C;
   }
   .active {
-    font-weight: 500;
-    text-shadow: 1px 1px 1px black;
-    background-color: #111;
+    font-weight: 600 !important;
+    background-color: #fff;
+    color: black !important;
+    border-radius: 50px;
+    position: relative;
+    box-shadow: 1px 1px 1px #fff;
+  }
+  .nav-link{
+    color: #fff;
   }
   mat-drawer-container{
     background-color: #272F3C;
@@ -137,24 +146,30 @@ html,body,*:not(.material-icons){
   .heading{
     color: #fff;
   }
+.mat-mdc-tab .mdc-tab__text-label {
+    color: #fff !important;
+  }
 }
 .LIGHT{
   mat-toolbar {
-    background-color: #0e6f87;
-    color: #fff;
+    background-color: #fff;
+    background-image: linear-gradient(160deg, #ffffff 10%, #00b2dc 100%);
+    color: #000;
     box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
   }
-  .header {
-    background-color: #0e6f8794;
-  }
+
   footer{
-    background-color: #0e6f87;
+    background-color: #000000cc;
   }
   .active {
-    font-weight: 500;
-    text-shadow: 1px 1px 1px black;
-    background-color: #0e6f87;
+    font-weight: 600 !important;
+    background-color: #fff;
+    color: black !important;
+    border-radius: 50px;
+    position: relative;
+    box-shadow: 1px 1px 1px #00000075;
   }
+
   mat-drawer-container{
     background-color: #fff;
     padding-bottom: 10px;
@@ -166,7 +181,12 @@ html,body,*:not(.material-icons){
     background-color: #d1d4d4;
   }
   .ag-theme-quartz {
-    --ag-header-background-color: rgb(209, 212, 212);
+    --ag-header-background-color: rgb(209, 212, 212) !important;
+    --ag-background-color: #fff;
+    --ag-font-size: 0.78rem;
+  }
+  .custom-modalbox, .ag-theme-quartz {
+    --ag-header-background-color: rgb(209, 212, 212) !important;
     --ag-background-color: #fff;
     --ag-font-size: 0.78rem;
   }
@@ -210,11 +230,14 @@ html,body,*:not(.material-icons){
   .light-footer2{
     fill: #0e6f87;
   }
+.mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: #0e6f87 !important;
+  }
 }
 
 /* darl-light theme css end  */
 footer{
-  background-color: #0e6f87;
+  background-color: #000000cc;
 }
 .col-form-label{
   font-size: 0.8rem !important;
@@ -296,4 +319,8 @@ footer{
 .text-size{
   font-size: 0.8rem !important;
 }
-
+::ng-deep .multiline-tooltip {
+  white-space: pre-line !important;
+  word-wrap: break-word !important;
+  width: 80px !important;
+}

@@ -42,7 +42,9 @@ export class ModulesViewComponent {
       this.crashFilesArr =data.moduleCrashLogFiles;
       this.logFilesArr = data.moduleLogFileNames;
     }
-
+  /**
+   * close modal.
+   */
     onCancelDelete(): void {
       localStorage.removeItem('modules');
       this.dialogRef.close(false); 

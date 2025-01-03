@@ -1,0 +1,129 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row radiobox-row mt-1">
+        <div class="col-md-12 radiobox">
+            <h3 class="heading">Select the device category :</h3>
+            <div class="rdkgroup">
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDfaultCategory" (change)="categoryChange('RDKV')" >
+                    <label class="form-check-label" for="rdkv">Video</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDfaultCategory"(change)="categoryChange('RDKB')">
+                    <label class="form-check-label" for="rdkb">Broadband</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDfaultCategory" (change)="categoryChange('RDKC')">
+                    <label class="form-check-label" for="rdkc">Camera</label>
+                </div>
+            </div>
+        </div>
+        <div class="row borders-btm">
+            <div class="col-md-12">
+                <h1 class="title"> {{categoryName}} Result Analysis</h1>
+            </div>
+        </div>
+        <div class="row mt-2 main-margin">
+            <div class="col">
+                <div class="row mb-3 common-style">
+                    <label for="resulttype" class="col-md-3 col-form-label">Result Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="resulttype" (change)="resultChange($event)">
+                            <option value="" default>Select</option>
+                            <option value="" default>Show result by Device type</option>
+                            <option value="" default>Show result by Device</option>
+                            <option value="" default>Show result by Build Name</option>
+                            <option value="" default>Analyze Execution</option>
+                            <option value="" default>Comparision Report Download</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row mb-3 common-style">
+                    <label for="resulttype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="resulttype" (change)="deviceChange($event)">
+                            <option value="" default>Select</option>
+                            <option value="device-1" default>device-1</option>
+                            <option value="device-2" default>device-2</option>
+                            <option value="device-3" default>device-3</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row mb-3 common-style" *ngIf="scriptShow">
+                    <label for="Script" class="col-md-3 col-form-label">Select Script<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="script" (change)="scriptChange($event)">
+                            <option value="" default>Select</option>
+                            <option value="Script-1" default>Script-1</option>
+                            <option value="Script-2" default>Script-2</option>
+                            <option value="Script-3" default>Script-3</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row mb-3 common-style" *ngIf="showTestSuite">
+                    <label for="TestSuite" class="col-md-3 col-form-label">Select TestSuite<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="testSuite" (change)="testSuiteChange($event)">
+                            <option value="" default>Select</option>
+                            <option value="TestSuite-1" default>TestSuite-1</option>
+                            <option value="TestSuite-2" default>TestSuite-2</option>
+                            <option value="TestSuite-3" default>TestSuite-3</option>
+                          </select>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="row mb-3 common-style">
+                    <label for="resultcategory" class="col-md-3 col-form-label">Result Category<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="resultcategory" (change)="resultCategory($event)">
+                            <option value="" default>Select</option>
+                            <option value="normal" default>Normal</option>
+                            <option value="performance" default>Performance</option>
+                          </select>
+                    </div>
+                </div>
+                <div class="row mb-3 common-style">
+                    <div class="col-md-12">
+                        <div class="viewgroup">
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="scripts" value="scripts" (change)="scriptType('scripts')" >
+                                <label class="form-check-label" for="scripts">Show Results by Script</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="testsuites" value="testsuites" (change)="scriptType('testsuites')">
+                                <label class="form-check-label" for="testsuites">Show Results by TestSuites</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3 common-style">
+                    <label for="resultno" class="col-md-3 col-form-label">Result No's<span style="color:red; margin-left: 0.75em;">*</span></label>
+                    <div class="col-md-8">
+                        <select class="form-select" aria-label="Default select example" id="resultno" (change)="resultNoChange($event)">
+                            <option value="" default>Select</option>
+                            <option value="2" default>2</option>
+                            <option value="3" default>3</option>
+                            <option value="4" default>4</option>
+                            <option value="5" default>5</option>
+                          </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

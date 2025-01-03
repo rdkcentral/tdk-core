@@ -18,8 +18,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import { FooterComponent } from '../../../layout/footer/footer.component';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -44,7 +42,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-list-soc',
   standalone: true,
-  imports: [FooterComponent,MaterialModule, RouterLink, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './list-soc.component.html',
   styleUrl: './list-soc.component.css'
 })

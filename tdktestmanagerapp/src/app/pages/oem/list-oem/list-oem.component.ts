@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { OemService } from '../../../services/oem.service';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { GridApi, ColDef, IMultiFilterParams, GridReadyEvent, RowSelectedEvent, SelectionChangedEvent } from 'ag-grid-community';
 import { AuthService } from '../../../auth/auth.service';
@@ -9,13 +9,12 @@ import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
-import { FooterComponent } from '../../../layout/footer/footer.component';
 import { MaterialModule } from '../../../material/material.module';
 
 @Component({
   selector: 'app-list-oem',
   standalone: true,
-  imports: [FooterComponent, RouterLink,MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
   templateUrl: './list-oem.component.html',
   styleUrl: './list-oem.component.css'
 })
@@ -87,14 +86,14 @@ export class ListOemComponent {
    * Event handler for when the grid is ready.
    * @param params The grid ready event parameters.
    */
-  onGridReady(params: GridReadyEvent<any>) {
+  onGridReady(params: GridReadyEvent<any>):void{
     this.gridApi = params.api;
   }
   /**
    * Deletes a record.
    * @param data The data of the record to delete.
    */
-  delete(data: any) {
+  delete(data: any) :void{
     if (confirm("Are you sure to delete ?")) {
       this.service.deleteOem(data.oemId).subscribe({
         next: (res) => {
@@ -125,7 +124,7 @@ export class ListOemComponent {
    * Event handler for when a row is selected.
    * @param event The row selected event.
    */
-  onRowSelected(event: RowSelectedEvent) {
+  onRowSelected(event: RowSelectedEvent):void{
     this.isRowSelected = event.node.isSelected();
     this.rowIndex = event.rowIndex
   }
@@ -134,7 +133,7 @@ export class ListOemComponent {
    * Event handler for when the selection is changed.
    * @param event The selection changed event.
    */
-  onSelectionChanged(event: SelectionChangedEvent) {
+  onSelectionChanged(event: SelectionChangedEvent):void{
     this.selectedRowCount = event.api.getSelectedNodes().length;
     const selectedNodes = event.api.getSelectedNodes();
     this.lastSelectedNodeId = selectedNodes.length > 0 ? selectedNodes[selectedNodes.length - 1].id : '';
@@ -149,7 +148,7 @@ export class ListOemComponent {
    * @param user The user to edit.
    * @returns The edited user.
    */
-  userEdit(user: any): any {
+  userEdit(user: any):void{
     localStorage.setItem('user', JSON.stringify(user))
     this.service.currentUrl = user.userGroupId;
     this.router.navigate(['configure/oem-edit']);
@@ -158,14 +157,14 @@ export class ListOemComponent {
   /**
    * Creates a new oem.
    */
-  createOem() {
+  createOem():void{
     this.router.navigate(['/configure/create-oem']);
   }
   
   /**
    * Navigates back to the previous page.
    */
-  goBack() {
+  goBack():void{
     this.authservice.selectedConfigVal = 'RDKV';
     this.router.navigate(["/configure"]);
   }
