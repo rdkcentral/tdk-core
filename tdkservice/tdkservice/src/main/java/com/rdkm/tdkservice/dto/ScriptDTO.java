@@ -62,7 +62,7 @@ public class ScriptDTO {
 	 * Primitive test name
 	 */
 	private String primitiveTestName;
-	
+
 	/**
 	 * The moduleName of the script.
 	 */
@@ -142,7 +142,7 @@ public class ScriptDTO {
 	 * Any specific remarks regarding the script
 	 */
 	private String remarks;
-	
+
 	/**
 	 * The script content
 	 */

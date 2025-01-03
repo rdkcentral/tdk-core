@@ -27,38 +27,38 @@ import lombok.Data;
 public class ExecutionSchedulesResponseDTO {
 
 	/**
- * The unique identifier for the execution schedule.
- */
-private String id;
+	 * The unique identifier for the execution schedule.
+	 */
+	private String id;
 
-/**
- * The time at which the execution is scheduled to occur.
- */
-private Instant executionTime;
+	/**
+	 * The time at which the execution is scheduled to occur.
+	 */
+	private Instant executionTime;
 
-/**
- * The name of the job associated with the execution schedule.
- */
-private String jobName;
+	/**
+	 * The name of the job associated with the execution schedule.
+	 */
+	private String jobName;
 
-/**
- * The name of the script or test suite that is scheduled to be executed.
- */
-private String scriptTestSuite;
+	/**
+	 * The name of the script or test suite that is scheduled to be executed.
+	 */
+	private String scriptTestSuite;
 
-/**
- * The device on which the execution is scheduled to be performed.
- */
-private String device;
+	/**
+	 * The device on which the execution is scheduled to be performed.
+	 */
+	private String device;
 
-/**
- * Additional details about the execution schedule.
- */
-private String details;
+	/**
+	 * Additional details about the execution schedule.
+	 */
+	private String details;
 
-/**
- * The status of the execution schedule (e.g., "PENDING", "COMPLETED").
- */
-private String status;
+	/**
+	 * The status of the execution schedule (e.g., "PENDING", "COMPLETED").
+	 */
+	private String status;
 
 }

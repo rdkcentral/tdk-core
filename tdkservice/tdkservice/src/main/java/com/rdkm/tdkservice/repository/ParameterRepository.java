@@ -19,13 +19,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
-import com.rdkm.tdkservice.model.Function;
-import com.rdkm.tdkservice.model.Parameter;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
+import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Parameter;
 
 /**
  * Repository interface for accessing ParameterType entities.

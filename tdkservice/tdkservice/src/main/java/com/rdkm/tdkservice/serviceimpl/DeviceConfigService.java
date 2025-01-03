@@ -81,9 +81,8 @@ public class DeviceConfigService implements IDeviceConfigService {
 
 		// If still not found, get the default device config file
 		if (resource == null && isThunderEnabled) {
-			resource = getDeviceConfigFileGivenName(Constants.THUNDER_DEVICE_CONFIG_FILE,
-					isThunderEnabled);
-		} else if(resource == null && !isThunderEnabled) {
+			resource = getDeviceConfigFileGivenName(Constants.THUNDER_DEVICE_CONFIG_FILE, isThunderEnabled);
+		} else if (resource == null && !isThunderEnabled) {
 			resource = getDeviceConfigFileGivenName(Constants.DEFAULT_DEVICE_CONFIG_FILE, isThunderEnabled);
 		}
 		// Add header to the resource

@@ -26,8 +26,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * The TestSuiteDTO class is used to store test suite data. This class is
- * used to transfer the data from the service layer to the controller layer.
+ * The TestSuiteDTO class is used to store test suite data. This class is used
+ * to transfer the data from the service layer to the controller layer.
  */
 @Data
 public class TestSuiteDTO {
@@ -47,8 +47,7 @@ public class TestSuiteDTO {
 	 * The description of the test suite.
 	 */
 	private String description;
-	
-	
+
 	/**
 	 * The category of the test suite.
 	 */

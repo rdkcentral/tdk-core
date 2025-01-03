@@ -20,13 +20,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import lombok.Data;
+
 /**
  * The RegisterResponseDTO class is used to map the response body of the
  * register request.
  */
 @Data
 public class RegisterResponseDTO {
-	
+
 	/**
 	 * Represents the status of the register request.
 	 */

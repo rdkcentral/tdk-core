@@ -2,7 +2,7 @@
  * If not stated otherwise in this file or this component's Licenses.txt file the
  * following copyright and licenses apply:
  *
- * Copyright 2016 RDK Management
+ * Copyright 2024 RDK Management
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -162,7 +162,7 @@ public class ExecutionService implements IExecutionService {
 	 * The execution part with out the validation to be used in scheduler as well as
 	 * in triggered execution
 	 * 
-	 * @param executionTriggerDTO 
+	 * @param executionTriggerDTO
 	 * @return ExecutionResponseDTO
 	 */
 	public ExecutionResponseDTO startExecution(ExecutionTriggerDTO executionTriggerDTO) {
@@ -529,6 +529,7 @@ public class ExecutionService implements IExecutionService {
 	 */
 	private List<Device> getValidDevicesForScriptbasedOnCategory(List<Device> deviceList, Script script,
 			StringBuilder responseString) {
+		LOGGER.info("Getting valid devices for script based on category");
 		List<Device> validDevices = new ArrayList<>();
 		for (Device device : deviceList) {
 			if (commonService.vaidateScriptDeviceCategory(device, script)) {
@@ -551,16 +552,21 @@ public class ExecutionService implements IExecutionService {
 	 */
 
 	private boolean validateScriptDeviceDeviceType(Device device, Script script) {
+		LOGGER.info("Validating script and device type");
 		List<DeviceType> deviceTypes = script.getDeviceTypes();
 		if (deviceTypes.isEmpty()) {
+			LOGGER.info("Script has no device types");
 			return true;
 		} else {
 			for (DeviceType deviceType : deviceTypes) {
 				if (deviceType.equals(device.getDeviceType())) {
+					LOGGER.info("Device: {} and Script: {} combination is valid\n", device.getName(), script.getName());
 					return true;
 				}
 			}
 		}
+		LOGGER.error("Device: {} and Script: {} combination is invalid and belongs to different devicetypes\n",
+				device.getName(), script.getName());
 		return false;
 
 	}
@@ -574,18 +580,22 @@ public class ExecutionService implements IExecutionService {
 
 	private boolean isScriptMarkedToBeSkipped(Script script) {
 		if (script.isSkipExecution()) {
+			LOGGER.info("Script: {} is marked to be skipped\n", script.getName());
 			return true;
 		}
+		LOGGER.info("Script: {} is not marked to be skipped\n", script.getName());
 		return false;
 	}
 
 	/**
-	 * This method is used to get the valid script list, if the script is not found
-	 * then it will append the response string with the script name not found and if
-	 * no scripts found then it will throw ResourceNotFoundException
+	 * Retrieves a list of valid scripts based on the provided script names.
 	 * 
-	 * @param scripts
-	 * @return
+	 * @param scripts        A list of script names to be validated and retrieved.
+	 * @param responseString A StringBuilder to append error messages if scripts are
+	 *                       not found.
+	 * @return A list of valid Script objects.
+	 * @throws ResourceNotFoundException if no valid scripts are found in the
+	 *                                   request.
 	 */
 	private List<Script> getValidScriptList(List<String> scripts, StringBuilder responseString) {
 		List<Script> scriptList = new ArrayList<>();
@@ -657,6 +667,7 @@ public class ExecutionService implements IExecutionService {
 	 *                                   provided list.
 	 */
 	private List<TestSuite> getValidTestSuiteList(List<String> testSuiteListFromRequest, StringBuilder responseLogs) {
+		LOGGER.info("Getting valid test suites from the request");
 		List<TestSuite> testSuiteList = new ArrayList<>();
 		for (String testSuiteName : testSuiteListFromRequest) {
 			TestSuite testSuite = testSuiteRepository.findByName(testSuiteName);
@@ -684,6 +695,7 @@ public class ExecutionService implements IExecutionService {
 	 * @return List of valid devices
 	 */
 	private List<Device> getValidDeviceList(List<String> devices, StringBuilder responseString) {
+		LOGGER.info("Getting valid devices from the request");
 		List<Device> deviceList = new ArrayList<>();
 		for (String deviceName : devices) {
 			Device device = deviceRepository.findByName(deviceName);
@@ -725,10 +737,17 @@ public class ExecutionService implements IExecutionService {
 	}
 
 	/**
-	 * This method is used to check the request is Valid or not
-	 * 
-	 * @param executionTriggerDTO
-	 * @return
+	 * Validates the execution trigger request.
+	 *
+	 * This method performs the following validations: 1. Ensures that either
+	 * scripts or test suite is provided in the request. 2. Checks if the device
+	 * list is not empty. 3. Ensures that both script list and test suite are not
+	 * provided simultaneously. 4. Verifies that the execution name, if provided, is
+	 * unique.
+	 *
+	 * @param executionTriggerDTO the execution trigger request data transfer object
+	 * @throws UserInputException if any validation fails with appropriate error
+	 *                            message
 	 */
 	public void checkValidTriggerRequest(ExecutionTriggerDTO executionTriggerDTO) {
 		// Checking for scripts or test suite is null or empty
@@ -889,6 +908,7 @@ public class ExecutionService implements IExecutionService {
 	 */
 	@Override
 	public JSONObject getClientPort(String deviceIP, String port) {
+		LOGGER.info("Getting client port for deviceIP: {} and port: {}", deviceIP, port);
 		JSONObject resultNode = new JSONObject();
 		if (deviceIP != null && port != null) {
 			Device device = deviceRepository.findByIpAndPort(deviceIP, port);
@@ -914,6 +934,7 @@ public class ExecutionService implements IExecutionService {
 	 * @param size     - size in page
 	 * @param sortBy   - by default it is createdDate
 	 * @param sortDir  - by default it is desc
+	 * @return ExecutionListResponseDTO
 	 */
 	@Override
 	public ExecutionListResponseDTO getExecutionsByCategory(String categoryName, int page, int size, String sortBy,
@@ -941,6 +962,7 @@ public class ExecutionService implements IExecutionService {
 	 * @param size                - size in page
 	 * @param sortBy              - by default it is createdDate
 	 * @param sortDir             - by default it is desc
+	 * @return ExecutionListResponseDTO
 	 */
 	@Override
 	public ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
@@ -983,6 +1005,7 @@ public class ExecutionService implements IExecutionService {
 		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
 		return executionListResponseDTO;
 	}
+
 	/**
 	 * This method is used to get the executions by execution name with pagination
 	 * 
@@ -1011,7 +1034,6 @@ public class ExecutionService implements IExecutionService {
 
 	}
 
-	
 	/**
 	 * This method is used to get the executions by user with pagination
 	 * 
@@ -1465,7 +1487,7 @@ public class ExecutionService implements IExecutionService {
 	 *                                   repetition process
 	 */
 	@Override
-	public boolean repeatExecution(UUID execId,String user) {
+	public boolean repeatExecution(UUID execId, String user) {
 		LOGGER.info("Repeating execution with id: {}", execId);
 		Execution execution = executionRepository.findById(execId)
 				.orElseThrow(() -> new ResourceNotFoundException("Execution", execId.toString()));
@@ -1570,7 +1592,7 @@ public class ExecutionService implements IExecutionService {
 		if (Utils.isEmpty(user)) {
 			LOGGER.error("User not found for execution with id: {}", execId);
 			triggerUser = execution.getUser();
-			
+
 		} else {
 			triggerUser = userRepository.findByUsername(user);
 		}
@@ -1580,8 +1602,8 @@ public class ExecutionService implements IExecutionService {
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 					.collect(Collectors.toList());
 			String execName = getNextRerunExecutionName(execution.getName(), executionNames);
-			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts,
-					triggerUser, execName, execution.getCategory().name(), execution.getTestType(), 1, false,
+			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts, triggerUser,
+					execName, execution.getCategory().name(), execution.getTestType(), 1, false,
 					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
 					execution.isDiagnosticLogsNeeded());
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);

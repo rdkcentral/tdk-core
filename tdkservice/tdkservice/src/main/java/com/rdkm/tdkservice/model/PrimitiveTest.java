@@ -50,14 +50,14 @@ public class PrimitiveTest extends BaseEntity {
 	 * The primitive test Module
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "module_id",nullable=false)
+	@JoinColumn(name = "module_id", nullable = false)
 	private Module module;
 
 	/**
 	 * The primitive test function
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "function_id" ,nullable=false)
+	@JoinColumn(name = "function_id", nullable = false)
 	private Function function;
 
 	/**
@@ -67,7 +67,6 @@ public class PrimitiveTest extends BaseEntity {
 	@JoinColumn(name = "userGroup_id")
 	private UserGroup userGroup;
 
-	
 	/**
 	 * The primitive test parameters list
 	 */

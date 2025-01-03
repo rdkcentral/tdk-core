@@ -14,6 +14,7 @@ public interface ExecutionScheduleRepository extends JpaRepository<ExecutionSche
 	 * This method is used to check the existence of the execution by name.
 	 * 
 	 * @param executionName
+	 * @return boolean - true if the execution exists, false otherwise
 	 */
 	boolean existsByExecutionName(String executionName);
 }

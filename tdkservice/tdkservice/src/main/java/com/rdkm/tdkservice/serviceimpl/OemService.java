@@ -36,7 +36,6 @@ import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Oem;
-import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;

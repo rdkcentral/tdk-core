@@ -28,21 +28,21 @@ import lombok.Data;
 @Data
 public class FunctionCreateDTO {
 
-    /**
-     * The name of the function.
-     */
-    @NotBlank(message = "Name is required")
-    private String functionName;
+	/**
+	 * The name of the function.
+	 */
+	@NotBlank(message = "Name is required")
+	private String functionName;
 
-    /**
-     * The name of the module to which the function belongs.
-     */
-    @NotBlank(message = "Module name is required")
-    private String moduleName;
+	/**
+	 * The name of the module to which the function belongs.
+	 */
+	@NotBlank(message = "Module name is required")
+	private String moduleName;
 
-    /**
-     * The category of the function.
-     */
-    @NotBlank(message = "Category is required")
-    private String functionCategory;
+	/**
+	 * The category of the function.
+	 */
+	@NotBlank(message = "Category is required")
+	private String functionCategory;
 }

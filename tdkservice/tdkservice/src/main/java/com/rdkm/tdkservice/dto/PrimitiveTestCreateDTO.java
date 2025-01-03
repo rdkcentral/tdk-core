@@ -21,7 +21,6 @@ package com.rdkm.tdkservice.dto;
 
 import java.util.List;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 /*

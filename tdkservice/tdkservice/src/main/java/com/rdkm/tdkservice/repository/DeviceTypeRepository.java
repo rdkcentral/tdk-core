@@ -22,14 +22,16 @@ package com.rdkm.tdkservice.repository;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.enums.DeviceTypeCategory;
-import com.rdkm.tdkservice.model.DeviceType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.DeviceTypeCategory;
+import com.rdkm.tdkservice.model.DeviceType;
 
 /**
- * The DeviceTypeRepository interface provides methods for device type operations.
+ * The DeviceTypeRepository interface provides methods for device type
+ * operations.
  */
 @Repository
 public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
@@ -48,8 +50,6 @@ public interface DeviceTypeRepository extends JpaRepository<DeviceType, UUID> {
 	 * @return a deviceType object containing the deviceType type's information
 	 */
 	DeviceType deleteByName(String name);
-	
-	
 
 	/**
 	 * This method is used to check if a device type exists by name.

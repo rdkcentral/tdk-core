@@ -35,17 +35,17 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserDTO {
-	
+
 	/**
-     * Represents the unique identifier for the User. This field is mandatory, hence
-     * it cannot be null.
-     */
+	 * Represents the unique identifier for the User. This field is mandatory, hence
+	 * it cannot be null.
+	 */
 	@NotNull(message = "User id is required")
 	private UUID userId;
-	
+
 	/**
-     * Represents the username of the User.
-     */
+	 * Represents the username of the User.
+	 */
 	private String userName;
 
 	/**
@@ -57,25 +57,25 @@ public class UserDTO {
 	 * Represents the email of the User.
 	 */
 	private String userEmail;
-	
+
 	/**
 	 * Represents the display name of the User.
 	 */
 
 	private String userDisplayName;
-	
+
 	/**
 	 * Represents the theme name of the User.
 	 */
 
 	private String userThemeName;
-	
+
 	/**
 	 * Represents the user group of the User.
 	 */
 
 	private String userGroupName;
-	
+
 	/**
 	 * Represents the user category.
 	 */

@@ -26,7 +26,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * The DeviceTypeDTO class is used to map the request body of the DeviceType request.
+ * The DeviceTypeDTO class is used to map the request body of the DeviceType
+ * request.
  */
 
 @Data
@@ -35,15 +36,15 @@ import lombok.Data;
 public class DeviceTypeCreateDTO {
 
 	/**
-	 * Represents the name of the DeviceType. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the name of the DeviceType. This field is mandatory, hence it
+	 * cannot be blank.
 	 */
 	@NotBlank(message = "DeviceType name is required")
 	private String deviceTypeName;
 
 	/**
-	 * Represents the type of the DeviceType. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the type of the DeviceType. This field is mandatory, hence it
+	 * cannot be blank.
 	 */
 	@NotBlank(message = "DeviceType Type is required")
 	private String deviceType;
@@ -56,8 +57,8 @@ public class DeviceTypeCreateDTO {
 	private String deviceTypeCategory;
 
 	/**
-	 * Represents the user group of the DeviceType. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the user group of the DeviceType. This field is mandatory, hence
+	 * it cannot be blank.
 	 */
 	private String deviceTypeUserGroup;
 

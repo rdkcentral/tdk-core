@@ -23,7 +23,6 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCustomDTO;
 import com.rdkm.tdkservice.dto.TestSuiteDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import com.rdkm.tdkservice.service.ITestSuiteService;
 import com.rdkm.tdkservice.util.Constants;
 
@@ -334,7 +334,8 @@ public class TestSuiteController {
 	}
 
 	/**
-	 *  This method used to get List of Test Suite by Category
+	 * This method used to get List of Test Suite by Category
+	 * 
 	 * @param category
 	 * @param isThunderEnabled
 	 * @return
@@ -344,17 +345,21 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getListofTestSuiteByCategory")
 	public ResponseEntity<?> getListofTestSuiteByCategory(@RequestParam String category,
-														  @RequestParam boolean isThunderEnabled) {
-		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			@RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category,
+				isThunderEnabled);
 
-		List<TestSuiteDetailsResponse> testSuites = testSuiteService.getListofTestSuiteNamesByCategory(category, isThunderEnabled);
+		List<TestSuiteDetailsResponse> testSuites = testSuiteService.getListofTestSuiteNamesByCategory(category,
+				isThunderEnabled);
 
 		if (testSuites != null) {
-			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category,
+					isThunderEnabled);
 			return ResponseEntity.status(HttpStatus.OK).body(testSuites);
 		} else {
 			LOGGER.warn("No test suites found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suites found for the specified category and Thunder setting");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("No test suites found for the specified category and Thunder setting");
 		}
 	}
 

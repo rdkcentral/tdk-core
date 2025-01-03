@@ -49,7 +49,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 /**
- * The controller class that handles the endpoints related to DeviceTypeController types.
+ * The controller class that handles the endpoints related to
+ * DeviceTypeController types.
  */
 @Validated
 @RestController
@@ -70,9 +71,9 @@ public class DeviceTypeController {
 	 * Creates a new device type based on the provided device type request.
 	 *
 	 * @param deviceTypeDTO The request object containing the details of the device
-	 *                       type.
-	 * @return A ResponseEntity containing the created device type if successful, or an
-	 *         error message if unsuccessful.
+	 *                      type.
+	 * @return A ResponseEntity containing the created device type if successful, or
+	 *         an error message if unsuccessful.
 	 * @throws ResourceAlreadyExistsException If a device type with the same name
 	 *                                        already exists.
 	 */
@@ -159,17 +160,18 @@ public class DeviceTypeController {
 	/**
 	 * Updates a device type based on the provided .
 	 * 
-	 * @param deviceTypeDTO The DeviceTypeUpdateDTO containing the updated
-	 *                             device type information.
-	 * @return ResponseEntity containing the updated DeviceTypeUpdateDTO if it exists, or a
-	 *         NOT_FOUND status with an error message if the device type is not found.
+	 * @param deviceTypeDTO The DeviceTypeUpdateDTO containing the updated device
+	 *                      type information.
+	 * @return ResponseEntity containing the updated DeviceTypeUpdateDTO if it
+	 *         exists, or a NOT_FOUND status with an error message if the device
+	 *         type is not found.
 	 */
 	@Operation(summary = "Update a device type", description = "Updates a device type in the system.")
 	@ApiResponse(responseCode = "200", description = "device type updated successfully")
 	@ApiResponse(responseCode = "404", description = "device type not found")
 	@ApiResponse(responseCode = "500", description = "Error in updating device type data")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateDeviceType (@RequestBody DeviceTypeDTO deviceTypeDTO) {
+	public ResponseEntity<?> updateDeviceType(@RequestBody DeviceTypeDTO deviceTypeDTO) {
 		LOGGER.info("Received update device type request: " + deviceTypeDTO.toString());
 		DeviceTypeDTO deviceTypeObjDTO = deviceTypeService.updateDeviceType(deviceTypeDTO);
 		if (null != deviceTypeObjDTO) {
@@ -232,11 +234,11 @@ public class DeviceTypeController {
 	}
 
 	/**
-	 * Retrieves all device type names in the system by category other than the device
-	 * type name
+	 * Retrieves all device type names in the system by category other than the
+	 * device type name
 	 *
-	 * @param category the category of the device types to retrieve
-	 * @param devicetype  the name of the device type to exclude
+	 * @param category   the category of the device types to retrieve
+	 * @param devicetype the name of the device type to exclude
 	 * @return a ResponseEntity containing the list of device types if found, or a
 	 *         ResponseEntity with status NOT_FOUND and a message if no device types
 	 *         are found.

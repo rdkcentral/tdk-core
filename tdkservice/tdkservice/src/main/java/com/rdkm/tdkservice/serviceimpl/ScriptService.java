@@ -575,7 +575,12 @@ public class ScriptService implements IScriptService {
 	private List<DeviceType> getScriptDevicetypes(List<String> deviceTypes, Category category) {
 		List<DeviceType> deviceTypeList = new ArrayList<>();
 		for (String deviceTypeName : deviceTypes) {
-			DeviceType deviceType = deviceTypeRepository.findByNameAndCategory(deviceTypeName, category);
+			DeviceType deviceType;
+			if (category.equals(Category.RDKV_RDKSERVICE)) {
+				deviceType = deviceTypeRepository.findByNameAndCategory(deviceTypeName, Category.RDKV);
+			} else {
+				deviceType = deviceTypeRepository.findByNameAndCategory(deviceTypeName, category);
+			}
 			if (null != deviceType) {
 				deviceTypeList.add(deviceType);
 			} else {

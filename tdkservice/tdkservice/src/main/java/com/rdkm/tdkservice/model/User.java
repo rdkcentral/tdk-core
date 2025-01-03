@@ -87,7 +87,7 @@ public class User extends BaseEntity implements UserDetails {
 	 */
 	@Enumerated(EnumType.STRING)
 	private Theme theme;
-	
+
 	/*
 	 * The category
 	 * 

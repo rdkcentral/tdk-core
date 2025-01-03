@@ -19,75 +19,87 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.model;
 
+import java.util.Set;
+
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestGroup;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import java.util.Set;
 
 /**
  * Entity representing a module.
  */
-@EqualsAndHashCode(callSuper = true ,exclude = "functions")
+@EqualsAndHashCode(callSuper = true, exclude = "functions")
 @Data
 @Entity
 @Table(name = "module")
-public class Module extends BaseEntity{
+public class Module extends BaseEntity {
 
-    /**
-     * The name of the module.
-     */
-    @Column(name = "name", unique = true, nullable = false)
-    private String name;
+	/**
+	 * The name of the module.
+	 */
+	@Column(name = "name", unique = true, nullable = false)
+	private String name;
 
-    /**
-     * The test group associated with the module.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private TestGroup testGroup;
+	/**
+	 * The test group associated with the module.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private TestGroup testGroup;
 
-    /**
-     * The execution time of the module.
-     */
-    @Column(name = "execution_time")
-    private Integer executionTime;
+	/**
+	 * The execution time of the module.
+	 */
+	@Column(name = "execution_time")
+	private Integer executionTime;
 
-    /**
-     * The user group associated with the module.
-     */
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "user_group_id")
-    private UserGroup userGroup;
+	/**
+	 * The user group associated with the module.
+	 */
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "user_group_id")
+	private UserGroup userGroup;
 
-    /**
-     * The set of log file paths associated with the module.
-     */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "module_log_file_paths", joinColumns = @JoinColumn(name = "module_id"))
-    @Column(name = "log_file_path")
-    private Set<String> logFileNames;
+	/**
+	 * The set of log file paths associated with the module.
+	 */
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "module_log_file_paths", joinColumns = @JoinColumn(name = "module_id"))
+	@Column(name = "log_file_path")
+	private Set<String> logFileNames;
 
-    /**
-     * The set of crash log file paths associated with the module.
-     */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "module_crash_log_paths", joinColumns = @JoinColumn(name = "module_id"))
-    @Column(name = "crash_log_path")
-    private Set<String> crashLogFiles;
+	/**
+	 * The set of crash log file paths associated with the module.
+	 */
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "module_crash_log_paths", joinColumns = @JoinColumn(name = "module_id"))
+	@Column(name = "crash_log_path")
+	private Set<String> crashLogFiles;
 
-    /**
-     * The category of the module.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Category category;
+	/**
+	 * The category of the module.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Category category;
 
-    /**
-     * The functions associated with the module.
-     */
-    @OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Function> functions;
+	/**
+	 * The functions associated with the module.
+	 */
+	@OneToMany(mappedBy = "module", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Function> functions;
 }

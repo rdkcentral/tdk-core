@@ -515,14 +515,14 @@ public class DeviceService implements IDeviceService {
 			Oem oem = oemRepository.findByNameAndCategory(deviceUpdateDTO.getOemName(), categoryValue);
 			if (oem != null) {
 				device.setOem(oem);
-			} 
+			}
 		}
 
 		if (!Utils.isEmpty(deviceUpdateDTO.getSocName())) {
 			Soc soc = socRepository.findByNameAndCategory(deviceUpdateDTO.getSocName(), categoryValue);
 			if (soc != null) {
 				device.setSoc(soc);
-			} 
+			}
 		}
 		UserGroup userGroup = userGroupRepository.findByName(deviceUpdateDTO.getUserGroupName());
 		if (null != userGroup)

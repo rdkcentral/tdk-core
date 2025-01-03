@@ -22,11 +22,11 @@ package com.rdkm.tdkservice.repository;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.model.Soc;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.Soc;
 
 /**
  * SocVendor repository
@@ -34,14 +34,14 @@ import com.rdkm.tdkservice.enums.Category;
  */
 @Repository
 public interface SocRepository extends JpaRepository<Soc, UUID> {
-	
+
 	/**
 	 * Find by name and category
 	 * 
 	 * @param socVendorType
 	 * @return
 	 */
-	
+
 	Soc findByNameAndCategory(String socName, Category category);
 
 	/**
@@ -59,7 +59,7 @@ public interface SocRepository extends JpaRepository<Soc, UUID> {
 	 * @return
 	 */
 	boolean existsByNameAndCategory(String name, Category category);
-	
+
 	/**
 	 * Find by category
 	 * 

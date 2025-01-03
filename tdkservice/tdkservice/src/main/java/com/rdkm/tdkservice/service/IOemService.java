@@ -26,8 +26,7 @@ import com.rdkm.tdkservice.dto.OemCreateDTO;
 import com.rdkm.tdkservice.dto.OemDTO;
 
 /**
- * This is the IOemService interface and contains the methods
- * related to oem.
+ * This is the IOemService interface and contains the methods related to oem.
  * 
  */
 
@@ -36,10 +35,10 @@ public interface IOemService {
 	/**
 	 * This method is used to create a new oem.
 	 * 
-	 * @param oemDTO This is the request object containing the
-	 *                               details of the oem to be created.
-	 * @return boolean This returns true if the oem was created
-	 *         successfully, false otherwise.
+	 * @param oemDTO This is the request object containing the details of the oem to
+	 *               be created.
+	 * @return boolean This returns true if the oem was created successfully, false
+	 *         otherwise.
 	 */
 
 	boolean createOem(OemCreateDTO oemDTO);
@@ -47,8 +46,7 @@ public interface IOemService {
 	/**
 	 * This method is used to retrieve all oem's.
 	 * 
-	 * @return List<oem> This returns a list of all
-	 *         oems.
+	 * @return List<oem> This returns a list of all oems.
 	 */
 
 	List<OemDTO> getAllOem();
@@ -73,10 +71,9 @@ public interface IOemService {
 	/**
 	 * This method is used to update a oem.
 	 * 
-	 * @param oemUpdateDTO This is the request object containing the
-	 *                               updated details of the oemUpdateDTO.
-	 * @param id                     This is the id of the oemUpdateDTO to be
-	 *                               updated.
+	 * @param oemUpdateDTO This is the request object containing the updated details
+	 *                     of the oemUpdateDTO.
+	 * @param id           This is the id of the oemUpdateDTO to be updated.
 	 * @return oemUpdateDTO This returns the updated oemUpdateDTO.
 	 */
 

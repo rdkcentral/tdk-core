@@ -2,7 +2,7 @@
  * If not stated otherwise in this file or this component's Licenses.txt file the
  * following copyright and licenses apply:
  *
- * Copyright 2016 RDK Management
+ * Copyright 2024 RDK Management
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 package com.rdkm.tdkservice.service.utilservices;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -33,8 +30,6 @@ import java.util.concurrent.Callable;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.rdkm.tdkservice.util.Constants;
 
 /**
  * This class reads the data from the input stream and returns the data as a
@@ -61,7 +56,6 @@ public class StreamReaderJob implements Callable<String> {
 		this.outputFileName = outputFileName;
 	}
 
-	
 	/**
 	 * This method will be called by the invoking thread. Reads the data from the
 	 * input stream and adds the content to a String buffer. On the end of the

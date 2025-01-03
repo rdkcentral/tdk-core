@@ -27,8 +27,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
 /**
- * The DeviceTypeUpdateDTO class is used to map the request body of the devicetype
- * request.
+ * The DeviceTypeUpdateDTO class is used to map the request body of the
+ * devicetype request.
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -54,6 +54,5 @@ public class DeviceTypeDTO {
 	 * Represents the device type category of the deviceType.
 	 */
 	private String deviceTypeCategory;
-
 
 }

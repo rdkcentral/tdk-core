@@ -89,7 +89,7 @@ public class Script extends BaseEntity {
 	/**
 	 * The list of device type of the script.
 	 */
-	@ManyToMany(cascade = CascadeType.PERSIST,fetch = FetchType.EAGER)
+	@ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
 	@JoinTable(name = "script_device_type", joinColumns = @JoinColumn(name = "script_id"), inverseJoinColumns = @JoinColumn(name = "device_type_id"))
 	private List<DeviceType> deviceTypes = new ArrayList<>();
 
@@ -104,7 +104,7 @@ public class Script extends BaseEntity {
 	 * The module associated with the script.
 	 */
 	@ManyToOne
-	@JoinColumn(name = "module_id",nullable = false)
+	@JoinColumn(name = "module_id", nullable = false)
 	private Module module;
 
 	/**
@@ -144,13 +144,13 @@ public class Script extends BaseEntity {
 	/**
 	 * API or interface used
 	 */
-	@Column(nullable = false,columnDefinition = "TEXT")
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String apiOrInterfaceUsed;
 
 	/**
 	 * Input parameters
 	 */
-	@Column(nullable = false,columnDefinition = "TEXT")
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String inputParameters;
 
 	/**
@@ -192,11 +192,11 @@ public class Script extends BaseEntity {
 	 * Any specific remarks regarding the script
 	 */
 	private String remarks;
-	
+
 	/**
 	 * The list of script group of the script.
 	 */
-	@OneToMany(mappedBy = "script", cascade = CascadeType.ALL,fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(mappedBy = "script", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	private List<ScriptTestSuite> scriptScriptGroup = new ArrayList<>();
 
 }

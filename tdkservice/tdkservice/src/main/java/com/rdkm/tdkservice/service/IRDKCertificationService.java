@@ -35,7 +35,7 @@ public interface IRDKCertificationService {
 	 * @param file
 	 * @return boolean
 	 */
-	boolean createOrUpdateOrUploadConfigFile( MultipartFile file);
+	boolean createOrUpdateOrUploadConfigFile(MultipartFile file);
 
 	/**
 	 * Method to download a config file
@@ -52,7 +52,6 @@ public interface IRDKCertificationService {
 	 */
 	List<String> getAllConfigFileNames();
 
-	
 	/**
 	 * Method to get the content of the config file
 	 * 
@@ -63,13 +62,11 @@ public interface IRDKCertificationService {
 	String getConfigFileContent(String fileName);
 
 	/**
-     * Method to delete a config file
-     * 
-     * @param fileName
-     * @return boolean
-     */
+	 * Method to delete a config file
+	 * 
+	 * @param fileName
+	 * @return boolean
+	 */
 	boolean deleteConfigFile(String fileName);
-
-
 
 }

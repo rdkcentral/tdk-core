@@ -22,23 +22,21 @@ package com.rdkm.tdkservice.exception;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
-
 /**
- * This is a custom exception class that is thrown when a not exists
- * in the database. This is used in spring boot exception handling for returning 
+ * This is a custom exception class that is thrown when a not exists in the
+ * database. This is used in spring boot exception handling for returning
  * appropriate response to the client.
  */
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResourceNotFoundException extends RuntimeException {
 
-	
 	private static final long serialVersionUID = 1L;
 	private String resourceType;
 	private String resourceName;
 
 	/**
-	 * This method returns the exception message	
+	 * This method returns the exception message
 	 */
 	public String getMessage() {
 		if (resourceName == null)

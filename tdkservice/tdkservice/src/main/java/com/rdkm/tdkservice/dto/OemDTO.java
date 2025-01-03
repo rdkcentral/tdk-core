@@ -28,8 +28,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * The OemUpdateDTO class is used to map the request body of the
- * oem request.
+ * The OemUpdateDTO class is used to map the request body of the oem request.
  */
 
 @Data

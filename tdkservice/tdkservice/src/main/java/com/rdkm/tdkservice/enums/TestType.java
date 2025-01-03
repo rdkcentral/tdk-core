@@ -20,7 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.enums;
 
 /**
- * The TestType enum is used to store test type information or data for a script.
+ * The TestType enum is used to store test type information or data for a
+ * script.
  */
 public enum TestType {
 

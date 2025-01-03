@@ -39,7 +39,6 @@ public interface UserRoleRepository extends JpaRepository<UserRole, UUID> {
 	 */
 	UserRole findByName(String userRole);
 
-	
 	/**
 	 * This method is used to delete a user role by name.
 	 *

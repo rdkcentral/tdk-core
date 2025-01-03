@@ -66,7 +66,6 @@ import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
-import com.rdkm.tdkservice.repository.ExecutionRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
 import com.rdkm.tdkservice.service.IFileService;
 import com.rdkm.tdkservice.service.IScriptService;

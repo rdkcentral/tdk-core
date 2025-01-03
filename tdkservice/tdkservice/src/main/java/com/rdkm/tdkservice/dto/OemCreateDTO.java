@@ -26,8 +26,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 /**
- * The OemDTO class is used to map the request body of the
- * oem request.
+ * The OemDTO class is used to map the request body of the oem request.
  */
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -35,22 +34,22 @@ import lombok.Data;
 public class OemCreateDTO {
 
 	/**
-	 * Represents the name of the oem. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the name of the oem. This field is mandatory, hence it cannot be
+	 * blank.
 	 */
 	@NotBlank(message = "Oem name is required")
 	private String OemName;
 
 	/**
-	 * Represents the category of the oem. This field is mandatory,
-	 * hence it cannot be blank.
+	 * Represents the category of the oem. This field is mandatory, hence it cannot
+	 * be blank.
 	 */
 	@NotBlank(message = "Oem category is required")
 	private String OemCategory;
 
 	/**
-	 * Represents the Oem group of the Oem. This field is mandatory,
-	 * hence it cannot be blank.
+	 * Represents the Oem group of the Oem. This field is mandatory, hence it cannot
+	 * be blank.
 	 */
 
 	private String OemUserGroup;

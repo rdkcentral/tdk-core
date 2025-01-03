@@ -49,7 +49,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.w3c.dom.Comment;
 import org.w3c.dom.Document;
@@ -67,14 +66,11 @@ import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
-import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Function;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.model.UserGroup;
-import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
-import com.rdkm.tdkservice.repository.ParameterRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IModuleService;
 import com.rdkm.tdkservice.util.Constants;
@@ -92,12 +88,6 @@ public class ModuleService implements IModuleService {
 
 	@Autowired
 	private UserGroupRepository userGroupRepository;
-
-	@Autowired
-	private FunctionRepository functionRepository;
-
-	@Autowired
-	private ParameterRepository parameterRepository;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModuleService.class);
 
@@ -159,7 +149,7 @@ public class ModuleService implements IModuleService {
 			Module newModule = moduleRepository.findByName(moduleDTO.getModuleName());
 			if (newModule != null && moduleDTO.getModuleName().equalsIgnoreCase(existingModule.getName())) {
 				existingModule.setName(moduleDTO.getModuleName());
-			} else{
+			} else {
 
 				if (moduleRepository.existsByName(moduleDTO.getModuleName())) {
 					LOGGER.info("Module already exists with the same name: " + moduleDTO.getModuleName());

@@ -164,7 +164,7 @@ public class UserGroupController {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateUserGroup( @RequestBody UserGroupDTO userGroupRequest) {
+	public ResponseEntity<?> updateUserGroup(@RequestBody UserGroupDTO userGroupRequest) {
 		LOGGER.info("Executing updateUserGroup method with request: " + userGroupRequest.toString());
 		UserGroupDTO updatedUserGroup = userGroupService.updateUserGroup(userGroupRequest);
 		if (null != updatedUserGroup) {

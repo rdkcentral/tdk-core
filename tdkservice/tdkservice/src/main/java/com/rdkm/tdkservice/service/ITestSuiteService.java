@@ -24,16 +24,16 @@ import java.io.ByteArrayInputStream;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCustomDTO;
 import com.rdkm.tdkservice.dto.TestSuiteDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 
 /**
- * The ITestSuiteService interface is used to provide the services for the
- * test suites.
+ * The ITestSuiteService interface is used to provide the services for the test
+ * suites.
  */
 public interface ITestSuiteService {
 
@@ -93,7 +93,7 @@ public interface ITestSuiteService {
 	 * @return the boolean - Status of custom test suite creation
 	 */
 	boolean createCustomTestSuite(TestSuiteCustomDTO testSuiteCustomDTO);
-	
+
 	/**
 	 * This method is used to download the test suite as XML
 	 * 
@@ -117,7 +117,7 @@ public interface ITestSuiteService {
 	 * @param moduleName - the moduleName
 	 * @return the scripsin test suite
 	 */
-	String updateTestSuiteByModuleNameAndCategory(String moduleName,String Category);
+	String updateTestSuiteByModuleNameAndCategory(String moduleName, String Category);
 
 	/**
 	 * This method is used to download all the test suite as XML
@@ -135,4 +135,4 @@ public interface ITestSuiteService {
 	 */
 	public List<TestSuiteDetailsResponse> getListofTestSuiteNamesByCategory(String category, boolean isThunderEnabled);
 
-	}
+}

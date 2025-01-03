@@ -19,11 +19,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
+import java.util.Set;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
-
-import java.util.Set;
 
 /**
  * Data Transfer Object for creating a new module.
@@ -31,47 +31,47 @@ import java.util.Set;
 @Data
 public class ModuleCreateDTO {
 
-    /**
-     * The name of the module.
-     */
-    @NotBlank(message = "Name is required")
-    private String moduleName;
+	/**
+	 * The name of the module.
+	 */
+	@NotBlank(message = "Name is required")
+	private String moduleName;
 
-    /**
-     * The test group associated with the module.
-     */
-    @NotBlank(message = "Test group is required")
-    private String testGroup;
+	/**
+	 * The test group associated with the module.
+	 */
+	@NotBlank(message = "Test group is required")
+	private String testGroup;
 
-    /**
-     * The execution time of the module.
-     */
-    @NotNull(message = "Execution time is required")
-    private Integer executionTime;
+	/**
+	 * The execution time of the module.
+	 */
+	@NotNull(message = "Execution time is required")
+	private Integer executionTime;
 
-    /**
-     * The user group associated with the module.
-     */
-    private String userGroup;
+	/**
+	 * The user group associated with the module.
+	 */
+	private String userGroup;
 
-    /**
-     * The set of log file names associated with the module.
-     */
-    private Set<String> moduleLogFileNames;
+	/**
+	 * The set of log file names associated with the module.
+	 */
+	private Set<String> moduleLogFileNames;
 
-    /**
-     * The set of crash log files associated with the module.
-     */
-    private Set<String> moduleCrashLogFiles;
+	/**
+	 * The set of crash log files associated with the module.
+	 */
+	private Set<String> moduleCrashLogFiles;
 
-    /**
-     * The category of the module.
-     */
-    @NotBlank(message = "Category is required")
-    private String moduleCategory;
+	/**
+	 * The category of the module.
+	 */
+	@NotBlank(message = "Category is required")
+	private String moduleCategory;
 
-    /**
-     * The flag indicating whether the module is enabled.
-     */
-    private boolean isModuleThunderEnabled;
+	/**
+	 * The flag indicating whether the module is enabled.
+	 */
+	private boolean isModuleThunderEnabled;
 }

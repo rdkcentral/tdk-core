@@ -93,11 +93,11 @@ public class Utils {
 	 * @param value     The string value to validate.
 	 * @param fieldName The name of the field being validated.
 	 */
-	public static void validateInteger(String value,String field) {
+	public static void validateInteger(String value, String field) {
 		try {
 			Integer.parseInt(value);
 		} catch (NumberFormatException e) {
-			throw new UserInputException(field+ " value need to be integer ");
+			throw new UserInputException(field + " value need to be integer ");
 		}
 	}
 

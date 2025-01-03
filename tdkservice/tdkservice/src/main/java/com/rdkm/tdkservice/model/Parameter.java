@@ -20,7 +20,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import com.rdkm.tdkservice.enums.ParameterDataType;
-import jakarta.persistence.*;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -31,42 +39,41 @@ import lombok.EqualsAndHashCode;
 @Data
 @Entity
 @Table(name = "parameter")
-public class Parameter extends BaseEntity{
+public class Parameter extends BaseEntity {
 
-    /**
-     * The name of the parameter type.
-     */
-    @Column(nullable = false)
-    private String name;
+	/**
+	 * The name of the parameter type.
+	 */
+	@Column(nullable = false)
+	private String name;
 
-    /**
-     * The enumeration of the parameter type.
-     */
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private ParameterDataType parameterDataType;
+	/**
+	 * The enumeration of the parameter type.
+	 */
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private ParameterDataType parameterDataType;
 
-    /**
-     * The range value of the parameter type.
-     */
-    @Column(nullable = false)
-    private String rangeVal;
+	/**
+	 * The range value of the parameter type.
+	 */
+	@Column(nullable = false)
+	private String rangeVal;
 
-    /**
-     * The function associated with the parameter type.
-     */
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "function_id", nullable = false)
-    private Function function;
+	/**
+	 * The function associated with the parameter type.
+	 */
+	@ManyToOne(cascade = CascadeType.PERSIST)
+	@JoinColumn(name = "function_id", nullable = false)
+	private Function function;
 
-
-    /**
-     * Returns a string representation of the parameter type.
-     *
-     * @return the name of the parameter type, or "NULL" if the name is null
-     */
-    @Override
-    public String toString() {
-        return name != null ? name : "NULL";
-    }
+	/**
+	 * Returns a string representation of the parameter type.
+	 *
+	 * @return the name of the parameter type, or "NULL" if the name is null
+	 */
+	@Override
+	public String toString() {
+		return name != null ? name : "NULL";
+	}
 }

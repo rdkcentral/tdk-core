@@ -162,7 +162,7 @@ public class SocService implements ISocService {
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SOC_ID, socUpdateDTO.getSocId().toString()));
 
 		if (!Utils.isEmpty(socUpdateDTO.getSocName())) {
-			Soc newSoc = socRepository.findByNameAndCategory(socUpdateDTO.getSocName(),categoryValue);
+			Soc newSoc = socRepository.findByNameAndCategory(socUpdateDTO.getSocName(), categoryValue);
 			if (newSoc != null && soc.getName().equalsIgnoreCase(socUpdateDTO.getSocName())) {
 				soc.setName(socUpdateDTO.getSocName());
 			} else {

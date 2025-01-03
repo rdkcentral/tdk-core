@@ -24,7 +24,7 @@ package com.rdkm.tdkservice.enums;
  * Represents the execution status of a single script
  */
 public enum ExecutionStatus {
-	
-	INPROGRESS,COMPLETED
+
+	INPROGRESS, COMPLETED
 
 }

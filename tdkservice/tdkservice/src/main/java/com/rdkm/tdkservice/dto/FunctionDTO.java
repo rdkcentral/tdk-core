@@ -30,25 +30,25 @@ import lombok.Data;
 @Data
 public class FunctionDTO {
 
-    /**
-     * The unique identifier of the function.
-     */
-    @NotNull(message = "ID is required")
-    private UUID id;
+	/**
+	 * The unique identifier of the function.
+	 */
+	@NotNull(message = "ID is required")
+	private UUID id;
 
-    /**
-     * The name of the function.
-     */
+	/**
+	 * The name of the function.
+	 */
 
-    private String functionName;
+	private String functionName;
 
-    /**
-     * The name of the module to which the function belongs.
-     */
-    private String moduleName;
+	/**
+	 * The name of the module to which the function belongs.
+	 */
+	private String moduleName;
 
-    /**
-     * The category of the function.
-     */
-    private String functionCategory;
+	/**
+	 * The category of the function.
+	 */
+	private String functionCategory;
 }

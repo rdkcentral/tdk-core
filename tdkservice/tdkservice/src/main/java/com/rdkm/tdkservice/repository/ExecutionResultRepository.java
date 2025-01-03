@@ -19,10 +19,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
-import com.rdkm.tdkservice.enums.ExecutionResultStatus;
-import com.rdkm.tdkservice.model.Execution;
-import com.rdkm.tdkservice.model.ExecutionDevice;
-import com.rdkm.tdkservice.model.ExecutionResult;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -30,8 +28,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
+import com.rdkm.tdkservice.enums.ExecutionResultStatus;
+import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionResult;
 
 /**
  * Represents the execution result repository.

@@ -37,17 +37,17 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserGroupDTO {
-	
+
 	/**
 	 * Represents the unique identifier for the UserGroup.
 	 */
 	@NotBlank(message = "User group id is required")
 	private UUID userGroupId;
-	
+
 	/**
 	 * Represents the name of the UserGroup. This field is mandatory, hence it
 	 * cannot be blank.
 	 */
 	@NotBlank(message = "Usergroup name is required")
-    private String userGroupName;
+	private String userGroupName;
 }

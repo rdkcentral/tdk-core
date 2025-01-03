@@ -52,9 +52,12 @@ public interface ILoginService {
 	 * @return A boolean value indicating the success of the operation.
 	 */
 	boolean register(UserCreateDTO registerRequest);
-	
+
 	/**
-	 * This method is used to change the category preference of a user. It receives the username of the user and the category to be changed. The method changes the category preference of the user and returns a boolean value indicating the success of the operation.
+	 * This method is used to change the category preference of a user. It receives
+	 * the username of the user and the category to be changed. The method changes
+	 * the category preference of the user and returns a boolean value indicating
+	 * the success of the operation.
 	 *
 	 * @param userName the username of the user
 	 * @param category the category to be changed

@@ -37,48 +37,47 @@ import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 public interface IExecutionService {
 
 	/**
-	 * This method is used to trigger the execution of the scripts or test suite
-	 * 
-	 * @param executionTriggerDTO
-	 * @return
+	 * Triggers the execution of a test case on a device.
+	 *
+	 * @param executionTriggerDTO the DTO containing the details of the execution to
+	 *                            be triggered
+	 * @return an ExecutionResponseDTO containing the details of the triggered
+	 *         execution
 	 */
 	public ExecutionResponseDTO triggerExecution(ExecutionTriggerDTO executionTriggerDTO);
 
 	/**
-	 * This method is used to save the execution result
-	 * 
-	 * @param execId
-	 * @param resultData
-	 * @param execResult
-	 * @param expectedResult
-	 * @param resultStatus
-	 * @param testCaseName
-	 * @param execDevice
-	 * 
-	 * @return
+	 * Saves the result of an execution.
+	 *
+	 * @param execId         the unique identifier of the execution
+	 * @param resultData     the result data of the execution
+	 * @param execResult     the result of the execution
+	 * @param expectedResult the expected result of the execution
+	 * @param resultStatus   the status of the execution
+	 * @param testCaseName   the name of the test case
+	 * @param execDevice     the device on which the execution is performed
+	 * @return true if the result is saved successfully, false otherwise
 	 */
 	public boolean saveExecutionResult(String execId, String resultData, String execResult, String expectedResult,
 			String resultStatus, String testCaseName, String execDevice);
 
 	/**
-	 * This method is used to trigger the execution of the scripts or test suite
-	 * based on the input provided.
+	 * Saves the status of a load module execution.
 	 *
-	 * @param execId     - the execution trigger DTO
-	 * @param statusData - the execution trigger DTO
-	 * @param execDevice - the execution trigger DTO
-	 * @param execResult - the execution trigger DTO
-	 * @return
+	 * @param execId     the unique identifier of the execution
+	 * @param statusData the status data of the load module
+	 * @param execDevice the device on which the execution is performed
+	 * @param execResult the result of the execution
+	 * @return true if the status is saved successfully, false otherwise
 	 */
 	boolean saveLoadModuleStatus(String execId, String statusData, String execDevice, String execResult);
 
 	/**
-	 * This method is used to get client port
-	 * 
-	 * @param deviceIP
-	 * @param port
-	 * 
-	 * @return
+	 * Retrieves the client port information for a given device IP and port.
+	 *
+	 * @param deviceIP the IP address of the device
+	 * @param port     the port number
+	 * @return a JSONObject containing the client port information
 	 */
 	JSONObject getClientPort(String deviceIP, String port);
 
@@ -112,79 +111,85 @@ public interface IExecutionService {
 	String getExecutionName(ExecutionNameRequestDTO executionNameRequestDTO);
 
 	/**
-	 * This method is used to get the execution details
-	 * 
-	 * @param id
-	 * @return
+	 * Retrieves the execution details for the given execution ID.
+	 *
+	 * @param id the unique identifier of the execution
+	 * @return an ExecutionDetailsResponseDTO containing the details of the
+	 *         execution
 	 */
 	ExecutionDetailsResponseDTO getExecutionDetails(UUID id);
 
 	/**
-	 * This method is used to get the execution result
-	 * 
-	 * @param execResultId
-	 * @return
+	 * Retrieves the execution result for the given execution result ID.
+	 *
+	 * @param execResultId the unique identifier of the execution result
+	 * @return an ExecutionResultResponseDTO containing the details of the execution
+	 *         result
 	 */
 	ExecutionResultResponseDTO getExecutionResult(UUID execResultId);
 
 	/**
-	 * This method is used to get the trend analysis
-	 * 
-	 * @param execResultId
-	 * @return
+	 * Retrieves the trend analysis for the given execution result ID.
+	 *
+	 * @param execResultId the unique identifier of the execution result
+	 * @return a list of trend analysis data
 	 */
 	List<String> getTrendAnalysis(UUID execResultId);
 
 	/**
-	 * This method is used to trigger abort the execution
-	 * 
-	 * @param execResultId
-	 * @return
+	 * Aborts the execution identified by the given execution ID.
+	 *
+	 * @param execId the unique identifier of the execution to be aborted
+	 * @return true if the execution was successfully aborted, false otherwise
 	 */
 	boolean abortExecution(UUID execId);
 
 	/**
-	 * This method is used to repeat the failed script
-	 * 
-	 * @param execId
-	 * @return
+	 * Determines whether the execution with the specified ID should be repeated.
+	 *
+	 * @param execId the unique identifier of the execution
+	 * @return true if the execution should be repeated, false otherwise
 	 */
 	boolean repeatExecution(UUID execId, String user);
 
 	/**
-	 * This method is used to rerun the failed script
-	 * 
-	 * @param execId
-	 * @return
+	 * Re-runs the failed script associated with the given execution ID.
+	 *
+	 * @param execId the unique identifier of the execution whose failed script
+	 *               needs to be re-run
+	 * @return true if the script was successfully re-run, false otherwise
 	 */
 	public boolean reRunFailedScript(UUID execId, String user);
 
-	/*
-	 * This method is used to delete the execution
-	 * 
-	 * @param id
-	 * 
+	/**
+	 * Deletes an execution identified by the given UUID.
+	 *
+	 * @param id the UUID of the execution to be deleted
+	 * @return true if the execution was successfully deleted, false otherwise
 	 */
 	public boolean deleteExecution(UUID id);
 
 	/**
-	 * This method is used to delete the list of executions
-	 * 
-	 * @param ids
-	 * 
+	 * Deletes the executions with the specified IDs.
+	 *
+	 * @param ids the list of UUIDs representing the executions to be deleted
+	 * @return true if the executions were successfully deleted, false otherwise
 	 */
 	public boolean deleteExecutions(List<UUID> ids);
 
 	/**
-	 * This method is to search executions based on test suite name and script name
-	 * 
-	 * @param scriptTestSuiteName - full script name or testsuite name or partial
-	 *                            name for search query
-	 * @param categoryName        - RDKV, RDKB, RDKC
-	 * @param page                - the page number
-	 * @param size                - size in page
-	 * @param sortBy              - by default it is createdDate
-	 * @param sortDir             - by default it is desc
+	 * Retrieves a paginated list of executions filtered by device name and category
+	 * name.
+	 *
+	 * @param deviceName   the name of the device to filter executions by
+	 * @param categoryName the name of the category to filter executions by
+	 * @param page         the page number to retrieve
+	 * @param size         the number of executions per page
+	 * @param sortBy       the field to sort the executions by
+	 * @param sortDir      the direction to sort the executions (e.g., "asc" for
+	 *                     ascending, "desc" for descending)
+	 * @return a response containing the list of executions matching the specified
+	 *         filters
 	 */
 	public ExecutionListResponseDTO getExecutionsByDeviceName(String deviceName, String categoryName, int page,
 			int size, String sortBy, String sortDir);
@@ -202,21 +207,21 @@ public interface IExecutionService {
 	 */
 	public ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
 			int size, String sortBy, String sortDir);
+
 	/**
-	 * This method is used to get the executions by executionName with
-	 * pagination
+	 * This method is used to get the executions by executionName with pagination
 	 * 
 	 * @param executionName - executionName
-	 * @param categoryName        - RDKV, RDKB, RDKC
-	 * @param page                - the page number
-	 * @param size                - size in page
-	 * @param sortBy              - by default it is date
-	 * @param sortDir             - by default it is desc
+	 * @param categoryName  - RDKV, RDKB, RDKC
+	 * @param page          - the page number
+	 * @param size          - size in page
+	 * @param sortBy        - by default it is date
+	 * @param sortDir       - by default it is desc
 	 * @return response DTO
 	 */
 	public ExecutionListResponseDTO getExecutionsByExecutionName(String executionName, String categoryName, int page,
 			int size, String sortBy, String sortDir);
-	
+
 	/**
 	 * This method is used to get the executions by user with pagination
 	 * 
@@ -248,11 +253,11 @@ public interface IExecutionService {
 	Map<String, ExecutionSummaryResponseDTO> getModulewiseExecutionSummary(UUID executionId);
 
 	/**
-	 * This method is used to delete the executions by date range
-	 * 
-	 * @param fromDate
-	 * @param toDate
-	 * @return
+	 * Deletes executions within the specified date range.
+	 *
+	 * @param fromDate the start date of the range (inclusive)
+	 * @param toDate   the end date of the range (inclusive)
+	 * @return the number of executions deleted
 	 */
 	public int deleteExecutionsByDateRange(Instant fromDate, Instant toDate);
 }

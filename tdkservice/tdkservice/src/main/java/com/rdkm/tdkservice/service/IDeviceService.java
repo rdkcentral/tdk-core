@@ -151,7 +151,6 @@ public interface IDeviceService {
 	 * 
 	 */
 	boolean toggleThunderEnabledstatus(String deviceIP);
-	
 
 	/**
 	 * This method is used to get the device status

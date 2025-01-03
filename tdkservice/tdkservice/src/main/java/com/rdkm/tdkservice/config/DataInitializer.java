@@ -43,7 +43,6 @@ import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.util.Constants;
 
-
 /**
  * This class is used to initialize the data in the database. It will read the
  * data.sql file and execute the SQL queries in it. It will also extract the

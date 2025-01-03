@@ -23,9 +23,9 @@ import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 
 /**
- * This is a custom exception class that is thrown when a resource already exists
- * in the database. This is used in springboot exception handling for returning 
- * appropriate response to the client
+ * This is a custom exception class that is thrown when a resource already
+ * exists in the database. This is used in springboot exception handling for
+ * returning appropriate response to the client
  */
 @NoArgsConstructor
 @AllArgsConstructor
@@ -36,12 +36,12 @@ public class ResourceAlreadyExistsException extends RuntimeException {
 	private String resourceName;
 
 	/**
-	 * This method returns the exception message	
+	 * This method returns the exception message
 	 */
 	public String getMessage() {
 		if (resourceName == null)
 			return null;
-		return String.format("%s '%s' already exists", resourceType,resourceName);
+		return String.format("%s '%s' already exists", resourceType, resourceName);
 	}
 
 }

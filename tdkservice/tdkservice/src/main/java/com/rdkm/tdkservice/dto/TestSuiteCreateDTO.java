@@ -35,7 +35,7 @@ public class TestSuiteCreateDTO {
 	 */
 	@NotNull(message = "Test suite name cannot be null")
 	private String name;
-	
+
 	/**
 	 * The description of the test suite.
 	 */

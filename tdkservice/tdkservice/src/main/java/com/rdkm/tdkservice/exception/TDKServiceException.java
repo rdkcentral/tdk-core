@@ -1,8 +1,7 @@
 package com.rdkm.tdkservice.exception;
 
-public class TDKServiceException extends RuntimeException{
-	
-	
+public class TDKServiceException extends RuntimeException {
+
 	private static final long serialVersionUID = 1L;
 
 	/**

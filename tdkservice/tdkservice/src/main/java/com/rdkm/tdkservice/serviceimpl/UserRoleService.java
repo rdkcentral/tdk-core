@@ -46,7 +46,6 @@ public class UserRoleService implements IUserRoleService {
 	@Autowired
 	private UserRoleRepository userRoleRepository;
 
-	
 	/**
 	 * This method is used to create a new UserRole.
 	 * 
@@ -71,7 +70,7 @@ public class UserRoleService implements IUserRoleService {
 			return false;
 		}
 
-		return userRoleObject != null && userRoleObject.getId() !=null;
+		return userRoleObject != null && userRoleObject.getId() != null;
 
 	}
 

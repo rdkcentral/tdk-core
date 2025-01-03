@@ -20,6 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.dto;
 
 import com.rdkm.tdkservice.enums.ParameterDataType;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -29,27 +30,27 @@ import lombok.Data;
 @Data
 public class ParameterCreateDTO {
 
-    /**
-     * The name of the parameter type.
-     */
-    @NotBlank(message = "Name is required")
-    private String parameterName;
+	/**
+	 * The name of the parameter type.
+	 */
+	@NotBlank(message = "Name is required")
+	private String parameterName;
 
-    /**
-     * The enumeration of the parameter type.
-     */
-    @NotBlank(message = "Parameter type is required")
-    private ParameterDataType parameterDataType;
+	/**
+	 * The enumeration of the parameter type.
+	 */
+	@NotBlank(message = "Parameter type is required")
+	private ParameterDataType parameterDataType;
 
-    /**
-     * The range value of the parameter type.
-     */
-    @NotBlank(message = "Range value is required")
-    private String parameterRangeVal;
+	/**
+	 * The range value of the parameter type.
+	 */
+	@NotBlank(message = "Range value is required")
+	private String parameterRangeVal;
 
-    /**
-     * The function associated with the parameter type.
-     */
-    @NotBlank(message = "Function is required")
-    private String function;
+	/**
+	 * The function associated with the parameter type.
+	 */
+	@NotBlank(message = "Function is required")
+	private String function;
 }

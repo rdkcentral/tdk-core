@@ -26,16 +26,16 @@ import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 
 /**
- * This interface defines the contract for the oemService. It provides
- * methods to perform CRUD operations on deviceType entities.
+ * This interface defines the contract for the oemService. It provides methods
+ * to perform CRUD operations on deviceType entities.
  */
 public interface IDeviceTypeService {
 
 	/**
 	 * This method is used to create a new deviceType.
 	 * 
-	 * @param deviceTypeDTO This is the request object containing the details of
-	 *                       the deviceType to be created.
+	 * @param deviceTypeDTO This is the request object containing the details of the
+	 *                      deviceType to be created.
 	 * @return boolean This returns true if the deviceType was created successfully,
 	 *         false otherwise.
 	 */
@@ -67,8 +67,8 @@ public interface IDeviceTypeService {
 	 * This method is used to update a deviceType.
 	 * 
 	 * @param deviceTypeUpdateDTO This is the request object containing the updated
-	 *                       details of the DeviceType.
-	 * @param id             This is the id of the DeviceType to be updated.
+	 *                            details of the DeviceType.
+	 * @param id                  This is the id of the DeviceType to be updated.
 	 * @return deviceTypeUpdateDTO This returns the updated DeviceType.
 	 */
 	DeviceTypeDTO updateDeviceType(DeviceTypeDTO deviceTypeUpdateDTO);

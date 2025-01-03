@@ -19,8 +19,19 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.stereotype.Service;
+
 import com.rdkm.tdkservice.dto.FunctionCreateDTO;
 import com.rdkm.tdkservice.dto.FunctionDTO;
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -29,21 +40,11 @@ import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
-import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.repository.ParameterRepository;
 import com.rdkm.tdkservice.service.IFunctionService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.UUID;
-import java.util.stream.Collectors;
 
 /**
  * Service implementation for managing function details.

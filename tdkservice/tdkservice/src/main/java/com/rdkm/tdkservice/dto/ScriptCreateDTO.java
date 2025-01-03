@@ -60,7 +60,7 @@ public class ScriptCreateDTO {
 	private String primitiveTestName;
 
 	/**
-	 * List of deviceTypes  that the script is associated with.
+	 * List of deviceTypes that the script is associated with.
 	 */
 	private List<String> deviceTypes;
 

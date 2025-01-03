@@ -19,8 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.dto;
 
-import java.util.ArrayList;
-
 import com.rdkm.tdkservice.enums.DeviceStatus;
 
 import jakarta.validation.constraints.NotBlank;
@@ -31,8 +29,8 @@ import lombok.Data;
 public class DeviceCreateDTO {
 
 	/**
-	 * Represents the deviceIp of the device. This field is mandatory, hence it cannot
-	 * be blank.
+	 * Represents the deviceIp of the device. This field is mandatory, hence it
+	 * cannot be blank.
 	 */
 	@NotBlank
 	private String deviceIp;

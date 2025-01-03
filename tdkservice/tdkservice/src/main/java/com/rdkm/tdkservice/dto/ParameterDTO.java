@@ -22,6 +22,7 @@ package com.rdkm.tdkservice.dto;
 import java.util.UUID;
 
 import com.rdkm.tdkservice.enums.ParameterDataType;
+
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -31,29 +32,29 @@ import lombok.Data;
 @Data
 public class ParameterDTO {
 
-    /**
-     * The unique identifier of the parameter type.
-     */
-    @NotNull(message = "ID is required")
-    private UUID id;
+	/**
+	 * The unique identifier of the parameter type.
+	 */
+	@NotNull(message = "ID is required")
+	private UUID id;
 
-    /**
-     * The name of the parameter type.
-     */
-    private String parameterName;
+	/**
+	 * The name of the parameter type.
+	 */
+	private String parameterName;
 
-    /**
-     * The enumeration of the parameter type.
-     */
-    private ParameterDataType parameterDataType;
+	/**
+	 * The enumeration of the parameter type.
+	 */
+	private ParameterDataType parameterDataType;
 
-    /**
-     * The range value of the parameter type.
-     */
-    private String parameterRangeVal;
+	/**
+	 * The range value of the parameter type.
+	 */
+	private String parameterRangeVal;
 
-    /**
-     * The function associated with the parameter type.
-     */
-    private String function;
+	/**
+	 * The function associated with the parameter type.
+	 */
+	private String function;
 }

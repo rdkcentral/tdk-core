@@ -22,10 +22,9 @@ package com.rdkm.tdkservice.enums;
 /*
  * Represents the execution result status.
  */
- 
-public enum ExecutionResultStatus {
-	
-	SUCCESS, FAILURE, ABORTED, INPROGRESS, PAUSED, SKIPPED, NA ,TIMEOUT, PENDING
 
+public enum ExecutionResultStatus {
+
+	SUCCESS, FAILURE, ABORTED, INPROGRESS, PAUSED, SKIPPED, NA, TIMEOUT, PENDING
 
 }

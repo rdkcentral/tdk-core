@@ -47,7 +47,7 @@ public class DeviceStatusResponseDTO {
 	 * The current status of the device.
 	 */
 	String status;
-	
+
 	/**
 	 * Device type name
 	 */

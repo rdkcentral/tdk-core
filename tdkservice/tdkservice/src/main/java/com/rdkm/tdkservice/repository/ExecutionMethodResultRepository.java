@@ -19,13 +19,13 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
-
-import java.util.List;
-import java.util.UUID;
 
 /**
  * Represents the execution method result repository.
@@ -39,5 +39,5 @@ public interface ExecutionMethodResultRepository extends JpaRepository<Execution
 	 * @return the list of execution method result
 	 */
 	List<ExecutionMethodResult> findByExecutionResult(ExecutionResult executionResult);
-	
+
 }

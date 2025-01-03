@@ -64,8 +64,7 @@ public class UserCreateDTO {
 	 * Represents the theme name of the User.
 	 */
 	private String userThemeName;
-	
-	
+
 	/**
 	 * Represents the user category.
 	 */

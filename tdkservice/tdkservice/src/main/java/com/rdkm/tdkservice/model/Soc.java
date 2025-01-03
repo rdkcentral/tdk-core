@@ -21,7 +21,15 @@ package com.rdkm.tdkservice.model;
 
 import com.rdkm.tdkservice.enums.Category;
 
-import jakarta.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -33,21 +41,21 @@ import lombok.EqualsAndHashCode;
 @Entity
 @EqualsAndHashCode(callSuper = true)
 @Table(name = "soc", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
-public class Soc extends BaseEntity  {
-	
+public class Soc extends BaseEntity {
+
 	/**
 	 * The name of the Soc.
 	 */
 	@Column(nullable = false)
 	private String name;
-	
+
 	/**
 	 * The user group of the Soc.
 	 */
 	@ManyToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "user_group_id")
 	private UserGroup userGroup;
-	
+
 	/**
 	 * The category of the Soc.
 	 */

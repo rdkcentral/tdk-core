@@ -23,5 +23,5 @@ package com.rdkm.tdkservice.enums;
  * Represents the execution overall result status.
  */
 public enum ExecutionOverallResultStatus {
-	SUCCESS, FAILURE, ABORTED, INPROGRESS, PAUSED, SKIPPED, NOT_APPLICABLE,TIMEOUT
+	SUCCESS, FAILURE, ABORTED, INPROGRESS, PAUSED, SKIPPED, NOT_APPLICABLE, TIMEOUT
 }

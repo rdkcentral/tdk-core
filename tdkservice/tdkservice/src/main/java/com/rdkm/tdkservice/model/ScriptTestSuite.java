@@ -40,7 +40,7 @@ public class ScriptTestSuite extends BaseEntity {
 	 * The script of the test suite.
 	 */
 	@ManyToOne(optional = false)
-	@JoinColumn(name = "script_id",nullable = false)
+	@JoinColumn(name = "script_id", nullable = false)
 	private Script script;
 
 	/**

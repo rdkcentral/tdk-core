@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -212,12 +211,10 @@ public class FunctionController {
 	 * @return ResponseEntity with a list of functions in the specified module
 	 */
 	@Operation(summary = "Retrieve all functions by module name", description = "Retrieves a list of all functions by module name.")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully retrieved all functions"),
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved all functions"),
 			@ApiResponse(responseCode = "404", description = "No functions found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
+			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findAllByModule/{moduleName}")
 	public ResponseEntity<?> findAllFunctionsByModule(@PathVariable String moduleName) {
 		LOGGER.info("Retrieving all functions by module name: {}", moduleName);

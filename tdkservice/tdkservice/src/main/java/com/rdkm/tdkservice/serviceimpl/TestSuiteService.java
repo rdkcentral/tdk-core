@@ -42,7 +42,6 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import com.rdkm.tdkservice.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,6 +52,11 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import com.rdkm.tdkservice.dto.ScriptListDTO;
+import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
+import com.rdkm.tdkservice.dto.TestSuiteCustomDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDTO;
+import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -256,8 +260,12 @@ public class TestSuiteService implements ITestSuiteService {
 				continue;
 			}
 
-			DeviceType boxtype = deviceTypeRepository.findByNameAndCategory(testSuiteCustomDTO.getDeviceType(),
-					category);
+			DeviceType boxtype;
+			if (category.equals(Category.RDKV_RDKSERVICE)) {
+				boxtype = deviceTypeRepository.findByNameAndCategory(testSuiteCustomDTO.getDeviceType(), Category.RDKV);
+			} else {
+				boxtype = deviceTypeRepository.findByNameAndCategory(testSuiteCustomDTO.getDeviceType(), category);
+			}
 			if (boxtype == null) {
 				LOGGER.error("DeviceType is not available with the name " + testSuiteCustomDTO.getDeviceType());
 				// if the device type is not available in the database, then throw an exception

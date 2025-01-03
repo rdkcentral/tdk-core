@@ -33,7 +33,8 @@ public interface IFunctionService {
 	/**
 	 * Creates a new function.
 	 *
-     * @param functionCreateDTO the data transfer object containing the function details
+	 * @param functionCreateDTO the data transfer object containing the function
+	 *                          details
 	 * @return true if the function was created successfully, false otherwise
 	 */
 	boolean createFunction(FunctionCreateDTO functionCreateDTO);
@@ -41,7 +42,8 @@ public interface IFunctionService {
 	/**
 	 * Updates an existing function.
 	 *
-     * @param functionDTO the data transfer object containing the updated function details
+	 * @param functionDTO the data transfer object containing the updated function
+	 *                    details
 	 * @return true if the function was updated successfully, false otherwise
 	 */
 	boolean updateFunction(FunctionDTO functionDTO);
@@ -49,7 +51,8 @@ public interface IFunctionService {
 	/**
 	 * Finds all functions.
 	 *
-     * @return a list of data transfer objects containing the details of all functions
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions
 	 */
 	List<FunctionDTO> findAllFunctions();
 
@@ -57,7 +60,8 @@ public interface IFunctionService {
 	 * Finds a function by its ID.
 	 *
 	 * @param id the ID of the function
-     * @return the data transfer object containing the details of the function, or null if not found
+	 * @return the data transfer object containing the details of the function, or
+	 *         null if not found
 	 */
 	FunctionDTO findFunctionById(UUID id);
 
@@ -73,7 +77,8 @@ public interface IFunctionService {
 	 * Finds all functions by their category.
 	 *
 	 * @param category the category of the functions
-     * @return a list of data transfer objects containing the details of all functions in the specified category
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions in the specified category
 	 */
 	List<FunctionDTO> findAllByCategory(String category);
 
@@ -81,7 +86,8 @@ public interface IFunctionService {
 	 * Finds all functions by their module.
 	 *
 	 * @param moduleName the module of the functions
-     * @return a list of data transfer objects containing the details of all functions in the specified module
+	 * @return a list of data transfer objects containing the details of all
+	 *         functions in the specified module
 	 */
 	public List<FunctionDTO> findAllFunctionsByModule(String moduleName);
 

@@ -20,8 +20,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.model;
 
 import com.rdkm.tdkservice.enums.Category;
-
 import com.rdkm.tdkservice.enums.DeviceTypeCategory;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

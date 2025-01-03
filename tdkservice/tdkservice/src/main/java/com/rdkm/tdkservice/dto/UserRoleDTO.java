@@ -38,12 +38,12 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class UserRoleDTO {
-	
+
 	/**
 	 * Represents the unique identifier for the UserRole.
 	 */
 	private UUID userRoleId;
-	
+
 	/**
 	 * Represents the name of the UserRole. This field is mandatory, hence it cannot
 	 * be blank.

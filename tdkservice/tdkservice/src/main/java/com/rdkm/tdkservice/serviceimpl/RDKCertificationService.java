@@ -172,7 +172,6 @@ public class RDKCertificationService implements IRDKCertificationService {
 		return fileContent;
 	}
 
-	
 	/**
 	 * Method to delete a config file
 	 * 

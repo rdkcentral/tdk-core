@@ -22,7 +22,6 @@ package com.rdkm.tdkservice.dto;
 import java.util.List;
 import java.util.UUID;
 
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
@@ -41,6 +40,6 @@ public class PrimitiveTestUpdateDTO {
 	/*
 	 * The primitiveTestParameters list .
 	 */
-	
+
 	private List<ParameterValueDTO> primitiveTestParameters;
 }

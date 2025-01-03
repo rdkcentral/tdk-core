@@ -24,7 +24,7 @@ package com.rdkm.tdkservice.enums;
  */
 
 public enum ExecutionTriggerStatus {
-	
-	TRIGGERED,NOTTRIGGERED;
+
+	TRIGGERED, NOTTRIGGERED;
 
 }

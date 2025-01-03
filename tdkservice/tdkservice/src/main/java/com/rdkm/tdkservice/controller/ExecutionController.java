@@ -124,6 +124,7 @@ public class ExecutionController {
 		boolean saved = executionService.saveExecutionResult(execId, resultData, execResult, expectedResult,
 				resultStatus, testCaseName, execDevice);
 		if (saved) {
+			LOGGER.info("Result Details saved successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Result Details saved successfully");
 		} else {
 			LOGGER.error("Failed to save Result Details");
@@ -151,6 +152,7 @@ public class ExecutionController {
 		LOGGER.info("Save result Details ids called");
 		boolean isModuleStatusSaved = executionService.saveLoadModuleStatus(execId, statusData, execDevice, execResult);
 		if (isModuleStatusSaved) {
+			LOGGER.info("Load Module Status saved successfully");
 			return ResponseEntity.status(HttpStatus.OK).body("Load Module Status saved successfully");
 		} else {
 			LOGGER.error("Failed to save Load Module Status");
@@ -172,6 +174,7 @@ public class ExecutionController {
 	public ResponseEntity<String> getClientPort(@RequestParam String deviceIP, @RequestParam String agentPort) {
 		try {
 			JSONObject result = executionService.getClientPort(deviceIP, agentPort);
+			LOGGER.info("Client port fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(result.toString());
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -296,7 +299,7 @@ public class ExecutionController {
 	 * @param size         - size in page
 	 * @param sortBy       - by default it is date
 	 * @param sortDir      - by default it is desc
-	 * @return
+	 * @return response
 	 */
 	@Operation(summary = "Get executions by user")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
@@ -344,6 +347,7 @@ public class ExecutionController {
 		LOGGER.info("Get execution name called");
 		try {
 			String result = executionService.getExecutionName(nameRequest);
+			LOGGER.info("Execution Name fetched successfully");
 			return ResponseEntity.ok(result);
 		} catch (Exception e) {
 			LOGGER.error("Failed to get Execution Name: {}", e.getMessage());
@@ -398,11 +402,11 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to abort the execution.
-	 * 
-	 * @param execId
-	 * 
-	 * @return ResponseEntity<?>
+	 * Aborts the execution of a given execution ID.
+	 *
+	 * @param execId the UUID of the execution to be aborted
+	 * @return a ResponseEntity indicating the result of the abort operation
+	 *
 	 */
 	@Operation(summary = "Abort the execution")
 	@ApiResponse(responseCode = "200", description = "Execution aborted successfully")
@@ -423,11 +427,11 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to repeat the execution
-	 * 
-	 * @param execId - the execution ID
-	 * @param user   - the user name
-	 * @return ResponseEntity - the response
+	 * Handles the HTTP POST request to repeat an execution.
+	 *
+	 * @param execId the UUID of the execution to be repeated
+	 * @return a ResponseEntity indicating the result of the operation
+	 *
 	 */
 	@Operation(summary = "Repeat the execution")
 	@ApiResponse(responseCode = "200", description = "Execution repeated successfully")
@@ -446,12 +450,11 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to rerun the failed script.
-	 * 
-	 * @param execId
-	 * 
-	 * @return ResponseEntity
-	 * 
+	 * Rerun the failed script.
+	 *
+	 * @param execId the UUID of the execution to be rerun
+	 * @return ResponseEntity indicating the result of the rerun operation
+	 *
 	 */
 	@Operation(summary = "Rerun the failed script")
 	@ApiResponse(responseCode = "200", description = "Execution rerun successfully")
@@ -470,11 +473,12 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to get the execution details.
-	 * 
-	 * @param id
-	 * 
-	 * @return ResponseEntity<ExecutionDetailsResponseDTO>
+	 * Handles the HTTP GET request to fetch execution details for a given ID.
+	 *
+	 * @param id the UUID of the execution whose details are to be fetched
+	 * @return ResponseEntity containing the execution details if found, or an error
+	 *         message if not
+	 *
 	 */
 	@Operation(summary = "Get the execution details")
 	@ApiResponse(responseCode = "200", description = "Execution details fetched successfully")
@@ -493,11 +497,12 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to delete the executions.
-	 * 
-	 * @param ids
-	 * 
-	 * @return ResponseEntity
+	 * Deletes the execution with the specified ID.
+	 *
+	 * @param id the UUID of the execution to be deleted
+	 * @return a ResponseEntity containing a success message with HTTP status 201 if
+	 *         the execution is deleted, or an error message with HTTP status 404 if
+	 *         the execution is not found
 	 */
 	@Operation(summary = "Delete the execution")
 	@ApiResponse(responseCode = "201", description = "Execution deleted successfully")
@@ -516,11 +521,13 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to delete the executions by IDs.
-	 * 
-	 * @param ids
-	 * 
-	 * @return ResponseEntity
+	 * Deletes the executions by the provided list of IDs.
+	 *
+	 * @param ids the list of UUIDs representing the IDs of the executions to be
+	 *            deleted
+	 * @return a ResponseEntity containing a success message with HTTP status 201 if
+	 *         the executions are deleted successfully, or an error message with
+	 *         HTTP status 404 if the executions are not found
 	 */
 
 	@Operation(summary = "Delete the executions by IDs")
@@ -540,11 +547,13 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to delete the executions by date range
-	 * 
-	 * @param fromDate
-	 * @param toDate
-	 * @return deletedCount
+	 * Deletes the executions within the specified date range.
+	 *
+	 * @param fromDate the start date of the range
+	 * @param toDate   the end date of the range
+	 * @return a ResponseEntity containing a message indicating the number of
+	 *         executions deleted
+	 *
 	 */
 	@Operation(summary = "Delete the executions by date range")
 	@ApiResponse(responseCode = "200", description = "Executions deleted successfully")
@@ -559,9 +568,12 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to get the execution users.
-	 * 
-	 * @return ResponseEntity<?>
+	 * Handles the HTTP GET request to fetch unique execution users.
+	 *
+	 * @return ResponseEntity containing the list of unique users with HTTP status
+	 *         200 if successful, or an error message with HTTP status 500 if the
+	 *         operation fails.
+	 *
 	 */
 	@Operation(summary = "Get the execution users")
 	@ApiResponse(responseCode = "200", description = "Unique users fetched successfully")
@@ -607,7 +619,7 @@ public class ExecutionController {
 	 * on execution ID.
 	 * 
 	 * @param executionId
-	 * @return
+	 * @return ResponseEntity<?> with the image name or firmware version
 	 */
 	@Operation(summary = "Fetches the image name or current firmware version based on execution ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Successfully retrieved the image name"),
@@ -711,11 +723,14 @@ public class ExecutionController {
 	@GetMapping("/getDeviceLogFileNames")
 	public ResponseEntity<List<String>> getDeviceLogFileNames(
 			@RequestParam("executionResultId") String executionResultId) {
+		LOGGER.info("Inside getDeviceLogFileNames controller");
 		List<String> logFileNames = fileService.getDeviceLogFileNames(executionResultId);
 		if (logFileNames.isEmpty()) {
+			LOGGER.error("No log files found");
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(logFileNames); // Return 204 NO CONTENT if no files
-																					// found
+																					// // found
 		}
+		LOGGER.info("Log file names fetched successfully");
 		return ResponseEntity.ok(logFileNames);
 	}
 
@@ -733,10 +748,13 @@ public class ExecutionController {
 		String logContent = fileService.getAgentLogContent(executionResId);
 
 		if (logContent.equals("Log file not found")) {
+			LOGGER.error("Log file not found");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(logContent); // 404 if file not found
 		} else if (logContent.equals("Error reading log file")) {
+			LOGGER.error("Error reading log file");
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(logContent); // 500 on error
 		}
+		LOGGER.info("Log file content fetched successfully");
 		return ResponseEntity.ok(logContent); // Return the log content with 200 OK
 	}
 
@@ -779,10 +797,13 @@ public class ExecutionController {
 	}
 
 	/**
-	 * This method is used to get the module wise execution summary.
-	 * 
-	 * @param executionId - ID of the execution entity
-	 * @return ResponseEntity<?>
+	 * Handles the HTTP GET request to retrieve the module-wise execution summary.
+	 *
+	 * @param executionId the UUID of the execution for which the summary is to be
+	 *                    fetched
+	 * @return a ResponseEntity containing the module-wise execution summary if
+	 *         found, or a 404 status with an error message if the execution data is
+	 *         not found
 	 */
 	@Operation(summary = "Get the module wise execution summary")
 	@ApiResponse(responseCode = "200", description = "Module wise summary fetched successfully")

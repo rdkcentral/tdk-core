@@ -19,13 +19,14 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
-import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.model.Module;
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.Module;
 
 /**
  * Repository interface for accessing Module entities.
@@ -33,44 +34,40 @@ import java.util.UUID;
 @Repository
 public interface ModuleRepository extends JpaRepository<Module, UUID> {
 
-    /**
-     * Finds a module by its name.
-     *
-     * @param name the name of the module
-     * @return the module with the specified name, or null if not found
-     */
-    Module findByName(String name);
+	/**
+	 * Finds a module by its name.
+	 *
+	 * @param name the name of the module
+	 * @return the module with the specified name, or null if not found
+	 */
+	Module findByName(String name);
 
-    /**
-     +     * Finds all modules by category.
-     +     * @param categories
-     +     * @return
-     +     */
-    List<Module> findAllByCategoryIn(List<Category> categories);
+	/**
+	 * + * Finds all modules by category. + * @param categories + * @return +
+	 */
+	List<Module> findAllByCategoryIn(List<Category> categories);
 
-    /**
-     * Finds all modules by category.
-     *
-     * @param category the category of the modules
-     * @return a list of modules with the specified category
-     */
-    List<Module> findAllByCategory(Category category);
+	/**
+	 * Finds all modules by category.
+	 *
+	 * @param category the category of the modules
+	 * @return a list of modules with the specified category
+	 */
+	List<Module> findAllByCategory(Category category);
 
-    /**
-     * Checks if a module with the specified name exists.
-     *
-     * @param name the name of the module
-     * @return true if a module with the specified name exists, false otherwise
-     */
-    boolean existsByName(String name);
+	/**
+	 * Checks if a module with the specified name exists.
+	 *
+	 * @param name the name of the module
+	 * @return true if a module with the specified name exists, false otherwise
+	 */
+	boolean existsByName(String name);
 
-    /**
-     * Finds all modules.
-     *
-     * @return a list of all modules
-     */
-    List<Module> findAll();
-
-
+	/**
+	 * Finds all modules.
+	 *
+	 * @return a list of all modules
+	 */
+	List<Module> findAll();
 
 }

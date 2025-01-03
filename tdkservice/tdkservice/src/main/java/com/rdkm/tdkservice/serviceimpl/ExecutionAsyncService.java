@@ -2,7 +2,7 @@
  * If not stated otherwise in this file or this component's Licenses.txt file the
  * following copyright and licenses apply:
  *
- * Copyright 2016 RDK Management
+ * Copyright 2024 RDK Management
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -377,9 +377,12 @@ public class ExecutionAsyncService {
 
 	}
 
-	/*
-	 * This method is used to check the execution is aborted or not
-	 * 
+	/**
+	 * Checks if the execution with the given ID has been aborted.
+	 *
+	 * @param executionId the unique identifier of the execution
+	 * @return {@code true} if the execution has an abort request, {@code false}
+	 *         otherwise
 	 */
 	private boolean isExecutionAborted(UUID executionId) {
 		Execution execution = executionRepository.findById(executionId).orElse(null);
@@ -395,8 +398,9 @@ public class ExecutionAsyncService {
 	 * @param script          - the script to be executed
 	 * @param execution       - the execution object
 	 * @param executionResult - the execution result object
-	 * @param executionDevice - the execution device object return boolean - true if
-	 *                        the script is executed successfully, false otherwise
+	 * @param executionDevice - the execution device object
+	 * @return boolean - true if the script is executed successfully, false
+	 *         otherwise
 	 */
 	private boolean executeScriptinDevice(Script script, Execution execution, ExecutionResult executionResult,
 			ExecutionDevice executionDevice) {
@@ -526,10 +530,28 @@ public class ExecutionAsyncService {
 	}
 
 	/**
-	 * This method is used to set final status of execution
-	 * 
-	 * @param execution
-	 * 
+	 * Sets the final status of the given execution object based on the results of
+	 * its execution.
+	 *
+	 * This method retrieves the execution object from the repository using its ID.
+	 * If the execution status is INPROGRESS, it updates the status to COMPLETED. It
+	 * then retrieves the list of execution results associated with the execution
+	 * and calculates the counts of different result statuses (FAILURE, NA, TIMEOUT,
+	 * SUCCESS, SKIPPED).
+	 *
+	 * Based on the counts of these result statuses, the method sets the overall
+	 * result status of the execution: - If there are any FAILURE results, the
+	 * overall result is set to FAILURE. - If there are any TIMEOUT results, the
+	 * overall result is set to FAILURE. - If all results are either NA or SKIPPED,
+	 * the overall result is set to FAILURE. - If there are any SUCCESS results, the
+	 * overall result is set to SUCCESS.
+	 *
+	 * Finally, the method saves the updated execution object back to the
+	 * repository.
+	 *
+	 * @param executionObject the execution object whose final status needs to be
+	 *                        set
+	 * @return the updated execution object with the final status set
 	 */
 	private Execution setFinalStatusOfExecution(Execution executionObject) {
 
@@ -670,12 +692,12 @@ public class ExecutionAsyncService {
 	}
 
 	/**
-	 * This method is used to compute the time difference between two time stamps
+	 * Handles invalid scripts by generating execution results for each script.
 	 * 
-	 * @param invalidScripts
-	 * @param execution
-	 * @param device
-	 * @return
+	 * @param invalidScripts the list of invalid scripts to be processed
+	 * @param execution      the execution context associated with the scripts
+	 * @param device         the device associated with the execution
+	 * @return a list of execution results for the invalid scripts
 	 */
 	private List<ExecutionResult> handleInvalidScripts(List<Script> invalidScripts, Execution execution,
 			Device device) {
@@ -719,6 +741,8 @@ public class ExecutionAsyncService {
 	 * @param execution
 	 * 
 	 * @param executionDevice
+	 * 
+	 * @return List<ExecutionResult>
 	 */
 
 	private List<ExecutionResult> handleApplicableScripts(List<Script> applicableScripts, Device device,

@@ -44,6 +44,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * This method is used to find the execution by name.
 	 * 
 	 * @param name
+	 * @return Execution
 	 * 
 	 */
 	Execution findByName(String name);
@@ -52,6 +53,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * This method is used to check the existence of the execution by name.
 	 * 
 	 * @param executionName
+	 * @return boolean - true if the execution exists, false otherwise
 	 */
 	boolean existsByName(String executionName);
 
@@ -60,6 +62,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * 
 	 * @param name
 	 * @param category
+	 * @return Execution
 	 */
 	Page<Execution> findByCategory(Category category, Pageable pageable);
 
@@ -109,6 +112,7 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 * 
 	 * @param fromDate - start {@link Date}
 	 * @param toDate   - end {@link Date}
+	 * @return List of {@link Execution}
 	 */
 	@Query("SELECT ex From  Execution ex WHERE ex.createdDate BETWEEN :fromDate AND :toDate")
 	List<Execution> executionListInDateRange(Instant fromDate, Instant toDate);

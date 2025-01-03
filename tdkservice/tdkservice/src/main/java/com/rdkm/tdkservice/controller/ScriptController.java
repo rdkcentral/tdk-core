@@ -51,7 +51,6 @@ import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
 
@@ -394,17 +393,20 @@ public class ScriptController {
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getListofScriptByCategory")
 	public ResponseEntity<?> getListofScriptByCategory(@RequestParam String category,
-													   @RequestParam boolean isThunderEnabled) {
-		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			@RequestParam boolean isThunderEnabled) {
+		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category,
+				isThunderEnabled);
 
 		List<ScriptDetailsResponse> scripts = scriptService.getListofScriptNamesByCategory(category, isThunderEnabled);
 
 		if (scripts != null) {
-			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
+			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category,
+					isThunderEnabled);
 			return ResponseEntity.status(HttpStatus.OK).body(scripts);
 		} else {
 			LOGGER.warn("No scripts found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No scripts found for the specified category and Thunder setting");
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body("No scripts found for the specified category and Thunder setting");
 		}
 	}
 }

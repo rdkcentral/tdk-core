@@ -28,7 +28,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
  * The class is used to configure the CORS for the application and enable CORS for all endpoints
  */
 @Configuration
-public class CorsConfig  {
+public class CorsConfig {
 
 	/**
 	 * This method is used to configure the CORS for the application and enable CORS

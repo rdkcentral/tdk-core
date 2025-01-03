@@ -22,26 +22,24 @@ package com.rdkm.tdkservice.repository;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.model.Oem;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.Oem;
 
 /**
- * The OemRepository interface provides methods for oem
- * operations.
+ * The OemRepository interface provides methods for oem operations.
  */
 
 @Repository
 public interface OemRepository extends JpaRepository<Oem, UUID> {
-	
+
 	/**
 	 * This method is used to find a oem by name.
 	 *
 	 * @param oem the name of the oem to find
-	 * @return a oem object containing the oem's
-	 *         information
+	 * @return a oem object containing the oem's information
 	 */
 	Oem findByNameAndCategory(String oem, Category category);
 
@@ -49,8 +47,7 @@ public interface OemRepository extends JpaRepository<Oem, UUID> {
 	 * This method is used to delete a oem by name.
 	 *
 	 * @param name the name of the oem to delete
-	 * @return a oem object containing the oem's
-	 *         information
+	 * @return a oem object containing the oem's information
 	 */
 	Oem deleteByName(String name);
 
@@ -66,8 +63,7 @@ public interface OemRepository extends JpaRepository<Oem, UUID> {
 	 * This method is used to find a list of Oems by category.
 	 *
 	 * @param category the category of the oems to find
-	 * @return a list of oems objects containing the oem's
-	 *         information
+	 * @return a list of oems objects containing the oem's information
 	 */
 	List<Oem> findByCategory(Category category);
 

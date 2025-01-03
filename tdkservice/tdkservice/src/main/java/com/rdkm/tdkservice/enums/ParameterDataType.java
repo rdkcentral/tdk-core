@@ -23,23 +23,23 @@ package com.rdkm.tdkservice.enums;
  * Enumeration for parameter types.
  */
 public enum ParameterDataType {
-    /**
-     * Represents a string parameter type.
-     */
-    STRING,
+	/**
+	 * Represents a string parameter type.
+	 */
+	STRING,
 
-    /**
-     * Represents an integer parameter type.
-     */
-    INTEGER,
+	/**
+	 * Represents an integer parameter type.
+	 */
+	INTEGER,
 
-    /**
-     * Represents a double parameter type.
-     */
-    DOUBLE,
+	/**
+	 * Represents a double parameter type.
+	 */
+	DOUBLE,
 
-    /**
-     * Represents a float parameter type.
-     */
-    FLOAT
+	/**
+	 * Represents a float parameter type.
+	 */
+	FLOAT
 }

@@ -252,16 +252,22 @@ public class Constants {
 	// Script group id
 	public static final String TEST_SUITE_ID = "Test suite id";
 
+	// No value
 	public static final String NO = "no";
 
+	// XML file extension
 	public static final String XML_FILE_EXTENSION = ".xml";
 
+	// Python content type
 	public static final String PYTHON_CONTENT = "text/x-python";
 
+	// User directory
 	public static final String USER_DIRECTORY = "user.dir";
 
+	// Base filestore folder
 	public static final String BASE_FILESTORE_FOLDER = "src/main/webapp/filestore";
 
+	// Zip file extension
 	public static final String ZIP_EXTENSION = ".zip";
 
 	// config file extension
@@ -286,10 +292,13 @@ public class Constants {
 			+ "# limitations under the License.\r\n"
 			+ "##########################################################################\r\n" + "";
 
+	// User theme constant
 	public static final String USER_THEME = "User Theme";
 
+	// TDK utility file location
 	public static final String TDK_UTIL_FILE_LOCATION = "/tdkUtilFiles/HeaderFile.txt";
 
+	// New line character
 	public static final String NEW_LINE = "\n";
 
 	// Python default command
@@ -319,107 +328,167 @@ public class Constants {
 	// PERCENTAGE
 	public static final String PERCENTAGE = "%";
 
+	// Colon character
 	public static final String COLON = ":";
 
+	// Key for last day
 	public static final String KEY_LASTDAY = "L";
+	// Key for new line
 	public static final String KEY_ENTERNEW_LINE = "\r\n";
+	// Greater than symbol
 	public static final String GREATERTHAN = ">";
+	// Less than symbol
 	public static final String LESSTHAN = "<";
+	// HTML greater than symbol
 	public static final String HTML_GREATERTHAN = "&gt;";
+	// HTML less than symbol
 	public static final String HTML_LESSTHAN = "&lt;";
+	// HTML replace BR tag pattern
 	public static final String HTML_REPLACEBR = "</?br\\b[^>]*>";
+	// HTML span pattern
 	public static final String HTML_PATTERN = "<span(.*?)</span>";
+	// HTML pattern after span
 	public static final String HTML_PATTERN_AFTERSPAN = "</?span\\b[^>]*>";
 	// CURLY_BRACKET_OPEN
 	public static final String CURLY_BRACKET_OPEN = "{";
 
+	// Status none
 	public static final String STATUS_NONE = "none";
 
+	// Configure test case replace token
 	public static final String CONFIGURE_TESTCASE_REPLACE_TOKEN = "configureTestCase(ip,port,";
+	// Replace by token
 	public static final String REPLACE_BY_TOKEN = ",ip,port,";
+	// Left parenthesis
 	public static final String LEFT_PARANTHESIS = "(";
+	// Right parenthesis
 	public static final String RIGHT_PARANTHESIS = ")";
+	// Curly bracket close
 	public static final String CURLY_BRACKET_CLOSE = "}";
+	// Square bracket open
 	public static final String SQUARE_BRACKET_OPEN = "[";
+	// Square bracket close
 	public static final String SQUARE_BRACKET_CLOSE = "]";
 
+	// Comma separator
 	public static final String COMMA_SEPERATOR = ",";
+	// Single quotes
 	public static final String SINGLE_QUOTES = "'";
+	// Underscore
 	public static final String UNDERSCORE = "_";
 
+	// Method token
 	public static final String METHOD_TOKEN = "configureTestCase";
 
+	// Logs
 	public static final String LOGS = "logs";
 
+	// Temp script file keyword
 	public static final String TEMP_SCRIPT_FILE_KEYWORD = "tempScript";
 
+	// Port replace token
 	public static final String PORT_REPLACE_TOKEN = "<port>";
 
+	// IP replace token
 	public static final String IP_REPLACE_TOKEN = "<ipaddress>";
 
+	// Execution keyword
 	public static final String EXECUTION_KEYWORD = "execution";
 
+	// Result
 	public static final String RESULT = "result";
 
+	// Execution logs
 	public static final String EXECUTION_LOGS = "executionLogs";
 
+	// Rerun appender
 	public static final String RERUN_APPENDER = "_RERUN";
 
+	// Script end Python code
 	public static final String SCRIPT_END_PY_CODE = "\nprint(\"SCRIPTEND#!@~\");";
 
+	// Error tag Python comment
 	public static final String ERROR_TAG_PY_COMMENT = "#TDK_@error";
 
+	// End tag Python comment
 	public static final String END_TAG_PY_COMMENT = "SCRIPTEND#!@~";
 
+	// IPv6 interface
 	public static final String IPV6_INTERFACE = "ipv6.interface";
+	// IPv4 interface
 	public static final String IPV4_INTERFACE = "ipv4.interface";
+	// Python command
 	public static final String PYTHON_COMMAND = "python_command";
+	// Console file upload script
 	public static final String CONSOLE_FILE_UPLOAD_SCRIPT = "//filestore//callConsoleLogUpload.py";
 
+	// Log upload IPv4
 	public static final String LOG_UPLOAD_IPV4 = "log.upload.ipv4";
+	// Log upload IPv6
 	public static final String LOG_UPLOAD_IPV6 = "log.upload.ipv6";
+	// REST mechanism
 	public static final String REST_MECHANISM = "REST";
+	// TM URL
 	public static final String TM_URL = "tmURL";
+	// File transfer script RDK service
 	public static final String FILE_TRANSFER_SCRIPT_RDKSERVICE = "transfer_thunderdevice_logs.py"; // Update path
+	// Slash version text file
 	public static final String SLASH_VERSION_TXT_FILE = "/version.txt"; // Update as necessary
+	// Root string
 	public static final String ROOT_STRING = "root"; // Example path, change as necessary
+	// None string
 	public static final String NONE_STRING = "none";
+	// TM config file
 	public static final String TM_CONFIG_FILE = "tm.config";
 	// AgentConsoleLog.txt
 	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsoleLog.log";
 	// logs.path
 	public static final String LOGS_PATH = "logs.path";
+	// HTML line break
 	public static final String HTML_BR = "<br/>";
 
+	// Multi test suite constant
 	public static final String MULTI_TEST_SUITE = "MultiTestSuite";
+	// Device logs constant
 	public static final String DEVICE_LOGS = "deviceLogs";
+	// Agent logs constant
 	public static final String AGENT_LOGS = "agentLogs";
+	// Device info logs constant
 	public static final String DEVICE_INFO_LOGS = "deviceinfo";
 
+	// Thunder default port constant
 	public static final String THUNDER_DEFAULT_PORT = "9998";
+	// File upload script constant
 	public static final String FILE_UPLOAD_SCRIPT = "fileupload.py";
+	// Python3 command constant
 	public static final String PYTHON3 = "python3";
 
+	// Build name failed message constant
 	public static final String BUILD_NAME_FAILED = "Build name fetching failed";
+	// Default IPv4 interface constant
 	public static final String DEFAULT_IPV4_INTERFACE = "eth0";
+	// Default IPv6 interface constant
 	public static final String DEFAULT_IPV6_INTERFACE = "sit1";
 
 	// The total keyword to be used in DTO
 	public static final String TOTAL_KEYWORD = "Total";
+	// Directory for Thunder device configuration
 	public static final String THUNDER_DEVICE_CONFIG_DIR = "tdkvRDKServiceConfig";
-	
+
+	// Application version
 	public static final String APP_VERSION = "app.version";
-	
+
 	// The device log type
 	public static final String DEVICELOGTYPE = "deviceLog";
-	
+
 	// The agent log type
 	public static final String AGENTLOGTYPE = "agentLog";
-	
+
 	// The crash log type
 	public static final String CRASHLOGTYPE = "crashLog";
-	
+	// Multiple keyword constant
 	public static final String MULTIPLE_KEY_WORD = "Multiple";
-	
+
+	// Job constant
 	public static final String JOB = "Job_";
 }

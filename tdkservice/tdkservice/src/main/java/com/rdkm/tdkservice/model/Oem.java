@@ -40,7 +40,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Entity
-@Table(name = "oem",uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
+@Table(name = "oem", uniqueConstraints = @UniqueConstraint(columnNames = { "name", "category" }))
 public class Oem extends BaseEntity {
 
 	/*

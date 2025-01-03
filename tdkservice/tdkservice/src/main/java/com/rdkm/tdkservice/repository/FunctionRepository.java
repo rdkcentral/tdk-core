@@ -19,15 +19,15 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
-import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.model.Function;
-import com.rdkm.tdkservice.model.Module;
+import java.util.List;
+import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-import java.util.UUID;
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.model.Function;
+import com.rdkm.tdkservice.model.Module;
 
 /**
  * Repository interface for accessing Function entities.
@@ -35,43 +35,43 @@ import java.util.UUID;
 @Repository
 public interface FunctionRepository extends JpaRepository<Function, UUID> {
 
-    /**
-     * Finds a function by its name.
-     *
-     * @param name the name of the function
-     * @return the function with the specified name, or null if not found
-     */
-    Function findByName(String name);
+	/**
+	 * Finds a function by its name.
+	 *
+	 * @param name the name of the function
+	 * @return the function with the specified name, or null if not found
+	 */
+	Function findByName(String name);
 
-    /**
-     * Finds all functions by their category.
-     *
-     * @param category the category of the functions
-     * @return a list of functions in the specified category
-     */
-    List<Function> findAllByCategory(Category category);
+	/**
+	 * Finds all functions by their category.
+	 *
+	 * @param category the category of the functions
+	 * @return a list of functions in the specified category
+	 */
+	List<Function> findAllByCategory(Category category);
 
-    /**
-     * Checks if a function with the specified name exists.
-     *
-     * @param name the name of the function
-     * @return true if a function with the specified name exists, false otherwise
-     */
-    boolean existsByName(String name);
+	/**
+	 * Checks if a function with the specified name exists.
+	 *
+	 * @param name the name of the function
+	 * @return true if a function with the specified name exists, false otherwise
+	 */
+	boolean existsByName(String name);
 
-    /**
-     * Finds all functions by their module ID.
-     *
-     * @param moduleId the ID of the module
-     * @return a list of functions in the specified module
-     */
-    List<Function> findAllByModuleId(UUID moduleId);
-    
+	/**
+	 * Finds all functions by their module ID.
+	 *
+	 * @param moduleId the ID of the module
+	 * @return a list of functions in the specified module
+	 */
+	List<Function> findAllByModuleId(UUID moduleId);
+
 	/**
 	 * Finds all functions by their module.
 	 *
 	 * @param module the module
 	 * @return a list of functions in the specified module
 	 */
-    List<Function>findAllByModule(Module module);
+	List<Function> findAllByModule(Module module);
 }

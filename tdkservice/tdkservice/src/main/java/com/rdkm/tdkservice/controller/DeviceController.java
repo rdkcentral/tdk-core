@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +53,7 @@ import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
 
@@ -481,8 +481,7 @@ public class DeviceController {
 					.body("Failed to toggle thunder enabled status");
 		}
 	}
-	
-	
+
 	/**
 	 * This method is used to get the status of a device by device name.
 	 *
@@ -505,6 +504,5 @@ public class DeviceController {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device found with name: " + deviceName);
 		}
 	}
-	
 
 }

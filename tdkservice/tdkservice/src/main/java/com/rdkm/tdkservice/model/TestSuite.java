@@ -57,7 +57,7 @@ public class TestSuite extends BaseEntity {
 	 */
 	@Column
 	private String description;
-	
+
 	/**
 	 * The description of the test suite.
 	 */
@@ -77,6 +77,6 @@ public class TestSuite extends BaseEntity {
 	 */
 	@OneToMany(mappedBy = "testSuite", cascade = CascadeType.ALL, orphanRemoval = true)
 	@OrderBy("scriptOrder ASC")
-	private List<ScriptTestSuite> scriptTestSuite= new ArrayList<>();
+	private List<ScriptTestSuite> scriptTestSuite = new ArrayList<>();
 
 }

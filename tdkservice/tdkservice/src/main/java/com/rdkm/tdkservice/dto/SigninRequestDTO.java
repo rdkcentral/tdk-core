@@ -28,14 +28,14 @@ import lombok.Data;
  */
 @Data
 public class SigninRequestDTO {
-	
+
 	/**
 	 * Represents the username of the user. This field is mandatory, hence it cannot
 	 * be blank.
 	 */
 	@NotBlank(message = "Username is required")
 	private String username;
-	
+
 	/**
 	 * Represents the password of the user. This field is mandatory, hence it cannot
 	 * be blank.

@@ -124,7 +124,8 @@ public class UserGroupService implements IUserGroupService {
 	public UserGroupDTO updateUserGroup(UserGroupDTO userGroupRequest) {
 		LOGGER.info("Going to update user group with id: " + userGroupRequest.getUserGroupId().toString());
 		UserGroup userGroup = userGroupRepository.findById(userGroupRequest.getUserGroupId())
-				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_GROUP_ID, userGroupRequest.getUserGroupId().toString()));
+				.orElseThrow(() -> new ResourceNotFoundException(Constants.USER_GROUP_ID,
+						userGroupRequest.getUserGroupId().toString()));
 		if (userGroupRepository.existsByName(userGroupRequest.getUserGroupName())) {
 			LOGGER.info("UserGroup already exists with the same name: " + userGroupRequest.getUserGroupName());
 			throw new ResourceAlreadyExistsException(Constants.USER_GROUP, userGroupRequest.getUserGroupName());

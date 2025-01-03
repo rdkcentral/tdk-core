@@ -37,7 +37,6 @@ import com.rdkm.tdkservice.enums.ParameterDataType;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Function;
-import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Parameter;
 import com.rdkm.tdkservice.repository.FunctionRepository;
 import com.rdkm.tdkservice.repository.ParameterRepository;

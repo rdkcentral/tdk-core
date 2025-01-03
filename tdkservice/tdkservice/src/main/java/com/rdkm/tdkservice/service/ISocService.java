@@ -39,8 +39,8 @@ public interface ISocService {
 	/**
 	 * This method is used to create a new SocVendor.
 	 * 
-	 * @param socDTO This is the request object containing the details of
-	 *                         the SocVendor to be created.
+	 * @param socDTO This is the request object containing the details of the
+	 *               SocVendor to be created.
 	 * @return boolean This returns true if the SocVendor was created successfully,
 	 *         false otherwise.
 	 */
@@ -74,9 +74,9 @@ public interface ISocService {
 	/**
 	 * This method is used to update a Soc.
 	 * 
-	 * @param socUpdateDTO This is the request object containing the updated
-	 *                         details of the Soc.
-	 * @param id               This is the id of the Soc to be updated.
+	 * @param socUpdateDTO This is the request object containing the updated details
+	 *                     of the Soc.
+	 * @param id           This is the id of the Soc to be updated.
 	 * @return SocVendorDTO This returns the updated SocVendor.
 	 */
 
