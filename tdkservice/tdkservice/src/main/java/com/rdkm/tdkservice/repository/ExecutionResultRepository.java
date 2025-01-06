@@ -65,4 +65,34 @@ public interface ExecutionResultRepository extends JpaRepository<ExecutionResult
 	 */
 	List<ExecutionResult> findByExecutionAndResult(Execution execution, ExecutionResultStatus failure);
 
+	/**
+	 * Find the execution result by execution and script.
+	 *
+	 * @param executionId the execution
+	 * @return the list of execution result
+	 */
+	@Query("SELECT DISTINCT s.module.name FROM ExecutionResult er JOIN Script s ON er.script = s.name WHERE er.execution.id = :executionId")
+	List<String> findDistinctModuleNamesByExecutionId(@Param("executionId") UUID executionId);
+
+	/**
+	 * Count the execution result by execution and script.
+	 *
+	 * @param executionId the execution ID
+	 * @param moduleName  the module name
+	 * @return the count of execution result
+	 */
+	@Query("SELECT COUNT(er) FROM ExecutionResult er JOIN Script s ON er.script = s.name WHERE er.execution.id = :executionId AND s.module.name = :moduleName")
+	int countByExecutionIdAndScriptModuleName(@Param("executionId") UUID executionId, @Param("moduleName") String moduleName);
+
+	/**
+	 * Count the execution result by execution, script and result.
+	 *
+	 * @param executionId the execution ID
+	 * @param moduleName  the module name
+	 * @param result      the result
+	 * @return the count of execution result
+	 */
+	@Query("SELECT COUNT(er) FROM ExecutionResult er JOIN Script s ON er.script = s.name WHERE er.execution.id = :executionId AND s.module.name = :moduleName AND er.result = :result")
+	int countByExecutionIdAndScriptModuleNameAndResult(@Param("executionId") UUID executionId, @Param("moduleName") String moduleName, @Param("result") ExecutionResultStatus result);
+
 }

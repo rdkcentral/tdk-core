@@ -25,15 +25,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.service.IExportExcelService;
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -60,6 +59,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerException;
+
 /**
  * This class is used to handle the execution related operations.
  *
@@ -76,6 +78,9 @@ public class ExecutionController {
 
 	@Autowired
 	private IFileService fileService;
+
+	@Autowired
+	private IExportExcelService exportExcelService;
 
 	/**
 	 * This method is used to trigger the execution.
@@ -738,9 +743,7 @@ public class ExecutionController {
 	 * Endpoint to get the content of the agent log file for a given execution ID
 	 * and execution result ID.
 	 *
-	 * @param executionId    The execution ID.
 	 * @param executionResId The execution result ID.
-	 * @param baseLogPath    The base log path.
 	 * @return The content of the log file as a String.
 	 */
 	@GetMapping("/getAgentLogContent")
@@ -816,6 +819,194 @@ public class ExecutionController {
 		return executionSummaryMap != null ? ResponseEntity.ok(executionSummaryMap)
 				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
 
+	}
+	/**
+	 * Downloads execution data as an Excel file.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the Excel file as a byte array
+	 */
+	@Operation(summary = "Download execution data as an Excel file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Excel file generated successfully"),
+			@ApiResponse(responseCode = "500", description = "Error generating Excel file")
+	})
+	@GetMapping("/{executionId}/download-excel")
+	public ResponseEntity<byte[]> downloadExcel(@PathVariable UUID executionId) {
+		try {
+			Execution execution = exportExcelService.getExecutionById(executionId);
+
+			byte[] excelData = exportExcelService.generateExcelReport(execution);
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + execution.getName() + "_execution_data.xlsx");
+			headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+
+			return ResponseEntity.ok().headers(headers).body(excelData);
+
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(("Error generating Excel: " + e.getMessage()).getBytes());
+		}
+	}
+	/**
+	 * Downloads combined execution data as an Excel file.
+	 *
+	 * @param executionIds the UUID of the execution
+	 * @return a ResponseEntity containing the Excel file as a byte array
+	 */
+	@Operation(summary = "Generate combined Excel report", description = "Generates a combined Excel report for the provided list of execution IDs.")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Excel report generated successfully"),
+			@ApiResponse(responseCode = "400", description = "Execution IDs list cannot be empty"),
+			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report")
+	})
+	@PostMapping("/combined-excel")
+	public ResponseEntity<byte[]> generateCombinedExcelReport(@RequestBody List<UUID> executionIds) {
+		if (executionIds == null || executionIds.isEmpty()) {
+			return ResponseEntity.badRequest().body("Execution IDs list cannot be empty.".getBytes());
+		}
+
+		byte[] excelData = exportExcelService.generateCombinedExcelReport(executionIds);
+
+		if (excelData == null || excelData.length == 0) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Failed to generate Excel report.".getBytes());
+		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDisposition(ContentDisposition.attachment().filename("Combined_Report.xlsx").build());
+
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(excelData);
+	}
+
+	/**
+	 * Downloads raw execution data as an Excel file.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the Excel file as a byte array
+	 */
+	@Operation(summary = "Download raw execution data as an Excel file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Excel file generated successfully"),
+			@ApiResponse(responseCode = "404", description = "Execution data not found"),
+			@ApiResponse(responseCode = "500", description = "Error generating Excel file")
+	})
+	@GetMapping("/raw/{executionId}")
+	public ResponseEntity<byte[]> generateRawReport(@PathVariable UUID executionId) {
+		try {
+			byte[] report = exportExcelService.generateRawReport(executionId);
+			if (report.length == 0) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+						.body(null);
+			}
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDisposition(ContentDisposition.attachment()
+					.filename("Raw_Report_" + executionId + ".xlsx")
+					.build());
+
+			return ResponseEntity.ok()
+					.headers(headers)
+					.body(report);
+		} catch (ResourceNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(null);
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body(null);
+		}
+	}
+
+	/**
+	 * Downloads the execution results as an Excel file.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the Excel file as a byte array
+	 */
+	@Operation(summary = "Download execution results as an XML file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "XML file generated successfully"),
+			@ApiResponse(responseCode = "404", description = "Execution data not found"),
+			@ApiResponse(responseCode = "500", description = "Error generating XML file")
+	})
+	@GetMapping("/{executionId}/XMLReport")
+	public ResponseEntity<byte[]> generateExecutionReport(@PathVariable UUID executionId) throws ParserConfigurationException, TransformerException {
+
+		// Fetch execution entity by ID
+		Execution execution = exportExcelService.getExecutionById(executionId); // Replace with actual service method
+		if (execution == null) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND)
+					.body(null); // Return 404 if execution not found
+		}
+
+		// Generate XML report
+		byte[] xmlReport = exportExcelService.generateXmlReport(execution);
+
+		// Set response headers
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=execution-report.xml");
+		headers.add(HttpHeaders.CONTENT_TYPE, "application/xml");
+
+		// Return XML file as byte array in response
+		return ResponseEntity.ok()
+				.headers(headers)
+				.body(xmlReport);
+
+	}
+
+	/**
+	 * Downloads the execution results as a zip file.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the zip file as a byte array
+	 */
+	@Operation(summary = "Download execution results as a zip file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Zip file generated successfully"),
+			@ApiResponse(responseCode = "404", description = "Execution data not found"),
+			@ApiResponse(responseCode = "500", description = "Error generating zip file")
+	})
+	@GetMapping("/{executionId}/results-zip")
+	public ResponseEntity<byte[]> getExecutionResultsZip(@PathVariable UUID executionId) {
+		try {
+			byte[] zipData = exportExcelService.generateExecutionResultsZip(executionId);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=execution_results.zip");
+			return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
+		} catch (ResourceNotFoundException | IOException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
+	/**
+	 * Downloads the failed execution results as a zip file.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the zip file as a byte array
+	 */
+	@Operation(summary = "Download failed execution results as a zip file")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Zip file generated successfully"),
+			@ApiResponse(responseCode = "404", description = "Execution data not found"),
+			@ApiResponse(responseCode = "500", description = "Error generating zip file")
+	})
+	@GetMapping("/{executionId}/failed-results-zip")
+	public ResponseEntity<byte[]> getFailedExecutionResultsZip(@PathVariable UUID executionId) {
+		try {
+			byte[] zipData = exportExcelService.generateExecutionFailureScriptsResultsZip(executionId);
+			HttpHeaders headers = new HttpHeaders();
+			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=failed_execution_results.zip");
+			return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
+		} catch (ResourceNotFoundException e) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		} catch (IOException e) {
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 }

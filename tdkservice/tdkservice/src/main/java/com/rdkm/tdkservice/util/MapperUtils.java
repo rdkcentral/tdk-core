@@ -22,54 +22,15 @@ package com.rdkm.tdkservice.util;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.rdkm.tdkservice.dto.*;
+import com.rdkm.tdkservice.enums.*;
+import com.rdkm.tdkservice.model.*;
+import com.rdkm.tdkservice.model.Module;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.rdkm.tdkservice.dto.DeviceCreateDTO;
-import com.rdkm.tdkservice.dto.DeviceResponseDTO;
-import com.rdkm.tdkservice.dto.DeviceTypeDTO;
-import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
-import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
-import com.rdkm.tdkservice.dto.FunctionCreateDTO;
-import com.rdkm.tdkservice.dto.FunctionDTO;
-import com.rdkm.tdkservice.dto.ModuleCreateDTO;
-import com.rdkm.tdkservice.dto.ModuleDTO;
-import com.rdkm.tdkservice.dto.OemDTO;
-import com.rdkm.tdkservice.dto.ParameterCreateDTO;
-import com.rdkm.tdkservice.dto.ParameterDTO;
-import com.rdkm.tdkservice.dto.PrimitiveTestParameterDTO;
-import com.rdkm.tdkservice.dto.ScriptCreateDTO;
-import com.rdkm.tdkservice.dto.ScriptDTO;
-import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
-import com.rdkm.tdkservice.dto.ScriptListDTO;
-import com.rdkm.tdkservice.dto.SocDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDTO;
-import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
-import com.rdkm.tdkservice.dto.UserDTO;
-import com.rdkm.tdkservice.dto.UserGroupDTO;
-import com.rdkm.tdkservice.dto.UserRoleDTO;
-import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.enums.ScheduleStatus;
-import com.rdkm.tdkservice.enums.TestGroup;
-import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.model.Device;
-import com.rdkm.tdkservice.model.DeviceType;
-import com.rdkm.tdkservice.model.ExecutionSchedule;
-import com.rdkm.tdkservice.model.Function;
-import com.rdkm.tdkservice.model.Module;
-import com.rdkm.tdkservice.model.Oem;
-import com.rdkm.tdkservice.model.Parameter;
-import com.rdkm.tdkservice.model.PrimitiveTestParameter;
-import com.rdkm.tdkservice.model.Script;
-import com.rdkm.tdkservice.model.ScriptTestSuite;
-import com.rdkm.tdkservice.model.Soc;
-import com.rdkm.tdkservice.model.TestSuite;
-import com.rdkm.tdkservice.model.User;
-import com.rdkm.tdkservice.model.UserGroup;
-import com.rdkm.tdkservice.model.UserRole;
 
 /**
  * This class is used to populate the DTO objects from the model objects.
@@ -740,5 +701,18 @@ public class MapperUtils {
 		response.setId(testSuite.getId());
 		response.setTestSuiteName(testSuite.getName());
 		return response;
+	}
+
+	/**
+	 * This method is used to convert the ExecutionResultDTO to ExecutionResult
+	 *
+	 * @param executionResultDTO ExecutionResult
+	 **/
+	public static ExecutionResult convertToExecutionResult(ExecutionResultDTO executionResultDTO) {
+		ExecutionResult executionResult = new ExecutionResult();
+		executionResult.setId(executionResultDTO.getExecutionResultID());
+		executionResult.setScript(executionResultDTO.getName());
+		executionResult.setResult(ExecutionResultStatus.valueOf(executionResultDTO.getStatus()));
+		return executionResult;
 	}
 }

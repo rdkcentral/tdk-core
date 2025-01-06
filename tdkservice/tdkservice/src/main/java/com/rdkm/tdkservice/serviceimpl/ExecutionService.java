@@ -1852,7 +1852,7 @@ public class ExecutionService implements IExecutionService {
 	 *                  objects
 	 * @return a list of ExecutionResultDTO objects
 	 */
-	private List<ExecutionResultDTO> getExecutionResults(Execution execution) {
+	public List<ExecutionResultDTO> getExecutionResults(Execution execution) {
 		List<ExecutionResult> results = execution.getExecutionResults();
 		List<ExecutionResultDTO> resultDTO = new ArrayList<>();
 		for (ExecutionResult result : results) {
@@ -1877,7 +1877,7 @@ public class ExecutionService implements IExecutionService {
 	 * @return an ExecutionSummaryResponseDTO object containing the summary of the
 	 *         execution
 	 */
-	private ExecutionSummaryResponseDTO getExecutionSummary(Execution execution) {
+	public ExecutionSummaryResponseDTO getExecutionSummary(Execution execution) {
 
 		ExecutionSummaryResponseDTO summary = new ExecutionSummaryResponseDTO();
 		summary.setTotalScripts(execution.getScriptCount());
