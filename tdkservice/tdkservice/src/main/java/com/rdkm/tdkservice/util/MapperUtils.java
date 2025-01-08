@@ -664,7 +664,6 @@ public class MapperUtils {
 		executionSchedule.setScheduleType(executionScheduleDTO.getScheduleType());
 		executionSchedule.setTestType(executionTriggerDTO.getTestType());
 		executionSchedule.setUser(executionTriggerDTO.getUser());
-		executionSchedule.setCategory(executionTriggerDTO.getCategory());
 		executionSchedule.setExecutionName(Constants.JOB + executionTriggerDTO.getExecutionName());
 		executionSchedule.setRepeatCount(executionTriggerDTO.getRepeatCount());
 		executionSchedule.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());

@@ -28,6 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -48,6 +49,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
  * 
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/api/v1/executionScheduler")
 public class ExecutionScheduleController {
 
@@ -132,9 +134,9 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching the execution schedules")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/getAll")
-	public ResponseEntity<?> getAllExecutionSchedules() {
+	public ResponseEntity<?> getAllExecutionSchedules(@RequestParam String category) {
 		LOGGER.info("Fetching all the execution schedules");
-		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService.getAllExecutionSchedules();
+		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService.getAllExecutionSchedulesByCategory(category);
 		if (executionSchedules != null) {
 			LOGGER.info("Execution schedules fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(executionSchedules);

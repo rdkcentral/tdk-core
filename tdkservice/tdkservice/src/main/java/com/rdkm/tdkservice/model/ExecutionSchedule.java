@@ -23,8 +23,11 @@ import java.time.Instant;
 
 import com.rdkm.tdkservice.enums.ScheduleStatus;
 import com.rdkm.tdkservice.enums.ScheduleType;
+import com.rdkm.tdkservice.enums.Category;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -89,7 +92,8 @@ public class ExecutionSchedule extends BaseEntity {
 	/**
 	 * Represents the category.
 	 */
-	private String category;
+	@Enumerated(EnumType.STRING)
+	private Category category;
 
 	/**
 	 * Represents the execution name.

@@ -41,12 +41,15 @@ import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
 import com.rdkm.tdkservice.dto.ExecutionSchedulesResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
+import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.ScheduleStatus;
 import com.rdkm.tdkservice.enums.ScheduleType;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.ExecutionSchedule;
 import com.rdkm.tdkservice.repository.ExecutionScheduleRepository;
 import com.rdkm.tdkservice.util.MapperUtils;
+import com.rdkm.tdkservice.util.Utils;
 
 import jakarta.annotation.PostConstruct;
 
@@ -165,8 +168,13 @@ public class ExecutionScheduleService {
 		// If not valid, throw an exception which will be caught by the controller
 		executionService.checkValidTriggerRequest(executionTriggerDTO);
 
+		
+		
 		// Saving the execution schedule object with schedule and execution details
 		ExecutionSchedule executionSchedule = MapperUtils.convertToExecutionSchedule(executionScheduleDTO);
+		String categoryValue = executionScheduleDTO.getExecutionTriggerDTO().getCategory();
+		Category category = Category.valueOf(categoryValue.toUpperCase());
+		executionSchedule.setCategory(category);
 		ExecutionSchedule savedExecutionSchedule = executionScheduleRepository.save(executionSchedule);
 
 		// Create the schedule based on the saved execution schedule
@@ -224,7 +232,7 @@ public class ExecutionScheduleService {
 
 		executionTriggerDTO.setTestType(executionSchedule.getTestType());
 		executionTriggerDTO.setUser(executionSchedule.getUser());
-		executionTriggerDTO.setCategory(executionSchedule.getCategory());
+		executionTriggerDTO.setCategory(executionSchedule.getCategory().getName());
 		executionTriggerDTO.setExecutionName(executionSchedule.getExecutionName());
 		executionTriggerDTO.setRepeatCount(executionSchedule.getRepeatCount());
 		executionTriggerDTO.setRerunOnFailure(executionSchedule.isRerunOnFailure());
@@ -256,9 +264,10 @@ public class ExecutionScheduleService {
 	}
 
 	/**
+	 * This method is for deleting the scheduled execution
 	 * 
-	 * @param executionID
-	 * @return
+	 * @param executionID - ID of the execution
+	 * @return - true or false - checks if execution is deleted or not
 	 */
 	public boolean deleteScheduleExecution(UUID executionID) {
 		LOGGER.info("Deleting the execution schedule");
@@ -279,9 +288,19 @@ public class ExecutionScheduleService {
 
 	}
 
-	public List<ExecutionSchedulesResponseDTO> getAllExecutionSchedules() {
+	/**
+	 * This method is to get all the execution schedules added
+	 * 
+	 * @return list of execution schedules
+	 */
+	public List<ExecutionSchedulesResponseDTO> getAllExecutionSchedulesByCategory(String categoryValue) {
 		LOGGER.info("Fetching all the execution schedules");
-		List<ExecutionSchedule> listOfExecutionSchedules = executionScheduleRepository.findAll();
+
+		Category category = Category.valueOf(categoryValue.toUpperCase());
+		if (category == null) {
+			throw new ResourceNotFoundException("Category ", categoryValue.toUpperCase());
+		}
+		List<ExecutionSchedule> listOfExecutionSchedules = executionScheduleRepository.findAllByCategory(category);
 		if (listOfExecutionSchedules == null) {
 			return null;
 		} else {
@@ -290,6 +309,12 @@ public class ExecutionScheduleService {
 
 	}
 
+	/**
+	 * This method returns the execution schedule response list
+	 * 
+	 * @param listOfExecutionSchedules - list of schedules
+	 * @return listOfExecutionSchedules
+	 */
 	private List<ExecutionSchedulesResponseDTO> getResponseDTOList(List<ExecutionSchedule> listOfExecutionSchedules) {
 		List<ExecutionSchedulesResponseDTO> responseDTOList = new ArrayList<>();
 		for (ExecutionSchedule executionSchedule : listOfExecutionSchedules) {
@@ -303,10 +328,20 @@ public class ExecutionScheduleService {
 				responseDTO.setDevice(executionSchedule.getDeviceList());
 			}
 
+			// To display the suite and script name same as the execution page
 			if (executionSchedule.getScriptList() != null) {
-				responseDTO.setScriptTestSuite(executionSchedule.getScriptList());
+				if (convertStringToListAndGetSize(executionSchedule.getScriptList()) == 1) {
+					responseDTO.setScriptTestSuite(executionSchedule.getScriptList());
+				} else {
+					responseDTO.setScriptTestSuite("Multiple Scripts");
+				}
+
 			} else if (executionSchedule.getTestSuite() != null) {
-				responseDTO.setScriptTestSuite(executionSchedule.getTestSuite());
+				if (convertStringToListAndGetSize(executionSchedule.getTestSuite()) == 1) {
+					responseDTO.setScriptTestSuite(executionSchedule.getTestSuite());
+				} else {
+					responseDTO.setScriptTestSuite("Multiple TestSuite");
+				}
 			}
 
 			if (executionSchedule.getScheduleType().equals(ScheduleType.ONCE)) {
@@ -319,4 +354,17 @@ public class ExecutionScheduleService {
 		return responseDTOList;
 	}
 
+	/**
+	 * This method is to convert String to List and get size
+	 * 
+	 * @return size of the converted string to list
+	 */
+	private int convertStringToListAndGetSize(String commaSeperatedString) {
+		if (Utils.isEmpty(commaSeperatedString)) {
+			return 0;
+		}
+		String[] splitArray = commaSeperatedString.split(",");
+		List<String> listOfValues = Arrays.asList(splitArray);
+		return listOfValues.size();
+	}
 }
