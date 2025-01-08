@@ -35,7 +35,7 @@ public interface IRDKCertificationService {
 	 * @param file
 	 * @return boolean
 	 */
-	boolean createOrUpdateOrUploadConfigFile(MultipartFile file);
+	boolean createOrUploadConfigFile(MultipartFile file);
 
 	/**
 	 * Method to download a config file
@@ -68,5 +68,14 @@ public interface IRDKCertificationService {
 	 * @return boolean
 	 */
 	boolean deleteConfigFile(String fileName);
+
+	/**
+	 * Updates the configuration file with the provided multipart file.
+	 *
+	 * @param file the multipart file to be used for updating the configuration
+	 * @return true if the configuration file was successfully updated, false
+	 *         otherwise
+	 */
+	boolean updateConfigFile(MultipartFile file);
 
 }
