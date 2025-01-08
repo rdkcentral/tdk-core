@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.json.JSONObject;
+import org.springframework.core.io.Resource;
 
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
@@ -44,7 +45,7 @@ public interface IExecutionService {
 	 * @return an ExecutionResponseDTO containing the details of the triggered
 	 *         execution
 	 */
-	public ExecutionResponseDTO triggerExecution(ExecutionTriggerDTO executionTriggerDTO);
+	ExecutionResponseDTO triggerExecution(ExecutionTriggerDTO executionTriggerDTO);
 
 	/**
 	 * Saves the result of an execution.
@@ -58,7 +59,7 @@ public interface IExecutionService {
 	 * @param execDevice     the device on which the execution is performed
 	 * @return true if the result is saved successfully, false otherwise
 	 */
-	public boolean saveExecutionResult(String execId, String resultData, String execResult, String expectedResult,
+	boolean saveExecutionResult(String execId, String resultData, String execResult, String expectedResult,
 			String resultStatus, String testCaseName, String execDevice);
 
 	/**
@@ -159,7 +160,7 @@ public interface IExecutionService {
 	 *               needs to be re-run
 	 * @return true if the script was successfully re-run, false otherwise
 	 */
-	public boolean reRunFailedScript(UUID execId, String user);
+	boolean reRunFailedScript(UUID execId, String user);
 
 	/**
 	 * Deletes an execution identified by the given UUID.
@@ -167,7 +168,7 @@ public interface IExecutionService {
 	 * @param id the UUID of the execution to be deleted
 	 * @return true if the execution was successfully deleted, false otherwise
 	 */
-	public boolean deleteExecution(UUID id);
+	boolean deleteExecution(UUID id);
 
 	/**
 	 * Deletes the executions with the specified IDs.
@@ -175,7 +176,7 @@ public interface IExecutionService {
 	 * @param ids the list of UUIDs representing the executions to be deleted
 	 * @return true if the executions were successfully deleted, false otherwise
 	 */
-	public boolean deleteExecutions(List<UUID> ids);
+	boolean deleteExecutions(List<UUID> ids);
 
 	/**
 	 * Retrieves a paginated list of executions filtered by device name and category
@@ -191,8 +192,8 @@ public interface IExecutionService {
 	 * @return a response containing the list of executions matching the specified
 	 *         filters
 	 */
-	public ExecutionListResponseDTO getExecutionsByDeviceName(String deviceName, String categoryName, int page,
-			int size, String sortBy, String sortDir);
+	ExecutionListResponseDTO getExecutionsByDeviceName(String deviceName, String categoryName, int page, int size,
+			String sortBy, String sortDir);
 
 	/**
 	 * This method is used to get the executions by device name with pagination
@@ -205,7 +206,7 @@ public interface IExecutionService {
 	 * @param sortDir      - by default it is desc
 	 * @return response DTO
 	 */
-	public ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
+	ExecutionListResponseDTO getExecutionsByScriptTestsuite(String testSuiteName, String categoryName, int page,
 			int size, String sortBy, String sortDir);
 
 	/**
@@ -219,8 +220,8 @@ public interface IExecutionService {
 	 * @param sortDir       - by default it is desc
 	 * @return response DTO
 	 */
-	public ExecutionListResponseDTO getExecutionsByExecutionName(String executionName, String categoryName, int page,
-			int size, String sortBy, String sortDir);
+	ExecutionListResponseDTO getExecutionsByExecutionName(String executionName, String categoryName, int page, int size,
+			String sortBy, String sortDir);
 
 	/**
 	 * This method is used to get the executions by user with pagination
@@ -233,15 +234,15 @@ public interface IExecutionService {
 	 * @param sortDir      - by default it is desc
 	 * @return response DTO
 	 */
-	public ExecutionListResponseDTO getExecutionsByUser(String username, String category, int page, int size,
-			String sortBy, String sortDir);
+	ExecutionListResponseDTO getExecutionsByUser(String username, String category, int page, int size, String sortBy,
+			String sortDir);
 
 	/**
 	 * This method is used to get the unique users.
 	 * 
 	 * @return List of String - the list of unique users
 	 */
-	public List<String> getUniqueUsers();
+	List<String> getUniqueUsers();
 
 	/**
 	 * 
@@ -259,5 +260,13 @@ public interface IExecutionService {
 	 * @param toDate   the end date of the range (inclusive)
 	 * @return the number of executions deleted
 	 */
-	public int deleteExecutionsByDateRange(Instant fromDate, Instant toDate);
+	int deleteExecutionsByDateRange(Instant fromDate, Instant toDate);
+
+	/**
+	 * Downloads the script associated with the given execution resource ID.
+	 *
+	 * @param executionResId the unique identifier of the execution resource
+	 * @return the script as a Resource object
+	 */
+	Resource downloadScript(UUID executionResId);
 }

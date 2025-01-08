@@ -586,7 +586,25 @@ public class CommonService {
 				+ Constants.FILE_PATH_SEPERATOR;
 		return deviceLogsPath;
 	}
-
+	
+	
+	
+	/**
+	 * Constructs the crash logs path for a given execution.
+	 *
+	 * @param executionId the unique identifier for the execution
+	 * @param executionResultId the unique identifier for the execution result
+	 * @param baseLogPath the base path where logs are stored
+	 * @return the constructed crash logs path for the specified execution and result
+	 */
+	public String getCrashLogsPathForTheExecution(String executionId, String executionResultId, String baseLogPath) {
+		String crashLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
+				+ Constants.UNDERSCORE + executionId + Constants.FILE_PATH_SEPERATOR + Constants.RESULT
+				+ Constants.UNDERSCORE + executionResultId + Constants.FILE_PATH_SEPERATOR + Constants.CRASH_LOGS
+				+ Constants.FILE_PATH_SEPERATOR;
+		return crashLogsPath;
+	}
+	
 	/**
 	 * Get file names from directory
 	 *

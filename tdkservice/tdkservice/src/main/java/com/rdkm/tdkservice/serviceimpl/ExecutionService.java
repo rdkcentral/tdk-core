@@ -22,6 +22,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,6 +40,8 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -45,6 +49,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.dto.ExecutionDetailsDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
@@ -1417,7 +1422,7 @@ public class ExecutionService implements IExecutionService {
 		} else if (logtype.equalsIgnoreCase(Constants.AGENTLOGTYPE)) {
 			return checkAgentLogsExists(executionID, executionResultID);
 		} else if (logtype.equalsIgnoreCase(Constants.CRASHLOGTYPE)) {
-			return false;
+			return checkCrashLogsExists(executionID, executionResultID);
 		} else {
 			return false;
 		}
@@ -2066,5 +2071,58 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Error deleting executions between dates: {} and {}", fromDate, toDate, e);
 			throw new TDKServiceException("Error deleting executions between dates: " + fromDate + " and " + toDate);
 		}
+	}
+
+	/**
+	 * Checks if crash logs exist for a given execution.
+	 *
+	 * @param executionID       the ID of the execution
+	 * @param executionResultID the ID of the execution result
+	 * @return true if the crash logs directory exists, false otherwise
+	 */
+	private boolean checkCrashLogsExists(String executionID, String executionResultID) {
+		String baseLogPath = commonService.getBaseLogPath();
+		String crashLogsDirectoryPath = commonService.getCrashLogsPathForTheExecution(executionID, executionResultID,
+				baseLogPath);
+		return commonService.checkAFolderExists(crashLogsDirectoryPath);
+	}
+
+	/**
+	 * Downloads the script associated with the given execution result ID.
+	 *
+	 * @param executionResId the UUID of the execution result
+	 * @return the script as a Resource
+	 * @throws ResourceNotFoundException if the execution result or script is not
+	 *                                   found
+	 * @throws TDKServiceException       if an error occurs during the download
+	 *                                   process
+	 */
+	@Override
+	public Resource downloadScript(UUID executionResId) {
+		LOGGER.info("Downloading script for execution result id: {}", executionResId);
+		ExecutionResult executionResult = executionResultRepository.findById(executionResId)
+				.orElseThrow(() -> new ResourceNotFoundException("ExecutionResult", executionResId.toString()));
+		String scriptName = executionResult.getScript();
+		Script script = scriptRepository.findByName(scriptName);
+		if (script == null) {
+			LOGGER.error("Script not found with name: {}", scriptName);
+			throw new ResourceNotFoundException("Script", scriptName);
+		}
+		try {
+			// File scriptFile = scriptServiceImpl.getPythonFile(script.getName());
+			Path scriptFilePath = Paths
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + script.getScriptLocation()
+							+ Constants.FILE_PATH_SEPERATOR + scriptName + Constants.PYTHON_FILE_EXTENSION);
+			Resource resource = null;
+			resource = new UrlResource(scriptFilePath.toUri());
+			// InputStreamResource resource = new InputStreamResource(new
+			// FileInputStream(scriptFile));
+			LOGGER.info("Successfully downloaded script for execution result id: {}", executionResId);
+			return resource;
+		} catch (Exception e) {
+			LOGGER.error("Error downloading script for execution result id: {}", executionResId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+
 	}
 }

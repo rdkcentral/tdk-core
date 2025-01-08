@@ -95,4 +95,21 @@ public interface IFileService {
 	 * @return
 	 */
 	Resource downloadAgentLogFile(String executionResId);
+
+	/**
+	 * Retrieves a list of crash log file names associated with the specified execution result ID.
+	 *
+	 * @param executionResultId the ID of the execution result for which to retrieve crash log file names
+	 * @return a list of crash log file names
+	 */
+	List<String> getCrashLogFileNames(String executionResultId);
+
+	/**
+	 * Downloads the crash log file for a given execution result ID and file name.
+	 *
+	 * @param executionResId the ID of the execution result for which the crash log file is to be downloaded
+	 * @param fileName the name of the crash log file to be downloaded
+	 * @return a Resource representing the downloaded crash log file
+	 */
+	Resource downloadCrashLogFile(String executionResId, String fileName);
 }

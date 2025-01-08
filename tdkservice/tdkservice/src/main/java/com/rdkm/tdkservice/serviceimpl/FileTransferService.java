@@ -115,76 +115,118 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
-	 * Transfer device logs for thunder enabled devices This will transfer logs from
-	 * the device based on the log files added in module configuration
+	 * This method is to transfer the crash logs for the execution
 	 * 
-	 * @param moduleName        - module name
-	 * @param executionId       - execution ID
-	 * @param executionResultId - execution result ID
+	 * @param execution       - the execution entity
+	 * @param executionResult - the execution result entity
+	 * @param device          - the device entity
 	 */
-	public void transferDeviceLogsForThunderEnabled(Execution execution, ExecutionResult executionResult,
+	public void transferCrashLogs(Execution execution, ExecutionResult executionResult, Device device) {
+		LOGGER.info("Starting transferCrashLogs for the execution: {} and execution result {}", execution.getName(),
+				executionResult.getId().toString());
+		if (device.isThunderEnabled()) {
+			transferCrashLogsForThunderEnabled(execution, executionResult, device);
+		} else {
+			transferCrashLogsForTDKEnabled(execution, executionResult, device);
+		}
+	}
+
+	/**
+	 * This method is to transfer the crash logs for Thunder enabled devices
+	 * 
+	 * @param moduleName
+	 * @param deviceIp
+	 * @param execId
+	 * @param execResultId
+	 */
+	public void transferCrashLogsForThunderEnabled(Execution execution, ExecutionResult executionResult,
 			Device device) {
 		try {
-			LOGGER.info("Starting transferSTBLogRdkService for the execution: {} and execution result {}",
+			LOGGER.info("Starting transferCrashLogsForThunderEnabled for the execution: {} and execution result {}",
 					execution.getName(), executionResult.getId().toString());
-
 			String scriptName = executionResult.getScript();
-
 			Module module = scriptService.getModuleByScriptName(scriptName);
 			if (module == null) {
 				LOGGER.error("Module not found for script: {}", scriptName);
 				return;
 			}
+			List<String> crashLogFiles = new ArrayList<>(module.getCrashLogFiles());
+			if (crashLogFiles.isEmpty()) {
+				LOGGER.warn("No crash log files found for the module: {}", module.getName());
+				return;
+			}
+			String baseLogPath = commonService.getBaseLogPath();
+			String crashLogFilesPath = commonService.getCrashLogsPathForTheExecution(execution.getId().toString(),
+					executionResult.getId().toString(), baseLogPath);
+			new File(crashLogFilesPath).mkdirs();
+			for (String name : crashLogFiles) {
+				processLogFile(name, device, crashLogFilesPath);
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error in transferCrashLogsForThunderEnabled: {}", e.getMessage(), e);
+		}
+	}
 
+	/**
+	 * This method is to transfer the device logs for Thunder enabled devices
+	 * 
+	 * @param moduleName
+	 * @param deviceIp
+	 * @param execId
+	 * @param execResultId
+	 */
+	public void transferDeviceLogsForThunderEnabled(Execution execution, ExecutionResult executionResult,
+			Device device) {
+		try {
+			LOGGER.info("Starting transferDeviceLogsForThunderEnabled for the execution: {} and execution result {}",
+					execution.getName(), executionResult.getId().toString());
+			String scriptName = executionResult.getScript();
+			Module module = scriptService.getModuleByScriptName(scriptName);
+			if (module == null) {
+				LOGGER.error("Module not found for script: {}", scriptName);
+				return;
+			}
 			List<String> deviceLogFiles = new ArrayList<>(module.getLogFileNames());
-			LOGGER.info("Device log files retrieved from module: {}", deviceLogFiles);
 			if (deviceLogFiles.isEmpty()) {
 				LOGGER.warn("No log files found for the module: {}", module.getName());
 				return;
 			}
-
 			String baseLogPath = commonService.getBaseLogPath();
 			String deviceLogFilesPath = commonService.getDeviceLogsPathForTheExecution(execution.getId().toString(),
 					executionResult.getId().toString(), baseLogPath);
-
 			new File(deviceLogFilesPath).mkdirs();
-			LOGGER.info("Ensured directory exists at: {}", deviceLogFilesPath);
-
-			if (deviceLogFiles != null) {
-				LOGGER.info("Processing {} log files.", deviceLogFiles.size());
-				for (String name : deviceLogFiles) {
-					LOGGER.info("Processing log file: {}", name);
-
-					File deviceLogTransferScriptFile = new File(AppConfig.getBaselocation()
-							+ Constants.FILE_PATH_SEPERATOR + Constants.FILE_TRANSFER_SCRIPT_RDKSERVICE);
-					LOGGER.info("Device log transfer script file located at: {}", deviceLogTransferScriptFile);
-
-					String deviceLogTransferScriptFilePath = deviceLogTransferScriptFile.getAbsolutePath();
-					LOGGER.info("Device log transfer script file absolute path: {}", deviceLogTransferScriptFilePath);
-
-					String[] fnameArray = name.split("/");
-					LOGGER.debug("Split file name: {}", (Object) fnameArray);
-
-					String fileName = fnameArray[fnameArray.length - 1];
-					LOGGER.info("Extracted file name: {}", fileName);
-
-					if (!deviceLogTransferScriptFilePath.isEmpty()) {
-						assert device != null;
-						String[] cmd = commandForTransferThunderEnabledLogFiles(
-								commonService.getPythonCommandFromConfig(), deviceLogTransferScriptFilePath,
-								device.getIp(), name, deviceLogFilesPath, fileName);
-						try {
-							scriptExecutorService.executeScript(cmd, 1);
-						} catch (Exception e) {
-							LOGGER.error("Error executing script: {}", e.getMessage(), e);
-						}
-					} else {
-						LOGGER.warn("Device log transfer script file path is empty, skipping execution.");
-					}
-				}
+			for (String name : deviceLogFiles) {
+				processLogFile(name, device, deviceLogFilesPath);
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error in transferDeviceLogsForThunderEnabled: {}", e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Processes a log file by executing a transfer script and handling any errors
+	 * that occur.
+	 *
+	 * @param name         The name of the log file to process.
+	 * @param device       The device entity containing device details.
+	 * @param logFilesPath The path where the log files should be stored.
+	 */
+	private void processLogFile(String name, Device device, String logFilesPath) {
+		try {
+			File logTransferScriptFile = new File(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.FILE_TRANSFER_SCRIPT_RDKSERVICE);
+			String logTransferScriptFilePath = logTransferScriptFile.getAbsolutePath();
+			String[] fnameArray = name.split("/");
+			String fileName = fnameArray[fnameArray.length - 1];
+			if (!logTransferScriptFilePath.isEmpty()) {
+				String[] cmd = commandForTransferThunderEnabledLogFiles(commonService.getPythonCommandFromConfig(),
+						logTransferScriptFilePath, device.getIp(), name, logFilesPath, fileName);
+				scriptExecutorService.executeScript(cmd, 1);
+			} else {
+				LOGGER.warn("Device log transfer script file path is empty, skipping execution.");
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error processing log file {}: {}", name, e.getMessage(), e);
 		}
 	}
 
@@ -198,63 +240,96 @@ public class FileTransferService implements IFileService {
 	 */
 	public void transferDeviceLogsForTDKEnabled(Execution execution, ExecutionResult executionResult, Device device) {
 		try {
-			// Fetch device details
 			String baseLogPath = commonService.getBaseLogPath();
-
-			// Fetch module and log file names
 			String scriptName = executionResult.getScript();
 			Module module = scriptService.getModuleByScriptName(scriptName);
 			if (module == null) {
 				LOGGER.error("Module not found for script: {}", scriptName);
 				return;
 			}
-
-			Set<String> deviceLogFiles = (module != null)
-					? module.getLogFileNames().stream().map(Object::toString).collect(Collectors.toSet())
-					: Collections.emptySet();
-
-			// Generate STB log file path
-			String deviceDestinationFilePath = commonService.getDeviceLogsPathForTheExecution(
-					execution.getId().toString(), executionResult.getId().toString(), baseLogPath);
-
-			// Fetch script details
-			String transferScriptName = getFileTransferScriptNameForTDKEnabled();
-			String fileTransferScriptPath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ transferScriptName;
-			String tmUrl = commonService.getTMUrlFromConfigFile();
-			LOGGER.info(" deviceLogFiles: {}", deviceLogFiles);
+			Set<String> deviceLogFiles = module.getLogFileNames().stream().map(Object::toString)
+					.collect(Collectors.toSet());
 			if (deviceLogFiles.isEmpty()) {
 				LOGGER.warn("No log files found for the module: {}", module.getName());
 				return;
 			}
+			String deviceDestinationFilePath = commonService.getDeviceLogsPathForTheExecution(
+					execution.getId().toString(), executionResult.getId().toString(), baseLogPath);
+			String transferScriptName = getFileTransferScriptNameForTDKEnabled();
+			String fileTransferScriptPath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ transferScriptName;
+			String tmUrl = commonService.getTMUrlFromConfigFile();
 			for (String logFileName : deviceLogFiles) {
-				try {
-					LOGGER.info("Processing device log file: {}", logFileName);
-
-					// Sanitize file name
-					String sanitizedFileName = logFileName.replaceAll("//", "_").replaceAll("/", "_");
-					LOGGER.info(" sanitizedFileName: {}", sanitizedFileName);
-					// Prepare command for file transfer
-					List<String> cmdList = new ArrayList<>(Arrays.asList(commonService.getPythonCommandFromConfig(),
-							fileTransferScriptPath, device.getIp(), device.getAgentMonitorPort(), logFileName,
-							executionResult.getId().toString() + "_" + sanitizedFileName, tmUrl));
-					LOGGER.info(" cmdList: {}", cmdList);
-					// Execute the script
-					String outputData = scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
-					LOGGER.info(" outputDat: {}", outputData);
-					// Copy logs into the specified directory
-					Thread.sleep(1000);
-					copyDeviceLogsIntoDir(deviceDestinationFilePath, execution.getId().toString(),
-							executionResult.getId().toString());
-
-					LOGGER.info("File transfer and log copying completed for: {}", logFileName);
-
-				} catch (Exception e) {
-					LOGGER.error("Error processing log file {}: {}", logFileName, e.getMessage(), e);
-				}
+				processTDKLogFile(logFileName, device, deviceDestinationFilePath, fileTransferScriptPath, tmUrl,
+						executionResult.getId().toString());
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error in transferDeviceLogsForTDKEnabled: {}", e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * This method is to transfer the crash logs for TDK enabled devices
+	 * 
+	 * @param moduleName
+	 * @param deviceIp
+	 * @param execId
+	 * @param execResultId
+	 */
+	public void transferCrashLogsForTDKEnabled(Execution execution, ExecutionResult executionResult, Device device) {
+		try {
+			String baseLogPath = commonService.getBaseLogPath();
+			String scriptName = executionResult.getScript();
+			Module module = scriptService.getModuleByScriptName(scriptName);
+			if (module == null) {
+				LOGGER.error("Module not found for script: {}", scriptName);
+				return;
+			}
+			Set<String> crashLogFiles = module.getCrashLogFiles().stream().map(Object::toString)
+					.collect(Collectors.toSet());
+			if (crashLogFiles.isEmpty()) {
+				LOGGER.warn("No crash log files found for the module: {}", module.getName());
+				return;
+			}
+			String crashDestinationFilePath = commonService.getCrashLogsPathForTheExecution(
+					execution.getId().toString(), executionResult.getId().toString(), baseLogPath);
+			String transferScriptName = getFileTransferScriptNameForTDKEnabled();
+			String fileTransferScriptPath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ transferScriptName;
+			String tmUrl = commonService.getTMUrlFromConfigFile();
+			for (String logFileName : crashLogFiles) {
+				processTDKLogFile(logFileName, device, crashDestinationFilePath, fileTransferScriptPath, tmUrl,
+						executionResult.getId().toString());
+			}
+		} catch (Exception e) {
+			LOGGER.error("Error in transferCrashLogsForTDKEnabled: {}", e.getMessage(), e);
+		}
+	}
+
+	/**
+	 * Processes a TDK log file by sanitizing the file name, building a command
+	 * list, executing the script, and copying the logs into the specified
+	 * directory.
+	 *
+	 * @param logFileName         The name of the log file to process.
+	 * @param device              The device entity containing device details.
+	 * @param destinationFilePath The path where the logs should be copied.
+	 * @param scriptPath          The path to the script used for file transfer.
+	 * @param tmUrl               The URL from the configuration file.
+	 * @param executionResultId   The ID of the execution result.
+	 */
+	private void processTDKLogFile(String logFileName, Device device, String destinationFilePath, String scriptPath,
+			String tmUrl, String executionResultId) {
+		try {
+			String sanitizedFileName = logFileName.replaceAll("//", "_").replaceAll("/", "_");
+			List<String> cmdList = new ArrayList<>(Arrays.asList(commonService.getPythonCommandFromConfig(), scriptPath,
+					device.getIp(), device.getAgentMonitorPort(), logFileName,
+					executionResultId + "_" + sanitizedFileName, tmUrl));
+			scriptExecutorService.executeScript(cmdList.toArray(new String[0]), 1);
+			Thread.sleep(1000);
+			copyLogsIntoDir(destinationFilePath, executionResultId);
+		} catch (Exception e) {
+			LOGGER.error("Error processing log file {}: {}", logFileName, e.getMessage(), e);
 		}
 	}
 
@@ -488,6 +563,32 @@ public class FileTransferService implements IFileService {
 	}
 
 	/**
+	 * This method is used to get the crash log files available for the execution
+	 * say wpeframework logs, thunder logs etc.
+	 * 
+	 * @param executionResultId
+	 * @return List of filenames
+	 */
+	@Override
+	public List<String> getCrashLogFileNames(String executionResultId) {
+		try {
+			LOGGER.debug("Getting crash log file names with parameters:executionResultId={}", executionResultId);
+			ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResultId))
+					.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResultId));
+			String executionId = executionResult.getExecution().getId().toString();
+			String baseLogPath = commonService.getBaseLogPath();
+			String logsDirectory = commonService.getCrashLogsPathForTheExecution(executionId, executionResultId,
+					baseLogPath);
+			List<String> fileNames = commonService.getFilenamesFromDirectory(logsDirectory, executionId);
+			LOGGER.debug("Crash log file names: {}", fileNames);
+			return fileNames;
+		} catch (Exception e) {
+			LOGGER.error("Error in getCrashLogFileNames: {}", e.getMessage(), e);
+			return Collections.emptyList();
+		}
+	}
+
+	/**
 	 * Method to download a log file
 	 *
 	 * @param executionId    The execution ID
@@ -513,6 +614,23 @@ public class FileTransferService implements IFileService {
 		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId, executionResId, baseLogPath);
 
 		// Use the helper method to get the resource
+		return getFileAsResource(logsDirectory, fileName);
+	}
+
+	@Override
+	public Resource downloadCrashLogFile(String executionResId, String fileName) {
+		LOGGER.info("Inside downloadCrashLogFile method with fileName: {}", fileName);
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResId))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResId));
+		String executionId = executionResult.getExecution().getId().toString();
+		// Get log file names for the execution
+		List<String> logFileNames = this.getCrashLogFileNames(executionResId);
+		if (!logFileNames.contains(fileName)) {
+			LOGGER.error("Log file not found: {}", fileName);
+			throw new ResourceNotFoundException("Log file", fileName);
+		}
+		String baseLogPath = commonService.getBaseLogPath();
+		String logsDirectory = commonService.getCrashLogsPathForTheExecution(executionId, executionResId, baseLogPath);
 		return getFileAsResource(logsDirectory, fileName);
 	}
 
@@ -1020,7 +1138,7 @@ public class FileTransferService implements IFileService {
 	 * @param executionId
 	 * @param executionResultId
 	 */
-	public void copyDeviceLogsIntoDir(String deviceLogDestPath, String executionId, String executionResultId) {
+	public void copyLogsIntoDir(String deviceLogDestPath, String executionResultId) {
 		try {
 			// Get the base log path
 			String baseLogPath = commonService.getBaseFilePathForUploadLogAPI();

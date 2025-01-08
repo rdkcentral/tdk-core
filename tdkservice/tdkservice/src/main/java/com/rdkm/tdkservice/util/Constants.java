@@ -491,4 +491,6 @@ public class Constants {
 
 	// Job constant
 	public static final String JOB = "Job_";
+	// crash logs 
+	public static final String CRASH_LOGS = "crashLogs";
 }

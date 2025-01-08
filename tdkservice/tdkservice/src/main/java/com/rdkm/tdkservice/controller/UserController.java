@@ -210,7 +210,7 @@ public class UserController {
 			return ResponseEntity.status(HttpStatus.OK).body("Succesfully updated the password");
 		} else {
 			LOGGER.error("Password change failed");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password doesnt match with the username");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password doesn't match with the username");
 
 		}
 

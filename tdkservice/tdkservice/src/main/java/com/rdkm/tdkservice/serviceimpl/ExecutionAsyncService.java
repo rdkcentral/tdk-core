@@ -516,6 +516,8 @@ public class ExecutionAsyncService {
 				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
 
 			}
+			// transfer crash logs
+			fileTransferService.transferCrashLogs(execution, finalExecutionResult, device);
 
 		} catch (Exception e) {
 			finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
