@@ -70,9 +70,9 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "500", description = "Error in creating config file")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createOrUpdateOrUploadConfigFile(@RequestPart("pythonFile") MultipartFile file) {
+	public ResponseEntity<String> createOrUploadConfigFile(@RequestPart("pythonFile") MultipartFile file) {
 		LOGGER.info("Inside createConfigFile method with fileName: {}", file.getOriginalFilename());
-		boolean isConfigFileCreated = rdkCertificationService.createOrUpdateOrUploadConfigFile(file);
+		boolean isConfigFileCreated = rdkCertificationService.createOrUploadConfigFile(file);
 		if (isConfigFileCreated) {
 			LOGGER.info("Config file created successfully");
 			return ResponseEntity.status(HttpStatus.CREATED).body("Config file created successfully");
@@ -173,6 +173,32 @@ public class RDKCertificationController {
 		} else {
 			LOGGER.error("Error in deleting config file");
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Config file not found for the name");
+		}
+	}
+
+	/**
+	 * Updates a configuration file in the system.
+	 *
+	 * @param file the configuration file to be updated, provided as a multipart
+	 *             file
+	 * @return a ResponseEntity containing a success message if the file is updated
+	 *         successfully, or an error message if the update fails
+	 *
+	 */
+	@Operation(summary = "Update a config file", description = "Update a config file in the system.")
+	@ApiResponse(responseCode = "200", description = "Config file updated successfully")
+	@ApiResponse(responseCode = "500", description = "Error in updating config file")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@PostMapping("/update")
+	public ResponseEntity<String> updateConfigFile(@RequestPart("pythonFile") MultipartFile file) {
+		LOGGER.info("Inside updateConfigFile method with fileName: {}", file);
+		boolean isConfigFileUpdated = rdkCertificationService.updateConfigFile(file);
+		if (isConfigFileUpdated) {
+			LOGGER.info("Config file updated successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Config file updated successfully");
+		} else {
+			LOGGER.error("Error in updating config file");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating config file");
 		}
 	}
 

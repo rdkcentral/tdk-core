@@ -19,7 +19,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -40,6 +44,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.service.IRDKCertificationService;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
@@ -56,27 +61,38 @@ public class RDKCertificationService implements IRDKCertificationService {
 	CommonService commonService;
 
 	/**
-	 * Method to create or update or upload a config file
+	 * Method to create or upload a config file
 	 * 
 	 * @param file
 	 * @return boolean
 	 */
 	@Override
-	public boolean createOrUpdateOrUploadConfigFile(MultipartFile file) {
+	public boolean createOrUploadConfigFile(MultipartFile file) {
 		LOGGER.info("Inside createOrUpdateConfigFile method with fileName: {}", file.getOriginalFilename());
 		commonService.validatePythonFile(file);
 		try {
 
 			MultipartFile fileWithHeader = commonService.addHeader(file);
-			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.RDK_CERTIFICATION_CONFIG_PATH + Constants.FILE_PATH_SEPERATOR);
-			if (!Files.exists(uploadPath)) {
-				Files.createDirectories(uploadPath);
+			Path testVariableConfig = Paths
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+
+			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
+
+			if (isFileNameExists(
+					file.getOriginalFilename().replace(Constants.PYTHON_FILE_EXTENSION, Constants.EMPTY_STRING),
+					testVariableConfig.toString())) {
+				throw new UserInputException("The file already exist");
+			} else {
+				addToConfig(file.getOriginalFilename(), testVariableConfig.toString());
 			}
+
 			Path filePath = uploadPath.resolve(fileWithHeader.getOriginalFilename());
 			Files.copy(fileWithHeader.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 			LOGGER.info("File uploaded successfully: {}", fileWithHeader.getOriginalFilename());
 			return true;
+		} catch (UserInputException e) {
+			LOGGER.error("Error saving file: " + e.getMessage());
+			throw e;
 		} catch (IOException e) {
 			LOGGER.error("Error saving file: " + e.getMessage());
 			throw new TDKServiceException("Error saving file: " + e.getMessage());
@@ -85,6 +101,65 @@ public class RDKCertificationService implements IRDKCertificationService {
 			throw new TDKServiceException("Error saving file: " + ex.getMessage());
 
 		}
+	}
+
+	/**
+	 * Checks if a given file name exists in the specified configuration file.
+	 *
+	 * @param fileName       the name of the file to check for existence
+	 * @param configFilePath the path to the configuration file containing the list
+	 *                       of file names
+	 * @return true if the file name exists in the configuration file, false
+	 *         otherwise
+	 * @throws IOException if an I/O error occurs reading from the configuration
+	 *                     file
+	 */
+	public static boolean isFileNameExists(String fileName, String configFilePath) throws IOException {
+		List<String> existingFileNames = readFile(configFilePath);
+		for (String existingFileName : existingFileNames) {
+
+			if (existingFileName.trim().equals(fileName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Reads a file from the specified file path and returns a list of lines that do
+	 * not start with a '#' character.
+	 *
+	 * @param filePath the path of the file to be read
+	 * @return a list of lines from the file that do not start with a '#' character
+	 * @throws IOException if an I/O error occurs reading from the file
+	 */
+	private static List<String> readFile(String filePath) throws IOException {
+		List<String> lines = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				if (!line.startsWith("#")) {
+					lines.add(line);
+				}
+			}
+		}
+		return lines;
+	}
+
+	/**
+	 * Adds the specified file name to the configuration file.
+	 *
+	 * @param fileName       the name of the file to be added to the configuration
+	 * @param configFilePath the path to the configuration file
+	 * @throws IOException if an I/O error occurs
+	 */
+	public static void addToConfig(String fileName, String configFilePath) throws IOException {
+
+		try (FileWriter fw = new FileWriter(configFilePath, true); BufferedWriter bw = new BufferedWriter(fw)) {
+			bw.newLine();
+			bw.write(fileName.replace(Constants.PYTHON_FILE_EXTENSION, Constants.EMPTY_STRING));
+		}
+
 	}
 
 	/**
@@ -97,7 +172,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 	public Resource downloadConfigFile(String fileName) {
 		LOGGER.info("Inside downloadConfigFile method with configFileName: {}", fileName);
 		String configFileLocation = AppConfig.getRealPath() + Constants.BASE_FILESTORE_DIR
-				+ Constants.FILE_PATH_SEPERATOR + Constants.RDK_CERTIFICATION_CONFIG_PATH;
+				+ Constants.FILE_PATH_SEPERATOR;
 		Path path = Paths.get(configFileLocation).resolve(fileName + Constants.PYTHON_FILE_EXTENSION);
 		if (!Files.exists(path)) {
 			LOGGER.error("Python config file not found: {}", fileName);
@@ -127,17 +202,10 @@ public class RDKCertificationService implements IRDKCertificationService {
 		LOGGER.info("Inside getAllConfigFileNames method");
 		List<String> configFileNames = new ArrayList<>();
 		try {
-			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.RDK_CERTIFICATION_CONFIG_PATH;
-			File folder = new File(filePath);
-			File[] listOfFiles = folder.listFiles();
-			if (listOfFiles != null) {
-				for (File file : listOfFiles) {
-					if (file.isFile()) {
-						configFileNames.add(file.getName().replace(Constants.PYTHON_FILE_EXTENSION, ""));
-					}
-				}
-			}
+			Path testVariableConfig = Paths
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+			configFileNames = readFile(testVariableConfig.toString());
+
 		} catch (Exception e) {
 			LOGGER.error("Error in getting config file names: " + e.getMessage());
 			throw new TDKServiceException("Error in getting config file names: " + e.getMessage());
@@ -157,8 +225,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 		LOGGER.info("Inside getConfigFileContent method with fileName: {}", fileName);
 		String fileContent = "";
 		try {
-			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.RDK_CERTIFICATION_CONFIG_PATH + Constants.FILE_PATH_SEPERATOR + fileName
+			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
 					+ Constants.PYTHON_FILE_EXTENSION;
 			File file = new File(filePath);
 			if (file.exists()) {
@@ -182,9 +249,12 @@ public class RDKCertificationService implements IRDKCertificationService {
 	public boolean deleteConfigFile(String fileName) {
 		LOGGER.info("Inside deleteConfigFile method with fileName: {}", fileName);
 		try {
-			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-					+ Constants.RDK_CERTIFICATION_CONFIG_PATH + Constants.FILE_PATH_SEPERATOR + fileName
+			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
 					+ Constants.PYTHON_FILE_EXTENSION;
+			Path testVariableConfig = Paths
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+			deleteFromTestVariableFile(fileName, testVariableConfig.toString());
+
 			File file = new File(filePath);
 			if (file.exists()) {
 				file.delete();
@@ -199,5 +269,77 @@ public class RDKCertificationService implements IRDKCertificationService {
 			throw new TDKServiceException("Error in deleting config file: " + e.getMessage());
 		}
 
+	}
+
+	/**
+	 * Deletes a specific line from a file.
+	 *
+	 * @param fileName the name of the file to be deleted from the list of lines in
+	 *                 the file
+	 * @param path     the path to the file from which the line should be deleted
+	 * @throws TDKServiceException if an I/O error occurs while reading or writing
+	 *                             the file
+	 */
+	private void deleteFromTestVariableFile(String fileName, String path) {
+		try {
+			// Read all lines from the file
+			List<String> lines = Files.readAllLines(Paths.get(path));
+			List<String> updatedLines = new ArrayList<>();
+
+			// Iterate through lines and keep only those not matching the line to remove
+			for (String line : lines) {
+				if (!line.trim().equals(fileName.trim())) {
+					updatedLines.add(line);
+				}
+			}
+
+			// Write the updated lines back to the file
+			Files.write(Paths.get(path), updatedLines);
+		} catch (IOException e) {
+			LOGGER.error("Error deleting file from config: " + e.getMessage());
+			throw new TDKServiceException("Error deleting file from config: " + e.getMessage());
+		}
+
+	}
+
+	/**
+	 * Updates the configuration file with the provided MultipartFile.
+	 * 
+	 * @param file the MultipartFile to be uploaded and updated
+	 * @return true if the file is successfully uploaded and updated, false
+	 *         otherwise
+	 * @throws ResourceNotFoundException if the configuration file does not exist
+	 * @throws TDKServiceException       if there is an error saving the file
+	 */
+	@Override
+	public boolean updateConfigFile(MultipartFile file) {
+		LOGGER.info("Inside updateConfigFile method with fileName: {}", file.getOriginalFilename());
+		commonService.validatePythonFile(file);
+		try {
+			MultipartFile fileWithHeader = commonService.addHeader(file);
+			Path testVariableConfig = Paths
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+
+			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
+			if (!isFileNameExists(file.getOriginalFilename(), testVariableConfig.toString())) {
+				throw new ResourceNotFoundException("Config file", file.getOriginalFilename());
+			}
+
+			Path filePath = uploadPath.resolve(fileWithHeader.getOriginalFilename());
+			Files.copy(fileWithHeader.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+			LOGGER.info("File uploaded successfully: {}", fileWithHeader.getOriginalFilename());
+			return true;
+
+		} catch (ResourceNotFoundException e) {
+			LOGGER.error("Error saving file: " + e.getMessage());
+			throw e;
+		} catch (IOException e) {
+			LOGGER.error("Error saving file: " + e.getMessage());
+			throw new TDKServiceException("Error saving file: " + e.getMessage());
+		} catch (Exception ex) {
+			LOGGER.error("Error saving file: ", ex.getMessage());
+			throw new TDKServiceException("Error saving file: " + ex.getMessage());
+
+		}
 	}
 }
