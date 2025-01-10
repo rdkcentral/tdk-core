@@ -74,7 +74,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 
 			MultipartFile fileWithHeader = commonService.addHeader(file);
 			Path testVariableConfig = Paths
-					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TEST_VARIABLE_FILE);
 
 			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
 
@@ -114,7 +114,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 	 * @throws IOException if an I/O error occurs reading from the configuration
 	 *                     file
 	 */
-	public static boolean isFileNameExists(String fileName, String configFilePath) throws IOException {
+	private static boolean isFileNameExists(String fileName, String configFilePath) throws IOException {
 		List<String> existingFileNames = readFile(configFilePath);
 		for (String existingFileName : existingFileNames) {
 
@@ -153,7 +153,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 	 * @param configFilePath the path to the configuration file
 	 * @throws IOException if an I/O error occurs
 	 */
-	public static void addToConfig(String fileName, String configFilePath) throws IOException {
+	private static void addToConfig(String fileName, String configFilePath) throws IOException {
 
 		try (FileWriter fw = new FileWriter(configFilePath, true); BufferedWriter bw = new BufferedWriter(fw)) {
 			bw.newLine();
@@ -203,7 +203,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 		List<String> configFileNames = new ArrayList<>();
 		try {
 			Path testVariableConfig = Paths
-					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TEST_VARIABLE_FILE);
 			configFileNames = readFile(testVariableConfig.toString());
 
 		} catch (Exception e) {
@@ -252,7 +252,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 			String filePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + fileName
 					+ Constants.PYTHON_FILE_EXTENSION;
 			Path testVariableConfig = Paths
-					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TEST_VARIABLE_FILE);
 			deleteFromTestVariableFile(fileName, testVariableConfig.toString());
 
 			File file = new File(filePath);
@@ -318,7 +318,7 @@ public class RDKCertificationService implements IRDKCertificationService {
 		try {
 			MultipartFile fileWithHeader = commonService.addHeader(file);
 			Path testVariableConfig = Paths
-					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + "testVariables.config");
+					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TEST_VARIABLE_FILE);
 
 			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
 			if (!isFileNameExists(file.getOriginalFilename(), testVariableConfig.toString())) {

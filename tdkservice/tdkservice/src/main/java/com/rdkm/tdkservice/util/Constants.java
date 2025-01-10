@@ -491,6 +491,9 @@ public class Constants {
 
 	// Job constant
 	public static final String JOB = "Job_";
-	// crash logs 
+	// crash logs
 	public static final String CRASH_LOGS = "crashLogs";
+	// Test variable file
+	public static final String TEST_VARIABLE_FILE = "testVariables.config";
+
 }

@@ -346,8 +346,7 @@ public class ExecutionService implements IExecutionService {
 			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			isExecutionTriggered = true;
-			responseLogs.append("MultiScript execution on device triggered: ").append(device.getName())
-					.append("triggered .\n");
+			responseLogs.append("MultiScript execution triggered on device :").append(device.getName());
 			executionAsyncService.prepareAndExecuteMultiScript(device, executionDetailsDTO.getScriptList(),
 					executionDetailsDTO.getUser(), executionName, executionDetailsDTO.getCategory(), null,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),

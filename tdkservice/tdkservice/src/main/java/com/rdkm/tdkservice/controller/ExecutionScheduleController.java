@@ -133,7 +133,7 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "200", description = "Execution Schedules fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Error in fetching the execution schedules")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/getAll")
+	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllExecutionSchedules(@RequestParam String category) {
 		LOGGER.info("Fetching all the execution schedules");
 		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService.getAllExecutionSchedulesByCategory(category);
