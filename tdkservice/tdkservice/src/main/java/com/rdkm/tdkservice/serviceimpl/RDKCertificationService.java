@@ -321,7 +321,9 @@ public class RDKCertificationService implements IRDKCertificationService {
 					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TEST_VARIABLE_FILE);
 
 			Path uploadPath = Paths.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR);
-			if (!isFileNameExists(file.getOriginalFilename(), testVariableConfig.toString())) {
+			if (!isFileNameExists(
+					file.getOriginalFilename().replace(Constants.PYTHON_FILE_EXTENSION, Constants.EMPTY_STRING),
+					testVariableConfig.toString())) {
 				throw new ResourceNotFoundException("Config file", file.getOriginalFilename());
 			}
 

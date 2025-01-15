@@ -491,9 +491,15 @@ public class Constants {
 
 	// Job constant
 	public static final String JOB = "Job_";
-	// crash logs
+	// crash logs 
 	public static final String CRASH_LOGS = "crashLogs";
+	
 	// Test variable file
 	public static final String TEST_VARIABLE_FILE = "testVariables.config";
-
+	// Bug issue type
+	public static final String BUG_ISSUE_TYPE = "Bug";
+	// Issue analyser configuration file
+	public static final String ISSUE_ANALYSER_CONFIG = "issueAnalysis.config";
+	// Ticket handler URL
+	public static final String TICKET_HANDLER_URL = "ticketHandlerUrl";
 }

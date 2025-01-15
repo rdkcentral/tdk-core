@@ -20,7 +20,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.config;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.client.RestTemplate;
 
 import com.rdkm.tdkservice.util.Constants;
 
@@ -99,5 +101,15 @@ public class AppConfig {
 			baselocation = getRealPath() + Constants.BASE_FILESTORE_DIR;
 		}
 		return baselocation;
+	}
+
+	/**
+	 * Creates and configures a {@link RestTemplate} bean.
+	 * 
+	 * @return a new instance of {@link RestTemplate}
+	 */
+	@Bean
+	public RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 }
