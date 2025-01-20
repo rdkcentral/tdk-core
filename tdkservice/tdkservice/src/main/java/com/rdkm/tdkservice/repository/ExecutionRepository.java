@@ -31,11 +31,15 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
+import com.rdkm.tdkservice.enums.ExecutionType;
 import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.User;
 
 /**
- * Repository class for Execution entity.
+ * Repository interface for Execution entity. This interface provides methods
+ * for CRUD operations on Execution entity objects and also custom methods to
+ * filter
  */
 @Repository
 public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
@@ -116,5 +120,54 @@ public interface ExecutionRepository extends JpaRepository<Execution, UUID> {
 	 */
 	@Query("SELECT ex From  Execution ex WHERE ex.createdDate BETWEEN :fromDate AND :toDate")
 	List<Execution> executionListInDateRange(Instant fromDate, Instant toDate);
+
+	/**
+	 * Retrieves a list of Executions filtered by category, date range, and result
+	 * status.
+	 *
+	 * @param category the category of the execution
+	 * @param fromDate the start date of the execution
+	 * @param toDate   the end date of the execution
+	 * @param results  the list of result statuses to filter by
+	 * @param pageable the pagination information
+	 * @return a list of filtered Executions
+	 */
+	@Query("SELECT ex FROM Execution ex WHERE ex.category = :category AND ex.createdDate BETWEEN :fromDate AND :toDate AND ex.result IN (:results) ORDER BY ex.createdDate DESC")
+	List<Execution> getExecutionListByFilter(Category category, Instant fromDate, Instant toDate,
+			List<ExecutionOverallResultStatus> results, Pageable pageable);
+
+	/**
+	 * Retrieves a list of Executions filtered by category, date range, result
+	 * status, and execution type.
+	 *
+	 * @param category      the category of the execution
+	 * @param fromDate      the start date of the execution
+	 * @param toDate        the end date of the execution
+	 * @param results       the list of result statuses to filter by
+	 * @param executionType the type of the execution
+	 * @param pageable      the pagination information
+	 * @return a list of filtered Executions
+	 */
+	@Query("SELECT ex FROM Execution ex WHERE ex.category = :category AND ex.createdDate BETWEEN :fromDate AND :toDate AND ex.result IN (:results) AND ex.executionType = :executionType  ORDER BY ex.createdDate DESC")
+	List<Execution> getExecutionListByFilterWithExecutionType(Category category, Instant fromDate, Instant toDate,
+			List<ExecutionOverallResultStatus> results, ExecutionType executionType, Pageable pageable);
+
+	/**
+	 * Retrieves a list of Executions filtered by category, date range, result
+	 * status, execution type, and script test suite name.
+	 *
+	 * @param category            the category of the execution
+	 * @param fromDate            the start date of the execution
+	 * @param toDate              the end date of the execution
+	 * @param results             the list of result statuses to filter by
+	 * @param executionType       the type of the execution
+	 * @param scripttestSuiteName the name of the script test suite
+	 * @param pageable            the pagination information
+	 * @return a list of filtered Executions
+	 */
+	@Query("SELECT ex FROM Execution ex WHERE ex.category = :category AND ex.createdDate BETWEEN :fromDate AND :toDate AND ex.result IN (:results) AND ex.executionType = :executionType  AND ex.scripttestSuiteName= :scripttestSuiteName   ORDER BY ex.createdDate DESC")
+	List<Execution> getExecutionListByFilterWithExecutionTypeAndSuitescript(Category category, Instant fromDate,
+			Instant toDate, List<ExecutionOverallResultStatus> results, ExecutionType executionType,
+			String scripttestSuiteName, Pageable pageable);
 
 }

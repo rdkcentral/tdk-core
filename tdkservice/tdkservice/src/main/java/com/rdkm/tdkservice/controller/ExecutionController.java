@@ -50,10 +50,12 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionListDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSearchFilterDTO;
 import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -1100,7 +1102,32 @@ public class ExecutionController {
 					.body("Error downloading script file: " + e.getMessage());
 		}
 	}
-	
-	
+
+	/**
+	 * This method is used to get the execution details based on the filter with
+	 * criteria like fromdate, toDate, Category , deviceType etc.
+	 * 
+	 * @param filterRequest - the filter request object that contains the criteria
+	 * @return ResponseEntity<?> - the response entity with the execution details
+	 */
+	@Operation(summary = "Get the execution details based on the filter")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to get Execution details"),
+			@ApiResponse(responseCode = "204", description = "Failed to get Execution details with this filter") })
+	@PostMapping("/getExecutionDetailsByFilter")
+	public ResponseEntity<?> getExecutionDetailsByFilter(@RequestBody ExecutionSearchFilterDTO filterRequest) {
+		LOGGER.info("Get execution details by filter called");
+		List<ExecutionListDTO> response = executionService.getExecutionDetailsByFilter(filterRequest);
+		LOGGER.info("Execution details fetched successfully");
+		if (response == null || response.isEmpty()) {
+			LOGGER.error("Failed to get Execution details");
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Execution details with this filter");
+
+		} else {
+			LOGGER.info("Execution details fetched successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+
+		}
+	}
 
 }

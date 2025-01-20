@@ -39,7 +39,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 /**
  * The DevicePythonController class is used to handle the device related
- * operations .TO DO
+ * operations that are called from the python scripts
  */
 @Validated
 @RestController

@@ -28,10 +28,12 @@ import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionListDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSearchFilterDTO;
 import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 
@@ -269,5 +271,15 @@ public interface IExecutionService {
 	 * @return the script as a Resource object
 	 */
 	Resource downloadScript(UUID executionResId);
+
+	/**
+	 * Gets the list of the executions based on the filter criteria in the DTO
+	 * 
+	 * @param filterRequest - the filter DTO with multple filter criteria like start
+	 *                      date, end date, execution type, script test suite,
+	 *                      device type etc.
+	 * @return the list of executions based on the filter criteria
+	 */
+	List<ExecutionListDTO> getExecutionDetailsByFilter(ExecutionSearchFilterDTO filterRequest);
 
 }

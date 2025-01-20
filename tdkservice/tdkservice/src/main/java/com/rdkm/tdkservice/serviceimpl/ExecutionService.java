@@ -26,6 +26,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -59,6 +60,7 @@ import com.rdkm.tdkservice.dto.ExecutionNameRequestDTO;
 import com.rdkm.tdkservice.dto.ExecutionResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultDTO;
 import com.rdkm.tdkservice.dto.ExecutionResultResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionSearchFilterDTO;
 import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.enums.Category;
@@ -2120,6 +2122,140 @@ public class ExecutionService implements IExecutionService {
 			return resource;
 		} catch (Exception e) {
 			LOGGER.error("Error downloading script for execution result id: {}", executionResId, e);
+			throw new TDKServiceException(e.getMessage());
+		}
+
+	}
+
+	/**
+	 * Gets the list of the executions based on the filter criteria in the DTO
+	 * 
+	 * @param filterRequest - the filter DTO with multple filter criteria like start
+	 *                      date, end date, execution type, script test suite,
+	 *                      device type etc.
+	 * @return the list of executions based on the filter criteria
+	 */
+	@Override
+	public List<ExecutionListDTO> getExecutionDetailsByFilter(ExecutionSearchFilterDTO searchFilterRequest) {
+		LOGGER.info("Fetching execution details based on custom filter criteria");
+
+		List<Execution> filteredExecutionList = this.getFilteredExecutions(searchFilterRequest);
+		if (filteredExecutionList == null || filteredExecutionList.isEmpty()) {
+			LOGGER.info("No executions found based on the filter criteria");
+			return null;
+		} else {
+			if (!Utils.isEmpty(searchFilterRequest.getDeviceType())) {
+				LOGGER.info("Filtering the execution list based on device type: {}",
+						searchFilterRequest.getDeviceType());
+				filteredExecutionList = this.filterTheExecutionByDeviceType(filteredExecutionList,
+						searchFilterRequest.getDeviceType());
+			}
+			if (filteredExecutionList.isEmpty() || filteredExecutionList == null) {
+				LOGGER.info("No executions found based on the filter criteria");
+				return null;
+			}
+
+		}
+		List<ExecutionListDTO> finalExecutionListResponse = this
+				.getExecutionDTOListFromExecutionList(filteredExecutionList);
+		LOGGER.info("Fetching execution details based on custom filter criteria completed successfully");
+
+		return finalExecutionListResponse;
+
+	}
+
+	/**
+	 * This method is used to again filter the filtered execution list by device
+	 * type
+	 * 
+	 * @param filteredExecutionList - the filtered execution list with other filters
+	 * @param deviceType            - the device type
+	 * @return the refiltered execution list by device
+	 */
+	private List<Execution> filterTheExecutionByDeviceType(List<Execution> filteredExecutionList, String deviceType) {
+		List<Execution> filteredExecutionListByDeviceType = new ArrayList<>();
+		for (Execution execution : filteredExecutionList) {
+			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+			if (executionDevice != null) {
+				Device device = executionDevice.getDevice();
+				if (device != null && device.getDeviceType().getName().equalsIgnoreCase(deviceType)) {
+					filteredExecutionListByDeviceType.add(execution);
+				}
+			}
+		}
+		return filteredExecutionListByDeviceType;
+	}
+
+	/**
+	 * This method is used to filter an return execution list based on from date, to
+	 * date, execution type, script test suite, category and status
+	 * 
+	 * @param filterRequest - the filter DTO with multiple filter criteria
+	 * @return the list of executions based on the filter criteria
+	 */
+	private List<Execution> getFilteredExecutions(ExecutionSearchFilterDTO filterRequest) {
+		LOGGER.info("Filtering the execution list based on the filter criteria ");
+		try {
+			// Validate the Category
+			Category category = Category.valueOf(filterRequest.getCategory().toUpperCase());
+			if (category == null) {
+				throw new UserInputException("Invalid category name provided");
+			}
+
+			// Add page limit to the pageable object
+			Pageable pageable = Pageable.unpaged();
+			if (filterRequest.getSizeLimit() > 0) {
+				pageable = PageRequest.of(0, filterRequest.getSizeLimit());
+			} else {
+				// If no size limit added, the add without any limit
+				pageable = Pageable.unpaged();
+			}
+
+			// Only SUCCESS and FAILURE status are allowed
+			List<ExecutionOverallResultStatus> executionStatuses = Arrays.asList(ExecutionOverallResultStatus.SUCCESS,
+					ExecutionOverallResultStatus.FAILURE);
+
+			List<Execution> executions = null;
+
+			// The case where the execution type is not provided and script test suite is
+			// not provided
+			if ((Utils.isEmpty(filterRequest.getExecutionType()))
+					&& (Utils.isEmpty(filterRequest.getScriptTestSuite()))) {
+				LOGGER.info("Fetching execution list based on category, start date, end date and status");
+				executions = executionRepository.getExecutionListByFilter(category, filterRequest.getStartDate(),
+						filterRequest.getEndDate(), executionStatuses, pageable);
+			} else if (!Utils.isEmpty(filterRequest.getExecutionType())) {
+				LOGGER.info(
+						"Fetching execution list based on category, start date, end date, status and execution type");
+				ExecutionType executionType = ExecutionType.valueOf(filterRequest.getExecutionType().toUpperCase());
+				if (executionType == null) {
+					throw new UserInputException("Invalid execution type provided");
+				}
+				// The case where the execution type is provided and script test suite is not
+				// provided
+				if (Utils.isEmpty(filterRequest.getScriptTestSuite())) {
+					executions = executionRepository.getExecutionListByFilterWithExecutionType(category,
+							filterRequest.getStartDate(), filterRequest.getEndDate(), executionStatuses, executionType,
+							pageable);
+				} else {
+					// The case where the execution type and script test suite are provided
+					if (executionType == ExecutionType.TESTSUITE || executionType == ExecutionType.SINGLESCRIPT) {
+						// The case where the execution type is testsuite or singlescript
+						executions = executionRepository.getExecutionListByFilterWithExecutionTypeAndSuitescript(
+								category, filterRequest.getStartDate(), filterRequest.getEndDate(), executionStatuses,
+								executionType, filterRequest.getScriptTestSuite(), pageable);
+					} else {
+						// The case where the execution type is Multiscript
+						executions = executionRepository.getExecutionListByFilterWithExecutionType(category,
+								filterRequest.getStartDate(), filterRequest.getEndDate(), executionStatuses,
+								executionType, pageable);
+					}
+				}
+
+			}
+			return executions;
+		} catch (Exception e) {
+			LOGGER.error("Error fetching execution details based on custom filter criteria", e);
 			throw new TDKServiceException(e.getMessage());
 		}
 
