@@ -491,9 +491,9 @@ public class Constants {
 
 	// Job constant
 	public static final String JOB = "Job_";
-	// crash logs 
+	// crash logs
 	public static final String CRASH_LOGS = "crashLogs";
-	
+
 	// Test variable file
 	public static final String TEST_VARIABLE_FILE = "testVariables.config";
 	// Bug issue type
@@ -502,4 +502,37 @@ public class Constants {
 	public static final String ISSUE_ANALYSER_CONFIG = "issueAnalysis.config";
 	// Ticket handler URL
 	public static final String TICKET_HANDLER_URL = "ticketHandlerUrl";
+	// Project IDs
+	public static final String PROJECT_IDS = "projectIDS";
+	// Platform project IDs
+	public static final String PLATFORM_PROJECT_IDS = "platformProjectIDs";
+	// Labels
+	public static final String LABELS = "labels";
+	// Release versions
+	public static final String RELEASE_VERSIONS = "releaseVersions";
+	// Hardware configurations
+	public static final String HARDWARE_CONFIGURATIONS = "hardwareConfigurations";
+	// Impacted platforms
+	public static final String IMPACTED_PLATFORMS = "impactedPlatforms";
+	// Severities
+	public static final String SEVERITIES = "severities";
+	// Fixed in versions
+	public static final String FIXED_IN_VERSIONS = "fixedInVersions";
+	// Components impacted
+	public static final String COMPONENTS_IMPACTED = "componentsImpacted";
+	// Priorities
+	public static final String PRIORITIES = "priorities";
+	// Create API endpoint
+	public static final String CREATE_API_ENDPOINT = "create";
+	// Search summary API endpoint
+	public static final String SEARCH_SUMMARY_API_ENDPOINT = "searchSummary";
+	// Attachment API endpoint
+	public static final String ATTACHMENT_API_ENDPOINT = "attachFile";
+	// Update API endpoint
+	public static final String UPDATE_API_ENDPOINT = "updateTicket";
+	// Jira automation
+	public static final String JIRA_AUTOMATION = "jira.integrated";
+	// Tdk project id 
+	public static final String TDK_PROJECT_NAME = "TDK";
+
 }
