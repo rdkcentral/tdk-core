@@ -73,14 +73,27 @@ def ssh_and_execute_rest(command,mac):
         print(e)
     return output
 
-def ssh_and_execute_jumpserver(cmd,mac):
+def ssh_and_execute_jumpserver(cmd,mac,ssh_util="revstbssh"):
     output=""
     jumpserver_ip = CertificationSuiteCommonVariables.jumpserver_ip
     jumpserver_username = CertificationSuiteCommonVariables.jumpserver_username
     cmd = cmd.replace('"','\\"')
-    command = """ssh -i /opt/remote_sshkey """ + jumpserver_username + """@""" + jumpserver_ip + """ "./execute_command.sh """ + mac + """ '""" + cmd + """' " """
+    mac_sshutil = ssh_util + " " + mac
+    if "'" in cmd:
+        command = "ssh -i /opt/remote_sshkey " + jumpserver_username + "@" + jumpserver_ip + " \"\"\"./execute_command.sh " + mac_sshutil + " \"" + cmd + "\" \"\"\""
+    else:
+        command = """ssh -i /opt/remote_sshkey """ + jumpserver_username + """@""" + jumpserver_ip + """ "./execute_command.sh """ + mac_sshutil + """ '""" + cmd + """' " """
     print(command)
     output = subprocess.check_output(command, shell=True, stderr=subprocess.STDOUT)
+    output = output.decode()
+    #To avoid the warnings from jumpserver in the actual output
+    if 'enforcement.' in output:
+        output=output.split('enforcement.')[-1].strip()
+    else:
+        output=output.split('measures.')[-1].strip()
+    output=cmd+'\n'+output
+    return output
+
     output = output.decode()
     #To avoid the warnings from jumpserver in the actual output
     if 'enforcement.' in output:

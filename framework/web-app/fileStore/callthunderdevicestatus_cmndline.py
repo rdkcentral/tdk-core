@@ -35,10 +35,10 @@ import importlib
 def executeCommandInVM():
     output = ""
     status = True
-    
+
     #remote_sshkey is an ssh key that should be available in the TM /opt location. This is used to ssh from docker to the host machine for VA devices.
-    #The same key can be used to ssh to any other VM to execute the command there. 
-    #Please ensure to keep the public key remote_sshkey.pub in the authorized_keys file in the remote VM 
+    #The same key can be used to ssh to any other VM to execute the command there.
+    #Please ensure to keep the public key remote_sshkey.pub in the authorized_keys file in the remote VM
 
     #pid_command is to check if the port is already open in the VM
     pid_command = "ssh -i /opt/remote_sshkey " +revportvm_username+"@"+deviceIP+ " \"sudo ss -sltnpe  | grep 0.0.0.0: | grep "+devicePort+" |  cut -d',' -f2 | cut -d'=' -f2\""
@@ -137,8 +137,9 @@ def ssh_execute_cmd_DUT(configValues,command):
         if ssh_method == "directSSH":
             output= ssh_and_execute (ssh_method,hostName,username,password,command)
         else:
-            mac=configValues["DEVICE_MAC"]
-            output = method_to_call(command,mac)
+            ssh_util = configValues["SSH_UTIL"]
+            mac = sys.argv[4]
+            output = method_to_call(command,mac,ssh_util)
     except Exception as e:
         print(e)
         status=False
@@ -147,9 +148,9 @@ def ssh_execute_cmd_DUT(configValues,command):
 #-------------------------------------------------
 #SCRIPT STARTS HERE
 #-------------------------------------------------
-if ( (len(sys.argv)) != 4):
-    print("Usage : python " + sys.argv[0] + " <Device_IP_Address> <Thunder_Port> <Device Specific Config file> ")
-    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 9998 <Device Specific Config file>")
+if ( (len(sys.argv)) < 4):
+    print("Usage : python " + sys.argv[0] + " <Device_IP_Address> <Thunder_Port> <Device Specific Config file> MACAddress")
+    print("eg    : python " + sys.argv[0] + " <Valid DUT IP Address> 9998 <Device Specific Config file MACAddress>")
     exit()
 else:
     deviceIP = hostName = sys.argv[1]
@@ -169,11 +170,11 @@ else:
     if request_successful and response is not None and response.status_code == 200:
         print("FREE")
     elif int(devicePort) != 9998 and conf_status:
-        #Check if the devicePort is open in the VM. 
+        #Check if the devicePort is open in the VM.
         #If open kill that process from the VM
         status = executeCommandInVM()
         if status:
-            configKeyList = ["SSH_METHOD","SSH_USERNAME","SSH_PASSWORD","PRIVATE_KEY_FILE_PATH","DEVICE_MAC"]
+            configKeyList = ["SSH_METHOD","SSH_USERNAME","SSH_PASSWORD","PRIVATE_KEY_FILE_PATH","SSH_UTIL"]
             conf_status,configValues=get_config_value(configKeyList)
             if conf_status:
                 private_key=configValues["PRIVATE_KEY_FILE_PATH"]

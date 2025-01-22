@@ -7240,10 +7240,11 @@ def executeCommand(execInfo, command, device="test-device"):
             print(e)
     else:
         try:
+            ssh_util = configParser.get('device.config', 'SSH_UTIL')
             lib = importlib.import_module("SSHUtility")
             method = "ssh_and_execute_" + sshMethod
             method_to_call = getattr(lib, method)
-            output = method_to_call(command,deviceMAC)
+            output = method_to_call(command,deviceMAC,ssh_util)
             print(output)
         except Exception as e:
             output = "EXCEPTION"
