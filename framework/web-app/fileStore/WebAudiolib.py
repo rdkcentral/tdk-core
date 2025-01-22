@@ -256,9 +256,9 @@ def webaudio_setPluginStatus(plugin,status,uri=''):
     rdkshell_activated = webaudio_rdkshellStatus()
     if rdkshell_activated:
         if status in "activate":
-            data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'"}'
+            data = '"method":"org.rdk.RDKShell.1.launch", "params":{"callsign": "'+plugin+'", "type":"", "uri":"'+uri+'","configuration":{"webaudio":true}}'
         else:
-            data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'"}'
+            data = '"method":"org.rdk.RDKShell.1.destroy", "params":{"callsign": "'+plugin+'","configuration":{"webaudio":true}}'
         if data !='':
             result = execute_step(data)
         else:
