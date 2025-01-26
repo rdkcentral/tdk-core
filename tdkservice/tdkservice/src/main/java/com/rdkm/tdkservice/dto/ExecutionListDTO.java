@@ -52,6 +52,11 @@ public class ExecutionListDTO {
 	private String device;
 
 	/**
+	 * The category of the execution.
+	 */
+	boolean isAbortNeeded;
+
+	/**
 	 * The status of the execution (
 	 */
 	private String status;

@@ -301,9 +301,10 @@ public class ExecutionAsyncService {
 							for (ExecutionResult execResults : executableResultList) {
 								if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
 										|| execResults.getResult() == ExecutionResultStatus.PENDING) {
-									execResults.setResult(ExecutionResultStatus.ABORTED);
-									execResults.setExecutionRemarks("Execution aborted by user");
-									executionResultRepository.save(execResults);
+									Execution executionAborted = executionRepository.findById(executionId).orElse(null);
+									executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+									executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
+									executionRepository.save(executionAborted);
 								}
 							}
 							execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
@@ -330,26 +331,30 @@ public class ExecutionAsyncService {
 							}
 
 							executedScript++;
-							execution.setExecutedScriptCount(executedScript);
-							executionRepository.save(execution);
+							Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
+
+							executionCompleted.setExecutedScriptCount(executedScript);
+							executionRepository.save(executionCompleted);
 						}
 					}
 					if (this.isExecutionAborted(executionId)) {
 						break;
 					}
 				}
+				
+				Execution finalExecution = executionRepository.findById(executionId).orElse(null);
 
 				if (executableResultList != null) {
 					double realExecTime = this.getRealExcetionTime(executableResultList);
 					double roundOfValue = this.roundOfToThreeDecimals(realExecTime);
-					execution.setRealExecutionTime(roundOfValue);
+					finalExecution.setRealExecutionTime(roundOfValue);
 				}
 
 				double executionEndTime = System.currentTimeMillis();
 				double executionTime = this.computeTimeDifference(executionStartTime, executionEndTime);
-				execution.setExecutionTime(executionTime);
-				executionRepository.save(execution);
-				Execution finalExecutionStatus = this.setFinalStatusOfExecution(execution);
+				finalExecution.setExecutionTime(executionTime);
+				executionRepository.save(finalExecution);
+				Execution finalExecutionStatus = this.setFinalStatusOfExecution(finalExecution);
 
 				if (isRerunOnFailure && (finalExecutionStatus.getResult() == ExecutionOverallResultStatus.FAILURE)) {
 					List<String> failedScriptName = executableResultList.stream()
@@ -561,6 +566,10 @@ public class ExecutionAsyncService {
 
 		if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
 			execution.setExecutionStatus(ExecutionProgressStatus.COMPLETED);
+		}
+		
+		if (execution.getExecutionStatus() == ExecutionProgressStatus.ABORTED) {
+			return execution;
 		}
 
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);

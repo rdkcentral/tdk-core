@@ -533,4 +533,25 @@ public class ExecutionAnalysisController {
 		return isJiraAutomationImplemented;
 	}
 
+	/**
+	 * Endpoint to get the analysis defect types.
+	 *
+	 * @return ResponseEntity<?> containing the analysis defect types
+	 */
+	@Operation(summary = "Get analysis defect types")
+	@ApiResponses(value = {
+			@ApiResponse(responseCode = "200", description = "Analysis defect types fetched successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to get analysis defect types"),
+			@ApiResponse(responseCode = "204", description = "Analysis defect types not available") })
+	@GetMapping("/getAnalysisDefectTypes")
+	public ResponseEntity<?> getAnalysisDefectType() {
+		LOGGER.info("Going to get AnalysisDefectType");
+		List<String> analysisDefectType = executionAnalysisService.getAnalysisDefectTypes();
+		if (analysisDefectType != null) {
+			return ResponseEntity.ok(analysisDefectType);
+		} else {
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AnalysisDefectType not available");
+		}
+	}
+
 }

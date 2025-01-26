@@ -192,11 +192,19 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		ExecutionResult executionResult = executionResultRepository.findById(executionResultID).orElseThrow(
 				() -> new ResourceNotFoundException("ExecutionResult with ID", executionResultID.toString()));
 
-		// Save the ExecutionResultAnalysis based on the data given in DTO and save it
-		ExecutionResultAnalysis executionResultAnalysis = new ExecutionResultAnalysis();
-		executionResultAnalysis.setExecutionResult(executionResult);
+		// Check if there is already an analysis result for the execution result
+		ExecutionResultAnalysis executionResultAnalysis = executionResultAnalysisRepository
+				.findByExecutionResult(executionResult);
+		if (null == executionResultAnalysis) {
+			LOGGER.info("Analysis result already exists for execution result id: {}", executionResultID.toString());
+			executionResultAnalysis = new ExecutionResultAnalysis();
+			// Save the ExecutionResultAnalysis based on the data given in DTO and save it
+			executionResultAnalysis.setExecutionResult(executionResult);
+		}
 
-		AnalysisDefectType defectType = AnalysisDefectType.valueOf(analysisResultRequest.getAnalysisDefectType());
+		AnalysisDefectType defectType = AnalysisDefectType
+				.getAnalysisDefectTypefromValue(analysisResultRequest.getAnalysisDefectType());
+
 		if (null != defectType) {
 			executionResultAnalysis.setAnalysisDefectType(defectType);
 		}
@@ -416,7 +424,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			return null;
 		}
 		AnalysisResultDTO analysisResultDTO = new AnalysisResultDTO();
-		analysisResultDTO.setAnalysisDefectType(executionResultAnalysis.getAnalysisDefectType().name());
+		analysisResultDTO.setAnalysisDefectType(executionResultAnalysis.getAnalysisDefectType().getValue());
 		analysisResultDTO.setAnalysisRemark(executionResultAnalysis.getAnalysisRemark());
 		analysisResultDTO.setAnalysisTicketID(executionResultAnalysis.getAnalysisTicketID());
 		analysisResultDTO.setAnalysisUser(executionResultAnalysis.getAnalysisUser());
@@ -904,8 +912,9 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 
 			}
 
-			executionResultAnalysis
-					.setAnalysisDefectType(AnalysisDefectType.valueOf(ticketCreateDTO.getAnalysisDefectType()));
+			executionResultAnalysis.setAnalysisDefectType(
+					AnalysisDefectType.getAnalysisDefectTypefromValue(ticketCreateDTO.getAnalysisDefectType()));
+
 			executionResultAnalysis.setAnalysisRemark(ticketCreateDTO.getAnalysisRemark());
 			if (ticketResponse.getTicketNumber() != null) {
 				executionResultAnalysis.setAnalysisTicketID(ticketResponse.getTicketNumber());
@@ -1133,6 +1142,18 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		LOGGER.info("Jira automation is implemented");
 		return Boolean.parseBoolean(jiraAutomation);
 
+	}
+
+	/**
+	 * This method is used to get the analysis defect types.
+	 *
+	 * @return the list of analysis defect types
+	 */
+	@Override
+	public List<String> getAnalysisDefectTypes() {
+		// Get list of the Analysis Defect Type
+		List<String> analysisDefectTypeList = AnalysisDefectType.getAllValues();
+		return analysisDefectTypeList;
 	}
 
 }

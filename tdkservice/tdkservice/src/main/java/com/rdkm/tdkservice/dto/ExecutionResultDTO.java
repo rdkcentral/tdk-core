@@ -41,4 +41,9 @@ public class ExecutionResultDTO {
 	 */
 	private String status;
 
+	/**
+	 * Represents Analysis ticket , say Jira ticket ID - TDK-123
+	 */
+	private String analysisTicket;
+
 }

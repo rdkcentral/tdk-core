@@ -189,4 +189,11 @@ public interface IExecutionAnalysisService {
 	 * @return true if Jira automation is implemented
 	 */
 	boolean isJiraAutomationImplemented();
+	
+	/**
+	 * This method is used to get the analysis defect types.
+	 *
+	 * @return the list of analysis defect types
+	 */
+	List<String> getAnalysisDefectTypes();
 }

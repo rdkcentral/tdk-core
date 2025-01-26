@@ -81,6 +81,7 @@ import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.ExecutionResultAnalysis;
 import com.rdkm.tdkservice.model.Module;
 import com.rdkm.tdkservice.model.Oem;
 import com.rdkm.tdkservice.model.Script;
@@ -92,6 +93,7 @@ import com.rdkm.tdkservice.repository.DeviceRepositroy;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
+import com.rdkm.tdkservice.repository.ExecutionResultAnalysisRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
@@ -124,6 +126,9 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private ExecutionMethodResultRepository executionMethodResultRepository;
+	
+	@Autowired
+	private ExecutionResultAnalysisRepository executionResultAnalysisRepository;
 
 	@Autowired
 	private ExecutionAsyncService executionAsyncService;
@@ -1143,12 +1148,16 @@ public class ExecutionService implements IExecutionService {
 				} else if (executionType.equals(ExecutionType.MULTISCRIPT)) {
 					scriptTestSuite = "Multiple Scripts";
 				} else if (executionType.equals(ExecutionType.MULTITESTSUITE)) {
-					scriptTestSuite = "MultiTestSuite";
+					scriptTestSuite = "Multi TestSuite";
 				}
 
 			}
-			if (scriptTestSuite == null) {
-				scriptTestSuite = "N/A";
+
+			if (executionType.equals(ExecutionType.TESTSUITE) || executionType.equals(ExecutionType.MULTITESTSUITE)
+					|| executionType.equals(ExecutionType.MULTISCRIPT)) {
+				if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
+					executionDTO.setAbortNeeded(true);
+				}
 			}
 			executionDTO.setScriptTestSuite(scriptTestSuite);
 
@@ -1836,7 +1845,12 @@ public class ExecutionService implements IExecutionService {
 		response.setDeviceName(device.getName());
 		response.setDeviceIP(device.getIp());
 		response.setDeviceMac(device.getMacId());
-		response.setDeviceDetails(fileTransferService.getDeviceDetailsFromVersionFile(id.toString()));
+
+		String deviceDetails = fileTransferService.getDeviceDetailsFromVersionFile(id.toString());
+		if (null != deviceDetails) {
+			deviceDetails = deviceDetails.replace("imagename:", "");
+		}
+		response.setDeviceDetails(deviceDetails);
 		response.setDeviceImageName(executionDevice.getBuildName());
 		response.setRealExecutionTime(execution.getRealExecutionTime());
 		response.setTotalExecutionTime(execution.getExecutionTime());
@@ -1869,6 +1883,13 @@ public class ExecutionService implements IExecutionService {
 				resultDTOObj.setStatus(ExecutionResultStatus.INPROGRESS.name());
 			} else {
 				resultDTOObj.setStatus(result.getResult().name());
+			}
+
+			ExecutionResultAnalysis executionResultAnalysis = executionResultAnalysisRepository
+					.findByExecutionResult(result);
+			if (null != executionResultAnalysis && !Utils.isEmpty(executionResultAnalysis.getAnalysisTicketID())) {
+
+				resultDTOObj.setAnalysisTicket(executionResultAnalysis.getAnalysisTicketID());
 			}
 
 			resultDTO.add(resultDTOObj);
@@ -1904,8 +1925,7 @@ public class ExecutionService implements IExecutionService {
 				.filter(r -> r.getResult() == ExecutionResultStatus.SKIPPED).count());
 		summary.setAborted((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getResult() == ExecutionResultStatus.ABORTED).count());
-		summary.setSuccessPercentage((double) summary.getSuccess() / summary.getTotalScripts() * 100);
-
+		summary.setSuccessPercentage((int) Math.round((double) summary.getSuccess() / summary.getTotalScripts() * 100));
 		return summary;
 
 	}
