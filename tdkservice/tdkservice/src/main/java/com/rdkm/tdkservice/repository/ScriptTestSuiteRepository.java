@@ -51,4 +51,13 @@ public interface ScriptTestSuiteRepository extends JpaRepository<ScriptTestSuite
 	 * @return the list of test suite mapping
 	 */
 	List<ScriptTestSuite> findAllByTestSuite(TestSuite testSuite);
+
+	/**
+	 * This method is used to find all the test suite mapping for a script and order
+	 * by script order
+	 * 
+	 * @param testSuite - the test suite
+	 * @return the list of test suite mapping
+	 */
+	List<ScriptTestSuite> findByTestSuiteOrderByScriptOrderAsc(TestSuite testSuite);
 }

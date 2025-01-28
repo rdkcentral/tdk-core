@@ -126,7 +126,7 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private ExecutionMethodResultRepository executionMethodResultRepository;
-	
+
 	@Autowired
 	private ExecutionResultAnalysisRepository executionResultAnalysisRepository;
 
@@ -442,15 +442,15 @@ public class ExecutionService implements IExecutionService {
 		LOGGER.info("Starting multiTestSuite excecution");
 		List<TestSuite> testSuiteList = executionDetailsDTO.getTestSuite();
 		StringBuilder responseLogs = new StringBuilder();
-		Set<Script> scriptSet = new HashSet<>();
+		List<Script> scriptSet = new ArrayList<>();
 		List<ScriptTestSuite> scriptList = new ArrayList<>();
 		for (TestSuite testSuite : testSuiteList) {
 			scriptList.addAll(testSuite.getScriptTestSuite());
 		}
 		for (ScriptTestSuite scriptTestSuite : scriptList) {
-			scriptSet.add(scriptTestSuite.getScript());
+			if (!scriptSet.contains(scriptTestSuite.getScript()))
+				scriptSet.add(scriptTestSuite.getScript());
 		}
-		List<Script> scripts = new ArrayList<>(scriptSet);
 
 		for (Device device : executionDetailsDTO.getDeviceList()) {
 			if (!checkDeviceAvailabilityForExecution(device)) {
@@ -462,7 +462,7 @@ public class ExecutionService implements IExecutionService {
 			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			responseLogs.append("Multitestsuite execution on device: ").append(device.getName()).append(".");
-			executionAsyncService.prepareAndExecuteMultiScript(device, scripts, executionDetailsDTO.getUser(),
+			executionAsyncService.prepareAndExecuteMultiScript(device, scriptSet, executionDetailsDTO.getUser(),
 					executionName, executionDetailsDTO.getCategory(), Constants.MULTI_TEST_SUITE,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
@@ -1519,7 +1519,7 @@ public class ExecutionService implements IExecutionService {
 		}
 
 		try {
-			List<ExecutionResult> executionResult = executionResultRepository.findByExecution(execution);
+			List<ExecutionResult> executionResult = execution.getExecutionResults();
 			List<String> scriptNames = executionResult.stream().map(ExecutionResult::getScript).toList();
 
 			List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
@@ -1894,7 +1894,28 @@ public class ExecutionService implements IExecutionService {
 
 			resultDTO.add(resultDTOObj);
 		}
-		return resultDTO;
+		// Separate the "NA", "SKIPPED", and other statuses
+		List<ExecutionResultDTO> naList = new ArrayList<>();
+		List<ExecutionResultDTO> skippedList = new ArrayList<>();
+		List<ExecutionResultDTO> othersList = new ArrayList<>();
+
+		for (ExecutionResultDTO dto : resultDTO) {
+			if ("NA".equals(dto.getStatus())) {
+				naList.add(dto);
+			} else if ("SKIPPED".equals(dto.getStatus())) {
+				skippedList.add(dto);
+			} else {
+				othersList.add(dto);
+			}
+		}
+
+		// Combine the lists, with "NA" and "SKIPPED" first
+		List<ExecutionResultDTO> orderedResultDTO = new ArrayList<>();
+		orderedResultDTO.addAll(naList);
+		orderedResultDTO.addAll(skippedList);
+		orderedResultDTO.addAll(othersList);
+
+		return orderedResultDTO;
 	}
 
 	/**

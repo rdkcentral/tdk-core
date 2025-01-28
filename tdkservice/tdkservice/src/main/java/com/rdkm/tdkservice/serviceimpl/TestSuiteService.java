@@ -478,7 +478,8 @@ public class TestSuiteService implements ITestSuiteService {
 	private TestSuiteDTO convertTestSuiteToTestSuiteDTO(TestSuite testSuite) {
 		LOGGER.info("Converting test suite to test suite DTO");
 		TestSuiteDTO testSuiteDTO = MapperUtils.convertToTestSuiteDTO(testSuite);
-		List<ScriptTestSuite> scriptTestSuiteList = scriptTestSuiteRepository.findAllByTestSuite(testSuite);
+		List<ScriptTestSuite> scriptTestSuiteList = scriptTestSuiteRepository
+				.findByTestSuiteOrderByScriptOrderAsc(testSuite);
 		List<ScriptListDTO> scriptList = MapperUtils.getScriptList(scriptTestSuiteList);
 		testSuiteDTO.setScripts(scriptList);
 		LOGGER.info("Test suite converted to test suite DTO");

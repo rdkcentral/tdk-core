@@ -33,6 +33,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -149,6 +150,7 @@ public class Execution extends BaseEntity {
 	 * Represents the execution results.
 	 */
 	@OneToMany(mappedBy = "execution")
+	@OrderBy("createdDate ASC")
 	private List<ExecutionResult> executionResults;
 
 	/*
