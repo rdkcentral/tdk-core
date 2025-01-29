@@ -1295,7 +1295,11 @@ public class ExecutionService implements IExecutionService {
 		Oem oem = device.getOem();
 		Soc soc = device.getSoc();
 		if (oem != null && soc != null) {
-			executionName = soc.getName() + Constants.UNDERSCORE + oem.getName() + Constants.UNDERSCORE;
+			if (oem.getName().equalsIgnoreCase(soc.getName())) {
+				executionName = soc.getName() + Constants.UNDERSCORE;
+			} else {
+				executionName = soc.getName() + Constants.UNDERSCORE + oem.getName() + Constants.UNDERSCORE;
+			}
 		} else if (oem != null && soc == null) {
 			executionName = oem.getName() + Constants.UNDERSCORE;
 		} else if (soc != null && oem == null) {
@@ -1858,7 +1862,11 @@ public class ExecutionService implements IExecutionService {
 		response.setExecutionType(execution.getExecutionType().name());
 		response.setScriptTestSuite(execution.getScripttestSuiteName());
 		response.setExecutionStatus(execution.getExecutionStatus().name());
-		response.setResult(execution.getResult().name());
+		if (execution.getExecutionStatus() == ExecutionProgressStatus.COMPLETED) {
+			response.setResult(execution.getResult().name());
+		} else {
+			response.setResult(execution.getExecutionStatus().name());
+		}
 		response.setSummary(getExecutionSummary(execution));
 		response.setExecutionResults(getExecutionResults(execution));
 		return response;

@@ -934,7 +934,7 @@ public class DeviceService implements IDeviceService {
 		device.setThunderEnabled(!device.isThunderEnabled());
 		deviceRepository.save(device);
 		LOGGER.info("Completed setting Thunder enabled status for device with ip: {}", deviceIP);
-		return true;
+		return device.isThunderEnabled();
 	}
 
 	/**

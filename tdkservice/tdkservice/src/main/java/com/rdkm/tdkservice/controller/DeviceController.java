@@ -474,11 +474,10 @@ public class DeviceController {
 		boolean status = deviceService.toggleThunderEnabledstatus(deviceIp);
 		if (status) {
 			LOGGER.info("Thunder enabled status toggled successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Thunder enabled status toggled successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Thunder enabled successfully");
 		} else {
-			LOGGER.error("Failed to toggle thunder enabled status");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to toggle thunder enabled status");
+			LOGGER.info("Thunder enabled status toggled successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Thunder disabled successfully");
 		}
 	}
 
