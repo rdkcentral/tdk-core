@@ -489,6 +489,7 @@ public class ExecutionAsyncService {
 				executionResult.setResult(ExecutionResultStatus.FAILURE);
 				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
+				this.removeFWRequiredTextsFromLogs(executionLogfile);
 				deleteTemporaryFile(temporaryScriptPath);
 				return false;
 			}
@@ -504,6 +505,7 @@ public class ExecutionAsyncService {
 				}
 				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
+				this.removeFWRequiredTextsFromLogs(executionLogfile);
 				deleteTemporaryFile(temporaryScriptPath);
 				return false;
 			}
@@ -516,6 +518,7 @@ public class ExecutionAsyncService {
 
 			// Delete the temporary script file after execution
 			deleteTemporaryFile(temporaryScriptPath);
+			this.removeFWRequiredTextsFromLogs(executionLogfile);
 
 			if (execution.isDeviceLogsNeeded()) {
 				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
@@ -534,6 +537,40 @@ public class ExecutionAsyncService {
 		}
 
 		return finalExecutionResultStatus == ExecutionResultStatus.SUCCESS;
+	}
+
+	/**
+	 * This method is to remove unwanted texts that was added for the python script
+	 * execution status checks. SCRIPTEND#!@~ for checking python script was
+	 * executed till end. "#TDK_@error" for adding the
+	 * status=============================================
+	 * 
+	 * @param logFilePath
+	 */
+	private void removeFWRequiredTextsFromLogs(String logFilePath) {
+		File logFile = new File(logFilePath);
+		if (!logFile.exists()) {
+			LOGGER.error("Log file does not exist at path: " + logFilePath);
+			return;
+		}
+		StringBuilder contentBuilder = new StringBuilder();
+		try (BufferedReader br = new BufferedReader(new FileReader(logFilePath))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				line = line.replace(Constants.END_TAG_PY_COMMENT, "").replace(Constants.ERROR_TAG_PY_COMMENT, "");
+				contentBuilder.append(line).append("\n");
+			}
+		} catch (IOException e) {
+			LOGGER.error("Error reading log file: " + logFilePath, e);
+			return;
+		}
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(logFilePath))) {
+			bw.write(contentBuilder.toString());
+		} catch (IOException e) {
+			LOGGER.error("Error writing to log file: " + logFilePath, e);
+		}
+
 	}
 
 	/**
