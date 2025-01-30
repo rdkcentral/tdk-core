@@ -114,6 +114,12 @@ if expectedResult in result.upper():
     revert = "NO"
     plugins_list = ["Cobalt","HtmlApp","LightningApp"]
     plugin_status_needed = {"Cobalt":"deactivated","HtmlApp":"deactivated","LightningApp":"deactivated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"

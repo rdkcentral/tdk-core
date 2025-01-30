@@ -114,9 +114,15 @@ if expectedResult in result.upper():
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt"]
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated"}
     if curr_plugins_status_dict != plugin_status_needed:
         if curr_plugins_status_dict.get("Cobalt") == "hibernated":
            restore_plugin(obj,"Cobalt")

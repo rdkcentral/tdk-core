@@ -39,16 +39,16 @@ def check_current_interface(obj):
     revert = "NO"
     interface = "EMPTY"
     status = "SUCCESS"
-    nw_plugin_status_dict = get_plugins_status(obj,["org.rdk.Network"])
-    nw_plugin_status = nw_plugin_status_dict["org.rdk.Network"]
+    nw_plugin_status_dict = get_plugins_status(obj,["org.rdk.NetworkManager"])
+    nw_plugin_status = nw_plugin_status_dict["org.rdk.NetworkManager"]
     if nw_plugin_status != "activated":
         revert = "YES"
-        status = set_plugins_status(obj,{"org.rdk.Network":"activated"})
-        nw_plugin_status_dict = get_plugins_status(obj,["org.rdk.Network"])
-        nw_plugin_status = nw_plugin_status_dict["org.rdk.Network"]
+        status = set_plugins_status(obj,{"org.rdk.NetworkManager":"activated"})
+        nw_plugin_status_dict = get_plugins_status(obj,["org.rdk.NetworkManager"])
+        nw_plugin_status = nw_plugin_status_dict["org.rdk.NetworkManager"]
     if status == "SUCCESS" and nw_plugin_status == "activated":
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-        tdkTestObj.addParameter("method","org.rdk.Network.1.getDefaultInterface")
+        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetPrimaryInterface")
         tdkTestObj.addParameter("reqValue","interface")
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
@@ -61,10 +61,10 @@ def check_current_interface(obj):
                 print("\n Default interface of the DUT :\n",interface)
                 tdkTestObj.setResultStatus("SUCCESS")
         else:
-            print("\n Error while executing org.rdk.Network.1.getDefaultInterface method \n")
+            print("\n Error while executing org.rdk.NetworkManager.1.GetPrimaryInterface method \n")
             tdkTestObj.setResultStatus("FAILURE")
     else:
-        print("\n Unable to activate org.rdk.Network plugin\n")
+        print("\n Unable to activate org.rdk.NetworkManager plugin\n")
     return interface,revert
 
 # Function to frame the complete URL of Lightning application from the configuration parameters
@@ -90,9 +90,9 @@ def get_lightning_app_url(obj):
 def set_plugins(obj):
     revert = "NO"
     plugin_status = "SUCCESS"
-    plugins_list = ["WebKitBrowser","org.rdk.Wifi"]
+    plugins_list = ["WebKitBrowser","org.rdk.NetworkManager"]
     plugin_status_dict = get_plugins_status(obj, plugins_list)
-    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated"}
+    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.NetworkManager":"activated"}
     if plugin_status_dict != plugin_status_needed:
         revert = "YES"
         plugin_status = set_plugins_status(obj,plugin_status_needed)
@@ -199,7 +199,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                     tdkTestObj.setResultStatus("SUCCESS")
                     #list of interfaces supported by this device including their state
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                    tdkTestObj.addParameter("method","org.rdk.Network.1.getInterfaces");
+                    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetAvailableInterfaces");
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
                     interfaces = tdkTestObj.getResultDetails()
@@ -210,11 +210,11 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                             if interface["interface"] == "WIFI":
                                 wifi_interface = True
                         if wifi_interface:
-                            print("\n WiFi interface is present in org.rdk.Network.1.getInterfaces list \n")
+                            print("\n WiFi interface is present in org.rdk.NetworkManager.1.GetAvailableInterfaces list \n")
                             tdkTestObj.setResultStatus("SUCCESS")
-                            params = '{"interface":"WIFI", "enabled":true, "persist":true}'
+                            params = '{"interface":"WIFI", "enabled":true}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                            tdkTestObj.addParameter("method","org.rdk.Network.1.setInterfaceEnabled");
+                            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
                             tdkTestObj.addParameter("value",params);
                             tdkTestObj.executeTestCase(expectedResult);
                             result = tdkTestObj.getResult();
@@ -222,7 +222,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                 time.sleep(40)
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                                tdkTestObj.addParameter("method","org.rdk.Network.1.getInterfaces");
+                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetAvailableInterfaces");
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
                                 interfaces = tdkTestObj.getResultDetails()
@@ -262,16 +262,16 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                         print("\n Unable to set WIFI to enabled state \n")
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print("\n Error while executing org.rdk.Network.1.getInterfaces method \n")
+                                    print("\n Error while executing org.rdk.NetworkManager.1.GetAvailableInterfaces method \n")
                                     tdkTestObj.setResultStatus("FAILURE")
                             else:
-                                print("\n Error while executing org.rdk.Network.1.setInterfaceEnabled method \n")
+                                print("\n Error while executing org.rdk.NetworkManager.1.SetInterfaceState method \n")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print("\n WIFI is not present in org.rdk.Network.1.getInterfaces output \n")
+                            print("\n WIFI is not present in org.rdk.NetworkManager.1.GetAvailableInterfaces output \n")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("\n Error while executing org.rdk.Network.1.getInterfaces method \n")
+                        print("\n Error while executing org.rdk.NetworkManager.1.GetAvailableInterfaces method \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("\n Error while enabling RFC for PreferredNetworkInterface\n")
@@ -314,7 +314,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
             print("please configure values before test")
         else:
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-            tdkTestObj.addParameter("method","org.rdk.Wifi.1.getCurrentState")
+            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetWifiState")
             tdkTestObj.addParameter("reqValue","state")
             tdkTestObj.executeTestCase(expectedResult)
             result = tdkTestObj.getResult()
@@ -322,11 +322,11 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                 state = int(tdkTestObj.getResultDetails())
                 print("\n Current state value of Wifi adapter :{} \n".format(state))
                 state_failure = False
-                if state not in (0,6):
+                if state not in (0,13):
                     tdkTestObj.setResultStatus("SUCCESS")
                     params = '{"incremental":false,"ssid":"","frequency":""}'
                     tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                    tdkTestObj.addParameter("method","org.rdk.Wifi.1.startScan")
+                    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.StartWiFiScan")
                     tdkTestObj.addParameter("value",params)
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
@@ -336,7 +336,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                         print("\n Connecting to SSID : {}\n".format(ssid))
                         params = '{"ssid":"'+ ssid +'", "passphrase": "'+ password +'", "securityMode":'+ security_mode +'}'
                         tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                        tdkTestObj.addParameter("method","org.rdk.Wifi.1.connect")
+                        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.WiFiConnect")
                         tdkTestObj.addParameter("value",params)
                         start_time = str(datetime.utcnow()).split()[1]
                         tdkTestObj.executeTestCase(expectedResult)
@@ -362,7 +362,7 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                                 #check wthether connected
                                 print("\n Checking whether DUT is connected to SSID \n")
                                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                                tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetConnectedSSID")
                                 tdkTestObj.addParameter("reqValue","ssid")
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
@@ -378,21 +378,21 @@ def connect_wifi(obj,ap_freq,start_time_needed=False):
                                         deviceAvailability = "No"
                                         tdkTestObj.setResultStatus("FAILURE")
                                 else:
-                                    print("\n Error while executing org.rdk.Wifi.1.getConnectedSSID method \n")
+                                    print("\n Error while executing org.rdk.NetworkManager.1.GetConnectedSSID method \n")
                                     deviceAvailability = "No"
                                     tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print("\n Error while executing org.rdk.Wifi.1.connect method \n")
+                            print("\n Error while executing org.rdk.NetworkManager.1.WiFiConnect method \n")
                             deviceAvailability = "No"
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("\n Error while executing org.rdk.Wifi.1.startScan method \n")
+                        print("\n Error while executing org.rdk.NetworkManager.1.StartWiFiScan method \n")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("\n Wifi adapter is not working \n")
                     tdkTestObj.setResultStatus("FAILURE")
             else:
-                print("\n Error while executing org.rdk.Wifi.1.getCurrentState method \n")
+                print("\n Error while executing org.rdk.NetworkManager.1.GetInterfaceState method \n")
                 tdkTestObj.setResultStatus("FAILURE")
     else:
         print("\n Device specific configuration file is missing \n")
@@ -408,7 +408,7 @@ def set_default_interface(obj,interface,start_time_needed = False):
     print("Set {} as default interface".format(interface))
     params = '{ "interface":"'+interface+'", "persist":true}'
     tdkTestObj = obj.createTestStep('rdkservice_setValue');
-    tdkTestObj.addParameter("method","org.rdk.Network.1.setDefaultInterface");
+    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetPrimaryInterface");
     tdkTestObj.addParameter("value",params);
     start_time = str(datetime.utcnow()).split()[1]
     tdkTestObj.executeTestCase(expectedResult);
@@ -419,9 +419,9 @@ def set_default_interface(obj,interface,start_time_needed = False):
         time.sleep(40)
         if  interface == "WIFI":
             print("Disabling Ethernet interface to set Wifi as default interface")
-            params = '{"interface":"ETHERNET", "enabled":false, "persist":true}'
+            params = '{"interface":"ETHERNET", "enabled":false}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.Network.1.setInterfaceEnabled");
+            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
             tdkTestObj.addParameter("value",params);
             tdkTestObj.executeTestCase(expectedResult);
             time.sleep(30)
@@ -429,9 +429,9 @@ def set_default_interface(obj,interface,start_time_needed = False):
             print("Disabled Ethernet interface")
         elif interface == "ETHERNET":
             print("Enabling Ethernet interface ")
-            params = '{"interface":"ETHERNET", "enabled":true, "persist":true}'
+            params = '{"interface":"ETHERNET", "enabled":true}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
-            tdkTestObj.addParameter("method","org.rdk.Network.1.setInterfaceEnabled");
+            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
             tdkTestObj.addParameter("value",params);
             tdkTestObj.executeTestCase(expectedResult);
             result = tdkTestObj.getResult();
@@ -454,7 +454,7 @@ def set_default_interface(obj,interface,start_time_needed = False):
                 print("Validate whether the device is available with the new IP:")
                 try:
                     tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                    tdkTestObj.addParameter("method","org.rdk.Network.1.getDefaultInterface")
+                    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetPrimaryInterface")
                     tdkTestObj.addParameter("reqValue","interface")
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
@@ -516,7 +516,7 @@ def check_cur_ssid_freq(obj):
     result1,ssid = getDeviceConfigKeyValue(conf_file,"WIFI_SSID_NAME")
     if ssid != "":
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-        tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetConnectedSSID")
         tdkTestObj.addParameter("reqValue","ssid")
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
@@ -552,7 +552,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
     #Check current interface
     current_connection, revert_nw = check_current_interface(obj)
     if revert_nw == "YES":
-        revert_dict["org.rdk.Network"] = "deactivated"
+        revert_dict["org.rdk.NetworkManager"] = "deactivated"
     if current_connection == "EMPTY":
         if start_time_needed:
             if wifi_connect_needed:

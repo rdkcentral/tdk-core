@@ -105,8 +105,14 @@ if expectedResult in result.upper():
         print("\n Please configure the cobalt_test_url in Config file")
     plugins_list = ["Cobalt","WebKitBrowser"]
     print("\n Check Pre conditions")
-    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
+    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting plugin status")
         status = "FAILURE"

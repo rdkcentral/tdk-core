@@ -95,6 +95,12 @@ if expectedResult in result.upper():
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     plugins_list = ["Cobalt","WebKitBrowser","DeviceInfo"]
     plugin_status_needed = {"DeviceInfo":"activated","Cobalt":"deactivated","WebKitBrowser":"deactivated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"

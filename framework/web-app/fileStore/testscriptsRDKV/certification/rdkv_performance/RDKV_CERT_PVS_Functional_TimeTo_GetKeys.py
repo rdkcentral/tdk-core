@@ -121,10 +121,16 @@ if expectedResult in result.upper():
     else:
         webinspect_port = PerformanceTestVariables.html_app_webinspect_port
     plugins_list = [webkit_instance,"Cobalt"]
+    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {webkit_instance:"resumed","Cobalt":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"

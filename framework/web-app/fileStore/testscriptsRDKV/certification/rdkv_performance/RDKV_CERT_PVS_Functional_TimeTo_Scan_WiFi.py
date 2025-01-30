@@ -49,7 +49,7 @@
 </pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>ssid:string</input_parameters>
-    <automation_approch>1. Enable Network plugin and Wifi plugins as a precondition.
+    <automation_approch>1. Enable NetworkManaer plugin as a precondition.
 2. Listen to "onAvailableSSIDs" of Wifi plugin.
 3. Start scanning for the given SSID and wait for 60 seconds
 4. Calculate the time taken by finding the difference between start scan and event triggered time.
@@ -100,17 +100,17 @@ if expectedResult in result.upper():
     event_listener = None
     status = "SUCCESS"
     revert = "NO"
-    plugins_list = ["org.rdk.Network","org.rdk.Wifi"]
-    plugin_status_needed = {"org.rdk.Network":"activated","org.rdk.Wifi":"activated"}
-    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-    if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
+    plugin_list = ["org.rdk.NetworkManager"] 
+    plugin_status_needed = {"org.rdk.NetworkManager":"activated"} 
+    curr_plugins_status_dict = get_plugins_status(obj, plugin_list)
+    if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugin_list):
         print("\n Error while getting plugin status")
         status = "FAILURE"
     elif curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
-        status = set_plugins_status(obj,plugin_status_needed)
-        new_status_dict = get_plugins_status(obj,plugins_list)
-        if new_status_dict != plugin_status_needed:
+        status = set_plugins_status(obj, plugin_status_needed)
+        new_plugin_status = get_plugins_status(obj, plugin_list)
+        if new_plugin_status != plugin_status_needed:
             status = "FAILURE"
     conf_file,file_status = getConfigFileName(obj.realpath)
     config_status,ssid = getDeviceConfigKeyValue(conf_file,"WIFI_SSID_NAME")
@@ -119,7 +119,7 @@ if expectedResult in result.upper():
         status = "FAILURE"
     if status == "SUCCESS":
         thunder_port = rdkv_performancelib.devicePort
-        event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 6,"method": "org.rdk.Wifi.1.register","params": {"event": "onAvailableSSIDs", "id": "client.events.1" }}'],"/jsonrpc",False)
+        event_listener = createEventListener(ip,thunder_port,['{"jsonrpc": "2.0","id": 6,"method": "org.rdk.NetworkManager.1.register","params": {"event": "onAvailableSSIDs", "id": "client.events.1" }}'],"/jsonrpc",False)
         time.sleep(10)
         tdkTestObj = obj.createTestStep('rdkservice_getSSHParams')
         tdkTestObj.addParameter("realpath",obj.realpath)
@@ -145,7 +145,7 @@ if expectedResult in result.upper():
                     tdkTestObj.setResultStatus("SUCCESS")
                     #list of interfaces supported by this device including their state
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                    tdkTestObj.addParameter("method","org.rdk.Network.1.getInterfaces");
+                    tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetAvailableInterfaces");
                     tdkTestObj.executeTestCase(expectedResult)
                     result = tdkTestObj.getResult()
                     interfaces = tdkTestObj.getResultDetails()
@@ -156,12 +156,12 @@ if expectedResult in result.upper():
                             if interface["interface"] == "WIFI":
                                 wifi_interface = True
                         if wifi_interface:
-                            print("\n WiFi interface is present in org.rdk.Network.1.getInterfaces list")
+                            print("\n WiFi interface is present in org.rdk.NetworkManager.1.GetAvailableInterfaces list")
                             tdkTestObj.setResultStatus("SUCCESS")
                             print("\n Enable WIFI interface")
-                            params = '{"interface":"WIFI", "enabled":true, "persist":true}'
+                            params = '{"interface":"WIFI", "enabled":true}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
-                            tdkTestObj.addParameter("method","org.rdk.Network.1.setInterfaceEnabled");
+                            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
                             tdkTestObj.addParameter("value",params);
                             tdkTestObj.executeTestCase(expectedResult);
                             result = tdkTestObj.getResult();
@@ -169,7 +169,7 @@ if expectedResult in result.upper():
                                 time.sleep(20)
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 tdkTestObj = obj.createTestStep('rdkservice_getValue');
-                                tdkTestObj.addParameter("method","org.rdk.Network.1.getInterfaces");
+                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.GetAvailableInterfaces");
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()
                                 interfaces = tdkTestObj.getResultDetails()
@@ -187,7 +187,7 @@ if expectedResult in result.upper():
                                             #Start scanning for SSID
                                             params = '{"incremental":true,"ssid":"' + ssid + '","frequency":""}'
                                             tdkTestObj = obj.createTestStep('rdkservice_setValue')
-                                            tdkTestObj.addParameter("method","org.rdk.Wifi.1.startScan")
+                                            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.StartWiFiScan")
                                             tdkTestObj.addParameter("value",params)
                                             scan_start_time = str(datetime.utcnow()).split()[1]
                                             tdkTestObj.executeTestCase(expectedResult)
@@ -253,10 +253,10 @@ if expectedResult in result.upper():
                                 print("\n Error while enabling WIFI interface")
                                 tdkTestObj.setResultStatus("FAILURE")
                         else:
-                            print("\n WIFI is not present in org.rdk.Network.1.getInterfaces output")
+                            print("\n WIFI is not present in org.rdk.NetworkManager.1.GetAvailableInterfaces output")
                             tdkTestObj.setResultStatus("FAILURE")
                     else:
-                        print("\n Error while executing org.rdk.Network.1.getInterfaces method")
+                        print("\n Error while executing org.rdk.NetworkManager.1.GetAvailableInterfaces method")
                         tdkTestObj.setResultStatus("FAILURE")
                 else:
                     print("\n Error while enabling RFC for PreferredNetworkInterface")

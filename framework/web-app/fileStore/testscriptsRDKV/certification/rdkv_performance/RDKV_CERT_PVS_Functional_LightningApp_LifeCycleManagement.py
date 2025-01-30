@@ -92,12 +92,18 @@ expectedResult = "SUCCESS"
 if expectedResult in result.upper() :
     status = "SUCCESS"
     revert="NO"
+    conf_file, status = get_configfile_name(obj);
     lightning_app_test_url = obj.url+'/fileStore/lightning-apps/VideoResizeTest.html'
     plugins_list = ["LightningApp"]
     print("\n Check Pre conditions")
+    plugin_status_needed = {"LightningApp":"deactivated"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
-    plugin_status_needed = {"LightningApp":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugin")
         status = "FAILURE"

@@ -150,10 +150,15 @@ if expectedResult in result.upper():
     set_method = "HtmlApp"+'.1.url'
     webinspect_port = str(PerformanceTestVariables.html_app_webinspect_port)
     plugins_list = ["Cobalt","HtmlApp"]
+    plugin_status_needed = {"Cobalt":"deactivated","HtmlApp":"resumed"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"
-    plugin_status_needed = {"Cobalt":"deactivated","HtmlApp":"resumed"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting plugin status")
         status = "FAILURE"

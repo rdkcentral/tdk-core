@@ -119,11 +119,17 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     revert="NO"
     lightningapp_test_url = IPChangeDetectionVariables.ip_change_app_url
+    conf_file, status = get_configfile_name(obj);
     plugins_list = ["WebKitBrowser","Cobalt","LightningApp"]
     print("\n Check Pre conditions")
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","LightningApp":"deactivated"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","LightningApp":"deactivated"}
     if not lightningapp_test_url:
         print("\n Please configure ip_change_app_url in IPChangeDetectionVariables and Try again.")
         status = "FAILURE"

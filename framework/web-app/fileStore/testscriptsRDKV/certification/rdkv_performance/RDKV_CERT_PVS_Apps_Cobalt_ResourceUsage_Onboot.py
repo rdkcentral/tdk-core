@@ -95,6 +95,13 @@ if expectedResult in result.upper():
     revert="NO"
     status = "SUCCESS"
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     initial_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if initial_plugins_status_dict != {}:
         tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')
@@ -118,7 +125,6 @@ if expectedResult in result.upper():
                     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
                     if initial_plugins_status_dict != curr_plugins_status_dict:
                         revert = "YES"
-                    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
                     if curr_plugins_status_dict != plugin_status_needed:
                         status = set_plugins_status(obj,plugin_status_needed)
                         new_plugins_status_dict = get_plugins_status(obj,plugins_list)

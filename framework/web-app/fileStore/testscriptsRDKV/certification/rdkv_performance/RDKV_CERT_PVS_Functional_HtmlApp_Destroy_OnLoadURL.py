@@ -100,11 +100,17 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     revert="NO"
     htmlapp_test_url = PerformanceTestVariables.html_page_url
+    conf_file, status = get_configfile_name(obj);
     plugins_list = ["WebKitBrowser","Cobalt","HtmlApp"]
     print("\n Check Pre conditions")
-    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
-    time.sleep(10)
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","HtmlApp":"deactivated"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
+    curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
+    time.sleep(20)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"

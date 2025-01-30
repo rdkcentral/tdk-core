@@ -103,6 +103,12 @@ if expectedResult in result.upper():
     rebootwaitTime = 160
     plugins_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
     plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     initial_plugins_status_dict = get_plugins_status(obj,plugins_list)
     if all(initial_plugins_status_dict[plugin] != "FAILURE" for plugin in plugins_list):
         tdkTestObj = obj.createTestStep('rdkservice_rebootDevice')

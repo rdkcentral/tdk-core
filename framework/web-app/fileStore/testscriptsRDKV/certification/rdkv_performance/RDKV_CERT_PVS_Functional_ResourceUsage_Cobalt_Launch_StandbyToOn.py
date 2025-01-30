@@ -120,9 +120,15 @@ if expectedResult in result.upper():
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["WebKitBrowser","Cobalt","org.rdk.System"]
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","org.rdk.System":"activated"}
+    conf_file, status = get_configfile_name(obj); #### from this line
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","org.rdk.System":"activated"}
     if curr_plugins_status_dict != plugin_status_needed:
         revert = "YES"
         status = set_plugins_status(obj,plugin_status_needed)
