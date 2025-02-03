@@ -301,15 +301,15 @@ public class ExecutionAsyncService {
 							for (ExecutionResult execResults : executableResultList) {
 								if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
 										|| execResults.getResult() == ExecutionResultStatus.PENDING) {
-									Execution executionAborted = executionRepository.findById(executionId).orElse(null);
-									executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
-									executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
-									executionRepository.save(executionAborted);
+									execResults.setResult(ExecutionResultStatus.ABORTED);
+									execResults.setExecutionRemarks("Execution aborted by user");
+									executionResultRepository.save(execResults);
 								}
 							}
-							execution.setExecutionStatus(ExecutionProgressStatus.ABORTED);
-							execution.setAbortRequested(true);
-							executionRepository.save(execution);
+							Execution executionAborted = executionRepository.findById(executionId).orElse(null);
+							executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+							executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
+							executionRepository.save(executionAborted);
 							LOGGER.info("Execution aborted for device: {}", device.getName());
 							break;
 						}
@@ -341,7 +341,7 @@ public class ExecutionAsyncService {
 						break;
 					}
 				}
-				
+
 				Execution finalExecution = executionRepository.findById(executionId).orElse(null);
 
 				if (executableResultList != null) {
@@ -542,8 +542,8 @@ public class ExecutionAsyncService {
 	/**
 	 * This method is to remove unwanted texts that was added for the python script
 	 * execution status checks. SCRIPTEND#!@~ for checking python script was
-	 * executed till end. "#TDK_@error" for adding the
-	 * status=============================================
+	 * executed till end. "#TDK_@error" for adding the status as Failure when
+	 * exception is thrown from the python script
 	 * 
 	 * @param logFilePath
 	 */
@@ -604,7 +604,7 @@ public class ExecutionAsyncService {
 		if (execution.getExecutionStatus() == ExecutionProgressStatus.INPROGRESS) {
 			execution.setExecutionStatus(ExecutionProgressStatus.COMPLETED);
 		}
-		
+
 		if (execution.getExecutionStatus() == ExecutionProgressStatus.ABORTED) {
 			return execution;
 		}

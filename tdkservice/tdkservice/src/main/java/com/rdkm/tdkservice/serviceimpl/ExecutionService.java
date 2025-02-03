@@ -1647,26 +1647,34 @@ public class ExecutionService implements IExecutionService {
 	public boolean deleteExecution(UUID id) {
 		LOGGER.info("Deleting execution with id: {}", id);
 		this.deleteAllFilesForTheExecution(id.toString());
-		Execution execution = executionRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Execution", id.toString()));
-		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
-		for (ExecutionResult executionResult : executionResults) {
-			List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
-					.findByExecutionResult(executionResult);
-			if (executionMethodResults != null && !executionMethodResults.isEmpty()) {
-				executionMethodResultRepository.deleteAll(executionMethodResults);
-			}
-		}
-		// Delete execution results
-		if (executionResults != null && !executionResults.isEmpty()) {
-			executionResultRepository.deleteAll(executionResults);
-		}
-
-		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
-		if (executionDevice != null) {
-			executionDeviceRepository.delete(executionDevice);
-		}
 		try {
+			Execution execution = executionRepository.findById(id)
+					.orElseThrow(() -> new ResourceNotFoundException("Execution", id.toString()));
+			List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+			for (ExecutionResult executionResult : executionResults) {
+				List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
+						.findByExecutionResult(executionResult);
+				if (executionMethodResults != null && !executionMethodResults.isEmpty()) {
+					executionMethodResultRepository.deleteAll(executionMethodResults);
+				}
+
+				ExecutionResultAnalysis executionResultAnalysis = executionResultAnalysisRepository
+						.findByExecutionResult(executionResult);
+
+				if (executionResultAnalysis != null) {
+					executionResultAnalysisRepository.delete(executionResultAnalysis);
+				}
+			}
+			// Delete execution results
+			if (executionResults != null && !executionResults.isEmpty()) {
+				executionResultRepository.deleteAll(executionResults);
+			}
+
+			ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+			if (executionDevice != null) {
+				executionDeviceRepository.delete(executionDevice);
+			}
+
 			executionRepository.delete(execution);
 
 			LOGGER.info("Successfully deleted execution with id: {}", id);
@@ -1939,9 +1947,10 @@ public class ExecutionService implements IExecutionService {
 		summary.setTotalScripts(execution.getScriptCount());
 		summary.setExecuted(execution.getExecutedScriptCount());
 		summary.setInProgressCount((int) execution.getExecutionResults().stream()
-				.filter(r -> r.getResult() == ExecutionResultStatus.INPROGRESS).count());
-		summary.setSuccess((int) execution.getExecutionResults().stream()
-				.filter(r -> r.getResult() == ExecutionResultStatus.SUCCESS).count());
+				.filter(r -> r.getStatus() == ExecutionStatus.INPROGRESS).count());
+		summary.setSuccess((int) execution.getExecutionResults().stream().filter(
+				r -> r.getResult() == ExecutionResultStatus.SUCCESS && r.getStatus() != ExecutionStatus.INPROGRESS)
+				.count());
 		summary.setFailure((int) execution.getExecutionResults().stream()
 				.filter(r -> r.getResult() == ExecutionResultStatus.FAILURE).count());
 		summary.setPending((int) execution.getExecutionResults().stream()
@@ -2016,7 +2025,14 @@ public class ExecutionService implements IExecutionService {
 				executionSummaryResponseDTO = new ExecutionSummaryResponseDTO();
 			}
 			executionSummaryResponseDTO.setTotalScripts(executionSummaryResponseDTO.getTotalScripts() + 1);
-			this.setExecutionSummaryCount(executionSummaryResponseDTO, executionResult.getResult());
+
+			ExecutionResultStatus result = executionResult.getResult();
+			ExecutionStatus status = executionResult.getStatus();
+			if (status == ExecutionStatus.INPROGRESS) {
+				result = ExecutionResultStatus.INPROGRESS;
+			}
+
+			this.setExecutionSummaryCount(executionSummaryResponseDTO, result);
 
 			moduleSummaryMap.put(moduleName, executionSummaryResponseDTO);
 		}
@@ -2038,7 +2054,7 @@ public class ExecutionService implements IExecutionService {
 
 				// Calculate percentages (assuming all counters are non-zero)
 				if (totalScripts > 0) {
-					summaryDTO.setSuccessPercentage((double) summaryDTO.getSuccess() / totalScripts * 100);
+					summaryDTO.setSuccessPercentage(Math.round((double) summaryDTO.getSuccess() / totalScripts * 100));
 				}
 
 				// Update the map with the modified DTO
