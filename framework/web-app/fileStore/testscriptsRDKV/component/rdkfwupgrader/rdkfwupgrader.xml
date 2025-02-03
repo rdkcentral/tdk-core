@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<xml>
+  <module testGroup="Component" name="rdkfwupgrader">
+    <primitiveTests>
+      <primitiveTest name="rdkfwupgrader_RunCommand" id=" " version="2">
+        <function>TestMgr_rdkfwupdater_RunCommand</function>
+        <parameters>
+          <parameter name="command" value=""/>
+          <parameter name="argument" value="NULL"/>
+          <parameter name="result_empty" value="0"/>
+	  <parameter name="result_size_empty" value="0"/>
+	  <parameter name="result_size" value="0"/>"
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_makeHttpHttps" id=" " version="2">
+        <function>TestMgr_rdkfwupdater_makeHttpHttps</function>
+        <parameters>
+          <parameter name="string" value=""/>
+          <parameter name="string_size" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_MemDLAlloc" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_MemDLAlloc</function>
+        <parameters>
+          <parameter name="allocate_size" value=""/>
+          <parameter name="null_param" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_stripinvalidchar" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_stripinvalidchar</function>
+        <parameters>
+          <parameter name="string" value=""/>
+          <parameter name="string_size" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_getJsonRpc" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_getJsonRpc</function>
+        <parameters>
+          <parameter name="null_param" value="0"/>
+          <parameter name="string" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_getJRPCTokenData" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_getJRPCTokenData</function>
+        <parameters>
+          <parameter name="null_token" value="0"/>
+          <parameter name="null_tokenSize" value="0"/>
+          <parameter name="string" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_get_system_uptime" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_get_system_uptime</function>
+        <parameters>
+          <parameter name="null_param" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_getMetaDataFile" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_getMetaDataFile</function>
+        <parameters>
+          <parameter name="directory" value=""/>
+          <parameter name="null_param" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_mergeLists" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_mergeLists</function>
+        <parameters>
+          <parameter name="list1" value=""/>
+          <parameter name="list2" value=""/>
+          <parameter name="null_list1" value="0"/>
+          <parameter name="null_list2" value="0"/>
+        </parameters>
+      </primitiveTest>
+    </primitiveTests>
+  </module>
+</xml>
