@@ -351,4 +351,69 @@
                   <resultGeneration useMethodTag="framerate_check_negative_scenario" />
              </testStep>
         </testCase>
+        
+	<!--- Test case 09 -->
+        <testCase testCaseId="FR_09" testCaseName="FrameRate_setCollectionFrequency_EmptyValue_Test" desc="Validate the response by setting empty value in setCollectionFrequency">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setCollectionFrequency_EmptyValue_Test" method="Set_Collection_Frequency_Negative">
+                     <params>
+                         <param tag="frequency" value="" />
+                     </params>
+                     <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 10 -->
+        <testCase testCaseId="FR_10" testCaseName="FrameRate_setCollectionFrequency_InvalidValue_Test" desc="Validate the response by setting invalid value in setCollectionFrequency">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setCollectionFrequency_InvalidValue_Test" method="Set_Collection_Frequency_Negative">
+                  <params>
+                         <param tag="frequency" value="invalid" />
+                  </params>
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 11 -->
+        <testCase testCaseId="FR_11" testCaseName="FrameRate_setCollectionFrequency_NoParam_Test" desc="Validate the response in setCollectionFrequency with no parameter passed">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setCollectionFrequency_NoParam_Test" method="Set_Collection_Frequency_Negative">
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 12 -->
+        <testCase testCaseId="FR_12" testCaseName="FrameRate_setCollectionFrequency_NegativeValue_Test" desc="Validate the response by setting negative value in setCollectionFrequency">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setCollectionFrequency_NegativeValue_Test" method="Set_Collection_Frequency_Negative">
+                  <params>
+                         <param tag="frequency" value="-10" />
+                  </params>
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 13 -->
+        <testCase testCaseId="FR_13" testCaseName="FrameRate_updateFps_NoParam_Test" desc="Validate the response in updateFps with no parameter passed">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="updateFps_NoParam_Test" method="Update_FPS_Value_Negative">
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 14 -->
+        <testCase testCaseId="FR_14" testCaseName="FrameRate_setDisplayFrameRate_NoParam_Test" desc="Validate the response in setDisplayFrameRate with no parameter passed">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setDisplayFrameRate_NoParam_Test" method="Set_Display_FrameRate">
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
+
+        <!--- Test case 15 -->
+        <testCase testCaseId="FR_15" testCaseName="FrameRate_setFrmMode_NoParam_Test" desc="Validate the response in setFrmMode with no parameter passed">
+             <testCaseInfo testCaseType="direct" />
+             <testStep testStepId="1" name="setFrmMode_NoParam_Test" method="Set_Frm_Mode_Negative">
+                  <resultGeneration useMethodTag="framerate_check_negative_scenario" />
+             </testStep>
+        </testCase>
 </testPlugin>
