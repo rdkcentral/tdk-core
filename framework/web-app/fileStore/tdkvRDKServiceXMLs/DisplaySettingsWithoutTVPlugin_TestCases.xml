@@ -105,7 +105,10 @@
     <!-- Test case 04 -->
     <testCase testCaseId="DSWTV_4" testCaseName="Check_Connected_AudioPorts_Without_TV_Connected"  desc="Checks whether getConnectedAudioPorts API does not return HDMI0 when TV is not connected">
         <testCaseInfo testCaseType="direct"/>
-        <testStep testStepId="1" name="Check_AudioPorts_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_AudioPorts">
+	<testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+	<testStep testStepId="2" name="Check_AudioPorts_Connected_Status" pluginName="DisplaySettings" method="Get_Connected_AudioPorts">
             <resultGeneration useMethodTag="check_empty_audio_ports" arguments="HDMI0"/>
         </testStep>
     </testCase>
@@ -120,6 +123,79 @@
             <resultGeneration useMethodTag="hdcpprofile_get_general_info" arguments="get_hdcp_status_without_tv">
                 <expectedValues usePreviousResult="true" Id="1" useMethodTag="display_get_isconnected_status" />
             </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 06 -->
+    <testCase testCaseId="DSWTV_6" testCaseName="Check_GetCurrentResolution_Status_Without_TV_Connected"  desc="Checks getCurrentResolution API response when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+        <testStep testStepId="2" name="Get_CurrentResolution_Status" method="Get_Current_Resolution" pluginName="DisplaySettings">
+	    <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 07 -->
+    <testCase testCaseId="DSWTV_7" testCaseName="Check_SetCurrentResolution_Status_Without_TV_Connected"  desc="Checks setCurrentResolution API response when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_SetCurrentResolution_Status" method="Set_Current_Resolution" pluginName="DisplaySettings">
+	    <params>
+		    <param tag="videoDisplay" value="HDMI0" />
+		    <param tag="resolution" value = "720p" />
+		    <param tag="persist" value = "true" />
+            </params>	
+	    <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 08 -->
+    <testCase testCaseId="DSWTV_8" testCaseName="Check_GetDefaultResolution_Status_Without_TV_Connected"  desc="Checks getDefaultResolution API response when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_GetDefaultResolution_Status" method="Get_Default_Resolution" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 09 -->
+    <testCase testCaseId="DSWTV_9" testCaseName="Check_PortName_Status_Without_TV_Connected"  desc="Checks portname API response when TV is not connected">
+        <testCaseInfo testCaseType="direct"/>
+	<testCasePreRequisite>
+	<prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="DisplayInfo" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DisplayInfo" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DisplayInfo" />
+                <params>
+                  <param tag="callsign" value="DisplayInfo" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,DisplayInfo" />
+                <params>
+                  <param tag="plugin" value="DisplayInfo" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,DisplayInfo" expectedValues="activated"/>
+            </testStep>
+        </prerequisite>
+        </testCasePreRequisite>
+
+	<testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
+            <resultGeneration useMethodTag="display_is_connected" arguments="check_tv_connected"/>
+        </testStep>
+        <testStep testStepId="2" name="Check_PortName_Status" method="DisplayInfo_GetPortname" pluginName="DisplayInfo">
+            <resultGeneration useMethodTag="empty_result_validation" arguments="empty_result_validation"/>
         </testStep>
     </testCase>
 </testPlugin>

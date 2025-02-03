@@ -442,4 +442,20 @@
                 </resultGeneration>
             </testStep>
        </testCase>    
+
+       <!-- Test case 23 -->
+       <testCase testCaseId="DI_23" testCaseName="DeviceInfo_Check_SystemInfo_API_Date_Matches_DUT_Date" desc="Check if the date returned by the systeminfo API matches the DUT date">
+	    <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Get_SystemInfo_API_Date" method="Get_System_Info" saveResult="true">
+		<resultGeneration useMethodTag="deviceinfo_get_system_info" arguments="get_systeminfo_date"/>
+	    </testStep>
+	    <testStep testStepId="2" name="Get_DUT_Date"  action="externalFnCall" saveResult="true">
+		    <resultGeneration useMethodTag="get_dut_date" />
+	    </testStep>
+	    <testStep testStepId="3" name="Compare_SystemInfo_API_Date_With_DUT_Date" action="externalFnCall">
+                <resultGeneration useMethodTag="validate_dates">
+                  <arguments usePreviousResult="true" Id="1,2" useMethodTag="get_previous_dates"/>
+                </resultGeneration>
+            </testStep>
+       </testCase>
 </testPlugin>

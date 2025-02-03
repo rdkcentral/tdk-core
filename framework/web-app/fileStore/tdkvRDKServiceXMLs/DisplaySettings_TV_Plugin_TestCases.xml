@@ -4110,4 +4110,65 @@
                           <resultGeneration useMethodTag="display_settings_check_set_operation" arguments="check_set_failed" />
                 </testStep>
        </testCase>
+
+       <!-- Test case 120 -->
+       <testCase testCaseId="DS_120" testCaseName="DisplaySettings_Check_Display_Connected_Status_After_Light_Sleep" desc="Verify that the getConnectedVideoDisplays method returns the TV connected status when the device in light sleep mode">
+            <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
+                  <resultGeneration useMethodTag="display_connected_status" />
+            </testStep>
+            <testStep testStepId="2" name="Get_Power_State" method="Get_Power_State" pluginName="System" saveResult="true">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+            </testStep>
+            <testStep testStepId="3" name="Get_Available_StandBy_Modes" method="Get_Available_StandBy_Modes" pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <resultGeneration useMethodTag="system_get_available_standby_modes" arguments="check_mode" expectedValues="LIGHT_SLEEP" />
+            </testStep>
+            <testStep testStepId="4" name="Get_Preferred_StandBy_Mode" method="Get_Preferred_StandBy_Mode" pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <resultGeneration useMethodTag="system_get_preferred_standby_mode" />
+            </testStep>
+            <testStep testStepId="5" name="Set_Preferred_StandBy_Mode" method="Set_Preferred_StandBy_Mode"  pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <params>
+                  <param tag="standbyMode" value="LIGHT_SLEEP" />
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="6" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="LIGHT_SLEEP"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="7" name="Get_Power_State" method="Get_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="2" useMethodTag="usbaccess_set_power_state"/>
+                <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="STANDBY,LIGHT_SLEEP"/>
+            </testStep>
+            <testStep testStepId="8" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" >
+                  <resultGeneration useMethodTag="display_connected_status" />
+            </testStep>
+
+       <testCasePostRequisite>
+         <postrequisite requisiteId="1" requisiteName="Reverting_PowerState_ON">
+            <testStep testStepId="1" name="Check_power_state" method="Get_Power_State" saveResult="true" pluginName="System">
+                <resultGeneration useMethodTag="usbaccess_get_power_state"/>
+            </testStep>
+            <testStep testStepId="2" name="Set_Power_State" method="Set_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <params>
+                  <param tag="standbyReason"  useDefault="true" />
+                  <param tag="powerState"  value="ON"/>
+                </params>
+                <resultGeneration useMethodTag="system_check_set_operation" />
+            </testStep>
+            <testStep testStepId="3" name="Check_power_state" method="Get_Power_State" pluginName="System">
+                <conditionalExecution enable="true" Id="1" useMethodTag="system_check_power_state_status"/>
+                <resultGeneration useMethodTag="usbaccess_get_power_state" expectedValues="ON" />
+            </testStep>
+         </postrequisite>
+       </testCasePostRequisite>
+       </testCase>
 </testPlugin>

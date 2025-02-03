@@ -97,6 +97,8 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if len(arg) and arg[0] == "exceptional_cases":
                 info["Test_Step_Status"] = "SUCCESS"
                 info["appStatus"] = "FALSE"
+            elif len(arg) and arg[0] == "empty_result_validation":
+                info["Test_Step_Status"] = "SUCCESS"
 
         # DeviceInfo Plugin Response result parser steps
         elif tag == "deviceinfo_get_system_info":
@@ -121,6 +123,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                         info["Test_Step_Status"] = "SUCCESS"
                     else:
                         info["Test_Step_Status"] = "FAILURE"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+
+            elif arg[0] == "get_systeminfo_date":
+                date = result.get("time")
+                if date:
+                    api_info = datetime.datetime.strptime(date, "%a, %d %b %Y %H:%M:%S")
+                    info["systeminfo_day"] = api_info.day
+                    info["systeminfo_month"] = api_info.month
+                    info["systeminfo_year"] = api_info.year
                 else:
                     info["Test_Step_Status"] = "FAILURE"
 
@@ -3833,6 +3845,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # DWTV Response result parser steps
+        elif tag == "empty_result_validation":
+            if result:
+                info["Test_Step_Status"] = "FAILURE"
+            else:
+                info["Test_Step_Status"] = "SUCCESS" 
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             info["Test_Step_Status"] = "FAILURE"
@@ -4395,6 +4414,21 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["imagename"] = testStepResults[0].get("image")
             info["yocto"] = testStepResults[0].get("yocto")
+
+        elif tag =="get_previous_dates":
+            api_date_list = [] 
+            dut_date_list = []
+            testStepResults1 = list(testStepResults[0].values())[0]
+            api_date_list.append(testStepResults1[0].get("systeminfo_day"))
+            api_date_list.append(testStepResults1[0].get("systeminfo_month"))
+            api_date_list.append(testStepResults1[0].get("systeminfo_year"))
+            info["api_date_list"] = api_date_list
+            
+            testStepResults2 = list(testStepResults[1].values())[0]
+            dut_date_list.append(testStepResults2[0].get("dut_day"))
+            dut_date_list.append(testStepResults2[0].get("dut_month"))
+            dut_date_list.append(testStepResults2[0].get("dut_year"))
+            info["dut_date_list"] = dut_date_list
 
         # OCDM Plugin Response result parser steps
         elif tag == "ocdm_get_all_drms":
@@ -6503,6 +6537,36 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
 
+        elif tag == "get_dut_date":
+            try:
+                command = 'date'
+                output = executeCommand(execInfo, command)
+                output = str(output).split("\n")[1].strip()
+                if output:
+                    dut_info = datetime.datetime.strptime(output, "%a %b %d %H:%M:%S %Z %Y")
+                    info["dut_day"] = dut_info.day
+                    info["dut_month"] = dut_info.month
+                    info["dut_year"] = dut_info.year
+                else:
+                    print("Empty output from command execution")
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["Test_Step_Status"] = "FAILURE"
+                print(e)
+
+        elif tag == "validate_dates":
+            data = arg
+            list1 = [int(item.strip("[] ")) for item in data[:3]]
+            list2 = [int(item.strip("[] ")) for item in data[3:]]
+            if list1 == list2:
+                message = "The dates from systeminfo API and DUT are same"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                message = "The dates from systeminfo API and DUT are different"
+                info["Test_Step_Message"] = message
+                info["Test_Step_Status"] = "FAILURE"
+        
         elif tag == "get_plugin_status_value":
             if arg[0] == "activated":
                 info["plugin_status_value"] = "no"
