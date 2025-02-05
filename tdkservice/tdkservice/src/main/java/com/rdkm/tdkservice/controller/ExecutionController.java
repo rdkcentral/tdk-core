@@ -1130,4 +1130,21 @@ public class ExecutionController {
 		}
 	}
 
+	/**
+	 * Checks if any execution result is failed.
+	 *
+	 * @param executionId the UUID of the execution to check
+	 * @return a ResponseEntity containing a Boolean indicating whether the
+	 *         execution result is failed
+	 */
+	@Operation(summary = "Check if any execution result is failed")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution result is failed"),
+			@ApiResponse(responseCode = "500", description = "Failed to check execution result") })
+	@GetMapping("/isExecutionResultFailed")
+	public ResponseEntity<Boolean> isExecutionResultFailed(@RequestParam UUID executionId) {
+		LOGGER.info("Check if execution result is failed called");
+		boolean isFailed = executionService.isExecutionResultFailed(executionId);
+		return ResponseEntity.status(HttpStatus.OK).body(isFailed);
+	}
+
 }

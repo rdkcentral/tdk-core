@@ -1489,15 +1489,6 @@ public class ExportExcelService implements IExportExcelService {
         if (logData == null || logData.isEmpty()) {
             return; // Skip if log data is not found
         }
-
-        // Create a folder for the module if it doesn't exist
-        zipOutputStream.putNextEntry(new ZipEntry(script.getModule().getName() + "/"));
-        zipOutputStream.closeEntry();
-
-        // Create a folder for the script inside the module folder
-        zipOutputStream.putNextEntry(new ZipEntry(script.getModule().getName() + "/" + scriptName + "/"));
-        zipOutputStream.closeEntry();
-
         // Add script log data to the script folder in .txt format
         zipOutputStream.putNextEntry(
                 new ZipEntry(script.getModule().getName() + "/" + scriptName + "/" + scriptName + "_Log.txt"));

@@ -2326,4 +2326,31 @@ public class ExecutionService implements IExecutionService {
 
 	}
 
+	/**
+	 * Method that checks if any execution result is failed.
+	 *
+	 * @param executionId the UUID of the execution to check
+	 * @return true if any execution result is failed
+	 */
+	@Override
+	public boolean isExecutionResultFailed(UUID executionId) {
+		LOGGER.info("Checking if execution result failed for execution id: {}", executionId);
+		Execution execution = executionRepository.findById(executionId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", "id" + executionId));
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+		if (executionResults.isEmpty()) {
+			LOGGER.error("No execution results found for execution with id: {}", executionId);
+			throw new ResourceNotFoundException("Execution Results", "for Execution ID: " + executionId.toString());
+		}
+		boolean isFailed = false;
+		for (ExecutionResult executionResult : executionResults) {
+			if (executionResult.getResult() == ExecutionResultStatus.FAILURE) {
+				isFailed = true;
+				break;
+			}
+		}
+		LOGGER.info("Execution result failed status for execution id: {} is: {}", executionId, isFailed);
+		return isFailed;
+	}
+
 }

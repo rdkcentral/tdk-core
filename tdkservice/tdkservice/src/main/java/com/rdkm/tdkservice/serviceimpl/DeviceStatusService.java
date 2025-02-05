@@ -70,6 +70,11 @@ public class DeviceStatusService {
 		List<Device> devices = deviceRepository.findAll();
 		for (Device device : devices) {
 			try {
+				// Check if the device still exists in the repository
+				if (!deviceRepository.existsById(device.getId())) {
+					LOGGER.warn("Device not found: " + device.getName());
+					continue;
+				}
 				DeviceStatus deviceStatus = fetchDeviceStatus(device);
 				if (deviceStatus != null) {
 

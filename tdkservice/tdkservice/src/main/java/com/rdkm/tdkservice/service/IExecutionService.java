@@ -282,4 +282,12 @@ public interface IExecutionService {
 	 */
 	List<ExecutionListDTO> getExecutionDetailsByFilter(ExecutionSearchFilterDTO filterRequest);
 
+	/**
+	 * This method is used to return true if any execution result is failed
+	 * 
+	 * @param executionId - the execution ID
+	 * @return true if the execution result is failed
+	 */
+	boolean isExecutionResultFailed(UUID executionId);
+
 }
