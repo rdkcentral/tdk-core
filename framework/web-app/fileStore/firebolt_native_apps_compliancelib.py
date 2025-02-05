@@ -325,10 +325,9 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
         command = command  + " use_appsrc ";
     #Feature to modify hls url to aamp url based on configuration
     if (use_aamp_for_hls == "yes") or (use_aamp_for_dash == "yes"):
-        testUrl_list = testUrl.split();
+        testUrl_list = test_url.split();
         url_list = set()
         #Check if HLS URL is present in command
-        url_list = (set(testUrl_list) & set(HLS_URL));
         for url in testUrl_list:
             if url.endswith(".m3u8") and (use_aamp_for_hls == "yes"):
                 url_list.add(url);
@@ -337,14 +336,14 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
                 url_list.add(url);
                 dash_url = True
         if url_list:
-            if "trickplay" in testName:
+            if "trickplay" in test_name:
                 url_list.clear()
                 if hls_url:
                     url_list.add(MediaValidationVariables.video_src_url_hls_h264_iframe);
-                    command = command.replace(testUrl,MediaValidationVariables.video_src_url_hls_h264_iframe)
+                    command = command.replace(test_url,MediaValidationVariables.video_src_url_hls_h264_iframe)
                 elif dash_url:
                     url_list.add(MediaValidationVariables.video_src_url_dash_h264_iframe);
-                    command = command.replace(testUrl,MediaValidationVariables.video_src_url_dash_h264_iframe)
+                    command = command.replace(test_url,MediaValidationVariables.video_src_url_dash_h264_iframe)
             for url in url_list:
                 #Change hls generic url to aamp url
                 url_updated = url.replace("https","aamps",1).replace("http","aamp",1);
