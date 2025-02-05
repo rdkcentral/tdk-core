@@ -231,6 +231,7 @@ video_src_url_aac = test_streams_base_path + "DASH_H264_AAC/atfms_291_dash_tdk_a
 video_src_url_96khz_aac = test_streams_base_path + "TDK_Asset_Sunrise_AAC_96kHz.mp4"
 video_src_url_96khz_opus = test_streams_base_path + "TDK_Asset_Sunrise_OPUS_96kHz.mp4"
 video_src_url_44khz_aac =  test_streams_base_path + "TDK_Asset_Sunrise_AAC_44kHz.mp4"
+video_src_url_48khz_aac  = test_streams_base_path + "TDK_Asset_Sunrise_30fps.mp4"
 
 #Video bitrate URL
 video_src_url_bitrate_h264 = ""

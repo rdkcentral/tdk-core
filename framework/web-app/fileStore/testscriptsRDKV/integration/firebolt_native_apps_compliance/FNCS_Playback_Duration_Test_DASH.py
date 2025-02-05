@@ -52,6 +52,9 @@
     <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
+    <!--  -->
+    <box_type>RPI-CLIENT</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>

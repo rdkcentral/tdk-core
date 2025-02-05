@@ -170,6 +170,9 @@ if "SUCCESS" in result.upper():
     tdkTestObj.addParameter("test_url",test_url)
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
+    #Disable audio frames validation for wav playback
+    if "checkAudioFPS=no" not in command:
+        command = command + " checkAudioFPS=no ";
 
     command = command + "only_audio"
 

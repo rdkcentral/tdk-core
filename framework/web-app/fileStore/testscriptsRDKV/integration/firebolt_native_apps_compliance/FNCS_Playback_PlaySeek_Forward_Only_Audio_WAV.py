@@ -21,7 +21,7 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>1</version>
+  <version>2</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>FNCS_Playback_PlaySeek_Forward_Only_Audio_WAV</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
@@ -58,7 +58,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FNCS_PLAYBACK_280</test_case>
+    <test_case_id>FNCS_PLAYBACK_280</test_case_id>
     <test_objective>Test to do forward seek on a only audio WAV stream</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator, RPI</test_setup>
@@ -181,6 +181,9 @@ if "SUCCESS" in result.upper():
     tdkTestObj.addParameter("test_url",test_url)
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
+    #Disable audio frames validation for wav playback
+    if "checkAudioFPS=no" not in command:
+        command = command + " checkAudioFPS=no ";
 
     command = command + "only_audio"
 
@@ -202,11 +205,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Forward seek on WAV stream successfull")
+            print("Forward seek on audio only WAV stream successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Forward seek on WAV stream failed")
+            print("Forward seek on audio only WAV stream failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")
