@@ -87,10 +87,10 @@ export class ScriptListComponent {
   selectedRowCount = 0;
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  scriptPageSize = 7;
-  testsuitePageSize = 7;
+  scriptPageSize = 10;
+  testsuitePageSize = 10;
   public gridApi!: GridApi;
-  allPageSize = 7;
+  allPageSize = 10;
   currentPage = 0;
   paginatedSuiteData:SuiteModule[]=[];
   paginatedScriptData:Module[]=[];

@@ -72,7 +72,6 @@ export class EditRdkCertificationComponent {
     this.service.getFileContent(fileName).subscribe({
       next: (res) => {
         const blob = new Blob([res.content], { type: res.content.type || 'text/plain' });
-        console.log("Content", blob);
         blob.text().then((text) => {
           this.certificationFormGroup.get('pythonEditor')?.setValue(text);
         });
@@ -101,10 +100,8 @@ export class EditRdkCertificationComponent {
    */
   onSubmit() : void {
     const pythonContent = this.certificationFormGroup.value.pythonEditor;
-    console.log("Content", pythonContent);
     const filename = `${this.certificationFormGroup.value.fileName}.py`;
     const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
-    console.log("Script File", scriptFile);
     this.service.createScript(scriptFile).subscribe({
       next: (res) => {
         this._snakebar.open('Config file updated sucessfully', '', {

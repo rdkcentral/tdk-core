@@ -91,10 +91,8 @@ export class CreateRdkCertificationComponent {
       return
     } else {
       const pythonContent = this.certificationFormGroup.value.pythonEditor;
-      console.log("Content", pythonContent);
       const filename = `${this.certificationFormGroup.value.fileName}.py`;
       const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
-      console.log("Script File", scriptFile);
       this.service.createScript(scriptFile).subscribe({
         next: (res) => {
           this._snakebar.open(res, '', {

@@ -59,7 +59,7 @@ h6 {
 }
 .form-control,
 .form-select {
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   font-size: 0.8rem !important;
 }
 .radio-text {
@@ -67,11 +67,11 @@ h6 {
 }
 .rdkradio,
 .form-check-input {
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
 }
 .form-check-input:checked {
   background-color: #0e6f87;
-  border-color: #0e6f8794;
+  border-color: gray;
 }
 .exection-name {
   background-color: #80808024;
@@ -129,10 +129,10 @@ h6 {
   .multiselect-dropdown
   .dropdown-btn
   .dropdown-multiselect__caret::before {
-  border-color: #0e6f8794 transparent !important;
+  border-color: gray transparent !important;
 }
 ::ng-deep .multiselect-dropdown .dropdown-btn {
-  border: 1px solid #0e6f8794 !important;
+  border: 1px solid gray !important;
   font-size: 0.8rem !important;
 }
 .time-picker {
@@ -156,7 +156,7 @@ h6 {
 }
 ::ng-deep .bs-timepicker-field {
   font-size: 0.8rem;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   height: 35px;
 }
 ::ng-deep .form-control:focus {
@@ -167,7 +167,7 @@ h6 {
   font-size: 0.8rem;
 }
 .group-texts {
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
 }
 .calendar-icon {
   color: #5cb85c;
@@ -254,7 +254,7 @@ h6 {
 }
 .execution-result {
   height: 100px;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   border-radius: 5px;
   padding: 10px;
   display: block;
@@ -263,3 +263,15 @@ h6 {
 .width-row{
   width: 100%;
 }
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
+}
+::ng-deep.ag-ltr .ag-header-select-all{
+  position: absolute !important;
+  top:5px !important;
+}
+.toggle-add{
+  margin-left: 5px;
+}
+

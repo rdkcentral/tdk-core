@@ -16,7 +16,7 @@ limitations under the License.
 <div class="container">
     <div class="row radiobox-row mt-1">
         <div class="col-md-12 radiobox">
-            <h3 class="heading">Select the device category :</h3>
+            <h3 class="heading">Select the RDK flavor :</h3>
             <div class="rdkgroup">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDeviceCategory" (change)="ischecked('RDKV')" >
@@ -56,10 +56,10 @@ limitations under the License.
                     </div>
                     <div class="col"></div>
                 </div>
-                <div style="width: 100%; height: auto; margin-top: 5px;" [class]="themeClass">
-                    <ag-grid-angular
+                <div style="margin-top: 5px; margin-bottom:12px;" [class]="themeClass">
+                    <ag-grid-angular style="width: 100%; height: 455px;"
                     [columnDefs]="columnDefs"
-                    [defaultColDef]="{sortable: true}"
+                    [defaultColDef]="defaultColDef"
                     [rowData]="rowData"
                     [pagination]="true"
                     [paginationPageSize]="paginationPageSize"
@@ -67,8 +67,7 @@ limitations under the License.
                     (gridReady)="onGridReady($event)"
                     [animateRows]="true"
                     [context]="this"
-                    [domLayout]="'autoHeight'"
-                   
+                    [gridOptions]="gridOptions"
                   ></ag-grid-angular>
             </div>
     </div>

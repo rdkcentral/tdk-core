@@ -45,8 +45,8 @@ export class DevicesComponent {
   @ViewChild('staticBackdrop', {static: false}) staticBackdrop?:ElementRef;
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [5, 10, 20, 50];
   configureName!: string;
   selectedRowCount = 0;
   selectedDeviceCategory : string = 'RDKV';
@@ -93,13 +93,19 @@ export class DevicesComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onViewClick:this.openModal.bind(this),
+        // onViewClick:this.openModal.bind(this),
         onDownloadClick:this.downloadXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
     }
   ];
-
+  public defaultColDef: ColDef = {
+    flex: 1,
+    menuTabs: ['filterMenuTab'],
+  };
+  gridOptions = {
+    rowHeight: 35,
+  };
 
   constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
     private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
@@ -184,9 +190,6 @@ export class DevicesComponent {
     localStorage.setItem('deviceCategoryName', this.categoryName);
   }
 
-  gridOptions = {
-    domLayout: 'autoHeight'
-  };
   /**
    * Event handler for when the grid is ready.
    * @param params - The GridReadyEvent object containing the grid API.
@@ -329,32 +332,32 @@ export class DevicesComponent {
  /**
    * open the modal when click on view button in device table
   */  
-  openModal(params:any){
-    this.dialog.open( DialogDelete,{
-      width: '99%',
-      height: '93vh',
-      maxWidth:'100vw',
-      panelClass: 'custom-modalbox',
-      data:{
-        agentMonitorPort: params.agentMonitorPort,
-        oemName : params.oemName,
-        deviceTypeName : params.deviceTypeName,
-        category :  params.category,
-        id :  params.id,
-        logTransferPort  :  params.logTransferPort,
-        macId :  params.macId,
-        socName :  params.socName,
-        statusPort :  params.statusPort,
-        deviceIp : params.deviceIp,
-        deviceName :   params.deviceName,
-        devicePort :  params.devicePort,
-        thunderEnabled :  params.thunderEnabled,
-        thunderPort :  params.thunderPort,
-        userGroupName :  params.userGroupName,
-        devicePortsConfigured: params.devicePortsConfigured
-      }
-    })
-  }
+  // openModal(params:any){
+  //   this.dialog.open( DialogDelete,{
+  //     width: '99%',
+  //     height: '93vh',
+  //     maxWidth:'100vw',
+  //     panelClass: 'custom-modalbox',
+  //     data:{
+  //       agentMonitorPort: params.agentMonitorPort,
+  //       oemName : params.oemName,
+  //       deviceTypeName : params.deviceTypeName,
+  //       category :  params.category,
+  //       id :  params.id,
+  //       logTransferPort  :  params.logTransferPort,
+  //       macId :  params.macId,
+  //       socName :  params.socName,
+  //       statusPort :  params.statusPort,
+  //       deviceIp : params.deviceIp,
+  //       deviceName :   params.deviceName,
+  //       devicePort :  params.devicePort,
+  //       thunderEnabled :  params.thunderEnabled,
+  //       thunderPort :  params.thunderPort,
+  //       userGroupName :  params.userGroupName,
+  //       devicePortsConfigured: params.devicePortsConfigured
+  //     }
+  //   })
+  // }
    /**
    * Download device details as xml format based on device name
    */

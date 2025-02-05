@@ -16,7 +16,7 @@ limitations under the License.
 <div class="container">
   <div class="row radiobox-row mt-1">
       <div class="col-md-12 radiobox">
-        <h3 class="heading">Select Category :</h3>
+        <h3 class="heading">Select the RDK flavor :</h3>
         <div class="rdkgroup">
             <div class="form-check form-check-inline">
               <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedCategory"
@@ -180,7 +180,7 @@ limitations under the License.
                       <mat-paginator
                       [length]="scriptFilteredData.length"
                       [pageSize]="allPageSize"
-                      [pageSizeOptions]="[5, 7, 10, 20]"
+                      [pageSizeOptions]="[5, 10, 20, 50]"
                       (page)="onPageChangeScript($event)" class="script-pagination">
                     </mat-paginator>
                     </div>
@@ -276,7 +276,7 @@ limitations under the License.
                         <mat-paginator
                         [length]="testSuiteFilteredData.length"
                         [pageSize]="allPageSize"
-                        [pageSizeOptions]="[5, 7, 10, 20]"
+                        [pageSizeOptions]="[5, 10, 20, 50]"
                         (page)="onPageChange($event)" class="script-pagination">
                       </mat-paginator>
                       </div>

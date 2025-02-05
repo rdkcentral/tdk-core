@@ -57,7 +57,7 @@ body, *:not(.material-icons) {
     background-color: #fff;
     font-size: 0.8rem;
     padding: 5px 15px;
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     border-radius: 6px;
     font-weight: 500;
     letter-spacing: 0.5px;
@@ -68,7 +68,7 @@ body, *:not(.material-icons) {
     color: #fff;
     font-size: 0.8rem;
     padding: 5px 15px;
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     border-radius: 6px;
     letter-spacing: 0.5px;
     cursor: pointer;
@@ -99,6 +99,7 @@ body, *:not(.material-icons) {
 .custom-title{
     margin-bottom: 0;
     font-size: 1rem;
+    color: #06667d;
 }
 .table-sec{
     padding: 0 25px;

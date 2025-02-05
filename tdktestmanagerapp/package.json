@@ -28,6 +28,7 @@
     "@materia-ui/ngx-monaco-editor": "^6.0.0",
     "ag-grid-angular": "^32.1.0",
     "ag-grid-community": "^32.1.0",
+    "angular-moment-timezone": "^1.7.1",
     "bootstrap": "^5.3.3",
     "express": "^4.18.2",
     "file-saver": "^2.0.5",

@@ -74,11 +74,12 @@ export class ChangePasswordComponent implements OnInit {
    * Represents the errorMessage of the application.
    */
   errorMessage: any = {};
+  loggedInUser: any={};
 
   constructor(private formBuilder: FormBuilder, private router: Router,
     private loginservice: LoginService, private _snakebar: MatSnackBar,
   ) {
-
+    this.loggedInUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
   }
 
   /**
@@ -87,7 +88,7 @@ export class ChangePasswordComponent implements OnInit {
   ngOnInit(): void {
 
     this.changePasswordForm = this.formBuilder.group({
-      username: ['', [Validators.required, Validators.minLength(4)]],
+      username: [{value:this.loggedInUser.userName, disabled: true}],
       oldpassword: ['', [Validators.required, Validators.minLength(6)]],
       newpassword: ['', [Validators.required, Validators.minLength(6)]],
       confirmpassword: ['', Validators.required],
@@ -162,7 +163,7 @@ export class ChangePasswordComponent implements OnInit {
       return
     } else {
       let obj = {
-        userName: this.changePasswordForm.value.username,
+        userName: this.loggedInUser.userName,
         oldPassword: this.changePasswordForm.value.oldpassword,
         newPassword: this.changePasswordForm.value.newpassword
       }
@@ -179,9 +180,8 @@ export class ChangePasswordComponent implements OnInit {
 
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this.errorMessage = errmsg.message ? errmsg.message : errmsg.password;
-          this._snakebar.open(this.errorMessage, '', {
+          let errMsgDisplay = err.error;
+          this._snakebar.open(errMsgDisplay, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

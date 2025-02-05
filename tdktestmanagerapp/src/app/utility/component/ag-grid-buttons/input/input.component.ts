@@ -36,7 +36,10 @@ import { FormsModule } from '@angular/forms';
     .invalid{
       border-color:red;
     }
-  
+    ::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}
     `
   ]
 })

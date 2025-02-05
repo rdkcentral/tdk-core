@@ -18,16 +18,18 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../../material/material.module';
-import { ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
+import { ApexChart, ApexDataLabels, ApexFill, ApexPlotOptions, ApexResponsive, ApexTitleSubtitle, ApexXAxis, ApexYAxis, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
 import { FormsModule } from '@angular/forms';
 import { LivelogDialogComponent } from '../livelog-dialog/livelog-dialog.component';
 import { LogfileDialogComponent } from '../logfile-dialog/logfile-dialog.component';
 import { ExecutionService } from '../../../../services/execution.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { firstValueFrom, interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
+import { AnalyzeDialogComponent } from '../../analyze-dialog/analyze-dialog.component';
+import { CrashlogfileDialogComponent } from '../crashlogfile-dialog/crashlogfile-dialog.component';
 
 export type ChartOptions = {
   series: Array<{
@@ -51,7 +53,8 @@ export type ChartOptions = {
   standalone: true,
   imports: [CommonModule,MaterialModule,FormsModule,NgApexchartsModule],
   templateUrl: './details-exe-dialog.component.html',
-  styleUrl: './details-exe-dialog.component.css'
+  styleUrl: './details-exe-dialog.component.css',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsExeDialogComponent {
   @ViewChild("chart") chart!: ChartComponent;
@@ -61,7 +64,7 @@ export class DetailsExeDialogComponent {
   rowData: any = [];
   rowDataSchudle:any =[];
   executionResultData:any;
-  panelOpenState = false;
+  // panelOpenState = false;
   allChecked = false;
   selectedDetails: any[] = [];
   filteredData:any[] = [];
@@ -71,20 +74,32 @@ export class DetailsExeDialogComponent {
   isFlipped = false;
   moduleTableTitle:any;
   moduleTableData:any;
+  analysisTableData: any;
+  analysisSummaryData:any;
   keys: string[] = [];
-  formatLogs: any;
+  analysisKeys:string[] = [];
+  formatLogs!: string;
   executionResultId:any;
   logFileNames: string[] = [];
   executionId!: string;
   liveLogsData:any;
   liveLogDestroy$ = new Subject<void>();
-  devideDetails:any;
+  deviceDetails:any;
   loggedinUser: any;
+  isExpanded = false;
+  maxLength: number = 75;
+  showAnalyzeLink = false;
+  analysisResult: any;
+  executionIdLocalStroge:any;
+  showPopupFlag = false;
 
   constructor(
     public dialogRef: MatDialogRef<DetailsExeDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog:MatDialog, public logFilesDialog:MatDialog, private executionservice: ExecutionService,private _snakebar :MatSnackBar) {
-    
+    @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog:MatDialog,
+     public logFilesDialog:MatDialog, private executionservice: ExecutionService,
+     private _snakebar :MatSnackBar,public analyzeDialog:MatDialog,
+     private changeDetectorRef: ChangeDetectorRef) {
+    this.executionIdLocalStroge = localStorage.getItem('executionId');
     }
   /**
    * Lifecycle hook that is called after data-bound properties of a directive are initialized.
@@ -99,8 +114,16 @@ export class DetailsExeDialogComponent {
     this.resultDetails();
     this.pieChartData();
     this.modulewiseExeSummary();
+    this.analysisSummary();
     let details = this.data.deviceDetails
-    this.devideDetails = details.replace(/\n/g, '<br>');
+    this.deviceDetails = details.replace(/\n/g, '<br>');
+    this.changeDetectorRef.detectChanges();
+  }
+  get displayContent(): string{
+    return this.isExpanded ? this.deviceDetails : this.deviceDetails.slice(0, this.maxLength) + (this.deviceDetails.length > this.maxLength ? '...':'');
+  }
+  toggleMoreLess():void{
+    this.isExpanded = !this.isExpanded;
   }
   /**
    * Generates and sets the options for a pie chart based on the summary data.
@@ -134,8 +157,8 @@ export class DetailsExeDialogComponent {
     ];
 
     const fullColors = [
-      "#00ff00",
-      "#f5425a",
+      "#5BC866",
+      "#F87878",
       "#ffff00",
       "#cccccc",
       "#ff9933",
@@ -160,7 +183,7 @@ export class DetailsExeDialogComponent {
     this.chartOptions = {
       series: filteredData.map(item => item.value),
       chart: {
-        height: 270,
+        height: 130,
         type: 'pie'
       },
       plotOptions: {
@@ -170,7 +193,7 @@ export class DetailsExeDialogComponent {
       },
       labels: filteredData.map(item => item.label),
       legend: {
-        position: 'bottom',
+        position: 'right',
       },
       dcolors: filteredData.map(item => item.color),
       dataLabels: {
@@ -237,17 +260,19 @@ export class DetailsExeDialogComponent {
   togglePanel(parent: any, id:any):void {
     parent.expanded = !parent.expanded;
     this.executionResultId = id;
-    this.panelOpenState = !this.panelOpenState;
-    if (parent.expanded && !parent.details) {
-      this.executionservice.scriptResultDetails(parent.executionResultID).subscribe(res=>{
-        parent.details =JSON.parse(res);
-        let logs = parent.details.logs
-        if(logs !== null){
-          this.formatLogs = logs.replace(/\n/g, '<br>');
-        }
-      })
+    // this.panelOpenState = !this.panelOpenState;
+    if (parent.expanded) {
+      if (!parent.details && parent.executionResultID) {
+        this.executionservice.scriptResultDetails(parent.executionResultID).subscribe(res => {
+          parent.details = JSON.parse(res);
+          const logs = parent.details.logs;
+          parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+          this.changeDetectorRef.detectChanges();
+        });
+      }
     } else {
-      parent.details = null;
+      parent.details = null; 
+      parent.formatLogs = '';
     }
   }
   /**
@@ -390,7 +415,6 @@ export class DetailsExeDialogComponent {
   logFiles():void {
     this.executionservice.getDeviceLogs(this.executionResultId).subscribe(
       (res) => {
-        console.log("Response", res);
         this.logFilesDialog.open( LogfileDialogComponent,{
           width: '50%',
           height: '70vh',
@@ -404,6 +428,21 @@ export class DetailsExeDialogComponent {
       });
    
   }
+  crashLogFiles():void{
+    this.executionservice.getCrashLogs(this.executionResultId).subscribe(
+      (res) => {
+        this.logFilesDialog.open( CrashlogfileDialogComponent,{
+          width: '50%',
+          height: '70vh',
+          maxWidth:'100vw',
+          panelClass: 'custom-modalbox',
+          data:{
+            logFileNames : res,
+            executionId : this.executionResultId
+          },
+        });
+      });
+  }
   /**
    * Closes the dialog and returns a value indicating that the action was not confirmed.
    *
@@ -414,6 +453,7 @@ export class DetailsExeDialogComponent {
    */  
   onClose():void {
     this.dialogRef.close(false);
+    localStorage.removeItem('executionIdLocalStroge');
   }
   /**
    * Repeats the execution of a process using the execution service.
@@ -494,6 +534,33 @@ export class DetailsExeDialogComponent {
   
       const totalData = this.moduleTableData['Total'];
       this.moduleTableTitle.push({ name: 'Total', ...totalData });
+      this.changeDetectorRef.detectChanges(); 
+      },
+      error:(err)=>{
+        let errmsg = JSON.parse(err.error);
+        this._snakebar.open(errmsg.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }
+    })
+  }
+  /**
+   * This method is for showing the table view of analysis summary .
+   */   
+  analysisSummary():void{
+    this.executionservice.getModulewiseAnalysisSummary(this.data.executionId).subscribe({
+      next:(res)=>{
+        this.analysisTableData = JSON.parse(res);
+        this.keys = Object.keys(this.analysisTableData);
+        this.analysisSummaryData = this.keys
+        .filter((key) => key !== 'Total')
+        .map((key) => ({ name: key, ...this.analysisTableData[key] }));
+  
+      const totalData = this.analysisTableData['Total'];
+      this.analysisSummaryData.push({ name: 'Total', ...totalData });
       },
       error:(err)=>{
         let errmsg = JSON.parse(err.error);
@@ -514,11 +581,228 @@ export class DetailsExeDialogComponent {
    * @returns {void}
    */
   dataUpdate():void{
-    this.executionservice.resultDetails(this.data.executionId).subscribe(res=>{ 
+    this.executionservice.resultDetails(this.executionIdLocalStroge).subscribe(res=>{
       this.data = JSON.parse(res);
       this.pieChartData();
       this.resultDetails();
+      this.changeDetectorRef.detectChanges();
     })
+  }
+  /**
+   * This method is for tabchange .
+   */ 
+  onTabClick(event: any): void {
+    const label = event.tab.textLabel;
+    this.changeDetectorRef.detectChanges();
+  }
+  /**
+   * This method is open the modal for link the JIRA ticket.
+   */ 
+  openAnalyzeDialog(patent:any):void{
+    const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, {
+      width: '99%',
+      height: '96vh',
+      maxWidth: '90vw',
+      panelClass: 'custom-modalbox',
+      data: patent,
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.dataUpdate();
+      }
+    });
+  }
+   /**
+   * This method is LInk the JIRA ticket of the scripts.
+   */   
+  openAnalyzeLinkDialog(parent:any, isAnalyze:any):void{
+    if(parent.analysisTicket){
+      this.executionservice.getAnalysisResult(parent.executionResultID)
+      .subscribe(async (res) => {
+        this.analysisResult = JSON.parse(res); 
+        this.analysisResult.name = parent.name; 
+        this.analysisResult.executionResultID = parent.executionResultID; 
+        const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, { 
+          width: '99%',
+          height: '96vh',
+          maxWidth: '90vw',
+          panelClass: 'custom-modalbox',
+          data: this.analysisResult 
+        })
+        const dialogResult = await firstValueFrom(dialogRef.afterClosed());  
+        if (dialogResult) {
+          this.dataUpdate();
+        }
+      });
+    }
+  }
+  /**
+   * This method is open the popup.
+   */ 
+  showPopup():void {
+    this.showPopupFlag = true;
+  }
+   /**
+   * This method is close the popup.
+   */ 
+  closePopup():void {
+    this.showPopupFlag = false;
+  }
+   /**
+   * This method is for download the raw Report of executions as excel format.
+   */   
+  rawReportDownload(): void{
+    if(this.data.executionId){
+      this.executionservice.rawExcelReport(this.data.executionId).subscribe({
+        next:(blob)=>{
+          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${this.data.executionId}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+    }
+  }
+   /**
+   * This method is for download the consolidatedReport of executions as excel format.
+   */   
+  consolidatedReport(): void{
+    if(this.data.executionId){
+      this.executionservice.excelReportConsolidated(this.data.executionId).subscribe({
+        next:(blob)=>{
+          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${this.data.executionId}.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+    }
+  }
+   /**
+   * This method is for download the executions as XML format.
+   */ 
+  XMLReportDownload(){
+    if(this.data.executionId){
+      this.executionservice.XMLReport(this.data.executionId).subscribe({
+        next:(blob)=>{
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `${this.data.executionId}.xml`; 
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+
+      });
+    }
+  }
+  /**
+   * This method is for download all the execution results.
+   */  
+  resultsZIP():void{
+    if(this.data.executionId){
+      this.executionservice.resultsZIP(this.data.executionId).subscribe({
+        next:(blob)=>{
+          const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Results-${this.data.executionId}.zip`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+
+      });
+    }
+  }
+  /**
+   * This method is for download all failed execution results.
+   */    
+  failResultsZIP():void{
+    if(this.data.executionId){
+      this.executionservice.failedResultsZIP(this.data.executionId).subscribe({
+        next:(blob)=>{
+          const xmlBlob = new Blob([blob], { type: 'application/zip' }); 
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `Failed-Results-${this.data.executionId}.zip`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+    }
+  }
+  /**
+   * This method is for download all options at a time.
+   */  
+  downLoadAll():void{
+    this.rawReportDownload();
+    this.consolidatedReport();
+    this.XMLReportDownload();
+    this.resultsZIP();
+    this.failResultsZIP();
   }
 
 }

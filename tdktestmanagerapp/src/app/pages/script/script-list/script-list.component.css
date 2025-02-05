@@ -44,12 +44,14 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   font-size: 0.78rem;
   margin-top: 8px;
   margin-bottom: 0;
+  font-weight: 500;
 }
 .headingView{
   margin-left: 80px;
 }
 .rdkgroup,.viewgroup{
   margin-left: 20px;
+  font-weight: 500;
 }
 .rdkradio{
   border: 2px solid #0e6f87;
@@ -104,19 +106,24 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   margin-left: 8px;
 }
 .fiter-input:focus{
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   box-shadow: none;
+}
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
 }
 .download-btn{
   background-color: #fff;
   font-size: 0.8rem;
   padding: 5px 15px;
-  border: 1px solid #0e6f8794;
+  border: none;
   border-radius: 6px;
   font-weight: 500;
   letter-spacing: 0.5px;
   cursor: pointer;
   margin-right: 15px;
+  box-shadow: 0px 3px 6px #00000029;
 }
 .create{
   background-color: #00B2DC;
@@ -143,7 +150,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
   background-color: #fff;
   font-size: 0.8rem;
   padding: 5px 15px;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   border-radius: 6px;
   font-weight: 500;
   letter-spacing: 0.5px;
@@ -175,7 +182,7 @@ width:24px;
   font-size: 1.3rem;
 }
 .delete-icon{
-  color: red;
+  color: #808080;
   font-size: 1.3rem;
 }
 .download{
@@ -301,7 +308,7 @@ width:24px;
     width: 90%;
 }
 .search-side{
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   background: none;
 }
 .xlsx-btm{
@@ -387,7 +394,7 @@ width:24px;
   color: #fff;
   font-size: 0.8rem;
   padding: 5px 15px;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   border-radius: 6px;
   letter-spacing: 0.5px;
   cursor: pointer;

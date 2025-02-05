@@ -107,11 +107,11 @@ export class ExecutionService {
     return this.http.post(`${apiUrl}api/v1/executionScheduler/create`,data, { headers, responseType: 'text' });
   }
 
-  getAllexecutionScheduler():Observable<any>{
+  getAllexecutionScheduler(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/executionScheduler/getAll`, {},{ headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/executionScheduler/getAll?category=${category}`,{ headers, responseType: 'text' });
   }
 
   getlistofUsers(): Observable<any>{
@@ -181,15 +181,25 @@ export class ExecutionService {
     });
     return this.http.get(`${apiUrl}execution/getDeviceLogFileNames?executionResultId=${data}`,{ headers, responseType: 'text' });
   }
- 
+
+  getCrashLogs(data:any): Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/getCrashLogFileNames?executionResultId=${data}`, { headers, responseType: 'text' });
+  }
   downloadLogFile(executioResultId:any, logFileName:any){
-    console.log("FileName",logFileName);
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
     return this.http.get(`${apiUrl}execution/downloadDeviceLogFile?executionResId=${executioResultId}&fileName=${logFileName}`, { headers, responseType: 'blob' })
   }
-  
+  downloadCrashLogFile(executioResultId:any, logFileName:any){
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/downloadCrashLogFile?executionResId=${executioResultId}&fileName=${logFileName}`, { headers, responseType: 'blob' })
+  }
   deleteScheduleExe(id:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -211,5 +221,69 @@ export class ExecutionService {
     return this.http.get(`${apiUrl}execution/getExecutionsByExecutionName/${SearchString}?categoryName=${category}&page=${page}&size=${size}&sortBy=createdDate&sortDir=desc`, { headers, responseType: 'text' });
   }
 
+  getDefectTypes(): Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/analysis/getAnalysisDefectTypes`, { headers, responseType: 'text' });
+  }
 
+  saveAnalysisResult(resultId:string, data:any):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.post(`${apiUrl}api/v1/analysis/saveAnalysisResult?executionResultID=${resultId}`, data, { headers, responseType: 'text' });
+  }
+
+  getModulewiseAnalysisSummary(resultId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/analysis/getModulewiseAnalysisSummary?executionID=${resultId}`,  { headers, responseType: 'text' });
+  }
+  
+  getAnalysisResult(resultId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}api/v1/analysis/getAnalysisResult?executionResultID=${resultId}`,  { headers, responseType: 'text' });
+  }
+
+  abortExecution(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.post(`${apiUrl}execution/abortexecution?execId=${exeId}`,{}, { headers, responseType: 'text' });
+  }
+  excelReportConsolidated(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/${exeId}/download-excel`, { headers, responseType: 'blob' });
+  }
+  rawExcelReport(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/raw/${exeId}`, { headers, responseType: 'blob' });
+  }
+  XMLReport(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/${exeId}/XMLReport`, { headers, responseType: 'blob' });
+  }
+  resultsZIP(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/${exeId}/results-zip`, { headers, responseType: 'blob' });
+  }
+  failedResultsZIP(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/${exeId}/failed-results-zip`, { headers, responseType: 'blob' });
+  }
 }

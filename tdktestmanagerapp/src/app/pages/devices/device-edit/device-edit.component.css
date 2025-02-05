@@ -76,6 +76,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     width: 185px;
     font-size: 0.8rem;
 }
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+  }
 .config-input:read-only { 
     background-color: #e9ecef;
     cursor: auto;

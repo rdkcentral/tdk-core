@@ -104,7 +104,7 @@ body, *:not(.material-icons) {
 .sort-button{
     margin: 3px 10px 0 0;
     background-color: #fff;
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     border-radius: 4px;
 }
 .sort-icon{
@@ -123,4 +123,8 @@ body, *:not(.material-icons) {
 .script-err{
     color: #dc3545;
     font-size: 0.8rem;
+}
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
 }

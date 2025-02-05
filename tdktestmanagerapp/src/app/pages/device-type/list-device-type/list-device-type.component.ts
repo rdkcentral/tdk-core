@@ -50,8 +50,8 @@ export class ListDeviceTypeComponent implements OnInit {
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [5, 10, 20, 50];
   public tooltipShowDelay = 500;
   isRowSelected: any;
   selectedRow: any;
@@ -97,6 +97,9 @@ export class ListDeviceTypeComponent implements OnInit {
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
+  };
+  gridOptions = {
+    rowHeight: 35,
   };
   configureName!: string;
 

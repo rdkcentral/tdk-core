@@ -117,8 +117,6 @@ public frameworkComponents :any;
     private service:DeviceService, private socService:SocService, private devicetypeService:DevicetypeService,
     private renderer:Renderer2, public dialog:MatDialog) { 
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
-    console.log(this.user);
-    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.frameworkComponents = {
       inputCellRenderer: InputComponent
@@ -161,7 +159,7 @@ public frameworkComponents :any;
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.editDeviceVForm = this.fb.group({
-      stbname: [this.user.deviceName, [Validators.required]],
+      stbname: [this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
       stbip: [this.user.deviceIp, [Validators.required, Validators.pattern(ipregexp)]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
@@ -178,7 +176,7 @@ public frameworkComponents :any;
     })
 
     this.rdkBForm = this.fb.group({
-      gatewayName:[this.user.deviceName, [Validators.required]],
+      gatewayName:[this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
       gatewayIp: [this.user.deviceIp, [Validators.required]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
@@ -190,7 +188,7 @@ public frameworkComponents :any;
     })
 
     this.rdkCForm = this.fb.group({
-      cameraName: [this.user.deviceName, [Validators.required]],
+      cameraName: [this.user.deviceName, [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] ],
       stbIp:[this.user.deviceIp, [Validators.required]],
       macaddr: [this.user.macId, [Validators.required]],
       devicetype: [this.user.deviceTypeName, [Validators.required]],
@@ -296,6 +294,21 @@ public frameworkComponents :any;
         this.rdkCForm.get('agentMonitorportB')?.setValue(cleanedValue, {
           emitEvent: false,
         });
+      }
+    });
+    this.editDeviceVForm.get('devicename')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.editDeviceVForm.get('devicename')?.setValue(value.toUpperCase());
+      }
+    });
+    this.rdkBForm.get('gatewayName')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.rdkBForm.get('gatewayName')?.setValue(value.toUpperCase());
+      }
+    });
+    this.rdkCForm.get('cameraName')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.rdkCForm.get('cameraName')?.setValue(value.toUpperCase());
       }
     });
   }

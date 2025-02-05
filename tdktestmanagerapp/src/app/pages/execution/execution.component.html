@@ -12,7 +12,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<div class="container-fluid">
+<div class="container-fluid bg-container">
     <div class="row ">
         <div class="col-md-2 col-sidebar">
             <div class="sidebar">
@@ -23,7 +23,7 @@ limitations under the License.
                 </div>
                 <div class="accordion accor-margin" id="accordionExample">
                     <div class="row accord-row">
-                      <div class="accordion-item" *ngFor="let parent of deviceStausArray">
+                      <div class="accordion-item device-section" *ngFor="let parent of filteredDeviceStausArray">
                           <h2 class="accordion-header d-flex align-items-center accord-head">
                             <div class="col">
                               <i class="bi bi-folder-fill folder-icon"></i><span> {{ parent.name }} </span>
@@ -38,6 +38,19 @@ limitations under the License.
                             </div>
                           </h2>
                         <div [class.show]="parent.isOpen" class="accordion-collapse collapse show">
+                          <div class="col-md-12 mb-2">
+                            <input type="text" #searchInput class="form-control seach-input" [(ngModel)]="searchTerm" (input)="searchDevices($event)"
+                            placeholder="Search device">
+                            <button class="clear-btn mt-1" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
+                            <span class="sort-label">Sort :</span>
+                            <button (click)="toggleSortOrder()" class="sort-btn">
+                              <!-- Sort {{ sortOrder === 'asc' ? 'Ascending' : 'Descending' }} -->
+                              <i class="bi sort-icon icon-sortng" [ngClass]="sortOrder === 'asc' ? 'bi-sort-up-alt' : 'bi-sort-down-alt'  "></i>
+                            </button>
+                          </div>
+                          <div *ngIf="filteredDeviceStausArray.length === 0" class="no-results">
+                            No matching devices found.
+                          </div>
                             <div class="accordion-body status-group">
                                 <ul class="ul-item">
                                     <li class="li-item" *ngFor="let child of parent.childData" >
@@ -51,12 +64,12 @@ limitations under the License.
                                       <span *ngIf="child.status === 'HANG'"><span class="hang"></span></span>
 
                                         <a class="device-name" [matTooltip]="'Name: ' + child.deviceName + '\nIP: ' + child.ip + '\nDeviceType: ' + child.deviceType + '\nStatus: ' + child.status"
-                                        matTooltipClass="multiline-tooltip" (click)="openModalExecute(child)"
+                                        matTooltipClass="multiline-tooltip" [matTooltipPosition]="'right'" (click)="openModalExecute(child)"
                                            >
                                             {{child.deviceName}}
                                         </a>
 
-                                        <span *ngIf="child.thunderEnabled === true"><i class="bi bi-lightning-charge-fill thunder-icon"></i></span>
+                                        <!-- <span *ngIf="child.thunderEnabled === true"><i class="bi bi-lightning-charge-fill thunder-icon"></i></span> -->
                                         <button mat-icon-button [matMenuTriggerFor]="menu" class="context-btn">
                                             <mat-icon class="dot-icon">more_vert</mat-icon>
                                         </button>
@@ -85,8 +98,8 @@ limitations under the License.
             </div>
         </div>
         <div class="col-md-10">
-            <div class="radiobox">
-                <h3 class="heading">Select the device category :</h3>
+            <div class="radiobox borders-btm">
+                <h3 class="heading ">Select the RDK flavor :</h3>
                 <div class="rdkgroup">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKV')">
@@ -102,9 +115,9 @@ limitations under the License.
                     </div>
                 </div>
             </div>
-            <div class="example-header" *ngIf="tabName !=='Execution Schedules'">
+            <div class="col-md-12 example-header" *ngIf="tabName !=='Execution Schedules'">
               <div class="filterby">
-                <label for="filterDropdown">Filter By:</label>
+                <label for="filterDropdown" class="filter-label">Filter By:</label>
                 <div class="filter-drop-down">
                   <select id="filterDropdown" class="form-select" (change)="onFilterChange($event)">
                     <option value="" default>Select</option>
@@ -115,19 +128,22 @@ limitations under the License.
                   </select>
                 </div>
               </div>
-      
               <div class="search-bar" *ngIf="selectedCategory === 'Device' || selectedCategory === 'Scripts/Testsuite' || selectedCategory === 'ExecutionName'">
-                <label class="search">Search any {{ selectedCategory }}</label>
+                <!-- <label class="search">Enter {{ selectedCategory }}</label> -->
+                <label *ngIf="selectedCategory === 'ExecutionName'" class="search">Enter Execution Name</label>
+                <label *ngIf="selectedCategory === 'Scripts/Testsuite'" class="search">Enter Scripts/Testsuite</label>
+                <label *ngIf="selectedCategory === 'Device'" class="device-search">Enter Device</label>
                 <div class="searchby">
                   <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="searchValue"
                     placeholder="">
-                    <button class="btn btn-sm search-btn" (click)="onSearchClick()"><i class="bi bi-search"></i></button>
+                    <button class="btn btn-sm search-btn" (click)="onSearchClick()"><i class="bi bi-search icon-search"></i></button>
                 </div>
               </div>
+
       
               <div class="search-user" *ngIf="selectedCategory === 'User'">
                 <div class="userby">
-                  <label for="dynamicDropdown">Search User:</label>
+                  <label for="dynamicDropdown" class="userbylabel">Select User</label>
                   <div class="user-drop-down">
                     <select id="dynamicDropdown" class="form-select user-dropdown" [(ngModel)]="selectedOption" (change)="onUserChange()">
                       <option value="" default>Select</option>
@@ -138,29 +154,40 @@ limitations under the License.
               </div>
             </div>
             
-            <div class="container mt-3">
+            <div class="container table-container mt-3">
                 <!-- TABS CONTAINER -->
                 <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
-                    <mat-tab label="Execution History">
-                        <div style="width: 100%; height: 370px;" [class]="themeClass">
+                    <mat-tab label="Execution History" class="tab-label">
+                        <div style="width: 100%; height: 390px;" [class]="themeClass">
                             <ag-grid-angular
                             style="width: 100%; height: 100%;"
                             [rowData]="rowData"
                             [columnDefs]="columnDefs"
-                            [defaultColDef]="{sortable: true}"
+                            [defaultColDef]="defaultColDef"
                             [pagination]="false"
-                            [gridOptions]="gridOptions"
+                            [rowHeight]="40"
                             rowSelection="multiple"
                             (gridReady)="onGridReady($event)"
                           ></ag-grid-angular>
-
                         </div>
                         <div class="table-footer">
                           <div class="col-md-3">
-                            <a class="delete-date" (click)="deleteDateModal()">Delete execution with date</a>
+                            <div class="header-container">
+                              <div class="btn-border">
+                                <button class="btn btn-sm delete-btn" (click)="deleteSelectedRows()">
+                                  <i class="bi bi-trash-fill delete-icon"></i>
+                                </button>
+                                <button class="btn btn-sm arrow-btn" (click)="deleteDateModal()" matTooltip="Delete execution with date">
+                                  <i class="bi bi-caret-down-fill arrow-icon"></i>
+                                </button>
+                              </div>
+                    
+                            </div>
+                            <!-- <a class="delete-date" (click)="deleteDateModal()">Delete execution with date</a> -->
                           </div>
                           <div class="col-md-9">
                             <mat-paginator
+                            class="pagination-sec"
                             [length]="totalItems"
                             [pageSize]="pageSize"
                             [pageSizeOptions]="[5, 10, 20]"
@@ -170,10 +197,10 @@ limitations under the License.
                           </div>
                         </div>
                     </mat-tab>
-                    <mat-tab label="Execution Schedules">
-                        <div style="width: 100%; height: 385px;" [class]="themeClass">
+                    <mat-tab label="Execution Schedules" class="tab-label">
+                        <div style="width: 100%; height: 412px;" [class]="themeClass">
                             <ag-grid-angular
-                                style="width: 100%; height: 100%;"
+                                style="width: 100%; height: 412px;"
                                 [columnDefs]="columnSchudle"
                                 [defaultColDef]="{sortable: true}"
                                 [rowData]="rowDataSchudle"

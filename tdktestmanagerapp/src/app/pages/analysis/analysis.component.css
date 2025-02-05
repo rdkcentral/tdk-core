@@ -17,71 +17,147 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+body,
+*:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.mat-typography h1, 
-.mat-typography h2, 
-.mat-typography h3, 
-.mat-typography h4, 
-.mat-typography h5, 
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4,
+.mat-typography h5,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.container{
-    margin-bottom: 2rem;
+.container {
+  margin-bottom: 1rem;
 }
-.radiobox-row{
-    border: 1px solid #0000002e;
-    border-radius: 10px;
-    box-shadow: 1px 1px 3px 0px rgb(0 0 0 / 18%);
-  }
-.radiobox{
-    display: flex;
-    justify-content: start;
-    align-items: baseline;
-    padding: 0 30px;
-    font-size: 0.78rem;
+.radiobox-row {
+  border-radius: 10px;
+  box-shadow:0px 1px 2px #333;
+  height: 500px;
+
+}
+.radiobox {
+  display: flex;
+  justify-content: start;
+  align-items: baseline;
+  padding: 0 30px;
+  font-size: 0.78rem;
 }
 
-.heading{
-    margin-top: 8px;
-    margin-bottom: 0;
-    font-size: 0.8rem;
+.heading {
+  margin-top: 8px;
+  margin-bottom: 0;
+  font-size: 0.8rem;
 }
-.rdkgroup{
-    margin-left: 30px;
+.rdkgroup {
+  margin-left: 30px;
 }
-.rdkradio{
-    border: 2px solid #0e6f87;
+.rdkradio {
+  border: 2px solid #0e6f87;
+}
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
+}
+.row-align {
+  display: flex;
+  justify-content: left;
+  align-items: baseline;
 }
 .form-check-inline {
-    margin-right: 2rem;
+  margin-right: 2rem;
 }
 .form-check-input:checked {
-    background-color: #0e6f87;
-    border-color: #0e6f87;
+  background-color: #0e6f87;
+  border-color: #0e6f87;
 }
-.borders-btm{
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px; 
-    margin:0;
-    width: 100%;
+.borders-btm {
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0;
+  width: 100%;
 }
 .title {
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 10px;
+  font-size: 1rem;
+  text-align: center;
+  margin-bottom: 10px;
 }
-.main-margin{
-    margin: 0;
+.main-margin {
+  margin: 0;
 }
-.common-style{
-    display: flex;
-    justify-content: center;
+.common-style {
+  display: flex;
+  justify-content: center;
 }
-.viewgroup{
+.viewgroup {
+  font-size: 0.8rem;
+  margin-left: 23px;
+}
+::ng-deep .mat-mdc-tab.mdc-tab {
+  flex-grow: 0 !important;
+}
+/* ::ng-deep .mdc-tab--active {
+  border-bottom: 47px solid #fff !important;
+  border-right: 25px solid #f6f6f6 !important;
+}
+::ng-deep .mat-mdc-tab-group,
+.mat-mdc-tab-nav-bar {
+  --mdc-tab-indicator-active-indicator-color: transparent !important;
+  --mat-tab-header-active-focus-indicator-color: transparent !important;
+  --mat-tab-header-active-hover-indicator-color: transparent !important;
+} */
+::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  font-size: 0.87rem !important;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+  font-size: 0.87rem !important;
+  font-weight: 500;
+  letter-spacing: 0px;
+}
+::ng-deep .mdc-tab,
+.mat-mdc-tab-label-container,
+.mdc-tab__content,
+.mat-mdc-tab {
+  height: 35px !important;
+}
+::ng-deep.mat-mdc-tab-labels {
+  height: 35px !important;
+}
+::ng-deep .mat-mdc-tab-body-content {
+  min-height: 405px;
+}
+.report-section{
+  margin: 15px 5px 5px 15px;
+}
+.create-btn {
+    background-color: #00B2DC;
+    color: #fff;
     font-size: 0.8rem;
-    margin-left: 23px;
+    padding: 8px 20px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+}
+.ortext{
+  margin-right: 10px;
+}
+.info-icon{
+  font-size: 15px;
+  color: #00B2DC;
+  margin-left: 8px;
 }

@@ -118,6 +118,10 @@ input::placeholder{
   .form-select{
     font-size: 0.78rem;
   }
+  ::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+  }
 .sign-in {
     left: 0;
     width: 50%;
@@ -310,4 +314,49 @@ input::placeholder{
 .backend-error{
     font-size: 0.8rem;
     color: #dc3545;
+}
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+    display: none;
+}
+.eyeicon {
+    position: absolute;
+    top: 207px;
+    right: 50px;
+    cursor: pointer;
+}
+ 
+.eyeicon i {
+    position: relative;
+    font-size: 1.2em;
+    top: -5px;
+    transform: translateY(-50%);
+}
+ 
+.registerEyeicon {
+    position: absolute;
+    top: 130px;
+    right: 50px;
+    cursor: pointer;
+}
+ 
+.registerEyeicon i {
+    position: relative;
+    font-size: 1.2em;
+    top: -5px;
+    transform: translateY(-50%);
+}
+ 
+.confirmEyeicon {
+    position: absolute;
+    top: 170px;
+    right: 50px;
+    cursor: pointer;
+}
+ 
+.confirmEyeicon i {
+    position: relative;
+    font-size: 1.2em;
+    top: -5px;
+    transform: translateY(-50%);
 }

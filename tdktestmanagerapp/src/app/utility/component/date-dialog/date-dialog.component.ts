@@ -24,6 +24,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 import { ExecutionService } from '../../../services/execution.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialogRef } from '@angular/material/dialog';
+import moment from 'moment-timezone';
 
 @Component({
   selector: 'app-date-dialog',
@@ -53,22 +54,10 @@ export class DateDialogComponent {
    */
   onDateChange(dateRange: Date[] | null): void {
     if (dateRange && dateRange.length === 2) {
-      this.utcDateRange = dateRange.map((date) => {
-        const utcDate = new Date(
-          Date.UTC(
-            date.getFullYear(),
-            date.getMonth(),
-            date.getDate(),
-            date.getHours(),
-            date.getMinutes(),
-            date.getSeconds(),
-            date.getMilliseconds()
-          )
-        );
-        return utcDate.toISOString();
-      });
-      this.fromDate = this.utcDateRange[0];
-      this.toDate = this.utcDateRange[1];
+      const utcMoment =  moment.tz(dateRange[0], moment.tz.guess()).utc();
+      this.fromDate = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
+      const toUtcMoment =  moment.tz(dateRange[1], moment.tz.guess()).utc();
+      this.toDate = toUtcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
     } 
   }
   /**
@@ -84,6 +73,9 @@ export class DateDialogComponent {
             panelClass: ['success-msg'],
             verticalPosition: 'top'
           })
+          setTimeout(() => {
+            this.dialogRef.close();
+          }, 2000);
         },
         error:(err)=>{
           let errmsg = JSON.parse(err.error);
