@@ -46,6 +46,7 @@ test_streams_base_path =""
 validateFullPlayback = ""
 use_appsrc = ""
 start_westeros = ""
+create_display = ""
 
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -158,6 +159,7 @@ def getDeviceConfigValue (configKey):
         global validateFullPlayback
         global use_appsrc
         global start_westeros
+        global create_display
 
         result = "SUCCESS"
         #Retrieve the device details(device name) and device type from tdk library
@@ -232,6 +234,10 @@ def getDeviceConfigValue (configKey):
                 start_westeros = configParser.get('device.config',"FIREBOLT_COMPLIANCE_START_WESTEROS")
             except:
                 start_westeros = "no"
+            try:
+                create_display = configParser.get('device.config',"FIREBOLT_COMPLIANCE_CREATE_RDKSHELL_DISPLAY")
+            except:
+                create_display = "no"
         else:
             print("DeviceConfig file not available")
             result = "FAILURE"
@@ -350,6 +356,8 @@ def getMediaPipelineTestCommand (test_name, test_url, arguments):
                 command = command.replace(url,url_updated);
     if (start_westeros == "yes"):
         command = command + " startWesteros=yes ";
+    elif (create_display == "yes"):
+        command = command + " createDisplay=yes";
     return command
 
 #Function to check mediapipeline test execution status from output string
@@ -452,7 +460,8 @@ def ParseGraphicsOutput(graphics_output,test_app):
         return "FAILURE"
     #If test application is Westeros_TDKTestApp , validate error statements
     if test_app == "Westeros_TDKTestApp":
-        if "error" in output:
+        #ignore "error opening device: /dev/input/event0" as output
+        if "error" in output and "error opening device" not in output:
             print ("FAILURE: ERROR observed in execution")
             print ("*" * 80)
             return "FAILURE"
