@@ -359,9 +359,7 @@ export class ExecutionComponent implements OnInit{
     this.listenForLogout();
     this.getDeviceStatus();
     this.getAllExecutions();
-    this.scheduleSubscription = interval(2000).subscribe(() => {
-      this.allExecutionScheduler();
-    });
+    this.allExecutionScheduler();
     this.searchTermSubject.pipe(debounceTime(300)).subscribe(term => { 
       this.performSearch(term);
     });
@@ -377,21 +375,16 @@ export class ExecutionComponent implements OnInit{
   */
   getAllExecutions():void{
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
-      this.executionservice.getAllExecutionByName(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
-        next: (res) => {
-          const data = JSON.parse(res);
-          this.rowData = data.executions;
-          this.totalItems = data.totalItems;
-        },
-        error: (err) => {
-          let errmsg = err.error;
-          this._snakebar.open(errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
-        }
+      this.executionservice.getAllExecutionByName(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe(response=>{
+        let data = null;
+          try {
+            if(response){
+              data = JSON.parse(response);
+              this.rowData = data.executions;
+              this.totalItems = data.totalItems;
+            }
+          } catch (e) {
+          }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
       this.executionservice.getAllExecutionByScript(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
@@ -508,9 +501,10 @@ export class ExecutionComponent implements OnInit{
     // this.executionservice.getDeviceStatus(this.selectedDfaultCategory)
     .subscribe({
       next: (res) => {
-        setTimeout(() => {
+        // setTimeout(() => {
           this.deviceStausArray = this.formatData(JSON.parse(res));
           this.filteredDeviceStausArray = [...this.deviceStausArray];
+          this.filterAndSortDevices(); 
           this.deviceStausArray[0].childData.forEach((element:any) => {
             this.toolTipText +=
             element.deviceName + '\n' +
@@ -519,7 +513,7 @@ export class ExecutionComponent implements OnInit{
             element.status + '\n';
          
           });
-        }, 3000);
+        // }, 3000);
       },
       error: (err) => {
         this._snakebar.open(err.error, '', {
@@ -803,7 +797,7 @@ export class ExecutionComponent implements OnInit{
       deviceExeModal.afterClosed().subscribe(() => {
         setTimeout(() => {
         this.getAllExecutions();
-        }, 1500);
+        }, 3000);
       });
     }else{
       this._snakebar.open('The device is not available for execution','',{
@@ -831,7 +825,7 @@ export class ExecutionComponent implements OnInit{
     normalExeModal.afterClosed().subscribe(() => {
       setTimeout(() => {
       this.getAllExecutions();
-      }, 1500);
+      }, 3000);
     });
   }
   /**
@@ -953,6 +947,10 @@ export class ExecutionComponent implements OnInit{
       }
     })
   }
+  filterAndSortDevices(){
+    this.performSearch(this.searchTerm);
+    this.sortDevices();
+  }
   searchDevices(event: any) :void{
     const target = event.target as HTMLInputElement;
     this.searchTermSubject.next(target.value);
@@ -960,7 +958,7 @@ export class ExecutionComponent implements OnInit{
   performSearch(term: string) :void{
     const lowerTerm = term.toLowerCase();
     const filteredChildData = this.deviceStausArray[0].childData.filter((device:any) => {
-      return device.deviceName.toLowerCase().includes(lowerTerm);
+      return device.deviceName.toLowerCase().includes(lowerTerm) || device.ip.toLowerCase().includes(term);
     });
 
     this.filteredDeviceStausArray = [{
@@ -988,15 +986,26 @@ export class ExecutionComponent implements OnInit{
   }
   sortDevices() :void{
     const order = this.sortOrder;
+    const statusOrder : { [key: string]: number } = {
+      'free': 1,
+      'not_found': 2,
+      'busy': 3,
+      'hang': 4
+    };
     this.filteredDeviceStausArray[0].childData.sort((a:any, b:any) => {
-      const aValue = a.deviceName;
-      const bValue = b.deviceName;
-      if (typeof aValue === 'string' && typeof bValue === 'string') {
-        const comparison = aValue.toLowerCase().localeCompare(bValue.toLowerCase());
-        return order === 'asc' ? comparison : -comparison;
-      } else {
-        return 0;
-      }
+      const firstStatus = a.status.toLowerCase();
+      const secondStatus = b.status.toLowerCase();
+  
+      const firstValue = statusOrder[firstStatus] || 999;
+      const secondValue = statusOrder[secondStatus] || 999;
+  
+     if (firstValue!== secondValue) {
+      return order === 'asc'? firstValue - secondValue: secondValue - firstValue;
+    } else {
+      const firstDeviceName = a.deviceName.toLowerCase();
+      const secondDeviceName = b.deviceName.toLowerCase();
+      return order === 'asc'? firstDeviceName.localeCompare(secondDeviceName): secondDeviceName.localeCompare(firstDeviceName);
+    }
     });
   }
 }

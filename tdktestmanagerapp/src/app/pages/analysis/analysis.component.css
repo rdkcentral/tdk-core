@@ -38,12 +38,18 @@ body,
   height: 500px;
 
 }
+.card-combine{
+  border-radius: 10px;
+  box-shadow:0px 1px 2px #333;
+  height: 580px;
+}
 .radiobox {
   display: flex;
   justify-content: start;
   align-items: baseline;
   padding: 0 30px;
   font-size: 0.78rem;
+  height: 20px;
 }
 
 .heading {
@@ -136,17 +142,26 @@ body,
 ::ng-deep.mat-mdc-tab-labels {
   height: 35px !important;
 }
-::ng-deep .mat-mdc-tab-body-content {
-  min-height: 405px;
+::ng-deep .height-comp {
+  height: 375px !important;
+}
+::ng-deep .hegiht-body {
+  height: 455px !important;
 }
 .report-section{
   margin: 15px 5px 5px 15px;
+}
+.first-row{
+  width: 101%;
+}
+.filter-btn{
+  margin-left: -12px;
 }
 .create-btn {
     background-color: #00B2DC;
     color: #fff;
     font-size: 0.8rem;
-    padding: 8px 20px;
+    padding: 7px 15px;
     border: 1px solid transparent;
     border-radius: 8px;
     font-weight: 500;

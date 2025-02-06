@@ -372,6 +372,16 @@ export class DetailsExeDialogComponent {
    * @returns {void}
    */
   liveLogs():void {
+    this.liveLogDialog.open( LivelogDialogComponent,{
+      width: '80%',
+      height: '80vh',
+      maxWidth:'100vw',
+      panelClass: 'custom-modalbox',
+      data: {
+        logs: this.liveLogsData,
+        executionId: this.executionResultId
+      } 
+    });
      interval(5000)
         .pipe(
           startWith(0),
@@ -389,18 +399,9 @@ export class DetailsExeDialogComponent {
 
           }
         })
-        if(this.liveLogsData){
-          this.liveLogDialog.open( LivelogDialogComponent,{
-            width: '50%',
-            height: '70vh',
-            maxWidth:'100vw',
-            panelClass: 'custom-modalbox',
-            data: {
-              logs: this.liveLogsData,
-              executionId: this.executionResultId
-            } 
-          });
-        }
+        // if(this.liveLogsData){
+
+        // }
   }
   /**
    * Fetches device logs for the current execution result and opens a dialog to display them.

@@ -294,7 +294,7 @@ h2.summary {
   letter-spacing: 0.5px;
   cursor: pointer;
   margin-right: 15px;
-  box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0px 3px 6px #0000005e;
 }
 .download-icon {
   color: #00b2dc;
@@ -509,7 +509,7 @@ background-color: transparent;
   letter-spacing: 0.5px;
   cursor: pointer;
   margin-top: -5px;
-  box-shadow: 0px 3px 6px #00000029;
+  box-shadow: 0px 3px 6px #0000005e;
 }
 .script-head{
   font-size: 0.8rem;

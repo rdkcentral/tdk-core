@@ -39,7 +39,7 @@ limitations under the License.
                           </h2>
                         <div [class.show]="parent.isOpen" class="accordion-collapse collapse show">
                           <div class="col-md-12 mb-2">
-                            <input type="text" #searchInput class="form-control seach-input" [(ngModel)]="searchTerm" (input)="searchDevices($event)"
+                            <input type="text" #searchInput class="form-control seach-device" [(ngModel)]="searchTerm" (input)="searchDevices($event)"
                             placeholder="Search device">
                             <button class="clear-btn mt-1" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
                             <span class="sort-label">Sort :</span>
@@ -132,7 +132,7 @@ limitations under the License.
                 <!-- <label class="search">Enter {{ selectedCategory }}</label> -->
                 <label *ngIf="selectedCategory === 'ExecutionName'" class="search">Enter Execution Name</label>
                 <label *ngIf="selectedCategory === 'Scripts/Testsuite'" class="search">Enter Scripts/Testsuite</label>
-                <label *ngIf="selectedCategory === 'Device'" class="device-search">Enter Device</label>
+                <label *ngIf="selectedCategory === 'Device'" class="device-search">Enter Device Name</label>
                 <div class="searchby">
                   <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="searchValue"
                     placeholder="">
@@ -143,7 +143,7 @@ limitations under the License.
       
               <div class="search-user" *ngIf="selectedCategory === 'User'">
                 <div class="userby">
-                  <label for="dynamicDropdown" class="userbylabel">Select User</label>
+                  <label for="dynamicDropdown" class="userbylabel">Select User Name</label>
                   <div class="user-drop-down">
                     <select id="dynamicDropdown" class="form-select user-dropdown" [(ngModel)]="selectedOption" (change)="onUserChange()">
                       <option value="" default>Select</option>
