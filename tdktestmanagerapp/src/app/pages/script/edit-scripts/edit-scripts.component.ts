@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
@@ -67,6 +67,7 @@ export class EditScriptsComponent {
   defaultPrimitive:any;
   changePriorityValue!:string;
   scriptDeatilsObj:any;
+  RDKFlavor: any;
 
   constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
     public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
@@ -85,6 +86,7 @@ export class EditScriptsComponent {
       allowSearchFilter: false,
     };
     const selectedCategory = localStorage.getItem('category');
+    this.RDKFlavor = selectedCategory;
     if(selectedCategory === 'RDKB'){
       this.selectedCategoryName = 'Broadband';
     }else if(selectedCategory === 'RDKC'){
@@ -97,14 +99,14 @@ export class EditScriptsComponent {
     this.allDeviceType = this.scriptDeatilsObj.deviceTypes.map((deviceType: string) => ({ deviceTypeId: deviceType, deviceTypeName: deviceType }));
     
     this.firstFormGroup = this.fb.group({
-      scriptname: [this.scriptDeatilsObj.name, [Validators.required]],
+      scriptname: [this.scriptDeatilsObj.name, [Validators.required,this.noSpacesValidator]],
       module:[{value:this.scriptDeatilsObj.moduleName, disabled: true}],
       primitiveTest: [{value:this.scriptDeatilsObj.primitiveTestName, disabled: true}],
       devicetype: [[], [Validators.required]],
       executiontimeout: [this.scriptDeatilsObj.executionTimeOut, [Validators.required]],
       longdurationtest: [this.scriptDeatilsObj.longDuration],
       skipexecution: [this.scriptDeatilsObj.skipExecution],
-      synopsis: [this.scriptDeatilsObj.synopsis, [Validators.required]]
+      synopsis: [this.scriptDeatilsObj.synopsis, [Validators.required,this.noSpacesValidator]]
     });
     this.secondFormGroup = this.fb.group({
       testcaseID: [this.scriptDeatilsObj.testId, Validators.required],
@@ -128,8 +130,84 @@ export class EditScriptsComponent {
     this.firstFormGroup.patchValue({ devicetype: this.scriptDeatilsObj.deviceTypes });
     this.deviceNameArr = this.firstFormGroup.value.devicetype;
   }
+  /**
+     * Get the controls of the register form.
+     * @returns The controls of the register form.
+     */  
+    get f() { return this.firstFormGroup.controls; }
+    /**
+       * This method is no space is allow.
+       */
+    noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+      const value = control.value ? control.value.toString() : '';
+      return value.trimStart().length !== value.length ? { noLeadingSpaces: true } : null;
+    }
+    
+    onInput(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.firstFormGroup.get('synopsis')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onScritName(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onTestcaseID(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onTestObjective(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('testObjective')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onInputParameters(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('inputParameters')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onAutomationApproach(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('automationApproach')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onTestStub(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('testStub')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onInterface(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('rdkInterface')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
+    onExpectedOutput(event: Event): void {
+      const inputElement = event.target as HTMLTextAreaElement;
+      const value = inputElement.value;
+      if (value.startsWith(' ')) {
+        this.secondFormGroup.get('expectedOutput')?.setValue(value.trimStart(), { emitEvent: false });
+      }
+    }
   getAllModules(): void{
-    this.configureName=this.authservice.selectedConfigVal;
+    this.configureName=this.RDKFlavor;
     this.modulesService.findallbyCategory(this.configureName).subscribe(res=>{
       this.allModules = JSON.parse(res); 
     })
@@ -165,7 +243,7 @@ changePriority(event:any): void {
 }
 
   getAlldeviceType(): void{
-    this.configureName=this.authservice.selectedConfigVal;
+    this.configureName=this.RDKFlavor;
     this.deviceTypeService.getfindallbycategory(this.configureName).subscribe(res=>{
       this.allDeviceType = (JSON.parse(res));
     })

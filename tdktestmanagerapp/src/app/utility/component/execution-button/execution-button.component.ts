@@ -33,9 +33,11 @@ interface customcellRenderparams extends ICellRendererParams{
   standalone: true,
   imports: [MaterialModule,CommonModule],
   template: `
-    <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Excel)" ><i class="bi bi-file-earmark-excel-fill icons report"></i></button>
+    <button *ngIf="showHideAbort" class="btn btn-sm delete-btn" (click)="onAbortClick($event)" matTooltip="Abort" ><i class="bi bi-ban icons ban"></i></button>
     &nbsp;
-    <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Zip)" ><i class="bi bi-file-earmark-zip-fill icons zip"></i></button>
+    <button  class="btn  btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download Consolidated Report(Excel)" ><i class="bi bi-file-earmark-excel-fill icons report"></i></button>
+    <!-- &nbsp; -->
+    <!-- <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Zip)" ><i class="bi bi-file-earmark-zip-fill icons zip"></i></button> -->
     &nbsp;
     <button  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="Execution Result Details" ><i class="bi bi-eye-fill icons details"></i></button>
 
@@ -64,6 +66,9 @@ interface customcellRenderparams extends ICellRendererParams{
     .details{
       color: #fdb73b;
     }
+    .ban{
+      color:#f58233;
+    }
     `
   ]
 })
@@ -73,6 +78,7 @@ export class ExecutionButtonComponent implements OnInit{
   lastSelectedNodeId:string ='';
   currentNodeId: string | undefined;
   textforedit!:string;
+  showHideAbort = true;
 
   agInit(params:customcellRenderparams): void {
     this.params = params;
@@ -84,7 +90,11 @@ export class ExecutionButtonComponent implements OnInit{
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    
+    if(this.params.data.abortNeeded === true){
+      this.showHideAbort = true;
+    }else{
+      this.showHideAbort = false;
+    }
   }
   //** Condition for disable edit and delete button to own user */
   isButtonDisabled(): boolean {
@@ -117,6 +127,11 @@ export class ExecutionButtonComponent implements OnInit{
   onDownloadClick($event:any){
     if (this.params.onDownloadClick instanceof Function) {
       this.params.onDownloadClick(this.params.node.data);
+    }
+  }
+  onAbortClick($event:any){
+    if (this.params.onAbortClick instanceof Function) {
+      this.params.onAbortClick(this.params.node.data);
     }
   }
 }

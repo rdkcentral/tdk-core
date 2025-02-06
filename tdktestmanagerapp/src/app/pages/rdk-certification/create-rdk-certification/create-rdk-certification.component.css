@@ -54,3 +54,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     cursor: pointer;
     margin-right: 15px;
 }
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}

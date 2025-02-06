@@ -14,8 +14,12 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row radiobox-row mt-1">
-        <div class="col-md-12 radiobox">
+    <div class="radiobox-row mt-1">
+        <div class="col-md-12">
+            <h1 class="title borders-btm">Result Analysis</h1>
+        </div>
+
+        <!-- <div class="col-md-12 radiobox">
             <h3 class="heading">Select the device category :</h3>
             <div class="rdkgroup">
                 <div class="form-check form-check-inline">
@@ -31,99 +35,148 @@ limitations under the License.
                     <label class="form-check-label" for="rdkc">Camera</label>
                 </div>
             </div>
-        </div>
-        <div class="row borders-btm">
+        </div> -->
+        <!-- <div class="row borders-btm">
             <div class="col-md-12">
-                <h1 class="title"> {{categoryName}} Result Analysis</h1>
+                <h1 class="title borders-btm">Result Analysis</h1>
             </div>
-        </div>
+        </div> -->
         <div class="row mt-2 main-margin">
-            <div class="col">
-                <div class="row mb-3 common-style">
-                    <label for="resulttype" class="col-md-3 col-form-label">Result Type<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="resulttype" (change)="resultChange($event)">
-                            <option value="" default>Select</option>
-                            <option value="" default>Show result by Device type</option>
-                            <option value="" default>Show result by Device</option>
-                            <option value="" default>Show result by Build Name</option>
-                            <option value="" default>Analyze Execution</option>
-                            <option value="" default>Comparision Report Download</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="row mb-3 common-style">
-                    <label for="resulttype" class="col-md-3 col-form-label">Device Type<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="resulttype" (change)="deviceChange($event)">
-                            <option value="" default>Select</option>
-                            <option value="device-1" default>device-1</option>
-                            <option value="device-2" default>device-2</option>
-                            <option value="device-3" default>device-3</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="row mb-3 common-style" *ngIf="scriptShow">
-                    <label for="Script" class="col-md-3 col-form-label">Select Script<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="script" (change)="scriptChange($event)">
-                            <option value="" default>Select</option>
-                            <option value="Script-1" default>Script-1</option>
-                            <option value="Script-2" default>Script-2</option>
-                            <option value="Script-3" default>Script-3</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="row mb-3 common-style" *ngIf="showTestSuite">
-                    <label for="TestSuite" class="col-md-3 col-form-label">Select TestSuite<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="testSuite" (change)="testSuiteChange($event)">
-                            <option value="" default>Select</option>
-                            <option value="TestSuite-1" default>TestSuite-1</option>
-                            <option value="TestSuite-2" default>TestSuite-2</option>
-                            <option value="TestSuite-3" default>TestSuite-3</option>
-                          </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col">
-                <div class="row mb-3 common-style">
-                    <label for="resultcategory" class="col-md-3 col-form-label">Result Category<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="resultcategory" (change)="resultCategory($event)">
-                            <option value="" default>Select</option>
-                            <option value="normal" default>Normal</option>
-                            <option value="performance" default>Performance</option>
-                          </select>
-                    </div>
-                </div>
-                <div class="row mb-3 common-style">
-                    <div class="col-md-12">
-                        <div class="viewgroup">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="scripts" value="scripts" (change)="scriptType('scripts')" >
-                                <label class="form-check-label" for="scripts">Show Results by Script</label>
+            <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
+                <mat-tab label="Comparsion Report">
+                    <div class="report-section">
+                        <form [formGroup]="reportForm" (ngSubmit)="reportSubmit()"> 
+                        <div class="mb-3 row-align">
+                            <label for="testtype" class="col-md-3 col-form-label">Base Execution Name <span
+                                style="color:red; margin-left: 0.75em;">*</span>
+                                <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select one execution for adding it as base execution"></i></span>
+                            </label>
+                            <div class="col-md-5">
+                                <input type="text" class="form-control" [value]="selectExecutionName" formControlName="baseName">
+                                <div *ngIf="reportSubmitted && reportForm.controls['baseName']?.errors" class="text-danger">
+                                    <small *ngIf="reportForm.controls['baseName']?.errors?.['required']">Give one execution name or choose.</small>
+                                </div>
+                                
                             </div>
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input rdkradio" type="radio" name="viewradio" id="testsuites" value="testsuites" (change)="scriptType('testsuites')">
-                                <label class="form-check-label" for="testsuites">Show Results by TestSuites</label>
+                            <div class="col-md-3 text-center">
+                                <span class="ortext">OR</span><button type="button" class="create-btn" (click)="openModal()">Choose</button>
+                            </div>
+
+                        </div>
+                        <div class="mt-4 mb-3 row-align">
+                            <label for="testtype" class="col-md-3 col-form-label">Comparison Execution Names <span
+                                style="color:red; margin-left: 0.75em;">*</span>
+                                <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select 1- 10 executions for the comparison report"></i></span>
+                            </label>
+                            <div class="col-md-5">
+                                <textarea rows="10" class="form-control" [value]="selectComparisonNames" formControlName="comparisonName"></textarea> 
+                                <div *ngIf="reportSubmitted && reportForm.controls['comparisonName']?.errors" class="text-danger">
+                                    <small *ngIf="reportForm.controls['comparisonName']?.errors?.['required']">Give list of execution names separated by comma (Min: 1 and Max: 10) or choose.</small>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-center">
+                                <span class="ortext">OR</span><button type="button" class="create-btn" (click)="comparisonModal()">Choose</button>
                             </div>
                         </div>
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="create-btn">Generate Comparison Report</button>
+                        </div>
+                    </form>
                     </div>
-                </div>
-                <div class="row mb-3 common-style">
-                    <label for="resultno" class="col-md-3 col-form-label">Result No's<span style="color:red; margin-left: 0.75em;">*</span></label>
-                    <div class="col-md-8">
-                        <select class="form-select" aria-label="Default select example" id="resultno" (change)="resultNoChange($event)">
-                            <option value="" default>Select</option>
-                            <option value="2" default>2</option>
-                            <option value="3" default>3</option>
-                            <option value="4" default>4</option>
-                            <option value="5" default>5</option>
-                          </select>
+                </mat-tab>
+                <mat-tab label="Combined Report">
+                    <div class="report-section">
+                        <form [formGroup]="combinedForm" (ngSubmit)="reportSubmit()"> 
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label">From <span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <input type="datetime-local" class="form-control" formControlName="fromDate">
+                                            <div *ngIf="combinedSubmitted && combinedForm.controls['fromDate']?.errors" class="text-danger">
+                                                <small *ngIf="combinedForm.controls['fromDate']?.errors?.['required']">Please select from date.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label">Device Type <span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <select class="form-select" aria-label="Default select example" id="selectDevicetype"
+                                                formControlName="deviceType">
+                                                <option value="" default>Select</option>
+                                                <option value="RDKV">deviceType1</option>
+                                                <option value="RDKB">deviceType2</option>
+                                                <option value="RDKC">deviceType3</option>
+                                            </select>
+                                            <div *ngIf="combinedSubmitted && combinedForm.controls['deviceType']?.errors" class="text-danger">
+                                                <small *ngIf="combinedForm.controls['deviceType']?.errors?.['required']">Please select device type.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label">To <span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <input type="datetime-local" class="form-control" formControlName="toDate">
+                                            <div *ngIf="combinedSubmitted && combinedForm.controls['toDate']?.errors" class="text-danger">
+                                                <small *ngIf="combinedForm.controls['toDate']?.errors?.['required']">Please select to date.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="mt-2 mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label">Script Type<span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <select class="form-select" aria-label="Default select example" id="selectDevicetype"
+                                                formControlName="scriptType">
+                                                <option value="" default>Select</option>
+                                                <option value="SingleScript">Single Script</option>
+                                                <option value="MultiScript">Multi Script</option>
+                                                <option value="TestSuite">TestSuite</option>
+                                            </select>
+                                            <div *ngIf="combinedSubmitted && combinedForm.controls['scriptType']?.errors" class="text-danger">
+                                                <small *ngIf="combinedForm.controls['scriptType']?.errors?.['required']">Please select script type.</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label">Category<span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                        <div class="col-md-8">
+                                            <select class="form-select" aria-label="Default select example" id="selectDevicetype"
+                                            formControlName="category">
+                                            <option value="" default>Select</option>
+                                            <option value="RDKV">Video</option>
+                                            <option value="RDKB">Broadband</option>
+                                            <option value="RDKC">Camera</option>
+                                        </select>
+                                        <div *ngIf="combinedSubmitted && combinedForm.controls['category']?.errors" class="text-danger">
+                                            <small *ngIf="combinedForm.controls['category']?.errors?.['required']">Please select a
+                                                category.</small>
+                                        </div>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row-align">
+                                        <label for="testtype" class="col-md-4 col-form-label"></label>
+                                        <div class="col-md-8">
+                                            <button type="submit" class="create-btn">Filter Executions</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="col-md-12 text-center">
+                            <button type="submit" class="create-btn">Generate Combined Report</button>
+                        </div>
+                    </form>
                     </div>
-                </div>
-            </div>
+                </mat-tab>
+            </mat-tab-group>    
         </div>
     </div>
 </div>

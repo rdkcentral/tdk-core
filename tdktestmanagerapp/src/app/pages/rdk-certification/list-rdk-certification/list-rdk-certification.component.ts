@@ -294,7 +294,6 @@ export class ListRdkCertificationComponent {
 
   delete(data: any):void{
     if (confirm("Are you sure to delete ?")) {
-      console.log("Data",data);
       this.service.deleteRdkCertification(data.name).subscribe({
         next: (res) => {
           this.rowData = this.rowData.filter((row: any) => row.name !== data.name);

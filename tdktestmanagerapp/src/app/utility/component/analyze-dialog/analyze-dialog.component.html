@@ -1,0 +1,127 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row mt-2">
+        <form [formGroup]="analysisForm" (ngSubmit)="analysisSubmit()">
+        <div class="col-md-12">
+            <h1 class="view-title">Analysis and Ticket Mapping</h1>
+            <div class="ticket-sec mt-2">
+                <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
+                    <mat-tab label="Ticket Details">
+                        <div class="row main-sec mt-3">
+                            <div class="col-md-2">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="row all-margin mb-4">
+                                    <label for="devicename" class="col-md-3 col-form-label">Script Name</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" formControlName="scriptName"> 
+                                        <div *ngIf="analysisFormSubmitted && analysisForm.controls['scriptName']?.errors" class="text-danger">
+                                            <small *ngIf="analysisForm.controls['scriptName']?.errors?.['required']">Please enter script name.</small>
+                                        </div>
+                                    </div>
+                                  </div>
+                                <div class="row mb-4">
+                                    <label for="testtype" class="col-md-3 col-form-label">Ticket Details<span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" formControlName="ticketDetails"> 
+                                        <div *ngIf="analysisFormSubmitted && analysisForm.controls['ticketDetails']?.errors" class="text-danger">
+                                            <small *ngIf="analysisForm.controls['ticketDetails']?.errors?.['required']">Please enter ticket details.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <label for="testtype" class="col-md-3 col-form-label">Defect Type <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-9">
+                                        <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="defectType">
+                                            <option value="" default>Select</option>
+                                            @for (item of allDeftesTypes; track $index) {
+                                                <option value="{{item}}">{{item}}</option>
+                                            }
+                                          </select>
+                                          <div *ngIf="analysisFormSubmitted && analysisForm.controls['defectType']?.errors" class="text-danger">
+                                            <small *ngIf="analysisForm.controls['defectType']?.errors?.['required']">Please select defect type.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-4">
+                                    <label for="testtype" class="col-md-3 col-form-label">Remarks <span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" formControlName="remarks"> 
+                                        <div *ngIf="analysisFormSubmitted && analysisForm.controls['remarks']?.errors" class="text-danger">
+                                            <small *ngIf="analysisForm.controls['remarks']?.errors?.['required']">Please enter remarks.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- <div class="col-md-12 text-end">
+                                    <button class="save-btn" >Save</button>
+                                </div> -->
+                            </div>
+                            <div class="col-md-2">
+   
+                            </div>
+
+                        </div>
+                    </mat-tab>
+                    <mat-tab label="Jira integrated analysis">
+                        <div class="col-md-12">
+                            <div class="filterby">
+                                <label for="filterDropdown" class="text-label"> Select the specific project and search if needed</label>
+                                <div class="filter-drop-down">
+                                  <!-- <select id="filterDropdown" class="form-select">
+                                    <option value="" default>Select</option>
+                                    <option value="ExecutionName">Execution Name</option>
+                                    <option value="Scripts/Testsuite">Scripts/Testsuite</option>
+                                    <option value="Device">Device</option>
+                                    <option value="User">User</option>
+                                  </select> -->
+                                </div>
+                            <button class="save-btn" matTooltip="Create"><i class="bi bi-plus-circle-fill download-icon"></i></button>
+
+                            </div>
+                      
+                        </div>
+                        <div style="width: 100%; height: 340px;" [class]="themeClass">
+                            <ag-grid-angular
+                                style="width: 100%; height: 100%;"
+                                [columnDefs]="columnSchudle"
+                                [defaultColDef]="{sortable: true}"
+                                [rowData]="rowData"
+                                [pagination]="false"
+                                [paginationPageSize]="pageSize"
+                                [paginationPageSizeSelector]="schedulePageSizeSelector"
+                                [animateRows]="true"
+                                [context]="this"
+                                [gridOptions]="gridOptions"
+                            ></ag-grid-angular>
+                        </div>
+                    </mat-tab>
+                </mat-tab-group>
+            </div>
+ 
+            <div class="row mt-2">
+                <div class="col-md-12 text-end">
+                    <button class="close-btn" type="button" (click)="onClose()">Close</button>
+                    <button class="save-btn" type="submit" [disabled]="!analysisForm.valid">Save</button>
+                </div>
+            </div>
+        </div>
+        </form>
+    </div>
+  </div>

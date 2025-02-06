@@ -129,7 +129,6 @@ export class DeviceCreateComponent implements OnInit{
    */
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
-    console.log(this.isThunderPresent);
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory
       this.configureName = deviceCategory;
@@ -157,7 +156,7 @@ export class DeviceCreateComponent implements OnInit{
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.deviceForm = new FormGroup({
-      devicename: new FormControl<string | null>('', { validators: Validators.required }),
+      devicename: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] }),
       deviceip: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
@@ -172,7 +171,7 @@ export class DeviceCreateComponent implements OnInit{
       agentmonitorport: new FormControl<string | null>(this.agentMonitoPort)
     })
     this.rdkBForm = new FormGroup({
-      gatewayName: new FormControl<string | null>('', { validators: Validators.required }),
+      gatewayName: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] }),
       gatewayIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
@@ -183,7 +182,7 @@ export class DeviceCreateComponent implements OnInit{
       agentMonitorportB:new FormControl<string | null>('')
     })
     this.rdkCForm = new FormGroup({
-      cameraName: new FormControl<string | null>('', { validators: Validators.required }),
+      cameraName: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] }),
       stbIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
       macaddr: new FormControl<string | null>('', { validators: Validators.required }),
       devicetype: new FormControl<string | null>('', { validators: Validators.required }),
@@ -288,8 +287,22 @@ export class DeviceCreateComponent implements OnInit{
         });
       }
     });
+    this.deviceForm.get('devicename')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.deviceForm.get('devicename')?.setValue(value.toUpperCase());
+      }
+    });
+    this.rdkBForm.get('gatewayName')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.rdkBForm.get('gatewayName')?.setValue(value.toUpperCase());
+      }
+    });
+    this.rdkCForm.get('cameraName')?.valueChanges.subscribe((value) => {
+      if (value) {
+        this.rdkCForm.get('cameraName')?.setValue(value.toUpperCase());
+      }
+    });
   }
-
 
 
   /**
@@ -358,11 +371,9 @@ export class DeviceCreateComponent implements OnInit{
     if(this.isThunderchecked){
       this.isThunderPresent = true;
       this.showPortFile = true;
-      console.log(this.isThunderPresent);
     }else{
       this.showPortFile = false;
       this.isThunderPresent = false;
-      console.log(this.isThunderPresent);
     }
     this.visibilityConfigFile();
   }

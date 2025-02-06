@@ -36,11 +36,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 .container-box {
     border-radius: 10px;
-    box-shadow: 0px 1px 2px 1px rgb(0 0 0 / 18%);
     position: relative;
     overflow: hidden;
     min-height: 320px;
-
+    background-color: #f6f6f6;
+    box-shadow: 0px 1px 2px #333;
 }
 
 .container-box form {
@@ -50,7 +50,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     padding: 30px 18%;
     height: 90%;
 }
-
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}
 .mt-2.createbtn {
     display: flex;
     justify-content: center;

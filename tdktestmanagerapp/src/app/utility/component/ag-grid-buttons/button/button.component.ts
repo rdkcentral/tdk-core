@@ -37,8 +37,8 @@ interface customcellRenderparams extends ICellRendererParams{
     <button   class="btn  btn-sm delete-btn" (click)="onEditClick($event)" matTooltip="{{textforedit}}"><mat-icon class="extra-icon edit">edit</mat-icon></button>
     &nbsp;
     <button *ngIf="deleteShowHide" class="btn  btn-sm delete-btn" (click)="onDeleteClick($event)" matTooltip="Delete"><mat-icon class="delete-icon extra-icon">delete_forever</mat-icon></button>
-    &nbsp;
-    <button *ngIf="viewShowHide"  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="View"><mat-icon class=" view extra-icon">remove_red_eye</mat-icon></button>
+   
+    <!-- <button *ngIf="viewShowHide"  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="View"><mat-icon class=" view extra-icon">remove_red_eye</mat-icon></button> -->
     &nbsp;
     <button *ngIf="downloadShowHide" class="btn  btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download XML" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
     &nbsp;
@@ -63,7 +63,7 @@ interface customcellRenderparams extends ICellRendererParams{
       color: #00B2DC;
     }
     .delete-icon{
-      color: #dc3545;
+      color: #808080;
     }
     .view{
       color: #fdb73b;
@@ -101,10 +101,10 @@ export class ButtonComponent implements OnInit{
   ngOnInit(): void {
     if(this.route.snapshot.url[0].path === 'devices'){
       this.downloadShowHide = true;
-      this.textforedit = 'Edit';
+      this.textforedit = 'Edit/View';
     }else{
       this.downloadShowHide = false;
-      this.textforedit = 'Edit';
+      this.textforedit = 'Edit/View';
     }
     if(this.route.snapshot.url[0].path === 'script'){
       this.downloadSriptZip = true;
@@ -122,7 +122,7 @@ export class ButtonComponent implements OnInit{
         this.textforedit = 'Edit/View';
       }else{
         this.viewShowHide = true;
-        this.textforedit = 'Edit';
+        this.textforedit = 'Edit/View';
       }
       if(this.route.snapshot.url[1].path === 'list-rdk-certifications'){
         this.deleteShowHide = true;

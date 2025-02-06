@@ -17,7 +17,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -119,12 +119,27 @@ export class LoginComponent implements OnInit {
   allGroupName: any = [];
   categorySelect!:string;
   backendErrors: { [key: string]: string } = {};
+/**
+   * Represents the showNewPassword of the application.
+   */
+public showPasswordOnPress: boolean = true;
+ 
+/**
+ * Represents the showViewPasswordOnPress of the application.
+ */
+public showViewPasswordOnPress: boolean = true;
+
+/**
+ * Represents the showConfirmPasswordOnPress of the application.
+ */
+public showConfirmPasswordOnPress: boolean = true;
 
   constructor(private fb: FormBuilder, private router: Router,
     private registerservice: RegisterService,
-    private _snakebar: MatSnackBar,
     private loginservice: LoginService,
-    private authservice: AuthService
+    private authservice: AuthService,
+    private location : Location,
+    private _snakebar: MatSnackBar,
   ) { }
   /**
    * Initializes the component.
@@ -148,7 +163,7 @@ export class LoginComponent implements OnInit {
       displayname: ['', [Validators.required, this.noSpacesValidator]],
       regpassword: ['', [Validators.required, Validators.minLength(6)]],
       retypepassword: ['', Validators.required],
-      usergroup: ['', [Validators.required]],
+      usergroup: [''],
       preferCategoty:['', [Validators.required]]
     }, { validators: this.passwordMatchValidator('regpassword', 'retypepassword') })
 
@@ -206,6 +221,15 @@ export class LoginComponent implements OnInit {
         });
       }
     });
+    if(this.authservice.isLoggednIn() && this.router.url === '/login'){
+      this.router.navigate(["/execution"]);
+    }
+    
+    window.addEventListener('storage',(event)=>{
+      if(event.key === 'logout'){
+        this.router.navigate(["/login"]);
+      }
+    })
   }
   get displayname(): AbstractControl {
     return this.registerForm.get('displayname')!;
@@ -335,6 +359,7 @@ export class LoginComponent implements OnInit {
           this.authservice.setPrivileges(res.userRoleName)
           localStorage.setItem("loggedinUser", JSON.stringify(loggedinUser));
           this.router.navigate(["/execution"]);
+          this.location.replaceState('/execution');
         },
         error: (err) => {
           let errmsg = err.error;
@@ -411,5 +436,24 @@ export class LoginComponent implements OnInit {
     return errors;
   }
 
+/**
+   * Method to view the password.
+   */
+viewPassword(): void {
+  this.showPasswordOnPress = !this.showPasswordOnPress;
+}
 
+/**
+ * Method to view the password.
+ */
+viewRegisterPassword(): void {
+  this.showViewPasswordOnPress = !this.showViewPasswordOnPress;
+}
+
+/**
+ * Method to view the password.
+ */
+viewConfirmPassword(): void{
+  this.showConfirmPasswordOnPress = !this.showConfirmPasswordOnPress;
+}
 }

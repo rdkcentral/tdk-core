@@ -25,9 +25,13 @@ limitations under the License.
                                 <div class="row mb-3">
                                     <label for="devicename" class="col-md-3 col-form-label">Stb Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                      <input type="text" class="form-control" id="devicename" formControlName="devicename" autocomplete="off" placeholder="Enter device name" [(ngModel)]="stbNameChange" (keyup)="valuechange($event)">
+                                      <input type="text" class="form-control" id="devicename" formControlName="devicename" autocomplete="off" placeholder="Enter device name" 
+                                      [(ngModel)]="stbNameChange" (keyup)="valuechange($event)" maxlength="20">
                                         <div *ngIf="deviceFormSubmitted && deviceForm.controls['devicename']?.errors" class="text-danger">
                                             <small *ngIf="deviceForm.controls['devicename']?.errors?.['required']">Please enter device name.</small>
+                                            <small *ngIf="deviceForm.controls['devicename']?.errors?.['pattern']">
+                                              Invalid device name. Only alphabets, numbers, and underscores are allowed.
+                                            </small>
                                         </div>
                                     </div>
                                   </div>
@@ -188,9 +192,12 @@ limitations under the License.
                                 <div class="row mb-3">
                                     <label for="gatewayName" class="col-md-3 col-form-label">Gateway Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
-                                      <input type="text" class="form-control" id="gatewayName" formControlName="gatewayName" autocomplete="off" placeholder="Enter gateway name">
+                                      <input type="text" class="form-control" id="gatewayName" formControlName="gatewayName" autocomplete="off" placeholder="Enter gateway name" maxlength="20">
                                         <div *ngIf="rdkbFormSubmitted && rdkBForm.controls['gatewayName']?.errors" class="text-danger">
                                             <small *ngIf="rdkBForm.controls['gatewayName']?.errors?.['required']">Please enter gateway name.</small>
+                                            <small *ngIf="rdkBForm.controls['gatewayName']?.errors?.['pattern']">
+                                              Invalid gateway name. Only alphabets, numbers, and underscores are allowed.
+                                            </small>
                                         </div>
                                     </div>
                                   </div>
@@ -314,9 +321,12 @@ limitations under the License.
                                     <label for="cameraName" class="col-md-3 col-form-label">Camera Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">
                                       <input type="text" class="form-control" id="cameraName" formControlName="cameraName" autocomplete="off"
-                                        placeholder="Enter camera name">
+                                        placeholder="Enter camera name" maxlength="20">
                                         <div *ngIf="rdkcFormSubmitted && rdkCForm.controls['cameraName']?.errors" class="text-danger">
                                             <small *ngIf="rdkCForm.controls['cameraName']?.errors?.['required']">Please enter camera name.</small>
+                                            <small *ngIf="rdkCForm.controls['cameraName']?.errors?.['pattern']">
+                                              Invalid camera name. Only alphabets, numbers, and underscores are allowed.
+                                            </small>
                                         </div>
                                     </div>
                                   </div>

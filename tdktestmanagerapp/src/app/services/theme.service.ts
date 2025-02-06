@@ -50,7 +50,6 @@ export class ThemeService {
     
     localStorage.setItem('theme', theme);
      this.http.put(`${apiUrl}api/v1/users/settheme?userId=${userId}&theme=${theme}`,null ,{ headers, responseType: 'text' }).subscribe(res=>{
-      console.log('Theme saved to API:', res);
      })
      this.currentThemeSubject.next(theme);
   }
@@ -63,7 +62,6 @@ export class ThemeService {
     this.http.get(`${apiUrl}api/v1/users/gettheme?userId=${userId}`,{ headers, responseType: 'text' })
     .pipe(
       catchError(() => {
-        console.log('Error fetching theme from API, defaulting to light');
         return of('LIGHT'); 
       })
     ).subscribe(response => {

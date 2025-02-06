@@ -39,7 +39,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     margin-left: 25px;
     margin-right: 25px;
 }
-
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}
 .container-box form {
     margin: 10px 2rem;
 }
@@ -68,7 +71,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     display :flex;
 }
 .thunder {
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
 }
 .chip-btn{
     background-color: #00B2DC;

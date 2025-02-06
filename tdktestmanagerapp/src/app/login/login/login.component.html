@@ -54,8 +54,11 @@ limitations under the License.
               <div class="row mb-1">
                 <label for="regpassword" class="col-md-4 col-form-label">Password<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
-                  <input type="password" id="regpassword" class="form-control" formControlName="regpassword"
+                  <input type="password" id="regpassword" class="form-control" [type]="showViewPasswordOnPress ? 'password' : 'text'" formControlName="regpassword"
                     placeholder="Enter Password">
+                    <span class="registerEyeicon" (click)="viewRegisterPassword()">
+                      <i [ngClass]="showViewPasswordOnPress?'bi bi-eye-slash':'bi bi-eye'"></i>
+                    </span>
                   <div *ngIf="regSubmitted && registerForm.controls['regpassword']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['regpassword']?.errors?.['required']">Please enter
                       password.</small>
@@ -66,8 +69,11 @@ limitations under the License.
               <div class="row mb-1">
                 <label for="retypepassword" class="col-md-4 col-form-label">Retype Password<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
-                  <input type="password" id="retypepassword" class="form-control" formControlName="retypepassword"
+                  <input type="password" id="retypepassword" class="form-control" [type]="showConfirmPasswordOnPress ? 'password' : 'text'" formControlName="retypepassword"
                     placeholder="Enter Retype Password">
+                    <span class="confirmEyeicon" (click)="viewConfirmPassword()">
+                      <i [ngClass]="showConfirmPasswordOnPress?'bi bi-eye-slash':'bi bi-eye'"></i>
+                    </span>
                   <div *ngIf="regSubmitted && registerForm.controls['retypepassword']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['retypepassword']?.errors?.['required']">Please enter
                       password.</small>
@@ -103,7 +109,7 @@ limitations under the License.
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="groupname" class="col-md-4 col-form-label">User Group<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <label for="groupname" class="col-md-4 col-form-label">User Group</label>
                 <div class="col-md-8">
                   <select class="form-select" aria-label="Default select example" id="usergroup"
                     formControlName="usergroup">
@@ -178,8 +184,11 @@ limitations under the License.
               <div class="row mb-4">
                 <label for="password" class="col-md-4 col-form-label">Password</label>
                 <div class="col-md-8">
-                  <input type="password" class="form-control" id="password" formControlName="password"
+                  <input type="password" class="form-control" id="password" [type]="showPasswordOnPress ? 'password' : 'text'" formControlName="password"
                     placeholder="Enter Password">
+                    <span class="eyeicon" (click)="viewPassword()">
+                      <i [ngClass]="showPasswordOnPress?'bi bi-eye-slash':'bi bi-eye'"></i>
+                    </span>
                   <div *ngIf="submitted && signinForm.controls['password'].errors" class="text-danger">
                     <small *ngIf="signinForm.controls['password'].errors['required']">Please enter password.</small>
                     <small *ngIf="signinForm.controls['password'].errors['minlength']">Password minimum 4
@@ -245,12 +254,12 @@ limitations under the License.
           <div class="toggle-container">
             <div class="toggle">
               <div class="toggle-panel toggle-left">
-                <h1>Welcome Back!</h1>
-                <p>Enter your personal details to use all of site features</p>
+                <!-- <h1>Welcome Back!</h1> -->
+                <p>Enter your user details to sign in</p>
                 <button class="signin" id="login" (click)="toogleForm('signin')">Sign In</button>
               </div>
               <div class="toggle-panel toggle-right">
-                <p>Register with your personal details to use all of site features</p>
+                <!-- <p>Register with your personal details to use all of site features</p> -->
                 <button class="signup" id="register" (click)="toogleForm('register')">Register</button>
               </div>
             </div>

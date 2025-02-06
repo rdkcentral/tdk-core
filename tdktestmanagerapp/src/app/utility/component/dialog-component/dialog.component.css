@@ -48,3 +48,7 @@ font-family: Roboto, "Helvetica Neue", sans-serif !important;
 .thunder{
   border: 1px solid;
 }
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
+}

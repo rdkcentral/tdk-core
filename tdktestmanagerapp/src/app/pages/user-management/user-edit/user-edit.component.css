@@ -62,3 +62,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .mat-mdc-card-content:last-child {
     padding-bottom: 14px !important;
 }
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}

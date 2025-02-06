@@ -15,7 +15,7 @@ limitations under the License.
 <div class="container">
     <div class="row radiobox-row mt-3">
         <div class="rdkgroup">
-            <h3 class="heading">Select the configuration category :</h3>
+            <h3 class="heading">Select the RDK flavor :</h3>
             <div class="form-check form-check-inline">
                 <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV"
                     [(ngModel)]="selectedCategory"  (change)="ischecked('RDKV')">
@@ -56,17 +56,17 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/modules-list">
-                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
+                    <div class="card-height-3" routerLink="/configure/list-soc">
+                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
                             <i class="bi bi-arrow-right-short arrow-icon"></i>
                             <div>
-                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+                                <span class="desc">Option to add SoC</span> 
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="col">
                     <div class="card-height-3" routerLink="/configure/list-primitivetest">
@@ -79,18 +79,16 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/list-soc">
-                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
+                    <div class="card-height-3" routerLink="/configure/modules-list">
+                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
                             <i class="bi bi-arrow-right-short arrow-icon-right"></i>
                             <div>
-                                <span class="desc">Option to add SoC</span> 
+                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-height-3" routerLink="/configure/list-rdk-certifications">
                         <span class="circle"><i class="bi bi-award-fill icon-right"></i></span>
                         <div class="text-group">
@@ -157,17 +155,17 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/modules-list">
-                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
+                    <div class="card-height-3" routerLink="/configure/list-soc">
+                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
                             <i class="bi bi-arrow-right-short arrow-icon"></i>
                             <div>
-                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+                                <span class="desc">Option to add SoC</span> 
                             </div>
                         </div>
                     </div>
+                
                 </div>
                 <div class="col">
                     <div class="card-height-3" routerLink="/configure/list-primitivetest">
@@ -180,19 +178,19 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/list-soc">
-                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
+                    <div class="card-height-3" routerLink="/configure/modules-list">
+                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
                             <i class="bi bi-arrow-right-short arrow-icon-right"></i>
                             <div>
-                                <span class="desc">Option to add SoC</span> 
+                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
                             </div>
                         </div>
                     </div>
+
                     <div class="card-height-3 rdkBcertify">
-                        <span class="circle"><i class="bi bi-award-fill icon-right"></i></span>
+                        <span class="circle bc-circle"><i class="bi bi-award-fill icon-right"></i></span>
                         <div class="text-group">
                             <a class="category-title3 rdkBlink" >RDK Certification</a>
                             <i class="bi bi-arrow-right-short arrow-icon-right"></i>
@@ -257,17 +255,17 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/modules-list">
-                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
+                    <div class="card-height-3" routerLink="/configure/list-soc">
+                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
                             <i class="bi bi-arrow-right-short arrow-icon"></i>
                             <div>
-                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
+                                <span class="desc">Option to add SoC</span> 
                             </div>
                         </div>
                     </div>
+
                 </div>
                 <div class="col">
                     <div class="card-height-3" routerLink="/configure/list-primitivetest">
@@ -280,17 +278,17 @@ limitations under the License.
                             </div>
                         </div>
                     </div>
-
-                    <div class="card-height-3" routerLink="/configure/list-soc">
-                        <span class="circle"><i class="bi bi-cpu-fill icon-right"></i></span>
+                    <div class="card-height-3" routerLink="/configure/modules-list">
+                        <span class="circle"><i class="bi bi-border icon-conf"></i></span>
                         <div class="text-group">
-                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('socvendors')">SoC</a>
+                            <a class="category-title3" routerLinkActive="active" (click)="navigationToUser('modules')">Modules</a>
                             <i class="bi bi-arrow-right-short arrow-icon-right"></i>
                             <div>
-                                <span class="desc">Option to add SoC</span> 
+                                <span class="text-center desc">Configure Information about Component Interface Modules</span>
                             </div>
                         </div>
                     </div>
+        
                 </div>
             </div>
             <div class="row mt-4" *ngIf="privileges == 'admin'">

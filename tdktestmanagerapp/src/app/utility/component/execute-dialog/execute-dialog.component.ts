@@ -32,6 +32,9 @@ import { TimepickerConfig, TimepickerModule } from "ngx-bootstrap/timepicker";
 import { ExecutionService } from '../../../services/execution.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
+import moment from 'moment-timezone';
+import { FocusDirective } from '../../directives/focus.directive';
+
 
 export function getDatepickerConfig(): BsDatepickerConfig {
   return Object.assign(new BsDatepickerConfig(), {
@@ -49,7 +52,7 @@ export function getTimepickerConfig(): TimepickerConfig {
   selector: 'app-execute-dialog',
   standalone: true,
   imports: [CommonModule, LoaderComponent, ReactiveFormsModule, FormsModule,
-    MaterialModule, NgMultiSelectDropDownModule, BsDatepickerModule, TimepickerModule],
+    MaterialModule, NgMultiSelectDropDownModule, BsDatepickerModule, TimepickerModule, FocusDirective],
   providers: [BsDatepickerConfig, TimepickerConfig],
   templateUrl: './execute-dialog.component.html',
   styleUrl: './execute-dialog.component.css'
@@ -107,6 +110,7 @@ export class ExecuteDialogComponent {
   bsConfig: Partial<BsDatepickerConfig>;
   categoryName !: string;
   selectedType!: string;
+  showToggleField = false;
 
   constructor(
     public dialogRef: MatDialogRef<ExecuteDialogComponent>,
@@ -173,7 +177,7 @@ export class ExecuteDialogComponent {
       this.executeForm = this.fb.group({
         isThunder:[this.deviceStatusData.params.thunderEnabled],
         devicetype: [[this.deviceStatusData.params.deviceName]],
-        testType:['CI',Validators.required],
+        testType:['Other',Validators.required],
         executionName: [''],
         selectType:['script'],
         scriptTestsuite: ['', Validators.required],
@@ -256,6 +260,14 @@ export class ExecuteDialogComponent {
     });
     this.selectedType = this.executeForm.value.selectType;
   }
+
+  toggleAdditinalField(event:any){
+    if(event.checked === true){
+      this.showToggleField = true;
+    }else{
+      this.showToggleField = false;
+    }
+  }
   /**
    * Handles the selection of script type and updates the visibility and form controls accordingly.
    * 
@@ -336,6 +348,7 @@ export class ExecuteDialogComponent {
       this.testSuiteRef?.onDeSelectAll.emit([]);
     }
   }
+
   /**
    * Handles the event when the Thunder button is toggled.
    * 
@@ -724,7 +737,6 @@ export class ExecuteDialogComponent {
           this.triggerMessage = status.message;
         },
         error:(err)=>{
-          console.log(err.error);
           let status = JSON.parse(err.error);
           this.triggerMessage = status.message;
         }
@@ -742,29 +754,14 @@ export class ExecuteDialogComponent {
   scheduleExecute():void{
     const selectedDate = this.executeForm.value.date;
     let selectedTime = this.executeForm.value.time;
-
     if (selectedDate && selectedTime) {
-      const combinedDateTime = new Date(
-        selectedDate.getFullYear(),
-        selectedDate.getMonth(),
-        selectedDate.getDate(),
-        selectedTime.getHours(),
-        selectedTime.getMinutes(),
-        selectedTime.getSeconds()
-      );
-      console.log(combinedDateTime);
-      
-      const utcDateTime = new Date(Date.UTC(
-          combinedDateTime.getFullYear(),
-          combinedDateTime.getMonth(),
-          combinedDateTime.getDate(),
-          combinedDateTime.getHours(),
-          combinedDateTime.getMinutes(),
-          combinedDateTime.getSeconds()
-        )
-      );
-      console.log(utcDateTime)
-      this.utcTime = utcDateTime.toISOString();
+      const browserTimezone = moment.tz.guess(); 
+      const formattedDate = moment(selectedDate).format('YYYY-MM-DD'); // Format the date to 'YYYY-MM-DD'
+      const formattedTime = moment(selectedTime, 'HH:mm').format('HH:mm');
+      const combinedDateTime = `${formattedDate} ${formattedTime}`;
+      const localTime = moment.tz(combinedDateTime, 'YYYY-MM-DD HH:mm', browserTimezone);
+      const utcTime = localTime.utc().format('YYYY-MM-DDTHH:mm:ss[Z]');
+      this.utcTime = utcTime;
     } else {
     }
     let schedulerObj={

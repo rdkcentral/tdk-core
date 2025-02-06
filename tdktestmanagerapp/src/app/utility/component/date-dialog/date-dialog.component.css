@@ -47,7 +47,7 @@ body,
   margin: 0;
 }
 .daterange{
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     font-size: 0.8rem;
 }
 .all-btn {

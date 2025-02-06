@@ -64,7 +64,6 @@ export class PreferedCategoryComponent {
    */
   changeCategory(event:any):void{
     let val = event.target.value;
-    console.log(val);
     this.categorySelect = val?val:this.loggedinUser.userCategory;
   }
    /**

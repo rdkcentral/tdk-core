@@ -24,7 +24,7 @@ http://www.apache.org/licenses/LICENSE-2.0
     max-height: 100vh;
 }
 .card-height{
-    height: 440px !important;
+    height: 500px !important;
     overflow-y: auto;
     display: block;
 }
@@ -74,19 +74,22 @@ http://www.apache.org/licenses/LICENSE-2.0
 .reset-btn {
     margin-right: 10px;
 }
-
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}
 .multiselect-dropdown .dropdown-btn .selected-item-container .selected-item{
     max-width: 130px !important;
 }
 .thunder{
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
 }
 .longtest{
     display: flex;
     align-items: end;
 }
 .btn-testcase{
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     font-size: 0.8rem !important;
     background-color: white;
     border-radius: 4px;

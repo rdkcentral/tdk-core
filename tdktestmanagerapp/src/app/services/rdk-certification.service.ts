@@ -39,8 +39,6 @@ export class RdkService {
     });
     const formData: FormData = new FormData();
     formData.append('pythonFile', file, file.name);
-    console.log("File name")
-
     return this.http.post(`${apiUrl}api/v1/rdkcertification/create`, formData, { headers, responseType: 'text' });
   }
 

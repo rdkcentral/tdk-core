@@ -102,7 +102,7 @@ export class ModulesListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onViewClick:this.openModal.bind(this),
+        // onViewClick:this.openModal.bind(this),
         onFunctionClick:this.createFunction.bind(this),
         onModuleXMLClick :this.downloadModuleXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
@@ -230,24 +230,24 @@ export class ModulesListComponent {
    * @param data - The data to be displayed.
    */
 
-  openModal(data:any):void{
-    this.dialog.open( ModulesViewComponent,{
-      width: '99%',
-      height: '93vh',
-      maxWidth:'100vw',
-      panelClass: 'custom-modalbox',
-      data:{
-        executionTimeOut: data.executionTime,
-        moduleName:data.moduleName,
-        testGroup: data.testGroup,
-        moduleThunderEnabled:data.moduleThunderEnabled,
-        moduleAdvanced:data.moduleAdvanced,
-        moduleCrashLogFiles:data.moduleCrashLogFiles,
-        moduleLogFileNames: data.moduleLogFileNames
-      }
-    })
+  // openModal(data:any):void{
+  //   this.dialog.open( ModulesViewComponent,{
+  //     width: '99%',
+  //     height: '93vh',
+  //     maxWidth:'100vw',
+  //     panelClass: 'custom-modalbox',
+  //     data:{
+  //       executionTimeOut: data.executionTime,
+  //       moduleName:data.moduleName,
+  //       testGroup: data.testGroup,
+  //       moduleThunderEnabled:data.moduleThunderEnabled,
+  //       moduleAdvanced:data.moduleAdvanced,
+  //       moduleCrashLogFiles:data.moduleCrashLogFiles,
+  //       moduleLogFileNames: data.moduleLogFileNames
+  //     }
+  //   })
     
-  }
+  // }
 
   dowloadAllModule():void{
     if(this.rowData.length > 0){

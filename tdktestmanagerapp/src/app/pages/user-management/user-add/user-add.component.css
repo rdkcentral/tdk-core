@@ -33,7 +33,10 @@ http://www.apache.org/licenses/LICENSE-2.0
     border-image-width: 0px 0px 4px 0px;
     margin: 0 25px;
 }
-
+::ng-deep.form-select:focus, .form-control:focus{
+    border-color: gray !important;
+    box-shadow: none !important;
+}
 .userform {
     margin-left: 25px;
     margin-right: 25px;

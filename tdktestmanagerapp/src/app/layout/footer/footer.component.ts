@@ -49,8 +49,6 @@ export class FooterComponent {
   getAppVersion():void{
     this.userservice.appVersion().subscribe(res=>{
       this.vesionName = res;
-      console.log(this.vesionName);
-      
     })
   }
 }

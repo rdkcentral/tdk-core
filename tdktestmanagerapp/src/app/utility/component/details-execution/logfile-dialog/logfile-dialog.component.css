@@ -22,7 +22,7 @@ http://www.apache.org/licenses/LICENSE-2.0
   background-color: #fff;
   font-size: 0.8rem;
   padding: 5px 10px;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
   border-radius: 6px;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -35,7 +35,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 .livelog-area {
   width: 100%;
-  border: 1px solid #0e6f8794;
+  border: 1px solid gray;
 }
 .details-table {
   width: 100%;
@@ -83,4 +83,8 @@ tbody tr:nth-child(odd) {
   justify-content: center;
   align-items: center;
   color: #00b2dc;
+}
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
 }

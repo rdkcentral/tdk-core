@@ -88,7 +88,7 @@ body,
   border-color: #0e6f87;
 }
 .thunder{
-    border: 1px solid #0e6f8794;
+    border: 1px solid gray;
     margin-top: 0;
 }
 .longtest{
@@ -160,4 +160,8 @@ body,
 .error-row{
   text-align: end;
   margin-right: 25px;
+}
+::ng-deep.form-select:focus, .form-control:focus{
+  border-color: gray !important;
+  box-shadow: none !important;
 }

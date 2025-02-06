@@ -34,11 +34,11 @@ interface customcellRenderparams extends ICellRendererParams{
   imports: [MaterialModule, CommonModule],
   template: `
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
-    <button *ngIf="editShowHide" class="btn btn-sm delete-btn" matTooltip="Edit" (click)="onEditClick($event)"><mat-icon class="extra-icon edit">edit</mat-icon></button>
+    <button *ngIf="editShowHide" class="btn btn-sm delete-btn" matTooltip="Edit/View" (click)="onEditClick($event)"><mat-icon class="extra-icon edit">edit</mat-icon></button>
     &nbsp;
     <button *ngIf="deleteShowHide" class="btn btn-sm delete-btn" matTooltip="Delete" (click)="onDeleteClick($event)"><mat-icon class="extra-icon delete-icon">delete_forever</mat-icon></button>
-    &nbsp;
-    <button *ngIf="viewShowHide" class="btn btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button>
+   
+    <!-- <button *ngIf="viewShowHide" class="btn btn-sm delete-btn" matTooltip="View" (click)="onViewClick($event)"><i class="bi bi-eye extra-icon view"></i></button> -->
     &nbsp;
     <button *ngIf="functionShowHide" class="btn btn-sm delete-btn" matTooltip="Functions and Parameters" (click)="onFunctionClick($event)"><i class="bi bi-gear extra-icon create"></i></button>
     &nbsp;
@@ -65,7 +65,7 @@ interface customcellRenderparams extends ICellRendererParams{
       color: #00B2DC;
     }
     .delete-icon{
-      color: #dc3545;
+      color: #808080;
     }
     .view{
       color: #fdb73b;

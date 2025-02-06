@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MONACO_PATH, MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
@@ -104,14 +104,14 @@ export class CreateScriptsComponent {
     this.getAlldeviceType();
 
     this.firstFormGroup = this.fb.group({
-      scriptname: ['', Validators.required],
+      scriptname: ['', [Validators.required, this.noSpacesValidator]],
       module:['',Validators.required],
       primitiveTest: [{value:this.defaultPrimitive, disabled: true}],
       devicetype: ['', Validators.required],
       executiontimeout: ['', Validators.required],
       longdurationtest: [''],
       skipexecution: [''],
-      synopsis: ['', Validators.required]
+      synopsis: ['', [Validators.required, this.noSpacesValidator]]
     });
     this.secondFormGroup = this.fb.group({
       testcaseID: ['', Validators.required],
@@ -140,7 +140,82 @@ export class CreateScriptsComponent {
         this.firstFormGroup.get('primitiveTest')?.disable();
       }
     });
-
+  }
+  /**
+   * Get the controls of the register form.
+   * @returns The controls of the register form.
+   */  
+  get f() { return this.firstFormGroup.controls; }
+  /**
+     * This method is no space is allow.
+     */
+  noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value ? control.value.toString() : '';
+    return value.trimStart().length !== value.length ? { noLeadingSpaces: true } : null;
+  }
+  
+  onInput(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.firstFormGroup.get('synopsis')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onScritName(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onTestcaseID(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onTestObjective(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('testObjective')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onInputParameters(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('inputParameters')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onAutomationApproach(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('automationApproach')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onTestStub(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('testStub')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onInterface(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('rdkInterface')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
+  onExpectedOutput(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('expectedOutput')?.setValue(value.trimStart(), { emitEvent: false });
+    }
   }
   /**
    * Method to get all modules
