@@ -1169,7 +1169,12 @@
                 <param tag="frequency" defaultValue="null" type="int"/>
             </params>
         </method>
-        <method name="Start_FPS_Collection" api="startFpsCollection" type="method" desc="Starts the fps collection"/>
+	<method name="Set_Collection_Frequency_Negative" api="setCollectionFrequency" type="method" desc="Set the collection frequency with invalid value">
+            <params>
+                <param tag="frequency" defaultValue="null" />
+            </params>
+        </method>
+	<method name="Start_FPS_Collection" api="startFpsCollection" type="method" desc="Starts the fps collection"/>
         <method name="Stop_FPS_Collection"  api="stopFpsCollection"  type="method" desc="Stops the fps collection"/>
         <method name="Get_Frm_Mode"  api="getFrmMode"  type="method" version="2" desc="Returns the current auto framerate mode" >
             <expectedValues>0,1</expectedValues>
@@ -1193,6 +1198,11 @@
         <method name="Update_FPS_Value"  api="updateFps"  type="method" desc="Updates Fps values" >
             <params>
                 <param tag="newFpsValue" defaultValue="null" type="int"/>
+            </params>
+        </method>
+        <method name="Update_FPS_Value_Negative"  api="updateFps"  type="method" desc="Updates invalid Fps values" >
+            <params>
+                <param tag="newFpsValue" defaultValue="null" />
             </params>
         </method>
         <event name="Event_On_FPS" eventName="onFpsEvent" eventId="client.events.1" type="event" desc="Fired at given interval and after stopFpsCollection" />
