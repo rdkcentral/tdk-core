@@ -97,6 +97,30 @@
     </testCase>
     <testCase testCaseId="Controller_07" testCaseName="Set_and_Get_Configuration"  desc="Provides access to the configuration object of a service">
       <testCaseInfo testCaseType="direct"/>
+      <testCasePreRequisite>
+	  <prerequisite requisiteId="1" requisiteName="Activate_RDKShell_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="callsign" value="org.rdk.RDKShell" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RDKShell" />
+                <params>
+                  <param tag="plugin" value="org.rdk.RDKShell" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RDKShell" expectedValues="activated"/>
+            </testStep>
+          </prerequisite>
+      </testCasePreRequisite>
+      
       <testStep testStepId="1" name="Deactivate_Plugin" method="Deactivate_Plugin"  >
         <params>
           <param tag="callsign"  value="WebKitBrowser" />

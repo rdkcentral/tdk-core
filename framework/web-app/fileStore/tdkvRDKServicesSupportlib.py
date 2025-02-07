@@ -3926,6 +3926,14 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
                 else:
                     result = "TRUE"
 
+        elif tag =="controller_check_plugin_state_applicability":
+            testStepResults = list(testStepResults[0].values())[0]
+            status_value = testStepResults[0].get("plugin_status_value")
+            if status_value == "yes":
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
         # TraceControl Plugin Response result parser steps
         elif tag == "tracecontrol_get_state":
             testStepResults = list(testStepResults[0].values())[0]
@@ -5266,6 +5274,10 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["callsign"] = testStepResults[0].get("callsign")
 
+        elif tag == "controller_get_plugin_state":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["state"] = testStepResults[0].get("state")
+
         # Usb Access Plugin Response result parser steps
         elif tag =="usbaccess_getlink_previous_result":
             testStepResults = list(testStepResults[0].values())[0]
@@ -5327,7 +5339,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
         elif tag =="hdmicecsource_get_previous_vendor_id":
             testStepResults = list(testStepResults[0].values())[0]
             info["vendorid"] = testStepResults[0].get("vendorID")
-        
+
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
             status = "FAILURE"
@@ -6490,6 +6502,12 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 message = "\"RDKSHELL_SPLASH_IMAGE_JPEG\" Environment variable is not present in the wpeframework.service file but \"Splash Screen\" feature configured as supported feature in config file"
                 info["Test_Step_Message"] = message
                 info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "get_plugin_status_value":
+            if arg[0] == "activated":
+                info["plugin_status_value"] = "no"
+            else:
+                info["plugin_status_value"] = "yes"
 
         elif tag == "check_time_sync":
             command = 'date'
