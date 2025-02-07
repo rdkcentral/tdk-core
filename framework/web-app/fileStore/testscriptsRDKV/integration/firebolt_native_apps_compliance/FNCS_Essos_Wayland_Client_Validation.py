@@ -100,7 +100,7 @@ expectedResult="SUCCESS"
 if "SUCCESS" in result.upper():
 
     tdkTestObj = obj.createTestStep('executeCmndInDUT')
-    command = "cd /opt/TDK; sh RunGraphicsTDKTest.sh Essos 30 wayland-0 USE_WAYLAND"
+    command = "cd /opt/TDK; sh RunGraphicsTDKTest.sh Essos 30 USE_WAYLAND"
     print("Executing command in DUT: ", command)
     tdkTestObj.addParameter("command",command)
     tdkTestObj.executeTestCase(expectedResult);
