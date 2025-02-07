@@ -49,6 +49,11 @@ public class DeviceStatusResponseDTO {
 	String status;
 
 	/**
+	 * The mac address of the device.
+	 */
+	String macAddress;
+	
+	/**
 	 * Device type name
 	 */
 	String deviceType;

@@ -332,8 +332,10 @@ public class ExecutionAsyncService {
 
 							executedScript++;
 							Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
-
+							double currentExecTime = System.currentTimeMillis();
+							double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
 							executionCompleted.setExecutedScriptCount(executedScript);
+							executionCompleted.setExecutionTime(executionTime);
 							executionRepository.save(executionCompleted);
 						}
 					}

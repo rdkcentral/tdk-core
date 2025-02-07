@@ -290,4 +290,13 @@ public interface IExecutionService {
 	 */
 	boolean isExecutionResultFailed(UUID executionId);
 
+	/**
+	 * This method is used to get the device status
+	 * 
+	 * @param deviceName - the device name
+	 * @param deviceType - the device type
+	 * @return the JSON object of the device status
+	 */
+	JSONObject getDeviceStatus(String deviceName, String deviceType);
+
 }

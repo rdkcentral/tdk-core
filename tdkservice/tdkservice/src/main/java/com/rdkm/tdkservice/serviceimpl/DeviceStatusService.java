@@ -63,8 +63,7 @@ public class DeviceStatusService {
 	 * @return boolean - true if the status update was successful for all devices,
 	 *         false otherwise
 	 */
-	@Scheduled(fixedRate = 30000)
-	@Async
+	@Scheduled(fixedRate = 300000)
 	public void updateAllDeviceStatus() {
 		LOGGER.debug("Updating status for all devices");
 		List<Device> devices = deviceRepository.findAll();

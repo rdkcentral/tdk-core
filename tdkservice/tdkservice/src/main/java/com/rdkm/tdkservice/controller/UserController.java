@@ -270,11 +270,17 @@ public class UserController {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@GetMapping("/getappversion")
-	public String getAppVersion() {
+	public ResponseEntity<String> getAppVersion() {
 		LOGGER.info("Inside getAppVersion method");
 		String appVersion = userService.getAppVersion();
 		LOGGER.info("App version is: " + appVersion);
-		return appVersion;
+		if (null != appVersion) {
+			LOGGER.info("App version found successfully ");
+			return ResponseEntity.status(HttpStatus.OK).body(appVersion);
+		} else {
+			LOGGER.error("App version not found");
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("App version not found");
+		}
 	}
 
 }

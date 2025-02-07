@@ -23,6 +23,8 @@ import com.rdkm.tdkservice.model.Execution;
 
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerException;
+
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
@@ -88,5 +90,15 @@ public interface IExportExcelService {
      * @throws IOException if an I/O error occurs
      */
     byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) throws IOException;
+
+    /**
+     * Generates an Excel report comparing the specified executions.
+     *
+     * @param baseExecId the UUID of the base execution to compare against
+     * @param executionIds a list of UUIDs of the executions to be compared
+     * @return a ByteArrayInputStream containing the generated Excel report
+     * @throws IOException if an I/O error occurs during report generation
+     */
+	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId,List<UUID> executionIds) throws IOException;
 
 }

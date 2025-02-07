@@ -532,7 +532,11 @@ public class Constants {
 	public static final String UPDATE_API_ENDPOINT = "updateTicket";
 	// Jira automation
 	public static final String JIRA_AUTOMATION = "jira.integrated";
-	// Tdk project id 
+	// Tdk project id
 	public static final String TDK_PROJECT_NAME = "TDK";
+	// Left Paranthesis
+	public static final String LEFT_PARENTHESIS = "(";
+	// Right Paranthesis
+	public static final String RIGHT_PARENTHESIS = ")";
 
 }

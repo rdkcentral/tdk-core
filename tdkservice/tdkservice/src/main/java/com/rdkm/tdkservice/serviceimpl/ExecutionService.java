@@ -90,6 +90,7 @@ import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
@@ -114,6 +115,9 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private DeviceRepositroy deviceRepository;
+
+	@Autowired
+	private DeviceTypeRepository deviceTypeRepository;
 
 	@Autowired
 	private ExecutionRepository executionRepository;
@@ -1345,6 +1349,9 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Error fetching script trend for script: {}", scriptName, e);
 			throw new TDKServiceException(e.getMessage());
 		}
+		// Remove the ExecutionResult whose status is inprogress
+		results.removeIf(result -> result.getStatus().equals(ExecutionStatus.INPROGRESS));
+
 		List<String> trend = results.stream().map(ExecutionResult::getResult).map(Enum::name).toList();
 		LOGGER.info("Successfully fetched script trend for executionResultId: {}", executionResultId);
 		return trend;
@@ -1484,6 +1491,10 @@ public class ExecutionService implements IExecutionService {
 		if (execution.getExecutionStatus() == ExecutionProgressStatus.COMPLETED) {
 			LOGGER.error("Execution with id: {} is already completed", execId);
 			throw new UserInputException("Execution is already completed");
+		}
+		if (execution.isAbortRequested()) {
+			throw new UserInputException(
+					"Abort is already requested, Please wait for the current script execution to finish");
 		}
 		try {
 			execution.setAbortRequested(true);
@@ -2351,6 +2362,31 @@ public class ExecutionService implements IExecutionService {
 		}
 		LOGGER.info("Execution result failed status for execution id: {} is: {}", executionId, isFailed);
 		return isFailed;
+	}
+
+	/**
+	 * Method to get the device status based on the device name and device type
+	 * 
+	 * @param deviceName
+	 * @param deviceType
+	 * @return JSONObject - the device status in JSON format
+	 */
+	@Override
+	public JSONObject getDeviceStatus(String deviceName, String deviceType) {
+		Device device = deviceRepository.findByName(deviceName);
+		JSONObject deviceStatus = new JSONObject();
+		if (device == null) {
+			return deviceStatus;
+		}
+		try {
+			deviceStatus.put(
+					device.getName() + Constants.LEFT_PARANTHESIS + device.getIp() + Constants.RIGHT_PARANTHESIS,
+					device.getDeviceStatus().name());
+		} catch (JSONException e) {
+			LOGGER.error("Error creating JSON object for device status", e);
+		}
+
+		return deviceStatus;
 	}
 
 }

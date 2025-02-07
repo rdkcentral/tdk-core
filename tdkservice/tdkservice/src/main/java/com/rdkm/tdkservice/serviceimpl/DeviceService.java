@@ -745,6 +745,7 @@ public class DeviceService implements IDeviceService {
 				deviceStatusResponseDTO.setDeviceName(device.getName());
 				deviceStatusResponseDTO.setStatus(device.getDeviceStatus().toString());
 				deviceStatusResponseDTO.setIp(device.getIp());
+				deviceStatusResponseDTO.setMacAddress(device.getMacId());
 				deviceStatusResponseDTO.setDeviceType(device.getDeviceType().getName());
 				deviceStatusResponseDTO.setThunderEnabled(device.isThunderEnabled());
 				deviceStatusResponseDTOs.add(deviceStatusResponseDTO);
@@ -955,6 +956,7 @@ public class DeviceService implements IDeviceService {
 		deviceStatusResponseDTO.setDeviceName(device.getName());
 		deviceStatusResponseDTO.setStatus(device.getDeviceStatus().toString());
 		deviceStatusResponseDTO.setIp(device.getIp());
+		deviceStatusResponseDTO.setMacAddress(device.getMacId());
 		deviceStatusResponseDTO.setDeviceType(device.getDeviceType().getName());
 		deviceStatusResponseDTO.setThunderEnabled(device.isThunderEnabled());
 		LOGGER.info("Fetching device status for device : {} with status {}", device.getName(),

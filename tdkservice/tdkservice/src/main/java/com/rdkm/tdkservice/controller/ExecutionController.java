@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.controller;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.time.Instant;
 import java.util.List;
@@ -32,10 +33,12 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -63,6 +66,7 @@ import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.service.IExecutionService;
 import com.rdkm.tdkservice.service.IExportExcelService;
 import com.rdkm.tdkservice.service.IFileService;
+import com.rdkm.tdkservice.util.Constants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -216,7 +220,7 @@ public class ExecutionController {
 				sortDir);
 		LOGGER.info("Executions fetched successfully");
 		return result != null ? ResponseEntity.ok(result)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
 	}
 
 	/**
@@ -244,7 +248,7 @@ public class ExecutionController {
 		ExecutionListResponseDTO executionListResponseDTO = executionService
 				.getExecutionsByScriptTestsuite(scriptTestSuiteName, categoryName, page, size, sortBy, sortDir);
 		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
 	}
 
 	/**
@@ -271,7 +275,7 @@ public class ExecutionController {
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByExecutionName(executionName,
 				categoryName, page, size, sortBy, sortDir);
 		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
 	}
 
 	/**
@@ -297,7 +301,7 @@ public class ExecutionController {
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByDeviceName(deviceName,
 				categoryName, page, size, sortBy, sortDir);
 		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
 	}
 
 	/**
@@ -324,7 +328,7 @@ public class ExecutionController {
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByUser(username, categoryName,
 				page, size, sortBy, sortDir);
 		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
 	}
 
 	/**
@@ -340,8 +344,15 @@ public class ExecutionController {
 	public ResponseEntity<?> getExecutionLogs(@RequestParam String executionResultID) {
 		LOGGER.info("Fetching execution logs for exec with Id: " + executionResultID);
 		String result = executionService.getExecutionLogs(executionResultID);
-		return result != null ? ResponseEntity.ok(result)
-				: ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch execution logs");
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+		if (null != result) {
+			LOGGER.info("Execution logs fetched successfully");
+			return new ResponseEntity<>(result, headers, HttpStatus.OK);
+		} else {
+			LOGGER.error("Failed to fetch execution logs");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch execution logs");
+		}
 	}
 
 	/**
@@ -867,11 +878,23 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "400", description = "Execution IDs list cannot be empty"),
 			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report") })
 	@PostMapping("/combined-excel")
-	public ResponseEntity<byte[]> generateCombinedExcelReport(@RequestBody List<UUID> executionIds) {
+	public ResponseEntity<?> generateCombinedExcelReport(@RequestBody List<UUID> executionIds) {
 		if (executionIds == null || executionIds.isEmpty()) {
 			return ResponseEntity.badRequest().body("Execution IDs list cannot be empty.".getBytes());
 		}
 
+		if (executionIds.size() > 10) {
+			LOGGER.error("Maximum 10 executions can be selected for combined report. Now {} executions are selected.",
+					executionIds.size());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Maximum 10 executions can be selected for combined report.Now" + executionIds.size()
+							+ "executions are selected.");
+		}
+		if (executionIds.size() == 1) {
+			LOGGER.error("Atleast two executions needs to be selected for combined report");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Atleast two executions needs to be selected for combined report");
+		}
 		byte[] excelData = exportExcelService.generateCombinedExcelReport(executionIds);
 
 		if (excelData == null || excelData.length == 0) {
@@ -884,6 +907,61 @@ public class ExecutionController {
 		headers.setContentDisposition(ContentDisposition.attachment().filename("Combined_Report.xlsx").build());
 
 		return ResponseEntity.ok().headers(headers).body(excelData);
+	}
+
+	/**
+	 * Generates a comparison Excel report for the provided list of execution IDs.
+	 *
+	 * @param baseExecId   The base execution ID for comparison.
+	 * @param executionIds The list of execution IDs to be compared.
+	 * @return A ResponseEntity containing the generated Excel report as a byte
+	 *         array, or an error message if the report generation fails.
+	 * 
+	 * @throws IOException if an I/O error occurs during report generation.
+	 */
+	@Operation(summary = "Generate comparison Excel report", description = "Generates a comparison Excel report for the provided list of execution IDs.")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Excel report generated successfully"),
+			@ApiResponse(responseCode = "400", description = "Execution IDs list cannot be empty"),
+			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report") })
+	@PostMapping("/comparison-excel")
+	public ResponseEntity<?> generateComparisonExcelReport(@RequestParam UUID baseExecId,
+			@RequestBody List<UUID> executionIds) {
+		LOGGER.info("Generating comparison Excel report for base execution ID: {} and execution IDs: {}", baseExecId,
+				executionIds);
+		if (baseExecId == null) {
+			LOGGER.error("Base Execution ID cannot be null.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Base Execution needs to be selected.");
+		}
+		if (executionIds == null || executionIds.isEmpty()) {
+			LOGGER.error("Execution IDs list cannot be empty.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Atleast one executions needs to be selected for combined report ");
+		}
+		if (executionIds.size() > 10) {
+			LOGGER.error("Maximum 10 executions can be selected for comparison report. Now {} executions are selected.",
+					executionIds.size());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Maximum 10 executions can be selected for comparison report. Now " + executionIds.size()
+							+ " executions are selected.");
+		}
+
+		try (ByteArrayInputStream excelData = exportExcelService.generateComparisonExcelReport(baseExecId,
+				executionIds)) {
+			if (excelData == null || excelData.available() == 0) {
+				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate Excel report.");
+			}
+
+			HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+			headers.setContentDispositionFormData("attachment", "Comparison_Report_" + baseExecId + ".xlsx");
+
+			LOGGER.info("Comparison Excel report generated successfully.");
+			return ResponseEntity.status(HttpStatus.OK).headers(headers).body(excelData.readAllBytes());
+		} catch (Exception e) {
+			LOGGER.error("Error generating comparison Excel report: {}", e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+					.body("Error generating Excel report: " + e.getMessage());
+		}
 	}
 
 	/**
@@ -1145,6 +1223,27 @@ public class ExecutionController {
 		LOGGER.info("Check if execution result is failed called");
 		boolean isFailed = executionService.isExecutionResultFailed(executionId);
 		return ResponseEntity.status(HttpStatus.OK).body(isFailed);
+	}
+
+	/**
+	 * The API to get the device status - the API is used in the python framework So
+	 * keeping the same format expected there
+	 * 
+	 * @param stbName -DeviceName - Using the stbName param as this API is already
+	 *                hardcoded in the scripts.
+	 * @param boxType -DeviceType - Using the boxType param as this API is already
+	 *                hardcoded in the
+	 * @return ResponseEntity<?> - the response entity with the device status
+	 */
+	@Operation(summary = "API to get the device status")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Device Status is obtained"),
+			@ApiResponse(responseCode = "500", description = "Any system error") })
+	@GetMapping("/getDeviceStatus")
+	public ResponseEntity<?> getDeviceStatus(@RequestParam String stbName, @RequestParam String boxType) {
+		LOGGER.info("Fetching device status for the device name: {} and device type {}", stbName, boxType);
+		JSONObject deviceStatus = executionService.getDeviceStatus(stbName, boxType);
+		return ResponseEntity.status(HttpStatus.OK).body(deviceStatus.toString());
+
 	}
 
 }
