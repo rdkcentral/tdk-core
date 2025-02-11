@@ -162,7 +162,7 @@ export class ExecuteDialogComponent {
         textField: 'scriptName',
         selectAllText: 'Select All',
         unSelectAllText: 'UnSelect All',
-        itemsShowLimit: 2,
+        maxHeight:200,
         allowSearchFilter: true,
       };
       this.testSuiteSettings = {
@@ -171,7 +171,7 @@ export class ExecuteDialogComponent {
         textField: 'testSuiteName',
         selectAllText: 'Select All',
         unSelectAllText: 'UnSelect All',
-        itemsShowLimit: 2,
+        
         allowSearchFilter: true,
       };
       this.executeForm = this.fb.group({
@@ -218,7 +218,7 @@ export class ExecuteDialogComponent {
         textField: 'scriptName',
         selectAllText: 'Select All',
         unSelectAllText: 'UnSelect All',
-        itemsShowLimit: 2,
+        maxHeight:200,
         allowSearchFilter: true,
       };
       this.testSuiteSettings = {
@@ -227,7 +227,7 @@ export class ExecuteDialogComponent {
         textField: 'testSuiteName',
         selectAllText: 'Select All',
         unSelectAllText: 'UnSelect All',
-        itemsShowLimit: 2,
+        
         allowSearchFilter: true,
       };
       this.executeForm = this.fb.group({

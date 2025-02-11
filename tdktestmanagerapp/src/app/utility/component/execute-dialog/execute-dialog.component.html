@@ -14,7 +14,6 @@ limitations under the License.
 -->
 <div class="container">
             <h1 class="title">Trigger Execution</h1>
-            <mat-card class="card-height">
                 <form [formGroup]="executeForm" class="executeForm mt-2">
                     <div class="row" *ngIf="showExecute">
                         <div *ngIf="deviceStatucClick">
@@ -157,21 +156,21 @@ limitations under the License.
 
                             <div class="col-md-8" >
                                 <mat-slide-toggle 
-                                class="example-margin toggle-add" 
+                                class="toggle-add" 
                                 (change)="toggleAdditinalField($event)">
                               </mat-slide-toggle>
-                                <div class="form-check form-check-inline" *ngIf="showToggleField">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox1"
+                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox1"
                                     formControlName="diagnosis" (change)="diagnosisChange($event)">
                                     <label class="form-check-label radio-text" for="inlineCheckbox1">Diagnosis log</label>
                                 </div>
-                                <div class="form-check form-check-inline" *ngIf="showToggleField">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox2"
+                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox2"
                                     formControlName="performance" (change)="performanceChange($event)">
                                     <label class="form-check-label radio-text" for="inlineCheckbox2">Performance log</label>
                                 </div>
-                                <div class="form-check form-check-inline" *ngIf="showToggleField">
-                                    <input class="form-check-input" type="checkbox" id="inlineCheckbox3"
+                                <div class="form-check form-check-inline list-logs" *ngIf="showToggleField">
+                                    <input class="form-check-input logs-check" type="checkbox" id="inlineCheckbox3"
                                     formControlName="logTransfer" (change)="logTransferChange($event)">
                                     <label class="form-check-label radio-text" for="inlineCheckbox3">Device log</label>
                                 </div>
@@ -358,8 +357,8 @@ limitations under the License.
                     <div class="row row-align" *ngIf="showExecute">
                         <div class="col-md-12 mt-2 text-end">
                             <button class="all-btn" (click)="close()">Close</button>
-                            <button class="all-btn" (click)="scheduleOpen('schedule')" [disabled]="!executeForm.valid">Schedule</button>
-                            <button type="submit" class="all-btn submit-btn" [disabled]="!executeForm.valid" (click)="triggerExecute()">Execute Now</button>
+                            <button class="all-btn" (click)="scheduleOpen('schedule')" [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before scheduling execution': '' " [disabled]="!executeForm.valid">Schedule</button>
+                            <button type="submit" class="all-btn submit-btn" [matTooltip]="!executeForm.valid ?'Enter all Mandatory fields before triggering execution': '' " [disabled]="!executeForm.valid" (click)="triggerExecute()">Execute Now</button>
                         </div>
                     </div>
 
@@ -386,5 +385,4 @@ limitations under the License.
                 <div class="row result-row" *ngIf="showLoader">
                     <app-loader></app-loader>
                 </div>
-            </mat-card>
 </div>

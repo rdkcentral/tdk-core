@@ -26,20 +26,32 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let err = JSON.parse(error.error);
+      let err = error.error;
+      // let err = JSON.parse(error.error);
+      console.log(err);
+      
       let errorMessage = err.message?err.message:'Network error. Please check your internet connection.';
         if (error instanceof ProgressEvent) {
           errorMessage = 'Network error. Please check your internet connection.';
         }
          if (error instanceof HttpErrorResponse) {
           // For other HTTP errors like 404, 500, etc.
-          if (error.status === 0) {
+          if (error.status == 0) {
             errorMessage = 'Unable to connect to the server. Please check if the server is running.';
           } 
-          if(error.status === 500){
+          if(error.status == 500){
             errorMessage = 'Internal Server Error'
           }
- 
+          if(error.status == 502){
+            errorMessage = 'Something went wrong'
+          }
+          if(error.status == 404){
+            errorMessage = err;
+          }
+          if(error.status == 400){
+            let err = JSON.parse(error.error);
+            errorMessage = err.message;
+          }
         }
       snackBar.open(errorMessage || 'An error occurred', 'Close', {
         duration: 2500,

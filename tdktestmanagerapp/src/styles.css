@@ -177,7 +177,7 @@ html,body,*:not(.material-icons){
     border-bottom: 47px solid #000 !important;
     border-right: 25px solid transparent !important;
   }
-  .radiobox-row{
+  .radiobox-row, .card-combine{
     background-color: #1e2025fa;
   }
   .mat-mdc-tab-body-content{
@@ -288,13 +288,25 @@ html,body,*:not(.material-icons){
     letter-spacing: 0px !important;
   }
   .ul-item li { 
-    background-color: #f6f6f6; 
+    /* background-color: #d6ebef;  */
+    /* background-color: #F6f6f6;  */
+    /* background-color: #d1d4d4; */
+    background-image: linear-gradient(180deg, #1987542b, #eeecec);
+    /* background-color: #b4b3b3; */
+    /* background-image: linear-gradient(to right, #d1d4d4,  #fff ); */
+    /* background-image: linear-gradient(to right, #d6ebef,  #fff ); */
     border-bottom: 1px solid #3333333d;
    }
   .ul-item li:nth-child(odd) { 
-    background-color: #d6ebef; 
-    /* background-image: linear-gradient(160deg, #ffffff 10%, #266e734a 100%); */
+    /* background-color: #d6ebef;  */
+     /* background-color: #d1d4d4; */
+     background-image: linear-gradient(180deg, #d6ebef, #fff);
+     /* background-color: #1987542b; */
+    /* background-image: linear-gradient(160deg, #ffffff 10%, #d6ebef 100%); */
     /* background-image: linear-gradient(160deg, #ffffff 10%, #1987542b 100%); */
+    /* background-image: linear-gradient(to right, #d1d4d4,  #fff ); */
+     /* background-image: linear-gradient(to right, #5ed9f4,  #fff ); */
+     /* background-image: linear-gradient(to right, #1987542b, #fff); */
     border-bottom: 1px solid #3333333d;
   }
  .mdc-tab--active {
@@ -307,7 +319,7 @@ html,body,*:not(.material-icons){
     --mat-tab-header-active-focus-indicator-color: transparent !important;
     --mat-tab-header-active-hover-indicator-color: transparent !important;
   }
-  .radiobox-row{
+  .radiobox-row, .card-combine{
     background-color: #f6f6f6;
   }
   .mat-mdc-tab-body-content{
@@ -410,4 +422,11 @@ footer{
 ::ng-deep .ag-theme-quartz .ag-checkbox-wrapper .ag-checkbox-input{
   transform: scale(0.5)!important;
   margin: 0!important;
+}
+::ng-deep .toggle-add {
+  --mdc-switch-selected-track-color: #4CAF50 !important; /* Track when checked */
+  --mdc-switch-selected-handle-color: #FFC107 !important; /* Thumb when checked */
+  --mdc-switch-selected-hover-track-color: #388E3C !important; /* Track on hover */
+  --mdc-switch-unselected-track-color: #E0E0E0 !important; /* Track when unchecked */
+  --mdc-switch-unselected-handle-color: #757575 !important; /* Thumb when unchecked */
 }

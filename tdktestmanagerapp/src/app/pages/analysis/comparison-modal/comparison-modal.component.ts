@@ -322,7 +322,6 @@ public columnDefs: ColDef[] = [
    */
   onGridReady(params: GridReadyEvent):void {
     this.gridApi = params.api;
-
     if(this.data.selectedScript){
       const selectedNames = this.data.selectedScript.split(', ');
       this.gridApi.forEachNode((node:any)=>{

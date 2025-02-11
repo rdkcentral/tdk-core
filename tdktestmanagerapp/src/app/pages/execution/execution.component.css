@@ -276,13 +276,14 @@ body,
   margin-left: 7px;
 }
 .free {
-  background-color: #79ff4d;
+  background-color: #5BC866;
 }
 .busy {
   background-color: gray;
+  /* background-color: #fff; */
 }
 .hang {
-  background-color: #e2e204;
+  background-color: orange;
 }
 .device-name {
   padding-left: 10px;
@@ -313,7 +314,7 @@ body,
   display: flex;
   position: absolute;
   z-index: 10;
-  right: 3%;
+  right: 5%;
   top: 46px;
   align-items: end;
 }
@@ -331,7 +332,7 @@ body,
   align-items: baseline;
   position: absolute;
   z-index: 10;
-  right: 11%;
+  right: 100px;
   top: 52px;
 }
 .user-dropdown {
@@ -346,8 +347,9 @@ body,
   position: relative;
   top: 6px;
 }
-.seach-input {
-  width: 210px;
+.seach-device {
+  width: 185px;
+  margin-left: 3px;
 }
 .search-btn {
   border: 1px solid gray;
@@ -493,6 +495,6 @@ body,
   display: inline-flex;
 }
 .seach-input{
-  width: 185px;
+  width: 150px;
   margin-left: 3px;
 }

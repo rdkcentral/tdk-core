@@ -28,11 +28,11 @@ h4,
 h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.card-height {
-  height: 480px !important;
-  display: block;
-  overflow-y: auto;
-}
+/* .card-height { */
+  /* height: 480px !important; */
+  /* display: block;
+  overflow-y: auto; */
+/* } */
 .title {
   font-size: 1rem;
   text-align: center;
@@ -271,7 +271,28 @@ h6 {
   position: absolute !important;
   top:5px !important;
 }
-.toggle-add{
-  margin-left: 5px;
+.list-logs{
+  padding-left: 15px;
+  margin-right: 2px;
+}
+.logs-check{
+  margin: 0 8px 0 0;
+}
+::ng-deep .mat-mdc-slide-toggle {
+  --mdc-switch-unselected-track-color: #E0E0E0 !important;
+  --mdc-switch-unselected-handle-color: #757575 !important;
+  --mdc-switch-selected-focus-track-color: #00b2dc !important;
+  --mdc-switch-selected-hover-track-color: #00b2dc !important;
+  --mdc-switch-selected-track-color: #00b2dc !important;
+  --mdc-switch-selected-pressed-track-color: #00b2dc !important;
+  --mdc-switch-selected-handle-color: #fdb73b !important;
+  --mdc-switch-selected-hover-track-color: #00b2dc !important;
+
+  --mdc-switch-selected-focus-handle-color: #fdb73b !important;
+  --mdc-switch-selected-hover-handle-color: #f58233 !important;
+  --mdc-switch-selected-pressed-handle-color: #fdb73b !important;
 }
 
+::ng-deep .multiselect-dropdown .dropdown-list{
+  overflow: hidden !important;
+}

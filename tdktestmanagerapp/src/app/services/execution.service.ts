@@ -120,7 +120,13 @@ export class ExecutionService {
     });
     return this.http.get(`${apiUrl}execution/getusers`, { headers, responseType: 'text' });
   }
- 
+  getAllExecutionByName(SearchString: any,category: any,page: number, size: number): Observable<any> {
+    const headers = new HttpHeaders({
+      // 'Content-Type': 'application/json',
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/getExecutionsByExecutionName/${SearchString}?categoryName=${category}&page=${page}&size=${size}&sortBy=createdDate&sortDir=desc`, { headers, responseType: 'text' });
+  }
   getAllExecutionByDevice(SearchString: any,category: any,page: number, size: number): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -136,6 +142,7 @@ export class ExecutionService {
   }
   getAllExecutionByUser(userName: any,category: any,page: number, size: number): Observable<any> {
     const headers = new HttpHeaders({
+      
       'Authorization': this.authService.getApiToken()
     });
     return this.http.get(`${apiUrl}execution/getExecutionsByUsername/${userName}?categoryName=${category}&page=${page}&size=${size}&sortBy=createdDate&sortDir=desc`, { headers, responseType: 'text' });
@@ -214,12 +221,7 @@ export class ExecutionService {
     return this.http.delete(`${apiUrl}execution/deletebydaterange?fromDate=${fromdate}&toDate=${toDate}`, { headers, responseType: 'text' }); 
   }
 
-  getAllExecutionByName(SearchString: any,category: any,page: number, size: number): Observable<any> {
-    const headers = new HttpHeaders({
-      'Authorization': this.authService.getApiToken()
-    });
-    return this.http.get(`${apiUrl}execution/getExecutionsByExecutionName/${SearchString}?categoryName=${category}&page=${page}&size=${size}&sortBy=createdDate&sortDir=desc`, { headers, responseType: 'text' });
-  }
+
 
   getDefectTypes(): Observable<any>{
     const headers = new HttpHeaders({

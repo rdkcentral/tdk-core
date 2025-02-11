@@ -14,13 +14,9 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="radiobox-row mt-1">
-        <div class="col-md-12">
-            <h1 class="title borders-btm">Result Analysis</h1>
-        </div>
-
-        <!-- <div class="col-md-12 radiobox">
-            <h3 class="heading">Select the device category :</h3>
+    <div  [ngClass]="this.tabName === 'Combined Report'?'card-combine':'radiobox-row'">
+        <div class="col-md-12 radiobox">
+            <h3 class="heading">Select the RDK flavor :</h3>
             <div class="rdkgroup">
                 <div class="form-check form-check-inline">
                     <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDfaultCategory" (change)="categoryChange('RDKV')" >
@@ -35,16 +31,14 @@ limitations under the License.
                     <label class="form-check-label" for="rdkc">Camera</label>
                 </div>
             </div>
-        </div> -->
-        <!-- <div class="row borders-btm">
+        </div>
             <div class="col-md-12">
                 <h1 class="title borders-btm">Result Analysis</h1>
             </div>
-        </div> -->
         <div class="row mt-2 main-margin">
             <mat-tab-group animationDuration="0ms" mat-align-tabs="start" (selectedTabChange)="onTabClick($event)">
                 <mat-tab label="Comparsion Report">
-                    <div class="report-section">
+                    <div class="report-section" [ngClass]="this.tabName === 'Combined Report'?'hegiht-body':'height-comp'">
                         <form [formGroup]="reportForm" (ngSubmit)="reportSubmit()"> 
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-3 col-form-label">Base Execution Name <span
@@ -85,9 +79,9 @@ limitations under the License.
                     </div>
                 </mat-tab>
                 <mat-tab label="Combined Report">
-                    <div class="report-section">
-                        <form [formGroup]="combinedForm" (ngSubmit)="reportSubmit()"> 
-                            <div class="row">
+                    <div class="report-section mat-mdc-tab-body-content" [ngClass]="this.tabName === 'Combined Report'?'hegiht-body':'height-comp'">
+                        <form [formGroup]="combinedForm" (ngSubmit)="onCombinedSubmit()"> 
+                            <div class="row first-row">
                                 <div class="col">
                                     <div class="mb-3 row-align">
                                         <label for="testtype" class="col-md-4 col-form-label">From <span
@@ -104,11 +98,11 @@ limitations under the License.
                                             style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                                formControlName="deviceType">
+                                                formControlName="deviceType" (change)="deviceChange($event)">
                                                 <option value="" default>Select</option>
-                                                <option value="RDKV">deviceType1</option>
-                                                <option value="RDKB">deviceType2</option>
-                                                <option value="RDKC">deviceType3</option>
+                                                @for (item of allDeviceType; track $index) {
+                                                    <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
+                                                }
                                             </select>
                                             <div *ngIf="combinedSubmitted && combinedForm.controls['deviceType']?.errors" class="text-danger">
                                                 <small *ngIf="combinedForm.controls['deviceType']?.errors?.['required']">Please select device type.</small>
@@ -128,18 +122,20 @@ limitations under the License.
                                         </div>
                                     </div>
                                     <div class="mt-2 mb-3 row-align">
-                                        <label for="testtype" class="col-md-4 col-form-label">Script Type<span
+                                        <label for="testtype" class="col-md-4 col-form-label">Execution Type<span
                                             style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                                formControlName="scriptType">
+                                                formControlName="executionType" (change)="changeExecutionType($event)" >
                                                 <option value="" default>Select</option>
-                                                <option value="SingleScript">Single Script</option>
-                                                <option value="MultiScript">Multi Script</option>
-                                                <option value="TestSuite">TestSuite</option>
+                                                <option value="SINGLESCRIPT">Single Script</option>
+                                                <option value="MULTISCRIPT">Multi Script</option>
+                                                <option value="TESTSUITE">TestSuite</option>
+                                                <option value="MULTITESTSUITE">Multi Testsuite</option>
+                                                
                                             </select>
-                                            <div *ngIf="combinedSubmitted && combinedForm.controls['scriptType']?.errors" class="text-danger">
-                                                <small *ngIf="combinedForm.controls['scriptType']?.errors?.['required']">Please select script type.</small>
+                                            <div *ngIf="combinedSubmitted && combinedForm.controls['executionType']?.errors" class="text-danger">
+                                                <small *ngIf="combinedForm.controls['executionType']?.errors?.['required']">Please select execution type.</small>
                                             </div>
                                         </div>
                                     </div>
@@ -150,31 +146,60 @@ limitations under the License.
                                             style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                            formControlName="category">
-                                            <option value="" default>Select</option>
-                                            <option value="RDKV">Video</option>
-                                            <option value="RDKB">Broadband</option>
-                                            <option value="RDKC">Camera</option>
-                                        </select>
+                                                formControlName="category" disable>
+                                                <option value="" default>Select</option>
+                                                <option value="RDKV">Video</option>
+                                                <option value="RDKB">Broadband</option>
+                                                <option value="RDKC">Camera</option>
+                                            </select>
                                         <div *ngIf="combinedSubmitted && combinedForm.controls['category']?.errors" class="text-danger">
                                             <small *ngIf="combinedForm.controls['category']?.errors?.['required']">Please select a
                                                 category.</small>
                                         </div>
                                         </div>
                                     </div>
-                                    <div class="mb-3 row-align">
-                                        <label for="testtype" class="col-md-4 col-form-label"></label>
+                                    <div class="mb-3 row-align" *ngIf="showScript">
+                                        <label for="testtype" class="col-md-4 col-form-label">Script</label>
                                         <div class="col-md-8">
-                                            <button type="submit" class="create-btn">Filter Executions</button>
+                                            <input type="text" class="form-control" formControlName="scriptSingle"/>
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row-align" *ngIf="testSuiteShow">
+                                        <label for="testtype" class="col-md-4 col-form-label">TestSuite</label>
+                                        <div class="col-md-8">
+                                            <input type="text" class="form-control" formControlName="testSuiteSingke"/>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        <div class="col-md-12 text-center">
+                            <div class="col-md-12 selectedScript" *ngIf="combinedSubmitted && combinedForm.errors?.['maxDaysExceeded']" class="text-danger">
+                                <small>Maximum number of days allowed is 30</small>
+                            </div>
+                            <div class="col-md-12 ">
+                                <button type="submit" class="create-btn">Filter Executions</button>
+                            </div>
+                        <!-- <div class="col-md-12 text-center">
                             <button type="submit" class="create-btn">Generate Combined Report</button>
+                        </div> -->
+                        </form>
+                        <div class="tableDeatils mt-2" *ngIf="showTable">
+                            <div style="width: 100%; height: 310px;" [class]="themeClass">
+                                <ag-grid-angular
+                                style="width: 100%; height: 100%;"
+                                [rowData]="rowData"
+                                [columnDefs]="columnDefs"
+                                [defaultColDef]="defaultColDef"
+                                [pagination]="true"
+                                [paginationPageSize]="pageSize"
+                                [paginationPageSizeSelector]="pageSizeSelector"
+                                [rowHeight]="35"
+                                [rowSelection]="'multiple'"
+                                (gridReady)="onGridReady($event)"
+                              ></ag-grid-angular>
+                            </div>
                         </div>
-                    </form>
                     </div>
+
                 </mat-tab>
             </mat-tab-group>    
         </div>
