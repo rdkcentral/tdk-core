@@ -137,6 +137,12 @@ if expectedResult in (result.upper() and pre_condition_status):
     revert_plugins_dict = {}
     plugins_list = ["WebKitBrowser","org.rdk.Wifi","DeviceInfo"]
     plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)    
     print("\n Get plugins status \n")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)

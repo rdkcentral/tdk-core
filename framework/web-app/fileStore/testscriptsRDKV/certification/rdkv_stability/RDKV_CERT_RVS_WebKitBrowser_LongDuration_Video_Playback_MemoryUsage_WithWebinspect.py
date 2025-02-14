@@ -152,6 +152,12 @@ if expectedResult in result.upper():
     set_method = "WebKitBrowser"+'.1.url'
     webinspect_port = str(PerformanceTestVariables.webinspect_port)
     plugins_list = ["Cobalt","WebKitBrowser"]
+    plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"resumed"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(20)
     status = "SUCCESS"

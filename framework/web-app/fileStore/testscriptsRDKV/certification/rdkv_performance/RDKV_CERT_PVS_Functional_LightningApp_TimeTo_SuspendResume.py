@@ -118,7 +118,6 @@ if expectedResult in result.upper():
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"LightningApp":"resumed","Cobalt":"deactivated","WebKitBrowser":"deactivated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting status of plugins")
         status = "FAILURE"

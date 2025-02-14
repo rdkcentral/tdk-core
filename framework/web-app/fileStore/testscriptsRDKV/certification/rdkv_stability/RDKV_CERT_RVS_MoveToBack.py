@@ -104,10 +104,16 @@ if expectedResult in (result.upper() and pre_condition_status):
     revert = "NO"
     moveto_back_max_count = StabilityTestVariables.moveto_operation_max_count
     plugin_list = ["WebKitBrowser","Cobalt","DeviceInfo"]
+    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugin_list[:]:
+        if plugin not in supported_plugins:
+            plugin_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     plugins_cur_status_dict = get_plugins_status(obj,plugin_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"WebKitBrowser":"deactivated","Cobalt":"deactivated","DeviceInfo":"activated"}
     if any(plugins_cur_status_dict[plugin] == "FAILURE" for plugin in plugin_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"

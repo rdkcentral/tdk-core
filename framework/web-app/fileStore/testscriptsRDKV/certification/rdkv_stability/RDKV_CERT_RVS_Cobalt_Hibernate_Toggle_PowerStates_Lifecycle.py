@@ -81,7 +81,7 @@ In a loop given number of times
     <test_stub_interface>rdkv_stability</test_stub_interface>
     <test_script>RDKV_CERT_RVS_Cobalt_Hibernate_Toggle_PowerStates_Lifecycle</test_script>
     <skipped>No</skipped>
-    <release_version>M132</release_version>
+    <release_version>M131</release_version>
     <remarks></remarks>
   </test_cases>
   <script_tags />
@@ -131,10 +131,16 @@ if expectedResult in (result.upper() and pre_condition_status):
     #No need to revert any values if the pre conditions are already set.
     revert="NO"
     plugins_list = ["org.rdk.System","DeviceInfo","Cobalt"]
+    plugin_status_needed = {"org.rdk.System":"activated","DeviceInfo":"activated","Cobalt":"resumed"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = set_status = "SUCCESS"
-    plugin_status_needed = {"org.rdk.System":"activated","DeviceInfo":"activated","Cobalt":"resumed"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"

@@ -100,7 +100,7 @@ if expectedResult in result.upper():
     plugins_list = ["Cobalt","WebKitBrowser"]
     plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated"}
     conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    status, supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     for plugin in plugins_list[:]:
         if plugin not in supported_plugins:
             plugins_list.remove(plugin)

@@ -96,10 +96,10 @@ if expectedResult in result.upper() :
     revert="NO"
     html_app_test_url = PerformanceTestVariables.html_page_url
     conf_file, status = get_configfile_name(obj);
-    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     plugins_list = ["HtmlApp","WebKitBrowser","Cobalt"]
     print("\n Check Pre conditions")
     plugin_status_needed = {"HtmlApp":"deactivated","WebKitBrowser":"deactivated","Cobalt":"deactivated"}
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     for plugin in plugins_list[:]:
         if plugin not in supported_plugins:
             plugins_list.remove(plugin)

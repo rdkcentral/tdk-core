@@ -111,9 +111,15 @@ if expectedResult in (result.upper() and pre_condition_status):
     max_iterations = StabilityTestVariables.set_volumelevel_max_count
     plugins_list = ["org.rdk.DisplaySettings","DeviceInfo"]
     print("\n Check Pre conditions")
+    plugin_status_needed = {"org.rdk.DisplaySettings":"activated","DeviceInfo":"activated"}
+    conf_file, status = get_configfile_name(obj);
+    status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
+    for plugin in plugins_list[:]:
+        if plugin not in supported_plugins:
+            plugins_list.remove(plugin)
+            plugin_status_needed.pop(plugin)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
-    plugin_status_needed = {"org.rdk.DisplaySettings":"activated","DeviceInfo":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         print("\n Error while getting the status of plugins")
         status = "FAILURE"
