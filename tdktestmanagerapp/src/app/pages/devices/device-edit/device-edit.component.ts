@@ -133,6 +133,8 @@ public frameworkComponents :any;
    */
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
+    this.selectedDeviceCategory = this.loggedinUser.userCategory;
+    this.categoryName = 'Video';
     this.stbNameChange = this.user.deviceName;
     this.deviceTypeValue = this.user.boxTypeName;
     if(deviceCategory){
@@ -552,6 +554,7 @@ public frameworkComponents :any;
    */
   goBack(){
     localStorage.removeItem('streamData');
+    localStorage.removeItem('deviceCategory');
     this.router.navigate(["/devices"]);
   }
   /**

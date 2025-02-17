@@ -21,6 +21,7 @@ import { Component } from '@angular/core';
 import { ThemeService } from '../../services/theme.service';
 import { CommonModule } from '@angular/common';
 import { UsergroupService } from '../../services/usergroup.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-footer',
@@ -33,9 +34,12 @@ export class FooterComponent {
 
   isChecked = false;
   vesionName!:string;
+  loggedinUser:any;
 
-  constructor(private themeService: ThemeService, private userservice: UsergroupService) { 
-    const theme = this.themeService.currentTheme;
+  constructor(private userservice: UsergroupService,
+    private _snakebar: MatSnackBar,
+  ) { 
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
   }
   /**
    * Initializes the component
@@ -47,8 +51,18 @@ export class FooterComponent {
    * This method is for getting the version name.
    */
   getAppVersion():void{
-    this.userservice.appVersion().subscribe(res=>{
-      this.vesionName = res;
+    this.userservice.appVersion().subscribe({
+      next:(res)=>{
+        this.vesionName = res;
+      },
+      error:(err)=>{
+          this._snakebar.open(err, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        }
     })
   }
 }

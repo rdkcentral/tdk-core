@@ -38,7 +38,6 @@ import { AuthService } from '../../../auth/auth.service';
 import { ModuleButtonComponent } from '../../../utility/component/modules-buttons/button/button.component';
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
-import { FunctionViewComponent } from '../function-view/function-view.component';
 import { MaterialModule } from '../../../material/material.module';
 
 @Component({
@@ -50,8 +49,8 @@ import { MaterialModule } from '../../../material/material.module';
 })
 export class FunctionListComponent {
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   public gridApi!: GridApi;
   public columnDefs: ColDef[] = [
@@ -72,7 +71,6 @@ export class FunctionListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onViewClick:this.openModal.bind(this),
         onParameterClick:this.createParameter.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
@@ -82,6 +80,9 @@ export class FunctionListComponent {
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
+  };
+  gridOptions = {
+    rowHeight: 36
   };
   configureName!: string;
   selectedConfig!: string | null;
@@ -194,21 +195,6 @@ export class FunctionListComponent {
         })
       }
     }
-  }
-  /**
-   * Open view modal click on view icon on function list table.
-   */
-  openModal(data:any):void{
-    this.dialog.open( FunctionViewComponent,{
-      width: '99%',
-      height: '93vh',
-      maxWidth:'100vw',
-      panelClass: 'custom-modalbox',
-      data:{
-        functionName : data.functionName,
-        moduleName : data.moduleName,
-      }
-    })
   }
   /**
    * Navigates to parameter list page.

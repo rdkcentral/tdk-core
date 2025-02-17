@@ -80,6 +80,7 @@ body, *:not(.material-icons) {
     justify-content: space-around;
     font-size: 0.75rem;
     letter-spacing: 0.06rem;
+    font-weight: 600;
 }
 
 li.nav-item :hover {

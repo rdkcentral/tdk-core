@@ -20,19 +20,27 @@ http://www.apache.org/licenses/LICENSE-2.0
 .container{
     margin-bottom: 2rem;
 }
-.card-padding {
-    padding-top: 8px !important;
-}
-
-.title {
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 10px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+.borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
-}
+    margin: 0 15px;
+  }
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 ::ng-deep.form-select:focus, .form-control:focus{
     border-color: gray !important;
     box-shadow: none !important;

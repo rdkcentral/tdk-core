@@ -76,7 +76,8 @@ limitations under the License.
                             <div class="row mb-2 row-align">
                                 <label for="testtype" class="col-md-4 col-form-label">Execution Name</label>
                                 <div class="col-md-8">
-                                    <input type="text" class="form-control" formControlName="executionName" value="{{executionName}}">
+                                    <input type="text" class="form-control" formControlName="executionName" value="{{executionName}}"
+                                    (input)="valueChange($event)">
                                 </div>
                             </div>
                             <div class="row mb-2 row-align">
@@ -121,6 +122,25 @@ limitations under the License.
                                     <small *ngIf="executeForm.controls['script']?.errors?.['required']">Please select Script/s.</small>
                                 </div>
                             </div>
+                            <div class="row mb-2 row-align">
+                                <label for="type" class="col-md-4 col-form-label">Repeat Test Type<span
+                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                                <div class="col-md-8">
+                                    <div class="viewgroup">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input rdkradio" type="radio"
+                                                id="scripts" value="full" formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
+                                            <label class="form-check-label radio-text" for="scripts">Full execution </label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input rdkradio" type="radio"
+                                                id="testsuites" value="individual" formControlName="fullIndvidual" (change)="fullOrIndividual($event)">
+                                            <label class="form-check-label radio-text"
+                                                for="testsuites">Individual scripts</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                     </div>
                     <div class="row" *ngIf="showExecute">
                         <div class="col">
@@ -151,7 +171,6 @@ limitations under the License.
                         </div>
                         <div class="row mb-3">
                             <label for="options" class="col-md-4 col-form-label">Additional log options
-
                             </label>
 
                             <div class="col-md-8" >
@@ -187,7 +206,7 @@ limitations under the License.
                                         formControlName="scheduleType" (change)="scheduleType($event)">
                                         <option value="" default>Select</option>
                                         <option value="OnetimeSchedule">Onetime Schedule</option>
-                                        <!-- <option value="ReccurenceSchedule">Reccurence Schedule</option> -->
+                                        <option value="ReccurenceSchedule">Reccurence Schedule</option>
                                     </select>
                                 </div>
 

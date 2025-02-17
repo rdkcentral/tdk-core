@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ParameterViewComponent } from './parameter-view.component';
+import { CreateJiraComponent } from './create-jira.component';
 
-describe('ParameterViewComponent', () => {
-  let component: ParameterViewComponent;
-  let fixture: ComponentFixture<ParameterViewComponent>;
+describe('CreateJiraComponent', () => {
+  let component: CreateJiraComponent;
+  let fixture: ComponentFixture<CreateJiraComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ParameterViewComponent]
+      imports: [CreateJiraComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ParameterViewComponent);
+    fixture = TestBed.createComponent(CreateJiraComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

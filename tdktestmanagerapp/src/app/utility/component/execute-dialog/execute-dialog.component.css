@@ -165,6 +165,7 @@ h6 {
 ::ng-deep .text-center,
 .common-label {
   font-size: 0.8rem;
+  margin-top: 4px;
 }
 .group-texts {
   border: 1px solid gray;

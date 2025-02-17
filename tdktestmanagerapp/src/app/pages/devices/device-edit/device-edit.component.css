@@ -17,21 +17,37 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-.container{
-    margin-bottom: 2rem;
-}
+
 .exsit-modal-content {
     max-height: 100vh;
 }
-.title{
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 1px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+.falvor-row{
+    display: flex;
+    align-items: baseline;
+    margin-top: 5px;
+    padding-left: 0;
+  }
+  .borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
-}
+    margin: 0 15px;
+  }
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 .userform{
     margin-left: 25px;
     margin-right: 25px;
@@ -71,6 +87,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 .newconfigfile{
     font-size: 0.8rem;
     margin-right: 10px;
+    box-shadow: 0px 3px 6px #0000005e;
+    border: 1px solid #ddd;
 }
 .config-input{
     width: 185px;

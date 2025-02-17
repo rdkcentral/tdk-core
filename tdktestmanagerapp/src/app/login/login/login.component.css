@@ -29,7 +29,8 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 
 .logo-img {
-    width: 7%;
+    width: 10%;
+    margin-top: 8px;
 }
 
 .title {
@@ -37,7 +38,12 @@ http://www.apache.org/licenses/LICENSE-2.0
     font-size: 1.1rem;
     text-align: center;
     padding-top: 10px;
-    margin-bottom: 0;
+    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+    margin: 0 180px;
+    padding-bottom: 5px;
+
 }
 
 .apptitle {
@@ -253,17 +259,19 @@ input::placeholder{
 
 .header {
     background-color: #fff;
-    background-image: linear-gradient(160deg, #ffffff 10%, #00b2dc 100%);
+    background-image: linear-gradient(160deg, #fff 10%, #00b2dc);
     color: #000;
-    box-shadow: 0px 2px 3px rgb(1 38 69 / 33%);
-    height: 45px;
-
+    height: 50px;
 }
 
 .signinbtn {
     text-align: center;
 }
-
+.eye-align{
+    display: flex;
+    position: relative;
+    flex-direction: column;
+}
 .logingOptionlbl {
     font-size: 0.7rem;
 }
@@ -321,7 +329,7 @@ input[type="password"]::-ms-clear {
 }
 .eyeicon {
     position: absolute;
-    top: 207px;
+    /* top: 207px; */
     right: 50px;
     cursor: pointer;
 }
@@ -329,34 +337,32 @@ input[type="password"]::-ms-clear {
 .eyeicon i {
     position: relative;
     font-size: 1.2em;
-    top: -5px;
+    top: -25px;
     transform: translateY(-50%);
 }
  
 .registerEyeicon {
     position: absolute;
-    top: 130px;
-    right: 50px;
+    right: 28px;
     cursor: pointer;
 }
  
 .registerEyeicon i {
     position: relative;
     font-size: 1.2em;
-    top: -5px;
+    top: 4px;
     transform: translateY(-50%);
 }
  
 .confirmEyeicon {
     position: absolute;
-    top: 170px;
-    right: 50px;
+    right: 28px;
     cursor: pointer;
 }
  
 .confirmEyeicon i {
     position: relative;
     font-size: 1.2em;
-    top: -5px;
+    top: 5px;
     transform: translateY(-50%);
 }

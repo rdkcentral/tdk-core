@@ -17,250 +17,263 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+body,
+*:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
- h1, 
- h2, 
- h3, 
- h4, 
- h6 {
+h1,
+h2,
+h3,
+h4,
+h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.container{
-    margin-bottom: 2rem;
-}
 .exsit-modal-content {
-    max-height: 100vh;
+  max-height: 100vh;
 }
-.card-height{
-    height: 488px !important;
-    overflow-y: auto;
-    display: block;
-    box-shadow: 0px 1px 2px #333;
-    background-color: #f6f6f6;
+.falvor-row {
+  display: flex;
+  align-items: baseline;
+  margin-top: 5px;
+  padding-left: 0;
 }
-.title{
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 1px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
+.borders-btm {
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0 15px;
 }
-.userform{
-    margin-left: 25px;
-    margin-right: 25px;
+.title {
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 10px;
+}
+.userform {
+  margin-left: 25px;
+  margin-right: 25px;
 }
 .create-btn,
 .reset-btn {
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 8px 20px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
+  background-color: #00b2dc;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }
-.download-btn{
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 7px 20px;
-    border: 1px solid transparent;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-top: 8px;
-    margin-right: 10px;
+.download-btn {
+  background-color: #00b2dc;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 7px 20px;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-top: 8px;
+  margin-right: 10px;
 }
 .reset-btn {
-    margin-right: 10px;
+  margin-right: 10px;
 }
-.thunder{
-    border: 1px solid gray;
+.thunder {
+  border: 1px solid gray;
 }
-.newconfigfile{
-    font-size: 0.8rem;
-    margin-right: 10px;
+.newconfigfile {
+  font-size: 0.8rem;
+  margin-right: 10px;
+  box-shadow: 0px 3px 6px #0000005e;
+  border: 1px solid #ddd;
 }
-.config-input{
-    width: 300px;
-    font-size: 0.8rem;
+.config-input {
+  width: 300px;
+  font-size: 0.8rem;
 }
-.config-input:read-only { 
-    background-color: #e9ecef;
-    cursor: auto;
-    font-size: 0.8rem;
- }
- .configbtngrp{
-    display: flex;
- }
- .form-check-inline {
-    display: flex !important;
- }
- .form-check-input[type=checkbox] {
-    margin-top: 10px !important;
- }
- ::ng-deep.form-select:focus, .form-control:focus{
-    border-color: gray !important;
-    box-shadow: none !important;
-  }
- .check-thunder{
-    display: flex;
- }
- .thunder-hints{
-    font-size: 11px;
- }
-.device-title{
-    font-size: 16px;
+.config-input:read-only {
+  background-color: #e9ecef;
+  cursor: auto;
+  font-size: 0.8rem;
 }
-.changefile-name{
-    margin-left: 14px;
-    display: inline-flex;
-
+.configbtngrp {
+  display: flex;
 }
-.delete-config{
-    margin: 10px 0px 0px 20px;
-    padding: 5px 10px;
-    border: 1px solid #00B2DC;
-    height: 35px;
+.form-check-inline {
+  display: flex !important;
 }
-.delete-config:hover{
-    background-color: transparent;
+.form-check-input[type="checkbox"] {
+  margin-top: 10px !important;
 }
-.delete-fill{
-    color: red;
+::ng-deep.form-select:focus,
+.form-control:focus {
+  border-color: gray !important;
+  box-shadow: none !important;
 }
-.download-icon{
-    color: #00B2DC;
+.check-thunder {
+  display: flex;
 }
-.bi-pencil{
-    color: #00B2DC;
+.thunder-hints {
+  font-size: 11px;
 }
-.mandatory-field{
-    text-align: right;
+.device-title {
+  font-size: 16px;
 }
-.streaming-details{
-    font-size: 1rem;
-    text-align: center;
+.changefile-name {
+  margin-left: 14px;
+  display: inline-flex;
+}
+.delete-config {
+  margin: 10px 0px 0px 20px;
+  padding: 5px 10px;
+  border: 1px solid #00b2dc;
+  height: 35px;
+}
+.delete-config:hover {
+  background-color: transparent;
+}
+.delete-fill {
+  color: red;
+}
+.download-icon {
+  color: #00b2dc;
+}
+.bi-pencil {
+  color: #00b2dc;
+}
+.mandatory-field {
+  text-align: right;
+}
+.streaming-details {
+  font-size: 1rem;
+  text-align: center;
 }
 /* Modal CSS Start */
 
 .modal-dialog.config-modal {
-    max-width: 760px;
+  max-width: 760px;
 }
 .modal-content.config-content {
-    height: 90vh;
+  height: 90vh;
 }
-.exist-config ngx-editor{
-    height: 304px !important;
-    overflow-y: auto;
-    display: block;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.8rem;
+.exist-config ngx-editor {
+  height: 304px !important;
+  overflow-y: auto;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.8rem;
 }
-.existModal-body{
-    height: 59%;
+.existModal-body {
+  height: 59%;
 }
-.toggleIcon{
-    color: #00273F;
-    font-size: 1.4rem;
+.toggleIcon {
+  color: #00273f;
+  font-size: 1.4rem;
 }
-.toggleBtn{
-    margin-left: 40rem;
-    padding: 0;
-    position: fixed;
+.toggleBtn {
+  margin-left: 40rem;
+  padding: 0;
+  position: fixed;
 }
 .config-header {
-    display: flex;
-    color: #00273f;
-    font-size: 1rem;
-    text-align: center;
-    padding: 1px 0 10px 0;
-    border-image: linear-gradient(
-      to right,
-      rgb(0, 178, 220) 25%,
-      rgb(253, 183, 59) 25%,
-      rgb(253, 183, 59) 50%,
-      rgb(146, 200, 73) 50%,
-      rgb(146, 200, 73) 75%,
-      rgb(245, 130, 51) 75%
-    );
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    margin: 5px 20px 0px 20px;
-  }
-  .config-title {
-    margin-bottom: 0px !important;
-  }
-  .modal-maximized ngx-editor {
-    height: 250px !important;
-    overflow-y: auto;
-    display: block;
-  }
-  .modal-maximized .config-modal {
-    max-width: 97vw;
-  }
-  .modal-maximized button .toggleIcon{
-    margin-left: 30rem; 
-  }
-.modal-btns{
-    text-align: right;
+  display: flex;
+  color: #00273f;
+  font-size: 1rem;
+  text-align: center;
+  padding: 1px 0 10px 0;
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 5px 20px 0px 20px;
+}
+.config-title {
+  margin-bottom: 0px !important;
+}
+.modal-maximized ngx-editor {
+  height: 250px !important;
+  overflow-y: auto;
+  display: block;
+}
+.modal-maximized .config-modal {
+  max-width: 97vw;
+}
+.modal-maximized button .toggleIcon {
+  margin-left: 30rem;
+}
+.modal-btns {
+  text-align: right;
 }
 /* Device Modal CSS Start */
-.newdevice-header{
-    margin-top: 0px;
-    padding-bottom: 0px;
+.newdevice-header {
+  margin-top: 0px;
+  padding-bottom: 0px;
 }
-  .device-editor ngx-editor{
-    height: 304px !important;
-    overflow-y: auto;
-    display: block;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 0.8rem;
+.device-editor ngx-editor {
+  height: 304px !important;
+  overflow-y: auto;
+  display: block;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 0.8rem;
 }
-.uploadconfig{
-    text-align: right;
-    margin-right: 10px;
+.uploadconfig {
+  text-align: right;
+  margin-right: 10px;
 }
-.upload-container{
-    height: 200px;
+.upload-container {
+  height: 200px;
 }
-.backEditor{
-    margin-right: 10px;
+.backEditor {
+  margin-right: 10px;
 }
-.config-editbtn :hover{
-    background: none;
+.config-editbtn :hover {
+  background: none;
 }
-.toogle-name{
-    color: #00B2DC;
+.toogle-name {
+  color: #00b2dc;
 }
-.device-input, .config-editbtn, .config-input{
-    height: 35px;
-    margin: 10px 4px 0px 4px;
+.device-input,
+.config-editbtn,
+.config-input {
+  height: 35px;
+  margin: 10px 4px 0px 4px;
 }
-.btns-grps{
-    margin-bottom: 10px;
+.btns-grps {
+  margin-bottom: 10px;
 }
-.thunder-info{
-    margin: -18px 0 0 30px;
-    position: absolute;
+.thunder-info {
+  margin: -18px 0 0 30px;
+  position: absolute;
 }
-.thunderport-info{
-    margin: 0px 0 0 5px;
-    position: absolute;
+.thunderport-info {
+  margin: 0px 0 0 5px;
+  position: absolute;
 }
-.form-check-input:disabled{
-    background-color: rgba(128, 128, 128, 0.897);
+.form-check-input:disabled {
+  background-color: rgba(128, 128, 128, 0.897);
 }
-.deviceconfig-info{
-    margin: -18px 0 0 55px;
-    position: absolute;
+.deviceconfig-info {
+  margin: -18px 0 0 55px;
+  position: absolute;
 }

@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -28,6 +28,7 @@ import {
   GridOptions,
   GridReadyEvent,
   IDateFilterParams,
+  RowNode,
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -38,12 +39,13 @@ import { ExecutionButtonComponent } from '../../utility/component/execution-butt
 import { DetailsExeDialogComponent } from '../../utility/component/details-execution/details-exe-dialog/details-exe-dialog.component';
 import { ExecutionService } from '../../services/execution.service';
 import { ExecuteDialogComponent } from '../../utility/component/execute-dialog/execute-dialog.component';
-import { debounceTime, interval, startWith, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { debounceTime, filter, interval, startWith, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LoginService } from '../../services/login.service';
 import { DateDialogComponent } from '../../utility/component/date-dialog/date-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { ScheduleButtonComponent } from '../../utility/component/execution-button/schedule-button.component';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 @Component({
   selector: 'app-execution',
@@ -59,9 +61,12 @@ import { ScheduleButtonComponent } from '../../utility/component/execution-butto
   templateUrl: './execution.component.html',
   styleUrl: './execution.component.css',
 })
-export class ExecutionComponent implements OnInit{
-  @ViewChild('searchInput') searchInput!: ElementRef;
+export class ExecutionComponent implements OnInit, OnDestroy{
+  @ViewChild('deviceSearchInput') deviceSearchInput!: ElementRef;
+  @ViewChild('tableSearchInput') tableSearchInput!: ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild('historyTable') historyTable: any;
+
   executeName: string = 'Execute';
   selectedCategory: string = 'All';
   public themeClass: string = 'ag-theme-quartz';
@@ -72,8 +77,10 @@ export class ExecutionComponent implements OnInit{
   currentPage = 0;
   pageSize = 10;
   schedulePageSize = 10;
-  schedulePageSizeSelector: number[] | boolean = [5, 10, 30, 50];
+  schedulePageSizeSelector: number[] | boolean = [10, 20, 50];
   public gridApi!: GridApi;
+  selectedRowIds : Set<number> = new Set();
+
   filterParams: IDateFilterParams = {
     comparator: (filterLocalDateAtMidnight: Date, cellValue: string) => {
       var dateAsString = cellValue;
@@ -123,6 +130,12 @@ export class ExecutionComponent implements OnInit{
       wrapText:true,
       headerClass: 'header-center',
       resizable: false,
+      valueFormatter: (params) => {
+        if (params.value) {
+          return params.value.toString().toUpperCase();
+        }
+        return '';
+      },
     },
     {
       headerName: 'Scripts/Testsuite',
@@ -130,7 +143,6 @@ export class ExecutionComponent implements OnInit{
       filter: 'agTextColumnFilter',
       sortable: true,
       tooltipField: 'scriptTestSuite',
-      // width:190,
       flex:2,
       resizable: false,
       cellRenderer:(params:any)=>{
@@ -143,6 +155,12 @@ export class ExecutionComponent implements OnInit{
       cellClass: (params:any)=>{
         return params.value.length > 30 ? 'text-ellipsis' : 'text-two-line';
       },
+      valueFormatter: (params) => {
+        if (params.value) {
+          return params.value.toString().toUpperCase();
+        }
+        return '';
+      },
     },
     {
       headerName: 'Device',
@@ -154,7 +172,14 @@ export class ExecutionComponent implements OnInit{
       width:130,
       cellStyle:{'white-space': 'normal',' word-break': 'break-word'},
       wrapText:true,
-      resizable: false
+      resizable: false,
+      valueFormatter: (params) => {
+        if (params.value) {
+          return params.value.toString().toUpperCase();
+        }
+        return '';
+      },
+      
     },
     {
       headerName: 'Date Of Execution',
@@ -179,6 +204,12 @@ export class ExecutionComponent implements OnInit{
       sortable: true,
       cellClass: 'selectable',
       resizable: false,
+      valueFormatter: (params) => {
+        if (params.value) {
+          return params.value.toString().toUpperCase();
+        }
+        return '';
+      },
     },
     {
       headerName: 'Result',
@@ -259,7 +290,7 @@ export class ExecutionComponent implements OnInit{
       headerName: 'Scripts/Testsuite',
       field: 'scriptTestSuite',
       filter: 'agTextColumnFilter',
-      flex: 1,
+      flex: 2,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
@@ -287,7 +318,7 @@ export class ExecutionComponent implements OnInit{
       headerName: 'Status',
       field: 'status',
       filter: 'agTextColumnFilter',
-      width: 110,
+      flex: 1,
       sortable: true,
       resizable: false,
       headerClass: 'header-center',
@@ -298,7 +329,7 @@ export class ExecutionComponent implements OnInit{
       sortable: false,
       resizable: false,
       headerClass: 'no-sort header-center',
-      width: 110,
+      flex: 1,
       cellRenderer: ScheduleButtonComponent,
       cellRendererParams: (params: any) => ({
         onDeleteClick: this.deleteSchedule.bind(this),
@@ -308,6 +339,11 @@ export class ExecutionComponent implements OnInit{
   ];
   gridOptions = {
     rowHeight: 40
+  };
+  gridOptionsHistory: GridOptions = { 
+    getRowId: (params:any) => {
+      return params.data.id;
+   }
   };
 
   deviceStausArray: any[] = [];
@@ -332,7 +368,15 @@ export class ExecutionComponent implements OnInit{
   searchTerm: string = '';
   filteredDeviceStausArray: any[] = []; 
   sortOrder: string = 'asc';
-  private searchTermSubject = new Subject<string>(); 
+  private searchTermSubject = new Subject<string>();
+  private refreshdestroy$ = new Subject<void>();
+  private allExecutionHistory$ = new Subject<void>();
+  exeRefresh = true;
+  scheduleRefresh = false;
+  searchDevice ='';
+  historyInterval:any;
+  deviceInterval:any;
+
   constructor(
     private authservice: AuthService,
     private _snakebar: MatSnackBar,
@@ -342,6 +386,8 @@ export class ExecutionComponent implements OnInit{
     public deleteDateDialog :MatDialog,
     private executionservice:ExecutionService,
     private clipboard: Clipboard,
+    private router: Router,
+    private route: ActivatedRoute,
   ) {
     this.loggedinUser = JSON.parse(
       localStorage.getItem('loggedinUser') || '{}'
@@ -355,16 +401,31 @@ export class ExecutionComponent implements OnInit{
   ngOnInit(): void {
     let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     this.defaultCategory = localcategory;
-    this.onCategoryChange(localcategory);
+    this.selectedDfaultCategory = this.userCategory;
     this.listenForLogout();
     this.getDeviceStatus();
     this.getAllExecutions();
     this.allExecutionScheduler();
-    this.searchTermSubject.pipe(debounceTime(300)).subscribe(term => { 
-      this.performSearch(term);
-    });
+    this.historyInterval = setInterval(() => {
+      this.getAllExecutions();
+    }, 60000);
+    // this.getDeviceStatus();
+    this.deviceInterval = setInterval(() => {
+      this.getDeviceStatus();
+    }, 10000);
   }
-
+  refreshExeHistory():void{
+    this.storeSelection();
+    setTimeout(() => {
+      this.getAllExecutions();
+      setTimeout(() => {
+      this.reSoreSelection();
+      }, 100);
+    }, 500);
+  }
+  refreshSchedule():void{
+    this.allExecutionScheduler();
+  }
   @HostListener('window:popstate', ['$event'])
   onPopState(event:Event){
    history.pushState(null, '', location.href);
@@ -374,17 +435,24 @@ export class ExecutionComponent implements OnInit{
    * Initializes all the execution list.
   */
   getAllExecutions():void{
+    this.storeSelection();
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
-      this.executionservice.getAllExecutionByName(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe(response=>{
-        let data = null;
-          try {
-            if(response){
-              data = JSON.parse(response);
-              this.rowData = data.executions;
-              this.totalItems = data.totalItems;
-            }
-          } catch (e) {
+      
+      this.executionservice.getAllExecutionByName(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
+        next: (res) => {
+          const data = JSON.parse(res);
+          this.rowData = data.executions;
+          this.totalItems = data.totalItems;
+          setTimeout(() => {
+            this.reSoreSelection();
+          }, 100);
+        },
+        error: (err) => {
+          if(err ==='No Executions available'){
+            this.rowData = [];
+            this.totalItems =0;
           }
+        }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
       this.executionservice.getAllExecutionByScript(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
@@ -394,13 +462,10 @@ export class ExecutionComponent implements OnInit{
           this.totalItems = data.totalItems;
         },
         error: (err) => {
-          let errmsg = err.error;
-          this._snakebar.open(errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          })
+          if(err ==='No Executions available'){
+            this.rowData = [];
+            this.totalItems =0;
+          }
         }
       })
     } else if(this.selectedCategory === 'Device' && this.searchValue != ''){
@@ -411,13 +476,10 @@ export class ExecutionComponent implements OnInit{
           this.totalItems = data.totalItems;
         },
         error: (err) => {
-          let errmsg = err.error;
-          this._snakebar.open(errmsg, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
+          if(err ==='No Executions available'){
+            this.rowData = [];
+            this.totalItems =0;
+          }
         }
       });
     } else if(this.selectedCategory === 'User' && this.selectedOption != ''){
@@ -428,16 +490,34 @@ export class ExecutionComponent implements OnInit{
       });
     }
     else {
-      this.executionservice.getAllexecution(this.defaultCategory,this.currentPage, this.pageSize).subscribe({
+      this.executionservice.getAllexecution(this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next:(res)=>{
           let data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
+          setTimeout(() => {
+            this.reSoreSelection();
+          }, 0);
         },
         error:(err)=>{
+          if(err ==='No Executions available'){
+            this.rowData = [];
+            this.totalItems =0;
+          }
         }
+
       })
     }
+    this.stayFocus();
+  }
+  stayFocus() {
+    setTimeout(() => {
+      if (document.activeElement === this.deviceSearchInput?.nativeElement) {
+        this.deviceSearchInput.nativeElement.focus();
+      } else if (document.activeElement === this.tableSearchInput?.nativeElement) {
+        this.tableSearchInput.nativeElement.focus();
+      }
+    }, 100);
   }
   /**
    * This method is for change the page.
@@ -454,10 +534,37 @@ export class ExecutionComponent implements OnInit{
   onGridReady(params: GridReadyEvent):void {
     this.gridApi = params.api;
   }
+
+  onSelectionChange():void{
+    this.selectedRowIds.clear();
+    this.gridApi.getSelectedRows().forEach(node => {
+      if(node.data){
+        this.selectedRowIds.add(node.data.executionId)
+      }
+    })
+    // const selectedNode = this.gridApi.getSelectedNodes()[0];
+    // this.selectedRowIds = this.gridApi.getSelectedNodes().map(node => node.data.executionId);
+  }
+  storeSelection(){
+    this.selectedRowIds.clear();
+    if(this.gridApi){
+      this.gridApi.getSelectedRows().forEach(row => this.selectedRowIds.add(row.executionId))
+    }
+  }
+  reSoreSelection():void{
+    if(!this.gridApi) return;
+      this.gridApi.forEachNode((node:any)=>{
+        if(this.selectedRowIds.has(node.data.executionId)){
+          node.setSelected(true);
+        }
+      })
+    
+  }
   /**
    * This method is for change the category.
   */ 
-  onCategoryChange(val: string): void {
+  onCategoryChange(event:any): void {
+    let val = event.target.value;
     this.deviceStausArray = [];
     this.rowData = [];
     if (val === 'RDKB') {
@@ -490,40 +597,44 @@ export class ExecutionComponent implements OnInit{
    * This method is for initialize the device status.
   */
   getDeviceStatus():void{
-    interval(10000)
-    .pipe(
-      startWith(0),
-      takeUntil(this.deviceStatusDestroy$),
-      switchMap(() => {
-        return this.executionservice.getDeviceStatus(this.selectedDfaultCategory);
-      })
-    )
-    // this.executionservice.getDeviceStatus(this.selectedDfaultCategory)
+
+    const isInputFocused = document.activeElement === this.deviceSearchInput?.nativeElement;
+    this.executionservice.getDeviceStatus(this.selectedDfaultCategory)
     .subscribe({
       next: (res) => {
-        // setTimeout(() => {
           this.deviceStausArray = this.formatData(JSON.parse(res));
           this.filteredDeviceStausArray = [...this.deviceStausArray];
-          this.filterAndSortDevices(); 
+          if (isInputFocused) {
+            setTimeout(() => {
+              if (this.deviceSearchInput) {
+                this.deviceSearchInput.nativeElement.focus();
+                this.deviceSearchInput.nativeElement.setSelectionRange(
+                  this.deviceSearchInput.nativeElement.value.length,
+                  this.deviceSearchInput.nativeElement.value.length
+                );
+              }
+            }, 0);
+          }
+          this.filterAndSortDevices(this.searchDevice);
           this.deviceStausArray[0].childData.forEach((element:any) => {
             this.toolTipText +=
             element.deviceName + '\n' +
             element.ip + '\n' +
             element.deviceType + '\n' +
             element.status + '\n';
-         
           });
-        // }, 3000);
       },
       error: (err) => {
-        this._snakebar.open(err.error, '', {
+        this._snakebar.open(err, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
           verticalPosition: 'top'
         })
-      }  
+      }
+
     })
+    this.stayFocus();
   }
   /**
    * This method is for format the tree view of device status
@@ -539,25 +650,7 @@ export class ExecutionComponent implements OnInit{
    * This method is for refresh the device status when click on refresh button.
   */
   refreshDevice():void{
-    this.executionservice.getDeviceStatus(this.selectedDfaultCategory).subscribe({
-      next: (res) => {
-        setTimeout(() => {
-          this.deviceStausArray = this.formatData(JSON.parse(res));
-          this.deviceStausArray[0].childData.forEach((element:any) => {
-            this.toolTipText +=
-            element.name + "\n" + element.ip + "\n" + element.deviceType + "\n" + element.status
-          });
-        }, 3000);
-      },
-      error: (err) => {
-        this._snakebar.open(err.error, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      } 
-    })
+    this.getDeviceStatus();
   }
   /**
    * After logout destroy the subject.
@@ -586,19 +679,40 @@ export class ExecutionComponent implements OnInit{
     this.deviceStatusDestroy$.complete();
     this.executionDestroy$.next();
     this.executionDestroy$.complete();
+    this.allExecutionHistory$.next();
+    this.allExecutionHistory$.complete();
     if (this.refreshSubscription) {
       this.refreshSubscription.unsubscribe();
     }
     if (this.scheduleSubscription) {
       this.scheduleSubscription.unsubscribe();
     }
+    this.refreshdestroy$.next();
+    this.refreshdestroy$.complete();
+    if (this.deviceInterval) {
+      clearInterval(this.deviceInterval);
+    }
+    if (this.historyInterval) {
+      clearInterval(this.historyInterval);
+    }
   }
   /**
    * Initiallize the execution scheduler
   */
   allExecutionScheduler(){
-    this.executionservice.getAllexecutionScheduler(this.selectedDfaultCategory).subscribe(res=>{
-      this.rowDataSchudle = JSON.parse(res);
+    this.executionservice.getAllexecutionScheduler(this.selectedDfaultCategory).subscribe({
+      next:(res)=>{
+        let data = JSON.parse(res);
+        this.rowDataSchudle = data;
+      },
+      error:(err)=>{
+          this._snakebar.open(err, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        }
     })
   }
   /**
@@ -797,7 +911,7 @@ export class ExecutionComponent implements OnInit{
       deviceExeModal.afterClosed().subscribe(() => {
         setTimeout(() => {
         this.getAllExecutions();
-        }, 3000);
+        }, 2000);
       });
     }else{
       this._snakebar.open('The device is not available for execution','',{
@@ -825,7 +939,7 @@ export class ExecutionComponent implements OnInit{
     normalExeModal.afterClosed().subscribe(() => {
       setTimeout(() => {
       this.getAllExecutions();
-      }, 3000);
+      }, 2000);
     });
   }
   /**
@@ -900,10 +1014,7 @@ export class ExecutionComponent implements OnInit{
               horizontalPosition: 'end',
               verticalPosition: 'top'
               })
-              const rowToRemove = this.rowDataSchudle.find((row:any) => row.id === data.id);
-              if (rowToRemove) {
-                this.gridApi.applyTransaction({ remove: [rowToRemove] });
-              }
+              this.allExecutionScheduler();
           },
           error:(err)=>{
             this._snakebar.open(err.error, '', {
@@ -923,6 +1034,14 @@ export class ExecutionComponent implements OnInit{
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
     this.tabName = label;
+    if(this.tabName === 'Execution Schedules'){
+      this.allExecutionScheduler();
+      this.exeRefresh = false;
+      this.scheduleRefresh = true;
+    } else{
+      this.exeRefresh = true;
+      this.scheduleRefresh = false;
+    }
   }
   /**
    * This method for abort the inprogress execution.
@@ -938,7 +1057,7 @@ export class ExecutionComponent implements OnInit{
           })
       },
       error:(err)=>{
-        this._snakebar.open(err.error, '', {
+        this._snakebar.open(err, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -947,18 +1066,42 @@ export class ExecutionComponent implements OnInit{
       }
     })
   }
-  filterAndSortDevices(){
-    this.performSearch(this.searchTerm);
+  filterAndSortDevices(seachDevice:string){
+    this.performSearch(seachDevice);
     this.sortDevices();
   }
-  searchDevices(event: any) :void{
-    const target = event.target as HTMLInputElement;
-    this.searchTermSubject.next(target.value);
+
+  searchDevices(event: Event) {
+    const inputElement = event.target as HTMLInputElement;
+    this.searchDevice = inputElement.value.toLowerCase();
+    this.performSearch(this.searchDevice);
+    setTimeout(() => {
+      if (this.deviceSearchInput) {
+        this.deviceSearchInput.nativeElement.focus();
+        this.deviceSearchInput.nativeElement.setSelectionRange(
+          this.deviceSearchInput.nativeElement.value.length,
+          this.deviceSearchInput.nativeElement.value.length
+        );
+      }
+    }, 0);
   }
   performSearch(term: string) :void{
     const lowerTerm = term.toLowerCase();
     const filteredChildData = this.deviceStausArray[0].childData.filter((device:any) => {
-      return device.deviceName.toLowerCase().includes(lowerTerm) || device.ip.toLowerCase().includes(term);
+      return Object.values(device).some(value => {
+        if (value === null || value === undefined) {
+          return false;
+        }
+  
+        if (typeof value === 'string') {
+          return value.toLowerCase().includes(lowerTerm);
+        } else if (typeof value === 'number') {
+          return value.toString().includes(lowerTerm);
+        } else if (typeof value === 'boolean') {
+          return value.toString().includes(lowerTerm);
+        }
+        return false;
+      });
     });
 
     this.filteredDeviceStausArray = [{
@@ -966,19 +1109,12 @@ export class ExecutionComponent implements OnInit{
       childData: filteredChildData,
       isOpen: this.deviceStausArray[0].isOpen
     }];
-    setTimeout(() => {
-      if (this.searchInput) {
-        this.searchInput.nativeElement.focus();
-      }
-    });
+    this.sortDevices();
   }
   clearSearch() :void{
     this.searchTerm = '';
     this.filteredDeviceStausArray = [...this.deviceStausArray];
     this.sortDevices();
-    if (this.searchInput) {
-      this.searchInput.nativeElement.focus();
-    }
   }
   toggleSortOrder():void{
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
@@ -987,9 +1123,9 @@ export class ExecutionComponent implements OnInit{
   sortDevices() :void{
     const order = this.sortOrder;
     const statusOrder : { [key: string]: number } = {
-      'free': 1,
-      'not_found': 2,
-      'busy': 3,
+      'busy': 1,
+      'free': 2,
+      'not_found': 3,
       'hang': 4
     };
     this.filteredDeviceStausArray[0].childData.sort((a:any, b:any) => {

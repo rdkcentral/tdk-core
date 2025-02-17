@@ -28,15 +28,28 @@ http://www.apache.org/licenses/LICENSE-2.0
     overflow-y: auto;
     display: block;
 }
-.title{
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 1px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+.borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
-}
+    margin: 0 15px;
+    /* padding-bottom: 4px; */
+  }
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 .row{
     display: flex;
     justify-content: center;
@@ -98,11 +111,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 ::ng-deep.cdk-program-focused{
     background-color: transparent !important;
 }
-::ng-deep.mat-step-icon-selected {
+/* ::ng-deep.mat-step-icon-selected{
     background-color: #00B2DC !important;
-}
-::ng-deep.mat-step-icon-state-edit{
+} */
+::ng-deep.mat-step-icon, .mat-step-icon-state-number {
     background-color: #00B2DC !important;
+    cursor: pointer !important;
 }
 hr{
     margin-top: 0;
@@ -116,4 +130,7 @@ hr{
 ::ng-deep .multiselect-dropdown span.selected-item{
     width: 100% !important;
     max-width: 100% !important;
+}
+.demo-stepper{
+    background-color: transparent !important;
 }

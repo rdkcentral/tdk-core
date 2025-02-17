@@ -13,11 +13,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
+<div class="container-fluid">
+    <div class="row borders-btm">
+        <div class="col">
+        </div>
+        <div class="col">
+            <h1 class="title"><h1 class="title">Update {{selectedCategoryName}} Script</h1></h1>
+        </div>
+        <div class="col">
+        </div>
+    </div>
     <div class="row mt-1">
         <div class="col-md-12">
-            <mat-card class="card-height">
-                <h1 class="title">Update {{selectedCategoryName}} Script</h1>
                 <mat-horizontal-stepper class="demo-stepper" [linear]="isLinear" #stepper>
                     <mat-step [stepControl]="firstFormGroup">
                         <form [formGroup]="firstFormGroup" >
@@ -29,7 +36,9 @@ limitations under the License.
                                                 style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
                                             <input type="text" class="form-control" id="scriptname" autocomplete="off"
-                                                placeholder="Enter script name" formControlName="scriptname" (input)="onScritName($event)">
+                                                placeholder="Enter script name" formControlName="scriptname">
+                                               <mat-error *ngIf="firstFormGroup.get('scriptname')?.hasError('required')">
+                                               </mat-error>
                                         </div>
                                     </div>
                                     <div class="row mb-3">
@@ -38,7 +47,7 @@ limitations under the License.
                                         </label>
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example" id="module"
-                                                formControlName="module" (change)="changeModule($event)">
+                                                formControlName="module">
                                                 <option value="" default>Select</option>
                                                 <option *ngFor="let item of allModules" [value]="item.moduleName">
                                                     {{ item.moduleName }}
@@ -51,8 +60,7 @@ limitations under the License.
                                         <label for="primitivetest" class="col-md-3 col-form-label">Primitive Test</label>
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example"
-                                                id="primitiveTest" formControlName="primitiveTest" (change)="onChangePrimitive($event)">
-                                                <!-- <option value="" default>Select</option> -->
+                                                id="primitiveTest" formControlName="primitiveTest">
                                                 <option *ngFor="let item of allPrimitiveTest" value="{{item.primitiveTestName}}">
                                                     {{ item.primitiveTestName }}
                                                 </option>
@@ -95,9 +103,11 @@ limitations under the License.
                                         <label for="executiontimeout" class="col-md-3 col-form-label">Execution
                                             TimeOut<span style="color:red; margin-left: 0.75em;">*</span></label>
                                         <div class="col-md-8">
-                                            <input type="text" class="form-control" id="executiontimeout" oninput="this.value = this.value.replace(/\D+/g, '')"
+                                            <input type="text" class="form-control" id="executiontimeout" (input)="onNumberInput($event)"
                                                 autocomplete="off" placeholder="Enter execution timeout (min)"
-                                                formControlName="executiontimeout">
+                                                formControlName="executiontimeout" >
+                                                <mat-error *ngIf="firstFormGroup.get('executiontimeout')?.hasError('required')">
+                                               </mat-error>
                                         </div>
                                     </div>
 
@@ -107,13 +117,15 @@ limitations under the License.
                                         <div class="col-md-8">
                                             <textarea class="form-control" id="synopsis" rows="3"
                                                 formControlName="synopsis" (input)="onInput($event)"></textarea>
+                                                <mat-error *ngIf="firstFormGroup.get('synopsis')?.hasError('required')">
+                                               </mat-error>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="text-end">
                                 <button mat-button matStepperPrevious class="reset-btn" (click)="goBack()">Back</button>
-                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="!firstFormGroup.valid"  >Next</button>
+                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="firstFormGroup.invalid">Next</button>
                             </div>
                         </form>
                     </mat-step>
@@ -127,6 +139,8 @@ limitations under the License.
                                         <div class="col-md-8">
                                             <input type="text" class="form-control" id="testId" autocomplete="off"
                                                 placeholder="Enter test case ID" formControlName="testcaseID" (input)="onTestcaseID($event)">
+                                                <mat-error *ngIf="secondFormGroup.get('testcaseID')?.hasError('required')">
+                                                </mat-error>
                                         </div>
                                     </div>
 
@@ -160,7 +174,7 @@ limitations under the License.
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example"
                                                 id="priority" formControlName="priority" (change)="changePriority($event)">
-                                                <option value="" default>Select</option>
+                                                <!-- <option value="" default>Select</option> -->
                                                 <option value="High">High</option>
                                                 <option value="Medium">Medium</option>
                                                 <option value="Low">Low</option>
@@ -184,7 +198,7 @@ limitations under the License.
                                         <div class="col-md-8">
                                             <select class="form-select" aria-label="Default select example"
                                                 id="testtype" formControlName="testType">
-                                                <option value="" default>Select</option>
+                                                <!-- <option value="" default>Select</option> -->
                                                 <option value="POSITIVE">POSITIVE</option>
                                                 <option value="NEGATIVE">NEGATIVE</option>
                                             </select>
@@ -236,13 +250,13 @@ limitations under the License.
                             </div>
                             <div class="text-end">
                                 <button mat-button matStepperPrevious class="reset-btn">Back</button>
-                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="!secondFormGroup.valid"
+                                <button mat-button matStepperNext class="reset-btn next-btn" [disabled]="secondFormGroup.invalid"
                                     >Next</button>
                             </div>
                         </form>
                     </mat-step>
                     <mat-step [stepControl]="thirdFormGroup" label="Script">
-                        <form [formGroup]="thirdFormGroup" >
+                        <form  [formGroup]="thirdFormGroup">
                             <label for="scriptcontent" class="col-md-3 col-form-label ">Script Content</label>
                             <div class="row">
                                 <div style="height: 400px;">
@@ -259,7 +273,6 @@ limitations under the License.
 
                     </mat-step>
                 </mat-horizontal-stepper>
-            </mat-card>
         </div>
     </div>
 </div>

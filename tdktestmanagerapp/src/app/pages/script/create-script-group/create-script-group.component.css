@@ -29,23 +29,29 @@ body, *:not(.material-icons) {
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.container{
-    margin-bottom: 2rem;
-}
-.card-height{
-    height: 440px !important;
-    overflow-y: auto;
-    display: block;
-}
-.title{
-    font-size: 1rem;
-    text-align: center;
-    padding: 0px 0 1px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+
+.borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
-}
+    margin: 0 15px;
+    /* padding-bottom: 4px; */
+  }
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 .create-btn,
 .reset-btn {
     background-color: #00B2DC;
@@ -72,18 +78,53 @@ body, *:not(.material-icons) {
 }
 .name-list {
     height: 280px;
+    width: 570px;
     padding: 10px;
     border: 1px solid #ddd;
-    background-color: #f9f9f9;
+    background-color: transparent;
     overflow-y: auto;
 }
-  
-[cdkDrag] {
+.ritename-list{
+    height: 280px;
+    width: 545px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: transparent;
+    overflow-y: auto; 
+}
+  .list-box ul{
+    list-style: none;
+    padding-left: 0;
+  }
+  .list-box ul li {
     padding: 0px 5px;
     margin-bottom: 5px;
     border: 1px solid #0000003b;
-    background-color: #fff;
     font-size: 0.7rem;
+}
+.left-sec{
+    position: relative;
+}
+.right-sec{
+    position: relative;
+    margin-left: 15px;
+}
+.move-btns{
+    position: absolute;
+    top: 0;
+    left: 98%;
+}
+.move-ritebtns{
+    position: absolute;
+    top: 0;
+    left: 94%;
+}
+.icon-move{
+    font-size: 1.3rem;
+    color: #00B2DC;
+}
+.arrow-btn{
+    border: none !important;
 }
 .nodata{
     display: flex;

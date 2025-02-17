@@ -29,6 +29,10 @@ import { ScriptsService } from '../../../services/scripts.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
 
+interface scriptType {
+  id: string,
+  name:string
+}
 @Component({
   selector: 'app-create-script-group',
   standalone: true,
@@ -53,6 +57,9 @@ export class CreateScriptGroupComponent {
   onlyVideoCategory!:string;
   onlyVideoCategoryName!:string;
   categoryName!:string;
+  selectedLeft = new Set<number>();
+  selectedRight = new Set<number>();
+  filteredLeftList:any;
 
   constructor(private authservice : AuthService,private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar ) {
@@ -65,7 +72,7 @@ export class CreateScriptGroupComponent {
     this.onlyVideoCategory = this.authservice.videoCategoryOnly;
     localStorage.setItem('onlyVideoCategory',this.onlyVideoCategory);
     let category = localStorage.getItem('category') || '';
-    this.selectedCategory = category?category:'RDKV';
+    this.selectedCategory = category;
     this.selectedCategory = this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory;
 
     if(this.onlyVideoCategory){
@@ -99,73 +106,122 @@ export class CreateScriptGroupComponent {
       this.container1 = JSON.parse(res);
     })
   }
-// Handle multi-select using Ctrl (Cmd on Mac) + click
-  selectItem(event: MouseEvent, item: string) :void{
-    if (event.ctrlKey || event.metaKey) {
-      if (this.selectedItems.has(item)) {
-        this.selectedItems.delete(item);
-      } else {
-        this.selectedItems.add(item);
-      }
-    } else {
-      this.selectedItems.clear();
-      this.selectedItems.add(item);
+  toggleSec(scripts:any, side: 'left' | 'right'){
+    if(side === 'left'){
+      this.selectedLeft.has(scripts.id)?this.selectedLeft.delete(scripts.id):this.selectedLeft.add(scripts.id);
+    }else{
+      this.selectedRight.has(scripts.id)?this.selectedRight.delete(scripts.id):this.selectedRight.add(scripts.id);
     }
   }
-  /**
-   * Method to drag and drop functionality
-   */ 
-  drop(event: CdkDragDrop<string[]>) :void{
-    const selectedArray = Array.from(this.selectedItems);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      for (let selectedItem of selectedArray) {
-        const index = event.previousContainer.data.indexOf(selectedItem);
-        if (index !== -1) {
-          event.previousContainer.data.splice(index, 1);
-          event.container.data.splice(event.currentIndex, 0, selectedItem);
-        }
-      }
-      this.selectedItems.clear();
-    }
-    this.testSuiteFrom.get('container2Scripts')?.setValue(this.container2);
+  moveToRight(){
+    
+    this.container2ScriptArr.push(...this.container1.filter(scripts => this.selectedLeft.has(scripts.id)));
+    this.container1 = this.container1.filter(scripts => !this.selectedLeft.has(scripts.id));
+    this.selectedLeft.clear();
+    this.testSuiteFrom.get('container2Scripts')?.setValue(this.container2ScriptArr);
     this.testSuiteFrom.get('container2Scripts')?.markAsTouched();
     this.testSuiteFrom.get('container2Scripts')?.updateValueAndValidity();
   }
-  get filteredContainer1(): any[] {
+  moveToLeft(){
+    this.container1.push(...this.container2ScriptArr.filter(scripts => this.selectedRight.has(scripts.id)));
+    this.container2ScriptArr = this.container2ScriptArr.filter(scripts => !this.selectedRight.has(scripts.id));
+    this.selectedRight.clear();
+  }
+  moveToUp(){
+    const selectedIds = Array.from(this.selectedRight);
+    for (let i = 1; i < this.container2ScriptArr.length; i++) {
+      if(selectedIds.includes(this.container2ScriptArr[i].id)){
+        [this.container2ScriptArr[i], this.container2ScriptArr[i-1]] =  [this.container2ScriptArr[i - 1], this.container2ScriptArr[i]]
+      }
+      
+    }
+  }
+  moveToDown(){
+    const selectedIds = Array.from(this.selectedRight);
+    for (let i = this.container2ScriptArr.length -2; i >= 0; i--) {
+      if(selectedIds.includes(this.container2ScriptArr[i].id)){
+        [this.container2ScriptArr[i], this.container2ScriptArr[i+1]] =  [this.container2ScriptArr[i + 1], this.container2ScriptArr[i]]
+      }
+      
+    }
+  }
+// Handle multi-select using Ctrl (Cmd on Mac) + click
+  // selectItem(event: MouseEvent, item: string) :void{
+  //   if (event.ctrlKey || event.metaKey) {
+  //     if (this.selectedItems.has(item)) {
+  //       this.selectedItems.delete(item);
+  //     } else {
+  //       this.selectedItems.add(item);
+  //     }
+  //   } else {
+  //     this.selectedItems.clear();
+  //     this.selectedItems.add(item);
+  //   }
+  // }
+  /**
+   * Method to drag and drop functionality
+   */ 
+  // drop(event: CdkDragDrop<string[]>) :void{
+  //   const selectedArray = Array.from(this.selectedItems);
+  //   if (event.previousContainer === event.container) {
+  //     moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
+  //   } else {
+  //     for (let selectedItem of selectedArray) {
+  //       const index = event.previousContainer.data.indexOf(selectedItem);
+  //       if (index !== -1) {
+  //         event.previousContainer.data.splice(index, 1);
+  //         event.container.data.splice(event.currentIndex, 0, selectedItem);
+  //       }
+  //     }
+  //     this.selectedItems.clear();
+  //   }
+  //   this.testSuiteFrom.get('container2Scripts')?.setValue(this.container2);
+  //   this.testSuiteFrom.get('container2Scripts')?.markAsTouched();
+  //   this.testSuiteFrom.get('container2Scripts')?.updateValueAndValidity();
+  // }
+  get filteredContainer1(): any[]{
     const searchTerm = this.testSuiteFrom.get('search')?.value || ''; 
-    let filteredList = this.container1;
+    this.filteredLeftList = this.container1;
     if (searchTerm) {
-      filteredList = this.container1.filter((item:any) =>
+       this.filteredLeftList = this.container1.filter((item:any) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    return filteredList.sort((a:any, b:any) => {
-      if (this.sortOrder === 'asc') {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
+      return this.filteredLeftList;
+    
+    // return filteredList.sort((a:any, b:any) => {
+    //   if (this.sortOrder === 'asc') {
+    //     return a.name.localeCompare(b.name);
+    //   } else {
+    //     return b.name.localeCompare(a.name);
+    //   }
+    // });
   }
   /**
    * Method to toggle scorting asc/desc
    */   
   toggleSortOrder() :void{
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
-  }
-  get container2(): any[] {
-    let filteredList2 = this.container2ScriptArr;
-    this.testSuiteArr = filteredList2;
-    return filteredList2.sort((a, b) => {
-      if (this.sortOrderRight === 'asc') {
+    this.filteredLeftList.sort((a: any, b: any)=>{
+      if (this.sortOrder === 'asc') {
         return a.name.localeCompare(b.name);
       } else {
         return b.name.localeCompare(a.name);
       }
-    });
+    })
+    // this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   }
+  // get container2(): any[] {
+  //   let filteredList2 = this.container2ScriptArr;
+  //   return this.testSuiteArr = filteredList2;
+    // return filteredList2.sort((a, b) => {
+    //   if (this.sortOrderRight === 'asc') {
+    //     return a.name.localeCompare(b.name);
+    //   } else {
+    //     return b.name.localeCompare(a.name);
+    //   }
+    // });
+  // }
   /**
    * Validation for rightside container
    */ 
@@ -185,6 +241,7 @@ export class CreateScriptGroupComponent {
    */  
   goBack():void{
     this.router.navigate(['/script']);
+    localStorage.removeItem('categoryname');
   }
   /**
    * Resets the form.

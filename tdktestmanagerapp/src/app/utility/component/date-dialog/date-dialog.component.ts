@@ -37,8 +37,8 @@ import moment from 'moment-timezone';
 export class DateDialogComponent {
   selectedDate: Date[] | null = null;
   utcDateRange: string[] | null = null;
-  fromDate :any
-  toDate :any;
+  fromDate: string | null = null;
+  toDate: string | null = null;
   bsConfig = {
     rangeInputFormat: 'YYYY-MM-DD',
     maxDate: new Date(),
@@ -54,11 +54,15 @@ export class DateDialogComponent {
    */
   onDateChange(dateRange: Date[] | null): void {
     if (dateRange && dateRange.length === 2) {
-      const utcMoment =  moment.tz(dateRange[0], moment.tz.guess()).utc();
-      this.fromDate = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-      const toUtcMoment =  moment.tz(dateRange[1], moment.tz.guess()).utc();
-      this.toDate = toUtcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
-    } 
+      const fromUTCMoment =  moment.tz(dateRange[0], moment.tz.guess()).utc();
+      const toUTCMoment =  moment.tz(dateRange[1], moment.tz.guess()).utc();
+      this.fromDate = fromUTCMoment.startOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]');
+      this.toDate = toUTCMoment.endOf('day').format('YYYY-MM-DDTHH:mm:ss[Z]');
+
+    } else {
+      this.fromDate = null;
+      this.toDate = null;
+    }
   }
   /**
    * Handles the delete date from to date.

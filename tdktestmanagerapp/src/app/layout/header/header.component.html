@@ -26,23 +26,23 @@ limitations under the License.
         <div class="displaymenu" id="navbarText">
           <ul class="navbar-nav menulist">
             <li class="nav-item">
-              <a class="nav-link  menugap" routerLink="/execution" routerLinkActive="active"
+              <a class="nav-link  menugap" routerLink="/execution" routerLinkActive="active" (click)="navigateTo('execution')"
               [routerLinkActiveOptions]="{exact:false}">EXECUTION</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  menugap" routerLink="/analysis" routerLinkActive="active" 
+              <a class="nav-link  menugap" routerLink="/analysis" routerLinkActive="active" (click)="navigateTo('analysis')"
               [routerLinkActiveOptions]="{exact:false}">ANALYSIS</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  menugap" routerLink="/script"(click)="navigateToScript()" routerLinkActive="active"
+              <a class="nav-link  menugap" routerLink="/script"(click)="navigateToScript();navigateTo('script')" routerLinkActive="active"
               [routerLinkActiveOptions]="{exact:false}">SCRIPT</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  menugap" routerLink="/devices" routerLinkActive="active"
+              <a class="nav-link  menugap" routerLink="/devices" routerLinkActive="active" (click)="navigateTo('devices')"
                 [routerLinkActiveOptions]="{exact:false}">DEVICES</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link  menugap" routerLink="/configure" (click)="navigateToPage()"
+              <a class="nav-link  menugap" routerLink="/configure" (click)="navigateToPage(); navigateTo('configure')"
                 routerLinkActive="active" [routerLinkActiveOptions]="{exact:false}">CONFIGURE</a>
             </li>
           </ul>

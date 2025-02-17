@@ -117,21 +117,21 @@ export class ScriptListComponent {
     {
       headerName: 'Sl. No.',
       valueGetter: (params) => params.node?.childIndex ? params.node?.childIndex + 1 : '1',
-      width: 150,
+      flex:1,
       pinned: 'left'
     },
     {
       headerName: 'Script Name',
       field: 'name',
       filter: 'agTextColumnFilter',
-      width:455,
+      flex:2,
       sortable: true
     },
     {
       headerName: 'Action',
       field: '',
       sortable: false,
-      width:330,
+      flex:1,
       headerClass: 'no-sort',
       cellRenderer: ButtonComponent,
       cellRendererParams: (params: any) => ({
@@ -181,10 +181,9 @@ export class ScriptListComponent {
   ngOnInit(): void {
     let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     let localViewName = localStorage.getItem('viewName') || '';
-    let localcategoryName = localStorage.getItem('categoryname') || '';
-    this.selectedCategory = localcategory?localcategory:'RDKV';
+    this.selectedCategory = this.userCategory;
+    localStorage.setItem('category', this.selectedCategory);
     this.viewName = localViewName?localViewName:'scripts';
-    this.categoryName = localcategoryName?localcategoryName:'Video';
     if(this.viewName === 'testsuites'){
       this.testsuitTable = true;
       this.scriptTable = false;
@@ -197,7 +196,6 @@ export class ScriptListComponent {
       this.scriptSorting();
     }
     this.viewChange(this.viewName);
-    this.categoryChange(localcategory);
     this.uploadScriptForm = new FormGroup({
       uploadZip: new FormControl<string | null>('', { validators: Validators.required }),
     })
@@ -239,8 +237,11 @@ export class ScriptListComponent {
         }
       },
       error:(err)=>{
-        let errmsg = err.error;
-        this.noScriptFound = errmsg;
+        let errmsg = err;
+        if(errmsg === "No script found for category"){
+          this.noScriptFound = 'No Rows To Show';
+        }
+
       }
     })
   }
@@ -261,24 +262,20 @@ export class ScriptListComponent {
    * - Updates local storage with the selected category and category name.
    * - Resets `authservice.videoCategoryOnly` to an empty string.
    */ 
-  categoryChange(val: string): void {
+  categoryChange(event:any): void {
+    let val = event.target.value;
     this.scriptDataArr=[];
     this.testSuiteDataArr = [];
     this.paginatedSuiteData = [];
     this.paginatedScriptData = [];
-    this.viewName = localStorage.getItem('viewName') || '{}';
     if(this.viewName ==='testsuites'){
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
         this.authservice.selectedCategory = this.selectedCategory;
         this.allTestSuilteListByCategory();
-      } else if (val === 'RDKC') {
-        this.categoryName = 'Camera';
-        this.selectedCategory = 'RDKC';
-        this.authservice.selectedCategory = this.selectedCategory;
-        this.allTestSuilteListByCategory();
-      } else {
+      } 
+      else {
         this.selectedCategory = 'RDKV';
         this.categoryName = 'Video';
         this.authservice.selectedCategory = this.selectedCategory;
@@ -289,14 +286,15 @@ export class ScriptListComponent {
       if (val === 'RDKB') {
         this.categoryName = 'Broadband';
         this.selectedCategory = 'RDKB';
+        // localStorage.setItem('category', this.selectedCategory);
+        // localStorage.setItem('categoryname',this.categoryName);
         this.findallScriptsByCategory(this.selectedCategory);
-      } else if (val === 'RDKC') {
-        this.categoryName = 'Camera';
-        this.selectedCategory = 'RDKC';
-        this.findallScriptsByCategory(this.selectedCategory);
-      } else {
+      } 
+      else {
         this.selectedCategory = 'RDKV';
         this.categoryName = 'Video';
+        // localStorage.setItem('category', this.selectedCategory);
+        // localStorage.setItem('categoryname',this.categoryName);
         this.findallScriptsByCategory(this.selectedCategory);
       }
     }
@@ -356,9 +354,15 @@ export class ScriptListComponent {
 
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this.noScriptFound = errmsg.message;
+        let errmsg = JSON.parse(err);
+        if(errmsg.message === " Test suite - 'RDKB' doesnt exist"){
+          this.noScriptFound = 'No Rows To Show';
+        }
+        if(errmsg.message === " Test suite - 'RDKV' doesnt exist"){
+          this.noScriptFound = 'No Rows To Show';
+        }
       }
+
     })
   }
   /**
@@ -1020,8 +1024,7 @@ export class ScriptListComponent {
               }
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error)
-            this._snakebar.open(errmsg.message, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

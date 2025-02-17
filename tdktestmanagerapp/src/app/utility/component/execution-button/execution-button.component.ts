@@ -35,10 +35,10 @@ interface customcellRenderparams extends ICellRendererParams{
   template: `
     <button *ngIf="showHideAbort" class="btn btn-sm delete-btn" (click)="onAbortClick($event)" matTooltip="Abort" ><i class="bi bi-ban icons ban"></i></button>
     &nbsp;
-    <button  class="btn  btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download Consolidated Report(Excel)" ><i class="bi bi-file-earmark-excel-fill icons report"></i></button>
-    <!-- &nbsp; -->
-    <!-- <button  class="btn  btn-sm delete-btn"  matTooltip="Download Consolidated Report(Zip)" ><i class="bi bi-file-earmark-zip-fill icons zip"></i></button> -->
-    &nbsp;
+    <button  class="btn  btn-sm delete-btn" (click)="onDownloadClick($event)" matTooltip="Download Consolidated Report(Excel)" >
+      <img src="assets/icons/excel.png" class="icons report"/> 
+    </button>
+       &nbsp;
     <button  class="btn  btn-sm delete-btn" (click)="onViewClick($event)" matTooltip="Execution Result Details" ><i class="bi bi-eye-fill icons details"></i></button>
 
   `,  
@@ -58,7 +58,8 @@ interface customcellRenderparams extends ICellRendererParams{
       color: #00B2DC;
     }
     .report{
-      color: green;
+      height: 19px;
+      width: 19px;
     }
     .zip{
       color: #f58233;

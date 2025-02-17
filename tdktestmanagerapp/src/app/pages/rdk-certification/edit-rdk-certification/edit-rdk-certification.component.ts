@@ -65,11 +65,12 @@ export class EditRdkCertificationComponent {
    */
   ngOnInit(): void {
     this.certificationFormGroup = this.fb.group({
-      fileName: [this.user.name, Validators.required],
+      fileName: [{value:this.user.name, disabled: true}],
       pythonEditor: ['', Validators.required]
     });
     const fileName = this.certificationFormGroup.get('fileName')?.value
-    this.service.getFileContent(fileName).subscribe({
+    const file=encodeURIComponent(fileName);
+    this.service.getFileContent(file).subscribe({
       next: (res) => {
         const blob = new Blob([res.content], { type: res.content.type || 'text/plain' });
         blob.text().then((text) => {
@@ -100,11 +101,12 @@ export class EditRdkCertificationComponent {
    */
   onSubmit() : void {
     const pythonContent = this.certificationFormGroup.value.pythonEditor;
-    const filename = `${this.certificationFormGroup.value.fileName}.py`;
-    const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
-    this.service.createScript(scriptFile).subscribe({
+    const fileName = this.certificationFormGroup.get('fileName')?.value;
+    const scriptFileName = `${fileName}.py`;
+    const scriptFile = new File([pythonContent], scriptFileName, { type: 'text/x-python' });
+    this.service.updateScript(scriptFile).subscribe({
       next: (res) => {
-        this._snakebar.open('Config file updated sucessfully', '', {
+        this._snakebar.open(res, '', {
           duration: 2000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'

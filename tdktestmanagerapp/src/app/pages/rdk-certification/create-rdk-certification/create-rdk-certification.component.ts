@@ -58,22 +58,18 @@ export class CreateRdkCertificationComponent {
    */
   ngOnInit(): void {
     this.certificationFormGroup = this.fb.group({
-      fileName: [
-        '',
-        [
-            Validators.required,
-            (control: AbstractControl): ValidationErrors | null => {
-                if (control.value && control.value.trim() === '') {
-                    return { cannotContainSpace: true };
-                }
-                return null;
-            },
-        ],
-    ],
+      fileName: ['',Validators.required],
       pythonEditor: ['', Validators.required]
     });
   }
 
+  onInputName(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.certificationFormGroup.get('fileName')?.setValue(value.trimStart(), { emitEvent: false });
+    }
+  }
   /**
    * Handles the form submission for creating an RDK certification.
    * 
@@ -101,7 +97,7 @@ export class CreateRdkCertificationComponent {
             verticalPosition: 'top'
           })
           setTimeout(() => {
-            this.router.navigate(["/configure/list-rdk-certifications"]);
+            this.router.navigate(["configure/list-rdk-certifications"]);
           }, 1000);
         },
         error: (err) => {

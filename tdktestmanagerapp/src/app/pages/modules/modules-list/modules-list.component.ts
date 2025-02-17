@@ -36,7 +36,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../auth/auth.service';
 import { ModuleButtonComponent } from '../../../utility/component/modules-buttons/button/button.component';
 import { MatDialog } from '@angular/material/dialog';
-import { ModulesViewComponent } from '../modules-view/modules-view.component';
 import { ModulesService } from '../../../services/modules.service';
 import { MaterialModule } from '../../../material/material.module';
 
@@ -51,8 +50,8 @@ export class ModulesListComponent {
 
   @ViewChild('moduleListModal', {static: false}) moduleListModal?:ElementRef;
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   public gridApi!: GridApi;
   selectedDeviceCategory : string = 'RDKV';
@@ -102,7 +101,6 @@ export class ModulesListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        // onViewClick:this.openModal.bind(this),
         onFunctionClick:this.createFunction.bind(this),
         onModuleXMLClick :this.downloadModuleXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
@@ -113,6 +111,9 @@ export class ModulesListComponent {
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
+  };
+  gridOptions = {
+    rowHeight: 36
   };
   loggedInUser:any;
   defaultCategory!:string;
@@ -223,31 +224,6 @@ export class ModulesListComponent {
     }
 
   }
-
-  /**
-   * Displays the specified data.
-   * 
-   * @param data - The data to be displayed.
-   */
-
-  // openModal(data:any):void{
-  //   this.dialog.open( ModulesViewComponent,{
-  //     width: '99%',
-  //     height: '93vh',
-  //     maxWidth:'100vw',
-  //     panelClass: 'custom-modalbox',
-  //     data:{
-  //       executionTimeOut: data.executionTime,
-  //       moduleName:data.moduleName,
-  //       testGroup: data.testGroup,
-  //       moduleThunderEnabled:data.moduleThunderEnabled,
-  //       moduleAdvanced:data.moduleAdvanced,
-  //       moduleCrashLogFiles:data.moduleCrashLogFiles,
-  //       moduleLogFileNames: data.moduleLogFileNames
-  //     }
-  //   })
-    
-  // }
 
   dowloadAllModule():void{
     if(this.rowData.length > 0){
@@ -361,6 +337,8 @@ export class ModulesListComponent {
    * Navigates back to the previous page.
    */
   goBack() :void{
+    this.authservice.selectedConfigVal = 'RDKV';
+    this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
 

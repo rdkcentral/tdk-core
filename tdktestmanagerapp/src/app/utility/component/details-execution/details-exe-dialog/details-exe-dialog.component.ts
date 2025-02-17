@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../../material/material.module';
 import { ApexChart, ApexDataLabels, ApexFill, ApexPlotOptions, ApexResponsive, ApexTitleSubtitle, ApexXAxis, ApexYAxis, ChartComponent, NgApexchartsModule } from 'ng-apexcharts';
@@ -30,6 +30,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { firstValueFrom, interval, startWith, Subject, switchMap, takeUntil } from 'rxjs';
 import { AnalyzeDialogComponent } from '../../analyze-dialog/analyze-dialog.component';
 import { CrashlogfileDialogComponent } from '../crashlogfile-dialog/crashlogfile-dialog.component';
+import { saveAs } from 'file-saver';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { GlobalConstants } from '../../../global-constants';
+
+const apiUrl: string = GlobalConstants.apiUrl;
 
 export type ChartOptions = {
   series: Array<{
@@ -57,6 +62,7 @@ export type ChartOptions = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsExeDialogComponent {
+  @ViewChild('printableArea', { static: false }) printableArea!: ElementRef;
   @ViewChild("chart") chart!: ChartComponent;
   public chartOptions!: Partial<ChartOptions> | any;
   encapsulation!: ViewEncapsulation.None;
@@ -92,14 +98,21 @@ export class DetailsExeDialogComponent {
   analysisResult: any;
   executionIdLocalStroge:any;
   showPopupFlag = false;
+  detailKeys: string[] = ['testCaseCount', 'timeTaken', 'logs'];
+  expandedIndexes: number[] = [];
+  showFailedZipOption = false;
+  safeHtmlContent: SafeHtml | undefined;
+  exeLogs:any;
+  htmlDetails: any;
 
   constructor(
     public dialogRef: MatDialogRef<DetailsExeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog:MatDialog,
      public logFilesDialog:MatDialog, private executionservice: ExecutionService,
      private _snakebar :MatSnackBar,public analyzeDialog:MatDialog,
-     private changeDetectorRef: ChangeDetectorRef) {
+     private changeDetectorRef: ChangeDetectorRef, private sanitizer: DomSanitizer) {
     this.executionIdLocalStroge = localStorage.getItem('executionId');
+    
     }
   /**
    * Lifecycle hook that is called after data-bound properties of a directive are initialized.
@@ -115,6 +128,8 @@ export class DetailsExeDialogComponent {
     this.pieChartData();
     this.modulewiseExeSummary();
     this.analysisSummary();
+    this.shwHideFailedDownload();
+    this.getExelogDetails();
     let details = this.data.deviceDetails
     this.deviceDetails = details.replace(/\n/g, '<br>');
     this.changeDetectorRef.detectChanges();
@@ -235,14 +250,10 @@ export class DetailsExeDialogComponent {
     details: null
   }))
   this.filteredData = [...this.executionResultData];
+  console.log(this.filteredData);
+  
   }
-  /**
-   * Toggles the state of the card flip.
-   * If the card is currently flipped, it will be unflipped and vice versa.
-   */
-  flipCard():void {
-    this.isFlipped = !this.isFlipped;
-  }
+
 
   /**
    * Toggles the expansion state of a panel and fetches execution details if expanded.
@@ -257,23 +268,44 @@ export class DetailsExeDialogComponent {
    * newline characters with `<br>` tags. If the panel is collapsed, it sets the `details` property of 
    * the parent object to null.
    */
-  togglePanel(parent: any, id:any):void {
+  togglePanel(parent: any, id:any, index:number):void {
     parent.expanded = !parent.expanded;
     this.executionResultId = id;
-    // this.panelOpenState = !this.panelOpenState;
     if (parent.expanded) {
+      this.expandedIndexes.push(index);
       if (!parent.details && parent.executionResultID) {
         this.executionservice.scriptResultDetails(parent.executionResultID).subscribe(res => {
           parent.details = JSON.parse(res);
           const logs = parent.details.logs;
           parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
           this.changeDetectorRef.detectChanges();
+          // this.exeLogs = parent.formatLogs;
+          // console.log(this.exeLogs);
         });
       }
     } else {
       parent.details = null; 
       parent.formatLogs = '';
+      this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
     }
+  }
+
+  getExelogDetails(){
+    this.executionservice.DetailsForHtmlReport(this.data.executionId).subscribe(res => {
+      let details = JSON.parse(res);
+      this.htmlDetails = details;
+      for (let i = 0; i < details.length; i++) {
+        const element = details[i];
+        // this.htmlDetails = element;
+        const logs = element.executionLogs;
+        const formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+        this.exeLogs = formatLogs;
+        console.log(logs);
+        console.log(this.htmlDetails);
+        this.changeDetectorRef.detectChanges();
+      }
+
+    })
   }
   /**
    * Toggles the checked state of all items in the execution result data.
@@ -399,9 +431,6 @@ export class DetailsExeDialogComponent {
 
           }
         })
-        // if(this.liveLogsData){
-
-        // }
   }
   /**
    * Fetches device logs for the current execution result and opens a dialog to display them.
@@ -766,6 +795,17 @@ export class DetailsExeDialogComponent {
       });
     }
   }
+  shwHideFailedDownload():void{
+    if(this.data.executionId){
+      this.executionservice.isfailedExecution(this.data.executionId).subscribe(res=>{
+        if(res === "true"){
+          this.showFailedZipOption = true;
+        }else{
+          this.showFailedZipOption = false;
+        }
+      })
+    }
+  }
   /**
    * This method is for download all failed execution results.
    */    
@@ -805,5 +845,169 @@ export class DetailsExeDialogComponent {
     this.resultsZIP();
     this.failResultsZIP();
   }
+  closeLastExpanded() {
+    if (this.expandedIndexes.length > 0) {
+      const lastIndex = this.expandedIndexes.pop();
+      if (lastIndex !== undefined) {
+        this.filteredData[lastIndex].expanded = false;
+      }
+    }
+  }
+  scriptDownload(parent:any):void{
+        if (parent.executionResultID) {
+          this.executionservice.DownloadScript(parent.executionResultID).subscribe({
+            next: (res) => {
+              const filename = res.filename;
+              const blob = new Blob([res.content], { type: res.content.type || 'application/json' });
+              saveAs(blob, filename);
+            },
+            error: (err) => {
+              // let errmsg = err.error;
+              this._snakebar.open(err, '', {
+                duration: 2000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              })
+            }
+          })
+        }
+      }
 
+openDynamicLink(id: string) {
+        this.executionservice.getExecutionLogsLinks(id).subscribe(res=>{
+          if(res){
+            const url = `${apiUrl}execution/getExecutionLogs?executionResultID=${id}`
+            window.open(url, '_blank', 'noopener noreferrer');
+          }
+        })
+      }
+openLogLink(){
+  const url = `${apiUrl}execution/getExecutionLogs?executionResultID`
+  window.open(url, '_blank', 'noopener noreferrer');
+}
+
+downloadAsHtml(){
+  const tableRows = this.moduleTableTitle.map((key:any) => `
+    <tr class="method">
+      <td>${key.name}</td>
+      <td>${key.totalScripts}</td>
+      <td>${key.success}</td>
+      <td>${key.failure}</td>
+      <td>${key.aborted}</td>
+      <td>${key.executed}</td>
+      <td>${key.inProgressCount}</td>
+      <td>${key.na}</td>
+      <td>${key.pending}</td>
+      <td>${key.skipped}</td>
+      <td>${key.timeout}</td>
+      <td class="passvalue">${key.successPercentage}</td>
+    </tr>
+  `).join('');
+
+  const scripNames = this.htmlDetails.map((key:any) => `
+      <tr >
+        <th >Script Name</th>
+        <td>${key.executionScriptName}</td>
+      </tr>
+      <tr >
+        <th >Status</th>
+        <td>${key.executionStatus}</td>
+      </tr>
+      <tr >
+        <th >Execution Log
+        <div> <a href="${apiUrl}execution/getExecutionLogs?executionResultID=${key.executionResultID}" target="_blank" rel="noopener noreferrer">Log link</a></div>
+        </th>
+        <td>${key.executionLogs}
+       
+        </td>
+      </tr>
+`).join('');
+
+  const htmlContent = `
+    <html>
+    <head>
+      <title>Exported Table</title>
+      <style>
+        body,
+        *:not(.material-icons) {
+          font-family: Roboto, "Helvetica Neue", sans-serif;
+          font-size:0.8rem;
+        }
+        table { border-collapse: collapse; width: 100%; }
+        th, td { border: 1px solid black; padding: 8px; text-align: left; }
+        th { background-color: #f2f2f2; }
+      </style>
+    </head>
+    <body>
+      <h2>Execution Result Details</h2>
+          <table class="script-table" >
+            <tbody>
+              <tr >
+                <th >Device Name :</th>
+                <td >${this.data.deviceName}</td>
+              </tr>
+              <tr >
+                <th >IP / MAC :</th>
+                <td >${this.data.deviceIP} / ${this.data.deviceMac}</td>
+              </tr>
+              <tr >
+                <th >Image Details :</th>
+                <td >${this.displayContent}</td>
+              </tr>
+              <tr >
+                <th >Date of Execution :</th>
+                <td >${this.convertDate(this.data.dateOfExecution)}</td>
+              </tr> 
+              <tr >
+                <th >Total execution time(min) :</th>
+                <td >${this.data.totalExecutionTime}</td>
+              </tr>
+              <tr >
+                <th >Overall Result :</th>
+                <td >${this.data.result}</td>
+              </tr>
+            </tbody>
+          </table> 
+          <h2>Result Summary</h2>
+              <table class="module-table bold-table">
+                  <thead>
+                          <tr class="method-head">
+                            <th>Module Name</th>
+                            <th>TotalScripts</th>
+                            <th>Success</th>
+                            <th>Failure</th>
+                            <th>Aborted</th>
+                            <th>Executed</th>
+                            <th>In Progress</th>
+                            <th>NA</th>
+                            <th>Pending</th>
+                            <th>Skipped</th>
+                            <th>Timeout</th>
+                            <th>Success %</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        ${tableRows}
+                        </tbody>
+                      </table>
+        <h2>Detailed Results</h2> 
+           <table class="script-table" >
+              <tbody>
+                ${scripNames}
+              </tbody>
+            </table>
+      </body>
+    </html>
+  `;
+    const blob = new Blob([htmlContent], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `${this.data.deviceName}.html`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  }
+  refreshAnalysis(){
+    this.dataUpdate();
+  }
 }

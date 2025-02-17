@@ -24,8 +24,8 @@ export class ListOemComponent {
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   isRowSelected: any;
   selectedRow: any;
@@ -64,7 +64,9 @@ export class ListOemComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-  
+  gridOptions = {
+    rowHeight: 36
+  }; 
 
   constructor(private router: Router, private authservice: AuthService,
     private service: OemService, private _snakebar: MatSnackBar
@@ -166,6 +168,7 @@ export class ListOemComponent {
    */
   goBack():void{
     this.authservice.selectedConfigVal = 'RDKV';
+    this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
 

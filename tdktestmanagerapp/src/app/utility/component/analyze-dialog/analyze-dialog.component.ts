@@ -20,18 +20,23 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import {Component, Inject, OnInit, ViewChild } from '@angular/core';
 import {  FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
 import { AgGridAngular } from 'ag-grid-angular';
 import {
   ColDef,
-  GridApi
+  GridApi,
+  GridReadyEvent
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { ExecutionService } from '../../../services/execution.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DetailsExeDialogComponent } from '../details-execution/details-exe-dialog/details-exe-dialog.component';
+import { CreateJiraComponent } from './create-jira/create-jira.component';
+import { AnalysisService } from '../../../services/analysis.service';
+import { ButtonJiraComponent } from '../ag-grid-buttons/button/buttion-jira.component';
+import { UpdateJiraComponent } from './update-jira/update-jira.component';
 
 @Component({
   selector: 'app-analyze-dialog',
@@ -45,6 +50,7 @@ export class AnalyzeDialogComponent implements OnInit{
   public themeClass: string = 'ag-theme-quartz';
   rowData: any = [];
   selectedRowCount = 0;
+  lastSelectedNodeId: string | undefined;
   pageSize = 10;
   schedulePageSizeSelector: number[] | boolean = [5, 10, 30, 50];
   public gridApi!: GridApi;
@@ -55,13 +61,21 @@ export class AnalyzeDialogComponent implements OnInit{
       filter: 'agTextColumnFilter',
       flex: 1,
       sortable: true,
+      cellRenderer: (params: any) => {
+        if (params.data && params.data.link) {
+          return `<a href="${params.data.link}" target="_blank">${params.value}</a>`;
+        } else {
+          return params.value;
+        }
+      },
     },
     {
       headerName: 'Summary',
       field: 'summary',
       filter: 'agTextColumnFilter',
       flex: 1,
-      sortable: true
+      sortable: true,
+      autoHeight: true
     },      
     {
       headerName: 'Status',
@@ -76,25 +90,39 @@ export class AnalyzeDialogComponent implements OnInit{
       sortable: false,
       headerClass: 'no-sort',
       width: 130,
-  
+      cellRenderer: ButtonJiraComponent,
+      cellRendererParams: (params: any) => ({
+        onEditClick: this.userEdit.bind(this),
+        selectedRowCount: () => this.selectedRowCount,
+        lastSelectedNodeId: this.lastSelectedNodeId,
+        })
     },
   ];
   gridOptions = {
-    // rowHeight: 30,
+    rowHeight: 40,
   };
   allDeftesTypes:any;
   analysisFormSubmitted = false;
   analysisForm!: FormGroup;
   loggedinUser:any;
+  isCreateJira = false;
+  allProjectNames: any[] = [];
+  jiraTitel = 'Map Tickets';
+  showJiraTab: boolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<AnalyzeDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private executionservice:ExecutionService,
     private fb: FormBuilder,
-    private _snakebar: MatSnackBar
+    private _snakebar: MatSnackBar,
+    public jiraCreateDialog :MatDialog,
+    public updateDialod: MatDialog,
+    private analysiservice: AnalysisService,
     ) {
       this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
+      console.log(data);
+      
   }
 
   ngOnInit(): void {
@@ -105,12 +133,41 @@ export class AnalyzeDialogComponent implements OnInit{
         remarks: [this.data.analysisRemark || '', Validators.required]
       });
     this.getAllDefects();
+    this.listProjectNAmes();
+    this.analysiservice.getTicketDetaisFromJira(this.data.executionResultID,'').subscribe(res=>{
+      console.log(JSON.parse(res));
+      this.rowData = JSON.parse(res);
+    })
+    this.isJiraPresent();
   }
 
   get f() { return this.analysisForm.controls; }
 
+  onGridReady(params: GridReadyEvent<any>):void {
+    this.gridApi = params.api;
+  }
+
+  isJiraPresent(){
+    this.analysiservice.isJiraAutomation().subscribe(res=>{
+      console.log(res);
+      if(res === "false"){
+        this.showJiraTab = false;
+      }else{
+        this.showJiraTab = true;
+      }
+    })
+  }
+
   onTabClick(event: any): void {
     const label = event.tab.textLabel;
+    if(label ==="JIRA Integration"){
+      this.isCreateJira = true;
+      this.jiraTitel = 'Map Tickets(JIRA)';
+    }
+    else{
+      this.isCreateJira = false;
+      this.jiraTitel = 'Map Tickets';
+    }
   }
   onClose():void {
     this.dialogRef.close(false);
@@ -121,8 +178,26 @@ export class AnalyzeDialogComponent implements OnInit{
       this.allDeftesTypes = JSON.parse(res) ;
     })
   }
-  
 
+  listProjectNAmes() {
+    this.analysiservice.getProjectNames().subscribe((res) => {
+      this.allProjectNames = JSON.parse(res);
+    });
+  }
+  onProjectChange(event:any){
+    let prjName = event.target.value;
+    let projectName = prjName?prjName:" ";
+    this.analysiservice.getTicketDetaisFromJira(this.data.executionResultID,projectName).subscribe(res=>{
+      console.log(JSON.parse(res));
+      let ticketNumber = JSON.parse(res);
+      if(ticketNumber != null){
+        this.rowData = JSON.parse(res);
+      }else{
+        this.rowData = [];
+      }
+      // this.rowData = JSON.parse(res);
+    })
+  }
   analysisSubmit():void{
     this.analysisFormSubmitted = true;
     if (this.analysisForm.invalid) {
@@ -158,5 +233,22 @@ export class AnalyzeDialogComponent implements OnInit{
       })
     }
   }
-
+  createJira():void{
+     this.jiraCreateDialog.open(CreateJiraComponent, {
+          width: '72%',
+          height: '96vh',
+          maxWidth: '100vw',
+          panelClass: 'custom-modalbox',
+          data:this.data,
+    });
+  }
+  userEdit(update:any){
+    this.updateDialod.open(UpdateJiraComponent,{
+      width: '72%',
+      height: '96vh',
+      maxWidth: '100vw',
+      panelClass: 'custom-modalbox',
+      data:{updateDetails:this.data,update}
+    })
+  }
 }

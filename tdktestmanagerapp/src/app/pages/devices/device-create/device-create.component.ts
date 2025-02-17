@@ -44,7 +44,6 @@ export class DeviceCreateComponent implements OnInit{
   @ViewChild('newDeviceTemplate', { static: true }) newDeviceTemplate!: TemplateRef<any>;
   deviceForm!: FormGroup;
   rdkBForm!:FormGroup;
-  rdkCForm!:FormGroup;
   deviceFormSubmitted = false;
   rdkbFormSubmitted = false;
   rdkcFormSubmitted = false;
@@ -61,7 +60,6 @@ export class DeviceCreateComponent implements OnInit{
   gridApi!: any;
   showHideCreateFormV = true;
   showHideCreateFormB = false;
-  showHideCreateFormC = false;
   rowHeight = 41;
   configureName!: string;
   isGateway!: any;
@@ -129,6 +127,8 @@ export class DeviceCreateComponent implements OnInit{
    */
   ngOnInit(): void {
     const deviceCategory = localStorage.getItem('deviceCategory');
+    this.selectedDeviceCategory = this.loggedinUser.userCategory;
+    this.categoryName = 'Video';
     if(deviceCategory){
       this.selectedDeviceCategory = deviceCategory
       this.configureName = deviceCategory;
@@ -139,20 +139,12 @@ export class DeviceCreateComponent implements OnInit{
     if(this.configureName ==='RDKV'){
       this.showHideCreateFormV = true;
       this.showHideCreateFormB = false;
-      this.showHideCreateFormC = false;
       this.categoryName = 'Video';
     }
     if(this.configureName ==='RDKB'){
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
-      this.showHideCreateFormC = false;
       this.categoryName = 'Broadband'
-    }
-    if(this.configureName ==='RDKC'){
-      this.showHideCreateFormV = false;
-      this.showHideCreateFormB = false;
-      this.showHideCreateFormC = true;
-      this.categoryName = "Camera"
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.deviceForm = new FormGroup({
@@ -180,17 +172,6 @@ export class DeviceCreateComponent implements OnInit{
       agentPortb: new FormControl<string | null>(''),
       agentStatusportB:new FormControl<string | null>(''),
       agentMonitorportB:new FormControl<string | null>('')
-    })
-    this.rdkCForm = new FormGroup({
-      cameraName: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(/^[a-zA-Z0-9_]+$/)] }),
-      stbIp: new FormControl<string | null>('', { validators: [Validators.required,Validators.pattern(ipregexp)] }),
-      macaddr: new FormControl<string | null>('', { validators: Validators.required }),
-      devicetype: new FormControl<string | null>('', { validators: Validators.required }),
-      oem: new FormControl<string | null>(''),
-      soc: new FormControl<string | null>(''),
-      agentPortb: new FormControl<string | null>(this.agentport),
-      agentStatusportB:new FormControl<string | null>(this.agentStatusPort),
-      agentMonitorportB: new FormControl<string | null>(this.agentMonitoPort)
     })
     this.getAlldeviceType();
     this.getAllOem();
@@ -263,30 +244,8 @@ export class DeviceCreateComponent implements OnInit{
         });
       }
     });
-    this.rdkCForm.get('agentPortb')?.valueChanges.subscribe((value) => {
-      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
-      if (cleanedValue !== value) {
-        this.rdkCForm.get('agentPortb')?.setValue(cleanedValue, {
-          emitEvent: false,
-        });
-      }
-    });
-    this.rdkCForm.get('agentStatusportB')?.valueChanges.subscribe((value) => {
-      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
-      if (cleanedValue !== value) {
-        this.rdkCForm.get('agentStatusportB')?.setValue(cleanedValue, {
-          emitEvent: false,
-        });
-      }
-    });
-    this.rdkCForm.get('agentMonitorportB')?.valueChanges.subscribe((value) => {
-      const cleanedValue = value.replace(/^\s+|[^0-9]/g, '');
-      if (cleanedValue !== value) {
-        this.rdkCForm.get('agentMonitorportB')?.setValue(cleanedValue, {
-          emitEvent: false,
-        });
-      }
-    });
+
+
     this.deviceForm.get('devicename')?.valueChanges.subscribe((value) => {
       if (value) {
         this.deviceForm.get('devicename')?.setValue(value.toUpperCase());
@@ -297,11 +256,7 @@ export class DeviceCreateComponent implements OnInit{
         this.rdkBForm.get('gatewayName')?.setValue(value.toUpperCase());
       }
     });
-    this.rdkCForm.get('cameraName')?.valueChanges.subscribe((value) => {
-      if (value) {
-        this.rdkCForm.get('cameraName')?.setValue(value.toUpperCase());
-      }
-    });
+
   }
 
 
@@ -509,10 +464,6 @@ export class DeviceCreateComponent implements OnInit{
   resetFormB(): void{
     this.rdkBForm.reset();
   }
-  resetFormC(): void{
-    this.rdkCForm.reset();
-  }
-  
   /**
    * Submit the device form of RDKV category.
    */
@@ -550,9 +501,9 @@ export class DeviceCreateComponent implements OnInit{
         }, 1000);
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        let errmessage = errmsg.message?errmsg.message:errmsg.macId;
-          this._snakebar.open(errmessage, '', {
+        let errmsg = err.message?err.message:err.macId;
+        // let errmessage = errmsg.message?errmsg.message:errmsg.macId;
+          this._snakebar.open(errmsg, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -597,52 +548,8 @@ export class DeviceCreateComponent implements OnInit{
           }, 1000);
         },
         error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message?errmsg.message:errmsg.macId, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-          })
-        }
-      })
-    }
-  }
-  /**
-   * Submit the device form of RDKC category.
-   */
-  deviceCSubmit(): void{
-    this.rdkcFormSubmitted = true;
-    if(this.rdkCForm.invalid){
-      return
-     }else{
-      let rdkcObj = {
-        deviceName:this.rdkCForm.value.cameraName,
-        deviceIp: this.rdkCForm.value.stbIp,
-        macId: this.rdkCForm.value.macaddr,
-        deviceTypeName: this.rdkCForm.value.devicetype,
-        oemName: this.rdkCForm.value.oem,
-        socName: this.rdkCForm.value.soc,
-        devicePort: this.rdkCForm.value.agentPortb,
-        statusPort:this.rdkCForm.value.agentStatusportB,
-        agentMonitorPort:this.rdkCForm.value.agentMonitorportB,
-        category : this.selectedDeviceCategory
-      }
-      this.service.createDevice(rdkcObj).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.router.navigate(["/devices"]);
-          }, 1000);
-         
-        },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message?errmsg.message:errmsg.macId, '', {
+          let errmsg = err.message?err.message:err.macId;
+          this._snakebar.open(errmsg, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',

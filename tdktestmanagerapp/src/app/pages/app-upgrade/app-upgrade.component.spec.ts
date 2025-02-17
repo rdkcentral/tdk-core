@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ModulesViewComponent } from './modules-view.component';
+import { AppUpgradeComponent } from './app-upgrade.component';
 
-describe('ModulesViewComponent', () => {
-  let component: ModulesViewComponent;
-  let fixture: ComponentFixture<ModulesViewComponent>;
+describe('AppUpgradeComponent', () => {
+  let component: AppUpgradeComponent;
+  let fixture: ComponentFixture<AppUpgradeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ModulesViewComponent]
+      imports: [AppUpgradeComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ModulesViewComponent);
+    fixture = TestBed.createComponent(AppUpgradeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

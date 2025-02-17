@@ -111,6 +111,8 @@ export class ExecuteDialogComponent {
   categoryName !: string;
   selectedType!: string;
   showToggleField = false;
+  additionalExeName!: string;
+  repeatTypeBoolean = false;
 
   constructor(
     public dialogRef: MatDialogRef<ExecuteDialogComponent>,
@@ -140,7 +142,8 @@ export class ExecuteDialogComponent {
   ngOnInit(): void {
     let deviceClick = this.deviceStatusData.params;
     let executionClick = this.executionClickData.normalExecutionClick;
-    this.categoryName = this.authservice.selectedCategory;
+    this.categoryName = this.userCategory;
+    this.repeatTypeBoolean = false;
     if (this.categoryName === 'RDKB' || this.categoryName === 'RDKC') {
       this.isThunderEnable = false;
       }
@@ -178,9 +181,10 @@ export class ExecuteDialogComponent {
         isThunder:[this.deviceStatusData.params.thunderEnabled],
         devicetype: [[this.deviceStatusData.params.deviceName]],
         testType:['Other',Validators.required],
-        executionName: [''],
+        executionName: [this.executionName],
         selectType:['script'],
         scriptTestsuite: ['', Validators.required],
+        fullIndvidual:['full'],
         rerun: [''],
         executionnumber:['1', Validators.required],
         diagnosis:[''],
@@ -237,6 +241,7 @@ export class ExecuteDialogComponent {
         executionName: [''],
         selectType:['script'],
         scriptTestsuite: ['', Validators.required],
+        fullIndvidual:['full'],
         rerun: [''],
         diagnosis:[''],
         performance:[''],
@@ -267,6 +272,10 @@ export class ExecuteDialogComponent {
     }else{
       this.showToggleField = false;
     }
+  }
+  valueChange(event:any):void{
+    let val = event.target.value;
+    this.additionalExeName = val;    
   }
   /**
    * Handles the selection of script type and updates the visibility and form controls accordingly.
@@ -486,10 +495,10 @@ export class ExecuteDialogComponent {
    * @param items - An array of items to be processed (not used in the current implementation).
    */  
   onScriptSelectAll(items: any[]):void{
-   let scripts = this.scriptList.filter(
+   let scripts = this.scriptTestsuiteOptions.filter(
     (item:any)=> !this.scriptNameArr.find((selected)=>selected.id === item.id)
    );
-   this.scriptNameArr = scripts.map((item:any)=>item.scriptName)
+   this.scriptNameArr = scripts.map((item:any)=>item.scriptName);
   }
   /**
    * Deselects all scripts by clearing the scriptNameArr array.
@@ -542,7 +551,7 @@ export class ExecuteDialogComponent {
    * @param items - An array of items to be processed (not used in the current implementation).
    */  
   testSuiteSelectAll(items: any[]):void{
-   let testSuites = this.testSuiteList.filter(
+   let testSuites = this.scriptTestsuiteOptions.filter(
     (item:any)=> !this.testSuiteNameArr.find((selected)=>selected.id === item.id)
    );
    this.testSuiteNameArr = testSuites.map((item:any)=>item.testSuiteName)
@@ -566,6 +575,15 @@ export class ExecuteDialogComponent {
     let val = event.target.value;
     this.testTypeName = val;
     this.getExecutionName();
+  }
+
+  fullOrIndividual(event:any):void{
+    let val = event.target.value;
+    if(val === 'full'){
+      this.repeatTypeBoolean = false;
+    }else{
+      this.repeatTypeBoolean = true;
+    }
   }
   /**
    * Retrieves the execution name based on the device names and test type from the form.
@@ -720,9 +738,10 @@ export class ExecuteDialogComponent {
         scriptList:this.scriptNameArr,
         testSuite:this.testSuiteNameArr,
         testType:this.executeForm.value.testType,
+        individualRepeatExecution: this.repeatTypeBoolean,
         user:this.loggedinUser.userName,
         category:this.userCategory,
-        executionName:this.executionName,
+        executionName:this.additionalExeName?this.additionalExeName:this.executionName,
         repeatCount:this.executeForm.value.executionnumber,
         deviceLogsNeeded: this.logTransfer,
         diagnosticLogsNeeded: this.diagnosis,
@@ -772,9 +791,10 @@ export class ExecuteDialogComponent {
         scriptList:this.scriptNameArr,
         testSuite:this.testSuiteNameArr,
         testType:this.executeForm.value.testType,
+        individualRepeatExecution: this.repeatTypeBoolean,
         user:this.loggedinUser.userName,
         category:this.userCategory,
-        executionName:this.executionName,
+        executionName:this.executeForm.value.executionName,
         repeatCount:this.executeForm.value.executionnumber,
         deviceLogsNeeded: this.logTransfer,
         diagnosticLogsNeeded: this.diagnosis,
@@ -803,7 +823,6 @@ export class ExecuteDialogComponent {
           verticalPosition: 'top'
         })
       }
-      
     })
   }
 

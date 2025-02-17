@@ -13,53 +13,96 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
-    <div class="row mt-2">
-        <div class="col">
-            <mat-card class="card-height">
-                    <div class="container container-box" id="container-box">
-                        <div class="form-container create-group">
-                            <h1 class="title">Update Function</h1>
-                            <form [formGroup]="updateFunctionForm" (ngSubmit)="updateFunctionSubmit()" data-bs-spy="scroll">
-                                <div class="row mb-4">
-                                    <label for="functionName" class="col-md-3 col-form-label offset-1">Function Name<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="functionName" formControlName="functionName"
-                                            placeholder="Enter Function Name">
-                                        <div *ngIf="functionFormSubmitted && updateFunctionForm.controls['functionName']?.errors"
-                                            class="text-danger">
-                                            <small
-                                                *ngIf="updateFunctionForm.controls['functionName']?.errors?.['required']">Please
-                                                enter function name.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="module" class="col-md-3 col-form-label offset-1">Module<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-    
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="moduleName" formControlName="moduleName"
-                                            placeholder="Enter Module Name">
-                                        <div *ngIf="functionFormSubmitted && updateFunctionForm.controls['moduleName']?.errors" class="text-danger">
-                                            <small *ngIf="updateFunctionForm.controls['moduleName']?.errors?.['required']">
-                                                please enter module.
-                                            </small>
-                                        </div>
-    
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mt-2 createbtn">
-                                        <button type="button" class="back-btn create-btn" (click)="goBack()">Back</button>
-                                        <button type="submit" class="create-btn">Update</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-            </mat-card>
-        </div>
+<div class="container-fluid">
+  <div class="row borders-btm">
+    <div class="col"></div>
+    <div class="col">
+      <h1 class="title">Update Function</h1>
     </div>
+    <div class="col"></div>
+  </div>
+  <div class="row mt-2">
+    <div class="col">
+      <div class="container-box" id="container-box">
+        <div class="form-container create-group">
+          <form
+            [formGroup]="updateFunctionForm"
+            (ngSubmit)="updateFunctionSubmit()"
+            data-bs-spy="scroll"
+          >
+            <div class="row mb-4">
+              <label for="functionName" class="col-md-3 col-form-label offset-1"
+                >Function Name<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="functionName"
+                  formControlName="functionName"
+                  placeholder="Enter Function Name"
+                />
+                <div
+                  *ngIf="
+                    functionFormSubmitted &&
+                    updateFunctionForm.controls['functionName']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="updateFunctionForm.controls['functionName']?.errors?.['required']"
+                    >Please enter function name.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <label for="module" class="col-md-3 col-form-label offset-1"
+                >Module<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="moduleName"
+                  formControlName="moduleName"
+                  placeholder="Enter Module Name"
+                />
+                <div
+                  *ngIf="
+                    functionFormSubmitted &&
+                    updateFunctionForm.controls['moduleName']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="updateFunctionForm.controls['moduleName']?.errors?.['required']"
+                  >
+                    please enter module.
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mt-2 createbtn">
+                <button
+                  type="button"
+                  class="back-btn create-btn"
+                  (click)="goBack()"
+                >
+                  Back
+                </button>
+                <button type="submit" class="create-btn">Update</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

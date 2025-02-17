@@ -21,24 +21,27 @@ http://www.apache.org/licenses/LICENSE-2.0
 .container-fluid{
     margin-bottom: 2rem;
 }
-.title {
-    font-size: 1rem;
-    text-align: center;
-    padding: 5px 0 10px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
+.borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
     border-image-slice: 1;
     border-image-width: 0px 0px 4px 0px;
-}
-
-.container-box {
-    border-radius: 10px;
-    position: relative;
-    overflow: hidden;
-    min-height: 485px;
-    background-color: #f6f6f6;
-    box-shadow: 0px 1px 2px #333;
-}
-
+    margin: 0 15px;
+  }
+  .title {
+    font-size: 1rem;
+    text-align: center;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
 .container-box form {
     display: flex;
     justify-content: center;

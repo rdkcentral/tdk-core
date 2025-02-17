@@ -14,80 +14,138 @@ limitations under the License.
 -->
 
 <div class="container-fluid">
-    <div class="row">
-        <div class="col">
-            <div class="parent mt-1">
-                <div class="container container-box" id="container-box">
-                    <div class="form-container create-group">
-                        <h1 class="title">Update {{categoryName}} Primitive Test</h1>
-                        <form [formGroup]="editPrimitiveTestForm" (ngSubmit)="editPrimitiveTest()" data-bs-spy="scroll">
-                            <div class="row mb-4">
-                                <label for="testName" class="col-md-3 col-form-label offset-1">Test Name
-                                    <span style="color:red; margin-left: 0.75em;">*</span>
-                                </label>
-                                <div class="col-md-7">
-                                    <input type="text" class="form-control" id="testName" formControlName="testName"
-                                        placeholder="Enter Test Name">
-                                    <div *ngIf="submitted && editPrimitiveTestForm.controls['testName']?.errors"
-                                        class="text-danger">
-                                        <small
-                                            *ngIf="editPrimitiveTestForm.controls['testName']?.errors?.['required']">Please
-                                            enter test name.</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <label for="selectModule" class="col-md-3 col-form-label offset-1">Select Module
-                                    <span style="color:red; margin-left: 0.75em;">*</span>
-                                </label>
-
-                                <div class="col-md-7">
-                                    <input type="text" class="form-control" id="selectModule"
-                                        formControlName="selectModule" placeholder="Enter Module Name">
-                                    <div *ngIf="submitted && f['selectModule']?.errors" class="text-danger">
-                                        <small *ngIf="f['selectModule']?.errors?.['required']">Please select a
-                                            module.</small>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-4">
-                                <label for="selectFunction" class="col-md-3 col-form-label offset-1">Select Function
-                                    <span style="color:red; margin-left: 0.75em;">*</span>
-                                </label>
-
-                                <div class="col-md-7">
-                                    <input type="text" class="form-control" id="selectFunction"
-                                        formControlName="selectFunction" placeholder="Enter Function Name">
-                                    <div *ngIf="submitted && f['selectFunction']?.errors" class="text-danger">
-                                        <small *ngIf="f['selectFunction']?.errors?.['required']">Please select a
-                                            function.</small>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="mt-2 createbtn">
-                                    <button type="submit" class="back-btn" (click)="goBack()">Back</button>
-                                    <button type="submit" class="create-btn">Update</button>
-                                    <!-- <button type="submit" class="back-btn" (click)="reset()">Reset</button> -->
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-
-                    <div class="row table-sec mt-3">
-                        <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-                            <ag-grid-angular style="width: 100%; height: 337px;" [columnDefs]="columnDefs"
-                                [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
-                                [class]="themeClass" [pagination]="false" [paginationPageSize]="paginationPageSize"
-                                [paginationPageSizeSelector]="paginationPageSizeSelector"
-                                (gridReady)="onGridReady($event)" [tooltipShowDelay]="tooltipShowDelay"
-                                [animateRows]="true" [components]="frameworkComponents"></ag-grid-angular>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
+  <div class="row borders-btm">
+    <div class="col"></div>
+    <div class="col">
+      <h1 class="title">Update {{ categoryName }} Primitive Test</h1>
     </div>
+    <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="parent">
+        <div class="container-box" id="container-box">
+          <div class="form-container create-group">
+            <form
+              [formGroup]="editPrimitiveTestForm"
+              (ngSubmit)="editPrimitiveTest()"
+              data-bs-spy="scroll"
+            >
+              <div class="row mb-4">
+                <label for="testName" class="col-md-3 col-form-label offset-1"
+                  >Test Name
+                  <span style="color: red; margin-left: 0.75em">*</span>
+                </label>
+                <div class="col-md-7">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="testName"
+                    formControlName="testName"
+                    placeholder="Enter Test Name"
+                  />
+                  <div
+                    *ngIf="
+                      submitted &&
+                      editPrimitiveTestForm.controls['testName']?.errors
+                    "
+                    class="text-danger"
+                  >
+                    <small
+                      *ngIf="editPrimitiveTestForm.controls['testName']?.errors?.['required']"
+                      >Please enter test name.</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label
+                  for="selectModule"
+                  class="col-md-3 col-form-label offset-1"
+                  >Select Module
+                  <span style="color: red; margin-left: 0.75em">*</span>
+                </label>
+
+                <div class="col-md-7">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="selectModule"
+                    formControlName="selectModule"
+                    placeholder="Enter Module Name"
+                  />
+                  <div
+                    *ngIf="submitted && f['selectModule']?.errors"
+                    class="text-danger"
+                  >
+                    <small *ngIf="f['selectModule']?.errors?.['required']"
+                      >Please select a module.</small
+                    >
+                  </div>
+                </div>
+              </div>
+              <div class="row mb-4">
+                <label
+                  for="selectFunction"
+                  class="col-md-3 col-form-label offset-1"
+                  >Select Function
+                  <span style="color: red; margin-left: 0.75em">*</span>
+                </label>
+
+                <div class="col-md-7">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="selectFunction"
+                    formControlName="selectFunction"
+                    placeholder="Enter Function Name"
+                  />
+                  <div
+                    *ngIf="submitted && f['selectFunction']?.errors"
+                    class="text-danger"
+                  >
+                    <small *ngIf="f['selectFunction']?.errors?.['required']"
+                      >Please select a function.</small
+                    >
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="mt-2 createbtn">
+                  <button type="submit" class="back-btn" (click)="goBack()">
+                    Back
+                  </button>
+                  <button type="submit" class="create-btn">Update</button>
+                </div>
+              </div>
+            </form>
+          </div>
+
+          <div class="row table-sec mt-3">
+            <div
+              class="ag-table mb-3"
+              style="display: flex; justify-content: center"
+            >
+              <ag-grid-angular
+                style="width: 100%; height: 337px"
+                [columnDefs]="columnDefs"
+                [defaultColDef]="defaultColDef"
+                [suppressRowClickSelection]="true"
+                [rowData]="rowData"
+                [class]="themeClass"
+                [pagination]="false"
+                [paginationPageSize]="paginationPageSize"
+                [paginationPageSizeSelector]="paginationPageSizeSelector"
+                (gridReady)="onGridReady($event)"
+                [tooltipShowDelay]="tooltipShowDelay"
+                [animateRows]="true"
+                [components]="frameworkComponents"
+              ></ag-grid-angular>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

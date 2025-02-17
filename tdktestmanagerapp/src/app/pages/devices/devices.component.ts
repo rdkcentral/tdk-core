@@ -46,7 +46,7 @@ export class DevicesComponent {
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
   public paginationPageSize = 10;
-  public paginationPageSizeSelector: number[] | boolean = [5, 10, 20, 50];
+  public paginationPageSizeSelector: number[] | boolean = [10, 20, 50];
   configureName!: string;
   selectedRowCount = 0;
   selectedDeviceCategory : string = 'RDKV';
@@ -104,7 +104,7 @@ export class DevicesComponent {
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 35,
+    rowHeight: 36,
   };
 
   constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
@@ -127,12 +127,14 @@ export class DevicesComponent {
    * Initializes the component and performs necessary setup tasks.
    */
   ngOnInit(): void {
+    this.selectedDeviceCategory = this.userCategory;
+    this.categoryName = 'Video';
     const deviceCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
-    const name = localStorage.getItem('deviceCategoryName');
-    this.categoryName = name;
-    this.categoryChange(deviceCategory);
+    // const name = localStorage.getItem('deviceCategoryName');
+    // this.categoryName = name;
+    // this.categoryChange(deviceCategory);
     if(deviceCategory === null){
-      this.categoryName = name;
+      // this.categoryName = name;/
       this.configureName = this.selectedDeviceCategory;
       this.findallbyCategory();
     }
@@ -166,28 +168,27 @@ export class DevicesComponent {
    * Handles the event when a device category is checked.
    * @param event - The event object containing the checked value.
    */
-  ischecked(val:any):void{
-    this.rowData = [];
-    this.categoryChange(val);
-  }
-  categoryChange(val:any){
+  // ischecked(val:any):void{
+  //   this.rowData = [];
+  //   this.categoryChange(val);
+  // }
+  categoryChange(event:any){
+    let val = event.target.value;
     if(val === 'RDKB'){
       this.categoryName = 'Broadband';
       this.selectedDeviceCategory = 'RDKB';
+      localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
+      localStorage.setItem('deviceCategoryName', this.categoryName);
       this.findallbyCategory();
-    }
-    else if(val === 'RDKC'){
-        this.categoryName = 'Camera';
-        this.selectedDeviceCategory = 'RDKC';
-        this.findallbyCategory();
     }
     else{
       this.selectedDeviceCategory = 'RDKV';
       this.categoryName = 'Video';
+      localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
+      localStorage.setItem('deviceCategoryName', this.categoryName);
       this.findallbyCategory();
     }
-    localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
-    localStorage.setItem('deviceCategoryName', this.categoryName);
+
   }
 
   /**
@@ -239,7 +240,7 @@ export class DevicesComponent {
               }
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -329,35 +330,6 @@ export class DevicesComponent {
       })
     }
   }
- /**
-   * open the modal when click on view button in device table
-  */  
-  // openModal(params:any){
-  //   this.dialog.open( DialogDelete,{
-  //     width: '99%',
-  //     height: '93vh',
-  //     maxWidth:'100vw',
-  //     panelClass: 'custom-modalbox',
-  //     data:{
-  //       agentMonitorPort: params.agentMonitorPort,
-  //       oemName : params.oemName,
-  //       deviceTypeName : params.deviceTypeName,
-  //       category :  params.category,
-  //       id :  params.id,
-  //       logTransferPort  :  params.logTransferPort,
-  //       macId :  params.macId,
-  //       socName :  params.socName,
-  //       statusPort :  params.statusPort,
-  //       deviceIp : params.deviceIp,
-  //       deviceName :   params.deviceName,
-  //       devicePort :  params.devicePort,
-  //       thunderEnabled :  params.thunderEnabled,
-  //       thunderPort :  params.thunderPort,
-  //       userGroupName :  params.userGroupName,
-  //       devicePortsConfigured: params.devicePortsConfigured
-  //     }
-  //   })
-  // }
    /**
    * Download device details as xml format based on device name
    */

@@ -43,11 +43,8 @@ import { ParameterCreateComponent } from './pages/modules/parameter-create/param
 import { ListPrimitiveTestComponent } from './pages/primitive-test/list-primitive-test/list-primitive-test.component';
 import { CreatePrimitiveTestComponent } from './pages/primitive-test/create-primitive-test/create-primitive-test.component';
 import { ModulesEditComponent } from './pages/modules/modules-edit/modules-edit.component';
-import { ModulesViewComponent } from './pages/modules/modules-view/modules-view.component';
 import { FunctionEditComponent } from './pages/modules/function-edit/function-edit.component';
-import { FunctionViewComponent } from './pages/modules/function-view/function-view.component';
 import { ParameterEditComponent } from './pages/modules/parameter-edit/parameter-edit.component';
-import { ParameterViewComponent } from './pages/modules/parameter-view/parameter-view.component';
 import { ScriptListComponent } from './pages/script/script-list/script-list.component';
 import { CreateScriptsComponent } from './pages/script/create-scripts/create-scripts.component';
 import { EditPrimitiveTestComponent } from './pages/primitive-test/edit-primitive-test/edit-primitive-test.component';
@@ -70,6 +67,8 @@ import { ListRdkCertificationComponent } from './pages/rdk-certification/list-rd
 import { CreateRdkCertificationComponent } from './pages/rdk-certification/create-rdk-certification/create-rdk-certification.component';
 import { EditRdkCertificationComponent } from './pages/rdk-certification/edit-rdk-certification/edit-rdk-certification.component';
 import { AnalysisComponent } from './pages/analysis/analysis.component';
+import { CreateJiraComponent } from './utility/component/analyze-dialog/create-jira/create-jira.component';
+import { AppUpgradeComponent } from './pages/app-upgrade/app-upgrade.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: '/login', pathMatch: 'full' },
@@ -107,13 +106,10 @@ export const routes: Routes = [
             {path: 'configure/parameter-list', title: 'Parameter', component:ParameterListComponent},
             {path: 'configure/modules-create', title: 'Module Create', component:ModulesCreateComponent},
             {path: 'configure/modules-edit', title: 'Module Edit', component:ModulesEditComponent},
-            {path: 'configure/modules-view', title: 'Module View', component:ModulesViewComponent},
             {path: 'configure/function-create', title: 'Function Create', component:FunctionCreateComponent},
             {path: 'configure/function-edit', title: 'Function Edit', component:FunctionEditComponent},
-            {path: 'configure/function-view', title: 'Function View', component:FunctionViewComponent},
             {path: 'configure/parmeter-create', title: 'Parmeter Create', component:ParameterCreateComponent},
             {path: 'configure/parameter-edit', title: 'Parmeter Edit', component:ParameterEditComponent},
-            {path: 'configure/parameter-view', title: 'Parmeter View', component:ParameterViewComponent},
             {path: 'configure/list-primitivetest',title:'List PrimitiveTest',component:ListPrimitiveTestComponent},
             {path: 'configure/edit-primitivetest',title:'Edit PrimitiveTest',component:EditPrimitiveTestComponent},
             {path:'configure/create-primitivetest', title:'Create PrimitiveTest', component:CreatePrimitiveTestComponent},
@@ -121,13 +117,15 @@ export const routes: Routes = [
             {path:'script/create-scripts', title:'Cretae Script', component:CreateScriptsComponent},
             {path:'script/edit-scripts', title:'Edit Script', component:EditScriptsComponent},
             {path:'script/create-script-group', title:'Create Script Group', component:CreateScriptGroupComponent},
-            {path:'execution', title:'Execution', component: ExecutionComponent},
+            {path:'execution', title:'Execution', component: ExecutionComponent,data: { refreshable: true }},
             {path:'script/custom-testsuite', title:'Custom TestSuite', component:CustomTestsuiteComponent},
             {path:'script/edit-testsuite',title:'Edit TestSuite',component:EditTestsuiteComponent},
             {path:'configure/list-rdk-certifications',title:'List RDK Certifications', component:ListRdkCertificationComponent},
             {path:'configure/create-rdk-certifications',title:'Create RDK Certifications', component:CreateRdkCertificationComponent},
             {path:'configure/edit-rdk-certifications', title:'Edit RDK Certifications', component:EditRdkCertificationComponent},
-            {path:'analysis', title:'Analysis', component:AnalysisComponent}
+            {path:'analysis', title:'Analysis', component:AnalysisComponent},
+            {path:'analysis/create-jira', title:'Create Jira', component:CreateJiraComponent},
+            {path:'app-upgrade', title:'App-Upgrade', component:AppUpgradeComponent}
         ]
     }
 ];

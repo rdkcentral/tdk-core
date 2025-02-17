@@ -16,7 +16,7 @@ limitations under the License.
 <div class="container">
     <div class="radiobox-row mt-1">
         <div class="col-md-12">
-            <h1 class="title borders-btm">Select {{data}} Executions</h1>
+            <h1 class="title borders-btm">Select {{data.tabName}} Executions</h1>
         </div>
         <div class="mt-2 main-margin">
             <form [formGroup]="filterForm" (ngSubmit)="filterDataSubmit()"> 
@@ -26,7 +26,7 @@ limitations under the License.
                             <label for="testtype" class="col-md-4 col-form-label">From <span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
                             <div class="col-md-8">
-                                <input type="datetime-local" class="form-control" formControlName="fromDate">
+                                <input type="date" class="form-control" formControlName="fromDate">
                                 <div *ngIf="filterSubmitted && filterForm.controls['fromDate']?.errors" class="text-danger">
                                     <small *ngIf="filterForm.controls['fromDate']?.errors?.['required']">Please select from date.</small>
                                 </div>
@@ -35,18 +35,18 @@ limitations under the License.
                         <div class="mt-2 mb-3 row-align">
                             <label for="testtype" class="col-md-4 col-form-label">Device Type <span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
-                            <div class="col-md-8">
-                                <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                    formControlName="deviceType">
-                                    <option value="" default>Select</option>
-                                    <option value="RDKV">deviceType1</option>
-                                    <option value="RDKB">deviceType2</option>
-                                    <option value="RDKC">deviceType3</option>
-                                </select>
-                                <div *ngIf="filterSubmitted && filterForm.controls['deviceType']?.errors" class="text-danger">
-                                    <small *ngIf="filterForm.controls['deviceType']?.errors?.['required']">Please select device type.</small>
+                                <div class="col-md-8">
+                                    <select class="form-select" aria-label="Default select example" id="selectDevicetype"
+                                        formControlName="deviceType" (change)="deviceChange($event)">
+                                        <option value="" default>Select</option>
+                                        @for (item of allDeviceType; track $index) {
+                                            <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
+                                        }
+                                    </select>
+                                    <div *ngIf="filterSubmitted && filterForm.controls['deviceType']?.errors" class="text-danger">
+                                        <small *ngIf="filterForm.controls['deviceType']?.errors?.['required']">Please select device type.</small>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                     <div class="col">
@@ -54,22 +54,23 @@ limitations under the License.
                             <label for="testtype" class="col-md-4 col-form-label">To <span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
                             <div class="col-md-8">
-                                <input type="datetime-local" class="form-control" formControlName="toDate">
+                                <input type="date" class="form-control" formControlName="toDate">
                                 <div *ngIf="filterSubmitted && filterForm.controls['toDate']?.errors" class="text-danger">
                                     <small *ngIf="filterForm.controls['toDate']?.errors?.['required']">Please select to date.</small>
                                 </div>
                             </div>
                         </div>
                         <div class="mt-2 mb-3 row-align">
-                            <label for="testtype" class="col-md-4 col-form-label">Script Type<span
+                            <label for="testtype" class="col-md-4 col-form-label">Execution Type<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
                             <div class="col-md-8">
                                 <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                    formControlName="scriptType">
+                                    formControlName="scriptType" (change)="changeExecutionType($event)">
                                     <option value="" default>Select</option>
-                                    <option value="SingleScript">Single Script</option>
-                                    <option value="MultiScript">Multi Script</option>
-                                    <option value="TestSuite">TestSuite</option>
+                                    <option value="SINGLESCRIPT">Single Script</option>
+                                    <option value="MULTISCRIPT">Multi Script</option>
+                                    <option value="TESTSUITE">TestSuite</option>
+                                    <option value="MULTITESTSUITE">Multi Testsuite</option>
                                 </select>
                                 <div *ngIf="filterSubmitted && filterForm.controls['scriptType']?.errors" class="text-danger">
                                     <small *ngIf="filterForm.controls['scriptType']?.errors?.['required']">Please select script type.</small>
@@ -81,26 +82,30 @@ limitations under the License.
                         <div class="mb-3 row-align">
                             <label for="testtype" class="col-md-4 col-form-label">Category<span
                                 style="color:red; margin-left: 0.75em;">*</span></label>
+                                <div class="col-md-8">
+                                    <select class="form-select" aria-label="Default select example" id="selectDevicetype"
+                                        formControlName="category">
+                                        <option value="" default>Select</option>
+                                        <option value="RDKV">Video</option>
+                                        <option value="RDKB">Broadband</option>
+                                    </select>
+                                </div>
+                        </div>
+                        <div class="mb-3 row-align" *ngIf="showScript">
+                            <label for="testtype" class="col-md-4 col-form-label">Script</label>
                             <div class="col-md-8">
-                                <select class="form-select" aria-label="Default select example" id="selectDevicetype"
-                                formControlName="category">
-                                <option value="" default>Select</option>
-                                <option value="RDKV">Video</option>
-                                <option value="RDKB">Broadband</option>
-                                <option value="RDKC">Camera</option>
-                            </select>
-                            <div *ngIf="filterSubmitted && filterForm.controls['category']?.errors" class="text-danger">
-                                <small *ngIf="filterForm.controls['category']?.errors?.['required']">Please select a
-                                    category.</small>
-                            </div>
+                                <input type="text" class="form-control" formControlName="scriptSingle"/>
                             </div>
                         </div>
-                        <div class="mb-3 row-align">
-                            <label for="testtype" class="col-md-4 col-form-label"></label>
+                        <div class="mb-3 row-align" *ngIf="testSuiteShow">
+                            <label for="testtype" class="col-md-4 col-form-label">TestSuite</label>
                             <div class="col-md-8">
-                                <button type="submit" class="create-btn">Filter Executions</button>
+                                <input type="text" class="form-control" formControlName="testSuiteSingke"/>
                             </div>
                         </div>
+                    </div>
+                    <div class="col-md-12 text-end">
+                        <button type="submit" class="create-btn">Filter Executions</button>
                     </div>
                 </div>
             </form>
@@ -108,10 +113,10 @@ limitations under the License.
         <div class="col-md-12 selectedScript" *ngIf="filterSubmitted && filterForm.errors?.['maxDaysExceeded']" class="text-danger">
             <small>Maximum number of days allowed is 30</small>
         </div>
-        <div class="col-md-12 selectedScript text-end">
+        <!-- <div class="col-md-12 selectedScript mt-2 text-end" *ngIf="showTable">
             <button  type="button" class="confirm-btn" (click)="onConfirm()">Confirm</button>
-        </div>
-        <div class="tableDeatils mt-2">
+        </div> -->
+        <div class="tableDeatils mt-2" *ngIf="showTable">
             <div style="width: 100%; height: 280px;" [class]="themeClass">
                 <ag-grid-angular
                 style="width: 100%; height: 100%;"
@@ -123,12 +128,14 @@ limitations under the License.
                 [paginationPageSizeSelector]="pageSizeSelector"
                 [rowHeight]="35"
                 [rowSelection]="'multiple'"
+                (selectionChanged)="onrowSelected()"
                 (gridReady)="onGridReady($event)"
               ></ag-grid-angular>
             </div>
         </div>
-        <div class="col-md-12 mt-2 text-end">
-            <button type="button" class="create-btn" (click)="close()" >Close</button>
+        <div class="col-md-12 text-end">
+            <button *ngIf="showTable" type="button" class="create-btn confirmC-btn" (click)="onConfirm()">Confirm</button>
+            <button type="button" class="create-btn close-btn" (click)="close()" >Close</button>
         </div>
     </div>
 </div>

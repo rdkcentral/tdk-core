@@ -13,141 +13,150 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
-  <mat-card class="card-height">
-    <h1 class="title">Create Custom TestSuite</h1>
-    <form [formGroup]="customFormGroup" (ngSubmit)="customFormSubmit()">
-    <div class="first-container">
-      <div class="radiobox">
-        <h3 class="heading">Select Category :</h3>
-        <div class="rdkgroup">
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input rdkradio"
-              type="radio"
-              name="category"
-              id="rdkv"
-              value="RDKV"
-              [(ngModel)]="selectedVideoCategory"
-              (change)="categoryChange('RDKV')"
-              formControlName="category"
-            />
-            <label class="form-check-label" for="rdkv">Video</label>
-          </div>
-          <div class="form-check form-check-inline">
-            <input
-              class="form-check-input rdkradio"
-              type="radio"
-              name="category"
-              id="rdkc"
-              [(ngModel)]="selectedVideoCategory"
-              value="RDKV_RDKSERVICE"
-              (change)="categoryChange('RDKV_RDKSERVICE')"
-              formControlName="category"
-            />
-            <label class="form-check-label" for="rdkc">Video-Thunder</label>
-          </div>
-        </div>
-      </div>
+<div class="container-fluid">
+  <div class="row borders-btm">
+    <div class="col">
     </div>
-      <div class="row first-container">
-        <div class="col">
-          <div class="row first-container mt-1 mb-1">
-            <label for="customname" class="col-md-3 col-form-label"
-              >Name<span style="color: red; margin-left: 0.75em">*</span></label
-            >
-            <div class="col-md-8">
-              <input
-                type="text"
-                class="form-control"
-                id="customname"
-                autocomplete="off"
-                placeholder="Enter name"
-                formControlName="name"
-              />
-              <div *ngIf="formSubmitted && customFormGroup.controls['name']?.errors" class="text-danger">
-                <small *ngIf="customFormGroup.controls['name']?.errors?.['required']">Please enter name.</small>
-            </div>
-            </div>
-
-          </div>
-          <div class="row first-container mt-2 mb-1">
-                <label for="desc" class="col-md-3 col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
-            <div class="col-md-8">
-                <textarea rows="4" class="form-control" id="desc" formControlName="description" autocomplete="off" placeholder="Enter description"></textarea>
-                <div *ngIf="formSubmitted && customFormGroup.controls['description']?.errors" class="text-danger">
-                    <small *ngIf="customFormGroup.controls['description']?.errors?.['required']">Please enter description.</small>
-                </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-
-          <div class="row first-container mb-2">
-            <label for="devicetype" class="col-md-4 label-title col-form-label">
-                DeviceType<span style="color:red; margin-left: 0.75em;">*</span>
-            </label>
-            <div class="col-md-8">
-              <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="deviceType" (change)="devicetypeChange($event)">
-                <option value="" default>Select</option>
-                @for (item of allDeviceType; track $index) {
-                    <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
-                }
-              </select>
-            <div *ngIf="formSubmitted && customFormGroup.controls['deviceType']?.errors" class="text-danger">
-                <small *ngIf="customFormGroup.controls['deviceType']?.errors?.['required']">Please select device type.</small>
-            </div>
-            </div>
-          </div>
-          <div class="row first-container">
-            <label for="longtest" class="col-md-4 label-title col-form-label">Long duration test</label>
-            <div class="col-md-8">
-                <div class="form-check form-check-inline form-check-reverse longtest">
-                    <input class="form-check-input thunder" type="checkbox" id="longtest"
-                        formControlName="longdurationtest"(change)="durationChecked($event)">
-                </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-      <div class="row sec-row">
-            <div class="col-md-4"></div>
-              <div class="col-md-4"></div>
-              <div class="col-md-4"></div>
-        </div>
-        <div class="mt-2">
-          <span class="titlemodule">Module List</span>
-          <div class="error-row">
-            <div *ngIf="formSubmitted && customFormGroup.controls['modules']?.errors" class="text-danger">
-              <small *ngIf="customFormGroup.controls['modules']?.errors?.['required']">At least one module must be selected.</small>
-            </div>
-          </div>
-            <div class="selectall">
-              <input
-              type="checkbox"
-              (change)="checkUncheckAll($event)"
-              [checked]="customFormGroup.value.modules.length === modulesArr.length"
-              [indeterminate]="customFormGroup.value.modules.length > 0 && customFormGroup.value.modules.length < modulesArr.length"
-            />
-                <span class="name">Select / Unselect All</span>
-          </div>
-          <div class="module-section">
-            <div class="name-grid" >
-              <div *ngFor="let item of modulesArr; let i = index " class="name-item">
-                  <input type="checkbox"  name="list_name " (change)="onChange($event, item)"
-                  [checked]="modulesChecked(item)" class="form-check-input thunder" />
-                  <span class="name">{{item}}</span>
+    <div class="col">
+        <h1 class="title"><h1 class="title">Create Custom TestSuite</h1></h1>
+    </div>
+    <div class="col">
+    </div>
+  </div>
+    <div class="row">
+      <form [formGroup]="customFormGroup" (ngSubmit)="customFormSubmit()">
+        <div class="first-container">
+          <div class="radiobox">
+            <h3 class="heading">Select Category :</h3>
+            <div class="rdkgroup">
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input rdkradio"
+                  type="radio"
+                  name="category"
+                  id="rdkv"
+                  value="RDKV"
+                  [(ngModel)]="selectedVideoCategory"
+                  (change)="categoryChange('RDKV')"
+                  formControlName="category"
+                />
+                <label class="form-check-label" for="rdkv">Video</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input
+                  class="form-check-input rdkradio"
+                  type="radio"
+                  name="category"
+                  id="rdkc"
+                  [(ngModel)]="selectedVideoCategory"
+                  value="RDKV_RDKSERVICE"
+                  (change)="categoryChange('RDKV_RDKSERVICE')"
+                  formControlName="category"
+                />
+                <label class="form-check-label" for="rdkc">Video-Thunder</label>
               </div>
             </div>
           </div>
         </div>
-        <div class="row form-row">
-          <div class="mt-1 mb-3 text-end btn-grp">
-              <button class="reset-btn" (click)="goBack()">Back</button>
-              <button type="submit" class="create-btn">Create</button>
+          <div class="row first-container">
+            <div class="col">
+              <div class="row first-container mt-1 mb-1">
+                <label for="customname" class="col-md-3 col-form-label"
+                  >Name<span style="color: red; margin-left: 0.75em">*</span></label
+                >
+                <div class="col-md-8">
+                  <input
+                    type="text"
+                    class="form-control"
+                    id="customname"
+                    autocomplete="off"
+                    placeholder="Enter name"
+                    formControlName="name"
+                  />
+                  <div *ngIf="formSubmitted && customFormGroup.controls['name']?.errors" class="text-danger">
+                    <small *ngIf="customFormGroup.controls['name']?.errors?.['required']">Please enter name.</small>
+                </div>
+                </div>
+    
+              </div>
+              <div class="row first-container mt-2 mb-1">
+                    <label for="desc" class="col-md-3 col-form-label">Description<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <div class="col-md-8">
+                    <textarea rows="4" class="form-control" id="desc" formControlName="description" autocomplete="off" placeholder="Enter description"></textarea>
+                    <div *ngIf="formSubmitted && customFormGroup.controls['description']?.errors" class="text-danger">
+                        <small *ngIf="customFormGroup.controls['description']?.errors?.['required']">Please enter description.</small>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="col">
+    
+              <div class="row first-container mb-2">
+                <label for="devicetype" class="col-md-4 label-title col-form-label">
+                    DeviceType<span style="color:red; margin-left: 0.75em;">*</span>
+                </label>
+                <div class="col-md-8">
+                  <select class="form-select" aria-label="Default select example" id="devicetype" formControlName="deviceType" (change)="devicetypeChange($event)">
+                    <option value="" default>Select</option>
+                    @for (item of allDeviceType; track $index) {
+                        <option value="{{item.deviceTypeName}}">{{item.deviceTypeName}}</option>
+                    }
+                  </select>
+                <div *ngIf="formSubmitted && customFormGroup.controls['deviceType']?.errors" class="text-danger">
+                    <small *ngIf="customFormGroup.controls['deviceType']?.errors?.['required']">Please select device type.</small>
+                </div>
+                </div>
+              </div>
+              <div class="row first-container">
+                <label for="longtest" class="col-md-4 label-title col-form-label">Long duration test</label>
+                <div class="col-md-8">
+                    <div class="form-check form-check-inline form-check-reverse longtest">
+                        <input class="form-check-input thunder" type="checkbox" id="longtest"
+                            formControlName="longdurationtest"(change)="durationChecked($event)">
+                    </div>
+                </div>
+              </div>
+            </div>
+    
           </div>
-      </div>
-    </form>
-  </mat-card>
+          <div class="row sec-row">
+                <div class="col-md-4"></div>
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4"></div>
+            </div>
+            <div class="mt-2">
+              <span class="titlemodule">Module List</span>
+              <div class="error-row">
+                <div *ngIf="formSubmitted && customFormGroup.controls['modules']?.errors" class="text-danger">
+                  <small *ngIf="customFormGroup.controls['modules']?.errors?.['required']">At least one module must be selected.</small>
+                </div>
+              </div>
+                <div class="selectall">
+                  <input
+                  type="checkbox"
+                  (change)="checkUncheckAll($event)"
+                  [checked]="customFormGroup.value.modules.length === modulesArr.length"
+                  [indeterminate]="customFormGroup.value.modules.length > 0 && customFormGroup.value.modules.length < modulesArr.length"
+                />
+                    <span class="name">Select / Unselect All</span>
+              </div>
+              <div class="module-section">
+                <div class="name-grid" >
+                  <div *ngFor="let item of modulesArr; let i = index " class="name-item">
+                      <input type="checkbox"  name="list_name " (change)="onChange($event, item)"
+                      [checked]="modulesChecked(item)" class="form-check-input thunder" />
+                      <span class="name">{{item}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="row form-row">
+              <div class="mt-1 mb-3 text-end btn-grp">
+                  <button class="reset-btn" (click)="goBack()">Back</button>
+                  <button type="submit" class="create-btn">Create</button>
+              </div>
+          </div>
+        </form>
+    <!-- </div> -->
+
 </div>

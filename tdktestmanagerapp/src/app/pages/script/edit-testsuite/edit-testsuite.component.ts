@@ -54,6 +54,9 @@ export class EditTestsuiteComponent {
   onlyVideoCategory!:string;
   onlyVideoCategoryName!:string;
   categoryName!:string;
+  selectedLeft = new Set<number>();
+  selectedRight = new Set<number>();
+  filteredLeftList:any;
 
   constructor(private fb: FormBuilder,private router: Router,private scriptservice:ScriptsService,
     private _snakebar: MatSnackBar,private route: ActivatedRoute,private authservice : AuthService ) {
@@ -65,8 +68,8 @@ export class EditTestsuiteComponent {
 
   ngOnInit(): void {
     this.onlyVideoCategory = localStorage.getItem('onlyVideoCategory')||'';
-    let category = localStorage.getItem('category') || '';
-    this.selectedCategory = category?category:'RDKV';
+    // let category = localStorage.getItem('category') || '';
+    // this.selectedCategory = category?category:'RDKV';
     this.selectedCategory = this.onlyVideoCategory?this.onlyVideoCategory:this.selectedCategory;
     if(this.onlyVideoCategory){
       if(this.onlyVideoCategory === 'RDKV_RDKSERVICE'){
@@ -103,54 +106,54 @@ export class EditTestsuiteComponent {
     })
 
   }
-
-   // Handle multi-select using Ctrl (Cmd on Mac) + click
-   selectItem(event: MouseEvent, item: string) :void{
-    if (event.ctrlKey || event.metaKey) {
-      if (this.selectedItems.has(item)) {
-        this.selectedItems.delete(item);
-      } else {
-        this.selectedItems.add(item);
-      }
-    } else {
-      this.selectedItems.clear();
-      this.selectedItems.add(item);
+  toggleSec(scripts:any, side: 'left' | 'right'){
+    if(side === 'left'){
+      this.selectedLeft.has(scripts.id)?this.selectedLeft.delete(scripts.id):this.selectedLeft.add(scripts.id);
+    }else{
+      this.selectedRight.has(scripts.id)?this.selectedRight.delete(scripts.id):this.selectedRight.add(scripts.id);
     }
   }
-
-  drop(event: CdkDragDrop<string[]>) :void{
-    const selectedArray = Array.from(this.selectedItems);
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      for (let selectedItem of selectedArray) {
-        const index = event.previousContainer.data.indexOf(selectedItem);
-        if (index !== -1) {
-          event.previousContainer.data.splice(index, 1);
-          event.container.data.splice(event.currentIndex, 0, selectedItem);
-        }
-      }
-      this.selectedItems.clear();
-    }
-    this.testSuiteEditFrom.get('container2Scripts')?.setValue(this.container2);
+  moveToRight(){
+    
+    this.container2ScriptArr.push(...this.container1.filter(scripts => this.selectedLeft.has(scripts.id)));
+    this.container1 = this.container1.filter(scripts => !this.selectedLeft.has(scripts.id));
+    this.selectedLeft.clear();
+    this.testSuiteEditFrom.get('container2Scripts')?.setValue(this.container2ScriptArr);
     this.testSuiteEditFrom.get('container2Scripts')?.markAsTouched();
     this.testSuiteEditFrom.get('container2Scripts')?.updateValueAndValidity();
   }
+  moveToLeft(){
+    this.container1.push(...this.container2ScriptArr.filter(scripts => this.selectedRight.has(scripts.id)));
+    this.container2ScriptArr = this.container2ScriptArr.filter(scripts => !this.selectedRight.has(scripts.id));
+    this.selectedRight.clear();
+  }
+  moveToUp(){
+    const selectedIds = Array.from(this.selectedRight);
+    for (let i = 1; i < this.container2ScriptArr.length; i++) {
+      if(selectedIds.includes(this.container2ScriptArr[i].id)){
+        [this.container2ScriptArr[i], this.container2ScriptArr[i-1]] =  [this.container2ScriptArr[i - 1], this.container2ScriptArr[i]]
+      }
+      
+    }
+  }
+  moveToDown(){
+    const selectedIds = Array.from(this.selectedRight);
+    for (let i = this.container2ScriptArr.length -2; i >= 0; i--) {
+      if(selectedIds.includes(this.container2ScriptArr[i].id)){
+        [this.container2ScriptArr[i], this.container2ScriptArr[i+1]] =  [this.container2ScriptArr[i + 1], this.container2ScriptArr[i]]
+      }
+      
+    }
+  }
   get filteredContainer1(): any[] {
     const searchTerm = this.testSuiteEditFrom.get('search')?.value || ''; 
-    let filteredList = this.container1;
+    this.filteredLeftList = this.container1;
     if (searchTerm) {
-      filteredList = this.container1.filter((item:any) =>
+       this.filteredLeftList = this.container1.filter((item:any) =>
         item.name.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
-    return filteredList.sort((a:any, b:any) => {
-      if (this.sortOrder === 'asc') {
-        return a.name.localeCompare(b.name);
-      } else {
-        return b.name.localeCompare(a.name);
-      }
-    });
+      return this.filteredLeftList;
   }
   toggleSortOrder() :void{
     this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';

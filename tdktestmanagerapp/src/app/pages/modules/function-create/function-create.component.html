@@ -13,13 +13,20 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
+<div class="container-fluid">
+    <div class="row borders-btm">
+        <div class="col">
+        </div>
+        <div class="col">
+          <h1 class="title">Create Function</h1>
+        </div>
+        <div class="col">
+        </div>
+      </div>
     <div class="row mt-2">
         <div class="col">
-            <mat-card class="card-height">
-                    <div class="container container-box" id="container-box">
+                    <div class="container-box" id="container-box">
                         <div class="form-container create-group">
-                            <h1 class="title">Create Function</h1>
                             <form [formGroup]="functionForm" (ngSubmit)="functionSubmit()" data-bs-spy="scroll">
                                 <div class="row mb-4">
                                     <label for="functionName" class="col-md-3 col-form-label offset-1">Name<span
@@ -60,7 +67,6 @@ limitations under the License.
                             </form>
                         </div>
                     </div>
-            </mat-card>
         </div>
     </div>
 </div>
