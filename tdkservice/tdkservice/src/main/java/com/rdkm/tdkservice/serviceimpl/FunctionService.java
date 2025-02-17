@@ -92,10 +92,10 @@ public class FunctionService implements IFunctionService {
 		Function function = new Function();
 
 		MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
-		LOGGER.info("Function created successfully: {}", function);
+	//	LOGGER.info("Function created successfully: {}", function);
 		try {
 			functionRepository.save(function);
-			LOGGER.info("Function created successfully: {}", function);
+	//		LOGGER.info("Function created successfully: {}", function);
 		} catch (Exception e) {
 			LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
 			return false;

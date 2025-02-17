@@ -31,74 +31,76 @@ import java.util.UUID;
 
 public interface IExportExcelService {
 
-    /**
-     * Generates an Excel report for the given execution.
-     *
-     * @param execution the execution for which the report is generated
-     * @return a byte array representing the generated Excel report
-     */
-    public byte[] generateExcelReport(Execution execution);
+	/**
+	 * Generates an Excel report for the given execution.
+	 *
+	 * @param execution the execution for which the report is generated
+	 * @return a byte array representing the generated Excel report
+	 */
+	public byte[] generateExcelReport(Execution execution);
 
-    /**
-     * Retrieves the execution by its ID.
-     *
-     * @param executionId the UUID of the execution
-     * @return the execution with the specified ID
-     */
-    Execution getExecutionById(UUID executionId);
+	/**
+	 * Retrieves the execution by its ID.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return the execution with the specified ID
+	 */
+	Execution getExecutionById(UUID executionId);
 
-    /**
-     * Generates a combined Excel report for the given list of execution IDs.
-     *
-     * @param executionIds the list of UUIDs of the executions
-     * @return a byte array representing the generated combined Excel report
-     */
-    byte[] generateCombinedExcelReport(List<UUID> executionIds);
+	/**
+	 * Generates a combined Excel report for the given list of execution IDs.
+	 *
+	 * @param executionIds the list of UUIDs of the executions
+	 * @return a byte array representing the generated combined Excel report
+	 */
+	byte[] generateCombinedExcelReport(List<UUID> executionIds);
 
-    /**
-     * Generates a raw report for the given execution ID.
-     *
-     * @param executionId the UUID of the execution
-     * @return a byte array representing the generated raw report
-     */
-    byte[] generateRawReport(UUID executionId);
+	/**
+	 * Generates a raw report for the given execution ID.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a byte array representing the generated raw report
+	 */
+	byte[] generateRawReport(UUID executionId);
 
-    /**
-     * Generates an XML report for the given execution.
-     *
-     * @param execution the execution for which the report is generated
-     * @return a byte array representing the generated XML report
-     * @throws ParserConfigurationException if a parser configuration error occurs
-     * @throws TransformerException if a transformer error occurs
-     */
-    byte[] generateXmlReport(Execution execution) throws ParserConfigurationException, TransformerException;
+	/**
+	 * Generates an XML report for the given execution.
+	 *
+	 * @param execution the execution for which the report is generated
+	 * @return a byte array representing the generated XML report
+	 * @throws ParserConfigurationException if a parser configuration error occurs
+	 * @throws TransformerException         if a transformer error occurs
+	 */
+	byte[] generateXmlReport(Execution execution) throws ParserConfigurationException, TransformerException;
 
-    /**
-     * Generates a ZIP file containing the execution results for the given execution ID.
-     *
-     * @param executionId the UUID of the execution
-     * @return a byte array representing the generated ZIP file
-     * @throws IOException if an I/O error occurs
-     */
-    byte[] generateExecutionResultsZip(UUID executionId) throws IOException;
+	/**
+	 * Generates a ZIP file containing the execution results for the given execution
+	 * ID.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a byte array representing the generated ZIP file
+	 * @throws IOException if an I/O error occurs
+	 */
+	byte[] generateExecutionResultsZip(UUID executionId) throws IOException;
 
-    /**
-     * Generates a ZIP file containing the failure scripts results for the given execution ID.
-     *
-     * @param executionId the UUID of the execution
-     * @return a byte array representing the generated ZIP file
-     * @throws IOException if an I/O error occurs
-     */
-    byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) throws IOException;
+	/**
+	 * Generates a ZIP file containing the failure scripts results for the given
+	 * execution ID.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a byte array representing the generated ZIP file
+	 * @throws IOException if an I/O error occurs
+	 */
+	byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) throws IOException;
 
-    /**
-     * Generates an Excel report comparing the specified executions.
-     *
-     * @param baseExecId the UUID of the base execution to compare against
-     * @param executionIds a list of UUIDs of the executions to be compared
-     * @return a ByteArrayInputStream containing the generated Excel report
-     * @throws IOException if an I/O error occurs during report generation
-     */
-	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId,List<UUID> executionIds) throws IOException;
+	/**
+	 * Generates an Excel report comparing the specified executions.
+	 *
+	 * @param baseExecId   the UUID of the base execution to compare against
+	 * @param executionIds a list of UUIDs of the executions to be compared
+	 * @return a ByteArrayInputStream containing the generated Excel report
+	 * @throws IOException if an I/O error occurs during report generation
+	 */
+	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds) throws IOException;
 
 }

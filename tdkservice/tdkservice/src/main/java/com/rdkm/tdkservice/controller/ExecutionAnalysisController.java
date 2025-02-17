@@ -179,7 +179,7 @@ public class ExecutionAnalysisController {
 				.getDetailsForPopulatingTicketDetails(execResultID);
 		if (ticketDescription != null) {
 			LOGGER.info("Ticket details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(ticketDescription.getDescription());
+			return ResponseEntity.status(HttpStatus.OK).body(ticketDescription);
 		} else {
 			LOGGER.error("Ticket details for this ticket not available");
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Jira data available");
@@ -230,7 +230,7 @@ public class ExecutionAnalysisController {
 			return ResponseEntity.status(HttpStatus.OK).body(true);
 		} else {
 			LOGGER.error("Project ID is not a platform project ID");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(false);
+			return ResponseEntity.status(HttpStatus.OK).body(false);
 		}
 	}
 

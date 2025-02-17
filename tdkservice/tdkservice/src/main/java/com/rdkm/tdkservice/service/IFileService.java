@@ -112,4 +112,13 @@ public interface IFileService {
 	 * @return a Resource representing the downloaded crash log file
 	 */
 	Resource downloadCrashLogFile(String executionResId, String fileName);
+	
+	/**
+	 * Retrieves additional logs from a specified log file associated with a given execution result ID.
+	 *
+	 * @param logFileName the name of the log file from which to retrieve additional logs
+	 * @param executionResultID the ID of the execution result for which to retrieve additional logs
+	 * @return a string containing the additional logs
+	 */
+	String getAdditionalLogs(String logFileName, String executionResultID);
 }

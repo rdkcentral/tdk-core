@@ -72,10 +72,8 @@ public class UserCreateDTO {
 	private String userCategory;
 
 	/**
-	 * Represents the user group of the User. This field is mandatory, hence it
-	 * cannot be blank.
+	 * Represents the user group of the User.
 	 */
-	@NotBlank(message = "Usergroup is required")
 	private String userGroupName;
 
 	/**

@@ -68,8 +68,6 @@ public class User extends BaseEntity implements UserDetails {
 	/**
 	 * The email of the user.
 	 */
-
-	@Column(nullable = false)
 	private String email;
 
 	/**

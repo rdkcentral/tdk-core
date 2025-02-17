@@ -33,12 +33,10 @@ import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -52,6 +50,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.dto.ExecutionDetailsForHtmlReportDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
@@ -66,7 +65,6 @@ import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.service.IExecutionService;
 import com.rdkm.tdkservice.service.IExportExcelService;
 import com.rdkm.tdkservice.service.IFileService;
-import com.rdkm.tdkservice.util.Constants;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -862,6 +860,7 @@ public class ExecutionController {
 			return ResponseEntity.ok().headers(headers).body(excelData);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
 					.body(("Error generating Excel: " + e.getMessage()).getBytes());
 		}
@@ -932,10 +931,15 @@ public class ExecutionController {
 			LOGGER.error("Base Execution ID cannot be null.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Base Execution needs to be selected.");
 		}
+		if (executionIds.contains(baseExecId)) {
+			LOGGER.error("Base Execution ID cannot be in the selected execution IDs list.");
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+					.body("Base Execution cannot be in the selected for comparision.");
+		}
 		if (executionIds == null || executionIds.isEmpty()) {
 			LOGGER.error("Execution IDs list cannot be empty.");
 			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Atleast one executions needs to be selected for combined report ");
+					.body("Atleast one executions needs to be selected for comparison report ");
 		}
 		if (executionIds.size() > 10) {
 			LOGGER.error("Maximum 10 executions can be selected for comparison report. Now {} executions are selected.",
@@ -1244,6 +1248,62 @@ public class ExecutionController {
 		JSONObject deviceStatus = executionService.getDeviceStatus(stbName, boxType);
 		return ResponseEntity.status(HttpStatus.OK).body(deviceStatus.toString());
 
+	}
+
+	/**
+	 * Endpoint to fetch additional logs for a given execution result.
+	 *
+	 * @param logFileName       the name of the log file to fetch
+	 * @param executionResultID the ID of the execution result for which to fetch
+	 *                          logs
+	 * @return ResponseEntity containing the additional logs as plain text if
+	 *         successful, or an error message if the logs could not be fetched
+	 *
+	 */
+	@Operation(summary = "Get the additional logs")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Additional logs fetched successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to fetch additional logs") })
+	@GetMapping("/getAdditionalLogs")
+	public ResponseEntity<?> getAdditionalLogs(@RequestParam String logFileName,
+			@RequestParam String executionResultID) {
+		LOGGER.info("Fetching additional logs for exec with Id: " + executionResultID);
+		String result = fileService.getAdditionalLogs(logFileName, executionResultID);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.TEXT_PLAIN);
+		if (null != result) {
+			LOGGER.info("Additional logs fetched successfully");
+			return new ResponseEntity<>(result, headers, HttpStatus.OK);
+		} else {
+			LOGGER.error("Failed to fetch additional logs");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch additional logs");
+		}
+	}
+
+	/**
+	 * Endpoint to fetch the execution details for the html report.
+	 *
+	 * @param executionId the UUID of the execution
+	 * @return a ResponseEntity containing the execution details for the html report
+	 */
+	@Operation(summary = "Get the execution details for html report")
+	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
+			@ApiResponse(responseCode = "500", description = "Failed to get Execution details"),
+			@ApiResponse(responseCode = "204", description = "No Execution details") })
+	@GetMapping("/getExecutionDetailsForHtmlReport")
+	public ResponseEntity<?> getExecutionDetailsForHtmlReport(@RequestParam UUID executionId) {
+		LOGGER.info("Get execution details for html report called");
+		List<ExecutionDetailsForHtmlReportDTO> response = executionService
+				.getExecutionDetailsForHtmlReport(executionId);
+		LOGGER.info("Execution details fetched successfully");
+		if (response == null || response.isEmpty()) {
+			LOGGER.error("Failed to get Execution details");
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Execution details");
+
+		} else {
+			LOGGER.info("Execution details fetched successfully");
+			return ResponseEntity.status(HttpStatus.OK).body(response);
+
+		}
 	}
 
 }

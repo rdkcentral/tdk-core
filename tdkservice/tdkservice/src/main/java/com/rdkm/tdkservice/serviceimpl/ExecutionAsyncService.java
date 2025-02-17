@@ -39,6 +39,12 @@ import org.springframework.stereotype.Service;
 
 import com.jayway.jsonpath.internal.Utils;
 import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.dto.CIComponentLevelDTO;
+import com.rdkm.tdkservice.dto.CIDeviceDTO;
+import com.rdkm.tdkservice.dto.CIRequestDTO;
+import com.rdkm.tdkservice.dto.CIResultDTO;
+import com.rdkm.tdkservice.dto.CIScriptDetailsDTO;
+import com.rdkm.tdkservice.dto.CITestInfoDTO;
 import com.rdkm.tdkservice.enums.DeviceStatus;
 import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
 import com.rdkm.tdkservice.enums.ExecutionProgressStatus;
@@ -50,12 +56,15 @@ import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionEntities;
+import com.rdkm.tdkservice.model.ExecutionMethodResult;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
+import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
+import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
 import com.rdkm.tdkservice.util.Constants;
@@ -76,10 +85,22 @@ public class ExecutionAsyncService {
 	private ExecutionResultRepository executionResultRepository;
 
 	@Autowired
+	private ExecutionMethodResultRepository executionMethodResultRepository;
+
+	@Autowired
 	private ExecutionDeviceRepository executionDeviceRepository;
 
 	@Autowired
+	private ScriptRepository scriptRepository;
+
+	@Autowired
 	private CommonService commonService;
+
+	@Autowired
+	private HttpService httpService;
+
+	@Autowired
+	private AppConfig appConfig;
 
 	@Autowired
 	private DeviceStatusService deviceStatusService;
@@ -135,7 +156,7 @@ public class ExecutionAsyncService {
 				double executionTime = this
 						.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
 
-				double realExecutionTime = this.getRealExcetionTime(executionEntities.getExecutionResult());
+				double realExecutionTime = this.getRealExcecutionTime(executionEntities.getExecutionResult());
 				this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
 				this.setFinalStatusOfExecution(executionEntities.getExecution());
 
@@ -153,7 +174,8 @@ public class ExecutionAsyncService {
 					executionEndTime = System.currentTimeMillis();
 					executionTime = this
 							.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
-					realExecutionTime = this.getRealExcetionTime(executionEntitiesForFailureRerun.getExecutionResult());
+					realExecutionTime = this
+							.getRealExcecutionTime(executionEntitiesForFailureRerun.getExecutionResult());
 					this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
 					this.setFinalStatusOfExecution(executionEntitiesForFailureRerun.getExecution());
 				}
@@ -198,7 +220,8 @@ public class ExecutionAsyncService {
 	@Async
 	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, User user, String executionName,
 			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
-			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded) {
+			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded,
+			boolean isIndividualRepeatExecution) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
 		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
 		try {
@@ -284,7 +307,7 @@ public class ExecutionAsyncService {
 				List<ExecutionResult> executableResultList = new ArrayList<>();
 				if (!applicableScripts.isEmpty()) {
 					executableResultList = handleApplicableScripts(applicableScripts, device, execution,
-							executionDevice);
+							executionDevice, isIndividualRepeatExecution, repeatCount);
 				}
 
 				execResultList.addAll(inValidExecutionResults);
@@ -295,59 +318,50 @@ public class ExecutionAsyncService {
 				UUID executionId = execution.getId();
 				int executedScript = 0;
 
-				for (Script script : applicableScripts) {
-					for (ExecutionResult execRes : executableResultList) {
-						if (this.isExecutionAborted(executionId)) {
-							for (ExecutionResult execResults : executableResultList) {
-								if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
-										|| execResults.getResult() == ExecutionResultStatus.PENDING) {
-									execResults.setResult(ExecutionResultStatus.ABORTED);
-									execResults.setExecutionRemarks("Execution aborted by user");
-									executionResultRepository.save(execResults);
-								}
-							}
-							Execution executionAborted = executionRepository.findById(executionId).orElse(null);
-							executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
-							executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
-							executionRepository.save(executionAborted);
-							LOGGER.info("Execution aborted for device: {}", device.getName());
-							break;
-						}
-
-						if (execRes.getScript().equals(script.getName())) {
-							execRes.setExecutionRemarks("Executing script: " + script.getName() + " on device: "
-									+ device.getName() + " is completed");
-							executionResultRepository.save(execRes);
-
-							boolean executionResult = executeScriptinDevice(script, execution, execRes,
-									executionDevice);
-
-							if (executionResult) {
-								LOGGER.info("Execution result success for {} on device: {}", script.getName(),
-										device.getName());
-							} else {
-								LOGGER.info("Execution result failed for {} on device: {}", script.getName(),
-										device.getName());
-							}
-
-							executedScript++;
-							Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
-							double currentExecTime = System.currentTimeMillis();
-							double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
-							executionCompleted.setExecutedScriptCount(executedScript);
-							executionCompleted.setExecutionTime(executionTime);
-							executionRepository.save(executionCompleted);
-						}
-					}
+				for (ExecutionResult execRes : executableResultList) {
 					if (this.isExecutionAborted(executionId)) {
+						for (ExecutionResult execResults : executableResultList) {
+							if (execResults.getResult() == ExecutionResultStatus.INPROGRESS
+									|| execResults.getResult() == ExecutionResultStatus.PENDING) {
+								execResults.setResult(ExecutionResultStatus.ABORTED);
+								execResults.setExecutionRemarks("Execution aborted by user");
+								executionResultRepository.save(execResults);
+							}
+						}
+						Execution executionAborted = executionRepository.findById(executionId).orElse(null);
+						executionAborted.setExecutionStatus(ExecutionProgressStatus.ABORTED);
+						executionAborted.setResult(ExecutionOverallResultStatus.ABORTED);
+						executionRepository.save(executionAborted);
+						LOGGER.info("Execution aborted for device: {}", device.getName());
 						break;
 					}
+					execRes.setExecutionRemarks(
+							"Executing script: " + execRes.getScript() + " on device: " + device.getName());
+					executionResultRepository.save(execRes);
+					Script script = scriptRepository.findByName(execRes.getScript());
+					boolean executionResult = executeScriptinDevice(script, execution, execRes, executionDevice);
+
+					if (executionResult) {
+						LOGGER.info("Execution result success for {} on device: {}", script.getName(),
+								device.getName());
+					} else {
+						LOGGER.info("Execution result failed for {} on device: {}", script.getName(), device.getName());
+					}
+
+					executedScript++;
+					Execution executionCompleted = executionRepository.findById(executionId).orElse(null);
+					double currentExecTime = System.currentTimeMillis();
+					double executionTime = this.computeTimeDifference(executionStartTime, currentExecTime);
+					executionCompleted.setExecutedScriptCount(executedScript);
+					executionCompleted.setExecutionTime(executionTime);
+					executionRepository.save(executionCompleted);
+
 				}
 
 				Execution finalExecution = executionRepository.findById(executionId).orElse(null);
 
 				if (executableResultList != null) {
-					double realExecTime = this.getRealExcetionTime(executableResultList);
+					double realExecTime = this.getRealExcecutionTime(executableResultList);
 					double roundOfValue = this.roundOfToThreeDecimals(realExecTime);
 					finalExecution.setRealExecutionTime(roundOfValue);
 				}
@@ -358,19 +372,31 @@ public class ExecutionAsyncService {
 				executionRepository.save(finalExecution);
 				Execution finalExecutionStatus = this.setFinalStatusOfExecution(finalExecution);
 
+				if (finalExecutionStatus.getTestType().contains("CI")) {
+					CIRequestDTO request = getCIRequestForRDKPortal(finalExecutionStatus.getId().toString());
+					String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+							+ Constants.TM_CONFIG_FILE;
+					String rdkPortalUrl = commonService.getConfigProperty(new File(configFilePath),
+							Constants.RDK_PORTAL_URL);
+					httpService.sendPostRequest(rdkPortalUrl, request, null);
+
+				}
 				if (isRerunOnFailure && (finalExecutionStatus.getResult() == ExecutionOverallResultStatus.FAILURE)) {
 					List<String> failedScriptName = executableResultList.stream()
 							.filter(result -> result.getResult() == ExecutionResultStatus.FAILURE)
 							.map(ExecutionResult::getScript).toList();
-					List<Script> failedScripts = applicableScripts.stream()
-							.filter(script -> failedScriptName.contains(script.getName())).toList();
+					List<Script> failedScripts = failedScriptName.stream().map(scriptRepository::findByName).toList();
 					if (!failedScripts.isEmpty()) {
 						String rerunExecutionName = currentExecutionName + "_RERUN";
 						LOGGER.info("Starting Rerun due to failure: execution name: {}", rerunExecutionName);
 						prepareAndExecuteMultiScript(device, failedScripts, user, rerunExecutionName, category,
 								testSuiteName, 1, false, isDeviceLogsNeeded, isDiagnosticsLogsNeeded,
-								isPerformanceNeeded);
+								isPerformanceNeeded, isIndividualRepeatExecution);
 					}
+				}
+
+				if (isIndividualRepeatExecution) {
+					break;
 				}
 			}
 		} catch (Exception e) {
@@ -381,6 +407,125 @@ public class ExecutionAsyncService {
 			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
 		}
 		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
+	}
+
+	/**
+	 * Generates a CIRequestDTO for the RDK Portal based on the provided execution
+	 * ID.
+	 *
+	 * @param executionId the ID of the execution to retrieve the CI request for
+	 * @return a CIRequestDTO containing details about the execution, including
+	 *         device and component level details
+	 *
+	 */
+	private CIRequestDTO getCIRequestForRDKPortal(String executionId) {
+		LOGGER.info("Getting CI request for RDK Portal");
+		Execution execution = executionRepository.findById(UUID.fromString(executionId)).orElse(null);
+		String baseUrl = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID=";
+		CIRequestDTO ciRequestDTO = new CIRequestDTO();
+		ciRequestDTO.setService(Constants.TDK_PORTAL_SERVICE);
+		ciRequestDTO.setStarted_at(getEpochTime(execution.getCreatedDate()));
+		ciRequestDTO.setStarted_by("RDKPortal/Jenkins");
+		ciRequestDTO.setStatus(execution.getResult().name());
+		ciRequestDTO.setDuration(getExecutionDurationInEpoch(execution.getExecutionTime()));
+
+		ArrayList<CIResultDTO> ciRequestDTOList = new ArrayList<>();
+		CIResultDTO ciResultDTO = new CIResultDTO();
+		ciResultDTO.setExecutionName(execution.getName());
+
+		ArrayList<CIDeviceDTO> cIDeviceDTOList = new ArrayList<>();
+		ArrayList<Object> systemInfoList = new ArrayList<>();
+		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
+		if (executionDevice != null) {
+			CIDeviceDTO ciDeviceDTO = new CIDeviceDTO();
+			ciDeviceDTO.setDevice(executionDevice.getDevice().getName());
+			ciDeviceDTO.setDeviceType(executionDevice.getDevice().getDeviceType().getName());
+			ciDeviceDTO.setImageName(executionDevice.getBuildName());
+
+			ArrayList<CIComponentLevelDTO> componentLevelDTOList = new ArrayList<>();
+			List<ExecutionResult> executionResults = execution.getExecutionResults();
+
+			Map<String, List<ExecutionResult>> moduleScriptMap = new HashMap<>();
+			for (ExecutionResult result : executionResults) {
+				String moduleName = scriptRepository.findByName(result.getScript()).getModule().getName();
+				moduleScriptMap.computeIfAbsent(moduleName, k -> new ArrayList<>()).add(result);
+			}
+
+			for (Map.Entry<String, List<ExecutionResult>> entry : moduleScriptMap.entrySet()) {
+				String moduleName = entry.getKey();
+				List<ExecutionResult> scriptResults = entry.getValue();
+
+				CIComponentLevelDTO ciComponentLevelDTO = new CIComponentLevelDTO();
+				ciComponentLevelDTO.setModuleName(moduleName);
+				boolean moduleStatus = true;
+				ArrayList<CIScriptDetailsDTO> ciScriptDetailsDTOList = new ArrayList<>();
+				for (ExecutionResult result : scriptResults) {
+					CIScriptDetailsDTO ciScriptDetailsDTO = new CIScriptDetailsDTO();
+					ciScriptDetailsDTO.setScriptName(result.getScript());
+					ciScriptDetailsDTO.setScriptStatus(result.getResult().name());
+					ciScriptDetailsDTO.setLogUrl(baseUrl + result.getId().toString());
+					if (result.getResult().name().equals(ExecutionResultStatus.FAILURE.name())) {
+						moduleStatus = false;
+					}
+
+					ArrayList<CITestInfoDTO> ciTestInfoDTOList = new ArrayList<>();
+					if (moduleName.equals("rdkservices")) {
+						List<ExecutionMethodResult> executionMethodResults = executionMethodResultRepository
+								.findByExecutionResult(result);
+						for (ExecutionMethodResult methodResult : executionMethodResults) {
+							CITestInfoDTO ciTestInfoDTO = new CITestInfoDTO();
+							ciTestInfoDTO.setTestCaseName(methodResult.getFunctionName());
+							ciTestInfoDTO.setTestCaseStatus(methodResult.getActualResult().name());
+							ciTestInfoDTOList.add(ciTestInfoDTO);
+						}
+					}
+					ciScriptDetailsDTO.setTestInfo(ciTestInfoDTOList.isEmpty() ? new ArrayList<>() : ciTestInfoDTOList);
+
+					ciScriptDetailsDTOList.add(ciScriptDetailsDTO);
+				}
+
+				if (moduleStatus) {
+					ciComponentLevelDTO.setModuleStatus(ExecutionResultStatus.SUCCESS.name());
+				} else {
+					ciComponentLevelDTO.setModuleStatus(ExecutionResultStatus.FAILURE.name());
+				}
+				ciComponentLevelDTO.setScriptDetails(ciScriptDetailsDTOList);
+				componentLevelDTOList.add(ciComponentLevelDTO);
+			}
+			ciDeviceDTO.setComponentLevelDetails(componentLevelDTOList);
+			ciDeviceDTO.setSystemLevelDetails(systemInfoList);
+			cIDeviceDTOList.add(ciDeviceDTO);
+		}
+
+		ciResultDTO.setDeviceDetails(cIDeviceDTOList.isEmpty() ? new ArrayList<>() : cIDeviceDTOList);
+		ciRequestDTOList.add(ciResultDTO);
+		ciRequestDTO.setResult(ciRequestDTOList.isEmpty() ? new ArrayList<>() : ciRequestDTOList);
+
+		return ciRequestDTO;
+	}
+
+	/**
+	 * Converts the given execution time in minutes to epoch time in seconds.
+	 *
+	 * @param executionTime the execution time in minutes
+	 * @return the execution time in epoch seconds as a String
+	 */
+	private String getExecutionDurationInEpoch(double executionTime) {
+		// convert double to epoch time
+		long epochTime = (long) (executionTime * 60);
+		return String.valueOf(epochTime);
+
+	}
+
+	/**
+	 * Converts the given Instant to its epoch time in milliseconds as a String.
+	 *
+	 * @param createdDate the Instant to be converted
+	 * @return the epoch time in milliseconds as a String
+	 */
+	private String getEpochTime(Instant createdDate) {
+		return String.valueOf(createdDate.toEpochMilli());
 
 	}
 
@@ -526,6 +671,11 @@ public class ExecutionAsyncService {
 				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
 
 			}
+			
+			if (execution.isDiagnosticLogsNeeded()) {
+				fileTransferService.transferDiagnosisLogs(execution, finalExecutionResult, device);
+			}
+			
 			// transfer crash logs
 			fileTransferService.transferCrashLogs(execution, finalExecutionResult, device);
 
@@ -733,7 +883,7 @@ public class ExecutionAsyncService {
 	 * @param executableResultList
 	 * @return double
 	 */
-	private double getRealExcetionTime(List<ExecutionResult> executableResultList) {
+	private double getRealExcecutionTime(List<ExecutionResult> executableResultList) {
 		double realExecutionTime = 0L;
 		for (ExecutionResult executionResult : executableResultList) {
 			realExecutionTime += executionResult.getExecutionTime();
@@ -796,18 +946,23 @@ public class ExecutionAsyncService {
 	 */
 
 	private List<ExecutionResult> handleApplicableScripts(List<Script> applicableScripts, Device device,
-			Execution execution, ExecutionDevice executionDevice) {
+			Execution execution, ExecutionDevice executionDevice, boolean isIndividualRepeatExecution,
+			int repeatCount) {
+		if (!isIndividualRepeatExecution) {
+			repeatCount = 1;
+		}
 		List<ExecutionResult> executableResultList = new ArrayList<>();
 		for (Script script : applicableScripts) {
-			LOGGER.info("Executing script: {} on device: {}", script.getName(), device.getName());
-
-			ExecutionResult executionResult = new ExecutionResult();
-			executionResult.setDateOfExecution(Instant.now());
-			executionResult.setExecution(execution);
-			executionResult.setScript(script.getName());
-			executionResult.setResult(ExecutionResultStatus.PENDING);
-			executionResultRepository.save(executionResult);
-			executableResultList.add(executionResult);
+			for (int i = 0; i < repeatCount; i++) {
+				LOGGER.info("Executing script: {} on device: {}", script.getName(), device.getName());
+				ExecutionResult executionResult = new ExecutionResult();
+				executionResult.setDateOfExecution(Instant.now());
+				executionResult.setExecution(execution);
+				executionResult.setScript(script.getName());
+				executionResult.setResult(ExecutionResultStatus.PENDING);
+				executionResultRepository.save(executionResult);
+				executableResultList.add(executionResult);
+			}
 		}
 		return executableResultList;
 	}

@@ -199,9 +199,15 @@ public class ScriptService implements IScriptService {
 		try {
 			script.setScriptLocation(scriptLocation);
 			// Set the device types in the script entity
-			List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes(), category);
-			script.setDeviceTypes(deviceTypes);
+			if (scriptCreateDTO.getDeviceTypes() != null && !scriptCreateDTO.getDeviceTypes().isEmpty()) {
+				List<DeviceType> deviceTypes = this.getScriptDevicetypes(scriptCreateDTO.getDeviceTypes(), category);
+				if (null != deviceTypes & !deviceTypes.isEmpty()) {
+					script.setDeviceTypes(deviceTypes);
+
+				}
+			}
 			savedScript = scriptRepository.save(script);
+
 		} catch (ResourceNotFoundException e) {
 			// Let ResourceNotFoundException propagate to the global exception handler
 			LOGGER.error("Device type doesnt exist " + e.getMessage());

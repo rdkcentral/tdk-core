@@ -89,4 +89,9 @@ public class ExecutionTriggerDTO {
 	 * Represents the is diagnostic logs needed.
 	 */
 	private boolean isDiagnosticLogsNeeded;
+
+	/*
+	 * Represents the is individual repeat execution.
+	 */
+	private boolean isIndividualRepeatExecution;
 }

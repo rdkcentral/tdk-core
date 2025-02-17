@@ -88,4 +88,9 @@ public class ExecutionDetailsDTO {
 	 */
 	private boolean isDiagnosticLogsNeeded;
 
+	/*
+	 * Represents the is individual repeat execution.
+	 */
+	private boolean isIndividualRepeatExecution;
+
 }

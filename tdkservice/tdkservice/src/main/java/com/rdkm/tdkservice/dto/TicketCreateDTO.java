@@ -136,12 +136,12 @@ public class TicketCreateDTO {
 	/**
 	 * The user reporting the issue.
 	 */
-	private String jiraUser;
+	private String user;
 
 	/**
 	 * The password of the user reporting the issue.
 	 */
-	private String jiraPassword;
+	private String password;
 
 	/**
 	 * Indicates if the device log is required.

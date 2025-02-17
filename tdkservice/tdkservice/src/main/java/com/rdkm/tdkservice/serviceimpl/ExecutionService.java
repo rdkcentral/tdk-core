@@ -52,6 +52,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.rdkm.tdkservice.config.AppConfig;
 import com.rdkm.tdkservice.dto.ExecutionDetailsDTO;
+import com.rdkm.tdkservice.dto.ExecutionDetailsForHtmlReportDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
@@ -157,6 +158,9 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private IScriptService scriptService;
+
+	@Autowired
+	private AppConfig appConfig;
 
 	/**
 	 * This method is used to trigger the execution of the scripts or test suite
@@ -357,12 +361,12 @@ public class ExecutionService implements IExecutionService {
 			String executionName = getExecutionName(executionDetailsDTO.getExecutionName(), device,
 					executionDetailsDTO.getTestType());
 			isExecutionTriggered = true;
-			responseLogs.append("MultiScript execution triggered on device :").append(device.getName());
+			responseLogs.append("MultiScript execution triggered on device :").append(device.getName()).append("\n");
 			executionAsyncService.prepareAndExecuteMultiScript(device, executionDetailsDTO.getScriptList(),
 					executionDetailsDTO.getUser(), executionName, executionDetailsDTO.getCategory(), null,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isPerformanceLogsNeeded());
+					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
 		}
 
 		// If atleast one script execution is triggered in one box, then return the
@@ -424,7 +428,7 @@ public class ExecutionService implements IExecutionService {
 					executionName, executionDetailsDTO.getCategory(), testSuite.getName(),
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isDiagnosticLogsNeeded());
+					executionDetailsDTO.isDiagnosticLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
 
 		}
 		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
@@ -470,7 +474,7 @@ public class ExecutionService implements IExecutionService {
 					executionName, executionDetailsDTO.getCategory(), Constants.MULTI_TEST_SUITE,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isPerformanceLogsNeeded());
+					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
 		}
 
 		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
@@ -661,6 +665,7 @@ public class ExecutionService implements IExecutionService {
 			}
 
 		}
+		executionDetailsDTO.setIndividualRepeatExecution(executionTriggerDTO.isIndividualRepeatExecution());
 		executionDetailsDTO.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());
 		executionDetailsDTO.setPerformanceLogsNeeded(executionTriggerDTO.isPerformanceLogsNeeded());
 		executionDetailsDTO.setDiagnosticLogsNeeded(executionTriggerDTO.isDiagnosticLogsNeeded());
@@ -1612,8 +1617,9 @@ public class ExecutionService implements IExecutionService {
 			throw new UserInputException("Device selected is not available for execution");
 		}
 
-		List<ExecutionResult> failedResults = executionResultRepository.findByExecutionAndResult(execution,
-				ExecutionResultStatus.FAILURE);
+		List<ExecutionResult> execResults = execution.getExecutionResults();
+		List<ExecutionResult> failedResults = execResults.stream()
+				.filter(result -> result.getResult().equals(ExecutionResultStatus.FAILURE)).toList();
 		if (failedResults.isEmpty() || failedResults == null) {
 			LOGGER.error("No failed scripts found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Failed Scripts", "for Execution ID: " + execId.toString());
@@ -1635,7 +1641,7 @@ public class ExecutionService implements IExecutionService {
 			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts, triggerUser,
 					execName, execution.getCategory().name(), execution.getTestType(), 1, false,
 					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
-					execution.isDiagnosticLogsNeeded());
+					execution.isDiagnosticLogsNeeded(), false);
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);
 		} catch (Exception e) {
 			LOGGER.error("Error re-running failed scripts for execution with id: {}", execId, e);
@@ -2387,6 +2393,52 @@ public class ExecutionService implements IExecutionService {
 		}
 
 		return deviceStatus;
+	}
+
+	/**
+	 * Retrieves the execution details for generating an HTML report based on the
+	 * given execution ID.
+	 *
+	 * @param executionId the unique identifier of the execution
+	 * @return a list of ExecutionDetailsForHtmlReportDTO containing the details of
+	 *         the execution
+	 * @throws ResourceNotFoundException if the execution or execution results are
+	 *                                   not found
+	 */
+	@Override
+	public List<ExecutionDetailsForHtmlReportDTO> getExecutionDetailsForHtmlReport(UUID executionId) {
+		LOGGER.info("Fetching execution details for id: {}", executionId);
+		Execution execution = executionRepository.findById(executionId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", "id" + executionId));
+		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
+		if (executionResults.isEmpty()) {
+			LOGGER.error("No execution results found for execution with id: {}", executionId);
+			throw new ResourceNotFoundException("Execution Results", "for Execution ID: " + executionId.toString());
+		}
+		List<ExecutionDetailsForHtmlReportDTO> executionDetails = new ArrayList<>();
+		for (ExecutionResult executionResult : executionResults) {
+			ExecutionDetailsForHtmlReportDTO executionDetail = new ExecutionDetailsForHtmlReportDTO();
+			executionDetail.setExecutionScriptName(executionResult.getScript());
+			executionDetail.setExecutionStatus(executionResult.getResult().name());
+			executionDetail.setExecutionLogs(getExecutionLogs(executionResult.getId().toString()));
+			executionDetail.setLogLinkUrl(getLogLinkUrl(executionResult.getId().toString()));
+			executionDetails.add(executionDetail);
+		}
+		return executionDetails;
+	}
+
+	/**
+	 * Generates a URL for retrieving execution logs based on the provided execution
+	 * result ID.
+	 *
+	 * @param execResultId the ID of the execution result for which the log link is
+	 *                     to be generated
+	 * @return a string representing the URL to access the execution logs
+	 */
+	private String getLogLinkUrl(String execResultId) {
+		String logLink = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID=" + execResultId;
+		return logLink;
+
 	}
 
 }

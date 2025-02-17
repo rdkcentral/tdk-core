@@ -484,6 +484,8 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 				.collect(Collectors.toList());
 		int count = countRerunExecutions(execution.getName(), executionNames);
+		description.append("Script Name: ").append(script.getName()).append("failed in execution: ")
+                .append(execution.getName()).append("\n\n");
 		description.append("Description:  < PROVIDE ISSUE OVERVIEW >\n\n").append("Test Steps :\n\n")
 				.append("PREREQUISITES : \n\n").append(script.getPrerequisites()).append("\n\n")
 				.append("TEST STEPS :\n\n").append(script.getAutomationApproach()).append("\n\n")
@@ -930,15 +932,15 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			String attachUrl = baseUrl + Constants.ATTACHMENT_API_ENDPOINT;
 			if (ticketCreateDTO.isExecutionLogRequired()) {
 				String execLogMessage = attachExecutionLogs(attachUrl, ticketCreateDTO.getExecutionResultId(),
-						ticketResponse.getTicketNumber(), ticketCreateDTO.getJiraUser(),
-						ticketCreateDTO.getJiraPassword());
+						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(),
+						ticketCreateDTO.getPassword());
 				responseString.append(execLogMessage);
 			}
 
 			if (ticketCreateDTO.isDeviceLogRequired()) {
 				String deviceLogMessage = attachDeviceLogs(attachUrl, ticketCreateDTO.getExecutionResultId(),
-						ticketResponse.getTicketNumber(), ticketCreateDTO.getJiraUser(),
-						ticketCreateDTO.getJiraPassword());
+						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(),
+						ticketCreateDTO.getPassword());
 				responseString.append(deviceLogMessage);
 			}
 
@@ -1104,15 +1106,15 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			String attachUrl = baseUrl + Constants.ATTACHMENT_API_ENDPOINT;
 			if (ticketUpdateDTO.isExecutionLogNeeded()) {
 				String execLogMessage = attachExecutionLogs(attachUrl, ticketUpdateDTO.getExecutionResultId(),
-						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getJiraUser(),
-						ticketUpdateDTO.getJiraPassword());
+						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(),
+						ticketUpdateDTO.getPassword());
 				responseString.append(execLogMessage);
 			}
 
 			if (ticketUpdateDTO.isDeviceLogNeeded()) {
 				String deviceLogMessage = attachDeviceLogs(attachUrl, ticketUpdateDTO.getExecutionResultId(),
-						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getJiraUser(),
-						ticketUpdateDTO.getJiraPassword());
+						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(),
+						ticketUpdateDTO.getPassword());
 				responseString.append(deviceLogMessage);
 			}
 

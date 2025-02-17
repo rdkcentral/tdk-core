@@ -66,10 +66,10 @@ public class TicketUpdateDTO {
 	/**
 	 * The user associated with the ticket.
 	 */
-	private String jiraUser;
+	private String user;
 
 	/**
 	 * The password for the user.
 	 */
-	private String jiraPassword;
+	private String password;
 }

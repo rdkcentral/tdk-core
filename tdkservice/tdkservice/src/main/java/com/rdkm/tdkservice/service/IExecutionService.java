@@ -27,6 +27,7 @@ import java.util.UUID;
 import org.json.JSONObject;
 import org.springframework.core.io.Resource;
 
+import com.rdkm.tdkservice.dto.ExecutionDetailsForHtmlReportDTO;
 import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionListDTO;
 import com.rdkm.tdkservice.dto.ExecutionListResponseDTO;
@@ -298,5 +299,13 @@ public interface IExecutionService {
 	 * @return the JSON object of the device status
 	 */
 	JSONObject getDeviceStatus(String deviceName, String deviceType);
+
+	/**
+	 * This method is used to get the execution details for the HTML report
+	 * 
+	 * @param executionId - the execution ID
+	 * @return the list of execution details for the HTML report
+	 */
+	List<ExecutionDetailsForHtmlReportDTO> getExecutionDetailsForHtmlReport(UUID executionId);
 
 }

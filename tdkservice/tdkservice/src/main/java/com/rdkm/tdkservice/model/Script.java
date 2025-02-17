@@ -131,7 +131,7 @@ public class Script extends BaseEntity {
 	/**
 	 * Objective of the test case
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false,columnDefinition = "TEXT")
 	private String objective;
 
 	/**
@@ -180,7 +180,7 @@ public class Script extends BaseEntity {
 	/**
 	 * Test stub information
 	 */
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String testStubInterface;
 
 	/**
@@ -191,6 +191,7 @@ public class Script extends BaseEntity {
 	/**
 	 * Any specific remarks regarding the script
 	 */
+	@Column( columnDefinition = "TEXT")
 	private String remarks;
 
 	/**

@@ -230,6 +230,41 @@ public class FileTransferService implements IFileService {
 		}
 	}
 
+	public void transferDiagnosisLogs(Execution execution, ExecutionResult executionResult, Device device) {
+		LOGGER.info("Starting transferDiagnosisLogs for the execution: {} and execution result {}", execution.getName(),
+				executionResult.getId().toString());
+		try {
+			File diagnosisLogsPath = new File(
+					AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR +Constants.RDK_DIAGNOSIS_LOG_SCRIPT);
+			String diagnosisLogScriptFilePath = diagnosisLogsPath.getAbsolutePath();
+
+			String[] command = { commonService.getPythonCommandFromConfig(), diagnosisLogScriptFilePath,
+					device.getIp() };
+			String outputData = scriptExecutorService.executeScript(command, 1);
+
+			String baseLogPath = commonService.getBaseLogPath();
+			String diagnosisLogsFilePath = commonService.getDeviceLogsPathForTheExecution(execution.getId().toString(),
+					executionResult.getId().toString(), baseLogPath);
+			if (!new File(diagnosisLogsFilePath).exists()) {
+				new File(diagnosisLogsFilePath).mkdirs();
+			}
+			String diagnosisLogsFileName = executionResult.getScript() + executionResult.getId().toString()
+					+ "_RdkCertificationDiagnosislogs.txt";
+
+			File diagnosisLogsFile = new File(diagnosisLogsFilePath + diagnosisLogsFileName);
+			if (!diagnosisLogsFile.exists()) {
+				diagnosisLogsFile.createNewFile();
+			}
+			BufferedWriter writer = new BufferedWriter(new FileWriter(diagnosisLogsFile));
+			writer.write(outputData);
+			writer.close();
+
+		} catch (Exception e) {
+			LOGGER.error("Error occurred during diagnosis logs transfer script execution: {}", e.getMessage(), e);
+
+		}
+	}
+
 	/**
 	 * This method is to transfer the device logs for TDK enabled devices
 	 * 
@@ -1275,6 +1310,48 @@ public class FileTransferService implements IFileService {
 		}
 
 		return resource;
+	}
+
+	/**
+	 * Retrieves the content of a specified log file associated with a given
+	 * execution result.
+	 *
+	 * @param logFileName       the name of the log file to retrieve.
+	 * @param executionResultID the ID of the execution result associated with the
+	 *                          log file.
+	 * @return the content of the specified log file as a String.
+	 * @throws ResourceNotFoundException if the execution result ID or log file is
+	 *                                   not found.
+	 */
+	@Override
+	public String getAdditionalLogs(String logFileName, String executionResultID) {
+		LOGGER.info("Getting log file names with parameters:executionResId={}", executionResultID);
+		ExecutionResult executionResult = executionResultRepository.findById(UUID.fromString(executionResultID))
+				.orElseThrow(() -> new ResourceNotFoundException("Execution Result ID ", executionResultID));
+		String executionId = executionResult.getExecution().getId().toString();
+		String baselogpath = commonService.getBaseLogPath();
+		String logsDirectory = commonService.getDeviceLogsPathForTheExecution(executionId, executionResultID,
+				baselogpath);
+		String filePath = logsDirectory + Constants.FILE_PATH_SEPERATOR + logFileName + Constants.LOG_FILE_EXTENSION;
+
+		StringBuilder contentBuilder = new StringBuilder();
+		// return the content from the log file
+		File logFile = new File(filePath);
+		if (logFile.exists()) {
+			try (BufferedReader reader = new BufferedReader(new FileReader(logFile))) {
+				String line;
+				while ((line = reader.readLine()) != null) {
+					contentBuilder.append(line).append("\n");
+				}
+			} catch (IOException e) {
+				LOGGER.error("Error reading log file: {}", e.getMessage(), e);
+			}
+		} else {
+			LOGGER.error("Log file not found: {}", logFileName);
+			throw new ResourceNotFoundException("Log file", logFileName);
+		}
+		return contentBuilder.toString();
+
 	}
 
 }

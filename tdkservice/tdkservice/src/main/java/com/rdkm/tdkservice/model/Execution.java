@@ -30,6 +30,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
@@ -149,7 +150,7 @@ public class Execution extends BaseEntity {
 	/*
 	 * Represents the execution results.
 	 */
-	@OneToMany(mappedBy = "execution")
+	@OneToMany(mappedBy = "execution", fetch = FetchType.EAGER)
 	@OrderBy("createdDate ASC")
 	private List<ExecutionResult> executionResults;
 

@@ -539,4 +539,13 @@ public class Constants {
 	// Right Paranthesis
 	public static final String RIGHT_PARENTHESIS = ")";
 
+	// Log file extension
+	public static final String LOG_FILE_EXTENSION = ".log";
+	// TDK portal service name
+	public static final String TDK_PORTAL_SERVICE = "TDK";
+	// RDK portal URL
+	public static final String RDK_PORTAL_URL = "rdkPortalUrl";
+	
+	public static final String RDK_DIAGNOSIS_LOG_SCRIPT = "rdk_cerfiticate_diagnosis.py";
+
 }
