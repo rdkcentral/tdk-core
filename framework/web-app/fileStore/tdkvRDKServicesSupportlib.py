@@ -4117,7 +4117,22 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             if result:
                 info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "SUCCESS" 
+                info["Test_Step_Status"] = "SUCCESS"
+
+        # Maintenance Manager Response result parser steps
+        elif tag == "check_maintenance_activity_status":
+            info = result
+            if str(result.get("success")).lower() == "true" and result.get("maintenanceStatus").lower() == expectedValues[0].lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "get_maintenance_optout_mode":
+            info = result
+            if str(result.get("success")).lower() == "true" and result.get("maintenanceMode").strip().lower() == expectedValues[0].lower() and result.get("optOut").strip().lower() == expectedValues[1].lower():
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
 
         else:
             print("\nError Occurred: [%s] No Parser steps available for %s" %(inspect.stack()[0][3],methodTag))
@@ -4590,6 +4605,15 @@ def CheckAndGenerateConditionalExecStatus(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             configured_ssid_presence = testStepResults[0].get("configured_ssid_presence")
             if str(configured_ssid_presence).lower() == "yes":
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        # MaintenanceMnager Plugin Response result parser steps
+        elif tag == "maintenancemanager_get_maintenance_status":
+            testStepResults = list(testStepResults[0].values())[0]
+            maintenance_status = testStepResults[0].get("maintenanceStatus")
+            if arg[0].lower() == maintenance_status.lower():
                 result = "TRUE"
             else:
                 result = "FALSE"

@@ -1113,6 +1113,25 @@ def CheckAndGenerateEventResult(result,methodTag,arguments,expectedValues):
                     info = eventResult
                     info["Test_Step_Status"] = "FAILURE"
 
+        # Maintenance Manager Events response result parser steps
+        elif tag == "maintenancemanager_check_maintenancestatechange_event":
+            try:
+                result = result[0]
+                status = result.get("maintenanceStatus")
+                info["maintenanceStatus"] = status
+                if status is None:
+                    info["Test_Step_Status"] = "FAILURE"
+                else:
+                    expected_status = str(expectedValues[0]).lower()
+                    actual_status = status.lower()
+                    if actual_status == expected_status:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["Test_Step_Status"] = "FAILURE"
+                print(e)
+
         # Common Events response result parser steps
         elif tag == "check_event_unavailability":
             if len(arg) and arg[0] == "check_empty_event":
