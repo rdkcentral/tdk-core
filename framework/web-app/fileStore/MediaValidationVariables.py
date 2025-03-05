@@ -167,17 +167,31 @@ video_src_url_mp4_hevc_hdr = test_streams_base_path + "TDK_Asset_Waterfall_HDR.M
 video_src_url_hevc_23fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_23fps.mp4"
 video_src_url_hevc_24fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_24fps.mp4"
 video_src_url_hevc_25fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_25fps.mp4"
+video_src_url_hevc_29fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_29fps.mp4"
 video_src_url_hevc_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_30fps_v2.mp4"
 video_src_url_hevc_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_50fps.mp4"
+video_src_url_hevc_59fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_59fps.mp4"
 video_src_url_hevc_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_60fps.mp4"
 
 #AV1 Video URL
 video_src_url_av1_23fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_23fps.mp4"
 video_src_url_av1_24fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_24fps.mp4"
 video_src_url_av1_25fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_25fps.mp4"
+video_src_url_av1_29fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_29fps.mp4"
 video_src_url_av1_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_30fps.mp4"
 video_src_url_av1_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_50fps.mp4"
+video_src_url_av1_59fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_59fps.mp4"
 video_src_url_av1_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_AV1_60fps.mp4"
+
+#VP9 Video URL
+video_src_url_vp9_23fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_23fps.webm"
+video_src_url_vp9_24fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_24fps.webm"
+video_src_url_vp9_25fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_25fps.webm"
+video_src_url_vp9_29fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_29fps.webm"
+video_src_url_vp9_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_30fps.webm"
+video_src_url_vp9_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_50fps.webm"
+video_src_url_vp9_59fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_59fps.webm"
+video_src_url_vp9_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_VP9_60fps.webm"
 
 #MKV Video URL
 video_src_url_4k_mkv = test_streams_base_path + "TDK_Asset_Sunrise_2160p.mkv"
@@ -186,7 +200,10 @@ video_src_url_4k_mkv = test_streams_base_path + "TDK_Asset_Sunrise_2160p.mkv"
 video_src_url_underflow_stream = test_streams_base_path + "TDK_Asset_Sunrise_underflow_stream_v2.mp4"
 
 #Stream with known number of frames for frame Drop test
-video_src_url_mp4_frameDrop = test_streams_base_path + "TDK_Asset_Sunrise_30fps_30secs.mp4"
+video_src_url_mp4_frameDrop_h264 = test_streams_base_path + "TDK_Asset_Sunrise_30fps_30secs.mp4"
+video_src_url_mp4_frameDrop_hevc = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_30fps_30sec_v2.mp4"
+video_src_url_mp4_frameDrop_vp9 = test_streams_base_path + "TDK_Asset_Sunrise_VP9_30fps_30sec.webm"
+video_src_url_mp4_frameDrop_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV1_30fps_30sec.mp4"
 
 #Audio underflow stream
 video_src_url_audio_underflow = test_streams_base_path + "TDK_Asset_Audio_underflow_v2.mp4"
