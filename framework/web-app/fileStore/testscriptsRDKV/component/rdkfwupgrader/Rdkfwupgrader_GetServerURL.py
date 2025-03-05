@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>Rdkfwupgrader_getMetaDataFile</name>
+  <name>Rdkfwupgrader_GetServerURL</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>rdkfwupgrader_getMetaDataFile</primitive_test_name>
+  <primitive_test_name>rdkfwupgrader_GetServerURL</primitive_test_name>
   <!--  -->
   <primitive_test_version>2</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To obtain file list from a test directory via rdkfwupgrader API getMetaDataFile and verify output</synopsis>
+  <synopsis>To pass string with filename and verify output whether it got scanned properly the URL from the file or not.</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -58,25 +58,27 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKFWUPGRADE_18</test_case_id>
-    <test_objective>To obtain file list from a test directory via rdkfwupgrader API getMetaDataFile and verify output</test_objective>
+    <test_case_id>RDKFWUPGRADE_31</test_case_id>
+    <test_objective>To pass string with filename and verify output whether it got scanned properly the URL from the file or not.</test_objective>
     <test_type>Positive</test_type>
     <test_setup>Video Accelerator,RPI</test_setup>
     <pre_requisite></pre_requisite>
-    <api_or_interface_used>getMetaDataFile</api_or_interface_used>
-    <input_parameters>testString</input_parameters>
+    <api_or_interface_used>GetServerUrlFile</api_or_interface_used>
+    <input_parameters>pServUrl - pointer to a char buffer to store the output string
+    szBufSize - the size of the character buffer in argument 1.
+    pFileName - a character pointer to a filename to scan.</input_parameters>
     <automation_approch>1. TM loads the RDK_fwupgradeAgent and SystemUtil via the test agent.
-    2. Using systemutil execute command , create test packages in a test directory
-    3. RDK_fwupgradeAgent will invoke getMetaDataFile API with testString.
+    2. Using systemutil execute command, create a test file along with the test url data.
+    3. RDK_fwupgradeAgent will invoke GetServerUrlFile API with testurl data.
     4. TM will verify the output by having a expected output string and cross verify.
-    5. Delete test packages created using systemutil execute command.
+    5. Delete test file created using systemutil execute command.
     6. TM will return SUCCESS or FAILURE based on the result from the above step.</automation_approch>
-    <expected_output>API must return file names correctly</expected_output>
+    <expected_output>API must scan properly the test url data and return correctly</expected_output>
     <priority>High</priority>
     <test_stub_interface>librdkfwupgraderstub.so.0.0.0</test_stub_interface>
-    <test_script>Rdkfwupgrader_getMetaDataFile</test_script>
+    <test_script>Rdkfwupgrader_GetServerURL</test_script>
     <skipped></skipped>
-    <release_version>M133</release_version>
+    <release_version>M134</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -93,8 +95,8 @@ sysUtilObj = tdklib.TDKScriptingLibrary("systemutil","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Rdkfwupgrader_getMetaDataFile');
-sysUtilObj.configureTestCase(ip,port,'Rdkfwupgrader_getMetaDataFile');
+obj.configureTestCase(ip,port,'Rdkfwupgrader_GetServerURL');
+sysUtilObj.configureTestCase(ip,port,'Rdkfwupgrader_GetServerURL');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -105,54 +107,67 @@ print("System module loading status : %s" %sysUtilLoadStatus);
 #Set the module loading status
 sysUtilObj.setLoadModuleStatus(sysUtilLoadStatus);
 
-#test_dir and test_packages obtained from RdkfwupgraderTestVariables
+#servURL_test_filepath and test_url_data obtained from RdkfwupgraderTestVariables
 
-def createPackages():
+def createTestFile():
     print("\n")
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
-    #Create test directory
-    cmd = "mkdir " + test_dir + " ; "
-    #Create dummy packages for testing
-    for test_package in test_packages:
-        cmd =  cmd + "touch " + test_dir + test_package + " ;"
-    #List files to cross verify package creation
-    cmd = cmd + "ls " + test_dir
+    #Create test config file under tmp dir
+    cmd = "touch " + servURL_test_filepath + " ;"
+    #List files to cross verify the file
+    cmd = cmd + "ls " + servURL_test_filepath;
     tdkTestObj.addParameter("command", cmd);
     tdkTestObj.executeTestCase("SUCCESS");
     details = tdkTestObj.getResultDetails()
-    if "TDK_1_package.json" in details and "TDK_2_package.json" in details:
-        print("Test packages created successfully")
-        tdkTestObj.setResultStatus("SUCCESS");
-        return True
+    if "swupdate.conf" in details:
+        print("Test file created successfully");
+        tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
+        cmd = "echo " + test_url_data + " > " + servURL_test_filepath + " ;"
+        cmd = cmd + "echo " + "$(cat " + servURL_test_filepath + ")"; 
+        tdkTestObj.addParameter("command", cmd);
+        tdkTestObj.executeTestCase("SUCCESS");
+        details = tdkTestObj.getResultDetails().strip().replace(r'\n', '\n');
+        print("details", details);
+        print("test_url_data", test_url_data);
+        if test_url_data in details:
+            print("URL data written successfully to the file");
+            tdkTestObj.executeTestCase("SUCCESS");
+            return True
+        else:
+            print("URL data doesn't written successfully to the file");
+            tdkTestObj.setResultStatus("FAILURE");
+            return False
     else:
-        print("FAILURE: Unable to create Test packages")
+        print("FAILURE: Unable to create Test file");
         tdkTestObj.setResultStatus("FAILURE");
         return False
     
-def deletePackages():
+def deleteTestFile():
     print("\n")
     tdkTestObj = sysUtilObj.createTestStep('ExecuteCommand');
     #Delete test directory
-    cmd = " rm -rf " + test_dir + " ;"
+    cmd = " rm -rf " + servURL_test_filepath + " ;"
     #Command to cross verify if directory is deleted
-    cmd = cmd + 'if [ -d ' + test_dir +' ]; then echo "Directory exists"; else echo "Directory does not exist"; fi'
+    cmd = cmd + 'if [ -d ' + servURL_test_filepath +' ]; then echo "Files exists"; else echo "File does not exist"; fi'
     tdkTestObj.addParameter("command", cmd);
     tdkTestObj.executeTestCase("SUCCESS");
-    details = tdkTestObj.getResultDetails()
-    if "Directory does not exist" in details:
-        print("Test packages deleted successfully\n")
+    details = tdkTestObj.getResultDetails();
+    if "File does not exist" in details:
+        print("Test file deleted successfully\n")
         tdkTestObj.setResultStatus("SUCCESS");
         return True
     else:
-        print("FAILURE: Unable to delete Test packages")
+        print("FAILURE: Unable to delete Test file")
         tdkTestObj.setResultStatus("FAILURE");
         return False
 
 if "SUCCESS" in result.upper() and "SUCCESS" in sysUtilLoadStatus.upper():
-    if createPackages():
+    if createTestFile():
         #Primitive test case which associated to this Script
-        tdkTestObj = obj.createTestStep('rdkfwupgrader_getMetaDataFile');
-        tdkTestObj.addParameter("directory", test_dir)
+        tdkTestObj = obj.createTestStep('rdkfwupgrader_GetServerURL');
+        tdkTestObj.addParameter("filename", servURL_test_filepath);
+        tdkTestObj.addParameter("null_param", 0);
+        tdkTestObj.addParameter("buffer_size", 128);
         tdkTestObj.executeTestCase("SUCCESS");
         #Get the result of execution
         result = tdkTestObj.getResult();
@@ -162,28 +177,18 @@ if "SUCCESS" in result.upper() and "SUCCESS" in sysUtilLoadStatus.upper():
         print("[DETAILS] : \n%s" %details);
 
         if result == "SUCCESS":
-            print ("Successfully  obtained files from ",test_dir);
-            print ("Validating result")
-            files_present = True
-            checkFiles = []
-            for test_package in test_packages:
-                checkString =  test_dir + "/" + test_package
-                checkFiles.append(checkString)
-                if checkString not in details:
-                    print ("ERROR : %s not found in getMetaDataFile result"%(checkString))
-                    files_present = False
-                    tdkTestObj.setResultStatus("FAILURE")
-            if files_present:
-                print("SUCCESS : Validation successfull")
-                tdkTestObj.setResultStatus("SUCCESS")
+            if test_url_data in details: 
+                print("Successfully scans URL from a test file");
+                tdkTestObj.setResultStatus("SUCCESS");
             else:
-                print("FAILURE : Validation unsuccessfull")
-                print("Expected Result : ",checkFiles)
-                print("Actual Result : ",details.splitlines())
+                print ("URL data mismatch b/w the input data and the result");
+                print("Expected Result : ", test_url_data);
+                print("Actual Result : ", details.splitlines());
+                tdkTestObj.setResultStatus("FAILURE");
         else:
-            print ("FAILURE : getMetaDataFile failed")
-            tdkTestObj.setResultStatus("FAILURE")
-        deletePackages();
+            print ("FAILURE : GetServerUrlFile failed");
+            tdkTestObj.setResultStatus("FAILURE");
+        deleteTestFile();
 
     obj.unloadModule("rdkfwupgrader");
     sysUtilObj.unloadModule("systemutil");

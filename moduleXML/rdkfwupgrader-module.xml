@@ -40,6 +40,15 @@
       <function name='TestMgr_rdkfwupdater_get_system_uptime' />
       <function name='TestMgr_rdkfwupdater_getMetaDataFile' />
       <function name='TestMgr_rdkfwupdater_mergeLists' />
+      <function name='TestMgr_rdkfwupdater_GetServerURL' />
+      <function name='TestMgr_rdkfwupdater_GetTimezone' />
+      <function name='TestMgr_rdkfwupdater_GetAdditionalFwVerInfo' />
+      <function name='TestMgr_rdkfwupdater_GetPDRIFileName' />
+      <function name='TestMgr_rdkfwupdater_GetUTCTime' />
+      <function name='TestMgr_rdkfwupdater_GetCapabilities' />
+      <function name='TestMgr_rdkfwupdater_GetPartnerId' />
+      <function name='TestMgr_rdkfwupdater_GetSerialNum' />
+      <function name='TestMgr_rdkfwupdater_GetAccountID' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -66,6 +75,28 @@
       <parameter funName='TestMgr_rdkfwupdater_mergeLists' parameterName='list2' parameterType='STRING' range='A-Z' />
       <parameter funName='TestMgr_rdkfwupdater_mergeLists' parameterName='null_list1' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_rdkfwupdater_mergeLists' parameterName='null_list2' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServerURL' parameterName='filename' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServerURL' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServerURL' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServerURL' parameterName='filename_null_check' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTimezone' parameterName='cpuarch' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTimezone' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTimezone' parameterName='cpuarch_null_param_check' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetTimezone' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetAdditionalFwVerInfo' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetAdditionalFwVerInfo' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPDRIFileName' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPDRIFileName' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetUTCTime' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetUTCTime' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetCapabilities' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetCapabilities' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPartnerId' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPartnerId' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetSerialNum' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetSerialNum' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetAccountID' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetAccountID' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
     </parameters>
   </module>
 </xml>

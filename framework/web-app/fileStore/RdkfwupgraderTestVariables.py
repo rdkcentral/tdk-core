@@ -21,7 +21,7 @@ import json
 # Test Scenario : To vaidate getJRPCTokenData
 # Purpose       : Sample Token to be set as test string
 tokenData = {}
-tokenData[token] = "tdk-1234-test-45678-token-90ABCDEFGHIJ"
+tokenData["token"] = "tdk-1234-test-45678-token-90ABCDEFGHIJ"
 tokenTestString = json.dumps(tokenData)[:-1] + ',"success":true}'
 
 # Test Scenario : To validate getMetaDataFile API
@@ -47,3 +47,8 @@ List2 = " ca-store-update-bundle_package.json lxyupdate-bundle_package.json"
 # Test Scenario : To validate stripinvalidchar APIstripinvalidchar API
 # Purpose       : Test String with control characters and a test string with space in between
 testStringsInvalidChar= [ "A\n", "B\t" , "C\b" , "D\r" , "E\a", "F\f", "G\0", "A B"]
+
+# Test Scenario : To validate GetServerURL API
+# Purpose : Sample config file to write the URL data
+servURL_test_filepath = "/tmp/swupdate.conf"
+test_url_data = "https://testserver.com"

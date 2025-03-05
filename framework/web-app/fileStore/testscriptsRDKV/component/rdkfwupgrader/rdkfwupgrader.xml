@@ -14,6 +14,7 @@
  limitations under the License.
 -->
 <xml>
+<?xml version="1.0" encoding="UTF-8"?><xml>
   <module testGroup="Component" name="rdkfwupgrader">
     <primitiveTests>
       <primitiveTest name="rdkfwupgrader_RunCommand" id=" " version="2">
@@ -22,8 +23,8 @@
           <parameter name="command" value=""/>
           <parameter name="argument" value="NULL"/>
           <parameter name="result_empty" value="0"/>
-	  <parameter name="result_size_empty" value="0"/>
-	  <parameter name="result_size" value="0"/>"
+          <parameter name="result_size_empty" value="0"/>
+          <parameter name="result_size" value="0"/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="rdkfwupgrader_makeHttpHttps" id=" " version="2">
@@ -82,6 +83,52 @@
           <parameter name="list2" value=""/>
           <parameter name="null_list1" value="0"/>
           <parameter name="null_list2" value="0"/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetServerURL" id=" " version="2">
+        <function>TestMgr_rdkfwupdater_GetServerURL</function>
+        <parameters>
+          <parameter name="filename" value=""/>
+          <parameter name="null_param" value=""/>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="filename_null_check" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetTimezone" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetTimezone</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="cpuarch" value=""/>
+          <parameter name="cpuarch_null_param_check" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetAdditionalFwVerInfo" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetAdditionalFwVerInfo</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetPDRIFileName" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetPDRIFileName</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetUTCTime" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetUTCTime</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetCapabilities" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetCapabilities</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>
