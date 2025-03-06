@@ -2687,4 +2687,23 @@
 	<event name="Event_On_AvailableSSIDs" eventName="onAvailableSSIDs" eventId="client.events.1" type="event" desc="Triggered when scan completes or when scan cancelled"/>
 	<event name="Event_On_WiFiStateChange" eventName="onWiFiStateChange" eventId="client.events.1" type="event" desc="Triggered when WIFI connection state get changed"/>
     </plugin>
+
+    <!-- MaintenanceManager Plugin Information -->
+    <plugin pluginName="MaintenanceManager" serviceName="org.rdk.MaintenanceManager" serviceVersion="1">
+        <!-- Method Definitions -->
+	<method name="MaintenanceManager_Get_MaintenanceActivity_Status" api="getMaintenanceActivityStatus" type="method" desc="Gets the maintenance activity status details"/>
+	<method name="MaintenanceManager_Get_Maintenance_StartTime" api="getMaintenanceStartTime" type="method" desc="Gets the scheduled maintenance start time"/>
+	<method name="MaintenanceManager_Get_Maintenance_Mode" api="getMaintenanceMode" type="method" desc="Gets the current maintenance mode and software upgrade opt-out mode which are stored in the persistent location"/>
+	<method name="MaintenanceManager_Set_Maintenance_Mode" api="setMaintenanceMode" type="method" desc="Sets the maintenance mode and software upgrade opt-out mode">
+	    <params>
+                <param tag="maintenanceMode" type="string"/>
+                <param tag="optOut" type="string"/>
+            </params>
+        </method>
+	<method name="MaintenanceManager_Start_Maintenance" api="startMaintenance" type="method" desc="Starts maintenance activities"/>
+	<method name="MaintenanceManager_Stop_Maintenance" api="stopMaintenance" type="method" desc="Stops maintenance activities"/>
+	
+	<!-- Event Definitions -->
+        <event name="Event_On_Maintenance_StatusChange" eventName="onMaintenanceStatusChange" eventId="client.events.1" type="event" desc="Triggered when the maintenance manager status changes"/>
+    </plugin>
 </thunderPlugins>
