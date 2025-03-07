@@ -62,7 +62,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKV_Media_Validation_214</test_case_id>
+    <test_case_id>RDKV_Media_Validation_577</test_case_id>
     <test_objective>Test Script to launch a lightning Video player application via Webkit instance and perform video play operation of 25 fps vp9 content for few minutes, check average fps and close the player</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDKTV,RPI, Accelerator</test_setup>
@@ -162,7 +162,7 @@ if expectedResult in result.upper():
         # Getting the complete test app URL for selected players
         video_test_urls = []
         test_counter = 0
-        players_list = str(MediaValidationVariables.codec_mp4).split(",")
+        players_list = str(MediaValidationVariables.codec_webm).split(",")
         print("SELECTED PLAYERS: ", players_list)
         video_test_urls = getTestURLs(players_list,appArguments)
 

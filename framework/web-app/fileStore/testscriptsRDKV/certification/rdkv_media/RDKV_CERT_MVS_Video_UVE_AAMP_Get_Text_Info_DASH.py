@@ -62,7 +62,7 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKV_Media_Validation_313</test_case_id>
+    <test_case_id>RDKV_Media_Validation_583</test_case_id>
     <test_objective>Test Script to launch a lightning UVE AAMP player application via Webkit instance and perform video play operation of multi text tracks stream, switch to another text track, get the track info and after given duration close the player</test_objective>
     <test_type>Positive</test_type>
     <test_setup>RDKTV,RPI,Accelerator</test_setup>

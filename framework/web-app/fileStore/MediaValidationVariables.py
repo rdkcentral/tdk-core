@@ -327,6 +327,7 @@ dolby_url_type = "dash"
 av1_url_type_fps = "mp4"
 mkv_4k_url_type ="mkv"
 vp9_4k_url_type  = "webm"
+vp9_url_type_fps = "webm"
 
 # direct ogg & webm container streams without ABR (not hls/dash)
 video_src_url_direct_ogg  = test_streams_base_path + "TDK_Asset_Sunrise_OGG.webm"
@@ -342,6 +343,7 @@ video_src_url_dash_segement_template = ""
 video_src_url_multi_audio_tracks = ""
 video_src_url_multi_text_tracks  = ""
 video_src_url_multi_thumbnail_tracks = ""
+video_src_dash_url_multi_text_tracks = ""
 
 # Streams with multiple audio codecs
 #Video URL with AC3 and AAC codec audio
