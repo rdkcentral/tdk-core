@@ -23,17 +23,17 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>Rdkfwupgrader_RunCommand_mfrutil</name>
+  <name>Rdkfwupgrader_GetPDRIFileName_NULL_param</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
-  <primitive_test_name>rdkfwupgrader_RunCommand</primitive_test_name>
+  <primitive_test_name>rdkfwupgrader_GetPDRIFileName</primitive_test_name>
   <!--  -->
   <primitive_test_version>2</primitive_test_version>
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>To Run mfrutil command via rdkfwupgrader API RunCommand and obtain output</synopsis>
+  <synopsis>To pass NULL param to rdkfwupgrader API GetPDRIFileName and verify output</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -58,28 +58,32 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>RDKFWUPGRADE_02</test_case_id>
-    <test_objective>To Run mfrutil command via rdkfwupgrader API RunCommand and obtain output</test_objective>
-    <test_type>Positive</test_type>
+    <test_case_id>RDKFWUPGRADE_44</test_case_id>
+    <test_objective>To pass NULL param to rdkfwupgrader API GetPDRIFileName and verify output</test_objective>
+    <test_type>Negative</test_type>
     <test_setup>Video Accelerator,RPI</test_setup>
     <pre_requisite></pre_requisite>
-    <api_or_interface_used>RunCommand</api_or_interface_used>
-    <input_parameters>emfrutil</input_parameters>
-    <automation_approch>1. TM loads the RDK_fwupgradeAgent via the test agent.
-    2. RDK_fwupgradeAgent will invoke RunCommand API with emfrutil.
-    3. RDK_fwupgradeAgent will return SUCCESS or FAILURE based on the result from the above step.</automation_approch>
-    <expected_output>Should be able to get output from mfrutil</expected_output>
+    <api_or_interface_used>GetPDRIFileName</api_or_interface_used>
+    <input_parameters>pPDRIFilename - pointer to a char buffer to store the output string
+    szBufSize - the size of the character buffer in argument 1.
+    size_t - number of characters copied to the output buffer.</input_parameters>
+    <automation_approch>1. TM loads the RDK_fwupgradeAgent.
+    2. RDK_fwupgradeAgent will invoke GetPDRIFileName API with the NULL param being passed to pPDRIFilename param.
+    3. TM will verify the output by having a expected output as invalid param and verify.
+    4. TM will return SUCCESS or FAILURE based on the result from the above step.</automation_approch>
+    <expected_output>API must do proper NULL check and return the corresponding error code without facing any crash</expected_output>
     <priority>High</priority>
     <test_stub_interface>librdkfwupgraderstub.so.0.0.0</test_stub_interface>
-    <test_script>Rdkfwupgrader_RunCommand_mfrutil</test_script>
+    <test_script>Rdkfwupgrader_GetPDRIFileName_NULL_param</test_script>
     <skipped></skipped>
-    <release_version>M133</release_version>
+    <release_version>M134</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script 
-import tdklib; 
+import tdklib;
+from RdkfwupgraderTestVariables import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkfwupgrader","1");
@@ -88,7 +92,7 @@ obj = tdklib.TDKScriptingLibrary("rdkfwupgrader","1");
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'Rdkfwupgrader_RunCommand_mfrutil');
+obj.configureTestCase(ip,port,'Rdkfwupgrader_GetPDRIFileName_NULL_param');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -97,35 +101,28 @@ obj.setLoadModuleStatus(result);
 
 if "SUCCESS" in result.upper():
     #Primitive test case which associated to this Script
-    tdkTestObj = obj.createTestStep('rdkfwupgrader_RunCommand');
-    command="eMfrUtil"
-    tdkTestObj.addParameter("command", command)
-    argument="--PDRIVersion"
-    tdkTestObj.addParameter("argument",argument)
-
-    #Execute the test case in DUT
+    tdkTestObj = obj.createTestStep('rdkfwupgrader_GetPDRIFileName');
+    tdkTestObj.addParameter("null_param", 1);
+    tdkTestObj.addParameter("buffer_size", 64);
     tdkTestObj.executeTestCase("SUCCESS");
-
     #Get the result of execution
     result = tdkTestObj.getResult();
-    details = tdkTestObj.getResultDetails().replace(r'\n', '\n').strip()
+    details = tdkTestObj.getResultDetails().replace(r'\n', '\n').strip();
 
-    print("[DETAILS] : %s" %details);
-    boxtype = obj.getDeviceBoxType();
+    print("[Expected Result]: FAILURE");
+    print("[Actual Result]: %s" %result);
 
-    #REFPLTV-2632 PDRI Version not supported by RPI4
-    if ((not details) or ("error" in details)) and (boxtype == "RPI-Client"):
-        print("SUCCESS : Empty or error response is expected for RPI4 as PDRI is not supported by platform");
+    if result == "FAILURE" and "crash" not in details:
+        print("SUCCESS : GetPDRIFileName failed as expected for null param")
         tdkTestObj.setResultStatus("SUCCESS")
+    elif "crash" in details:
+        print("FAILURE : GetPDRIFileName crashes when called with null param")
+        tdkTestObj.setResultStatus("FAILURE")
+        obj.initiateReboot();
     else:
-        if all(char.isdigit() or char == '.' for char in details):
-            print ("SUCCESS :PDRI version is obtained as expected")
-            tdkTestObj.setResultStatus("SUCCESS")
-        else:
-            print ("FAILURE : PDRI version is not obtained")
-            tdkTestObj.setResultStatus("FAILURE")
+        print("FAILURE : GetPDRIFileName is success for null param which is not expected")
+        tdkTestObj.setResultStatus("FAILURE")
 
     obj.unloadModule("rdkfwupgrader");
-
 else:
     print ("LOAD MODULE FAILED")

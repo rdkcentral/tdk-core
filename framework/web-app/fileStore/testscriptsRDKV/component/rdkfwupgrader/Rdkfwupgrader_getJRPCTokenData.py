@@ -102,6 +102,7 @@ if "SUCCESS" in result.upper():
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('rdkfwupgrader_getJRPCTokenData');
     #JRPCTokenData obtained from RdkfwupgraderTestVariables
+    print("tokenTestString : ",tokenTestString)
     tdkTestObj.addParameter("string", tokenTestString)
     tdkTestObj.executeTestCase("SUCCESS");
     #Get the result of execution
@@ -111,12 +112,12 @@ if "SUCCESS" in result.upper():
     print("\n[RESULT] : %s" %result);
     print("[DETAILS] : %s" %details);
 
-    if token == details:
-        print ("SUCCESS : Validation success for ",repr(testString));
+    if tokenData["token"] == details:
+        print ("SUCCESS : Validation success for ",repr(tokenTestString));
         tdkTestObj.setResultStatus("SUCCESS")
     else:
         print ("FAILURE : Validation unsuccessfull")
-        print ("Expected test Result : ", token)
+        print ("Expected test Result : ", tokenData["token"])
         print ("Actual test Result : ", details)
         tdkTestObj.setResultStatus("FAILURE")
 
