@@ -292,6 +292,8 @@ public final class Constants
 	private static final String  RDKVXCONFRFC="rdkvxconfrfc";
 	private static final String  RIALTO_CONTAINER="rialto_container";
 	private static final String  FIREBOLT_NATIVE_APPS_COMPLIANCE="firebolt_native_apps_compliance";
+	private static final String  VENDOR_TEST_SUITE="vendor_test_suite";
+
 	
 	private static final String SUCCESS ="SUCCESS";
 	private static final String FAILED ="FAILED";
