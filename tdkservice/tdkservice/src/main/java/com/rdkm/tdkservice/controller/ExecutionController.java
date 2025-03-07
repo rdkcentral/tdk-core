@@ -1251,7 +1251,7 @@ public class ExecutionController {
 	}
 
 	/**
-	 * Endpoint to fetch additional logs for a given execution result.
+	 * Endpoint to fetch additional logs to display in browser for a given execution result.
 	 *
 	 * @param logFileName       the name of the log file to fetch
 	 * @param executionResultID the ID of the execution result for which to fetch
