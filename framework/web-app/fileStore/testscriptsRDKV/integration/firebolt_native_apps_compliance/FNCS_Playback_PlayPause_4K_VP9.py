@@ -1,4 +1,4 @@
-##########################################################################
+#########################################################################
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
@@ -150,6 +150,10 @@ if "SUCCESS" in result.upper():
     tdkTestObj.addParameter("test_url",test_url)
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
+
+    #Disable audio frames validation for wav playback
+    if "checkAudioFPS=no" not in command:
+        command = command + " checkAudioFPS=no ";
 
     print("Executing command in DUT: ", command)
 

@@ -151,6 +151,10 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
 
+    #Disable audio frames validation for wav playback
+    if "checkAudioFPS=no" not in command:
+        command = command + " checkAudioFPS=no ";
+
     print("Executing command in DUT: ", command)
 
     tdkTestObj = obj.createTestStep('executeCmndInDUT') 

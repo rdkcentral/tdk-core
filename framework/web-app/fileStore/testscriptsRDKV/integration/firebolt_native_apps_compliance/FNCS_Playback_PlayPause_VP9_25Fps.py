@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
   <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>FNCS_Playback_Seek_Towards_EOS_with_Pause_MKV</name>
+  <name>FNCS_Playback_PlayPause_VP9_25Fps</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id> </primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,7 +33,7 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Test to do seek operation towards end of the video along with pause operation and verify the End Of Stream message detection </synopsis>
+  <synopsis>Verify play pause for VP9 25 fps video</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
@@ -49,6 +49,7 @@
   <!--  -->
   <box_types>
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
     <box_type>RDKTV</box_type>
     <!--  -->
   </box_types>
@@ -57,42 +58,33 @@
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>FNCS_PLAYBACK_319</test_case_id>
-    <test_objective>Test to do seek operation towards end of the video and verify the End Of Stream message detection</test_objective>
+    <test_case_id>FNCS_PLAYBACK_330</test_case_id>
+    <test_objective>Verify play pause for VP9 25 fps video</test_objective>
     <test_type>Positive</test_type>
-    <test_setup>RDK TV,Video Accelerator, RPI</test_setup>
-    <pre_requisite>1.tdk_mediapipelinetests application should be installed in the DUT
-2. Test stream url for an MKV stream should be updated in the config variable video_src_url_4k_av1_mkv inside MediaValidationVariables.py library inside filestore
+    <test_setup>RDK TV,Video Accelerator</test_setup>
+    <pre_requisite>1.tdk_mediapipelinetests application must be installed in DUT
+2. Test stream url for an DASH stream should be updated in the config variable video_src_url_vp9_25fps inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
-4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time in seconds for which the fastforward operation should be carried out
-5. FIREBOLT_COMPLIANCE_VALIDATE_FULL_PLAYBACK configuration should be set as yes/no in the device config file for advanced playback validation
-6. FIREBOLT_COMPLIANCE_CHECK_PTS configuration should be set as yes/no in the device config file for validating video pts
-7. FIREBOLT_COMPLIANCE_CHECK_FPS configuration should be set as yes/no in the device config file for validating video frames
-8. FIREBOLT_COMPLIANCE_CHECK_AUDIO configuration should be set as yes/no in the device config file for validating audio frames</pre_requisite>
-    <api_or_interface_used>gstreamer-1.0</api_or_interface_used>
-    <input_parameters>testcasename - "test_seek_EOS_with_pause"
-test_url - MKV url from MediaValidationVariables library (MediaValidationVariables.video_src_url_4k_av1_mkv)
+4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time to wait before checking for AV playback</pre_requisite>
+    <api_or_interface_used>Execute the mediapipelinetests application in DUT</api_or_interface_used>
+    <input_parameters>testcasename - "test_playback_fps"
+test_url - DASH url from MediaValidationVariables library (MediaValidationVariables.video_src_url_vp9_25fps)
 "checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
-timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file
-'checkFPS=yes' argument to get the video frames. This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_FPS)
-'checkAudioFPS=yes' - argument to get the audio frames. This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AUDIO)
-'checkPTS=yes' - argument to get the video PTS . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_PTS)
-'validateFullPlayback' - argument for advanced playback validation . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_VALIDATE_FULL_PLAYBACK)</input_parameters>
-    <automation_approch>1.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
-3.Retrieve the video_src_url_4k_av1_mkv variable from MediaValidationVariables library
-4.Construct the tdk_mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout
+timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file</input_parameters>
+    <automation_approch>1.Initiate SSH connection to execute command remotely.
+2.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
+3.Retrieve the video_src_url_vp9_25fps variable from MediaValidationVariables library
+4.Construct the mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout
 5.Execute the command in DUT. During the execution, the DUT will playback av for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds then application exits by closing the pipeline
-6.Video will play and then seek operation will perform.
-7.After that test will detect if EOS message is recived or not.
-8.Verify the output from the execute command and check if the strings "Failures: 0" and "Errors: 0", or "failed: 0" exists in the returned output
-9.Based on the ExecuteCommand() return value and the output returned from the tdk_mediapipelinetests application, TM return SUCCESS/FAILURE status.</automation_approch>
+6.Verify the output from the execute command and check if the strings "Failures: 0" and "Errors: 0", or "failed: 0" exists in the returned output
+7.Based on the ExecuteCommand() return value and the output returned from the mediapipelinetests application, TM return SUCCESS/FAILURE status.</automation_approch>
     <expected_output>1. Verify the API call is success
-Checkpoint 2. Verify that the output returned from tdk_mediapipelinetests contains the strings "Failures: 0" and "Errors: 0", or "failed: 0"</expected_output>
+Checkpoint 2. Verify that the output returned from mediapipelinetests contains the strings "Failures: 0" and "Errors: 0", or "failed: 0"</expected_output>
     <priority>High</priority>
     <test_stub_interface>tdk_mediapipelinetests</test_stub_interface>
-    <test_script>FNCS_Playback_Seek_Towards_EOS_with_Pause_MKV</test_script>
+    <test_script>FNCS_Playback_PlayPause_VP9_25Fps</test_script>
     <skipped>No</skipped>
-    <release_version>M132</release_version>
+    <release_version>M134</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
@@ -108,11 +100,12 @@ obj = tdklib.TDKScriptingLibrary("firebolt_native_apps_compliance","1",standAlon
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'FNCS_Playback_Seek_Towards_EOS_with_Pause_MKV');
+obj.configureTestCase(ip,port,'FNCS_Playback_PlayPause_VP9_25Fps');
 
 #Set device configurations to default values
 checkAVStatus = "no"
 timeoutInSeconds = "10"
+fps = 25
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -122,9 +115,9 @@ expectedResult="SUCCESS"
 if "SUCCESS" in result.upper():
     
     #The test name specifies the test case to be executed from the mediapipeline test suite
-    test_name = "test_seek_EOS_with_pause"
+    test_name = "test_playback_fps"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_4k_av1_mkv
+    test_url = MediaValidationVariables.video_src_url_vp9_25fps
 
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
@@ -150,7 +143,7 @@ if "SUCCESS" in result.upper():
     if expectedResult in actualresult.upper() and timeoutConfigValue != "":
         timeoutInSeconds = timeoutConfigValue
 
-    #Sample command = "mediapipelinetests test_seek_EOS_with_pause <MKV_STREAM_URL> checkavstatus=yes timeout=20"
+    #Sample command = "mediapipelinetests test_playback_fps <DASH_STREAM_URL> checkavstatus=yes timeout=20"
     arguments = {"checkavstatus" : checkAVStatus, "timeout": timeoutInSeconds}
 
     tdkTestObj = obj.createTestStep('getMediaPipelineTestCommand')
@@ -160,6 +153,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
 
+    command = command + " fps=" + str(fps)
     print("Executing command in DUT: ", command)
 
     tdkTestObj = obj.createTestStep('executeCmndInDUT') 
@@ -178,11 +172,11 @@ if "SUCCESS" in result.upper():
 
         if expectedResult in executionStatus:
             tdkTestObj.setResultStatus("SUCCESS")
-            print("Seek operation towards EOS with pause using MKV stream was successfull")
+            print("25Fps video Playback using 'playbin' and 'westeros-sink' was successfull")
             print("Mediapipeline test executed successfully")
         else:
             tdkTestObj.setResultStatus("FAILURE")
-            print("Seek operation towards EOS with pause operation using MKV stream was failed")
+            print("25Fps video Playback using 'playbin' and 'westeros-sink' failed")
     else:
         tdkTestObj.setResultStatus("FAILURE")
         print("Mediapipeline test execution failed")

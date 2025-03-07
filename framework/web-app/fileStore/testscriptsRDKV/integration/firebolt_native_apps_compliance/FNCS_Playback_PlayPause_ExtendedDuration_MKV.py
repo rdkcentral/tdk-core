@@ -94,7 +94,7 @@ import tdklib;
 import MediaValidationVariables
 
 #Test component to be tested
-obj = tdklib.TDKScriptingLibrary("firebolt_native_apps_compliance","1",standAlone=True,checkSSH=True)
+obj = tdklib.TDKScriptingLibrary("firebolt_native_apps_compliance","1",standAlone=True)
 
 #IP and Port of box, No need to change,
 #This will be replaced with corresponding DUT Ip and port while executing script
