@@ -13,11 +13,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
+<div class="container-fluid">
+    <div class="row borders-btm">
+        <div class="col">
+        </div>
+        <div class="col">
+            <h1 class="title"><h1 class="title">Create {{selectedCategoryName}} Script</h1></h1>
+        </div>
+        <div class="col">
+        </div>
+    </div>
     <div class="row mt-1">
         <div class="col-md-12">
-            <mat-card class="card-height">
-                <h1 class="title">Create {{selectedCategoryName}} Script</h1>
                 <mat-horizontal-stepper class="demo-stepper" [linear]="isLinear" #stepper>
                     <mat-step [stepControl]="firstFormGroup">
                         <form [formGroup]="firstFormGroup" >
@@ -259,7 +266,6 @@ limitations under the License.
 
                     </mat-step>
                 </mat-horizontal-stepper>
-            </mat-card>
         </div>
     </div>
 </div>

@@ -159,11 +159,10 @@ public showConfirmPasswordOnPress: boolean = true;
     let emailregex: RegExp = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     this.registerForm = this.fb.group({
       regusername: ['', [Validators.required, Validators.minLength(3)]],
-      regemail: ['', [Validators.required, Validators.pattern(emailregex)]],
+      regemail: ['', [Validators.pattern(emailregex)]],
       displayname: ['', [Validators.required, this.noSpacesValidator]],
       regpassword: ['', [Validators.required, Validators.minLength(6)]],
       retypepassword: ['', Validators.required],
-      usergroup: [''],
       preferCategoty:['', [Validators.required]]
     }, { validators: this.passwordMatchValidator('regpassword', 'retypepassword') })
 
@@ -362,8 +361,7 @@ public showConfirmPasswordOnPress: boolean = true;
           this.location.replaceState('/execution');
         },
         error: (err) => {
-          let errmsg = err.error;
-          this.errorMessage = errmsg;
+          this.errorMessage = err;
           if (this.errorMessage) {
             this.showhideErr = true;
             setTimeout(() => {

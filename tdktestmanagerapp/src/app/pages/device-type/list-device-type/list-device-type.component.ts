@@ -28,7 +28,6 @@ import {
   IMultiFilterParams,
 } from 'ag-grid-community';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 import { ButtonComponent } from '../../../utility/component/ag-grid-buttons/button/button.component';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -51,7 +50,7 @@ export class ListDeviceTypeComponent implements OnInit {
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
   public paginationPageSize = 10;
-  public paginationPageSizeSelector: number[] | boolean = [5, 10, 20, 50];
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   isRowSelected: any;
   selectedRow: any;
@@ -99,11 +98,11 @@ export class ListDeviceTypeComponent implements OnInit {
     menuTabs: ['filterMenuTab'],
   };
   gridOptions = {
-    rowHeight: 35,
+    rowHeight: 36,
   };
   configureName!: string;
 
-  constructor(private http: HttpClient, private router: Router,
+  constructor( private router: Router,
     private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) { }
 
 
@@ -181,8 +180,8 @@ export class ListDeviceTypeComponent implements OnInit {
    * Go back to the previous page.
    */  
   goBack():void {
-    // this.authservice.selectedConfigVal = 'RDKV';
-    // this.authservice.showSelectedCategory = "Video";
+    this.authservice.selectedConfigVal = 'RDKV';
+    this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
 

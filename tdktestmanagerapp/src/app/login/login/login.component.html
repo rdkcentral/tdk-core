@@ -39,7 +39,7 @@ limitations under the License.
                 <label for="regusername" class="col-md-4 col-form-label">User Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="regusername" formControlName="regusername"
-                    placeholder="Enter User Name">
+                    placeholder="Enter user name">
                   <div *ngIf="regSubmitted && registerForm.controls['regusername']?.errors " class="text-danger">
                     <small *ngIf="registerForm.controls['regusername']?.errors?.['required']">Please enter user
                       name.</small>
@@ -53,9 +53,9 @@ limitations under the License.
               </div>
               <div class="row mb-1">
                 <label for="regpassword" class="col-md-4 col-form-label">Password<span style="color:red; margin-left: 0.75em;">*</span></label>
-                <div class="col-md-8">
+                <div class="col-md-8 eye-align">
                   <input type="password" id="regpassword" class="form-control" [type]="showViewPasswordOnPress ? 'password' : 'text'" formControlName="regpassword"
-                    placeholder="Enter Password">
+                    placeholder="Enter password">
                     <span class="registerEyeicon" (click)="viewRegisterPassword()">
                       <i [ngClass]="showViewPasswordOnPress?'bi bi-eye-slash':'bi bi-eye'"></i>
                     </span>
@@ -68,14 +68,14 @@ limitations under the License.
               </div>
               <div class="row mb-1">
                 <label for="retypepassword" class="col-md-4 col-form-label">Retype Password<span style="color:red; margin-left: 0.75em;">*</span></label>
-                <div class="col-md-8">
+                <div class="col-md-8 eye-align">
                   <input type="password" id="retypepassword" class="form-control" [type]="showConfirmPasswordOnPress ? 'password' : 'text'" formControlName="retypepassword"
-                    placeholder="Enter Retype Password">
+                    placeholder="Enter retype password">
                     <span class="confirmEyeicon" (click)="viewConfirmPassword()">
                       <i [ngClass]="showConfirmPasswordOnPress?'bi bi-eye-slash':'bi bi-eye'"></i>
                     </span>
                   <div *ngIf="regSubmitted && registerForm.controls['retypepassword']?.errors" class="text-danger">
-                    <small *ngIf="registerForm.controls['retypepassword']?.errors?.['required']">Please enter
+                    <small *ngIf="registerForm.controls['retypepassword']?.errors?.['required']">Please enter retype
                       password.</small>
                     <small *ngIf="registerForm.controls['retypepassword']?.errors?.['passwordMatchValidator']">Password
                       didn't match.</small>
@@ -83,10 +83,10 @@ limitations under the License.
                 </div>
               </div>
               <div class="row mb-1">
-                <label for="regemail" class="col-md-4 col-form-label">Email<span style="color:red; margin-left: 0.75em;">*</span></label>
+                <label for="regemail" class="col-md-4 col-form-label">Email</label>
                 <div class="col-md-8">
                   <input type="text" id="regemail" class="form-control" formControlName="regemail"
-                    placeholder="Enter Email">
+                    placeholder="Enter email">
                   <div *ngIf="regSubmitted && registerForm.controls['regemail']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['regemail']?.errors?.['required']">Please enter email.</small>
                     <small *ngIf="registerForm.controls['regemail']?.errors?.['pattern']">Please enter valid
@@ -101,30 +101,13 @@ limitations under the License.
                 <label for="displayname" class="col-md-4 col-form-label">Display Name<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
                   <input type="text" class="form-control" id="displayname" formControlName="displayname"
-                    placeholder="Enter Display Name">
+                    placeholder="Enter display name">
                   <div *ngIf="regSubmitted && registerForm.controls['displayname']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['displayname']?.errors?.['required']">Please enter display
                       name.</small>
                   </div>
                 </div>
               </div>
-              <div class="row mb-1">
-                <label for="groupname" class="col-md-4 col-form-label">User Group</label>
-                <div class="col-md-8">
-                  <select class="form-select" aria-label="Default select example" id="usergroup"
-                    formControlName="usergroup">
-                    <option value="" default>Select</option>
-                    @for (item of allGroupName; track $index) {
-                    <option value="{{item}}">{{item}}</option>
-                    }
-                  </select>
-                  <div *ngIf="regSubmitted && registerForm.controls['usergroup']?.errors" class="text-danger">
-                    <small *ngIf="registerForm.controls['usergroup']?.errors?.['required']">Please select user
-                      group.</small>
-                  </div>
-                </div>
-              </div>
-
               <div class="row mb-1">
                 <label for="preferCategoty" class="col-md-4 col-form-label">Prefered Category<span style="color:red; margin-left: 0.75em;">*</span></label>
                 <div class="col-md-8">
@@ -133,7 +116,6 @@ limitations under the License.
                     <option value="" default>Select</option>
                     <option value="RDKV">Video</option>
                     <option value="RDKB">Broadband</option>
-                    <option value="RDKC">Camera</option>
                   </select>
                   <div *ngIf="regSubmitted && registerForm.controls['preferCategoty']?.errors" class="text-danger">
                     <small *ngIf="registerForm.controls['preferCategoty']?.errors?.['required']">Please select prefer categoty.</small>
@@ -159,15 +141,6 @@ limitations under the License.
           <div class="form-container sign-in" *ngIf="signinVisible && currentForm === 'signin'">
 
             <h1 class="title">Sign In</h1>
-            <div class="logingOption text-center">
-              <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                <input type="radio" class="btn-check" name="btnradio" id="usersignin" checked>
-                <label class="btn btn-outline-primary logingOptionlbl" for="usersignin">User Sign In</label>
-
-                <input type="radio" class="btn-check" name="btnradio" id="ldapsignin" disabled>
-                <label class="btn btn-outline-primary logingOptionlbl" for="ldapsignin">LDAP Sign In</label>
-              </div>
-            </div>
             <form [formGroup]="signinForm" (ngSubmit)="onSubmit()" class="signinform">
               <div class="row mb-4">
                 <label for="username" class="col-md-4 col-form-label">User Name</label>
@@ -259,7 +232,7 @@ limitations under the License.
                 <button class="signin" id="login" (click)="toogleForm('signin')">Sign In</button>
               </div>
               <div class="toggle-panel toggle-right">
-                <!-- <p>Register with your personal details to use all of site features</p> -->
+                <p>Register with your details</p>
                 <button class="signup" id="register" (click)="toogleForm('register')">Register</button>
               </div>
             </div>

@@ -17,187 +17,176 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+body,
+*:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.mat-typography h1, 
-.mat-typography h2, 
-.mat-typography h3, 
-.mat-typography h4, 
-.mat-typography h5, 
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4,
+.mat-typography h5,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.container{
-    margin-bottom: 1rem;
-}
-.radiobox-row{
-    border-radius: 10px;
-    box-shadow: 0px 1px 2px #333;
-  }
-.radiobox{
-    display: flex;
-    justify-content: start;
-    align-items: baseline;
-    padding: 0 30px;
-    font-size: 0.78rem;
+
+.main-sec{
+    margin: auto;
 }
 
-.heading{
-    margin-top: 8px;
-    margin-bottom: 0;
-    font-size: 0.8rem;
-    font-weight: 500;
+::ng-deep.form-select:focus,
+.form-control:focus {
+  border-color: gray !important;
+  box-shadow: none !important;
 }
-.rdkgroup{
-    margin-left: 30px;
-    font-weight: 500;
+::ng-deep .ag-theme-quartz .ag-row {
+  border-bottom: 1px solid #dee2e6 !important;
 }
-.rdkradio{
-    border: 2px solid #0e6f87;
+.falvor-row{
+  display: flex;
+  align-items: baseline;
+  margin-top: 5px;
+  padding-left: 0;
 }
-.form-check-inline {
-    margin-right: 2rem;
+.falvor-label{
+  width: 75px;
+  font-size: 0.8rem;
+  font-weight: 500;
 }
-.rdklist{
-    list-style: none;
-    text-decoration: underline;
-    line-height: 2;
-    font-size: 0.9rem;
-    cursor: pointer;
+.rdk-dropdown{
+  width: 120px;
 }
-.rdk2ndlist ,.rdkcommonlist{
-    list-style: none;
-    line-height: 2;
-    font-size: 0.9rem;
-}
-.rdkcommonlist{
-    margin-left: 15px;
-}
-.form-check-input:checked {
-    background-color: #0e6f87;
-    border-color: #0e6f87;
-}
-::ng-deep.form-select:focus, .form-control:focus{
-    border-color: gray !important;
-    box-shadow: none !important;
-}
-::ng-deep .ag-theme-quartz .ag-row{
-    border-bottom: 1px solid #dee2e6 !important;
-}
-.borders-btm{
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px; 
-    margin: 0 0 0 7px;
-    width: 99%;
+
+.borders-btm {
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0 15px;
 }
 .title {
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 10px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
-.btns-grp{
-    display: flex;
-    margin-left: -95px;
+.btns-group{
+  text-align: end;
+  margin-top: 5px;
 }
 
+.seach-row{
+  margin: auto;
+}
 .example-header {
-    margin-bottom: 1px;
-    display: flex;
-    justify-content: flex-start;
-    align-items: baseline;
+  margin-bottom: 1px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: baseline;
+  padding-left: 15px;
 }
-.seach-input{
-    width: 60%;
+.seach-input {
+  width: 45%;
 }
-.download-btn{
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: none;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 15px;
-    box-shadow: 0px 3px 6px #0000005e;
+.download-btn {
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-left: 15px;
+  box-shadow: 0px 3px 6px #0000005e;
 }
-.modal-btns{
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 15px;
+.modal-btns {
+  background-color: #00b2dc;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 15px;
 }
-.download-icon{
-    color: #00B2DC;
-    font-weight: bold;
-    font-size: 18px;
-}
-
-.search{
-    font-size: 0.8rem;
-    display: flex;
-    margin-right: 5px;
-}
-.info-icon{
-    font-size: 20px;
-    color: #00B2DC;
-    margin-left: 8px;
+.download-icon {
+  color: #00b2dc;
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.modal-footer{
-    border-top: none;
-    padding: 1rem 1.45rem 2rem 2rem;
+.search {
+  font-size: 0.8rem;
+  display: flex;
+  margin-right: 5px;
 }
-.custom-modal{
-    max-width: 800px;
-    margin-top: 100px;
+.info-icon {
+  font-size: 20px;
+  color: #00b2dc;
+  margin-left: 8px;
 }
-.modaltitle{
-    margin: 0 10px 0px 10px;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    padding: 10px 5px 5px 5px;
+
+.modal-footer {
+  border-top: none;
+  padding: 1rem 1.45rem 2rem 2rem;
 }
-.custom-title{
-    margin-bottom: 0;
-    font-size: 1rem;
-    color: #06667d;
+.custom-modal {
+  max-width: 800px;
+  margin-top: 100px;
 }
-.btn-grp{
-    position: absolute;
-    text-align: end;
-    right: 100px;
-    top: 35px;
+.modaltitle {
+  margin: 0 10px 0px 10px;
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  padding: 10px 5px 5px 5px;
 }
+.custom-title {
+  margin-bottom: 0;
+  font-size: 1rem;
+  color: #06667d;
+}
+
 .create-btn,
 .back-btn {
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 140px;
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: 1px solid gray;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 140px;
 }
-.icon-size{
-    color: #00B2DC;
-    font-weight: bold;
-    font-size: 18px;
+.icon-size {
+  color: #00b2dc;
+  font-weight: bold;
+  font-size: 18px;
 }
 .back-btn {
-    margin-right: 10px;
+  margin-right: 10px;
 }
-.errorupload{
-    color: #dc3545;
-    font-size: 0.8rem;
+.errorupload {
+  color: #dc3545;
+  font-size: 0.8rem;
 }
+

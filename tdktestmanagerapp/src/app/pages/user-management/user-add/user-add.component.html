@@ -13,13 +13,18 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
-    <div class="row mt-2">
+<div class="container-fluid">
+    <div class="row borders-btm">
+        <div class="col"></div>
+        <div class="col">
+            <h1 class="title">Create User</h1>
+        </div>
+        <div class="col">
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-12">
-            <mat-card class="card-height">
-                <mat-card-content class="card-padding">
-                    <h1 class="title">Create User</h1>
-                    <form [formGroup]="userForm" (ngSubmit)="onuserSubmit()" class="userform mt-5">
+                    <form [formGroup]="userForm" (ngSubmit)="onuserSubmit()" class="userform mt-3">
                         <div class="row">
                             <div class="col">
                                 <div class="row mb-3">
@@ -149,8 +154,6 @@ limitations under the License.
                             </div>
                         </div>
                     </form>
-                </mat-card-content>
-            </mat-card>
         </div>
     </div>
 </div>

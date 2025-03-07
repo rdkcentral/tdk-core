@@ -45,6 +45,7 @@ import {
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridAngular } from 'ag-grid-angular';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-analysis',
@@ -54,7 +55,7 @@ import { AgGridAngular } from 'ag-grid-angular';
   styleUrl: './analysis.component.css',
 })
 export class AnalysisComponent {
-  selectedDfaultCategory!: string;
+  selectedDfaultCategory: string = '';
   categoryName!: string;
   loggedinUser: any;
   userCategory!: string;
@@ -66,6 +67,8 @@ export class AnalysisComponent {
   combinedSubmitted = false;
   combinedForm!: FormGroup;
   selectExecutionName!: string;
+  finalBaseName!: string;
+  compNamesArr:any;
   selectComparisonNames: string = '';
   baseCombinedName!: string;
   CombinedExecutions: string = '';
@@ -121,7 +124,7 @@ export class AnalysisComponent {
       sortable: true,
       tooltipField: 'executionName',
       cellClass: 'selectable',
-      width:265,
+      flex:2,
       cellStyle:{'white-space': 'normal',' word-break': 'break-word'},
       wrapText:true,
       headerClass: 'header-center',
@@ -132,18 +135,18 @@ export class AnalysisComponent {
       field: 'scriptTestSuite',
       filter: 'agTextColumnFilter',
       sortable: true,
-      width:305,
+      flex:2,
       tooltipField: 'scriptTestSuite',
       resizable: false,
       cellRenderer:(params:any)=>{
         const text = params.value || '';
-        if(text.length > 50){
-          return `${text.slice(0,50)}...`;
+        if(text.length > 30){
+          return `${text.slice(0,30)}...`;
         }
         return text;
       },
       cellClass: (params:any)=>{
-        return params.value.length > 50 ? 'text-ellipsis' : 'text-two-line';
+        return params.value.length > 30 ? 'text-ellipsis' : 'text-two-line';
       },
     },
     {
@@ -178,28 +181,26 @@ export class AnalysisComponent {
       cellStyle: { textAlign: "center" },
       sortable: true,
       resizable: false,
-      width:90,
+     flex:1,
       cellClass: 'selectable',
       cellRenderer:(params:any)=>{
         const status = params.value;
         let iconHtml = '';
         switch(status){
           case 'SUCCESS':
-            iconHtml = `<i class="bi bi-check-circle-fill" style="color:green;" title="Success"></i>`;
+            iconHtml = `<span style="color:#5BC866; font-size:0.66rem; font-weight:500;" title="Success">SUCCESS</span>`;
             break;
           case 'FAILURE':
-            iconHtml =  `<i class="bi bi-x-circle-fill" style="color:red;" title="Failure"></i>`;
+            iconHtml = `<span style="color:#F87878; font-size:0.66rem; font-weight:500;" title="Failure">FAILURE</span>`;
             break;
           case 'INPROGRESS':
-            iconHtml =  `<div class="spinner-border spinner-border-sm text-warning" role="status" title="Inprogress">
-                      <span class="visually-hidden">Loading...</span>
-                    </div>`;
+            iconHtml = `<span style=" color:#6460C1; font-size:0.66rem; font-weight:500;" title="Inprogress">INPROGRESS</span>`;
             break;
           case 'ABORTED':
-            iconHtml =  `<i class="bi bi-ban" style="color:red;" title="Aborted"></i>`;
+            iconHtml = `<span style="color:#FFB237; font-size:0.66rem; font-weight:500;" title="Aborted">ABORTED</span>`;
             break;
           case 'PAUSE':
-            iconHtml =  `<i class="bi bi-pause-circle-fill" style="color:gray;" title="Paused"></i>`;
+            iconHtml = `<span style="color:gray; font-size:0.66rem; font-weight:500;" title="Paused">PAUSE</span>`;
             break;
           default:
             return;
@@ -217,6 +218,10 @@ export class AnalysisComponent {
   pageSize = 10;
   pageSizeSelector: number[] | boolean = [10, 20, 30, 50];
   showTable = false;
+  selectedExecutions: any[] = [];
+  selectedExecutionNames: string[] = [];
+  selectionErrorMessage: string = '';
+  showReportBtn = false;
 
   constructor(
     private authservice: AuthService,
@@ -224,20 +229,22 @@ export class AnalysisComponent {
     public baseDialog: MatDialog,
     public comparisonDialog: MatDialog,
     private deviceTypeService: DevicetypeService,
-    private anlysisService:AnalysisService
+    private anlysisService:AnalysisService,
+    private _snakebar: MatSnackBar,
   ) {
     this.loggedinUser = JSON.parse(
       localStorage.getItem('loggedinUser') || '{}'
     );
     this.userCategory = this.loggedinUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
+    this.selectedDfaultCategory = this.loggedinUser.userCategory;
   }
 
   ngOnInit(): void {
     let localcategory = this.preferedCategory
       ? this.preferedCategory
       : this.userCategory;
-    this.categoryChange(localcategory);
+    // this.categoryChange(localcategory);
     this.reportForm = this.fb.group({
       baseName: ['', Validators.required],
       comparisonName: ['', Validators.required],
@@ -248,7 +255,7 @@ export class AnalysisComponent {
         toDate: ['', Validators.required],
         deviceType: ['', Validators.required],
         executionType: ['', Validators.required],
-        category: [this.selectedDfaultCategory, Validators.required],
+        category: [{value:this.selectedDfaultCategory, disabled:true}],
         scriptSingle: [''],
         testSuiteSingke: [''],
       },
@@ -277,10 +284,10 @@ export class AnalysisComponent {
       .getfindallbycategory(this.selectedDfaultCategory)
       .subscribe((res) => {
         this.allDeviceType = JSON.parse(res);
-        console.log(this.allDeviceType);
       });
   }
-  categoryChange(val: string): void {
+  categoryChange(event:any): void {
+    let val = event.target.value;
     if (val === 'RDKB') {
       this.categoryName = 'Broadband';
       this.selectedDfaultCategory = 'RDKB';
@@ -303,7 +310,6 @@ export class AnalysisComponent {
   deviceChange(event: any): void {
     let val = event.target.value;
     this.deviceName = val;
-    console.log(this.deviceName);
   }
   changeExecutionType(event: any): void {
     let val = event.target.value;
@@ -328,37 +334,79 @@ export class AnalysisComponent {
       this.tabName = 'Comparsion Report';
     }
   }
-  reportSubmit(): void {
+  compReportSubmit(): void {
     this.reportSubmitted = true;
     if (this.reportForm.invalid) {
       return;
+    }else{
+      if(this.compNamesArr.includes(this.finalBaseName)){
+        let errorMessage  = 'Base Execution cannot be in the selected for comparision.'
+        this._snakebar.open(errorMessage,'',{
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }else{
+        this.anlysisService.compReportGenerate(this.finalBaseName,this.compNamesArr).subscribe({
+          next:(blob)=>{
+            const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+            const url = window.URL.createObjectURL(xmlBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${this.selectExecutionName}_comparisionreport.xlsx`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          },
+          error:(err)=>{
+          }
+        });
+      }
     }
   }
   openModal() {
     const dialogRef = this.baseDialog.open(BaseModalComponent, {
       width: '85%',
-      height: '90vh',
+      height: '97vh',
       maxWidth: '100vw',
-      panelClass: 'report-modalbox',
-      data: this.tabName,
+      panelClass: 'report-basemodal',
+      data: {
+        tabname:this.tabName,
+        category:this.selectedDfaultCategory
+      }
     });
     dialogRef.afterClosed().subscribe((res) => {
       if (res) {
-        this.selectExecutionName = res;
+        this.finalBaseName = res.executionId;
+        this.selectExecutionName = res.executionName;
+        this.reportForm.patchValue({
+          baseName: this.selectExecutionName
+        });
       }
     });
   }
   comparisonModal() {
     const dialogRef = this.comparisonDialog.open(ComparisonModalComponent, {
       width: '85%',
-      height: '90vh',
+      height: '97vh',
       maxWidth: '100vw',
       panelClass: 'report-modalbox',
-      data: this.tabName,
+      data:  {
+        tabname:this.tabName,
+        category:this.selectedDfaultCategory
+      }
     });
-    dialogRef.afterClosed().subscribe((res: string[]) => {
+    dialogRef.afterClosed().subscribe((res: any[]) => {
       if (res) {
-        this.selectComparisonNames = res.join(', ');
+        const selectedNames = res.map((row:any)=>row.executionName);
+        const selectExecutionId = res.map((row:any)=>row.executionId);
+        this.compNamesArr = selectExecutionId;
+        this.selectComparisonNames = selectedNames.join(', ');
+        this.reportForm.patchValue({
+          comparisonName: this.selectComparisonNames
+        });
       }
     });
   }
@@ -371,11 +419,11 @@ export class AnalysisComponent {
       const locaFromDateTime = this.combinedForm.get('fromDate')?.value;
       const locaToDateTime = this.combinedForm.get('toDate')?.value;
       if (locaFromDateTime) {
-        const utcMoment = moment.tz(locaFromDateTime, moment.tz.guess()).utc();
+        const utcMoment = moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
         this.combinedFromUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
       if (locaToDateTime) {
-        const utcMoment = moment.tz(locaToDateTime, moment.tz.guess()).utc();
+        const utcMoment = moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
         this.combinedToUTC = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
       let obj = {
@@ -387,7 +435,6 @@ export class AnalysisComponent {
         "category": this.selectedDfaultCategory
         
       };
-      console.log(obj);
       this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
         let response = JSON.parse(res);
         if(response){
@@ -398,5 +445,53 @@ export class AnalysisComponent {
         }
       })
     }
+  }
+
+  onSelectionChanged() {
+    this.selectedExecutions = this.gridApi.getSelectedRows();
+    this.updateSelectedExecutionNames();
+  }
+  updateSelectedExecutionNames() {
+    this.selectionErrorMessage = '';
+    if (this.selectedExecutions.length < 2 || this.selectedExecutions.length > 10) {
+      this.selectionErrorMessage = 'Please select between 2 and 10 executions.';
+      this.showReportBtn = false;
+      this.selectedExecutionNames = [];
+      return;
+    }
+    if(this.selectedExecutions.length > 2 || this.selectedExecutions.length <= 10){
+      this.showReportBtn = true;
+    }else{
+      this.showReportBtn = false;
+    }
+    this.selectedExecutionNames = this.selectedExecutions.map(execution => execution.executionId);
+  }
+
+  generateReport():void{
+    if(this.selectedExecutionNames){
+      this.anlysisService.combinnedReportGenerate(this.selectedExecutionNames).subscribe({
+        next:(blob)=>{
+          const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
+          const url = window.URL.createObjectURL(xmlBlob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `CombinedResultExecution.xlsx`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        },
+        error:(err)=>{
+          let errmsg = JSON.parse(err.error);
+          this._snakebar.open(errmsg,'',{
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      });
+    }
+
   }
 }

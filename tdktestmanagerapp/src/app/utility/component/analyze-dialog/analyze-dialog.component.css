@@ -20,11 +20,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 .main-sec{
   width: 100%;
   margin: auto;
-  border: 1px solid gray;
   border-radius: 5px;
-  height: 300px;
+  height: 425px;
   display: flex;
-  align-items: baseline;
+  background-color: #fff;
+  margin-top: 0 !important;
 }
 .all-margin{
   margin-top: 40px;
@@ -32,6 +32,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 .view-title{
     margin-bottom: 0;
     padding-bottom: 0;
+    font-weight: 500;
 }
 .form-select, .form-control{
     font-size: 0.8rem;
@@ -48,7 +49,7 @@ http://www.apache.org/licenses/LICENSE-2.0
   letter-spacing: 0.5px;
   cursor: pointer;
   position: absolute;
-  bottom: 15px;
+  bottom: 2px;
   right: 110px;
   }
   .save-btn:disabled{
@@ -70,8 +71,9 @@ http://www.apache.org/licenses/LICENSE-2.0
     letter-spacing: 0.5px;
     cursor: pointer;
     position: absolute;
-    bottom: 15px;
+    bottom: 55px;
     right: 25px;
+    z-index: 1;
   }
 ::ng-deep .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label{
   color: #06667d !important;
@@ -94,4 +96,46 @@ http://www.apache.org/licenses/LICENSE-2.0
   --ag-header-background-color: rgb(209, 212, 212) !important;
   --ag-background-color: #fff;
   --ag-font-size: 0.78rem;
+}
+.download-btn {
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-left: 15px;
+  box-shadow: 0px 3px 6px #0000005e;
+}
+.create-section{
+  text-align: end;
+  position: absolute;
+  right: 20px;
+  z-index: 10;
+  display: flex;
+}
+/* .project-section{
+  position: absolute;
+  left: 30%;
+  z-index: 10;
+  display: flex;
+  width: 355px;
+} */
+::ng-deep .ag-theme-quartz .ag-cell {
+  white-space: normal !important;
+  word-break: break-word !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 0.75rem !important;
+  text-align: center;
+  text-transform: uppercase;
+}
+::ng-deep .ag-theme-quartz .ag-header-cell-label {
+  text-align: center !important;
+  justify-content: center;
 }

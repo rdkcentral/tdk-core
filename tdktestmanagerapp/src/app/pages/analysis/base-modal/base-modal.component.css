@@ -90,6 +90,8 @@ body,
   font-size: 1rem;
   text-align: center;
   margin-bottom: 10px;
+  font-weight: 500;
+  color: #06667d;
 }
 .main-margin {
   margin: 0;
@@ -106,7 +108,9 @@ body,
     cursor: pointer;
 }
 .confirm-btn{
-    background-color: #00B2DC;
+    margin-right: 100px;
+    margin-top: 15px;
+    /* background-color: #00B2DC;
     color: #fff;
     font-size: 0.8rem;
     padding: 5px 10px;
@@ -114,7 +118,7 @@ body,
     border-radius: 8px;
     font-weight: 500;
     cursor: pointer;
-    margin-left: 10px;
+    margin-left: 10px; */
 }
 ::ng-deep .ag-theme-quartz .ag-checkbox-wrapper .ag-checkbox-input{
     transform: scale(0.5)!important;
@@ -163,7 +167,7 @@ body,
     text-align: center !important;
     justify-content: center;
   }
-  .report-modalbox, .ag-theme-quartz {
+  .report-basemodal, .ag-theme-quartz {
     --ag-header-background-color: rgb(209, 212, 212) !important;
     --ag-background-color: #fff;
     --ag-font-size: 0.78rem;
@@ -174,4 +178,10 @@ body,
   .selectedItem{
     color: #06667d;
     font-weight: 500;
+  }
+  .close-btn{
+    position: absolute;
+    display: inline-block;
+    bottom: 25px;
+    right: 12px;
   }

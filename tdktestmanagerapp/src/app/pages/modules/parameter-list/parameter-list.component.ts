@@ -37,7 +37,6 @@ import { AuthService } from '../../../auth/auth.service';
 import { ModuleButtonComponent } from '../../../utility/component/modules-buttons/button/button.component';
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
-import { ParameterViewComponent } from '../parameter-view/parameter-view.component';
 import { MaterialModule } from '../../../material/material.module';
 
 
@@ -50,8 +49,8 @@ import { MaterialModule } from '../../../material/material.module';
 })
 export class ParameterListComponent {
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   public gridApi!: GridApi;
   public columnDefs: ColDef[] = [
@@ -86,7 +85,6 @@ export class ParameterListComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        onViewClick:this.openModal.bind(this),
         selectedRowCount: () => this.selectedRowCount,
         lastSelectedNodeId: this.lastSelectedNodeId,
       })
@@ -95,6 +93,9 @@ export class ParameterListComponent {
   public defaultColDef: ColDef = {
     flex: 1,
     menuTabs: ['filterMenuTab'],
+  };
+  gridOptions = {
+    rowHeight: 36
   };
   configureName!: string;
   selectedConfig!: string | null;
@@ -205,23 +206,6 @@ export class ParameterListComponent {
         })
       }
     }
-  }
-  /**
-   * Open modal for view the parameters.
-   */
-  openModal(data:any):void{
-    this.dialog.open( ParameterViewComponent,{
-      width: '99%',
-      height: '93vh',
-      maxWidth:'100vw',
-      panelClass: 'custom-modalbox',
-      data:{
-          function : data.function,
-          parameterName : data.parameterName,
-          parameterDataType: data.parameterDataType,
-          parameterRangeVal: data.parameterRangeVal,
-      }
-    })
   }
 
   /**

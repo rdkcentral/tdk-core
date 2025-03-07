@@ -13,102 +13,197 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
-    <div class="row mt-2">
-        <div class="col">
-            <mat-card class="card-height">
-                    <div class="container container-box" id="container-box">
-                        <div class="form-container create-group">
-                            <h1 class="title">Create Parameter</h1>
-                            <form [formGroup]="parameterForm" (ngSubmit)="parameterFormSubmit()" data-bs-spy="scroll">
-                                <div class="row mb-4">
-                                    <label for="paraName" class="col-md-3 col-form-label offset-1">Parameter Name<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="paraName" formControlName="parameterName"
-                                            placeholder="Enter Parameter Name">
-                                        <div *ngIf="paraFormSubmitted && parameterForm.controls['parameterName']?.errors"
-                                            class="text-danger">
-                                            <small
-                                                *ngIf="parameterForm.controls['parameterName']?.errors?.['required']">Please
-                                                enter parameter name.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="parameterType" class="col-md-3 col-form-label offset-1">Parameter Type<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-    
-                                    <div class="col-md-7">
-                                        <select class="form-select" aria-label="Default select example"
-                                            formControlName="parameterType" id="parameterType">
-                                            <option value="" default>Select Parameter Type</option>
-                                            @for (item of parameterType; track $index) {
-                                                <option value="{{item}}">{{item}}</option>
-                                                }
-                                        </select>
-                                        <div *ngIf="paraFormSubmitted && parameterForm.controls['parameterType']?.errors" class="text-danger">
-                                            <small *ngIf="parameterForm.controls['parameterType']?.errors?.['required']">
-                                                please select parameter type.
-                                            </small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="rangeVal" class="col-md-3 col-form-label offset-1">Range Value<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="rangeVal" formControlName="rangeVal"
-                                            placeholder="Enter range value">
-                                        <div *ngIf="paraFormSubmitted && parameterForm.controls['rangeVal']?.errors"
-                                            class="text-danger">
-                                            <small
-                                                *ngIf="parameterForm.controls['rangeVal']?.errors?.['required']">Please
-                                                enter range value.</small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="module" class="col-md-3 col-form-label offset-1">Module<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-    
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="module" formControlName="module"
-                                        placeholder="Enter Function Name" readonly>
-                                    <div *ngIf="paraFormSubmitted && parameterForm.controls['module']?.errors"
-                                        class="text-danger">
-                                        <small
-                                            *ngIf="parameterForm.controls['module']?.errors?.['required']">Please
-                                            enter function name.</small>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="row mb-4">
-                                    <label for="function" class="col-md-3 col-form-label offset-1">Function<span
-                                            style="color:red; margin-left: 0.75em;">*</span></label>
-    
-                                    <div class="col-md-7">
-                                        <input type="text" class="form-control" id="module" formControlName="function"
-                                        placeholder="Enter Function Name" readonly>
-                                    <div *ngIf="paraFormSubmitted && parameterForm.controls['function']?.errors"
-                                        class="text-danger">
-                                        <small
-                                            *ngIf="parameterForm.controls['function']?.errors?.['required']">Please
-                                            enter function name.</small>
-                                    </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="mt-2 createbtn">
-                                        <button type="button" class="back-btn create-btn" (click)="goBack()">Back</button>
-                                        <button type="button" class="back-btn create-btn" (click)="reset()">Reset</button>
-                                        <button type="submit" class="create-btn">Create</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-            </mat-card>
-        </div>
+<div class="container-fluid">
+  <div class="row borders-btm">
+    <div class="col"></div>
+    <div class="col">
+      <h1 class="title">Create Parameter</h1>
     </div>
+    <div class="col"></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <div class="container-box" id="container-box">
+        <div class="form-container create-group">
+          <form
+            [formGroup]="parameterForm"
+            (ngSubmit)="parameterFormSubmit()"
+            data-bs-spy="scroll"
+          >
+            <div class="row mb-4">
+              <label for="paraName" class="col-md-3 col-form-label offset-1"
+                >Parameter Name<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="paraName"
+                  formControlName="parameterName"
+                  placeholder="Enter Parameter Name"
+                />
+                <div
+                  *ngIf="
+                    paraFormSubmitted &&
+                    parameterForm.controls['parameterName']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="parameterForm.controls['parameterName']?.errors?.['required']"
+                    >Please enter parameter name.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <label
+                for="parameterType"
+                class="col-md-3 col-form-label offset-1"
+                >Parameter Type<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+
+              <div class="col-md-7">
+                <select
+                  class="form-select"
+                  aria-label="Default select example"
+                  formControlName="parameterType"
+                  id="parameterType"
+                >
+                  <option value="" default>Select Parameter Type</option>
+                  @for (item of parameterType; track $index) {
+                  <option value="{{ item }}">{{ item }}</option>
+                  }
+                </select>
+                <div
+                  *ngIf="
+                    paraFormSubmitted &&
+                    parameterForm.controls['parameterType']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="parameterForm.controls['parameterType']?.errors?.['required']"
+                  >
+                    please select parameter type.
+                  </small>
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <label for="rangeVal" class="col-md-3 col-form-label offset-1"
+                >Range Value<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="rangeVal"
+                  formControlName="rangeVal"
+                  placeholder="Enter range value"
+                />
+                <div
+                  *ngIf="
+                    paraFormSubmitted &&
+                    parameterForm.controls['rangeVal']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="parameterForm.controls['rangeVal']?.errors?.['required']"
+                    >Please enter range value.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <label for="module" class="col-md-3 col-form-label offset-1"
+                >Module<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="module"
+                  formControlName="module"
+                  placeholder="Enter Function Name"
+                  readonly
+                />
+                <div
+                  *ngIf="
+                    paraFormSubmitted &&
+                    parameterForm.controls['module']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="parameterForm.controls['module']?.errors?.['required']"
+                    >Please enter function name.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row mb-4">
+              <label for="function" class="col-md-3 col-form-label offset-1"
+                >Function<span style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+
+              <div class="col-md-7">
+                <input
+                  type="text"
+                  class="form-control"
+                  id="module"
+                  formControlName="function"
+                  placeholder="Enter Function Name"
+                  readonly
+                />
+                <div
+                  *ngIf="
+                    paraFormSubmitted &&
+                    parameterForm.controls['function']?.errors
+                  "
+                  class="text-danger"
+                >
+                  <small
+                    *ngIf="parameterForm.controls['function']?.errors?.['required']"
+                    >Please enter function name.</small
+                  >
+                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="mt-2 createbtn">
+                <button
+                  type="button"
+                  class="back-btn create-btn"
+                  (click)="goBack()"
+                >
+                  Back
+                </button>
+                <button
+                  type="button"
+                  class="back-btn create-btn"
+                  (click)="reset()"
+                >
+                  Reset
+                </button>
+                <button type="submit" class="create-btn">Create</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

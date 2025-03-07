@@ -34,7 +34,6 @@ import { FormsModule } from '@angular/forms';
 export class ConfigureComponent implements OnInit {
   rdkvVisible = true;
   rdkbVisible = false;
-  rdkcVisible = false;
   privileges!: string | null;
   loggedInUser:any;
   defaultCategory!:string;
@@ -47,35 +46,28 @@ export class ConfigureComponent implements OnInit {
     this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
   }
 
-   /**
-   * Handles the checkbox change event.
-   * @param val - The value of the checkbox.
-   */
-  ischecked(val: any): void {
+  /**
+   * Initializes the component.
+   */ 
+  ngOnInit(): void {
     this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
-    this.categoryChange(val);
+    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.defaultCategory;
+    this.privileges = this.service.getPrivileges();
   }
   /**
    * Handles the radiobutton of category change event.
    * @param val - The value of the radiobutton.
    */
-  categoryChange(val:any){
+  categoryChange(event:any){
+    let val = event.target.value;
     if (val === 'RDKB') {
       this.rdkbVisible = true;
       this.rdkvVisible = false;
-      this.rdkcVisible = false;
       this.service.selectedConfigVal = 'RDKB';
       this.service.showSelectedCategory = "Broadband";
-    } else if (val === 'RDKC') {
-      this.rdkcVisible = true;
-      this.rdkbVisible = false;
-      this.rdkvVisible = false;
-      this.service.selectedConfigVal = 'RDKC';
-      this.service.showSelectedCategory = "Camera";
     } else {
       this.rdkvVisible = true;
       this.rdkbVisible = false;
-      this.rdkcVisible = false;
       this.service.selectedConfigVal = 'RDKV';
       this.service.showSelectedCategory = "Video";
     }
@@ -88,6 +80,9 @@ export class ConfigureComponent implements OnInit {
   navigationToUser(val: any):void {
     if (val === 'groups') {
       this.router.navigate(["configure/create-group"]);
+    }
+    if(val === 'upgrade'){
+      this.router.navigate(["app-upgrade"]);
     }
     if (val === 'usermanagement') {
       this.router.navigate(["configure/user-management"]);
@@ -121,13 +116,5 @@ export class ConfigureComponent implements OnInit {
     }
   }
 
-  /**
-   * Initializes the component.
-   */ 
-  ngOnInit(): void {
-    this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
-    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.defaultCategory;
-    this.categoryChange(this.selectedCategory);
-    this.privileges = this.service.getPrivileges();
-  }
+
 }

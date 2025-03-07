@@ -18,8 +18,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { Component } from '@angular/core';
-import { FooterComponent } from '../../../layout/footer/footer.component';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -58,8 +56,8 @@ export class ListPrimitiveTestComponent {
   lastSelectedNodeId: string | undefined;
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   isRowSelected: any;
   selectedRow: any;
@@ -101,7 +99,10 @@ export class ListPrimitiveTestComponent {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
-
+  gridOptions = {
+    rowHeight: 36
+  };
+  
   constructor(private router: Router, private authservice: AuthService, private _snakebar: MatSnackBar, private service: PrimitiveTestService
   ) { }
 
@@ -231,6 +232,7 @@ export class ListPrimitiveTestComponent {
    */
   goBack() :void{
     this.authservice.selectedConfigVal = 'RDKV';
+    this.authservice.showSelectedCategory = "Video";
     this.router.navigate(["/configure"]);
   }
 

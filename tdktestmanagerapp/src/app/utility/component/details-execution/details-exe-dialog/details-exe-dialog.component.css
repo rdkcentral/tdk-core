@@ -32,6 +32,7 @@ body,
 h1.view-title {
   margin-bottom: 0px;
   padding-bottom: 10px;
+  font-weight: 500;
 }
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface{
   background-color: #F6F6F6 !important;
@@ -50,13 +51,13 @@ h1.view-title {
   width: 100%;
 }
 .details-table tr{
-  border: 1px solid gray;
+  border: 1px solid #ddd;
 }
 .script-table tr{
-  border: 1px solid gray;
+  border: 1px solid #ddd;
 }
 .trend-row{
-  border: 1px solid gray;
+  border: 1px solid #ddd;
   margin: 0px 20px 10px 20px;
 }
 .module-table th, td {
@@ -99,6 +100,7 @@ h1.view-title {
   font-size: 0.8rem;
   padding: 2px 5px 2px 5px;
 }
+
 .script-td{
   border-right: none;
   border-bottom: none;
@@ -272,11 +274,14 @@ h2.summary {
   background-color: green;
   margin-right: 15px;
 }
-.seach-section {
+.seach-section, .refrs-section {
   margin: 0;
   display: flex;
   align-items: center;
   border: 1px solid #d1d4d4;
+}
+.refrs-section{
+  height: 40px;
 }
 .select-filter {
   font-size: 0.8rem;
@@ -296,6 +301,16 @@ h2.summary {
   margin-right: 15px;
   box-shadow: 0px 3px 6px #0000005e;
 }
+.script-btn{
+  background-color: #fff;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 15px;
+  box-shadow: 0px 3px 6px #0000005e;
+}
 .download-icon {
   color: #00b2dc;
   font-weight: bold;
@@ -305,7 +320,7 @@ h2.summary {
   background-color: #00b2dc;
   font-size: 0.8rem;
   padding: 5px 10px;
-  border: 1px solid gray;
+  border: none;
   border-radius: 6px;
   letter-spacing: 0.5px;
   cursor: pointer;
@@ -331,8 +346,10 @@ h2.summary {
   height: auto;
 }
 .log-btn {
-  background-color: transparent;
+  background-color: #dddddd8a;
+  border: 1px solid #ddd;
   margin: 5px 0;
+  box-shadow: 0px 3px 6px #0000005e;
 }
 .total {
   position: absolute;
@@ -417,13 +434,24 @@ background-color: transparent;
   font-size: 0.8rem;
   width: 130px;
 }
-.logs-table{
+.logs-table, .count-table, .time-table{
   width: 100%;
+  display: contents;
+  border: 1px solid #ddd;
 }
+.trend-heading, .count-heading, .time-heading, .logs-heading, .logadd-heading{
+  width: 200px;
+}
+/* .logs-heading{
+  border-right: 1px solid #ddd;
+} */
 .format-text{
   word-break: break-all;
   white-space: pre-wrap;
   overflow-wrap: break-word;
+  height: 420px;
+  overflow-y: auto;
+  display: block;
 }
 .refresh{
   position: absolute;
@@ -527,6 +555,10 @@ background-color: transparent;
   color: #06667d;
   margin-left: 10px;
   cursor: pointer;
+  border: 1px solid #06667d;
+  border-radius: 10px;
+  padding: 5px;
+  text-decoration: none;
 }
 .first{
   padding-left: 3px;
@@ -621,7 +653,8 @@ background-color: transparent;
   width: 230px;
 }
 .excel{
-  color: #008000;
+  height: 20px;
+  width: 20px;
 }
 .xml{
   color: #00b2dc;
@@ -631,4 +664,26 @@ background-color: transparent;
 }
 .dot-icon{
   color: #518c02;
+}
+.row-align{
+  padding-bottom: 4px;
+}
+.close-script{
+  margin-left: 10px;
+}
+.method-panel{
+  background-color: #dddddd8a !important;
+  border: 1px solid #ddd !important;
+}
+.log-link{
+  color: #06667d;
+  text-decoration: underline;
+  cursor: pointer;
+}
+.refresh-btn{
+  background-color: #00b2dc;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  margin-left: 10px;
 }

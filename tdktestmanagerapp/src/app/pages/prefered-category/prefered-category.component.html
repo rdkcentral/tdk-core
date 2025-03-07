@@ -13,12 +13,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
   <div class="container-fluid">
+    <div class="row borders-btm">
+      <div class="col">
+      </div>
+      <div class="col">
+        <h1 class="title">Prefered Category</h1>
+      </div>
+      <div class="col">
+      </div>
+  </div>
     <div class="row">
       <div class="col">
         <div class="parent mt-2 mb-2">
           <div class="container container-box" id="container-box">
             <div class="form-container change-password">
-              <h1 class="title">Prefered Category</h1>
+              <!-- <h1 class="title">Prefered Category</h1> -->
   
               <form [formGroup]="categoryForm" (ngSubmit)="categorySubmit()">
                 <div class="row mb-3 category-row">
@@ -30,7 +39,6 @@ limitations under the License.
                       <option value="" default>Select</option>
                       <option value="RDKV">Video</option>
                       <option value="RDKB">Broadband</option>
-                      <option value="RDKC">Camera</option>
                   </select>
                     <div *ngIf="submitted && categoryForm.controls['catgegory']?.errors" class="text-danger">
                       <small *ngIf="categoryForm.controls['catgegory']?.errors?.['required']">Please select category</small>

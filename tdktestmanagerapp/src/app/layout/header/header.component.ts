@@ -41,10 +41,14 @@ export class HeaderComponent implements OnInit {
   isChecked = false;
   userloggedIn:any;
   currentTheme: string = 'LIGHT';
+  currentRoute = '';
 
   constructor(private loginService: LoginService, private router: Router,private service: AuthService, 
     public themeService: ThemeService) { 
     this.userloggedIn = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+    this.router.events.subscribe(() => {
+      this.currentRoute = this.router.url;
+    });
   }
 
   /**
@@ -120,5 +124,13 @@ export class HeaderComponent implements OnInit {
     this.service.selectedCategory = 'RDKV';
     localStorage.removeItem('scriptCategory');
   }
-
+  navigateTo(route: string) {
+    if (this.router.url === `/${route}`) {
+      this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
+        this.router.navigate([route]);
+      });
+    } else {
+      this.router.navigate([route]);
+    }
+  }
 }

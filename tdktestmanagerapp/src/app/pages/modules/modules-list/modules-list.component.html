@@ -29,28 +29,14 @@ limitations under the License.
             </div>
         </div>
     </div>
-    <!-- <div class="row table-sec mt-2">
-        <div class="col">
-            <button type="button" class="download-btn" (click)="dowloadAllModule()"><i class="bi bi-download download-icon"></i> Download all the {{categoryName}} Module Details</button>
-            <button type="button" class="uploadbtn" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                Upload Module XML File
-              </button>
-        </div>
-        <div class="col text-end">
-            <button class="back-btn" (click)="goBack()">Back</button>
-            <button class="create-btn" (click)="createModule()">Create {{categoryName}}
-                Module
-            </button>
-        </div>
-    </div> -->
     <div class="row table-sec mt-2">
         <div class="ag-table mb-3" style="display: flex; justify-content: center;">
-            <ag-grid-angular style="width: 100%; height: 390px;" [columnDefs]="columnDefs"
+            <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowData]="rowData"
                 [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
                 [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true"
-                 [context]="this"></ag-grid-angular>
+                 [context]="this" [gridOptions]="gridOptions"></ag-grid-angular>
         </div>
     </div>
     <!-- Modal Start-->

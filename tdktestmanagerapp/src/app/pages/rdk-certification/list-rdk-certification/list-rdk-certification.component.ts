@@ -127,17 +127,21 @@ export class ListRdkCertificationComponent {
    * @returns {void}
    */
   ngOnInit(): void {
-    this.service.getallRdkCertifications().subscribe(res => {
-      const certificationNames = JSON.parse(res);
-      this.rowData = certificationNames.map((name: any) => ({ name }));
-    })
+
     this.configureName = this.authservice.selectedConfigVal;
     this.categoryName = this.authservice.showSelectedCategory;
     this.uploadConfigurationForm = new FormGroup({
       uploadConfig: new FormControl<string | null>('', { validators: Validators.required }),
     })
+    this.getAllCerificate();
   }
 
+  getAllCerificate():void{
+    this.service.getallRdkCertifications().subscribe(res => {
+      const certificationNames = JSON.parse(res);
+      this.rowData = certificationNames.map((name: any) => ({ name }));
+    })
+  }
   /**
    * Event handler for when the grid is ready.
    * 

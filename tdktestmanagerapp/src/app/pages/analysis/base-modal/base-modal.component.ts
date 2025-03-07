@@ -34,6 +34,8 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import moment from 'moment-timezone';
+import { DevicetypeService } from '../../../services/devicetype.service';
+import { AnalysisService } from '../../../services/analysis.service';
 
 @Component({
   selector: 'app-base-modal',
@@ -154,21 +156,19 @@ public columnDefs: ColDef[] = [
           let iconHtml = '';
           switch(status){
             case 'SUCCESS':
-              iconHtml = `<i class="bi bi-check-circle-fill" style="color:green;" title="Success"></i>`;
+              iconHtml = `<span style="color:#5BC866; font-size:0.66rem; font-weight:500;" title="Success">SUCCESS</span>`;
               break;
             case 'FAILURE':
-              iconHtml =  `<i class="bi bi-x-circle-fill" style="color:red;" title="Failure"></i>`;
+              iconHtml = `<span style="color:#F87878; font-size:0.66rem; font-weight:500;" title="Failure">FAILURE</span>`;
               break;
             case 'INPROGRESS':
-              iconHtml =  `<div class="spinner-border spinner-border-sm text-warning" role="status" title="Inprogress">
-                        <span class="visually-hidden">Loading...</span>
-                      </div>`;
+              iconHtml = `<span style=" color:#6460C1; font-size:0.66rem; font-weight:500;" title="Inprogress">INPROGRESS</span>`;
               break;
             case 'ABORTED':
-              iconHtml =  `<i class="bi bi-ban" style="color:red;" title="Aborted"></i>`;
+              iconHtml = `<span style="color:#FFB237; font-size:0.66rem; font-weight:500;" title="Aborted">ABORTED</span>`;
               break;
             case 'PAUSE':
-              iconHtml =  `<i class="bi bi-pause-circle-fill" style="color:gray;" title="Paused"></i>`;
+              iconHtml = `<span style="color:gray; font-size:0.66rem; font-weight:500;" title="Paused">PAUSE</span>`;
               break;
             default:
               return;
@@ -182,130 +182,42 @@ public columnDefs: ColDef[] = [
       sortable:true,
       headerClass: 'header-center',
     };
-    selectedRowName: string | null = null;
+    selectedBaseRow: any;
+    baseModalName:string | null = null;
     pageSize = 10;
     pageSizeSelector: number[] | boolean = [10, 20, 30, 50];
     fromUTCTime!:string;
     toUTCTime!: string;
+    selectedDfaultCategory!:string;
+    allDeviceType:any;
+    deviceName!: string;
+    showScript = false;
+    testSuiteShow = false;
+    executionTypeName!: string;
+    showTable = false;
 
-    constructor(private authservice: AuthService, private fb: FormBuilder,
-      public dialogRef: MatDialogRef<BaseModalComponent>,@Inject(MAT_DIALOG_DATA) public data: any 
+    constructor( private fb: FormBuilder,private deviceTypeService: DevicetypeService,
+      public dialogRef: MatDialogRef<BaseModalComponent>,@Inject(MAT_DIALOG_DATA) public data: any ,
+      private anlysisService:AnalysisService,
     ) { 
+      
       }
   
     ngOnInit(): void {
+      this.selectedDfaultCategory = this.data.category;
       this.filterForm = this.fb.group({
         fromDate:['', Validators.required],
         toDate:['', Validators.required],
         deviceType:['', Validators.required],
         scriptType:['', Validators.required],
-        category:['', Validators.required]
+        category:[{ value: this.data.category, disabled: true }],
+        scriptSingle: [''],
+        testSuiteSingke: [''],
       },
       {
         validators: this.dateRangeValidator
       });
-      this.rowData = [
-        {
-            "executionId": "018665c5-b5a9-465a-b157-e1c7d5015c53",
-            "executionName": "Amlogic_Amlogic_CI_012725095848",
-            "executionDate": "2025-01-27T09:58:55Z",
-            "scriptTestSuite": "RDKV_CERT_PVS_Apps_TimeTo_Video_PlayPause_4K_AV1",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "20a9f9cb-028b-409a-a5e8-2534ab652fe2",
-            "executionName": "Amlogic_Amlogic_CI_012725095604",
-            "executionDate": "2025-01-27T09:56:10Z",
-            "scriptTestSuite": "RDKV_CERT_PVS_Functional_ResidentApp_TimeTo_Launch",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "20172fdf-60a0-421c-8a5e-1c18f1728edc",
-            "executionName": "Amlogic_Amlogic_CI_012725094739",
-            "executionDate": "2025-01-27T09:48:16Z",
-            "scriptTestSuite": "RDKV_CERT_PVS_Functional_HtmlApp_TimeTo_SuspendResume",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "b78f45af-9a53-422a-851b-f310f58ca347",
-            "executionName": "Amlogic_Amlogic_CI_012725094202",
-            "executionDate": "2025-01-27T09:42:09Z",
-            "scriptTestSuite": "RDKV_CERT_PVS_Functional_Check_FailedServices",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "9dd2f859-c62b-49aa-a739-9b9a3b806f8a",
-            "executionName": "Amlogic_Amlogic_CI_012725093322",
-            "executionDate": "2025-01-27T09:33:33Z",
-            "scriptTestSuite": "RDKV_Memcr_Check_Service_Status",
-            "device": "AMLOGIC_TDKCI",
-            "status": "SUCCESS",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "4a383dba-377c-48c8-8660-07c94685cbac",
-            "executionName": "Amlogic_Amlogic_CI_012725092637",
-            "executionDate": "2025-01-27T09:26:47Z",
-            "scriptTestSuite": "RDKV_CERT_PACS_Cobalt_PlayPause_Hibernate_Restore",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "aa0c47c8-8795-4123-83ea-f8a4f3608fc3",
-            "executionName": "Amlogic_Amlogic_CI_012725090629",
-            "executionDate": "2025-01-27T09:06:36Z",
-            "scriptTestSuite": "RDKV_CERT_PACS_Cobalt_PlayPause_Hibernate_Restore",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "5cf1cda4-5137-46ae-b48d-cde81df4c96e",
-            "executionName": "Amlogic_Amlogic_CI_012725085649",
-            "executionDate": "2025-01-27T08:57:04Z",
-            "scriptTestSuite": "RDKV_CERT_PACS_Cobalt_PlayPause_Hibernate_Restore",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "81122d78-b2fe-46c8-9d04-1539da11fd6e",
-            "executionName": "Amlogic_Amlogic_CI_012725084251",
-            "executionDate": "2025-01-27T08:43:06Z",
-            "scriptTestSuite": "RDKV_CERT_PACS_Cobalt_PlayPause_Hibernate_Restore",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        },
-        {
-            "executionId": "c9ef567e-2fca-4cb9-b767-ccf1cc2c3671",
-            "executionName": "Amlogic_Amlogic_CI_012725080452",
-            "executionDate": "2025-01-27T08:05:10Z",
-            "scriptTestSuite": "RDKV_CERT_AVS_XCast",
-            "device": "AMLOGIC_TDKCI",
-            "status": "FAILURE",
-            "user": "admin",
-            "abortNeeded": false
-        }
-    ];
+      this.getDeviceByCategory();
     }
     dateRangeValidator(group: AbstractControl):{[key:string]:any}| null{
       const fromDate = group.get('fromDate')?.value;
@@ -315,6 +227,32 @@ public columnDefs: ColDef[] = [
         return diff > 30 ? {maxDaysExceeded: true}:null;
       }
       return null;
+    }
+
+    getDeviceByCategory(): void {
+      this.deviceTypeService
+        .getfindallbycategory(this.selectedDfaultCategory)
+        .subscribe((res) => {
+          this.allDeviceType = JSON.parse(res);
+        });
+    }
+    deviceChange(event: any): void {
+      let val = event.target.value;
+      this.deviceName = val;
+    }
+    changeExecutionType(event: any): void {
+      let val = event.target.value;
+      this.executionTypeName = val;
+      if (this.executionTypeName === 'SINGLESCRIPT') {
+        this.showScript = true;
+      } else {
+        this.showScript = false;
+      }
+      if (this.executionTypeName === 'TESTSUITE') {
+        this.testSuiteShow = true;
+      } else {
+        this.testSuiteShow = false;
+      }
     }
   /**
    * Event handler for when the grid is ready.
@@ -326,9 +264,10 @@ public columnDefs: ColDef[] = [
   onrowSelected():void{
     const selectedNodes = (this.gridApi as any).getSelectedNodes();
     if(selectedNodes.length > 0){
-      this.selectedRowName = selectedNodes[0].data.executionName;
+      this.selectedBaseRow = selectedNodes[0].data;
+      this.baseModalName = this.selectedBaseRow.executionName
       } else{
-      this.selectedRowName = null;
+      this.selectedBaseRow = null;
     }
   }
   close():void{
@@ -343,17 +282,37 @@ public columnDefs: ColDef[] = [
       const locaToDateTime = this.filterForm.get('toDate')?.value;
       
       if(locaFromDateTime){
-        const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).utc();
+        const utcMoment =  moment.tz(locaFromDateTime, moment.tz.guess()).startOf('day');
         this.fromUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
       if(locaToDateTime){
-        const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).utc();
+        const utcMoment =  moment.tz(locaToDateTime, moment.tz.guess()).endOf('day');
         this.toUTCTime = utcMoment.format('YYYY-MM-DDTHH:mm:ss[Z]');
       }
+      let obj = {
+        "startDate": this.fromUTCTime,
+        "endDate": this.toUTCTime,
+        "executionType": this.executionTypeName,
+        "scriptTestSuite": '',
+        "deviceType": this.deviceName,
+        "category": this.selectedDfaultCategory
+        
+      };
+      this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
+        let response = JSON.parse(res);
+        if(response){
+          this.rowData = response;
+          this.showTable = true;
+        }else{
+          this.showTable = false;
+        }
+      })
+
+
     }
   }
 
   onConfirm():void{
-    this.dialogRef.close(this.selectedRowName);
+    this.dialogRef.close(this.selectedBaseRow);
   }
 }

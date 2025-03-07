@@ -17,61 +17,71 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-body, *:not(.material-icons) {
-    font-family: Roboto, "Helvetica Neue", sans-serif;
+body,
+*:not(.material-icons) {
+  font-family: Roboto, "Helvetica Neue", sans-serif;
 }
-.mat-typography h1, 
-.mat-typography h2, 
-.mat-typography h3, 
-.mat-typography h4, 
-.mat-typography h5, 
+.mat-typography h1,
+.mat-typography h2,
+.mat-typography h3,
+.mat-typography h4,
+.mat-typography h5,
 .mat-typography h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-.container{
-    margin-bottom: 1rem;
+.borders-btm {
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0 15px;
 }
 .title {
-    font-size: 1rem;
-    text-align: center;
-    padding: 5px 0 5px 0;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    margin: 0 25px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
-
 .userform {
-    margin-left: 25px;
-    margin-right: 25px;
+  margin-left: 25px;
+  margin-right: 25px;
 }
 
 .container-box form {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 20px 18%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 20px 18%;
 }
 .create-btn,
 .reset-btn {
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 8px 20px;
-    border: 1px solid transparent;
-    border-radius: 8px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 10px;
+  background-color: #00b2dc;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 8px 20px;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
 .reset-btn {
-    margin-right: 10px;
+  margin-right: 10px;
 }
-.createbtn{
-    text-align: center;
+.createbtn {
+  text-align: center;
 }
-::ng-deep.form-select:focus, .form-control:focus{
-    border-color: gray !important;
-    box-shadow: none !important;
+::ng-deep.form-select:focus,
+.form-control:focus {
+  border-color: gray !important;
+  box-shadow: none !important;
 }

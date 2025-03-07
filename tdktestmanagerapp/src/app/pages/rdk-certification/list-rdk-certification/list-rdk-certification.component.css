@@ -18,125 +18,143 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 .container-fluid {
-    margin-bottom: 1rem;
+  margin-bottom: 1rem;
 }
 
 .header {
-    background-color: #0e6f87;
-    color: #fff;
-    height: 60px;
-    box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
+  background-color: #0e6f87;
+  color: #fff;
+  height: 60px;
+  box-shadow: 5px 5px 5px rgb(1 38 69 / 33%);
 }
 
 .apptitle {
-    color: #fff;
-    font-size: 1rem !important;
-    font-weight: 500;
-    margin-left: 15px;
+  color: #fff;
+  font-size: 1rem !important;
+  font-weight: 500;
+  margin-left: 15px;
 }
-
 .borders-btm {
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  margin: 0 15px;
 }
-
 .title {
-    font-size: 1rem;
-    text-align: center;
-    margin-bottom: 10px;
+  font-size: 1rem;
+  text-align: center;
+  font-weight: 500;
+  margin-top: 5px;
+  margin-bottom: 10px;
 }
-
-.btns-grp {
-    display: flex;
-    margin-left: -100px;
+.btns-group {
+  text-align: end;
+  margin-top: 5px;
 }
-
 .groupListTitle {
-    color: #00273F;
-    font-size: 1rem;
-    text-align: center;
-    padding: 0 0 0 0;
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
+  color: #00273f;
+  font-size: 1rem;
+  text-align: center;
+  padding: 0 0 0 0;
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
 }
 
 .create-btn,
 .back-btn {
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 140px;
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  box-shadow: 0px 3px 6px #0000005e;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
 }
 
 .download-btn {
-    background-color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 15px;
+  background-color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  box-shadow: 0px 3px 6px #0000005e;
+  border-radius: 6px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 15px;
 }
 
 .modal-btns {
-    background-color: #00B2DC;
-    color: #fff;
-    font-size: 0.8rem;
-    padding: 5px 15px;
-    border: 1px solid gray;
-    border-radius: 6px;
-    letter-spacing: 0.5px;
-    cursor: pointer;
-    margin-right: 15px;
+  background-color: #00b2dc;
+  color: #fff;
+  font-size: 0.8rem;
+  padding: 5px 15px;
+  border: none;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  margin-right: 15px;
 }
-
+.table-sec {
+  margin: auto;
+}
 .modal-footer {
-    border-top: none;
-    padding: 1rem 1.45rem 2rem 2rem;
+  border-top: none;
+  padding: 1rem 1.45rem 2rem 2rem;
 }
 
 .custom-modal {
-    max-width: 800px;
-    margin-top: 100px;
+  max-width: 800px;
+  margin-top: 100px;
 }
 
 .modaltitle {
-    margin: 0 10px 0px 10px;
-    border-image: linear-gradient(to right, rgb(0, 178, 220) 25%, rgb(253, 183, 59) 25%, rgb(253, 183, 59) 50%, rgb(146, 200, 73) 50%, rgb(146, 200, 73) 75%, rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
-    padding: 10px 5px 5px 5px;
+  margin: 0 10px 0px 10px;
+  border-image: linear-gradient(
+    to right,
+    rgb(0, 178, 220) 25%,
+    rgb(253, 183, 59) 25%,
+    rgb(253, 183, 59) 50%,
+    rgb(146, 200, 73) 50%,
+    rgb(146, 200, 73) 75%,
+    rgb(245, 130, 51) 75%
+  );
+  border-image-slice: 1;
+  border-image-width: 0px 0px 4px 0px;
+  padding: 10px 5px 5px 5px;
 }
 
 .custom-title {
-    margin-bottom: 0;
-    font-size: 1rem;
+  margin-bottom: 0;
+  font-size: 1rem;
 }
 
 .download-icon {
-    color: #00B2DC;
-    font-weight: bold;
-    font-size: 18px;
+  color: #00b2dc;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .icon-size {
-    color: #00B2DC;
-    font-weight: bold;
-    font-size: 18px;
+  color: #00b2dc;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 .back-btn {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .btns-grp[_ngcontent-ng-c3306316013] {
-    margin-left: -101px !important;
+  margin-left: -101px !important;
 }

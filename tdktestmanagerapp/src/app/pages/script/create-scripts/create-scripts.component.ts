@@ -338,12 +338,7 @@ getAlldeviceType(): void{
   onCodeChange(value: string) :void{
     let val = value;
   }
-  /**
-   * Navigate to sscript page
-   */ 
-  back():void{
-    this.router.navigate(["/script"]);
-  }
+
   updateOptionalLabel() :void{
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
@@ -357,7 +352,7 @@ getAlldeviceType(): void{
         synopsis : this.firstFormGroup.value.synopsis,
         executionTimeOut : this.firstFormGroup.value.executiontimeout,
         primitiveTestName: this.defaultPrimitive,
-        deviceTypes: this.deviceNameArr,
+        deviceTypes: this.firstFormGroup.value.devicetype,
         skipExecution:this.firstFormGroup.value.skipexecution,
         longDuration:this.firstFormGroup.value.longdurationtest,
         testId: this.secondFormGroup.value.testcaseID,
@@ -403,6 +398,7 @@ getAlldeviceType(): void{
    * Navigate to script page
    */ 
   goBack():void{
+    localStorage.removeItem('category');
     this.router.navigate(["/script"]);
   }
 

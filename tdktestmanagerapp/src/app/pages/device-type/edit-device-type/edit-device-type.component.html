@@ -14,12 +14,20 @@ limitations under the License.
 -->
 
 <div class="container-fluid mb-3">
+    <div class="row borders-btm">
+        <div class="col">
+        </div>
+        <div class="col">
+          <h1 class="title">Update {{categoryName}} Device Type</h1>
+        </div>
+        <div class="col">
+        </div>
+    </div>
     <div class="row">
         <div class="col">
-            <div class="parent mt-2">
-                <div class="container container-box" id="container-box">
+            <div class="parent">
+                <div class="container-box" id="container-box">
                     <div class="form-container create-group">
-                        <h1 class="title">Update {{categoryName}} Device Type</h1>
                         <form [formGroup]="updateDeviceTypeForm" (ngSubmit)="updateDeviceType()" data-bs-spy="scroll">
                             <div class="row mb-4">
                                 <label for="devicetypeName" class="col-md-3 col-form-label offset-1">Device Type Name<span style="color:red; margin-left: 0.75em;">*</span></label>

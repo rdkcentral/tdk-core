@@ -26,40 +26,67 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
   const snackBar = inject(MatSnackBar);
   return next(req).pipe(
     catchError((error: HttpErrorResponse) => {
-      let err = error.error;
-      // let err = JSON.parse(error.error);
-      console.log(err);
-      
-      let errorMessage = err.message?err.message:'Network error. Please check your internet connection.';
-        if (error instanceof ProgressEvent) {
-          errorMessage = 'Network error. Please check your internet connection.';
+
+      let errorMessage = 'An unknown error occurred.';
+
+      if (error instanceof HttpErrorResponse) {
+        if(error.status == 0){
+          errorMessage = 'Network error: Please check your internet connection.';
         }
-         if (error instanceof HttpErrorResponse) {
-          // For other HTTP errors like 404, 500, etc.
-          if (error.status == 0) {
-            errorMessage = 'Unable to connect to the server. Please check if the server is running.';
-          } 
-          if(error.status == 500){
-            errorMessage = 'Internal Server Error'
-          }
-          if(error.status == 502){
-            errorMessage = 'Something went wrong'
-          }
-          if(error.status == 404){
-            errorMessage = err;
-          }
-          if(error.status == 400){
-            let err = JSON.parse(error.error);
-            errorMessage = err.message;
-          }
+        if(error.status == 404){
+          errorMessage = error.error
         }
-      snackBar.open(errorMessage || 'An error occurred', 'Close', {
-        duration: 2500,
-        panelClass: ['err-msg'],
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      });
-      return throwError(() => error);
+        if(error.status == 401){
+          errorMessage = error.error
+        }
+        if(error.status == 400){
+          errorMessage =JSON.parse(error.error);
+        }
+        if(error.status == 409){
+          errorMessage =JSON.parse(error.error);
+        }
+        console.log(errorMessage);
+        console.log(error);
+      } else if (isProgressEventError(error)) {
+        errorMessage = 'Network error: Please check your internet connection.';
+
+      } else if (isObject(error) && 'error' in error) {
+        errorMessage = extractMessage(error);
+
+      } else if (isObject(error) && 'message' in error) {
+        errorMessage = extractMessage(error);
+
+      } else {
+        console.error('Unknown Error:', error);
+      }
+      // snackBar.open(errorMessage || 'An error occurred', 'Close', {
+      //   duration: 2500,
+      //   panelClass: ['err-msg'],
+      //   horizontalPosition: 'end',
+      //   verticalPosition: 'top'
+      // });
+      return throwError(() =>errorMessage);
     })
   );
 };
+
+function extractMessage(error: any): string {
+  if (typeof error === 'string') {
+    return error;
+  } else if (typeof error === 'object' && error !== null) {
+    if ('message' in error && typeof error.message === 'string') {
+      return error.message;
+    }
+  }
+  return 'An unknown error occurred.';
+}
+ 
+
+ 
+function isProgressEventError(error: unknown): error is { error: ProgressEvent } {
+  return isObject(error) && 'error' in error && error['error'] instanceof ProgressEvent;
+}
+ 
+function isObject(value: unknown): value is Record<string, unknown> {
+  return typeof value === 'object' && value !== null;
+}

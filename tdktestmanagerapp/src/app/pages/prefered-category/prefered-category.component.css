@@ -34,33 +34,28 @@ http://www.apache.org/licenses/LICENSE-2.0
     font-weight: 500;
     margin-left: 15px;
   }
-  
+  .borders-btm {
+    border-image: linear-gradient(
+      to right,
+      rgb(0, 178, 220) 25%,
+      rgb(253, 183, 59) 25%,
+      rgb(253, 183, 59) 50%,
+      rgb(146, 200, 73) 50%,
+      rgb(146, 200, 73) 75%,
+      rgb(245, 130, 51) 75%
+    );
+    border-image-slice: 1;
+    border-image-width: 0px 0px 4px 0px;
+    margin: 0 15px;
+  }
   .title {
     font-size: 1rem;
     text-align: center;
-    padding: 10px 0 1px 0;
-    border-image: linear-gradient(to right,
-        rgb(0, 178, 220) 25%,
-        rgb(253, 183, 59) 25%,
-        rgb(253, 183, 59) 50%,
-        rgb(146, 200, 73) 50%,
-        rgb(146, 200, 73) 75%,
-        rgb(245, 130, 51) 75%);
-    border-image-slice: 1;
-    border-image-width: 0px 0px 4px 0px;
+    font-weight: 500;
+    margin-top: 5px;
+    margin-bottom: 10px;
   }
-  
-  .container-box {
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 1px 1px 2px 2px rgb(0 0 0 / 18%);
-    position: relative;
-    overflow: hidden;
-    width: 80%;
-    max-width: 100%;
-    min-height: 440px;
-  }
-  
+
   .container-box form {
     background-color: #fff;
     display: flex;

@@ -89,7 +89,14 @@ export class RdkService {
     });
     return this.http.post(`${apiUrl}api/v1/rdkcertification/create`, formData, { headers, responseType: 'text' });
   }
-
+  updateScript(scriptFile: File): Observable<any> {
+    const formData = new FormData();
+    formData.append('pythonFile', scriptFile);
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.post(`${apiUrl}api/v1/rdkcertification/update`, formData, { headers, responseType: 'text' });
+  }
   getFileContent(fileName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

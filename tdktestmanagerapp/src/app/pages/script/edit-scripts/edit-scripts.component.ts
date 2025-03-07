@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
@@ -32,8 +32,9 @@ import { PrimitiveTestService } from '../../../services/primitive-test.service';
 import { ScriptsService } from '../../../services/scripts.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatStepperIntl } from '@angular/material/stepper';
+import { MatStepper, MatStepperIntl } from '@angular/material/stepper';
 import { Validators } from 'ngx-editor';
+import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-edit-scripts',
@@ -47,7 +48,6 @@ export class EditScriptsComponent {
   firstFormGroup!:FormGroup;
   secondFormGroup!:FormGroup;
   thirdFormGroup!:FormGroup;
-  configureName!: string;
   allDeviceType:any;
   selectedDeviceCategory : string = 'RDKV';
   allsocVendors!:any[]
@@ -59,10 +59,11 @@ export class EditScriptsComponent {
   optionalLabelText!: string;
   newtestDialogRef!: MatDialogRef<any>;
   @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
+  @ViewChild('stepper', { static: true }) stepper!: MatStepper;
   isLinear = true;
   allModules:any;
   allPrimitiveTest:any[]=[];
-  userGroupName:any;
+  loggedinUser:any;
   deviceNameArr: any[]=[]
   defaultPrimitive:any;
   changePriorityValue!:string;
@@ -72,10 +73,11 @@ export class EditScriptsComponent {
   constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
     public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
     private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
-    this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
-    this.scriptDeatilsObj = JSON.parse(localStorage.getItem('scriptDetails') || '{}');
+    this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
+  
    }
   ngOnInit(): void {
+    this.scriptDeatilsObj = JSON.parse(localStorage.getItem('scriptDetails') || '{}');
     this.deviceTypeSettings = {
       singleSelection: false,
       idField: 'deviceTypeName',
@@ -89,66 +91,166 @@ export class EditScriptsComponent {
     this.RDKFlavor = selectedCategory;
     if(selectedCategory === 'RDKB'){
       this.selectedCategoryName = 'Broadband';
-    }else if(selectedCategory === 'RDKC'){
-      this.selectedCategoryName = 'Camera';
     }else{
       this.selectedCategoryName = 'Video';
     }
     this.getAllModules();
     this.getAlldeviceType();
     this.allDeviceType = this.scriptDeatilsObj.deviceTypes.map((deviceType: string) => ({ deviceTypeId: deviceType, deviceTypeName: deviceType }));
-    
-    this.firstFormGroup = this.fb.group({
-      scriptname: [this.scriptDeatilsObj.name, [Validators.required,this.noSpacesValidator]],
-      module:[{value:this.scriptDeatilsObj.moduleName, disabled: true}],
-      primitiveTest: [{value:this.scriptDeatilsObj.primitiveTestName, disabled: true}],
-      devicetype: [[], [Validators.required]],
-      executiontimeout: [this.scriptDeatilsObj.executionTimeOut, [Validators.required]],
-      longdurationtest: [this.scriptDeatilsObj.longDuration],
-      skipexecution: [this.scriptDeatilsObj.skipExecution],
-      synopsis: [this.scriptDeatilsObj.synopsis, [Validators.required,this.noSpacesValidator]]
-    });
-    this.secondFormGroup = this.fb.group({
-      testcaseID: [this.scriptDeatilsObj.testId, Validators.required],
-      testObjective: [this.scriptDeatilsObj.objective, Validators.required],
-      inputParameters: [this.scriptDeatilsObj.inputParameters, Validators.required],
-      automationApproach: [this.scriptDeatilsObj.automationApproach, Validators.required],
-      priority: [this.scriptDeatilsObj.priority,Validators.required],
-      testStub:[this.scriptDeatilsObj.testStubInterface,Validators.required],
-      testType: [this.scriptDeatilsObj.testType,Validators.required],
-      rdkInterface: [this.scriptDeatilsObj.testStubInterface, Validators.required],
-      expectedOutput: [this.scriptDeatilsObj.expectedOutput,Validators.required],
-      testPreRequisites: [this.scriptDeatilsObj.prerequisites],
-      remarks: [this.scriptDeatilsObj.remarks],
-      releaseVersion:[this.scriptDeatilsObj.releaseVersion],
-    });
-    this.thirdFormGroup = this.fb.group({
-      pythonEditor: [ this.scriptDeatilsObj.scriptContent, Validators.required],
-    });
     this.getAllPrimitiveTest(this.scriptDeatilsObj.moduleName);
     this.code = this.scriptDeatilsObj.scriptContent;
-    this.firstFormGroup.patchValue({ devicetype: this.scriptDeatilsObj.deviceTypes });
-    this.deviceNameArr = this.firstFormGroup.value.devicetype;
+    this.initializeForm();
+    this.loadData();
+    this.setUpValidation();
   }
+  initializeForm() {
+    this.firstFormGroup = this.fb.group({
+      scriptname: ['', [Validators.required, this.noSpacesValidator]],
+      module: [{ value: '', disabled: true }],
+      primitiveTest: [{ value: '', disabled: true }],
+      devicetype: [[], [Validators.required,this.mindeviceValidator(1)]],
+      executiontimeout: ['', [Validators.required,this.onlyNumbersValidator]],
+      longdurationtest: [''],
+      skipexecution: [''],
+      synopsis: ['', [Validators.required, this.noSpacesValidator]]
+    });
+
+    this.secondFormGroup = this.fb.group({
+      testcaseID: ['', [Validators.required, this.noSpacesValidator]],
+      testObjective: ['', [Validators.required, this.noSpacesValidator]],
+      inputParameters: ['', [Validators.required, this.noSpacesValidator]],
+      automationApproach: ['', [Validators.required, this.noSpacesValidator]],
+      priority: ['', [Validators.required]],
+      testStub: ['', [Validators.required, this.noSpacesValidator]],
+      testType: ['', [Validators.required]],
+      rdkInterface: ['', [Validators.required, this.noSpacesValidator]],
+      expectedOutput: ['', [Validators.required, this.noSpacesValidator]],
+      testPreRequisites: [''],
+      remarks: [''],
+      releaseVersion: ['']
+    });
+
+    this.thirdFormGroup = this.fb.group({
+      pythonEditor: ['', Validators.required]
+    });
+  }
+
+  loadData() {
+    if (this.scriptDeatilsObj) {
+      this.firstFormGroup.patchValue({
+        scriptname: this.scriptDeatilsObj.name,
+        module: this.scriptDeatilsObj.moduleName,
+        primitiveTest: this.scriptDeatilsObj.primitiveTestName,
+        devicetype: this.scriptDeatilsObj.deviceTypes,
+        executiontimeout: this.scriptDeatilsObj.executionTimeOut,
+        longdurationtest: this.scriptDeatilsObj.longDuration,
+        skipexecution: this.scriptDeatilsObj.skipExecution,
+        synopsis: this.scriptDeatilsObj.synopsis
+      });
+      this.secondFormGroup.patchValue({
+        testcaseID: this.scriptDeatilsObj.testId,
+        testObjective: this.scriptDeatilsObj.objective,
+        inputParameters: this.scriptDeatilsObj.inputParameters,
+        automationApproach: this.scriptDeatilsObj.automationApproach,
+        priority: this.scriptDeatilsObj.priority,
+        testStub: this.scriptDeatilsObj.testStubInterface,
+        testType: this.scriptDeatilsObj.testType,
+        rdkInterface: this.scriptDeatilsObj.testStubInterface,
+        expectedOutput: this.scriptDeatilsObj.expectedOutput,
+        testPreRequisites: this.scriptDeatilsObj.prerequisites,
+        remarks: this.scriptDeatilsObj.remarks,
+        releaseVersion: this.scriptDeatilsObj.releaseVersion
+      });
+
+      this.thirdFormGroup.patchValue({
+        pythonEditor: this.scriptDeatilsObj.scriptContent
+      });
+
+      setTimeout(() => {
+        this.markFormFieldsTouched(this.firstFormGroup);
+        this.markFormFieldsTouched(this.secondFormGroup);
+        this.markFormFieldsTouched(this.thirdFormGroup);
+      });
+      const selectedDeviceTypes = this.allDeviceType.length > 0 ? this.allDeviceType.map((device:any) => device.deviceTypeId) : [];
+      this.firstFormGroup.patchValue({ devicetype: selectedDeviceTypes }, { emitEvent: false });
+      setTimeout(() => {
+        this.updateDeviceTypeValidity();
+      });
+    }
+  }
+
+  setUpValidation() {
+    this.firstFormGroup.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
+      this.firstFormGroup.updateValueAndValidity();
+    });
+
+    this.secondFormGroup.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
+      this.secondFormGroup.updateValueAndValidity();
+    });
+
+    this.thirdFormGroup.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
+      this.thirdFormGroup.updateValueAndValidity();
+    });
+  }
+
+  markFormFieldsTouched(formGroup: FormGroup) {
+    Object.values(formGroup.controls).forEach(control => {
+      control.markAsTouched();
+      control.markAsDirty();
+      control.updateValueAndValidity();
+    });
+  }
+
+  goToNext(stepIndex: number) {
+    if (stepIndex === 1 && this.firstFormGroup.valid) {
+      this.stepper.next();
+    } else if (stepIndex === 2 && this.secondFormGroup.valid) {
+      this.stepper.next();
+    }
+  }
+
   /**
      * Get the controls of the register form.
      * @returns The controls of the register form.
-     */  
+  */  
     get f() { return this.firstFormGroup.controls; }
-    /**
+  /**
        * This method is no space is allow.
-       */
+  */
     noSpacesValidator(control: AbstractControl): ValidationErrors | null {
-      const value = control.value ? control.value.toString() : '';
-      return value.trimStart().length !== value.length ? { noLeadingSpaces: true } : null;
-    }
-    
-    onInput(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.firstFormGroup.get('synopsis')?.setValue(value.trimStart(), { emitEvent: false });
+      if (!control.value) {
+        return { required: true };
       }
+      return control.value.startsWith(' ') ? { noLeadingSpaces: true } : null;
+    
+    }
+    mindeviceValidator(min: number): ValidatorFn {
+      return (control: AbstractControl): ValidationErrors | null => {
+        if (!control.value || control.value.length < min) {
+          return { minSelection: true };
+        }
+        return null;
+      };
+    }
+    onlyNumbersValidator(control: AbstractControl): ValidationErrors | null {
+      const value = control.value ? control.value.toString().trim() : '';
+      if (!value) {
+        return { required: true };
+      }
+      return /^[0-9]+$/.test(value) ? null : { onlyNumbers: true };
+    }
+    onNumberInput(event: Event): void {
+      const inputElement = event.target as HTMLInputElement;
+      let value = inputElement.value.replace(/\D/g, '');
+      const control = this.firstFormGroup.get('executiontimeout');
+      control?.setValue(value, { emitEvent: true });
+      control?.updateValueAndValidity();
+    }
+    onInput(event: Event): void {
+      const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
+      const value = inputElement.value;
+      const trimmedValue = value.replace(/^\s+/, '');
+      this.firstFormGroup.get('synopsis')?.setValue(trimmedValue, { emitEvent: false });
     }
     onScritName(event: Event): void {
       const inputElement = event.target as HTMLTextAreaElement;
@@ -207,8 +309,7 @@ export class EditScriptsComponent {
       }
     }
   getAllModules(): void{
-    this.configureName=this.RDKFlavor;
-    this.modulesService.findallbyCategory(this.configureName).subscribe(res=>{
+    this.modulesService.findallbyCategory(this.RDKFlavor).subscribe(res=>{
       this.allModules = JSON.parse(res); 
     })
   }
@@ -243,8 +344,7 @@ changePriority(event:any): void {
 }
 
   getAlldeviceType(): void{
-    this.configureName=this.RDKFlavor;
-    this.deviceTypeService.getfindallbycategory(this.configureName).subscribe(res=>{
+    this.deviceTypeService.getfindallbycategory(this.RDKFlavor).subscribe(res=>{
       this.allDeviceType = (JSON.parse(res));
     })
   }
@@ -253,23 +353,34 @@ changePriority(event:any): void {
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
+    this.updateDeviceTypeValidity();
   }
 
   onDeSelect(item:any): void {
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
+    this.updateDeviceTypeValidity();
   }
 
   onSelectAll(items: any[]): void {
     let devices = this.allDeviceType.filter(
       (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
      );
-     this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
+     this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName);
+     this.updateDeviceTypeValidity();
   }
   onDeSelectAll(item:any): void {
     this.deviceNameArr=[];
+    this.firstFormGroup.get('devicetype')?.setValue([]);
+    this.updateDeviceTypeValidity();
   }
 
+  updateDeviceTypeValidity() {
+    const control = this.firstFormGroup.get('devicetype');
+    if (!control) return;
+    control.markAsTouched();
+    control.updateValueAndValidity();
+  }
   // You can also change editor options dynamically if needed
   onCodeChange(value: string): void {
     let val = value;
@@ -280,11 +391,8 @@ changePriority(event:any): void {
   back(): void {
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
-  }
-
-  updateOptionalLabel() : void {
-    this._matStepperIntl.optionalLabel = this.optionalLabelText;
-    this._matStepperIntl.changes.next();
+    localStorage.removeItem('category');
+    localStorage.removeItem('categoryname');
   }
   /**
    * Submission for customSuite update
@@ -296,7 +404,7 @@ changePriority(event:any): void {
       synopsis : this.firstFormGroup.value.synopsis,
       executionTimeOut : this.firstFormGroup.value.executiontimeout,
       primitiveTestName: this.defaultPrimitive?this.defaultPrimitive:this.scriptDeatilsObj.primitiveTestName,
-      deviceTypes:this.deviceNameArr?this.deviceNameArr:this.scriptDeatilsObj.deviceTypes,
+      deviceTypes:this.allDeviceType?this.allDeviceType:this.deviceNameArr,
       skipExecution:this.firstFormGroup.value.skipexecution,
       longDuration:this.firstFormGroup.value.longdurationtest,
       testId: this.secondFormGroup.value.testcaseID,
@@ -311,7 +419,7 @@ changePriority(event:any): void {
       testStubInterface:this.secondFormGroup.value.testStub,
       releaseVersion:this.secondFormGroup.value.releaseVersion,
       remarks:this.secondFormGroup.value.remarks,
-      userGroup:this.userGroupName.userGroupName,
+      userGroup:this.loggedinUser.userGroupName,
     };
     const pythonContent = this.thirdFormGroup.value.pythonEditor;
     const filename = `${this.firstFormGroup.value.scriptname}.py`;
@@ -337,12 +445,14 @@ changePriority(event:any): void {
       })
     }
   })
+
 }
   /**
    * Navigate to script page
   */ 
 goBack(): void {
   localStorage.removeItem('scriptDetails');
+  localStorage.removeItem('category');
   this.router.navigate(["/script"]);
 }
 

@@ -39,8 +39,8 @@ limitations under the License.
                           </h2>
                         <div [class.show]="parent.isOpen" class="accordion-collapse collapse show">
                           <div class="col-md-12 mb-2">
-                            <input type="text" #searchInput class="form-control seach-device" [(ngModel)]="searchTerm" (input)="searchDevices($event)"
-                            placeholder="Search device">
+                            <input type="text" #deviceSearchInput class="form-control seach-device" [value]="searchDevice" (input)="searchDevices($event)"
+                            placeholder="Search by device, ip, mac">
                             <button class="clear-btn mt-1" *ngIf="searchTerm" (click)="clearSearch()">Clear</button>
                             <span class="sort-label">Sort :</span>
                             <button (click)="toggleSortOrder()" class="sort-btn">
@@ -98,23 +98,38 @@ limitations under the License.
             </div>
         </div>
         <div class="col-md-10">
-            <div class="radiobox borders-btm">
-                <h3 class="heading ">Select the RDK flavor :</h3>
-                <div class="rdkgroup">
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkv" value="RDKV" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKV')">
-                        <label class="form-check-label" for="rdkv">Video</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkb" value="RDKB" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKB')">
-                        <label class="form-check-label" for="rdkb">Broadband</label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <input class="form-check-input rdkradio" type="radio" name="rdkradio" id="rdkc" value="RDKC" [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange('RDKC')">
-                        <label class="form-check-label" for="rdkc">Camera</label>
-                    </div>
-                </div>
+          <div class="row borders-btm">
+            <div class="col">
+                <div class="row ">
+                  <div class="falvor-row">
+                    <span for="falvor" class="falvor-label">RDK flavor :</span>
+                        <select class="form-select rdk-dropdown" aria-label="Default select example" id="preferCategoty"
+                        [(ngModel)]="selectedDfaultCategory" (change)="onCategoryChange($event)">
+                            <!-- <option value="" default>Select</option> -->
+                            <option value="RDKV">Video</option>
+                            <option value="RDKB">Broadband</option>
+                        </select>
+                  </div>
+                  </div>
             </div>
+            <div class="col">
+                <h1 class="title">Execution</h1>
+            </div>
+            <div class="col">
+            </div>
+        </div>
+            <!-- <div class="col-md-12 reload-sec" *ngIf="exeRefresh">
+              <button type="button" class="download-btn refresh-history" matTooltip="Click here to refresh"
+               (click)="refreshExeHistory()">
+                <i class="bi bi-arrow-clockwise history-icon"></i>
+              </button>
+            </div> -->
+            <!-- <div class="col-md-12 reload-sec" *ngIf="scheduleRefresh">
+              <button type="button" class="download-btn refresh-history" matTooltip="Click here to refresh"
+               (click)="refreshSchedule()">
+                <i class="bi bi-arrow-clockwise history-icon"></i>
+              </button>
+            </div> -->
             <div class="col-md-12 example-header" *ngIf="tabName !=='Execution Schedules'">
               <div class="filterby">
                 <label for="filterDropdown" class="filter-label">Filter By:</label>
@@ -134,7 +149,7 @@ limitations under the License.
                 <label *ngIf="selectedCategory === 'Scripts/Testsuite'" class="search">Enter Scripts/Testsuite</label>
                 <label *ngIf="selectedCategory === 'Device'" class="device-search">Enter Device Name</label>
                 <div class="searchby">
-                  <input type="text" class="form-control seach-input" id="filter-text-box" [(ngModel)]="searchValue"
+                  <input type="text"  #tableSearchInput class="form-control seach-input" id="filter-text-box" [(ngModel)]="searchValue"
                     placeholder="">
                     <button class="btn btn-sm search-btn" (click)="onSearchClick()"><i class="bi bi-search icon-search"></i></button>
                 </div>
@@ -160,6 +175,7 @@ limitations under the License.
                     <mat-tab label="Execution History" class="tab-label">
                         <div style="width: 100%; height: 390px;" [class]="themeClass">
                             <ag-grid-angular
+                            #historyTable
                             style="width: 100%; height: 100%;"
                             [rowData]="rowData"
                             [columnDefs]="columnDefs"
@@ -168,6 +184,8 @@ limitations under the License.
                             [rowHeight]="40"
                             rowSelection="multiple"
                             (gridReady)="onGridReady($event)"
+                            (selectionChanged)="onSelectionChange()"
+                            
                           ></ag-grid-angular>
                         </div>
                         <div class="table-footer">
@@ -181,16 +199,20 @@ limitations under the License.
                                   <i class="bi bi-caret-down-fill arrow-icon"></i>
                                 </button>
                               </div>
-                    
+                             
+                                <button type="button" *ngIf="exeRefresh" class="download-btn refresh-history" matTooltip="Click here to refresh"
+                                 (click)="refreshExeHistory()">
+                                  <i class="bi bi-arrow-clockwise history-icon"></i>
+                                </button>
+                             
                             </div>
-                            <!-- <a class="delete-date" (click)="deleteDateModal()">Delete execution with date</a> -->
                           </div>
                           <div class="col-md-9">
                             <mat-paginator
                             class="pagination-sec"
                             [length]="totalItems"
                             [pageSize]="pageSize"
-                            [pageSizeOptions]="[5, 10, 20]"
+                            [pageSizeOptions]="[10, 20, 50]"
                             (page)="onPageChange($event)"
                             [showFirstLastButtons]="true"
                           ></mat-paginator>
@@ -212,8 +234,14 @@ limitations under the License.
                                 [gridOptions]="gridOptions"
                             ></ag-grid-angular>
                         </div>
+                        <div class="schedule-btnsec" *ngIf="scheduleRefresh">
+                          <button type="button" class="download-btn refresh-history" matTooltip="Click here to refresh"
+                           (click)="refreshSchedule()">
+                            <i class="bi bi-arrow-clockwise history-icon"></i>
+                          </button>
+                        </div>
                     </mat-tab>
-                  </mat-tab-group>
-        </div>
+                </mat-tab-group>
+            </div>
     </div>
 </div>

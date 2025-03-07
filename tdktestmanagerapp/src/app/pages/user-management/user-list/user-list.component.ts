@@ -102,25 +102,7 @@ export class UserListComponent implements OnInit {
         ],
       } as IMultiFilterParams,
     },
-    {
-      headerName: 'Group Name',
-      field: 'userGroupName',
-      filter: 'agMultiColumnFilter',
-      flex: 2,
-      filterParams: {
-        filters: [
-          {
-            filter: 'agTextColumnFilter',
-            display: 'accordion',
-            title: 'Expand Me for Text Filters',
-          },
-          {
-            filter: 'agSetColumnFilter',
-            display: 'accordion',
-          },
-        ],
-      } as IMultiFilterParams,
-    },
+ 
     {
       headerName: 'Role',
       field: 'userRoleName',
@@ -156,10 +138,13 @@ export class UserListComponent implements OnInit {
     flex: 1,
     menuTabs: ['filterMenuTab'],
   };
+  gridOptions = {
+    rowHeight: 36
+  }; 
   rowData: any = [];
   public themeClass: string = "ag-theme-quartz";
-  public paginationPageSize = 7;
-  public paginationPageSizeSelector: number[] | boolean = [7, 15, 30, 50];
+  public paginationPageSize = 10;
+  public paginationPageSizeSelector: number[] | boolean = [10, 15, 30, 50];
   public tooltipShowDelay = 500;
   isRowSelected: any;
   selectedRow: any;

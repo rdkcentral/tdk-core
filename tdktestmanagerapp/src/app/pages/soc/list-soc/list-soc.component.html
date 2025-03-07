@@ -13,7 +13,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<div class="container">
+<div class="container-fluid">
     <div class="row borders-btm mt-2">
         <div class="col-md-11">
             <h1 class="title">{{categoryName}} SoC List</h1>
@@ -28,11 +28,11 @@ limitations under the License.
         </div>
     </div>
     <div class="row table-sec mt-2">
-            <ag-grid-angular style="width: 100%; height: 395px;" [columnDefs]="columnDefs"
+            <ag-grid-angular style="width: 100%; height: 446px;" [columnDefs]="columnDefs"
                 [defaultColDef]="defaultColDef" [suppressRowClickSelection]="true" [rowSelection]="rowSelection"
                 [rowData]="rowData" [class]="themeClass" [pagination]="true" [paginationPageSize]="paginationPageSize"
                 [paginationPageSizeSelector]="paginationPageSizeSelector" (gridReady)="onGridReady($event)"
-                [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true" (rowSelected)="onRowSelected($event) "
+                [tooltipShowDelay]="tooltipShowDelay" [animateRows]="true" [gridOptions]="gridOptions" (rowSelected)="onRowSelected($event) "
                 (selectionChanged)="onSelectionChanged($event) " [context]="this"></ag-grid-angular>
     </div>
 </div>

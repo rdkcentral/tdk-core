@@ -19,9 +19,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 import { Injectable } from '@angular/core';
 import { GlobalConstants } from '../utility/global-constants';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
-import { interval, Observable, switchMap } from 'rxjs';
+import { interval, map, Observable, switchMap } from 'rxjs';
 
 
 const apiUrl: string = GlobalConstants.apiUrl;
@@ -100,6 +100,14 @@ export class ExecutionService {
     });
     return this.http.get(`${apiUrl}execution/getExecutionResult?execResultId=${id}`, { headers, responseType: 'text' });
   }
+
+  DetailsForHtmlReport(id:any):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/getExecutionDetailsForHtmlReport?executionId=${id}`, { headers, responseType: 'text' });
+  }
+
   schedularExecution(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
@@ -288,4 +296,43 @@ export class ExecutionService {
     });
     return this.http.get(`${apiUrl}execution/${exeId}/failed-results-zip`, { headers, responseType: 'blob' });
   }
+  isfailedExecution(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/isExecutionResultFailed?executionId=${exeId}`, { headers, responseType: 'text' });
+  }
+
+  DownloadScript(exeId:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    return this.http.get(`${apiUrl}execution/downloadScript?executionResId=${exeId}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
+          map((response: HttpResponse<Blob>) => {
+            const contentDisposition = response.headers.get('content-disposition');
+            let filename = 'script.py';
+            if (contentDisposition) {
+              const matches = /filename="([^"]*)"/.exec(contentDisposition);
+              if (matches && matches[1]) {
+                filename = matches[1];
+              }
+            }
+            const status = {
+              ...response.body,
+              statusCode: response.status
+            }
+            return { filename, content: response.body, status }
+          })
+        )
+  }
+
+getExecutionLogsLinks(exeId:string):Observable<any>{
+  const headers = new HttpHeaders({
+    'Authorization': this.authService.getApiToken()
+  });
+  return this.http.get(`${apiUrl}execution/getExecutionLogs?executionResultID=${exeId}`, { headers, responseType: 'text' });
+}
+
+
+
 }
