@@ -1,0 +1,111 @@
+##########################################################################
+# If not stated otherwise in this file or this component's Licenses.txt
+# file the following copyright and licenses apply:
+#
+# Copyright 2025 RDK Management
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+##########################################################################
+
+#Tool chain script path
+SDK_INSTALL_SCRIPT=
+
+#Where to install the SDK
+SDK_INSTALL_PATH=
+
+#Platform repo for tdk
+SRC_PLATFORM_RPI=https://code.rdkcentral.com/r/rdk/devices/raspberrypi/tdk
+SRC_PLATFORM_REALTEK=https://code.rdkcentral.com/r/collaboration/soc/realtek/rdk/tdk-video
+SRC_PLATFORM_AMLOGIC=https://code.rdkcentral.com/r/collaboration/soc/amlogic/rdk/tdk-video
+SRC_PLATFORM_BROADCOM=https://code.rdkcentral.com/r/collaboration/soc/broadcom/rdk/tdk-video
+
+MIDDLEWARE_VERSION=
+
+#Choose from HYBRID, MEDIACLIENT
+DEVICE_TYPE=MEDIACLIENT
+
+#Choose from VENDOR, MIDDLEWARE
+IMAGE_TYPE=""
+
+#Enable modules for Hybrid and Client
+
+CONFIGURE_OPTIONS_MEDIACLIENT=" --enable-client --enable-westeroshal"
+
+CONFIGURE_OPTIONS_HYBRID=" --enable-hybrid --enable-xupnp --enable-westeroshal --enable-trm --enable-dtcp --enable-snmp"
+
+CONFIGURE_OPTIONS_HAL=" --enable-wifihal --enable-powermgrhal --enable-deepsleephal --enable-mfrhal --enable-tdkgraphics --enable-bluetoothhal --disable-defaultComponents --enable-mediautils --enable-westeroshal"
+
+CONFIGURE_OPTIONS_COMPONENTS="--enable-netsrvmgr --enable-rdkfwupdater --enable-aamp --enable-hdmicechal"
+
+MFRHAL_LIB_NAME="-lRDKMfrLib"
+
+PWRMGRHAL_FLAGS=" -DENABLE_THERMAL_PROTECTION "
+HDMICECHAL_FLAGS=" -DNO_DEVICE_READY_EVENT "
+DEEPSLEEPHAL_FLAGS=" -DENABLE_DEEPSLEEP_WAKEUP_EVT "
+WIFIHAL_LIBS=" -lwifihal "
+if [ $PLATFORM == "BROADCOM" ];then
+    PWRMGRHAL_LIBS=" -liarmmgrs-power-hal "
+else
+    PWRMGRHAL_LIBS=" $MFRHAL_LIB_NAME -liarmmgrs-power-hal "
+fi
+MFRHAL_LIBS=" $MFRHAL_LIB_NAME "
+HDMICECHAL_LIBS=" -lRCECHal "
+DEEPSLEEPHAL_FLAGS=" -DENABLE_DEEPSLEEP_WAKEUP_EVT "
+
+FLAGS_HAL="-DENABLE_DEEPSLEEP_WAKEUP_EVT -DENABLE_THERMAL_PROTECTION -DENABLE_LLAMA_PLATCO -DNO_DEVICE_READY_EVENT"
+
+#Do you want to enable any modules which are not enabled?
+DISTRO_CONFIGURE=" --enable-fireboltcompliance --enable-bluetoothhal"
+
+
+#Do you want to exclude any files from copying to device?
+EXCLUDE_LIST="apparmor_profile_change_after_reboot.sh HWPerf_metric_parser.sh MVS_Single_Execution_Script.sh MVS_StartExecution.sh rdk_build.sh rne_sdk_install.sh TDK_HWPerfTools_Executor.sh validate_complain_to_enforce.sh validate_logs_for_denied_message.sh ltmain.sh"
+
+#HAL Headers Config
+SRC_WIFI_HAL_HEADER_REVISION="DEFAULT"
+SRC_DS_HAL_HEADER_REVISION="2.0.0"
+SRC_IARMMGRS_HEADER_REVISION="DEFAULT"
+SRC_POWERMGR_HAL_HEADER_REVISION="1.0.2"
+SRC_HDMICEC_HAL_HEADER_REVISION="1.3.7"
+SRC_BLUETOOTH_HAL_HEADER_REVISION="DEFAULT"
+SRC_IARMMGRS_HAL_HEADER_REVISION="DEFAULT"
+SRC_WESTEROS_HAL_HEADER_REVISION="DEFAULT"
+SRC_RMF_AUDIO_CAPTURE_HAL_HEADER_REVISION="DEFAULT"
+SRC_STORAGE_MGR_HEADER_REVISION="DEFAULT"
+SRC_NETSRVMGR_HEADER_REVISION="DEFAULT"
+SRC_IARMBUS_HEADER_REVISION="DEFAULT"
+SRC_DEEPSLEEP_HAL_HEADER_REVISION="1.0.3"
+SRC_DS_HEADER_REVISION="DEFAULT"
+
+#HAL Lib version configuration
+DS_HAL_LIB_VERSION=0
+PWRMGR_HAL_LIB_VERSION=0
+CEC_HAL_LIB_VERSION=0
+BLE_HAL_LIB_VERSION=0
+MFR_HAL_LIB_VERSION=0.0.0
+DEEPSLEEP_HAL_LIB_VERSION=0
+WIFI_HAL_LIB_VERSION=0
+IARMBUS_LIB_VERSION=0
+ESSOS_LIB_VERSION=0
+WESTEROS_LIB_VERSION=0
+AAMP_LIB_VERSION=""
+DS_LIB_VERSION=""
+STMGR_LIB_VERSION=2
+AUDIO_CAPTURE_MGR_LIB_VERSION=0.0.0
+DS_LIB_VERSION=""
+LIBSYSWRAPPER_LIB_VERSION=0
+FWUTILS_LIB_VERSION=0
+PARSEJSON_LIB_VERSION=0
+DWNLUTILS_LIB_VERSION=0
+
+TDK_REVISION="DEFAULT"
