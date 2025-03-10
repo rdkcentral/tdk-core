@@ -313,14 +313,14 @@ public class ExportExcelService implements IExportExcelService {
 				headerCell.setCellStyle(boldStyle);
 
 				// Create value cell
-				row.createCell(4).setCellValue(deviceValues[i]); 
+				row.createCell(4).setCellValue(deviceValues[i]);
 
 				row.getCell(4).setCellStyle(createArialStyle(sheet.getWorkbook()));
 
 			}
 
 			sheet.autoSizeColumn(3);
-			sheet.autoSizeColumn(4); 
+			sheet.autoSizeColumn(4);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -399,6 +399,7 @@ public class ExportExcelService implements IExportExcelService {
 					Font linkFont = sheet.getWorkbook().createFont();
 					linkFont.setUnderline(Font.U_SINGLE);
 					linkFont.setColor(IndexedColors.BLUE.getIndex());
+
 					linkFont.setFontName("Arial");
 					linkStyle.setFont(linkFont);
 					moduleCell.setCellStyle(linkStyle);
@@ -426,7 +427,7 @@ public class ExportExcelService implements IExportExcelService {
 					row.createCell(7).setCellValue(skipped);
 
 					// Apply arial font
-					for (int i = 1; i < 8; i++) {
+					for (int i = 2; i < 8; i++) {
 						row.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 					}
 
@@ -563,7 +564,6 @@ public class ExportExcelService implements IExportExcelService {
 			e.printStackTrace();
 		}
 	}
-
 
 	/**
 	 * Calculate the total for the given key in the summary data.
@@ -1977,8 +1977,6 @@ public class ExportExcelService implements IExportExcelService {
 		}
 	}
 
-
-
 	/**
 	 * Creates test case details sheet for the given workbook with execution
 	 * details.
@@ -2026,49 +2024,62 @@ public class ExportExcelService implements IExportExcelService {
 		linkStyle.setFont(linkFont);
 		backCell.setCellStyle(linkStyle);
 
-		// Parse pre-requisites and populate rows
-		Pattern preReqPattern = Pattern.compile(
-				"Pre Requisite : (.*?)\\n.*?CALLSIGN :(.*?)\\n.*?#--------- \\[Pre-requisite Status\\] : (.*?) ----------#",
-				Pattern.DOTALL);
-		Matcher preReqMatcher = preReqPattern.matcher(logData);
+		Pattern entirePreReqSectionPattern = Pattern
+				.compile("#---------------------------- Plugin Pre-requisite ----------------------------#\\r?\\n"
+						+ "(.*?)" + "Plugin Pre-requisite Status\\s*:\\s*\\w+\\r?\\n", Pattern.DOTALL);
 
-		int preReqNum = 1;
-		boolean preReqHeaderCreated = false;
+		// Then, pattern to match each individual pre-requisite block within the section
+		Pattern individualPreReqPattern = Pattern
+				.compile("Pre Requisite\\s*:\\s*(.*?)\\r?\\n" + "Pre Requisite No\\s*:\\s*(\\d+)\\r?\\n" + "(.*?)"
+						+ "#--------- \\[Pre-requisite Status\\]\\s*:\\s*(.*?)\\s*----------#", Pattern.DOTALL);
 
-		while (preReqMatcher.find()) {
-			String[] preReqHeaders = { "Sl.No", "Pre-Requisite Name", "Status", "Executed On", "Log Data", "Jira ID",
-					"Issue Type", "Remarks" };
-			if (!preReqHeaderCreated) {
-				// Create header row for pre-requisites
-				createAndStyleArialHeaders(sheet, rowNum++, preReqHeaders, 0);
-				preReqHeaderCreated = true;
-			}
+		// First, find the entire pre-requisite section
+		Matcher sectionMatcher = entirePreReqSectionPattern.matcher(logData);
+		if (sectionMatcher.find()) {
+			String entirePreReqSection = sectionMatcher.group(1);
 
-			Row row = sheet.createRow(rowNum++);
-			row.createCell(0).setCellValue(preReqNum++);
-			row.createCell(1).setCellValue(preReqMatcher.group(1).trim());
-			row.createCell(2).setCellValue(preReqMatcher.group(3).trim());
-			row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if available
-			row.createCell(4).setCellValue(preReqMatcher.group(0).trim());
+			// Now find all individual pre-requisite blocks within that section
+			Matcher individualPreReqMatcher = individualPreReqPattern.matcher(entirePreReqSection);
 
-			if (analysis != null) {
-				row.createCell(5).setCellValue(
-						analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
-				row.createCell(6)
-						.setCellValue(analysis.getAnalysisDefectType().toString() != null
-								? analysis.getAnalysisDefectType().toString()
-								: "N/A");
-				row.createCell(7).setCellValue(
-						analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
-			} else {
+			int preReqNum = 1;
+			boolean preReqHeaderCreated = false;
 
-				row.createCell(5).setCellValue("N/A");
-				row.createCell(6).setCellValue("N/A");
-				row.createCell(7).setCellValue("N/A");
+			while (individualPreReqMatcher.find()) {
+				String[] preReqHeaders = { "Sl.No", "Pre-Requisite Name", "Status", "Executed On", "Log Data",
+						"Jira ID", "Issue Type", "Remarks" };
+				if (!preReqHeaderCreated) {
+					// Create header row for pre-requisites
+					createAndStyleArialHeaders(sheet, rowNum++, preReqHeaders, 0);
+					preReqHeaderCreated = true;
+				}
 
-			}
-			for (int i = 0; i < preReqHeaders.length; i++) {
-				row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(preReqNum++);
+				row.createCell(1).setCellValue(individualPreReqMatcher.group(1).trim()); // Pre-Requisite Name
+				row.createCell(2).setCellValue(individualPreReqMatcher.group(4).trim()); // Status from [Pre-requisite
+																							// Status]
+				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
+																		// available
+				row.createCell(4).setCellValue(individualPreReqMatcher.group(0).trim()); // Log Data);
+
+				if (analysis != null) {
+					row.createCell(5).setCellValue(
+							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
+					row.createCell(6)
+							.setCellValue(analysis.getAnalysisDefectType().toString() != null
+									? analysis.getAnalysisDefectType().toString()
+									: "N/A");
+					row.createCell(7).setCellValue(
+							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+				} else {
+					row.createCell(5).setCellValue("N/A");
+					row.createCell(6).setCellValue("N/A");
+					row.createCell(7).setCellValue("N/A");
+				}
+
+				for (int i = 0; i < preReqHeaders.length; i++) {
+					row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
+				}
 			}
 		}
 
@@ -2079,7 +2090,7 @@ public class ExportExcelService implements IExportExcelService {
 		createAndStyleArialHeaders(sheet, rowNum++, testCaseHeaders, 0);
 		// Parse test cases and populate rows
 		Pattern testCasePattern = Pattern.compile(
-				"#==============================================================================#\\nTEST CASE NAME : (.*?)\\n.*?TEST CASE ID : (.*?)\\n.*?DESCRIPTION : (.*?)\\n.*?TEST STEP STATUS : (.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\] : (.*?) ----------##",
+				"#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?TEST STEP STATUS\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
 				Pattern.DOTALL);
 		Matcher testCaseMatcher = testCasePattern.matcher(logData);
 		int testCaseNum = 1;
@@ -2153,8 +2164,10 @@ public class ExportExcelService implements IExportExcelService {
 				row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
 			}
 		}
-		String logLink = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID="
-				+ executionResult.getId();
+		File tmConfigFile = new File(
+				AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE);
+		String logLink = commonService.getConfigProperty(tmConfigFile, Constants.TM_URL)
+				+ "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
 		Row logLinkRow = sheet.createRow(rowNum + 2);
 		Cell logLinkCell = logLinkRow.createCell(0);
 		logLinkCell.setCellValue("LogLink");
@@ -2197,9 +2210,10 @@ public class ExportExcelService implements IExportExcelService {
 		System.out.println("Log Data: " + logData);
 		// Define the pattern to extract the required information
 		Pattern pattern = Pattern.compile("======================== PLUGIN TEST SUMMARY ======================\\r?\\n"
-				+ "PLUGIN NAME : (.*?)\\r?\\n" + "TOTAL TESTS : (\\d+)\\r?\\n" + "EXECUTED TESTS : (\\d+)\\r?\\n"
-				+ "PASSED TESTS : (\\d+)\\r?\\n" + "FAILED TESTS : (\\d+)\\r?\\n" + "N/A TESTS : (\\d+)\\r?\\n"
-				+ "\\r?\\n" + "Final Plugin Tests Status: (.*?)\\r?\\n", Pattern.DOTALL);
+				+ "PLUGIN NAME\\s*:\\s*(.*?)\\r?\\n" + "TOTAL TESTS\\s*:\\s*(\\d+)\\r?\\n"
+				+ "EXECUTED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "PASSED TESTS\\s*:\\s*(\\d+)\\r?\\n"
+				+ "FAILED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "N/A TESTS\\s*:\\s*(\\d+)\\r?\\n" + "\\r?\\n"
+				+ "Final Plugin Tests Status\\s*:\\s*(.*?)\\r?\\n", Pattern.DOTALL);
 		// Find all matches in the log data
 		int totalTestCasesSum = 0;
 		int executedTestCasesSum = 0;
