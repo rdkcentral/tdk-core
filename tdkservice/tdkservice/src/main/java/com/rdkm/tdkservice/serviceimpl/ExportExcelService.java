@@ -19,29 +19,27 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import com.rdkm.tdkservice.config.AppConfig;
-import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
-import com.rdkm.tdkservice.dto.ExecutionResultDTO;
-import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
-import com.rdkm.tdkservice.enums.ExecutionOverallResultStatus;
-import com.rdkm.tdkservice.enums.ExecutionResultStatus;
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
-import com.rdkm.tdkservice.model.*;
-import com.rdkm.tdkservice.repository.*;
-import com.rdkm.tdkservice.service.IExportExcelService;
-import com.rdkm.tdkservice.service.IFileService;
-import com.rdkm.tdkservice.service.utilservices.CommonService;
-import com.rdkm.tdkservice.util.Constants;
-import com.rdkm.tdkservice.util.MapperUtils;
-import org.apache.poi.common.usermodel.HyperlinkType;
-import org.apache.poi.ss.usermodel.*;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -53,18 +51,53 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.time.Instant;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
+import org.apache.poi.common.usermodel.HyperlinkType;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.CreationHelper;
+import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.Hyperlink;
+import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.dto.ExecutionDetailsForExcelDTO;
+import com.rdkm.tdkservice.dto.ExecutionDetailsResponseDTO;
+import com.rdkm.tdkservice.dto.ExecutionResultDTO;
+import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
+import com.rdkm.tdkservice.enums.Category;
+import com.rdkm.tdkservice.enums.ExecutionResultStatus;
+import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.model.Device;
+import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.model.ExecutionDevice;
+import com.rdkm.tdkservice.model.ExecutionMethodResult;
+import com.rdkm.tdkservice.model.ExecutionResult;
+import com.rdkm.tdkservice.model.ExecutionResultAnalysis;
+import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.repository.DeviceRepositroy;
+import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
+import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
+import com.rdkm.tdkservice.repository.ExecutionRepository;
+import com.rdkm.tdkservice.repository.ExecutionResultAnalysisRepository;
+import com.rdkm.tdkservice.repository.ExecutionResultRepository;
+import com.rdkm.tdkservice.repository.ModuleRepository;
+import com.rdkm.tdkservice.repository.ScriptRepository;
+import com.rdkm.tdkservice.service.IExportExcelService;
+import com.rdkm.tdkservice.service.IFileService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.util.Constants;
+import com.rdkm.tdkservice.util.MapperUtils;
 
 @Service
 public class ExportExcelService implements IExportExcelService {
@@ -100,6 +133,9 @@ public class ExportExcelService implements IExportExcelService {
 
 	@Autowired
 	private ExecutionDeviceRepository executionDeviceRepository;
+
+	@Autowired
+	private ModuleRepository moduleRepository;
 
 	@Autowired
 	private IFileService fileService;
@@ -153,41 +189,69 @@ public class ExportExcelService implements IExportExcelService {
 
 		rowNum += 6; // 5 rows for device details + 1 blank row for spacing
 
+		ExecutionDetailsForExcelDTO excelDTO = new ExecutionDetailsForExcelDTO();
+		List<ExecutionResult> execResultWithoutPluginData = new ArrayList<>();
+		List<String> pluginLogData = new ArrayList<>();
+		boolean notRdkServiceModule = false;
 		for (Map.Entry<String, List<ExecutionResult>> entry : moduleExecutionResultMap.entrySet()) {
 			String moduleName = entry.getKey();
+
 			List<ExecutionResult> execResults = entry.getValue();
-			if (moduleName.equalsIgnoreCase("rdkservices")) {
+			Module module = moduleRepository.findByName(moduleName);
+
+			if (module.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
 				List<String> logDatas = new ArrayList<>();
+				Map<ExecutionResult, String> execResultLogMap = new LinkedHashMap<>();
 				for (ExecutionResult executionResult : execResults) {
 					logDatas.add(executionService.getExecutionLogs(executionResult.getId().toString()));
+					execResultLogMap.put(executionResult,
+							executionService.getExecutionLogs(executionResult.getId().toString()));
 				}
-				rowNum = createConsolidatedSummarySheet(summarySheet, rowNum, logDatas, execution);
-				for (ExecutionResult executionResultId : execResults) {
+
+				excelDTO = createExcelDTO(summarySheet, rowNum, logDatas, execResultLogMap);
+				if (excelDTO.getExecutionResultForExcelWithoutPluginData() != null) {
+					execResultWithoutPluginData.addAll(excelDTO.getExecutionResultForExcelWithoutPluginData());
+				}
+				if (excelDTO.getPluginLogData() != null) {
+					pluginLogData.addAll(excelDTO.getPluginLogData());
+				}
+				for (ExecutionResult executionResultId : excelDTO.getExecutionResultForExcelWithPluginData()) {
 					createTestCaseDetailsSheet(workbook,
 							executionService.getExecutionLogs(executionResultId.getId().toString()),
 							execution.getCreatedDate(), executionResultId);
 				}
 
 			} else {
-				// Create Summary Sheet
-				createNormalSummarySheet(summarySheet, execution, moduleData, rowNum);
-				// Create Module Sheets for each unique module
-				if (!moduleData.isEmpty()) {
-					Map<String, List<Map<String, Object>>> modulesGrouped = moduleData.stream()
-							.collect(Collectors.groupingBy(data -> (String) data.get("moduleName")));
-
-					for (Map.Entry<String, List<Map<String, Object>>> entrys : modulesGrouped.entrySet()) {
-						String moduleNames = entrys.getKey();
-						if (!moduleNames.equalsIgnoreCase("rdkservices")) {
-							List<Map<String, Object>> moduleScripts = entrys.getValue();
-							createModuleSheet(moduleScripts, workbook, moduleNames);
-						}
-					}
-				} else {
-					logger.warn("No module data available. Skipping module sheet creation.");
-				}
+				notRdkServiceModule = true;
 
 			}
+
+		}
+		if (notRdkServiceModule) {
+			rowNum = createNormalSummarySheet(summarySheet, execution, moduleData, rowNum);
+		}
+		// Create Module Sheets for each unique module
+		if (!moduleData.isEmpty()) {
+			Map<String, List<Map<String, Object>>> modulesGrouped = moduleData.stream()
+					.collect(Collectors.groupingBy(data -> (String) data.get("moduleName")));
+
+			for (Map.Entry<String, List<Map<String, Object>>> entrys : modulesGrouped.entrySet()) {
+				String modName = entrys.getKey();
+				Module moduleObj = moduleRepository.findByName(modName);
+				if (!moduleObj.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
+					List<Map<String, Object>> moduleScripts = entrys.getValue();
+					createModuleSheet(moduleScripts, workbook, modName);
+				}
+			}
+
+		}
+
+		if (pluginLogData.size() > 0) {
+			rowNum = pluginSummaryData(pluginLogData, summarySheet, rowNum + 1, excelDTO.getPattern());
+		}
+
+		if (execResultWithoutPluginData != null && !execResultWithoutPluginData.isEmpty()) {
+			summaryForScriptsWithoutPluginData(execResultWithoutPluginData, summarySheet, rowNum + 1);
 		}
 
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
@@ -233,14 +297,55 @@ public class ExportExcelService implements IExportExcelService {
 	}
 
 	/**
+	 * Create createExcelDTO
+	 * 
+	 * @param sheet
+	 * @param rowCount
+	 * @param logData
+	 * @param execResultLogMap
+	 */
+	private ExecutionDetailsForExcelDTO createExcelDTO(Sheet sheet, int rowCount, List<String> logData,
+			Map<ExecutionResult, String> execResultLogMap) {
+
+		ExecutionDetailsForExcelDTO executionExcelDetails = new ExecutionDetailsForExcelDTO();
+		List<ExecutionResult> scriptsWithoutPluginData = new ArrayList<>();
+		List<ExecutionResult> scriptsWithPluginData = new ArrayList<>();
+
+		// Define the pattern to extract the required information
+		Pattern pattern = Pattern.compile("======================== PLUGIN TEST SUMMARY ======================\\r?\\n"
+				+ "PLUGIN NAME\\s*:\\s*(.*?)\\r?\\n" + "TOTAL TESTS\\s*:\\s*(\\d+)\\r?\\n"
+				+ "EXECUTED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "PASSED TESTS\\s*:\\s*(\\d+)\\r?\\n"
+				+ "FAILED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "N/A TESTS\\s*:\\s*(\\d+)\\r?\\n" + "\\r?\\n"
+				+ "Final Plugin Tests Status\\s*:\\s*(.*?)\\r?\\n", Pattern.DOTALL);
+		List<String> pluginLogs = new ArrayList<>();
+		for (Map.Entry<ExecutionResult, String> scriptLog : execResultLogMap.entrySet()) {
+			Matcher matcher = pattern.matcher(scriptLog.getValue());
+			if (!matcher.find()) {
+				scriptsWithoutPluginData.add(scriptLog.getKey());
+			} else {
+				pluginLogs.add(scriptLog.getValue());
+				scriptsWithPluginData.add(scriptLog.getKey());
+			}
+		}
+		executionExcelDetails.setExecutionResultForExcelWithPluginData(scriptsWithPluginData);
+		executionExcelDetails.setExecutionResultForExcelWithoutPluginData(scriptsWithoutPluginData);
+		executionExcelDetails.setRowNumber(rowCount);
+		executionExcelDetails.setPluginLogData(pluginLogs);
+		executionExcelDetails.setPattern(pattern);
+		return executionExcelDetails;
+
+	}
+
+	/**
 	 * Create the summary sheet for the given execution.
 	 *
 	 * @param sheet       the summary sheet
 	 * @param execution   the execution
 	 * @param summaryData the summary data
 	 */
-	private void createNormalSummarySheet(Sheet sheet, Execution execution, List<Map<String, Object>> summaryData,
+	private int createNormalSummarySheet(Sheet sheet, Execution execution, List<Map<String, Object>> summaryData,
 			int rowNum) {
+
 		try {
 			String heading = "Module Summary";
 
@@ -268,6 +373,7 @@ public class ExportExcelService implements IExportExcelService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return rowNum;
 	}
 
 	/**
@@ -381,7 +487,9 @@ public class ExportExcelService implements IExportExcelService {
 			List<Map<String, Object>> summaryData = new ArrayList<>();
 
 			for (String moduleName : moduleNames) {
-				if (!moduleName.equalsIgnoreCase("rdkservices")) {
+
+				Module moduleObj = moduleRepository.findByName(moduleName);
+				if (!moduleObj.getCategory().getName().equalsIgnoreCase(Category.RDKV_RDKSERVICE.name())) {
 					Row row = sheet.createRow(rowNum++);
 
 					// Populate Sl No
@@ -450,7 +558,7 @@ public class ExportExcelService implements IExportExcelService {
 			}
 
 			// Add total row after all modules
-			addTotalRow(sheet, rowNum++, summaryData);
+			addTotalRowForConsolidatedReport(sheet, rowNum++, summaryData);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -552,6 +660,38 @@ public class ExportExcelService implements IExportExcelService {
 			int totalNA = calculateTotal(summaryData, "notApplicable");
 			int totalSkipped = calculateTotal(summaryData, "skipped");
 
+			totalRow.createCell(4).setCellValue(""); // Blank for Sl No
+			totalRow.createCell(5).setCellValue("Total");
+			totalRow.createCell(6).setCellValue(totalScripts);
+			totalRow.createCell(7).setCellValue(totalSuccess);
+			totalRow.createCell(8).setCellValue(totalFailure);
+			totalRow.createCell(9).setCellValue(totalTimeout);
+			totalRow.createCell(10).setCellValue(totalNA);
+			totalRow.createCell(11).setCellValue(totalSkipped);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * Add total row to the Excel summary sheet for generate excel method.
+	 *
+	 * @param sheet       the summary sheet
+	 * @param rowNum      the row number
+	 * @param summaryData the summary data
+	 */
+
+	private void addTotalRowForConsolidatedReport(Sheet sheet, int rowNum, List<Map<String, Object>> summaryData) {
+		try {
+			Row totalRow = sheet.createRow(rowNum);
+
+			int totalScripts = calculateTotal(summaryData, "executed");
+			int totalSuccess = calculateTotal(summaryData, "success");
+			int totalFailure = calculateTotal(summaryData, "failure");
+			int totalTimeout = calculateTotal(summaryData, "timeout");
+			int totalNA = calculateTotal(summaryData, "notApplicable");
+			int totalSkipped = calculateTotal(summaryData, "skipped");
+
 			totalRow.createCell(0).setCellValue(""); // Blank for Sl No
 			totalRow.createCell(1).setCellValue("Total");
 			totalRow.createCell(2).setCellValue(totalScripts);
@@ -615,8 +755,13 @@ public class ExportExcelService implements IExportExcelService {
 				resultData.put("scriptName", scriptName);
 				resultData.put("moduleName",
 						script != null && script.getModule() != null ? script.getModule().getName() : "Unknown Module");
-				resultData.put("executed",
-						result.getExecution() != null ? result.getExecution().getResult() : "Unknown Execution Result");
+
+				if (result.getResult().equals(ExecutionResultStatus.SUCCESS)
+						|| result.getResult().equals(ExecutionResultStatus.FAILURE)) {
+					resultData.put("executed", "Yes");
+				} else {
+					resultData.put("executed", "No");
+				}
 				resultData.put("status", result.getResult());
 				resultData.put("executedOn", result.getDateOfExecution() != null ? result.getDateOfExecution() : "N/A");
 				resultData.put("executionTime", result.getExecutionTime());
@@ -1013,14 +1158,16 @@ public class ExportExcelService implements IExportExcelService {
 		Map<String, Map<String, ExecutionResult>> prioritizedResults = new LinkedHashMap<>();
 
 		// Validate device details
-		if (!validateDeviceIPs(executionIds)) {
-			LOGGER.warn("Devices across executions do not have the same IP address. Skipping comparison.");
-			return resultDataList;
-		}
+//		if (!validateDeviceIPs(executionIds)) {
+//			LOGGER.warn("Devices across executions do not have the same IP address. Skipping comparison.");
+//			return resultDataList;
+//		}
 
 		// Fetch and prioritize execution results
 		for (UUID executionId : executionIds) {
+
 			processExecutionResults(executionId, prioritizedResults);
+
 		}
 
 		// Convert prioritized results into final output
@@ -1782,21 +1929,21 @@ public class ExportExcelService implements IExportExcelService {
 		createAndStyleArialHeaders(sheet, 5, headers, 0);
 
 		ExecutionDetailsResponseDTO baseExecutionDetails = executionService.getExecutionDetails(baseExecId);
-		List<ExecutionDetailsResponseDTO> executionDetails = new ArrayList<>();
-		List<String> executionNames = new ArrayList<>();
-		executionDetails.add(baseExecutionDetails);
-		for (UUID executionId : executionIds) {
-			executionDetails.add(executionService.getExecutionDetails(executionId));
-		}
-
-		Map<String, ExecutionDetailsResponseDTO> executionDetailsMap = new HashMap<>();
+		Map<String, ExecutionDetailsResponseDTO> executionDetailsMap = new LinkedHashMap<>();
 		Execution execution = executionRepository.findById(baseExecId).get();
-		executionNames.add(execution.getName());
+
 		executionDetailsMap.put(execution.getName(), baseExecutionDetails);
 		for (UUID executionId : executionIds) {
-			execution = executionRepository.findById(executionId).get();
-			executionNames.add(execution.getName());
-			executionDetailsMap.put(execution.getName(), executionService.getExecutionDetails(executionId));
+			Execution executionDetails = executionRepository.findById(executionId).get();
+			executionDetailsMap.put(executionDetails.getName(), executionService.getExecutionDetails(executionId));
+		}
+
+		ExecutionDetailsResponseDTO baseScriptNames = executionDetailsMap
+				.get(executionRepository.findById(baseExecId).get().getName());
+		List<ExecutionResultDTO> execResult = baseScriptNames.getExecutionResults();
+		List<String> baseScriptName = new ArrayList<>();
+		for (ExecutionResultDTO result : execResult) {
+			baseScriptName.add(result.getName());
 		}
 
 		int rowNum = 6;
@@ -1815,11 +1962,24 @@ public class ExportExcelService implements IExportExcelService {
 			row.createCell(9).setCellValue(entry.getValue().getSummary().getSkipped());
 			row.createCell(10).setCellValue(entry.getValue().getSummary().getSuccessPercentage());
 
-			// TODO: Need to add new failure script count, new timedout script count, new
-			// script count
-			row.createCell(11).setCellValue(0);
-			row.createCell(12).setCellValue(0);
-			row.createCell(13).setCellValue(0);
+			int newFailureScriptCount = 0;
+			int newTimedoutScriptCount = 0;
+			int newScriptCount = 0;
+			List<ExecutionResultDTO> executionResult = entry.getValue().getExecutionResults();
+			for (ExecutionResultDTO result : executionResult) {
+				if (!baseScriptName.contains(result.getName())) {
+					newScriptCount++;
+					if (result.getStatus().equals("FAILURE")) {
+						newFailureScriptCount++;
+					} else if (result.getStatus().equals("TIMEOUT")) {
+						newTimedoutScriptCount++;
+					}
+				}
+			}
+			row.createCell(11).setCellValue(newFailureScriptCount);
+			row.createCell(12).setCellValue(newTimedoutScriptCount);
+			row.createCell(13).setCellValue(newScriptCount);
+
 			for (int i = 0; i < headers.length; i++) {
 				row.getCell(i).setCellStyle(style);
 			}
@@ -1999,69 +2159,116 @@ public class ExportExcelService implements IExportExcelService {
 		if (pluginMatcher.find()) {
 			pluginName = pluginMatcher.group(1).trim();
 		}
-		Sheet sheet = workBook.createSheet(pluginName.toLowerCase());
-		int rowNum = 0;
-		// Add a "Back to Summary" link at the top
-		Row backRow = sheet.createRow(rowNum++);
-		Cell backCell = backRow.createCell(0);
-		backCell.setCellValue("Back to Summary");
+		if (pluginName != null) {
 
-		CreationHelper creationHelper = workBook.getCreationHelper();
-		Hyperlink backLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
-		backLink.setAddress("'Summary'!A1");
-		backCell.setHyperlink(backLink);
+			Sheet sheet = workBook.createSheet(pluginName.toLowerCase());
+			int rowNum = 0;
+			// Add a "Back to Summary" link at the top
+			Row backRow = sheet.createRow(rowNum++);
+			Cell backCell = backRow.createCell(0);
+			backCell.setCellValue("Back to Summary");
 
-		// Create a CellStyle for headers with bold font
-		CellStyle headerStyle = workBook.createCellStyle();
-		Font headerFont = workBook.createFont();
-		headerFont.setBold(true); // Set font to bold
-		headerStyle.setFont(headerFont);
+			CreationHelper creationHelper = workBook.getCreationHelper();
+			Hyperlink backLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
+			backLink.setAddress("'Summary'!A1");
+			backCell.setHyperlink(backLink);
 
-		CellStyle linkStyle = workBook.createCellStyle();
-		Font linkFont = workBook.createFont();
-		linkFont.setUnderline(Font.U_SINGLE);
-		linkFont.setColor(IndexedColors.BLUE.getIndex());
-		linkStyle.setFont(linkFont);
-		backCell.setCellStyle(linkStyle);
+			// Create a CellStyle for headers with bold font
+			CellStyle headerStyle = workBook.createCellStyle();
+			Font headerFont = workBook.createFont();
+			headerFont.setBold(true); // Set font to bold
+			headerStyle.setFont(headerFont);
 
-		Pattern entirePreReqSectionPattern = Pattern
-				.compile("#---------------------------- Plugin Pre-requisite ----------------------------#\\r?\\n"
-						+ "(.*?)" + "Plugin Pre-requisite Status\\s*:\\s*\\w+\\r?\\n", Pattern.DOTALL);
+			CellStyle linkStyle = workBook.createCellStyle();
+			Font linkFont = workBook.createFont();
+			linkFont.setUnderline(Font.U_SINGLE);
+			linkFont.setColor(IndexedColors.BLUE.getIndex());
+			linkStyle.setFont(linkFont);
+			backCell.setCellStyle(linkStyle);
 
-		// Then, pattern to match each individual pre-requisite block within the section
-		Pattern individualPreReqPattern = Pattern
-				.compile("Pre Requisite\\s*:\\s*(.*?)\\r?\\n" + "Pre Requisite No\\s*:\\s*(\\d+)\\r?\\n" + "(.*?)"
-						+ "#--------- \\[Pre-requisite Status\\]\\s*:\\s*(.*?)\\s*----------#", Pattern.DOTALL);
+			Pattern entirePreReqSectionPattern = Pattern
+					.compile("#---------------------------- Plugin Pre-requisite ----------------------------#\\r?\\n"
+							+ "(.*?)" + "Plugin Pre-requisite Status\\s*:\\s*\\w+\\r?\\n", Pattern.DOTALL);
 
-		// First, find the entire pre-requisite section
-		Matcher sectionMatcher = entirePreReqSectionPattern.matcher(logData);
-		if (sectionMatcher.find()) {
-			String entirePreReqSection = sectionMatcher.group(1);
+			// Then, pattern to match each individual pre-requisite block within the section
+			Pattern individualPreReqPattern = Pattern
+					.compile(
+							"Pre Requisite\\s*:\\s*(.*?)\\r?\\n" + "Pre Requisite No\\s*:\\s*(\\d+)\\r?\\n" + "(.*?)"
+									+ "#--------- \\[Pre-requisite Status\\]\\s*:\\s*(.*?)\\s*----------#",
+							Pattern.DOTALL);
 
-			// Now find all individual pre-requisite blocks within that section
-			Matcher individualPreReqMatcher = individualPreReqPattern.matcher(entirePreReqSection);
+			// First, find the entire pre-requisite section
+			Matcher sectionMatcher = entirePreReqSectionPattern.matcher(logData);
+			if (sectionMatcher.find()) {
+				String entirePreReqSection = sectionMatcher.group(1);
 
-			int preReqNum = 1;
-			boolean preReqHeaderCreated = false;
+				// Now find all individual pre-requisite blocks within that section
+				Matcher individualPreReqMatcher = individualPreReqPattern.matcher(entirePreReqSection);
 
-			while (individualPreReqMatcher.find()) {
-				String[] preReqHeaders = { "Sl.No", "Pre-Requisite Name", "Status", "Executed On", "Log Data",
-						"Jira ID", "Issue Type", "Remarks" };
-				if (!preReqHeaderCreated) {
-					// Create header row for pre-requisites
-					createAndStyleArialHeaders(sheet, rowNum++, preReqHeaders, 0);
-					preReqHeaderCreated = true;
+				int preReqNum = 1;
+				boolean preReqHeaderCreated = false;
+
+				while (individualPreReqMatcher.find()) {
+					String[] preReqHeaders = { "Sl.No", "Pre-Requisite Name", "Status", "Executed On", "Log Data",
+							"Jira ID", "Issue Type", "Remarks" };
+					if (!preReqHeaderCreated) {
+						// Create header row for pre-requisites
+						createAndStyleArialHeaders(sheet, rowNum++, preReqHeaders, 0);
+						preReqHeaderCreated = true;
+					}
+
+					Row row = sheet.createRow(rowNum++);
+					row.createCell(0).setCellValue(preReqNum++);
+					row.createCell(1).setCellValue(individualPreReqMatcher.group(1).trim()); // Pre-Requisite Name
+					row.createCell(2).setCellValue(individualPreReqMatcher.group(4).trim()); // Status from
+																								// [Pre-requisite
+																								// Status]
+					row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
+																			// available
+					row.createCell(4).setCellValue(individualPreReqMatcher.group(0).trim()); // Log Data);
+
+					if (analysis != null) {
+						row.createCell(5)
+								.setCellValue(analysis.getAnalysisTicketID() != null
+										? analysis.getAnalysisTicketID().toString()
+										: "N/A");
+						row.createCell(6)
+								.setCellValue(analysis.getAnalysisDefectType().toString() != null
+										? analysis.getAnalysisDefectType().toString()
+										: "N/A");
+						row.createCell(7).setCellValue(
+								analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+					} else {
+						row.createCell(5).setCellValue("N/A");
+						row.createCell(6).setCellValue("N/A");
+						row.createCell(7).setCellValue("N/A");
+					}
+
+					for (int i = 0; i < preReqHeaders.length; i++) {
+						row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
+					}
 				}
+			}
 
+			// Create header row for test cases
+			String[] testCaseHeaders = { "Sl.No", "Test Case Name", "Status", "Executed On", "Log Data", "Jira ID",
+					"Issue Type", "Remarks" };
+
+			createAndStyleArialHeaders(sheet, rowNum++, testCaseHeaders, 0);
+			// Parse test cases and populate rows
+			Pattern testCasePattern = Pattern.compile(
+					"#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?TEST STEP STATUS\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
+					Pattern.DOTALL);
+			Matcher testCaseMatcher = testCasePattern.matcher(logData);
+			int testCaseNum = 1;
+			while (testCaseMatcher.find()) {
 				Row row = sheet.createRow(rowNum++);
-				row.createCell(0).setCellValue(preReqNum++);
-				row.createCell(1).setCellValue(individualPreReqMatcher.group(1).trim()); // Pre-Requisite Name
-				row.createCell(2).setCellValue(individualPreReqMatcher.group(4).trim()); // Status from [Pre-requisite
-																							// Status]
+				row.createCell(0).setCellValue(testCaseNum++);
+				row.createCell(1).setCellValue(testCaseMatcher.group(1).trim());
+				row.createCell(2).setCellValue(testCaseMatcher.group(4).trim());
 				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
 																		// available
-				row.createCell(4).setCellValue(individualPreReqMatcher.group(0).trim()); // Log Data);
-
+				row.createCell(4).setCellValue(testCaseMatcher.group(0).trim());
 				if (analysis != null) {
 					row.createCell(5).setCellValue(
 							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
@@ -2072,126 +2279,297 @@ public class ExportExcelService implements IExportExcelService {
 					row.createCell(7).setCellValue(
 							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
 				} else {
+
 					row.createCell(5).setCellValue("N/A");
 					row.createCell(6).setCellValue("N/A");
 					row.createCell(7).setCellValue("N/A");
-				}
 
-				for (int i = 0; i < preReqHeaders.length; i++) {
+				}
+				for (int i = 0; i < testCaseHeaders.length; i++) {
 					row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
 				}
 			}
+
+			// Parse post-requisites and populate rows (if any)
+			Pattern postReqPattern = Pattern.compile(
+					"Post Requisite : (.*?)\\n.*?#--------- \\[Post-requisite Status\\] : (.*?) ----------#",
+					Pattern.DOTALL);
+			Matcher postReqMatcher = postReqPattern.matcher(logData);
+			boolean postReqHeaderCreated = false;
+			int postReqNum = 1;
+			while (postReqMatcher.find()) {
+				if (!postReqHeaderCreated) {
+					// Create header row for post-requisites
+					String[] postReqHeaders = { "Sl.No", "Post-Requisite Name", "Status", "Executed On", "Log Data",
+							"Jira ID", "Issue Type", "Remarks" };
+					createAndStyleArialHeaders(sheet, rowNum++, postReqHeaders, 0);
+					postReqHeaderCreated = true;
+				}
+
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(postReqNum++);
+				row.createCell(1).setCellValue(postReqMatcher.group(1).trim());
+				row.createCell(2).setCellValue(postReqMatcher.group(2).trim());
+				row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if
+																		// available
+				row.createCell(4).setCellValue(postReqMatcher.group(0).trim());
+				if (analysis != null) {
+					row.createCell(5).setCellValue(
+							analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
+					row.createCell(6)
+							.setCellValue(analysis.getAnalysisDefectType().toString() != null
+									? analysis.getAnalysisDefectType().toString()
+									: "N/A");
+					row.createCell(7).setCellValue(
+							analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
+				} else {
+
+					row.createCell(5).setCellValue("N/A");
+					row.createCell(6).setCellValue("N/A");
+					row.createCell(7).setCellValue("N/A");
+
+				}
+				for (int i = 0; i < testCaseHeaders.length; i++) {
+					row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
+				}
+			}
+			File tmConfigFile = new File(
+					AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE);
+			String logLink = commonService.getConfigProperty(tmConfigFile, Constants.TM_URL)
+					+ "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
+			Row logLinkRow = sheet.createRow(rowNum + 2);
+			Cell logLinkCell = logLinkRow.createCell(0);
+			logLinkCell.setCellValue("LogLink");
+			CreationHelper createHelper = workBook.getCreationHelper();
+			Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
+			hyperlink.setAddress(logLink);
+			Cell logLinkCellValue = logLinkRow.createCell(1);
+			logLinkCellValue.setCellValue(logLink);
+			logLinkCellValue.setHyperlink(hyperlink);
+			logLinkCellValue.setCellStyle(linkStyle);
+			autoSizeColumns(sheet, 0, 4);
 		}
-
-		// Create header row for test cases
-		String[] testCaseHeaders = { "Sl.No", "Test Case Name", "Status", "Executed On", "Log Data", "Jira ID",
-				"Issue Type", "Remarks" };
-
-		createAndStyleArialHeaders(sheet, rowNum++, testCaseHeaders, 0);
-		// Parse test cases and populate rows
-		Pattern testCasePattern = Pattern.compile(
-				"#==============================================================================#\\nTEST CASE NAME\\s*:\\s*(.*?)\\n.*?TEST CASE ID\\s*:\\s*(.*?)\\n.*?DESCRIPTION\\s*:\\s*(.*?)\\n.*?TEST STEP STATUS\\s*:\\s*(.*?)\\n.*?##--------- \\[TEST EXECUTION STATUS\\]\\s*:\\s*(.*?)\\s*----------##",
-				Pattern.DOTALL);
-		Matcher testCaseMatcher = testCasePattern.matcher(logData);
-		int testCaseNum = 1;
-		while (testCaseMatcher.find()) {
-			Row row = sheet.createRow(rowNum++);
-			row.createCell(0).setCellValue(testCaseNum++);
-			row.createCell(1).setCellValue(testCaseMatcher.group(1).trim());
-			row.createCell(2).setCellValue(testCaseMatcher.group(4).trim());
-			row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if available
-			row.createCell(4).setCellValue(testCaseMatcher.group(0).trim());
-			if (analysis != null) {
-				row.createCell(5).setCellValue(
-						analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
-				row.createCell(6)
-						.setCellValue(analysis.getAnalysisDefectType().toString() != null
-								? analysis.getAnalysisDefectType().toString()
-								: "N/A");
-				row.createCell(7).setCellValue(
-						analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
-			} else {
-
-				row.createCell(5).setCellValue("N/A");
-				row.createCell(6).setCellValue("N/A");
-				row.createCell(7).setCellValue("N/A");
-
-			}
-			for (int i = 0; i < testCaseHeaders.length; i++) {
-				row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
-			}
-		}
-
-		// Parse post-requisites and populate rows (if any)
-		Pattern postReqPattern = Pattern.compile(
-				"Post Requisite : (.*?)\\n.*?#--------- \\[Post-requisite Status\\] : (.*?) ----------#",
-				Pattern.DOTALL);
-		Matcher postReqMatcher = postReqPattern.matcher(logData);
-		boolean postReqHeaderCreated = false;
-		int postReqNum = 1;
-		while (postReqMatcher.find()) {
-			if (!postReqHeaderCreated) {
-				// Create header row for post-requisites
-				String[] postReqHeaders = { "Sl.No", "Post-Requisite Name", "Status", "Executed On", "Log Data",
-						"Jira ID", "Issue Type", "Remarks" };
-				createAndStyleArialHeaders(sheet, rowNum++, postReqHeaders, 0);
-				postReqHeaderCreated = true;
-			}
-
-			Row row = sheet.createRow(rowNum++);
-			row.createCell(0).setCellValue(postReqNum++);
-			row.createCell(1).setCellValue(postReqMatcher.group(1).trim());
-			row.createCell(2).setCellValue(postReqMatcher.group(2).trim());
-			row.createCell(3).setCellValue(createdDate.toString()); // Replace with actual execution time if available
-			row.createCell(4).setCellValue(postReqMatcher.group(0).trim());
-			if (analysis != null) {
-				row.createCell(5).setCellValue(
-						analysis.getAnalysisTicketID() != null ? analysis.getAnalysisTicketID().toString() : "N/A");
-				row.createCell(6)
-						.setCellValue(analysis.getAnalysisDefectType().toString() != null
-								? analysis.getAnalysisDefectType().toString()
-								: "N/A");
-				row.createCell(7).setCellValue(
-						analysis.getAnalysisRemark() != null ? analysis.getAnalysisRemark().toString() : "N/A");
-			} else {
-
-				row.createCell(5).setCellValue("N/A");
-				row.createCell(6).setCellValue("N/A");
-				row.createCell(7).setCellValue("N/A");
-
-			}
-			for (int i = 0; i < testCaseHeaders.length; i++) {
-				row.getCell(i).setCellStyle(createArialStyle(workBook.getSheetAt(0).getWorkbook()));
-			}
-		}
-		File tmConfigFile = new File(
-				AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE);
-		String logLink = commonService.getConfigProperty(tmConfigFile, Constants.TM_URL)
-				+ "/execution/getExecutionLogs?executionResultID=" + executionResult.getId();
-		Row logLinkRow = sheet.createRow(rowNum + 2);
-		Cell logLinkCell = logLinkRow.createCell(0);
-		logLinkCell.setCellValue("LogLink");
-		CreationHelper createHelper = workBook.getCreationHelper();
-		Hyperlink hyperlink = createHelper.createHyperlink(HyperlinkType.URL);
-		hyperlink.setAddress(logLink);
-		Cell logLinkCellValue = logLinkRow.createCell(1);
-		logLinkCellValue.setCellValue(logLink);
-		logLinkCellValue.setHyperlink(hyperlink);
-		logLinkCellValue.setCellStyle(linkStyle);
-		autoSizeColumns(sheet, 0, 4);
 	}
 
 	/**
-	 * Create consolidated summary sheet
+	 * This method is used to generate the summary For scripts without pluginData
 	 * 
-	 * @param workBook
-	 * @param logData
-	 * @param execution
-	 * @throws IOException
+	 * @param failedScripts
+	 * @param sheet
+	 * @param rowCount
+	 * @return void
 	 */
-	private int createConsolidatedSummarySheet(Sheet sheet, int rowCount, List<String> logData, Execution execution) {
+	private void summaryForScriptsWithoutPluginData(List<ExecutionResult> failedScripts, Sheet sheet, int rowCount) {
 
-		String heading = "RDKSERVICES Summary";
+		String rdkserviceModuleSummary = "RDKSERVICE Module Summary";
+		Row rowForRdkserviceModule = sheet.createRow(rowCount++);
+		Cell headCellForRdkServiceModule = rowForRdkserviceModule.createCell(3);
+		headCellForRdkServiceModule.setCellValue(rdkserviceModuleSummary);
+		CellStyle headStyleForRdkServiceModule = sheet.getWorkbook().createCellStyle();
+		Font headFontForRdkServiceModule = sheet.getWorkbook().createFont();
+		headFontForRdkServiceModule.setUnderline(Font.U_SINGLE);
+		headFontForRdkServiceModule.setBold(true);
+		headFontForRdkServiceModule.setFontName("Arial");
+		headStyleForRdkServiceModule.setFont(headFontForRdkServiceModule);
+		headCellForRdkServiceModule.setCellStyle(headStyleForRdkServiceModule);
+
+		Cell warningMessage = rowForRdkserviceModule.createCell(4);
+		warningMessage.setCellValue(
+				"Below RDKServices scripts  did not run \n. Without logs, plugin-based data could not be rendered,\n so module-wise data was added");
+		CellStyle warningMessageStyle = sheet.getWorkbook().createCellStyle();
+		Font warningMessageFont = sheet.getWorkbook().createFont();
+		// set colour to this text as red
+		warningMessageFont.setColor(IndexedColors.RED.getIndex());
+		warningMessageFont.setFontName("Arial");
+		warningMessageStyle.setFont(warningMessageFont);
+		warningMessage.setCellStyle(warningMessageStyle);
+
+		rowCount++;
+
+		String[] headersException = { "Sl No", "Module", "Executed", "SUCCESS", "FAILURE", "SCRIPT TIME OUT", "N/A",
+				"SKIPPED" };
+		createAndStyleArialHeaders(sheet, rowCount++, headersException, 0);
+
+		Map<Module, List<ExecutionResult>> modueExecutionMap = new LinkedHashMap<>();
+		for (ExecutionResult failedScript : failedScripts) {
+
+			Module module = scriptRepository.findByName(failedScript.getScript()).getModule();
+
+			modueExecutionMap.putIfAbsent(module, new ArrayList<>());
+			modueExecutionMap.get(module).add(failedScript);
+
+		}
+		int sl = 1;
+
+		int totalExecutedCount = 0;
+		int totalSuccessCount = 0;
+		int totalFailureCount = 0;
+		int totalTimeoutCount = 0;
+		int totalNaCount = 0;
+		int totalSkippedCount = 0;
+
+		for (Map.Entry<Module, List<ExecutionResult>> entry : modueExecutionMap.entrySet()) {
+			Row row = sheet.createRow(rowCount++);
+			row.createCell(0).setCellValue(sl++);
+			// row.createCell(1).setCellValue(entry.getKey().getName());
+
+			Cell moduleCell = row.createCell(1);
+			moduleCell.setCellValue(entry.getKey().getName().toLowerCase());
+			CreationHelper creationHelper = sheet.getWorkbook().getCreationHelper();
+			Hyperlink link = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
+			link.setAddress("'" + entry.getKey().getName().toLowerCase() + "'!A1"); // Target module sheet
+			moduleCell.setHyperlink(link);
+
+			CellStyle linkStyle = sheet.getWorkbook().createCellStyle();
+			Font linkFont = sheet.getWorkbook().createFont();
+			linkFont.setUnderline(Font.U_SINGLE);
+			linkFont.setColor(IndexedColors.BLUE.getIndex());
+			linkFont.setFontName("Arial");
+			linkStyle.setFont(linkFont);
+			moduleCell.setCellStyle(linkStyle);
+
+			int executed = 0;
+			int success = 0;
+			int failure = 0;
+			int timeout = 0;
+			int na = 0;
+			int skipped = 0;
+			for (ExecutionResult failedScript : entry.getValue()) {
+				if (failedScript.getResult().equals(ExecutionResultStatus.SUCCESS)) {
+					success++;
+				} else if (failedScript.getResult().equals(ExecutionResultStatus.FAILURE)) {
+					failure++;
+				} else if (failedScript.getResult().equals(ExecutionResultStatus.TIMEOUT)) {
+					timeout++;
+				} else if (failedScript.getResult().equals(ExecutionResultStatus.NA)) {
+					na++;
+				} else if (failedScript.getResult().equals(ExecutionResultStatus.SKIPPED)) {
+					skipped++;
+				}
+				executed++;
+			}
+			row.createCell(2).setCellValue(executed);
+			row.createCell(3).setCellValue(success);
+			row.createCell(4).setCellValue(failure);
+			row.createCell(5).setCellValue(timeout);
+			row.createCell(6).setCellValue(na);
+			row.createCell(7).setCellValue(skipped);
+			totalExecutedCount += executed;
+			totalSuccessCount += success;
+			totalFailureCount += failure;
+			totalTimeoutCount += timeout;
+			totalNaCount += na;
+			totalSkippedCount += skipped;
+			//
+
+			for (int i = 2; i < 8; i++) {
+				row.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
+			}
+		}
+
+		// Create Total row
+		Row rowTotalForModule = sheet.createRow(rowCount++);
+		rowTotalForModule.createCell(0).setCellValue("");
+		rowTotalForModule.createCell(1).setCellValue("Total");
+		rowTotalForModule.createCell(2).setCellValue(totalExecutedCount);
+		rowTotalForModule.createCell(3).setCellValue(totalSuccessCount);
+		rowTotalForModule.createCell(4).setCellValue(totalFailureCount);
+		rowTotalForModule.createCell(5).setCellValue(totalTimeoutCount);
+		rowTotalForModule.createCell(6).setCellValue(totalNaCount);
+		rowTotalForModule.createCell(7).setCellValue(totalSkippedCount);
+		for (int i = 0; i < 8; i++) {
+			rowTotalForModule.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
+		}
+
+		for (Map.Entry<Module, List<ExecutionResult>> entry : modueExecutionMap.entrySet()) {
+			// create module sheets
+			Sheet moduleSheet = sheet.getWorkbook().createSheet(entry.getKey().getName().toLowerCase());
+			int rowNum = 0;
+
+			// Add a "Go to Summary" link at the top
+			Row backRow = moduleSheet.createRow(rowNum++);
+			Cell backCell = backRow.createCell(0);
+			backCell.setCellValue("Go to Summary");
+
+			CreationHelper creationHelper = sheet.getWorkbook().getCreationHelper();
+			Hyperlink backLink = creationHelper.createHyperlink(HyperlinkType.DOCUMENT);
+			backLink.setAddress("'Summary'!A1");
+			backCell.setHyperlink(backLink);
+
+			// Create a CellStyle for headers with bold font
+			CellStyle headerStyle = sheet.getWorkbook().createCellStyle();
+			Font headerFont = sheet.getWorkbook().createFont();
+			headerFont.setBold(true); // Set font to bold
+			headerFont.setFontName("Arial");
+			headerStyle.setFont(headerFont);
+
+			CellStyle linkStyle = sheet.getWorkbook().createCellStyle();
+			Font linkFont = sheet.getWorkbook().createFont();
+			linkFont.setUnderline(Font.U_SINGLE);
+			linkFont.setColor(IndexedColors.BLUE.getIndex());
+			linkFont.setFontName("Arial");
+			linkStyle.setFont(linkFont);
+
+			backCell.setCellStyle(linkStyle);
+
+			// Create headers for the module sheet
+			Row headerRow = moduleSheet.createRow(rowNum++);
+			String[] headersModules = { "Sl.No", "Script Name", "Executed", "Status", "Executed On", "Log Data",
+					"Jira ID", "Issue Type", "Remarks" };
+			for (int i = 0; i < headersModules.length; i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(headersModules[i]);
+				cell.setCellStyle(headerStyle);
+			}
+			int serialNo = 1;
+			for (ExecutionResult failedScript : entry.getValue()) {
+				Row row = moduleSheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(serialNo++);
+				row.createCell(1).setCellValue(failedScript.getScript());
+				if (failedScript.getResult().equals(ExecutionResultStatus.SUCCESS)
+						|| failedScript.getResult().equals(ExecutionResultStatus.FAILURE)) {
+					row.createCell(2).setCellValue("YES");
+				} else {
+					row.createCell(2).setCellValue("NO");
+				}
+
+				row.createCell(3).setCellValue(failedScript.getResult().toString());
+				row.createCell(4).setCellValue(failedScript.getDateOfExecution().toString());
+				row.createCell(5).setCellValue(executionService.getExecutionLogs(failedScript.getId().toString()));
+				ExecutionResultAnalysis analysis = executionResultAnalysisRepository
+						.findByExecutionResult(failedScript);
+				if (analysis != null) {
+					row.createCell(6).setCellValue(analysis.getAnalysisTicketID().toString());
+					row.createCell(7).setCellValue(analysis.getAnalysisDefectType().toString());
+					row.createCell(8).setCellValue(analysis.getAnalysisRemark());
+				} else {
+					row.createCell(6).setCellValue("N/A");
+					row.createCell(7).setCellValue("N/A");
+					row.createCell(8).setCellValue("N/A");
+				}
+				for (int i = 0; i < headersModules.length; i++) {
+					row.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
+				}
+			}
+			autoSizeColumns(moduleSheet, 0, 8);
+		}
+
+		autoSizeColumns(sheet, 0, 7);
+
+	}
+
+	/**
+	 * This method is used to generate the summary sheet for the plugin data
+	 * 
+	 * @param logData
+	 * @param sheet
+	 * @param rowCount
+	 * @param pattern
+	 * @return
+	 */
+	private int pluginSummaryData(List<String> logData, Sheet sheet, int rowCount, Pattern pattern) {
+
+		String heading = "RDKSERVICE Summary";
 		Row rowHead = sheet.createRow(rowCount++);
 		Cell headCells = rowHead.createCell(3);
 		headCells.setCellValue(heading);
@@ -2207,30 +2585,21 @@ public class ExportExcelService implements IExportExcelService {
 		String[] headers = { "Sl No", "Plugins", "Script Status", "Total Test Case", "Executed", "SUCCESS", "FAILURE",
 				"N/A" };
 		createAndStyleArialHeaders(sheet, rowCount++, headers, 0);
-		System.out.println("Log Data: " + logData);
-		// Define the pattern to extract the required information
-		Pattern pattern = Pattern.compile("======================== PLUGIN TEST SUMMARY ======================\\r?\\n"
-				+ "PLUGIN NAME\\s*:\\s*(.*?)\\r?\\n" + "TOTAL TESTS\\s*:\\s*(\\d+)\\r?\\n"
-				+ "EXECUTED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "PASSED TESTS\\s*:\\s*(\\d+)\\r?\\n"
-				+ "FAILED TESTS\\s*:\\s*(\\d+)\\r?\\n" + "N/A TESTS\\s*:\\s*(\\d+)\\r?\\n" + "\\r?\\n"
-				+ "Final Plugin Tests Status\\s*:\\s*(.*?)\\r?\\n", Pattern.DOTALL);
+
 		// Find all matches in the log data
 		int totalTestCasesSum = 0;
 		int executedTestCasesSum = 0;
 		int successTestCasesSum = 0;
 		int failureTestCasesSum = 0;
 		int naTestCasesSum = 0;
+		int slNo = 1;
 		for (String log : logData) {
 			Matcher matcher = pattern.matcher(log);
 			// Create a row for each match
-			int slNo = 1;
-			// i need to add up for each finder
 
 			while (matcher.find()) {
 				Row row = sheet.createRow(rowCount++);
 				row.createCell(0).setCellValue(slNo++);
-				// row.createCell(1).setCellValue(matcher.group(1).trim());
-				// Create and style hyperlink for module name
 				Cell pluginCell = row.createCell(1);
 				pluginCell.setCellValue(matcher.group(1).trim().toLowerCase());
 				CreationHelper creationHelper = sheet.getWorkbook().getCreationHelper();
@@ -2253,7 +2622,7 @@ public class ExportExcelService implements IExportExcelService {
 				row.createCell(6).setCellValue(Integer.parseInt(matcher.group(5).trim()));
 				row.createCell(7).setCellValue(Integer.parseInt(matcher.group(6).trim()));
 
-				for (int i = 2; i < headers.length; i++) {
+				for (int i = 2; i < 8; i++) {
 					row.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 				}
 
@@ -2271,7 +2640,6 @@ public class ExportExcelService implements IExportExcelService {
 				failureTestCasesSum += failureTestCases;
 				naTestCasesSum += naTestCases;
 			}
-
 		}
 
 		// Create a row for the total
@@ -2284,14 +2652,11 @@ public class ExportExcelService implements IExportExcelService {
 		rowTotal.createCell(5).setCellValue(successTestCasesSum);
 		rowTotal.createCell(6).setCellValue(failureTestCasesSum);
 		rowTotal.createCell(7).setCellValue(naTestCasesSum);
-		for (int i = 0; i < headers.length; i++) {
+		for (int i = 0; i < 8; i++) {
 			rowTotal.getCell(i).setCellStyle(createArialStyle(sheet.getWorkbook()));
 		}
-
-		autoSizeColumns(sheet, 0, 7);
-
+		//
 		return rowCount;
-
 	}
 
 }
