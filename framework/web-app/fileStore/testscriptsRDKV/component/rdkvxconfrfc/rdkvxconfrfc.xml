@@ -15,16 +15,6 @@
 <?xml version="1.0" encoding="UTF-8"?><xml>
   <module testGroup="Component" name="rdkvxconfrfc">
     <primitiveTests>
-      <primitiveTest name="rfc_updateserverurl" id="" version="1">
-        <function>rfc_updateserverurl</function>
-        <parameters>
-          <parameter name="RFC_XCONF_URL" value=""/>
-        </parameters>
-      </primitiveTest>
-      <primitiveTest name="rfc_parodusstatuscheck" id="" version="1">
-        <function>rfc_parodusstatuscheck</function>
-        <parameters/>
-      </primitiveTest>
       <primitiveTest name="rfc_datamodelcheck" id=" " version="1">
         <function>rfc_datamodelcheck</function>
         <parameters>
@@ -49,24 +39,11 @@
           <parameter name="xconfdomainname" value=""/>
         </parameters>
       </primitiveTest>
-      <primitiveTest name="rfc_restartservice" id="" version="1">
-        <function>rfc_restartservice</function>
-        <parameters/>
-      </primitiveTest>
       <primitiveTest name="rfc_check_setornot_configdata" id=" " version="1">
         <function>rfc_check_setornot_configdata</function>
         <parameters>
           <parameter name="expectedvalue" value=""/>
           <parameter name="rfcparameter" value=""/>
-        </parameters>
-      </primitiveTest>
-      <primitiveTest name="rfc_rollbackdatamodelvalue" id=" " version="2">
-        <function>rfc_rollbackdatamodelvalue</function>
-        <parameters>
-          <parameter name="rfcparameter" value=""/>
-          <parameter name="actualvalue" value=""/>
-          <parameter name="xconfdomainname" value=""/>
-          <parameter name="feature_name" value=""/>
         </parameters>
       </primitiveTest>
       <primitiveTest name="rfc_urlvalidate" id=" " version="3">
@@ -92,6 +69,28 @@
         <function>rfc_deletefeaturerule</function>
         <parameters>
           <parameter name="xconfdomainname" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_partnersdefaultschecker" id="" version="1">
+        <function>rfc_partnersdefaultschecker</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rfc_datfilechecker" id="" version="1">
+        <function>rfc_datfilechecker</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rfc_enable_maintenance_manager" id=" " version="1">
+        <function>rfc_enable_maintenance_manager</function>
+        <parameters>
+          <parameter name="method" value=""/>
+          <parameter name="params" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rfc_disable_enable_maintenance_manager" id=" " version="1">
+        <function>rfc_disable_enable_maintenance_manager</function>
+        <parameters>
+          <parameter name="method" value=""/>
+          <parameter name="params" value=""/>
         </parameters>
       </primitiveTest>
     </primitiveTests>

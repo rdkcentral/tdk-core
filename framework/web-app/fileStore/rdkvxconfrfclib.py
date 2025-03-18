@@ -30,6 +30,7 @@ import inspect
 import configparser
 from time import sleep
 import pexpect
+import tdklib
 
 #---------------------------------------------------------------
 #INITIALIZE THE MODULE
@@ -76,7 +77,6 @@ def rfc_getDeviceConfig (basePath, configKey):
     else:
         output = "FAILURE : No Device config file found : " + deviceNameConfigFile + " or " + deviceTypeConfigFile
         print(output)
-        #print "[ERROR]: No Device config file found : %s or %s" %(deviceNameConfigFile,deviceTypeConfigFile)
     try:
         if (len (deviceConfigFile) != 0) and (len (configKey) != 0):
             config = configparser.ConfigParser ()
@@ -170,7 +170,7 @@ def rfc_urlvalidate(basePath, configKey):
     configValue = rfc_getDeviceConfig (basePath, configKey)
     if "FAILURE" not in configValue:
         if len(configValue) == 0:
-            output = "[INFO] - Please configure the XCONF server URL in device config file"
+            output = "[INFO] - Please configure the xconf server URL in device config file"
             print(output)
             rfc_urlvalidatestatus="FAILURE"
         else:
@@ -185,10 +185,10 @@ def rfc_urlvalidate(basePath, configKey):
                 result=str(result[1])
                 if "200" in result:
                     output = configValue
-                    print("SUCCESS : Configured XCONF server URL "+output)
+                    print("SUCCESS : Configured xconf server URL : "+output+" accessed by the device")
                 else:
                     output = configValue
-                    output = "FAILURE : Please configure accessible URL "+output
+                    output = "FAILURE : Please configure accessible xconf server URL : "+output
                     print(output)
                     rfc_urlvalidatestatus="FAILURE"
             else:
@@ -241,70 +241,6 @@ def rfc_getmacaddress():
     return getmacaddressstatus
 
 #-----------------------------------------------------------------
-# UPDATE THE RFC FILE BY XCONF URL
-#-----------------------------------------------------------------
-def rfc_updateserverurl(RFC_XCONF_URL):
-    updatefilestatus="SUCCESS"
-    config_status=rfc_obtainCredentials()
-    if "FAILURE" not in config_status:
-        credentials = deviceIP + ',' + user_name + ',' + password
-        #check whether the rfc file updated or not
-        command="grep -q "+RFC_XCONF_URL+" /etc/rfc.properties  && echo 1 || echo 0"
-        print("Executing Command : %s" %command)
-        #execute in DUT function
-        result=rfc_executeInDUT (sshMethod, credentials, command)
-        result = str(result).split("\n")
-        print(result)
-        if int(result[1]) == 1:
-            print("\nAlready RFC file have updated xconf url")
-        else:
-            print("\nRFC file not updated with xconfurl..Updating Xconfurl with RFC file Please wait.....")
-            modify_url=RFC_XCONF_URL.replace("/","\\/")
-            command= "sed -i 's/^RFC_CONFIG_SERVER_URL=.*/RFC_CONFIG_SERVER_URL="+modify_url+"/' /etc/rfc.properties ; grep -q "+RFC_XCONF_URL+" /etc/rfc.properties && echo 1 || echo 0"
-            print("Executing Command : %s" %command)
-            #execute in DUT function
-            result=rfc_executeInDUT (sshMethod, credentials, command)
-            result = str(result).split("\n")
-            print(result)
-            if int(result[1]) == 1:
-                print("\nSUCCESS : Successfully updated xconfurl in RFC file")
-            else:
-                print("\nFAILURE: Failed to update the xconfurl in RFC file")
-                updatefilestatus="FAILURE"
-    else:
-        print("\nFAILURE : Failed to get the device credentials")
-        updatefilestatus="FAILURE"
-    return updatefilestatus
-
-#-----------------------------------------------------------------
-# CHECK THE PARODUS STATUS
-#-----------------------------------------------------------------
-def rfc_parodusstatuscheck():
-    parodusstatus="SUCCESS"
-    config_status=rfc_obtainCredentials()
-    if "FAILURE" not in config_status:
-        credentials = deviceIP + ',' + user_name + ',' + password
-        #check parodus status
-        command="systemctl status parodus | grep running"
-        print("Executing Command : %s" %command)
-        #execute in DUT function
-        result=rfc_executeInDUT (sshMethod, credentials, command)
-        result=result.split("\n")
-        print(result)
-        result=str(result[1])
-        if "active (running)" in result:
-            print(result)
-            print("\nSUCCESS : Successfully get the parodus status")
-        else:
-            print(result)
-            print("\nFAILURE : Parodus Process not running")
-            parodusstatus="FAILURE"
-    else:
-        print("\nFAILURE : Failed to get the device credentials")
-        parodusstatus="FAILURE"
-    return parodusstatus
-
-#-----------------------------------------------------------------
 # CHECK RFC PARAMETER STATUS
 #-----------------------------------------------------------------
 def rfc_datamodelcheck(rfcparameter):
@@ -346,7 +282,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
             feature_id=result.replace('"','').strip()
             if "[]" not in feature_id:
                 print("Feature is already present")
-                print("\nSUCCESS : "+feature_name+" "+"feature retrieved successfully")
+                print(feature_name+" "+"feature retrieved successfully")
                 #check feature rule already present or not
                 command='curl -sX  GET '+"'"+xconfdomainname+'featurerule/filtered?APPLICATION_TYPE=stb&NAME='+feature_name+"'"+' -H "Content-Type: application/json" -H "Accept: application/json" | cut -d "," -f 1 | cut -d ":" -f 2'
                 print("Executing Command : %s" %command)
@@ -357,35 +293,34 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                 feature_rule_id=result.replace('"','').strip()
                 if "[]" not in feature_rule_id:
                     print("Feature rule is already present")
-                    print("\nSUCCESS : "+feature_name+" "+"feature rule retrieved successfully")
+                    print(feature_name+" "+"feature rule retrieved successfully")
                     #Update feature
                     command='curl -sX POST '+xconfdomainname+'feature/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_id+'","name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}]\''
                     print("Executing Command : %s" %command)
                     #execute in DUT function
                     result=rfc_executeInDUT (sshMethod, credentials, command)
                     if "IMPORTED" in result:
-                        print("Successfully updated feature")
+                        print("\nSUCCESS : Feature updated successfully")
                         feature_rule_id=feature_rule_id.strip()
                         #Update feature rule
                         command='curl -sX POST '+xconfdomainname+'featurerule/importAll -H "Content-Type: application/json" -H "Accept: application/json" -d \'[{"id":"'+feature_rule_id+'","name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}]\''
                         print("Executing Command : %s" %command)
                         #execute in DUT function
                         result=rfc_executeInDUT (sshMethod, credentials, command)
-                        print(result)
                         if "IMPORTED" in result:
-                            print("Successfully updated featurerule")
+                            print("\nSUCCESS : Feature rule updated successfully")
                         else:
-                            print("Failed to update feature rule")
+                            print("\nFAILURE : Failed to update feature rule")
                             initializefeaturestatus="FAILURE"
                     else:
-                        print("Failed to update feature")
+                        print("\nFAILURE : Failed to update feature")
                         initializefeaturestatus="FAILURE"
                 else:
                     print("Feature rule is not present")
                     print("\nFAILURE : "+feature_name+" "+"failed to retrieve feature rule")
                     initializefeaturestatus="FAILURE"
             else:
-                print(feature_name+" : "+"Creating this feature please wait....")
+                print(feature_name+" : "+"Creating the feature please wait....")
                 #Create feature
                 command='curl -sX POST '+xconfdomainname+'feature -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","effectiveImmediate":true,"enable":true,"whitelisted":false,"configData":{"tr181.'+rfcparameter+'":"'+expectedvalue+'"},"whitelistProperty":{},"applicationType":"stb","featureInstance":"'+feature_name+'"}\''
                 print("Executing Command : %s" %command)
@@ -398,7 +333,7 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                 if len(feature_id)!=0:
                     print(feature_name+" : feature created Successfully")
                     #Create feature rule
-                    print(feature_name+" : "+"Creating this feature rule please wait....")
+                    print(feature_name+" : "+"Creating the feature rule please wait....")
                     command='curl -sX POST '+xconfdomainname+'featurerule -H "Content-Type: application/json" -H "Accept: application/json" -d \'{"name":"'+feature_name+'","rule":{"negated":false,"compoundParts":[{"negated":false,"condition":{"freeArg":{"type":"STRING","name":"estbIP"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceIP+'"}}}},"compoundParts":[]},{"negated":false,"relation":"OR","condition":{"freeArg":{"type":"STRING","name":"estbMacAddress"},"operation":"IS","fixedArg":{"bean":{"value":{"java.lang.String":"'+deviceMAC+'"}}}},"compoundParts":[]}]},"priority":4,"featureIds":["'+feature_id+'"],"applicationType":"stb"}\''
                     print("Executing Command : %s" %command)
                     #execute in DUT function
@@ -410,10 +345,10 @@ def rfc_initializefeatures(feature_name,xconfdomainname,rfcparameter,expectedval
                     if len(feature_rule_id)!=0:
                         print(feature_name+" : feature rule successfully created")
                     else:
-                        print("Failed to create feature rule")
+                        print("\nFAILURE : Failed to create feature rule")
                         initializefeaturestatus="FAILURE"
                 else:
-                    print("Failed to create feature")
+                    print("\nFAILURE : Failed to create feature")
                     initializefeaturestatus="FAILURE"
         else:
             print("\nFAILURE : Failed to get the device credentials")
@@ -438,12 +373,12 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
             result=rfc_executeInDUT (sshMethod, credentials, command)
             reaesc = re.compile(r'\x1b[^m]*m')
             result = reaesc.sub('',result)
-            if feature_name in result and rfcparameter in result and expectedvalue in result:
+            if feature_name in result and rfcparameter in result:
                 print(result)
-                print("\nSUCCESS : Retrieved RFC details match with configure data")
+                print("\nSUCCESS : Getting RFC settings from the xconf server matches with the configure data")
             else:
                 print(result)
-                print("\nFAILURE : Retrieved RFC details not match with configure data")
+                print("\nFAILURE : Getting RFC settings from the xconf server does not match with with configure data")
                 checkconfiguredatastatus="FAILURE"
         else:
             print("\nFAILURE : Failed to get the device credentials")
@@ -451,32 +386,6 @@ def rfc_checkconfiguredata(xconfdomainname,rfcparameter,expectedvalue,feature_na
     else:
         checkconfiguredatastatus="FAILURE"
     return checkconfiguredatastatus
-
-#---------------------------------------------------------------
-# RESTART RFC CONFIG SERVICE
-#---------------------------------------------------------------
-def rfc_restartservice():
-    restartrfcstatus="SUCCESS"
-    config_status=rfc_obtainCredentials()
-    if "FAILURE" not in config_status:
-        credentials = deviceIP + ',' + user_name + ',' + password
-        #restart rfc services
-        command='systemctl restart rfc-config ; sleep 25s ; systemctl status rfc-config | grep active  | cut -d ";" -f 2 | cut -d " " -f 2'
-        print("Executing Command : %s" %command)
-        #execute in DUT function
-        result=rfc_executeInDUT (sshMethod, credentials, command)
-        result=result.split("\n")
-        result=result[1]
-        result=result.replace("s","").strip()
-        if int(result) <= 27:
-            print("\nSUCCESS : Successfully restarted RFC service with the delay of "+result+" seconds")
-        else:
-            print("\nFAILURE : Failed to restart RFC service with the delay of "+result+" seconds")
-            restartrfcstatus="FAILURE"
-    else:
-        print("\nFAILURE : Failed to get the device credentials")
-        restartrfcstatus="FAILURE"
-    return restartrfcstatus
 
 #---------------------------------------------------------------
 # CHECK XCONF SERVER SETTING APPLIED OR NOT IN DUT
@@ -503,45 +412,6 @@ def rfc_check_setornot_configdata(rfcparameter,expectedvalue):
         print("\nFAILURE : Failed to get the device credentials")
         result="FAILURE"
     return result
-
-#----------------------------------------------------------------------------------------------
-# IF XCONF SERVER SETTING APPLIED SUCCESSFULLY THEN ROLLBACK THE RFC PARAMETER TO ACTUALVALUE
-#----------------------------------------------------------------------------------------------
-def rfc_rollbackdatamodelvalue(rfcparameter,actualvalue,xconfdomainname,feature_name):
-    revertrfcstatus="SUCCESS"
-    config_status=rfc_obtainCredentials()
-    if "FAILURE" not in config_status:
-        if len(actualvalue) == 0:
-            actualvalue="false"
-        credentials = deviceIP + ',' + user_name + ',' + password
-        #rollback the rfc parameter
-        command="tr181 -s -v "+actualvalue+" "+rfcparameter+" "+"&& echo 1 || echo 0"
-        print("Executing Command : %s" %command)
-        #execute in DUT function
-        result=rfc_executeInDUT (sshMethod, credentials, command)
-        result = str(result).split("\n")
-        if int(result[1]) == 1:
-            print("SUCCESS : Set command for "+rfcparameter+" executed successfully")
-            command="tr181 -d "+str(rfcparameter)
-            print("Executing Command : %s" %command)
-            #execute in DUT function
-            result=rfc_executeInDUT (sshMethod, credentials, command)
-            result=str(result).split("\n")
-            result=str(result[2])
-            if actualvalue in result:
-                print(result)
-                print("\nSUCCESS : Rollback the RFC parameter successfully")
-            else:
-                print(result)
-                print("\nFAILURE : Rollback the RFC parameter failed")
-                revertrfcstatus="FAILURE"
-        else:
-            print("\nFAILURE : Set command for "+rfcparameter+" execution  failed")
-            revertrfcstatus="FAILURE"
-    else:
-        print("\nFAILURE : Failed to get the device credentials")
-        revertrfcstatus="FAILURE"
-    return revertrfcstatus
 
 #---------------------------------------------------------------
 # DELETE THE FEATURE
@@ -598,3 +468,203 @@ def rfc_deletefeaturerule(xconfdomainname):
         print("\nFAILURE : Failed to get the device credentials")
         deletefeaturerulestatus="FAILURE"
     return deletefeaturerulestatus
+
+#---------------------------------------------------------------
+# CHECK for THE PRESENCE OF the PARTNERID3 FILE
+#---------------------------------------------------------------
+def rfc_datfilechecker():
+    datfilecheckerstatus="SUCCESS"
+    config_status=rfc_obtainCredentials()
+    if "FAILURE" not in config_status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        #check whether partnerid3 dat file is present or not
+        command="[ -f /opt/www/authService/partnerId3.dat ] && echo 1 || echo 0"
+        print("Executing Command : %s" %command)
+        #execute in DUT function
+        result=rfc_executeInDUT (sshMethod, credentials, command)
+        result = str(result).split("\n")
+        result = int(result[1])
+        if result == 1:
+            print("\nSUCCESS : partnerId3.dat file is available")
+            #check if the string "community" exists in /opt/www/authService/partnerId3.dat
+            command="grep -q 'community' /opt/www/authService/partnerId3.dat && echo 1 || echo 0"
+            print("Executing Command : %s" %command)
+            #execute in DUT function
+            result=rfc_executeInDUT (sshMethod, credentials, command)
+            result = str(result).split("\n")
+            result = int(result[1])
+            if result == 1:
+                print("\nSUCCESS : String 'community' exists in /opt/www/authService/partnerId3.dat")
+            else:
+                print(result)
+                print("\nFAILURE : String 'community' does not exist in /opt/www/authService/partnerId3.dat")
+                datfilecheckerstatus="FAILURE"
+        else:
+            print(result)
+            print("\nFAILURE :  partnerId3.dat file is not available")
+            datfilecheckerstatus="FAILURE"
+    else:
+        print("\nFAILURE : Failed to get the device credentials")
+        datfilecheckerstatus="FAILURE"
+    return datfilecheckerstatus
+
+#---------------------------------------------------------------
+# CHECK for THE PRESENCE OF the PARTNERS_DEFAULTS JSON FILE
+#---------------------------------------------------------------
+def rfc_partnersdefaultschecker():
+    partnersdefaultscheckerstatus="SUCCESS"
+    config_status=rfc_obtainCredentials()
+    if "FAILURE" not in config_status:
+        credentials = deviceIP + ',' + user_name + ',' + password
+        #check whether partners_defaults.json file is present or not
+        command="[ -f /etc/partners_defaults.json ] && echo 1 || echo 0"
+        print("Executing Command : %s" %command)
+        #execute in DUT function
+        result=rfc_executeInDUT (sshMethod, credentials, command)
+        result = str(result).split("\n")
+        result = int(result[1])
+        if result == 1:
+            print("\nSUCCESS : partners_defaults.json file is available")
+            #check if the xconf domain URL exists in /etc/partners_defaults.json
+            command="sed -n '/community/,/}/p' /etc/partners_defaults.json | grep -q '"+'"Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Bootstrap.XconfUrl" *: *"https://xconf.rdkcentral.com:19092"'+"' /etc/partners_defaults.json && echo 1 || echo 0"
+            print("Executing Command : %s" %command)
+            #execute in DUT function
+            result=rfc_executeInDUT (sshMethod, credentials, command)
+            result = str(result).split("\n")
+            result = int(result[1])
+            if result == 1:
+                print("\nSUCCESS : Xconf domain URL exists in /etc/partners_defaults.json")
+            else:
+                print(result)
+                print("\nFAILURE : Xconf domain URL does not exist in /etc/partners_defaults.json")
+                partnersdefaultscheckerstatus="FAILURE"
+        else:
+            print(result)
+            print("\nFAILURE : partners_defaults.json file is not available")
+            partnersdefaultscheckerstatus="FAILURE"
+    else:
+        print("\nFAILURE : Failed to get the device credentials")
+        partnersdefaultscheckerstatus="FAILURE"
+    return partnersdefaultscheckerstatus
+
+#---------------------------------------------------------------
+# EXECUTE CURL REQUESTS
+# Description  : Execute curl request in DUT
+# Parameters   : Data - a string which contains actual curl request
+# Return Value : contains response of the curl request sent
+#---------------------------------------------------------------
+def execute_step(Data):
+    data = '{"jsonrpc": "2.0", "id": 1, '+Data+'}'
+    headers = {'content-type': 'text/plain;',}
+    url = 'http://'+str(deviceIP)+':'+str(devicePort)+'/jsonrpc'
+    try:
+        response = requests.post(url, headers=headers, data=data, timeout=30)
+        json_response = json.loads(response.content)
+        print("---------------------------------------------------------------------------------------------------")
+        print("Json command : ", data)
+        print("\n Response : ", json_response)
+        print("----------------------------------------------------------------------------------------------------")
+        result = json_response.get("result")
+    except requests.exceptions.RequestException as e:
+        print("---------------------------------------------------------------------------------------------------")
+        print("Json command : ", data)
+        print("Error Message Received : ",e)
+        print("---------------------------------------------------------------------------------------------------")
+        sys.exit()
+    return result
+
+#-------------------------------------------------------------------
+# GET THE VALUE OF A METHOD
+#-------------------------------------------------------------------
+def rfc_getValue(method):
+    data = '"method": "'+method+'"'
+    result = execute_step(data)
+    return result
+
+#------------------------------------------------------------------
+# SET VALUE FOR A METHOD
+#------------------------------------------------------------------
+def rfc_setValue(method,value):
+    data = '"method": "'+method+'","params": '+value
+    result = execute_step(data)
+    return result
+
+#-----------------------------------------------------------------
+# GET PLUGIN STATUS
+#-----------------------------------------------------------------
+def rfc_getPluginStatus(plugin):
+    data = '"method": "Controller.1.status@'+plugin+'"'
+    result = execute_step(data)
+    if result != None:
+        for x in result:
+            PluginStatus=x["state"]
+        return PluginStatus
+    else:
+        return result
+
+#------------------------------------------------------------------
+# ENABLE MAINTENANCEMANAGER PLUGIN
+#------------------------------------------------------------------
+def rfc_enable_maintenance_manager(method,params):
+    enable_maintenance_manager_status="SUCCESS"
+    #check the plugin status
+    status = rfc_getPluginStatus(method)
+    #If the plugin status is deactivated, it needs to be activated
+    if status == "deactivated":
+        print("\nPlugin is currently deactivated and needs to be activated")
+        print("[INFO] Activating "+method+" plugin")
+        time.sleep(3)
+        status = rfc_setValue("Controller.1.activate",params)
+        time.sleep(3)
+        status = rfc_getPluginStatus(method)
+        #check the plugin status
+        if status == "activated":
+            print("SUCCESS : "+method+" plugin in activated state")
+        else:
+            print("FAILURE : Unable to activate "+method+"\n")
+            enable_maintenance_manager_status="FAILURE"
+    elif status == "activated":
+        print("SUCCESS : "+method+" plugin in activated state")
+    else:
+        print("FAILURE : Plugin is missing or in an undefined state\n")
+        enable_maintenance_manager_status="FAILURE"
+    return enable_maintenance_manager_status
+
+#------------------------------------------------------------------
+# DISABLE AND ENABLE MAINTENANCEMANAGER PLUGIN
+#------------------------------------------------------------------
+def rfc_disable_enable_maintenance_manager(method,params):
+    disable_enable_maintenance_manager_status="SUCCESS"
+    #check the plugin status
+    status = rfc_getPluginStatus(method)
+    #If the plugin status is activated, it needs to be deactivated and then reactivated
+    if status == "activated":
+        #Deactivate the plugin
+        print("\nPlugin is currently activated and needs to be deactivated and then activated")
+        print("[INFO] Deactivating "+method+" plugin")
+        time.sleep(3)
+        status = rfc_setValue("Controller.1.deactivate",params)
+        time.sleep(3)
+        status = rfc_getPluginStatus(method)
+        #check the plugin status
+        if status == "deactivated":
+            print("SUCCESS : "+method+" plugin in deactivated state\n")
+            #Activate the plugin
+            print("\n[INFO] Activating "+method+" plugin")
+            time.sleep(3)
+            status = rfc_setValue("Controller.1.activate",params)
+            time.sleep(3)
+            status = rfc_getPluginStatus(method)
+            #check the plugin status
+            if status == "activated":
+                print("SUCCESS : "+method+" plugin in activated state\n")
+            else:
+                print("FAILURE : Unable to activate "+method+"\n")
+                disable_enable_maintenance_manager_status="FAILURE"
+        else:
+            print("FAILURE : Unable to deactivate "+method+"\n")
+            disable_enable_maintenance_manager_status="FAILURE"
+    else:
+        print("FAILURE : Plugin is missing or in an undefined state\n")
+        disable_enable_maintenance_manager_status="FAILURE"
+    return disable_enable_maintenance_manager_status
