@@ -30,6 +30,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { OemService } from '../../../services/oem.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { SocService } from '../../../services/soc.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-device-edit',
@@ -113,10 +114,12 @@ public frameworkComponents :any;
   findboxType: any[] = [];
 
   constructor(private fb:FormBuilder, private router: Router,
-    private _snakebar :MatSnackBar, private oemService:OemService, 
+    private _snakebar :MatSnackBar, private oemService:OemService, private authservice: AuthService,
     private service:DeviceService, private socService:SocService, private devicetypeService:DevicetypeService,
     private renderer:Renderer2, public dialog:MatDialog) { 
     this.user = JSON.parse(localStorage.getItem('user') || '{}');
+    console.log(this.user);
+    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.frameworkComponents = {
       inputCellRenderer: InputComponent
@@ -132,32 +135,16 @@ public frameworkComponents :any;
    * Retrieves data from API endpoints.
    */
   ngOnInit(): void {
-    const deviceCategory = localStorage.getItem('deviceCategory');
-    this.selectedDeviceCategory = this.loggedinUser.userCategory;
-    this.categoryName = 'Video';
-    this.stbNameChange = this.user.deviceName;
-    this.deviceTypeValue = this.user.boxTypeName;
-    if(deviceCategory){
-      this.selectedDeviceCategory = deviceCategory;
-      this.configureName = deviceCategory;
-    }
-    if(this.configureName ==='RDKV'){
-      this.showHideCreateFormV = true;
-      this.showHideCreateFormB = false;
-      this.showHideCreateFormC = false;
-      this.categoryName = 'Video';
-    }
-    if(this.configureName ==='RDKB'){
+    this.configureName = this.authservice.selectedConfigVal;
+    this.selectedDeviceCategory = this.configureName;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
-      this.showHideCreateFormC = false;
-      this.categoryName = 'Broadband';
-    }
-    if(this.configureName ==='RDKC'){
-      this.showHideCreateFormV = false;
+    }else{
+      this.categoryName = 'Video';
+      this.showHideCreateFormV = true;
       this.showHideCreateFormB = false;
-      this.showHideCreateFormC = true;
-      this.categoryName = 'Camera';
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.editDeviceVForm = this.fb.group({
@@ -674,52 +661,7 @@ public frameworkComponents :any;
     })
     }
   }
-  /**
-   * The submit method is update device for categort RDKC
-   */  
-  editDeviceCSubmit(){
-    this.rdkcFormSubmitted = true;
-    if(this.rdkCForm.invalid){
-      return
-     }else{
-      let rdkcObj = {
-        id : this.user.id,
-        deviceName:this.rdkCForm.value.cameraName,
-        deviceIp: this.rdkCForm.value.stbIp,
-        macId: this.rdkCForm.value.macaddr,
-        deviceTypeName: this.rdkCForm.value.devicetype,
-        oemName: this.rdkCForm.value.oem,
-        socName: this.rdkCForm.value.soc,
-        stbPort: this.rdkCForm.value.agentPortb,
-        statusPort:this.rdkCForm.value.agentStatusportB,
-        agentMonitorPort:this.rdkCForm.value.agentMonitorportB,
-        category : this.selectedDeviceCategory
-      }
-      this.service.updateDevice(rdkcObj).subscribe({
-        next:(res)=>{
-          this._snakebar.open(res, '', {
-          duration: 3000,
-          panelClass: ['success-msg'],
-          verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.router.navigate(["/devices"]);
-            
-          }, 1000);
-         
-        },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-          })
-        }
-      })
-    }
-  }
+
   /**
    * Edit icon will show/hide in editor modal
    */

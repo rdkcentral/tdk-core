@@ -34,6 +34,7 @@ import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ButtonComponent } from '../../../utility/component/ag-grid-buttons/button/button.component';
 import { ScriptsService } from '../../../services/scripts.service';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 interface Script {
   id: string;
@@ -56,8 +57,8 @@ interface SuiteModule {
 @Component({
   selector: 'app-script-list',
   standalone: true,
-  imports: [CommonModule,AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule,ScrollingModule
-],
+  imports: [CommonModule,AgGridAngular, FormsModule, ReactiveFormsModule, MaterialModule,ScrollingModule,
+              LoaderComponent],
   templateUrl: './script-list.component.html',
   styleUrl: './script-list.component.css'
 })
@@ -72,8 +73,8 @@ export class ScriptListComponent {
   @ViewChild('scriptModal', {static: false}) scriptModal?:ElementRef;
   @ViewChild('testSuiteModal', {static: false}) testSuiteModal?:ElementRef;
   categories = ['Video', 'Broadband', 'Camera'];
-  selectedCategory : string = 'RDKV';
-  categoryName: string = 'Video';
+  selectedCategory! : string;
+  categoryName!: string;
   uploadScriptForm!:FormGroup;
   uploadtestSuiteForm!:FormGroup;
   uploadFormSubmitted = false;
@@ -113,6 +114,8 @@ export class ScriptListComponent {
   loggedinUser:any;
   preferedCategory!:string;
   userCategory!:string;
+  showLoader = false;
+
   public columnDefs: ColDef[] = [
     {
       headerName: 'Sl. No.',
@@ -179,22 +182,23 @@ export class ScriptListComponent {
    * @returns {void}
    */
   ngOnInit(): void {
-    let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
+    this.selectedCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     let localViewName = localStorage.getItem('viewName') || '';
-    this.selectedCategory = this.userCategory;
     localStorage.setItem('category', this.selectedCategory);
-    this.viewName = localViewName?localViewName:'scripts';
-    if(this.viewName === 'testsuites'){
-      this.testsuitTable = true;
-      this.scriptTable = false;
-      this.allTestSuilteListByCategory();
-      this.toggleSortSuite();
-    }else{
-      this.testsuitTable = false;
-      this.scriptTable = true;
-      this.findallScriptsByCategory(this.selectedCategory);
-      this.scriptSorting();
-    }
+    // this.viewName = localViewName?localViewName:'scripts';
+    // if(this.viewName === 'testsuites'){
+    //   this.testsuitTable = true;
+    //   this.scriptTable = false;
+    //   this.allTestSuilteListByCategory();
+    //   this.toggleSortSuite();
+    // }else{
+    //   this.testsuitTable = false;
+    //   this.scriptTable = true;
+    //   this.findallScriptsByCategory(this.selectedCategory);
+    //   this.scriptSorting();
+    // }
+    this.findallScriptsByCategory(this.selectedCategory);
+    this.scriptSorting();
     this.viewChange(this.viewName);
     this.uploadScriptForm = new FormGroup({
       uploadZip: new FormControl<string | null>('', { validators: Validators.required }),
@@ -224,6 +228,7 @@ export class ScriptListComponent {
    * @param category - The category to filter scripts by.
    */  
   findallScriptsByCategory(category:any){
+    this.showLoader = true;
     this.scriptservice.getallbymodules(category).subscribe({
       next:(res)=>{
         if(res){
@@ -231,6 +236,7 @@ export class ScriptListComponent {
           this.cdRef.detectChanges();
           this.filterScript();
           this.scriptSorting();
+          this.showLoader = false;
         }else{
           this.cdRef.detectChanges();
           this.scriptDataArr =[];
@@ -317,12 +323,20 @@ export class ScriptListComponent {
     if (name === 'testsuites') {
       this.testsuitTable = true;
       this.scriptTable = false;
+
       this.allTestSuilteListByCategory();
+      if(this.paginatedSuiteData.length>0){
+        this.showLoader = false;
+      }
     } 
     if (name === 'scripts') {
       this.testsuitTable = false;
       this.scriptTable = true;
+
       this.findallScriptsByCategory(this.selectedCategory);
+      if(this.paginatedScriptData.length>0){
+        this.showLoader = false;
+      }
     }
   }
   /**
@@ -339,6 +353,7 @@ export class ScriptListComponent {
    * @returns {void}
    */  
   allTestSuilteListByCategory(){
+    this.showLoader = true;
     this.scriptservice.getAllTestSuite(this.selectedCategory).subscribe({
       next:(res)=>{
         if(res){
@@ -346,12 +361,11 @@ export class ScriptListComponent {
           this.cdRef.detectChanges();
           this.applyFilterSuite();
           this.toggleSortSuite();
-          
+          this.showLoader = false;
         }else{
           this.cdRef.detectChanges();
           this.testSuiteDataArr =[];
         }
-
       },
       error:(err)=>{
         let errmsg = JSON.parse(err);
@@ -576,6 +590,7 @@ export class ScriptListComponent {
         this.paginatedScriptData = this.paginatedScriptData.filter(
           (module) => module.scripts.length > 0
         );
+        
       }else{
         this.paginatedScriptData = [...this.scriptDataArr];
         this.scriptDataPagination();

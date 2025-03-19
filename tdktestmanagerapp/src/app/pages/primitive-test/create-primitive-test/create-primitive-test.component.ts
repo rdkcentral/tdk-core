@@ -172,7 +172,12 @@ export class CreatePrimitiveTestComponent {
       selectFunction: ['', Validators.required]
     });
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
+
     this.service.getlistofModules(this.configureName).subscribe(res => {
       this.moduleNames = JSON.parse(res);
     })
@@ -259,7 +264,7 @@ export class CreatePrimitiveTestComponent {
           for (let i = 0; i < res.length; i++) {
             this.errElement = res[i];
           }
-          this._snakebar.open(errmsg.message ? errmsg.message : this.errElement.key, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

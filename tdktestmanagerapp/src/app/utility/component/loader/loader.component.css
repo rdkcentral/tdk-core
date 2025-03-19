@@ -90,7 +90,6 @@ div ul li:nth-child(4){
 }
 .loader > span{
     display: inline-block;
-    /* background-color: purple; */
     background-color: rgb(0, 178, 220);
     width: 0px;
     height: 0px;
@@ -100,7 +99,6 @@ div ul li:nth-child(4){
     animation: bounce 0.6s infinite alternate;
 }
 .loader > span:nth-child(2){
-    /* background-color: palevioletred; */
     background-color: rgb(253, 183, 59);
     animation-delay: 0.2s;
 }
@@ -131,6 +129,10 @@ div ul li:nth-child(4){
     display: flex;
     justify-content: center;
     align-items: center;
+    /* position: absolute;
+    top: 50%;
+    right: 50%; */
+
 }
 .container{
     display: flex;

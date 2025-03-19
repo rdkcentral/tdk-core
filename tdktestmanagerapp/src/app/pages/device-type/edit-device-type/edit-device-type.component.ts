@@ -41,7 +41,11 @@ export class EditDeviceTypeComponent {
       selectDevicetype: [this.user.deviceType, Validators.required]
     });
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
   }
 
   /**

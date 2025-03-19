@@ -61,7 +61,11 @@ export class ModulesEditComponent {
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.moduleservice.getAllTestGroups().subscribe((res:any) => {
       this.testGroupArr = JSON.parse(res);
     });

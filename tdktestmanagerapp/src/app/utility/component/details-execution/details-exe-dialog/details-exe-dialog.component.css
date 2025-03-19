@@ -455,6 +455,8 @@ background-color: transparent;
 }
 .refresh{
   position: absolute;
+  margin-left: -50px;
+  margin-top: -5px;
 }
 .summary-label{
   font-size: 0.8rem;
@@ -679,6 +681,7 @@ background-color: transparent;
   color: #06667d;
   text-decoration: underline;
   cursor: pointer;
+  padding-left: 5px;
 }
 .refresh-btn{
   background-color: #00b2dc;
@@ -686,4 +689,13 @@ background-color: transparent;
   border-radius: 5px;
   color: #fff;
   margin-left: 10px;
+}
+.close-sec a{
+  cursor: pointer;
+}
+.loader-row{
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  right: 50%;
 }

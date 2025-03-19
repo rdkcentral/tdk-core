@@ -53,6 +53,13 @@ export class ConfigureComponent implements OnInit {
     this.service.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.defaultCategory;
     this.selectedCategory = this.preferedCategory?this.preferedCategory:this.defaultCategory;
     this.privileges = this.service.getPrivileges();
+    if(this.selectedCategory === 'RDKB'){
+      this.rdkbVisible = true;
+      this.rdkvVisible = false;
+    }else{
+      this.rdkvVisible = true;
+      this.rdkbVisible = false;
+    }
   }
   /**
    * Handles the radiobutton of category change event.

@@ -31,6 +31,7 @@ import { saveAs } from 'file-saver';
 import { OemService } from '../../../services/oem.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { SocService } from '../../../services/soc.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-device-create',
@@ -110,9 +111,10 @@ export class DeviceCreateComponent implements OnInit{
   dialogRef!: MatDialogRef<any>;
   newDeviceDialogRef!: MatDialogRef<any>;
   isThunderPresent = false;
-  // thunderTooltip: string = 'Please enter devicename and boxtype before you check this box';
+  preferedCategory!:string;
 
-  constructor( private router: Router,private fb:FormBuilder,
+
+  constructor( private router: Router,private fb:FormBuilder,private authservice: AuthService,
     private _snakebar :MatSnackBar, private oemService:OemService, 
     private service:DeviceService, private socService:SocService, private deviceTypeService:DevicetypeService,
     public dialog:MatDialog
@@ -121,30 +123,22 @@ export class DeviceCreateComponent implements OnInit{
     this.frameworkComponents = {
       inputCellRenderer: InputComponent
     }
+    this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
   }
   /**
    * The method to initialize the component.
    */
   ngOnInit(): void {
-    const deviceCategory = localStorage.getItem('deviceCategory');
-    this.selectedDeviceCategory = this.loggedinUser.userCategory;
-    this.categoryName = 'Video';
-    if(deviceCategory){
-      this.selectedDeviceCategory = deviceCategory
-      this.configureName = deviceCategory;
-    }
-    if(deviceCategory===null){
-      this.configureName = this.selectedDeviceCategory;
-    }
-    if(this.configureName ==='RDKV'){
-      this.showHideCreateFormV = true;
-      this.showHideCreateFormB = false;
-      this.categoryName = 'Video';
-    }
-    if(this.configureName ==='RDKB'){
+    this.configureName = this.authservice.selectedConfigVal;
+    this.selectedDeviceCategory = this.configureName;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
       this.showHideCreateFormV = false;
       this.showHideCreateFormB = true;
-      this.categoryName = 'Broadband'
+    }else{
+      this.categoryName = 'Video';
+      this.showHideCreateFormV = true;
+      this.showHideCreateFormB = false;
     }
     let ipregexp: RegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/;
     this.deviceForm = new FormGroup({

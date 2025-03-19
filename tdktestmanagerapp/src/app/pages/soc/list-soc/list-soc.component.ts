@@ -38,11 +38,12 @@ import { AuthService } from '../../../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SocService } from '../../../services/soc.service';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-list-soc',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
   templateUrl: './list-soc.component.html',
   styleUrl: './list-soc.component.css'
 })
@@ -64,6 +65,7 @@ export class ListSocComponent {
   selectedRowCount = 0;
   showUpdateButton = false; 
   categoryName!: string;
+  showLoader = false;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -102,10 +104,18 @@ export class ListSocComponent {
    */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.authservice.currentRoute = this.router.url.split('?')[0];
+    this.showLoader = true;
     this.service.getSoc(this.authservice.selectedConfigVal).subscribe(res => {
       this.rowData = JSON.parse(res);
+      if(this.rowData.length>0){
+        this.showLoader = false;
+      }
     })
   }
   /**
@@ -134,8 +144,7 @@ export class ListSocComponent {
           })
         },
         error: (err) => {
-          const error = JSON.parse(err.error);
-          this._snakebar.open(error.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 3000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -42,10 +42,12 @@ export class CreateOemComponent implements OnInit{
   placeholderName = 'OEM name'
   loggedinUser: any={};
   labelName = 'Name'
+  configureName!:string;
+  categoryName!:string;
 
   constructor(private router: Router, public service: OemService,
     private route: ActivatedRoute, private _snakebar: MatSnackBar, private authservice: AuthService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'create-oem' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'OEM' : this.commonFormName;
+    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
 
   }
@@ -54,6 +56,14 @@ export class CreateOemComponent implements OnInit{
    * Initializes the component.
    */
     ngOnInit(): void {
+      this.configureName = this.authservice.selectedConfigVal;
+      if(this.configureName === 'RDKB'){
+        this.categoryName = 'Broadband';
+        this.commonFormName = this.route.snapshot.url[1].path === 'create-oem' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
+      }else{
+        this.categoryName = 'Video';
+        this.commonFormName = this.route.snapshot.url[1].path === 'create-oem' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
+      }
     }
 
     
@@ -80,18 +90,15 @@ export class CreateOemComponent implements OnInit{
             this.router.navigate(["configure/list-oem"]);
   
           }, 1000);
-  
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.OemName?errmsg.OemName:errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
           })
         }
-  
       })
     }
 

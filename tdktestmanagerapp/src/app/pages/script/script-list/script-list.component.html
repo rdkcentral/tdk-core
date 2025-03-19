@@ -107,6 +107,9 @@ limitations under the License.
                       <div class="col"><span class="script-table-head">Action</span></div>
                     </div>
                     <div class="row">
+                      <div class="row loader-row" *ngIf="showLoader">
+                        <app-loader></app-loader>
+                      </div>
                       <div class="accordion" id="accordionExample">
                         <div class="row accord-row">
                           <div class="accordion-item" *ngFor="let parent of paginatedScriptData">
@@ -209,6 +212,9 @@ limitations under the License.
                         <div class="col"><span class="script-table-head">Action</span></div>
                       </div>
                       <div class="row">
+                        <div class="row loader-row" *ngIf="showLoader">
+                          <app-loader></app-loader>
+                        </div>
                         <div class="accordion" id="accordionExample">
                           <div class="row accord-row">
                             <div class="accordion-item" *ngFor="let testSuite of paginatedSuiteData">
@@ -254,7 +260,7 @@ limitations under the License.
                                     [defaultColDef]="{sortable: true}"
                                     [rowData]="testSuite.scripts"
                                     [pagination]="true"
-                                    [paginationPageSize]="testsuitePageSize"
+
                                     
                                     [animateRows]="true"
                                     [gridOptions]="gridOptions"

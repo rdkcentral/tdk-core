@@ -36,11 +36,12 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import moment from 'moment-timezone';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { AnalysisService } from '../../../services/analysis.service';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-comparison-modal',
   standalone: true,
-  imports: [CommonModule,FormsModule, ReactiveFormsModule, MaterialModule, AgGridAngular],
+  imports: [CommonModule,FormsModule, ReactiveFormsModule, MaterialModule, AgGridAngular,LoaderComponent],
   templateUrl: './comparison-modal.component.html',
   styleUrl: './comparison-modal.component.css'
 })
@@ -193,6 +194,7 @@ public columnDefs: ColDef[] = [
     testSuiteShow = false;
     executionTypeName!: string;
     showTable = false;
+    showLoader = false;
 
     constructor(private fb: FormBuilder,
       public dialogRef: MatDialogRef<ComparisonModalComponent>,
@@ -303,13 +305,17 @@ public columnDefs: ColDef[] = [
         "category": this.selectedDfaultCategory
         
       };
+      this.showLoader = true;
       this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
         let response = JSON.parse(res);
         if(response){
           this.rowData = response;
           this.showTable = true;
+          this.showLoader = false;
         }else{
-          this.showTable = false;
+          this.rowData = [];
+          this.showLoader = false;
+          this.showTable = true;
         }
       })
     }

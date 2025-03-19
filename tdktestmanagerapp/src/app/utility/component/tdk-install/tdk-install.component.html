@@ -1,0 +1,124 @@
+<!--
+If not stated otherwise in this file or this component's Licenses.txt file the
+following copyright and licenses apply:
+Copyright 2024 RDK Management
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<div class="container">
+    <div class="row mt-2">
+      <div class="col-md-12">
+        <h1 class="view-title">Package Manager</h1>
+        <div class="ticket-sec mt-2">
+          <mat-tab-group
+            animationDuration="0ms"
+            mat-align-tabs="start"
+            (selectedTabChange)="onTabClick($event)"
+          >
+            <mat-tab label="TDK">
+                <div class="col-md-12 mt-3">
+                     <span class="package-title">
+                     <span class="sub-titel">{{selectedPackage}}</span>  Package installation for <span class="sub-titel">{{data}}</span>
+                    </span>
+
+                     <div class="execution-drop mt-3">
+                        <button type="button" class="download-btn  execution-select" >
+                            Create Package
+                        </button>
+                        <button type="button" class="download-btn  execution-select" >
+                            Upload Package
+                        </button>
+                    </div>
+                    <div class="title-sec mt-2">
+                        <span class="select-title">Select the <span class="sub-titel">{{selectedPackage}}</span> package for installation</span>
+                    </div>
+                    <div class="execution-result mt-2">
+                      <div *ngFor="let package of packageNames; let i = index" class="check-sec">
+                        <input 
+                          type="checkbox" 
+                          [id]="'chk' + i" 
+                          [value]="package" 
+                          [(ngModel)]="selectedPackages[package]"
+                          (change)="onCheckboxChange(package, $event)">
+                        <label [for]="'chk' + i" class="label-check">{{selectedPackage}}-{{ package }}</label>
+                      </div>
+                      
+                      <ul>
+                        <li *ngFor="let name of selectedList">{{ name }}</li>
+                      </ul>
+            
+                    </div>
+
+                    <div class="logsection">
+                        <span>Installation logs</span>
+                    </div>
+                    <div class="execution-result mb-3">
+            
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="VTS" >
+              <div class="col-md-12 mt-3">
+                <span class="package-title">
+                    <span class="sub-titel">{{selectedPackage}}</span>  Package installation for <span class="sub-titel">{{data}}</span>
+                </span>
+                    <div class="execution-drop mt-3">
+                        <button type="button" class="download-btn  execution-select" >
+                            Create Package
+                        </button>
+                        <button type="button" class="download-btn  execution-select" >
+                            Upload Package
+                        </button>
+                    </div>
+                    <div class="title-sec mt-2">
+                        <span class="select-title">Select the <span class="sub-titel">{{selectedPackage}}</span> package for installation</span>
+                    </div>
+                    <div class="execution-result mt-2">
+                      <div *ngFor="let package of packageNames; let i = index" class="check-sec">
+                        <input 
+                          type="checkbox" 
+                          [id]="'chk' + i" 
+                          [value]="package" 
+                          [(ngModel)]="selectedPackages[package]"
+                          (change)="onCheckboxChange(package, $event)">
+                        <label [for]="'chk' + i" class="label-check">{{selectedPackage}}-{{ package }}</label>
+                      </div>
+                      
+                      <ul>
+                        <li *ngFor="let name of selectedList">{{ name }}</li>
+                      </ul>
+                    </div>
+
+                    <div class="logsection ">
+                        <span>Installation logs</span>
+                    </div>
+                    <div class="execution-result mb-3">
+            
+                    </div>
+              </div>
+
+            </mat-tab>
+          </mat-tab-group>
+          <div class="row mt-2">
+            <div class="col-md-12 text-end btns-grp">
+                <button type="button" class="close-btn install-btn" >
+                    Install
+                </button>
+              <button class="close-btn" type="button" (click)="close()">
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

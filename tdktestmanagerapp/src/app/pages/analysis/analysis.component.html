@@ -47,7 +47,7 @@ limitations under the License.
                                 <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select one execution for adding it as base execution"></i></span>
                             </label>
                             <div class="col-md-5">
-                                <input type="text" class="form-control" value="{{selectExecutionName}}" formControlName="baseName">
+                                <input type="text" class="form-control" [(ngModel)]="selectExecutionName" formControlName="baseName">
                                 <div *ngIf="reportSubmitted && reportForm.controls['baseName']?.errors" class="text-danger">
                                     <small *ngIf="reportForm.controls['baseName']?.errors?.['required']">Give one execution name or choose.</small>
                                 </div>
@@ -64,9 +64,13 @@ limitations under the License.
                                 <span class="thunderport-info"><i class="bi bi-info-circle info-icon" matTooltip ="Select 1- 10 executions for the comparison report"></i></span>
                             </label>
                             <div class="col-md-5">
-                                <textarea rows="10" class="form-control" value="{{selectComparisonNames}}" formControlName="comparisonName"></textarea> 
+                                <textarea rows="10" class="form-control" (input)="updateComparisonFormValue($event)"
+                                formControlName="comparisonName"></textarea> 
                                 <div *ngIf="reportSubmitted && reportForm.controls['comparisonName']?.errors" class="text-danger">
                                     <small *ngIf="reportForm.controls['comparisonName']?.errors?.['required']">Give list of execution names separated by comma (Min: 1 and Max: 10) or choose.</small>
+                                    <small *ngIf="reportForm.controls['comparisonName']?.errors?.['baseFoundInComparison']">
+                                        Base Execution cannot be in the selected for comparision.
+                                    </small>
                                 </div>
                             </div>
                             <div class="col-md-3 text-center">
@@ -185,6 +189,9 @@ limitations under the License.
                         <div class="col-md-12 text-end reportbtn" *ngIf="showReportBtn">
                             <button type="submit" class="create-btn" (click)="generateReport()">Generate Combined Report</button>
                         </div>
+                        <div class="row loader-row" *ngIf="showLoader">
+                            <app-loader></app-loader>
+                        </div>
                         <div class="tableDeatils mt-2" *ngIf="showTable">
                             <div style="width: 100%; height: 330px;" [class]="themeClass">
                                 <ag-grid-angular
@@ -202,6 +209,7 @@ limitations under the License.
                               ></ag-grid-angular>
                             </div>
                         </div>
+
                     </div>
     
                 </mat-tab>

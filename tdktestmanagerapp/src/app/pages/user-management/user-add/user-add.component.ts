@@ -66,7 +66,7 @@ export class UserAddComponent implements OnInit {
       displayname: new FormControl<string | null>('', { validators: [Validators.required,this.noLeadingSpacesValidator] }),
       userpassword: new FormControl<string | null>('', { validators: [Validators.required, Validators.minLength(6)] }),
       retypepassword: new FormControl<string | null>('', { validators: Validators.required }),
-      usergroupname: new FormControl<string | null>('', { validators: Validators.required }),
+      usergroupname: new FormControl<string | null>(''),
       rolename: new FormControl<string | null>('', { validators: Validators.required }),
 
     }, <AbstractControlOptions>{ validators: this.passwordMatchValidator('userpassword', 'retypepassword') });
@@ -193,8 +193,7 @@ export class UserAddComponent implements OnInit {
 
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

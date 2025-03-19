@@ -16,12 +16,12 @@ limitations under the License.
 <div class="container-fluid">
     <div class="row mt-2">
       <div class="col-md-12" #printableArea>
-        <button type="button" class="download-btn refresh" matTooltip="Click here to update" (click)="dataUpdate()"
-        *ngIf ="data.executionStatus === 'INPROGRESS'">
-          <i class="bi bi-arrow-clockwise download-icon"></i>
-        </button>
         <h1 class="view-title">Execution Result Details</h1>
         <div class="download-dropdown">
+          <button type="button" class="download-btn refresh" matTooltip="Click here to update" (click)="dataUpdate()"
+          *ngIf ="data.executionStatus === 'INPROGRESS'">
+            <i class="bi bi-arrow-clockwise download-icon"></i>
+          </button>
           <button class="btn btn-sm top-download" (click)="showPopup()">
             <i class="bi bi-cloud-arrow-down-fill extra-icon download"></i>
           </button>
@@ -209,7 +209,33 @@ limitations under the License.
           <div class="col-md-12 mt-3">
             <span class="summary-label mt-3">Detailed Results</span>
             <div class="table-container mt-2" >
-              <div class="row seach-section" *ngIf="data.executionType !== 'SINGLESCRIPT'  && data.result === 'SUCCESS' || data.result === 'ABORTED'">
+              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'SUCCESS' ">
+                <div class="col">
+                  <div class="row mt-1 row-align">
+                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
+                    <div class="col-md-9">
+                      <select class="form-select select-filter" aria-label="Default select example"
+                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
+                          <option value="all" default>Select</option>
+                          <option value="SUCCESS">SUCCESS</option>
+                          <option value="FAILURE">FAILURE</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="btns-option">
+                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
+                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
+                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
+                    <button type="button" class="script-btn" matTooltip="Rerun Of Failure Scripts" (click)="rerunFailure()">
+                      <i class="bi bi-arrow-repeat download-icon"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="col"></div>
+              </div>
+              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'FAILURE'">
                 <div class="col">
                   <div class="row mt-1 row-align">
                     <label for="device" class="col-md-3 col-form-label">Filter by</label>
@@ -252,13 +278,21 @@ limitations under the License.
                 <div class="col"></div>
                 <div class="col"></div>
               </div>
-              <div class="row refrs-section" *ngIf="data.executionType === 'SINGLESCRIPT'  && data.result === 'SUCCESS'">
+              <div class="row refrs-section" *ngIf="data.executionType === 'SINGLESCRIPT'  && scriptStatus.status === 'SUCCESS' ">
                 <div class="col">
                   <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
                 </div>
                 <div class="col"></div>
                 <div class="col"></div>
               </div>
+              <div class="row refrs-section" *ngIf="data.executionType === 'SINGLESCRIPT'  && scriptStatus.status === 'FAILURE' ">
+                <div class="col">
+                  <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
+                </div>
+                <div class="col"></div>
+                <div class="col"></div>
+              </div>
+
               <div class="row table-heading">
                 <div class="col-md-1 border-column">
                   <span><input type="checkbox" id="selectAll" [checked]="allChecked" 
@@ -269,7 +303,6 @@ limitations under the License.
                 </div>
                 <div class="col-md-2 border-column script-head"><span>Status</span></div>
                 <div class="col-md-3 script-head">Action
-                  <button (click)="refreshAnalysis()" class="refresh-btn"><i class="bi bi-arrow-clockwise history-icon"></i></button>
                 </div>
               </div>
               <div class="row">
@@ -306,6 +339,9 @@ limitations under the License.
                       <div [class.show]="parent.expanded" class="accordion-collapse collapse">
                         <div class="accordion-body" >
                           <mat-card class="details-card">
+                            <div class="row loader-row" *ngIf="showLoader">
+                              <app-loader></app-loader>
+                            </div>
                             <div class="method-sec mt-3">
                               <mat-accordion>
                                 <mat-expansion-panel class="method-panel">
@@ -361,8 +397,8 @@ limitations under the License.
                                         }">
                                           <ng-container *ngIf="key === 'testCaseCount'">Test Step Count</ng-container>
                                           <ng-container *ngIf="key === 'timeTaken'">Time Taken (min)</ng-container>
-                                          <ng-container *ngIf="key === 'logs'">Execution Log
-                                            <div><a class="log-link" (click)="openDynamicLink(parent.executionResultID)">Log link</a></div>
+                                          <ng-container *ngIf="key === 'logs'">Execution Log <a class="log-link" (click)="openDynamicLink(parent.executionResultID)"><i class="bi bi-box-arrow-up-right"></i></a>
+                                            <!-- <div><a class="log-link" (click)="openDynamicLink(parent.executionResultID)">Log link</a></div> -->
                                           </ng-container>
                                         </th>
                                         <td class="details-row script-td">
@@ -391,8 +427,12 @@ limitations under the License.
                                     </tr>
                                   </tbody>
                               </table>
+                                  <div class="close-sec text-center">
+                                    <a (click)="togglePanel(parent, parent.executionResultID, i)"><i class="bi bi-chevron-up"></i></a>
+                                  </div>
                               </div>
                           </mat-card>
+
                         </div>
                       </div>
                     </div>
@@ -404,11 +444,11 @@ limitations under the License.
           <div class="col-md-12">
             <div class="mt-2 text-end mb-2">
               <button class="view-btn close" (click)="onClose()">
-                Close Window
+                Close
               </button>
-                <button class="view-btn close-script" (click)="closeLastExpanded()" *ngIf="expandedIndexes.length > 0">
+                <!-- <button class="view-btn close-script" (click)="closeLastExpanded()" *ngIf="expandedIndexes.length > 0">
                   Close Script Panel
-                </button>
+                </button> -->
             </div>
           </div>
         </div>

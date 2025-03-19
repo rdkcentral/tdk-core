@@ -35,11 +35,12 @@ import { ButtonComponent } from '../../../utility/component/ag-grid-buttons/butt
 import { Router } from '@angular/router';
 import { UserManagementService } from '../../../services/user-management.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-user-list',
   standalone: true,
-  imports: [AgGridAngular, HttpClientModule, MaterialModule, CommonModule],
+  imports: [AgGridAngular, HttpClientModule, MaterialModule, CommonModule,LoaderComponent],
   templateUrl: './user-list.component.html',
   styleUrl: './user-list.component.css'
 })
@@ -152,6 +153,7 @@ export class UserListComponent implements OnInit {
   gridApi!: any;
   rowIndex!: number | null;
   selectedRowCount = 0;
+  showLoader = false;
 
   constructor(private http: HttpClient, private router: Router, private usermanageservice: UserManagementService, private _snakebar: MatSnackBar) { }
   
@@ -159,7 +161,13 @@ export class UserListComponent implements OnInit {
    * The method to initialize the component.
    */
   ngOnInit(): void {
-    this.usermanageservice.getAlluser().subscribe((data) => (this.rowData = data));
+    this.showLoader = true;
+    this.usermanageservice.getAlluser().subscribe((data) =>{
+      this.rowData = data;
+      if(this.rowData.length>0){
+        this.showLoader = false;
+      }
+    });
   }
 
   /**

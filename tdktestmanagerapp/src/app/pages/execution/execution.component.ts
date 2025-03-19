@@ -18,7 +18,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
 import { AgGridAngular } from 'ag-grid-angular';
@@ -28,7 +28,6 @@ import {
   GridOptions,
   GridReadyEvent,
   IDateFilterParams,
-  RowNode,
 } from 'ag-grid-community';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
@@ -39,13 +38,14 @@ import { ExecutionButtonComponent } from '../../utility/component/execution-butt
 import { DetailsExeDialogComponent } from '../../utility/component/details-execution/details-exe-dialog/details-exe-dialog.component';
 import { ExecutionService } from '../../services/execution.service';
 import { ExecuteDialogComponent } from '../../utility/component/execute-dialog/execute-dialog.component';
-import { debounceTime, filter, interval, startWith, Subject, Subscription, switchMap, takeUntil } from 'rxjs';
+import { Subject, Subscription, takeUntil } from 'rxjs';
 import { Clipboard } from '@angular/cdk/clipboard';
 import { LoginService } from '../../services/login.service';
 import { DateDialogComponent } from '../../utility/component/date-dialog/date-dialog.component';
 import { MatPaginator } from '@angular/material/paginator';
 import { ScheduleButtonComponent } from '../../utility/component/execution-button/schedule-button.component';
-import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { TdkInstallComponent } from '../../utility/component/tdk-install/tdk-install.component';
+
 
 @Component({
   selector: 'app-execution',
@@ -124,7 +124,6 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       sortable: true,
       tooltipField: 'executionName',
       cellClass: 'selectable',
-      // width:190,
       flex:2,
       cellStyle:{'white-space': 'normal',' word-break': 'break-word'},
       wrapText:true,
@@ -186,7 +185,6 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       field: 'executionDate',
       filter: 'agDateColumnFilter',
       filterParams: this.filterParams,
-      // width:170,
       flex:1.8,
       sortable: true,
       cellClass: 'selectable',
@@ -215,7 +213,6 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       headerName: 'Result',
       field: 'status',
       filter: 'agTextColumnFilter',
-      // width: 82,
       flex:1,
       cellStyle: { textAlign: "center" },
       sortable: true,
@@ -338,7 +335,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     },
   ];
   gridOptions = {
-    rowHeight: 40
+    rowHeight: 45
   };
   gridOptionsHistory: GridOptions = { 
     getRowId: (params:any) => {
@@ -368,7 +365,6 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   searchTerm: string = '';
   filteredDeviceStausArray: any[] = []; 
   sortOrder: string = 'asc';
-  private searchTermSubject = new Subject<string>();
   private refreshdestroy$ = new Subject<void>();
   private allExecutionHistory$ = new Subject<void>();
   exeRefresh = true;
@@ -382,12 +378,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     private _snakebar: MatSnackBar,
     private loginService: LoginService,
     public resultDialog: MatDialog,
-    public triggerDialog :MatDialog,
+    public triggerDialog : MatDialog,
+    public dialogTDK : MatDialog,
     public deleteDateDialog :MatDialog,
     private executionservice:ExecutionService,
     private clipboard: Clipboard,
-    private router: Router,
-    private route: ActivatedRoute,
   ) {
     this.loggedinUser = JSON.parse(
       localStorage.getItem('loggedinUser') || '{}'
@@ -399,9 +394,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
    * Initializes the component.
   */
   ngOnInit(): void {
-    let localcategory = this.preferedCategory?this.preferedCategory:this.userCategory;
-    this.defaultCategory = localcategory;
-    this.selectedDfaultCategory = this.userCategory;
+    this.selectedDfaultCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
     this.listenForLogout();
     this.getDeviceStatus();
     this.getAllExecutions();
@@ -409,7 +402,6 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.historyInterval = setInterval(() => {
       this.getAllExecutions();
     }, 60000);
-    // this.getDeviceStatus();
     this.deviceInterval = setInterval(() => {
       this.getDeviceStatus();
     }, 10000);
@@ -438,7 +430,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.storeSelection();
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
       
-      this.executionservice.getAllExecutionByName(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
+      this.executionservice.getAllExecutionByName(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
@@ -455,7 +447,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
-      this.executionservice.getAllExecutionByScript(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
+      this.executionservice.getAllExecutionByScript(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
@@ -469,7 +461,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Device' && this.searchValue != ''){
-      this.executionservice.getAllExecutionByDevice(this.searchValue, this.defaultCategory,this.currentPage, this.pageSize).subscribe({
+      this.executionservice.getAllExecutionByDevice(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
@@ -483,7 +475,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       });
     } else if(this.selectedCategory === 'User' && this.selectedOption != ''){
-      this.executionservice.getAllExecutionByUser(this.selectedOption, this.defaultCategory, this.currentPage, this.pageSize).subscribe(res => {
+      this.executionservice.getAllExecutionByUser(this.selectedOption, this.selectedDfaultCategory, this.currentPage, this.pageSize).subscribe(res => {
         let data = JSON.parse(res);
         this.rowData = data.executions;
         this.totalItems = data.totalItems;
@@ -932,6 +924,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       height: '96vh',
       maxWidth: '100vw',
       panelClass: 'custom-modalbox',
+      restoreFocus: false,
       data: {
         normalExecutionClick
       },
@@ -1144,4 +1137,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     }
     });
   }
+
+  installTDKModal(deviceName:string){
+    const dialogModal = this.dialogTDK.open(TdkInstallComponent, {
+      width: '68%',
+      height: '96vh',
+      maxWidth: '100vw',
+      panelClass: 'custom-modalbox',
+      restoreFocus: false,
+      data:deviceName,
+    });
+    dialogModal.afterClosed().subscribe(() => {
+
+    });
+  }
+
+
 }

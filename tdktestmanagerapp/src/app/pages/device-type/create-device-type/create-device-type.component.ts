@@ -61,8 +61,11 @@ export class CreateDeviceTypeComponent implements OnInit {
     });
   
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
-
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
   }
 
   /**
@@ -96,8 +99,7 @@ export class CreateDeviceTypeComponent implements OnInit {
           }, 1000);
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.deviceTypeName?errmsg.deviceTypeName:errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

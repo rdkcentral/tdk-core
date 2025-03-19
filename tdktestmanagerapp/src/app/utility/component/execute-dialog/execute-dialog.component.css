@@ -28,11 +28,7 @@ h4,
 h6 {
   font-family: Roboto, "Helvetica Neue", sans-serif !important;
 }
-/* .card-height { */
-  /* height: 480px !important; */
-  /* display: block;
-  overflow-y: auto; */
-/* } */
+
 .title {
   font-size: 1rem;
   text-align: center;

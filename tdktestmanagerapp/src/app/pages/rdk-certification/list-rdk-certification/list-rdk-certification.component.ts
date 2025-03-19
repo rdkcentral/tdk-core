@@ -38,11 +38,12 @@ import { MaterialModule } from '../../../material/material.module';
 import { RdkService } from '../../../services/rdk-certification.service';
 import { saveAs } from 'file-saver';
 import { CdkStepperModule } from '@angular/cdk/stepper';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-list-rdk-certification',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, CdkStepperModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, CdkStepperModule,LoaderComponent],
   templateUrl: './list-rdk-certification.component.html',
   styleUrl: './list-rdk-certification.component.css'
 })
@@ -71,7 +72,7 @@ export class ListRdkCertificationComponent {
   uploadFormSubmitted = false;
   uploadFileName!: File;
   configureName!: string;
-
+  showLoader = false;
   /**
    * Column definitions for the ag-Grid table in the RDK Certification List component.
    * 
@@ -129,7 +130,11 @@ export class ListRdkCertificationComponent {
   ngOnInit(): void {
 
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.uploadConfigurationForm = new FormGroup({
       uploadConfig: new FormControl<string | null>('', { validators: Validators.required }),
     })
@@ -137,9 +142,13 @@ export class ListRdkCertificationComponent {
   }
 
   getAllCerificate():void{
+    this.showLoader = true;
     this.service.getallRdkCertifications().subscribe(res => {
       const certificationNames = JSON.parse(res);
       this.rowData = certificationNames.map((name: any) => ({ name }));
+      if(this.rowData.length>0){
+        this.showLoader = false;
+      }
     })
   }
   /**
@@ -310,8 +319,7 @@ export class ListRdkCertificationComponent {
           })
         },
         error: (err) => {
-          let errmsg = err.error;
-          this._snakebar.open(errmsg, '', {
+          this._snakebar.open(err, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

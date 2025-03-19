@@ -38,12 +38,14 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 
 @Component({
   selector: 'app-parameter-list',
   standalone: true,
-  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,
+    LoaderComponent],
   templateUrl: './parameter-list.component.html',
   styleUrl: './parameter-list.component.css'
 })
@@ -109,6 +111,7 @@ export class ParameterListComponent {
   dynamicModuleName!:string;
   dynamicFunctionName!:string;
   categoryName: any;
+  showLoader = false;
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice: ModulesService,
@@ -122,13 +125,30 @@ export class ParameterListComponent {
     this.dynamicModuleName = functiondata.moduleName;
     this.dynamicFunctionName = functiondata.functionName;
     this.configureName = this.authservice.selectedConfigVal;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.parameterByFunction();
-    this.categoryName = this.authservice.showSelectedCategory;
   }
   parameterByFunction():void{
-    this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe((data) => {
-      this.rowData = JSON.parse(data);
-      
+    this.showLoader = true;
+    this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe({
+      next:(data)=>{
+        this.rowData = JSON.parse(data);
+        this.showLoader = false;
+      },
+      error:(err)=>{
+        this.showLoader = false;
+        this._snakebar.open(err, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        })
+      }
+
     })
   }
   /**

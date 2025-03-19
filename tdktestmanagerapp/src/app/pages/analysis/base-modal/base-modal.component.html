@@ -133,6 +133,9 @@ limitations under the License.
               ></ag-grid-angular>
             </div>
         </div>
+        <div class="row loader-row" *ngIf="showLoader">
+            <app-loader></app-loader>
+        </div>
         <div class="col-md-12  text-end">
             <button *ngIf="baseModalName != null" type="button" class="create-btn confirm-btn" (click)="onConfirm()">Confirm</button>
             <button type="button" class="create-btn close-btn" (click)="close()" >Close</button>

@@ -96,8 +96,7 @@ export class ParameterCreateComponent {
           }, 2000);
         },
         error:(err)=>{
-          let errmsg = JSON.parse(err.error)
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
