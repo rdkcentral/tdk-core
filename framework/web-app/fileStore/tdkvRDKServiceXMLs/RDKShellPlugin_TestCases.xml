@@ -519,7 +519,7 @@
          
           <!-- Test case 24 -->
         <testCase testCaseId="RDKShell_24" testCaseName= "RDKShell_Suspend_Resume_Cobalt" desc="Resume cobalt  application">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -644,7 +644,7 @@
 
         <!-- Test case 29 -->
         <testCase testCaseId="RDKShell_29" testCaseName= "RDKShell_Destroy_Resume_Cobalt" desc="Destroy and resumes Cobalt application">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -698,7 +698,7 @@
 
         <!-- Test case 31 -->
         <testCase testCaseId="RDKShell_31" testCaseName="RDKShell_Check_On_Launched_Event_Cobalt" desc="Checks on launched event" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -746,7 +746,7 @@
 
         <!-- Test case 32 -->
         <testCase testCaseId="RDKShell_32" testCaseName="RDKShell_Check_On_Suspended_Event_Cobalt" desc="Checks on suspended event">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -772,7 +772,7 @@
 
         <!-- Test case 33 -->
         <testCase testCaseId="RDKShell_33" testCaseName= "RDKShell_Check_On_Destroyed_Event_Cobalt" desc="Checks on destroyed events">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -888,7 +888,7 @@
 
         <!-- Test case 37 -->
         <testCase testCaseId="RDKShell_37" testCaseName= "RDKShell_Suspend_Resume_Cobalt_Check_State" desc="Checks cobalt suspend resume states">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -929,7 +929,7 @@
         
         <!-- Test case 39 -->
         <testCase testCaseId="RDKShell_39" testCaseName="Enable_And_Disable_Hole_Punch_Cobalt"  desc="Checks whether able to enable and disable hole punch for client cobalt">
-            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <params>
                   <param tag="client" value="cobalt" />
@@ -1310,7 +1310,7 @@
 
         <!-- Test case 53 -->
         <testCase testCaseId="RDKShell_53" testCaseName= "RDKShell_Set_And_Get_Virtual_Resolution_Cobalt" desc="Checks whether able to set and get the virtual resolution for the cobalt client" >
-            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -1380,7 +1380,7 @@
 
         <!-- Test case 55 -->
         <testCase testCaseId="RDKShell_55" testCaseName="RDKShell_Check_Application_Life_Cycle_Events_For_Cobalt" desc="Checks the application life cycle events for the cobalt application">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -1559,7 +1559,7 @@
     
         <!-- Test case 63 -->
         <testCase testCaseId="RDKShell_63" testCaseName="RDKShell_Check_On_Plugin_Suspended_Event_Cobalt" desc="Checks for Plugin suspended event for cobalt">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -1769,7 +1769,7 @@
         </testCase>
         <!-- Test case 71 -->
         <testCase testCaseId="RDKShell_71" testCaseName="RDKShell_Check_Suspended_State_On_Launching_Cobalt" desc="Checks the suspended state on launching the cobalt" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -1859,7 +1859,7 @@
         </testCase>
         <!-- Test case 73 -->
         <testCase testCaseId="RDKShell_73" testCaseName="RDKShell_Check_Focus_State_On_Launching_Cobalt" desc="Checks the focus state on launching the cobalt" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -1965,7 +1965,7 @@
         </testCase>
         <!-- Test case 75 -->
         <testCase testCaseId="RDKShell_75" testCaseName="RDKShell_Check_Zorder_Sequence_On_Launching_Cobalt" desc="Checks the zorder sequence on launching the cobalt" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -2051,7 +2051,7 @@
         </testCase>
         <!-- Test case 77 -->
         <testCase testCaseId="RDKShell_77" testCaseName="RDKShell_Check_Video_Hole_Punching_State_On_Launching_Cobalt" desc="Checks the video hole punching status on launching the cobalt" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -2324,7 +2324,7 @@
         </testCase>
         <!-- Test case 83 -->
         <testCase testCaseId="RDKShell_83" testCaseName= "RDKShell_Application_Kill_Cobalt" desc="Kill Application">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -2401,7 +2401,7 @@
 
         <!-- Test case 86 -->
         <testCase testCaseId="RDKShell_86" testCaseName= "RDKShell_Enable_Disable_Virtual_Display_Cobalt" desc="Checks whether able to enable and disable the virtual display for the cobalt client" >
-            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="setandget" revert="true" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -2811,7 +2811,7 @@
 
         <!-- Test case 97 -->
         <testCase testCaseId="RDKShell_97" testCaseName="RDKShell_Create_Display_Cobalt" desc="Checks if able to create display for cobalt">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments="check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -2834,7 +2834,7 @@
 
         <!-- Test case 98 -->
         <testCase testCaseId="RDKShell_98" testCaseName="RDKShell_Check_Zorder_On_Launching_Cobalt_Suspended_State" desc="Checks the zorder sequence on launching the cobalt application in suspended state" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -2904,7 +2904,7 @@
         
         <!-- Test case 99 -->
         <testCase testCaseId="RDKShell_99" testCaseName="RDKShell_Add_Remove_Multiple_Key_Intercepts" desc="Checks if able to add multiple key intercepts and remove it">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_multiple_application" arguments="check_if_exists" expectedValues="cobalt,webkitbrowser" />
             </testStep>
@@ -2972,7 +2972,7 @@
         
         <!-- Test case 100 -->
         <testCase testCaseId="RDKShell_100" testCaseName="RDKShell_Check_Zorder_On_Launching_Cobalt_TopMost" desc="Checks the zorder sequence on launching the cobalt application with topmost parameter" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3037,7 +3037,7 @@
     
         <!-- Test case 101 -->
         <testCase testCaseId="RDKShell_101" testCaseName="RDKShell_Check_Zorder_On_Launching_WesterosTest_TopMost_False" desc="Checks the zorder sequence on launching the Westeros application topmost as False" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
 	    <testCasePreRequisite>
 	    <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3111,7 +3111,7 @@
 
         <!-- Test case 102 -->
         <testCase testCaseId="RDKShell_102" testCaseName="RDKShell_Check_Visibility_on_Launching_Cobalt_Suspended_State" desc="Checks the visibility status on launching cobalt application in suspended state" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3164,7 +3164,7 @@
 
         <!-- Test case 103 -->
         <testCase testCaseId="RDKShell_103" testCaseName="RDKShell_Check_Visibility_on_Suspending_Resuming_Cobalt" desc="Checks the visibility status on suspending/resuming  cobalt application" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3224,7 +3224,7 @@
 
         <!-- Test case 104 -->
         <testCase testCaseId="RDKShell_104" testCaseName="RDKShell_Check_LaunchType_on_Launching_Cobalt_Suspended_State" desc="Checks the Launch type in onLaunched event on launching cobalt in suspended state" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3320,7 +3320,7 @@
 
         <!-- Test case 106 -->
         <testCase testCaseId="RDKShell_106" testCaseName="RDKShell_Check_Zorder_On_Launching_WebKitBrowser_TopMost" desc="Checks the zorder sequence on launching the webkitbrowser application with topmost parameter" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_WebKitBrowser_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3557,7 +3557,7 @@
 
         <!-- Test case 110 -->
         <testCase testCaseId="RDKShell_110" testCaseName="RDKShell_Suspend_Non_Running_Client_Cobalt" desc="checks if able to suspend the cobalt client which is not running" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3601,7 +3601,7 @@
 
         <!-- Test case 111 -->
         <testCase testCaseId="RDKShell_111" testCaseName="RDKShell_Add_KeyIntercept_For_Non_Running_Client_Cobalt" desc="checks if able to add key intercepts for the cobalt client which is not running" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
@@ -3952,7 +3952,7 @@
 
        <!-- Test case 122 -->
         <testCase testCaseId="RDKShell_122" testCaseName="RDKShell_Suspend_Destroy_Cobalt_Application" desc="Checks if able to suspend and destroy cobalt application">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testStep testStepId="1" name="Get_connected_clients" method="GetClients" >
               <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "cobalt" />
             </testStep>
@@ -4059,7 +4059,7 @@
 
 	<!-- Test case 125 -->
         <testCase testCaseId="RDKShell_125" testCaseName="RDKShell_Launch_Cobalt_with_Scaletofit_True" desc="Launch the cobalt application with scalefit to true" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
@@ -4090,7 +4090,7 @@
 
 	<!-- Test case 126 -->
         <testCase testCaseId="RDKShell_126" testCaseName="RDKShell_Launch_Cobalt_with_Scaletofit_False" desc="Launch the cobalt application with scalefit to false" >
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                  <prerequisite requisiteId="1" requisiteName="Destroy_Cobalt_Application">
                    <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
@@ -4258,7 +4258,7 @@
 	
 	<!-- Test case 133 -->
 	<testCase testCaseId="RDKShell_133" testCaseName="RDKShell_Memcr_Verify_Launch_Suspend_Hibernate_Event_Validation" desc="Verify if launch, suspend and hibernate events are being triggered">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
 		<!-- TestCase PreRequisite 1 -->
                 <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
@@ -4375,7 +4375,7 @@
 
 	<!-- Test case 134 -->
         <testCase testCaseId="RDKShell_134" testCaseName="RDKShell_Memcr_Verify_Restore_Event_Validation" desc="Verify if restore event are being triggered">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
 		<!-- TestCase PreRequisite 1 -->
                 <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
@@ -4486,7 +4486,7 @@
 
 	<!-- Test case 135 -->
         <testCase testCaseId="RDKShell_135" testCaseName="RDKShell_Memcr_Launch_Suspend_Hibernate_Cobalt_State_Check" desc="Verify the cobalt launch, suspend and hibernate state functionality">
-            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="Cobalt"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
             <testCasePreRequisite>
                 <!-- TestCase PreRequisite 1 -->
                 <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">

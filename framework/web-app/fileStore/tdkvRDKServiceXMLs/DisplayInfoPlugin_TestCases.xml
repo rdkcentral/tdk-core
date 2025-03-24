@@ -433,7 +433,7 @@
         </testCase>
      <!-- Test case 19 -->
         <testCase testCaseId="DISP_19" testCaseName= "DisplayInfo_GET_Color_Space" desc="Gets the display color space">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYINFO_NA_TESTS" useMethodTag="displayinfo_na_tests" arguments="colorspace"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
                 <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings" >
@@ -447,7 +447,7 @@
         </testCase>
       <!-- Test case 20 -->
         <testCase testCaseId="DISP_20" testCaseName= "DisplayInfo_Get_Colour_Depth" desc="Gets the display colour depth">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYINFO_NA_TESTS" useMethodTag="displayinfo_na_tests" arguments="colourdepth"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
                 <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings" >
@@ -461,7 +461,7 @@
         </testCase>
        <!-- Test case 21 -->
         <testCase testCaseId="DISP_21" testCaseName= "DisplayInfo_Get_Quantization_Range" desc="Gets the display quantization range">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYINFO_NA_TESTS" useMethodTag="displayinfo_na_tests" arguments="quantizationrange"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
                 <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings" >
@@ -491,7 +491,7 @@
         </testCase>
        <!-- Test case 23 -->
         <testCase testCaseId="DISP_23" testCaseName= "DisplayInfo_Get_EOTF" desc="Gets the display Electro Optical Transfer Function" >
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DISPLAYINFO_NA_TESTS" useMethodTag="displayinfo_na_tests" arguments="eotf"/>
             <testCasePreRequisite>
                 <prerequisite requisiteId="1" requisiteName="Get_Display_Connected_Status">
                 <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" pluginName="DisplaySettings" >

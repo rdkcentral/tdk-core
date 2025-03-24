@@ -213,7 +213,7 @@
        </testCase>
 
        <testCase testCaseId="DI_10" testCaseName= "DeviceInfo_Check_Host_EDID" desc="Check the EDID status of host">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hostedid"/>
             <testStep testStepId="1" name="Get_Host_EDID_Details" method="Get_Host_EDID">
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
@@ -238,7 +238,7 @@
        </testCase>
 
        <testCase testCaseId="DI_12" testCaseName="DeviceInfo_Check_Supported_HDCP_Version" desc="Checks the supported HDCP version" >
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hdcpversion"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
             </testStep>
@@ -394,7 +394,7 @@
 
        <!-- Test case 20 -->
        <testCase testCaseId="DI_20" testCaseName="DeviceInfo_Validate_Host_EDID" desc="Verify whether the host EDID details returned by deviceinfo API matches the EDID details in displaysettings or not">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hostedid"/>
 	    <testStep testStepId="1" name="DeviceInfo_Get_Host_EDID_Details" method="Get_Host_EDID" saveResult="true">
                 <resultGeneration useMethodTag="deviceinfo_get_api_info"/>
             </testStep>
@@ -410,7 +410,7 @@
 
        <!-- Test case 21 -->
        <testCase testCaseId="DI_21" testCaseName="DeviceInfo_Validate_HDCP_Version" desc="Verify whether the HDCP version returned by deviceinfo API matches the HDCP version in HdcpProfile plugin or not">
-            <testCaseInfo testCaseType="direct"/>
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="DEVICEINFO_NA_TESTS" useMethodTag="deviceinfo_na_tests" arguments="hdcpversion"/>
             <testStep testStepId="1" name="Check_Display_Connected_Status" method="Get_Connected_VideoDisplays" saveResult="true" pluginName="DisplaySettings">
                 <resultGeneration useMethodTag="display_connected_status"/>
             </testStep>

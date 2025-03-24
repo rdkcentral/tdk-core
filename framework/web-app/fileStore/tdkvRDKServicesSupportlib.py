@@ -99,6 +99,13 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["appStatus"] = "FALSE"
             elif len(arg) and arg[0] == "empty_result_validation":
                 info["Test_Step_Status"] = "SUCCESS"
+            # Ensure 'arg' is a list and has at least two elements
+            elif isinstance(arg, list) and len(arg) > 1:
+                if arg[1] == "no":
+                    if not result:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
 
         # DeviceInfo Plugin Response result parser steps
         elif tag == "deviceinfo_get_system_info":
@@ -1854,10 +1861,22 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         elif tag == "display_connected_status":
             info["video_display"] = result.get('connectedVideoDisplays')
-            if json.dumps(result.get('success')) == "true" and  result.get('connectedVideoDisplays'):
-                info["Test_Step_Status"] = "SUCCESS"
+            if len(arg):
+                if arg[0].lower() != "true":
+                    if json.dumps(result.get('success')) == "true" and result.get('connectedVideoDisplays'):
+                        info["Test_Step_Status"] = "FAILURE"
+                    else:
+                        info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    if json.dumps(result.get('success')) == "true" and result.get('connectedVideoDisplays'):
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
             else:
-                info["Test_Step_Status"] = "FAILURE"
+                if json.dumps(result.get('success')) == "true" and  result.get('connectedVideoDisplays'):
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
 
         elif tag == "check_settop_supported_resolutions":
             info["supportedSettopResolutions"] = result.get('supportedSettopResolutions')
@@ -2063,7 +2082,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "check_video_port_status_standby":
             if len(arg) and arg[0] == "check_for_invalid_port":
                 info = checkAndGetAllResultInfo(result)
-                if str(result.get("success")).lower() == "false" and result.get('error_message') in expectedValues:
+                if str(result.get("success")).lower() == "false" and result.get('error_message').lower() in expectedValues:
                     info["Test_Step_Status"] = "SUCCESS"
                 else:
                     info["Test_Step_Status"] = "FAILURE"
@@ -2799,30 +2818,30 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
 
         # Monitor Plugin Response result parser steps
         elif tag == "monitor_get_result_data":
-            if arg[0] == "get_status":
-                measurements =  result[0].get("measurements")
-                info["observable"] = result[0].get("observable")
-                info["restart_limit"] = result[0].get("restart").get("limit")
-                info["restart_window"] = result[0].get("restart").get("window")
-            elif arg[0] == "get_reset_statistics":
-                measurements =  result.get("measurements")
-                info["observable"] = result.get("observable")
-                info["restart_limit"] = result.get("restart").get("limit")
-                info["restart_window"] = result.get("restart").get("window")
-            status = []
-            measurement_detail = []
-            for key in measurements:
-                detail_Values=[]
-                detail_Values.append(measurements.get(key))
-                status.append(checkNonEmptyResultData(detail_Values))
-                measurement_detail.append(str(key)+": "+str(measurements.get(key)))
-            info["measurements"] =  measurement_detail
-            if "FALSE" not in status:
-                info["Test_Step_Status"] = "SUCCESS"
-            else:
-                info["Test_Step_Status"] = "FAILURE"
-
-
+            if arg[1] =="yes":
+                if arg[0] == "get_status":
+                    measurements =  result[0].get("measurements")
+                    info["observable"] = result[0].get("observable")
+                    info["restart_limit"] = result[0].get("restart").get("limit")
+                    info["restart_window"] = result[0].get("restart").get("window")
+                elif arg[0] == "get_reset_statistics":
+                    measurements =  result.get("measurements")
+                    info["observable"] = result.get("observable")
+                    info["restart_limit"] = result.get("restart").get("limit")
+                    info["restart_window"] = result.get("restart").get("window")
+                status = []
+                measurement_detail = []
+                for key in measurements:
+                    detail_Values=[]
+                    detail_Values.append(measurements.get(key))
+                    status.append(checkNonEmptyResultData(detail_Values))
+                    measurement_detail.append(str(key)+": "+str(measurements.get(key)))
+                info["measurements"] =  measurement_detail
+                if "FALSE" not in status:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
+        
         # ScreenCapture Plugin Response result parser steps
         elif tag == "screencapture_upload_screen":
             if str(result.get("success")) in expectedValues:
@@ -4111,7 +4130,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
                 info["Test_Step_Status"] = "SUCCESS"
             else:
                 info["Test_Step_Status"] = "FAILURE"
-        
+
         # DWTV Response result parser steps
         elif tag == "empty_result_validation":
             if result:
@@ -4711,7 +4730,7 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
                 info["enabled"] = False
             elif str(state ).lower() == "false":
                 info["enabled"] = True
-
+ 
         # MessageControl Plugin Response result parser steps
         elif tag == "messagecontrol_get_original_state":
             state = ""
@@ -5715,6 +5734,11 @@ def parsePreviousTestStepResult(testStepResults,methodTag,arguments):
             testStepResults = list(testStepResults[0].values())[0]
             info["endpoints"] = testStepResults[0].get("endpoints")
 
+        # Monitor Plugin Response result parser steps
+        elif tag =="monitor_get_webkit_presence":
+            testStepResults = list(testStepResults[0].values())[0]
+            info["webkit_presence"] = testStepResults[0].get("webkitbrowser_details_presence")
+
         # Common Response result parser steps
         elif tag =="toggle_enabled_status":
             testStepResults = list(testStepResults[0].values())[0]
@@ -5801,6 +5825,24 @@ def checkTestCaseApplicability(methodTag,configKeyData,arguments):
                 result = "FALSE"
 
         elif tag == "warehouse_na_tests":
+            if arg[0] not in keyData:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "deviceinfo_na_tests":
+            if arg[0] not in keyData:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "displayinfo_na_tests":
+            if arg[0] not in keyData:
+                result = "TRUE"
+            else:
+                result = "FALSE"
+
+        elif tag == "playerinfo_na_tests":
             if arg[0] not in keyData:
                 result = "TRUE"
             else:
@@ -6928,6 +6970,22 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
                 info["plugin_status_value"] = "no"
             else:
                 info["plugin_status_value"] = "yes"
+
+        elif tag == "check_webkit_presence":
+            try:
+                command = "grep -iq '"+'"callsign":\s*"WebKitBrowser"'+"' "+arg[0]+" && echo 1 || echo 0"
+                output = executeCommand(execInfo, command)
+                output = str(output).split("\n")[1].strip()
+                if int(output) == 1:
+                    info["webkitbrowser_details_presence"] = "yes"
+                elif int(output) == 0:
+                    info["webkitbrowser_details_presence"] = "no"
+                else:
+                    print(output)
+                    info["Test_Step_Status"] = "FAILURE"
+            except Exception as e:
+                info["Test_Step_Status"] = "FAILURE"
+                print(e)
 
         elif tag == "check_time_sync":
             command = 'date'

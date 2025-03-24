@@ -142,7 +142,7 @@
             </testStep>
         </testCase>
         <testCase testCaseId="PI_08" testCaseName= "Check_Dolby_AudioMode_Changed_Event"  desc="Checks for the audio mode changed event">
-            <testCaseInfo testCaseType="loop" revert="true" />
+            <testCaseInfo testCaseType="loop" revert="true" configurableTest="true" testKey="PLAYERINFO_NA_TESTS" useMethodTag="playerinfo_na_tests" arguments="audiomodes"/>
             <testStep testStepId="1" name="Check_Connected_AudioPorts" method="Get_Connected_AudioPorts" saveResult="true" pluginName="DisplaySettings" >
                 <resultGeneration useMethodTag="check_connected_audio_ports" arguments="check_value" >
                 </resultGeneration>
