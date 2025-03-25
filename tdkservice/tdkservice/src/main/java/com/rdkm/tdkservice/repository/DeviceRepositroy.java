@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.rdkm.tdkservice.enums.Category;
@@ -128,4 +129,15 @@ public interface DeviceRepositroy extends JpaRepository<Device, UUID> {
 	 *         status
 	 */
 	List<Device> findByCategoryAndIsThunderEnabled(Category category, Boolean isThunderEnabled);
+
+	/**
+	 * Retrieves all Device entities from the database, sorted by their deviceStatus
+	 * in the following order: INPROGRESS, BUSY, HANG. Any devices with a
+	 * deviceStatus not in this list will be placed at the end.
+	 *
+	 * @return A List of Device objects sorted by deviceStatus.
+	 */
+	@Query("SELECT d FROM Device d ORDER BY FIELD(d.deviceStatus, 'BUSY', 'HANG','FREE','NOT_FOUND','ALLOCATED','TDK_DISABLED')")
+	List<Device> findAllSortedByDeviceStatus();
+
 }

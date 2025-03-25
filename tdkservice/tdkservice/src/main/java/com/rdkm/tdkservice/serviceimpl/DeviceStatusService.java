@@ -24,7 +24,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -63,10 +62,13 @@ public class DeviceStatusService {
 	 * @return boolean - true if the status update was successful for all devices,
 	 *         false otherwise
 	 */
-	@Scheduled(fixedRate = 300000)
+	@Scheduled(initialDelay = 5000, fixedDelay = 30000)
 	public void updateAllDeviceStatus() {
 		LOGGER.debug("Updating status for all devices");
-		List<Device> devices = deviceRepository.findAll();
+		// The status of BUSY, HANG devices should be checked first, as the
+		// BUSY, HANG states of the TDK enabled devices are set from
+		// the device itself for TDK enabled devices
+		List<Device> devices = deviceRepository.findAllSortedByDeviceStatus();
 		for (Device device : devices) {
 			try {
 				// Check if the device still exists in the repository
@@ -77,22 +79,31 @@ public class DeviceStatusService {
 				DeviceStatus deviceStatus = fetchDeviceStatus(device);
 				if (deviceStatus != null) {
 
-					// If the device is busy in the device entity, then no need to change the status
-					// because it is set via the execution logic
-					// If the device status fetched via script is busy, then we can change it.
-					// Because in TDK enabled devices, the script will return busy state
+					// If the device is not TDK enabled and is busy in the Database, then no need to
+					// change
+					// to the live status that we get from the status checker script execution.
+					// The script for thunder enabled devices -allthunderdevicestatus_cmndline.py
+					// will fetch us only device availability - FREE, NOT_FOUND.
+					// because it is set via the execution logic workflow in the tool.
 					if (device.isThunderEnabled()) {
 						if (device.getDeviceStatus().equals(DeviceStatus.BUSY)) {
 							continue;
 						} else {
+							// If the device is not is use, then the current status should
+							// be updated in the periodic update
 							device.setDeviceStatus(deviceStatus);
 						}
 					} else {
+						// If the device is TDK enabled, the script used for checking the status is
+						// calldevicestatus_cmndline.py.It will return status like HANG, BUSY etc
+						// based on the status of TDK Agent running in the box. Since the BUSY
+						// status is obtained from the script itself, we can keep that one.
 						device.setDeviceStatus(deviceStatus);
 					}
 
 					deviceRepository.save(device);
 				} else {
+
 					LOGGER.warn("Failed to fetch status for device: " + device.getName());
 				}
 			} catch (
@@ -146,7 +157,11 @@ public class DeviceStatusService {
 
 		}
 
-		deviceStatusOutput = scriptExecutorService.executeScript(scriptExecutionCommand, 1);
+		// Wait time of 5 seconds. If the device status is not obtained after 5 seconds,
+		// then the device status fetching is failed, the status checker itself has
+		// the logic to return the status as NOT_FOUND in case of inaccesibility
+		// So not handling that here
+		deviceStatusOutput = scriptExecutorService.executeScript(scriptExecutionCommand, 5);
 
 		DeviceStatus deviceStatus = getDeviceStatusFromOutput(deviceStatusOutput);
 		LOGGER.debug("Device status fetched for device: " + device.getName() + " is: " + deviceStatus.toString());

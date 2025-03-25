@@ -545,7 +545,22 @@ public class Constants {
 	public static final String TDK_PORTAL_SERVICE = "TDK";
 	// RDK portal URL
 	public static final String RDK_PORTAL_URL = "rdkPortalUrl";
-	
+
 	public static final String RDK_DIAGNOSIS_LOG_SCRIPT = "rdk_cerfiticate_diagnosis.py";
+
+	// Script for rest agent
+	public static final String REST_AGENT_SCRIPT = "callResetAgent.py";
+
+	// Key word FALSE
+	public static final String FALSE = "FALSE";
+
+	// Key word TRUE
+	public static final String TRUE = "TRUE";
+
+	// Script for reboot device
+	public static final String REBOOT_ON_CRASH_SCRIPT_FILE = "callRebootOnCrash.py";
+
+	// Based log file path in the config file
+	public static final String LOGS_PATH_KEY_CONFIG_FILE = "logs_path";
 
 }

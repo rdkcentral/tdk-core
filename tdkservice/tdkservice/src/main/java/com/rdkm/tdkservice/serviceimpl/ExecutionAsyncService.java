@@ -66,6 +66,7 @@ import com.rdkm.tdkservice.repository.ExecutionRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.service.utilservices.CommonService;
+import com.rdkm.tdkservice.service.utilservices.PythonLibraryScriptExecutorService;
 import com.rdkm.tdkservice.service.utilservices.ScriptExecutorService;
 import com.rdkm.tdkservice.util.Constants;
 
@@ -108,6 +109,9 @@ public class ExecutionAsyncService {
 	@Autowired
 	private FileTransferService fileTransferService;
 
+	@Autowired
+	private PythonLibraryScriptExecutorService pythonLibraryScriptExecutorService;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(ExecutionService.class);
 
 	/**
@@ -129,11 +133,14 @@ public class ExecutionAsyncService {
 			int repeatCount, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
 			boolean isDiagnosticLogsNeeded) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
-		// Busy lock the device before execution
+		// Busy lock in the database device entity before execution
 		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
 		try {
 			String realExecutionName = "";
 
+			// repeatCount means how many times the execution needs to be done
+			// If 0 is added by the user , then the execution won't happen
+			// So if the repeatcount is 0, then it is defaulted to 1
 			if (repeatCount == 0) {
 				repeatCount = 1;
 			}
@@ -144,11 +151,17 @@ public class ExecutionAsyncService {
 					// For repeat of the base execution, add a suffix R1, R2, R3 etc
 					realExecutionName = executionName + "_R" + i;
 				}
+				// Start time is stored
 				double executionStartTime = System.currentTimeMillis();
 
+				// The set of objects required for the executing the script are added here.
+				// for concise code
 				ExecutionEntities executionEntities = this.getExecutionEntitiesForExecution(device, script, user,
 						realExecutionName, isRerunOnFailure, isDeviceLogsNeeded, isPerformanceLogsNeeded,
 						isDiagnosticLogsNeeded);
+				// Transfer the version File
+				this.transferVersionFileOfTheDevice(executionEntities.getExecution().getId().toString(), device,
+						executionEntities.getExecutionDevice().getId().toString());
 
 				boolean executionStatus = executeScriptinDevice(script, executionEntities.getExecution(),
 						executionEntities.getExecutionResult().get(0), executionEntities.getExecutionDevice());
@@ -160,6 +173,7 @@ public class ExecutionAsyncService {
 				this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
 				this.setFinalStatusOfExecution(executionEntities.getExecution());
 
+				// TODO : Execution Status logic cross check once again
 				if (isRerunOnFailure && !executionStatus) {
 					// For the rerun on Failure, add _RERUN in the execution name
 					realExecutionName = realExecutionName + Constants.RERUN_APPENDER;
@@ -171,6 +185,11 @@ public class ExecutionAsyncService {
 					executeScriptinDevice(script, executionEntitiesForFailureRerun.getExecution(),
 							executionEntitiesForFailureRerun.getExecutionResult().get(0),
 							executionEntitiesForFailureRerun.getExecutionDevice());
+
+					this.transferVersionFileOfTheDevice(
+							executionEntitiesForFailureRerun.getExecution().getId().toString(), device,
+							executionEntities.getExecutionDevice().getId().toString());
+
 					executionEndTime = System.currentTimeMillis();
 					executionTime = this
 							.roundOfToThreeDecimals(this.computeTimeDifference(executionStartTime, executionEndTime));
@@ -235,7 +254,7 @@ public class ExecutionAsyncService {
 				if (repeatIndex == 0) {
 					currentExecutionName = executionName;
 				} else {
-					// Append _R<i> for subsequent executions
+					// Append _R<i> for subsequent executions, starting from _R1
 					currentExecutionName = executionName + "_R" + repeatIndex;
 				}
 
@@ -284,19 +303,8 @@ public class ExecutionAsyncService {
 				executionDevice.setExecution(execution);
 
 				String executionID = savedExecution.getId().toString();
-				boolean isVersionFileTransfered = fileTransferService.getVersionFileForTheDevice(executionID, device);
 
-				if (!isVersionFileTransfered) {
-					LOGGER.warn("Version file is not transferred for the device: {}", device.getName());
-				}
-
-				String buildName = fileTransferService.getImageName(executionID);
-				if (Utils.isEmpty(buildName)) {
-					buildName = Constants.BUILD_NAME_FAILED;
-				}
-
-				executionDevice.setBuildName(buildName);
-				executionDeviceRepository.save(executionDevice);
+				ExecutionDevice savedExecutionDevice = executionDeviceRepository.save(executionDevice);
 
 				List<ExecutionResult> execResultList = new ArrayList<>();
 				List<ExecutionResult> inValidExecutionResults = new ArrayList<>();
@@ -316,6 +324,7 @@ public class ExecutionAsyncService {
 				executionRepository.save(execution);
 
 				UUID executionId = execution.getId();
+				this.transferVersionFileOfTheDevice(executionID, device, savedExecutionDevice.getId().toString());
 				int executedScript = 0;
 
 				for (ExecutionResult execRes : executableResultList) {
@@ -407,6 +416,30 @@ public class ExecutionAsyncService {
 			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
 		}
 		deviceStatusService.fetchAndUpdateDeviceStatus(device);
+
+	}
+
+	/**
+	 * Method to transfer version file from the device, get the image name and store
+	 * in the Execution Device object
+	 * 
+	 * @param executionID       - ID of the Execution ID object
+	 * @param device            - Device object
+	 * @param executionDeviceID - ID of the Execution ID object
+	 */
+	private void transferVersionFileOfTheDevice(String executionID, Device device, String executionDeviceID) {
+		boolean isVersionFileTransfered = fileTransferService.getVersionFileForTheDevice(executionID, device);
+		if (!isVersionFileTransfered) {
+			LOGGER.warn("Version file is not transferred for the device: {}", device.getName());
+		}
+		String buildName = fileTransferService.getImageName(executionID);
+		if (Utils.isEmpty(buildName)) {
+			buildName = Constants.BUILD_NAME_FAILED;
+		}
+		ExecutionDevice executionDevice = executionDeviceRepository.findById(UUID.fromString(executionDeviceID)).get();
+
+		executionDevice.setBuildName(buildName);
+		executionDeviceRepository.save(executionDevice);
 
 	}
 
@@ -557,7 +590,7 @@ public class ExecutionAsyncService {
 	private boolean executeScriptinDevice(Script script, Execution execution, ExecutionResult executionResult,
 			ExecutionDevice executionDevice) {
 		String output = "";
-
+		LOGGER.info("Executing script: {} on device: {}", script.getName(), executionDevice.getDevice().getName());
 		Device device = executionDevice.getDevice();
 		StringBuilder remarksString = new StringBuilder();
 		remarksString.append("Execution started in device: ").append(device.getName()).append(" for script: ")
@@ -633,11 +666,17 @@ public class ExecutionAsyncService {
 
 			// If there is a TDK_error string , add it as failure
 			if (output.contains(Constants.ERROR_TAG_PY_COMMENT)) {
+				LOGGER.info(
+						"There is TDK error string in the log, So it can be an exception or error from the python framework");
 				executionResult.setResult(ExecutionResultStatus.FAILURE);
 				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
 				this.removeFWRequiredTextsFromLogs(executionLogfile);
 				deleteTemporaryFile(temporaryScriptPath);
+				if (!device.isThunderEnabled()) {
+					LOGGER.info("The device is TDK enabled, So after the error, the TDK agent needs to be reset");
+					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
+				}
 				return false;
 			}
 
@@ -646,6 +685,7 @@ public class ExecutionAsyncService {
 			// to timeout or due to some other reason
 			if (!output.contains(Constants.END_TAG_PY_COMMENT)) {
 				if (executiontime > waittime) {
+					LOGGER.info("The script execution is interrupted due to timeout");
 					executionResult.setResult(ExecutionResultStatus.TIMEOUT);
 				} else {
 					executionResult.setResult(ExecutionResultStatus.FAILURE);
@@ -654,7 +694,22 @@ public class ExecutionAsyncService {
 				executionResultRepository.save(executionResult);
 				this.removeFWRequiredTextsFromLogs(executionLogfile);
 				deleteTemporaryFile(temporaryScriptPath);
+				if (!device.isThunderEnabled()) {
+					LOGGER.info(
+							"The device is TDK enabled, the TDK agent needs to be reset, other wise the device status will be in busy state");
+					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
+				}
 				return false;
+			}
+
+			if (finalExecutionResultStatus == ExecutionResultStatus.FAILURE) {
+				LOGGER.info("The script execution is failed");
+				if (!device.isThunderEnabled()) {
+					LOGGER.info(
+							"The script execution is failed, the TDK agent needs to be reset, other wise the device status will be in busy state");
+					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
+				}
+
 			}
 
 			ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId()).get();
@@ -671,11 +726,11 @@ public class ExecutionAsyncService {
 				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
 
 			}
-			
-			if (execution.isDiagnosticLogsNeeded()) {
+
+			if (execution.isDiagnosticLogsNeeded() && device.isThunderEnabled()) {
 				fileTransferService.transferDiagnosisLogs(execution, finalExecutionResult, device);
 			}
-			
+
 			// transfer crash logs
 			fileTransferService.transferCrashLogs(execution, finalExecutionResult, device);
 
@@ -842,21 +897,8 @@ public class ExecutionAsyncService {
 		// Create and save ExecutionDevice
 		ExecutionDevice executionDevice = new ExecutionDevice();
 		executionDevice.setDevice(device);
-		executionDevice.setExecution(execution);
+		executionDevice.setExecution(savedExecution);
 		// Before saving the execution device, get the latest build name from the device
-		String executionID = savedExecution.getId().toString();
-		boolean isVersionFileTransfered = fileTransferService.getVersionFileForTheDevice(executionID, device);
-
-		if (!isVersionFileTransfered) {
-			LOGGER.warn("Version file is not transferred for the device: {}", device.getName());
-		}
-
-		String buildName = fileTransferService.getImageName(executionID);
-		if (Utils.isEmpty(buildName)) {
-			buildName = Constants.BUILD_NAME_FAILED;
-		}
-
-		executionDevice.setBuildName(buildName);
 		executionDeviceRepository.save(executionDevice);
 
 		ExecutionResult executionResult = new ExecutionResult();

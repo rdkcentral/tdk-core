@@ -95,7 +95,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 
 		String outputData;
 		try {
-			outputData = scriptExecutorService.executeScript(command, 1);
+			outputData = scriptExecutorService.executeScript(command, 60);
 		} catch (Exception e) {
 			LOGGER.error("Error executing script", e);
 			createPackageResponse.setStatus("Error executing script");
@@ -276,9 +276,9 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 		LOGGER.info("rebootCommand: " + Arrays.toString(rebootCommand));
 		try {
 
-			scriptExecutorService.executeScript(copyPackageCommand, 1);
-			scriptExecutorService.executeScript(copyScriptCommand, 1);
-			String output = scriptExecutorService.executeScript(executeScriptCommand, 1);
+			scriptExecutorService.executeScript(copyPackageCommand, 60);
+			scriptExecutorService.executeScript(copyScriptCommand, 60);
+			String output = scriptExecutorService.executeScript(executeScriptCommand, 60);
 			if (output.contains("Going to reboot the device")) {
 				String message = "\nPackage installed successfully.";
 				output = output + message;
@@ -292,7 +292,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 			LOGGER.error("Error executing script", e);
 			throw new RuntimeException("Error executing script", e);
 		} finally {
-			scriptExecutorService.executeScript(rebootCommand, 1);
+			scriptExecutorService.executeScript(rebootCommand, 60);
 			deviceStatusService.setDeviceStatus(DeviceStatus.FREE, deviceObj);
 		}
 

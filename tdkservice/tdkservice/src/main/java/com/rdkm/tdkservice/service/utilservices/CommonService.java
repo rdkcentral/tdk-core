@@ -366,7 +366,7 @@ public class CommonService {
 		LOGGER.info("Getting base log path");
 		String defaultLogBasePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.LOGS;
 		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
-		String logsPath = getConfigProperty(new File(configFilePath), Constants.PYTHON_COMMAND);
+		String logsPath = getConfigProperty(new File(configFilePath), Constants.LOGS_PATH_KEY_CONFIG_FILE);
 
 		// Check if the value from the config is null or empty
 		if (Utils.isEmpty(logsPath)) {
@@ -479,10 +479,10 @@ public class CommonService {
 	 *         occurs
 	 */
 	private Properties loadPropertiesFromFile(String filePath) {
-		LOGGER.info("Loading properties from file: {}", filePath);
+		LOGGER.debug("Loading properties from file: {}", filePath);
 		File configFile = new File(filePath);
 		if (!configFile.exists() || !Files.exists(configFile.toPath())) {
-			LOGGER.info("No Config File !!! ");
+			LOGGER.error("No Config File !!! ");
 			return null;
 		}
 		try (InputStream is = new FileInputStream(configFile)) {
@@ -522,10 +522,10 @@ public class CommonService {
 			// get tm.config file using base location
 			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
 					+ Constants.TM_CONFIG_FILE;
-			LOGGER.info("configFilePath: {}", configFilePath);
+			LOGGER.debug("configFilePath: {}", configFilePath);
 			// get the TM URL from the config file
 			tmUrl = getConfigProperty(new File(configFilePath), Constants.TM_URL);
-			LOGGER.info("TM URL from config file: {}", tmUrl);
+			LOGGER.debug("TM URL from config file: {}", tmUrl);
 		} catch (Exception e) {
 			LOGGER.error("Error getting TM URL from config file: " + e.getMessage());
 		}

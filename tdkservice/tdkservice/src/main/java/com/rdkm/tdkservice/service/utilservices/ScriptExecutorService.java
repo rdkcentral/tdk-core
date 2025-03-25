@@ -37,7 +37,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 /**
- * The ScriptExecutorService class provides the methods to execute a script.
+ * The ScriptExecutorService class provides the methods to execute Test script
+ * and other framework Python scripts.
  */
 @Service
 public class ScriptExecutorService {
@@ -47,11 +48,13 @@ public class ScriptExecutorService {
 	private final ExecutorService executorService = Executors.newCachedThreadPool();
 
 	/**
-	 * Executes a script with the given command and wait time.
+	 * Executes a Python script with the given command and wait time.
+	 * Mostly used for executing the framework python scripts for image version, 
+	 * file transfer , device status checker etc.
 	 *
 	 * @param command  the command to execute as an array of strings
 	 * @param waittime the maximum time to wait for the script to complete, in
-	 *                 minutes
+	 *                 seconds
 	 * @return the output of the script, or null if an error occurs
 	 */
 	public String executeScript(String[] command, int waittime) {
@@ -76,7 +79,7 @@ public class ScriptExecutorService {
 			if (waittime == 0) {
 				process.waitFor();
 			} else {
-				process.waitFor(waittime, TimeUnit.MINUTES);
+				process.waitFor(waittime, TimeUnit.SECONDS);
 			}
 
 			String outputData;
