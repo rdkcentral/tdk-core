@@ -56,25 +56,25 @@ public class Device extends BaseEntity {
 	 * Represents the stbPort of the device.
 	 */
 	@Column(nullable = true, columnDefinition = "varchar(255) default '8087'")
-	private String port;
+	private String port = "8087";
 
 	/**
 	 * Represents the statusPort of the device.
 	 */
 	@Column(nullable = true, columnDefinition = "varchar(255) default '8088'")
-	private String statusPort;
+	private String statusPort = "8088";
 
 	/**
 	 * Represents the agentMonitorPort of the device.
 	 */
 	@Column(nullable = true, columnDefinition = "varchar(255) default '8090'")
-	private String agentMonitorPort;
+	private String agentMonitorPort = "8090";
 
 	/**
 	 * Represents the logTransferPort of the device.
 	 */
 	@Column(nullable = true, columnDefinition = "varchar(255) default '69'")
-	private String logTransferPort;
+	private String logTransferPort = "69";
 
 	/**
 	 * Represents the macId of the device.

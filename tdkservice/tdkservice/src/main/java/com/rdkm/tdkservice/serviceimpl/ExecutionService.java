@@ -1239,11 +1239,11 @@ public class ExecutionService implements IExecutionService {
 				return logFileData.toString();
 			} catch (IOException e) {
 				LOGGER.error("Error reading log file: {}", executionLogfile, e);
-				return executionRemarks;
+				throw new TDKServiceException("Error Occcured while reading the log file");
 			}
 		} else {
-			LOGGER.warn("Log file does not exist: {}", executionLogfile);
-			return ("Log file for the execution doesnt't exist");
+			LOGGER.warn("Displaying the execution remarks: {}", executionRemarks);
+			return (executionRemarks);
 
 		}
 	}
@@ -1531,6 +1531,10 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Execution Device not found for execution with id: {}", execId);
 			throw new ResourceNotFoundException("Execution Device", "Execution ID: " + execId.toString());
 		}
+		if (executionDevice.getDevice().getDeviceStatus() != DeviceStatus.FREE) {
+			LOGGER.error(" Device not available for execution");
+			throw new UserInputException("The device not available for execution");
+		}
 
 		Device device = executionDevice.getDevice();
 		if (device == null) {
@@ -1762,7 +1766,7 @@ public class ExecutionService implements IExecutionService {
 	 */
 	public String getNextRepeatExecutionName(String currentExecutionName, List<String> existingExecutionNames) {
 		// Extract the base name before "_R"
-		String baseName = currentExecutionName.split("_R")[0];
+		String baseName = currentExecutionName.split("_R\\d+")[0];
 
 		// Initialize the maximum repeat count
 		int maxRepeatCount = 0;
