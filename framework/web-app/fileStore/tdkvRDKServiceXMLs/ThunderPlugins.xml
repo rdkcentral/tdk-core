@@ -2706,4 +2706,61 @@
 	<!-- Event Definitions -->
         <event name="Event_On_Maintenance_StatusChange" eventName="onMaintenanceStatusChange" eventId="client.events.1" type="event" desc="Triggered when the maintenance manager status changes"/>
     </plugin>
+
+    <!-- RemoteControl Plugin Information -->
+    <plugin pluginName="RemoteControl" serviceName="org.rdk.RemoteControl" serviceVersion="1">
+        <!-- Method Definitions -->
+	<method name="RemoteControl_Get_ApiVersionNumber" api="getApiVersionNumber" type="method" desc="Gets the current API version number"/>
+	<method name="RemoteControl_Get_NetStatus" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
+		<params>
+                	<param tag="netType" type="int"/>
+            	</params>
+	</method>
+	<method name="RemoteControl_ConfigureWakeupKeys" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
+                <params>
+			<param tag="netType" type="int"/>
+			<param tag="wakeupConfig" type="string"/>
+			<param tag="customKeys" type="string"/>
+                </params>
+	</method>
+	<method name="RemoteControl_Get_LastKeypress_Source" api="getLastKeypressSource" type="method" desc="Returns last key press source data">
+                <params>
+                        <param tag="netType" type="int"/>
+                </params>
+	</method>
+	<method name="RemoteControl_Find_MyRemote" api="findMyRemote" type="method" desc="Returns the most recently used remote to beep">
+                <params>
+			<param tag="netType" type="int"/>
+			<param tag="level" type="string"/>
+                </params>
+        </method>
+	<method name="RemoteControl_FactoryReset" api="factoryReset" type="method" desc="Returns all paired and connected remotes to factory reset"/>
+	<method name="RemoteControl_Get_NetStatus_Negative" api="getNetStatus" type="method" desc="Returns the status information provided by the last onStatus event for the specified network">
+                <params>
+                        <param tag="netType"/>
+                </params>
+	</method>
+	<method name="RemoteControl_Get_IRDBManufacturers_Negative" api="getIRDBManufacturers" type="method" desc="Returns a list of manufacturer names based on the specified input parameters">
+                <params>
+			<param tag="netType"/>
+			<param tag="avDevType" type="string"/>
+			<param tag="manufacturer" type="string"/>
+                </params>
+	</method>
+	<method name="RemoteControl_Get_IRDBModels_Negative" api="getIRDBModels" type="method" desc="Returns a list of model names based on the specified input parameters">
+                <params>
+                        <param tag="netType"/>
+                        <param tag="avDevType" type="string"/>
+			<param tag="manufacturer" type="string"/>
+			<param tag="model" type="string"/>
+                </params>
+	</method>
+	<method name="RemoteControl_ConfigureWakeupKeys_Negative" api="configureWakeupKeys" type="method" desc="Configures which keys on the remote will wake the target from deepsleep">
+                <params>
+                        <param tag="netType"/>
+                        <param tag="wakeupConfig" type="string"/>
+                        <param tag="customKeys" type="string"/>
+                </params>
+        </method>
+    </plugin>
 </thunderPlugins>

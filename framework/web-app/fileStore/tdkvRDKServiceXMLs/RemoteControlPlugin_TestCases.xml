@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ If not stated otherwise in this file or this component's Licenses.txt file the
+ following copyright and licenses apply:
+ Copyright 2025 RDK Management
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ http://www.apache.org/licenses/LICENSE-2.0
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+<testPlugin pluginName="RemoteControl" pluginVersion="1">
+    <pluginPreRequisite>
+      <!-- Activate RemoteControl plugin -->
+      <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+            <params>
+              <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
+        </testStep>
+        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+            <params>
+              <param tag="callsign" value="org.rdk.RemoteControl" />
+            </params>
+        </testStep>
+        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+            <params>
+              <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+            </params>
+            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+        </testStep>
+      </prerequisite>
+
+      <!-- Check control manager service status -->
+      <prerequisite requisiteId="2" requisiteName="Check_ControlManager_Service_Status">
+            <testStep testStepId="1" name="Check_ControlManager_Service_Status"  action="externalFnCall">
+                <resultGeneration useMethodTag="check_service_status" arguments="ctrlm-main"/>
+            </testStep>
+      </prerequisite>
+
+      <!-- Activate Bluetooth Plugin -->
+      <prerequisite requisiteId="3" requisiteName="Activate_Bluetooth_Plugin">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                <params>
+                  <param tag="plugin" value="org.rdk.Bluetooth" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" />
+            </testStep>
+            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Bluetooth" />
+                <params>
+                  <param tag="callsign" value="org.rdk.Bluetooth" />
+                </params>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Bluetooth" />
+                <params>
+                  <param tag="plugin" value="org.rdk.Bluetooth" indexOnly="true" />
+                </params>
+                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" expectedValues="activated"/>
+            </testStep>
+      </prerequisite>
+
+      <!-- Get_Connected_Remote_Device -->
+      <prerequisite requisiteId="4" requisiteName="Get_Connected_Remote_Device">
+      	    <testStep testStepId="1" name="Get_Connected_Remote_Device" method="Get_Connected_Devices" delay="5" pluginName="Bluetooth">
+                <resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_device_connected,check_active_state">
+                    <expectedValues useConfigFile="true" key="REMOTECONTROL_PAIRED_REMOTE_DEVICE_NAME"/>
+                </resultGeneration>
+	    </testStep>
+      </prerequisite>
+
+      <!-- Event Registration -->
+      <prerequisite requisiteId="5" requisiteName="Register_And_Listen_Events" type="eventRegister" trace="false">
+	      <event pluginName="Controller" eventName="Event_Controller_State_Changed" />
+	      <event pluginName="Controller" eventName="Event_Controller_All" />
+      </prerequisite>
+    </pluginPreRequisite>
+	
+    <!-- Test case 01 -->
+    <testCase testCaseId="RC_01" testCaseName="RemoteControl_Check_API_Version" desc="Check if the current API version number can be fetched">
+	<testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Check_API_Version" method="RemoteControl_Get_ApiVersionNumber">
+		<resultGeneration useMethodTag="check_api_version">
+			<expectedValues useConfigFile="true" key="REMOTECONTROL_API_VERSION"/>
+		</resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 02 -->
+    <testCase testCaseId="RC_02" testCaseName="RemoteControl_Check_GetNetStatus" desc="Check if the getNetStatus API is returning a response after the device connects to the remote">
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Check_GetNetStatus" method="RemoteControl_Get_NetStatus">
+                <params>
+                        <param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+                </params>
+                <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 03 -->
+    <testCase testCaseId="RC_03" testCaseName="RemoteControl_Configure_WakeupKeys_Set_to_All" desc="Check if the configureWakeupKeys API is returning a success status (true) or not when set to all">
+        <testCaseInfo testCaseType="direct"/>
+	<testStep testStepId="1" name="Configure_WakeupKeys_Set_to_All" method="RemoteControl_ConfigureWakeupKeys">
+                <params>
+			<param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+			<param tag="wakeupConfig" value="all"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 04 -->
+    <testCase testCaseId="RC_04" testCaseName="RemoteControl_Configure_WakeupKeys_Set_to_None" desc="Check if the configureWakeupKeys API is returning a success status (true) or not when set to none">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Configure_WakeupKeys_Set_to_None" method="RemoteControl_ConfigureWakeupKeys">
+                <params>
+                        <param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+                        <param tag="wakeupConfig" value="none"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 05 -->
+    <testCase testCaseId="RC_05" testCaseName="RemoteControl_Configure_WakeupKeys_Set_to_Custom" desc="Check if the configureWakeupKeys API is returning a success status (true) or not when set to custom">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Configure_WakeupKeys_Set_to_Custom" method="RemoteControl_ConfigureWakeupKeys">
+                <params>
+                        <param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+			<param tag="wakeupConfig" value="custom"/>
+			<param tag="customKeys" useConfigFile="true" key="REMOTECONTROL_CUSTOMKEYS"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 06 -->
+    <testCase testCaseId="RC_06" testCaseName="RemoteControl_Get_LastKeypress_SourceDetails" desc="Check that the getLastKeypressSource API returns key details when any key is pressed in remote">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_LastKeypress_SourceDetails" method="RemoteControl_Get_LastKeypress_Source">
+                <params>
+                        <param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+                </params>
+                <resultGeneration useMethodTag="check_result_values"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 07 -->
+    <testCase testCaseId="RC_07" testCaseName="RemoteControl_Find_MyRemote" desc="Check if the findMyRemote API is returning a success status (true) or not">
+        <testCaseInfo testCaseType="loop"/>
+	<testStep testStepId="1" name="Find_MyRemote_with_Beeplevel_Mild_High" testStepType="loop" >
+        <subtestStep subtestStepId="1" name="Find_MyRemote" method="RemoteControl_Find_MyRemote" delay ="20">
+                <params>
+                        <param tag="netType" useConfigFile="true" key="REMOTECONTROL_NETTYPE"/>
+                        <param tag="level" useConfigFile="true" key="REMOTECONTROL_BEEPLEVEL" iteration="true"/>
+                </params>
+                <resultGeneration useMethodTag="success_status_validation"/>
+	</subtestStep>
+	</testStep>
+    </testCase>
+
+    <!-- Test case 08 -->
+    <testCase testCaseId="RC_08" testCaseName="RemoteControl_Factory_Reset" desc="Check if the factoryReset API is returning a success status (true) or not">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Factory_Reset" method="RemoteControl_FactoryReset">
+                <resultGeneration useMethodTag="success_status_validation"/>
+        </testStep>
+    </testCase> 
+
+    <!-- Test case 09 -->
+    <testCase testCaseId="RC_09" testCaseName="RemoteControl_ActivateDeactivate_Event_Test" desc="Validates statechange event on Activating/deactivating the plugin">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.RemoteControl" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	    
+	    <testStep testStepId="1" name="Deactivate_RemoteControl_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_RemoteControl_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 10 -->
+    <testCase testCaseId="RC_10" testCaseName="RemoteControl_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
+	    <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.RemoteControl" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	    
+	    <testStep testStepId="1" name="Deactivate_RemoteControl_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.remotecontrol,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Activate_RemoteControl_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="5" name="Check_All_Event" event="Event_Controller_All" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_all_event" expectedValues="org.rdk.remotecontrol,activated,requested"/>
+            </testStep>
+            <testStep testStepId="6" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+    
+    <!-- Test case 11 -->
+    <testCase testCaseId="RC_11" testCaseName="RemoteControl_GetNetStatus_Without_Parameter" desc="Check that the getNetStatus method returns an error when the netType parameter is not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetNetStatus_Without_Parameter" method="RemoteControl_Get_NetStatus_Negative">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 12 -->
+    <testCase testCaseId="RC_12" testCaseName="RemoteControl_GetNetStatus_With_InvalidNetType" desc="Check that the getNetStatus method returns an error when the netType parameter is set to an invalid value">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="GetNetStatus_With_InvalidNetType" method="RemoteControl_Get_NetStatus_Negative">
+                <params>
+                        <param tag="netType"  value="-1" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 13 -->
+    <testCase testCaseId="RC_13" testCaseName="RemoteControl_Get_IRDBManufacturers_With_EmptyParameters" desc="Check that the getIRDBManufacturers method returns an error when an empty parameters are provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_IRDBManufacturers_With_EmptyParameters" method="RemoteControl_Get_IRDBManufacturers_Negative">
+                <params>
+			<param tag="netType"  value="" />
+			<param tag="avDevType"  value="" />
+			<param tag="manufacturer"  value="" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 14 -->
+    <testCase testCaseId="RC_14" testCaseName="RemoteControl_Get_IRDBManufacturers_Without_Parameters" desc="Check that the getIRDBManufacturers method returns an error when parameters are not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_IRDBManufacturers_Without_Parameters" method="RemoteControl_Get_IRDBManufacturers_Negative">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 15 -->
+    <testCase testCaseId="RC_15" testCaseName="RemoteControl_Get_IRDBModels_With_EmptyParameters" desc="Check that the IRDBModels method returns an error when an empty parameters are provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_IRDBModels_With_EmptyParameters" method="RemoteControl_Get_IRDBModels_Negative">
+                <params>
+                        <param tag="netType"  value="" />
+                        <param tag="avDevType"  value="" />
+			<param tag="manufacturer"  value="" />
+			<param tag="model"  value="" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 16 -->
+    <testCase testCaseId="RC_16" testCaseName="RemoteControl_Get_IRDBModels_Without_Parameters" desc="Check that the IRDBModels method returns an error when parameters are not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Get_IRDBModels_Without_Parameters" method="RemoteControl_Get_IRDBModels_Negative">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 17 -->
+    <testCase testCaseId="RC_17" testCaseName="RemoteControl_ConfigureWakeupKeys_With_EmptyParameters" desc="Check that the ConfigureWakeupKeys method returns an error when an empty parameters are provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="ConfigureWakeupKeys_With_EmptyParameters" method="RemoteControl_ConfigureWakeupKeys_Negative">
+                <params>
+                        <param tag="netType"  value="" />
+                        <param tag="wakeupConfig"  value="" />
+                        <param tag="customKeys"  value="" />
+                </params>
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 18 -->
+    <testCase testCaseId="RC_18" testCaseName="RemoteControl_ConfigureWakeupKeys_Without_Parameters" desc="Check that the ConfigureWakeupKeys method returns an error when parameters are not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="ConfigureWakeupKeys_Without_Parameters" method="RemoteControl_ConfigureWakeupKeys_Negative">
+                <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 19 -->
+    <testCase testCaseId="RC_19" testCaseName="RemoteControl_Verify_Get_NetStatus_Error" desc="Verify that the getNetStatus method returns an error when the plugin is in a deactivated state">
+            <testCaseInfo testCaseType="direct" />
+	    <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.RemoteControl" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+	    
+	    <testStep testStepId="1" name="Deactivate_RemoteControl_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+	    <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,deactivated,requested"/>
+            </testStep>
+	    <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="deactivated"/>
+            </testStep>
+	    <testStep testStepId="4" name="Check_RemoteControl_Get_NetStatus_API_Response" method="RemoteControl_Get_NetStatus">
+	    	 <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                 </resultGeneration>
+	    </testStep>
+	    <testStep testStepId="5" name="Activate_RemoteControl_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="6" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,activated,requested"/>
+            </testStep>
+            <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 20 -->
+    <testCase testCaseId="RC_20" testCaseName="RemoteControl_Verify_ConfigureWakeupKeys_Error" desc="Verify that the configureWakeupKeys method returns an error when the plugin is in a deactivated state">
+            <testCaseInfo testCaseType="direct" />
+            <testCasePreRequisite>
+                 <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
+                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
+                   </testStep>
+                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="callsign" value="org.rdk.RemoteControl" />
+                     </params>
+                   </testStep>
+                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
+                     <params>
+                       <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                     </params>
+                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+                   </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+            <testStep testStepId="1" name="Deactivate_RemoteControl_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                  <params>
+                    <param tag="callsign"  value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="2" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,deactivated,requested"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="deactivated"/>
+            </testStep>
+            <testStep testStepId="4" name="Check_RemoteControl_Configure_WakeupKeys_API_Response" method="RemoteControl_ConfigureWakeupKeys">
+                 <resultGeneration useMethodTag="controller_check_error_message">
+                     <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                     <arguments value="deactivate_check_error_message"/>
+                 </resultGeneration>
+            </testStep>
+            <testStep testStepId="5" name="Activate_RemoteControl_Plugin" method="Activate_Plugin"  pluginName="Controller" delay="1">
+                  <params>
+                    <param tag="callsign" value="org.rdk.RemoteControl" />
+                  </params>
+            </testStep>
+            <testStep testStepId="6" name="Check_State_Change_Event" event="Event_Controller_State_Changed" action="eventListener" delay="2" pluginName="Controller">
+              <resultGeneration useMethodTag="controller_check_state_change_event" expectedValues="org.rdk.remotecontrol,activated,requested"/>
+            </testStep>
+            <testStep testStepId="7" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller" PluginOnStep="yes" >
+                 <params>
+                     <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+                 </params>
+                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
+            </testStep>
+    </testCase>
+</testPlugin>

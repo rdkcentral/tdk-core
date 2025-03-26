@@ -4131,6 +4131,14 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             else:
                 info["Test_Step_Status"] = "FAILURE"
 
+        # RemoteControl Response result parser steps
+        elif tag == "check_api_version":
+            info = checkAndGetAllResultInfo(result,result.get("success"))
+            if str(result.get("success")).lower() == "true" and result.get("version") == int(expectedValues[0]):
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                info["Test_Step_Status"] = "FAILURE"
+        
         # DWTV Response result parser steps
         elif tag == "empty_result_validation":
             if result:
@@ -6373,6 +6381,16 @@ def ExecExternalFnAndGenerateResult(methodTag,arguments,expectedValues,execInfo)
 
         elif tag == "check_memcr_service_status":
             command="systemctl status memcr | grep running"
+            result = executeCommand(execInfo, command)
+            if "active (running)" in result:
+                print(result)
+                info["Test_Step_Status"] = "SUCCESS"
+            else:
+                print(result)
+                info["Test_Step_Status"] = "FAILURE"
+
+        elif tag == "check_service_status":
+            command="systemctl status "+arg[0]+" | grep running"
             result = executeCommand(execInfo, command)
             if "active (running)" in result:
                 print(result)
