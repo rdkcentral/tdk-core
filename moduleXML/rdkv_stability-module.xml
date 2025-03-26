@@ -42,6 +42,7 @@
       <function name='rdkservice_executeLifeCycle' />
       <function name='rdkservice_launchAndDestroy' />
       <function name='rdkservice_memcrApps_executeLifeCycle' />
+      <function name='rdkservice_synchronous_request' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -65,6 +66,7 @@
       <parameter funName='rdkservice_memcrApps_executeLifeCycle' parameterName='validation_details' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_launchAndDestroy' parameterName='plugin' parameterType='STRING' range='a-z' />
       <parameter funName='rdkservice_launchAndDestroy' parameterName='uri' parameterType='STRING' range='a-z' />
+      <parameter funName='rdkservice_synchronous_request' parameterName='method' parameterType='STRING' range='a-z' />
     </parameters>
   </module>
 </xml>
