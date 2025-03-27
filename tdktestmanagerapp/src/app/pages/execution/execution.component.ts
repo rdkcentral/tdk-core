@@ -1117,9 +1117,10 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     const order = this.sortOrder;
     const statusOrder : { [key: string]: number } = {
       'busy': 1,
-      'free': 2,
-      'not_found': 3,
-      'hang': 4
+      'in_use': 2,
+      'free': 3,
+      'not_found': 4,
+      'hang': 5
     };
     this.filteredDeviceStausArray[0].childData.sort((a:any, b:any) => {
       const firstStatus = a.status.toLowerCase();

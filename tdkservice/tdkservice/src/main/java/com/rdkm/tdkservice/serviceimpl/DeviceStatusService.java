@@ -79,25 +79,13 @@ public class DeviceStatusService {
 				DeviceStatus deviceStatus = fetchDeviceStatus(device);
 				if (deviceStatus != null) {
 
-					// If the device is not TDK enabled and is busy in the Database, then no need to
-					// change
-					// to the live status that we get from the status checker script execution.
-					// The script for thunder enabled devices -allthunderdevicestatus_cmndline.py
-					// will fetch us only device availability - FREE, NOT_FOUND.
-					// because it is set via the execution logic workflow in the tool.
-					if (device.isThunderEnabled()) {
-						if (device.getDeviceStatus().equals(DeviceStatus.BUSY)) {
-							continue;
-						} else {
-							// If the device is not is use, then the current status should
-							// be updated in the periodic update
-							device.setDeviceStatus(deviceStatus);
-						}
+					// If the device is on use from the script, then the status is
+					// not set
+					if (device.getDeviceStatus().equals(DeviceStatus.IN_USE)) {
+						continue;
 					} else {
-						// If the device is TDK enabled, the script used for checking the status is
-						// calldevicestatus_cmndline.py.It will return status like HANG, BUSY etc
-						// based on the status of TDK Agent running in the box. Since the BUSY
-						// status is obtained from the script itself, we can keep that one.
+						// If the device is not is use, then the current status should
+						// be updated in the periodic update
 						device.setDeviceStatus(deviceStatus);
 					}
 

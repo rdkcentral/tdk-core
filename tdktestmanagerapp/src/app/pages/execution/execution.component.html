@@ -58,6 +58,11 @@ limitations under the License.
                                           <span class="visually-hidden">Loading...</span>
                                         </div>
                                       </span>
+                                      <span *ngIf="child.status === 'IN_USE'">
+                                        <div class="spinner-border spinner-border-sm text-warning spinner" role="status">
+                                          <span class="visually-hidden">Loading...</span>
+                                        </div>
+                                      </span>
                                       <span *ngIf="child.status === 'FREE'"><span class="free"></span></span>
                                       <span *ngIf="child.status === 'NOT_FOUND'"><span class="busy"></span></span>
                                       <span *ngIf="child.status === 'HANG'"><span class="hang"></span></span>

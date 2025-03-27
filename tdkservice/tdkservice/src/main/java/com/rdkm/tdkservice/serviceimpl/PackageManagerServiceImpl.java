@@ -231,12 +231,14 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 			throw new UserInputException("Soc name  " + socName + " not found for this device");
 		}
 		DeviceStatus deviceStatus = deviceStatusService.fetchDeviceStatus(deviceObj);
-		if (deviceStatus == DeviceStatus.NOT_FOUND) {
+		if (deviceStatus == DeviceStatus.FREE) {
+			deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, deviceObj);
+		} else if (deviceStatus == DeviceStatus.NOT_FOUND) {
 			LOGGER.error("Device is offline");
 			throw new UserInputException("Device " + device + " is down");
-		}
-		if (deviceStatus == DeviceStatus.FREE) {
-			deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, deviceObj);
+		} else {
+			LOGGER.error("Device is not available");
+			throw new UserInputException("Device " + device + " is not available for update");
 		}
 
 		String tdkPackagesLocation = AppConfig.getBaselocation() + "/tdk_packages/" + socName.toLowerCase() + "/"
@@ -293,7 +295,7 @@ public class PackageManagerServiceImpl implements IPackageManagerService {
 			throw new RuntimeException("Error executing script", e);
 		} finally {
 			scriptExecutorService.executeScript(rebootCommand, 60);
-			deviceStatusService.setDeviceStatus(DeviceStatus.FREE, deviceObj);
+			deviceStatusService.fetchAndUpdateDeviceStatus(deviceObj);
 		}
 
 	}

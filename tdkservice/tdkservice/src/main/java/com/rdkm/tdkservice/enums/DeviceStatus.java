@@ -24,7 +24,7 @@ package com.rdkm.tdkservice.enums;
  * Device status enum 
  */
 public enum DeviceStatus {
-	FREE, ALLOCATED, BUSY, NOT_FOUND, HANG, TDK_DISABLED;
+	FREE, ALLOCATED, BUSY, NOT_FOUND, HANG, TDK_DISABLED,IN_USE;
 
 	/*
 	 * Default status

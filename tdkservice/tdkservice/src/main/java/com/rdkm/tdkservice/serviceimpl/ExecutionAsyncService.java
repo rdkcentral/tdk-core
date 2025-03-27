@@ -134,7 +134,7 @@ public class ExecutionAsyncService {
 			boolean isDiagnosticLogsNeeded) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
 		// Busy lock in the database device entity before execution
-		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
+		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
 		try {
 			String realExecutionName = "";
 
@@ -201,6 +201,8 @@ public class ExecutionAsyncService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			// Unlock the device with the current status
+			deviceStatusService.fetchAndUpdateDeviceStatus(device);
 			LOGGER.error("Error in executing script: {} on device: {} , due to the exception", script.getName(),
 					device.getName(), e);
 		}
@@ -242,7 +244,7 @@ public class ExecutionAsyncService {
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded,
 			boolean isIndividualRepeatExecution) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
-		deviceStatusService.setDeviceStatus(DeviceStatus.BUSY, device);
+		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
 		try {
 			if (repeatCount == 0) {
 				repeatCount = 1;
@@ -410,11 +412,12 @@ public class ExecutionAsyncService {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			// Unlock the device with the current status
 			deviceStatusService.fetchAndUpdateDeviceStatus(device);
-
 			LOGGER.error("Error in executing scripts: {} on device: {}", device.getName());
 			throw new TDKServiceException("Error in executing scripts: " + " on device: " + device.getName());
 		}
+		// Unlock the device with the current status
 		deviceStatusService.fetchAndUpdateDeviceStatus(device);
 
 	}
@@ -656,12 +659,13 @@ public class ExecutionAsyncService {
 
 			double currentTimeMillisAfterExecution = System.currentTimeMillis();
 
-			// Finding the execution time
+			// Finding the execution time and converts to minutes
 			double executiontime = this.computeTimeDifference(currentTimeMillisBeforeExecution,
 					currentTimeMillisAfterExecution);
 			executionResult.setExecutionTime(executiontime);
 
 			LOGGER.debug("Execution output: " + output);
+
 			// Update the execution result based on the output
 
 			// If there is a TDK_error string , add it as failure
@@ -669,70 +673,75 @@ public class ExecutionAsyncService {
 				LOGGER.info(
 						"There is TDK error string in the log, So it can be an exception or error from the python framework");
 				executionResult.setResult(ExecutionResultStatus.FAILURE);
-				executionResult.setStatus(ExecutionStatus.COMPLETED);
 				executionResultRepository.save(executionResult);
-				this.removeFWRequiredTextsFromLogs(executionLogfile);
-				deleteTemporaryFile(temporaryScriptPath);
 				if (!device.isThunderEnabled()) {
 					LOGGER.info("The device is TDK enabled, So after the error, the TDK agent needs to be reset");
-					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
+					pythonLibraryScriptExecutorService.resetAgentForTDKDevices(device.getIp(), device.getPort(),
+							Constants.TRUE);
 				}
-				return false;
-			}
-
-			// If the script output does not contain the script end token,
-			// then the script execution is considered as interrupted in between either due
-			// to timeout or due to some other reason
-			if (!output.contains(Constants.END_TAG_PY_COMMENT)) {
-				if (executiontime > waittime) {
-					LOGGER.info("The script execution is interrupted due to timeout");
-					executionResult.setResult(ExecutionResultStatus.TIMEOUT);
-				} else {
-					executionResult.setResult(ExecutionResultStatus.FAILURE);
-				}
-				executionResult.setStatus(ExecutionStatus.COMPLETED);
+			} else if (output.contains("Pre-Condition not met")) {
+				LOGGER.info("Precondition failure happened");
+				executionResult.setResult(ExecutionResultStatus.FAILURE);
 				executionResultRepository.save(executionResult);
-				this.removeFWRequiredTextsFromLogs(executionLogfile);
-				deleteTemporaryFile(temporaryScriptPath);
-				if (!device.isThunderEnabled()) {
-					LOGGER.info(
-							"The device is TDK enabled, the TDK agent needs to be reset, other wise the device status will be in busy state");
-					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
+			} else {
+
+				if (output.contains(Constants.END_TAG_PY_COMMENT)) {
+					// The execution result is parallely set from the python framework via APIS
+					// that is added here
+					ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId())
+							.get();
+					finalExecutionResultStatus = finalExecutionResult.getResult();
+					executionResult.setResult(finalExecutionResultStatus);
+					executionResultRepository.save(executionResult);
+
+				} else {
+					// If the script output does not contain the script end token,
+					// then the script execution is considered as interrupted in between due
+					// to timeout or either any abrupt failure
+					if ((executiontime >= waittime) && (waittime != 0)) {
+						LOGGER.info("The script execution is interrupted due to timeout");
+						executionResult.setResult(ExecutionResultStatus.TIMEOUT);
+						if (!device.isThunderEnabled()) {
+							LOGGER.info(
+									"The device is TDK enabled, the TDK agent needs to be reset, other wise the device status will be in busy state");
+							pythonLibraryScriptExecutorService.resetAgentForTDKDevices(device.getIp(), device.getPort(),
+									Constants.TRUE);
+						}
+					} else {
+						executionResult.setResult(ExecutionResultStatus.FAILURE);
+						if (!device.isThunderEnabled()) {
+							LOGGER.info(
+									"The device is TDK enabled, the TDK agent needs to be reset, other wise the device status will be in busy state");
+							pythonLibraryScriptExecutorService.resetAgentForTDKDevices(device.getIp(), device.getPort(),
+									Constants.FALSE);
+						}
+					}
+					executionResultRepository.save(executionResult);
+
 				}
-				return false;
-			}
-
-			if (finalExecutionResultStatus == ExecutionResultStatus.FAILURE) {
-				LOGGER.info("The script execution is failed");
-				if (!device.isThunderEnabled()) {
-					LOGGER.info(
-							"The script execution is failed, the TDK agent needs to be reset, other wise the device status will be in busy state");
-					pythonLibraryScriptExecutorService.hardResetAgentForTDKDevices(device.getIp(), device.getPort());
-				}
 
 			}
-
-			ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId()).get();
-			finalExecutionResultStatus = finalExecutionResult.getResult();
-			executionResult.setResult(finalExecutionResultStatus);
-			executionResult.setStatus(ExecutionStatus.COMPLETED);
-			executionResultRepository.save(executionResult);
 
 			// Delete the temporary script file after execution
 			deleteTemporaryFile(temporaryScriptPath);
+			// remove the unwanted comments in the console log like TDK_ERROR which were
+			// added for the result status reading
 			this.removeFWRequiredTextsFromLogs(executionLogfile);
 
 			if (execution.isDeviceLogsNeeded()) {
-				fileTransferService.transferDeviceLogs(execution, finalExecutionResult, device);
-
+				fileTransferService.transferDeviceLogs(execution, executionResult, device);
 			}
 
 			if (execution.isDiagnosticLogsNeeded() && device.isThunderEnabled()) {
-				fileTransferService.transferDiagnosisLogs(execution, finalExecutionResult, device);
+				fileTransferService.transferDiagnosisLogs(execution, executionResult, device);
 			}
 
 			// transfer crash logs
-			fileTransferService.transferCrashLogs(execution, finalExecutionResult, device);
+			fileTransferService.transferCrashLogs(execution, executionResult, device);
+
+			ExecutionResult finalExecutionResult = executionResultRepository.findById(executionResult.getId()).get();
+			finalExecutionResult.setStatus(ExecutionStatus.COMPLETED);
+			executionResultRepository.save(finalExecutionResult);
 
 		} catch (Exception e) {
 			finalExecutionResultStatus = ExecutionResultStatus.FAILURE;
@@ -743,6 +752,7 @@ public class ExecutionAsyncService {
 			LOGGER.error("Error in executing script: {} on device: {} due to ", script.getName(), device.getName(), e);
 		}
 
+		// boolean returned with execution result status
 		return finalExecutionResultStatus == ExecutionResultStatus.SUCCESS;
 	}
 

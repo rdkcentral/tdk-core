@@ -51,15 +51,16 @@ public class PythonLibraryScriptExecutorService {
 	 * 
 	 * @param deviceIP   - IP of the device
 	 * @param devicePort - TDK Agent port number
+	 * @param enableReset - true - To restart agent, false - To reset device state to FREE
 	 */
-	public void hardResetAgentForTDKDevices(String deviceIP, String devicePort) {
+	public void resetAgentForTDKDevices(String deviceIP, String devicePort , String enableReset) {
 		try {
 			LOGGER.info("Going to run resetAgent Script for device: {} with port: {}", deviceIP, devicePort);
 			File resetAgentScriptFile = new File(
 					AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.REST_AGENT_SCRIPT);
 			String resetAgentScriptFilePath = resetAgentScriptFile.getAbsolutePath();
 			String[] cmd = new String[] { commonService.getPythonCommandFromConfig(), resetAgentScriptFilePath,
-					deviceIP, devicePort, Constants.TRUE };
+					deviceIP, devicePort, enableReset };
 			String outputOfScriptExecution = scriptExecutorService.executeScript(cmd, 30);
 			this.callRebootOnAgentResetFailure(outputOfScriptExecution, deviceIP, devicePort);
 
