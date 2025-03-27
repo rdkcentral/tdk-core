@@ -58,6 +58,11 @@ export class ModulesCreateComponent {
   ngOnInit(): void {
     this.categoryName = this.authservice.selectedConfigVal;
     this.displayName = this.authservice.showSelectedCategory;
+    if(this.categoryName === 'RDKB'){
+      this.displayName = 'Broadband';
+    }else{
+      this.displayName = 'Video';
+    }
     if(this.categoryName == "RDKB"){
       this.crashFilesArr = ['/rdklogs/logs'];
       this.logFilesArr = ['/rdklogs/logs'];
@@ -105,9 +110,7 @@ export class ModulesCreateComponent {
             }, 1000);
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            let errmessage = errmsg.moduleName? errmsg.moduleName:errmsg.message;
-            this._snakebar.open(errmessage, '', {
+            this._snakebar.open(err.message, '', {
               duration: 2000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',

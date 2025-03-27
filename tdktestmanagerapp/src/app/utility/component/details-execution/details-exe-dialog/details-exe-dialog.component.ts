@@ -33,6 +33,7 @@ import { CrashlogfileDialogComponent } from '../crashlogfile-dialog/crashlogfile
 import { saveAs } from 'file-saver';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { GlobalConstants } from '../../../global-constants';
+import { LoaderComponent } from '../../loader/loader.component';
 
 const apiUrl: string = GlobalConstants.apiUrl;
 
@@ -56,7 +57,7 @@ export type ChartOptions = {
 @Component({
   selector: 'app-details-exe-dialog',
   standalone: true,
-  imports: [CommonModule,MaterialModule,FormsModule,NgApexchartsModule],
+  imports: [CommonModule,MaterialModule,FormsModule,NgApexchartsModule, LoaderComponent],
   templateUrl: './details-exe-dialog.component.html',
   styleUrl: './details-exe-dialog.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -104,6 +105,8 @@ export class DetailsExeDialogComponent {
   safeHtmlContent: SafeHtml | undefined;
   exeLogs:any;
   htmlDetails: any;
+  scriptStatus: any;
+  showLoader = false;
 
   constructor(
     public dialogRef: MatDialogRef<DetailsExeDialogComponent>,
@@ -250,8 +253,11 @@ export class DetailsExeDialogComponent {
     details: null
   }))
   this.filteredData = [...this.executionResultData];
-  console.log(this.filteredData);
-  
+    for (let i = 0; i < this.filteredData.length; i++) {
+      this.scriptStatus = this.filteredData[i];
+      console.log(this.scriptStatus.status);
+      
+    }
   }
 
 
@@ -269,24 +275,27 @@ export class DetailsExeDialogComponent {
    * the parent object to null.
    */
   togglePanel(parent: any, id:any, index:number):void {
+    this.showLoader = true;
     parent.expanded = !parent.expanded;
     this.executionResultId = id;
     if (parent.expanded) {
       this.expandedIndexes.push(index);
       if (!parent.details && parent.executionResultID) {
+        
         this.executionservice.scriptResultDetails(parent.executionResultID).subscribe(res => {
           parent.details = JSON.parse(res);
           const logs = parent.details.logs;
           parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
+          this.showLoader = false;
           this.changeDetectorRef.detectChanges();
-          // this.exeLogs = parent.formatLogs;
-          // console.log(this.exeLogs);
+          
         });
       }
     } else {
       parent.details = null; 
       parent.formatLogs = '';
       this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
+      this.showLoader = false;
     }
   }
 
@@ -300,8 +309,6 @@ export class DetailsExeDialogComponent {
         const logs = element.executionLogs;
         const formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
         this.exeLogs = formatLogs;
-        console.log(logs);
-        console.log(this.htmlDetails);
         this.changeDetectorRef.detectChanges();
       }
 
@@ -404,7 +411,7 @@ export class DetailsExeDialogComponent {
    * @returns {void}
    */
   liveLogs():void {
-    this.liveLogDialog.open( LivelogDialogComponent,{
+   const dialogRef =  this.liveLogDialog.open( LivelogDialogComponent,{
       width: '80%',
       height: '80vh',
       maxWidth:'100vw',
@@ -425,7 +432,12 @@ export class DetailsExeDialogComponent {
         .subscribe({
           next:(res)=>{
             this.liveLogsData = res;
-
+            dialogRef.afterClosed().subscribe(result => {
+              this.dataUpdate();
+              if (result) {
+                this.dataUpdate();
+              }
+            });
           },
           error:(err)=>{
 
@@ -637,6 +649,7 @@ export class DetailsExeDialogComponent {
       data: patent,
     });
     dialogRef.afterClosed().subscribe(result => {
+      this.dataUpdate();
       if (result) {
         this.dataUpdate();
       }
@@ -853,6 +866,7 @@ export class DetailsExeDialogComponent {
       }
     }
   }
+
   scriptDownload(parent:any):void{
         if (parent.executionResultID) {
           this.executionservice.DownloadScript(parent.executionResultID).subscribe({
@@ -1007,7 +1021,5 @@ downloadAsHtml(){
     a.click();
     URL.revokeObjectURL(a.href);
   }
-  refreshAnalysis(){
-    this.dataUpdate();
-  }
+
 }

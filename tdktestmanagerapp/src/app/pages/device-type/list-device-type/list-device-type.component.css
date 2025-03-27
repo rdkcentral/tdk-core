@@ -82,6 +82,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 ::ng-deep .ag-theme-quartz .ag-row {
   border-bottom: 1px solid #dee2e6 !important;
 }
+::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
+  display: none !important;
+}
 .create-btn,
 .back-btn {
   background-color: #fff;
@@ -101,4 +104,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 }
 .back-btn {
   margin-right: 10px;
+}
+.loader-row{
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  right: 50%;
 }

@@ -182,7 +182,11 @@ export class EditPrimitiveTestComponent {
       this.rowData = res.primitiveTestParameters;
     })
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
   }
 
   /**

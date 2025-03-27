@@ -38,11 +38,12 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { MatDialog } from '@angular/material/dialog';
 import { ModulesService } from '../../../services/modules.service';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-modules-list',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, LoaderComponent],
   templateUrl: './modules-list.component.html',
   styleUrl: './modules-list.component.css'
 })
@@ -118,7 +119,8 @@ export class ModulesListComponent {
   loggedInUser:any;
   defaultCategory!:string;
   preferedCategory!:string;
-
+  showLoader = false;
+  
   constructor(private router: Router, private authservice: AuthService, private fb:FormBuilder,
     private _snakebar: MatSnackBar, public dialog:MatDialog, private moduleservice:ModulesService,private renderer: Renderer2
   ) {
@@ -131,7 +133,11 @@ export class ModulesListComponent {
   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.findallbyCategory(); 
     this.uploadXMLForm = this.fb.group({
       uploadXml: [null, Validators.required]
@@ -141,9 +147,13 @@ export class ModulesListComponent {
    * Finds all devices by category.
    */
  findallbyCategory():void{
+  this.showLoader = true;
   this.moduleservice.findallbyCategory(this.configureName).subscribe(res=>{
     let data = JSON.parse(res);
     this.rowData = data;
+    if(this.rowData.length>0){
+      this.showLoader = false;
+    }
   })
 }
   /**
@@ -211,8 +221,7 @@ export class ModulesListComponent {
             })
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

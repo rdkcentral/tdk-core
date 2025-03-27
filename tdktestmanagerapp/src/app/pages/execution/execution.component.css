@@ -282,9 +282,6 @@ body,
 }
 .status-group {
   padding: 0;
-  /* height: 425px;
-  display: block;
-  overflow-y: auto; */
 }
 .free,
 .busy,
@@ -465,6 +462,7 @@ body,
   font-size: 0.75rem !important;
   text-align: center;
   text-transform: uppercase;
+ 
 }
 ::ng-deep .ag-theme-quartz .text-ellipsis {
   white-space: nowrap !important;

@@ -43,6 +43,8 @@ export class EditOemComponent implements OnInit{
   validationName = 'oem'
   placeholderName = 'OEM Name'
   labelName = "Name";
+  configureName!:string;
+  categoryName!:string;
 
   constructor(private route: ActivatedRoute, private router: Router,
     public service: UsergroupService, private _snakebar: MatSnackBar,
@@ -50,7 +52,7 @@ export class EditOemComponent implements OnInit{
     private authservice: AuthService
   ) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'oem-edit' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'OEM' : this.commonFormName;
+    
   }
 
    /**
@@ -64,6 +66,14 @@ export class EditOemComponent implements OnInit{
     this.service.currentUrl = this.id;
     let data = JSON.parse(localStorage.getItem('user') || '{}');
     this.record = data;
+    this.configureName = this.authservice.selectedConfigVal;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+      this.commonFormName = this.route.snapshot.url[1].path === 'oem-edit' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
+    }else{
+      this.categoryName = 'Video';
+      this.commonFormName = this.route.snapshot.url[1].path === 'oem-edit' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'OEM' : this.commonFormName;
+    }
   }
 
     /**
@@ -90,8 +100,7 @@ export class EditOemComponent implements OnInit{
    
           },
           error: (err) => {
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            this._snakebar.open(err.message, '', {
               duration: 3000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',

@@ -37,6 +37,7 @@ import { AuthService } from '../../../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { PrimitiveTestService } from '../../../services/primitive-test.service';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 /**
  * Component for listing primitive tests.
@@ -44,7 +45,7 @@ import { MaterialModule } from '../../../material/material.module';
 @Component({
   selector: 'app-list-primitive-test',
   standalone: true,
-  imports: [MaterialModule, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular],
+  imports: [MaterialModule, CommonModule, FormsModule, ReactiveFormsModule, AgGridAngular,LoaderComponent],
   templateUrl: './list-primitive-test.component.html',
   styleUrl: './list-primitive-test.component.css'
 })
@@ -72,6 +73,7 @@ export class ListPrimitiveTestComponent {
   configureName!: string;
   names: any[] = [];
   categoryName!: string;
+  showLoader = false;
 
   public columnDefs: ColDef[] = [
     {
@@ -111,12 +113,20 @@ export class ListPrimitiveTestComponent {
   */
   ngOnInit(): void {
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.authservice.currentRoute = this.router.url.split('?')[0];
+    this.showLoader = true;
     this.service.getlistofModules(this.configureName).subscribe(res => {
-      this.moduleNames = JSON.parse(res)
+      this.moduleNames = JSON.parse(res);
       this.selectedValue = this.moduleNames[0];
       this.getParameterDetails(this.selectedValue);
+      if(this.moduleNames.length>0){
+        this.showLoader = false;
+      }
     })
    
   }
@@ -156,8 +166,7 @@ export class ListPrimitiveTestComponent {
           })
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

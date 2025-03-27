@@ -19,22 +19,6 @@ limitations under the License.
       <h1 class="view-title">{{jiraTitel}}</h1>
 
       <div class="ticket-sec mt-2">
-        <!-- <div class="project-section" *ngIf="isCreateJira">
-          <span for="reproducibitity" class="col-md-4 col-form-label"
-            >Select Project ID :</span
-          >
-          <select
-            class="form-select"
-            aria-label="Default select example"
-            id="projectname"
-            (change)="onProjectChange($event)"
-          >
-            <option value="" default>All</option>
-            @for (item of allProjectNames; track $index) {
-            <option value="{{ item }}">{{ item }}</option>
-            }
-          </select>
-        </div> -->
         <div class="create-section" *ngIf="isCreateJira">
           <div class="row">
             <label for="staticEmail" class="col-sm-6 col-form-label">Select Project ID :</label>
@@ -182,15 +166,9 @@ limitations under the License.
                       </div>
                     </div>
                   </div>
-                  <!-- <div class="col-md-12 text-end">
-                                        <button class="save-btn" >Save</button>
-                                    </div> -->
                 </div>
                 <div class="row mt-2">
                   <div class="col-md-12 text-end">
-                    <!-- <button class="close-btn" type="button" (click)="onClose()">
-                      Close
-                    </button> -->
                     <button
                       class="save-btn"
                       type="submit"
@@ -206,17 +184,8 @@ limitations under the License.
           <mat-tab label="JIRA Integration" *ngIf="showJiraTab">
             <div class="col-md-12">
               <div class="filterby">
-                <!-- <label for="filterDropdown" class="text-label">
-                  Select the specific project and search if needed</label
-                > -->
                 <div class="filter-drop-down">
-                  <!-- <select id="filterDropdown" class="form-select">
-                                    <option value="" default>Select</option>
-                                    <option value="ExecutionName">Execution Name</option>
-                                    <option value="Scripts/Testsuite">Scripts/Testsuite</option>
-                                    <option value="Device">Device</option>
-                                    <option value="User">User</option>
-                                  </select> -->
+
                 </div>
                 <button class="save-btn" matTooltip="Create">
                   <i class="bi bi-plus-circle-fill download-icon"></i>

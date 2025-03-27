@@ -10,11 +10,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-list-oem',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
   templateUrl: './list-oem.component.html',
   styleUrl: './list-oem.component.css'
 })
@@ -36,6 +37,7 @@ export class ListOemComponent {
   showUpdateButton = false;
   categoryName!: string;
   configureName!: string;
+  showLoader = false;
   public columnDefs: ColDef[] = [
     {
       headerName: 'Name',
@@ -76,12 +78,20 @@ export class ListOemComponent {
    * Initializes the component.
   */
   ngOnInit(): void {
+    this.showLoader = true;
     this.service.getOemByList(this.authservice.selectedConfigVal).subscribe(res => {
       this.rowData = JSON.parse(res);
+      if(this.rowData.length>0){
+        this.showLoader = false;
+      }
     })
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
     this.authservice.currentRoute = this.router.url.split('?')[0];
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
   }
 
   /**
@@ -109,8 +119,7 @@ export class ListOemComponent {
           })
         },
         error: (err) => {
-          const error = JSON.parse(err.error);
-          this._snakebar.open(error.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -31,12 +31,13 @@ import { DeviceService } from '../../services/device.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MaterialModule } from '../../material/material.module';
 import { MatDialog } from '@angular/material/dialog';
-import { DialogDelete } from '../../utility/component/dialog-component/dialog.component';
+import { AuthService } from '../../auth/auth.service';
+import { LoaderComponent } from '../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-devices',
   standalone: true,
-  imports: [CommonModule,AgGridAngular,FormsModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule,AgGridAngular,FormsModule, ReactiveFormsModule, MaterialModule,LoaderComponent],
   templateUrl: './devices.component.html',
   styleUrl: './devices.component.css'
 })
@@ -58,7 +59,7 @@ export class DevicesComponent {
   loggedinUser:any;
   preferedCategory!:string;
   userCategory!:string;
-  loaderDisplay = false;
+  showLoader = false;
 
   public gridApi!: GridApi;  public columnDefs: ColDef[] = [
     {
@@ -93,7 +94,6 @@ export class DevicesComponent {
       cellRendererParams: (params: any) => ({
         onEditClick: this.userEdit.bind(this),
         onDeleteClick: this.delete.bind(this),
-        // onViewClick:this.openModal.bind(this),
         onDownloadClick:this.downloadXML.bind(this),
         selectedRowCount: () => this.selectedRowCount,
       })
@@ -108,6 +108,7 @@ export class DevicesComponent {
   };
 
   constructor(private router: Router, private service:DeviceService, private fb:FormBuilder,
+    private authservice: AuthService,
     private _snakebar :MatSnackBar, public dialog:MatDialog,private renderer: Renderer2){
       this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
       this.userCategory = this.loggedinUser.userCategory;
@@ -128,13 +129,14 @@ export class DevicesComponent {
    */
   ngOnInit(): void {
     this.selectedDeviceCategory = this.userCategory;
-    this.categoryName = 'Video';
+    this.authservice.selectedConfigVal = this.preferedCategory?this.preferedCategory:this.userCategory;
     const deviceCategory = this.preferedCategory?this.preferedCategory:this.userCategory;
-    // const name = localStorage.getItem('deviceCategoryName');
-    // this.categoryName = name;
-    // this.categoryChange(deviceCategory);
+    if(deviceCategory === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     if(deviceCategory === null){
-      // this.categoryName = name;/
       this.configureName = this.selectedDeviceCategory;
       this.findallbyCategory();
     }
@@ -151,16 +153,16 @@ export class DevicesComponent {
    * Finds all devices by category.
    */
   findallbyCategory(){
-    this.loaderDisplay = true;
+    this.showLoader = true;
     this.service.findallbyCategory(this.selectedDeviceCategory).subscribe({
       next: (res) => {
         let data = JSON.parse(res);
         this.rowData = data;
         this.rowData = data.sort((a: any, b: any) =>a.deviceName.toString().localeCompare(b.deviceName.toString()));
-        this.loaderDisplay = false;
+        this.showLoader = false;
       },
       error: (err) => {
-        this.loaderDisplay = false;
+        this.showLoader = false;
       }
     })
   }
@@ -168,24 +170,20 @@ export class DevicesComponent {
    * Handles the event when a device category is checked.
    * @param event - The event object containing the checked value.
    */
-  // ischecked(val:any):void{
-  //   this.rowData = [];
-  //   this.categoryChange(val);
-  // }
   categoryChange(event:any){
     let val = event.target.value;
     if(val === 'RDKB'){
       this.categoryName = 'Broadband';
       this.selectedDeviceCategory = 'RDKB';
-      localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
-      localStorage.setItem('deviceCategoryName', this.categoryName);
+      this.authservice.selectedConfigVal = 'RDKB';
+      this.authservice.showSelectedCategory = "Broadband";
       this.findallbyCategory();
     }
     else{
       this.selectedDeviceCategory = 'RDKV';
       this.categoryName = 'Video';
-      localStorage.setItem('deviceCategory', this.selectedDeviceCategory);
-      localStorage.setItem('deviceCategoryName', this.categoryName);
+      this.authservice.selectedConfigVal = 'RDKV';
+      this.authservice.showSelectedCategory = "Video";
       this.findallbyCategory();
     }
 

@@ -21,11 +21,12 @@ export class EditSocComponent {
   validationName = 'soc';
   placeholderName = 'Soc Name';
   labelName = 'Name';
-
+  configureName!:string;
+  categoryName!:string;
+  
   constructor(private route: ActivatedRoute, private router: Router, private _snakebar: MatSnackBar,
     public service: SocService, private authservice: AuthService) {
     this.service.currentUrl = this.route.snapshot.url[1].path
-    this.commonFormName = this.route.snapshot.url[1].path === 'edit-soc' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'SoC' : this.commonFormName;
   }
 
    /**
@@ -36,7 +37,14 @@ export class EditSocComponent {
     this.service.currentUrl = this.id;
     let data = JSON.parse(localStorage.getItem('user') || '{}');
     this.record = data;
-
+    this.configureName = this.authservice.selectedConfigVal;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+      this.commonFormName = this.route.snapshot.url[1].path === 'edit-soc' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'SoC' : this.commonFormName;
+    }else{
+      this.categoryName = 'Video';
+      this.commonFormName = this.route.snapshot.url[1].path === 'edit-soc' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'SoC' : this.commonFormName;
+    }
   }
 
   /**

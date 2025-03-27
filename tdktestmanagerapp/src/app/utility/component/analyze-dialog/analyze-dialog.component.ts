@@ -195,7 +195,6 @@ export class AnalyzeDialogComponent implements OnInit{
       }else{
         this.rowData = [];
       }
-      // this.rowData = JSON.parse(res);
     })
   }
   analysisSubmit():void{

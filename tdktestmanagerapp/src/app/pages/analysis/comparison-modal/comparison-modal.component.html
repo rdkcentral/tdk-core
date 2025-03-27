@@ -113,9 +113,6 @@ limitations under the License.
         <div class="col-md-12 selectedScript" *ngIf="filterSubmitted && filterForm.errors?.['maxDaysExceeded']" class="text-danger">
             <small>Maximum number of days allowed is 30</small>
         </div>
-        <!-- <div class="col-md-12 selectedScript mt-2 text-end" *ngIf="showTable">
-            <button  type="button" class="confirm-btn" (click)="onConfirm()">Confirm</button>
-        </div> -->
         <div class="tableDeatils mt-2" *ngIf="showTable">
             <div style="width: 100%; height: 280px;" [class]="themeClass">
                 <ag-grid-angular
@@ -132,6 +129,9 @@ limitations under the License.
                 (gridReady)="onGridReady($event)"
               ></ag-grid-angular>
             </div>
+        </div>
+        <div class="row loader-row" *ngIf="showLoader">
+            <app-loader></app-loader>
         </div>
         <div class="col-md-12 text-end">
             <button *ngIf="showTable" type="button" class="create-btn confirmC-btn" (click)="onConfirm()">Confirm</button>

@@ -531,3 +531,8 @@ width:19px;
   top: 2px !important;
   height: 90% !important;
 }
+.loader-row{
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+}

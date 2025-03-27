@@ -25,6 +25,7 @@ import {
   FormGroup,
   FormsModule,
   ReactiveFormsModule,
+  ValidationErrors,
   Validators,
 } from '@angular/forms';
 import { AuthService } from '../../auth/auth.service';
@@ -38,7 +39,6 @@ import { AnalysisService } from '../../services/analysis.service';
 import {
   ColDef,
   GridApi,
-  GridOptions,
   GridReadyEvent,
   IDateFilterParams,
 } from 'ag-grid-community';
@@ -46,11 +46,12 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
 import { AgGridAngular } from 'ag-grid-angular';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoaderComponent } from '../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule,AgGridAngular],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, MaterialModule,AgGridAngular,LoaderComponent],
   templateUrl: './analysis.component.html',
   styleUrl: './analysis.component.css',
 })
@@ -222,6 +223,7 @@ export class AnalysisComponent {
   selectedExecutionNames: string[] = [];
   selectionErrorMessage: string = '';
   showReportBtn = false;
+  showLoader = false;
 
   constructor(
     private authservice: AuthService,
@@ -237,17 +239,16 @@ export class AnalysisComponent {
     );
     this.userCategory = this.loggedinUser.userCategory;
     this.preferedCategory = localStorage.getItem('preferedCategory') || '';
-    this.selectedDfaultCategory = this.loggedinUser.userCategory;
+    // this.selectedDfaultCategory = this.loggedinUser.userCategory;
   }
 
   ngOnInit(): void {
-    let localcategory = this.preferedCategory
+    this.selectedDfaultCategory = this.preferedCategory
       ? this.preferedCategory
       : this.userCategory;
-    // this.categoryChange(localcategory);
     this.reportForm = this.fb.group({
       baseName: ['', Validators.required],
-      comparisonName: ['', Validators.required],
+      comparisonName: ['', [Validators.required, this.validateBaseNotInComparison.bind(this)]],
     });
     this.combinedForm = this.fb.group(
       {
@@ -334,21 +335,32 @@ export class AnalysisComponent {
       this.tabName = 'Comparsion Report';
     }
   }
+  /** Custom Validator: Check if baseName exists in comparisonName */
+  validateBaseNotInComparison(control: AbstractControl): ValidationErrors | null {
+    const comparisonIds = this.compNamesArr?.map((item:any) => item.id) || [];
+
+    if (this.finalBaseName && comparisonIds.includes(this.finalBaseName)) {
+      return { baseFoundInComparison: true };
+    }
+    return null;
+  }
+
+/** Update Form Control when the user edits the textarea manually */
+    updateComparisonFormValue(event: Event) {
+      const inputValue = (event.target as HTMLTextAreaElement).value;
+      const newNames = inputValue.split(',').map(name => name.trim()).filter(name => name);
+      this.compNamesArr = this.compNamesArr.filter((item:any) => newNames.includes(item.name));
+  
+      this.selectComparisonNames = newNames.join(', ');
+      this.reportForm.patchValue({ comparisonName: this.selectComparisonNames });
+      this.reportForm.get('comparisonName')?.updateValueAndValidity();
+    }
   compReportSubmit(): void {
     this.reportSubmitted = true;
     if (this.reportForm.invalid) {
       return;
     }else{
-      if(this.compNamesArr.includes(this.finalBaseName)){
-        let errorMessage  = 'Base Execution cannot be in the selected for comparision.'
-        this._snakebar.open(errorMessage,'',{
-          duration: 2000,
-          panelClass: ['err-msg'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        })
-      }else{
-        this.anlysisService.compReportGenerate(this.finalBaseName,this.compNamesArr).subscribe({
+        this.anlysisService.compReportGenerate(this.finalBaseName,this.compNamesArr.map((item:any) => item.id)).subscribe({
           next:(blob)=>{
             const xmlBlob = new Blob([blob], { type: 'application/xml' }); 
             const url = window.URL.createObjectURL(xmlBlob);
@@ -363,7 +375,6 @@ export class AnalysisComponent {
           error:(err)=>{
           }
         });
-      }
     }
   }
   openModal() {
@@ -402,11 +413,12 @@ export class AnalysisComponent {
       if (res) {
         const selectedNames = res.map((row:any)=>row.executionName);
         const selectExecutionId = res.map((row:any)=>row.executionId);
-        this.compNamesArr = selectExecutionId;
+        this.compNamesArr = selectExecutionId.map((id, index) => ({ id, name: selectedNames[index] }));
         this.selectComparisonNames = selectedNames.join(', ');
         this.reportForm.patchValue({
           comparisonName: this.selectComparisonNames
         });
+        this.reportForm.get('comparisonName')?.updateValueAndValidity();
       }
     });
   }
@@ -435,13 +447,17 @@ export class AnalysisComponent {
         "category": this.selectedDfaultCategory
         
       };
+      this.showLoader = true;
       this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
         let response = JSON.parse(res);
         if(response){
           this.rowData = response;
           this.showTable = true;
+          this.showLoader = false;
         }else{
-          this.showTable = false;
+          this.rowData = [];
+          this.showTable = true;
+          this.showLoader = false;
         }
       })
     }

@@ -250,3 +250,9 @@ body,
   font-size: 0.8rem;
   margin-left: 5px;
 }
+.loader-row{
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  right: 50%;
+}

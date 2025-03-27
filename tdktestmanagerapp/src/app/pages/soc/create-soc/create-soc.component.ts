@@ -23,10 +23,12 @@ export class CreateSocComponent {
   validationName = 'SoC';
   placeholderName = 'SoC Name';
   labelName = 'Name';
-  
+  configureName!:string;
+  categoryName!:string;
+
   constructor(private router: Router, private route: ActivatedRoute, public service: SocService,
     private _snakebar: MatSnackBar, private authservice: AuthService) {
-    this.commonFormName = this.route.snapshot.url[1].path === 'create-soc' ? this.commonFormName + ' ' + `${this.authservice.showSelectedCategory}` + ' ' + 'SoC' : this.commonFormName;
+    
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
   }
 
@@ -55,8 +57,7 @@ export class CreateSocComponent {
   
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.socName?errmsg.socName:errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -73,6 +74,14 @@ export class CreateSocComponent {
    * Initializes the component.
    */  
   ngOnInit(): void {
+    this.configureName = this.authservice.selectedConfigVal;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+      this.commonFormName = this.route.snapshot.url[1].path === 'create-soc' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'SoC' : this.commonFormName;
+    }else{
+      this.categoryName = 'Video';
+      this.commonFormName = this.route.snapshot.url[1].path === 'create-soc' ? this.commonFormName + ' ' + `${this.categoryName}` + ' ' + 'SoC' : this.commonFormName;
+    }
   }
 
 }

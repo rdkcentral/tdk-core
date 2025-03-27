@@ -39,11 +39,12 @@ import { ModuleButtonComponent } from '../../../utility/component/modules-button
 import { ModulesService } from '../../../services/modules.service';
 import { MatDialog } from '@angular/material/dialog';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-function-list',
   standalone: true,
-  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule],
+  imports: [ MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular, HttpClientModule,LoaderComponent],
   templateUrl: './function-list.component.html',
   styleUrl: './function-list.component.css'
 })
@@ -95,6 +96,7 @@ export class FunctionListComponent {
   selectedRowCount = 0;
   dynamicModuleName!:string;
   categoryName: any;
+  showLoader = false;
 
   constructor(private router: Router, private authservice: AuthService, 
     private _snakebar: MatSnackBar,private moduleservice:ModulesService, public dialog:MatDialog,
@@ -107,15 +109,21 @@ export class FunctionListComponent {
     let data = JSON.parse(localStorage.getItem('modules') || '{}');
     this.dynamicModuleName = data.moduleName;
     this.configureName = this.authservice.selectedConfigVal;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
     this.functionListByModule();
-    this.categoryName = this.authservice.showSelectedCategory;
   }
   /**
    * Function to get the list of function by module name.
   */
   functionListByModule():void{
+    this.showLoader = true;
     this.moduleservice.functionList(this.dynamicModuleName).subscribe( res=>{
       this.rowData = JSON.parse(res);
+      this.showLoader = false;
     })
   }
   /**
@@ -184,8 +192,7 @@ export class FunctionListComponent {
             
           },
           error:(err)=>{
-            const error = JSON.parse(err.error);
-            this._snakebar.open(error.message, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

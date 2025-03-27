@@ -35,11 +35,12 @@ import { AuthService } from '../../../auth/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { MaterialModule } from '../../../material/material.module';
+import { LoaderComponent } from '../../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-list-device-type',
   standalone: true,
-  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular],
+  imports: [MaterialModule, CommonModule, ReactiveFormsModule, AgGridAngular,LoaderComponent],
   templateUrl: './list-device-type.component.html',
   styleUrl: './list-device-type.component.css'
 })
@@ -101,20 +102,32 @@ export class ListDeviceTypeComponent implements OnInit {
     rowHeight: 36,
   };
   configureName!: string;
+  preferedCategory!:string;
+  showLoader = false;
 
   constructor( private router: Router,
-    private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) { }
+    private authservice: AuthService, private service: DevicetypeService, private _snakebar: MatSnackBar) {
+      this.preferedCategory = localStorage.getItem('preferedCategory')|| '';
+     }
 
 
   /**
    * Initializes the component.
    */
   ngOnInit(): void {
+    this.showLoader = true;
     this.service.getfindallbycategory(this.authservice.selectedConfigVal).subscribe(res => {
       this.rowData = JSON.parse(res);
+      if(this.rowData.length>0){
+        this.showLoader = false;
+      }
     })
     this.configureName = this.authservice.selectedConfigVal;
-    this.categoryName = this.authservice.showSelectedCategory;
+    if(this.configureName === 'RDKB'){
+      this.categoryName = 'Broadband';
+    }else{
+      this.categoryName = 'Video';
+    }
   }
 
   /**
@@ -154,8 +167,7 @@ export class ListDeviceTypeComponent implements OnInit {
             })
           },
           error: (err) => {
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            this._snakebar.open(err.message, '', {
               duration: 2000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',

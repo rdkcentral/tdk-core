@@ -158,3 +158,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 .btns-grp[_ngcontent-ng-c3306316013] {
   margin-left: -101px !important;
 }
+::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
+  display: none !important;
+}
+.loader-row{
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  right: 50%;
+}

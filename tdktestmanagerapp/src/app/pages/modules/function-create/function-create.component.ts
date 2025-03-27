@@ -85,9 +85,7 @@ export class FunctionCreateComponent {
           }, 1000);
         },
         error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          let errmessage = errmsg.moduleName? errmsg.moduleName:errmsg.message;
-          this._snakebar.open(errmessage, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

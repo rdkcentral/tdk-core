@@ -116,13 +116,7 @@ http://www.apache.org/licenses/LICENSE-2.0
   z-index: 10;
   display: flex;
 }
-/* .project-section{
-  position: absolute;
-  left: 30%;
-  z-index: 10;
-  display: flex;
-  width: 355px;
-} */
+
 ::ng-deep .ag-theme-quartz .ag-cell {
   white-space: normal !important;
   word-break: break-word !important;

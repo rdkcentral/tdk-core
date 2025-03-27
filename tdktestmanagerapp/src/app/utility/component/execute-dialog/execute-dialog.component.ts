@@ -113,6 +113,7 @@ export class ExecuteDialogComponent {
   showToggleField = false;
   additionalExeName!: string;
   repeatTypeBoolean = false;
+  preferedCategory!:string;
 
   constructor(
     public dialogRef: MatDialogRef<ExecuteDialogComponent>,
@@ -128,6 +129,7 @@ export class ExecuteDialogComponent {
     };
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
     this.userCategory = this.loggedinUser.userCategory;
+    this.preferedCategory = localStorage.getItem('preferedCategory') || '';
   }
   /**
    * Initializes the component. Sets up form controls and settings based on the selected category and click data.
@@ -142,7 +144,7 @@ export class ExecuteDialogComponent {
   ngOnInit(): void {
     let deviceClick = this.deviceStatusData.params;
     let executionClick = this.executionClickData.normalExecutionClick;
-    this.categoryName = this.userCategory;
+    this.categoryName = this.preferedCategory?this.preferedCategory:this.userCategory;
     this.repeatTypeBoolean = false;
     if (this.categoryName === 'RDKB' || this.categoryName === 'RDKC') {
       this.isThunderEnable = false;
