@@ -131,7 +131,7 @@ public class ExecutionAsyncService {
 	@Async
 	public void prepareAndExecuteSingleScript(Device device, Script script, User user, String executionName,
 			int repeatCount, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
-			boolean isDiagnosticLogsNeeded) {
+			boolean isDiagnosticLogsNeeded, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Going to execute script: {} on device: {}", script.getName(), device.getName());
 		// Busy lock in the database device entity before execution
 		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
@@ -158,7 +158,7 @@ public class ExecutionAsyncService {
 				// for concise code
 				ExecutionEntities executionEntities = this.getExecutionEntitiesForExecution(device, script, user,
 						realExecutionName, isRerunOnFailure, isDeviceLogsNeeded, isPerformanceLogsNeeded,
-						isDiagnosticLogsNeeded);
+						isDiagnosticLogsNeeded, testType);
 				// Transfer the version File
 				this.transferVersionFileOfTheDevice(executionEntities.getExecution().getId().toString(), device,
 						executionEntities.getExecutionDevice().getId().toString());
@@ -171,7 +171,8 @@ public class ExecutionAsyncService {
 
 				double realExecutionTime = this.getRealExcecutionTime(executionEntities.getExecutionResult());
 				this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
-				this.setFinalStatusOfExecution(executionEntities.getExecution());
+				Execution finalExecutionStatus = this.setFinalStatusOfExecution(executionEntities.getExecution());
+				this.callCiRequest(finalExecutionStatus, callBackUrl, imageVersion);
 
 				// TODO : Execution Status logic cross check once again
 				if (isRerunOnFailure && !executionStatus) {
@@ -180,7 +181,7 @@ public class ExecutionAsyncService {
 					executionStartTime = System.currentTimeMillis();
 					ExecutionEntities executionEntitiesForFailureRerun = this.getExecutionEntitiesForExecution(device,
 							script, user, realExecutionName, isRerunOnFailure, isDeviceLogsNeeded,
-							isPerformanceLogsNeeded, isDiagnosticLogsNeeded);
+							isPerformanceLogsNeeded, isDiagnosticLogsNeeded, testType);
 
 					executeScriptinDevice(script, executionEntitiesForFailureRerun.getExecution(),
 							executionEntitiesForFailureRerun.getExecutionResult().get(0),
@@ -196,7 +197,9 @@ public class ExecutionAsyncService {
 					realExecutionTime = this
 							.getRealExcecutionTime(executionEntitiesForFailureRerun.getExecutionResult());
 					this.setExecutionTime(executionEntities.getExecution(), executionTime, realExecutionTime);
-					this.setFinalStatusOfExecution(executionEntitiesForFailureRerun.getExecution());
+					Execution execData = this
+							.setFinalStatusOfExecution(executionEntitiesForFailureRerun.getExecution());
+					this.callCiRequest(execData, callBackUrl, imageVersion);
 				}
 			}
 		} catch (Exception e) {
@@ -209,6 +212,48 @@ public class ExecutionAsyncService {
 		// Unlock the device with the current status
 		deviceStatusService.fetchAndUpdateDeviceStatus(device);
 
+	}
+
+	/**
+	 * This method is used to call ci request
+	 * 
+	 * @param finalExecutionStatus - the final execution status
+	 * @param callBackUrl          - the call back url
+	 * @param imageVersion         - the image
+	 * 
+	 */
+	private void callCiRequest(Execution finalExecutionStatus, String callBackUrl, String imageVersion) {
+		if (!finalExecutionStatus.getTestType().contains("CI")) {
+			return;
+		}
+
+		CIRequestDTO request = getCIRequestForRDKPortal(finalExecutionStatus.getId().toString(), imageVersion);
+		LOGGER.info("CI Jsonobject: {}", request);
+
+		if (callBackUrl == null || callBackUrl.isEmpty()) {
+			callBackUrl = getCallBackUrlFromConfig();
+		}
+
+		if (callBackUrl == null) {
+			LOGGER.error("CallBack url not found in tm.config file");
+			throw new TDKServiceException("CallBack url not found in tm.config file");
+		}
+
+		try {
+			httpService.sendPostRequest(callBackUrl, request, null);
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while sending the request to the CI server", e.getMessage());
+		}
+	}
+
+	/*
+	 * This method is used to get the call back url from the config file
+	 * 
+	 * @return String - the call back url
+	 */
+	private String getCallBackUrlFromConfig() {
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + Constants.TM_CONFIG_FILE;
+		return commonService.getConfigProperty(new File(configFilePath), Constants.CI_CALLBACK_URL);
 	}
 
 	/**
@@ -242,7 +287,7 @@ public class ExecutionAsyncService {
 	public void prepareAndExecuteMultiScript(Device device, List<Script> scriptList, User user, String executionName,
 			String category, String testSuiteName, int repeatCount, boolean isRerunOnFailure,
 			boolean isDeviceLogsNeeded, boolean isDiagnosticsLogsNeeded, boolean isPerformanceNeeded,
-			boolean isIndividualRepeatExecution) {
+			boolean isIndividualRepeatExecution, String testType, String callBackUrl, String imageVersion) {
 		LOGGER.info("Executing multiple scripts execution in device:" + device.getName());
 		deviceStatusService.setDeviceStatus(DeviceStatus.IN_USE, device);
 		try {
@@ -293,6 +338,7 @@ public class ExecutionAsyncService {
 				execution.setResult(ExecutionOverallResultStatus.INPROGRESS);
 				execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
 				execution.setScriptCount(scriptCount);
+				execution.setTestType(testType);
 				execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
 				execution.setDiagnosticLogsNeeded(isDiagnosticsLogsNeeded);
 				execution.setPerformanceLogsNeeded(isPerformanceNeeded);
@@ -382,16 +428,8 @@ public class ExecutionAsyncService {
 				finalExecution.setExecutionTime(executionTime);
 				executionRepository.save(finalExecution);
 				Execution finalExecutionStatus = this.setFinalStatusOfExecution(finalExecution);
+				this.callCiRequest(finalExecutionStatus, callBackUrl, imageVersion);
 
-				if (finalExecutionStatus.getTestType().contains("CI")) {
-					CIRequestDTO request = getCIRequestForRDKPortal(finalExecutionStatus.getId().toString());
-					String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
-							+ Constants.TM_CONFIG_FILE;
-					String rdkPortalUrl = commonService.getConfigProperty(new File(configFilePath),
-							Constants.RDK_PORTAL_URL);
-					httpService.sendPostRequest(rdkPortalUrl, request, null);
-
-				}
 				if (isRerunOnFailure && (finalExecutionStatus.getResult() == ExecutionOverallResultStatus.FAILURE)) {
 					List<String> failedScriptName = executableResultList.stream()
 							.filter(result -> result.getResult() == ExecutionResultStatus.FAILURE)
@@ -402,7 +440,7 @@ public class ExecutionAsyncService {
 						LOGGER.info("Starting Rerun due to failure: execution name: {}", rerunExecutionName);
 						prepareAndExecuteMultiScript(device, failedScripts, user, rerunExecutionName, category,
 								testSuiteName, 1, false, isDeviceLogsNeeded, isDiagnosticsLogsNeeded,
-								isPerformanceNeeded, isIndividualRepeatExecution);
+								isPerformanceNeeded, isIndividualRepeatExecution, testType, callBackUrl, imageVersion);
 					}
 				}
 
@@ -455,7 +493,7 @@ public class ExecutionAsyncService {
 	 *         device and component level details
 	 *
 	 */
-	private CIRequestDTO getCIRequestForRDKPortal(String executionId) {
+	private CIRequestDTO getCIRequestForRDKPortal(String executionId, String imageVersion) {
 		LOGGER.info("Getting CI request for RDK Portal");
 		Execution execution = executionRepository.findById(UUID.fromString(executionId)).orElse(null);
 		String baseUrl = appConfig.getBaseURL() + "/execution/getExecutionLogs?executionResultID=";
@@ -475,9 +513,9 @@ public class ExecutionAsyncService {
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 		if (executionDevice != null) {
 			CIDeviceDTO ciDeviceDTO = new CIDeviceDTO();
-			ciDeviceDTO.setDevice(executionDevice.getDevice().getName());
+			ciDeviceDTO.setDevice(getDeviceNameFromConfigFile(imageVersion));
 			ciDeviceDTO.setDeviceType(executionDevice.getDevice().getDeviceType().getName());
-			ciDeviceDTO.setImageName(executionDevice.getBuildName());
+			ciDeviceDTO.setImageName(imageVersion);
 
 			ArrayList<CIComponentLevelDTO> componentLevelDTOList = new ArrayList<>();
 			List<ExecutionResult> executionResults = execution.getExecutionResults();
@@ -539,6 +577,71 @@ public class ExecutionAsyncService {
 		ciRequestDTO.setResult(ciRequestDTOList.isEmpty() ? new ArrayList<>() : ciRequestDTOList);
 
 		return ciRequestDTO;
+	}
+
+	/*
+	 * The method is used to get the Device corresponding to the image version from
+	 * config file
+	 * 
+	 * @param imageVersion - the image version
+	 * 
+	 * @return - the device
+	 */
+	private String getDeviceNameFromConfigFile(String imageVersion) {
+		String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+				+ Constants.CI_IMAGE_BOXTYPE_CONFIG_FILE;
+		List<Map<String, String>> boxTypeMap = parseConfigFile(configFilePath);
+
+		for (Map<String, String> boxType : boxTypeMap) {
+			for (Map.Entry<String, String> entry : boxType.entrySet()) {
+				if (entry.getValue() != null && entry.getValue().contains(imageVersion)) {
+					return entry.getKey();
+				}
+			}
+		}
+		throw new TDKServiceException("Device name not found for image version: " + imageVersion);
+	}
+
+	/**
+	 * This method is used to create a map of Device and Corresponding Image Version
+	 * keyWord From Config file
+	 * 
+	 * @param filePath - the file path
+	 * @return - the list of map of device and image version keyword
+	 */
+	public static List<Map<String, String>> parseConfigFile(String filePath) {
+		List<Map<String, String>> configMaps = new ArrayList<>();
+		Map<String, String> configMap = new HashMap<>();
+
+		try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				// Trim and skip empty or comment lines
+				line = line.trim();
+				if (line.isEmpty() || line.startsWith("#")) {
+					continue;
+				}
+
+				// Split the line by ':'
+				String[] parts = line.split("=", 2);
+				if (parts.length == 2) {
+					String key = parts[0].trim();
+					String value = parts[1].trim();
+					configMap.put(key, value);
+				}
+			}
+
+			// Add the map to the list if it's not empty
+			if (!configMap.isEmpty()) {
+				configMaps.add(configMap);
+			}
+
+		} catch (Exception e) {
+			LOGGER.error("Error reading config file: {}", filePath, e);
+			throw new TDKServiceException("Error reading config file: " + filePath);
+		}
+
+		return configMaps;
 	}
 
 	/**
@@ -888,7 +991,7 @@ public class ExecutionAsyncService {
 	 */
 	private ExecutionEntities getExecutionEntitiesForExecution(Device device, Script script, User user,
 			String executionName, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
-			boolean isDiagnosticLogsNeeded) {
+			boolean isDiagnosticLogsNeeded,String testType) {
 		Execution execution = new Execution();
 		execution.setName(executionName);
 		execution.setCategory(device.getCategory());
@@ -899,6 +1002,7 @@ public class ExecutionAsyncService {
 		execution.setExecutionStatus(ExecutionProgressStatus.INPROGRESS);
 		execution.setScriptCount(1);
 		execution.setUser(user);
+		execution.setTestType(testType);
 		execution.setDeviceLogsNeeded(isDeviceLogsNeeded);
 		execution.setPerformanceLogsNeeded(isPerformanceLogsNeeded);
 		execution.setDiagnosticLogsNeeded(isDiagnosticLogsNeeded);

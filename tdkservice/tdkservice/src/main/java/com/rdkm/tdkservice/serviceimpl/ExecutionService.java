@@ -300,7 +300,8 @@ public class ExecutionService implements IExecutionService {
 			executionAsyncService.prepareAndExecuteSingleScript(device, script, executionDetailsDTO.getUser(),
 					executionName, executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isPerformanceLogsNeeded(),
-					executionDetailsDTO.isDiagnosticLogsNeeded());
+					executionDetailsDTO.isDiagnosticLogsNeeded(), executionDetailsDTO.getTestType(),
+					executionDetailsDTO.getCallBackUrl(), executionDetailsDTO.getImageVersion());
 			LOGGER.info(" Asynchronous Execution of script on " + script.getName() + "the device" + device.getName()
 					+ " triggered");
 
@@ -366,7 +367,9 @@ public class ExecutionService implements IExecutionService {
 					executionDetailsDTO.getUser(), executionName, executionDetailsDTO.getCategory(), null,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
+					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution(),
+					executionDetailsDTO.getTestType(), executionDetailsDTO.getCallBackUrl(),
+					executionDetailsDTO.getImageVersion());
 		}
 
 		// If atleast one script execution is triggered in one box, then return the
@@ -428,7 +431,9 @@ public class ExecutionService implements IExecutionService {
 					executionName, executionDetailsDTO.getCategory(), testSuite.getName(),
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isDiagnosticLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
+					executionDetailsDTO.isDiagnosticLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution(),
+					executionDetailsDTO.getTestType(), executionDetailsDTO.getCallBackUrl(),
+					executionDetailsDTO.getImageVersion());
 
 		}
 		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
@@ -474,7 +479,9 @@ public class ExecutionService implements IExecutionService {
 					executionName, executionDetailsDTO.getCategory(), Constants.MULTI_TEST_SUITE,
 					executionDetailsDTO.getRepeatCount(), executionDetailsDTO.isRerunOnFailure(),
 					executionDetailsDTO.isDeviceLogsNeeded(), executionDetailsDTO.isDiagnosticLogsNeeded(),
-					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution());
+					executionDetailsDTO.isPerformanceLogsNeeded(), executionDetailsDTO.isIndividualRepeatExecution(),
+					executionDetailsDTO.getTestType(), executionDetailsDTO.getCallBackUrl(),
+					executionDetailsDTO.getImageVersion());
 		}
 
 		ExecutionResponseDTO executionResponseDTO = this.createExecutionResponseDTO(responseLogs.toString(),
@@ -665,6 +672,8 @@ public class ExecutionService implements IExecutionService {
 			}
 
 		}
+		executionDetailsDTO.setCallBackUrl(executionTriggerDTO.getCiCallBackUrl());
+		executionDetailsDTO.setImageVersion(executionTriggerDTO.getCiImageVersion());
 		executionDetailsDTO.setIndividualRepeatExecution(executionTriggerDTO.isIndividualRepeatExecution());
 		executionDetailsDTO.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());
 		executionDetailsDTO.setPerformanceLogsNeeded(executionTriggerDTO.isPerformanceLogsNeeded());
@@ -1645,7 +1654,7 @@ public class ExecutionService implements IExecutionService {
 			executionAsyncService.prepareAndExecuteMultiScript(executionDevice.getDevice(), scripts, triggerUser,
 					execName, execution.getCategory().name(), execution.getTestType(), 1, false,
 					execution.isDeviceLogsNeeded(), execution.isDiagnosticLogsNeeded(),
-					execution.isDiagnosticLogsNeeded(), false);
+					execution.isDiagnosticLogsNeeded(), false, execution.getTestType(), null, null);
 			LOGGER.info("Successfully re-run failed scripts for execution with id: {}", execId);
 		} catch (Exception e) {
 			LOGGER.error("Error re-running failed scripts for execution with id: {}", execId, e);

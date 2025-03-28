@@ -93,4 +93,16 @@ public class ExecutionDetailsDTO {
 	 */
 	private boolean isIndividualRepeatExecution;
 
+	/*
+	 * Represents the callback url.This call back url is coming from CI portal and
+	 * this ci execution trigger will get added to ci_portal.The url of this
+	 * ci_portal is mentioned in this callbackurl.
+	 */
+	private String callBackUrl;
+
+	/*
+	 * Represents the image version that is using for the ci trigger.
+	 */
+	private String imageVersion;
+
 }

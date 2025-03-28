@@ -94,4 +94,16 @@ public class ExecutionTriggerDTO {
 	 * Represents the is individual repeat execution.
 	 */
 	private boolean isIndividualRepeatExecution;
+
+	/*
+	 * Represents the callback url.This call back url is coming from CI portal and
+	 * this ci execution trigger will get added to ci_portal.The url of this
+	 * ci_portal is mentioned in this callbackurl.
+	 */
+	private String ciCallBackUrl;
+
+	/*
+	 * Represents the image version that is using for the ci trigger.
+	 */
+	private String ciImageVersion;
 }

@@ -543,9 +543,11 @@ public class Constants {
 	public static final String LOG_FILE_EXTENSION = ".log";
 	// TDK portal service name
 	public static final String TDK_PORTAL_SERVICE = "TDK";
-	// RDK portal URL
-	public static final String RDK_PORTAL_URL = "rdkPortalUrl";
 
+	// CI callback URL
+	public static final String CI_CALLBACK_URL = "ci_callback_url";
+	
+	// Rdkcertification diagnostics script file
 	public static final String RDK_DIAGNOSIS_LOG_SCRIPT = "rdk_cerfiticate_diagnosis.py";
 
 	// Script for rest agent
@@ -562,5 +564,8 @@ public class Constants {
 
 	// Based log file path in the config file
 	public static final String LOGS_PATH_KEY_CONFIG_FILE = "logs_path";
+
+	// CI image boxtype config file
+	public static final String CI_IMAGE_BOXTYPE_CONFIG_FILE = "ci_image_boxtype.config";
 
 }
