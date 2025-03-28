@@ -133,10 +133,10 @@ if expectedResult in result.upper():
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
     if revert_nw == "YES":
-        revert_plugins_dict = {"org.rdk.Network":"deactivated"}
+        revert_plugins_dict = {"org.rdk.NetworkManager":"deactivated"}
     if current_interface == "EMPTY":
         status = "FAILURE"
-    elif current_interface == "ETHERNET":
+    elif current_interface == "eth0":
         revert_if = "YES"
         wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
         if revert_plugins == "YES":

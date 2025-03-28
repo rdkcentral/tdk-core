@@ -107,7 +107,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     rebootwaitTime = StabilityTestVariables.rebootwaitTime
-    connect_status, revert_dict, revert_plugin_status,deviceAvailability = connect_to_interface(obj, "WIFI")
+    connect_status, revert_dict, revert_plugin_status,deviceAvailability = connect_to_interface(obj,"wlan0")
     if connect_status == "SUCCESS":
         count = 0
         reboot_time = []
@@ -234,7 +234,7 @@ if expectedResult in result.upper():
         revert_if = revert_dict.pop("revert_if")
         current_connection = revert_dict.pop("current_if")
         if revert_if:
-            result_status, revert_dict_new, revert_plugins = connect_to_interface(obj, current_connection)
+            result_status, revert_dict_new, revert_plugins,deviceAvailability = connect_to_interface(obj, current_connection)
             time.sleep(30)
             if result_status == "FAILURE":
                 obj.setLoadModuleStatus("FAILURE")

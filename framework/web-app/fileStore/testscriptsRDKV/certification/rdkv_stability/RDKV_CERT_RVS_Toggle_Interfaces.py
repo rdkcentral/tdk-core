@@ -131,8 +131,8 @@ if expectedResult in (result.upper() and pre_condition_status):
     status = "SUCCESS"
     max_iterations = StabilityTestVariables.max_interface_changes
     revert_plugins_dict = {}
-    plugins_list = ["WebKitBrowser","org.rdk.Wifi","DeviceInfo"]
-    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","DeviceInfo":"activated"}
+    plugins_list = ["WebKitBrowser","org.rdk.NetworkManager","DeviceInfo"]
+    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.NetworkManager":"activated","DeviceInfo":"activated"}
     conf_file, status = get_configfile_name(obj);
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     for plugin in plugins_list[:]:
@@ -157,15 +157,15 @@ if expectedResult in (result.upper() and pre_condition_status):
     initial_interface = current_interface
     url_status,complete_url = get_lightning_app_url(obj)
     if revert_nw == "YES":
-        revert_plugins_dict["org.rdk.Network"] = "deactivated"
+        revert_plugins_dict["org.rdk.NetworkManager"] = "deactivated"
     if current_interface != "EMPTY" and url_status == status == "SUCCESS":
         revert_plugins_dict.update(current_plugin_status_dict)
         for count in range(0,max_iterations):
             result_dict = {}
-            if current_interface == "ETHERNET":
-                new_interface = "WIFI"
+            if current_interface == "eth0":
+                new_interface = "wlan0"
             else:
-                new_interface = "ETHERNET"
+                new_interface = "eth0"
                 status = launch_lightning_app(obj,complete_url)
                 time.sleep(30)
             if status == "SUCCESS":
@@ -211,7 +211,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         #Revert interface
         if current_interface != initial_interface and deviceAvailability == "Yes":
             print("\n Revert network interface to {}\n".format(initial_interface))
-            if initial_interface == "ETHERNET":
+            if initial_interface == "eth0":
                 status = launch_lightning_app(obj,complete_url)
                 time.sleep(30)
             tdkTestObj = obj.createTestStep('rdkservice_setDefaultInterface')

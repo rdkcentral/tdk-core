@@ -135,8 +135,8 @@ if expectedResult in (result.upper() and pre_condition_status):
     revert_if = ""
     max_iterations = StabilityTestVariables.max_ssid_changes
     revert_plugins_dict = {}
-    plugins_list = ["WebKitBrowser","org.rdk.Wifi","DeviceInfo"]
-    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","DeviceInfo":"activated"}
+    plugins_list = ["WebKitBrowser","org.rdk.NetworkManager","DeviceInfo"]
+    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.NetworkManager":"activated","DeviceInfo":"activated"}
     conf_file, status = get_configfile_name(obj);
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
     for plugin in plugins_list[:]:
@@ -161,12 +161,12 @@ if expectedResult in (result.upper() and pre_condition_status):
     initial_interface = current_interface
     url_status,complete_url = get_lightning_app_url(obj)
     if revert_nw == "YES":
-        revert_plugins_dict["org.rdk.Network"] = "deactivated"
-    if current_interface == "ETHERNET":
+        revert_plugins_dict["org.rdk.NetworkManager"] = "deactivated"
+    if current_interface == "eth0":
         revert_if = "YES"
         wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
         if wifi_connect_status == "SUCCESS":
-            current_interface = "WIFI"
+            current_interface = "wlan0"
         else:
             status = "FAILURE"
     if current_interface != "EMPTY" and all(value =="SUCCESS" for value in (url_status,status)):
@@ -220,7 +220,7 @@ if expectedResult in (result.upper() and pre_condition_status):
         if deviceAvailability == "Yes":
             if revert_if == "YES" and status == "SUCCESS":
                 time.sleep(40)
-                interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
+                interface_status,deviceAvailability = set_default_interface(obj,"eth0")
                 if interface_status == "SUCCESS":
                     print("\n Successfully reverted to ETHERNET \n")
                     status = close_lightning_app(obj)

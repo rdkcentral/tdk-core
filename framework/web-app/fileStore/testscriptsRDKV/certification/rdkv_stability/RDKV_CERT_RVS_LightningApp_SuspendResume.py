@@ -110,10 +110,10 @@ if expectedResult in (result.upper() and pre_condition_status):
     plugin_status_needed = {"LightningApp":"resumed","Cobalt":"deactivated","WebKitBrowser":"deactivated","DeviceInfo":"activated"}
     conf_file, status = get_configfile_name(obj);
     status,supported_plugins = getDeviceConfigValue(conf_file,"SUPPORTED_PLUGINS")
-    for plugin in plugins_list[:]:
-        if plugin not in supported_plugins:
-            plugins_list.remove(plugin)
-            plugin_status_needed.pop(plugin)
+    for plugin_item in plugins_list[:]:
+        if plugin_item not in supported_plugins:
+            plugins_list.remove(plugin_item)
+            plugin_status_needed.pop(plugin_item)
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):

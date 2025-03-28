@@ -92,11 +92,11 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     rebootwaitTime = StabilityTestVariables.rebootwaitTime
-    plugins_list = ["org.rdk.Network","org.rdk.Wifi"]
+    plugins_list = ["org.rdk.NetworkManager"]
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     status = "SUCCESS"
-    plugin_status_needed = {"org.rdk.Network":"activated","org.rdk.Wifi":"activated"}
+    plugin_status_needed = {"org.rdk.NetworkManager":"activated"}
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):
         status = "FAILURE"
         print("\n Error while getting status of plugins")
@@ -107,11 +107,11 @@ if expectedResult in result.upper():
         new_plugins_status = get_plugins_status(obj,plugins_list)
         if new_plugins_status != plugin_status_needed:
             status = "FAILURE"
-    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "WIFI")
+    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "wlan0")
     if connect_status == "SUCCESS" and status == "SUCCESS":
         #get the connected SSID
         tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-        tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+        tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.getConnectedSSID")
         tdkTestObj.addParameter("reqValue","ssid")
         tdkTestObj.executeTestCase(expectedResult)
         result = tdkTestObj.getResult()
@@ -139,18 +139,18 @@ if expectedResult in result.upper():
                         tdkTestObj.setResultStatus("SUCCESS")
                         #Check current interface
                         interface,revert = check_current_interface(obj)
-                        if interface == "WIFI":
+                        if interface == "wlan0":
                             print("\n Current interface is WIFI")
                             #Check connected SSID
                             wifi_activated = False
-                            wifi_status = rdkservice_getPluginStatus("org.rdk.Wifi")
+                            wifi_status = rdkservice_getPluginStatus("org.rdk.NetworkManager")
                             if wifi_status == "activated":
                                 wifi_activated = True
                             elif wifi_status == "deactivated":
-                                new_status = rdkservice_setPluginStatus("org.rdk.Wifi","activate")
+                                new_status = rdkservice_setPluginStatus("org.rdk.NetworkManager","activate")
                                 time.sleep(5)
                                 if new_status != "EXCEPTION OCCURRED":
-                                    wifi_status = rdkservice_getPluginStatus("org.rdk.Wifi")
+                                    wifi_status = rdkservice_getPluginStatus("org.rdk.NetworkManager")
                                     if wifi_status == "activated":
                                         wifi_activated = True
                                     else:
@@ -165,7 +165,7 @@ if expectedResult in result.upper():
                             if wifi_activated:
                                 #get the connected SSID
                                 tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-                                tdkTestObj.addParameter("method","org.rdk.Wifi.1.getConnectedSSID")
+                                tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.getConnectedSSID")
                                 tdkTestObj.addParameter("reqValue","ssid")
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResult()

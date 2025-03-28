@@ -27,6 +27,7 @@ from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common import exceptions
 from selenium.webdriver.common.keys import Keys
+from selenium.common.exceptions import StaleElementReferenceException
 from SSHUtility import *
 import SSHUtility
 import re
@@ -310,7 +311,7 @@ def openChromeBrowser(url):
 #-------------------------------------------------------------------
 def rdkservice_getBrowserURL(webinspect_port):
     try:
-        webinspectURL = 'http://'+deviceIP+':'+webinspect_port+'/'
+        webinspectURL = 'http://'+deviceIP+':'+str(webinspect_port)+'/'
         print (webinspectURL)
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
@@ -1078,13 +1079,20 @@ def rdkservice_getBrowserScore_AnimationBenchmark():
         webinspectURL = 'http://'+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/Main.html?ws='+deviceIP+':'+BrowserPerformanceVariables.webinspect_port+'/socket/1/1/WebPage'
         driver = openChromeBrowser(webinspectURL);
         if driver != "EXCEPTION OCCURRED":
-            time.sleep(10)
+            time.sleep(20)
             action = ActionChains(driver)
             html = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/li[2]/span/span/span')
             source = action.move_to_element(html).move_by_offset(-30,0).click().key_down(Keys.ALT).click().perform()
-            time.sleep(10)
+            time.sleep(20)
             for count in range(0,5):
-                fps_info = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/li[2]/span/span[2]').text
+                try:
+                    fps_info_element = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/li[2]/span/span[2]')
+                    fps_info = fps_info_element.text  # Now we get the text after locating the element again
+                except StaleElementReferenceException:
+                    print("Stale element encountered, retrying...")
+                    fps_info_element = driver.find_element_by_xpath('//*[@id="tab-browser"]/div/div/div/div[2]/div/ol/ol/ol/li[2]/span/span[2]')
+                    fps_info = fps_info_element.text  # Re-find the element before using `.text`
+
                 if "FPS" in fps_info:
                     fps_value = fps_info.split(' ')[0]
                     fps_list.append(float(fps_value))

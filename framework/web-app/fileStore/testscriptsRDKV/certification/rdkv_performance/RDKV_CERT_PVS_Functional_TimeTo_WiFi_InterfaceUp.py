@@ -113,13 +113,13 @@ if expectedResult in result.upper():
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
     if revert_nw == "YES":
-        revert_plugins_dict = {"org.rdk.Network":"deactivated"}
+        revert_plugins_dict = {"org.rdk.NetworkManager":"deactivated"}
     if current_interface == "EMPTY":
         status = "FAILURE"
-    elif current_interface == "ETHERNET":
+    elif current_interface == "eth0":
         revert_if = "YES"
         wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj)
-        plugins_status_needed = {"org.rdk.Network":"activated","WebKitBrowser":"activated"}
+        plugins_status_needed = {"org.rdk.NetworkManager":"activated","WebKitBrowser":"activated"}
         if revert_plugins == "YES":
             revert_plugins_dict.update(plugins_status_dict)
         time.sleep(20)
@@ -240,7 +240,7 @@ if expectedResult in result.upper():
             lauch_app_status = launch_lightning_app(obj,complete_url)
             time.sleep(60)
             if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
-                interface_status,deviceAvailabiliy = set_default_interface(obj,"ETHERNET")
+                interface_status,deviceAvailabiliy = set_default_interface(obj,"eth0")
                 if interface_status  == "SUCCESS":
                     print("\n Successfully reverted to ETHERNET \n")
                     status = close_lightning_app(obj)

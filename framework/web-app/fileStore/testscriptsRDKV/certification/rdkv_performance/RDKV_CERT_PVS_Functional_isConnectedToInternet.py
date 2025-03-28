@@ -117,7 +117,7 @@ if expectedResult in result.upper():
     validation_dict = {}
     initial_connection = ""
     revert_plugins_dict = {}
-    connections_list = ["WIFI","WIFI_5GHZ","ETHERNET"]
+    connections_list = ["wlan0","WIFI_5GHZ","eth0"]
     for connection in connections_list:
         connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, connection)
         if connect_status == "SUCCESS":
@@ -127,8 +127,8 @@ if expectedResult in result.upper():
                 if revert_plugin_status == "YES":
                     revert_plugins_dict.update(revert_dict)
             tdkTestObj = obj.createTestStep('rdkservice_getReqValueFromResult')
-            tdkTestObj.addParameter("method","org.rdk.Network.1.isConnectedToInternet")
-            tdkTestObj.addParameter("reqValue","connectedToInternet")
+            tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.isConnectedToInternet")
+            tdkTestObj.addParameter("reqValue","connected")
             tdkTestObj.executeTestCase(expectedResult)
             connected = tdkTestObj.getResultDetails()
             connected_status = tdkTestObj.getResult()

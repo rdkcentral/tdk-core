@@ -128,8 +128,8 @@ if expectedResult in result.upper():
     revert_wifi_ssid = False
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
     validation_dict = {}
-    plugins_list = ["WebKitBrowser","org.rdk.Wifi","Cobalt"]
-    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.Wifi":"activated","Cobalt":"deactivated"}
+    plugins_list = ["WebKitBrowser","org.rdk.NetworkManager","Cobalt"]
+    plugin_status_needed = {"WebKitBrowser":"resumed","org.rdk.NetworkManager":"activated","Cobalt":"deactivated"}
     print("\n Get plugins status")
     current_plugin_status_dict = get_plugins_status(obj,plugins_list)
     if plugin_status_needed != current_plugin_status_dict:
@@ -149,8 +149,8 @@ if expectedResult in result.upper():
     initial_interface = current_interface
     url_status,complete_url = get_lightning_app_url(obj)
     if revert_nw == "YES":
-        revert_plugins_dict["org.rdk.Network"] = "deactivated"
-    if current_interface == "WIFI":
+        revert_plugins_dict["org.rdk.NetworkManager"] = "deactivated"
+    if current_interface == "wlan0":
         print("\n Current interface is WIFI")
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
@@ -172,8 +172,8 @@ if expectedResult in result.upper():
         for count in range(0,2):
             time.sleep(30)
             result_status = "FAILURE"
-            if current_interface == "ETHERNET":
-                new_interface = "WIFI"
+            if current_interface == "eth0":
+                new_interface = "wlan0"
                 wifi_connect_status,plugins_status_dict,revert_plugins,start_time_dict[new_interface],deviceAvailability = switch_to_wifi(obj,"2.4",True)
                 if wifi_connect_status == "SUCCESS":
                     print("\n Successfully set WIFI as default interface")
@@ -182,10 +182,10 @@ if expectedResult in result.upper():
                     print("\n Error while setting WIFI as default interface")
                     result_status = "FAILURE"
             else:
-                new_interface = "ETHERNET"
+                new_interface = "eth0"
                 status = launch_lightning_app(obj,complete_url)
                 time.sleep(30)
-                interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"ETHERNET",True)
+                interface_status,start_time_dict[new_interface],deviceAvailability = set_default_interface(obj,"eth0",True)
                 if interface_status  == "SUCCESS":
                     print("\n Successfully set ETHERNET as default interface \n")
                     result_status = close_lightning_app(obj)
@@ -262,10 +262,10 @@ if expectedResult in result.upper():
             #Revert interface
             if current_interface != initial_interface:
                 print("\n Revert network interface to {}\n".format(initial_interface))
-                if initial_interface == "ETHERNET":
+                if initial_interface == "eth0":
                     status = launch_lightning_app(obj,complete_url)
                     time.sleep(30)
-                    interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
+                    interface_status,deviceAvailability = set_default_interface(obj,"eth0")
                     if interface_status == "SUCCESS":
                         print("\n Successfully reverted ETHERNET as default interface")
                     else:

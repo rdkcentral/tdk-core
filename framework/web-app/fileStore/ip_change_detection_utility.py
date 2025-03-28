@@ -182,20 +182,6 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
         result = tdkTestObj.getResult()
         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
         if ssh_param_dict != {} and expectedResult in result:
-            tdkTestObj.setResultStatus("SUCCESS")
-            print("\n Enable the RFC Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable in DUT \n")
-            #command to enable RFC for PreferredNetworkInterface
-            command = "tr181 -s -v true Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable; tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable"
-            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
-            tdkTestObj.addParameter("command",command)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            output = tdkTestObj.getResultDetails()
-            if output != "EXCEPTION" and expectedResult in result:
-                if "true" in output.split("\n")[1]:
-                    print("\n Enabled RFC feature \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     #list of interfaces supported by this device including their state
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -207,12 +193,12 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                         wifi_interface = False
                         interfaces = ast.literal_eval(interfaces)["interfaces"]
                         for interface in interfaces:
-                            if interface["interface"] == "WIFI":
+                            if interface["name"] == "wlan0":
                                 wifi_interface = True
                         if wifi_interface:
                             print("\n WiFi interface is present in org.rdk.NetworkManager.1.GetAvailableInterfaces list \n")
                             tdkTestObj.setResultStatus("SUCCESS")
-                            params = '{"interface":"WIFI", "enabled":true}'
+                            params = '{"interface":"wlan0", "enabled":true}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
                             tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
                             tdkTestObj.addParameter("value",params);
@@ -231,7 +217,7 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                     interfaces = ast.literal_eval(interfaces)["interfaces"]
                                     wifi_dict = {}
                                     for interface in interfaces:
-                                        if interface["interface"] == "WIFI":
+                                        if interface["name"] == "wlan0":
                                             wifi_dict = interface
                                     if wifi_dict["enabled"]:
                                         app_status = launch_lightning_app(obj,complete_app_url)
@@ -244,9 +230,9 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                                             if expectedResult in wifi_connect_status and deviceAvailability == "Yes":
                                                 time.sleep(20)
                                                 if start_time_needed:
-                                                    result,start_time,deviceAvailability = set_default_interface(obj,"WIFI",start_time_needed)
+                                                    result,start_time,deviceAvailability = set_default_interface(obj,"wlan0",start_time_needed)
                                                 else:
-                                                    result,deviceAvailability = set_default_interface(obj,"WIFI")
+                                                    result,deviceAvailability = set_default_interface(obj,"wlan0")
                                                 if expectedResult in result:
                                                     tdkTestObj.setResultStatus("SUCCESS")
                                                     status = "SUCCESS"
@@ -273,12 +259,6 @@ def switch_to_wifi(obj,ap_freq = "2.4",start_time_needed = False, wifi_connect_n
                     else:
                         print("\n Error while executing org.rdk.NetworkManager.1.GetAvailableInterfaces method \n")
                         tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    print("\n Error while enabling RFC for PreferredNetworkInterface\n")
-                    tdkTestObj.setResultStatus("FAILURE")
-            else:
-                print("\n Error while enabling RFC feature in DUT \n")
-                tdkTestObj.setResultStatus("FAILURE")
         else:
             print("\n Please configure SSH details in Device configuration file \n")
             tdkTestObj.setResultStatus("FAILURE")
@@ -417,9 +397,9 @@ def set_default_interface(obj,interface,start_time_needed = False):
         print("\n Set default interface method executed successfuly for {} interfce \n".format(interface))
         tdkTestObj.setResultStatus("SUCCESS")
         time.sleep(40)
-        if  interface == "WIFI":
+        if  interface == "wlan0":
             print("Disabling Ethernet interface to set Wifi as default interface")
-            params = '{"interface":"ETHERNET", "enabled":false}'
+            params = '{"interface":"eth0", "enabled":false}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
             tdkTestObj.addParameter("value",params);
@@ -427,9 +407,9 @@ def set_default_interface(obj,interface,start_time_needed = False):
             time.sleep(30)
             result = tdkTestObj.getResult();
             print("Disabled Ethernet interface")
-        elif interface == "ETHERNET":
+        elif interface == "eth0":
             print("Enabling Ethernet interface ")
-            params = '{"interface":"ETHERNET", "enabled":true}'
+            params = '{"interface":"eth0", "enabled":true}'
             tdkTestObj = obj.createTestStep('rdkservice_setValue');
             tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
             tdkTestObj.addParameter("value",params);
@@ -547,7 +527,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
     deviceAvailability = "Yes"
     wifi_start_time = ""
     result_status = "FAILURE"
-    wifi_ssid_dict = {"WIFI":"2.4", "WIFI_5GHZ":"5"}
+    wifi_ssid_dict = {"wlan0":"2.4", "WIFI_5GHZ":"5"}
     revert_plugins = "NO"
     #Check current interface
     current_connection, revert_nw = check_current_interface(obj)
@@ -561,7 +541,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
                 return result_status, revert_dict, revert_plugins, start_time,deviceAvailability
         else:
             return result_status, revert_dict, revert_plugins,deviceAvailability
-    elif current_connection == "WIFI":
+    elif current_connection == "wlan0":
         #Check the frequency of SSID
         ssid_freq = check_cur_ssid_freq(obj)
         if ssid_freq == "FAILURE":
@@ -576,7 +556,7 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
             current_connection = "WIFI_5GHZ"
     if current_connection == required_connection:
         result_status = "SUCCESS"
-    elif current_connection == "ETHERNET" or "WIFI" in required_connection:
+    elif current_connection == "eth0" or "wlan0" in required_connection:
         revert_dict["revert_if"] = True
         if start_time_needed:
             if wifi_connect_needed:
@@ -592,11 +572,11 @@ def connect_to_interface(obj, required_connection,start_time_needed = False, wif
         launch_app_status = launch_lightning_app(obj, complete_url)
         time.sleep(60)
         if all(status == "SUCCESS" for status in (plugin_status, url_status, launch_app_status)):
-            if required_connection == "ETHERNET":
+            if required_connection == "eth0":
                 if start_time_needed:
-                    result_status,start_time,deviceAvailability = set_default_interface(obj, "ETHERNET", True)
+                    result_status,start_time,deviceAvailability = set_default_interface(obj, "eth0", True)
                 else:
-                    result_status,deviceAvailability = set_default_interface(obj, "ETHERNET")
+                    result_status,deviceAvailability = set_default_interface(obj, "eth0")
         else:
             print("\n Error while launching Lightning App")
     revert_dict["current_if"] = current_connection

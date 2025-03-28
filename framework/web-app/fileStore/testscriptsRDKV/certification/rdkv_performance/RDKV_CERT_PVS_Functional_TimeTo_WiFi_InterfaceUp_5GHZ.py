@@ -112,15 +112,15 @@ if expectedResult in result.upper():
     connected_to_5ghz = True
     ssid_freq = ""
     revert_wifi_ssid = False
-    plugins_status_needed = {"org.rdk.Network":"activated","WebKitBrowser":"activated"}
+    plugins_status_needed = {"org.rdk.NetworkManager":"activated","WebKitBrowser":"activated"}
     revert_if  = revert_device_info = revert_plugins = "NO"
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
     if revert_nw == "YES":
-        revert_plugins_dict = {"org.rdk.Network":"deactivated"}
+        revert_plugins_dict = {"org.rdk.NetworkManager":"deactivated"}
     if current_interface == "EMPTY":
         status = "FAILURE"
-    elif current_interface == "ETHERNET":
+    elif current_interface == "eth0":
         revert_if = "YES"
         wifi_connect_status,plugins_status_dict,revert_plugins,deviceAvailability = switch_to_wifi(obj,"5",False)
         if revert_plugins == "YES":
@@ -140,7 +140,7 @@ if expectedResult in result.upper():
         else:
             status = "FAILURE"
     if status == "SUCCESS":
-        if current_interface == "WIFI" and ssid_freq == "2.4":
+        if current_interface == "wlan0" and ssid_freq == "2.4":
             revert_wifi_ssid = True
             url_status,complete_url = get_lightning_app_url(obj)
             status = launch_lightning_app(obj,complete_url)
@@ -257,7 +257,7 @@ if expectedResult in result.upper():
             lauch_app_status = launch_lightning_app(obj,complete_url)
             time.sleep(60)
             if all(status == "SUCCESS" for status in (activate_status,url_status,lauch_app_status)):
-                interface_status,deviceAvailability = set_default_interface(obj,"ETHERNET")
+                interface_status,deviceAvailability = set_default_interface(obj,"eth0")
                 if interface_status  == "SUCCESS":
                     print("\n Successfully reverted to ETHERNET")
                     status = close_lightning_app(obj)

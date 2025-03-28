@@ -49,7 +49,7 @@
 </pre_requisite>
     <api_or_interface_used>None</api_or_interface_used>
     <input_parameters>ssid:string</input_parameters>
-    <automation_approch>1. Enable NetworkManaer plugin as a precondition.
+    <automation_approch>1. Enable NetworkManager plugin as a precondition.
 2. Listen to "onAvailableSSIDs" of Wifi plugin.
 3. Start scanning for the given SSID and wait for 60 seconds
 4. Calculate the time taken by finding the difference between start scan and event triggered time.
@@ -128,20 +128,6 @@ if expectedResult in result.upper():
         result = tdkTestObj.getResult()
         ssh_param_dict = json.loads(tdkTestObj.getResultDetails())
         if ssh_param_dict != {} and expectedResult in result:
-            tdkTestObj.setResultStatus("SUCCESS")
-            print("\n Enable the RFC Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable in DUT")
-            #command to enable RFC for PreferredNetworkInterface
-            command = "tr181 -s -v true Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable; tr181 Device.DeviceInfo.X_RDKCENTRAL-COM_RFC.Feature.PreferredNetworkInterface.Enable"
-            tdkTestObj = obj.createTestStep('rdkservice_getRequiredLog')
-            tdkTestObj.addParameter("ssh_method",ssh_param_dict["ssh_method"])
-            tdkTestObj.addParameter("credentials",ssh_param_dict["credentials"])
-            tdkTestObj.addParameter("command",command)
-            tdkTestObj.executeTestCase(expectedResult)
-            result = tdkTestObj.getResult()
-            output = tdkTestObj.getResultDetails()
-            if output != "EXCEPTION" and expectedResult in result:
-                if "true" in output.split("\n")[1]:
-                    print("\n Enabled RFC feature \n")
                     tdkTestObj.setResultStatus("SUCCESS")
                     #list of interfaces supported by this device including their state
                     tdkTestObj = obj.createTestStep('rdkservice_getValue');
@@ -153,13 +139,13 @@ if expectedResult in result.upper():
                         wifi_interface = False
                         interfaces = ast.literal_eval(interfaces)["interfaces"]
                         for interface in interfaces:
-                            if interface["interface"] == "WIFI":
+                            if interface["name"] == "wlan0":
                                 wifi_interface = True
                         if wifi_interface:
                             print("\n WiFi interface is present in org.rdk.NetworkManager.1.GetAvailableInterfaces list")
                             tdkTestObj.setResultStatus("SUCCESS")
                             print("\n Enable WIFI interface")
-                            params = '{"interface":"WIFI", "enabled":true}'
+                            params = '{"interface":"wlan0", "enabled":true}'
                             tdkTestObj = obj.createTestStep('rdkservice_setValue');
                             tdkTestObj.addParameter("method","org.rdk.NetworkManager.1.SetInterfaceState");
                             tdkTestObj.addParameter("value",params);
@@ -178,7 +164,7 @@ if expectedResult in result.upper():
                                     interfaces = ast.literal_eval(interfaces)["interfaces"]
                                     wifi_dict = {}
                                     for interface in interfaces:
-                                        if interface["interface"] == "WIFI":
+                                        if interface["name"] == "wlan0":
                                             wifi_dict = interface
                                     else:
                                         if wifi_dict and wifi_dict["enabled"]:
@@ -258,12 +244,6 @@ if expectedResult in result.upper():
                     else:
                         print("\n Error while executing org.rdk.NetworkManager.1.GetAvailableInterfaces method")
                         tdkTestObj.setResultStatus("FAILURE")
-                else:
-                    print("\n Error while enabling RFC for PreferredNetworkInterface")
-                    tdkTestObj.setResultStatus("FAILURE")
-            else:
-                print("\n Error while enabling RFC feature in DUT")
-                tdkTestObj.setResultStatus("FAILURE")
         else:
             print("\n Please configure SSH details in Device configuration file \n")
             tdkTestObj.setResultStatus("FAILURE")

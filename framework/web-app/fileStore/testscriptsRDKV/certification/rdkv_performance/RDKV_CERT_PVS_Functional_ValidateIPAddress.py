@@ -94,10 +94,10 @@ if expectedResult in result.upper():
     #Check current interface
     current_interface,revert_nw = check_current_interface(obj)
     if revert_nw == "YES":
-        revert_plugins_dict["org.rdk.Network"] = "deactivated"
-    if current_interface == "ETHERNET":
+        revert_plugins_dict["org.rdk.NetworkManager"] = "deactivated"
+    if current_interface == "eth0":
         interface_name_key = "ETHERNET_INTERFACE"
-    elif current_interface == "WIFI":
+    elif current_interface == "wlan0":
         interface_name_key = "WIFI_INTERFACE"
     conf_file,file_status = getConfigFileName(obj.realpath)
     interface_config_status,interface_name = getDeviceConfigKeyValue(conf_file,interface_name_key)
