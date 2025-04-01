@@ -48,9 +48,9 @@ public class ScriptExecutorService {
 	private final ExecutorService executorService = Executors.newCachedThreadPool();
 
 	/**
-	 * Executes a Python script with the given command and wait time.
-	 * Mostly used for executing the framework python scripts for image version, 
-	 * file transfer , device status checker etc.
+	 * Executes a Python script with the given command and wait time. Mostly used
+	 * for executing the framework python scripts for image version, file transfer ,
+	 * device status checker etc.
 	 *
 	 * @param command  the command to execute as an array of strings
 	 * @param waittime the maximum time to wait for the script to complete, in
@@ -60,7 +60,7 @@ public class ScriptExecutorService {
 	public String executeScript(String[] command, int waittime) {
 
 		// Initialize the process variable
-		Process process;
+		Process process = null;
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			process = processBuilder.start();
@@ -88,10 +88,11 @@ public class ScriptExecutorService {
 			errorData = errorReaderTask.get();
 
 			if (errorData != null && !errorData.isEmpty()) {
-				LOGGER.error("Error Data: " + errorData);
+				LOGGER.error(" Error while executing command: {}", String.join(" ", command));
 			}
 
-			process.destroy();
+			if (null != process)
+				process.destroyForcibly();
 			return outputData;
 		} catch (IOException e) {
 			LOGGER.error("Error executing script: " + e.getMessage());
@@ -102,6 +103,9 @@ public class ScriptExecutorService {
 		} catch (Exception e) {
 			LOGGER.error("Error reading script output: " + e.getMessage());
 			return null;
+		} finally {
+			if (null != process)
+				process.destroyForcibly();
 		}
 	}
 

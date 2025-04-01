@@ -533,6 +533,27 @@ public class CommonService {
 	}
 
 	/**
+	 * Method to get the TM URL from configuration file for test execution The URL
+	 * to be accessed from the python frameworks like tdklib while test execution
+	 * TODO: Change to auto detected from the request
+	 */
+	public String getTMUrlFromConfigFileForTestExecution() {
+		String tmUrl = "";
+		try {
+			// get tm.config file using base location
+			String configFilePath = AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR
+					+ Constants.TM_CONFIG_FILE;
+			LOGGER.debug("configFilePath: {}", configFilePath);
+			// get the TM URL from the config file
+			tmUrl = getConfigProperty(new File(configFilePath), Constants.TM_URL_EXEC_KEY_CONFIG_FILE);
+			LOGGER.debug("TM URL from config file: {}", tmUrl);
+		} catch (Exception e) {
+			LOGGER.error("Error getting TM URL from config file: " + e.getMessage());
+		}
+		return tmUrl;
+	}
+
+	/**
 	 * Method to get the interface from the configuration file
 	 * 
 	 * @param ipType The IP type (e.g., "IPv4" or "IPv6")
@@ -586,16 +607,15 @@ public class CommonService {
 				+ Constants.FILE_PATH_SEPERATOR;
 		return deviceLogsPath;
 	}
-	
-	
-	
+
 	/**
 	 * Constructs the crash logs path for a given execution.
 	 *
-	 * @param executionId the unique identifier for the execution
+	 * @param executionId       the unique identifier for the execution
 	 * @param executionResultId the unique identifier for the execution result
-	 * @param baseLogPath the base path where logs are stored
-	 * @return the constructed crash logs path for the specified execution and result
+	 * @param baseLogPath       the base path where logs are stored
+	 * @return the constructed crash logs path for the specified execution and
+	 *         result
 	 */
 	public String getCrashLogsPathForTheExecution(String executionId, String executionResultId, String baseLogPath) {
 		String crashLogsPath = baseLogPath + Constants.FILE_PATH_SEPERATOR + Constants.EXECUTION_KEYWORD
@@ -604,7 +624,7 @@ public class CommonService {
 				+ Constants.FILE_PATH_SEPERATOR;
 		return crashLogsPath;
 	}
-	
+
 	/**
 	 * Get file names from directory
 	 *

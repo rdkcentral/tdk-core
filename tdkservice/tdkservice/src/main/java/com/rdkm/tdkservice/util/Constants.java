@@ -420,7 +420,7 @@ public class Constants {
 	// Python command
 	public static final String PYTHON_COMMAND = "python_command";
 	// Console file upload script
-	public static final String CONSOLE_FILE_UPLOAD_SCRIPT = "//filestore//callConsoleLogUpload.py";
+	public static final String CONSOLE_FILE_UPLOAD_SCRIPT = "callConsoleLogUpload.py";
 
 	// Log upload IPv4
 	public static final String LOG_UPLOAD_IPV4 = "log.upload.ipv4";
@@ -440,8 +440,8 @@ public class Constants {
 	public static final String NONE_STRING = "none";
 	// TM config file
 	public static final String TM_CONFIG_FILE = "tm.config";
-	// AgentConsoleLog.txt
-	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsoleLog.log";
+	// AgentConsole
+	public static final String AGENT_CONSOLE_LOG_FILE = "AgentConsole.log";
 	// logs.path
 	public static final String LOGS_PATH = "logs.path";
 	// HTML line break
@@ -546,7 +546,7 @@ public class Constants {
 
 	// CI callback URL
 	public static final String CI_CALLBACK_URL = "ci_callback_url";
-	
+
 	// Rdkcertification diagnostics script file
 	public static final String RDK_DIAGNOSIS_LOG_SCRIPT = "rdk_cerfiticate_diagnosis.py";
 
@@ -567,5 +567,8 @@ public class Constants {
 
 	// CI image boxtype config file
 	public static final String CI_IMAGE_BOXTYPE_CONFIG_FILE = "ci_image_boxtype.config";
+
+	// TM URL
+	public static final String TM_URL_EXEC_KEY_CONFIG_FILE = "tmURL_exec";
 
 }

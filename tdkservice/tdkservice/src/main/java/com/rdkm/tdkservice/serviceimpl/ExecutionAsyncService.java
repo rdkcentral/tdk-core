@@ -831,6 +831,11 @@ public class ExecutionAsyncService {
 			// added for the result status reading
 			this.removeFWRequiredTextsFromLogs(executionLogfile);
 
+			if (!device.isThunderEnabled()) {
+				fileTransferService.transferAgentLogs(device, execution.getId().toString(),
+						executionResult.getId().toString());
+			}
+
 			if (execution.isDeviceLogsNeeded()) {
 				fileTransferService.transferDeviceLogs(execution, executionResult, device);
 			}
@@ -991,7 +996,7 @@ public class ExecutionAsyncService {
 	 */
 	private ExecutionEntities getExecutionEntitiesForExecution(Device device, Script script, User user,
 			String executionName, boolean isRerunOnFailure, boolean isDeviceLogsNeeded, boolean isPerformanceLogsNeeded,
-			boolean isDiagnosticLogsNeeded,String testType) {
+			boolean isDiagnosticLogsNeeded, String testType) {
 		Execution execution = new Execution();
 		execution.setName(executionName);
 		execution.setCategory(device.getCategory());
@@ -1138,7 +1143,7 @@ public class ExecutionAsyncService {
 	private String prepareReplacementString(Device device, Execution execution, ExecutionDevice executionDevice,
 			ExecutionResult executionResult, Script script) {
 		return Constants.METHOD_TOKEN + Constants.LEFT_PARANTHESIS + Constants.SINGLE_QUOTES
-				+ commonService.getTMUrlFromConfigFile() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
+				+ commonService.getTMUrlFromConfigFileForTestExecution() + Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR
 				+ Constants.SINGLE_QUOTES + AppConfig.getRealPath() + Constants.SINGLE_QUOTES
 				+ Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + commonService.getBaseLogPath()
 				+ Constants.SINGLE_QUOTES + Constants.COMMA_SEPERATOR + Constants.SINGLE_QUOTES + execution.getId()
