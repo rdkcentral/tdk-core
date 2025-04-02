@@ -49,6 +49,13 @@
       <function name='TestMgr_rdkfwupdater_GetPartnerId' />
       <function name='TestMgr_rdkfwupdater_GetSerialNum' />
       <function name='TestMgr_rdkfwupdater_GetAccountID' />
+      <function name='TestMgr_rdkfwupdater_GetOsClass' />
+      <function name='TestMgr_rdkfwupdater_GetModelNum' />
+      <function name='TestMgr_rdkfwupdater_GetBuildType' />
+      <function name='TestMgr_rdkfwupdater_GetFirmwareVersion' />
+      <function name='TestMgr_rdkfwupdater_GetEstbMac' />
+      <function name='TestMgr_rdkfwupdater_GetRemoteInfo' />
+      <function name='TestMgr_rdkfwupdater_GetRemoteVers' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -97,6 +104,21 @@
       <parameter funName='TestMgr_rdkfwupdater_GetSerialNum' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
       <parameter funName='TestMgr_rdkfwupdater_GetAccountID' parameterName='null_param' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_rdkfwupdater_GetAccountID' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetOsClass' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetOsClass' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetModelNum' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetModelNum' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetBuildType' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetBuildType' parameterName='BuildType_null_param_check' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetBuildType' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetFirmwareVersion' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetFirmwareVersion' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetEstbMac' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetEstbMac' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRemoteInfo' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRemoteInfo' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRemoteVers' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRemoteVers' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
     </parameters>
   </module>
 </xml>
