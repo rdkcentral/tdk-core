@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2020 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,28 +17,47 @@
 # limitations under the License.
 ##########################################################################
 '''
-<?xml version="1.0" encoding="UTF-8"?><xml>
-  <id/>
-  <version>4</version>
+<?xml version='1.0' encoding='utf-8'?>
+<xml>
+  <id></id>
+  <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
+  <version>11</version>
+  <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
   <name>RDKV_CERT_RVS_Reboot</name>
-  <primitive_test_id/>
+  <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
+  <primitive_test_id> </primitive_test_id>
+  <!-- Do not change primitive_test_id if you are editing an existing script. -->
   <primitive_test_name>rdkservice_rebootDevice</primitive_test_name>
+  <!--  -->
   <primitive_test_version>1</primitive_test_version>
+  <!--  -->
   <status>FREE</status>
+  <!--  -->
   <synopsis>To reboot the device for the given number of times and check the status of device after each reboot.</synopsis>
-  <groups_id/>
+  <!--  -->
+  <groups_id />
+  <!--  -->
   <execution_time>4000</execution_time>
+  <!--  -->
   <long_duration>false</long_duration>
+  <!--  -->
   <advanced_script>false</advanced_script>
-  <remarks/>
+  <!-- execution_time is the time out time for test execution -->
+  <remarks></remarks>
+  <!-- Reason for skipping the tests if marked to skip -->
   <skip>false</skip>
+  <!--  -->
   <box_types>
     <box_type>RPI-Client</box_type>
+    <!--  -->
     <box_type>RPI-HYB</box_type>
+    <!--  -->
     <box_type>Video_Accelerator</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
+    <!--  -->
   </rdk_versions>
   <test_cases>
     <test_case_id>RDKV_STABILITY_02</test_case_id>
@@ -61,11 +80,10 @@
     <test_script>RDKV_CERT_RVS_Reboot</test_script>
     <skipped>No</skipped>
     <release_version>M82</release_version>
-    <remarks/>
+    <remarks></remarks>
   </test_cases>
-  <script_tags/>
+  <script_tags />
 </xml>
-
 '''
 # use tdklib library,which provides a wrapper for tdk testcase script
 import tdklib;
@@ -73,6 +91,7 @@ from StabilityTestVariables import *
 import rebootTestUtility
 from rebootTestUtility import *
 from ast import literal_eval
+from StabilityTestUtility import *
 
 #Test component to be tested
 obj = tdklib.TDKScriptingLibrary("rdkv_stability","1",standAlone=True);
@@ -180,8 +199,10 @@ if expectedResult in result.upper():
                                             tdkTestObj.setResultStatus("FAILURE")
 
                                         #CHECK PLUGINS WITH AUTOSTART AS TRUE ARE ACTIVATED
+                                        conf_file, status = get_configfile_name(obj);
+                                        status,plugin_list = getDeviceConfigValue(conf_file,"REBOOT_PLUGINS")
                                         PluginStatusAfterReboot = literal_eval(PluginStatusAfterReboot)
-                                        activated_status = checkPluginsActivated(PluginStatusAfterReboot,ValidateActivatedPlugins)
+                                        activated_status = checkPluginsActivated(plugin_list,PluginStatusAfterReboot,ValidateActivatedPlugins)
                                         if activated_status == "SUCCESS":
                                             tdkTestObj.setResultStatus("SUCCESS")
                                         else:
@@ -217,23 +238,23 @@ if expectedResult in result.upper():
                                                 count = count +1
                                             else:
                                                 tdkTestObj.setResultStatus("FAILURE")
-                                                print("Failed to get the UI status")
+                                                logger.info("Failed to get the UI status")
                                                 break
                                         else:
                                             tdkTestObj.setResultStatus("FAILURE")
-                                            print("Failed to get the interface status")
+                                            logger.info("Failed to get the interface status")
                                             break
                                     else:
                                         tdkTestObj.setResultStatus("FAILURE")
-                                        print("Failed to get the plugin status")
+                                        logger.info("Failed to get the plugin status")
                                         break
                                 else:
                                     tdkTestObj.setResultStatus("FAILURE")
-                                    print("Failed to get the number of plugins")
+                                    logger.info("Failed to get the number of plugins")
                                     break
                             else:
                                 tdkTestObj.setResultStatus("FAILURE")
-                                print("Failed to get the Uptime")
+                                logger.info("Failed to get the Uptime")
                                 break
                         else:
                             tdkTestObj.setResultStatus("FAILURE")
