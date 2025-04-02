@@ -1012,7 +1012,6 @@ def monitorVideoTestUsingRestAPI(obj,validation_dict,check_pattern,timeout):
             file_check_count += 1
             time.sleep(1);
 
-
     while logging_flag:
         if continue_count > timeout:
             hang_detected = 1
@@ -1353,19 +1352,33 @@ def getTestURLs(players_list,appArguments):
 
 # Function to set the primary post-requisites
 def setMediaTestPostRequisites(obj,webkit_browser_instance,webkit_console_socket):
+    global next_z_order_client
     post_requisite_status = "SUCCESS"
     if logging_method == "WEB_INSPECT" or webkit_console_socket != None:
         webkit_console_socket.disconnect();
         time.sleep(3);
 
     launch_status = launchPlugin(obj,webkit_browser_instance,"about:blank")
+    destroy_status = destroyPlugin(obj,webkit_browser_instance)
     # TODO webkit browser has to be killed, but when launched again it is not
     # listed as clients after killing. This can be handled when the issues are fixed
-    if "SUCCESS" in launch_status:
-        if next_z_order_client != None:
-            move_status = moveToFrontClient(obj,next_z_order_client)
-            if "SUCCESS" not in move_status:
-                post_requisite_status = "FAILURE"
+    if "SUCCESS" in launch_status and "SUCCESS" in destroy_status:
+        tdkTestObj = obj.createTestStep('rdkservice_getValue');
+        tdkTestObj.addParameter("method","org.rdk.RDKShell.1.getZOrder");
+        tdkTestObj.executeTestCase("SUCCESS");
+        result  = tdkTestObj.getResult();
+        details = tdkTestObj.getResultDetails();
+        clients_list = ast.literal_eval(details)["clients"]
+        # remove unwanted process from z-order list
+        clients_list = exclude_from_zorder(clients_list)
+        print("Clients Z-Order: %s" %(clients_list))
+        if len(clients_list) > 0:
+            if clients_list[0] == next_z_order_client:
+                move_status = "SUCCESS"
+            elif next_z_order_client != None:
+                move_status = moveToFrontClient(obj,next_z_order_client)
+                if "SUCCESS" not in move_status:
+                    post_requisite_status = "FAILURE"
     else:
         post_requisite_status = "FAILURE"
 
@@ -1395,3 +1408,21 @@ def validateLatency(obj):
         print("\n Please Configure the PLAYBACK_START_THRESHOLD_VALUE in config file \n")
         test_result = "FAILURE"
     return test_result
+
+def destroyPlugin(obj,plugin):
+    print("\nDestroying %s using RDKShell..." %(plugin))
+    tdkTestObj = obj.createTestStep('rdkservice_setValue')
+    params = '{"callsign":"'+plugin+'"}'
+    tdkTestObj.addParameter("method","org.rdk.RDKShell.1.destroy")
+    tdkTestObj.addParameter("value",params)
+    tdkTestObj.executeTestCase(expectedResult);
+    result = tdkTestObj.getResult();
+    info = tdkTestObj.getResultDetails();
+    if "SUCCESS" in result:
+        print("Destroyed %s plugin " %(plugin))
+        tdkTestObj.setResultStatus("SUCCESS")
+        return "SUCCESS"
+    else:
+        print("Unable to Destroy %s plugin " %(plugin))
+        tdkTestObj.setResultStatus("FAILURE")
+        return "FAILURE"
