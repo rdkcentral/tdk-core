@@ -231,3 +231,13 @@ encrypt_video_duration = 150
 
 #time in minutes till the test should be performed
 encrypt_trickplay_duration = 1440
+
+#Configuration for RDK Service Stress Testing  iterations can be changed
+iterations = "200"
+methods = [
+    "org.rdk.System.getDeviceInfo",
+    "org.rdk.DisplaySettings.getConnectedAudioPorts",
+    "org.rdk.DisplaySettings.getMuted",
+    "org.rdk.DisplaySettings.getVolumeLevel",
+    "org.rdk.NetworkManager.1.GetPublicIP"
+]

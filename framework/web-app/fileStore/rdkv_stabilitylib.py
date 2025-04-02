@@ -29,6 +29,8 @@ import importlib
 import sys
 from SecurityTokenUtility import *
 import web_socket_util
+import gevent
+import gevent.monkey
 
 deviceIP=""
 devicePort=""
@@ -82,7 +84,7 @@ def postCURLRequest(data,securityEnabled):
 #---------------------------------------------------------------
 #EXECUTE CURL REQUESTS
 #---------------------------------------------------------------
-def execute_step(Data):
+def execute_step(Data,IsPerformanceStressTest="NO"):
     status = "SUCCESS"
     global securityEnabled
     try:
@@ -123,12 +125,18 @@ def execute_step(Data):
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
 
-            IsPerformanceSelected = libObj.parentTestCase.performanceBenchMarkingEnabled
-            if IsPerformanceSelected == "true":
-                conf_file,result_conf = getConfigFileName(libObj.realpath)
-                result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
-                time_taken = response.elapsed.total_seconds()
-                print("Time Taken for",Data,"is :", time_taken)
+            #Whether to check the API response time
+            conf_file,result_conf = rdkv_performancelib.getConfigFileName(libObj.realpath)
+            perf_status, IsPerformanceSelected = rdkv_performancelib.getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
+            if IsPerformanceStressTest == "YES" or IsPerformanceSelected == "true":
+                time_taken = round(response.elapsed.total_seconds() * 1000, 3)
+                print ("Time Taken for",Data,"is :", time_taken, "ms")
+                output_file = '{}{}_{}_{}_ServiceAPIResponseTime.txt'.format(libObj.logpath,str(libObj.execID),str(libObj.execDevId),str(libObj.resultId))
+                time_data = Data + ":" + str(time_taken) + " ms"
+                write_time_data(Data,str(time_taken),output_file)
+            if IsPerformanceStressTest == "NO" and IsPerformanceSelected == "true":
+                result_time, max_response_time = rdkv_performancelib.getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
+                time_taken = round(response.elapsed.total_seconds() * 1000, 3)
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
                     print("Device took more than usual to respond.")
                     print("Exiting the script")
@@ -548,3 +556,35 @@ def rdkservice_launchAndDestroy(plugin,uri=""):
     else:
         print("\n Error while launching {} plugin".format(plugin))
     return result
+
+#---------------------------------------------------------------------------
+#TO INVOKE APIS SIMULTANEOUSLY
+#---------------------------------------------------------------------------
+def make_requests(method):
+    data = '"method":"'+method+'"'
+    result = execute_step(data, "YES")
+    return method, result
+
+def rdkservice_synchronous_request(method):
+    try:
+        jobs = []
+        gevent.monkey.patch_all()
+        failed_requests = []
+        for element in method:
+            job = gevent.spawn(make_requests, element)
+            jobs.append(job)
+
+        gevent.joinall(jobs)
+
+        for job in jobs:
+            method_name, result = job.value
+            if result == "EXCEPTION OCCURRED":
+                failed_requests.append(method_name)
+
+        if not failed_requests:
+            return "SUCCESS"
+        else:
+            return failed_requests
+    except Exception as e:
+        print("Failure:", str(e))
+        return "FAILURE"

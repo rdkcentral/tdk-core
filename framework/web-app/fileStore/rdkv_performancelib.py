@@ -107,7 +107,7 @@ def postCURLRequest(data,securityEnabled):
 #---------------------------------------------------------------
 #EXECUTE CURL REQUESTS
 #---------------------------------------------------------------
-def execute_step(Data,IsPerformanceSelected="false"):
+def execute_step(Data,IsPerformanceStressTest="NO"):
     status = "SUCCESS"
     global securityEnabled
     try:
@@ -147,17 +147,18 @@ def execute_step(Data,IsPerformanceSelected="false"):
             result = json_response.get("result")
             if result != None and "'success': False" in str(result):
                 result = "EXCEPTION OCCURRED"
-            if IsPerformanceSelected == "YES":
-                time_taken = response.elapsed.total_seconds()
-                print("Time taken for",Data,"is :", time_taken)
-                return time_taken;
-            conf_file = getConfigFileName(libObj.realpath)
-            IsPerformanceSelected = getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
-            if IsPerformanceSelected == "true":
-                conf_file,result_conf = getConfigFileName(libObj.realpath)
-                result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
-                time_taken = response.elapsed.total_seconds()
-                print("Time Taken for",Data,"is :", time_taken)
+
+            #Whether to check the API response time
+            conf_file,result_conf = rdkv_performancelib.getConfigFileName(libObj.realpath)
+            perf_status, IsPerformanceSelected = rdkv_performancelib.getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
+            if IsPerformanceStressTest == "YES" or IsPerformanceSelected == "true":
+                time_taken = round(response.elapsed.total_seconds() * 1000, 3)
+                print ("Time Taken for",Data,"is :", time_taken, "ms")
+                output_file = '{}{}_{}_{}_ServiceAPIResponseTime.txt'.format(libObj.logpath,str(libObj.execID),str(libObj.execDevId),str(libObj.resultId))
+                time_data = Data + ":" + str(time_taken) + " ms"
+                write_time_data(Data,str(time_taken),output_file)
+            if IsPerformanceStressTest == "NO" and IsPerformanceSelected == "true":
+                result_time, max_response_time = rdkv_performancelib.getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
                     print("Device took more than usual to respond.")
                     print("Exiting the script")
