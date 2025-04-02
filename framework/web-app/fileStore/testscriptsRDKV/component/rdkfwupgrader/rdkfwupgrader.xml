@@ -130,6 +130,77 @@
           <parameter name="null_param" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetPartnerId" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetPartnerId</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetSerialNum" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetSerialNum</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetAccountID" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetAccountID</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetOsClass" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetOsClass</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetModelNum" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetModelNum</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetBuildType" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetBuildType</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="BuildType_null_param_check" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetFirmwareVersion" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetFirmwareVersion</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetRemoteInfo" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetRemoteInfo</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetRemoteVers" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetRemoteVers</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetEstbMac" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetEstbMac</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
