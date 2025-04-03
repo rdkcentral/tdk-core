@@ -358,7 +358,7 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
                    skipped_testCases.append(test.split(".")[1].strip())
         if not skipped:    
             print("Executing ",test)
-            testIterator=test[0]
+            testIterator=test.split('.')[0].strip()
             print("Test Iterator = ",testIterator)
             commands = [ "S", str(testIterator) ];
             if "PLAT_DS_SetDeepSleep_L1" in test or "L2_SetDeepSleepAndVerifyWakeUp10s" in test:
@@ -366,6 +366,8 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
                 print("Marking test as FAILURE , please execute manually and update result")
                 output = "TESTCASE FAILURE"
             else:
+                if "dsGetDisplay_L1_positive" in test:
+                    runTime=30
                 output = executeCommands(session,commands,runTime);
         def escape_ansi(line):
             if isinstance(line, bytes):  # Ensure it's a string
