@@ -98,21 +98,35 @@
 
         <testCase testCaseId="MN_01" testCaseName= "Monitor_Reset_Statistics_WebKitBrowser"  desc="Resets memory and process statistics for a single service">
             <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Reset_Statistics" method="Reset_Statistics" saveResult="true">
+	    <testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence"  action="externalFnCall" saveResult="true">
+		<resultGeneration useMethodTag="check_webkit_presence">
+                        <arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
+                </resultGeneration>
+            </testStep>
+	    <testStep testStepId="2" name="Reset_Statistics" method="Reset_Statistics">
                 <params>
                   <param tag="callsign"  value="WebKitBrowser"/>
                 </params>
-              <resultGeneration useMethodTag="monitor_get_result_data" arguments="get_reset_statistics"/>
+		<resultGeneration useMethodTag="monitor_get_result_data">
+			<arguments value="get_reset_statistics" usePreviousResult="true" Id="1" useMethodTag="monitor_get_webkit_presence"/>
+		</resultGeneration>
             </testStep>
         </testCase>
 
         <testCase testCaseId="MN_02" testCaseName= "Monitor_Get_Status_WebKitBrowser"  desc="Lists the service statistics">
             <testCaseInfo testCaseType="direct" />
-            <testStep testStepId="1" name="Get_Status" method="Get_Status" saveResult="true">
+	    <testStep testStepId="1" name="Check_WebKitBrowser_Details_Presence"  action="externalFnCall" saveResult="true">
+		<resultGeneration useMethodTag="check_webkit_presence">
+			<arguments useConfigFile="true" key="MONITOR_JSON_FILE_LOCATION"/>
+		</resultGeneration>
+            </testStep>
+	    <testStep testStepId="2" name="Get_Status" method="Get_Status" saveResult="true">
                 <params>
-                  <param tag="plugin" value="WebKitBrowser" indexOnly="true" />
+                  <param tag="plugin" value="WebKitBrowser" indexOnly="true"/>
                 </params>
-              <resultGeneration useMethodTag="monitor_get_result_data" arguments="get_status"  />
+		<resultGeneration useMethodTag="monitor_get_result_data">
+			<arguments value="get_status" usePreviousResult="true" Id="1" useMethodTag="monitor_get_webkit_presence"/>
+                </resultGeneration>
             </testStep>
         </testCase>
 
