@@ -138,6 +138,10 @@ audio_src_url_mkv = test_streams_base_path + "TDK_Asset_Waterfall_Audio_MKV.mkv"
 video_src_url_webm_4k_vp9 = test_streams_base_path + "DASH_VP9_OPUS_WebM/4k.webm"
 #4K AV1 URL
 video_src_url_4k_av1 = test_streams_base_path + "TDK_Asset_Sunrise_AV1_2160p.mp4"
+#4K HEVC MKV URL
+video_src_url_hevc_mkv = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_MKV.mkv"
+#HEVC_MK 30Sec URL
+video_src_url_hevc_mkv_30sec = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_30Sec_MKV.mkv"
 
 
 # Long duration src streams. Streams should be of minimum 5-10 minutes
