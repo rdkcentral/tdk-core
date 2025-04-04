@@ -21,6 +21,8 @@ package com.rdkm.tdkservice.serviceimpl;
 
 import java.io.File;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,8 +35,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+
+import com.rdkm.tdkservice.exception.UserInputException;
 
 /*
  * The HttpService class provides methods for sending HTTP requests.
@@ -89,6 +94,7 @@ public class HttpService {
 	 * @param requestBody the body of the request; must not be null
 	 * @param headers     a map of headers to include in the request; can be null
 	 * @return a ResponseEntity containing the response as a String
+	 * @throws UserInputException       any user input related exception
 	 * @throws IllegalArgumentException if the URL or request body is null or empty
 	 * @throws RuntimeException         if an error occurs during the POST request
 	 */
@@ -112,9 +118,29 @@ public class HttpService {
 		try {
 			LOGGER.info("Sending POST request to URL: {}", url);
 			return restTemplate.exchange(url, HttpMethod.POST, entity, String.class);
+		} catch (HttpClientErrorException.Forbidden e) {
+			LOGGER.error("Access denied to this jira or Account has been blocked", e.getMessage());
+			throw new UserInputException("Access denied to this jira or Account has been blocked");
+		} catch (HttpClientErrorException.Unauthorized e) {
+			LOGGER.error("Authentication with Jira failed. Incorrect username or password", e.getMessage());
+			throw new UserInputException(
+					"Authentication with Jira failed. Incorrect username or password.Multiple attempts with incorrect credentials will lock the account.");
+		} catch (HttpClientErrorException.BadRequest e) {
+			LOGGER.error("Please check the jira field selection", e.getMessage());
+			String error = e.getMessage();
+			Pattern pattern = Pattern.compile("\\{\"message\":\"(.*?)\"\\}");
+			Matcher matcher = pattern.matcher(error);
+			if (matcher.find()) {
+				String errorMessage = matcher.group(1);
+				throw new UserInputException(errorMessage);
+			} else {
+				throw new UserInputException(error);
+			}
+
 		} catch (RestClientException e) {
 			LOGGER.error("Error during POST request to URL: {}", url, e);
 			throw new RuntimeException("Error during POST request", e);
+
 		}
 	}
 

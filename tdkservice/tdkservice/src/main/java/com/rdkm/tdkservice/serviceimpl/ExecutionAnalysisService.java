@@ -454,7 +454,7 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		Script script = scriptRepository.findByName(executionResult.getScript());
 		JiraDescriptionDTO jiraDescriptionDTO = new JiraDescriptionDTO();
 
-		String imageName = fileTransferService.getDeviceDetailsFromVersionFile(execResultID.toString());
+		String imageName = fileTransferService.getDeviceDetailsFromVersionFile(execution.getId().toString());
 
 		ExecutionDevice executionDevice = executionDeviceRepository.findByExecution(execution);
 
@@ -484,20 +484,22 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		List<String> executionNames = executionRepository.findAll().stream().map(Execution::getName)
 				.collect(Collectors.toList());
 		int count = countRerunExecutions(execution.getName(), executionNames);
-		description.append("Script Name: ").append(script.getName()).append("failed in execution: ")
-                .append(execution.getName()).append("\n\n");
-		description.append("Description:  < PROVIDE ISSUE OVERVIEW >\n\n").append("Test Steps :\n\n")
-				.append("PREREQUISITES : \n\n").append(script.getPrerequisites()).append("\n\n")
-				.append("TEST STEPS :\n\n").append(script.getAutomationApproach()).append("\n\n")
-				.append("Actual Result :  < ENTER ACTUAL RESULTS >\n\n").append("Expected Result :\n\n")
-				.append(script.getExpectedOutput()).append("\n\n").append("Image Details:\n\n").append(imageName)
-				.append("\n\n").append("Rerun status :\n");
+		description.append(script.getName()).append(" failed in execution: ").append(execution.getName())
+				.append("\n\n");
+		description.append("*Description*:  < PROVIDE ISSUE OVERVIEW >\n\n").append("*PREREQUISITES* : \n\n")
+				.append(script.getPrerequisites()).append("\n\n").append("*TEST STEPS* :\n\n")
+				.append(script.getAutomationApproach()).append("\n\n")
+				.append("*Actual Result* :  < ENTER ACTUAL RESULTS >\n\n").append("*Expected Result* :\n\n")
+				.append(script.getExpectedOutput()).append("\n\n").append("*Image Details*:\n\n").append(imageName)
+				.append("\n\n").append("*Rerun status* :\n");
 
 		if (count > 0) {
 			description.append(count).append(" reruns of the execution was performed for this result");
 		} else {
 			description.append("No reruns of the execution was performed for this result");
 		}
+
+		description.append("\n\n*Regression* : <Yes/No>");
 
 		return description.toString();
 	}
@@ -932,15 +934,13 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			String attachUrl = baseUrl + Constants.ATTACHMENT_API_ENDPOINT;
 			if (ticketCreateDTO.isExecutionLogRequired()) {
 				String execLogMessage = attachExecutionLogs(attachUrl, ticketCreateDTO.getExecutionResultId(),
-						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(),
-						ticketCreateDTO.getPassword());
+						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(), ticketCreateDTO.getPassword());
 				responseString.append(execLogMessage);
 			}
 
 			if (ticketCreateDTO.isDeviceLogRequired()) {
 				String deviceLogMessage = attachDeviceLogs(attachUrl, ticketCreateDTO.getExecutionResultId(),
-						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(),
-						ticketCreateDTO.getPassword());
+						ticketResponse.getTicketNumber(), ticketCreateDTO.getUser(), ticketCreateDTO.getPassword());
 				responseString.append(deviceLogMessage);
 			}
 
@@ -1106,15 +1106,13 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			String attachUrl = baseUrl + Constants.ATTACHMENT_API_ENDPOINT;
 			if (ticketUpdateDTO.isExecutionLogNeeded()) {
 				String execLogMessage = attachExecutionLogs(attachUrl, ticketUpdateDTO.getExecutionResultId(),
-						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(),
-						ticketUpdateDTO.getPassword());
+						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(), ticketUpdateDTO.getPassword());
 				responseString.append(execLogMessage);
 			}
 
 			if (ticketUpdateDTO.isDeviceLogNeeded()) {
 				String deviceLogMessage = attachDeviceLogs(attachUrl, ticketUpdateDTO.getExecutionResultId(),
-						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(),
-						ticketUpdateDTO.getPassword());
+						ticketUpdateDTO.getTicketNumber(), ticketUpdateDTO.getUser(), ticketUpdateDTO.getPassword());
 				responseString.append(deviceLogMessage);
 			}
 

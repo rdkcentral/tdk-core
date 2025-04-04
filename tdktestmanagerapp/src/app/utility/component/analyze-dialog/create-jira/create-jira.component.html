@@ -72,18 +72,7 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
-                                    <label for="imageversion" class="col-md-4 col-form-label">Image Version :<span style="color:red; margin-left: 0.75em;">*</span></label>
-                                    <div class="col-md-8">
-                                        <input type="text" id="imageversion" class="form-control"
-                                            formControlName="imageversion" autocomplete="off">
-                                        <div *ngIf="jiraSubmitted && jiraCreateForm.controls['imageversion']?.errors"
-                                            class="text-danger">
-                                            <small *ngIf="jiraCreateForm.controls['imageversion']?.errors?.['required']">Please
-                                                enter imageversion.</small>
-                                        </div>
-                                    </div>
-                                </div>
+                           
                                 <div class="row mb-3">
                                     <label for="desc" class="col-md-4 col-form-label">Issue Description :<span style="color:red; margin-left: 0.75em;">*</span></label>
                                     <div class="col-md-8">

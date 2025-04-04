@@ -393,8 +393,15 @@ export class CreateJiraComponent {
             this.close();
             }, 2000);
           },
-          error:(err)=>{
-  
+          error: (err) => {
+      
+              this._snakebar.open(err.message, '', {
+                duration: 4000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              });
+            
           }
         })
       }else{
@@ -434,8 +441,15 @@ export class CreateJiraComponent {
             this.close();
             }, 2000);
           },
-          error:(err)=>{
-  
+          error: (err) => {
+        
+              this._snakebar.open(err.message, '', {
+                duration: 4000,
+                panelClass: ['err-msg'],
+                horizontalPosition: 'end',
+                verticalPosition: 'top'
+              });
+            
           }
         })
       }
