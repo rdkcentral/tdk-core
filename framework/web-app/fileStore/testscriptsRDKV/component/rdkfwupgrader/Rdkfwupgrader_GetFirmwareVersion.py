@@ -101,7 +101,7 @@ obj.setLoadModuleStatus(result);
 if "SUCCESS" in result.upper():
     #Primitive test case which associated to this Script
     tdkTestObj = obj.createTestStep('rdkfwupgrader_GetFirmwareVersion');
-    tdkTestObj.addParameter("buffer_size", 25);
+    tdkTestObj.addParameter("buffer_size", 150);
     tdkTestObj.executeTestCase("SUCCESS");
     #Get the result of execution
     result = tdkTestObj.getResult();

@@ -108,7 +108,7 @@ if "SUCCESS" in result.upper():
     result = tdkTestObj.getResult();
     details = tdkTestObj.getResultDetails().strip().replace(r'\n', '\n');
 
-    print("[Expected Result]: FAILURE");
+    print("[Expected Result]: SUCCESS");
     print("[Actual Result]: %s" %result);
     
     if result == "FAILURE" and "crash" not in details:
@@ -119,8 +119,8 @@ if "SUCCESS" in result.upper():
         tdkTestObj.setResultStatus("FAILURE")
         obj.initiateReboot();
     else:
-        print("FAILURE : GetBuildType is success for null param which is not expected")
-        tdkTestObj.setResultStatus("FAILURE")
+        print("SUCCESS : GetBuildType is success for null param of BUILDTYPE enum which is expected as per API spec")
+        tdkTestObj.setResultStatus("SUCCESS")
 
     obj.unloadModule("rdkfwupgrader");
 else:
