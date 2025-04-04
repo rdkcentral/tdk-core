@@ -27,20 +27,22 @@
     <logFileNames>[]</logFileNames>
   <!-- Crash File Names of the module -->
     <crashFileNames>[]</crashFileNames>
+  <!-- Module is thundeEnabled or not -->
+    <moduleThunder>Disable</moduleThunder>
   <!-- Total functions corresponding module  -->
     <functions>
       <function name='rfc_checkconfiguredata' />
       <function name='rfc_check_setornot_configdata' />
       <function name='rfc_datamodelcheck' />
       <function name='rfc_initializefeatures' />
-      <function name='rfc_parodusstatuscheck' />
-      <function name='rfc_restartservice' />
-      <function name='rfc_rollbackdatamodelvalue' />
-      <function name='rfc_updateserverurl' />
       <function name='rfc_urlvalidate' />
       <function name='rfc_formfeaturename' />
       <function name='rfc_deletefeature' />
       <function name='rfc_deletefeaturerule' />
+      <function name='rfc_datfilechecker' />
+      <function name='rfc_partnersdefaultschecker' />
+      <function name='rfc_enable_maintenance_manager' />
+      <function name='rfc_disable_enable_maintenance_manager' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -55,16 +57,15 @@
       <parameter funName='rfc_initializefeatures' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_initializefeatures' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_initializefeatures' parameterName='expectedvalue' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='rfcparameter' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='actualvalue' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_rollbackdatamodelvalue' parameterName='feature_name' parameterType='STRING' range='A-Z' />
-      <parameter funName='rfc_updateserverurl' parameterName='RFC_XCONF_URL' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_urlvalidate' parameterName='basePath' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_urlvalidate' parameterName='configKey' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_formfeaturename' parameterName='feature_name' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_deletefeature' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
       <parameter funName='rfc_deletefeaturerule' parameterName='xconfdomainname' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_enable_maintenance_manager' parameterName='method' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_enable_maintenance_manager' parameterName='params' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_disable_enable_maintenance_manager' parameterName='method' parameterType='STRING' range='A-Z' />
+      <parameter funName='rfc_disable_enable_maintenance_manager' parameterName='params' parameterType='STRING' range='A-Z' />
     </parameters>
   </module>
 </xml>
