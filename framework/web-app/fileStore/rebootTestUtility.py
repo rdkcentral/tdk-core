@@ -37,18 +37,27 @@ StatusActivatedPlugins = []
 # OPEN A LOG FILE TO REDIRECT THE LOGS
 #--------------------------------------------------------
 def open_logfile(obj):
-    global logger;
+    global logger
     formatter = logging.Formatter('%(message)s')
     logger = logging.getLogger()
-    for handler in logger.handlers:
-        if isinstance(handler, logging.StreamHandler):
-            handler.setFormatter(formatter)
-    output_file = '{}{}_{}_{}_RebootScriptLog.txt'.format(obj.logpath,str(obj.execID),str(obj.execDevId),str(obj.resultId))
-    logger.setLevel(logging.INFO)
-    fh = logging.FileHandler(output_file, mode='w')
-    logger.addHandler(fh)
-    return logger;
 
+    # Remove existing handlers
+    for handler in logger.handlers:
+        logger.removeHandler(handler)
+
+    # Create StreamHandler for console output
+    stream_handler = logging.StreamHandler()
+    stream_handler.setFormatter(formatter)
+    logger.addHandler(stream_handler)
+
+    # Create FileHandler for file output
+    output_file = '{}{}_{}_{}_RebootScriptLog.txt'.format(obj.logpath, str(obj.execID), str(obj.execDevId), str(obj.resultId))
+    fh = logging.FileHandler(output_file, mode='w')
+    fh.setFormatter(formatter)
+    logger.addHandler(fh)
+
+    logger.setLevel(logging.INFO)
+    return logger
 
 #-------------------------------------------------------
 #VALIDATE UPTIME VALUE AFTER REBOOT
@@ -73,7 +82,7 @@ def getIFStatus(IF_name,validate):
     if rdkv_performancelib.devicePort == 80:
         output = getIFStatus_thunder(IF_name);
     else:
-        curr_status = rdkservice_getPluginStatus('org.rdk.Network')
+        curr_status = rdkservice_getPluginStatus('org.rdk.NetworkManager')
         if curr_status != "EXCEPTION OCCURRED":
             if curr_status == "activated":
                 curr_status = "activate"
@@ -81,10 +90,10 @@ def getIFStatus(IF_name,validate):
                 curr_status = "deactivate"
             time.sleep(10)
             if curr_status != "activate":
-                status = rdkservice_setPluginStatus("org.rdk.Network","activate")
+                status = rdkservice_setPluginStatus("org.rdk.NetworkManager","activate")
             if status == None:
-                method = "org.rdk.Network.1.isInterfaceEnabled"
-                value='{"interface":"ETHERNET"}'
+                method = "org.rdk.NetworkManager.1.GetInterfaceState"
+                value='{"interface":"eth0"}'
                 status = rdkservice_setValue(method,value)
                 if status != "EXCEPTION OCCURRED":
                     status = status["enabled"]
@@ -96,7 +105,7 @@ def getIFStatus(IF_name,validate):
                 elif status == "EXCEPTION":
                     output = "EXCEPTION"
                 if curr_status != "activate":
-                    rev_status = rdkservice_setPluginStatus("org.rdk.Network",curr_status)
+                    rev_status = rdkservice_setPluginStatus("org.rdk.NetworkManager",curr_status)
                 if rev_status == None:
                     logger.info("Reverted network plugin status")
                 else:
@@ -203,14 +212,16 @@ def getUIStatus(validate):
 #------------------------------------------------------
 #CHECK PLUGINS WITH AUTOSTART AS TRUE ARE ACTIVATED
 #------------------------------------------------------
-def checkPluginsActivated(statusList,validate):
+def checkPluginsActivated(plugin_list,statusList,validate):
     result = "FAILURE"
-    plugins_not_activated = [plugin_details for plugin_details in statusList if plugin_details[2] and plugin_details[1]  not in ('activated','resumed')]
+    plugin_result = "FAILURE"
+    plugins_not_activated = [plugin_details for plugin_details in statusList if plugin_details[0] in plugin_list and plugin_details[1] not in ('activated', 'resumed')]
     if not plugins_not_activated:
         result = "SUCCESS"
     else:
         logger.info("\n Details of plugins which are not in activated/resumed state after reboot:")
         logger.info(plugins_not_activated)
+    #plugin_list = ["OCDM", "DisplayInfo", "PlayerInfo"]
     if result == "FAILURE" and validate.lower() == "yes":
         exitScript(StatusActivatedPlugins,iter_no)
     elif result == "FAILURE":

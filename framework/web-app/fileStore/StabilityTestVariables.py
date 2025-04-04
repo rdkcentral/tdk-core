@@ -91,6 +91,9 @@ cobalt_randomkey_test_duration = 600
 #maximum number of URL set operation
 url_loop_count = 500
 
+#max count of times URL should be set in a loop
+max_count = 100
+
 #any valid URLs to be launched in webkit
 loop_test_url_1 = ""
 loop_test_url_2 = ""
