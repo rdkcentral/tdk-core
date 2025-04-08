@@ -66,7 +66,7 @@ public class ExecutionScheduleController {
 	 */
 	@Operation(summary = "Create the execution schedule")
 	@ApiResponse(responseCode = "201", description = "Execution Schedule created successfully")
-	@ApiResponse(responseCode = "500", description = "Error in updating device details data")
+	@ApiResponse(responseCode = "500", description = "Failed to schedule execution")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
 	public ResponseEntity<?> createExecutionSchedule(@RequestBody ExecutionScheduleDTO executionScheduleDTO) {
@@ -103,6 +103,29 @@ public class ExecutionScheduleController {
 	}
 
 	/**
+	 * This method is used to revert the cancel of the execution schedule
+	 * 
+	 * @param executionID Id of the execution schedule
+	 * @return Response for the request
+	 */
+	@Operation(summary = "Revert the cancel of the execution schedule")
+	@ApiResponse(responseCode = "200", description = "Execution Schedule reverted successfully")
+	@ApiResponse(responseCode = "500", description = "Error in reverting the cancel of the execution schedule")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@PostMapping("/schedule")
+	public ResponseEntity<?> revertCancelTask(@RequestParam UUID executionID) {
+		LOGGER.info("Reverting the cancel of the execution schedule");
+		boolean executionSchedule = executionScheduleService.revertCancelTask(executionID);
+		if (executionSchedule) {
+			LOGGER.info("Execution schedule reverted successfully");
+			return ResponseEntity.status(HttpStatus.OK).body("Execution Schedule reverted successfully");
+		} else {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to revert execution");
+		}
+
+	}
+
+	/**
 	 * This method is used to delete the execution schedule
 	 * 
 	 * @param executionScueduleID Id of the execution schedule
@@ -136,7 +159,8 @@ public class ExecutionScheduleController {
 	@GetMapping("/getAll")
 	public ResponseEntity<?> getAllExecutionSchedules(@RequestParam String category) {
 		LOGGER.info("Fetching all the execution schedules");
-		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService.getAllExecutionSchedulesByCategory(category);
+		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService
+				.getAllExecutionSchedulesByCategory(category);
 		if (executionSchedules != null) {
 			LOGGER.info("Execution schedules fetched successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(executionSchedules);

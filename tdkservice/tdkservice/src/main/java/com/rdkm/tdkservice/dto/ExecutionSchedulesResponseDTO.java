@@ -35,6 +35,16 @@ public class ExecutionSchedulesResponseDTO {
 	 * The time at which the execution is scheduled to occur.
 	 */
 	private Instant executionTime;
+	
+	/**
+	 * The start time for the cron job.
+	 */
+	private Instant cronStartTime;
+	
+	/**
+	 * The end time for the cron job.
+	 */
+	private Instant cronEndTime;
 
 	/**
 	 * The name of the job associated with the execution schedule.
@@ -57,7 +67,7 @@ public class ExecutionSchedulesResponseDTO {
 	private String details;
 
 	/**
-	 * The status of the execution schedule (e.g., "PENDING", "COMPLETED").
+	 * The status of the execution schedule (e.g., "SCHEDULED", "COMPLETED").
 	 */
 	private String status;
 

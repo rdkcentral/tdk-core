@@ -46,28 +46,48 @@ public class ExecutionSchedule extends BaseEntity {
 	private Instant executionTime;
 
 	/**
-	 * The type of schedule.
-	 * 
-	 * @see com.rdkm.tdkservice.enums.ScheduleType
+	 * The start time for the cron job
 	 */
-	private ScheduleType scheduleType;
-
+	private Instant cronStartTime;
+	
+	/**
+	 * The end time for the cron job
+	 */
+	private Instant cronEndTime;
+	
+	
 	/**
 	 * The cron expression for scheduling.
 	 */
 	private String cronExpression;
+	
+	/**
+	 * Cron query in human-readable format to be displayed on UI.
+	 */
+	private String cronQuery;
+
+	/**
+	 * The type of schedule.
+	 * 
+	 * @see com.rdkm.tdkservice.enums.ScheduleType
+	 */
+	@Enumerated(EnumType.STRING)
+	private ScheduleType scheduleType;
+
+
 
 	/**
 	 * The status of the schedule.
 	 * 
 	 * @see com.rdkm.tdkservice.enums.ScheduleStatus
 	 */
+	@Enumerated(EnumType.STRING)
 	private ScheduleStatus scheduleStatus;
 
 	/**
 	 * The list of devices for the execution.
 	 */
-	private String deviceList;
+	private String device;
 
 	/**
 	 * Represents the list of scripts.
@@ -124,4 +144,21 @@ public class ExecutionSchedule extends BaseEntity {
 	 * Represents whether diagnostic logs are needed.
 	 */
 	private boolean isDiagnosticLogsNeeded;
+
+	/**
+	 * Represents the is individual repeat execution.
+	 */
+	private boolean isIndividualRepeatExecution;
+
+	/**
+	 * Represents the callback url.This call back url is coming from CI portal and
+	 * this ci execution trigger will get added to ci_portal.The url of this
+	 * ci_portal is mentioned in this callbackurl.
+	 */
+	private String ciCallBackUrl;
+
+	/**
+	 * Represents the image version that is using for the ci trigger.
+	 */
+	private String ciImageVersion;
 }

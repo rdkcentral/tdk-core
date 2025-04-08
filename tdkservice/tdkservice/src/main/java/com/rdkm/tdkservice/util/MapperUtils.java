@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.util;
 
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -649,28 +650,58 @@ public class MapperUtils {
 	 * @param executionScheduleDTO ExecutionScheduleDTO
 	 * @return ExecutionSchedule ExecutionSchedule
 	 */
-	public static ExecutionSchedule convertToExecutionSchedule(ExecutionScheduleDTO executionScheduleDTO) {
+	public static ExecutionSchedule convertToExecutionSchedule(ExecutionScheduleDTO executionScheduleDTO,
+			String cronExpression) {
 		ExecutionSchedule executionSchedule = new ExecutionSchedule();
 		ExecutionTriggerDTO executionTriggerDTO = executionScheduleDTO.getExecutionTriggerDTO();
-		executionSchedule.setExecutionTime(executionScheduleDTO.getExecutionTime());
 		List<String> deviceList = executionTriggerDTO.getDeviceList();
-		String deviceListString = String.join(",", deviceList);
 		List<String> scriptList = executionTriggerDTO.getScriptList();
-		String scriptListString = String.join(",", scriptList);
-		String testSuiteString = String.join(",", executionTriggerDTO.getTestSuite());
-		executionSchedule.setTestSuite(testSuiteString);
-		executionSchedule.setDeviceList(deviceListString);
-		executionSchedule.setScriptList(scriptListString);
-		executionSchedule.setScheduleType(executionScheduleDTO.getScheduleType());
+		List<String> testSuiteList = executionTriggerDTO.getTestSuite();
+
+		// Setting up execution related data
+		if (null != deviceList && !deviceList.isEmpty()) {
+			executionSchedule.setDevice(deviceList.get(0));
+		}
+
+		if ((null != scriptList) && !scriptList.isEmpty()) {
+			String scriptListString = String.join(",", scriptList);
+			executionSchedule.setScriptList(scriptListString);
+		}
+
+		if ((null != testSuiteList) && !testSuiteList.isEmpty()) {
+			String testSuiteString = String.join(",", testSuiteList);
+			executionSchedule.setTestSuite(testSuiteString);
+		}
+
 		executionSchedule.setTestType(executionTriggerDTO.getTestType());
 		executionSchedule.setUser(executionTriggerDTO.getUser());
-		executionSchedule.setExecutionName(Constants.JOB + executionTriggerDTO.getExecutionName());
+		if (Utils.isEmpty(executionTriggerDTO.getExecutionName())) {
+			executionSchedule.setExecutionName(Constants.JOB + Utils.getTimeStampInUTCForExecutionName());
+		} else {
+			executionSchedule.setExecutionName(Constants.JOB + executionTriggerDTO.getExecutionName());
+
+		}
 		executionSchedule.setRepeatCount(executionTriggerDTO.getRepeatCount());
 		executionSchedule.setRerunOnFailure(executionTriggerDTO.isRerunOnFailure());
 		executionSchedule.setDeviceLogsNeeded(executionTriggerDTO.isDeviceLogsNeeded());
 		executionSchedule.setPerformanceLogsNeeded(executionTriggerDTO.isPerformanceLogsNeeded());
 		executionSchedule.setDiagnosticLogsNeeded(executionTriggerDTO.isDiagnosticLogsNeeded());
+		String categoryValue = executionScheduleDTO.getExecutionTriggerDTO().getCategory();
+		Category category = Category.valueOf(categoryValue.toUpperCase());
+		executionSchedule.setCategory(category);
+		executionSchedule.setCiCallBackUrl(executionTriggerDTO.getCiCallBackUrl());
+		executionSchedule.setCiImageVersion(executionTriggerDTO.getCiImageVersion());
+		executionSchedule.setIndividualRepeatExecution(executionTriggerDTO.isIndividualRepeatExecution());
+
+		// Execution schedule related data
+		executionSchedule.setScheduleType(executionScheduleDTO.getScheduleType());
 		executionSchedule.setScheduleStatus(ScheduleStatus.SCHEDULED);
+		executionSchedule.setExecutionTime(executionScheduleDTO.getExecutionTime());
+		executionSchedule.setCronExpression(cronExpression);
+		executionSchedule.setCronEndTime(executionScheduleDTO.getCronEndTime());
+		executionSchedule.setCronStartTime(executionScheduleDTO.getCronStartTime());
+		executionSchedule.setCronQuery(executionScheduleDTO.getCronQuery());
+
 		return executionSchedule;
 	}
 

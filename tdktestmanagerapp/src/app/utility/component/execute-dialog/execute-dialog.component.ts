@@ -796,7 +796,7 @@ export class ExecuteDialogComponent {
         individualRepeatExecution: this.repeatTypeBoolean,
         user:this.loggedinUser.userName,
         category:this.userCategory,
-        executionName:this.executeForm.value.executionName,
+        executionName:this.executionName,
         repeatCount:this.executeForm.value.executionnumber,
         deviceLogsNeeded: this.logTransfer,
         diagnosticLogsNeeded: this.diagnosis,
@@ -817,8 +817,7 @@ export class ExecuteDialogComponent {
         }, 3000);
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg, '', {
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',

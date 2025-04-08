@@ -19,6 +19,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.repository;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -49,4 +50,13 @@ public interface ExecutionScheduleRepository extends JpaRepository<ExecutionSche
 	 * @return list of Execution Schedules
 	 */
 	List<ExecutionSchedule> findAllByCategory(Category category);
+
+	/**
+	 * This method is used to check the existence of the execution by name 
+	 * and device.
+	 * @param executionTime
+	 * @param string
+	 * @return
+	 */
+	boolean existsByExecutionTimeAndDevice(Instant executionTime, String string);
 }

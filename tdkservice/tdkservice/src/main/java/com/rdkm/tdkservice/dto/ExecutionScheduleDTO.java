@@ -38,6 +38,31 @@ public class ExecutionScheduleDTO {
 	private Instant executionTime;
 
 	/**
+	 * The start time for the cron job
+	 */
+	private Instant cronStartTime;
+
+	/**
+	 * The end time for the cron job
+	 */
+	private Instant cronEndTime;
+
+	/**
+	 * This is the Cron Expression for scheduling the execution
+	 */
+	private String cronExpression;
+
+	/**
+	 * The type of cron expression.
+	 */
+	private String cronType;
+
+	/**
+	 * The cron query for scheduling the execution in a unique human readable format
+	 */
+	private String cronQuery;
+
+	/**
 	 * The type of schedule.
 	 * 
 	 * @see com.rdkm.tdkservice.enums.ScheduleType
