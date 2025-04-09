@@ -279,9 +279,10 @@ h2.summary {
   display: flex;
   align-items: center;
   border: 1px solid #d1d4d4;
+  height: 45px;
 }
 .refrs-section{
-  height: 40px;
+  height: 45px;
 }
 .select-filter {
   font-size: 0.8rem;

@@ -45,7 +45,7 @@ import { DateDialogComponent } from '../../utility/component/date-dialog/date-di
 import { MatPaginator } from '@angular/material/paginator';
 import { ScheduleButtonComponent } from '../../utility/component/execution-button/schedule-button.component';
 import { TdkInstallComponent } from '../../utility/component/tdk-install/tdk-install.component';
-
+import { LoaderComponent } from '../../utility/component/loader/loader.component';
 
 @Component({
   selector: 'app-execution',
@@ -56,6 +56,7 @@ import { TdkInstallComponent } from '../../utility/component/tdk-install/tdk-ins
     FormsModule,
     ReactiveFormsModule,
     MaterialModule,
+    LoaderComponent
 
   ],
   templateUrl: './execution.component.html',
@@ -372,6 +373,9 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   searchDevice ='';
   historyInterval:any;
   deviceInterval:any;
+  showLoader =false;
+  noDataFound : string = '';
+  isNoDataVisible = false;
 
   constructor(
     private authservice: AuthService,
@@ -429,12 +433,13 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   getAllExecutions():void{
     this.storeSelection();
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
-      
+      this.showLoader=true;
       this.executionservice.getAllExecutionByName(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
+          this.showLoader = false; 
           setTimeout(() => {
             this.reSoreSelection();
           }, 100);
@@ -447,11 +452,13 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
+      this.showLoader=true;
       this.executionservice.getAllExecutionByScript(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
+          this.showLoader = false; 
         },
         error: (err) => {
           if(err ==='No Executions available'){
@@ -461,11 +468,13 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Device' && this.searchValue != ''){
+      this.showLoader=true;
       this.executionservice.getAllExecutionByDevice(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
+          this.showLoader = false; 
         },
         error: (err) => {
           if(err ==='No Executions available'){
@@ -475,18 +484,22 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       });
     } else if(this.selectedCategory === 'User' && this.selectedOption != ''){
+      this.showLoader=true;
       this.executionservice.getAllExecutionByUser(this.selectedOption, this.selectedDfaultCategory, this.currentPage, this.pageSize).subscribe(res => {
         let data = JSON.parse(res);
         this.rowData = data.executions;
         this.totalItems = data.totalItems;
+        this.showLoader = false; 
       });
     }
     else {
+      this.showLoader=true;
       this.executionservice.getAllexecution(this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next:(res)=>{
           let data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
+          this.showLoader = false; 
           setTimeout(() => {
             this.reSoreSelection();
           }, 0);
@@ -567,6 +580,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.executionDestroy$.next();
       this.getDeviceStatus();
       this.getAllExecutions();
+      this.allExecutionScheduler();
     } else if (val === 'RDKC') {
       this.categoryName = 'Camera';
       this.selectedDfaultCategory = 'RDKC';
@@ -575,6 +589,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.executionDestroy$.next();
       this.getDeviceStatus();
       this.getAllExecutions();
+      this.allExecutionScheduler();
     } else {
       this.selectedDfaultCategory = 'RDKV';
       this.categoryName = 'Video';
@@ -583,6 +598,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.executionDestroy$.next();
       this.getDeviceStatus();
       this.getAllExecutions();
+      this.allExecutionScheduler();
     }
   }
   /**
@@ -692,10 +708,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
    * Initiallize the execution scheduler
   */
   allExecutionScheduler(){
+    this.showLoader=true;
+    this.isNoDataVisible = false;
+    this.rowDataSchudle = [];
     this.executionservice.getAllexecutionScheduler(this.selectedDfaultCategory).subscribe({
       next:(res)=>{
         let data = JSON.parse(res);
         this.rowDataSchudle = data;
+        this.showLoader = false;
+        if (this.rowDataSchudle.length == 0) {
+            this.isNoDataVisible = true;
+            this.noDataFound = 'No Rows to Show';
+        } else {
+            this.isNoDataVisible = false;
+        }
       },
       error:(err)=>{
           this._snakebar.open(err, '', {

@@ -228,6 +228,29 @@ limitations under the License.
                     <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
                       <i class="bi bi-arrow-clockwise download-icon"></i></button>
                     <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
+                  </div>
+                </div>
+                <div class="col"></div>
+              </div>
+              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'FAILURE'">
+                <div class="col">
+                  <div class="row mt-1 row-align">
+                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
+                    <div class="col-md-9">
+                      <select class="form-select select-filter" aria-label="Default select example"
+                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
+                          <option value="all" default>Select</option>
+                          <option value="SUCCESS">SUCCESS</option>
+                          <option value="FAILURE">FAILURE</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="btns-option">
+                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
+                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
+                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
                     <button type="button" class="script-btn" matTooltip="Rerun Of Failure Scripts" (click)="rerunFailure()">
                       <i class="bi bi-arrow-repeat download-icon"></i>
                     </button>
@@ -235,7 +258,31 @@ limitations under the License.
                 </div>
                 <div class="col"></div>
               </div>
-              <div class="row seach-section" *ngIf="data.executionType === 'MULTISCRIPT'  && scriptStatus.status === 'FAILURE'">
+              <div class="row seach-section" *ngIf="(data.executionType === 'MULTITESTSUITE' || data.executionType === 'TESTSUITE')  && scriptStatus.status === 'SUCCESS' ">
+                <div class="col">
+                  <div class="row mt-1 row-align">
+                    <label for="device" class="col-md-3 col-form-label">Filter by</label>
+                    <div class="col-md-9">
+                      <select class="form-select select-filter" aria-label="Default select example"
+                          id="priority" [(ngModel)]="filterStatus" (change)="applyFilter()">
+                          <option value="all" default>Select</option>
+                          <option value="SUCCESS">SUCCESS</option>
+                          <option value="FAILURE">FAILURE</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="btns-option">
+                    <button type="button" class="script-btn" (click)="clearSelections()" matTooltip="Clear Filters">
+                      <i class="bi bi-arrow-clockwise download-icon"></i></button>
+                    <button type="button" class="script-btn" matTooltip="Repeat Execution" (click)="repeatExecution()"><i class="bi bi-repeat download-icon"></i></button>
+                  
+                  </div>
+                </div>
+                <div class="col"></div>
+              </div>
+              <div class="row seach-section" *ngIf="(data.executionType === 'MULTITESTSUITE' || data.executionType === 'TESTSUITE') && scriptStatus.status === 'FAILURE'">
                 <div class="col">
                   <div class="row mt-1 row-align">
                     <label for="device" class="col-md-3 col-form-label">Filter by</label>

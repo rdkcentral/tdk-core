@@ -352,7 +352,7 @@ getAlldeviceType(): void{
         synopsis : this.firstFormGroup.value.synopsis,
         executionTimeOut : this.firstFormGroup.value.executiontimeout,
         primitiveTestName: this.defaultPrimitive,
-        deviceTypes: this.firstFormGroup.value.devicetype,
+        deviceTypes: this.deviceNameArr,
         skipExecution:this.firstFormGroup.value.skipexecution,
         longDuration:this.firstFormGroup.value.longdurationtest,
         testId: this.secondFormGroup.value.testcaseID,

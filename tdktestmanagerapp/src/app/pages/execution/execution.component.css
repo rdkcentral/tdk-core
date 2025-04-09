@@ -313,8 +313,12 @@ body,
   display: inline-flex;
 }
 .loader-row {
-  margin-right: 0;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  z-index: 1;
 }
+
 ::ng-deep .multiselect-dropdown .selected-item {
   max-width: 100% !important;
 }
@@ -542,4 +546,7 @@ body,
 .seach-input {
   width: 150px;
   margin-left: 3px;
+}
+::ng-deep .ag-theme-quartz .ag-overlay-no-rows-center{
+  display: none !important;
 }
