@@ -428,4 +428,135 @@
 	     	</resultGeneration>
 	</testStep>
     </testCase>
+
+    <!-- Test case 21 -->
+    <testCase testCaseId="MM_21" testCaseName="MaintenanceManager_Set_Foreground_MaintenanceMode_with_Invalid_OptOut" desc="Check if the SetMaintenanceMode method returns an error when maintenancemode as foreground and invalid optOut parameter is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Foreground_MaintenanceMode_with_Invalid_OptOut" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="FOREGROUND" />
+                <param tag="optOut"  value="INVALID_OPTOUT" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 22 -->
+    <testCase testCaseId="MM_22" testCaseName="MaintenanceManager_Set_Background_MaintenanceMode_with_Empty_OptOut" desc="Check if the SetMaintenanceMode method returns an error when maintenancemode as background and empty optOut parameter is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Background_MaintenanceMode_with_Empty_OptOut" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="BACKGROUND" />
+                <param tag="optOut"  value="" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 23 -->
+    <testCase testCaseId="MM_23" testCaseName="MaintenanceManager_Set_Specialchars_MaintenanceMode_with_BYPASS_OPTOUT" desc="Check if the SetMaintenanceMode method returns an error when Maintenancemode as special character and with OptOut parameter as BYPASS_OPTOUT">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Specialchars_MaintenanceMode_with_BYPASS_OPTOUT" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="@" />
+                <param tag="optOut"  value="BYPASS_OPTOUT" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 24 -->
+    <testCase testCaseId="MM_24" testCaseName="MaintenanceManager_Check_Stop_Maintenance_Error"  desc="Check if the stop maintenance methods returns an error when the plugin is in a deactivated state">
+        <testCaseInfo testCaseType="direct"/>
+        <testCasePreRequisite>
+            <prerequisite requisiteId="1" requisiteName="Deactivate_Plugin">
+                <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+                    <params>
+                        <param tag="plugin" value="org.rdk.MaintenanceManager" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.MaintenanceManager" />
+                </testStep>
+                <testStep testStepId="2" name="Deactivate_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.MaintenanceManager" />
+                    <params>
+                        <param tag="callsign" value="org.rdk.MaintenanceManager" />
+                    </params>
+                </testStep>
+                <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller">
+                    <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isActivated,org.rdk.MaintenanceManager" />
+                    <params>
+                        <param tag="plugin" value="org.rdk.MaintenanceManager" indexOnly="true" />
+                    </params>
+                    <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.MaintenanceManager" expectedValues="deactivated"/>
+                </testStep>
+            </prerequisite>
+        </testCasePreRequisite>
+	
+	<testStep testStepId="1" name="Check_Stop_Maintenance_API_Response" method="MaintenanceManager_Stop_Maintenance" PluginOnStep="yes">
+            <resultGeneration useMethodTag="controller_check_error_message">
+                <expectedValues value="ERROR_UNAVAILABLE,The service is in an illegal state!!!."/>
+                <arguments value="deactivate_check_error_message"/>
+            </resultGeneration>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 25 -->
+    <testCase testCaseId="MM_25" testCaseName="MaintenanceManager_Set_Numeric_MaintenanceMode_with_None_OptOut" desc="Check if the SetMaintenanceMode method returns an error when the MaintenanceMode is set to a numeric value (123) and the OptOut parameter is none">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Numeric_MaintenanceMode_with_None_OptOut" method="MaintenanceManager_Set_Maintenance_Mode_Negative_MaintenanceMode">
+            <params>
+                <param tag="maintenanceMode"  value="123" />
+                <param tag="optOut"  value="NONE" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 26 -->
+    <testCase testCaseId="MM_26" testCaseName="MaintenanceManager_Set_Foreground_MaintenanceMode_with_Numeric_OptOut" desc="Check if the SetMaintenanceMode method returns an error when maintenancemode as foreground and invalid optOut parameter is provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Foreground_MaintenanceMode_with_Numeric_OptOut" method="MaintenanceManager_Set_Maintenance_Mode_Negative_OptOut">
+            <params>
+                <param tag="maintenanceMode"  value="FOREGROUND" />
+                <param tag="optOut"  value="456" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 27 -->
+    <testCase testCaseId="MM_27" testCaseName="MaintenanceManager_Set_Specialchars_MaintenanceMode_with_ENFORCE_OPTOUT_OptOut" desc="Check if the SetMaintenanceMode method returns an error when Maintenancemode set as special character and with OptOut parameter set as ENFORCE_OPTOUT">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Specialchars_MaintenanceMode_with_ENFORCE_OPTOUT_OptOut" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="@" />
+                <param tag="optOut"  value="ENFORCE_OPTOUT" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 28 -->
+    <testCase testCaseId="MM_28" testCaseName="MaintenanceManager_Set_Specialchars_MaintenanceMode_with_None_OptOut" desc="Check if the SetMaintenanceMode method returns an error when the MaintenanceMode contains special characters and the OptOut parameter is none">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Specialchars_MaintenanceMode_with_None_OptOut" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="@#$%^*()" />
+                <param tag="optOut"  value="NONE" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
+
+    <!-- Test case 29 -->
+    <testCase testCaseId="MM_29" testCaseName="MaintenanceManager_Set_Foreground_MaintenanceMode_with_Specialchars_OptOut" desc="Check if the SetMaintenanceMode method returns an error when the OptOut parameter contains special characters while the MaintenanceMode is foreground">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Set_Foreground_MaintenanceMode_with_Specialchars_OptOut" method="MaintenanceManager_Set_Maintenance_Mode">
+            <params>
+                <param tag="maintenanceMode"  value="FOREGROUND" />
+                <param tag="optOut"  value="@#$%^*()" />
+            </params>
+            <resultGeneration useMethodTag="success_negative_status_validation"/>
+        </testStep>
+    </testCase>
 </testPlugin>
