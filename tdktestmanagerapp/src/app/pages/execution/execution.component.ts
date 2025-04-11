@@ -433,14 +433,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   getAllExecutions():void{
     this.storeSelection();
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
-      this.showLoader=true;
-      this.executionservice.getAllExecutionByName(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
+   this.executionservice.getAllExecutionByName(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
-          this.showLoader = false; 
-          setTimeout(() => {
+        setTimeout(() => {
             this.reSoreSelection();
           }, 100);
         },
@@ -452,14 +450,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
-      this.showLoader=true;
       this.executionservice.getAllExecutionByScript(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
-          this.showLoader = false; 
-        },
+    },
         error: (err) => {
           if(err ==='No Executions available'){
             this.rowData = [];
@@ -468,14 +464,12 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       })
     } else if(this.selectedCategory === 'Device' && this.searchValue != ''){
-      this.showLoader=true;
-      this.executionservice.getAllExecutionByDevice(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
+   this.executionservice.getAllExecutionByDevice(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
           const data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
-          this.showLoader = false; 
-        },
+      },
         error: (err) => {
           if(err ==='No Executions available'){
             this.rowData = [];
@@ -484,22 +478,20 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       });
     } else if(this.selectedCategory === 'User' && this.selectedOption != ''){
-      this.showLoader=true;
       this.executionservice.getAllExecutionByUser(this.selectedOption, this.selectedDfaultCategory, this.currentPage, this.pageSize).subscribe(res => {
         let data = JSON.parse(res);
         this.rowData = data.executions;
         this.totalItems = data.totalItems;
-        this.showLoader = false; 
+      
       });
     }
     else {
-      this.showLoader=true;
       this.executionservice.getAllexecution(this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next:(res)=>{
           let data = JSON.parse(res);
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
-          this.showLoader = false; 
+  
           setTimeout(() => {
             this.reSoreSelection();
           }, 0);
@@ -509,6 +501,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
             this.rowData = [];
             this.totalItems =0;
           }
+
         }
 
       })

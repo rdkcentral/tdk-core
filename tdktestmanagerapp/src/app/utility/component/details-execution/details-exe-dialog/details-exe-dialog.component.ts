@@ -275,7 +275,6 @@ export class DetailsExeDialogComponent {
    * the parent object to null.
    */
   togglePanel(parent: any, id:any, index:number):void {
-    this.showLoader = true;
     parent.expanded = !parent.expanded;
     this.executionResultId = id;
     if (parent.expanded) {
@@ -286,7 +285,6 @@ export class DetailsExeDialogComponent {
           parent.details = JSON.parse(res);
           const logs = parent.details.logs;
           parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
-          this.showLoader = false;
           this.changeDetectorRef.detectChanges();
           
         });
@@ -295,7 +293,6 @@ export class DetailsExeDialogComponent {
       parent.details = null; 
       parent.formatLogs = '';
       this.expandedIndexes = this.expandedIndexes.filter(i => i !== index);
-      this.showLoader = false;
     }
   }
 
