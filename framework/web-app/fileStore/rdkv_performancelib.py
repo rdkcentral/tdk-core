@@ -150,8 +150,8 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
                 result = "EXCEPTION OCCURRED"
 
             #Whether to check the API response time
-            conf_file,result_conf = rdkv_performancelib.getConfigFileName(libObj.realpath)
-            perf_status, IsPerformanceSelected = rdkv_performancelib.getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
+            conf_file,result_conf = getConfigFileName(libObj.realpath)
+            perf_status, IsPerformanceSelected = getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
             if IsPerformanceStressTest == "YES" or IsPerformanceSelected == "true":
                 time_taken = round(response.elapsed.total_seconds() * 1000, 3)
                 print ("Time Taken for",Data,"is :", time_taken, "ms")
@@ -159,7 +159,7 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
                 time_data = Data + ":" + str(time_taken) + " ms"
                 write_time_data(Data,str(time_taken),output_file)
             if IsPerformanceStressTest == "NO" and IsPerformanceSelected == "true":
-                result_time, max_response_time = rdkv_performancelib.getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
+                result_time, max_response_time = getDeviceConfigKeyValue(conf_file,"MAX_RESPONSE_TIME")
                 if (float(time_taken) <= 0 or float(time_taken) > float(max_response_time)):
                     print("Device took more than usual to respond.")
                     print("Exiting the script")
