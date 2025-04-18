@@ -410,8 +410,21 @@ public showConfirmPasswordOnPress: boolean = true;
           this.regSubmitted = false;
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
+          //Check for the errors that are already parsed
+          let errorMessage = err.message;
+          if(errorMessage && typeof errorMessage === 'string' && errorMessage.includes("already exists")){
+            this.backendErrors = this.parseBackendErrors(errorMessage);
+
+          }else{
+            let errmsg = JSON.parse(err.error);
+          console.log("Error message in error handler"+ errmsg)
           this.backendErrors = this.parseBackendErrors(errmsg.message);
+
+          }
+
+
+
+          
           setTimeout(() => {
             this.backendErrors = {};
           }, 2000);

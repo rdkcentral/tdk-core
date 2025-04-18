@@ -22,7 +22,7 @@ limitations under the License.
           *ngIf ="data.executionStatus === 'INPROGRESS'">
             <i class="bi bi-arrow-clockwise download-icon"></i>
           </button>
-          <button class="btn btn-sm top-download" (click)="showPopup()">
+          <button class="btn btn-sm top-download" matTooltip="Download Reports" (click)="showPopup()">
             <i class="bi bi-cloud-arrow-down-fill extra-icon download"></i>
           </button>
         </div>
@@ -39,7 +39,7 @@ limitations under the License.
           </div>
         </div>
         <mat-menu #nestedMenu="matMenu"  xPosition="before" class="nested-download">
-          <button mat-menu-item class="download-all" (click)="downLoadAll()"><span class="logout-text">Download All</span></button>
+          <button mat-menu-item class="download-all"   (click)="downLoadAll()"> <span class="logout-text">Download All</span></button>
         </mat-menu>
         <div>
           <div class="row mt-2">
@@ -139,7 +139,7 @@ limitations under the License.
                         <thead>
                           <tr class="method-head">
                             <th>Module Name</th>
-                            <th>TotalScripts</th>
+                            <th>Total Scripts</th>
                             <th>Success</th>
                             <th>Failure</th>
                             <th>Aborted</th>

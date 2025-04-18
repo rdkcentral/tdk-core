@@ -1069,7 +1069,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           })
       },
       error:(err)=>{
-        this._snakebar.open(err, '', {
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',

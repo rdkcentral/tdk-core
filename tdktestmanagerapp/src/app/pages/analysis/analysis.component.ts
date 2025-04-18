@@ -470,7 +470,7 @@ export class AnalysisComponent {
   updateSelectedExecutionNames() {
     this.selectionErrorMessage = '';
     if (this.selectedExecutions.length < 2 || this.selectedExecutions.length > 10) {
-      this.selectionErrorMessage = 'Please select between 2 and 10 executions.';
+      this.selectionErrorMessage = 'Number of executions selected must be between 2 and 10';
       this.showReportBtn = false;
       this.selectedExecutionNames = [];
       return;

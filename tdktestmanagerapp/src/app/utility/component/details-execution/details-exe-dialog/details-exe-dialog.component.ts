@@ -699,7 +699,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${this.data.executionId}.xlsx`;
+          a.download = `RawReport_${this.data.deviceName}_${this.data.executionId}.xlsx`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -728,7 +728,9 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${this.data.executionId}.xlsx`;
+
+
+          a.download = `ConsolidatedReport_${this.data.deviceName}_${this.data.executionId}.xlsx`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -756,7 +758,8 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${this.data.executionId}.xml`; 
+          a.download = `ExecutionReport_${this.data.deviceName}_${this.data.executionId}.xml`;
+ 
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -786,7 +789,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `Results-${this.data.executionId}.zip`;
+          a.download = `Results_${this.data.deviceName}_${this.data.executionId}.zip`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -827,7 +830,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `Failed-Results-${this.data.executionId}.zip`;
+          a.download = `Failed_Results_${this.data.deviceName}_${this.data.executionId}.zip`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -854,6 +857,8 @@ export class DetailsExeDialogComponent {
     this.XMLReportDownload();
     this.resultsZIP();
     this.failResultsZIP();
+    this.downloadAsHtml();
+    
   }
   closeLastExpanded() {
     if (this.expandedIndexes.length > 0) {
@@ -985,7 +990,7 @@ downloadAsHtml(){
                   <thead>
                           <tr class="method-head">
                             <th>Module Name</th>
-                            <th>TotalScripts</th>
+                            <th>Total Scripts</th>
                             <th>Success</th>
                             <th>Failure</th>
                             <th>Aborted</th>

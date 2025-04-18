@@ -88,11 +88,13 @@ export class LivelogDialogComponent {
       });
   }
   ngOnDestroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
+    this.destroy$.next(); // Notify all subscriptions to complete
+    this.destroy$.complete(); // Complete the destroy$ subject
   }
 
   onClose(): void {
+    this.destroy$.next(); // Notify all subscriptions to complete
+    this.destroy$.complete(); // Complete the destroy$ subject
     this.dialogRef.close(false);
   }
 }

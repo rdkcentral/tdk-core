@@ -45,8 +45,8 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         if(error.status == 409){
           errorMessage =JSON.parse(error.error);
         }
-        console.log(errorMessage);
-        console.log(error);
+        console.log("Error message"+ errorMessage);
+        console.log("Error received"+ error);
       } else if (isProgressEventError(error)) {
         errorMessage = 'Network error: Please check your internet connection.';
 
