@@ -124,7 +124,7 @@ public class UserService implements UserDetailsService {
 
 		User user = new User();
 		user.setUsername(userRequest.getUserName());
-		if (Utils.isEmpty(userRequest.getUserEmail())) {
+		if (!Utils.isEmpty(userRequest.getUserEmail())) {
 			user.setEmail(userRequest.getUserEmail());
 		}
 
@@ -235,6 +235,11 @@ public class UserService implements UserDetailsService {
 				}
 			}
 		}
+		
+		if (!Utils.isEmpty(updateUserRequest.getPassword())) {
+			user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
+        }
+			
 
 		if (!Utils.isEmpty(updateUserRequest.getUserEmail())) {
 			User newUser = userRepository.findByEmail(updateUserRequest.getUserEmail());
@@ -253,8 +258,8 @@ public class UserService implements UserDetailsService {
 
 		if (!Utils.isEmpty(updateUserRequest.getUserDisplayName()))
 			user.setDisplayName(updateUserRequest.getUserDisplayName());
-		if (!Utils.isEmpty(updateUserRequest.getPassword()))
-			user.setPassword(updateUserRequest.getPassword());
+//		if (!Utils.isEmpty(updateUserRequest.getPassword()))
+//			user.setPassword(updateUserRequest.getPassword());
 
 		// Find the UserRole, Theme, and UserGroup from their repositories and set them
 		// to the user

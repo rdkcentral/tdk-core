@@ -44,8 +44,7 @@ limitations under the License.
                                     </div>
                                 </div>
                                 <div class="row mb-3">
-                                    <label for="useremail" class="col-md-3 col-form-label">Email <span
-                                        style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <label for="useremail" class="col-md-3 col-form-label">Email </label>
                                     <div class="col-md-8">
                                         <input type="email" id="useremail" class="form-control"
                                             formControlName="useremail" autocomplete="off" placeholder="Enter Email">
@@ -78,7 +77,9 @@ limitations under the License.
                                 </div>
                             </div>
                             <div class="col">
-                                <div class="row mb-3">
+                                <!-- Hiding the usergroup column now, usergroup based data access won't be
+                                 there in the first release in 2025-->
+                                <!-- <div class="row mb-3">
                                     <label for="usergroupname" class="col-md-3 offset-1 col-form-label">Group
                                         Name</label>
                                     <div class="col-md-8">
@@ -96,7 +97,7 @@ limitations under the License.
                                                 select group name.</small>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                                 <div class="row mb-3">
                                     <label for="rolename" class="col-md-3 offset-1 col-form-label">Role <span
                                         style="color:red; margin-left: 0.75em;">*</span></label>

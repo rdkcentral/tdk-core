@@ -7,5 +7,5 @@ export class GlobalConstants {
 
     /* QA server*/
     //public static apiUrl = 'http://15.206.243.179/';
-    public static apiUrl = 'https://54.221.181.251:8443/tdkservice/';
+    public static apiUrl = 'http://54.221.181.251:8443/tdkservice/';
 }

@@ -101,7 +101,9 @@ public class LoginService implements ILoginService {
 		signinResponse.setUserRoleName(user.getUserRole().getName());
 		signinResponse.setThemeName(user.getTheme().getName());
 		signinResponse.setDisplayName(user.getDisplayName());
-		signinResponse.setUserGroupName(user.getUserGroup().getName());
+		if (user.getUserGroup() != null) {
+			signinResponse.setUserGroupName(user.getUserGroup().getName());
+		}
 		signinResponse.setUserCategory(user.getCategory().name());
 		LOGGER.info("Finished signin request" + signinRequest.toString());
 		return signinResponse;
