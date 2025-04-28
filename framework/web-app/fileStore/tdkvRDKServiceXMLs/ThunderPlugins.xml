@@ -2624,7 +2624,7 @@
         </method>
 	<method name="NetworkManager_Wifi_DisConnect" api="WiFiDisconnect" type="method" desc="Disconnects from the currently connected SSID"/>
 	<method name="NetworkManager_Get_Connected_SSID" api="GetConnectedSSID" type="method" desc="Returns the connected SSID information"/>
-	<method name="NetworkManager_Get_Supported_Security_Modes" api="GetSupportedsecurityModes" type="method" desc="Returns the wifi security modes that the device supports"/>
+	<method name="NetworkManager_Get_Supported_Security_Modes" api="GetSupportedSecurityModes" type="method" desc="Returns the wifi security modes that the device supports"/>
 	<method name="NetworkManager_Get_Stun_Endpoint" api="GetStunEndpoint" type="method" desc="Get the STUN endpoint that is used to identify public IP of the device"/>
 	<method name="NetworkManager_Set_Stun_Endpoint" api="SetStunEndpoint" type="method" desc="Set the STUN endpoint to be used to identify public IP of the device">
             <params>
