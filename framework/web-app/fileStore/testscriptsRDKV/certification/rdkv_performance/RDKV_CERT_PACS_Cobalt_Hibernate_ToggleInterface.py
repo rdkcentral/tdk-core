@@ -117,9 +117,9 @@ if expectedResult in result.upper():
     status = "SUCCESS"
     revert = "NO"
     cobalt_test_url = PerformanceTestVariables.cobalt_test_url
-    plugins_list = ["Cobalt","WebKitBrowser","org.rdk.Network"]
-    inverse_dict = {"ETHERNET":"WIFI","WIFI":"ETHERNET"}
-    plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated","org.rdk.Network":"activated"}
+    plugins_list = ["Cobalt","WebKitBrowser","org.rdk.NetworkManager"]
+    inverse_dict = {"eth0":"wlan0","wlan0":"eth0"}
+    plugin_status_needed = {"Cobalt":"deactivated","WebKitBrowser":"deactivated","org.rdk.NetworkManager":"activated"}
     curr_plugins_status_dict = get_plugins_status(obj,plugins_list)
     time.sleep(10)
     if any(curr_plugins_status_dict[plugin] == "FAILURE" for plugin in plugins_list):

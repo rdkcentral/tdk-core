@@ -116,7 +116,7 @@ obj.setLoadModuleStatus(result)
 expectedResult = "SUCCESS"
 if expectedResult in result.upper():
     rebootwaitTime = StabilityTestVariables.rebootwaitTime
-    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "ETHERNET")
+    connect_status, revert_dict, revert_plugin_status, deviceAvailability = connect_to_interface(obj, "eth0")
     if connect_status == "SUCCESS":
         reboot_time = []
         count = 0
