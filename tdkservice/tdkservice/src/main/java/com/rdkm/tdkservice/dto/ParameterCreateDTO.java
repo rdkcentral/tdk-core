@@ -39,7 +39,6 @@ public class ParameterCreateDTO {
 	/**
 	 * The enumeration of the parameter type.
 	 */
-	@NotBlank(message = "Parameter type is required")
 	private ParameterDataType parameterDataType;
 
 	/**

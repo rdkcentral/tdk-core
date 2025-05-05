@@ -57,7 +57,14 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.loggedInUser = this.loginService.getAuthenticatedUser();
     if(this.userloggedIn.userID){
-      this.themeService.getTheme(this.userloggedIn.userID);
+      this.themeService.getTheme(this.userloggedIn.userID).subscribe((res:any)=>{
+        console.log(res);
+        if(res.data == 'DARK' || res.data == 'LIGHT'){
+          this.themeService.setTheme(res.data);
+        }else{
+          this.themeService.setTheme('LIGHT');
+        }
+      })
     }
     this.themeService.currentTheme.subscribe(theme => {
       this.currentTheme = theme;

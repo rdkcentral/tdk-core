@@ -40,6 +40,7 @@ import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IOemService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -60,6 +61,9 @@ public class OemService implements IOemService {
 	@Autowired
 	UserGroupRepository userGroupRepository;
 
+	@Autowired
+	CommonService commonService;
+
 	/**
 	 * This method is used to create a new oem.
 	 * 
@@ -72,22 +76,17 @@ public class OemService implements IOemService {
 	public boolean createOem(OemCreateDTO oemDTO) {
 		LOGGER.info("Going to create oemDTO with name: " + oemDTO.toString());
 
-		Category category = Category.getCategory(oemDTO.getOemCategory());
-
+		Category category = commonService.validateCategory(oemDTO.getOemCategory());
+		
 		if (oemRepository.existsByNameAndCategory(oemDTO.getOemName(), category)) {
 			LOGGER.info("oem already exists with the same name: " + oemDTO.getOemName());
 			throw new ResourceAlreadyExistsException(Constants.OEM_NAME, oemDTO.getOemName());
 		}
 		Oem oem = new Oem();
 		oem.setName(oemDTO.getOemName());
-		if (category != null) {
-			oem.setCategory(category);
-		} else {
-			LOGGER.info("Invalid category: " + oemDTO.getOemCategory());
-			throw new ResourceNotFoundException(Constants.CATEGORY, oemDTO.getOemCategory());
-		}
 		UserGroup userGroup = userGroupRepository.findByName(oemDTO.getOemUserGroup());
 		oem.setUserGroup(userGroup);
+		oem.setCategory(category);
 
 		try {
 			oem = oemRepository.save(oem);

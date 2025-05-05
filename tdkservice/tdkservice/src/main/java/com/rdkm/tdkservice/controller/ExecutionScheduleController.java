@@ -26,7 +26,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -38,7 +37,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.ExecutionScheduleDTO;
 import com.rdkm.tdkservice.dto.ExecutionSchedulesResponseDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.serviceimpl.ExecutionScheduleService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -62,21 +65,21 @@ public class ExecutionScheduleController {
 	 * This method is used to create the execution schedule
 	 * 
 	 * @param executionScheduleDTO
-	 * @return ResponseEntity<?>
+	 * @return ResponseEntity<Response>
 	 */
 	@Operation(summary = "Create the execution schedule")
 	@ApiResponse(responseCode = "201", description = "Execution Schedule created successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to schedule execution")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<?> createExecutionSchedule(@RequestBody ExecutionScheduleDTO executionScheduleDTO) {
+	public ResponseEntity<Response> createExecutionSchedule(@RequestBody ExecutionScheduleDTO executionScheduleDTO) {
 		LOGGER.info("Creating the execution schedule");
 		boolean executionSchedule = executionScheduleService.saveScheduleExecution(executionScheduleDTO);
 		if (executionSchedule) {
 			LOGGER.info("Execution schedule created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Execution Schedule created successfully");
+			return ResponseUtils.getCreatedResponse("Execution schedule created successfully");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to schedule execution");
+			throw new TDKServiceException("Failed to schedule execution");
 		}
 	}
 
@@ -91,14 +94,14 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "500", description = "Error in cancelling the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/cancel")
-	public ResponseEntity<?> cancelExecutionSchedule(@RequestBody UUID executionID) {
+	public ResponseEntity<Response> cancelExecutionSchedule(@RequestBody UUID executionID) {
 		LOGGER.info("Cancelling the execution schedule");
 		boolean executionSchedule = executionScheduleService.cancelScheduleExecution(executionID);
 		if (executionSchedule) {
 			LOGGER.info("Execution schedule cancelled successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Execution Schedule cancelled successfully");
+			return ResponseUtils.getSuccessResponse("Execution schedule cancelled successfully");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to cancel execution");
+			throw new TDKServiceException("Failed to cancel execution");
 		}
 	}
 
@@ -112,15 +115,15 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "200", description = "Execution Schedule reverted successfully")
 	@ApiResponse(responseCode = "500", description = "Error in reverting the cancel of the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping("/schedule")
-	public ResponseEntity<?> revertCancelTask(@RequestParam UUID executionID) {
+	@PostMapping("/scheduleAgain")
+	public ResponseEntity<Response> revertCancelTask(@RequestParam UUID executionID) {
 		LOGGER.info("Reverting the cancel of the execution schedule");
 		boolean executionSchedule = executionScheduleService.revertCancelTask(executionID);
 		if (executionSchedule) {
 			LOGGER.info("Execution schedule reverted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Execution Schedule reverted successfully");
+			return ResponseUtils.getSuccessResponse("Execution schedule reverted successfully");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to revert execution");
+			throw new TDKServiceException("Failed to revert cancel execution");
 		}
 
 	}
@@ -136,14 +139,15 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "500", description = "Error in deleting the execution schedule")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/delete")
-	public ResponseEntity<?> deleteExecutionSchedule(@RequestParam UUID executionScueduleID) {
+	public ResponseEntity<Response> deleteExecutionSchedule(@RequestParam UUID executionScueduleID) {
 		LOGGER.info("Deleting the execution schedule");
 		boolean executionSchedule = executionScheduleService.deleteScheduleExecution(executionScueduleID);
 		if (executionSchedule) {
 			LOGGER.info("Execution schedule deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Execution Schedule deleted successfully");
+			return ResponseUtils.getSuccessResponse("Execution schedule deleted successfully");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete execution");
+			LOGGER.error("Failed to delete execution schedule");
+			throw new TDKServiceException("Failed to delete execution schedule");
 		}
 	}
 
@@ -157,15 +161,16 @@ public class ExecutionScheduleController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching the execution schedules")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getAll")
-	public ResponseEntity<?> getAllExecutionSchedules(@RequestParam String category) {
+	public ResponseEntity<DataResponse> getAllExecutionSchedules(@RequestParam String category) {
 		LOGGER.info("Fetching all the execution schedules");
 		List<ExecutionSchedulesResponseDTO> executionSchedules = executionScheduleService
 				.getAllExecutionSchedulesByCategory(category);
 		if (executionSchedules != null) {
 			LOGGER.info("Execution schedules fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(executionSchedules);
+			return ResponseUtils.getSuccessDataResponse("Execution schedules fetched successfully", executionSchedules);
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to fetch execution schedules");
+			LOGGER.error("Failed to fetch execution schedules");
+			return ResponseUtils.getSuccessDataResponse("No execution schedules available", null);
 		}
 	}
 

@@ -213,7 +213,7 @@ export class EditPrimitiveTestComponent {
       }
       this.service.updatePrimitiveTest(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res.body, '', {
+          this._snakebar.open(res.body.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -224,15 +224,14 @@ export class EditPrimitiveTestComponent {
           }, 1000);
 
         },
-        error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          const res = Object.keys(errmsg).map(key => {
-            return { key: errmsg[key] }
+        error: (err) => {          
+          const res = Object.keys(err).map(key => {
+            return { key: err[key] }
           });
           for (let i = 0; i < res.length; i++) {
             this.errElement = res[i];
           }
-          this._snakebar.open(errmsg.message ? errmsg.message : this.errElement.key, '', {
+          this._snakebar.open(err.message ? err.message : this.errElement.key, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

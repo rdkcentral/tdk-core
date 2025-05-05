@@ -45,8 +45,8 @@ export class CreateSocComponent {
     if(name !== undefined && name !== null){
       this.service.createSoc(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
-            duration: 3000,
+          this._snakebar.open(res.message, '', {
+            duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
           })
@@ -58,7 +58,7 @@ export class CreateSocComponent {
         },
         error: (err) => {
           this._snakebar.open(err.message, '', {
-            duration: 4000,
+            duration: 3000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'

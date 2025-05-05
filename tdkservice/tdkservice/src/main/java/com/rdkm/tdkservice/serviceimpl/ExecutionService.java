@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Instant;
@@ -91,7 +92,6 @@ import com.rdkm.tdkservice.model.Soc;
 import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.DeviceRepositroy;
-import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionMethodResultRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
@@ -116,9 +116,6 @@ public class ExecutionService implements IExecutionService {
 
 	@Autowired
 	private DeviceRepositroy deviceRepository;
-
-	@Autowired
-	private DeviceTypeRepository deviceTypeRepository;
 
 	@Autowired
 	private ExecutionRepository executionRepository;
@@ -969,11 +966,7 @@ public class ExecutionService implements IExecutionService {
 	public ExecutionListResponseDTO getExecutionsByCategory(String categoryName, int page, int size, String sortBy,
 			String sortDir) {
 		LOGGER.info("Fetching executions by category: {} for size{} and page number{} ", categoryName, size, page);
-		Category category = Category.valueOf(categoryName);
-		if (category == null) {
-			throw new UserInputException("Invalid category name provided");
-		}
-
+		Category category = commonService.validateCategory(categoryName);
 		Pageable pageable = getPageable(page, size, sortBy, sortDir);
 		Page<Execution> pageExecutions = executionRepository.findByCategory(category, pageable);
 		ExecutionListResponseDTO executionListResponseDTO = getExecutionListResponseFromSearchResult(pageExecutions);
@@ -2204,21 +2197,23 @@ public class ExecutionService implements IExecutionService {
 			LOGGER.error("Script not found with name: {}", scriptName);
 			throw new ResourceNotFoundException("Script", scriptName);
 		}
+		Path scriptFilePath = Paths
+				.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + script.getScriptLocation()
+						+ Constants.FILE_PATH_SEPERATOR + scriptName + Constants.PYTHON_FILE_EXTENSION);
+		Resource resource = null;
 		try {
-			// File scriptFile = scriptServiceImpl.getPythonFile(script.getName());
-			Path scriptFilePath = Paths
-					.get(AppConfig.getBaselocation() + Constants.FILE_PATH_SEPERATOR + script.getScriptLocation()
-							+ Constants.FILE_PATH_SEPERATOR + scriptName + Constants.PYTHON_FILE_EXTENSION);
-			Resource resource = null;
 			resource = new UrlResource(scriptFilePath.toUri());
-			// InputStreamResource resource = new InputStreamResource(new
-			// FileInputStream(scriptFile));
-			LOGGER.info("Successfully downloaded script for execution result id: {}", executionResId);
-			return resource;
-		} catch (Exception e) {
-			LOGGER.error("Error downloading script for execution result id: {}", executionResId, e);
-			throw new TDKServiceException(e.getMessage());
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+			LOGGER.error("Error creating URL resource for script file: {}", scriptFilePath, e);
+			throw new TDKServiceException("Error downloading script for execution result ");
 		}
+		if (!resource.exists()) {
+			LOGGER.error("Script file not found at path: {}", scriptFilePath);
+			throw new ResourceNotFoundException("Script ", script.getName());
+		}
+		LOGGER.info("Successfully downloaded script for execution result id: {}", executionResId);
+		return resource;
 
 	}
 

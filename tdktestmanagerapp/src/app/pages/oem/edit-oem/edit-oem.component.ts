@@ -89,7 +89,7 @@ export class EditOemComponent implements OnInit{
       if (name != undefined && name != null) {
         this.oemService.updateOem(obj).subscribe({
           next: (res) => {
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 3000,
               panelClass: ['success-msg'],
               verticalPosition: 'top'

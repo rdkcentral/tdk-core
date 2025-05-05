@@ -64,7 +64,7 @@ export class ParameterCreateComponent {
     })
 
     this.moduleservice.getListOfParameterEnums().subscribe((data) => {
-      this.parameterType = JSON.parse(data);
+      this.parameterType = data.data;
       
     })
   }
@@ -86,7 +86,7 @@ export class ParameterCreateComponent {
       
       this.moduleservice.createParameter(parameterObj).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
           duration: 2000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'

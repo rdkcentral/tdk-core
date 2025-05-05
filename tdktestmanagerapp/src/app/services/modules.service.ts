@@ -36,104 +36,104 @@ export class ModulesService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/getAllTestGroups`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/module/getAllTestGroups`, { headers});
   }
 
   createModule(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/module/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/module/create`, data, { headers })
   }
 
   findallbyCategory(category:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/findAllByCategory/${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/module/findAllByCategory?category=${category}`, { headers});
   }
 
   updateModule(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/module/update`, data, { headers, responseType: 'text' })
+    return this.http.put(`${apiUrl}api/v1/module/update`, data, { headers })
   }
 
   deleteModule(id:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/module/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/module/delete?id=${id}`, { headers });
   }
 
   createFunction(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/function/create`, data, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/function/create`, data, { headers });
   }
 
   functionList(modulename:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/function/findAllByModule/${modulename}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/function/findAllByModule?moduleName=${modulename}`, { headers });
   }
 
   updateFunction(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/function/update`, data, { headers, responseType: 'text' });
+    return this.http.put(`${apiUrl}api/v1/function/update`, data, { headers });
   }
 
   deleteFunction(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/function/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/function/delete?id=${id}`, { headers });
   }
   getListOfParameterEnums():Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/parameter/getListOfParameterEnums`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/parameter/getListOfParameterDatatypes`, { headers});
   }
 
   createParameter(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/parameter/create`, data, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/parameter/create`, data, { headers });
   }
 
  findAllByFunction(functionName:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction/${functionName}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction?functionName=${functionName}`, { headers });
   }
 
   deleteParameter(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/parameter/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/parameter/delete?id=${id}`, { headers});
   }
 
   updateParameter(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/parameter/update`, data, { headers, responseType: 'text' });
+    return this.http.put(`${apiUrl}api/v1/parameter/update`, data, { headers});
   }
 
   downloadModuleByCategory(category:string):void{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-     this.http.get(`${apiUrl}api/v1/module/downloadzip/${category}`,{ headers, responseType: 'blob' }).subscribe(blob =>{
+     this.http.get(`${apiUrl}api/v1/module/downloadzip?category=${category}`,{ headers, responseType: 'blob' }).subscribe(blob =>{
       saveAs(blob, `module_${category}.zip`);
     });
   }
@@ -144,14 +144,14 @@ export class ModulesService {
     });
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/module/parsexml`, formData,{ headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/module/uploadxml`, formData,{ headers });
   }
   
   downloadXMLModule(moduleName:any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/downloadxml/${moduleName}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/module/downloadxml?moduleName=${moduleName}`, { headers, responseType: 'blob' })
 
   }
 

@@ -40,6 +40,10 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 /**
  * The DevicePythonController class is used to handle the device related
  * operations that are called from the python scripts
+ * 
+ * TODO : Keeping the Rest API response and path as such for keeping backward
+ * compatibility with python framework, change to a proper standard form of Rest
+ * API after change in Python lib
  */
 @Validated
 @RestController

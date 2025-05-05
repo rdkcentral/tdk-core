@@ -17,24 +17,33 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
-import { Observable, catchError, map, throwError } from 'rxjs';
 
-const apiUrl: string = GlobalConstants.apiUrl;
+package com.rdkm.tdkservice.response;
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RegisterService {
-  constructor(private http: HttpClient) { }
+import lombok.Getter;
 
-  registerUser(user: any): Observable<any> {
+/**
+ * This class is used to return success response with data
+ */
+@Getter
+public class DataResponse extends Response {
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${apiUrl}api/v1/auth/signup`, user, { headers: headers});
-   
-  }
+	/**
+	 * This holds the data
+	 */
+	Object data;
+
+	/**
+	 * Constructor to initialize the SuccessDataResponse with message, statusCode,
+	 * and data.
+	 *
+	 * @param message    The success message.
+	 * @param statusCode The HTTP status code.
+	 * @param data       The data to be returned.
+	 */
+	public DataResponse(String message, int statusCode, Object data) {
+		super(message, statusCode);
+		this.data = data;
+	}
 
 }

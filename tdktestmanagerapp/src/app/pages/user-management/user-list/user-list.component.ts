@@ -163,8 +163,8 @@ export class UserListComponent implements OnInit {
   ngOnInit(): void {
     this.showLoader = true;
     this.usermanageservice.getAlluser().subscribe((data) =>{
-      this.rowData = data;
-      if(this.rowData.length>0){
+      this.rowData = data.data;
+      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
         this.showLoader = false;
       }
     });
@@ -223,8 +223,8 @@ export class UserListComponent implements OnInit {
     if (confirm("Are you sure want to delete ? ")) {
       this.usermanageservice.deleteUser(data.userId).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
-            duration: 3000,
+          this._snakebar.open(res.message, '', {
+            duration: 2000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'
@@ -232,7 +232,7 @@ export class UserListComponent implements OnInit {
           this.ngOnInit();
         },
         error: (err) => {
-          this._snakebar.open(err, 'Something went wrong', {
+          this._snakebar.open(err.message, '', {
             duration: 3000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -67,7 +67,7 @@ export class ParameterEditComponent {
       })
   
       this.moduleservice.getListOfParameterEnums().subscribe((data) => {
-        this.parameterType = JSON.parse(data);
+        this.parameterType = data.data
       })
     }
   /**
@@ -87,7 +87,7 @@ export class ParameterEditComponent {
       }
       this.moduleservice.updateParameter(data).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
@@ -97,9 +97,8 @@ export class ParameterEditComponent {
             this.router.navigate(["/configure/parameter-list"]);
           }, 1000);
         },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+        error:(err)=>{          
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

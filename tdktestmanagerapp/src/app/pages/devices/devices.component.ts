@@ -156,10 +156,16 @@ export class DevicesComponent {
     this.showLoader = true;
     this.service.findallbyCategory(this.selectedDeviceCategory).subscribe({
       next: (res) => {
-        let data = JSON.parse(res);
+        this.rowData = []
+        let data = res.data;
         this.rowData = data;
-        this.rowData = data.sort((a: any, b: any) =>a.deviceName.toString().localeCompare(b.deviceName.toString()));
-        this.showLoader = false;
+        if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ||this.rowData.length == 0  ) {
+          this.showLoader = false;
+        }
+        if(this.rowData == null || this.rowData == undefined||this.rowData.length == 0){
+          this.rowData = []
+        }
+       
       },
       error: (err) => {
         this.showLoader = false;
@@ -226,7 +232,7 @@ export class DevicesComponent {
       if(data){
         this.service.deleteDevice(data.id).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -288,7 +294,7 @@ export class DevicesComponent {
         this.uploadFileError = null;
         this.service.uploadXMLFile(this.uploadFileName).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -297,9 +303,8 @@ export class DevicesComponent {
               this.close();
               this.ngOnInit();
           },
-          error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+          error:(err)=>{           
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

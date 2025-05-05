@@ -310,7 +310,7 @@ export class EditScriptsComponent {
     }
   getAllModules(): void{
     this.modulesService.findallbyCategory(this.RDKFlavor).subscribe(res=>{
-      this.allModules = JSON.parse(res); 
+      this.allModules = res.data; 
     })
   }
 
@@ -321,11 +321,10 @@ changeModule(event:any): void {
 getAllPrimitiveTest(value: any): void{
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
-        this.allPrimitiveTest = JSON.parse(res);
+        this.allPrimitiveTest = res.data;
       },
-      error: (err) => {
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg.message, '', {
+      error: (err) => {       
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -345,7 +344,7 @@ changePriority(event:any): void {
 
   getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.RDKFlavor).subscribe(res=>{
-      this.allDeviceType = (JSON.parse(res));
+      this.allDeviceType = res.data
     })
   }
 
@@ -404,7 +403,7 @@ changePriority(event:any): void {
       synopsis : this.firstFormGroup.value.synopsis,
       executionTimeOut : this.firstFormGroup.value.executiontimeout,
       primitiveTestName: this.defaultPrimitive?this.defaultPrimitive:this.scriptDeatilsObj.primitiveTestName,
-      deviceTypes:this.allDeviceType?this.allDeviceType:this.deviceNameArr,
+      deviceTypes: this.deviceNameArr,
       skipExecution:this.firstFormGroup.value.skipexecution,
       longDuration:this.firstFormGroup.value.longdurationtest,
       testId: this.secondFormGroup.value.testcaseID,
@@ -426,7 +425,7 @@ changePriority(event:any): void {
     const scriptFile = new File([pythonContent],filename,{type: 'text/x-python'});
     this.scriptservice.updateScript(scriptUpdateData,scriptFile).subscribe({
       next: (res) => {
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 2000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
@@ -435,9 +434,8 @@ changePriority(event:any): void {
           this.router.navigate(["/script"]);
         }, 1000);
       },
-      error: (err) => {
-        let errmsg =JSON.parse(err.error) ;
-        this._snakebar.open(errmsg.message, '', {
+      error: (err) => {       
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',

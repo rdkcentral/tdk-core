@@ -80,8 +80,8 @@ export class ListOemComponent {
   ngOnInit(): void {
     this.showLoader = true;
     this.service.getOemByList(this.authservice.selectedConfigVal).subscribe(res => {
-      this.rowData = JSON.parse(res);
-      if(this.rowData.length>0){
+      this.rowData = res.data;
+      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
         this.showLoader = false;
       }
     })
@@ -111,7 +111,7 @@ export class ListOemComponent {
         next: (res) => {
           this.rowData = this.rowData.filter((row: any) => row.oemId !== data.oemId);
           this.rowData = [...this.rowData];
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',

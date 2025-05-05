@@ -144,9 +144,12 @@ export class ListRdkCertificationComponent {
   getAllCerificate():void{
     this.showLoader = true;
     this.service.getallRdkCertifications().subscribe(res => {
-      const certificationNames = JSON.parse(res);
-      this.rowData = certificationNames.map((name: any) => ({ name }));
-      if(this.rowData.length>0){
+      const certificationNames = res.data;
+      this.rowData =null;
+      if(certificationNames !=null && certificationNames!=undefined && certificationNames.length>0) {
+        this.rowData = certificationNames.map((name: any) => ({ name }));
+      }      
+      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
         this.showLoader = false;
       }
     })
@@ -232,7 +235,7 @@ export class ListRdkCertificationComponent {
       if (this.uploadFileName) {
         this.service.uploadConfigFile(this.uploadFileName).subscribe({
           next: (res) => {
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -242,7 +245,7 @@ export class ListRdkCertificationComponent {
             this.ngOnInit();
           },
           error: (err) => {
-            let errmsg = err.error;
+            let errmsg = err.message;
             this._snakebar.open(errmsg, '', {
               duration: 2000,
               panelClass: ['err-msg'],
@@ -311,7 +314,7 @@ export class ListRdkCertificationComponent {
         next: (res) => {
           this.rowData = this.rowData.filter((row: any) => row.name !== data.name);
           this.rowData = [...this.rowData];
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
@@ -319,7 +322,7 @@ export class ListRdkCertificationComponent {
           })
         },
         error: (err) => {
-          this._snakebar.open(err, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

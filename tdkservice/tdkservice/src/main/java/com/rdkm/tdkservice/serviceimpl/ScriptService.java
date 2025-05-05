@@ -54,6 +54,7 @@ import javax.xml.transform.stream.StreamResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -71,6 +72,7 @@ import com.rdkm.tdkservice.dto.ScriptModuleDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.TestType;
+import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
@@ -309,11 +311,10 @@ public class ScriptService implements IScriptService {
 			scriptRepository.delete(script);
 			this.deleteScriptFile(script.getName() + Constants.PYTHON_FILE_EXTENSION, script.getScriptLocation());
 			LOGGER.info("Script deleted successfully: " + scriptId.toString());
-			TestSuite testSuite = testSuiteRepository.findByName(script.getModule().getName());
-			if (testSuite.getScriptTestSuite() == null || testSuite.getScriptTestSuite().isEmpty()) {
-				testSuiteRepository.delete(testSuite);
-			}
 			return true;
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error("Error deleting script: " + e.getMessage());
+			throw new DeleteFailedException();
 		} catch (Exception e) {
 			LOGGER.error("Error deleting script: " + e.getMessage());
 		}
@@ -538,7 +539,11 @@ public class ScriptService implements IScriptService {
 				Files.createDirectories(uploadPath);
 			}
 			Path filePath = uploadPath.resolve(scriptName);
-			System.out.println("Deleting file: " + filePath.toString());
+			LOGGER.info("Deleting file: " + filePath.toString());
+			if (!Files.exists(filePath)) {
+				LOGGER.error("File not found: " + filePath.toString());
+				return;
+			}
 			Files.delete(filePath);
 			LOGGER.info("File deleted successfully: {}", scriptName);
 		} catch (IOException e) {
@@ -700,7 +705,6 @@ public class ScriptService implements IScriptService {
 	 */
 
 	public File getPythonFile(String scriptName) {
-
 		Script testCase = scriptRepository.findByName(scriptName);
 		if (testCase == null) {
 			LOGGER.error("Test script not found with the name: " + scriptName);
@@ -711,7 +715,7 @@ public class ScriptService implements IScriptService {
 						+ Constants.FILE_PATH_SEPERATOR + scriptName + Constants.PYTHON_FILE_EXTENSION);
 		File scriptFile = scriptFilePath.toFile();
 		if (!scriptFile.exists()) {
-			throw new ResourceNotFoundException("Script file not found at location: ", testCase.getScriptLocation());
+			throw new ResourceNotFoundException("Script file", scriptName);
 		}
 		return scriptFile;
 
@@ -807,10 +811,11 @@ public class ScriptService implements IScriptService {
 	 * 
 	 * @param file - the ZIP file
 	 * @return true if the ZIP file is uploaded successfully, false otherwise
+	 * @throws IOException 
 	 */
 
 	@Override
-	public boolean uploadZipFile(MultipartFile file) {
+	public boolean uploadZipFile(MultipartFile file) throws IOException {
 		LOGGER.info("Uploading zip file: " + file.getOriginalFilename());
 
 		// Validate file is a zip
@@ -820,85 +825,69 @@ public class ScriptService implements IScriptService {
 			throw new UserInputException("Only ZIP files are allowed");
 		}
 
-		try {
-			// Create a temporary file to store the uploaded zip
-			File tempZipFile = File.createTempFile("uploaded-", Constants.ZIP_EXTENSION);
-			file.transferTo(tempZipFile);
+		// Create a temporary file to store the uploaded zip
+		File tempZipFile = File.createTempFile("uploaded-", Constants.ZIP_EXTENSION);
+		file.transferTo(tempZipFile);
 
-			try (ZipFile zip = new ZipFile(tempZipFile)) {
-				Enumeration<? extends ZipEntry> entries = zip.entries();
-				boolean pythonFileExists = false;
-				boolean xmlFileExists = false;
-				MultipartFile pythonFile = null;
-				ScriptCreateDTO scriptCreateDTO = null;
+		try (ZipFile zip = new ZipFile(tempZipFile)) {
+			Enumeration<? extends ZipEntry> entries = zip.entries();
+			boolean pythonFileExists = false;
+			boolean xmlFileExists = false;
+			MultipartFile pythonFile = null;
+			ScriptCreateDTO scriptCreateDTO = null;
 
-				// First pass to check if both Python (.py) and XML (.xml) files exist
-				while (entries.hasMoreElements()) {
-					ZipEntry entry = entries.nextElement();
-					// Check for Python file
-					if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
-						pythonFileExists = true;
-					}
-					// Check for XML file
-					if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
-						xmlFileExists = true;
+			// First pass to check if both Python (.py) and XML (.xml) files exist
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				// Check for Python file
+				if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
+					pythonFileExists = true;
+				}
+				// Check for XML file
+				if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
+					xmlFileExists = true;
+				}
+			}
+			// If either Python or XML file is missing, throw a UserInputException
+			if (!pythonFileExists || !xmlFileExists) {
+				LOGGER.error("Both Python and XML files are required in the ZIP file.");
+				throw new UserInputException("Both Python and XML files are required in the ZIP file.");
+			}
+
+			// Reset entries to process the files now that we know both exist
+			entries = zip.entries();
+			// Process the Python and XML files
+			while (entries.hasMoreElements()) {
+				ZipEntry entry = entries.nextElement();
+				// Handle Python file
+				if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
+					try (InputStream pyInputStream = zip.getInputStream(entry)) {
+						// Convert Python file to MultipartFile
+						pythonFile = convertScriptFileToMultipartFile(pyInputStream, entry.getName().split("/")[1]);
 					}
 				}
-				// If either Python or XML file is missing, throw a UserInputException
-				if (!pythonFileExists || !xmlFileExists) {
-					LOGGER.error("Both Python and XML files are required in the ZIP file.");
-					throw new UserInputException("Both Python and XML files are required in the ZIP file.");
-				}
-
-				// Reset entries to process the files now that we know both exist
-				entries = zip.entries();
-				// Process the Python and XML files
-				while (entries.hasMoreElements()) {
-					ZipEntry entry = entries.nextElement();
-					// Handle Python file
-					if (entry.getName().endsWith(Constants.PYTHON_FILE_EXTENSION)) {
-						try (InputStream pyInputStream = zip.getInputStream(entry)) {
-							// Convert Python file to MultipartFile
-							pythonFile = convertScriptFileToMultipartFile(pyInputStream, entry.getName());
-						}
+				// Handle XML file
+				else if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
+					try (InputStream xmlInputStream = zip.getInputStream(entry)) {
+						// Convert XML file to ScriptCreateDTO
+						scriptCreateDTO = convertXmlToScriptCreateDTO(xmlInputStream);
 					}
-					// Handle XML file
-					else if (entry.getName().endsWith(Constants.XML_FILE_EXTENSION)) {
-						try (InputStream xmlInputStream = zip.getInputStream(entry)) {
-							// Convert XML file to ScriptCreateDTO
-							scriptCreateDTO = convertXmlToScriptCreateDTO(xmlInputStream);
-						}
-					}
-				}
-
-				// Validate that both files were processed
-				if (pythonFile != null && scriptCreateDTO != null) {
-					boolean savedScript = saveScript(pythonFile, scriptCreateDTO);
-					tempZipFile.delete();
-					LOGGER.info("Script XML saved successfully");
-					return savedScript;
-				} else {
-					LOGGER.error(
-							"Error processing the zip file, either the XML or Python file was not processed correctly.");
-					throw new TDKServiceException(
-							"Error processing the zip file: XML or Python file processing failed.");
 				}
 			}
 
-		} catch (UserInputException e) {
-			// Let UserInputException propagate to the global exception handler
-			LOGGER.error("Error uploading zip file: " + e.getMessage());
-			throw e;
-		} catch (ResourceNotFoundException e) {
-			LOGGER.error("Error uploading zip file: " + e.getMessage());
-			throw e;
-		} catch (ResourceAlreadyExistsException e) {
-			LOGGER.error("Error uploading zip file: " + e.getMessage());
-			throw e;
-		} catch (Exception e) {
-			LOGGER.error("Error uploading zip file: " + e.getMessage());
-			throw new TDKServiceException("Error uploading zip file: " + e.getMessage());
+			// Validate that both files were processed
+			if (pythonFile != null && scriptCreateDTO != null) {
+				boolean savedScript = saveScript(pythonFile, scriptCreateDTO);
+				tempZipFile.delete();
+				LOGGER.info("Script XML saved successfully");
+				return savedScript;
+			} else {
+				LOGGER.error(
+						"Error processing the zip file, either the XML or Python file was not processed correctly.");
+				throw new TDKServiceException("Error processing the zip file: XML or Python file processing failed.");
+			}
 		}
+
 	}
 
 	/**

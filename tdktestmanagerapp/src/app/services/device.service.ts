@@ -51,7 +51,7 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/findallbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/device/findAllByCategory?category=${category}`, { headers });
 
   }
 
@@ -59,7 +59,7 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/device/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/device/create`, data, { headers })
   }
 
   getlistofGatewayDevices(category: any): Observable<any> {
@@ -73,21 +73,21 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/device/update`, data, { headers, responseType: 'text' })
+    return this.http.put(`${apiUrl}api/v1/device/update`, data, { headers })
   }
 
   deleteDevice(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/device/deleteDeviceById/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/device/delete?id=${id}`, { headers });
   }
 
   downloadDevice(name: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/downloadXML/${name}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/device/downloadXML?deviceName=${name}`, { headers, responseType: 'blob' })
   }
 
   uploadXMLFile(file: File): Observable<any> {
@@ -97,7 +97,7 @@ export class DeviceService {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post(`${apiUrl}api/v1/device/uploadDeviceXML`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/device/uploadxml`, formData, { headers});
   }
 
   downloadDeviceConfigFile(deviceTypeName: string, deviceType: string, isThunder: boolean): Observable<any> {
@@ -127,7 +127,7 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    this.http.get(`${apiUrl}api/v1/device/downloadDevicesByCategory/${category}`, { headers, responseType: 'blob' }).subscribe(blob => {
+    this.http.get(`${apiUrl}api/v1/device/downloadDevicesByCategory?category=${category}`, { headers, responseType: 'blob' }).subscribe(blob => {
       saveAs(blob, `device_${category}.zip`);
     });
   }

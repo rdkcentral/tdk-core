@@ -38,7 +38,7 @@ export class AnalysisService {
     return this.http.post(
       `${apiUrl}execution/getExecutionDetailsByFilter`,
       details,
-      { headers, responseType: 'text' }
+      { headers }
     );
   }
 
@@ -46,7 +46,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.post(`${apiUrl}execution/combined-excel`, data, {
+    return this.http.post(`${apiUrl}execution/combinedExcel`, data, {
       headers,
       responseType: 'blob',
     });
@@ -57,7 +57,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.post(
-      `${apiUrl}execution/comparison-excel?baseExecId=${execId}`,
+      `${apiUrl}execution/comparisonExcel?baseExecId=${execId}`,
       data,
       {
         headers,
@@ -71,8 +71,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getListOfProjectIDs`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -81,8 +80,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getPriorities`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -91,8 +89,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getListOfLabels`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -101,8 +98,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getReleaseVersions`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -111,8 +107,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getHardwareConfiguration`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
   ticketDetails(exeId:string): Observable<any> {
@@ -120,17 +115,15 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getDetailsForPopulatingTicketDetails?execResultID=${exeId}`, {
-      headers,
-      responseType: 'text',
-    });
+      headers
+  });
   }
   getImpactedPlatforms(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getImpactedPlatforms`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
   getFixedInVersions(): Observable<any> {
@@ -138,8 +131,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getFixedInVersions`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
   getSeverities(): Observable<any> {
@@ -147,8 +139,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getSeverities`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -157,8 +148,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getComponentsImpacted`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -176,8 +166,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/isPlatformProjectID?projectID=${prjectId}`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
   createJira(data:any): Observable<any> {
@@ -185,8 +174,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.post(`${apiUrl}api/v1/analysis/createJiraTicket`, data ,{
-      headers,
-      responseType: 'text',
+      headers
     });
   }
   getTicketDetaisFromJira(exeId:string, projectname:string): Observable<any> {
@@ -194,8 +182,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.get(`${apiUrl}api/v1/analysis/getTicketDetaisFromJira?executionResultID=${exeId}&projectName=${projectname}`, {
-      headers,
-      responseType: 'text',
+      headers
     });
   }
 
@@ -204,8 +191,7 @@ export class AnalysisService {
     Authorization: this.authService.getApiToken(),
   });
   return this.http.post(`${apiUrl}api/v1/analysis/updateJiraTicket`, data ,{
-    headers,
-    responseType: 'text',
+    headers
   });
 }
 
@@ -213,7 +199,7 @@ isJiraAutomation():Observable<any>{
   const headers = new HttpHeaders({
     'Authorization': this.authService.getApiToken()
   });
-  return this.http.get(`${apiUrl}api/v1/analysis/isJiraAutomationImplemented`, { headers, responseType: 'text' });
+  return this.http.get(`${apiUrl}api/v1/analysis/isJiraAutomationImplemented`, { headers});
  }
 
  

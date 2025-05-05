@@ -167,33 +167,33 @@ export class CreateJiraComponent {
   }
   listProjectNAmes() {
     this.analysiservice.getProjectNames().subscribe((res) => {
-      this.allProjectNames = JSON.parse(res);
+      this.allProjectNames = res.data;
     });
   }
 
   listPriorities(){
     this.analysiservice.getPriorities().subscribe((res) => {
-      this.allPriorites = JSON.parse(res);
+      this.allPriorites = res.data;
     });
   }
   ListLabels(){
     this.analysiservice.ListOfLabels().subscribe((res) => {
-      this.allLabels = JSON.parse(res);
+      this.allLabels = res.data
     });
   }
   releaseVersions(){
     this.analysiservice.getReleaseVersions().subscribe((res) => {
-      this.allReleaseVersion = JSON.parse(res);
+      this.allReleaseVersion = res.data;
     });
   }
   getHardwareDetails(){
     this.analysiservice.getHardware().subscribe((res) => {
-      this.allHardwares = JSON.parse(res);
+      this.allHardwares = res.data;
     });
   }
   ticketDetails(){
     this.analysiservice.ticketDetails(this.data.executionResultID).subscribe((res) => {
-      let details = JSON.parse(res);
+      let details = res.data
       console.log(details);
       this.ticketDetailsOBJ = details;
       if(this.ticketDetailsOBJ){
@@ -218,26 +218,25 @@ export class CreateJiraComponent {
   }
 
   getImpPlatforms(){
-    this.analysiservice.getImpactedPlatforms().subscribe((res) => {
-      console.log(res);
-      this.allImpPlatforms = JSON.parse(res);
+    this.analysiservice.getImpactedPlatforms().subscribe((res) => {      
+      this.allImpPlatforms = res.data;
     });
   }
 
   getFixedVersions(){
     this.analysiservice.getFixedInVersions().subscribe((res) => {
-      this.allFixVersion = JSON.parse(res);
+      this.allFixVersion = res.data;
     });
   }
 
   getAllServerities(){
     this.analysiservice.getSeverities().subscribe((res) => {
-      this.allServerities = JSON.parse(res);
+      this.allServerities = res.data
     });
   }
   getAllCompImpacted(){
     this.analysiservice.getComponentsImpacted().subscribe((res) => {
-      this.allCompImpacted = JSON.parse(res);
+      this.allCompImpacted = res.data;
     });
   }
   onProjectChange(event:any){
@@ -247,11 +246,11 @@ export class CreateJiraComponent {
     this.jiraCreateForm.controls['user'].setValidators([Validators.required]);
     this.jiraCreateForm.controls['password'].setValidators([Validators.required]);
     this.analysiservice.isPlatform(name).subscribe(res=>{
-      this.isPlatFormProject = res;
+      this.isPlatFormProject = res.data;
       this.ngZone.run(() => {
         this.cdRef.detectChanges();
     });
-    if(this.isPlatFormProject === 'false'){
+    if(this.isPlatFormProject === false){
         this.showHardware = false;
         this.showCompImpacted = false;
         this.showReproduce = false;
@@ -384,7 +383,7 @@ export class CreateJiraComponent {
         }
         this.analysiservice.createJira(createObj).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.data, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               verticalPosition: 'top'
@@ -432,7 +431,7 @@ export class CreateJiraComponent {
         }
         this.analysiservice.createJira(createObj).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.data, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               verticalPosition: 'top'

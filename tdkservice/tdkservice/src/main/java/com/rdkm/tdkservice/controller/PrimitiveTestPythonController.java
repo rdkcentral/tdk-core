@@ -39,6 +39,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 /**
  * The PrimitiveTestPythonController class is used to handle the primitive test
  * related operations
+ * 
+ * TODO : Keeping the Rest API response and path as such for keeping backward
+ * compatibility with python framework, change to a proper standard form of Rest
+ * API after change in Python lib
+ * 
  */
 
 @Validated

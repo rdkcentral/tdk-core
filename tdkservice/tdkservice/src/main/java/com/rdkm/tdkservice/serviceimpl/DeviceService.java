@@ -19,7 +19,6 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.serviceimpl;
 
-import static com.rdkm.tdkservice.enums.Category.getCategory;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_FILE_EXTENSION_ZIP;
 import static com.rdkm.tdkservice.util.Constants.DEVICE_XML_FILE_EXTENSION;
 
@@ -88,6 +87,7 @@ import com.rdkm.tdkservice.repository.OemRepository;
 import com.rdkm.tdkservice.repository.SocRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IDeviceService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -117,6 +117,9 @@ public class DeviceService implements IDeviceService {
 	@Autowired
 	private UserGroupRepository userGroupRepository;
 
+	@Autowired
+	CommonService commonService;
+
 	/**
 	 * This method is used to create a new device. It receives a POST request at the
 	 * "/createDevice" endpoint with a DeviceDTO object in the request body. The
@@ -130,6 +133,19 @@ public class DeviceService implements IDeviceService {
 	 */
 	public boolean createDevice(DeviceCreateDTO deviceCreateDTO) {
 		LOGGER.info("Going to create Device");
+		// name,Ip and mac are unique fields
+		if (deviceRepository.existsByName(deviceCreateDTO.getDeviceName())) {
+			LOGGER.info("Device with the same DeviceName already exists");
+			throw new ResourceAlreadyExistsException("DeviceName: ", deviceCreateDTO.getDeviceName());
+		}
+		if (deviceRepository.existsByIp(deviceCreateDTO.getDeviceIp())) {
+			LOGGER.info("Device with the same deviceIp already exists");
+			throw new ResourceAlreadyExistsException("DeviceIp: ", deviceCreateDTO.getDeviceIp());
+		}
+		if (deviceRepository.existsByMacId(deviceCreateDTO.getMacId())) {
+			LOGGER.info("Device with the same macid already exists");
+			throw new ResourceAlreadyExistsException("MacId: ", deviceCreateDTO.getMacId());
+		}
 
 		Device device = MapperUtils.populateDeviceDTO(deviceCreateDTO);
 		// call setPropetietsCreateDTO meeethod here
@@ -265,6 +281,7 @@ public class DeviceService implements IDeviceService {
 			LOGGER.error("Error occurred while deleting Device with id: " + id, e);
 			throw new DeleteFailedException();
 		}
+
 	}
 
 	/**
@@ -277,8 +294,9 @@ public class DeviceService implements IDeviceService {
 	public List<DeviceResponseDTO> getAllDeviceDetailsByCategory(String category) {
 		LOGGER.info("Starting getAllDeviceDetailsByCategory method with category: {}", category);
 		List<Device> devices = new ArrayList<>();
+		Category categoryEnum = commonService.validateCategory(category);
 		try {
-			devices = deviceRepository.findByCategory(getCategory(category));
+			devices = deviceRepository.findByCategory(categoryEnum);
 		} catch (Exception e) {
 			LOGGER.error("Error occurred while fetching devices by category: " + category, e);
 		}
@@ -312,27 +330,36 @@ public class DeviceService implements IDeviceService {
 	public boolean parseXMLForDevice(MultipartFile file) {
 		LOGGER.info("Parsing XML file for device details");
 		validateFile(file);
+		Document doc = null;
 		try {
-			Document doc = getDocumentFromXMLFile(file);
-			ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-			Validator validator = factory.getValidator();
+			doc = getDocumentFromXMLFile(file);
 
-			NodeList nList = doc.getElementsByTagName("device");
-
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				Node nNode = nList.item(temp);
-				LOGGER.info("\nCurrent Element :" + nNode.getNodeName());
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) nNode;
-					DeviceCreateDTO deviceDTO = createDeviceDTOFromElement(eElement);
-					validateAndCreateDevice(deviceDTO, validator);
-				}
-			}
-			return true;
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			LOGGER.error("Error parsing XML file", e);
 			throw new TDKServiceException("Error parsing XML file" + e.getMessage());
 		}
+
+		if (doc == null) {
+			LOGGER.error("Document is null");
+			return false;
+		}
+
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+
+		NodeList nList = doc.getElementsByTagName("device");
+
+		for (int temp = 0; temp < nList.getLength(); temp++) {
+			Node nNode = nList.item(temp);
+			LOGGER.info("\nCurrent Element :" + nNode.getNodeName());
+			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+				Element eElement = (Element) nNode;
+				DeviceCreateDTO deviceDTO = createDeviceDTOFromElement(eElement);
+				validateAndCreateDevice(deviceDTO, validator);
+			}
+		}
+		return true;
+
 	}
 
 	/**
@@ -929,7 +956,7 @@ public class DeviceService implements IDeviceService {
 		Device device = deviceRepository.findByIp(deviceIP);
 		if (device == null) {
 			LOGGER.error("Device not found with IP: {}", deviceIP);
-			throw new ResourceNotFoundException("Device IP", deviceIP);
+			throw new ResourceNotFoundException("Device ", deviceIP);
 		}
 
 		device.setThunderEnabled(!device.isThunderEnabled());

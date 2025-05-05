@@ -66,6 +66,6 @@ export class UsergroupService {
   }
 
   appVersion(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/users/getappversion`,{responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/users/getappversion`);
   }
 }

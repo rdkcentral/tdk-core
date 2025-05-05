@@ -42,7 +42,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -61,10 +60,14 @@ import com.rdkm.tdkservice.dto.ExecutionSearchFilterDTO;
 import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.dto.ExecutionTriggerDTO;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.model.Execution;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IExecutionService;
 import com.rdkm.tdkservice.service.IExportExcelService;
 import com.rdkm.tdkservice.service.IFileService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -94,27 +97,32 @@ public class ExecutionController {
 	 * This method is used to trigger the execution.
 	 * 
 	 * @param executionTrigger - the execution trigger
-	 * @return ResponseEntity<ExecutionResponseDTO>
+	 * @return ResponseEntity<DataResponse> - with the status of the execution
+	 *         trigger
 	 */
 	@Operation(summary = "Trigger the execution")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution triggered successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to trigger the execution"),
 			@ApiResponse(responseCode = "400", description = "Execution trigger request is invalid") })
 	@PostMapping("/trigger")
-	public ResponseEntity<?> triggerExecution(@RequestBody ExecutionTriggerDTO executionTriggerDTO) {
+	public ResponseEntity<DataResponse> triggerExecution(@RequestBody ExecutionTriggerDTO executionTriggerDTO) {
 		LOGGER.info("Trigger execution called");
 		ExecutionResponseDTO responseBody = executionService.triggerExecution(executionTriggerDTO);
 		if (null != responseBody) {
 			LOGGER.info("Execution triggered successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+			return ResponseUtils.getSuccessDataResponse("Execution triggered successfully", responseBody);
 		} else {
 			LOGGER.error("Failed to trigger the execution");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to trigger the execution");
+			throw new TDKServiceException("Failed to trigger the execution");
 		}
 	}
 
 	/**
 	 * This method is used to save the execution result details.
+	 * 
+	 * TODO : Keeping the Rest API response and path as such for keeping backward
+	 * compatibility with python framework, change to a proper standard form of Rest
+	 * API after change in Python lib
 	 * 
 	 * @param execId
 	 * @param resultData
@@ -148,6 +156,10 @@ public class ExecutionController {
 	/**
 	 * This method is used to save the execution status details.
 	 * 
+	 * TODO : Keeping the Rest API response and path as such for keeping backward
+	 * compatibility with python framework, change to a proper standard form of Rest
+	 * API after change in Python lib
+	 * 
 	 * @param execId
 	 * @param statusData
 	 * @param execDevice
@@ -175,6 +187,11 @@ public class ExecutionController {
 
 	/**
 	 * This method is used to get the client port from the python scripts.
+	 * 
+	 * 
+	 * TODO : Keeping the Rest API response and path as such for keeping backward
+	 * compatibility with python framework, change to a proper standard form of Rest
+	 * API after change in Python lib
 	 * 
 	 * @param deviceIP
 	 * @param agentPort
@@ -209,7 +226,7 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Executions fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to fetch executions") })
 	@GetMapping("/getExecutionsByCategory")
-	public ResponseEntity<?> getExecutionsByCategory(@RequestParam String category,
+	public ResponseEntity<DataResponse> getExecutionsByCategory(@RequestParam String category,
 			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
 			@RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
@@ -217,8 +234,8 @@ public class ExecutionController {
 		ExecutionListResponseDTO result = executionService.getExecutionsByCategory(category, page, size, sortBy,
 				sortDir);
 		LOGGER.info("Executions fetched successfully");
-		return result != null ? ResponseEntity.ok(result)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
+		return result != null ? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", result)
+				: ResponseUtils.getSuccessDataResponse("No execution avaiable for category :" + category, null);
 	}
 
 	/**
@@ -231,22 +248,24 @@ public class ExecutionController {
 	 * @param size                - size in page
 	 * @param sortBy              - by default it is date
 	 * @param sortDir             - by default it is desc
-	 * @return ExecutionListResponseDTO
+	 * @return ResponseEntity<DataResponse> ExecutionListResponseDTO
 	 */
 	@Operation(summary = "Search executions based on  test suite and script name")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to fetch execution details"),
 			@ApiResponse(responseCode = "400", description = "Execution data with this condition is not found") })
-	@GetMapping("/getExecutionsByScriptTestsuite/{scriptTestSuiteName}")
-	public ResponseEntity<?> getExecutionsByTestsuite(@PathVariable String scriptTestSuiteName,
+	@GetMapping("/getExecutionsByScriptTestsuite")
+	public ResponseEntity<DataResponse> getExecutionsByTestsuite(@RequestParam String scriptTestSuiteName,
 			@RequestParam String categoryName, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
 		LOGGER.info("Fetching executions for test suite or script: " + scriptTestSuiteName);
 		ExecutionListResponseDTO executionListResponseDTO = executionService
 				.getExecutionsByScriptTestsuite(scriptTestSuiteName, categoryName, page, size, sortBy, sortDir);
-		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
+		return executionListResponseDTO != null
+				? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", executionListResponseDTO)
+				: ResponseUtils.getSuccessDataResponse(
+						"No execution avaiable with  scriptTestSuite search :" + scriptTestSuiteName, null);
 	}
 
 	/**
@@ -258,22 +277,24 @@ public class ExecutionController {
 	 * @param size          - size in page
 	 * @param sortBy        - by default it is date
 	 * @param sortDir       - by default it is desc
-	 * @return ExecutionListResponseDTO
+	 * @return ResponseEntity<DataResponse> ExecutionListResponseDTO
 	 */
 	@Operation(summary = "Search executions based on  execution name")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to fetch execution details"),
 			@ApiResponse(responseCode = "400", description = "Execution data with this condition is not found") })
-	@GetMapping("/getExecutionsByExecutionName/{executionName}")
-	public ResponseEntity<?> getExecutionsByExecutionName(@PathVariable String executionName,
+	@GetMapping("/getExecutionsByExecutionName")
+	public ResponseEntity<DataResponse> getExecutionsByExecutionName(@RequestParam String executionName,
 			@RequestParam String categoryName, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
 		LOGGER.info("Fetching executions for execution name: " + executionName);
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByExecutionName(executionName,
 				categoryName, page, size, sortBy, sortDir);
-		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
+		return executionListResponseDTO != null
+				? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", executionListResponseDTO)
+				: ResponseUtils.getSuccessDataResponse(
+						"No execution avaiable with  Execution name search :" + executionName, null);
 	}
 
 	/**
@@ -285,21 +306,25 @@ public class ExecutionController {
 	 * @param size         - size in page
 	 * @param sortBy       - by default it is date
 	 * @param sortDir      - by default it is desc
-	 * @return response
+	 * @return response - ResponseEntity<DataResponse> Device list
 	 */
 	@Operation(summary = "Get executions by device name")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to fetch execution details") })
-	@GetMapping("/getExecutionsByDevice/{deviceName}")
-	public ResponseEntity<?> getExecutionsByDeviceName(@PathVariable String deviceName,
+	@GetMapping("/getExecutionsByDevice")
+	public ResponseEntity<DataResponse> getExecutionsByDeviceName(@RequestParam String deviceName,
 			@RequestParam String categoryName, @RequestParam(defaultValue = "0") int page,
 			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
 		LOGGER.info("Fetching executions for deviceName " + deviceName);
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByDeviceName(deviceName,
 				categoryName, page, size, sortBy, sortDir);
-		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
+
+		return executionListResponseDTO != null
+				? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", executionListResponseDTO)
+				: ResponseUtils.getSuccessDataResponse(
+						"No execution avaiable with  Execution device search :" + deviceName, null);
+
 	}
 
 	/**
@@ -312,21 +337,23 @@ public class ExecutionController {
 	 * @param size         - size in page
 	 * @param sortBy       - by default it is date
 	 * @param sortDir      - by default it is desc
-	 * @return response
+	 * @return response -
 	 */
 	@Operation(summary = "Get executions by user")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution details fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to fetch execution details") })
-	@GetMapping("/getExecutionsByUsername/{username}")
-	public ResponseEntity<?> getExecutionsByUser(@PathVariable String username, @RequestParam String categoryName,
-			@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int size,
-			@RequestParam(defaultValue = "createdDate") String sortBy,
+	@GetMapping("/getExecutionsByUsername")
+	public ResponseEntity<DataResponse> getExecutionsByUser(@RequestParam String username,
+			@RequestParam String categoryName, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "createdDate") String sortBy,
 			@RequestParam(defaultValue = "desc") String sortDir) {
 		LOGGER.info("Fetching executions for user " + username);
 		ExecutionListResponseDTO executionListResponseDTO = executionService.getExecutionsByUser(username, categoryName,
 				page, size, sortBy, sortDir);
-		return executionListResponseDTO != null ? ResponseEntity.ok(executionListResponseDTO)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("No Executions available");
+		return executionListResponseDTO != null
+				? ResponseUtils.getSuccessDataResponse("Executions fetched successfully", executionListResponseDTO)
+				: ResponseUtils.getSuccessDataResponse("No execution avaiable with  User search :" + username, null);
+
 	}
 
 	/**
@@ -357,21 +384,21 @@ public class ExecutionController {
 	 * This method is used to get the execution name.
 	 * 
 	 * @param nameRequest - the name request
-	 * @return The execution name generated
+	 * @return ResponseEntity<DataResponse> The execution name generated
 	 */
 	@Operation(summary = "Get the execution name")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution Name fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to get Execution Name") })
 	@PostMapping("/getExecutionName")
-	public ResponseEntity<String> getExecutionName(@RequestBody ExecutionNameRequestDTO nameRequest) {
+	public ResponseEntity<DataResponse> getExecutionName(@RequestBody ExecutionNameRequestDTO nameRequest) {
 		LOGGER.info("Get execution name called");
 		try {
 			String result = executionService.getExecutionName(nameRequest);
 			LOGGER.info("Execution Name fetched successfully");
-			return ResponseEntity.ok(result);
+			return ResponseUtils.getSuccessDataResponse("Execution Name fetched successfully", result);
 		} catch (Exception e) {
 			LOGGER.error("Failed to get Execution Name: {}", e.getMessage());
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get Execution Name");
+			throw new TDKServiceException("Failed to get Execution Name");
 		}
 	}
 
@@ -386,15 +413,15 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Execution Result fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get Execution Result")
 	@GetMapping("/getExecutionResult")
-	public ResponseEntity<?> getExecutionResult(@RequestParam UUID execResultId) {
+	public ResponseEntity<DataResponse> getExecutionResult(@RequestParam UUID execResultId) {
 		LOGGER.info("Get execution result details called");
 		ExecutionResultResponseDTO executinResultResponse = executionService.getExecutionResult(execResultId);
 		if (null != executinResultResponse) {
 			LOGGER.info("Execution results obtained");
-			return ResponseEntity.status(HttpStatus.OK).body(executinResultResponse);
+			return ResponseUtils.getSuccessDataResponse("Execution results obtained", executinResultResponse);
 		} else {
-			LOGGER.error("Execution results not  found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution results not  found");
+			LOGGER.error("Execution results not found");
+			return ResponseUtils.getNotFoundDataResponse("Execution results not  found", null);
 		}
 	}
 
@@ -403,21 +430,22 @@ public class ExecutionController {
 	 * 
 	 * @param execResultId
 	 * 
-	 * @return ResponseEntity<?>
+	 * @return ResponseEntity<DataResponse> - Trend Analysis of last 5 script
+	 *         execution
 	 */
 	@Operation(summary = "Get the trend analysis")
 	@ApiResponse(responseCode = "200", description = "Trend Analysis fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get Trend Analysis")
 	@GetMapping("/getTrendAnalysis")
-	public ResponseEntity<?> getTrendAnalysis(@RequestParam UUID execResultId) {
+	public ResponseEntity<DataResponse> getTrendAnalysis(@RequestParam UUID execResultId) {
 		LOGGER.info("Get trend analysis called");
 		List<String> trendAnalysis = executionService.getTrendAnalysis(execResultId);
 		if (null != trendAnalysis && !trendAnalysis.isEmpty()) {
-			LOGGER.info("Trend Analysis of last 5 script found");
-			return ResponseEntity.status(HttpStatus.OK).body(trendAnalysis);
+			LOGGER.info("Trend Analysis of last 5 script execution found");
+			return ResponseUtils.getSuccessDataResponse("Trend Analysis of last 5 script found", trendAnalysis);
 		} else {
 			LOGGER.error("Trend Analysis Not  found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Trend Analysis Not  found");
+			return ResponseUtils.getSuccessDataResponse("Trend Analysis of last 5 script not found", null);
 		}
 	}
 
@@ -431,18 +459,17 @@ public class ExecutionController {
 	@Operation(summary = "Abort the execution")
 	@ApiResponse(responseCode = "200", description = "Execution aborted successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to abort the execution")
-	@PostMapping("/abortexecution")
-	public ResponseEntity<?> abortExecution(@RequestParam UUID execId) {
+	@PostMapping("/abortExecution")
+	public ResponseEntity<Response> abortExecution(@RequestParam UUID execId) {
 		LOGGER.info("Abort execution called");
 		boolean isAborted = executionService.abortExecution(execId);
 		if (isAborted) {
 			LOGGER.info("Execution aborted successfully");
-			return ResponseEntity.status(HttpStatus.OK)
-					.body("The execution will be aborted after the current script execution is completed");
+			return ResponseUtils.getSuccessResponse(
+					"The execution will be aborted after the current script execution is completed");
 		} else {
 			LOGGER.error("Failed to abort the execution");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to abort the execution");
-
+			throw new TDKServiceException("Failed to abort the execution");
 		}
 	}
 
@@ -457,15 +484,16 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Execution repeated successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to repeat the execution")
 	@PostMapping("/repeatExecution")
-	public ResponseEntity<?> repeatExecution(@RequestParam UUID execId, @RequestParam String user) {
+	public ResponseEntity<Response> repeatExecution(@RequestParam UUID execId, @RequestParam String user) {
 		LOGGER.info("Repeat execution called");
 		boolean isRepeated = executionService.repeatExecution(execId, user);
 		if (isRepeated) {
 			LOGGER.info("Execution repeated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("The execution will be repeated");
+			return ResponseUtils.getSuccessResponse(
+					"Succesfully triggered repetition of the execution. Please check the execution status in the Execution page");
 		} else {
 			LOGGER.error("Failed to repeat the execution");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to repeat the execution");
+			throw new TDKServiceException("Failed to repeat the execution");
 		}
 	}
 
@@ -473,22 +501,22 @@ public class ExecutionController {
 	 * Rerun the failed script.
 	 *
 	 * @param execId the UUID of the execution to be rerun
-	 * @return ResponseEntity indicating the result of the rerun operation
+	 * @return ResponseEntity<Response> indicating the result of the rerun operation
 	 *
 	 */
 	@Operation(summary = "Rerun the failed script")
 	@ApiResponse(responseCode = "200", description = "Execution rerun successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to rerun the failed script")
 	@PostMapping("/rerunFailedScript")
-	public ResponseEntity<?> reRunFailedScript(@RequestParam UUID execId, @RequestParam String user) {
+	public ResponseEntity<Response> reRunFailedScript(@RequestParam UUID execId, @RequestParam String user) {
 		LOGGER.info("Rerun failed script called");
 		boolean isRerun = executionService.reRunFailedScript(execId, user);
 		if (isRerun) {
 			LOGGER.info("Execution rerun successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("The failed script will be rerun");
+			return ResponseUtils.getSuccessResponse("The failed scripts in this execuion will be rerun");
 		} else {
 			LOGGER.error("Failed to rerun the failed script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to rerun the failed script");
+			throw new TDKServiceException("Failed to rerun the failed script");
 		}
 	}
 
@@ -503,16 +531,17 @@ public class ExecutionController {
 	@Operation(summary = "Get the execution details")
 	@ApiResponse(responseCode = "200", description = "Execution details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get Execution details")
-	@GetMapping("/getExecutionDetails/{id}")
-	public ResponseEntity<?> getExecutionDetails(@PathVariable UUID id) {
+	@GetMapping("/getExecutionDetails")
+	public ResponseEntity<DataResponse> getExecutionDetails(@RequestParam UUID id) {
 		LOGGER.info("Fetching execution details for ID: {}", id);
 		ExecutionDetailsResponseDTO response = executionService.getExecutionDetails(id);
 		if (null != response) {
 			LOGGER.info("Execution details fetched successfully for ID: {}", id);
-			return ResponseEntity.status(HttpStatus.OK).body(response);
+			return ResponseUtils.getSuccessDataResponse("Execution details fetched successfully for ID " + id,
+					response);
 		} else {
 			LOGGER.error("Failed to get Execution details for ID: {}", id);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to get Execution details");
+			return ResponseUtils.getSuccessDataResponse("Failed to get Execution details for ID - " + id, null);
 		}
 	}
 
@@ -520,23 +549,23 @@ public class ExecutionController {
 	 * Deletes the execution with the specified ID.
 	 *
 	 * @param id the UUID of the execution to be deleted
-	 * @return a ResponseEntity containing a success message with HTTP status 201 if
-	 *         the execution is deleted, or an error message with HTTP status 404 if
-	 *         the execution is not found
+	 * @return a ResponseEntity containing a success Response with HTTP status 200
+	 *         if the execution is deleted, or an error Response with HTTP status
+	 *         404 if the execution is not found
 	 */
 	@Operation(summary = "Delete the execution")
 	@ApiResponse(responseCode = "201", description = "Execution deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Execution not found")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteExecution(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteExecution(@RequestParam UUID id) {
 		LOGGER.info("Deleting execution by ID: {}", id);
 		boolean isDeleted = executionService.deleteExecution(id);
 		if (isDeleted) {
 			LOGGER.info("Execution deleted successfully: {}", id);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Execution deleted successfully");
+			return ResponseUtils.getSuccessResponse("Execution deleted successfully");
 		} else {
 			LOGGER.error("Execution not found with ID: {}", id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution not found");
+			return ResponseUtils.getNotFoundResponse("Execution not found with Id: " + id + " or already deleted.");
 		}
 	}
 
@@ -545,24 +574,24 @@ public class ExecutionController {
 	 *
 	 * @param ids the list of UUIDs representing the IDs of the executions to be
 	 *            deleted
-	 * @return a ResponseEntity containing a success message with HTTP status 201 if
-	 *         the executions are deleted successfully, or an error message with
+	 * @return a ResponseEntity containing a success Response with HTTP status 201
+	 *         if the executions are deleted successfully, or an error Response with
 	 *         HTTP status 404 if the executions are not found
 	 */
 
 	@Operation(summary = "Delete the executions by IDs")
 	@ApiResponse(responseCode = "201", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Executions not found")
-	@PostMapping("/deletelistofexecutions")
-	public ResponseEntity<String> deleteExecutions(@RequestBody List<UUID> ids) {
+	@PostMapping("/deleteListOfExecutions")
+	public ResponseEntity<Response> deleteExecutions(@RequestBody List<UUID> ids) {
 		LOGGER.info("Deleting executions by IDs: {}", ids);
 		boolean isDeleted = executionService.deleteExecutions(ids);
 		if (isDeleted) {
 			LOGGER.info("Executions deleted successfully: {}", ids);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Executions deleted successfully");
+			return ResponseUtils.getSuccessResponse("Executions deleted successfully");
 		} else {
 			LOGGER.error("Executions not found with IDs: {}", ids);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Executions not found");
+			return ResponseUtils.getNotFoundResponse("Execution not found or already deleted");
 		}
 	}
 
@@ -578,12 +607,16 @@ public class ExecutionController {
 	@Operation(summary = "Delete the executions by date range")
 	@ApiResponse(responseCode = "200", description = "Executions deleted successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to delete executions")
-	@DeleteMapping("/deletebydaterange")
-	public ResponseEntity<String> deleteExecutionsByDateRange(@RequestParam Instant fromDate,
+	@DeleteMapping("/deleteByDateRange")
+	public ResponseEntity<Response> deleteExecutionsByDateRange(@RequestParam Instant fromDate,
 			@RequestParam Instant toDate) {
 		int deletedCount = executionService.deleteExecutionsByDateRange(fromDate, toDate);
 		LOGGER.info("Deleted {} executions successfully.", deletedCount);
-		return ResponseEntity.status(HttpStatus.OK).body(deletedCount + " executions deleted successfully.");
+		if (deletedCount == 0) {
+			LOGGER.error("No executions found in the specified date range.");
+			return ResponseUtils.getNotFoundResponse("No executions found in the specified date range.");
+		}
+		return ResponseUtils.getSuccessResponse(deletedCount + " executions deleted successfully.");
 
 	}
 
@@ -598,25 +631,32 @@ public class ExecutionController {
 	@Operation(summary = "Get the execution users")
 	@ApiResponse(responseCode = "200", description = "Unique users fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to get unique users")
-	@GetMapping("/getusers")
-	public ResponseEntity<?> getUniqueUsers() {
+	@GetMapping("/getUsers")
+	public ResponseEntity<DataResponse> getUniqueUsers() {
 		LOGGER.info("Fetching unique users");
 		List<String> users = executionService.getUniqueUsers();
 		if (null != users) {
 			LOGGER.info("Unique users fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(users);
+			return ResponseUtils.getSuccessDataResponse("Unique users fetched successfully", users);
 		} else {
 			LOGGER.error("Failed to get unique users");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Failed to get users users");
+			return ResponseUtils.getNotFoundDataResponse("No users found ", null);
+
 		}
 	}
 
 	/**
 	 * This method is used to get the execution result details.
+	 * 
+	 * 
+	 * TODO : Keeping the Rest API response and path as such for keeping backward
+	 * compatibility with TDK agent code, change to a proper standard form of Rest
+	 * API after change in TDK agent code
+	 * 
 	 *
 	 * @param execResultId
 	 *
-	 * @return ResponseEntity<?>
+	 * @return ResponseEntity<String>
 	 */
 	@Operation(summary = "Upload Logs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Logs uploaded successfully"),
@@ -646,20 +686,13 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "400", description = "Bad request, invalid parameters"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getDeviceImageName")
-	public ResponseEntity<String> getImageName(@RequestParam String executionId) {
-		try {
-			LOGGER.info("Going to get image name");
-			String imageName = fileService.getImageName(executionId);
-			if (imageName.isEmpty()) {
-				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Image name or firmware version not found.");
-			}
-			return ResponseEntity.ok(imageName);
-		} catch (Exception e) {
-			// Log the error (optional, depending on logging setup)
-			LOGGER.error("Error fetching image name for executionId: {}", executionId, e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("An error occurred while processing the request.");
+	public ResponseEntity<DataResponse> getImageName(@RequestParam String executionId) {
+		LOGGER.info("Going to get image name");
+		String imageName = fileService.getImageName(executionId);
+		if (imageName.isEmpty()) {
+			return ResponseUtils.getNotFoundDataResponse("Image name or firmware version not found", null);
 		}
+		return ResponseUtils.getSuccessDataResponse("Image name or firmware version found", imageName);
 	}
 
 	/**
@@ -679,20 +712,10 @@ public class ExecutionController {
 	public ResponseEntity<?> downloadDeviceLogFile(@RequestParam String executionResId, @RequestParam String fileName) {
 
 		LOGGER.info("Inside downloadLogFile controller with fileName: {}", fileName);
-		Resource resource = null;
-		try {
-			// Call service method to retrieve the log file resource
-			resource = fileService.downloadDeviceLogFile(executionResId, fileName);
-		} catch (ResourceNotFoundException ex) {
-			// Log and return not found error if the file doesn't exist
-			LOGGER.error("Log file not found: {}", fileName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Log file not found: " + fileName);
-		} catch (Exception e) {
-			// Log and return internal server error for other exceptions
-			LOGGER.error("Error in downloading log file: {}", e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading log file");
-		}
+		// Call service method to retrieve the log file resource
+		Resource resource = fileService.downloadDeviceLogFile(executionResId, fileName);
 
+		// Check if the resource exists and return the appropriate response
 		if (resource != null && resource.exists()) {
 			LOGGER.info("Log file downloaded successfully");
 			return ResponseEntity.status(HttpStatus.OK)
@@ -700,7 +723,7 @@ public class ExecutionController {
 					.header("Access-Control-Expose-Headers", "content-disposition").body(resource);
 		} else {
 			LOGGER.error("Error in downloading log file: {}", fileName);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading log file");
+			throw new TDKServiceException("Error in downloading log file: " + fileName);
 		}
 	}
 
@@ -741,17 +764,16 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "204", description = "No log files found"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/getDeviceLogFileNames")
-	public ResponseEntity<List<String>> getDeviceLogFileNames(
+	public ResponseEntity<DataResponse> getDeviceLogFileNames(
 			@RequestParam("executionResultId") String executionResultId) {
 		LOGGER.info("Inside getDeviceLogFileNames controller");
 		List<String> logFileNames = fileService.getDeviceLogFileNames(executionResultId);
 		if (logFileNames.isEmpty()) {
 			LOGGER.error("No log files found");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(logFileNames); // Return 204 NO CONTENT if no files
-																					// // found
+			return ResponseUtils.getSuccessDataResponse("No log files found", null);
 		}
 		LOGGER.info("Log file names fetched successfully");
-		return ResponseEntity.ok(logFileNames);
+		return ResponseUtils.getSuccessDataResponse("Log file names fetched successfully", logFileNames);
 	}
 
 	/**
@@ -762,15 +784,19 @@ public class ExecutionController {
 	 * @return The content of the log file as a String.
 	 */
 	@GetMapping("/getAgentLogContent")
-	public ResponseEntity<String> getAgentLogContent(@RequestParam("executionResId") String executionResId) {
+	public ResponseEntity<?> getAgentLogContent(@RequestParam("executionResId") String executionResId) {
 		String logContent = fileService.getAgentLogContent(executionResId);
 
 		if (logContent.equals("Log file not found")) {
 			LOGGER.error("Log file not found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(logContent); // 404 if file not found
+			return ResponseUtils.getNotFoundResponse("Log file not found for the execution id - " + executionResId); // 404
+																														// if
+																														// file
+																														// not
+																														// found
 		} else if (logContent.equals("Error reading log file")) {
 			LOGGER.error("Error reading log file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(logContent); // 500 on error
+			throw new TDKServiceException("Error reading log file");
 		}
 		LOGGER.info("Log file content fetched successfully");
 		return ResponseEntity.ok(logContent); // Return the log content with 200 OK
@@ -793,25 +819,19 @@ public class ExecutionController {
 
 		LOGGER.info("Inside downloadAgentLogFile controller with fileName");
 
-		try {
-			// Call the service method to download the agent log file
-			Resource resource = fileService.downloadAgentLogFile(executionResId);
+		// Call the service method to download the agent log file
+		Resource resource = fileService.downloadAgentLogFile(executionResId);
 
-			// Prepare the response headers for file download
-			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-					.header("Access-Control-Expose-Headers", "content-disposition")
-					.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
-		} catch (ResourceNotFoundException ex) {
-			// Log and return not found response
-			LOGGER.error("Agent log file not found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Agent log file not found ");
-		} catch (Exception e) {
-			// Log and return internal server error response
-			LOGGER.error("Error downloading agent log file: {}", e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error downloading agent log file: " + e.getMessage());
+		if (resource == null || !resource.exists()) {
+			LOGGER.error("Error in downloading agent log file");
+			return ResponseUtils.getNotFoundResponse("Agent log file not found");
 		}
+
+		// Prepare the response headers for file download
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.header("Access-Control-Expose-Headers", "content-disposition")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
 
 	/**
@@ -827,13 +847,13 @@ public class ExecutionController {
 	@ApiResponse(responseCode = "200", description = "Module wise summary fetched successfully")
 	@ApiResponse(responseCode = "404", description = "Execution data with this condition is not found")
 	@GetMapping("/getModulewiseExecutionSummary")
-	public ResponseEntity<?> getModulewiseExecutionSummary(@RequestParam UUID executionId) {
+	public ResponseEntity<DataResponse> getModulewiseExecutionSummary(@RequestParam UUID executionId) {
 		LOGGER.info("Get module wise summary called for the executionId {}", executionId.toString());
 		Map<String, ExecutionSummaryResponseDTO> executionSummaryMap = executionService
 				.getModulewiseExecutionSummary(executionId);
-		return executionSummaryMap != null ? ResponseEntity.ok(executionSummaryMap)
-				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Execution data with this condition is not found");
-
+		return executionSummaryMap != null
+				? ResponseUtils.getSuccessDataResponse("Module wise summary fetched successfully", executionSummaryMap)
+				: ResponseUtils.getNotFoundDataResponse("Module wise summary not available for this execution", null);
 	}
 
 	/**
@@ -845,25 +865,22 @@ public class ExecutionController {
 	@Operation(summary = "Download execution data as an Excel file")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Excel file generated successfully"),
 			@ApiResponse(responseCode = "500", description = "Error generating Excel file") })
-	@GetMapping("/{executionId}/download-excel")
-	public ResponseEntity<byte[]> downloadExcel(@PathVariable UUID executionId) {
-		try {
-			Execution execution = exportExcelService.getExecutionById(executionId);
+	@GetMapping("/downloadConsolidatedExcelReport")
+	public ResponseEntity<byte[]> downloadExcel(@RequestParam UUID executionId) {
+		Execution execution = exportExcelService.getExecutionById(executionId);
+		byte[] excelData = exportExcelService.generateExcelReport(execution);
 
-			byte[] excelData = exportExcelService.generateExcelReport(execution);
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_DISPOSITION,
-					"attachment; filename=" + execution.getName() + "_execution_data.xlsx");
-			headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-			return ResponseEntity.ok().headers(headers).body(excelData);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body(("Error generating Excel: " + e.getMessage()).getBytes());
+		if (excelData == null || excelData.length == 0) {
+			LOGGER.error("Failed to generate Excel report for execution ID: {}", executionId);
+			throw new TDKServiceException("Failed to generate Excel report.");
 		}
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=ConsolidatedReport_" + execution.getName() + ".xlsx");
+		headers.add(HttpHeaders.CONTENT_TYPE, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+		return ResponseEntity.ok().headers(headers).body(excelData);
+
 	}
 
 	/**
@@ -876,35 +893,16 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Excel report generated successfully"),
 			@ApiResponse(responseCode = "400", description = "Execution IDs list cannot be empty"),
 			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report") })
-	@PostMapping("/combined-excel")
+	@PostMapping("/combinedExcel")
 	public ResponseEntity<?> generateCombinedExcelReport(@RequestBody List<UUID> executionIds) {
-		if (executionIds == null || executionIds.isEmpty()) {
-			return ResponseEntity.badRequest().body("Execution IDs list cannot be empty.".getBytes());
-		}
-
-		if (executionIds.size() > 10) {
-			LOGGER.error("Maximum 10 executions can be selected for combined report. Now {} executions are selected.",
-					executionIds.size());
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Maximum 10 executions can be selected for combined report.Now" + executionIds.size()
-							+ "executions are selected.");
-		}
-		if (executionIds.size() == 1) {
-			LOGGER.error("Atleast two executions needs to be selected for combined report");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Atleast two executions needs to be selected for combined report");
-		}
+		LOGGER.info("Generating combined Excel report for execution IDs: {}", executionIds);
 		byte[] excelData = exportExcelService.generateCombinedExcelReport(executionIds);
-
 		if (excelData == null || excelData.length == 0) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to generate Excel report.".getBytes());
+			throw new TDKServiceException("Failed to generate Excel report.");
 		}
-
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
 		headers.setContentDisposition(ContentDisposition.attachment().filename("Combined_Report.xlsx").build());
-
 		return ResponseEntity.ok().headers(headers).body(excelData);
 	}
 
@@ -922,50 +920,24 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Excel report generated successfully"),
 			@ApiResponse(responseCode = "400", description = "Execution IDs list cannot be empty"),
 			@ApiResponse(responseCode = "500", description = "Failed to generate Excel report") })
-	@PostMapping("/comparison-excel")
+	@PostMapping("/comparisonExcel")
 	public ResponseEntity<?> generateComparisonExcelReport(@RequestParam UUID baseExecId,
 			@RequestBody List<UUID> executionIds) {
 		LOGGER.info("Generating comparison Excel report for base execution ID: {} and execution IDs: {}", baseExecId,
 				executionIds);
-		if (baseExecId == null) {
-			LOGGER.error("Base Execution ID cannot be null.");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Base Execution needs to be selected.");
-		}
-		if (executionIds.contains(baseExecId)) {
-			LOGGER.error("Base Execution ID cannot be in the selected execution IDs list.");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Base Execution cannot be in the selected for comparision.");
-		}
-		if (executionIds == null || executionIds.isEmpty()) {
-			LOGGER.error("Execution IDs list cannot be empty.");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Atleast one executions needs to be selected for comparison report ");
-		}
-		if (executionIds.size() > 10) {
-			LOGGER.error("Maximum 10 executions can be selected for comparison report. Now {} executions are selected.",
-					executionIds.size());
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-					.body("Maximum 10 executions can be selected for comparison report. Now " + executionIds.size()
-							+ " executions are selected.");
-		}
+		Execution execution = exportExcelService.getExecutionById(baseExecId);
 
-		try (ByteArrayInputStream excelData = exportExcelService.generateComparisonExcelReport(baseExecId,
-				executionIds)) {
-			if (excelData == null || excelData.available() == 0) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate Excel report.");
-			}
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDispositionFormData("attachment", "Comparison_Report_" + baseExecId + ".xlsx");
-
-			LOGGER.info("Comparison Excel report generated successfully.");
-			return ResponseEntity.status(HttpStatus.OK).headers(headers).body(excelData.readAllBytes());
-		} catch (Exception e) {
-			LOGGER.error("Error generating comparison Excel report: {}", e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error generating Excel report: " + e.getMessage());
+		ByteArrayInputStream excelData;
+		excelData = exportExcelService.generateComparisonExcelReport(baseExecId, executionIds);
+		if (excelData == null || excelData.available() == 0) {
+			throw new TDKServiceException("Failed to generate Excel report.");
 		}
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDispositionFormData("attachment",
+				"Comparison_Report_" + execution.getExecutionTime() + ".xlsx");
+		LOGGER.info("Comparison Excel report generated successfully.");
+		return ResponseEntity.status(HttpStatus.OK).headers(headers).body(excelData.readAllBytes());
 	}
 
 	/**
@@ -978,25 +950,20 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Excel file generated successfully"),
 			@ApiResponse(responseCode = "404", description = "Execution data not found"),
 			@ApiResponse(responseCode = "500", description = "Error generating Excel file") })
-	@GetMapping("/raw/{executionId}")
-	public ResponseEntity<byte[]> generateRawReport(@PathVariable UUID executionId) {
-		try {
-			byte[] report = exportExcelService.generateRawReport(executionId);
-			if (report.length == 0) {
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-			}
-
-			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-			headers.setContentDisposition(
-					ContentDisposition.attachment().filename("Raw_Report_" + executionId + ".xlsx").build());
-
-			return ResponseEntity.ok().headers(headers).body(report);
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+	@GetMapping("/rawExcelReport")
+	public ResponseEntity<byte[]> generateRawReport(@RequestParam UUID executionId) {
+		byte[] report = exportExcelService.generateRawReport(executionId);
+		if (report.length == 0) {
+			throw new TDKServiceException("Failed to generate raw report.");
 		}
+
+		Execution execution = exportExcelService.getExecutionById(executionId);
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+		headers.setContentDisposition(
+				ContentDisposition.attachment().filename("Raw_Report_" + execution.getName() + ".xlsx").build());
+
+		return ResponseEntity.ok().headers(headers).body(report);
 	}
 
 	/**
@@ -1009,22 +976,22 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "XML file generated successfully"),
 			@ApiResponse(responseCode = "404", description = "Execution data not found"),
 			@ApiResponse(responseCode = "500", description = "Error generating XML file") })
-	@GetMapping("/{executionId}/XMLReport")
-	public ResponseEntity<byte[]> generateExecutionReport(@PathVariable UUID executionId)
+	@GetMapping("/downloadXMLReport")
+	public ResponseEntity<byte[]> generateExecutionReport(@RequestParam UUID executionId)
 			throws ParserConfigurationException, TransformerException {
 
 		// Fetch execution entity by ID
-		Execution execution = exportExcelService.getExecutionById(executionId); // Replace with actual service method
+		Execution execution = exportExcelService.getExecutionById(executionId);
 		if (execution == null) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null); // Return 404 if execution not found
+			LOGGER.error("Execution data not found for ID: {}", executionId);
+			throw new ResourceNotFoundException("Execution  ID: ", executionId.toString());
 		}
 
 		// Generate XML report
 		byte[] xmlReport = exportExcelService.generateXmlReport(execution);
-
 		// Set response headers
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=execution-report.xml");
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Xml-report" + execution.getName() + ".xml");
 		headers.add(HttpHeaders.CONTENT_TYPE, "application/xml");
 
 		// Return XML file as byte array in response
@@ -1042,16 +1009,19 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Zip file generated successfully"),
 			@ApiResponse(responseCode = "404", description = "Execution data not found"),
 			@ApiResponse(responseCode = "500", description = "Error generating zip file") })
-	@GetMapping("/{executionId}/results-zip")
-	public ResponseEntity<byte[]> getExecutionResultsZip(@PathVariable UUID executionId) {
-		try {
-			byte[] zipData = exportExcelService.generateExecutionResultsZip(executionId);
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=execution_results.zip");
-			return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
-		} catch (ResourceNotFoundException | IOException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	@GetMapping("/downloadAllResultLogsZip")
+	public ResponseEntity<byte[]> getAllResultLogsZip(@RequestParam UUID executionId) {
+		byte[] zipData = exportExcelService.generateExecutionResultsZip(executionId);
+		if (zipData == null || zipData.length == 0) {
+			LOGGER.error("Failed to generate zip file for execution ID: {}", executionId);
+			throw new TDKServiceException("Failed to generate zip file.");
 		}
+		HttpHeaders headers = new HttpHeaders();
+		Execution execution = exportExcelService.getExecutionById(executionId);
+		headers.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=Execution_Logs" + execution.getName() + ".zip");
+		return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
+
 	}
 
 	/**
@@ -1064,18 +1034,18 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Zip file generated successfully"),
 			@ApiResponse(responseCode = "404", description = "Execution data not found"),
 			@ApiResponse(responseCode = "500", description = "Error generating zip file") })
-	@GetMapping("/{executionId}/failed-results-zip")
-	public ResponseEntity<byte[]> getFailedExecutionResultsZip(@PathVariable UUID executionId) {
-		try {
-			byte[] zipData = exportExcelService.generateExecutionFailureScriptsResultsZip(executionId);
-			HttpHeaders headers = new HttpHeaders();
-			headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=failed_execution_results.zip");
-			return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
-		} catch (ResourceNotFoundException e) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		} catch (IOException e) {
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	@GetMapping("/downloadFailedResultLogsZip")
+	public ResponseEntity<byte[]> getFailedResultLogsZip(@RequestParam UUID executionId) {
+		byte[] zipData = exportExcelService.generateExecutionFailureScriptsResultsZip(executionId);
+		if (zipData == null || zipData.length == 0) {
+			LOGGER.error("Failed to generate zip file for execution ID: {}", executionId);
+			throw new TDKServiceException("Failed to generate zip file.");
 		}
+		Execution execution = exportExcelService.getExecutionById(executionId);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add(HttpHeaders.CONTENT_DISPOSITION,
+				"attachment; filename=Failed_Execution_Logs" + execution.getName() + ".zip");
+		return new ResponseEntity<>(zipData, headers, HttpStatus.OK);
 	}
 
 	/**
@@ -1165,24 +1135,13 @@ public class ExecutionController {
 	@GetMapping("/downloadScript")
 	public ResponseEntity<?> downloadScript(@RequestParam UUID executionResId) {
 		LOGGER.info("Inside downloadScript controller with fileName");
-		try {
-			// Call the service method to download the script file
-			Resource resource = executionService.downloadScript(executionResId);
-			// Prepare the response headers for file download
-			return ResponseEntity.ok()
-					.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
-					.header("Access-Control-Expose-Headers", "content-disposition")
-					.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
-		} catch (ResourceNotFoundException ex) {
-			// Log and return not found response
-			LOGGER.error("Script file not found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Script file not found ");
-		} catch (Exception e) {
-			// Log and return internal server error response
-			LOGGER.error("Error downloading script file: {}", e.getMessage(), e);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error downloading script file: " + e.getMessage());
-		}
+		// Call the service method to download the script file
+		Resource resource = executionService.downloadScript(executionResId);
+		// Prepare the response headers for file download
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+				.header("Access-Control-Expose-Headers", "content-disposition")
+				.contentType(MediaType.APPLICATION_OCTET_STREAM).body(resource);
 	}
 
 	/**
@@ -1197,18 +1156,17 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "500", description = "Failed to get Execution details"),
 			@ApiResponse(responseCode = "204", description = "Failed to get Execution details with this filter") })
 	@PostMapping("/getExecutionDetailsByFilter")
-	public ResponseEntity<?> getExecutionDetailsByFilter(@RequestBody ExecutionSearchFilterDTO filterRequest) {
+	public ResponseEntity<DataResponse> getExecutionDetailsByFilter(
+			@RequestBody ExecutionSearchFilterDTO filterRequest) {
 		LOGGER.info("Get execution details by filter called");
 		List<ExecutionListDTO> response = executionService.getExecutionDetailsByFilter(filterRequest);
 		LOGGER.info("Execution details fetched successfully");
 		if (response == null || response.isEmpty()) {
 			LOGGER.error("Failed to get Execution details");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Execution details with this filter");
-
+			return ResponseUtils.getSuccessDataResponse("No Data available with the filter", null);
 		} else {
 			LOGGER.info("Execution details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-
+			return ResponseUtils.getSuccessDataResponse("Execution details fetched successfully", response);
 		}
 	}
 
@@ -1223,15 +1181,20 @@ public class ExecutionController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Execution result is failed"),
 			@ApiResponse(responseCode = "500", description = "Failed to check execution result") })
 	@GetMapping("/isExecutionResultFailed")
-	public ResponseEntity<Boolean> isExecutionResultFailed(@RequestParam UUID executionId) {
+	public ResponseEntity<DataResponse> isExecutionResultFailed(@RequestParam UUID executionId) {
 		LOGGER.info("Check if execution result is failed called");
 		boolean isFailed = executionService.isExecutionResultFailed(executionId);
-		return ResponseEntity.status(HttpStatus.OK).body(isFailed);
+		return ResponseUtils.getSuccessDataResponse("Execution result is failed", isFailed);
 	}
 
 	/**
 	 * The API to get the device status - the API is used in the python framework So
 	 * keeping the same format expected there
+	 * 
+	 * 
+	 * TODO : Keeping the Rest API response and path as such for keeping backward
+	 * compatibility with python framework, change to a proper standard form of Rest
+	 * API after change in Python lib
 	 * 
 	 * @param stbName -DeviceName - Using the stbName param as this API is already
 	 *                hardcoded in the scripts.
@@ -1251,7 +1214,8 @@ public class ExecutionController {
 	}
 
 	/**
-	 * Endpoint to fetch additional logs to display in browser for a given execution result.
+	 * Endpoint to fetch additional logs to display in browser for a given execution
+	 * result.
 	 *
 	 * @param logFileName       the name of the log file to fetch
 	 * @param executionResultID the ID of the execution result for which to fetch
@@ -1290,19 +1254,17 @@ public class ExecutionController {
 			@ApiResponse(responseCode = "500", description = "Failed to get Execution details"),
 			@ApiResponse(responseCode = "204", description = "No Execution details") })
 	@GetMapping("/getExecutionDetailsForHtmlReport")
-	public ResponseEntity<?> getExecutionDetailsForHtmlReport(@RequestParam UUID executionId) {
+	public ResponseEntity<DataResponse> getExecutionDetailsForHtmlReport(@RequestParam UUID executionId) {
 		LOGGER.info("Get execution details for html report called");
 		List<ExecutionDetailsForHtmlReportDTO> response = executionService
 				.getExecutionDetailsForHtmlReport(executionId);
 		LOGGER.info("Execution details fetched successfully");
 		if (response == null || response.isEmpty()) {
 			LOGGER.error("Failed to get Execution details");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Execution details");
-
+			return ResponseUtils.getNotFoundDataResponse("No Execution details available for this execution", null);
 		} else {
 			LOGGER.info("Execution details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(response);
-
+			return ResponseUtils.getSuccessDataResponse("Execution details fetched successfully", response);
 		}
 	}
 

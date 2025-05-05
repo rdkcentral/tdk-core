@@ -294,7 +294,7 @@ public class PrimitiveTestService implements IPrimitiveTestService {
 		List<PrimitiveTest> primitiveTests = primitiveTestRepository.findByModule(module);
 		if (primitiveTests == null || primitiveTests.isEmpty()) {
 			LOGGER.error("Primitive test not found with module name: " + moduleName);
-			throw new ResourceNotFoundException(Constants.PRIMITIVE_TEST_WITH_MODULE_NAME, module.getName());
+			return null;
 		}
 		List<PrimitiveTestNameAndIdDTO> primitiveTestNameAndId = new ArrayList<>();
 		for (PrimitiveTest primitiveTest : primitiveTests) {

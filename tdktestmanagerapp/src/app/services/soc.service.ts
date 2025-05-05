@@ -41,7 +41,7 @@ export class SocService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/soc/findallbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/soc/findallbycategory?category=${category}`, { headers });
   }
 
   createSoc(data: any): Observable<any> {
@@ -50,7 +50,7 @@ export class SocService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/soc/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/soc/create`, data, { headers })
   }
 
   updateSoc(data: any): Observable<any> {
@@ -58,14 +58,14 @@ export class SocService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/soc/update`, data, { headers, responseType: 'text'});
+    return this.http.put(`${apiUrl}api/v1/soc/update`, data, { headers});
   }
 
   deleteSoc(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/soc/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/soc/delete?id=${id}`, { headers });
   }
 
 }

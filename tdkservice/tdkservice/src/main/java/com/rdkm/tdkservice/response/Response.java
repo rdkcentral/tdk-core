@@ -19,21 +19,23 @@ http://www.apache.org/licenses/LICENSE-2.0
 */
 package com.rdkm.tdkservice.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * This class is used to return error response
+ * This class is used to return response with message and status code
  */
 @Getter
-public class ErrorResponse {
+@AllArgsConstructor
+public class Response {
 
-	/*
-	 * The error message
+	/**
+	 * This holds the message
 	 */
 	private String message;
 
-	public ErrorResponse(String message) {
-		this.message = message;
-	}
-
+	/**
+	 * This holds the status code
+	 */
+	private int statusCode;
 }

@@ -35,30 +35,30 @@ export class DevicetypeService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/devicetype/getlistbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/devicetype/getlistbycategory?category=${category}`, { headers});
   }
 
   getfindallbycategory(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/devicetype/findallbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/devicetype/findallbycategory?category=${category}`, { headers });
   }
 
-  createDeviceType(data: any) {
+  createDeviceType(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/devicetype/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/devicetype/create`, data, { headers})
   }
 
-  deleteDeviceType(id: any) {
+  deleteDeviceType(id: any) : Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/devicetype/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/devicetype/delete?id=${id}`, { headers});
   }
 
   updateDeviceType(data: any): Observable<any> {
@@ -66,7 +66,7 @@ export class DevicetypeService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/devicetype/update`, data, { headers, responseType: 'text'});
+    return this.http.put(`${apiUrl}api/v1/devicetype/update`, data, { headers});
   }
 
 

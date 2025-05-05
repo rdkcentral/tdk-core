@@ -81,7 +81,7 @@ export class CreateOemComponent implements OnInit{
     if(name !== undefined && name !== null){
       this.service.createOem(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'

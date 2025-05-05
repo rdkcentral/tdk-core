@@ -37,7 +37,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -51,8 +50,12 @@ import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IScriptService;
 import com.rdkm.tdkservice.util.Constants;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -79,23 +82,24 @@ public class ScriptController {
 	 * 
 	 * @param scriptCreateDTO - the script create dto
 	 * @param file            - the script file
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity - the ResponseEntity<Response>
 	 */
 	@Operation(summary = "Create Script", description = "Create Script")
 	@ApiResponse(responseCode = "201", description = "Script created successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in creating script")
 	@PostMapping("/create")
-	public ResponseEntity<?> createScript(@Valid @RequestPart("scriptCreateData") ScriptCreateDTO scriptCreateDTO,
+	public ResponseEntity<Response> createScript(
+			@Valid @RequestPart("scriptCreateData") ScriptCreateDTO scriptCreateDTO,
 			@RequestPart("scriptFile") MultipartFile scriptFile) {
 		LOGGER.info("Received create script request: " + scriptCreateDTO.toString());
 		boolean isScriptCreated = scriptService.saveScript(scriptFile, scriptCreateDTO);
 		if (isScriptCreated) {
 			LOGGER.info("Script created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Script created successfully");
+			return ResponseUtils.getCreatedResponse("Script created successfully");
 		} else {
 			LOGGER.error("Error in creating script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in creating script");
+			throw new TDKServiceException("Failed to create device");
 		}
 	}
 
@@ -111,16 +115,16 @@ public class ScriptController {
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in updating script")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateScript(@Valid @RequestPart("scriptUpdateData") ScriptDTO scriptUpdateDTO,
+	public ResponseEntity<Response> updateScript(@Valid @RequestPart("scriptUpdateData") ScriptDTO scriptUpdateDTO,
 			@RequestPart("scriptFile") MultipartFile scriptFile) {
 		LOGGER.info("Received update script request: " + scriptUpdateDTO.toString());
 		boolean isScriptUpdated = scriptService.updateScript(scriptFile, scriptUpdateDTO);
 		if (isScriptUpdated) {
 			LOGGER.info("Script updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Script updated successfully");
+			return ResponseUtils.getSuccessResponse("Script updated successfully");
 		} else {
 			LOGGER.error("Error in updating script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating script");
+			throw new TDKServiceException("Error in updating script");
 		}
 	}
 
@@ -128,21 +132,21 @@ public class ScriptController {
 	 * This method is used to delete the script
 	 * 
 	 * @param scriptId - the script id
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity<Response> - the response entity
 	 */
 	@Operation(summary = "Delete Script", description = "Delete Script")
 	@ApiResponse(responseCode = "200", description = "Script deleted successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteScript(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteScript(@RequestParam UUID id) {
 		LOGGER.info("Received delete script request: " + id);
 		boolean isScriptDeleted = scriptService.deleteScript(id);
 		if (isScriptDeleted) {
 			LOGGER.info("Script deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Script deleted successfully");
+			return ResponseUtils.getSuccessResponse("Script deleted successfully");
 		} else {
 			LOGGER.error("Error in deleting script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in deleting script");
+			throw new TDKServiceException("Error in deleting script");
 		}
 	}
 
@@ -156,16 +160,16 @@ public class ScriptController {
 	@Operation(summary = "Get all scripts by module", description = "Get all scripts by module")
 	@ApiResponse(responseCode = "200", description = "Scripts fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findlistbymodule")
-	public ResponseEntity<?> findAllScriptsByModule(@RequestParam String module) {
+	@GetMapping("/findListByModule")
+	public ResponseEntity<DataResponse> findAllScriptsByModule(@RequestParam String module) {
 		LOGGER.info("Received get all scripts request for module: " + module);
 		List<ScriptListDTO> scripts = scriptService.findAllScriptsByModule(module);
 		if (scripts != null && !scripts.isEmpty()) {
 			LOGGER.info("Scripts fetched successfully  for module: " + module);
-			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+			return ResponseUtils.getSuccessDataResponse("Scripts fetched successfully", scripts);
 		} else {
 			LOGGER.error("Scripts not found for module: " + module);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Scripts not found for module");
+			return ResponseUtils.getSuccessDataResponse("Scripts not found for module", null);
 		}
 	}
 
@@ -173,21 +177,21 @@ public class ScriptController {
 	 * This method is used to get the script details by script id.
 	 * 
 	 * @param scriptId - the script id
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity<DataResponse> - the response entity
 	 */
 	@Operation(summary = "Get Script by Id", description = "Get Script by Id")
 	@ApiResponse(responseCode = "200", description = "Script fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> findScriptById(@PathVariable UUID id) {
+	@GetMapping("/findById")
+	public ResponseEntity<DataResponse> findScriptById(@RequestParam UUID id) {
 		LOGGER.info("Received get script by id request for script id: " + id);
 		ScriptDTO script = scriptService.findScriptById(id);
 		if (script != null) {
 			LOGGER.info("Script fetched successfully for script id: " + id);
-			return ResponseEntity.status(HttpStatus.OK).body(script);
+			return ResponseUtils.getSuccessDataResponse("Script fetched successfully", script);
 		} else {
-			LOGGER.error("No script found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found");
+			LOGGER.error("Error is fetching script for script id: " + id);
+			throw new TDKServiceException("Error is fetching script for script id: " + id);
 		}
 	}
 
@@ -201,16 +205,17 @@ public class ScriptController {
 	@Operation(summary = "Get all scripts by module with category", description = "Get all scripts by module with category")
 	@ApiResponse(responseCode = "200", description = "Scripts fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findallbymodulewithcategory")
-	public ResponseEntity<?> findAllScriptByModuleWithCategory(@RequestParam String category) {
+	@GetMapping("/findAllByModuleWithCategory")
+	public ResponseEntity<DataResponse> findAllScriptByModuleWithCategory(@RequestParam String category) {
 		LOGGER.info("Received get all scripts request for category: " + category);
 		List<ScriptModuleDTO> scripts = scriptService.findAllScriptByModuleWithCategory(category);
 		if (scripts != null && !scripts.isEmpty()) {
 			LOGGER.info("Scripts fetched successfully for category: " + category);
-			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+			return ResponseUtils.getSuccessDataResponse("Scripts fetched successfully for category: " + category,
+					scripts);
 		} else {
 			LOGGER.error("No script found for category", category);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found for category");
+			return ResponseUtils.getSuccessDataResponse("No script found for category: " + category, null);
 		}
 	}
 
@@ -223,13 +228,12 @@ public class ScriptController {
 	@Operation(summary = "Download Test Case as Excel", description = "Download Test Case as Excel")
 	@ApiResponse(responseCode = "200", description = "Test case downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/downloadtestcaseasexcel")
-	public ResponseEntity<?> downloadTestCaseToExcel(@RequestParam String testScriptName) {
+	@GetMapping("/downloadTestCaseAsExcel")
+	public ResponseEntity<?> downloadTestCaseAsExcel(@RequestParam String testScriptName) {
 		ByteArrayInputStream in = scriptService.testCaseToExcel(testScriptName);
 		// Prepare response with the Excel file
 		if (in == null || in.available() == 0) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading test case as excel");
+			throw new TDKServiceException("Error in downloading test case as excel");
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Disposition",
@@ -248,13 +252,13 @@ public class ScriptController {
 	@Operation(summary = "Download Test Case as Excel by Module", description = "Download Test Case as Excel by Module")
 	@ApiResponse(responseCode = "200", description = "Test case downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/downloadtestcaseasexcelbymodule")
-	public ResponseEntity<?> downloadTestCaseToExcelByModule(@RequestParam String moduleName) {
+	@GetMapping("/downloadTestCaseAsExcelByModule")
+	public ResponseEntity<?> downloadTestCaseAsExcelByModule(@RequestParam String moduleName) {
 		ByteArrayInputStream in = scriptService.testCaseToExcelByModule(moduleName);
 		if (in == null || in.available() == 0) {
 			LOGGER.error("Error in downloading test case as excel by module");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading test case as excel by module");
+			throw new TDKServiceException("Error in downloading test case as excel by module");
+
 		}
 		// Prepare response with the Excel file
 		HttpHeaders headers = new HttpHeaders();
@@ -270,21 +274,22 @@ public class ScriptController {
 	 * list of scripts for the given category.
 	 * 
 	 * @param category - the category
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity<DataResponse> - the response entity
 	 */
 	@Operation(summary = "Get all scripts by  category", description = "Get all scripts by category")
 	@ApiResponse(responseCode = "200", description = "Scripts fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findlistbycategory")
-	public ResponseEntity<?> findAllScriptByCategory(@RequestParam String category) {
+	@GetMapping("/findListByCategory")
+	public ResponseEntity<DataResponse> findAllScriptByCategory(@RequestParam String category) {
 		LOGGER.info("Received get all scripts request for category: " + category);
 		List<ScriptListDTO> scripts = scriptService.findAllScriptsByCategory(category);
 		if (scripts != null) {
 			LOGGER.info("Scripts fetched successfully for category: " + category);
-			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+			return ResponseUtils.getSuccessDataResponse("Scripts fetched successfully for category: " + category,
+					scripts);
 		} else {
 			LOGGER.error("No script found for category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No script found for category");
+			return ResponseUtils.getSuccessDataResponse("No script found for category", null);
 		}
 	}
 
@@ -298,7 +303,7 @@ public class ScriptController {
 	@Operation(summary = "Download Script", description = "Download Script")
 	@ApiResponse(responseCode = "200", description = "Script downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/downloadscriptdatazip")
+	@GetMapping("/downloadScriptDataZip")
 	public ResponseEntity<?> downloadScript(@RequestParam String scriptName) {
 		byte[] zipBytes = scriptService.generateScriptZip(scriptName);
 		if (zipBytes == null) {
@@ -306,7 +311,7 @@ public class ScriptController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading script");
 		}
 		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + scriptName + ".zip");
+		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=Script-" + scriptName + ".zip");
 		LOGGER.info("Script downloaded successfully");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(zipBytes);
@@ -322,16 +327,22 @@ public class ScriptController {
 	@Operation(summary = "Upload ZIP file", description = "Upload ZIP file")
 	@ApiResponse(responseCode = "200", description = "ZIP file has been successfully processed")
 	@ApiResponse(responseCode = "500", description = "Error in processing ZIP file")
-	@PostMapping("/uploadscriptdatazip")
-	public ResponseEntity<String> uploadScript(@RequestParam("file") MultipartFile file) {
+	@PostMapping("/uploadScriptDataZip")
+	public ResponseEntity<Response> uploadScript(@RequestParam("file") MultipartFile file) {
 		LOGGER.info("Received upload ZIP file request: " + file.getOriginalFilename());
-		boolean scriptUpload = scriptService.uploadZipFile(file);
+		boolean scriptUpload;
+		try {
+			scriptUpload = scriptService.uploadZipFile(file);
+		} catch (IOException e) {
+			LOGGER.error("Error in processing ZIP file");
+			throw new TDKServiceException("Error in processing ZIP file");
+		}
 		if (scriptUpload) {
 			LOGGER.info("ZIP file has been successfully processed");
-			return ResponseEntity.status(HttpStatus.OK).body("ZIP file has been successfully processed");
+			return ResponseUtils.getSuccessResponse("ZIP file has been successfully processed");
 		} else {
 			LOGGER.error("Error in processing ZIP file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in processing ZIP file");
+			throw new TDKServiceException("Error in processing ZIP file");
 		}
 
 	}
@@ -347,8 +358,8 @@ public class ScriptController {
 	@ApiResponse(responseCode = "200", description = "Script template fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in fetching script template")
-	@GetMapping("/template/{primitiveTestName}")
-	public ResponseEntity<String> getScriptTemplate(@PathVariable String primitiveTestName) {
+	@GetMapping("/getScriptTemplate")
+	public ResponseEntity<String> getScriptTemplate(@RequestParam String primitiveTestName) {
 		String scriptTemplate = scriptService.scriptTemplate(primitiveTestName);
 		return ResponseEntity.status(HttpStatus.OK).body(scriptTemplate);
 	}
@@ -363,14 +374,13 @@ public class ScriptController {
 	@Operation(summary = "Download all Test Case as Module Excel  zip by Category", description = "Download all Test Case as Excel by Module ZIP by Category")
 	@ApiResponse(responseCode = "200", description = "Test case downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/downloadalltestcasezipbycategory")
+	@GetMapping("/downloadAllTestcaseZipByCategory")
 	public ResponseEntity<?> downloadAllTestCaseAsZipByCategory(@RequestParam String category) {
 		LOGGER.info("Received download all test case as excel as zip  by category : " + category);
 		ByteArrayInputStream in = scriptService.testCaseToExcelByCategory(category);
 		if (in == null || in.available() == 0) {
 			LOGGER.error("Error in downloading all test case as excel by module ZIP by category");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading all test case as excel by module ZIP by category");
+			throw new TDKServiceException("Error in downloading all test case as excel by module ZIP by category");
 		}
 		// Prepare response with the Excel file
 		HttpHeaders headers = new HttpHeaders();
@@ -386,27 +396,27 @@ public class ScriptController {
 	 *
 	 * @param category         - the category
 	 * @param isThunderEnabled - the isThunderEnabled
-	 * @return List<String> - the list of script
+	 * @return ResponseEntity<DataResponse> - the list of script in
 	 */
 	@Operation(summary = "Get List of Script by Category", description = "Get List of Script by Category")
 	@ApiResponse(responseCode = "200", description = "List of script fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getListofScriptByCategory")
-	public ResponseEntity<?> getListofScriptByCategory(@RequestParam String category,
+	public ResponseEntity<DataResponse> getListofScriptByCategory(@RequestParam String category,
 			@RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Received request to get list of scripts by category: {} and isThunderEnabled: {}", category,
 				isThunderEnabled);
-
 		List<ScriptDetailsResponse> scripts = scriptService.getListofScriptNamesByCategory(category, isThunderEnabled);
 
 		if (scripts != null) {
 			LOGGER.info("Scripts fetched successfully for category: {} and isThunderEnabled: {}", category,
 					isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.OK).body(scripts);
+			return ResponseUtils.getSuccessDataResponse("Scripts fetched successfully for category: " + category
+					+ "and isThunderEnabled: " + isThunderEnabled, scripts);
 		} else {
 			LOGGER.warn("No scripts found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body("No scripts found for the specified category and Thunder setting");
+			return ResponseUtils.getSuccessDataResponse(
+					"No scripts found for category: " + category + "and isThunderEnabled: " + isThunderEnabled, null);
 		}
 	}
 }

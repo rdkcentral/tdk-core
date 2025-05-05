@@ -167,7 +167,7 @@ public showConfirmPasswordOnPress: boolean = true;
     }, { validators: this.passwordMatchValidator('regpassword', 'retypepassword') })
 
     this.loginservice.getuserGroup().subscribe(res => {
-      this.allGroupName = res;
+      this.allGroupName = res.data;
     });
     this.registerForm.get('regusername')?.valueChanges.subscribe((value) => {
       const cleanedValue = value.replace(/\s+/g, '');
@@ -353,15 +353,15 @@ public showConfirmPasswordOnPress: boolean = true;
       }
       this.loginservice.userlogin(credential).subscribe({
         next: (res: any) => {
-          let loggedinUser = res;
-          this.authservice.sendToken(res.token);
-          this.authservice.setPrivileges(res.userRoleName)
+          let loggedinUser = res.data;
+          this.authservice.sendToken(loggedinUser.token);
+          this.authservice.setPrivileges(loggedinUser.userRoleName)
           localStorage.setItem("loggedinUser", JSON.stringify(loggedinUser));
           this.router.navigate(["/execution"]);
           this.location.replaceState('/execution');
         },
         error: (err) => {
-          this.errorMessage = err;
+          this.errorMessage = err.message;
           if (this.errorMessage) {
             this.showhideErr = true;
             setTimeout(() => {
@@ -404,7 +404,7 @@ public showConfirmPasswordOnPress: boolean = true;
       }
       this.registerservice.registerUser(signUpData).subscribe({
         next: (res: any) => {
-          this.registerSuccess = res;
+          this.registerSuccess = res.message;
           this.showHideRegSucess = true;
           this.showHideRegForm = false;
           this.regSubmitted = false;
@@ -412,19 +412,7 @@ public showConfirmPasswordOnPress: boolean = true;
         error: (err) => {
           //Check for the errors that are already parsed
           let errorMessage = err.message;
-          if(errorMessage && typeof errorMessage === 'string' && errorMessage.includes("already exists")){
-            this.backendErrors = this.parseBackendErrors(errorMessage);
-
-          }else{
-            let errmsg = JSON.parse(err.error);
-          console.log("Error message in error handler"+ errmsg)
-          this.backendErrors = this.parseBackendErrors(errmsg.message);
-
-          }
-
-
-
-          
+          this.backendErrors = this.parseBackendErrors(errorMessage);      
           setTimeout(() => {
             this.backendErrors = {};
           }, 2000);

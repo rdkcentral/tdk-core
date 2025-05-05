@@ -68,9 +68,10 @@ export class EditDeviceTypeComponent {
         deviceTypeCategory: this.user.deviceTypeCategory.toUpperCase()
       }
       this.service.updateDeviceType(data).subscribe({
-        next: (res:HttpResponse<any>) => {
+        next: (res) => {
+          
           if(res){
-            this._snakebar.open('Device Type Update Successfully', '', {
+            this._snakebar.open(res.message, '', {
               duration: 3000,
               panelClass: ['success-msg'],
               verticalPosition: 'top'
@@ -81,8 +82,8 @@ export class EditDeviceTypeComponent {
           }
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          console.log(err);
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

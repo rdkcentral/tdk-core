@@ -39,6 +39,7 @@ export class FooterComponent {
   constructor(private userservice: UsergroupService,
     private _snakebar: MatSnackBar,
   ) { 
+
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser')|| '{}');
   }
   /**
@@ -51,18 +52,13 @@ export class FooterComponent {
    * This method is for getting the version name.
    */
   getAppVersion():void{
-    this.userservice.appVersion().subscribe({
+    this.userservice.appVersion().subscribe({      
       next:(res)=>{
-        this.vesionName = res;
+        this.vesionName = res.data;        
       },
-      error:(err)=>{
-          this._snakebar.open(err, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-        }
+      error:(err)=>{        
+         this.vesionName = "";
+      }
     })
   }
 }

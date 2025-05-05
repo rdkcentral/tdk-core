@@ -121,7 +121,7 @@ export class ListPrimitiveTestComponent {
     this.authservice.currentRoute = this.router.url.split('?')[0];
     this.showLoader = true;
     this.service.getlistofModules(this.configureName).subscribe(res => {
-      this.moduleNames = JSON.parse(res);
+      this.moduleNames = res.data
       this.selectedValue = this.moduleNames[0];
       this.getParameterDetails(this.selectedValue);
       if(this.moduleNames.length>0){
@@ -158,7 +158,7 @@ export class ListPrimitiveTestComponent {
         next: (res) => {
           this.rowData = this.rowData.filter((row: any) => row.primitiveTestId !== data.primitiveTestId);
           this.rowData = [...this.rowData];
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
@@ -209,7 +209,7 @@ export class ListPrimitiveTestComponent {
   userEdit(user: any):void{
     localStorage.setItem('user', JSON.stringify(user))
     this.service.getParameterListUpdate(user.primitiveTestId).subscribe(res => {
-      this.service.allPassedData.next(JSON.parse(res));
+      this.service.allPassedData.next(res.data);
     })
 
     this.router.navigate(['configure/edit-primitivetest']);
@@ -223,12 +223,13 @@ export class ListPrimitiveTestComponent {
   }
 
   /**
-   * Method to get the parameter details.
+   * Method to get the Primitive test details.
    */
  getParameterDetails(selectedValue:any):void{
+    this.rowData = [];
     this.service.getParameterNames(selectedValue).subscribe({
       next: (res) => {
-        this.rowData = JSON.parse(res);
+        this.rowData = res.data
       },
       error: () => {
         this.rowData = [];

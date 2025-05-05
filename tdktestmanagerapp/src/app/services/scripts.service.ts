@@ -51,14 +51,14 @@ export class ScriptsService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/findallbymodulewithcategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/script/findAllByModuleWithCategory?category=${category}`, { headers });
   }
 
   downloadTestcases(moduleName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/downloadtestcaseasexcelbymodule?moduleName=${moduleName}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/script/downloadTestCaseAsExcelByModule?moduleName=${moduleName}`, { headers, responseType: 'blob' })
   }
 
   uploadZipFile(file: File): Observable<any> {
@@ -68,28 +68,28 @@ export class ScriptsService {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post(`${apiUrl}api/v1/script/uploadscriptdatazip`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/script/uploadScriptDataZip`, formData, { headers});
   }
 
   downloadScript(name: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/downloadscriptdatazip?scriptName=${name}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/script/downloadScriptDataZip?scriptName=${name}`, { headers, responseType: 'blob' })
   }
 
   downloadTestCasesZip(category:any) :Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/downloadalltestcasezipbycategory?category=${category}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/script/downloadAllTestcaseZipByCategory?category=${category}`, { headers, responseType: 'blob' })
   }
 
-  scriptTemplate(name:string){
+  scriptTemplate(name:string) : Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/template/${name}`, { headers, responseType: 'text' })
+    return this.http.get(`${apiUrl}api/v1/script/getScriptTemplate?primitiveTestName=${name}`, { headers, responseType: 'text' })
   }
   
   createScript(scriptCreateData:any,scriptFile:File):Observable<any>{
@@ -99,7 +99,7 @@ export class ScriptsService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-   return this.http.post(`${apiUrl}api/v1/script/create`,formData,  { headers,responseType: 'text'  });
+   return this.http.post(`${apiUrl}api/v1/script/create`,formData,  { headers });
   }
 
   updateScript(scriptUpdateData:any,scriptFile:File):Observable<any>{
@@ -109,82 +109,82 @@ export class ScriptsService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-   return this.http.put(`${apiUrl}api/v1/script/update`,formData,  { headers,responseType: 'text'  });
+   return this.http.put(`${apiUrl}api/v1/script/update`,formData,  { headers  });
   }
 
   delete(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/script/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/script/delete?id=${id}`, { headers });
   }
 
   scriptFindbyId(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/findbyid/${id}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/script/findById?id=${id}`, { headers});
   }
 
   downloadSriptZip(name:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/downloadscriptdatazip?scriptName=${name}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/script/downloadScriptDataZip?scriptName=${name}`, { headers, responseType: 'blob' })
   }
 
   findTestSuitebyCategory(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/findlistbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/script/findListByCategory?category=${category}`, { headers });
   }
 
   cretaeTestSuite(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-   return this.http.post(`${apiUrl}api/v1/testsuite/create`,data,  { headers,responseType: 'text'  });
+   return this.http.post(`${apiUrl}api/v1/testsuite/create`,data,  { headers  });
   }
   getModuleCustomTestSuite(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/findbycategory/${category}`, { headers, responseType: 'text' }); 
+    return this.http.get(`${apiUrl}api/v1/module/findAllModuleNamesBySubCategory?category=${category}`, { headers}); 
   }
 
   getAllTestSuite(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/testsuite/findallbycategory?category=${category}`, { headers, responseType: 'text' }); 
+    return this.http.get(`${apiUrl}api/v1/testsuite/findAllByCategory?category=${category}`, { headers }); 
   }
 
   downloadalltestsuitexmlZip(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/testsuite/downloadalltestsuitexml?category=${category}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/testsuite/downloadAllTestSuiteXml?category=${category}`, { headers, responseType: 'blob' })
   }
 
   downloadTestSuiteXML(testsuite:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/testsuite/downloadtestsuitexml?testSuite=${testsuite}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/testsuite/downloadTestSuiteXml?testSuite=${testsuite}`, { headers, responseType: 'blob' })
   }
 
   downloadTestSuiteXLSX(testsuite:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/testsuite/downloadtestcases?testSuite=${testsuite}`, { headers, responseType: 'blob' })
+    return this.http.get(`${apiUrl}api/v1/testsuite/downloadTestCases?testSuite=${testsuite}`, { headers, responseType: 'blob' })
   }
-  deleteTestSuite(id:any){
+  deleteTestSuite(id:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/testsuite/delete/${id}`, { headers, responseType: 'text' }); 
+    return this.http.delete(`${apiUrl}api/v1/testsuite/delete?id=${id}`, { headers }); 
   }
 
   uploadTestSuiteXML(file:File): Observable<any>{
@@ -193,14 +193,14 @@ export class ScriptsService {
     });
     const formData: FormData = new FormData();
     formData.append('testSuite', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/testsuite/uploadtestsuitexml`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/testsuite/uploadTestSuiteXml`, formData, { headers});
   }
 
   updateTestSuite(data:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-   return this.http.post(`${apiUrl}api/v1/testsuite/update`,data,  { headers,responseType: 'text'  });
+   return this.http.put(`${apiUrl}api/v1/testsuite/update`,data,  { headers });
   
   }
 
@@ -208,7 +208,7 @@ export class ScriptsService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-   return this.http.post(`${apiUrl}api/v1/testsuite/createCustomTestSuite`,data,  { headers,responseType: 'text'  });
+   return this.http.post(`${apiUrl}api/v1/testsuite/createCustomTestSuite`,data,  { headers});
   
   }
 

@@ -37,7 +37,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import com.rdkm.tdkservice.response.ErrorResponse;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 
 /**
  * This class is used to handle the global exceptions using Spring boot
@@ -55,7 +56,7 @@ public class GlobalExceptionHandler {
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	@ResponseBody
-	public ResponseEntity<Map<String, String>> handleValidationExceptions(MethodArgumentNotValidException ex) {
+	public ResponseEntity<DataResponse> handleValidationExceptions(MethodArgumentNotValidException ex) {
 		logger.info("Validation failed: " + ex.getMessage());
 		Map<String, String> errors = new HashMap<>();
 		ex.getBindingResult().getAllErrors().forEach((error) -> {
@@ -63,7 +64,9 @@ public class GlobalExceptionHandler {
 			String errorMessage = error.getDefaultMessage();
 			errors.put(fieldName, errorMessage);
 		});
-		return ResponseEntity.badRequest().body(errors);
+		DataResponse errorResponse = new DataResponse("Invalid User inputs in request", HttpStatus.BAD_REQUEST.value(),
+				errors);
+		return ResponseEntity.badRequest().body(errorResponse);
 	}
 
 	/*
@@ -78,14 +81,15 @@ public class GlobalExceptionHandler {
 
 	/**
 	 * This method is used to handle the ResourceAlreadyExistsException and return
-	 * the error response with the error message in the response body
+	 * the error response with the error message in the response body and HTTP
+	 * status code 409
 	 * 
-	 * @param ex
-	 * @return
+	 * @param exception
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(ResourceAlreadyExistsException.class)
-	public ResponseEntity<Object> handleResourceAlreadyRegistered(ResourceAlreadyExistsException ex) {
-		ErrorResponse error = new ErrorResponse(ex.getMessage());
+	public ResponseEntity<Response> handleResourceAlreadyRegistered(ResourceAlreadyExistsException ex) {
+		Response error = new Response(ex.getMessage(), HttpStatus.CONFLICT.value());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(error);
 	}
 
@@ -94,12 +98,12 @@ public class GlobalExceptionHandler {
 	 * error response with the error message in the response body
 	 * 
 	 * @param ex
-	 * @return
+	 * @return ResponseEntity
 	 */
 
 	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<Object> handleResourceNotExists(ResourceNotFoundException ex) {
-		ErrorResponse error = new ErrorResponse(ex.getMessage());
+	public ResponseEntity<Response> handleResourceNotExists(ResourceNotFoundException ex) {
+		Response error = new Response(ex.getMessage(), HttpStatus.NOT_FOUND.value());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
 
@@ -108,11 +112,11 @@ public class GlobalExceptionHandler {
 	 * error response with the error message in the response body
 	 * 
 	 * @param ex
-	 * @return
+	 * @return ResponseEntity
 	 */
 	@ExceptionHandler(NoResourceFoundException.class)
-	public ResponseEntity<Object> handleResourceNotExists(NoResourceFoundException ex) {
-		ErrorResponse error = new ErrorResponse("API endpoint not found");
+	public ResponseEntity<Response> handleResourceNotExists(NoResourceFoundException ex) {
+		Response error = new Response("API endpoint not found", 123);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(error);
 	}
 
@@ -122,40 +126,52 @@ public class GlobalExceptionHandler {
 	 * 
 	 * @param ex
 	 * @param request
-	 * @return
+	 * @return ResponseEntity
 	 */
-
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<Object> handleGlobalException(Exception ex, WebRequest request) {
-		ex.printStackTrace();
-
-		return new ResponseEntity<>("An unexpected error occurred: " + ex.getMessage(),
-				HttpStatus.INTERNAL_SERVER_ERROR);
+		logger.info("Internal server error that is not handled: " + ex.getMessage());
+		Response errorResponse = new Response("Something went wrong, Please report to administrator", HttpStatus.INTERNAL_SERVER_ERROR.value());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
 
 	/**
 	 * This method is used to handle the BadCredentialsException and return the
 	 * error response with the error message in the response body
 	 * 
-	 * @return
+	 * @return ResponseEntity
 	 * 
 	 */
-
 	@ExceptionHandler(BadCredentialsException.class)
-	public ResponseEntity<String> handleBadCredentialsException() {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+	public ResponseEntity<Response> handleBadCredentialsException(BadCredentialsException ex) {
+		Response errorResponse = new Response("Incorrect password", HttpStatus.UNAUTHORIZED.value());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
+	}
+
+	/**
+	 * This method is used to handle the BadCredentialsException and return the
+	 * error response with the error message in the response body
+	 * 
+	 * @return ResponseEntity
+	 * 
+	 */
+	@ExceptionHandler(TDKServiceException.class)
+	public ResponseEntity<Response> handleTDKServiceException(TDKServiceException ex) {
+		Response errorResponse = new Response(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value());
+		return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorResponse);
 	}
 
 	/**
 	 * This method is used to handle the InternalAuthenticationServiceException and
 	 * return the error response with the error message in the response body
 	 * 
-	 * @return
+	 * @return ResponseEntity
 	 * 
 	 */
 	@ExceptionHandler(InternalAuthenticationServiceException.class)
-	public ResponseEntity<String> handleInternalAuthenticationServiceException() {
-		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect username or password");
+	public ResponseEntity<Response> handleInternalAuthenticationServiceException() {
+		Response errorResponse = new Response("Incorrect username or password", HttpStatus.UNAUTHORIZED.value());
+		return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorResponse);
 	}
 
 	/**
@@ -166,8 +182,8 @@ public class GlobalExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(UserInputException.class)
-	public ResponseEntity<ErrorResponse> handleUserInputException(UserInputException ex) {
-		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+	public ResponseEntity<Response> handleUserInputException(UserInputException ex) {
+		Response errorResponse = new Response(ex.getMessage(), HttpStatus.BAD_REQUEST.value());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
 
 	}
@@ -180,8 +196,8 @@ public class GlobalExceptionHandler {
 	 * @return
 	 */
 	@ExceptionHandler(DeleteFailedException.class)
-	public ResponseEntity<ErrorResponse> handleDeleteFailedException(DeleteFailedException ex) {
-		ErrorResponse errorResponse = new ErrorResponse(ex.getMessage());
+	public ResponseEntity<Response> handleDeleteFailedException(DeleteFailedException ex) {
+		Response errorResponse = new Response(ex.getMessage(), HttpStatus.CONFLICT.value());
 		return ResponseEntity.status(HttpStatus.CONFLICT).body(errorResponse);
 	}
 

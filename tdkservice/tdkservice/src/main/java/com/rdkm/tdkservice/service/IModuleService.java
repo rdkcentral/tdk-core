@@ -100,12 +100,12 @@ public interface IModuleService {
 	 * @param module the module name
 	 * @return the XML file as a string
 	 */
-	ByteArrayResource downloadModulesAsZip(String category) throws Exception;
+	ByteArrayResource downloadModulesAsZip(String category);
 
 	/**
 	 * Finds all module names by category.
 	 *
 	 * @return a list of all module names
 	 */
-	public List<String> findByCategory(String category);
+	public List<String> findAllModuleNamesBySubCategory(String category);
 }

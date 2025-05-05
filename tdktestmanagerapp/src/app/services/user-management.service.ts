@@ -42,7 +42,7 @@ export class UserManagementService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/users/delete?id=${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/users/delete?id=${id}`, { headers });
   }
 
   getGroupName(): Observable<any> {
@@ -56,14 +56,14 @@ export class UserManagementService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/users/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/users/create`, data, { headers })
   }
 
   updateUser(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/users/update`, data, { headers, observe: 'response', responseType: 'text' })
+    return this.http.put(`${apiUrl}api/v1/users/update`, data, { headers, observe: 'response'})
   }
 
 

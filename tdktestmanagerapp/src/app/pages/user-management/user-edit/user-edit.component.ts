@@ -108,8 +108,8 @@ export class UserEditComponent implements OnInit {
       this.usermanageserice.updateUser(obj).subscribe({
         next: (res) => {
           if (res.status === 200) {
-            this._snakebar.open('Update Successfully !!!', '', {
-              duration: 3000,
+            this._snakebar.open(res.body.message , '', {
+              duration: 2000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
               verticalPosition: 'top',
@@ -121,8 +121,7 @@ export class UserEditComponent implements OnInit {
           }
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 4000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -42,6 +42,7 @@ import com.rdkm.tdkservice.repository.DeviceRepositroy;
 import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IDeviceTypeService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -63,6 +64,9 @@ public class DeviceTypeService implements IDeviceTypeService {
 
 	@Autowired
 	UserGroupRepository userGroupRepository;
+
+	@Autowired
+	CommonService commonService;
 
 	/**
 	 * This method is used to create a new deviceType.
@@ -105,7 +109,7 @@ public class DeviceTypeService implements IDeviceTypeService {
 			LOGGER.error("Error occurred while creating Device Type", e);
 			return false;
 		}
-		LOGGER.info("deviceType creation completed");
+		LOGGER.info("DeviceType creation completed");
 		return deviceType != null && deviceType.getId() != null;
 	}
 
@@ -222,7 +226,8 @@ public class DeviceTypeService implements IDeviceTypeService {
 	@Override
 	public List<DeviceTypeDTO> getDeviceTypesByCategory(String category) {
 		LOGGER.info("Going to fetch DeviceType  by category: " + category);
-		List<DeviceType> deviceTypes = deviceTypeRepository.findByCategory(Category.getCategory(category));
+		Category categoryEnum = commonService.validateCategory(category);
+		List<DeviceType> deviceTypes = deviceTypeRepository.findByCategory(categoryEnum);
 		if (deviceTypes.isEmpty()) {
 			return null;
 		}
@@ -238,7 +243,8 @@ public class DeviceTypeService implements IDeviceTypeService {
 	@Override
 	public List<String> getDeviceTypeNameByCategory(String category) {
 		LOGGER.info("Going to fetch DeviceType names by category: " + category);
-		List<DeviceType> deviceTypes = deviceTypeRepository.findByCategory(Category.getCategory(category));
+		Category categoryEnum = commonService.validateCategory(category);
+		List<DeviceType> deviceTypes = deviceTypeRepository.findByCategory(categoryEnum);
 		if (deviceTypes.isEmpty()) {
 			return null;
 		}

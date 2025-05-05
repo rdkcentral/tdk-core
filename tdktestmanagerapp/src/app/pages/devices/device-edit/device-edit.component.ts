@@ -315,7 +315,7 @@ public frameworkComponents :any;
    */
   getAlldeviceType(){
     this.devicetypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
-      this.allDeviceType = (JSON.parse(res));
+      this.allDeviceType = res.data
       this.findboxType = this.allDeviceType;
       for (let i = 0; i < this.findboxType.length; i++) {
         const element = this.findboxType[i];
@@ -333,7 +333,7 @@ public frameworkComponents :any;
    */
   getAllOem(){
     this.oemService.getOemByList(this.selectedDeviceCategory).subscribe(res=>{
-      this.allOem = JSON.parse(res);
+      this.allOem = res.data;
       
     })
   }
@@ -343,7 +343,7 @@ public frameworkComponents :any;
    */
   getAllsoc(){
     this.socService.getSoc(this.selectedDeviceCategory).subscribe(res=>{
-      this.allsoc = JSON.parse(res);
+      this.allsoc = res.data;
       
     })
   }
@@ -590,7 +590,7 @@ public frameworkComponents :any;
       }
     this.service.updateDevice(obj).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
         duration: 3000,
         panelClass: ['success-msg'],
         verticalPosition: 'top'
@@ -602,8 +602,8 @@ public frameworkComponents :any;
        
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg.message, '', {
+    
+        this._snakebar.open(err.message, '', {
         duration: 2000,
         panelClass: ['err-msg'],
         horizontalPosition: 'end',
@@ -639,7 +639,7 @@ public frameworkComponents :any;
       }
     this.service.updateDevice(rdkBobj).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
         duration: 3000,
         panelClass: ['success-msg'],
         verticalPosition: 'top'
@@ -649,8 +649,7 @@ public frameworkComponents :any;
         }, 1000);
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg.message, '', {
+        this._snakebar.open(err.message, '', {
         duration: 2000,
         panelClass: ['err-msg'],
         horizontalPosition: 'end',

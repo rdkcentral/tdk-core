@@ -179,7 +179,7 @@ export class CreatePrimitiveTestComponent {
     }
 
     this.service.getlistofModules(this.configureName).subscribe(res => {
-      this.moduleNames = JSON.parse(res);
+      this.moduleNames = res.data;
     })
 
   }
@@ -196,7 +196,7 @@ export class CreatePrimitiveTestComponent {
   getModuleSelected(event: any) :void{
     this.selectedValue = event.target.value;
     this.service.getlistofFunction(this.selectedValue).subscribe(res => {
-      this.functionNames = JSON.parse(res)
+      this.functionNames = res.data
     })
   }
 
@@ -207,7 +207,7 @@ export class CreatePrimitiveTestComponent {
   getFunctionSelected(event: any) :void{
     this.selectedFunctionValue = event.target.value;
     this.service.getParameterList(this.selectedFunctionValue).subscribe(res => {
-      this.rowData = JSON.parse(res);
+      this.rowData = res.data;
     })
   }
 
@@ -245,7 +245,7 @@ export class CreatePrimitiveTestComponent {
       }
       this.service.createPrimitiveTest(data).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -257,9 +257,9 @@ export class CreatePrimitiveTestComponent {
 
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          const res = Object.keys(errmsg).map(key => {
-            return { key: errmsg[key] }
+         
+          const res = Object.keys(err).map(key => {
+            return { key: err[key] }
           });
           for (let i = 0; i < res.length; i++) {
             this.errElement = res[i];

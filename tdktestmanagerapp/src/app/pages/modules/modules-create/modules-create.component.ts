@@ -68,7 +68,7 @@ export class ModulesCreateComponent {
       this.logFilesArr = ['/rdklogs/logs'];
     }
     this.moduleservice.getAllTestGroups().subscribe((res:any) => {
-      this.testGroupArr = JSON.parse(res);
+      this.testGroupArr = res.data;
     });
     this.createModuleForm = new FormGroup({
       moduleName: new FormControl<string | null>('', { validators: Validators.required }),
@@ -99,7 +99,7 @@ export class ModulesCreateComponent {
         }
         this.moduleservice.createModule(moduleObj).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'

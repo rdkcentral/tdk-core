@@ -284,7 +284,7 @@ export class AnalysisComponent {
     this.deviceTypeService
       .getfindallbycategory(this.selectedDfaultCategory)
       .subscribe((res) => {
-        this.allDeviceType = JSON.parse(res);
+        this.allDeviceType = res.data;
       });
   }
   categoryChange(event:any): void {
@@ -449,7 +449,7 @@ export class AnalysisComponent {
       };
       this.showLoader = true;
       this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
-        let response = JSON.parse(res);
+        let response = res.data;
         if(response){
           this.rowData = response;
           this.showTable = true;

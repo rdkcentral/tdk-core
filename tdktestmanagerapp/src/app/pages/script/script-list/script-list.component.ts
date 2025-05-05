@@ -232,7 +232,7 @@ export class ScriptListComponent {
     this.scriptservice.getallbymodules(category).subscribe({
       next:(res)=>{
         if(res){
-          this.scriptDataArr = JSON.parse(res);
+          this.scriptDataArr = res.data;
           this.cdRef.detectChanges();
           this.filterScript();
           this.scriptSorting();
@@ -243,11 +243,10 @@ export class ScriptListComponent {
         }
       },
       error:(err)=>{
-        let errmsg = err;
-        if(errmsg === "No script found for category"){
+        let errmsg = err.message;
+        if(errmsg && errmsg.includes("No script found for category")){
           this.noScriptFound = 'No Rows To Show';
         }
-
       }
     })
   }
@@ -352,12 +351,12 @@ export class ScriptListComponent {
    * 
    * @returns {void}
    */  
-  allTestSuilteListByCategory(){
+  allTestSuilteListByCategory(){    
     this.showLoader = true;
     this.scriptservice.getAllTestSuite(this.selectedCategory).subscribe({
       next:(res)=>{
         if(res){
-          this.testSuiteDataArr = JSON.parse(res);
+          this.testSuiteDataArr = res.data
           this.cdRef.detectChanges();
           this.applyFilterSuite();
           this.toggleSortSuite();
@@ -368,7 +367,7 @@ export class ScriptListComponent {
         }
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err);
+        let errmsg = err.message;
         if(errmsg.message === " Test suite - 'RDKB' doesnt exist"){
           this.noScriptFound = 'No Rows To Show';
         }
@@ -658,7 +657,7 @@ export class ScriptListComponent {
         this.uploadFileError = null;
         this.scriptservice.uploadZipFile(this.uploadFileName).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -668,8 +667,8 @@ export class ScriptListComponent {
               this.ngOnInit();
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -732,7 +731,7 @@ export class ScriptListComponent {
         this.uploadFileError = null;
         this.scriptservice.uploadTestSuiteXML(this.xmlFileName).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -743,8 +742,7 @@ export class ScriptListComponent {
               this.allTestSuilteListByCategory();
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -799,11 +797,23 @@ export class ScriptListComponent {
    * @param editData - The data containing the ID of the script to be edited.
    */  
   editScript(editData: any): void {
-    this.scriptservice.scriptFindbyId(editData.id).subscribe(res=>{
-      this.scriptDetails = JSON.parse(res);
-      localStorage.setItem('scriptDetails', JSON.stringify(this.scriptDetails));
-      this.router.navigate(['script/edit-scripts']);
-    })
+    this.scriptservice.scriptFindbyId(editData.id).subscribe(
+      {
+        next: (res) => {
+          this.scriptDetails = res.data;
+          localStorage.setItem('scriptDetails', JSON.stringify(this.scriptDetails));
+          this.router.navigate(['script/edit-scripts']);
+        },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      }        
+    )
   }
   /**
    * Deletes a script after user confirmation.
@@ -821,7 +831,7 @@ export class ScriptListComponent {
       if(data){
         this.scriptservice.delete(data.id).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -830,7 +840,7 @@ export class ScriptListComponent {
               this.findallScriptsByCategory(this.selectedCategory);
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -881,7 +891,7 @@ export class ScriptListComponent {
         const url = window.URL.createObjectURL(xmlBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${params.moduleName}.xlsx`;
+        a.download = `Testcases_Module-${params.moduleName}.xlsx`;
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
@@ -953,7 +963,7 @@ export class ScriptListComponent {
       const url = window.URL.createObjectURL(xmlBlob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `Testcase_${this.selectedCategory}.zip`;
+      a.download = `Testcases_${this.selectedCategory}.zip`;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -999,7 +1009,7 @@ export class ScriptListComponent {
         const url = window.URL.createObjectURL(xmlBlob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `${params.name}.xlsx`;
+        a.download = `Suite_Testcases_${params.name}.xlsx`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -1026,7 +1036,7 @@ export class ScriptListComponent {
       if(params.id){
         this.scriptservice.deleteTestSuite(params.id).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',

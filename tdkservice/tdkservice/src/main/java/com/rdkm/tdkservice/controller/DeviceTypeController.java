@@ -25,13 +25,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +40,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rdkm.tdkservice.dto.DeviceTypeCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceTypeDTO;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IDeviceTypeService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -82,17 +84,15 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "500", description = "Error in saving device type data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createDeviceType(@RequestBody @Valid DeviceTypeCreateDTO deviceTypeDTO) {
+	public ResponseEntity<Response> createDeviceType(@RequestBody @Valid DeviceTypeCreateDTO deviceTypeDTO) {
 		LOGGER.info("Received create device type request: " + deviceTypeDTO.toString());
-
 		boolean isDeviceTypeCreated = deviceTypeService.createDeviceType(deviceTypeDTO);
-
 		if (isDeviceTypeCreated) {
 			LOGGER.info("device type created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Device Type created succesfully");
+			return ResponseUtils.getCreatedResponse("Device Type created successfully");
 		} else {
 			LOGGER.error("Error in saving devicetype data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving device type data");
+			throw new TDKServiceException("Error in saving device type data");
 		}
 
 	}
@@ -108,15 +108,15 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "device types retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No device types found")
 	@GetMapping("/findall")
-	public ResponseEntity<?> getAllDeviceTypes() {
+	public ResponseEntity<DataResponse> getAllDeviceTypes() {
 		LOGGER.info("Going to fetch all Device types");
 		List<DeviceTypeDTO> deviceTypeDTOS = deviceTypeService.getAllDeviceTypes();
 		if (null != deviceTypeDTOS) {
 			LOGGER.info("Device types found");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTOS);
+			return ResponseUtils.getSuccessDataResponse("Device types fetched successfully", deviceTypeDTOS);
 		} else {
 			LOGGER.info("No device types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device types found");
+			return ResponseUtils.getSuccessDataResponse("No devicetypes available", deviceTypeDTOS);
 		}
 
 	}
@@ -131,12 +131,11 @@ public class DeviceTypeController {
 	@Operation(summary = "Delete a device type", description = "Deletes a device type from the system.")
 	@ApiResponse(responseCode = "200", description = "Device type deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Device type not found")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteDeviceType(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteDeviceType(@RequestParam UUID id) {
 		LOGGER.info("Received delete device type request: " + id);
 		deviceTypeService.deleteById(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Device Type deleted successfully");
-
+		return ResponseUtils.getSuccessResponse("Device Type deleted successfully");
 	}
 
 	/**
@@ -149,11 +148,11 @@ public class DeviceTypeController {
 	@Operation(summary = "Find device type by ID", description = "Retrieves a device type by its ID.")
 	@ApiResponse(responseCode = "200", description = "Device type found")
 	@ApiResponse(responseCode = "404", description = "Device type not found")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<DeviceTypeDTO> findById(@PathVariable UUID id) {
+	@GetMapping("/findbyid")
+	public ResponseEntity<DataResponse> findById(@RequestParam UUID id) {
 		LOGGER.info("Received find device type by id request: " + id);
 		DeviceTypeDTO deviceTypeDTO = deviceTypeService.findById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTO);
+		return ResponseUtils.getSuccessDataResponse("Device type found", deviceTypeDTO);
 
 	}
 
@@ -171,15 +170,15 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "404", description = "device type not found")
 	@ApiResponse(responseCode = "500", description = "Error in updating device type data")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateDeviceType(@RequestBody DeviceTypeDTO deviceTypeDTO) {
+	public ResponseEntity<DataResponse> updateDeviceType(@RequestBody DeviceTypeDTO deviceTypeDTO) {
 		LOGGER.info("Received update device type request: " + deviceTypeDTO.toString());
 		DeviceTypeDTO deviceTypeObjDTO = deviceTypeService.updateDeviceType(deviceTypeDTO);
 		if (null != deviceTypeObjDTO) {
 			LOGGER.info("DeviceType updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Device Type updated successfully");
+			return ResponseUtils.getSuccessDataResponse("Device Type updated successfully", deviceTypeObjDTO);
 		} else {
 			LOGGER.error("Error in updating Device type data");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Device Type not found");
+			throw new TDKServiceException("Error in updating user data");
 		}
 
 	}
@@ -196,15 +195,15 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "device types retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No device types found")
 	@GetMapping("/findallbycategory")
-	public ResponseEntity<?> getDeviceTypesByCategory(@RequestParam String category) {
+	public ResponseEntity<DataResponse> getDeviceTypesByCategory(@RequestParam String category) {
 		LOGGER.info("Received find device type by category request: " + category);
 		List<DeviceTypeDTO> deviceTypeDTOS = deviceTypeService.getDeviceTypesByCategory(category);
 		if (null != deviceTypeDTOS) {
 			LOGGER.info("device types found");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTOS);
+			return ResponseUtils.getSuccessDataResponse("Device types fetched successfully", deviceTypeDTOS);
 		} else {
 			LOGGER.error("No device types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device types found");
+			return ResponseUtils.getSuccessDataResponse("No device types found", deviceTypeDTOS);
 		}
 
 	}
@@ -221,21 +220,22 @@ public class DeviceTypeController {
 	@ApiResponse(responseCode = "200", description = "device types retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No device types found")
 	@GetMapping("/getlistbycategory")
-	public ResponseEntity<?> getDeviceTypesListByCategory(@RequestParam String category) {
+	public ResponseEntity<DataResponse> getDeviceTypesListByCategory(@RequestParam String category) {
 		LOGGER.info("Received find device type by category request: " + category);
 		List<String> deviceDTO = deviceTypeService.getDeviceTypeNameByCategory(category);
 		if (null != deviceDTO) {
 			LOGGER.info("device types found");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDTO);
+			return ResponseUtils.getSuccessDataResponse("Device types fetched successfully", deviceDTO);
 		} else {
 			LOGGER.error("No device types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device types found");
+			return ResponseUtils.getSuccessDataResponse("No device types found", deviceDTO);
+
 		}
 	}
 
 	/**
 	 * Retrieves all device type names in the system by category other than the
-	 * device type name
+	 * device type name given
 	 *
 	 * @param category   the category of the device types to retrieve
 	 * @param devicetype the name of the device type to exclude
@@ -254,10 +254,10 @@ public class DeviceTypeController {
 		deviceTypeDTO.remove(devicetype);
 		if (null != deviceTypeDTO && !deviceTypeDTO.isEmpty()) {
 			LOGGER.info("Device types found");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceTypeDTO);
+			return ResponseUtils.getSuccessDataResponse("Device types fetched successfully", deviceTypeDTO);
 		} else {
 			LOGGER.error("No device types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device types found");
+			return ResponseUtils.getSuccessDataResponse("No device types found", deviceTypeDTO);
 		}
 	}
 

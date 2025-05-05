@@ -77,6 +77,8 @@ import com.rdkm.tdkservice.dto.ExecutionSummaryResponseDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.enums.ExecutionResultStatus;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.Execution;
 import com.rdkm.tdkservice.model.ExecutionDevice;
@@ -803,21 +805,36 @@ public class ExportExcelService implements IExportExcelService {
 	 */
 	@Override
 	public byte[] generateCombinedExcelReport(List<UUID> executionIds) {
-		Logger logger = LoggerFactory.getLogger(getClass());
+		LOGGER.info("Generating combined Excel report for execution IDs: {}", executionIds);
+
+		if (executionIds == null || executionIds.isEmpty()) {
+			throw new UserInputException("Execution IDs list cannot be empty.");
+		}
+
+		if (executionIds.size() > 10) {
+			LOGGER.error("Maximum 10 executions can be selected for combined report. Now {} executions are selected.",
+					executionIds.size());
+			throw new UserInputException("Maximum 10 executions can be selected for combined report. Now "
+					+ executionIds.size() + " executions are selected.");
+		}
+		if (executionIds.size() == 1) {
+			LOGGER.error("Atleast two executions needs to be selected for combined report");
+			throw new UserInputException("Atleast two executions needs to be selected for combined report");
+		}
 
 		// Fetch filtered and prioritized module data for all execution IDs
-		logger.debug("Fetching filtered and prioritized combined module data.");
+		LOGGER.debug("Fetching filtered and prioritized combined module data.");
 		List<Map<String, Object>> combinedModuleData = getFilteredCombinedModuleData(executionIds);
-		logger.debug("Fetched combined module data: {}", combinedModuleData);
+		LOGGER.debug("Fetched combined module data: {}", combinedModuleData);
 
 		// Fetch device details for the execution IDs
-		logger.info("Fetching device details for execution IDs.");
+		LOGGER.info("Fetching device details for execution IDs.");
 		List<Map<String, Object>> deviceDetails = getDeviceDetails(executionIds);
-		logger.info("Fetched device details: {}", deviceDetails);
+		LOGGER.info("Fetched device details: {}", deviceDetails);
 
 		try (Workbook workbook = new XSSFWorkbook()) {
 			// Create Summary Sheet
-			logger.info("Creating summary sheet.");
+			LOGGER.info("Creating summary sheet.");
 			Sheet summarySheet = workbook.createSheet("Summary");
 
 			// Pass device details to the summary sheet creation
@@ -825,30 +842,30 @@ public class ExportExcelService implements IExportExcelService {
 
 			// Create Module Sheets
 			if (!combinedModuleData.isEmpty()) {
-				logger.debug("Creating module sheets for {} modules.", combinedModuleData.size());
+				LOGGER.debug("Creating module sheets for {} modules.", combinedModuleData.size());
 				Map<String, List<Map<String, Object>>> modulesGrouped = combinedModuleData.stream()
 						.collect(Collectors.groupingBy(data -> (String) data.get("moduleName")));
-				logger.info("Module data: {}", modulesGrouped);
+				LOGGER.info("Module data: {}", modulesGrouped);
 
 				for (Map.Entry<String, List<Map<String, Object>>> entry : modulesGrouped.entrySet()) {
 					String moduleName = entry.getKey();
 					List<Map<String, Object>> moduleScripts = entry.getValue();
-					logger.info("Creating sheet for module: {} with {} scripts.", moduleName, moduleScripts.size());
+					LOGGER.info("Creating sheet for module: {} with {} scripts.", moduleName, moduleScripts.size());
 
 					createCombinedModuleSheet(moduleScripts, workbook);
 				}
 			} else {
-				logger.warn("No module data available. Skipping module sheet creation.");
+				LOGGER.warn("No module data available. Skipping module sheet creation.");
 			}
 
 			// Write workbook to a byte array
-			logger.debug("Writing workbook to byte array.");
+			LOGGER.debug("Writing workbook to byte array.");
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			workbook.write(outputStream);
-			logger.info("Excel file generated with {} sheets.", workbook.getNumberOfSheets());
+			LOGGER.info("Excel file generated with {} sheets.", workbook.getNumberOfSheets());
 			return outputStream.toByteArray();
 		} catch (IOException e) {
-			logger.error("Error generating Excel file", e);
+			LOGGER.error("Error generating Excel file", e);
 		}
 		return new byte[0];
 	}
@@ -1436,7 +1453,8 @@ public class ExportExcelService implements IExportExcelService {
 	 */
 	public byte[] generateRawReport(UUID executionId) {
 		LOGGER.info("Generating raw report for execution ID: {}", executionId);
-
+		Execution execution = executionRepository.findById(executionId)
+				.orElseThrow(() -> new ResourceNotFoundException("Execution", executionId.toString()));
 		// Fetch module data using existing logic
 		List<Map<String, Object>> moduleData = getModuleData(executionId);
 
@@ -1446,8 +1464,6 @@ public class ExportExcelService implements IExportExcelService {
 			int rowNum = 0;
 
 			// Add device details
-			Execution execution = executionRepository.findById(executionId)
-					.orElseThrow(() -> new ResourceNotFoundException("Execution", executionId.toString()));
 			addRawReportDeviceDetails(rawSheet, execution);
 			rowNum += 5; // Adjust rowNum after adding device details
 			rowNum++; // Add an extra blank row
@@ -1549,9 +1565,9 @@ public class ExportExcelService implements IExportExcelService {
 			}
 		} catch (IOException e) {
 			LOGGER.error("Error writing workbook to output stream", e);
+			throw new TDKServiceException("Error writing creating raw excel");
 		}
 
-		return new byte[0];
 	}
 
 	/**
@@ -1806,25 +1822,29 @@ public class ExportExcelService implements IExportExcelService {
 	 * @return the byte array of the ZIP file
 	 * @throws IOException if an I/O error occurs
 	 */
-	public byte[] generateExecutionResultsZip(UUID executionId) throws IOException {
+	public byte[] generateExecutionResultsZip(UUID executionId) {
 
 		Optional<Execution> executionOptional = executionRepository.findById(executionId);
 		if (!executionOptional.isPresent()) {
-			throw new ResourceNotFoundException("Execution not found for id: ", executionId.toString());
+			throw new ResourceNotFoundException("Execution ID ", executionId.toString());
 		}
 		Execution execution = executionOptional.get();
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		if (executionResults.isEmpty()) {
+			throw new ResourceNotFoundException("Execution results for ID", executionId.toString());
+		}
 		try (ZipOutputStream zipOutputStream = new ZipOutputStream(byteArrayOutputStream)) {
 			for (ExecutionResult result : executionResults) {
 				String scriptName = result.getScript();
 				Script script = scriptRepository.findByName(scriptName);
-				if (script == null) {
-					throw new ResourceNotFoundException("Script not found for name: ", scriptName);
-				}
 				addLogsToZip(zipOutputStream, result, script, executionId);
 			}
+		} catch (IOException e) {
+			LOGGER.error("Error generating ZIP file: ", e);
+			throw new TDKServiceException("Error generating ZIP file");
 		}
+
 		return byteArrayOutputStream.toByteArray();
 	}
 
@@ -1835,11 +1855,11 @@ public class ExportExcelService implements IExportExcelService {
 	 * @return the byte array of the ZIP file
 	 * @throws IOException if an I/O error occurs
 	 */
-	public byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) throws IOException {
+	public byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) {
 		// Fetch execution results using the executionId
 		Optional<Execution> executionOptional = executionRepository.findById(executionId);
 		if (!executionOptional.isPresent()) {
-			throw new ResourceNotFoundException("Execution not found for id: ", executionId.toString());
+			throw new ResourceNotFoundException("Execution ID ", executionId.toString());
 		}
 		Execution execution = executionOptional.get();
 		List<ExecutionResult> executionResults = executionResultRepository.findByExecution(execution);
@@ -1848,7 +1868,8 @@ public class ExportExcelService implements IExportExcelService {
 		List<ExecutionResult> failedResults = executionResults.stream()
 				.filter(result -> result.getResult().equals(ExecutionResultStatus.FAILURE)).toList();
 		if (failedResults.isEmpty()) {
-			throw new ResourceNotFoundException("No failure scripts found for execution id: ", executionId.toString());
+			LOGGER.error("No failed execution results found for execution ID: {}", executionId);
+			throw new UserInputException("No failed execution results found for the execution ");
 		}
 
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -1856,11 +1877,11 @@ public class ExportExcelService implements IExportExcelService {
 			for (ExecutionResult result : failedResults) {
 				String scriptName = result.getScript();
 				Script script = scriptRepository.findByName(scriptName);
-				if (script == null) {
-					throw new ResourceNotFoundException("Script not found for name: ", scriptName);
-				}
 				addLogsToZip(zipOutputStream, result, script, executionId);
 			}
+		} catch (IOException e) {
+			LOGGER.error("Error generating ZIP file: ", e);
+			throw new TDKServiceException("Error generating ZIP file");
 		}
 		return byteArrayOutputStream.toByteArray();
 	}
@@ -1875,18 +1896,44 @@ public class ExportExcelService implements IExportExcelService {
 	 * @throws IOException if an I/O error occurs during report generation
 	 */
 	@Override
-	public ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds)
-			throws IOException {
+	public ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds) {
 		LOGGER.info("Generating comparison report for base execution ID: {} and execution IDs: {}", baseExecId,
 				executionIds);
+
+		if (baseExecId == null) {
+			LOGGER.error("Base Execution ID cannot be null.");
+			throw new UserInputException("Base Execution ID needs to be provided for comparison report generation. ");
+		}
+		if (executionIds.contains(baseExecId)) {
+			LOGGER.error("Base Execution ID cannot be in the selected execution IDs list.");
+			throw new UserInputException("Base Execution ID cannot be in the selected execution IDs list.");
+		}
+		if (executionIds == null || executionIds.isEmpty()) {
+			LOGGER.error("Execution IDs list cannot be empty.");
+			throw new UserInputException("Atleast one executions needs to be selected for comparison report ");
+		}
+		if (executionIds.size() > 10) {
+			LOGGER.error("Maximum 10 executions can be selected for comparison report. Now {} executions are selected.",
+					executionIds.size());
+			// Return a bad request response with the error message
+			throw new UserInputException("Maximum 10 executions can be selected for comparison report. Now "
+					+ executionIds.size() + " executions are selected.");
+		}
+
 		Workbook workBook = new XSSFWorkbook();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		createSummarySheet(workBook, baseExecId, executionIds);
 		createScriptComparisonSheet(workBook, baseExecId, executionIds);
 
-		workBook.write(out);
-		workBook.close();
+		try {
+			workBook.write(out);
+			workBook.close();
+		} catch (IOException e) {
+			LOGGER.error("Error writing workbook to output stream", e);
+			e.printStackTrace();
+			throw new TDKServiceException("Error generating comparison report");
+		}
 		LOGGER.info("Comparison report generated");
 		return new ByteArrayInputStream(out.toByteArray());
 	}

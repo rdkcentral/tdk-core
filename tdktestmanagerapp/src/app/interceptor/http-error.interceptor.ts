@@ -36,19 +36,23 @@ export const httpErrorInterceptor: HttpInterceptorFn = (req, next) => {
         if(error.status == 404){
           errorMessage = error.error
         }
-        if(error.status == 401){
-          errorMessage = error.error
+        if(error.status == 401){          
+          errorMessage =error.error
         }
         if(error.status == 400){
-          errorMessage =JSON.parse(error.error);
+          errorMessage =error.error
         }
         if(error.status == 409){
-          errorMessage =JSON.parse(error.error);
+          errorMessage =error.error
         }
-        console.log("Error message"+ errorMessage);
-        console.log("Error received"+ error);
+
+        if(error.status == 500){
+          errorMessage = error.error   
+
+        }
+       
       } else if (isProgressEventError(error)) {
-        errorMessage = 'Network error: Please check your internet connection.';
+        errorMessage = 'Network error: Please check your internet connection or the backend server may be down.';
 
       } else if (isObject(error) && 'error' in error) {
         errorMessage = extractMessage(error);

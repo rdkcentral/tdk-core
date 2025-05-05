@@ -495,7 +495,7 @@ public class Constants {
 	public static final String CRASH_LOGS = "crashLogs";
 
 	// Test variable file
-	public static final String TEST_VARIABLE_FILE = "testVariables.config";
+	public static final String RDK_CERTIFICATION_FILE_LIST = "rdkCertificationFileNames.config";
 	// Bug issue type
 	public static final String BUG_ISSUE_TYPE = "Bug";
 	// Issue analyser configuration file

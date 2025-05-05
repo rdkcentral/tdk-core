@@ -74,7 +74,7 @@ export class UpdateJiraComponent {
     }
     ListLabels(){
       this.analysiservice.ListOfLabels().subscribe((res) => {
-        this.allLabels = JSON.parse(res);
+        this.allLabels = res.data;
       });
     }
 
@@ -101,7 +101,7 @@ export class UpdateJiraComponent {
         }
         this.analysiservice.updateJiraTicket(updateObj).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               verticalPosition: 'top'
@@ -111,7 +111,7 @@ export class UpdateJiraComponent {
             }, 2000);
           },
           error:(err)=>{
-            this._snakebar.open(err, '', {
+            this._snakebar.open(err.message, '', {
               duration: 1000,
               panelClass: ['err-msg'],
               horizontalPosition: 'end',

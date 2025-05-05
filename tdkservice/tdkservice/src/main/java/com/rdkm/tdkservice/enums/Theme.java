@@ -58,6 +58,6 @@ public enum Theme {
 	 * 
 	 */
 	public static Theme getDefaultTheme() {
-		return DARK;
+		return LIGHT;
 	}
 }

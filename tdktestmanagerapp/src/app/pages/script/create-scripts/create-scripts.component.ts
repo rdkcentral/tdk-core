@@ -222,7 +222,7 @@ export class CreateScriptsComponent {
    */   
   getAllModules(): void{
     this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res=>{
-      this.allModules = JSON.parse(res);
+      this.allModules = res.data;
     })
   }
 
@@ -241,14 +241,14 @@ getSelectedModule(event: any):void{
 getAllPrimitiveTest(value: any): void{
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
-        this.allPrimitiveTest = JSON.parse(res); 
+        this.allPrimitiveTest = res.data; 
         for (let i = 0; i < this.allPrimitiveTest.length; i++) {
           this.defaultPrimitive = this.allPrimitiveTest[0].primitiveTestName;
           this.getCode();
         }
       },
       error: (err) => {
-        let errmsg = JSON.parse(err.error);
+        let errmsg = JSON.parse(err.message);
         this._snakebar.open(errmsg.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
@@ -301,7 +301,7 @@ getCode():void{
    */ 
 getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res=>{
-      this.allDeviceType = (JSON.parse(res));
+      this.allDeviceType = res.data
     })
   }
   /**
@@ -374,7 +374,7 @@ getAlldeviceType(): void{
       const scriptFile = new File([pythonContent],filename,{type: 'text/x-python'});
       this.scriptservice.createScript(scriptCreateData,scriptFile).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -383,9 +383,8 @@ getAlldeviceType(): void{
             this.router.navigate(["/script"]);
           }, 1000);
         },
-        error: (err) => {
-          let errmsg =JSON.parse(err.error) ;
-          this._snakebar.open(errmsg.message, '', {
+        error: (err) => {         
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

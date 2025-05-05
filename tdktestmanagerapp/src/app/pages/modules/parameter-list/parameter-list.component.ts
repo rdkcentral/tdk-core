@@ -136,8 +136,10 @@ export class ParameterListComponent {
     this.showLoader = true;
     this.moduleservice.findAllByFunction(this.dynamicFunctionName).subscribe({
       next:(data)=>{
-        this.rowData = JSON.parse(data);
+        this.rowData = data.data;
+        if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
         this.showLoader = false;
+        }
       },
       error:(err)=>{
         this.showLoader = false;
@@ -208,7 +210,7 @@ export class ParameterListComponent {
           next:(res)=>{
             this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
             this.rowData = [...this.rowData];
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -216,7 +218,7 @@ export class ParameterListComponent {
               })
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -37,7 +37,7 @@ import jakarta.transaction.Transactional;
 public interface ScriptTestSuiteRepository extends JpaRepository<ScriptTestSuite, UUID> {
 
 	/**
-	 * This method is used to delete all the test suite mapping for a script group.
+	 * This method is used to delete all the test suite mapping for a script.
 	 * 
 	 * @param testSuite
 	 */

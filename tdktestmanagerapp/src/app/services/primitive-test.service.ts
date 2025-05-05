@@ -41,7 +41,7 @@ export class PrimitiveTestService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/getlistofmodulenamebycategory/${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/module/findAllModuleNamesByCategory?category=${category}`, { headers});
 
   }
 
@@ -49,7 +49,7 @@ export class PrimitiveTestService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/function/getlistoffunctionbymodulename/${moduleName}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/function/getlistoffunctionbymodulename?moduleName=${moduleName}`, { headers});
 
   }
 
@@ -57,42 +57,42 @@ export class PrimitiveTestService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/primitivetest/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${apiUrl}api/v1/primitivetest/create`, data, { headers })
   }
 
   getParameterNames(moduleName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/primitivetest/getlistbymodulename?moduleName=${moduleName}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/primitivetest/getlistbymodulename?moduleName=${moduleName}`, { headers });
   }
 
   getParameterList(functionName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction/${functionName}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction?functionName=${functionName}`, { headers});
   }
 
   getParameterListUpdate(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/primitivetest/findbyid/${id}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/primitivetest/findbyid?id=${id}`, { headers });
   }
 
   updatePrimitiveTest(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/primitivetest/update`, data, { headers, observe: 'response', responseType: 'text' })
+    return this.http.put(`${apiUrl}api/v1/primitivetest/update`, data, { headers, observe: 'response'})
   }
 
   deletePrimitiveTest(id: number): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/primitivetest/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/primitivetest/delete?id=${id}`, { headers});
   }
  
   dropdownValue$ = this.dropdownValueSubject.asObservable();

@@ -25,7 +25,6 @@ import static com.rdkm.tdkservice.util.Constants.DEVICE_XML_FILE_EXTENSION;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,7 +39,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -53,9 +51,12 @@ import com.rdkm.tdkservice.dto.DeviceCreateDTO;
 import com.rdkm.tdkservice.dto.DeviceResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceStatusResponseDTO;
 import com.rdkm.tdkservice.dto.DeviceUpdateDTO;
-import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IDeviceConfigService;
 import com.rdkm.tdkservice.service.IDeviceService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -88,22 +89,23 @@ public class DeviceController {
 	 *
 	 * @param deviceDTO This is the request object containing the details of the
 	 *                  device to be created.
-	 * @return ResponseEntity<String> This returns the response message.
+	 * @return ResponseEntity<Response> This returns the response message in
+	 *         Response object.
 	 */
 	@Operation(summary = "Create a new device details", description = "Creates a new device details in the system.")
 	@ApiResponse(responseCode = "201", description = "device details created successfully")
 	@ApiResponse(responseCode = "500", description = "Error in saving device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createDevice(@RequestBody @Valid DeviceCreateDTO deviceDTO) {
+	public ResponseEntity<Response> createDevice(@RequestBody @Valid DeviceCreateDTO deviceDTO) {
 		LOGGER.info("Received create device request: " + deviceDTO.toString());
 		boolean isDeviceCreated = deviceService.createDevice(deviceDTO);
 		if (isDeviceCreated) {
 			LOGGER.info("Device created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Device created successfully");
+			return ResponseUtils.getCreatedResponse("Device created successfully");
 		} else {
 			LOGGER.error("Failed to create device data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create device");
+			throw new TDKServiceException("Failed to create device");
 		}
 	}
 
@@ -112,22 +114,23 @@ public class DeviceController {
 	 *
 	 * @param deviceUpdateDTO This is the request object containing the updated
 	 *                        details of the device.
-	 * @return ResponseEntity<String> This returns the response message.
+	 * @return ResponseEntity<Response> This returns the response message in
+	 *         Response object..
 	 */
 	@Operation(summary = "Update device details", description = "Updates the device details in the system.")
 	@ApiResponse(responseCode = "200", description = "device details updated successfully")
 	@ApiResponse(responseCode = "500", description = "Error in updating device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PutMapping("/update")
-	public ResponseEntity<String> updateDevice(@RequestBody @Valid DeviceUpdateDTO deviceUpdateDTO) {
+	public ResponseEntity<Response> updateDevice(@RequestBody @Valid DeviceUpdateDTO deviceUpdateDTO) {
 		LOGGER.info("Received update device request: " + deviceUpdateDTO.toString());
 		boolean isDeviceUpdated = deviceService.updateDevice(deviceUpdateDTO);
 		if (isDeviceUpdated) {
 			LOGGER.info("Device updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Device updated successfully");
+			return ResponseUtils.getSuccessResponse("Device updated successfully");
 		} else {
 			LOGGER.error("Failed to update device data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update device");
+			throw new TDKServiceException("Failed to update module");
 		}
 	}
 
@@ -140,16 +143,16 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "device details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findall")
-	public ResponseEntity<?> getAllDevices() {
+	@GetMapping("/findAll")
+	public ResponseEntity<DataResponse> getAllDevices() {
 		LOGGER.info("Received find all devices request");
 		List<DeviceResponseDTO> deviceDetails = deviceService.getAllDeviceDetails();
 		if (deviceDetails != null && !deviceDetails.isEmpty()) {
 			LOGGER.info("Device details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+			return ResponseUtils.getSuccessDataResponse("Device details fetched successfully", deviceDetails);
 		} else {
 			LOGGER.error("No devices found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found");
+			return ResponseUtils.getSuccessDataResponse("Device details retrieved successfully", deviceDetails);
 		}
 	}
 
@@ -157,22 +160,22 @@ public class DeviceController {
 	 * This method is used to get all devices by category.
 	 *
 	 * @param category This is the category of the devices to be fetched.
-	 * @return ResponseEntity<?> This returns the response entity.
+	 * @return ResponseEntity<DataResponse> with a list of Devices
 	 */
 	@Operation(summary = "Get All device details", description = "Get the device details in the system.")
 	@ApiResponse(responseCode = "200", description = "device details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findallbycategory")
-	public ResponseEntity<?> getAllDevicesByCategory(@RequestParam String category) {
+	@GetMapping("/findAllByCategory")
+	public ResponseEntity<DataResponse> getAllDevicesByCategory(@RequestParam String category) {
 		LOGGER.info("Received find all devices by category request: " + category);
 		List<DeviceResponseDTO> deviceDetails = deviceService.getAllDeviceDetailsByCategory(category);
 		if (deviceDetails != null && !deviceDetails.isEmpty()) {
 			LOGGER.info("Device details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+			return ResponseUtils.getSuccessDataResponse("Device details fetched successfully", deviceDetails);
 		} else {
 			LOGGER.error("No devices found for the category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found for the category");
+			return ResponseUtils.getSuccessDataResponse("No Device details found for category", null);
 		}
 	}
 
@@ -186,16 +189,16 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "device details fetched successfully")
 	@ApiResponse(responseCode = "500", description = "Error in fetching device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getDeviceById(@PathVariable UUID id) {
+	@GetMapping("/findbyid")
+	public ResponseEntity<DataResponse> getDeviceById(@RequestParam UUID id) {
 		LOGGER.info("Received find device by id request: " + id);
 		DeviceResponseDTO deviceDetails = deviceService.findDeviceById(id);
 		if (deviceDetails != null) {
 			LOGGER.info("Device details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(deviceDetails);
+			return ResponseUtils.getSuccessDataResponse("Device details fetched successfully", deviceDetails);
 		} else {
 			LOGGER.error("No device found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device found");
+			return ResponseUtils.getNotFoundDataResponse("No device found: " + id, null);
 		}
 	}
 
@@ -203,23 +206,18 @@ public class DeviceController {
 	 * This method is used to delete a device by its id.
 	 *
 	 * @param id This is the id of the device to be deleted.
-	 * @return ResponseEntity<String> This returns the response message.
+	 * @return ResponseEntity<DataResponse> with the device in DataResponse
 	 */
 	@Operation(summary = "Delete device details by id", description = "Delete the device details by id in the system.")
 	@ApiResponse(responseCode = "200", description = "device details deleted successfully")
 	@ApiResponse(responseCode = "500", description = "Error in deleting device details data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@DeleteMapping("/deleteDeviceById/{id}")
-	public ResponseEntity<String> deleteDeviceById(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteDeviceById(@RequestParam UUID id) {
 		LOGGER.info("Received delete device request for id: " + id);
-		boolean isDeviceDeleted = deviceService.deleteDeviceById(id);
-		if (isDeviceDeleted) {
-			LOGGER.info("Device deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Device deleted successfully");
-		} else {
-			LOGGER.error("Error in deleting device details data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete device");
-		}
+		deviceService.deleteDeviceById(id);
+		LOGGER.info("Device deleted successfully");
+		return ResponseUtils.getSuccessResponse("Device is deleted successfully");
 	}
 
 	/**
@@ -232,17 +230,17 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "Device created successfully from XML data")
 	@ApiResponse(responseCode = "500", description = "Failed to create device from XML data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PostMapping(value = "/uploadDeviceXML")
-	public ResponseEntity<String> createDeviceFromXML(@Valid @RequestParam("file") MultipartFile file) {
+	@PostMapping("/uploadxml")
+	public ResponseEntity<Response> createDeviceFromXML(@Valid @RequestParam("file") MultipartFile file) {
 		LOGGER.info("Received upload device XML request: " + file.getOriginalFilename());
 		boolean isUploadedDeviceXml = deviceService.parseXMLForDevice(file);
 		if (isUploadedDeviceXml) {
 			LOGGER.info("Device created successfully from XML data");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Device created successfully from XML data");
+			return ResponseUtils.getCreatedResponse("Device created successfully from XML data");
 		} else {
 			LOGGER.error("Failed to create device from XML data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Failed to create device from XML data");
+			throw new TDKServiceException("Could not upload the xml file");
+
 		}
 	}
 
@@ -258,13 +256,13 @@ public class DeviceController {
 	@ApiResponse(responseCode = "200", description = "Downloaded  Device XMl successfully")
 	@ApiResponse(responseCode = "500", description = "Failed to create device from XML data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/downloadXML/{deviceName}")
-	public ResponseEntity<String> downloadXML(@PathVariable String deviceName) {
+	@GetMapping("/downloadXML")
+	public ResponseEntity<String> downloadXML(@RequestParam String deviceName) {
 		LOGGER.info("Received download device XML request: " + deviceName);
 		String xmlContent = deviceService.downloadDeviceXML(deviceName);
 		if (xmlContent == null) {
 			LOGGER.error("Failed to download device XML");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to download device XML");
+			throw new TDKServiceException("Failed to download device XML");
 		}
 		HttpHeaders headers = new HttpHeaders();
 		headers.add(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + deviceName + DEVICE_XML_FILE_EXTENSION);
@@ -373,8 +371,8 @@ public class DeviceController {
 	@Operation(summary = "Download all devices by category", description = "Download all devices by category to the system")
 	@ApiResponse(responseCode = "200", description = "Downloaded successfully.")
 	@ApiResponse(responseCode = "500", description = "Internal server error while downloading.")
-	@GetMapping("/downloadDevicesByCategory/{category}")
-	public ResponseEntity<?> downloadAllDevicesByCategory(@PathVariable String category) {
+	@GetMapping("/downloadDevicesByCategory")
+	public ResponseEntity<?> downloadAllDevicesByCategory(@RequestParam String category) {
 		LOGGER.info("Received download all devices by category request: " + category);
 		Path file = deviceService.downloadAllDevicesByCategory(category);
 		byte[] fileContent;
@@ -413,7 +411,7 @@ public class DeviceController {
 			return ResponseEntity.status(HttpStatus.OK).body(deviceStatusList);
 		} else {
 			LOGGER.error("No devices found in the category  " + category);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No devices found in the category: " + category);
+			return ResponseEntity.status(HttpStatus.OK).body("No devices found in the category: " + category);
 		}
 
 	}
@@ -434,50 +432,44 @@ public class DeviceController {
 	@ApiResponse(responseCode = "500", description = "Error in fetching device data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "404", description = "No devices found for the category")
-	@GetMapping("/getdevicebycategoryandthunderstatus")
-	public ResponseEntity<List<DeviceResponseDTO>> getDevicesByCategoryAndThunderStatus(@RequestParam String category,
+	@GetMapping("/getDeviceByCategoryAndThunderstatus")
+	public ResponseEntity<DataResponse> getDevicesByCategoryAndThunderStatus(@RequestParam String category,
 			@RequestParam(required = false) Boolean isThunderEnabled) {
-		try {
-			// Validate category
-			if (category == null || category.isEmpty()) {
-				return ResponseEntity.badRequest().body(Collections.emptyList());
-			}
-			// Fetch devices
-			List<DeviceResponseDTO> devices = deviceService.getDevicesByCategoryAndThunderStatus(category,
-					isThunderEnabled);
+		LOGGER.info("Received request to fetch devices by category: " + category + " and thunder status: "
+				+ (isThunderEnabled != null ? isThunderEnabled : "not specified"));
+		// Fetch devices
+		List<DeviceResponseDTO> devices = deviceService.getDevicesByCategoryAndThunderStatus(category,
+				isThunderEnabled);
 
-			// Check if devices are found
-			if (devices.isEmpty()) {
-				return ResponseEntity.noContent().build();
-			}
-			return ResponseEntity.ok(devices);
-		} catch (ResourceNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Collections.emptyList());
-		} catch (Exception e) {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(Collections.emptyList());
+		if (devices == null || devices.isEmpty() || devices.size() == 0) {
+			return ResponseUtils.getSuccessDataResponse("No devices found for the category: " + category, null);
+		} else {
+			return ResponseUtils.getSuccessDataResponse("Devices fetched successfully", devices);
+
 		}
+
 	}
 
 	/**
 	 * This method is used to toggle the thunder enabled status of a device.
 	 *
 	 * @param deviceIp This is the IP of the device.
-	 * @return ResponseEntity<String> This returns the response message.
+	 * @return ResponseEntity<Response> This returns the response message.
 	 */
 	@Operation(summary = "Toggle Thunder Enabled Status", description = "Toggle the thunder enabled status of a device.")
 	@ApiResponse(responseCode = "200", description = "Thunder enabled status toggled successfully")
 	@ApiResponse(responseCode = "500", description = "Error in toggling thunder enabled status")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/toggleThunderEnabledStatus")
-	public ResponseEntity<String> toggleThunderEnabledStatus(@RequestParam String deviceIp) {
+	public ResponseEntity<Response> toggleThunderEnabledStatus(@RequestParam String deviceIp) {
 		LOGGER.info("Received toggle thunder enabled status request for device: " + deviceIp);
 		boolean status = deviceService.toggleThunderEnabledstatus(deviceIp);
 		if (status) {
 			LOGGER.info("Thunder enabled status toggled successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Thunder enabled successfully");
+			return ResponseUtils.getSuccessResponse("Thunder enabled successfully");
 		} else {
 			LOGGER.info("Thunder enabled status toggled successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Thunder disabled successfully");
+			return ResponseUtils.getSuccessResponse("Thunder disabled successfully");
 		}
 	}
 
@@ -495,13 +487,9 @@ public class DeviceController {
 	public ResponseEntity<?> getDeviceStatusByName(@RequestParam String deviceName) {
 		LOGGER.info("Received request to fetch status for device: " + deviceName);
 		DeviceStatusResponseDTO deviceStatus = deviceService.getDeviceStatus(deviceName);
-		if (deviceStatus != null) {
-			LOGGER.info("Fetched status for device: " + deviceName);
-			return ResponseEntity.status(HttpStatus.OK).body(deviceStatus);
-		} else {
-			LOGGER.error("No device found with name: " + deviceName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No device found with name: " + deviceName);
-		}
+		LOGGER.info("Fetched status for device: " + deviceName);
+		return ResponseUtils.getSuccessDataResponse("Device status fetched successfully for :" + deviceName,
+				deviceStatus);
 	}
 
 }

@@ -40,10 +40,14 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rdkm.tdkservice.dto.AnalysisIssueTypewiseSummaryDTO;
 import com.rdkm.tdkservice.dto.AnalysisResultDTO;
 import com.rdkm.tdkservice.dto.JiraDescriptionDTO;
-import com.rdkm.tdkservice.dto.TicketUpdateDTO;
 import com.rdkm.tdkservice.dto.TicketCreateDTO;
 import com.rdkm.tdkservice.dto.TicketDetailsDTO;
+import com.rdkm.tdkservice.dto.TicketUpdateDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IExecutionAnalysisService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -70,22 +74,22 @@ public class ExecutionAnalysisController {
 	 *
 	 * @param analysisResultRequest the request body containing analysis result
 	 *                              details
-	 * @return ResponseEntity<String> indicating the result of the save operation
+	 * @return ResponseEntity<Response> indicating the result of the save operation
 	 */
 	@Operation(summary = "Save analysis result for an execution result")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Analysis result saved successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to save analysis result"),
 			@ApiResponse(responseCode = "400", description = "Bad request, invalid parameters") })
 	@PostMapping("/saveAnalysisResult")
-	public ResponseEntity<?> saveAnalysisResult(
+	public ResponseEntity<Response> saveAnalysisResult(
 			@RequestParam(value = "executionResultID", required = true) UUID executionResultID,
 			@RequestBody AnalysisResultDTO analysisResultRequest) {
 		LOGGER.info("Going to save analysis result");
 		boolean saved = executionAnalysisService.saveAnalysisResult(executionResultID, analysisResultRequest);
 		if (saved) {
-			return ResponseEntity.ok("Analysis result saved successfully");
+			return ResponseUtils.getCreatedResponse("Result analysis saved succesfullly");
 		} else {
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to save analysis result");
+			throw new TDKServiceException("Failed to save analysis result");
 		}
 	}
 
@@ -93,20 +97,21 @@ public class ExecutionAnalysisController {
 	 * Endpoint to get the analysis result for an execution result.
 	 *
 	 * @param executionResultID the UUID of the execution result
-	 * @return ResponseEntity<?> containing the analysis result details
+	 * @return ResponseEntity<DataResponse> containing the analysis result details
 	 */
 	@Operation(summary = "Get analysis result for an execution result")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Analysis result fetched successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to get analysis result") })
 	@GetMapping("/getAnalysisResult")
-	public ResponseEntity<?> getAnalysisResult(@RequestParam UUID executionResultID) {
+	public ResponseEntity<DataResponse> getAnalysisResult(@RequestParam UUID executionResultID) {
 		LOGGER.info("Going to get analysis result");
 		AnalysisResultDTO analysisResult = executionAnalysisService.getAnalysisResult(executionResultID);
 		if (analysisResult != null) {
-			return ResponseEntity.ok(analysisResult);
+			LOGGER.info("Analysis result fetched successfully");
+			return ResponseUtils.getSuccessDataResponse("Analysis result fetched successfully", analysisResult);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT)
-					.body("Analysis result for this execution result not available");
+			return ResponseUtils.getSuccessDataResponse("Analysis result for this execution result not available",
+					null);
 		}
 	}
 
@@ -114,7 +119,8 @@ public class ExecutionAnalysisController {
 	 * Endpoint to get the module-wise analysis summary for an execution .
 	 *
 	 * @param executionID the UUID of the execution
-	 * @return ResponseEntity<?> containing the module-wise analysis summary details
+	 * @return ResponseEntity<DataResponse> containing the module-wise analysis
+	 *         summary details
 	 */
 	@Operation(summary = "Get module-wise analysis summary for an execution")
 	@ApiResponses(value = {
@@ -122,15 +128,17 @@ public class ExecutionAnalysisController {
 			@ApiResponse(responseCode = "500", description = "Failed to get module-wise analysis summary"),
 			@ApiResponse(responseCode = "201", description = "Module-wise analysis summary for this execution not available") })
 	@GetMapping("/getModulewiseAnalysisSummary")
-	public ResponseEntity<?> getModulewiseAnalysisSummary(@RequestParam UUID executionID) {
+	public ResponseEntity<DataResponse> getModulewiseAnalysisSummary(@RequestParam UUID executionID) {
 		LOGGER.info("Going to get module-wise analysis summary");
 		Map<String, AnalysisIssueTypewiseSummaryDTO> analysisSummary = executionAnalysisService
 				.getModulewiseAnalysisSummary(executionID);
+		LOGGER.info("Module-wise analysis summary fetched succesfully");
 		if (analysisSummary != null) {
-			return ResponseEntity.ok(analysisSummary);
+			return ResponseUtils.getSuccessDataResponse("Module-wise analysis summary fetched succesfully",
+					analysisSummary);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT)
-					.body("Module-wise analysis summary for this execution not available");
+			return ResponseUtils.getSuccessDataResponse(
+					"Module-wise analysis summary is not fetched, as there is no failure case", analysisSummary);
 		}
 	}
 
@@ -139,25 +147,25 @@ public class ExecutionAnalysisController {
 	 *
 	 * @param executionResultID the unique identifier of the execution result
 	 * @param projectName       the name of the project
-	 * @return a ResponseEntity containing the ticket details if available, or a
-	 *         message indicating no data is available
+	 * @return ResponseEntity<DataResponse> containing the ticket details if
+	 *         available, or a message indicating no data is available
 	 *
 	 */
 	@Operation(summary = "Get the ticket details from jira for the particular execution script")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Ticket details fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Ticket details not available") })
+			@ApiResponse(responseCode = "200", description = "Ticket details not available") })
 	@GetMapping("/getTicketDetaisFromJira")
-	public ResponseEntity<?> getTicketDetailsFromJira(@RequestParam UUID executionResultID,
+	public ResponseEntity<DataResponse> getTicketDetailsFromJira(@RequestParam UUID executionResultID,
 			@RequestParam String projectName) {
 		LOGGER.info("Going to get ticket details from Jira");
 		List<TicketDetailsDTO> ticketDetails = executionAnalysisService.getTicketDetailsFromJira(executionResultID,
 				projectName);
 		if (ticketDetails != null && !ticketDetails.isEmpty()) {
 			LOGGER.info("Ticket details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(ticketDetails);
+			return ResponseUtils.getSuccessDataResponse("Ticket details fetched successfully", ticketDetails);
 		} else {
-			LOGGER.error("Ticket details for this ticket not available");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Jira data available");
+			LOGGER.error("Ticket details for this issue not available");
+			return ResponseUtils.getSuccessDataResponse("Ticket details for this issue not available", null);
 		}
 	}
 
@@ -165,47 +173,48 @@ public class ExecutionAnalysisController {
 	 * Endpoint to get the ticket details for populating the ticket details.
 	 *
 	 * @param execResultID the UUID of the execution result
-	 * @return ResponseEntity containing the ticket description if available, or a
-	 *         message indicating no data is available
+	 * @return ResponseEntity<DataResponse> containing the ticket description if
+	 *         available, or a message indicating no data is available
 	 * 
 	 */
 	@Operation(summary = "Get the ticket details for populating the ticket details")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Ticket details fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Ticket details not available") })
+			@ApiResponse(responseCode = "503", description = "Ticket details not available") })
 	@GetMapping("/getDetailsForPopulatingTicketDetails")
-	public ResponseEntity<?> getDetailsForPopulatingTicketDetails(@RequestParam UUID execResultID) {
+	public ResponseEntity<DataResponse> getDetailsForPopulatingTicketDetails(@RequestParam UUID execResultID) {
 		LOGGER.info("Going to get ticket details for populating the ticket details");
 		JiraDescriptionDTO ticketDescription = executionAnalysisService
 				.getDetailsForPopulatingTicketDetails(execResultID);
 		if (ticketDescription != null) {
 			LOGGER.info("Ticket details fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(ticketDescription);
+			return ResponseUtils.getSuccessDataResponse("Ticket description fetched successfully", ticketDescription);
 		} else {
 			LOGGER.error("Ticket details for this ticket not available");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("No Jira data available");
+			throw new TDKServiceException("Error in getting Ticket details for this issue");
 		}
 	}
 
 	/**
 	 * Endpoint to get the list of project IDs.
 	 * 
-	 * @return ResponseEntity containing the list of project IDs if available,
-	 *         otherwise a message indicating no project IDs are available.
+	 * @return ResponseEntity<DataResponse> containing the list of project IDs if
+	 *         available, otherwise a message indicating no project IDs are
+	 *         available.
 	 * 
 	 */
 	@Operation(summary = "Get the list of project IDs")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project IDs fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Project IDs not available") })
+			@ApiResponse(responseCode = "503", description = "Project IDs not available") })
 	@GetMapping("/getListOfProjectIDs")
-	public ResponseEntity<?> getListOfProjectIDs() {
+	public ResponseEntity<DataResponse> getListOfProjectIDs() {
 		LOGGER.info("Going to get the list of project IDs");
 		List<String> projectIDs = executionAnalysisService.getListOfProjectIDs();
 		if (projectIDs != null && !projectIDs.isEmpty()) {
 			LOGGER.info("Project IDs fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(projectIDs);
+			return ResponseUtils.getSuccessDataResponse("Project IDs fetched successfully", projectIDs);
 		} else {
 			LOGGER.error("Project IDs not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No project IDs available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Project IDs not available", projectIDs);
 		}
 	}
 
@@ -213,24 +222,23 @@ public class ExecutionAnalysisController {
 	 * Endpoint to check if the project ID is a platform project ID.
 	 * 
 	 * @param projectID the project ID to be checked
-	 * @return ResponseEntity containing true if the project ID is a platform
-	 *         project ID, otherwise false.
+	 * @return ResponseEntity<DataResponse> containing true if the project ID is a
+	 *         platform project ID, otherwise false.
 	 * 
 	 */
-
 	@Operation(summary = "Check if the project ID is a platform project ID")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Project ID is a platform project ID"),
-			@ApiResponse(responseCode = "204", description = "Project ID is not a platform project ID") })
+			@ApiResponse(responseCode = "200", description = "Project ID is not a platform project ID") })
 	@GetMapping("/isPlatformProjectID")
-	public ResponseEntity<?> isPlatformProjectID(@RequestParam String projectID) {
+	public ResponseEntity<DataResponse> isPlatformProjectID(@RequestParam String projectID) {
 		LOGGER.info("Going to check if the project ID is a platform project ID");
 		boolean isPlatformProjectID = executionAnalysisService.isPlatformProjectID(projectID);
 		if (isPlatformProjectID) {
 			LOGGER.info("Project ID is a platform project ID");
-			return ResponseEntity.status(HttpStatus.OK).body(true);
+			return ResponseUtils.getSuccessDataResponse("Project ID is a platform project ID", isPlatformProjectID);
 		} else {
 			LOGGER.error("Project ID is not a platform project ID");
-			return ResponseEntity.status(HttpStatus.OK).body(false);
+			return ResponseUtils.getSuccessDataResponse("Project ID is not a platform project ID", isPlatformProjectID);
 		}
 	}
 
@@ -242,17 +250,17 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the list of labels")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Labels fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Labels not available") })
+			@ApiResponse(responseCode = "503", description = "Labels not available") })
 	@GetMapping("/getListOfLabels")
-	public ResponseEntity<?> getListOfLabels() {
+	public ResponseEntity<DataResponse> getListOfLabels() {
 		LOGGER.info("Going to get the list of labels");
 		List<String> labels = executionAnalysisService.getListOfLabels();
 		if (labels != null && !labels.isEmpty()) {
 			LOGGER.info("Labels fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(labels);
+			return ResponseUtils.getSuccessDataResponse("Labels fetched successfully", labels);
 		} else {
 			LOGGER.error("Labels not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No labels available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Labels not available", labels);
 		}
 	}
 
@@ -265,17 +273,17 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the list of release versions")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Release versions fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Release versions not available") })
+			@ApiResponse(responseCode = "503", description = "Release versions not available") })
 	@GetMapping("/getReleaseVersions")
-	public ResponseEntity<?> getReleaseVersions() {
+	public ResponseEntity<DataResponse> getReleaseVersions() {
 		LOGGER.info("Going to get the list of release versions");
 		List<String> releaseVersions = executionAnalysisService.getReleaseVersions();
 		if (releaseVersions != null && !releaseVersions.isEmpty()) {
 			LOGGER.info("Release versions fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(releaseVersions);
+			return ResponseUtils.getSuccessDataResponse("Release versions fetched successfully", releaseVersions);
 		} else {
 			LOGGER.error("Release versions not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No release versions available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Release versions not available", releaseVersions);
 		}
 	}
 
@@ -289,17 +297,19 @@ public class ExecutionAnalysisController {
 	@Operation(summary = "Get the hardware configuration")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Hardware configuration fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Hardware configuration not available") })
+			@ApiResponse(responseCode = "503", description = "Hardware configuration not available") })
 	@GetMapping("/getHardwareConfiguration")
-	public ResponseEntity<?> getHardwareConfiguration() {
+	public ResponseEntity<DataResponse> getHardwareConfiguration() {
 		LOGGER.info("Going to get the hardware configuration");
 		List<String> hardwareConfiguration = executionAnalysisService.getHardwareConfiguration();
 		if (hardwareConfiguration != null && !hardwareConfiguration.isEmpty()) {
 			LOGGER.info("Hardware configuration fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(hardwareConfiguration);
+			return ResponseUtils.getSuccessDataResponse("Hardware configuration fetched successfully",
+					hardwareConfiguration);
 		} else {
 			LOGGER.error("Hardware configuration not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No hardware configuration available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Hardware configuration not available",
+					hardwareConfiguration);
 		}
 	}
 
@@ -313,17 +323,17 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the list of impacted platforms")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Impacted platforms fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Impacted platforms not available") })
+			@ApiResponse(responseCode = "503", description = "Impacted platforms not available") })
 	@GetMapping("/getImpactedPlatforms")
-	public ResponseEntity<?> getImpactedPlatforms() {
+	public ResponseEntity<DataResponse> getImpactedPlatforms() {
 		LOGGER.info("Going to get the list of impacted platforms");
 		List<String> impactedPlatforms = executionAnalysisService.getImpactedPlatforms();
 		if (impactedPlatforms != null && !impactedPlatforms.isEmpty()) {
 			LOGGER.info("Impacted platforms fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(impactedPlatforms);
+			return ResponseUtils.getSuccessDataResponse("Impacted platforms fetched successfully", impactedPlatforms);
 		} else {
 			LOGGER.error("Impacted platforms not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No impacted platforms available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Impacted platforms not available", impactedPlatforms);
 		}
 	}
 
@@ -336,17 +346,17 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the list of severities")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Severities fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Severities not available") })
+			@ApiResponse(responseCode = "503", description = "Severities not available") })
 	@GetMapping("/getSeverities")
-	public ResponseEntity<?> getSeverities() {
+	public ResponseEntity<DataResponse> getSeverities() {
 		LOGGER.info("Going to get the list of severities");
 		List<String> severities = executionAnalysisService.getSeverities();
 		if (severities != null && !severities.isEmpty()) {
 			LOGGER.info("Severities fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(severities);
+			return ResponseUtils.getSuccessDataResponse("Severities fetched successfully", severities);
 		} else {
 			LOGGER.error("Severities not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No severities available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Severities not available", severities);
 		}
 	}
 
@@ -359,63 +369,64 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the list of fixed in versions")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Fixed in versions fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Fixed in versions not available") })
+			@ApiResponse(responseCode = "503", description = "Fixed in versions not available") })
 	@GetMapping("/getFixedInVersions")
-	public ResponseEntity<?> getFixedInVersions() {
+	public ResponseEntity<DataResponse> getFixedInVersions() {
 		LOGGER.info("Going to get the list of fixed in versions");
 		List<String> fixedInVersions = executionAnalysisService.getFixedInVersions();
 		if (fixedInVersions != null && !fixedInVersions.isEmpty()) {
 			LOGGER.info("Fixed in versions fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(fixedInVersions);
+			return ResponseUtils.getSuccessDataResponse("Fixed in versions fetched successfully", fixedInVersions);
 		} else {
 			LOGGER.error("Fixed in versions not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No fixed in versions available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Fixed in versions not available", fixedInVersions);
 		}
 	}
 
 	/**
 	 * Endpoint to get the list of components impacted.
 	 *
-	 * @return ResponseEntity containing the list of components impacted if
-	 *         available, otherwise a message indicating no components impacted are
-	 *         available.
+	 * @return ResponseEntity<DataResponse> containing the list of components
+	 *         impacted if available, otherwise a message indicating no components
+	 *         impacted are available.
 	 */
 	@Operation(summary = "Get the list of components impacted")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Components impacted fetched successfully"),
 			@ApiResponse(responseCode = "204", description = "Components impacted not available") })
 	@GetMapping("/getComponentsImpacted")
-	public ResponseEntity<?> getComponentsImpacted() {
+	public ResponseEntity<DataResponse> getComponentsImpacted() {
 		LOGGER.info("Going to get the list of components impacted");
 		List<String> componentsImpacted = executionAnalysisService.getComponentsImpacted();
 		if (componentsImpacted != null && !componentsImpacted.isEmpty()) {
 			LOGGER.info("Components impacted fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(componentsImpacted);
+			return ResponseUtils.getSuccessDataResponse("Components impacted fetched successfully", componentsImpacted);
 		} else {
 			LOGGER.error("Components impacted not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No components impacted available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Fixed in versions not available", componentsImpacted);
 		}
 	}
 
 	/**
 	 * Endpoint to get the list of defect types.
 	 * 
-	 * @return ResponseEntity containing the list of defect types if available,
-	 *         otherwise a message indicating that no defect types are available.
+	 * @return ResponseEntity<DataResponse> containing the list of defect types if
+	 *         available, otherwise a message indicating that no defect types are
+	 *         available.
 	 */
 	@Operation(summary = "Get the list of defect types")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Defect types fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Defect types not available") })
+			@ApiResponse(responseCode = "503", description = "Defect types not available") })
 	@GetMapping("/getDefectTypes")
-	public ResponseEntity<?> getDefectTypes() {
+	public ResponseEntity<DataResponse> getDefectTypes() {
 		LOGGER.info("Going to get the list of defect types");
 		List<String> defectTypes = executionAnalysisService.getDefectTypes();
 		if (defectTypes != null && !defectTypes.isEmpty()) {
 			LOGGER.info("Defect types fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(defectTypes);
+			return ResponseUtils.getSuccessDataResponse("Defect types fetched successfully", defectTypes);
 		} else {
 			LOGGER.error("Defect types not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No defect types available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Defect types not available", defectTypes);
 		}
 
 	}
@@ -430,7 +441,7 @@ public class ExecutionAnalysisController {
 	 */
 	@Operation(summary = "Get the steps to reproduce")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Steps to reproduce fetched successfully"),
-			@ApiResponse(responseCode = "204", description = "Steps to reproduce not available") })
+			@ApiResponse(responseCode = "503", description = "Steps to reproduce not available") })
 	@GetMapping("/getStepsToReproduce")
 	public ResponseEntity<?> getStepsToReproduce(String scriptName) {
 		LOGGER.info("Going to get the steps to reproduce");
@@ -448,23 +459,24 @@ public class ExecutionAnalysisController {
 	/**
 	 * Handles the HTTP GET request to retrieve the list of priorities.
 	 * 
-	 * @return ResponseEntity containing the list of priorities if available,
-	 *         otherwise a response indicating that no priorities are available.
+	 * @return ResponseEntity<DataResponse> containing the list of priorities if
+	 *         available, otherwise a response indicating that no priorities are
+	 *         available.
 	 * 
 	 */
 	@Operation(summary = "Get the list of priorities")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Priorities fetched successfully"),
 			@ApiResponse(responseCode = "204", description = "Priorities not available") })
 	@GetMapping("/getPriorities")
-	public ResponseEntity<?> getPriorities() {
+	public ResponseEntity<DataResponse> getPriorities() {
 		LOGGER.info("Going to get the list of priorities");
 		List<String> priorities = executionAnalysisService.getPriorities();
 		if (priorities != null && !priorities.isEmpty()) {
 			LOGGER.info("Priorities fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(priorities);
+			return ResponseUtils.getSuccessDataResponse("Priorities fetched successfully", priorities);
 		} else {
 			LOGGER.error("Priorities not available");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No priorities available");
+			return ResponseUtils.getNotFoundDataConfigResponse("Priorities not available", priorities);
 		}
 	}
 
@@ -480,15 +492,18 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Jira ticket created successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to create Jira ticket") })
 	@PostMapping("/createJiraTicket")
-	public ResponseEntity<?> createJiraTicket(@RequestBody TicketCreateDTO ticketCreateDTO) {
+	public ResponseEntity<DataResponse> createJiraTicket(@RequestBody TicketCreateDTO ticketCreateDTO) {
 		LOGGER.info("Going to create Jira ticket");
 		String response = executionAnalysisService.createJiraTicket(ticketCreateDTO);
 		if (response != null) {
 			LOGGER.info("Jira ticket created successfully");
-			return ResponseEntity.ok(response);
+			return ResponseUtils.getSuccessDataResponse("Jira ticket created successfully", response); // Return the
+																										// response with
+																										// the ticket
+																										// ID)
 		} else {
 			LOGGER.error("Failed to create Jira ticket");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create Jira ticket");
+			throw new TDKServiceException("Failed to create Jira ticket");
 		}
 
 	}
@@ -505,32 +520,36 @@ public class ExecutionAnalysisController {
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Jira ticket updated successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to update Jira ticket") })
 	@PostMapping("/updateJiraTicket")
-	public ResponseEntity<?> updateJiraTicket(@RequestBody TicketUpdateDTO ticketUpdateDTO) {
+	public ResponseEntity<DataResponse> updateJiraTicket(@RequestBody TicketUpdateDTO ticketUpdateDTO) {
 		LOGGER.info("Going to update Jira ticket");
 		String response = executionAnalysisService.updateJiraTicket(ticketUpdateDTO);
 		if (response != null) {
 			LOGGER.info("Jira ticket updated successfully");
-			return ResponseEntity.ok(response);
+			return ResponseUtils.getSuccessDataResponse("Jira ticket updated successfully", response); // Return the
+																										// response with
+																										// the ticket
+																										// ID)
 		} else {
 			LOGGER.error("Failed to update Jira ticket");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update Jira ticket");
+			throw new TDKServiceException("Failed to update Jira ticket");
 		}
 	}
 
 	/**
 	 * Endpoint to check if Jira automation is implemented.
 	 *
-	 * @return true if Jira automation is implemented, false otherwise.
+	 * @return ResponseEntity<DataResponse>true if Jira automation is implemented,
+	 *         false otherwise.
 	 *
 	 */
 	@Operation(summary = "Check if Jira automation is implemented")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Jira automation is implemented"),
 			@ApiResponse(responseCode = "204", description = "Jira automation is not implemented") })
 	@GetMapping("/isJiraAutomationImplemented")
-	public boolean isJiraAutomationImplemented() {
+	public ResponseEntity<DataResponse> isJiraAutomationImplemented() {
 		LOGGER.info("Going to check if Jira automation is implemented");
 		boolean isJiraAutomationImplemented = executionAnalysisService.isJiraAutomationImplemented();
-		return isJiraAutomationImplemented;
+		return ResponseUtils.getSuccessDataResponse("Jira automation is implemented", isJiraAutomationImplemented);
 	}
 
 	/**
@@ -544,13 +563,13 @@ public class ExecutionAnalysisController {
 			@ApiResponse(responseCode = "500", description = "Failed to get analysis defect types"),
 			@ApiResponse(responseCode = "204", description = "Analysis defect types not available") })
 	@GetMapping("/getAnalysisDefectTypes")
-	public ResponseEntity<?> getAnalysisDefectType() {
+	public ResponseEntity<DataResponse> getAnalysisDefectType() {
 		LOGGER.info("Going to get AnalysisDefectType");
 		List<String> analysisDefectType = executionAnalysisService.getAnalysisDefectTypes();
 		if (analysisDefectType != null) {
-			return ResponseEntity.ok(analysisDefectType);
+			return ResponseUtils.getSuccessDataResponse("AnalysisDefectType fetched successfully", analysisDefectType);
 		} else {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("AnalysisDefectType not available");
+			return ResponseUtils.getNotFoundDataConfigResponse("AnalysisDefectType not available", analysisDefectType);
 		}
 	}
 

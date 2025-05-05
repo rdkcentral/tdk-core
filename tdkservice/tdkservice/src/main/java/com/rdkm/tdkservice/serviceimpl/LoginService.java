@@ -15,6 +15,7 @@ import com.rdkm.tdkservice.dto.SigninResponseDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.enums.Category;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
+import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.User;
 import com.rdkm.tdkservice.repository.UserRepository;
 import com.rdkm.tdkservice.service.ILoginService;
@@ -60,7 +61,6 @@ public class LoginService implements ILoginService {
 	public boolean register(UserCreateDTO registerRequest) {
 		LOGGER.info("Registed user the user");
 		boolean registeredUser = userService.createUser(registerRequest);
-		// TODO : Place holder for email based registration
 		return registeredUser;
 	}
 
@@ -124,9 +124,19 @@ public class LoginService implements ILoginService {
 			LOGGER.error("User doesnt exists with the username: " + userName);
 			throw new ResourceNotFoundException(Constants.USER_NAME, userName);
 		}
-		user.setCategory(Category.valueOf(category));
+		
+		Category categoryEnum = null;
+		try {
+			// Check if the category is valid
+			categoryEnum = Category.valueOf(category);
+		} catch (IllegalArgumentException e) {
+			LOGGER.error("Invalid category: " + category);
+			throw new UserInputException("Invalid category: " + category); // Changed to InvalidArgumentException
+		}
+        user.setCategory(categoryEnum);
 		User savedUser = userRepository.save(user);
 		if (savedUser != null && savedUser.getId() != null) {
+			System.out.println(savedUser.getCategory().toString());
 			LOGGER.info("Changing category preference success");
 			return true;
 		} else {

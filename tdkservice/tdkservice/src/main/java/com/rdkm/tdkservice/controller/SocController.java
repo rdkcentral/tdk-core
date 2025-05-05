@@ -25,13 +25,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -41,7 +39,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.SocCreateDTO;
 import com.rdkm.tdkservice.dto.SocDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.ISocService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -73,15 +75,15 @@ public class SocController {
 	@ApiResponse(responseCode = "500", description = "Error in saving Soc data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createSoc(@RequestBody @Valid SocCreateDTO socDTO) {
+	public ResponseEntity<Response> createSoc(@RequestBody @Valid SocCreateDTO socDTO) {
 		LOGGER.info("Received create soc request: " + socDTO.toString());
 		boolean isSocVendorCreated = socService.createSoc(socDTO);
 		if (isSocVendorCreated) {
 			LOGGER.info("Soc created succesfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("SoC created succesfully");
+			return ResponseUtils.getCreatedResponse("SoC created succesfully");
 		} else {
-			LOGGER.error("Error in saving soc data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving soc data");
+			LOGGER.error("Error in creating soc data");
+			throw new TDKServiceException("Error in creating SoC");
 		}
 
 	}
@@ -96,15 +98,15 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "SOC retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No SOC found")
 	@GetMapping("/findall")
-	public ResponseEntity<?> getAllSocs() {
+	public ResponseEntity<DataResponse> getAllSocs() {
 		LOGGER.info("Received find all Soc request");
 		List<SocDTO> socs = socService.findAll();
 		if (socs != null && !socs.isEmpty()) {
 			LOGGER.info("Soc found");
-			return ResponseEntity.status(HttpStatus.OK).body(socs);
+			return ResponseUtils.getSuccessDataResponse("SOC fetched successfully", socs);
 		} else {
 			LOGGER.error("No Soc found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found");
+			return ResponseUtils.getSuccessDataResponse("No SoC available", socs);
 		}
 	}
 
@@ -118,11 +120,11 @@ public class SocController {
 	@Operation(summary = "Delete a Soc ", description = "Deletes a Soc  in the system.")
 	@ApiResponse(responseCode = "200", description = "Soc deleted successfully")
 	@ApiResponse(responseCode = "404", description = "Soc not found")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteSoc(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<?> deleteSoc(@RequestParam UUID id) {
 		LOGGER.info("Received delete SocVendor: " + id);
 		socService.deleteSoc(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the SoC");
+		return ResponseUtils.getSuccessResponse("Succesfully deleted the SoC");
 
 	}
 
@@ -136,11 +138,11 @@ public class SocController {
 	@Operation(summary = "Find Soc by ID", description = "Retrieves a Soc by its ID.")
 	@ApiResponse(responseCode = "200", description = "Soc found")
 	@ApiResponse(responseCode = "404", description = "Soc not found")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<SocDTO> findById(@PathVariable UUID id) {
+	@GetMapping("/findbyid")
+	public ResponseEntity<DataResponse> findById(@RequestParam UUID id) {
 		LOGGER.info("Received find Soc by id request: " + id);
 		SocDTO socDTO = socService.findById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(socDTO);
+		return ResponseUtils.getSuccessDataResponse("SOC fetched successfully", socDTO);
 
 	}
 
@@ -157,15 +159,15 @@ public class SocController {
 	@ApiResponse(responseCode = "404", description = "Soc not found")
 	@ApiResponse(responseCode = "500", description = "Error in updating Soc data")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateSoc(@RequestBody SocDTO socUpdateDTO) {
+	public ResponseEntity<DataResponse> updateSoc(@RequestBody SocDTO socUpdateDTO) {
 		LOGGER.info("Received update SocVendor request: " + socUpdateDTO.toString());
 		SocDTO socUpdateDto = socService.updateSoc(socUpdateDTO);
 		if (socUpdateDto != null) {
 			LOGGER.info("Soc updated succesfully");
-			return ResponseEntity.status(HttpStatus.OK).body("SoC updated succesfully");
+			return ResponseUtils.getSuccessDataResponse("SOC updated successfully", socUpdateDto);
 		} else {
 			LOGGER.error("Error in updating soc data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating soc data");
+			throw new TDKServiceException("Error in updating SOC");
 		}
 
 	}
@@ -182,15 +184,15 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "SOCs found")
 	@ApiResponse(responseCode = "404", description = "No SOCs found")
 	@GetMapping("/findallbycategory")
-	public ResponseEntity<?> getSOCsByCategory(@RequestParam String category) {
+	public ResponseEntity<DataResponse> getSOCsByCategory(@RequestParam String category) {
 		LOGGER.info("Received find soc by category request: " + category);
 		List<SocDTO> socs = socService.getSOCsByCategory(category);
 		if (socs != null && !socs.isEmpty()) {
 			LOGGER.info("Socs found");
-			return ResponseEntity.status(HttpStatus.OK).body(socs);
+			return ResponseUtils.getSuccessDataResponse("SOC fetched successfully", socs);
 		} else {
 			LOGGER.error("No Soc vs found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found with category: " + category);
+			return ResponseUtils.getSuccessDataResponse("No SOC found for the category", socs);
 		}
 	}
 
@@ -206,15 +208,15 @@ public class SocController {
 	@ApiResponse(responseCode = "200", description = "SOC  found")
 	@ApiResponse(responseCode = "404", description = "No SOC  found")
 	@GetMapping("/getlistbycategory")
-	public ResponseEntity<?> getSOCsListByCategory(String category) {
+	public ResponseEntity<DataResponse> getSOCsListByCategory(String category) {
 		LOGGER.info("Received find Soc by category request: " + category);
 		List<String> socsList = socService.getSOCsListByCategory(category);
 		if (socsList != null && !socsList.isEmpty()) {
 			LOGGER.info("Socs found");
-			return ResponseEntity.status(HttpStatus.OK).body(socsList);
+			return ResponseUtils.getSuccessDataResponse("SOC fetched successfully", socsList);
 		} else {
 			LOGGER.error("No Socs found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No SoC found with category: " + category);
+			return ResponseUtils.getSuccessDataResponse("No SOC found for the category", socsList);
 		}
 
 	}

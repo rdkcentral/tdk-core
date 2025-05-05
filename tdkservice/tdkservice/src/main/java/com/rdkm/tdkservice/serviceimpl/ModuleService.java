@@ -73,6 +73,7 @@ import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.ModuleRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IModuleService;
+import com.rdkm.tdkservice.service.utilservices.CommonService;
 import com.rdkm.tdkservice.util.Constants;
 import com.rdkm.tdkservice.util.MapperUtils;
 import com.rdkm.tdkservice.util.Utils;
@@ -88,6 +89,9 @@ public class ModuleService implements IModuleService {
 
 	@Autowired
 	private UserGroupRepository userGroupRepository;
+
+	@Autowired
+	CommonService commonService;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ModuleService.class);
 
@@ -112,12 +116,8 @@ public class ModuleService implements IModuleService {
 		if (moduleDTO.isModuleThunderEnabled()) {
 			module.setCategory(Category.RDKV_RDKSERVICE);
 		} else {
-			Category category = Category.getCategory(moduleDTO.getModuleCategory());
-			if (null == category) {
-				throw new ResourceNotFoundException(Constants.CATEGORY, moduleDTO.getModuleCategory());
-			} else {
-				module.setCategory(category);
-			}
+			Category category = commonService.validateCategory(moduleDTO.getModuleCategory());
+			module.setCategory(category);
 		}
 		try {
 			moduleRepository.save(module);
@@ -217,7 +217,8 @@ public class ModuleService implements IModuleService {
 	}
 
 	/**
-	 * Finds all modules by category.
+	 * Finds all modules by category, For RDKV category, it fetches modules
+	 * associated with both RDKV and RDKV_RDKSERVICE categories.
 	 *
 	 * @param category the category of the module
 	 * @return a list of data transfer objects containing the details of all modules
@@ -225,13 +226,14 @@ public class ModuleService implements IModuleService {
 	@Override
 	public List<ModuleDTO> findAllByCategory(String category) {
 		LOGGER.info("Going to fetch all modules by category: {}", category);
+		Category categoryEnum = commonService.validateCategory(category);
 		List<Module> modules;
 		if (Category.RDKV.name().equals(category)) {
 			modules = moduleRepository.findAllByCategoryIn(Arrays.asList(Category.RDKV, Category.RDKV_RDKSERVICE));
 		} else {
-			modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+			categoryEnum = commonService.validateCategory(category);
+			modules = moduleRepository.findAllByCategory(categoryEnum);
 		}
-		Utils.checkCategoryValid(category);
 		if (modules.isEmpty()) {
 			return Collections.emptyList();
 		}
@@ -312,7 +314,7 @@ public class ModuleService implements IModuleService {
 		} catch (SAXException e) {
 			LOGGER.error("Invalid XML file format" + e.getMessage());
 			throw new UserInputException("Invalid XML file format.");
-		} catch (IOException | ParserConfigurationException | IllegalArgumentException e) {
+		} catch (Exception e) {
 			LOGGER.error("Error reading the XML file" + e.getMessage());
 			throw new TDKServiceException("Error reading the XML file.");
 		}
@@ -360,32 +362,44 @@ public class ModuleService implements IModuleService {
 	 *                   file
 	 */
 	@Override
-	public ByteArrayResource downloadModulesAsZip(String category) throws Exception {
+	public ByteArrayResource downloadModulesAsZip(String category) {
 		LOGGER.info("Downloading all modules as a ZIP file");
 		Utils.checkCategoryValid(category);
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 		ZipOutputStream zos = new ZipOutputStream(baos);
 
-		Category categoryEnum = Category.getCategory(category);
+		Category categoryEnum = commonService.validateCategory(category);
 		// Fetch all modules by category
 		List<Module> modules = moduleRepository.findAllByCategory(categoryEnum);
 
-		for (Module module : modules) {
-			// Generate XML content for each module
-			String xmlContent = generateXML(module.getName());
-
-			// Create a ZIP entry for each module
-			ZipEntry zipEntry = new ZipEntry(module.getName() + Constants.XML_EXTENSION);
-			zos.putNextEntry(zipEntry);
-
-			// Write XML content to the ZIP entry
-			zos.write(xmlContent.getBytes());
-			zos.closeEntry();
+		if (modules.isEmpty()) {
+			LOGGER.error("No modules found for category {}", category);
+			throw new ResourceNotFoundException(Constants.MODULE_NAME, category);
 		}
 
-		zos.finish();
+		try {
 
-		return new ByteArrayResource(baos.toByteArray());
+			for (Module module : modules) {
+				// Generate XML content for each module
+				String xmlContent = generateXML(module.getName());
+
+				// Create a ZIP entry for each module
+				ZipEntry zipEntry = new ZipEntry(module.getName() + Constants.XML_EXTENSION);
+				zos.putNextEntry(zipEntry);
+
+				// Write XML content to the ZIP entry
+				zos.write(xmlContent.getBytes());
+				zos.closeEntry();
+			}
+
+			zos.finish();
+
+			return new ByteArrayResource(baos.toByteArray());
+
+		} catch (Exception e) {
+			LOGGER.error("Error occurred while fetching all modules", e);
+			throw new TDKServiceException("Error occurred while fetching all modules");
+		}
 
 	}
 
@@ -735,10 +749,10 @@ public class ModuleService implements IModuleService {
 	 * @return a list of all module names
 	 */
 	@Override
-	public List<String> findByCategory(String category) {
+	public List<String> findAllModuleNamesBySubCategory(String category) {
 		LOGGER.info("Going to fetch all modules by category: {}", category);
-		Utils.checkCategoryValid(category);
-		List<Module> modules = moduleRepository.findAllByCategory(Category.valueOf(category));
+		Category categoryEnum = commonService.validateCategory(category);
+		List<Module> modules = moduleRepository.findAllByCategory(categoryEnum);
 		if (modules.isEmpty()) {
 			return Collections.emptyList();
 		}

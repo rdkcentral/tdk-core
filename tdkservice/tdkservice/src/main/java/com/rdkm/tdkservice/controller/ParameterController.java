@@ -25,27 +25,31 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.enums.ParameterDataType;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IParameterService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 
 /**
  * REST controller for managing parameter types.
@@ -65,7 +69,7 @@ public class ParameterController {
 	 * Creates a new parameter type.
 	 *
 	 * @param parameterCreateDTO the parameter type creation data transfer object
-	 * @return ResponseEntity with a boolean indicating success or failure
+	 * @return ResponseEntity with Success or Failure message in Response object
 	 */
 	@Operation(summary = "Create a new parameter ", description = "Creates a new parameter in the system.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter type created successfully"),
@@ -74,15 +78,16 @@ public class ParameterController {
 			@ApiResponse(responseCode = "400", description = "Invalid input"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized") })
 	@PostMapping("/create")
-	public ResponseEntity<String> createParameter(@RequestBody ParameterCreateDTO parameterCreateDTO) {
+	public ResponseEntity<Response> createParameter(@RequestBody @Valid ParameterCreateDTO parameterCreateDTO) {
 		LOGGER.info("Creating new parameter : {}", parameterCreateDTO);
 		boolean isCreated = parameterService.createParameter(parameterCreateDTO);
 		if (isCreated) {
 			LOGGER.info("Parameter  created successfully: {}", parameterCreateDTO);
-			return ResponseEntity.status(HttpStatus.CREATED).body("Parameter created successfully");
+			return ResponseUtils.getCreatedResponse("Parameter created successfully");
+
 		} else {
 			LOGGER.error("Failed to create parameter : {}", parameterCreateDTO);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to create parameter");
+			throw new TDKServiceException("Error in saving Parameter data");
 		}
 	}
 
@@ -90,7 +95,7 @@ public class ParameterController {
 	 * Updates an existing parameter .
 	 *
 	 * @param parameterDTO the parameter data transfer object
-	 * @return ResponseEntity with a boolean indicating success or failure
+	 * @return ResponseEntity with Success or Failure message in Response object
 	 */
 	@Operation(summary = "Update an existing parameter ", description = "Updates an existing parameter in the system.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter updated successfully"),
@@ -99,15 +104,15 @@ public class ParameterController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "404", description = "Parameter not found") })
 	@PutMapping("/update")
-	public ResponseEntity<String> updateParameter(@RequestBody ParameterDTO parameterDTO) {
+	public ResponseEntity<Response> updateParameter(@RequestBody ParameterDTO parameterDTO) {
 		LOGGER.info("Updating parameter : {}", parameterDTO);
 		boolean isUpdated = parameterService.updateParameter(parameterDTO);
 		if (isUpdated) {
 			LOGGER.info("Parameter  updated successfully: {}", parameterDTO);
-			return ResponseEntity.status(HttpStatus.OK).body("Parameter updated successfully");
+			return ResponseUtils.getSuccessResponse("Parameter updated successfully");
 		} else {
 			LOGGER.error("Failed to update parameter type: {}", parameterDTO);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to update parameter ");
+			throw new TDKServiceException("Error in updating Parameter data");
 		}
 	}
 
@@ -122,15 +127,15 @@ public class ParameterController {
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
 	@GetMapping("/findAll")
-	public ResponseEntity<?> findAllParameter() {
+	public ResponseEntity<DataResponse> findAllParameter() {
 		LOGGER.info("Retrieving all parameter ");
 		List<ParameterDTO> parameters = parameterService.findAllParameters();
 		if (parameters != null && !parameters.isEmpty()) {
 			LOGGER.info("Successfully retrieved all parameter ");
-			return ResponseEntity.status(HttpStatus.OK).body(parameters);
+			return ResponseUtils.getSuccessDataResponse("Parameters fetched successfully", parameters);
 		} else {
 			LOGGER.error("No parameter found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No parameter found");
+			return ResponseUtils.getSuccessDataResponse("No parameters available", null);
 		}
 	}
 
@@ -145,16 +150,16 @@ public class ParameterController {
 			@ApiResponse(responseCode = "404", description = "Parameter type not found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/findById/{id}")
-	public ResponseEntity<?> findParameterById(@PathVariable UUID id) {
+	@GetMapping("/findById")
+	public ResponseEntity<DataResponse> findParameterById(@RequestParam UUID id) {
 		LOGGER.info("Retrieving parameter by ID: {}", id);
 		ParameterDTO parameter = parameterService.findParameterById(id);
 		if (parameter != null) {
 			LOGGER.info("Successfully retrieved parameter : {}", parameter);
-			return ResponseEntity.status(HttpStatus.OK).body(parameter);
+			return ResponseUtils.getSuccessDataResponse("Parameter fetched successfully", parameter);
 		} else {
-			LOGGER.error("Parameter  not found with ID: {}", id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Parameter not found");
+			LOGGER.error("Error in getting parameter with id: {}", id);
+			throw new TDKServiceException("Error in getting parameter with id: " + id);
 		}
 	}
 
@@ -162,23 +167,24 @@ public class ParameterController {
 	 * Deletes a parameter type by its ID.
 	 *
 	 * @param id the ID of the parameter type
-	 * @return ResponseEntity with a boolean indicating success or failure
+	 * @return ResponseEntity with a message indicating success or failure in
+	 *         Response
 	 */
 	@Operation(summary = "Delete a parameter  by its ID", description = "Deletes a parameter  by its ID.")
 	@ApiResponses(value = { @ApiResponse(responseCode = "200", description = "Parameter  deleted successfully"),
 			@ApiResponse(responseCode = "500", description = "Failed to delete parameter "),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "404", description = "Parameter not found") })
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteParameter(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteParameter(@RequestParam UUID id) {
 		LOGGER.info("Deleting parameter type by ID: {}", id);
 		boolean isDeleted = parameterService.deleteParameter(id);
 		if (isDeleted) {
 			LOGGER.info("Parameter deleted successfully: {}", id);
-			return ResponseEntity.ok("Parameter deleted successfully");
+			return ResponseUtils.getSuccessResponse("Parameter deleted successfully");
 		} else {
 			LOGGER.error("Failed to delete parameter : {}", id);
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to delete parameter");
+			throw new TDKServiceException("Error in deleting parameter with id: " + id);
 		}
 	}
 
@@ -193,33 +199,39 @@ public class ParameterController {
 			@ApiResponse(responseCode = "404", description = "No parameters found"),
 			@ApiResponse(responseCode = "401", description = "Unauthorized"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/findAllByFunction/{functionName}")
-	public ResponseEntity<?> findAllParametersByFunction(@PathVariable String functionName) {
+	@GetMapping("/findAllByFunction")
+	public ResponseEntity<DataResponse> findAllParametersByFunction(@RequestParam String functionName) {
 		LOGGER.info("Retrieving all parameters by function name: {}", functionName);
 		List<ParameterDTO> parameters = parameterService.findAllParametersByFunction(functionName);
 		if (parameters != null && !parameters.isEmpty()) {
 			LOGGER.info("Successfully retrieved all parameters by function name: {}", functionName);
-			return ResponseEntity.status(HttpStatus.OK).body(parameters);
+			return ResponseUtils.getSuccessDataResponse("Parameters fetched successfully", parameters);
 		} else {
 			LOGGER.error("No parameters found for function name: {}", functionName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No parameters found for function");
+			return ResponseUtils.getSuccessDataResponse("No parameters available for function: " + functionName, null);
 		}
 	}
 
 	/**
 	 * Retrieves all parameter enums.
 	 *
-	 * @return ResponseEntity with a list of all parameter enums
+	 * @return ResponseEntity with a list of all parameter enums in DataResponse
 	 */
 	@Operation(summary = "Retrieve all parameter enums", description = "Retrieves a list of all parameter enums.")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "Successfully retrieved all parameter enums"),
 			@ApiResponse(responseCode = "500", description = "Internal server error") })
-	@GetMapping("/getListOfParameterEnums")
-	public ResponseEntity<List<ParameterDataType>> getAllParameterEnums() {
-		LOGGER.info("Retrieving all parameter enums");
+	@GetMapping("/getListOfParameterDatatypes")
+	public ResponseEntity<DataResponse> getAllParameterEnums() {
+		LOGGER.info("Retrieving all ParameterDatatypes");
 		List<ParameterDataType> parameterEnums = parameterService.getAllParameterEnums();
-		return ResponseEntity.status(HttpStatus.OK).body(parameterEnums);
+		if (parameterEnums == null || parameterEnums.isEmpty()) {
+			LOGGER.error("No parameter enums found");
+			return ResponseUtils.getSuccessDataResponse("No Parameter Datatypes available", null);
+		} else {
+			LOGGER.info("Successfully retrieved all ParameterDatatypes");
+			return ResponseUtils.getSuccessDataResponse("Parameter Datatypes fetched successfully", parameterEnums);
+		}
 	}
 
 }

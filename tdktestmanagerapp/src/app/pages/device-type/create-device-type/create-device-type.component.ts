@@ -89,7 +89,7 @@ export class CreateDeviceTypeComponent implements OnInit {
       }
       this.service.createDeviceType(data).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'

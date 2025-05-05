@@ -122,8 +122,10 @@ export class FunctionListComponent {
   functionListByModule():void{
     this.showLoader = true;
     this.moduleservice.functionList(this.dynamicModuleName).subscribe( res=>{
-      this.rowData = JSON.parse(res);
-      this.showLoader = false;
+     this.rowData = res.data;
+      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
+        this.showLoader = false;
+      }
     })
   }
   /**
@@ -183,7 +185,7 @@ export class FunctionListComponent {
           next:(res)=>{
             this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
             this.rowData = [...this.rowData];
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',

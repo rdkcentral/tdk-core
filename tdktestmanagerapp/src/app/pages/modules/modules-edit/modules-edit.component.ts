@@ -67,7 +67,7 @@ export class ModulesEditComponent {
       this.categoryName = 'Video';
     }
     this.moduleservice.getAllTestGroups().subscribe((res:any) => {
-      this.testGroupArr = JSON.parse(res);
+      this.testGroupArr = res.data;
     });
     this.updateModuleForm = new FormGroup({
       moduleName: new FormControl<string | null>(this.moduleDetails.moduleName, { validators: Validators.required }),
@@ -143,7 +143,7 @@ export class ModulesEditComponent {
       }
       this.moduleservice.updateModule(moduleObj).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
@@ -152,9 +152,8 @@ export class ModulesEditComponent {
             this.router.navigate(["configure/modules-list"]);
           }, 1000);
         },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+        error:(err)=>{          
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

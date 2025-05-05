@@ -39,7 +39,12 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IRDKCertificationService;
+import com.rdkm.tdkservice.util.ResponseUtils;
+import com.rdkm.tdkservice.util.Utils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -70,15 +75,15 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "500", description = "Error in creating config file")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createOrUploadConfigFile(@RequestPart("pythonFile") MultipartFile file) {
+	public ResponseEntity<Response> createOrUploadConfigFile(@RequestPart("pythonFile") MultipartFile file) {
 		LOGGER.info("Inside createConfigFile method with fileName: {}", file.getOriginalFilename());
 		boolean isConfigFileCreated = rdkCertificationService.createOrUploadConfigFile(file);
 		if (isConfigFileCreated) {
 			LOGGER.info("Config file created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Config file created successfully");
+			return ResponseUtils.getCreatedResponse("Config file created successfully");
 		} else {
 			LOGGER.error("Error in creating config file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in creating config file");
+			throw new TDKServiceException("Error in creating config file");
 		}
 	}
 
@@ -103,7 +108,7 @@ public class RDKCertificationController {
 					.header("Access-Control-Expose-Headers", "content-disposition").body(resource);
 		} else {
 			LOGGER.error("Error in downloading config file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading config file");
+			throw new TDKServiceException("Error in creating config file");
 		}
 
 	}
@@ -118,15 +123,15 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "500", description = "Error in getting config file names")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getall")
-	public ResponseEntity<?> getAllConfigFileNames() {
+	public ResponseEntity<DataResponse> getAllConfigFileNames() {
 		LOGGER.info("Inside getAllConfigFileNames method");
 		List<String> configFileNames = rdkCertificationService.getAllConfigFileNames();
 		if (configFileNames != null && !configFileNames.isEmpty()) {
 			LOGGER.info("Config file names found successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(configFileNames);
+			return ResponseUtils.getSuccessDataResponse("Config file names found successfully", configFileNames);
 		} else {
 			LOGGER.error("No config file names found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file names found");
+			return ResponseUtils.getSuccessDataResponse("No config file names found", configFileNames);
 		}
 	}
 
@@ -144,12 +149,12 @@ public class RDKCertificationController {
 	public ResponseEntity<?> getConfigFileContent(@RequestParam String fileName) {
 		LOGGER.info("Inside getConfigFileContent method with fileName: {}");
 		String configFileContent = rdkCertificationService.getConfigFileContent(fileName);
-		if (configFileContent != null) {
+		if (!Utils.isEmpty(configFileContent)) {
 			LOGGER.info("Config file content found successfully");
 			return ResponseEntity.status(HttpStatus.OK).body(configFileContent);
 		} else {
 			LOGGER.error("No config file content found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No config file content found");
+			return ResponseUtils.getSuccessDataResponse("No config file content found", null);
 		}
 	}
 
@@ -164,15 +169,15 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "500", description = "Error in deleting config file")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteConfigFile(@RequestParam String fileName) {
+	public ResponseEntity<Response> deleteConfigFile(@RequestParam String fileName) {
 		LOGGER.info("Inside deleteConfigFile method with fileName: {}", fileName);
 		boolean isConfigFileDeleted = rdkCertificationService.deleteConfigFile(fileName);
 		if (isConfigFileDeleted) {
 			LOGGER.info("Config file deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Config file deleted successfully");
+			return ResponseUtils.getSuccessResponse("Succesfully deleted the certification file");
 		} else {
 			LOGGER.error("Error in deleting config file");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Config file not found for the name");
+			return ResponseUtils.getNotFoundResponse("The config file-" + fileName + "not found");
 		}
 	}
 
@@ -190,15 +195,15 @@ public class RDKCertificationController {
 	@ApiResponse(responseCode = "500", description = "Error in updating config file")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/update")
-	public ResponseEntity<String> updateConfigFile(@RequestPart("pythonFile") MultipartFile file) {
+	public ResponseEntity<Response> updateConfigFile(@RequestPart("pythonFile") MultipartFile file) {
 		LOGGER.info("Inside updateConfigFile method with fileName: {}", file);
 		boolean isConfigFileUpdated = rdkCertificationService.updateConfigFile(file);
 		if (isConfigFileUpdated) {
 			LOGGER.info("Config file updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Config file updated successfully");
+			return ResponseUtils.getSuccessResponse("Config file updated successfully");
 		} else {
 			LOGGER.error("Error in updating config file");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating config file");
+			throw new TDKServiceException("Error in updating config file");
 		}
 	}
 

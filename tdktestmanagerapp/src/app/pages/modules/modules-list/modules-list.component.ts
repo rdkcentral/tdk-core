@@ -148,10 +148,9 @@ export class ModulesListComponent {
    */
  findallbyCategory():void{
   this.showLoader = true;
-  this.moduleservice.findallbyCategory(this.configureName).subscribe(res=>{
-    let data = JSON.parse(res);
-    this.rowData = data;
-    if(this.rowData.length>0){
+  this.moduleservice.findallbyCategory(this.configureName).subscribe(res => {
+    this.rowData = res.data;
+    if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ||this.rowData.length == 0  ) {
       this.showLoader = false;
     }
   })
@@ -213,7 +212,7 @@ export class ModulesListComponent {
           next:(res)=>{
             this.rowData = this.rowData.filter((row: any) => row.id !== data.id);
             this.rowData = [...this.rowData];
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -221,7 +220,7 @@ export class ModulesListComponent {
             })
           },
           error:(err)=>{
-            this._snakebar.open(err.message, '', {
+            this._snakebar.open(err.message , '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -273,7 +272,7 @@ export class ModulesListComponent {
         this.uploadFileError = null;
         this.moduleservice.uploadXMLFile(this.uploadFileName).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -283,8 +282,8 @@ export class ModulesListComponent {
               this.ngOnInit();
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
-            this._snakebar.open(errmsg.message, '', {
+          
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -25,13 +25,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +40,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rdkm.tdkservice.dto.OemCreateDTO;
 import com.rdkm.tdkservice.dto.OemDTO;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IOemService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -76,15 +78,15 @@ public class OemController {
 	@ApiResponse(responseCode = "500", description = "Error in saving oem type data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createOemType(@RequestBody @Valid OemCreateDTO oemDTO) {
+	public ResponseEntity<Response> createOem(@RequestBody @Valid OemCreateDTO oemDTO) {
 		LOGGER.info("Received create oemDTO type request: " + oemDTO.toString());
 		boolean isOemCreated = iOemService.createOem(oemDTO);
 		if (isOemCreated) {
 			LOGGER.info("Oem created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("OEM created succesfully");
+			return ResponseUtils.getCreatedResponse("Device Type created successfully");
 		} else {
 			LOGGER.error("Error in saving Oem type data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving Oem type data");
+			throw new TDKServiceException("Error in creating OEM");
 		}
 
 	}
@@ -99,15 +101,15 @@ public class OemController {
 	@ApiResponse(responseCode = "200", description = "oem types found")
 	@ApiResponse(responseCode = "404", description = "No oem types found")
 	@GetMapping("/findall")
-	public ResponseEntity<?> findAllOemTypes() {
+	public ResponseEntity<DataResponse> findAllOemTypes() {
 		LOGGER.info("Received find all oem types request");
 		List<OemDTO> oemDTOList = iOemService.getAllOem();
 		if (oemDTOList != null && !oemDTOList.isEmpty()) {
 			LOGGER.info("Oem types found successfully");
-			return ResponseEntity.ok(oemDTOList);
+			return ResponseUtils.getSuccessDataResponse("OEM fetched successfully", oemDTOList);
 		} else {
 			LOGGER.error("No oem types found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEM types found");
+			return ResponseUtils.getSuccessDataResponse("No OEM available", oemDTOList);
 		}
 
 	}
@@ -122,11 +124,11 @@ public class OemController {
 	@Operation(summary = "Delete a oem type", description = "Deletes a oem type from the system.")
 	@ApiResponse(responseCode = "200", description = "oem deleted successfully")
 	@ApiResponse(responseCode = "404", description = "oem not found")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteOemType(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteOemType(@RequestParam UUID id) {
 		LOGGER.info("Received delete oem type request for ID: " + id);
 		iOemService.deleteOem(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Succesfully deleted the OEM");
+		return ResponseUtils.getSuccessResponse("OEM deleted successfully");
 	}
 
 	/**
@@ -139,12 +141,11 @@ public class OemController {
 	@Operation(summary = "Find oem by ID", description = "Retrieves a oem by its ID.")
 	@ApiResponse(responseCode = "200", description = "oem found")
 	@ApiResponse(responseCode = "500", description = "oem not found")
-
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<OemDTO> findById(@PathVariable UUID id) {
+	@GetMapping("/findbyid")
+	public ResponseEntity<DataResponse> findById(@RequestParam UUID id) {
 		LOGGER.info("Received find oem by id request: " + id);
 		OemDTO oemDTO = iOemService.findById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(oemDTO);
+		return ResponseUtils.getSuccessDataResponse("OEM found", oemDTO);
 
 	}
 
@@ -161,15 +162,15 @@ public class OemController {
 	@ApiResponse(responseCode = "500", description = "Error in updating oem")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateOemType(@RequestBody OemDTO oemUpdateDTO) {
+	public ResponseEntity<DataResponse> updateOemType(@RequestBody OemDTO oemUpdateDTO) {
 		LOGGER.info("Received update oemUpdateDTO request: " + oemUpdateDTO.toString());
 		OemDTO oemUpdateDto = iOemService.updateOem(oemUpdateDTO);
 		if (oemUpdateDto != null) {
 			LOGGER.info("oem updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("OEM updated successfully");
+			return ResponseUtils.getSuccessDataResponse("oem updated successfully", oemUpdateDto);
 		} else {
 			LOGGER.error("Error in updating oem");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating oem");
+			throw new TDKServiceException("Error in updating OEM");
 		}
 
 	}
@@ -185,15 +186,15 @@ public class OemController {
 	@ApiResponse(responseCode = "200", description = "oem found")
 	@ApiResponse(responseCode = "404", description = "No oem found")
 	@GetMapping("/findallbycategory")
-	public ResponseEntity<?> getOemsByCategory(String category) {
+	public ResponseEntity<DataResponse> getOemsByCategory(String category) {
 		LOGGER.info("Received find oem by category request: " + category);
 		List<OemDTO> oemDTOList = iOemService.getOemsByCategory(category);
 		if (oemDTOList != null && !oemDTOList.isEmpty()) {
 			LOGGER.info("oem found");
-			return ResponseEntity.status(HttpStatus.OK).body(oemDTOList);
+			return ResponseUtils.getSuccessDataResponse("Oem fetched successfully", oemDTOList);
 		} else {
 			LOGGER.error("No oem found for the category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEMs found");
+			return ResponseUtils.getSuccessDataResponse("No oem found for the category", oemDTOList);
 		}
 	}
 
@@ -209,15 +210,15 @@ public class OemController {
 	@ApiResponse(responseCode = "200", description = "oems retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No oems found")
 	@GetMapping("/getlistbycategory")
-	public ResponseEntity<?> getOemListByCategory(@RequestParam String category) {
+	public ResponseEntity<DataResponse> getOemListByCategory(@RequestParam String category) {
 		LOGGER.info("Received find oem by category request: " + category);
 		List<String> oemListByCategory = iOemService.getOemListByCategory(category);
 		if (oemListByCategory != null && !oemListByCategory.isEmpty()) {
 			LOGGER.info("oem found successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(oemListByCategory);
+			return ResponseUtils.getSuccessDataResponse("Oem fetched successfully", oemListByCategory);
 		} else {
 			LOGGER.error("No oem found for the category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No OEMs found");
+			return ResponseUtils.getSuccessDataResponse("No oem found for the category", oemListByCategory);
 		}
 	}
 

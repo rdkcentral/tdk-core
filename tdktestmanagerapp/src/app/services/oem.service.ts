@@ -43,7 +43,7 @@ export class OemService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/oem/findallbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${apiUrl}api/v1/oem/findallbycategory?category=${category}`, { headers});
   }
 
   createOem(data: any): Observable<any> {
@@ -52,14 +52,14 @@ export class OemService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/oem/create`, data, { headers, responseType: 'text' });
+    return this.http.post(`${apiUrl}api/v1/oem/create`, data, { headers });
   }
 
   deleteOem(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/oem/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${apiUrl}api/v1/oem/delete?id=${id}`, { headers });
   }
 
   updateOem(data: any): Observable<any> {
@@ -67,7 +67,7 @@ export class OemService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/oem/update`, data, { headers, responseType: 'text' });
+    return this.http.put(`${apiUrl}api/v1/oem/update`, data, { headers});
  
   }
 

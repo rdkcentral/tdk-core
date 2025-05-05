@@ -90,7 +90,7 @@ export class CustomTestsuiteComponent {
   */
   getAllModule(category:string):void{
     this.scriptservice.getModuleCustomTestSuite(category).subscribe(res=>{
-      this.modulesArr = JSON.parse(res);
+      this.modulesArr = res.data;
     })
   }
   /**
@@ -98,7 +98,7 @@ export class CustomTestsuiteComponent {
   */  
   getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.getCategory).subscribe(res=>{
-      this.allDeviceType = JSON.parse(res);
+      this.allDeviceType = res.data
     })
   }
   /**
@@ -180,7 +180,7 @@ export class CustomTestsuiteComponent {
       }
       this.scriptservice.createCustomTestSuite(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -189,9 +189,8 @@ export class CustomTestsuiteComponent {
             this.router.navigate(["/script"]);
           }, 1000);
         },
-        error: (err) => {
-          let errmsg =JSON.parse(err.error) ;
-          this._snakebar.open(errmsg.message, '', {
+        error: (err) => {          
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

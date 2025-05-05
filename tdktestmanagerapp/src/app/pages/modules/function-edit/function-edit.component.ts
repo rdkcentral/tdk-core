@@ -72,7 +72,7 @@ export class FunctionEditComponent {
       }
       this.moduleservice.updateFunction(data).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
@@ -82,9 +82,8 @@ export class FunctionEditComponent {
             this.router.navigate(["/configure/function-list"]);
           }, 1000);
         },
-        error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+        error:(err)=>{       
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

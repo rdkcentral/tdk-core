@@ -81,7 +81,7 @@ public interface IExportExcelService {
 	 * @return a byte array representing the generated ZIP file
 	 * @throws IOException if an I/O error occurs
 	 */
-	byte[] generateExecutionResultsZip(UUID executionId) throws IOException;
+	byte[] generateExecutionResultsZip(UUID executionId);
 
 	/**
 	 * Generates a ZIP file containing the failure scripts results for the given
@@ -91,7 +91,7 @@ public interface IExportExcelService {
 	 * @return a byte array representing the generated ZIP file
 	 * @throws IOException if an I/O error occurs
 	 */
-	byte[] generateExecutionFailureScriptsResultsZip(UUID executionId) throws IOException;
+	byte[] generateExecutionFailureScriptsResultsZip(UUID executionId);
 
 	/**
 	 * Generates an Excel report comparing the specified executions.
@@ -101,6 +101,6 @@ public interface IExportExcelService {
 	 * @return a ByteArrayInputStream containing the generated Excel report
 	 * @throws IOException if an I/O error occurs during report generation
 	 */
-	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds) throws IOException;
+	ByteArrayInputStream generateComparisonExcelReport(UUID baseExecId, List<UUID> executionIds);
 
 }

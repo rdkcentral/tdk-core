@@ -91,7 +91,7 @@ export class CreateRdkCertificationComponent {
       const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
       this.service.createScript(scriptFile).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -101,8 +101,8 @@ export class CreateRdkCertificationComponent {
           }, 1000);
         },
         error: (err) => {
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          let errmsg = err.message;
+          this._snakebar.open(errmsg, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

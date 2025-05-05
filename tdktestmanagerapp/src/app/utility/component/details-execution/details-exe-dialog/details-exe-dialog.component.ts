@@ -279,15 +279,25 @@ export class DetailsExeDialogComponent {
     this.executionResultId = id;
     if (parent.expanded) {
       this.expandedIndexes.push(index);
-      if (!parent.details && parent.executionResultID) {
-        
-        this.executionservice.scriptResultDetails(parent.executionResultID).subscribe(res => {
-          parent.details = JSON.parse(res);
+      if (!parent.details && parent.executionResultID) {        
+        this.executionservice.scriptResultDetails(parent.executionResultID).subscribe({
+          next: (res) => {
+          parent.details = res.data
           const logs = parent.details.logs;
           parent.formatLogs = logs ? logs.replace(/\n/g, '<br>') : '';
           this.changeDetectorRef.detectChanges();
           
-        });
+        },
+        error:(err)=>{
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })
+        }
+      }           
+      );
       }
     } else {
       parent.details = null; 
@@ -298,7 +308,7 @@ export class DetailsExeDialogComponent {
 
   getExelogDetails(){
     this.executionservice.DetailsForHtmlReport(this.data.executionId).subscribe(res => {
-      let details = JSON.parse(res);
+      let details = res.data
       this.htmlDetails = details;
       for (let i = 0; i < details.length; i++) {
         const element = details[i];
@@ -460,7 +470,7 @@ export class DetailsExeDialogComponent {
           maxWidth:'100vw',
           panelClass: 'custom-modalbox',
           data:{
-            logFileNames : res,
+            logFileNames : res.data,
             executionId : this.executionResultId
           },
         });
@@ -508,14 +518,14 @@ export class DetailsExeDialogComponent {
   repeatExecution():void{
     this.executionservice.repeatExecution(this.data.executionId,this.loggedinUser.userName).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         })
       },
       error:(err)=>{
-        this._snakebar.open(err.error.text, '', {
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -533,14 +543,14 @@ export class DetailsExeDialogComponent {
   rerunFailure():void{
     this.executionservice.rerunOnFailure(this.data.executionId,this.loggedinUser.userName).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         })
       },
       error:(err)=>{
-        this._snakebar.open(err.error.text, '', {
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -565,7 +575,7 @@ export class DetailsExeDialogComponent {
   modulewiseExeSummary():void{
     this.executionservice.modulewiseSummary(this.data.executionId).subscribe({
       next:(res)=>{
-        this.moduleTableData = JSON.parse(res);
+        this.moduleTableData = res.data
         this.keys = Object.keys(this.moduleTableData);
         this.moduleTableTitle = this.keys
         .filter((key) => key !== 'Total')
@@ -592,7 +602,7 @@ export class DetailsExeDialogComponent {
   analysisSummary():void{
     this.executionservice.getModulewiseAnalysisSummary(this.data.executionId).subscribe({
       next:(res)=>{
-        this.analysisTableData = JSON.parse(res);
+        this.analysisTableData = res.data;
         this.keys = Object.keys(this.analysisTableData);
         this.analysisSummaryData = this.keys
         .filter((key) => key !== 'Total')
@@ -601,9 +611,8 @@ export class DetailsExeDialogComponent {
       const totalData = this.analysisTableData['Total'];
       this.analysisSummaryData.push({ name: 'Total', ...totalData });
       },
-      error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg.message, '', {
+      error:(err)=>{        
+        this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -621,7 +630,7 @@ export class DetailsExeDialogComponent {
    */
   dataUpdate():void{
     this.executionservice.resultDetails(this.executionIdLocalStroge).subscribe(res=>{
-      this.data = JSON.parse(res);
+      this.data = res.data
       this.pieChartData();
       this.resultDetails();
       this.changeDetectorRef.detectChanges();
@@ -659,7 +668,7 @@ export class DetailsExeDialogComponent {
     if(parent.analysisTicket){
       this.executionservice.getAnalysisResult(parent.executionResultID)
       .subscribe(async (res) => {
-        this.analysisResult = JSON.parse(res); 
+        this.analysisResult = res.data; 
         this.analysisResult.name = parent.name; 
         this.analysisResult.executionResultID = parent.executionResultID; 
         const dialogRef = this.analyzeDialog.open(AnalyzeDialogComponent, { 
@@ -728,8 +737,6 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-
-
           a.download = `ConsolidatedReport_${this.data.deviceName}_${this.data.executionId}.xlsx`;
           document.body.appendChild(a);
           a.click();
@@ -789,7 +796,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `Results_${this.data.deviceName}_${this.data.executionId}.zip`;
+          a.download = `Execution_Logs_${this.data.deviceName}_${this.data.executionId}.zip`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -811,7 +818,8 @@ export class DetailsExeDialogComponent {
   shwHideFailedDownload():void{
     if(this.data.executionId){
       this.executionservice.isfailedExecution(this.data.executionId).subscribe(res=>{
-        if(res === "true"){
+        let resData = res.data;
+        if(resData === true){
           this.showFailedZipOption = true;
         }else{
           this.showFailedZipOption = false;
@@ -830,7 +838,7 @@ export class DetailsExeDialogComponent {
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `Failed_Results_${this.data.deviceName}_${this.data.executionId}.zip`;
+          a.download = `Failed_Execution_Logs_${this.data.deviceName}_${this.data.executionId}.zip`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);

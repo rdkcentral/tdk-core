@@ -35,7 +35,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,8 +48,12 @@ import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCustomDTO;
 import com.rdkm.tdkservice.dto.TestSuiteDTO;
 import com.rdkm.tdkservice.dto.TestSuiteDetailsResponse;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.ITestSuiteService;
 import com.rdkm.tdkservice.util.Constants;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -75,22 +78,22 @@ public class TestSuiteController {
 	 * Create a test suite.
 	 * 
 	 * @param testSuiteCreateDTO
-	 * @return
+	 * @return testSUite list
 	 */
 	@Operation(summary = "Create test suite", description = "Create test suite")
 	@ApiResponse(responseCode = "201", description = "test suite created successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in creating test suite")
 	@PostMapping("/create")
-	public ResponseEntity<?> createTestSuite(@RequestBody @Valid TestSuiteCreateDTO testSuiteCreateDTO) {
+	public ResponseEntity<Response> createTestSuite(@RequestBody @Valid TestSuiteCreateDTO testSuiteCreateDTO) {
 		LOGGER.info("Received create test suite request: " + testSuiteCreateDTO.toString());
 		boolean isTestSuiteCreated = testSuiteService.createTestSuite(testSuiteCreateDTO);
 		if (isTestSuiteCreated) {
 			LOGGER.info("Test suite created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Test suite created successfully");
+			return ResponseUtils.getCreatedResponse("Test suite created successfully");
 		} else {
 			LOGGER.error("Error in creating script");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in creating Test suite");
+			throw new TDKServiceException("Error in creating script");
 		}
 
 	}
@@ -99,22 +102,22 @@ public class TestSuiteController {
 	 * Update the test suite.
 	 * 
 	 * @param testSuiteDTO - the test suite dto
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity<Response> - the response entity
 	 */
 	@Operation(summary = "Update test suite", description = "Update test suite")
 	@ApiResponse(responseCode = "200", description = "test suite updated successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in updating test suite")
-	@PostMapping("/update")
-	public ResponseEntity<?> updateTestSuite(@RequestBody @Valid TestSuiteDTO testSuiteDTO) {
+	@PutMapping("/update")
+	public ResponseEntity<Response> updateTestSuite(@RequestBody @Valid TestSuiteDTO testSuiteDTO) {
 		LOGGER.info("Received update test suite request: " + testSuiteDTO.toString());
 		boolean isTestSuiteUpdated = testSuiteService.updateTestSuite(testSuiteDTO);
 		if (isTestSuiteUpdated) {
 			LOGGER.info("Test suite updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Test suite updated successfully");
+			return ResponseUtils.getSuccessResponse("Test suite updated successfully");
 		} else {
 			LOGGER.error("Error in updating test suite");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating test suite");
+			throw new TDKServiceException("Error in updating test suite");
 		}
 
 	}
@@ -123,21 +126,21 @@ public class TestSuiteController {
 	 * This method is used to get the test suite by id
 	 * 
 	 * @param testSuiteId - the test suite id
-	 * @return ResponseEntity - the response entity
+	 * @return ResponseEntity<DataResponse> - the response entity
 	 */
 	@Operation(summary = "Get TestSuite By Id", description = "Get test suite by id")
 	@ApiResponse(responseCode = "200", description = "Scriptgroup fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getTestSuiteById(@PathVariable UUID id) {
+	@GetMapping("/findById")
+	public ResponseEntity<DataResponse> getTestSuiteById(@RequestParam UUID id) {
 		LOGGER.info("Received get testSuite by id request: " + id);
 		TestSuiteDTO testSuiteDTO = testSuiteService.findTestSuiteById(id);
 		if (testSuiteDTO != null) {
 			LOGGER.info("Test suite fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTO);
+			return ResponseUtils.getSuccessDataResponse("Test suite fetched successfully", testSuiteDTO);
 		} else {
 			LOGGER.error("No test suite found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suite found");
+			return ResponseUtils.getNotFoundDataResponse("No test suite found" + id, null);
 		}
 	}
 
@@ -150,16 +153,16 @@ public class TestSuiteController {
 	@Operation(summary = "Get All TestSuite By Category", description = "Get All test suite by category")
 	@ApiResponse(responseCode = "200", description = "Scriptgroup fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findallbycategory")
-	public ResponseEntity<?> getAllTestSuiteByCategory(@RequestParam String category) {
+	@GetMapping("/findAllByCategory")
+	public ResponseEntity<DataResponse> getAllTestSuiteByCategory(@RequestParam String category) {
 		LOGGER.info("Received get testSuite by category request: " + category);
 		List<TestSuiteDTO> testSuiteDTOList = testSuiteService.findAllTestSuiteByCategory(category);
 		if (testSuiteDTOList != null) {
 			LOGGER.info("Test suite fetched successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(testSuiteDTOList);
+			return ResponseUtils.getSuccessDataResponse("Test suite fetched successfully", testSuiteDTOList);
 		} else {
 			LOGGER.error("No test suite found by category");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No test suite found by category");
+			return ResponseUtils.getSuccessDataResponse("No Device details found for category" + category, null);
 		}
 	}
 
@@ -172,16 +175,16 @@ public class TestSuiteController {
 	@Operation(summary = "Delete TestSuite", description = "Delete test suite")
 	@ApiResponse(responseCode = "200", description = "Scriptgroup deleted successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> deleteScript(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteScript(@RequestParam UUID id) {
 		LOGGER.info("Received delete testSuite request: " + id);
 		boolean isScriptDeleted = testSuiteService.deleteTestSuite(id);
 		if (isScriptDeleted) {
 			LOGGER.info("Test suite deleted successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Test suite deleted successfully");
+			return ResponseUtils.getSuccessResponse("Device is deleted successfully");
 		} else {
 			LOGGER.error("Error in deleting test suite");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in deleting test suite");
+			throw new TDKServiceException("Error in deleting test suite");
 		}
 	}
 
@@ -196,19 +199,19 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "TestCases downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in downloading test cases")
-	@GetMapping("/downloadtestcases")
+	@GetMapping("/downloadTestCases")
 	public ResponseEntity<?> downloadTestCasesAsExcel(@RequestParam String testSuite) {
 		LOGGER.info("Received download test cases details for all the scripts in test suite as excel request:");
 		ByteArrayInputStream in = testSuiteService.getTestCasesInTestSuiteAsExcel(testSuite);
 		if (in == null || in.available() == 0) {
 			LOGGER.error("Error in downloading test cases details for all the scripts in test suite as excel");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading test cases details for all the scripts in test suite as excel");
+			throw new TDKServiceException(
+					"Error in downloading test cases details for all the scripts in test suite as excel");
 		}
 		// Prepare response with the Excel file
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("Content-Disposition",
-				"attachment; filename=TestCase_" + testSuite + Constants.EXCEL_FILE_EXTENSION);
+				"attachment; filename=SuiteTestcases_" + testSuite + Constants.EXCEL_FILE_EXTENSION);
 		LOGGER.info("Downloaded test case as excel by module");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(new InputStreamResource(in));
@@ -225,15 +228,15 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in creating Custom Test Suite")
 	@PostMapping("/createCustomTestSuite")
-	public ResponseEntity<?> createCustomTestSuite(@RequestBody @Valid TestSuiteCustomDTO testSuiteCustomDTO) {
+	public ResponseEntity<Response> createCustomTestSuite(@RequestBody @Valid TestSuiteCustomDTO testSuiteCustomDTO) {
 		LOGGER.info("Received create custom test suite request: " + testSuiteCustomDTO.toString());
 		boolean isTestSuiteCreated = testSuiteService.createCustomTestSuite(testSuiteCustomDTO);
 		if (isTestSuiteCreated) {
 			LOGGER.info("Custom Test Suite created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Custom Test Suite created successfully");
+			return ResponseUtils.getSuccessResponse("Custom Test Suite created successfully");
 		} else {
 			LOGGER.error("Error in creating Custom Test Suite");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in creating Custom Test Suite");
+			throw new TDKServiceException("Error in creating Custom Test Suite");
 		}
 
 	}
@@ -248,14 +251,13 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "test suite xml downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in downloading test suite xml")
-	@GetMapping("/downloadtestsuitexml")
+	@GetMapping("/downloadTestSuiteXml")
 	public ResponseEntity<?> downloadTestSuiteXML(@RequestParam String testSuite) {
 		LOGGER.info("Received download test suite XML request:");
 		ByteArrayInputStream inputStream = testSuiteService.downloadTestSuiteAsXML(testSuite);
 		if (inputStream == null || inputStream.available() == 0) {
 			LOGGER.error("Error in downloading test suite as XML");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading test suite as XML");
+			throw new TDKServiceException("Error in creating Custom Test Suite");
 		}
 		// Prepare response with the XML file
 		HttpHeaders headers = new HttpHeaders();
@@ -275,15 +277,15 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "test suite uploaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in uploading test suite")
-	@PostMapping("/uploadtestsuitexml")
-	public ResponseEntity<?> uploadTestSuiteXML(@RequestPart("testSuite") MultipartFile testSuite) {
+	@PostMapping("/uploadTestSuiteXml")
+	public ResponseEntity<Response> uploadTestSuiteXML(@RequestPart("testSuite") MultipartFile testSuite) {
 		boolean isTestSuiteUploaded = testSuiteService.uploadTestSuiteAsXML(testSuite);
 		if (isTestSuiteUploaded) {
 			LOGGER.info("Script names uploaded successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Test suite uploaded successfully");
+			return ResponseUtils.getSuccessResponse("Test suite uploaded successfully");
 		} else {
 			LOGGER.error("Error in uploading test suites");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in uploading test suites");
+			throw new TDKServiceException("Error in creating Custom Test Suite");
 		}
 	}
 
@@ -296,13 +298,13 @@ public class TestSuiteController {
 	@Operation(summary = "Update TestSuite By Module Name", description = "Update TestSuite By Module Name")
 	@ApiResponse(responseCode = "200", description = "Scriptgroup updated successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@PutMapping("/updatetestsuite/{moduleName}/{category}")
-	public ResponseEntity<String> updateTestSuiteByModuleNameAndCategory(@PathVariable String moduleName,
-			@PathVariable String category) {
+	@PutMapping("/updateTestSuite")
+	public ResponseEntity<Response> updateTestSuiteByModuleNameAndCategory(@RequestParam String moduleName,
+			@RequestParam String category) {
 		LOGGER.info("Received request to update test suite for module: {} and category: {}", moduleName, category);
 		String message = testSuiteService.updateTestSuiteByModuleNameAndCategory(moduleName, category);
 		LOGGER.info("Successfully updated test suite for module: {} and category: {}", moduleName, category);
-		return ResponseEntity.ok(message);
+		return ResponseUtils.getSuccessResponse(message);
 	}
 
 	/**
@@ -316,18 +318,17 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "All TestSuite downloaded successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@ApiResponse(responseCode = "500", description = "Issue in downloading All TestSuite")
-	@GetMapping("/downloadalltestsuitexml")
+	@GetMapping("/downloadAllTestSuiteXml")
 	public ResponseEntity<?> downloadAllTestSuiteXML(@RequestParam String category) {
 		LOGGER.info("Received download all test suite XML request:");
 		ByteArrayInputStream inputStream = testSuiteService.downloadAllTestSuiteAsXML(category);
 		if (inputStream == null || inputStream.available() == 0) {
 			LOGGER.error("Error in downloading all test suite as XML");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-					.body("Error in downloading all test suite as XML");
+			throw new TDKServiceException("Error in creating Custom Test Suite");
 		}
 		// Prepare response with the XML file
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("Content-Disposition", "attachment; filename=" + category + Constants.ZIP_EXTENSION);
+		headers.add("Content-Disposition", "attachment; filename=Testcases_" + category + Constants.ZIP_EXTENSION);
 		LOGGER.info("Downloaded all test suite xml as zip");
 		return ResponseEntity.status(HttpStatus.OK).headers(headers).contentType(MediaType.APPLICATION_OCTET_STREAM)
 				.body(new InputStreamResource(inputStream));
@@ -344,7 +345,7 @@ public class TestSuiteController {
 	@ApiResponse(responseCode = "200", description = "List of test suite fetched successfully")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getListofTestSuiteByCategory")
-	public ResponseEntity<?> getListofTestSuiteByCategory(@RequestParam String category,
+	public ResponseEntity<DataResponse> getListofTestSuiteByCategory(@RequestParam String category,
 			@RequestParam boolean isThunderEnabled) {
 		LOGGER.info("Received request to get list of test suites by category: {} and isThunderEnabled: {}", category,
 				isThunderEnabled);
@@ -355,11 +356,13 @@ public class TestSuiteController {
 		if (testSuites != null) {
 			LOGGER.info("Test suites fetched successfully for category: {} and isThunderEnabled: {}", category,
 					isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.OK).body(testSuites);
+			return ResponseUtils.getSuccessDataResponse("Test suites fetched successfully for category - " + category
+					+ " and thunderenabled status - " + isThunderEnabled, testSuites);
 		} else {
 			LOGGER.warn("No test suites found for category: {} and isThunderEnabled: {}", category, isThunderEnabled);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND)
-					.body("No test suites found for the specified category and Thunder setting");
+			return ResponseUtils.getSuccessDataResponse(
+					"No test suites found for category: " + category + " and isThunderEnabled: " + isThunderEnabled,
+					testSuites);
 		}
 	}
 

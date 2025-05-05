@@ -25,13 +25,11 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,7 +41,11 @@ import com.rdkm.tdkservice.dto.PrimitiveTestCreateDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestNameAndIdDTO;
 import com.rdkm.tdkservice.dto.PrimitiveTestUpdateDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IPrimitiveTestService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -67,7 +69,7 @@ public class PrimitiveTestController {
 	 * This method is used to create the primitive test
 	 *
 	 * @param primitiveTestDTO - PrimitiveTestCreateDTO object
-	 * @return ResponseEntity<String> - response entity - message
+	 * @return ResponseEntity<Response> - response entity - message in Response
 	 */
 
 	@Operation(summary = "Create Primitive Test", description = "Create Primitive Test in the system")
@@ -75,14 +77,14 @@ public class PrimitiveTestController {
 	@ApiResponse(responseCode = "500", description = "Error in saving primitive test data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PostMapping("/create")
-	public ResponseEntity<String> createPrimitiveTest(@RequestBody @Valid PrimitiveTestCreateDTO primitiveTestDTO) {
+	public ResponseEntity<Response> createPrimitiveTest(@RequestBody @Valid PrimitiveTestCreateDTO primitiveTestDTO) {
 		boolean isPrimitiveTestCreated = primitiveTestService.createPrimitiveTest(primitiveTestDTO);
 		if (isPrimitiveTestCreated) {
 			LOGGER.info("Primitive Test created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("Primitive Test Created Successfully");
+			return ResponseUtils.getCreatedResponse("Primitive Test created successfully");
 		} else {
 			LOGGER.error("Error in saving primitive test data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Primitive Test Creation Failed");
+			throw new TDKServiceException("Error in saving primitive test data");
 		}
 
 	}
@@ -91,7 +93,7 @@ public class PrimitiveTestController {
 	 * This method is used to update the primitive test
 	 *
 	 * @param primitiveTestDTO - PrimitiveTestUpdateDTO object
-	 * @return ResponseEntity<String> - response entity - message
+	 * @return ResponseEntity<Response> - response entity - message in Response
 	 */
 
 	@Operation(summary = "Update Primitive Test", description = "Update Primitive Test in the system")
@@ -99,14 +101,14 @@ public class PrimitiveTestController {
 	@ApiResponse(responseCode = "500", description = "Error in updating primitive test data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@PutMapping("/update")
-	public ResponseEntity<String> updatePrimitiveTest(@RequestBody @Valid PrimitiveTestUpdateDTO primitiveTestDTO) {
+	public ResponseEntity<Response> updatePrimitiveTest(@RequestBody @Valid PrimitiveTestUpdateDTO primitiveTestDTO) {
 		boolean isPrimitiveTestUpdated = primitiveTestService.updatePrimitiveTest(primitiveTestDTO);
 		if (isPrimitiveTestUpdated) {
 			LOGGER.info("Primitive Test Updated Successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Primitive Test Updated Successfully");
+			return ResponseUtils.getSuccessResponse("Primitive Test Updated Successfully");
 		} else {
 			LOGGER.error("Error in updating primitive test data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Primitive Test Update Failed");
+			throw new TDKServiceException("Error in updating primitive test data");
 		}
 	}
 
@@ -121,36 +123,36 @@ public class PrimitiveTestController {
 	@ApiResponse(responseCode = "200", description = "Primitive Test deleted successfully")
 	@ApiResponse(responseCode = "500", description = "Error in deleting primitive test data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<String> deleteById(@PathVariable UUID id) {
+	@DeleteMapping("/delete")
+	public ResponseEntity<Response> deleteById(@RequestParam UUID id) {
 		LOGGER.info("Deleting primitive test with id: " + id);
 		primitiveTestService.deleteById(id);
 		LOGGER.info("Primitive test deleted successfully with id: " + id);
-		return ResponseEntity.status(HttpStatus.OK).body("Primitive test deleted successfully");
+		return ResponseUtils.getSuccessResponse("Primitive test deleted successfully");
 	}
 
 	/**
 	 * This method is used to get the primitive test details by id
 	 *
 	 * @param id - UUID
-	 * @return ResponseEntity<?> - response entity - message
-	 * 
+	 * @return ResponseEntity<DataResponse> - response entity - message in
+	 *         DataResponse
 	 */
-
 	@Operation(summary = "Find Primitive Test", description = "Find Primitive Test by id")
 	@ApiResponse(responseCode = "200", description = "Primitive Test found successfully")
 	@ApiResponse(responseCode = "404", description = "Primitive Test not found")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@GetMapping("/findbyid/{id}")
-	public ResponseEntity<?> getPrimitiveTestDetails(@PathVariable UUID id) {
+	@GetMapping("/findbyid")
+	public ResponseEntity<DataResponse> getPrimitiveTestDetails(@RequestParam UUID id) {
 		LOGGER.info("Finding primitive test with id: " + id);
 		PrimitiveTestDTO primitiveTestDTO = primitiveTestService.getPrimitiveTestDetailsById(id);
 		if (primitiveTestDTO != null) {
 			LOGGER.info("Primitive test found  " + primitiveTestDTO.toString());
-			return ResponseEntity.status(HttpStatus.OK).body(primitiveTestDTO);
+			return ResponseUtils.getSuccessDataResponse("Primitive test fetched successfully", primitiveTestDTO);
+
 		} else {
 			LOGGER.error("Primitive test not found with id: " + id);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Primitive test not found");
+			throw new TDKServiceException("Error in getting Primitive test with id: " + id);
 		}
 
 	}
@@ -159,23 +161,26 @@ public class PrimitiveTestController {
 	 * This method is used to get the primitive test details by module name
 	 *
 	 * @param moduleName - String
-	 * @return ResponseEntity<?> - response entity - message
+	 * @return ResponseEntity<DataResponse>- response entity - message with
+	 *         DataResponse
 	 */
 	@Operation(summary = "Find Primitive Test", description = "Find Primitive Test name and Id list  by module name")
 	@ApiResponse(responseCode = "200", description = "Primitive Test found successfully")
 	@ApiResponse(responseCode = "404", description = "Primitive Test not found")
 	@ApiResponse(responseCode = "400", description = "Bad request")
 	@GetMapping("/getlistbymodulename")
-	public ResponseEntity<?> getPrimitiveTestDetailsByModuleName(@RequestParam String moduleName) {
+	public ResponseEntity<DataResponse> getPrimitiveTestDetailsByModuleName(@RequestParam String moduleName) {
 		LOGGER.info("Finding primitive test with module name: " + moduleName);
 		List<PrimitiveTestNameAndIdDTO> primitiveTestDTO = primitiveTestService
 				.getPrimitiveTestDetailsByModuleName(moduleName);
 		if (primitiveTestDTO != null) {
 			LOGGER.info("Primitive test found  " + primitiveTestDTO.toString());
-			return ResponseEntity.status(HttpStatus.OK).body(primitiveTestDTO);
+			return ResponseUtils.getSuccessDataResponse("PrimitiveTests fetched with module name: " + moduleName,
+					primitiveTestDTO);
 		} else {
 			LOGGER.error("Primitive test not found with module name: " + moduleName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Primitive test not found");
+			return ResponseUtils.getSuccessDataResponse("No primitive test not found for the module: " + moduleName,
+					null);
 		}
 
 	}
@@ -197,10 +202,12 @@ public class PrimitiveTestController {
 		List<PrimitiveTestDTO> primitiveTestDTO = primitiveTestService.findAllByModuleName(moduleName);
 		if (primitiveTestDTO != null) {
 			LOGGER.info("Primitive test found  " + primitiveTestDTO.toString());
-			return ResponseEntity.status(HttpStatus.OK).body(primitiveTestDTO);
+			return ResponseUtils.getSuccessDataResponse("PrimitiveTests fetched with module name: " + moduleName,
+					primitiveTestDTO);
 		} else {
 			LOGGER.error("Primitive test not found with module name: " + moduleName);
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Primitive test not found");
+			return ResponseUtils.getSuccessDataResponse("No primitive test not found for the module: " + moduleName,
+					null);
 		}
 
 	}

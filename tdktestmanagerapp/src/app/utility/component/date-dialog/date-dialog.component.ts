@@ -72,7 +72,7 @@ export class DateDialogComponent {
     if (this.selectedDate) {
       this.executionservice.datewiseDeleteExe(this.fromDate, this.toDate).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -82,8 +82,8 @@ export class DateDialogComponent {
           }, 2000);
         },
         error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message,'',{
+          let errmsg = err.message
+          this._snakebar.open(errmsg,'',{
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

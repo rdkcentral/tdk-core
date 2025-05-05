@@ -100,7 +100,7 @@ export class EditTestsuiteComponent {
 
   allScripts(){
     this.scriptservice.findTestSuitebyCategory(this.selectedCategory).subscribe(res=>{
-      this.container1 = JSON.parse(res);
+      this.container1 = res.data
       const idsToRemove = new Set(this.container2ScriptArr.map((obj) => obj.id));
       this.container1 = this.container1.filter((obj) => !idsToRemove.has(obj.id));
     })
@@ -200,7 +200,7 @@ export class EditTestsuiteComponent {
       }
       this.scriptservice.updateTestSuite(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 2000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -210,8 +210,8 @@ export class EditTestsuiteComponent {
           }, 1000);
         },
         error: (err) => {
-          let errmsg =JSON.parse(err.error) ;
-          this._snakebar.open(errmsg.message, '', {
+        
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

@@ -134,9 +134,8 @@ export class AnalyzeDialogComponent implements OnInit{
       });
     this.getAllDefects();
     this.listProjectNAmes();
-    this.analysiservice.getTicketDetaisFromJira(this.data.executionResultID,'').subscribe(res=>{
-      console.log(JSON.parse(res));
-      this.rowData = JSON.parse(res);
+    this.analysiservice.getTicketDetaisFromJira(this.data.executionResultID,'').subscribe(res=>{      
+      this.rowData = res.data;
     })
     this.isJiraPresent();
   }
@@ -149,8 +148,8 @@ export class AnalyzeDialogComponent implements OnInit{
 
   isJiraPresent(){
     this.analysiservice.isJiraAutomation().subscribe(res=>{
-      console.log(res);
-      if(res === "false"){
+      
+      if(res.data === false){
         this.showJiraTab = false;
       }else{
         this.showJiraTab = true;
@@ -175,23 +174,23 @@ export class AnalyzeDialogComponent implements OnInit{
 
   getAllDefects():void{
     this.executionservice.getDefectTypes().subscribe(res=>{
-      this.allDeftesTypes = JSON.parse(res) ;
+      this.allDeftesTypes = res.data ;
     })
   }
 
   listProjectNAmes() {
     this.analysiservice.getProjectNames().subscribe((res) => {
-      this.allProjectNames = JSON.parse(res);
+      this.allProjectNames = res.data;
     });
   }
   onProjectChange(event:any){
     let prjName = event.target.value;
     let projectName = prjName?prjName:" ";
     this.analysiservice.getTicketDetaisFromJira(this.data.executionResultID,projectName).subscribe(res=>{
-      console.log(JSON.parse(res));
-      let ticketNumber = JSON.parse(res);
-      if(ticketNumber != null){
-        this.rowData = JSON.parse(res);
+      
+      let ticketDetails = res.data;
+      if(ticketDetails != null){
+        this.rowData = ticketDetails;
       }else{
         this.rowData = [];
       }
@@ -210,7 +209,7 @@ export class AnalyzeDialogComponent implements OnInit{
       }
       this.executionservice.saveAnalysisResult(this.data.executionResultID,analysisData).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 1000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -221,8 +220,7 @@ export class AnalyzeDialogComponent implements OnInit{
           }, 2000);
         },
         error:(err)=>{
-          let errmsg = JSON.parse(err.error);
-          this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',

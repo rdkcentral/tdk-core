@@ -55,25 +55,27 @@ export class ThemeService {
   }
 
 
-  getTheme(userId:any): void{
+  getTheme(userId:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    this.http.get(`${apiUrl}api/v1/users/gettheme?userId=${userId}`,{ headers, responseType: 'text' })
-    .pipe(
-      catchError(() => {
-        return of('LIGHT'); 
-      })
-    ).subscribe(response => {
-      let theme = response;
-      this.setTheme(theme); 
-    });
+    return this.http.get(`${apiUrl}api/v1/users/gettheme?userId=${userId}`,{ headers })
+    // .pipe(
+    //   catchError(() => {
+    //     return of('LIGHT'); 
+    //   })
+    // ).subscribe(response => {
+    //   let theme = response;
+    //   this.setTheme(theme); 
+    // });
   }
+
   setTheme(theme: string): void {
     localStorage.setItem('theme', theme);
     this.currentThemeSubject.next(theme);
     this.applyTheme(theme); 
   }
+  
   applyTheme(theme: string): void {
     if (theme === 'DARK') {
       document.body.classList.add('dark');

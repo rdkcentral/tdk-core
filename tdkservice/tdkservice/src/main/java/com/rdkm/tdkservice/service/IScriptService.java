@@ -21,6 +21,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 package com.rdkm.tdkservice.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -118,9 +119,10 @@ public interface IScriptService {
 	 * 
 	 * @param file - the file
 	 * @return - true if the file is uploaded successfully, false otherwise
+	 * @throws IOException 
 	 */
 
-	boolean uploadZipFile(MultipartFile file);
+	boolean uploadZipFile(MultipartFile file) throws IOException;
 
 	/**
 	 * This method is used to generate the script zip.

@@ -235,7 +235,7 @@ public columnDefs: ColDef[] = [
       this.deviceTypeService
         .getfindallbycategory(this.selectedDfaultCategory)
         .subscribe((res) => {
-          this.allDeviceType = JSON.parse(res);
+          this.allDeviceType = res.data
         });
     }
     deviceChange(event: any): void {
@@ -302,7 +302,7 @@ public columnDefs: ColDef[] = [
       };
       this.showLoader = true;
       this.anlysisService.getcombinedByFilter(obj).subscribe(res=>{
-        let response = JSON.parse(res);
+        let response = res.data;
         if(response){
           this.rowData = response;
           this.showTable = true;

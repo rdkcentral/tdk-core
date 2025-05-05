@@ -435,7 +435,11 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     if(this.selectedCategory === 'ExecutionName' && this.searchValue != ''){
    this.executionservice.getAllExecutionByName(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
-          const data = JSON.parse(res);
+          const data = res.data
+          if (( data === null || data === undefined) ) {
+            this.rowData = [];
+            this.totalItems =0;
+          }
           this.rowData = data.executions;
           this.totalItems = data.totalItems;
         setTimeout(() => {
@@ -443,65 +447,102 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           }, 100);
         },
         error: (err) => {
-          if(err ==='No Executions available'){
-            this.rowData = [];
-            this.totalItems =0;
-          }
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })  
         }
       })
     } else if(this.selectedCategory === 'Scripts/Testsuite' && this.searchValue != ''){
       this.executionservice.getAllExecutionByScript(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
-          const data = JSON.parse(res);
-          this.rowData = data.executions;
-          this.totalItems = data.totalItems;
+          const data = res.data
+          if (( data === null) || (data === undefined) ) {
+            this.rowData = [];
+            this.totalItems = 0;
+          } else{
+            this.rowData = data.executions;
+            this.totalItems = data.totalItems;
+          }          
     },
         error: (err) => {
-          if(err ==='No Executions available'){
-            this.rowData = [];
-            this.totalItems =0;
-          }
+         this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          }) 
         }
       })
     } else if(this.selectedCategory === 'Device' && this.searchValue != ''){
    this.executionservice.getAllExecutionByDevice(this.searchValue, this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next: (res) => {
-          const data = JSON.parse(res);
-          this.rowData = data.executions;
-          this.totalItems = data.totalItems;
-      },
-        error: (err) => {
-          if(err ==='No Executions available'){
+          let data = res.data
+          if (( data === null) || (data === undefined) ) {
             this.rowData = [];
             this.totalItems =0;
-          }
+          } else{
+            this.rowData = data.executions;
+            this.totalItems = data.totalItems;
+          }      
+      },
+        error: (err) => {
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          }) 
         }
       });
     } else if(this.selectedCategory === 'User' && this.selectedOption != ''){
-      this.executionservice.getAllExecutionByUser(this.selectedOption, this.selectedDfaultCategory, this.currentPage, this.pageSize).subscribe(res => {
-        let data = JSON.parse(res);
-        this.rowData = data.executions;
-        this.totalItems = data.totalItems;
-      
-      });
+      this.executionservice.getAllExecutionByUser(this.selectedOption, this.selectedDfaultCategory, this.currentPage, this.pageSize).subscribe(
+        {
+          next: (res) => {
+            let data = res.data
+            if (( data === null) || (data === undefined) ) {
+              this.rowData = [];
+              this.totalItems =0;
+            } else{
+              this.rowData = data.executions;
+              this.totalItems = data.totalItems;
+            }      
+        },
+          error: (err) => {
+            this._snakebar.open(err.message, '', {
+              duration: 2000,
+              panelClass: ['err-msg'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }) 
+          }
+        }
+      )
     }
     else {
       this.executionservice.getAllexecution(this.selectedDfaultCategory,this.currentPage, this.pageSize).subscribe({
         next:(res)=>{
-          let data = JSON.parse(res);
-          this.rowData = data.executions;
-          this.totalItems = data.totalItems;
-  
+          let data = res.data
+          if (( data === null) || (data === undefined) ) {
+            this.rowData = [];
+            this.totalItems =0;
+          } else{
+            this.rowData = data.executions;
+            this.totalItems = data.totalItems;
+          }       
           setTimeout(() => {
             this.reSoreSelection();
           }, 0);
         },
         error:(err)=>{
-          if(err ==='No Executions available'){
-            this.rowData = [];
-            this.totalItems =0;
-          }
-
+          this._snakebar.open(err.message, '', {
+            duration: 2000,
+            panelClass: ['err-msg'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          })     
         }
 
       })
@@ -706,7 +747,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
     this.rowDataSchudle = [];
     this.executionservice.getAllexecutionScheduler(this.selectedDfaultCategory).subscribe({
       next:(res)=>{
-        let data = JSON.parse(res);
+        let data = res.data
         this.rowDataSchudle = data;
         this.showLoader = false;
         if (this.rowDataSchudle.length == 0) {
@@ -717,7 +758,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
         }
       },
       error:(err)=>{
-          this._snakebar.open(err, '', {
+          this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -746,15 +787,14 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   enableDisable(deviceIP:any):void{
     this.executionservice.toggleThunderEnabled(deviceIP).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
         })
       },
       error:(err)=>{
-        let errmsg = JSON.parse(err.error);
-        this._snakebar.open(errmsg.message, '', {
+          this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
@@ -799,7 +839,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       this.selectedCategory = event.target.value;
       if (this.selectedCategory === 'User') {
         this.executionservice.getlistofUsers().subscribe(res => {
-          this.dynamicList = JSON.parse(res)
+          this.dynamicList = res.data
         })
       } else if (this.selectedCategory === 'Device' || this.selectedCategory === 'Scripts/Testsuite' || this.selectedCategory === 'ExecutionName') {
         this.searchValue = '';
@@ -847,8 +887,8 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   */
   openDetailsModal(params: any):void {
     localStorage.setItem('executionId', params.executionId);
-    this.executionservice.resultDetails(params.executionId).subscribe(res=>{
-       this.resultDetailsData = JSON.parse(res);
+    this.executionservice.resultDetails(params.executionId).subscribe({next:(res)=>{
+       this.resultDetailsData = res.data;
        this.resultDetailsData.executionId = params.executionId;
        if(this.resultDetailsData){
         let  resultDetailsModal  =  this.resultDialog.open(DetailsExeDialogComponent, {
@@ -862,7 +902,17 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           this.getAllExecutions();
         });
       }
-    })
+    }
+    , error:(err)=>{
+      this._snakebar.open(err.message, '', {
+        duration: 2000,
+        panelClass: ['err-msg'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      })
+    }
+  
+  })
   }
 
   /**
@@ -876,7 +926,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
           const url = window.URL.createObjectURL(xmlBlob);
           const a = document.createElement('a');
           a.href = url;
-          a.download = `${params.executionName}.xlsx`;
+          a.download = `ConsolidatedReport_${params.executionName}.xlsx`;
           document.body.appendChild(a);
           a.click();
           document.body.removeChild(a);
@@ -975,7 +1025,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       if (confirm("Are you sure to delete ?")) {
         this.executionservice.deleteExecutions(executionArr).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 3000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -984,7 +1034,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
             this.getAllExecutions();
           },
           error:(err)=>{
-            let errmsg = JSON.parse(err.error);
+            let errmsg = err.message
             this._snakebar.open(errmsg,'',{
               duration: 2000,
               panelClass: ['err-msg'],
@@ -1020,7 +1070,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
       if(data){
         this.executionservice.deleteScheduleExe(data.id).subscribe({
           next:(res)=>{
-            this._snakebar.open(res, '', {
+            this._snakebar.open(res.message, '', {
               duration: 1000,
               panelClass: ['success-msg'],
               horizontalPosition: 'end',
@@ -1029,7 +1079,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
               this.allExecutionScheduler();
           },
           error:(err)=>{
-            this._snakebar.open(err.error, '', {
+            this._snakebar.open(err.message, '', {
             duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
@@ -1061,7 +1111,7 @@ export class ExecutionComponent implements OnInit, OnDestroy{
   onAbort(params: any):void{
     this.executionservice.abortExecution(params.executionId).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 1000,
           panelClass: ['success-msg'],
           horizontalPosition: 'end',

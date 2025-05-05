@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -40,8 +39,12 @@ import com.rdkm.tdkservice.dto.SigninRequestDTO;
 import com.rdkm.tdkservice.dto.SigninResponseDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserGroupDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.ILoginService;
 import com.rdkm.tdkservice.service.IUserGroupService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -86,20 +89,19 @@ public class LoginController {
 	 */
 	@Operation(summary = "Register a new user", description = "Registers a new user in the system.")
 	@ApiResponse(responseCode = "201", description = "User created successfully")
-	@ApiResponse(responseCode = "500", description = "Error in saving user data")
+	@ApiResponse(responseCode = "500", description = "Error in registering user data")
 	@ApiResponse(responseCode = "400", description = "Bad request")
-	@ApiResponse(responseCode = "409", description = "Conflict")
-
+	@ApiResponse(responseCode = "409", description = "Conflict , unique fields already existing")
 	@PostMapping("/signup")
-	public ResponseEntity<String> signUp(@RequestBody @Valid UserCreateDTO registerRequest) {
+	public ResponseEntity<Response> signUp(@RequestBody @Valid UserCreateDTO registerRequest) {
 		LOGGER.info("Received signup request: " + registerRequest.toString());
 		boolean isUserCreated = loginService.register(registerRequest);
 		if (isUserCreated) {
 			LOGGER.info("User creation is successfull");
-			return ResponseEntity.status(HttpStatus.CREATED).body("User created successfully");
+			return ResponseUtils.getCreatedResponse("User created successfully");
 		} else {
-			LOGGER.error("User creation failed");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in saving user data");
+			LOGGER.error("Error in registering user data");
+			throw new TDKServiceException("Error in registering user data");
 		}
 
 	}
@@ -128,11 +130,13 @@ public class LoginController {
 	@ApiResponse(responseCode = "403", description = "Forbidden")
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@PostMapping("/signin")
-	public ResponseEntity<SigninResponseDTO> signIn(@RequestBody @Valid SigninRequestDTO signinRequest) {
+	public ResponseEntity<DataResponse> signIn(@RequestBody @Valid SigninRequestDTO signinRequest) {
 		LOGGER.info("Received sign request: " + signinRequest.toString());
 		SigninResponseDTO signinResponseDTO = loginService.signIn(signinRequest);
 		LOGGER.info("Finished signin request, response id: " + signinResponseDTO.toString());
-		return ResponseEntity.status(HttpStatus.OK).body(signinResponseDTO);
+		ResponseEntity<DataResponse> dataResponse = ResponseUtils.getSuccessDataResponse("Signin is successful",
+				signinResponseDTO);
+		return dataResponse;
 	}
 
 	/**
@@ -141,21 +145,22 @@ public class LoginController {
 	 * userGroupService to get a list of all UserGroupDTO objects. Then, it uses a
 	 * stream to map each UserGroupDTO to its name and collects these names into a
 	 * list. Finally, it returns a ResponseEntity containing this list of user group
-	 * names.
-	 *
+	 * names. TODO : Not valid now, UserGroup is not planned for initial release
+	 * 
+	 * 
 	 * @return ResponseEntity containing a list of user group names
 	 */
 	@Operation(summary = "Get list of user groups", description = "Retrieves a list of all user groups in the system.")
 	@ApiResponse(responseCode = "200", description = "User groups retrieved successfully")
 	@ApiResponse(responseCode = "404", description = "No user groups found")
 	@GetMapping("/getList")
-	public ResponseEntity<List<String>> getListOfUserGroups() {
+	public ResponseEntity<DataResponse> getListOfUserGroups() {
 		List<UserGroupDTO> userGroups = userGroupService.findAll();
 		LOGGER.info("Received user groups: " + userGroups.toString());
 		List<String> userGroupNames = userGroups.stream().map(UserGroupDTO::getUserGroupName)
 				.collect(Collectors.toList());
 		LOGGER.info("User groups found: " + userGroupNames);
-		return ResponseEntity.status(HttpStatus.OK).body(userGroupNames);
+		return ResponseUtils.getSuccessDataResponse(userGroupNames);
 	}
 
 	/**
@@ -178,22 +183,19 @@ public class LoginController {
 	@Operation(summary = "API to change the category preference", description = "This API is used to change the category preference of a user")
 	@ApiResponse(responseCode = "200", description = "Successfully updated the category preference")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
-	@ApiResponse(responseCode = "400", description = "Bad Request")
-	@ApiResponse(responseCode = "404", description = "User not found")
-	@ApiResponse(responseCode = "409", description = "Conflict")
-	@ApiResponse(responseCode = "401", description = "Unauthorized")
-	@ApiResponse(responseCode = "403", description = "Forbidden")
+	@ApiResponse(responseCode = "400", description = "Bad Request,Category preference change failed")
+	@ApiResponse(responseCode = "404", description = "User name not found")
 	@PostMapping("/changecategorypreference")
-	public ResponseEntity<String> changeCategoryPreference(@RequestParam String userName,
+	public ResponseEntity<Response> changeCategoryPreference(@RequestParam String userName,
 			@RequestParam String category) {
 		LOGGER.info("The change category preference request is " + userName + " " + category);
 		boolean isCategoryChanged = loginService.changeCategoryPreference(userName, category);
 		if (isCategoryChanged) {
 			LOGGER.info("Category preference change is successful");
-			return ResponseEntity.status(HttpStatus.OK).body("Successfully updated the category preference");
+			return ResponseUtils.getSuccessResponse("Successfully updated the category preference");
 		} else {
 			LOGGER.error("Category preference change failed");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Failed to update the category preference");
+			throw new TDKServiceException("Category preference change failed");
 		}
 	}
 }

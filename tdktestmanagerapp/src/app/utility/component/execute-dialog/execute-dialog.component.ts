@@ -400,7 +400,7 @@ export class ExecuteDialogComponent {
    */  
   getDeviceByCategory(category:string,isThunderEnable:boolean):void{
     this.executionservice.getDeviceByCategory(category,isThunderEnable).subscribe(res=>{
-      this.deviceList = JSON.parse(res);
+      this.deviceList = res.data;
     })
   }
   /**
@@ -463,7 +463,7 @@ export class ExecuteDialogComponent {
    */  
   getScriptByCategory(category:string,isThunderEnable:boolean):void{
     this.executionservice.getscriptByCategory(category,isThunderEnable).subscribe(res=>{
-      this.scriptTestsuiteOptions = JSON.parse(res);
+      this.scriptTestsuiteOptions = res.data
     })
   }
   /**
@@ -520,7 +520,7 @@ export class ExecuteDialogComponent {
    */  
   getTestSuiteByCategory(category:any,isThunderEnable:boolean):void{
     this.executionservice.gettestSuiteByCategory(category,isThunderEnable).subscribe(res=>{
-      this.scriptTestsuiteOptions = JSON.parse(res);      
+      this.scriptTestsuiteOptions = res.data      
     })
   }
   /**
@@ -600,7 +600,7 @@ export class ExecuteDialogComponent {
       testType: this.executeForm.value.testType
     }
     this.executionservice.geExecutionName(obj).subscribe(res=>{
-      this.executionName = res;
+      this.executionName = res.data;
     })
   }
   /**
@@ -753,13 +753,12 @@ export class ExecuteDialogComponent {
       this.showLoader = true;
       this.executionservice.executioTrigger(triggerObj).subscribe({
         next:(res)=>{
-          let status = JSON.parse(res);
+          let status = res.data
           this.triggerExecuteDetails = status.executionTriggerStatus;
           this.triggerMessage = status.message;
         },
-        error:(err)=>{
-          let status = JSON.parse(err.error);
-          this.triggerMessage = status.message;
+        error:(err)=>{          
+          this.triggerMessage = err.message;
         }
 
       })
@@ -807,7 +806,7 @@ export class ExecuteDialogComponent {
 
     this.executionservice.schedularExecution(schedulerObj).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'

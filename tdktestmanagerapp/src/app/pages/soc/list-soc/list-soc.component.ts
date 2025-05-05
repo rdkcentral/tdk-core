@@ -112,8 +112,8 @@ export class ListSocComponent {
     this.authservice.currentRoute = this.router.url.split('?')[0];
     this.showLoader = true;
     this.service.getSoc(this.authservice.selectedConfigVal).subscribe(res => {
-      this.rowData = JSON.parse(res);
-      if(this.rowData.length>0){
+      this.rowData = res.data;
+      if(this.rowData == null || this.rowData == undefined|| this.rowData.length>0 ) {
         this.showLoader = false;
       }
     })
@@ -136,7 +136,7 @@ export class ListSocComponent {
         next: (res) => {
           this.rowData = this.rowData.filter((row: any) => row.socId !== data.socId);
           this.rowData = [...this.rowData];
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',

@@ -25,7 +25,6 @@ import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -41,7 +40,12 @@ import org.springframework.web.bind.annotation.RestController;
 import com.rdkm.tdkservice.dto.ChangePasswordRequestDTO;
 import com.rdkm.tdkservice.dto.UserCreateDTO;
 import com.rdkm.tdkservice.dto.UserDTO;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.exception.UserInputException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.serviceimpl.UserService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -72,22 +76,21 @@ public class UserController {
 	 * @param userRequestDTO - User object
 	 * @return ResponseEntity<String> - response entity - message
 	 */
-
 	@Operation(summary = "API to Crreate the User", description = "This API is used to create the user")
 	@ApiResponse(responseCode = "201", description = "Successfully signed in")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@PostMapping("/create")
-	public ResponseEntity<String> saveUser(@RequestBody @Valid UserCreateDTO userRequestDTO) {
+	public ResponseEntity<Response> saveUser(@RequestBody @Valid UserCreateDTO userRequestDTO) {
 		LOGGER.info("Executing saveUser method with request: " + userRequestDTO.toString());
 		boolean isUserCreated = userService.createUser(userRequestDTO);
 		if (isUserCreated) {
 			LOGGER.info("User created successfully");
-			return ResponseEntity.status(HttpStatus.CREATED).body("User created succesfully");
+			return ResponseUtils.getCreatedResponse("User created succesfully");
 		} else {
 			LOGGER.error("Error in saving user data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("User creation failed");
+			throw new TDKServiceException("User creation failed");
 		}
 	}
 
@@ -101,10 +104,10 @@ public class UserController {
 	@ApiResponse(responseCode = "200", description = "Successfully found the user")
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@GetMapping("findById/{id}")
-	public ResponseEntity<UserDTO> findUserById(@PathVariable UUID id) {
+	public ResponseEntity<DataResponse> findUserById(@PathVariable UUID id) {
 		LOGGER.info("Executing findUserById method with id: " + id);
 		UserDTO user = userService.findUserById(id);
-		return ResponseEntity.status(HttpStatus.OK).body(user);
+		return ResponseUtils.getSuccessDataResponse(user);
 	}
 
 	/**
@@ -120,17 +123,16 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@PutMapping("/update")
-	public ResponseEntity<?> updateUser(@Valid @RequestBody UserDTO userRequest) {
+	public ResponseEntity<DataResponse> updateUser(@Valid @RequestBody UserDTO userRequest) {
 		LOGGER.info("Executing updateUser method with request: " + userRequest.toString());
 		UserDTO updatedUser = userService.updateUser(userRequest);
 		if (null != updatedUser) {
 			LOGGER.info("User updated successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(updatedUser);
+			return ResponseUtils.getSuccessDataResponse("User updated successfully", updatedUser);
 		} else {
 			LOGGER.error("Error in updating user data");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in updating user data");
+			throw new TDKServiceException("Error in updating user data");
 		}
-
 	}
 
 	/**
@@ -145,15 +147,15 @@ public class UserController {
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@GetMapping("/findAll")
-	public ResponseEntity<?> getAllUsers() {
+	public ResponseEntity<DataResponse> getAllUsers() {
 		LOGGER.info("Executing getAllUsers method");
 		List<UserDTO> users = userService.getAllUsers();
 		if (null != users) {
 			LOGGER.info("Users found successfully ");
-			return ResponseEntity.status(HttpStatus.OK).body(users);
+			return ResponseUtils.getSuccessDataResponse(users);
 		} else {
 			LOGGER.error("No users found");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No users found");
+			return ResponseUtils.getSuccessDataResponse("No users available", users);
 		}
 
 	}
@@ -171,10 +173,10 @@ public class UserController {
 	@ApiResponse(responseCode = "404", description = "User not found")
 	@ApiResponse(responseCode = "409", description = "Conflict")
 	@DeleteMapping("/delete")
-	public ResponseEntity<String> deleteUser(@RequestParam UUID id) {
+	public ResponseEntity<Response> deleteUser(@RequestParam UUID id) {
 		LOGGER.info("Executing deleteUser method with id: " + id);
 		userService.deleteUser(id);
-		return ResponseEntity.status(HttpStatus.OK).body("User got deleted successfully");
+		return ResponseUtils.getSuccessResponse("User deleted successfully");
 	}
 
 	/**
@@ -202,21 +204,20 @@ public class UserController {
 	@ApiResponse(responseCode = "401", description = "Unauthorized")
 	@ApiResponse(responseCode = "403", description = "Forbidden")
 	@PostMapping("/changepassword")
-	public ResponseEntity<String> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest) {
+	public ResponseEntity<Response> changePassword(@RequestBody @Valid ChangePasswordRequestDTO changePasswordRequest) {
 		LOGGER.info("The change password request is " + changePasswordRequest.toString());
 		boolean isChangePassword = userService.changePassword(changePasswordRequest);
 		if (isChangePassword) {
 			LOGGER.info("Password change is successful");
-			return ResponseEntity.status(HttpStatus.OK).body("Succesfully updated the password");
+			return ResponseUtils.getCreatedResponse("Succesfully updated the password");
 		} else {
 			LOGGER.error("Password change failed");
-			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Old password doesn't match with the username");
-
+			throw new UserInputException("Old password doesn't match with the username");
 		}
 
 	}
 
-	/*
+	/**
 	 * This method is used to set the theme for the user. It receives a PUT request
 	 * at the "/settheme" endpoint with the user ID and theme in the request
 	 * parameters. The theme should be a string value. The method calls the
@@ -224,7 +225,7 @@ public class UserController {
 	 * 
 	 * @param userId The ID of the user whose theme is to be set.
 	 * 
-	 * @param theme The theme to be set for the user.
+	 * @param theme  The theme to be set for the user.
 	 * 
 	 * @return boolean Returns true if the theme is successfully set for the user,
 	 */
@@ -233,11 +234,16 @@ public class UserController {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@PutMapping("/settheme")
-	public boolean setTheme(@RequestParam UUID userId, @RequestParam String theme) {
+	public ResponseEntity<Response> setTheme(@RequestParam UUID userId, @RequestParam String theme) {
 		LOGGER.info("The set theme request is " + theme);
 		boolean isThemeSet = userService.setTheme(userId, theme);
-		return isThemeSet;
-
+		if (isThemeSet) {
+			LOGGER.info("Theme set successfully");
+			return ResponseUtils.getSuccessResponse("Theme set successfully");
+		} else {
+			LOGGER.error("Error in setting theme");
+			throw new TDKServiceException("Error in setting theme");
+		}
 	}
 
 	/**
@@ -254,10 +260,18 @@ public class UserController {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@GetMapping("/gettheme")
-	public String getTheme(@RequestParam UUID userId) {
+	public ResponseEntity<DataResponse> getTheme(@RequestParam UUID userId) {
 		LOGGER.info("The get theme request is " + userId);
 		String theme = userService.getTheme(userId);
-		return theme;
+		if (null != theme) {
+			ResponseEntity<DataResponse> response = ResponseUtils.getSuccessDataResponse("Theme fetched successfully",
+					theme);
+			LOGGER.info("Theme found successfully ");
+			return response;
+		} else {
+			LOGGER.error("Theme not found");
+			throw new TDKServiceException("Theme not found");
+		}
 	}
 
 	/**
@@ -270,16 +284,16 @@ public class UserController {
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@GetMapping("/getappversion")
-	public ResponseEntity<String> getAppVersion() {
+	public ResponseEntity<?> getAppVersion() {
 		LOGGER.info("Inside getAppVersion method");
 		String appVersion = userService.getAppVersion();
 		LOGGER.info("App version is: " + appVersion);
 		if (null != appVersion) {
 			LOGGER.info("App version found successfully ");
-			return ResponseEntity.status(HttpStatus.OK).body(appVersion);
+			return ResponseUtils.getSuccessDataResponse("App version fetched successfully", appVersion);
 		} else {
 			LOGGER.error("App version not found");
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("App version not found");
+			return ResponseUtils.getNotFoundDataResponse("Version Unavailable", appVersion);
 		}
 	}
 

@@ -134,6 +134,8 @@ public class UserService implements UserDetailsService {
 		Category category = Category.getCategory(userRequest.getUserCategory());
 		if (category != null) {
 			user.setCategory(category);
+		} else {
+			user.setCategory(Category.RDKV);
 		}
 		// Setting User role, if empty default user role TESTER will be set
 		String userRoleName = userRequest.getUserRoleName();
@@ -156,6 +158,7 @@ public class UserService implements UserDetailsService {
 		UserGroup userGroup = userGroupRepository.findByName(userRequest.getUserGroupName());
 		if (null != userGroup)
 			user.setUserGroup(userGroup);
+
 		User savedUser = userRepository.save(user);
 		if (savedUser != null && savedUser.getId() != null) {
 			LOGGER.info("Creating new user success");
@@ -220,7 +223,6 @@ public class UserService implements UserDetailsService {
 		// Validation for mandatory fields are not applied for update request
 		// if the update , for user update should happen for specific fields as well.
 		// So we are doing the empty check and if it is empty then no need to update
-
 		if (!Utils.isEmpty(updateUserRequest.getUserName())) {
 			User newUser = userRepository.findByUsername(updateUserRequest.getUserName());
 			if (newUser != null && updateUserRequest.getUserName().equalsIgnoreCase(user.getUsername())) {
@@ -235,11 +237,10 @@ public class UserService implements UserDetailsService {
 				}
 			}
 		}
-		
+
 		if (!Utils.isEmpty(updateUserRequest.getPassword())) {
 			user.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
-        }
-			
+		}
 
 		if (!Utils.isEmpty(updateUserRequest.getUserEmail())) {
 			User newUser = userRepository.findByEmail(updateUserRequest.getUserEmail());
@@ -247,7 +248,7 @@ public class UserService implements UserDetailsService {
 				user.setEmail(updateUserRequest.getUserEmail());
 			} else {
 
-				if (userRepository.existsByUsername(updateUserRequest.getUserEmail())) {
+				if (userRepository.existsByEmail(updateUserRequest.getUserEmail())) {
 					LOGGER.info("Email already exists with the same name: " + updateUserRequest.getUserEmail());
 					throw new ResourceAlreadyExistsException(Constants.EMAIL, updateUserRequest.getUserEmail());
 				} else {
@@ -258,8 +259,6 @@ public class UserService implements UserDetailsService {
 
 		if (!Utils.isEmpty(updateUserRequest.getUserDisplayName()))
 			user.setDisplayName(updateUserRequest.getUserDisplayName());
-//		if (!Utils.isEmpty(updateUserRequest.getPassword()))
-//			user.setPassword(updateUserRequest.getPassword());
 
 		// Find the UserRole, Theme, and UserGroup from their repositories and set them
 		// to the user
@@ -288,6 +287,10 @@ public class UserService implements UserDetailsService {
 		}
 
 		User savedUser = userRepository.save(user);
+		if (savedUser == null) {
+			LOGGER.error("Updating user failed");
+			throw new TDKServiceException("Updating user failed");
+		}
 		return MapperUtils.populateUserDTO(savedUser);
 
 	}
@@ -301,6 +304,7 @@ public class UserService implements UserDetailsService {
 	 */
 	public void deleteUser(UUID id) {
 		LOGGER.info("Executing deleteUser method with id: " + id);
+		// Check if the user exists
 		if (!userRepository.existsById(id)) {
 			LOGGER.info("No User found with id: " + id);
 			throw new ResourceNotFoundException(Constants.USER_ID, id.toString());
@@ -311,6 +315,7 @@ public class UserService implements UserDetailsService {
 			LOGGER.error("Error occurred while deleting User with id: " + id, e);
 			throw new DeleteFailedException();
 		}
+		LOGGER.info("User deleted successfully with id: " + id);
 
 	}
 
@@ -322,18 +327,22 @@ public class UserService implements UserDetailsService {
 	 */
 	public boolean changePassword(ChangePasswordRequestDTO changePasswordRequest) {
 		LOGGER.info("The change password request is " + changePasswordRequest.toString());
+
+		if (changePasswordRequest.getNewPassword().trim().equals(changePasswordRequest.getOldPassword().trim())) {
+			throw new UserInputException("Old password and New password are same");
+		}
+
 		User user = userRepository.findByUsername(changePasswordRequest.getUserName());
 		if (null == user) {
 			LOGGER.error("User doesnt exists with the username: " + changePasswordRequest.getUserName());
 			throw new ResourceNotFoundException(Constants.USER_NAME, changePasswordRequest.getUserName());
 		}
+
 		boolean isPasswordMatching = passwordEncoder.matches(changePasswordRequest.getOldPassword(),
 				user.getPassword());
-
 		if (isPasswordMatching) {
 			userRepository.changeUserPassword(passwordEncoder.encode(changePasswordRequest.getNewPassword()),
 					user.getUsername());
-
 			return true;
 		}
 		return false;

@@ -137,12 +137,22 @@ public class CommonService {
 	 * @return category enum - RDKV, RDKB, RDKC
 	 */
 	public Category validateCategory(String category) {
-		Category categoryEnum = Category.valueOf(category.toUpperCase());
+		LOGGER.info("Validating category: " + category);
+
+		// if the category is
+		Category categoryEnum = null;
+		try {
+			categoryEnum = Category.getCategory(category.toUpperCase());
+		} catch (Exception e) {
+			LOGGER.error("Error in converting category to upper case: " + e.getMessage());
+			throw new UserInputException("Category is entered is not valid : " + category);
+		}
+
 		if (categoryEnum != null) {
 			return categoryEnum;
 		} else {
 			LOGGER.error("Category not found: " + category);
-			throw new ResourceNotFoundException("Category not found", category);
+			throw new UserInputException("Category entered is not valid : " + category);
 		}
 	}
 

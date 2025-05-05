@@ -92,10 +92,8 @@ public class FunctionService implements IFunctionService {
 		Function function = new Function();
 
 		MapperUtils.mapCreateDTOToEntity(function, functionCreateDTO, module);
-	//	LOGGER.info("Function created successfully: {}", function);
 		try {
 			functionRepository.save(function);
-	//		LOGGER.info("Function created successfully: {}", function);
 		} catch (Exception e) {
 			LOGGER.error("Failed to create function: {}", functionCreateDTO, e);
 			return false;
@@ -249,9 +247,10 @@ public class FunctionService implements IFunctionService {
 	public List<FunctionDTO> findAllFunctionsByModule(String moduleName) {
 		LOGGER.info("Fetching all functions for module: {}", moduleName);
 		Module module = moduleRepository.findByName(moduleName);
-		LOGGER.info("Module found: {}", module);
 		if (module == null) {
 			throw new ResourceNotFoundException("Module", moduleName);
+		}else {
+			LOGGER.info("Module found: {}", module.getName());
 		}
 		List<Function> functions = functionRepository.findAllByModuleId(module.getId());
 		return functions.stream().map(MapperUtils::convertToFunctionDTO).collect(Collectors.toList());

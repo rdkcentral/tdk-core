@@ -29,11 +29,13 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.rdkm.tdkservice.dto.ParameterCreateDTO;
 import com.rdkm.tdkservice.dto.ParameterDTO;
 import com.rdkm.tdkservice.enums.ParameterDataType;
+import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
 import com.rdkm.tdkservice.exception.ResourceNotFoundException;
 import com.rdkm.tdkservice.model.Function;
@@ -199,14 +201,17 @@ public class ParameterService implements IParameterService {
 	@Override
 	public boolean deleteParameter(UUID id) {
 		LOGGER.info("Deleting parameter by ID: {}", id);
+		parameterRepository.findById(id).orElseThrow(
+				() -> new ResourceNotFoundException("ParameterType not found for this id :: ", id.toString()));
 		try {
 			parameterRepository.deleteById(id);
 			LOGGER.info("Parameter deleted successfully: {}", id);
 			return true;
-		} catch (Exception e) {
-			LOGGER.error("Failed to delete parameter by ID: {}", id, e);
-			return false;
+		} catch (DataIntegrityViolationException e) {
+			LOGGER.error("Error occurred while deleting deviceType with id: " + id, e);
+			throw new DeleteFailedException();
 		}
+
 	}
 
 	/**

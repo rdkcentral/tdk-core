@@ -180,7 +180,7 @@ export class UserAddComponent implements OnInit {
       }
       this.usermanageserice.createUser(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             horizontalPosition: 'end',
@@ -194,7 +194,7 @@ export class UserAddComponent implements OnInit {
         },
         error: (err) => {
           this._snakebar.open(err.message, '', {
-            duration: 4000,
+            duration: 2000,
             panelClass: ['err-msg'],
             horizontalPosition: 'end',
             verticalPosition: 'top'

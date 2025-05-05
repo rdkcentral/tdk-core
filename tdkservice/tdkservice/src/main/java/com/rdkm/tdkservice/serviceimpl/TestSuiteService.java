@@ -167,7 +167,7 @@ public class TestSuiteService implements ITestSuiteService {
 		TestSuite testSuite = testSuiteRepository.findById(testSuiteDTO.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.SCRIPT_ID, testSuiteDTO.getId().toString()));
 
-//		// TODO : Revisit this if test suite name can be changed or not
+		// TODO : Revisit this if test suite name can be changed or not
 		if (!Utils.isEmpty(testSuiteDTO.getName())) {
 			TestSuite newTestSuite = testSuiteRepository.findByName(testSuiteDTO.getName());
 			if (newTestSuite != null && testSuiteDTO.getName().equalsIgnoreCase(testSuite.getName())) {
@@ -328,14 +328,20 @@ public class TestSuiteService implements ITestSuiteService {
 	@Override
 	public boolean deleteTestSuite(UUID id) {
 		LOGGER.info("Deleting test suite with id: " + id);
+		// get ScriptTestSuite by test suite id
 		TestSuite testSuite = testSuiteRepository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException(Constants.TEST_SUITE, id.toString()));
 		try {
+			// Delete all the script test suite mapping for the test suite
+			List<ScriptTestSuite> scriptTestSuiteList = scriptTestSuiteRepository.findAllByTestSuite(testSuite);
+			scriptTestSuiteRepository.deleteAll(scriptTestSuiteList);
+			// loop through the script test suite list and delete each script test suite
 			testSuiteRepository.delete(testSuite);
 		} catch (DataIntegrityViolationException e) {
 			LOGGER.error("Error in deleting TestSuite data: " + e.getMessage());
 			throw new DeleteFailedException();
 		}
+
 		LOGGER.info("Test suite deleted successfully");
 		return true;
 

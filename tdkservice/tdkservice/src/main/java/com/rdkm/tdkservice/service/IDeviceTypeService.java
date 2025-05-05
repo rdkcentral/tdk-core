@@ -87,7 +87,6 @@ public interface IDeviceTypeService {
 	 * @param category This is the category of the DeviceTypes to be retrieved.
 	 * @return List<String> This returns a list of DeviceTypes.
 	 */
-
 	List<String> getDeviceTypeNameByCategory(String category);
 
 }

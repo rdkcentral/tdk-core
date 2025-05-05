@@ -169,7 +169,7 @@ export class ChangePasswordComponent implements OnInit {
       }
       this.loginservice.restPassword(obj).subscribe({
         next: (res) => {
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
             duration: 3000,
             panelClass: ['success-msg'],
             verticalPosition: 'top'
@@ -180,7 +180,7 @@ export class ChangePasswordComponent implements OnInit {
 
         },
         error: (err) => {
-          let errMsgDisplay = err.error;
+          let errMsgDisplay = err.message;
           this._snakebar.open(errMsgDisplay, '', {
             duration: 4000,
             panelClass: ['err-msg'],

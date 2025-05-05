@@ -266,7 +266,7 @@ export class DeviceCreateComponent implements OnInit{
    */
   getAlldeviceType(): void{
     this.deviceTypeService.getfindallbycategory(this.selectedDeviceCategory).subscribe(res=>{
-      this.allDeviceType = (JSON.parse(res));
+      this.allDeviceType = res.data
     })
   }
    /**
@@ -274,7 +274,7 @@ export class DeviceCreateComponent implements OnInit{
    */
   getAllOem(): void{
     this.oemService.getOemByList(this.selectedDeviceCategory).subscribe(res=>{
-      this.alloem = JSON.parse(res); 
+      this.alloem = res.data; 
     })
   }
    /**
@@ -282,7 +282,7 @@ export class DeviceCreateComponent implements OnInit{
    */
   getAllsoc(): void{
     this.socService.getSoc(this.selectedDeviceCategory).subscribe(res=>{
-      this.allsoc = JSON.parse(res);  
+      this.allsoc = res.data;  
     })
   }
   /**
@@ -485,7 +485,7 @@ export class DeviceCreateComponent implements OnInit{
     }
       this.service.createDevice(obj).subscribe({
       next:(res)=>{
-        this._snakebar.open(res, '', {
+        this._snakebar.open(res.message, '', {
         duration: 3000,
         panelClass: ['success-msg'],
         verticalPosition: 'top'
@@ -496,7 +496,6 @@ export class DeviceCreateComponent implements OnInit{
       },
       error:(err)=>{
         let errmsg = err.message?err.message:err.macId;
-        // let errmessage = errmsg.message?errmsg.message:errmsg.macId;
           this._snakebar.open(errmsg, '', {
           duration: 2000,
           panelClass: ['err-msg'],
@@ -532,7 +531,7 @@ export class DeviceCreateComponent implements OnInit{
       }
       this.service.createDevice(rdkbObj).subscribe({
         next:(res)=>{
-          this._snakebar.open(res, '', {
+          this._snakebar.open(res.message, '', {
           duration: 3000,
           panelClass: ['success-msg'],
           verticalPosition: 'top'
