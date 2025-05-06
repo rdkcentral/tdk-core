@@ -4603,4 +4603,352 @@
                 </postrequisite>
             </testCasePostRequisite>
         </testCase>
+
+	<!-- Test case 136 -->
+        <testCase testCaseId="RDKShell_136" testCaseName="RDKShell_Memcr_Verify_YouTubeTV_Launch_Suspend_Hibernate_Event_Validation" desc="Verify if launch, suspend and hibernate events are being triggered">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
+            <testCasePreRequisite>
+                <!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 2 -->
+                <prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 3 -->
+                <prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+                <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+            <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Check_On_Launched_Event" event="Event_On_Launched" action="eventListener" delay="3">
+                  <resultGeneration useMethodTag="rdkshell_check_on_launched_event" expectedValues="YouTubeTV,activate"/>
+            </testStep>
+            <testStep testStepId="3" name="Suspend_Application" method="SuspendApplication" >
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="4" name="Check_On_Suspended_Event" event="Event_On_Suspended" action="eventListener" delay="3" clear="false">
+                  <resultGeneration useMethodTag="rdkshell_check_application_state_event" expectedValues="YouTubeTV"/>
+            </testStep>
+            <testStep testStepId="5" name="Check_On_Hibernated_Event" event="Event_On_Hibernated" action="eventListener" delay="8">
+                  <resultGeneration useMethodTag="rdkshell_check_event_status"/>
+            </testStep>
+            <testStep testStepId="6" name="Restore_Application" method="Restore_Application" delay="3">
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+
+            <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Killing_YouTubeTV_Application">
+                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+        </testCase>
+
+	<!-- Test case 137 -->
+        <testCase testCaseId="RDKShell_137" testCaseName="RDKShell_Memcr_Verify_YouTubeTV_Restore_Event_Validation" desc="Verify if restore event are being triggered">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
+            <testCasePreRequisite>
+                <!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 2 -->
+                <prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 3 -->
+                <prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+                <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+            <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Suspend_Application" method="SuspendApplication" delay="3">
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="8">
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="4" name="Check_On_Restored_Event" event="Event_On_Restored" action="eventListener" delay="3">
+                  <resultGeneration useMethodTag="rdkshell_check_event_status"/>
+            </testStep>
+
+            <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Killing_YouTubeTV_Application">
+                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </postrequisite>
+            </testCasePostRequisite>
+        </testCase>
+
+	<!-- Test case 138 -->
+        <testCase testCaseId="RDKShell_138" testCaseName="RDKShell_Memcr_YouTubeTV_Launch_Suspend_Hibernate_State_Check" desc="Verify the youtubetv launch, suspend and hibernate state functionality">
+            <testCaseInfo testCaseType="direct" configurableTest="true" testKey="RDKSHELL_PREREQ_PLUGINS" useMethodTag="rdkshell_check_feature_applicability" arguments="cobalt"/>
+            <testCasePreRequisite>
+                <!-- TestCase PreRequisite 1 -->
+                <prerequisite requisiteId="1" requisiteName="Check_Memcr_Service_Status">
+                <testStep testStepId="1" name="Check_Service_Status"  action="externalFnCall">
+                        <resultGeneration useMethodTag="check_memcr_service_status"/>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 2 -->
+                <prerequisite requisiteId="2" requisiteName="Enable_TR181_Parameter" >
+                <testStep testStepId="1" name="Check_TR181_Parameter"  action="externalFnCall" saveResult="true">
+                        <resultGeneration useMethodTag="check_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="2" name="Enable_TR181_Parameter"  action="externalFnCall"  >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="enable_tr181_parameter" >
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                <testStep testStepId="3" name="System_reboot" method="Reboot" pluginName="System" rebootStep="yes" >
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="system_check_set_operation"  />
+                </testStep>
+                <testStep testStepId="4" name="Check_TR181_Parameter"  action="externalFnCall" delay="10">
+                        <conditionalExecution enable="true" Id="1" useMethodTag="usbaccess_check_parameter"/>
+                        <resultGeneration useMethodTag="check_tr181_parameter" expectedValues="true">
+                                <arguments useConfigFile="true" key="MEMCR_APPHIBERNATE_PARAMETER"/>
+                        </resultGeneration>
+                </testStep>
+                </prerequisite>
+
+                <!-- TestCase PreRequisite 3 -->
+                <prerequisite requisiteId="3" requisiteName="Check_App_Running_Status">
+                <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                </prerequisite>
+            </testCasePreRequisite>
+
+            <testStep testStepId="1" name="Launch_Application" method="LaunchApplication" delay="3">
+                  <params>
+                        <param tag="callsign" value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_check_for_results" />
+            </testStep>
+            <testStep testStepId="2" name="Get_connected_clients" method="GetClients" >
+              <resultGeneration useMethodTag="rdkshell_check_application" arguments= "check_if_exists" expectedValues= "youtubetv"/>
+            </testStep>
+            <testStep testStepId="3" name="Check_YouTubeTV_Launch_State" method="Get_Application_State" delay="2">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="YouTubeTV" expectedValues="resumed" />
+            </testStep>
+            <testStep testStepId="4" name="Suspend_Application" method="SuspendApplication" delay="3">
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="5" name="Check_YouTubeTV_Hibernate_State" method="Get_Application_State" delay="8">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="YouTubeTV" expectedValues="hibernated" />
+            </testStep>
+            <testStep testStepId="6" name="Restore_Application" method="Restore_Application" delay="3">
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+            </testStep>
+            <testStep testStepId="7" name="Check_YouTubeTV_Suspend_State" method="Get_Application_State" delay="2">
+              <resultGeneration useMethodTag="rdkshell_get_state" arguments="YouTubeTV" expectedValues="suspended" />
+            </testStep>
+
+            <testCasePostRequisite>
+                <postrequisite requisiteId="1" requisiteName="Killing_YouTubeTV_Application">
+                 <testStep testStepId="1" name="Get_connected_clients" method="GetClients" saveResult="true">
+                        <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="2" name="Check_Application_State" method="Get_Application_State" delay="2" saveResult="true">
+                  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <resultGeneration useMethodTag="rdkshell_check_for_results"/>
+                </testStep>
+                <testStep testStepId="3" name="Restore_Application" method="Restore_Application" delay="3">
+                  <conditionalExecution enable="true" Id="1,2" useMethodTag="rdkshell_get_previous_app_state" arguments="youtubetv"/>
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+                <testStep testStepId="4" name="Kill_Application" method="Kill" >
+		  <conditionalExecution enable="true" Id="1" useMethodTag="rdkshell_check_application_state" arguments="check_app_not_exists,youtubetv" />
+                  <params>
+                        <param tag="callsign"  value="YouTubeTV" />
+                  </params>
+                  <resultGeneration useMethodTag="rdkshell_get_result_status" />
+                </testStep>
+		</postrequisite>
+            </testCasePostRequisite>
+        </testCase>
 </testPlugin>

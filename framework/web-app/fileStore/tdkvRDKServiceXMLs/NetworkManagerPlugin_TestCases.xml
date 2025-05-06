@@ -1831,7 +1831,9 @@
                   <param tag="endpoint" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT" />
                   <param tag="ipversion" value="IPv4" />
                 </params>
-                <resultGeneration useMethodTag="networkmanager_get_ping_response" arguments="validate_error_message" expectedValues="could not ping endpoint,0.42.42.42"/>
+		<resultGeneration useMethodTag="networkmanager_get_ping_response" arguments="validate_error_message">
+		  <expectedValues value="could not ping endpoint" useConfigFile="true" key="NETWORKMANAGER_INVALID_ENDPOINT"/>
+		</resultGeneration>
             </testStep>
     </testCase>
 
@@ -2983,5 +2985,26 @@
         <testStep testStepId="3" name="Stop_Wifi_Scan" method="NetworkManager_Stop_Wifi_Scan">
                 <resultGeneration useMethodTag="success_status_validation"/>
         </testStep>
+    </testCase>
+
+    <!-- Test case 95 -->
+    <testCase testCaseId="NM_95" testCaseName="NetworkManager_Trace_Empty_Endpoint"  desc="Traces the empty endpoint" >
+           <testCaseInfo testCaseType="direct"/>
+            <testStep testStepId="1" name="Trace_Empty_Endpoint" method="NetworkManager_Trace">
+                <params>
+                  <param tag="endpoint" value="" />
+		  <param tag="ipversion" value="IPv4" />
+		  <param tag="packets" value="10" />
+                </params>
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+            </testStep>
+    </testCase>
+
+    <!-- Test case 96 -->
+    <testCase testCaseId="NM_96" testCaseName="NetworkManager_Trace_Without_Parameter"  desc="Check if the Trace method returns an error when parameters are not provided">
+        <testCaseInfo testCaseType="direct"/>
+        <testStep testStepId="1" name="Trace_Without_Parameter" method="NetworkManager_Trace">
+		<resultGeneration useMethodTag="success_negative_status_validation"/>
+	</testStep>
     </testCase>
 </testPlugin>
