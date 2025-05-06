@@ -2700,6 +2700,18 @@
                 <param tag="optOut" type="string"/>
             </params>
         </method>
+	<method name="MaintenanceManager_Set_Maintenance_Mode_Negative_MaintenanceMode" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
+	    <params>
+                <param tag="maintenanceMode" type="int"/>
+                <param tag="optOut" type="string"/>
+            </params>
+        </method>
+	<method name="MaintenanceManager_Set_Maintenance_Mode_Negative_OptOut" api="setMaintenanceMode" type="method" desc="Sets negative values to the maintenance mode and software upgrade opt-out mode">
+            <params>
+                <param tag="maintenanceMode" type="string"/>
+                <param tag="optOut" type="int"/>
+            </params>
+        </method>
 	<method name="MaintenanceManager_Start_Maintenance" api="startMaintenance" type="method" desc="Starts maintenance activities"/>
 	<method name="MaintenanceManager_Stop_Maintenance" api="stopMaintenance" type="method" desc="Stops maintenance activities"/>
 	
