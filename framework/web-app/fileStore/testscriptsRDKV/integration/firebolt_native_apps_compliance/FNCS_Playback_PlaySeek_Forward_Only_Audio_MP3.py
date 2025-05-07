@@ -52,6 +52,8 @@
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
+    <box_type>RPI-CLIENT</box_type>
+    <!--  -->
   </box_types>
   <rdk_versions>
     <rdk_version>RDK2.0</rdk_version>
@@ -182,7 +184,7 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
 
-    command = command + "only_audio"
+    command = command + " only_audio"
 
     print("Executing command in DUT: ", command)
 

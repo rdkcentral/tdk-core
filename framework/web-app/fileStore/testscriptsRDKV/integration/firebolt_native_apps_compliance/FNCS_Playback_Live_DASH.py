@@ -155,6 +155,9 @@ if "SUCCESS" in result.upper():
     tdkTestObj.executeTestCase(expectedResult);
     command = tdkTestObj.getResultDetails();
 
+    #parameter for live stream handling
+    command = command + " live_stream"
+
     print("Executing command in DUT: ", command)
 
     tdkTestObj = obj.createTestStep('executeCmndInDUT') 

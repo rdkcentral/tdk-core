@@ -165,7 +165,11 @@ video_src_url_mp4_30fps  = test_streams_base_path + "TDK_Asset_Sunrise_30fps_v2.
 video_src_url_mp4_50fps  = test_streams_base_path + "TDK_Asset_Sunrise_50fps.mp4"
 video_src_url_mp4_59fps  = test_streams_base_path + "TDK_Asset_Sunrise_59fps.mp4"
 video_src_url_mp4_60fps  = test_streams_base_path + "TDK_Asset_Sunrise_60fps.mp4"
-video_src_url_mp4_hevc_hdr = test_streams_base_path + "TDK_Asset_Waterfall_HDR.MOV"
+
+#HDR and MOV URL
+video_src_url_hevc_hdr = test_streams_base_path + "TDK_Asset_Waterfall_HDR.MOV"
+video_src_url_h264_mov = test_streams_base_path + "TDK_Asset_Sunrise_H264_MOV.MOV"
+video_src_url_vp9_hdr = test_streams_base_path + "TDK_Asset_Waterfall_VP9_HDR.webm"
 
 #HEVC Video URL
 video_src_url_hevc_23fps  = test_streams_base_path + "TDK_Asset_Sunrise_HEVC_23fps.mp4"

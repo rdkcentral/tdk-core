@@ -174,7 +174,7 @@ if "SUCCESS" in result.upper():
     if "checkAudioFPS=no" not in command:
         command = command + " checkAudioFPS=no ";
 
-    command = command + "only_audio"
+    command = command + " only_audio"
 
     print("Executing command in DUT: ", command)
 

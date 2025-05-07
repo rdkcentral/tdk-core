@@ -66,7 +66,7 @@
     <test_type>Positive</test_type>
     <test_setup>RDK TV,Video Accelerator, RPI</test_setup>
     <pre_requisite>1.tdk_mediapipelinetests application should be installed in the DUT
-2. Test stream url for an DASH stream should be updated in the config variable video_src_url_bitrate_h264 inside MediaValidationVariables.py library inside filestore
+2. Test stream url for an DASH stream should be updated in the config variable video_src_url_dash inside MediaValidationVariables.py library inside filestore
 3. FIREBOLT_COMPLIANCE_CHECK_AV_STATUS configuration should be set as yes/no in the device config file
 4. FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT configuration should be set to time in seconds for which the fastforward operation should be carried out
 5. FIREBOLT_COMPLIANCE_VALIDATE_FULL_PLAYBACK configuration should be set as yes/no in the device config file for advanced playback validation
@@ -75,7 +75,7 @@
 8. FIREBOLT_COMPLIANCE_CHECK_AUDIO configuration should be set as yes/no in the device config file for validating audio frames</pre_requisite>
     <api_or_interface_used>gstreamer-1.0</api_or_interface_used>
     <input_parameters>testcasename - "test_seek_EOS"
-test_url - DASH url from MediaValidationVariables library (MediaValidationVariables.video_src_url_bitrate_h264)
+test_url - DASH url from MediaValidationVariables library (MediaValidationVariables.video_src_url_dash)
 "checkavstatus=yes" - argument to do the video playback verification from SOC side . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_AV_STATUS) from Device Config file
 timeout - a string to specify the time in seconds for which the videoplayback should be done . This argument is the value of device configuration(FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT) from Device Config file
 'checkFPS=yes' argument to get the video frames. This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_FPS)
@@ -83,7 +83,7 @@ timeout - a string to specify the time in seconds for which the videoplayback sh
 'checkPTS=yes' - argument to get the video PTS . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_CHECK_PTS)
 'validateFullPlayback' - argument for advanced playback validation . This argument can be yes/no based on a device configuration(FIREBOLT_COMPLIANCE_VALIDATE_FULL_PLAYBACK)</input_parameters>
     <automation_approch>1.Retrieve the FIREBOLT_COMPLIANCE_CHECK_AV_STATUS and FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT config values from Device config file.
-3.Retrieve the video_src_url_bitrate_h264 variable from MediaValidationVariables library
+3.Retrieve the video_src_url_dash variable from MediaValidationVariables library
 4.Construct the tdk_mediapipelinetests command based on the retrieved video url, testcasename, FIREBOLT_COMPLIANCE_CHECK_AV_STATUS deviceconfig value and timeout
 5.Execute the command in DUT. During the execution, the DUT will playback av for FIREBOLT_COMPLIANCE_MEDIAPLAYBACK_TIMEOUT seconds then application exits by closing the pipeline
 6.Video will play and then seek operation will perform.
@@ -128,7 +128,7 @@ if "SUCCESS" in result.upper():
     #The test name specifies the test case to be executed from the mediapipeline test suite
     test_name = "test_seek_EOS"
     #Test url for the stream to be played is retrieved from MediaValidationVariables library
-    test_url = MediaValidationVariables.video_src_url_bitrate_h264
+    test_url = MediaValidationVariables.video_src_url_dash
 
     #Retrieve the value of configuration parameter 'FIREBOLT_COMPLIANCE_CHECK_AV_STATUS' that specifies whether SOC level playback verification check should be done or not
     tdkTestObj = obj.createTestStep('getDeviceConfigValue')
