@@ -201,6 +201,62 @@
           <parameter name="null_param" value=""/>
         </parameters>
       </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetFileContents" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetFileContents</function>
+        <parameters>
+          <parameter name="filename" value=""/>
+          <parameter name="filename_null_check" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetExperience" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetExperience</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetRdmManifestVersion" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetRdmManifestVersion</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetServURL" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetServURL</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isStateRedSupported" id="" version="1">
+        <function>TestMgr_rdkfwupdater_isStateRedSupported</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isInStateRed" id="" version="1">
+        <function>TestMgr_rdkfwupdater_isInStateRed</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isPDRIEnable" id="" version="1">
+        <function>TestMgr_rdkfwupdater_isPDRIEnable</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_GetPDRIVersion" id=" " version="1">
+        <function>TestMgr_rdkfwupdater_GetPDRIVersion</function>
+        <parameters>
+          <parameter name="buffer_size" value=""/>
+          <parameter name="null_param" value=""/>
+        </parameters>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_getCurrentSysTimeSec" id="" version="1">
+        <function>TestMgr_rdkfwupdater_getCurrentSysTimeSec</function>
+        <parameters/>
+      </primitiveTest>
+      <primitiveTest name="rdkfwupgrader_isOCSPEnable" id="" version="1">
+        <function>TestMgr_rdkfwupdater_isOCSPEnable</function>
+        <parameters/>
+      </primitiveTest>
     </primitiveTests>
   </module>
 </xml>
