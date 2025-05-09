@@ -441,6 +441,9 @@ video_src_url_playready_hls_h264_drmconfigs = ""
 video_src_url_playready_hls_hevc = ""
 video_src_url_playready_hls_hevc_drmconfigs = ""
 
+video_src_url_playready_dash_av1 = ""
+video_src_url_playready_dash_av1_drmconfigs = ""
+
 # Widevine DRM URLs
 video_src_url_widevine_dash_aac = ""
 video_src_url_widevine_dash_aac_drmconfigs = ""
@@ -495,6 +498,9 @@ video_src_url_widevine_cbcs_dash_drmconfigs = ""
 
 video_src_url_widevine_cbcs_hls = ""
 video_src_url_widevine_cbcs_hls_drmconfigs = ""
+
+video_src_url_playready_cbcs_dash_av1 = ""
+video_src_url_playready_cbcs_dash_av1_drmconfigs = ""
 
 # Multikey streams
 video_src_url_widevine_multikey_dash = ""
