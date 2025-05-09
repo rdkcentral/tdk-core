@@ -26,6 +26,7 @@ from SSHUtility import *
 import SSHUtility
 import re
 import importlib
+import socket
 
 
 #----------------------------------------------------------------------------------
@@ -144,6 +145,21 @@ def ssh_execute_cmd_DUT(configValues,command):
         status=False
     return status,output
 
+#------------------------------------------------------------------------
+#TO CHECK IF SSH PORT IS OPEN FOR THE DEVICE
+#Parameter    : Host IP address
+#               SSH Port number (default is 22)
+#               Timeout for checking socket connection (default is 5 seconds)
+#Return Value : True - if ssh port is open
+#               False - if ssh port is closed
+#------------------------------------------------------------------------
+def is_ssh_port_open(host, port=22, timeout=3):
+    try:
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except (socket.timeout, socket.error):
+        return False
+
 #-------------------------------------------------
 #SCRIPT STARTS HERE
 #-------------------------------------------------
@@ -166,8 +182,23 @@ else:
     #Check the device status
     response,request_successful = check_device_status()
 
+    #********************************************************
+    # Device status priority
+    # 1. WPEFRAMEWORK - THUNDER port
+    # 2. SSH Status if "SET_SSH_AS_DEVICE_STATUS" is enabled
+    # 3. REV_PORT_GW mechanism
+    #********************************************************
     if request_successful and response is not None and response.status_code == 200:
         print("FREE")
+        exit()
+    else:
+        configKeyList = ["SET_SSH_AS_DEVICE_STATUS"]
+        ssh_conf_status,ssh_configValues=get_config_value(configKeyList)
+
+    if ssh_conf_status and ssh_configValues["SET_SSH_AS_DEVICE_STATUS"] == "yes":
+        if (is_ssh_port_open(deviceIP)):
+            print("FREE")
+            exit()
     elif int(devicePort) != 9998 and conf_status:
         #Check if the devicePort is open in the VM. 
         #If open kill that process from the VM
