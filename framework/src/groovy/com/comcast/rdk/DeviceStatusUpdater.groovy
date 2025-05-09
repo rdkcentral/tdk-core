@@ -115,14 +115,17 @@ public class DeviceStatusUpdater {
 			def device
 			String devIp = ""
 			String devName = ""
+			String devMacId
 			if(dev?.isThunderEnabled == 1){
 				File nontdkstatus = grailsApplication.parentContext.getResource("//fileStore//callthunderdevicestatus_cmndline.py").file
 				def scriptPath = nontdkstatus.absolutePath
 				devIp = dev?.stbIp
+				devMacId=dev?.serialNo
 				def thunderPort = dev?.thunderPort
 				device = Device.findById(dev?.id)
-				String finalConfigFile = ""
-
+				String finalConfigFile = ""				
+	
+				
 				// Get the resources
 				Resource deviceConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.stbName + ".config")
 				Resource boxTypeConfigResource = grailsApplication.parentContext.getResource("//fileStore//tdkvRDKServiceConfig//" + device?.boxType?.name + ".config")
@@ -136,7 +139,7 @@ public class DeviceStatusUpdater {
 				    finalConfigFile = device?.boxType?.name + ".config"  // Just the file name
 				}
 
-			String[] cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort,finalConfigFile]
+			String[] cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort,finalConfigFile,devMacId]
 			Runnable statusUpdator = new ThunderDeviceStatusUpdaterTask(cmd, device, deviceStatusService,executescriptService,grailsApplication);
 			executorService.execute(statusUpdator);
 			}else{
@@ -185,6 +188,7 @@ public class DeviceStatusUpdater {
 			def scriptPath = nontdkstatus.absolutePath
 			def thunderPort = device?.thunderPort
 			def devIp = device?.stbIp
+			def devMacId=device?.serialNo?:"null"
 			
 			String finalConfigFile = ""
 			
@@ -202,8 +206,8 @@ public class DeviceStatusUpdater {
 			    finalConfigFile = device?.boxType?.name + ".config"  // Just the file name
 			} 
 
-
-			cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort, finalConfigFile]
+			
+			cmd = [PYTHON_COMMAND, scriptPath, devIp, thunderPort, finalConfigFile, devMacId]
 		}else{
 		File layoutFolder = grailsApplication.parentContext.getResource("//fileStore//calldevicestatus_cmndline.py").file
 

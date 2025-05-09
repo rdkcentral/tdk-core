@@ -43,13 +43,16 @@ class ThunderDeviceStatusUpdaterTask implements Runnable {
 
 		try {
 			String devIp = device?.stbIp
+			String deviceMacId = device?.serialNo ?: "null"
 			String [] cmdArray = [
 						          cmd[0],
 						          cmd[1],
 						          devIp,
 								  cmd[3],
-								  cmd[4]
+								  cmd[4],
+								  deviceMacId
 					             ]
+	
 			cmd = cmdArray
 		} catch (Exception e) {
 			e.printStackTrace()
