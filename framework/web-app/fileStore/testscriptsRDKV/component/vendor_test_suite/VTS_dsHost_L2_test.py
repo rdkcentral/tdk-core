@@ -108,7 +108,7 @@ if "SUCCESS" in result.upper():
     password = ssh_params[1]
 
     #Set module
-    module = ["L2 dsHost - Source"]
+    module = "L2 dsHost - Source"
     #Set binary name
     binaryName = DeviceSettings_binaryName
     #Set TestCase Config

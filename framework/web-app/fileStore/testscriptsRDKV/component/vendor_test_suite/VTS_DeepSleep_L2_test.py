@@ -111,6 +111,8 @@ if "SUCCESS" in result.upper():
     module = "L2 deepSleepMgr"
     #Set binary name
     binaryName = DeepSleep_binaryName
+    #Set TestCase Config
+    binaryConfig = DeepSleep_binaryConfig
     #Set Custom List of TestCases
     testCaseList = DeepSleep_L2_List
     #Set basepath of test
@@ -121,7 +123,7 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, "", module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
 
     try:
         if testList:

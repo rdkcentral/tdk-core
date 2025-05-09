@@ -28,7 +28,7 @@ import json
 import sys
 
 # Maximum time a command can run in seconds
-maxCommandRunTime = 10
+defaultMaxRunTime = 30
 
 failed_testCases = []
 
@@ -226,8 +226,9 @@ def stopSession(client,session):
 #              - str: The output of the last executed command.
 #-------------------------------------------------------------------
 def executeCommands(session, commands, runTime=0):
-    global maxCommandRunTime
-    if runTime:
+    global defaultMaxRunTime
+    maxCommandRunTime = defaultMaxRunTime
+    if runTime > maxCommandRunTime:
        maxCommandRunTime = runTime
        print("Running time changed to ",runTime)
     numberOfCommands = len(commands)
@@ -236,22 +237,31 @@ def executeCommands(session, commands, runTime=0):
         return "No SSH session"
     commandIterator = 1
     for command in commands:
+        if "hal" in command:
+            print("Executing command : ",command)
         commandStartTime = time.time()
         try:
             session.send(command + "\n")
             time.sleep(1)  # Initial wait for the command to start executing
             output = ""
+            last_data_time = time.time()
             while time.time() - commandStartTime < maxCommandRunTime:
-                # Wait for command to finish by checking if the channel is closed
                 if session.recv_ready():
-                    output += session.recv(1024).decode()
-                elif "Enter command:" in output:  # Check if command has completed
-                    break
-                elif session.exit_status_ready():
-                    break
-            if maxCommandRunTime != 10:
-                maxCommandRunTime = 10
-                print("Running time reverted to 10")
+                    data = session.recv(1024).decode()
+                    output += data
+                    last_data_time = time.time()
+                else:
+                    # Check if we've received no data for a while
+                    if time.time() - last_data_time > maxCommandRunTime:
+                        break
+                    time.sleep(0.2)
+                if "Enter command:" in output:
+                    break;
+                if ("Segmentation fault" in output) or ("symbol lookup error" in output):
+                    break;
+            if maxCommandRunTime != defaultMaxRunTime:
+                maxCommandRunTime = defaultMaxRunTime
+                print("Running time reverted to ",defaultMaxRunTime)
             if commandIterator == numberOfCommands:
                 return output
             commandIterator += 1
@@ -366,8 +376,8 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
                 print("Marking test as FAILURE , please execute manually and update result")
                 output = "TESTCASE FAILURE"
             else:
-                if "dsGetDisplay_L1_positive" in test:
-                    runTime=30
+                if "test_l2_rmfAudioCapture_primary_d" in test:
+                    runTime=100
                 output = executeCommands(session,commands,runTime);
         def escape_ansi(line):
             if isinstance(line, bytes):  # Ensure it's a string
@@ -379,13 +389,20 @@ def runTest(binaryPath, module, testCaseID, testList, TestCaseList=[], SkipTestC
         if "TESTCASE FAILURE" in output:
             status="FAILURE"
         elif "TESTCASE SKIPPED" not in output:
-            try:
-                testResult = parseAsserts(output)
-                if testResult == {}:
-                   raise KeyError
-                print("\n%s -> %s"%(test,testResult))
-            except Exception as e:
-                print ("ERROR : Unable to parse Result\nMarking test as Failure")
+            setFailure = False
+            if ("Segmentation fault" in output) or ("symbol lookup error" in output): 
+                print ("Marking test as Failure")
+                setFailure = True
+            else:
+                try:
+                    testResult = parseAsserts(output)
+                    if testResult == {}:
+                       raise KeyError
+                    print("\n%s -> %s"%(test,testResult))
+                except Exception as e:
+                    print ("ERROR : Unable to parse Result\nMarking test as Failure")
+                    setFailure = True
+            if setFailure:
                 testResult["total"] = 1
                 testResult["ran"] = 1
                 testResult["inactive"] = "n/a"

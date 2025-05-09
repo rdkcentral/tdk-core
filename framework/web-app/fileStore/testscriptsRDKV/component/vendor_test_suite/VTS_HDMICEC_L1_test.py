@@ -108,7 +108,7 @@ if "SUCCESS" in result.upper():
     password = ssh_params[1]
 
     #Set module
-    modules = ["L1 HDMICEC Common TestCase", "L1 HDMICEC STB TestCase"]
+    modules = ["L1 HDMI CEC Source TestCase"]
     #Set binary name
     binaryName = HDMICEC_binaryName
     #Set TestCase Config
@@ -121,6 +121,9 @@ if "SUCCESS" in result.upper():
         if module == "L1 HDMICEC Common TestCase":
             testCaseList = HDMICEC_L1_common_List
             testCaseID = "HDMICEC L1 Common"
+        elif module == "L1 HDMI CEC Source TestCase":
+            testCaseList = []
+            testCaseID = "HDMICEC L1 CEC Source TestCase"
         else:
             testCaseList = HDMICEC_L1_stb_List
             testCaseID = "HDMICEC L1 STB"
@@ -133,7 +136,7 @@ if "SUCCESS" in result.upper():
                 print("####################################################################################")
 
                 binaryPath = "cd " + basePath + " ; ./" + binaryName + " -p " + binaryConfig
-                executionSummary = runTest(binaryPath, module, testCaseID, testCaseList)
+                executionSummary = runTest(binaryPath, module, testCaseID, testList, testCaseList)
                 executePostRequisites()
    
                 failed_testCases = printTestSummary(executionSummary)
