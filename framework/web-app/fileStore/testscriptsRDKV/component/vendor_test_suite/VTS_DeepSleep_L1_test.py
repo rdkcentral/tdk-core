@@ -111,6 +111,8 @@ if "SUCCESS" in result.upper():
     module = "L1 deepSleepMgr"
     #Set binary name
     binaryName = DeepSleep_binaryName
+    #Set TestCase Config
+    binaryConfig = DeepSleep_binaryConfig
     #Set Custom List of TestCases
     testCaseList = DeepSleep_L1_List
     #Set basepath of test
@@ -121,13 +123,12 @@ if "SUCCESS" in result.upper():
     words[0], words[-1] = words[-1], words[0]
     plugin_name = " ".join(words)
 
-    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, "", module)
+    testList = SetupPreRequisites(str(ip), username, password, basePath, binaryName, binaryConfig, module)
     executionSummary1 = {}
     executionSummary2 = {}
     executionSummary3 = {}
 
-    #try:
-    if True:
+    try:
         if testList:
             print("\n####################################################################################")
             print("            PLUGIN NAME :  ",plugin_name)
@@ -139,8 +140,7 @@ if "SUCCESS" in result.upper():
         else:
             print("ERROR : NO TESTS FOUND")
             failed_testCases = "ERROR"
-    #except:
-    else:
+    except:
         failed_testCases = "ERROR"
     
     tdkTestObj = obj.createTestStep('setVTSResult')
