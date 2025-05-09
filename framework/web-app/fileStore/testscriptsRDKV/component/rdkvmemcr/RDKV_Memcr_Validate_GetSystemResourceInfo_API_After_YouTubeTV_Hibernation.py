@@ -2,7 +2,7 @@
 # If not stated otherwise in this file or this component's Licenses.txt
 # file the following copyright and licenses apply:
 #
-# Copyright 2024 RDK Management
+# Copyright 2025 RDK Management
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -21,9 +21,9 @@
 <xml>
   <id></id>
   <!-- Do not edit id. This will be auto filled while exporting. If you are adding a new script keep the id empty -->
-  <version>3</version>
+  <version>1</version>
   <!-- Do not edit version. This will be auto incremented while updating. If you are adding a new script you can keep the vresion as 1 -->
-  <name>RDKV_Memcr_Validate_HibernateAPI_Call_ErrorHandling_PostHibernate_State</name>
+  <name>RDKV_Memcr_Validate_GetSystemResourceInfo_API_After_YouTubeTV_Hibernation</name>
   <!-- If you are adding a new script you can specify the script name. Script Name should be unique same as this file name with out .py extension -->
   <primitive_test_id></primitive_test_id>
   <!-- Do not change primitive_test_id if you are editing an existing script. -->
@@ -33,11 +33,11 @@
   <!--  -->
   <status>FREE</status>
   <!--  -->
-  <synopsis>Memcr feature validation</synopsis>
+  <synopsis>Memcr Feature Validation</synopsis>
   <!--  -->
   <groups_id />
   <!--  -->
-  <execution_time>4</execution_time>
+  <execution_time>5</execution_time>
   <!--  -->
   <long_duration>false</long_duration>
   <!--  -->
@@ -48,40 +48,36 @@
   <skip>false</skip>
   <!--  -->
   <box_types>
-    <box_type>RDKTV</box_type>
-    <!--  -->
     <box_type>RPI-Client</box_type>
-    <!--  -->
-    <box_type>RPI-HYB</box_type>
     <!--  -->
     <box_type>Video_Accelerator</box_type>
     <!--  -->
   </box_types>
   <rdk_versions>
-    <rdk_version>RDK2.0</rdk_version>
+    <rdk_version>RDK1.3</rdk_version>
     <!--  -->
   </rdk_versions>
   <test_cases>
-    <test_case_id>rdkvmemcr_07</test_case_id>
-    <test_objective>To ensure a validation error occurs when attempting a hibernate call after the app has hibernated</test_objective>
-    <test_type>Negative</test_type>
+    <test_case_id>rdkvmemcr_20</test_case_id>
+    <test_objective>Verify that the getSystemResourceInfo API does not return resource information when the app is in a hibernated state</test_objective>
+    <test_type>Positive</test_type>
     <test_setup>Video_Accelerator and RPI</test_setup>
     <pre_requisite>MEMCR_APPHIBERNATE_PARAMETER needs to be configured in the device configuration file</pre_requisite>
-    <api_or_interface_used>org.rdk.RDKShell.1.getClients,org.rdk.RDKShell.1.getState,org.rdk.RDKShell.1.restore,org.rdk.RDKShell.1.launch,org.rdk.RDKShell.1.generateKey,org.rdk.RDKShell.1.hibernate</api_or_interface_used>
+    <api_or_interface_used>org.rdk.RDKShell.1.getClients,org.rdk.RDKShell.1.getState,org.rdk.RDKShell.1.restore,org.rdk.RDKShell.1.launch,org.rdk.RDKShell.1.suspend,org.rdk.RDKShell.1.getSystemResourceInfo</api_or_interface_used>
     <input_parameters>MEMCR_APPHIBERNATE_PARAMETER</input_parameters>
-    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service 3. Check the status of the cobalt app: if it is hibernated, restore it; if it is suspended, launch it; if it is already running, take no action 4. If it is not running at all, proceed to launch the app 5. Check if the cobalt app enters a hibernated state by using the Home keycode(36), without relying on the suspend API 6. Simulating a hibernate state and then triggering a hibernate API call to verify error handling</automation_approch>
+    <automation_approch>1. Retrieve the AppHibernate RFC parameter from the device configuration 2. Check the status of the Memcr service 3. Check the status of the youtubetv app: if it is hibernated, restore it; if it is suspended, launch it; if it is already running, take no action 4. If it is not running at all, proceed to launch the app 5. Check that the getSystemResourceInfo API returns resource information about the app 6. Suspend the app and verify that the getSystemResourceInfo API does not return resource information about the app while it is in hibernated state</automation_approch>
     <expected_output>All the steps should execute successfully</expected_output>
     <priority>Medium</priority>
     <test_stub_interface>Nil</test_stub_interface>
-    <test_script>RDKV_Memcr_Validate_HibernateAPI_Call_ErrorHandling_PostHibernate_State</test_script>
+    <test_script>RDKV_Memcr_Validate_GetSystemResourceInfo_API_After_YouTubeTV_Hibernation</test_script>
     <skipped>Nil</skipped>
-    <release_version>M128</release_version>
+    <release_version>M136</release_version>
     <remarks></remarks>
   </test_cases>
 </xml>
 '''
-# use tdklib library,which provides a wrapper for tdk testcase script
-import tdklib;
+# use tdklib library,which provides a wrapper for tdk testcase script 
+import tdklib; 
 import ast
 import time
 from rdkvmemcrlib import *
@@ -93,7 +89,7 @@ obj = tdklib.TDKScriptingLibrary("rdkvmemcr","1",standAlone=True);
 #This will be replaced with corresponding DUT Ip and port while executing script
 ip = <ipaddress>
 port = <port>
-obj.configureTestCase(ip,port,'RDKV_Memcr_Validate_HibernateAPI_Call_ErrorHandling_PostHibernate_State');
+obj.configureTestCase(ip,port,'RDKV_Memcr_Validate_GetSystemResourceInfo_API_After_YouTubeTV_Hibernation');
 
 #Get the result of connection with test component and DUT
 result =obj.getLoadModuleResult();
@@ -140,7 +136,7 @@ if "SUCCESS" in result.upper():
                     tdkTestObj.setResultStatus("FAILURE")
                     obj.unloadModule("rdkvmemcr");
                     exit()
-                    
+
                 method = "org.rdk.RDKShell.1.getClients"
                 tdkTestObj = obj.createTestStep('memcr_getValue')
                 tdkTestObj.addParameter("method",method)
@@ -155,7 +151,7 @@ if "SUCCESS" in result.upper():
 
                     #Verify the success status for updating the flag value in the subsequent if and elif blocks
                     successstatus = 0
-                    if "cobalt" in appcheck:
+                    if "youtubetv" in appcheck:
                         method = "org.rdk.RDKShell.1.getState"
                         tdkTestObj = obj.createTestStep('memcr_getValue')
                         tdkTestObj.addParameter("method",method)
@@ -164,9 +160,9 @@ if "SUCCESS" in result.upper():
                         result = ast.literal_eval(result)
                         #Access the list of applications
                         apps = result["state"]
-                        #Iterate through the list to find the youtube app state
+                        #Iterate through the list to find the youtubetv app state
                         for app in apps:
-                            if app["callsign"] == "Cobalt":
+                            if app["callsign"] == "YouTubeTV":
                                 appstate = app["state"]
                         success = result.get("success")
                         if str(success).lower() != "true":
@@ -181,7 +177,7 @@ if "SUCCESS" in result.upper():
 
                         if appstate == "hibernated":
                             method = "org.rdk.RDKShell.1.restore"
-                            value = '{ "callsign": "Cobalt" }'
+                            value = '{ "callsign": "YouTubeTV" }'
                             tdkTestObj = obj.createTestStep('memcr_setValue')
                             tdkTestObj.addParameter("method",method)
                             tdkTestObj.addParameter("value",value)
@@ -200,7 +196,7 @@ if "SUCCESS" in result.upper():
                                 print("SUCCESS : "+method+" API call was successful\n")
 
                                 time.sleep(5)
-                                value = '{ "callsign": "Cobalt" }'
+                                value = '{ "callsign": "YouTubeTV" }'
                                 appstate,success = memcr_launchapp(obj,value)
                                 if str(success).lower() != "true" and "resume" not in str(appstate).strip().lower():
                                     tdkTestObj.setResultStatus("FAILURE")
@@ -214,7 +210,7 @@ if "SUCCESS" in result.upper():
 
                         elif appstate == "suspended":
                             time.sleep(5)
-                            value = '{ "callsign": "Cobalt" }'
+                            value = '{ "callsign": "YouTubeTV" }'
                             appstate,success = memcr_launchapp(obj,value)
                             if str(success).lower() != "true" and "resume" not in str(appstate).strip().lower():
                                 tdkTestObj.setResultStatus("FAILURE")
@@ -229,9 +225,9 @@ if "SUCCESS" in result.upper():
                             successstatus = 1
                             pass
 
-                    elif "cobalt" not in appcheck:
+                    elif "youtubetv" not in appcheck:
                         time.sleep(5)
-                        value = '{ "callsign": "Cobalt" }'
+                        value = '{ "callsign": "YouTubeTV" }'
                         appstate,success = memcr_launchapp(obj,value)
                         if str(success).lower() != "true" and "activate" not in str(appstate).strip().lower():
                             tdkTestObj.setResultStatus("FAILURE")
@@ -251,7 +247,7 @@ if "SUCCESS" in result.upper():
                             result = ast.literal_eval(result)
                             appcheck = result.get("clients")
                             success = result.get("success")
-                            if str(success).lower() != "true" and "cobalt" not in appcheck:
+                            if str(success).lower() != "true" and "youtubetv" not in appcheck:
                                 tdkTestObj.setResultStatus("FAILURE")
                                 print("FAILURE : "+method+" API call was unsuccessful\n")
                                 obj.unloadModule("rdkvmemcr");
@@ -262,49 +258,54 @@ if "SUCCESS" in result.upper():
                                 print("SUCCESS : "+method+" API call was successful\n")
 
                     if successstatus == 1:
-                            method = "org.rdk.RDKShell.1.generateKey"
-                            value = '{ "keys": [ { "keyCode":  36, "modifiers": [], "delay": 1.0 } ] }'
-                            tdkTestObj = obj.createTestStep('memcr_setValue')
+                            method = "org.rdk.RDKShell.1.getSystemResourceInfo"
+                            tdkTestObj = obj.createTestStep('memcr_getValue')
                             tdkTestObj.addParameter("method",method)
-                            tdkTestObj.addParameter("value",value)
                             tdkTestObj.executeTestCase(expectedResult)
                             result = tdkTestObj.getResultDetails()
                             result = ast.literal_eval(result)
+                            #Access the list of applications
+                            apps = result["types"]
+                            #Iterate through the list to find the youtubetv app state
+                            app_ram = 0
+                            for app in apps:
+                                if app["callsign"] == "YouTubeTV":
+                                    app_ram = app["ram"]
                             success = result.get("success")
-                            if str(success).lower() == "true":
+                            if str(success).lower() == "true" and app_ram != 0:
                                 tdkTestObj.setResultStatus("SUCCESS")
                                 print("SUCCESS : "+method+" API call was successful\n")
 
-                                time.sleep(10)
-                                method = "org.rdk.RDKShell.1.getState"
-                                tdkTestObj = obj.createTestStep('memcr_getValue')
+                                time.sleep(3)
+                                method = "org.rdk.RDKShell.1.suspend"
+                                value = '{ "callsign": "YouTubeTV" }'
+                                tdkTestObj = obj.createTestStep('memcr_setValue')
                                 tdkTestObj.addParameter("method",method)
+                                tdkTestObj.addParameter("value",value)
                                 tdkTestObj.executeTestCase(expectedResult)
                                 result = tdkTestObj.getResultDetails()
                                 result = ast.literal_eval(result)
-                                #Access the list of applications
-                                apps = result["state"]
-                                #Iterate through the list to find the youtube app state
-                                for app in apps:
-                                    if app["callsign"] == "Cobalt":
-                                        appstate = app["state"]
                                 success = result.get("success")
-                                if str(success).lower() == "true" and "hibernated" in appstate:
+                                if str(success).lower() == "true":
                                     tdkTestObj.setResultStatus("SUCCESS")
                                     print("SUCCESS : "+method+" API call was successful\n")
 
-                                    time.sleep(3)
-                                    method = "org.rdk.RDKShell.1.hibernate"
-                                    value = '{ "callsign": "YouTube" }'
-                                    tdkTestObj = obj.createTestStep('memcr_setValue')
+                                    time.sleep(10)
+                                    method = "org.rdk.RDKShell.1.getSystemResourceInfo"
+                                    tdkTestObj = obj.createTestStep('memcr_getValue')
                                     tdkTestObj.addParameter("method",method)
-                                    tdkTestObj.addParameter("value",value)
                                     tdkTestObj.executeTestCase(expectedResult)
                                     result = tdkTestObj.getResultDetails()
                                     result = ast.literal_eval(result)
+                                    #Access the list of applications
+                                    apps = result["types"]
+                                    #Iterate through the list to find the youtubetv app state
+                                    app_ram = 0
+                                    for app in apps:
+                                        if app["callsign"] == "YouTubeTV":
+                                            app_ram = app["ram"]
                                     success = result.get("success")
-                                    message = result.get("message")
-                                    if str(success).lower() != "true" and "failed to hibernate native application" in str(message.strip()).lower():
+                                    if str(success).lower() == "true" and app_ram == 0:
                                         tdkTestObj.setResultStatus("SUCCESS")
                                         print("SUCCESS : "+method+" API call was successful\n")
                                     else:
