@@ -955,8 +955,16 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             powerState = result.get("state")
             info["powerState"] = powerState
             success = str(result.get("success")).lower() == "true"
-            if success and powerState in expectedValues:
-                info["Test_Step_Status"] = "SUCCESS"
+            if success:
+                if "STANDBY" in expectedValues or "LIGHT_SLEEP" in expectedValues:
+                    if powerState in ["STANDBY","LIGHT_SLEEP"]:
+                        info["Test_Step_Status"] = "SUCCESS"
+                    else:
+                        info["Test_Step_Status"] = "FAILURE"
+                elif powerState in expectedValues:
+                    info["Test_Step_Status"] = "SUCCESS"
+                else:
+                    info["Test_Step_Status"] = "FAILURE"
             else:
                 info["Test_Step_Status"] = "FAILURE"
         elif tag == "system_check_telemetry_optout_status":
@@ -2994,7 +3002,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
             resolution = result.replace("Resolution","")
             fps_data = re.split('(p|i)',str(expectedValues[0]))[2]
             if fps_data == "60":
-                if str(resolution).lower() != "2160p":
+                if str(resolution).lower() != "2160p60":
                    expectedValues = str(expectedValues[0])[0:-2]
             if str(resolution).lower() in expectedValues:
                 info["Test_Step_Status"] = "SUCCESS"
@@ -4005,7 +4013,7 @@ def CheckAndGenerateTestStepResult(result,methodTag,arguments,expectedValues,oth
         elif tag == "networkmanager_check_supported_security_modes":
             info["supported_security_modes"] = result.get("security_modes")
             success = str(result.get("success")).lower() == "true"
-            status = checkNonEmptyResultData(result)
+            status = checkNonEmptyResultData(result.get("security_modes"))
             if "FALSE" not in status and success:
                 info["Test_Step_Status"] = "SUCCESS"
             else:

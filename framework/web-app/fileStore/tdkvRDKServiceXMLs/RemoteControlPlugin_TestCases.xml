@@ -15,24 +15,11 @@
 -->
 <testPlugin pluginName="RemoteControl" pluginVersion="1">
     <pluginPreRequisite>
-      <!-- Activate RemoteControl plugin -->
-      <prerequisite requisiteId="1" requisiteName="Activate_Plugin">
-        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+      <!-- Check RemoteControl plugin state -->
+      <prerequisite requisiteId="1" requisiteName="Check_.RemoteControl_Plugin_State">
+        <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
             <params>
-              <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
-            </params>
-            <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" />
-        </testStep>
-        <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
-            <params>
-              <param tag="callsign" value="org.rdk.RemoteControl" />
-            </params>
-        </testStep>
-        <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-            <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.RemoteControl" />
-            <params>
-              <param tag="plugin" value="org.rdk.RemoteControl" indexOnly="true" />
+              <param tag="plugin" value="org.rdk.RemoteControl"/>
             </params>
             <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.RemoteControl" expectedValues="activated"/>
         </testStep>
@@ -45,30 +32,17 @@
             </testStep>
       </prerequisite>
 
-      <!-- Activate Bluetooth Plugin -->
-      <prerequisite requisiteId="3" requisiteName="Activate_Bluetooth_Plugin">
-            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
+      <!-- Check Bluetooth plugin state-->
+      <prerequisite requisiteId="3" requisiteName="Check_Bluetooth_Plugin_State">
+            <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
                 <params>
-                  <param tag="plugin" value="org.rdk.Bluetooth" indexOnly="true" />
-                </params>
-                <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" />
-            </testStep>
-            <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Bluetooth" />
-                <params>
-                  <param tag="callsign" value="org.rdk.Bluetooth" />
-                </params>
-            </testStep>
-            <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.Bluetooth" />
-                <params>
-                  <param tag="plugin" value="org.rdk.Bluetooth" indexOnly="true" />
+                  <param tag="plugin" value="org.rdk.Bluetooth"/>
                 </params>
                 <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.Bluetooth" expectedValues="activated"/>
             </testStep>
       </prerequisite>
 
-      <!-- Get_Connected_Remote_Device -->
+      <!-- Get Connected Remote Device -->
       <prerequisite requisiteId="4" requisiteName="Get_Connected_Remote_Device">
       	    <testStep testStepId="1" name="Get_Connected_Remote_Device" method="Get_Connected_Devices" delay="5" pluginName="Bluetooth">
                 <resultGeneration useMethodTag="bluetooth_get_connected_devices" arguments="check_device_connected,check_active_state">
