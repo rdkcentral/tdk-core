@@ -56,6 +56,16 @@
       <function name='TestMgr_rdkfwupdater_GetEstbMac' />
       <function name='TestMgr_rdkfwupdater_GetRemoteInfo' />
       <function name='TestMgr_rdkfwupdater_GetRemoteVers' />
+      <function name='TestMgr_rdkfwupdater_GetFileContents' />
+      <function name='TestMgr_rdkfwupdater_GetExperience' />
+      <function name='TestMgr_rdkfwupdater_GetRdmManifestVersion' />
+      <function name='TestMgr_rdkfwupdater_GetServURL' />
+      <function name='TestMgr_rdkfwupdater_isStateRedSupported' />
+      <function name='TestMgr_rdkfwupdater_isInStateRed' />
+      <function name='TestMgr_rdkfwupdater_isPDRIEnable' />
+      <function name='TestMgr_rdkfwupdater_GetPDRIVersion' />
+      <function name='TestMgr_rdkfwupdater_getCurrentSysTimeSec' />
+      <function name='TestMgr_rdkfwupdater_isOCSPEnable' />
     </functions>
   <!-- Total parameters corresponding module  -->
     <parameters>
@@ -119,6 +129,17 @@
       <parameter funName='TestMgr_rdkfwupdater_GetRemoteInfo' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
       <parameter funName='TestMgr_rdkfwupdater_GetRemoteVers' parameterName='null_param' parameterType='INTEGER' range='0-1' />
       <parameter funName='TestMgr_rdkfwupdater_GetRemoteVers' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetFileContents' parameterName='filename' parameterType='STRING' range='A-Z' />
+      <parameter funName='TestMgr_rdkfwupdater_GetFileContents' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetFileContents' parameterName='filename_null_check' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetExperience' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetExperience' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRdmManifestVersion' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetRdmManifestVersion' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServURL' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetServURL' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPDRIVersion' parameterName='null_param' parameterType='INTEGER' range='0-1' />
+      <parameter funName='TestMgr_rdkfwupdater_GetPDRIVersion' parameterName='buffer_size' parameterType='INTEGER' range='1-1000' />
     </parameters>
   </module>
 </xml>
