@@ -963,13 +963,86 @@ function callFunc(select) {
 				'copyDeviceIp' : function(node) {
 					copyDeviceIp(select);
 				},
-				'installTDK' : function(node) {
-					option = "installTDK"
-					installTDK(select);
-				}
+				'installTDK': function(node) {
+	                option = "installTDK";
+	                installTDK(select); // Ensure tabType is passed
+	            }
 			}
 		});
 }
+var deviceeeId;
+let selectedTab = 'TDK'; // Default to TDK
+
+function switchTab(tabType) {  
+    
+    selectedTab = tabType;
+    
+
+    // Toggle visibility
+    document.getElementById('tdkTab').style.display = tabType === 'TDK' ? 'block' : 'none';
+    document.getElementById('vtsTab').style.display = tabType === 'VTS' ? 'block' : 'none';
+
+    // Update button styles
+    document.getElementById("tdkTabButton").classList.toggle('active', tabType === 'TDK');
+    document.getElementById("vtsTabButton").classList.toggle('active', tabType === 'VTS');
+
+
+    // API Call to notify backend about tab switch
+   
+}
+
+
+
+function installTDK(deviceId) {
+    
+
+    $.get('tdkpackages', { deviceId: deviceId }, function(data) {
+       
+        deviceeeId=deviceId
+        // Clear previous modal content
+        $('#popup-container').empty();
+
+        // Append new content
+        $('#popup-container').html(data);
+
+        // Check backend flags from hidden inputs
+        var deviceNotFree = $('#deviceNotFreeFlag').val() === 'true';
+        var noFiles = $('#noFilesFlag').val() === 'true';
+		
+		
+		 if (deviceNotFree) {
+            alert("Device is down or busy. Please try later.");
+            return; // Stop further processing
+        }
+
+        // Proceed only if no issues
+        $("#popup-container").modal({
+            opacity: 0.7,
+            overlayCss: { backgroundColor: "#000" },
+            containerCss: {
+                width: "550px",
+                height: "350px",
+                padding: "10px",
+                backgroundColor: "#fff",
+                borderRadius: "8px"
+            },
+            onClose: function(dialog) {
+                $.modal.close();
+                clearInterval(refreshInterval);
+            }
+        });
+
+        if (typeof refreshInterval !== "undefined") {
+            clearInterval(refreshInterval);
+        }
+
+        refreshInterval = setInterval(function() {
+            refreshFileList(selectedTab);
+        }, 2000);
+    });
+}
+
+
 
 
 /**
@@ -1028,31 +1101,6 @@ function thunderDisabled(deviceId){
 		alert(" Thunder disabled");
 	});
 }
-var deviceeeId;
-function installTDK(deviceId){	
-		 $.get('tdkpackages', {deviceId:deviceId},function(data) {
-		 deviceeeId=deviceId
-		 if (data.includes("grailsLogo")) {
-        alert("No valid SoC vendor is available");
-    }
-
-		  else{
-		  
-         $('#popup-container').html(data);
-		  $("#popup-container").modal({ opacity : 60, overlayCss : {
-		  backgroundColor : "#c4c4c4" }, containerCss: {
-			   autoOpen: true,
-    modal: true,
-    width: 500, // Initial width
-    height: 250, // Initial height
-         
-	        } }, { onClose : function(dialog) {
-		  $.modal.close(); } });
-		  }
-         // Show the popup
-     });
-	
- }
 
 
 /**
@@ -1424,69 +1472,94 @@ function failureScriptCheck(executionName,device,deviceStatus){
 function  executionTriggeredPopUp(){
 	alert("Execution Triggered ");	
 }
+/**
+ * function to install packages
+ */
+function submitForm(event) {
+    event.preventDefault();
+    var result = confirm("Device is going to reboot. Do you want to proceed?");
+    
+    $('#outputDiv').hide();
+    $('#LogsFetched').hide();
+    $('#progressContainer').hide();
+    $('#InstalltionCompleted').hide();
+    $('#installation').show();
 
- function submitForm(event) {
-	   var result = confirm("Device is going to reboot are you still want to proceed?");
-		 $('#outputDiv').hide();
-		 $('#progressContainer').hide();
-		  var isTure = false;
-		  $('#InstalltionCompleted').hide();
-	  if (result) {
-        // Prevent the default form submission behavior
-		$("#popup").show();
-		var selectedFiles = []; // Array to store selected files
-    var checkboxes = document.getElementsByName('selectedFiles');
+    if (result) {
+        $("#popup").show();
 
- for (var i = 0; i < checkboxes.length; i++) {
-        if (checkboxes[i].checked) {
-            selectedFiles.push(checkboxes[i].value); // Add the value of checked checkbox to the array
+        var selectedFiles = [];
+        var checkboxes = document.getElementsByName('selectedFiles');
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedFiles.push(checkboxes[i].value);
+            }
         }
-    }
-		$('#progressContainer').show();
-		 $('#progressBar').show();
-		   simulateProgress();
-			  $('#progressBar').css('width', '100%'); 
-		var testFiles=JSON.stringify(selectedFiles)
-			 $('#copyFiles').show();
-		  $.get('captureSelectedFiles', {deviceeeId:deviceeeId,selectedFiles: testFiles}, function(response) {
-					 $("#popup").show();
-					 $('#copyFiles').hide();
-					 $('#FetchLoges').show();
-					 $('#installButton').hide();
-					
-		var parsedResponse = $(response);
-	
-		 isTure = true;
-           parsedResponse.find('div').not('#outputDiv').hide(); // Show the outputDiv
-			$("#LogsFetched").show();
-			$('#FetchLoges').show();
-			 $('#InstalltionCompleted').show();
-			$('#outputDiv').empty().append(parsedResponse);
-			  $('#outputDiv').show();
-			  	$("#popup").hide();
-				
-			  var flashMessage = parsedResponse.find('#flashMessage').text();
-        
-        // Show an alert with the flash message
-        if (flashMessage.trim() !== "") {
-            alert(flashMessage);
+
+        $('#progressContainer').show();
+        $('#progressBar').show();
+        simulateProgress();
+        $('#progressBar').css('width', '100%');
+
+        var testFiles = JSON.stringify(selectedFiles);
+        $('#copyFiles').show();
+
+        $.get('installPackages', { deviceeeId: deviceeeId, selectedFiles: testFiles }, function(response) {
+            $("#popup").show();
+            $('#copyFiles').hide();
+            $("#LogsFetched").hide();
+            $('#installButton').hide();
+            $("#InstalltionCompleted").show();
+            $('#outputDiv').show();
+            
+            if (response.trim() !== "") {
+                $('#LogsFetched').show();
+                $('#installation').hide();
+                
+                var logsHtml = "<pre style='text-align: left; margin: 0; padding: 10px;'>" + response + "</pre>";
+                $('#outputDiv').html(logsHtml); // first show only logs
+                
+                // Then append the success or failure message
+                if (response.trim().includes("running")) {
+                  
+                    $('#outputDiv').append(
+                        "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'>TDK Installed Successfully</div>"
+                    );
+                } else {
+                    
+                    $('#outputDiv').append(
+                        "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'>TDK Installation Failed</div>"
+                    );
+                }
+
+            } else {
+                $('#LogsFetched').hide();
+                $('#outputDiv').hide();
+                $('#installation').hide();
+            }
+
+            $("#popup").hide();
+
+            var flashMessage = $("<div>").html(response).find('#flashMessage').text();
+            if (flashMessage.trim() !== "") {
+                alert(flashMessage);
+            }
+        });
+
+        if ($('.shell-script-container').find('p').length > 0) {
+            $('.shell-script-container').css('border', 'none');
+        } else {
+            $('.shell-script-container').css('border', '1px solid #ccc');
         }
-	 });
-		if ($('.shell-script-container').find('p').length > 0) {
-		    // Apply border if logs are present
-			$('#outputDiv').hide();
-		    $('.shell-script-container').css('border', 'none');
-			
-		} else {
-		    // Remove border if no logs are present
-		    $('.shell-script-container').css('border', '1px solid #ccc');
-		} 
-  } else {
-        // If user clicks "No", show an alert message
+    } else {
         alert("Installation cancelled.");
-    }	
-	
- }
+    }
+}
+
+/**
+ * function will show progess for packages installation
+ */
 function simulateProgress() {
             var progress = 0;
             var interval = setInterval(function() {
@@ -1498,4 +1571,453 @@ function simulateProgress() {
                 }
             }, 100); // Adjust the interval as needed to match your backend process time
         }	
+
+
+/**
+ * function will close pop up 
+ */
+// Function to close the script output popup
+function closePopup() {
+    $("#outputModal").hide();
+}
+/**
+ * function to create TDK package
+ */
+function createTDKPackage() {
+    // Clear previous logs before new request
+    $("#scriptOutput").text(""); 
+    $("#packageSuccess").hide();
+    $("#packageError").hide();
+    $("#uploadSuccess").hide();
+    $("#uploadError").hide();
+    $("#uploadButton").hide();
+
+    // Show progress message and disable button
+    $("#createPackageButton").prop("disabled", true).css("cursor", "not-allowed");
+
+    // Make AJAX call to backend API
+    $.ajax({
+        url: "createTDKPackage",
+        type: "GET",
+        data: { deviceeeId: deviceeeId },
+        success: function (response) {
+            document.getElementById("scriptOutput").style.display = "block";
+            const output = response.output || "";
+            if (!output.includes("not")) {
+                $("#packageSuccess").show();
+                $("#scriptOutput").text(output || "TDK Package Created Successfully!");
+            } else if (output.includes("not")) {
+                $("#packageError").show().html(`
+    ? Failed to create package. Please upload a generic package manually.
+    <br>
+    <a href="javascript:void(0)" onclick="document.getElementById('packageFilee').click()" 
+       style="color: #007BFF; text-decoration: underline; font-size: 1em; display: inline-flex; align-items: center; margin-top: 8px;">
+        <img src="../images/reorder_up.png" alt="Upload Icon" 
+             style="width: 16px; height: 16px; vertical-align: middle; margin-right: 6px;">
+        Upload Generic Package
+    </a>
+    <input type="file" id="packageFilee" name="packageFilee" style="display: none;" onchange="uploadGenericPackage()">
+`);
+
+
+                $("#scriptOutput").text(output).show();
+            } else {
+                $("#packageError").show().text("Package creation failed.");
+                $("#scriptOutput").text(output).show();
+            }
+        },
+        error: function () {
+            $("#packageError").show().text("Error processing the request.");
+        },
+        complete: function () {
+            $("#createPackageButton").prop("disabled", false).css("cursor", "pointer");
+        }
+    });
+}
+/**
+ * function will create TDK Generic package
+ */
+function uploadGenericPackage() {
+    const fileInput = document.getElementById('packageFilee');
+    const file = fileInput.files[0];
+
+    if (!file) {
+        $("#uploadError").show().text("Please select a package file.");
+        return;
+    }
+	$("#packageError").hide()
+    const formData = new FormData();
+    formData.append("packageFilee", file);
+    formData.append("deviceeeId", deviceeeId);
+
+    $.ajax({
+        url: "uploadGenericTDKPackage",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+            if (response.status === "success") {
+                $("#uploadSuccess").show().text("Generic TDK Package uploaded successfully.");
+            } else {
+                $("#uploadError").show().text(response.message || "Upload failed.");
+            }
+        },
+        error: function () {
+            $("#uploadError").show().text("Error while uploading the package.");
+        }
+    });
+}
+
+/**
+ * function will upload the package
+ */
+function uploadPackage() {
+    var uploadedFile = $("#packageFile")[0].files[0]; 
+    
+    if (!uploadedFile) {
+        alert("Please upload a file first.");
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append("packageFile", uploadedFile);
+    formData.append("deviceeeId", deviceeeId); 
+
+    // Clear previous logs
+    $("#scriptOutput").hide().text(""); 
+    $("#uploadSuccess").hide();
+    $("#uploadError").hide();
+    $("#packageSuccess").hide();
+    $("#packageError").hide();
+
+    // Show progress message
+    $("#uploadProgress").show();
+
+    $.ajax({
+        url: "processPackage", 
+        type: "POST",
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        success: function(response) {
+            $("#uploadProgress").hide();
+
+            if (response.status === "success") {
+                $("#uploadSuccess").show();
+
+                // Show output only if it's not empty
+                if (response.output && response.output.trim() !== "") {
+                    $("#scriptOutput").show().text(response.output);
+                } else {
+                    $("#scriptOutput").hide();
+                }
+            } else {
+                $("#uploadError").show().text(response.message || "Failed to upload package.");
+                $("#scriptOutput").hide(); // Hide output on failure
+            }
+        },
+        error: function() {
+            $("#uploadProgress").hide();
+            $("#uploadError").show().text("Error while processing.");
+            $("#scriptOutput").hide();
+        }
+    });
+}
+
+/**
+ * function will refresh with latest packages
+ */
+function refreshFileList() {
+  
+    // Store selected checkboxes before refreshing
+    let selectedTdkFiles = new Set();
+    let selectedVtsFiles = new Set();
+
+
+    $("#fileListTable input[name='selectedFiles']:checked").each(function () {
+        selectedTdkFiles.add($(this).val());
+    });
+
+    $("#vtsFileListTable input[name='selectedVtsFiles']:checked").each(function () {
+        selectedVtsFiles.add($(this).val());
+    });
+
+
+
+    $("#fileListTable tbody").load(`tdkpackages?deviceId=${deviceeeId} #fileListTable tbody > *`, function(response, status, xhr) {
+        if (status === "error") {
+            console.error("Error refreshing TDK file list:", xhr.status, xhr.statusText);
+        } else {
+           
+            $("#fileListTable input[name='selectedFiles']").each(function () {
+                if (selectedTdkFiles.has($(this).val())) {
+                    $(this).prop("checked", true);
+                }
+            });
+
+            bindCheckboxLogic();
+        }
+    });
+
+    $.get(`getvtsPackages?deviceId=${deviceeeId}`, function(data) {
+
+        let vtsFiles = data.allVtsFilesList || [];
+
+        let html = vtsFiles.length
+            ? vtsFiles.map(file => `
+                <tr>
+                    <td>
+                        <label class="checkbox-container">
+                            <input type="checkbox" name="selectedVtsFiles" value="${file}" class="checkbox-custom" />
+                            <span>${file}</span>
+                        </label>
+                    </td>
+                </tr>
+            `).join("")
+            : `<tr><td style="text-align: center; font-weight: bold; color: red;">No files available</td></tr>`;
+
+        $("#vtsFileListTable tbody").html(html);
+
+        bindCheckboxLogic(); // Ensure logic is applied to new checkboxes
+    });
+
+}
+
+/**
+ * function will add the checkbox for selected files
+ */
+function bindCheckboxLogic() {
+
+    // Handle TDK files
+    let tdkCheckboxes = document.querySelectorAll('input[name="selectedFiles"]');
+    handleCheckboxSelection(tdkCheckboxes, "lastSelectedFile");
+
+    // Handle VTS files
+    let vtsCheckboxes = document.querySelectorAll('input[name="selectedVtsFiles"]');
+    handleCheckboxSelection(vtsCheckboxes, "lastSelectedVtsFile");
+}
+/**
+ * function will restore the package selection
+ */
+function handleCheckboxSelection(checkboxes, storageKey) {
+    checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function () {
+            console.log(`Checkbox clicked: ${this.value}, Checked: ${this.checked}`);
+
+            if (this.checked) {
+                // Disable all other checkboxes when one is selected
+                checkboxes.forEach(function (otherCheckbox) {
+                    if (otherCheckbox !== checkbox) {
+                        otherCheckbox.checked = false;
+                        otherCheckbox.disabled = true;
+                    }
+                });
+
+                // Save the selected file immediately
+                sessionStorage.setItem(storageKey, checkbox.value);
+                
+            } else {
+                // Re-enable all checkboxes when none are selected
+                let anyChecked = Array.from(checkboxes).some(cb => cb.checked);
+                if (!anyChecked) {
+                    checkboxes.forEach(cb => cb.disabled = false);
+                }
+
+                // Clear stored selection if none are checked
+                sessionStorage.removeItem(storageKey);
+                
+            }
+        });
+    });
+
+    // Restore last selected checkbox if exists
+    let lastSelectedFile = sessionStorage.getItem(storageKey);
+    if (lastSelectedFile) {
+        checkboxes.forEach(cb => {
+            if (cb.value === lastSelectedFile) {
+                cb.checked = true;
+                cb.dispatchEvent(new Event('change')); // Trigger change event
+                
+            }
+        });
+    }
+}
+
+// Ensure checkbox logic is applied on page load
+bindCheckboxLogic();
+/**
+ * function will create VTS package
+ */
+function createVTSPackage() {
+    // Clear previous logs before new request
+    $("#scriptVTSOutput").text(""); 
+    $("#vtspackageSuccess").hide();
+    $("#vtspackageError").hide();
+    $("#vtsuploadSuccess").hide();
+    $("#vtsuploadError").hide();
+
+    // Show progress message and disable button
+    $("#createVTSPackageButton").prop("disabled", true).css("cursor", "not-allowed");
+
+    // Make AJAX call to backend API
+    $.ajax({
+        url: "createVTSPackage",
+        type: "GET",
+        data: { deviceeeId: deviceeeId }, // Ensure correct deviceId
+        success: function (response) {
+            
+            if (response.status === "success") {
+            	 document.getElementById("vtsscriptOutput").style.display = "block";
+                $("#vtspackageSuccess").show();
+                $("#vtsscriptOutput").text(response.output || "VTS Package Created Successfully!");
+            } else {
+            	 document.getElementById("vtsscriptOutput").style.display = "block";
+                $("#vtspackageError").show().text(response.message || "VTS Package creation failed.");
+            }
+        },
+        error: function (xhr, status, error) {
+            $("#vtspackageError").show().text("Error processing the request.");
+        },
+        complete: function () {
+            $("#createVTSPackageButton").prop("disabled", false).css("cursor", "pointer");
+        }
+    });
+}
+/**
+ * function will upload VTS package
+ */
+function uploadVTSPackage() {
+    var uploadedFile = $("#vtspackageFile")[0].files[0]; 
+    
+    if (!uploadedFile) {
+        alert("Please upload a file first.");
+        return;
+    }
+
+    var formData = new FormData();
+    formData.append("vtspackageFile", uploadedFile);
+    formData.append("deviceeeId", deviceeeId); 
+
+    // Clear previous logs
+    $("#vtsscriptOutput").hide().text(""); 
+    $("#vtsuploadSuccess").hide();
+    $("#vtsuploadError").hide();
+    $("#vtspackageSuccess").hide();
+    $("#vtspackageError").hide();
+
+    // Show progress message
+    $("#vtsuploadProgress").show();
+
+    $.ajax({
+        url: "processVtsPackage", 
+        type: "POST",
+        data: formData,
+        processData: false, 
+        contentType: false, 
+        success: function(response) {
+            $("#vtsuploadProgress").hide();
+
+            if (response.status === "success") {
+                $("#vtsuploadSuccess").show();
+
+                // Show output only if it's not empty
+                if (response.output && response.output.trim() !== "") {
+                    $("#vtsscriptOutput").show().text(response.output);
+                } else {
+                    $("#vtsscriptOutput").hide();
+                }
+            } else {
+                $("#vtsuploadError").show().text(response.message || "Failed to upload VTS package.");
+                $("#vtsscriptOutput").hide(); // Hide output on failure
+            }
+        },
+        error: function() {
+            $("#vtsuploadProgress").hide();
+            $("#vtsuploadError").show().text("Error while processing.");
+            $("#vtsscriptOutput").hide();
+        }
+    });
+}
+/**
+ * function will install the VTS packages
+ */
+function submitVtsForm(event) {
+    event.preventDefault();
+
+    var result = confirm("Device is going to reboot for VTS installation. Do you want to proceed?");
+    
+    // Hide previous logs or messages
+    $('#vtsoutputDiv').hide();
+    $('#vtsLogsFetched').hide();
+    $('#vtsinstallation').show();
+    $('#vtssuccess').hide();
+
+    if (result) {
+        var selectedVtsFiles = [];
+        var checkboxes = document.getElementsByName('selectedVtsFiles');
+
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i].checked) {
+                selectedVtsFiles.push(checkboxes[i].value);
+            }
+        }
+
+        if (selectedVtsFiles.length === 0) {
+            alert("Please select at least one VTS package to install.");
+            $('#vtsinstallation').hide();
+            return;
+        }
+
+        var testFiles = JSON.stringify(selectedVtsFiles);
+        $('#vtsinstallation').show();
+
+        // Replace `deviceeeId` with actual value or dynamically get it if needed
+        $.get('installPackages', {
+            deviceeeId: deviceeeId,
+            selectedVtsFiles: testFiles
+        }, function(response) {
+            $('#vtsinstallation').hide();
+
+            if (response.trim() !== "") {
+                $('#vtsLogsFetched').show();
+                $('#vtssuccess').show();
+
+                var finalVtsLogs = "<div style='background-color: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; font-family: monospace; font-size: 14px; white-space: pre-wrap; overflow-x: auto;'>"
+                                    + response
+                                    + "</div>";
+
+                // Add success or failure message after VTS logs
+                if (response.trim().includes("enabled")) {
+                    finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: green; font-size: 1.2em;'> VTS Installed Successfully</div>";
+                } else {
+                    finalVtsLogs += "<div style='margin-top: 20px; font-weight: bold; color: red; font-size: 1.2em;'> VTS Installation Failed</div>";
+                }
+
+                // Show logs and final status message
+                $('#vtsoutputDiv').show().html(finalVtsLogs);
+            } else {
+                $('#vtsLogsFetched').hide();
+                $('#vtsoutputDiv').hide();
+            }
+
+            // Optional: extract flash message
+            var flashMessage = $("<div>").html(response).find('#flashMessage').text();
+            if (flashMessage.trim() !== "") {
+                alert(flashMessage);
+            }
+        });
+    } else {
+        $('#vtsinstallation').hide();
+        alert("VTS installation cancelled.");
+    }
+}
+
+
+
+
+
+
+
+
     

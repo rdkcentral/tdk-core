@@ -17,7 +17,7 @@
  * limitations under the License.
 */
 package com.comcast.rdk
-
+import java.util.concurrent.TimeUnit
 import static com.comcast.rdk.Constants.*
 import static org.quartz.CronScheduleBuilder.*
 import static org.quartz.DateBuilder.*
@@ -26,6 +26,7 @@ import static org.quartz.TriggerBuilder.*
 import static org.quartz.TriggerKey.*
 import grails.converters.JSON
 import groovy.json.JsonBuilder
+import groovy.json.JsonSlurper
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Map;
@@ -48,7 +49,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import org.codehaus.groovy.grails.validation.routines.InetAddressValidator;
 import org.springframework.util.StringUtils;
-
+import org.springframework.web.multipart.MultipartFile
 import grails.converters.JSON
 import java.nio.file.Files
 import java.nio.file.Path
@@ -6465,177 +6466,313 @@ class ExecutionController {
 	
 	/**
 	 * Method to show tdk packages in the UI
+	 * This method used to get all packages
 	 * @return
 	 */
-    def tdkpackages() {
-        // Directory path within the project to fetch files from
-        List<String> allFilesList = new ArrayList<String>()
-        List<String> allFilessList = new ArrayList<String>()
-        List<String> totalAllFilessList = new ArrayList<String>()
-        def checkDeviceId=params?.deviceId
-        boolean checkStatus
-        Device device
-		
-        try{
-            def pathName="//fileStore/tdk_packages/"
-            def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
-            def directory = new File(directoryPath)
-            if (directory.exists() && directory.isDirectory()) {
-                allFilesList = directory.listFiles().collect { it.name }
-            }
-            allFilesList.each{fileee ->
-               	
-					def socVendorInstance = SoCVendor.findByName(fileee)
-					def deviceInstanceList = Device.findAllBySoCVendor(socVendorInstance)
-                    deviceInstanceList.each{deviceeid ->
-					if((deviceeid?.deviceStatus.toString().equals("FREE")) && (checkDeviceId?.equals(deviceeid?.id.toString()))){
-						checkStatus=true
-						def directoryPathh = grailsApplication.parentContext.getResource("/fileStore/tdk_packages/${fileee}/").file.path
-						def directoryy = new File(directoryPathh)
-						if (directoryy.exists() && directoryy.isDirectory()) {
-							allFilessList = directoryy.listFiles().collect { it.name }
-							totalAllFilessList.addAll(allFilessList)
-						} 
-					}
-				}
-                
-            }
+def tdkpackages() {
+    List<String> totalAllFilesList = []
+    List<String> totalVtsAllFilesList = []
+    def checkDeviceId = params?.deviceId
+    boolean deviceNotFree = false
+    boolean noTdkFiles = false
+    boolean noVtsFiles = false
 
-            if(!checkStatus){
-                redirect(view : "tdkpackages")
-            }
-
-        }catch(Exception e){
-            e.printStackTrace()
-        }
-		
-        render(template: "tdkpackages", model: [allFilesList : totalAllFilessList])
-    }
-	/**
-	 * Method to install the TDK Packages
-	 * @return
-	 */
-def captureSelectedFiles() {
-
-    String deviceIp
-    def errorOutputLine
-    Device device
-    def selectedPackagesList = []
-    def errorLines = []
-    List<String> allFilesList = new ArrayList<String>()
-    def sshCommand
-    String line
-    def sshProcess
-    def errorOutput
-    boolean isFilesShared=false
-    def reader
-    def output = new StringBuilder()
-    boolean checkStatuss
-    boolean allocated = false
-    def user = "root"
-    def password = ""
-    String text
-    def shellScriptCommand="sh /InstallTDKPackage.sh"
-    def remoteFilePath="/opt/TDK/logs/tdk_agent.log"
     try {
-
-        device = Device.findById(params?.deviceeeId)
-        deviceIp = device?.stbIp
-        def checkDeviceId=params?.deviceeeId
-        def caputereId=params?.deviceeeId
-        def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
-        def directory = new File(directoryPath)
-        if (directory.exists() && directory.isDirectory()) {
-            allFilesList = directory.listFiles().collect { it.name }
+        def device = Device.findById(checkDeviceId)
+        if (device?.deviceStatus?.toString() != "FREE") {
+            deviceNotFree = true
         }
-        selectedPackagesList = params.selectedFiles // Get the JSON string of selected files
-        def selectedFileName = selectedPackagesList[1]
-        def result = selectedPackagesList.substring(2, selectedPackagesList.length() - 2)
 
-        if(device?.deviceStatus.toString().equals("FREE")){
-            String status = ""
-            status = DeviceStatusUpdater.fetchDeviceStatus(grailsApplication, device)
-            synchronized (lock) {
-                if(executionService.deviceAllocatedList.contains(device?.id)){
-                    status = "BUSY"
-                }else{
-                    if((status.equals( Status.FREE.toString() ))){
-                        if(!executionService.deviceAllocatedList.contains(device?.id)){
-                            allocated = true
-                            executionService.deviceAllocatedList.add(device?.id)
+        def socVendors = SoCVendor.findAll()
+        def normalize = { it?.toLowerCase()?.replaceAll(/[^a-z0-9]/, "") }
 
-                            Thread.start{
-                                deviceStatusService.updateOnlyDeviceStatus(device, Status.BUSY.toString())
+        // === TDK PACKAGES ===
+        def tdkDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+        def tdkDirectory = new File(tdkDirectoryPath)
+
+        if (tdkDirectory.exists() && tdkDirectory.isDirectory()) {
+           
+            tdkDirectory.listFiles()?.each { dir ->
+                def normalizedDirName = normalize(dir.name)
+                
+                def matchedVendor = socVendors.find { vendor ->
+                    def normalizedVendor = normalize(vendor.name)
+                   
+                    return normalizedVendor.contains(normalizedDirName)
+                }
+
+                if (matchedVendor) {
+                    
+                    def deviceInstanceList = Device.findAllBySoCVendor(matchedVendor)
+                    deviceInstanceList.each { d ->
+                        if (d.deviceStatus?.toString() == "FREE" && checkDeviceId == d.id?.toString()) {
+                            def subDir = new File(dir.absolutePath)
+                            if (subDir.exists() && subDir.isDirectory()) {
+                                def files = subDir.listFiles()?.collect { it.name } ?: []
+                                totalAllFilesList.addAll(files)
                             }
                         }
                     }
                 }
             }
+        }
+
+        // === VTS PACKAGES ===
+        def vtsDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
+        def vtsDirectory = new File(vtsDirectoryPath)
+
+        if (vtsDirectory.exists() && vtsDirectory.isDirectory()) {
            
-            allFilesList.each{fileee ->
-                def socVendorInstance=SoCVendor.findByName(fileee.toString())
-                def deviceInstance=Device.findBySoCVendor(socVendorInstance)
-                def deviceInstanceList=Device.findAllBySoCVendor(socVendorInstance)	
-				deviceInstanceList.each { deviceInnstance ->
-						def checkingId = deviceInnstance?.id
-						def devName = deviceInnstance?.stbName
-			if(device?.stbName.toString().equals(devName.toString())){
-                    checkStatuss=true
-                    def sshKeyScanCommand = "ssh-keyscan -H ${deviceIp}"
-                    def sshKeyScanProcess = sshKeyScanCommand.execute()
-                    sshKeyScanProcess.waitFor()
-                    // Read the output of the ssh-keyscan command
-                    reader = new BufferedReader(new InputStreamReader(sshKeyScanProcess.inputStream))
-                    def knownHostsFile = new File("/root/.ssh/known_hosts")
+            vtsDirectory.listFiles()?.each { dir ->
+                def normalizedDirName = normalize(dir.name)
+                
+                def matchedVendor = socVendors.find { vendor ->
+                    def normalizedVendor = normalize(vendor.name)
+                   
+                    return normalizedVendor.contains(normalizedDirName)
+                }
 
-                    while ((line = reader.readLine()) != null) {
-                        knownHostsFile.append(line + "\n")
-                    }
-                    reader.close()
-
-                    if(result){
-                        def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//tdk_packages//${socVendorInstance?.name}//${result} ${user}@${deviceIp}:/"
-                        def scpFileProcess = scpCopyPackage.execute()
-                        scpFileProcess.waitFor()
-                        def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${request.getRealPath('/')}//fileStore//InstallTDKPackage.sh ${user}@${deviceIp}:/"
-                        def scpScriptProcess = scpCopyShellScript.execute()
-                        scpScriptProcess.waitFor()
-                    }
-                    String executeSSHCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} > ${remoteFilePath}; cat ${remoteFilePath}'"
-                    try {
-                        ProcessBuilder processBuilder = new ProcessBuilder("bash", "-c", executeSSHCommand);
-                        Process process = processBuilder.start();
-                        process.waitFor();
-						BufferedReader readerr = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                        String linee;
-                        while ((linee = readerr.readLine()) != null) {
-                            render(template: "tdkpackages", model: [outputOfShellScript : linee.toString()])
+                if (matchedVendor) {
+                   
+                    def deviceInstanceList = Device.findAllBySoCVendor(matchedVendor)
+                    deviceInstanceList.each { d ->
+                        if (d.deviceStatus?.toString() == "FREE" && checkDeviceId == d.id?.toString()) {
+                            def subDir = new File(dir.absolutePath)
+                            if (subDir.exists() && subDir.isDirectory()) {
+                                def files = subDir.listFiles()?.collect { it.name } ?: []
+                                
+                                totalVtsAllFilesList.addAll(files)
+                            }
                         }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                    if(allocated){
-                        executionService.deviceAllocatedList.remove(device?.id)
-                        allocated = false
                     }
                 }
-				}
+            }
+        }
 
-            }
-            if(!checkStatuss){
-                return
-            }
-        }else{
-            redirect(action: "tdkpackages");
-            flash.message = "Device is down."
-            return
-        }}catch(Exception e){
+        noTdkFiles = totalAllFilesList.isEmpty()
+        noVtsFiles = totalVtsAllFilesList.isEmpty()
+
+    } catch (Exception e) {
         e.printStackTrace()
     }
 
-    return
-
+    render(template: "tdkpackages", model: [
+        allFilesList    : totalAllFilesList,
+        allVtsFilesList : totalVtsAllFilesList,
+        noTdkFiles      : noTdkFiles,
+        noVtsFiles      : noVtsFiles,
+        deviceNotFree   : deviceNotFree
+    ])
 }
+
+
+
+
+	/**
+	 * Method to install the TDK Packages
+	 * This method is used install TDK apckages via UI
+	 * @return
+	 */
+	def installPackages() {
+
+		String deviceIp
+		Device device
+		List<String> allFilesList = []
+		List<String> errorLines = []
+		List<String> outputLines = []
+
+		def user = "root"
+		def password = ""
+		def remoteFilePath = "/opt/TDK/logs/tdk_agent.log"
+		boolean checkStatuss = false
+		boolean allocated = false
+		List<String> selectedPackagesList = []
+		def sourcePath, shellScriptCommand
+		def fileStorePath = "/fileStore/"
+		def isVtsPackage = false
+
+		try {
+
+			device = Device.findById(params?.deviceeeId)
+			deviceIp = device?.stbIp
+
+			if (!deviceIp) {
+
+				render text: "Device IP not found", contentType: "text/plain"
+				return
+			}
+
+
+			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/tdk_packages").file.path
+			def directory = new File(directoryPath)
+
+			if (directory.exists() && directory.isDirectory()) {
+				allFilesList = directory.listFiles().collect { it.name }
+
+			}
+			def selectedRaw = params.selectedFiles ?: params.selectedVtsFiles
+			if (!selectedRaw) {
+
+				render text: "No package selected", contentType: "text/plain"
+				return
+			}
+
+			if (params.selectedFiles) {
+				sourcePath = "/fileStore/tdk_packages/"
+				shellScriptCommand = "sh /InstallTDKPackage.sh"
+			} else {
+				sourcePath = "/fileStore/vts_packages/"
+				shellScriptCommand = "sh /InstallVTSPackage.sh"
+				isVtsPackage = true
+			}
+
+			selectedPackagesList = new JsonSlurper().parseText(selectedRaw)
+			if (!selectedPackagesList || selectedPackagesList.isEmpty()) {
+
+				render text: "No valid packages found", contentType: "text/plain"
+				return
+			}
+
+
+
+			if (device?.deviceStatus?.toString() == "FREE") {
+
+				synchronized (lock) {
+					if (!executionService.deviceAllocatedList.contains(device.id)) {
+						allocated = true
+						executionService.deviceAllocatedList.add(device.id)
+						Thread.start {
+							deviceStatusService.updateOnlyDeviceStatus(device, Status.BUSY.toString())
+						}
+					}
+				}
+
+				def selectedPackage = selectedPackagesList[0]
+				def baseDir = new File(request.getRealPath(sourcePath))
+
+
+				allFilesList.each { fileee ->
+					def socVendorInstance = SoCVendor.findAll().find {
+						it.name?.toLowerCase()?.startsWith(fileee.toLowerCase())
+					}
+
+					if (!socVendorInstance) {
+
+						return
+					}
+
+					def expectedFolderName = socVendorInstance.name
+
+					def matchedFolders = baseDir.listFiles()?.findAll {
+						it.isDirectory() && it.name.toLowerCase().startsWith(expectedFolderName.toLowerCase())
+					}
+
+					if (expectedFolderName.toLowerCase().startsWith("b")) {
+						matchedFolders = baseDir.listFiles()?.findAll {
+							it.isDirectory() && it.name.toLowerCase().startsWith("b")
+						}
+					}
+
+					def validFolders = matchedFolders?.findAll { folder ->
+						new File(folder, selectedPackage).exists()
+					}
+
+					if (!validFolders || validFolders.isEmpty()) {
+
+						return
+					}
+
+					validFolders.each { validFolder ->
+
+
+						def packagePath = "${request.getRealPath('/')}${sourcePath}${validFolder.name}/${selectedPackage}"
+						def scriptPath = "${request.getRealPath('/')}${fileStorePath}${shellScriptCommand.replace('sh ', '')}"
+
+						def scpCopyPackage = "sshpass -p '' scp -o StrictHostKeyChecking=no ${packagePath} ${user}@${deviceIp}:/"
+						def scpCopyShellScript = "sshpass -p '' scp -o StrictHostKeyChecking=no ${scriptPath} ${user}@${deviceIp}:/"
+
+						scpCopyPackage.execute().waitFor()
+
+						scpCopyShellScript.execute().waitFor()
+
+						def executeSSHCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no -t ${user}@${deviceIp} 'mkdir -p \$(dirname ${remoteFilePath}) && ${shellScriptCommand} \"${selectedPackage}\" > ${remoteFilePath}; cat ${remoteFilePath}'"
+
+
+						def process = new ProcessBuilder("bash", "-c", executeSSHCommand).start()
+						def outputReader = new BufferedReader(new InputStreamReader(process.getInputStream()))
+						def errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()))
+
+						String line
+						while ((line = outputReader.readLine()) != null) {
+
+							outputLines.add(line)
+						}
+						while ((line = errorReader.readLine()) != null) {
+
+							errorLines.add(line)
+						}
+
+						process.waitFor()
+						outputReader.close()
+						errorReader.close()
+
+						// Skip reboot for VTS packages
+						if (!isVtsPackage) {
+							
+							def rebootCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'nohup reboot >/dev/null 2>&1 &'"
+							def rebootProcess = ["bash", "-c", rebootCommand].execute()
+							def rebootExitCode = rebootProcess.waitForOrKill(2000) ?: -1
+
+
+							TimeUnit.SECONDS.sleep(10)
+						}
+
+						// --------- Check TDK Status ----------
+
+						def statusCommand = "sshpass -p root ssh -o StrictHostKeyChecking=no ${user}@${deviceIp} 'systemctl status tdk'"
+						def statusProcess = new ProcessBuilder("bash", "-c", statusCommand).start()
+						def statusReader = new BufferedReader(new InputStreamReader(statusProcess.getInputStream()))
+
+						String statusLine
+						while ((statusLine = statusReader.readLine()) != null) {
+							outputLines.add(statusLine)
+						}
+						statusProcess.waitFor()
+						statusReader.close()
+
+						checkStatuss = true
+					}
+				}
+
+				if (allocated) {
+
+					executionService.deviceAllocatedList.remove(device.id)
+				}
+
+				if (!checkStatuss) {
+
+					render text: "No valid package installed", contentType: "text/plain"
+				} else {
+
+					render text: outputLines.join("\n"), contentType: "text/plain"
+				}
+
+			} else {
+
+				flash.message = "Device is down or busy."
+				redirect(action: "tdkpackages")
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace()
+			render text: "Error occurred: ${e.message}", contentType: "text/plain"
+		}
+
+
+	}
+
+
 
 	 /**
 	 * Method to enable/disbale thunder using REST API
@@ -6781,7 +6918,332 @@ def captureSelectedFiles() {
             render(status: 404, text: 'File not found')
         }
     }
+	
+	/**
+	 * Method to create TDK Package
+	 * This method used to create TDK Packages
+	 * @return
+	 */
+	def createTDKPackage() {
+		try {
+
+			def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createTDKPackage.sh")?.file
+
+			if (!scriptFile || !scriptFile.exists()) {
+				render([status: "error", message: "Script file not found"] as JSON)
+				return
+			}
 
 
+			def scriptFileName = scriptFile.name
+			def scriptDirectory = scriptFile.parent
 
+			def checkDeviceId = params?.deviceeeId
+			Device device = Device.findById(checkDeviceId)
+
+			if (!device) {
+				render([status: "error", message: "Device not found"] as JSON)
+				return
+			}
+
+			def chmodProcess = [
+				"chmod",
+				"777",
+				"${scriptFile.absolutePath}"
+			].execute()
+			def chmodExit = chmodProcess.waitFor()
+			if (chmodExit != 0) {
+				def chmodError = chmodProcess.errorStream.text.trim()
+				render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
+				return
+			}
+
+			def process = [
+				"sh",
+				"-c",
+				"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
+			].execute()
+
+			def exitCode = process.waitFor()
+			def output = process.inputStream.text.trim()
+			def errorOutput = process.errorStream.text.trim()
+
+
+			if (exitCode == 0) {
+				render([status: "success", message: "Package created successfully", output: output] as JSON)
+			} else {
+				render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
+			}
+
+		} catch (Exception e) {
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
+
+
+	/**
+	 * Method to upload TDK packages
+	 * This method used to create TDK packages via UI
+	 * @return
+	 */
+	def processPackage() {
+		try {
+
+
+			def deviceId = params?.deviceeeId
+
+
+			Device device = Device.findById(deviceId)
+			if (!device) {
+				render([status: "error", message: "Invalid device ID"] as JSON)
+				return
+			}
+
+
+			def soCVendor = device.soCVendor
+
+
+			def packageFile = request.getFile("packageFile") as MultipartFile
+			if (!packageFile || packageFile.isEmpty()) {
+				render([status: "error", message: "No file uploaded"] as JSON)
+				return
+			}
+
+			// Define base directory
+			def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
+
+			if (!baseDir.exists()) {
+				baseDir.mkdirs()
+			}
+
+
+			def vendorFolder = new File(baseDir, soCVendor?.toString())
+
+			if (!vendorFolder.exists()) {
+				boolean dirCreated = vendorFolder.mkdirs()
+			}
+			// Define target file path
+			def targetFile = new File(vendorFolder, packageFile.originalFilename)
+
+			packageFile.transferTo(targetFile)
+
+			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
+
+		} catch (Exception e) {
+			e.printStackTrace()
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
+
+	/**
+	 * Method to create VTS package
+	 * This method used to create VTS packages via UI
+	 * @return
+	 */
+	def createVTSPackage() {
+		try {
+
+			def scriptFile = grailsApplication.mainContext.getResource("/fileStore/createVTSPackage.sh")?.file
+
+			if (!scriptFile || !scriptFile.exists()) {
+				render([status: "error", message: "Script file not found"] as JSON)
+				return
+			}
+
+
+			def scriptFileName = scriptFile.name
+			def scriptDirectory = scriptFile.parent
+
+			def checkDeviceId = params?.deviceeeId
+			Device device = Device.findById(checkDeviceId)
+
+			if (!device) {
+				render([status: "error", message: "Device not found"] as JSON)
+				return
+			}
+
+
+			def chmodProcess = [
+				"chmod",
+				"777",
+				"${scriptFile.absolutePath}"
+			].execute()
+			def chmodExit = chmodProcess.waitFor()
+			if (chmodExit != 0) {
+				def chmodError = chmodProcess.errorStream.text.trim()
+				render([status: "error", message: "Failed to set execute permissions", output: chmodError] as JSON)
+				return
+			}
+
+
+			def process = [
+				"sh",
+				"-c",
+				"cd ${scriptDirectory} && ./${scriptFileName} ${device?.soCVendor}"
+			].execute()
+
+
+			def exitCode = process.waitFor()
+			def output = process.inputStream.text.trim()
+			def errorOutput = process.errorStream.text.trim()
+
+
+			if (exitCode == 0) {
+				render([status: "success", message: "Package created successfully", output: output] as JSON)
+			} else {
+				render([status: "error", message: "Script execution failed", output: errorOutput] as JSON)
+			}
+
+		} catch (Exception e) {
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
+
+
+	/**
+	 * Method to upload the VTS Packages
+	 * this method used to upload VTS packges via UI
+	 * @return
+	 */
+	def processVtsPackage() {
+		try {
+
+			def deviceId = params?.deviceeeId
+
+			Device device = Device.findById(deviceId)
+			if (!device) {
+				render([status: "error", message: "Invalid device ID"] as JSON)
+				return
+			}
+
+			def soCVendor = device.soCVendor
+
+			def packageFile = request.getFile("vtspackageFile") as MultipartFile
+			if (!packageFile || packageFile.isEmpty()) {
+				render([status: "error", message: "No file uploaded"] as JSON)
+				return
+			}
+
+			def baseDir = new File(servletContext.getRealPath("/fileStore/vts_packages"))
+
+			if (!baseDir.exists()) {
+				baseDir.mkdirs()
+			}
+
+			def vendorFolder = new File(baseDir, soCVendor?.toString())
+
+			if (!vendorFolder.exists()) {
+				boolean dirCreated = vendorFolder.mkdirs()
+			}
+
+			def targetFile = new File(vendorFolder, packageFile.originalFilename)
+
+
+			packageFile.transferTo(targetFile)
+
+			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
+
+		} catch (Exception e) {
+			e.printStackTrace()
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
+
+	/**
+	 * Method to get all VTS Packages
+	 * this method used to get all VTS packges
+	 * @return
+	 */
+	def getvtsPackages() {
+
+		List<String> totalVtsAllFilesList = []
+		def checkDeviceId = params?.deviceId
+		boolean checkStatus = false
+
+
+		try {
+			def directoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages").file.path
+			def directory = new File(directoryPath)
+
+
+			if (directory.exists() && directory.isDirectory()) {
+
+				directory.listFiles().each { fileee ->
+					def socVendorInstance = SoCVendor.findByNameIlike("${fileee.name}%")
+					def deviceInstanceList = Device.findAllBySoCVendor(socVendorInstance)
+
+					deviceInstanceList.each { deviceeid ->
+
+						if ((deviceeid?.deviceStatus?.toString() == "FREE") && (checkDeviceId == deviceeid?.id?.toString())) {
+							checkStatus = true
+							def subDirectoryPath = grailsApplication.parentContext.getResource("/fileStore/vts_packages/${fileee.name}/").file.path
+							def subDirectory = new File(subDirectoryPath)
+
+							if (subDirectory.exists() && subDirectory.isDirectory()) {
+								def allFiles = subDirectory.listFiles().collect { it.name }
+								//  No filtering, include all files
+								totalVtsAllFilesList.addAll(allFiles)
+							}
+						}
+					}
+				}
+			}
+
+			if (!checkStatus) {
+				return render(view: "tdkpackages", model: [allVtsFilesList: []])
+
+
+			}
+		} catch (Exception e) {
+
+			e.printStackTrace()
+		}
+
+
+		render([allVtsFilesList: totalVtsAllFilesList] as JSON)
+
+	}
+
+	/**
+	 * Method to upload the Generic TDK Packages
+	 * This method used to upload generic TDK packages
+	 * @return
+	 */
+	def uploadGenericTDKPackage() {
+		try {
+
+			def deviceId = params?.deviceeeId
+
+			Device device = Device.findById(deviceId)
+			if (!device) {
+				render([status: "error", message: "Invalid device ID"] as JSON)
+				return
+			}
+
+
+			def packageFile = request.getFile("packageFilee") as MultipartFile
+			if (!packageFile || packageFile.isEmpty()) {
+				render([status: "error", message: "No file uploaded"] as JSON)
+				return
+			}
+
+
+			def baseDir = new File(servletContext.getRealPath("/fileStore/tdk_packages"))
+
+			if (!baseDir.exists()) {
+				baseDir.mkdirs()
+			}
+
+
+			def targetFile = new File(baseDir, packageFile.originalFilename)
+
+			packageFile.transferTo(targetFile)
+
+			render([status: "success", message: "Package uploaded successfully!", filePath: targetFile.absolutePath] as JSON)
+
+		} catch (Exception e) {
+			e.printStackTrace()
+			render([status: "error", message: "Exception: ${e.message}"] as JSON)
+		}
+	}
 }

@@ -305,7 +305,7 @@ $(document).ready(function() {
 											<li id="thunderDisabled"  >EnableTDK</li>
 											<li id="thunderEnabled" >DisableTDK</li>
 	          								<li id="copyDeviceIp" >Copy Device IP</li>
-	          								<li id="installTDK" >Install TDK</li>
+	          								<li id="installTDK" >Install Packages</li>
 	        							</ul>
 	      			</div>									
 	  		</td> 
@@ -427,7 +427,7 @@ $(document).ready(function() {
 	
 	<div id="executionStatusPopup" style="display: none; overflow: auto; width : 98%; height : 98%;">			
 	</div>
-<div id="popup-container" style="display: none; overflow: auto; width : 98%; height : 98%;">
+<div id="popup-container" style="display: none; width : 100%; height : 90%;">
 </div>
 	<div id="cleanupPopup" style="display: none; overflow: auto;">			
 		<g:form controller="execution" ><br>
