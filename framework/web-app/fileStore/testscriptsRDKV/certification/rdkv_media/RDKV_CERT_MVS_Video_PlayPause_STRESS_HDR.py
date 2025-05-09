@@ -68,7 +68,7 @@
     <input_parameters>Lightning player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_mp4_hevc_hdr: string
+video_src_url_hevc_hdr: string
 pause_interval_stress:int
 play_interval_stress:int
 repeat_count_stress:int</input_parameters>
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+        videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
         # Setting VideoPlayer Operations
         setOperation("pause",MediaValidationVariables.pause_interval_stress)
         setOperation("play",MediaValidationVariables.play_interval_stress)
@@ -149,7 +149,7 @@ if expectedResult in result.upper():
 
         #Example video test url
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
-        #url=<video_mp4_url>&operations=pause(5),play(5),repeat(15)&autotest=true&type=mp4
+        #url=<video_url>&operations=pause(5),play(5),repeat(15)&autotest=true&type=mp4
 
         # Setting the video test url in webkit instance using RDKShell
         for video_test_url in video_test_urls:

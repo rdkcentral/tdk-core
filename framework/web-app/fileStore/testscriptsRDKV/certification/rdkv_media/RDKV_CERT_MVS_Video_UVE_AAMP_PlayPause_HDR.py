@@ -68,7 +68,7 @@
     <input_parameters>Lightning UVE AAMP player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_mp4_hevc_hdr: string
+video_src_url_hevc_hdr: string
 play_interval: int
 pause_interval:int</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket conntion to webinspect page
@@ -127,7 +127,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         appURL    = MediaValidationVariables.lightning_uve_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+        videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
         # Setting VideoPlayer Operations
         setOperation("pause",MediaValidationVariables.pause_interval)
         setOperation("play",MediaValidationVariables.play_interval)

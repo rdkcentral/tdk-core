@@ -68,7 +68,7 @@
     <input_parameters>Lightning UVE player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_mp4_hevc_hdr: string
+video_src_url_hevc_hdr: string
 close_interval: int</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket conntion to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
@@ -125,7 +125,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         appURL    = MediaValidationVariables.lightning_uve_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+        videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
         # Setting VideoPlayer Operations
         setOperation("close",MediaValidationVariables.close_interval)
         operations = getOperations()
@@ -139,7 +139,7 @@ if expectedResult in result.upper():
 
         #Example video test url
         #http://*testManagerIP*/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?
-        #url=<video_src_url_mp4_hevc_hdr>.mpd&operations=close(60)&autotest=true
+        #url=<video_src_url_hevc_hdr>.mpd&operations=close(60)&autotest=true
 
         # Setting the video test url in webkit instance using RDKShell
         launch_status = launchPlugin(obj,webkit_instance,video_test_url)

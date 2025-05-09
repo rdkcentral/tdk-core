@@ -65,7 +65,7 @@
     <input_parameters>Lightning UVE AAMP player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_mp4_hevc_hdr : string
+video_src_url_hevc_hdr : string
 repeat_count_stress:int</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket connection to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
@@ -122,7 +122,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         appURL    = MediaValidationVariables.lightning_uve_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+        videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
         # Setting VideoPlayer Operations
         # Audio mute and unmute operations by changing volume to 0 and 100
         setOperation("mute",MediaValidationVariables.operation_max_interval)

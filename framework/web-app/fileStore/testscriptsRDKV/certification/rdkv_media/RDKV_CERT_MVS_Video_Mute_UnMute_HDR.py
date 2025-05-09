@@ -68,7 +68,7 @@
     <input_parameters>Lightning player App URL: string
 webkit_instance:string
 webinspect_port: string
-video_src_url_mp4_hevc_hdr: string</input_parameters>
+video_src_url_hevc_hdr: string</input_parameters>
     <automation_approch>1. As pre requisite, launch webkit instance via RDKShell, open websocket conntion to webinspect page
 2. Store the details of other launched apps. Move the webkit instance to front, if its z-order is low.
 3. Launch webkit instance with video test app with the src url, operations to be performed, mute and unmute with given interval.
@@ -124,7 +124,7 @@ if expectedResult in result.upper():
         conf_file,result = getDeviceConfigFile(obj.realpath)
         setDeviceConfigFile(conf_file)
         #appURL    = MediaValidationVariables.lightning_video_test_app_url
-        videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+        videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
         # Setting VideoPlayer Operations
         setOperation("mute","30")
         setOperation("unmute","30")
