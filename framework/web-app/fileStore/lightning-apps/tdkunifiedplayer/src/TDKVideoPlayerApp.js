@@ -469,6 +469,10 @@ export default class App extends Lightning.Component {
       var actionInterval = 0
       var duration = 0, index = 0
       logMsg("Setting up the operations...")
+      var actionList = operations.map(op => op.split('(')[0])
+      if (actionList.every(op => op === "close")) {
+            this.check_end_duration = 1
+      }
       for (var i = 0; i < operations.length; i++)
       {
           var action = operations[i].split('(')[0];
@@ -479,6 +483,8 @@ export default class App extends Lightning.Component {
           }else{
               duration = parseInt(operations[i].split('(')[1].split(')')[0]);
           }
+	  if ( action == "close" )
+	      this.closeDuration = duration
           if ( action == "playtillend" )
               actionInterval = actionInterval + (this.interval*parseInt(this.vidDuration)) + 60000;
           else
@@ -734,9 +740,20 @@ export default class App extends Lightning.Component {
               if(parseInt(pos) >= (parseInt(this.vidDuration)-3)){
                   this.pos_end_flag = 1
               }
+	      
+          }
+	  if(this.check_end_duration == 1 && this.loop_test_flag == 0){
+                  if(parseInt(pos) >= (parseInt(this.closeDuration)-3)){
+                  this.pos_end_flag = 1
+              }
           }
 	  // display the video progress message and capture the video position
           logMsg(this.progressEventMsg)
+	  if (this.pos_val_index == 0){
+	      this.pos_list.push(pos)
+	      logMsg(this.progressEventMsg)
+	  }
+	  this.progressEventMsg = ""
           if(this.pos_val_flag == 1){
      	      this.pos_list.push(pos)
           }
@@ -778,9 +795,31 @@ export default class App extends Lightning.Component {
     else
         logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : FAILURE")
 
+    if (this.check_end_duration == 1 && this.loop_test_flag == 0){
+	    if (this.pos_end_flag != 1){
+                       this.testStatus = 1
+		       logMsg("FAILURE REASON: VIDEO DID NOT PLAYED TILL THE END OF THE MENTIONED DURATION")
+	    }
+	    else{
+                       logMsg("SUCCESS: VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION")
+            }
 
+    }
+    
+    if (this.check_end_duration == 1 && this.loop_test_flag == 1){
+	    var expectedLoopCount = (this.closeDuration/parseInt(this.vidDuration)).toFixed(1)
+	    expectedLoopCount = Math.round(expectedLoopCount) 
+	    if ( expectedLoopCount != this.pos_zero_count){
+                       this.testStatus = 1
+                       logMsg("FAILURE REASON: VIDEO DID NOT LOOP FOR THE MENTIONED DURATION")
+            }
+	    else{
+                    logMsg("SUCCESS: VIDEO LOOPED FOR THE MENTIONED DURATION")
+            }
+
+    }
     //Generate TEST RESULT based on error, events & pos validation results
-    if (this.eventFlowFlag == 1 && this.errorFlag == 0 && overall_pos_val_status == 1)
+    if (this.eventFlowFlag == 1 && this.errorFlag == 0 && overall_pos_val_status == 1 && this.testStatus == 0)
         logMsg("TEST RESULT: SUCCESS")
     else{
         logMsg("TEST RESULT: FAILURE")
@@ -804,6 +843,8 @@ export default class App extends Lightning.Component {
     this.usedashlib = false
     this.usehlslib  = false
     this.interval = 1000
+    this.testStatus = 0
+    this.closeDuration = 0
     this.checkInterval= 3000
     this.seekInterval = 10
     this.expectedPos    = 0
@@ -825,6 +866,7 @@ export default class App extends Lightning.Component {
     this.progressLogger    = null
     this.secondaryURL = "";
     this.loop_test_flag = 0
+    this.check_end_duration = 0
     this.pos_zero_count = 0
     this.pos_end_flag	= 0
     this.pos_val_flag   = 0

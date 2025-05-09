@@ -19,6 +19,9 @@
 
   let message = "";
 
+  export const validationState = {
+    initialPosCheckDone: false
+  };
   // Method to parse the URL parameters
   export function GetURLParameter(sParam){
     var sPageURL = window.location.search.substring(1);
@@ -97,6 +100,7 @@
   // Method to perform video progress position validation
   export function getPosValResult(pos_list,pos_index){
     var pos_val_status = "SUCCESS"
+    var critical_mismatch_flag = false
     var vid_pos_list = []
     var pos_diff = 0;
     var mismatch = ""
@@ -118,10 +122,22 @@
             });
         }
         if (vid_pos_list.length > 1){
+	    if (!validationState.initialPosCheckDone) {
+	         if (vid_pos_list[0] > 3){
+                    critical_mismatch_flag = true
+                 }
+	         validationState.initialPosCheckDone = true
+	    }
             for (var i = 0; i < vid_pos_list.length -1 ; i++){
                 // finding the diff of curr pos and prev pos values
                 pos_diff = vid_pos_list[i+1] - vid_pos_list[i]
                 if (pos_index != 0){
+		    if (pos_diff < 0 || pos_diff >= (pos_index + 3)) {
+                        critical_mismatch_flag = true
+			pos_mismatch_count += 1
+                        mismatch = "Pos:"+vid_pos_list[i+1]+"-"+vid_pos_list[i]+",diff="+pos_diff
+                        pos_mismatch_list.push(mismatch)
+                    }
                     // check whether pos diff is >= to the required diff
                     // for video operations except pause
                     if (!(pos_diff >= pos_index)){
@@ -141,7 +157,7 @@
             }
             // If the pos diff is not as expected for more than max threshold limit
             // consider pos validation status as failure
-            if (pos_mismatch_count > 3){
+            if (pos_mismatch_count > 3 || critical_mismatch_flag == true){
                 logMsg(pos_mismatch_list)
                 logMsg("Failure Reason: Video Progress position difference is not as expected")
                 pos_val_status = "FAILURE"

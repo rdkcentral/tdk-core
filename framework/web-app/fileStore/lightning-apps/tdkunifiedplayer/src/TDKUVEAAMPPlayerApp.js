@@ -320,6 +320,17 @@ export default class App extends Lightning.Component {
           logMsg("[ERROR]: Current Audio Bitrate  obtained is invalid")
       }
   }
+  checkmute(){
+      var currVolume = parseInt(this.getVolume())
+      this.updatePosValidationInfo(1)
+      if( currVolume == 0 ){
+          logMsg("SUCCESS: Video Player Mute Status is True")
+      }else{
+          this.eventFlowFlag = 0
+          Status = "FAILURE"
+          logMsg("FAILURE REASON: Current mute status is not as expected")
+      }
+  }
   setVideoTrack(){
      logMsg("Available Video Tracks "+ this.getAvailableVideoTracks())
      this.availableVideoTrack = JSON.parse(this.getAvailableVideoTracks())
@@ -556,6 +567,11 @@ export default class App extends Lightning.Component {
     tag.dispUIVideoPosition(tag.message2)
     tag.progressEventMsg = "Video Progressing "  + position.toFixed(2) + "/" + duration.toFixed(2)
     logMsg(tag.progressEventMsg)
+    if(tag.check_end_duration == 1){
+                  if(parseInt(position) >= (parseInt(tag.closeDuration)-3)){
+                  tag.pos_end_flag = 1
+              }
+    }
     if(tag.pos_val_flag == 1){
           var pos = tag.progressEventMsg.split("Video Progressing")[1].trim().split("/")[0]
           tag.pos_list.push(pos)
@@ -751,6 +767,10 @@ export default class App extends Lightning.Component {
       var actionInterval = 0
       var duration = 0, position = 0
       logMsg("Setting up the operations...")
+      var actionList = operations.map(op => op.split('(')[0])
+      if (actionList.every(op => op === "close")) {
+            this.check_end_duration = 1
+      }
       for (var i = 0; i < operations.length; i++)
       {
           var action = operations[i].split('(')[0];
@@ -760,6 +780,8 @@ export default class App extends Lightning.Component {
           }else{
               duration = parseInt(operations[i].split('(')[1].split(')')[0]);
           }
+	  if ( action == "close" )
+              this.closeDuration = duration
           if ( action == "playtillend" )
               actionInterval = actionInterval + (this.interval*parseInt(this.vidDuration)) + 60000;
           else
@@ -798,6 +820,12 @@ export default class App extends Lightning.Component {
                 setTimeout(()=> {
                     this.clearEvents()
                     this.unmute()
+                },actionInterval);
+            }
+	    else if (action == "checkmute"){
+                setTimeout(()=> {
+                    this.clearEvents()
+                    this.checkmute()
                 },actionInterval);
             }
 	    else if (action == "seekfwd"){
@@ -1196,9 +1224,19 @@ export default class App extends Lightning.Component {
         logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : SUCCESS")
     else
         logMsg("OVERALL VIDEO OPERATIONS EVENTS VALIDATION STATUS : FAILURE")
+    
+    if (this.check_end_duration == 1 ){
+            if (this.pos_end_flag != 1){
+                       this.testStatus = 1
+                       logMsg("FAILURE REASON: VIDEO DID NOT PLAYED TILL THE END OF THE MENTIONED DURATION")
+            }
+	    else{
+		       logMsg("SUCCESS: VIDEO PLAYED TILL THE END OF THE MENTIONED DURATION")
+	    }
+    }
 
     //Generate TEST RESULT based on error, events & pos validation results
-    if (this.eventFlowFlag == 1 && this.errorFlag == 0 && overall_pos_val_status == 1)
+    if (this.eventFlowFlag == 1 && this.errorFlag == 0 && overall_pos_val_status == 1 && this.testStatus == 0 )
         logMsg("TEST RESULT: SUCCESS")
     else{
         logMsg("TEST RESULT: FAILURE")
@@ -1239,6 +1277,9 @@ export default class App extends Lightning.Component {
     this.rewindFlag     = 0
     this.errorFlag      = 0
     this.eventFlowFlag  = 1
+    this.pos_end_flag   = 0
+    this.testStatus = 0
+    this.closeDuration = 0
     this.observedEvents = []
     this.expectedEvents = []
     this.expectedVolume = 0
