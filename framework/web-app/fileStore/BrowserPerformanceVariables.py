@@ -27,7 +27,7 @@ sunspider_test_subcategory_list = ["access","bitops","3bit-bits-in-byte","bits-i
 strike_tool_url = "https://strike.lightningjs.io/"
 motionmark_test_url = "https://browserbench.org/MotionMark1.2/"
 animation_benchmark_test_url = "https://themaninblue.com/experiment/AnimationBenchmark/canvas/"
-speedometer_test_url = "https://browserbench.org/Speedometer2.0/"
+speedometer_test_url = "https://browserbench.org/Speedometer3.1/"
 smashcat_test_url = "http://www.smashcat.org/av/canvas_test/"
 kraken_test_url = "https://mozilla.github.io/krakenbenchmark.mozilla.org/kraken-1.1/driver.html"
 #https://askubuntu.com/questions/432255/what-is-the-display-environment-variable
