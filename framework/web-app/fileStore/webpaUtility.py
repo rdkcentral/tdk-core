@@ -19,35 +19,32 @@
 #
 
 import json;
-import pycurl
+import requests
 import os
-from io import StringIO
-from io import BytesIO
 from webpaVariables import *
 import snmplib;
 from time import sleep;
 from tdkbVariables import *;
 
 def webpaQuery(obj, parameter, method="get"):
-# webpaQuery
 
+# webpaQuery
 # Syntax      : webpaQuery(obj,parameter, method="get")
 # Description : Function to create and send curl request to WEBPA server
 # Parameters  : obj - Object of the tdk library
 #               parameter - parameter list to be passed on to the curl request
 #             : method - whether the method is get or set
-# Return Value: SUCCESS/FAILURE
+# Return Value: WEBPA response
 
-    #response_buffer = StringIO()
-    response_buffer = BytesIO()
-    curl = pycurl.Curl()
     webpaQuery.parameter_list=[parameter]
     post_data=json.dumps({"parameters":webpaQuery.parameter_list})
     print(post_data)
 
+    # Get the device MAC
     deviceDetails = obj.getDeviceDetails()
     macaddress = deviceDetails["mac"]
 
+    # Determine the authentication
     if SAT_REQUIRED == "true":
         SatKey=""
         response_file = SAT_TOKEN_FILE
@@ -58,29 +55,35 @@ def webpaQuery(obj, parameter, method="get"):
             with open(response_file,'r') as f:
                 data=json.load(f)
             SatKey=str(data["serviceAccessToken"])
+
+            authentication = AUTHTYPE + ' '+ SatKey
+            headers = {"Authorization": authentication, "Accept": "application/json", "Content-Type": "application/json"}
         else:
             print("No SAT Token file is available")
 
-    curl.setopt(curl.URL, str(SERVER_URI+"/api/v2/device/mac:"+macaddress+"/config?names="+ parameter['name']))
-
-    if SAT_REQUIRED == "true":
-        curl.setopt(curl.HTTPHEADER, ['Content-Type: application/json','Accept: application/json','Authorization:' + AUTHTYPE + ' '+ SatKey])
     else:
-        curl.setopt(curl.HTTPHEADER, ['Content-Type: application/json','Accept: application/json','Authorization:' + AUTHTYPE])
+        headers = {"Authorization": AUTHTYPE, "Accept": "application/json", "Content-Type": "application/json"}
+
+    SERVER = SERVER_URI + f"/api/v2/device/mac:{macaddress}/config"
 
     if method == "set":
-        curl.setopt(curl.POSTFIELDS, post_data)
-        curl.setopt(pycurl.POST, 1)
-        curl.setopt(curl.CUSTOMREQUEST, 'PATCH')
+        #SET operation
+        name = parameter.get("name")
+        dataType = parameter.get("dataType")
+        value = parameter.get("value")
 
-    curl.setopt(curl.WRITEFUNCTION, response_buffer.write)
-    curl.perform()
-    print('Status: %d' %curl.getinfo(curl.RESPONSE_CODE))
-    curl.close()
-    #response_value = response_buffer.getvalue()
-    response_value = response_buffer.getvalue().decode()
-    print("WEBPA response received as: ", response_value)
-    return response_value
+        payload = {"parameters": [{"dataType": dataType, "name": name, "value": value}]}
+        resp = requests.patch(SERVER, headers=headers, data=json.dumps(payload))
+    elif method == "get":
+        #GET operation
+        name = parameter.get("name")
+        payload = {"names": name}
+        resp = requests.get(SERVER, headers=headers, params=payload)
+
+    print(f"Status: {resp.status_code}")
+    print(f"WEBPA response received as: {resp.text}")
+    return resp.text
+
 ########## End of Function ##########
 
 def parseWebpaResponse(response, count, method="get"):
