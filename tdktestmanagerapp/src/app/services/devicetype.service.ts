@@ -17,32 +17,32 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
+import { Injectable,Inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class DevicetypeService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   getlistbycategory(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/devicetype/getlistbycategory?category=${category}`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/devicetype/getlistbycategory?category=${category}`, { headers});
   }
 
   getfindallbycategory(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/devicetype/findallbycategory?category=${category}`, { headers });
+    return this.http.get(`${this.config.apiUrl}api/v1/devicetype/findallbycategory?category=${category}`, { headers });
   }
 
   createDeviceType(data: any): Observable<any> {
@@ -51,14 +51,14 @@ export class DevicetypeService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/devicetype/create`, data, { headers})
+    return this.http.post(`${this.config.apiUrl}api/v1/devicetype/create`, data, { headers})
   }
 
   deleteDeviceType(id: any) : Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/devicetype/delete?id=${id}`, { headers});
+    return this.http.delete(`${this.config.apiUrl}api/v1/devicetype/delete?id=${id}`, { headers});
   }
 
   updateDeviceType(data: any): Observable<any> {
@@ -66,7 +66,7 @@ export class DevicetypeService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/devicetype/update`, data, { headers});
+    return this.http.put(`${this.config.apiUrl}api/v1/devicetype/update`, data, { headers});
   }
 
 

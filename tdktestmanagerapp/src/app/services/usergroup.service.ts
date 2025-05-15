@@ -17,13 +17,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
-
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -31,13 +28,15 @@ const apiUrl: string = GlobalConstants.apiUrl;
 export class UsergroupService {
   currentUrl: any;
   isEdit = false;
-  constructor(private http: HttpClient, private authService: AuthService) {
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) {
   }
 
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
   getuserGroupList(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/usergroup/findall`, this.options);
+    return this.http.get(`${this.config.apiUrl}api/v1/usergroup/findall`, this.options);
   }
 
   createuserGroup(data: any): Observable<any> {
@@ -47,7 +46,7 @@ export class UsergroupService {
     let params = new HttpParams();
     params = params.set('userGroupName', data);
 
-    return this.http.post(`${apiUrl}api/v1/usergroup/create`, params, { headers, responseType: 'text' })
+    return this.http.post(`${this.config.apiUrl}api/v1/usergroup/create`, params, { headers, responseType: 'text' })
   }
 
   updateUserGroup(data: any): Observable<any> {
@@ -55,17 +54,17 @@ export class UsergroupService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/usergroup/update`, data, { headers, responseType: 'text' })
+    return this.http.put(`${this.config.apiUrl}api/v1/usergroup/update`, data, { headers, responseType: 'text' })
   }
 
   deleteUserGroup(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/usergroup/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${this.config.apiUrl}api/v1/usergroup/delete/${id}`, { headers, responseType: 'text' });
   }
 
   appVersion(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/users/getappversion`);
+    return this.http.get(`${this.config.apiUrl}api/v1/users/getappversion`);
   }
 }

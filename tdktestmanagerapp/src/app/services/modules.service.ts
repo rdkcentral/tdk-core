@@ -18,122 +18,122 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
-import { GlobalConstants } from '../utility/global-constants';
 import { saveAs } from 'file-saver';
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class ModulesService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   getAllTestGroups():Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/getAllTestGroups`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/module/getAllTestGroups`, { headers});
   }
 
   createModule(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/module/create`, data, { headers })
+    return this.http.post(`${this.config.apiUrl}api/v1/module/create`, data, { headers })
   }
 
   findallbyCategory(category:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/findAllByCategory?category=${category}`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/module/findAllByCategory?category=${category}`, { headers});
   }
 
   updateModule(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/module/update`, data, { headers })
+    return this.http.put(`${this.config.apiUrl}api/v1/module/update`, data, { headers })
   }
 
   deleteModule(id:any): Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/module/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/module/delete?id=${id}`, { headers });
   }
 
   createFunction(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/function/create`, data, { headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/function/create`, data, { headers });
   }
 
   functionList(modulename:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/function/findAllByModule?moduleName=${modulename}`, { headers });
+    return this.http.get(`${this.config.apiUrl}api/v1/function/findAllByModule?moduleName=${modulename}`, { headers });
   }
 
   updateFunction(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/function/update`, data, { headers });
+    return this.http.put(`${this.config.apiUrl}api/v1/function/update`, data, { headers });
   }
 
   deleteFunction(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/function/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/function/delete?id=${id}`, { headers });
   }
   getListOfParameterEnums():Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/parameter/getListOfParameterDatatypes`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/parameter/getListOfParameterDatatypes`, { headers});
   }
 
   createParameter(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/parameter/create`, data, { headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/parameter/create`, data, { headers });
   }
 
  findAllByFunction(functionName:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/parameter/findAllByFunction?functionName=${functionName}`, { headers });
+    return this.http.get(`${this.config.apiUrl}api/v1/parameter/findAllByFunction?functionName=${functionName}`, { headers });
   }
 
   deleteParameter(id:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/parameter/delete?id=${id}`, { headers});
+    return this.http.delete(`${this.config.apiUrl}api/v1/parameter/delete?id=${id}`, { headers});
   }
 
   updateParameter(data:any):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/parameter/update`, data, { headers});
+    return this.http.put(`${this.config.apiUrl}api/v1/parameter/update`, data, { headers});
   }
 
   downloadModuleByCategory(category:string):void{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-     this.http.get(`${apiUrl}api/v1/module/downloadzip?category=${category}`,{ headers, responseType: 'blob' }).subscribe(blob =>{
+     this.http.get(`${this.config.apiUrl}api/v1/module/downloadzip?category=${category}`,{ headers, responseType: 'blob' }).subscribe(blob =>{
       saveAs(blob, `module_${category}.zip`);
     });
   }
@@ -144,14 +144,14 @@ export class ModulesService {
     });
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/module/uploadxml`, formData,{ headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/module/uploadxml`, formData,{ headers });
   }
   
   downloadXMLModule(moduleName:any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/module/downloadxml?moduleName=${moduleName}`, { headers, responseType: 'blob' })
+    return this.http.get(`${this.config.apiUrl}api/v1/module/downloadxml?moduleName=${moduleName}`, { headers, responseType: 'blob' })
 
   }
 

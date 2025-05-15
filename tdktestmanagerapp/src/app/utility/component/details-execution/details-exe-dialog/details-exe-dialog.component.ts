@@ -32,10 +32,8 @@ import { AnalyzeDialogComponent } from '../../analyze-dialog/analyze-dialog.comp
 import { CrashlogfileDialogComponent } from '../crashlogfile-dialog/crashlogfile-dialog.component';
 import { saveAs } from 'file-saver';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
-import { GlobalConstants } from '../../../global-constants';
 import { LoaderComponent } from '../../loader/loader.component';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 export type ChartOptions = {
   series: Array<{
@@ -113,7 +111,8 @@ export class DetailsExeDialogComponent {
     @Inject(MAT_DIALOG_DATA) public data: any, public liveLogDialog:MatDialog,
      public logFilesDialog:MatDialog, private executionservice: ExecutionService,
      private _snakebar :MatSnackBar,public analyzeDialog:MatDialog,
-     private changeDetectorRef: ChangeDetectorRef, private sanitizer: DomSanitizer) {
+     private changeDetectorRef: ChangeDetectorRef, private sanitizer: DomSanitizer,
+     @Inject('APP_CONFIG') private config: any) {
     this.executionIdLocalStroge = localStorage.getItem('executionId');
     
     }
@@ -901,13 +900,13 @@ export class DetailsExeDialogComponent {
 openDynamicLink(id: string) {
         this.executionservice.getExecutionLogsLinks(id).subscribe(res=>{
           if(res){
-            const url = `${apiUrl}execution/getExecutionLogs?executionResultID=${id}`
+            const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${id}`
             window.open(url, '_blank', 'noopener noreferrer');
           }
         })
       }
 openLogLink(){
-  const url = `${apiUrl}execution/getExecutionLogs?executionResultID`
+  const url = `${this.config.apiUrl}execution/getExecutionLogs?executionResultID`
   window.open(url, '_blank', 'noopener noreferrer');
 }
 
@@ -940,7 +939,7 @@ downloadAsHtml(){
       </tr>
       <tr >
         <th >Execution Log
-        <div> <a href="${apiUrl}execution/getExecutionLogs?executionResultID=${key.executionResultID}" target="_blank" rel="noopener noreferrer">Log link</a></div>
+        <div> <a href="${this.config.apiUrl}execution/getExecutionLogs?executionResultID=${key.executionResultID}" target="_blank" rel="noopener noreferrer">Log link</a></div>
         </th>
         <td>${key.executionLogs}
        

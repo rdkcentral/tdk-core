@@ -17,13 +17,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GlobalConstants } from '../utility/global-constants';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -32,18 +30,20 @@ export class OemService {
 
   currentUrl: any;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
   getOemList(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/boxmanufacturer/findall`, this.options);
+    return this.http.get(`${this.config.apiUrl}api/v1/boxmanufacturer/findall`, this.options);
   }
 
   getOemByList(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/oem/findallbycategory?category=${category}`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/oem/findallbycategory?category=${category}`, { headers});
   }
 
   createOem(data: any): Observable<any> {
@@ -52,14 +52,14 @@ export class OemService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/oem/create`, data, { headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/oem/create`, data, { headers });
   }
 
   deleteOem(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/oem/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/oem/delete?id=${id}`, { headers });
   }
 
   updateOem(data: any): Observable<any> {
@@ -67,7 +67,7 @@ export class OemService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/oem/update`, data, { headers});
+    return this.http.put(`${this.config.apiUrl}api/v1/oem/update`, data, { headers});
  
   }
 

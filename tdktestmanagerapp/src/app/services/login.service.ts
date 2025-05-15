@@ -17,13 +17,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -34,13 +31,17 @@ export class LoginService {
   private logoutSubject = new Subject<void>();
   onLogout$ = this.logoutSubject.asObservable();
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any  // <-- Inject runtime config
+  ) {}
 
   userlogin(data: any): Observable<any> {
-    return this.http.post(`${apiUrl}api/v1/auth/signin`, data);
+    return this.http.post(`${this.config.apiUrl}api/v1/auth/signin`, data);
   }
   getuserGroup(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/auth/getList`);
+    return this.http.get(`${this.config.apiUrl}api/v1/auth/getList`);
   }
 
   getAuthenticatedUser() {
@@ -59,15 +60,14 @@ export class LoginService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/users/changepassword`, data, { headers })
+    return this.http.post(`${this.config.apiUrl}api/v1/users/changepassword`, data, { headers, responseType: 'text' });
   }
 
   changePrefernce(username:any,category:any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/auth/changecategorypreference?userName=${username}&category=${category}`,{}, { headers })
-
+    return this.http.post(`${this.config.apiUrl}api/v1/auth/changecategorypreference?userName=${username}&category=${category}`, {}, { headers, responseType: 'text' });
   }
 
 }

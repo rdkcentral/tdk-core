@@ -17,21 +17,24 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
-import { Observable, catchError, map, throwError } from 'rxjs';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class RegisterService {
-  constructor(private http: HttpClient,@Inject('APP_CONFIG') private config: any) { }
+@Injectable({ providedIn: 'root' })
+export class ConfigService {
+  private config: any;
 
-  registerUser(user: any): Observable<any> {
+  constructor(private http: HttpClient) {}
 
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.config.apiUrl}api/v1/auth/signup`, user, { headers: headers});
-   
+  loadConfig(): Promise<void> {
+    return this.http.get('/assets/config.json')
+      .toPromise()
+      .then(config => {
+        this.config = config;
+      });
   }
 
+  get apiUrl(): string {
+    return this.config?.apiUrl || '';
+  }
 }

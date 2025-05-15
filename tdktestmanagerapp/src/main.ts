@@ -22,10 +22,21 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-quartz.css';
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+
+fetch('/assets/config.json')
+  .then(res => res.json())
+  .then(config => {
+    bootstrapApplication(AppComponent, {
+      ...appConfig,
+      providers: [
+        ...appConfig.providers || [],
+        { provide: 'APP_CONFIG', useValue: config }
+      ]
+    }).catch((err) => console.error(err));
+  });
+
 (window as any).MonacoEnvironment = {
-  getWorkerUrl : function(moduleId:any, label:any){
+  getWorkerUrl: function (moduleId: any, label: any) {
     return `./assets/monaco-editor/min/vs/base/worker/workerMain.js`
   }
-}
+};

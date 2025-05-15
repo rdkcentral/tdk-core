@@ -18,25 +18,25 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { Observable } from 'rxjs';
-import { GlobalConstants } from '../utility/global-constants';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root',
 })
 export class AnalysisService {
-  constructor(private http: HttpClient, private authService: AuthService) {}
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) {}
 
   getcombinedByFilter(details: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
     return this.http.post(
-      `${apiUrl}execution/getExecutionDetailsByFilter`,
+      `${this.config.apiUrl}execution/getExecutionDetailsByFilter`,
       details,
       { headers }
     );
@@ -46,7 +46,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.post(`${apiUrl}execution/combinedExcel`, data, {
+    return this.http.post(`${this.config.apiUrl}execution/combinedExcel`, data, {
       headers,
       responseType: 'blob',
     });
@@ -57,7 +57,7 @@ export class AnalysisService {
       Authorization: this.authService.getApiToken(),
     });
     return this.http.post(
-      `${apiUrl}execution/comparisonExcel?baseExecId=${execId}`,
+      `${this.config.apiUrl}execution/comparisonExcel?baseExecId=${execId}`,
       data,
       {
         headers,
@@ -70,7 +70,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getListOfProjectIDs`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfProjectIDs`, {
       headers
     });
   }
@@ -79,7 +79,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getPriorities`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getPriorities`, {
       headers
     });
   }
@@ -88,7 +88,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getListOfLabels`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getListOfLabels`, {
       headers
     });
   }
@@ -97,7 +97,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getReleaseVersions`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getReleaseVersions`, {
       headers
     });
   }
@@ -106,7 +106,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getHardwareConfiguration`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getHardwareConfiguration`, {
       headers
     });
   }
@@ -114,7 +114,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getDetailsForPopulatingTicketDetails?execResultID=${exeId}`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getDetailsForPopulatingTicketDetails?execResultID=${exeId}`, {
       headers
   });
   }
@@ -122,7 +122,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getImpactedPlatforms`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getImpactedPlatforms`, {
       headers
     });
   }
@@ -130,7 +130,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getFixedInVersions`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getFixedInVersions`, {
       headers
     });
   }
@@ -138,7 +138,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getSeverities`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getSeverities`, {
       headers
     });
   }
@@ -147,7 +147,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getComponentsImpacted`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getComponentsImpacted`, {
       headers
     });
   }
@@ -156,7 +156,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getStepsToReproduce?scriptName=${scriptName}`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getStepsToReproduce?scriptName=${scriptName}`, {
       headers,
       responseType: 'text',
     });
@@ -165,7 +165,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/isPlatformProjectID?projectID=${prjectId}`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/isPlatformProjectID?projectID=${prjectId}`, {
       headers
     });
   }
@@ -173,7 +173,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.post(`${apiUrl}api/v1/analysis/createJiraTicket`, data ,{
+    return this.http.post(`${this.config.apiUrl}api/v1/analysis/createJiraTicket`, data ,{
       headers
     });
   }
@@ -181,7 +181,7 @@ export class AnalysisService {
     const headers = new HttpHeaders({
       Authorization: this.authService.getApiToken(),
     });
-    return this.http.get(`${apiUrl}api/v1/analysis/getTicketDetaisFromJira?executionResultID=${exeId}&projectName=${projectname}`, {
+    return this.http.get(`${this.config.apiUrl}api/v1/analysis/getTicketDetaisFromJira?executionResultID=${exeId}&projectName=${projectname}`, {
       headers
     });
   }
@@ -190,7 +190,7 @@ export class AnalysisService {
   const headers = new HttpHeaders({
     Authorization: this.authService.getApiToken(),
   });
-  return this.http.post(`${apiUrl}api/v1/analysis/updateJiraTicket`, data ,{
+  return this.http.post(`${this.config.apiUrl}api/v1/analysis/updateJiraTicket`, data ,{
     headers
   });
 }
@@ -199,7 +199,7 @@ isJiraAutomation():Observable<any>{
   const headers = new HttpHeaders({
     'Authorization': this.authService.getApiToken()
   });
-  return this.http.get(`${apiUrl}api/v1/analysis/isJiraAutomationImplemented`, { headers});
+  return this.http.get(`${this.config.apiUrl}api/v1/analysis/isJiraAutomationImplemented`, { headers});
  }
 
  

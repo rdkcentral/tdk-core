@@ -18,12 +18,9 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { effect, Injectable, Signal, signal, WritableSignal } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
+import { effect, Inject, Injectable, Signal, signal, WritableSignal } from '@angular/core';
 import { BehaviorSubject, catchError, firstValueFrom, Observable, of, tap } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
-
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +31,9 @@ export class ThemeService {
   private currentThemeSubject: BehaviorSubject<string> = new BehaviorSubject<string>(this.getInitialTheme());
   public currentTheme: Observable<string> = this.currentThemeSubject.asObservable();
 
-  constructor(private http: HttpClient,private authService: AuthService) {
+  constructor(private http: HttpClient,private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) {
     this.userloggedIn = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
    }
 
@@ -49,7 +48,7 @@ export class ThemeService {
     });
     
     localStorage.setItem('theme', theme);
-     this.http.put(`${apiUrl}api/v1/users/settheme?userId=${userId}&theme=${theme}`,null ,{ headers, responseType: 'text' }).subscribe(res=>{
+     this.http.put(`${this.config.apiUrl}api/v1/users/settheme?userId=${userId}&theme=${theme}`,null ,{ headers, responseType: 'text' }).subscribe(res=>{
      })
      this.currentThemeSubject.next(theme);
   }
@@ -59,7 +58,7 @@ export class ThemeService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/users/gettheme?userId=${userId}`,{ headers })
+    return this.http.get(`${this.config.apiUrl}api/v1/users/gettheme?userId=${userId}`,{ headers })
     // .pipe(
     //   catchError(() => {
     //     return of('LIGHT'); 

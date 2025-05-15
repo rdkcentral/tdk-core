@@ -17,13 +17,10 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GlobalConstants } from '../utility/global-constants';
 import { AuthService } from '../auth/auth.service';
-
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +29,9 @@ export class SocService {
 
   currentUrl: any;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
@@ -41,7 +40,7 @@ export class SocService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/soc/findallbycategory?category=${category}`, { headers });
+    return this.http.get(`${this.config.apiUrl}api/v1/soc/findallbycategory?category=${category}`, { headers });
   }
 
   createSoc(data: any): Observable<any> {
@@ -50,7 +49,7 @@ export class SocService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/soc/create`, data, { headers })
+    return this.http.post(`${this.config.apiUrl}api/v1/soc/create`, data, { headers })
   }
 
   updateSoc(data: any): Observable<any> {
@@ -58,14 +57,14 @@ export class SocService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/soc/update`, data, { headers});
+    return this.http.put(`${this.config.apiUrl}api/v1/soc/update`, data, { headers});
   }
 
   deleteSoc(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/soc/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/soc/delete?id=${id}`, { headers });
   }
 
 }

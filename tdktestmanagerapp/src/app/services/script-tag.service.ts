@@ -17,13 +17,11 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { GlobalConstants } from '../utility/global-constants';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -32,7 +30,9 @@ export class ScriptTagService {
 
   currentUrl: any;
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
   createScriptTag(data: any): Observable<any> {
@@ -41,14 +41,14 @@ export class ScriptTagService {
       'Authorization': this.authService.getApiToken()
     });
 
-    return this.http.post(`${apiUrl}api/v1/scripttag/create`, data, { headers, responseType: 'text' })
+    return this.http.post(`${this.config.apiUrl}api/v1/scripttag/create`, data, { headers, responseType: 'text' })
   }
 
   getScriptTagByList(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/scripttag/findallbycategory?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${this.config.apiUrl}api/v1/scripttag/findallbycategory?category=${category}`, { headers, responseType: 'text' });
   }
 
   updateScriptTag(data: any): Observable<any> {
@@ -56,7 +56,7 @@ export class ScriptTagService {
       'Content-Type': 'application/json',
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/scripttag/update`, data, { headers,  responseType: 'text'})
+    return this.http.put(`${this.config.apiUrl}api/v1/scripttag/update`, data, { headers,  responseType: 'text'})
 
   }
 
@@ -64,7 +64,7 @@ export class ScriptTagService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/scripttag/delete/${id}`, { headers, responseType: 'text' });
+    return this.http.delete(`${this.config.apiUrl}api/v1/scripttag/delete/${id}`, { headers, responseType: 'text' });
 
   }
   

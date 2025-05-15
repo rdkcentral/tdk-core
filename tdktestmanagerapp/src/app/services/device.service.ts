@@ -17,14 +17,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
+import { Injectable , Inject} from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { GlobalConstants } from '../utility/global-constants';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { saveAs } from 'file-saver';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
@@ -37,13 +35,15 @@ export class DeviceService {
   typeOfboxtypeDropdown!: string;
   showSelectedCategory: string = 'Video';
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   isBoxtypeGateway(boxtype: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/boxtype/istheboxtypegateway?boxType=${boxtype}`, { headers, responseType: 'text' });
+    return this.http.get(`${this.config.apiUrl}api/v1/boxtype/istheboxtypegateway?boxType=${boxtype}`, { headers, responseType: 'text' });
 
   }
 
@@ -51,7 +51,7 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/findAllByCategory?category=${category}`, { headers });
+    return this.http.get(`${this.config.apiUrl}api/v1/device/findAllByCategory?category=${category}`, { headers });
 
   }
 
@@ -59,35 +59,35 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/device/create`, data, { headers })
+    return this.http.post(`${this.config.apiUrl}api/v1/device/create`, data, { headers })
   }
 
   getlistofGatewayDevices(category: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/getlistofgatewaydevices?category=${category}`, { headers, responseType: 'text' });
+    return this.http.get(`${this.config.apiUrl}api/v1/device/getlistofgatewaydevices?category=${category}`, { headers, responseType: 'text' });
   }
 
   updateDevice(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/device/update`, data, { headers })
+    return this.http.put(`${this.config.apiUrl}api/v1/device/update`, data, { headers })
   }
 
   deleteDevice(id: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/device/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/device/delete?id=${id}`, { headers });
   }
 
   downloadDevice(name: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/downloadXML?deviceName=${name}`, { headers, responseType: 'blob' })
+    return this.http.get(`${this.config.apiUrl}api/v1/device/downloadXML?deviceName=${name}`, { headers, responseType: 'blob' })
   }
 
   uploadXMLFile(file: File): Observable<any> {
@@ -97,14 +97,14 @@ export class DeviceService {
     const formData: FormData = new FormData();
     formData.append('file', file, file.name);
 
-    return this.http.post(`${apiUrl}api/v1/device/uploadxml`, formData, { headers});
+    return this.http.post(`${this.config.apiUrl}api/v1/device/uploadxml`, formData, { headers});
   }
 
   downloadDeviceConfigFile(deviceTypeName: string, deviceType: string, isThunder: boolean): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/device/downloadDeviceConfigFile?deviceTypeName=${deviceTypeName}&deviceType=${deviceType}&isThunderEnabled=${isThunder}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
+    return this.http.get(`${this.config.apiUrl}api/v1/device/downloadDeviceConfigFile?deviceTypeName=${deviceTypeName}&deviceType=${deviceType}&isThunderEnabled=${isThunder}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
       map((response: HttpResponse<Blob>) => {
         const contentDisposition = response.headers.get('content-disposition');
         let filename = 'device.config';
@@ -127,7 +127,7 @@ export class DeviceService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    this.http.get(`${apiUrl}api/v1/device/downloadDevicesByCategory?category=${category}`, { headers, responseType: 'blob' }).subscribe(blob => {
+    this.http.get(`${this.config.apiUrl}api/v1/device/downloadDevicesByCategory?category=${category}`, { headers, responseType: 'blob' }).subscribe(blob => {
       saveAs(blob, `device_${category}.zip`);
     });
   }
@@ -137,14 +137,14 @@ export class DeviceService {
     });
     const formData: FormData = new FormData();
     formData.append('uploadFile', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/device/uploadDeviceConfigFile?isThunderEnabled=${isThunder}`, formData, { headers, responseType: 'text' });
+    return this.http.post(`${this.config.apiUrl}api/v1/device/uploadDeviceConfigFile?isThunderEnabled=${isThunder}`, formData, { headers, responseType: 'text' });
   }
 
   deleteDeviceConfigFile(deviceConfigFileName: any) {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/device/deleteDeviceConfigFile?deviceConfigFileName=${deviceConfigFileName}`, { headers, responseType: 'text' });
+    return this.http.delete(`${this.config.apiUrl}api/v1/device/deleteDeviceConfigFile?deviceConfigFileName=${deviceConfigFileName}`, { headers, responseType: 'text' });
   }
 
 }

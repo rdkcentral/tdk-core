@@ -17,53 +17,53 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
-import { GlobalConstants } from '../utility/global-constants';
+import { Inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { AuthService } from '../auth/auth.service';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserManagementService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   private options = { headers: new HttpHeaders().set('Authorization', this.authService.getApiToken()) };
 
   getAlluser(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/users/findAll`, this.options);
+    return this.http.get(`${this.config.apiUrl}api/v1/users/findAll`, this.options);
   }
 
   deleteUser(id: string): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/users/delete?id=${id}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/users/delete?id=${id}`, { headers });
   }
 
   getGroupName(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/usergroup/findall`, this.options);
+    return this.http.get(`${this.config.apiUrl}api/v1/usergroup/findall`, this.options);
   }
   getAllRole(): Observable<any> {
-    return this.http.get(`${apiUrl}api/v1/userrole/findall`, this.options);
+    return this.http.get(`${this.config.apiUrl}api/v1/userrole/findall`, this.options);
   }
 
   createUser(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/users/create`, data, { headers })
+    return this.http.post(`${this.config.apiUrl}api/v1/users/create`, data, { headers })
   }
 
   updateUser(data: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.put(`${apiUrl}api/v1/users/update`, data, { headers, observe: 'response'})
+    return this.http.put(`${this.config.apiUrl}api/v1/users/update`, data, { headers, observe: 'response'})
   }
 
 

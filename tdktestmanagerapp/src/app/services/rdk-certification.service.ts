@@ -17,21 +17,21 @@ http://www.apache.org/licenses/LICENSE-2.0
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { AuthService } from '../auth/auth.service';
 import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
-import { GlobalConstants } from '../utility/global-constants';
 import { BehaviorSubject, map, Observable, of } from 'rxjs';
 import { saveAs } from 'file-saver';
 
-const apiUrl: string = GlobalConstants.apiUrl;
 
 @Injectable({
   providedIn: 'root'
 })
 export class RdkService {
 
-  constructor(private http: HttpClient, private authService: AuthService) { }
+  constructor(private http: HttpClient, private authService: AuthService,
+    @Inject('APP_CONFIG') private config: any
+  ) { }
 
   uploadConfigFile(file: File): Observable<any> {
     const headers = new HttpHeaders({
@@ -39,14 +39,14 @@ export class RdkService {
     });
     const formData: FormData = new FormData();
     formData.append('pythonFile', file, file.name);
-    return this.http.post(`${apiUrl}api/v1/rdkcertification/create`, formData, { headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/create`, formData, { headers });
   }
 
   getallRdkCertifications(): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/rdkcertification/getall`, { headers});
+    return this.http.get(`${this.config.apiUrl}api/v1/rdkcertification/getall`, { headers});
 
   }
 
@@ -54,7 +54,7 @@ export class RdkService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/rdkcertification/download?fileName=${name}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
+    return this.http.get(`${this.config.apiUrl}api/v1/rdkcertification/download?fileName=${name}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
       map((response: HttpResponse<Blob>) => {
         const contentDisposition = response.headers.get('content-disposition');
         let filename = 'script.py';
@@ -78,7 +78,7 @@ export class RdkService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/script/getScriptTemplate?primitiveTestName=${name}`, { headers, responseType: 'text' })
+    return this.http.get(`${this.config.apiUrl}api/v1/script/getScriptTemplate?primitiveTestName=${name}`, { headers, responseType: 'text' })
   }
 
   createScript(scriptFile: File): Observable<any> {
@@ -87,7 +87,7 @@ export class RdkService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/rdkcertification/create`, formData, { headers});
+    return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/create`, formData, { headers});
   }
   updateScript(scriptFile: File): Observable<any> {
     const formData = new FormData();
@@ -95,13 +95,13 @@ export class RdkService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.post(`${apiUrl}api/v1/rdkcertification/update`, formData, { headers });
+    return this.http.post(`${this.config.apiUrl}api/v1/rdkcertification/update`, formData, { headers });
   }
   getFileContent(fileName: any): Observable<any> {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.get(`${apiUrl}api/v1/rdkcertification/getconfigfilecontent?fileName=${fileName}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
+    return this.http.get(`${this.config.apiUrl}api/v1/rdkcertification/getconfigfilecontent?fileName=${fileName}`, { headers, responseType: 'blob', observe: 'response' }).pipe(
       map((response: HttpResponse<Blob>) => {
         const status = {
           ...response.body,
@@ -116,6 +116,6 @@ export class RdkService {
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()
     });
-    return this.http.delete(`${apiUrl}api/v1/rdkcertification/delete?fileName=${name}`, { headers });
+    return this.http.delete(`${this.config.apiUrl}api/v1/rdkcertification/delete?fileName=${name}`, { headers });
   }
 }
