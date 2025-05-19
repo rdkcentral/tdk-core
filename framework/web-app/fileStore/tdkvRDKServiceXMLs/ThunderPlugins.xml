@@ -2650,10 +2650,10 @@
                 <param tag="endpoints"  defaultValue="null" type="list"/>
             </params>
         </method>
-        <method name="NetworkManager_Get_Log_Level" api="getLogLevel" type="method" desc="Returns the currently set logging level" >
+        <method name="NetworkManager_Get_Log_Level" api="GetLogLevel" type="method" desc="Returns the currently set logging level" >
                 <expectedValues>0,1,2,3,4</expectedValues>
         </method>
-        <method name="NetworkManager_Set_Log_Level" api="setLogLevel" type="method" desc="Sets the logging level" >
+        <method name="NetworkManager_Set_Log_Level" api="SetLogLevel" type="method" desc="Sets the logging level" >
             <params>
                 <param tag="level" defaultValue="null" type="int"/>
             </params>

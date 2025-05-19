@@ -212,9 +212,9 @@
 	    <testStep testStepId="3" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                   <param tag="false" value="false" />
+                   <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
 	    <testStep testStepId="4" name="Pause_Container" method="Pause_Container">
               <params>
@@ -373,9 +373,9 @@
             <testStep testStepId="6" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                   <param tag="false" value="false" />
+                   <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
             <testStep testStepId="7" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="3">
                 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
@@ -426,7 +426,7 @@
 	  <testStep testStepId="2" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" value="" />
-                   <param tag="false" value="false" />
+                   <param tag="force" value="false" />
               </params>
               <resultGeneration useMethodTag="ocicontainer_check_for_results"  arguments="check_negative_scenario" />
             </testStep>
@@ -485,7 +485,7 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
             <testStep testStepId="6" name="Get_Containers_List" method="List_Containers" delay="2" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
@@ -581,7 +581,7 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                    <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
               </testStep>
               <testStep testStepId="3" name="Check_Container_Status" method="Get_Container_State" >
                     <params>
@@ -693,7 +693,7 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
                    <param tag="force" value="true" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
               </testStep>
               <testStep testStepId="3" name="Check_Container_Status" method="Get_Container_State" >
                     <params>
@@ -865,7 +865,7 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="true" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
             <testStep testStepId="6" name="Get_Containers_List" method="List_Containers" delay="1" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
@@ -1098,9 +1098,9 @@
             <testStep testStepId="12" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                   <param tag="false" value="false" />
+                   <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
             <testStep testStepId="13" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="3">
                 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
@@ -1203,7 +1203,7 @@
      		 <params>
         		<param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
       		</params>
-      		<resultGeneration useMethodTag="ocicontainer_check_for_results" />
+      		<resultGeneration useMethodTag="success_status_validation" />
     	</testStep>
     	<testStep testStepId="4" name="Check_On_Container_Stopped_Event" event="Event_On_Container_Stopped" action="eventListener" delay="3">
      		 <resultGeneration useMethodTag="ocicontainer_check_container_events" >
@@ -1348,14 +1348,14 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
             <testStep testStepId="6" name="Stop_Container" method="Stop_Container">
               <params>
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="ocicontainer_check_for_results" arguments="check_negative_scenario"/>
+              <resultGeneration useMethodTag="success_negative_status_validation"/>
             </testStep>
             <testStep testStepId="7" name="Get_Containers_List" method="List_Containers" delay="1" >
                     <resultGeneration useMethodTag="ocicontainer_list_container" arguments="check_not_exists" >
@@ -1468,64 +1468,22 @@
                    <param tag="containerId" useConfigFile="true" key="LISA_APPLICATION_NAME" />
                    <param tag="force" value="false" />
               </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
+              <resultGeneration useMethodTag="success_status_validation" />
             </testStep>
-        <testCasePostRequisite>
-          <postrequisite requisiteId="1" requisiteName="Launch_Test_Application" >
-            <testStep testStepId="1" name="Get_Valuefrom_Config file" saveResult="true" action="externalFnCall">
-                <resultGeneration useMethodTag="get_configfile_value">
-                        <arguments useConfigFile="true" key="OCICONTAINER_DISPLAY_CREATION"/>
-                </resultGeneration>
-            </testStep>
-            <testStep testStepId="2" name="Kill_Application" method="Kill"  pluginName="RDKShell">
-              <conditionalExecution enable="true" Id="1" useMethodTag="check_test_status" />
-              <params>
-                <param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-              </params>
-              <resultGeneration useMethodTag="rdkshell_get_result_status" />
-            </testStep>
-            <testStep testStepId="3" name="Launch_Application" method="Launch_Application" pluginName="RDKShell" delay="2" >
-              <params>
-                  <param tag="client" useConfigFile="true" key="LISA_APPLICATION_NAME" />
-                  <param tag="uri" useConfigFile="true" key="LISA_APPLICATION_URI" />
-                  <param tag="mimeType" value="application/dac.native" />
-              </params>
-              <resultGeneration useMethodTag="rdkshell_check_for_results" />
-            </testStep>
-            <testStep testStepId="4" name="Get_connected_clients" method="GetClients" pluginName="RDKShell" delay="2" >
-                    <resultGeneration useMethodTag="rdkshell_check_application"  arguments="check_if_exists" >
-                            <expectedValues useConfigFile="true" key="LISA_APPLICATION_NAME"/>
-                    </resultGeneration>
-            </testStep>
-          </postrequisite>
-        </testCasePostRequisite>
         </testCase>	
 	
 	<!-- Test case 23 -->
         <testCase testCaseId="OCIContainer_23" testCaseName="OCIContainer_ActivateDeactivate_All_Event_Test" desc="Validates all event on Activating/deactivating the plugin">
             <testCaseInfo testCaseType="direct" />
             <testCasePreRequisite>
-                 <prerequisite requisiteId="1" requisiteName="Activate_Plugins">
-                   <testStep testStepId="1" name="Check_PluginActive_Status" method="Get_Plugin_Status" saveResult="true" pluginName="Controller">
-                     <params>
-                       <param tag="plugin" value="org.rdk.OCIContainer" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.OCIContainer" />
+                <prerequisite requisiteId="1" requisiteName="Kill_Test_Application">
+		   <testStep testStepId="1" name="Kill_Application" method="Kill"  pluginName="RDKShell">
+              		<params>
+                		<param tag="callsign" useConfigFile="true" key="LISA_APPLICATION_NAME"/>
+              		</params>
+              		<resultGeneration useMethodTag="rdkshell_get_result_status" />
                    </testStep>
-                   <testStep testStepId="2" name="Activate_Plugin" method="Activate_Plugin"  pluginName="Controller" >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.OCIContainer" />
-                     <params>
-                       <param tag="callsign" value="org.rdk.OCIContainer" />
-                     </params>
-                   </testStep>
-                   <testStep testStepId="3" name="Check_PluginActive_Status" method="Get_Plugin_Status" pluginName="Controller"  >
-                     <conditionalExecution enable="true" Id="1" useMethodTag="controller_get_plugin_state" arguments="isDeactivated,org.rdk.OCIContainer" />
-                     <params>
-                       <param tag="plugin" value="org.rdk.OCIContainer" indexOnly="true" />
-                     </params>
-                     <resultGeneration useMethodTag="controller_get_plugin_state" arguments="check_status,org.rdk.OCIContainer" expectedValues="activated"/>
-                   </testStep>
-                </prerequisite>
+		</prerequisite>
             </testCasePreRequisite>
 
             <testStep testStepId="1" name="Deactivate_OCIContainer_Plugin" method="Deactivate_Plugin"  pluginName="Controller">
