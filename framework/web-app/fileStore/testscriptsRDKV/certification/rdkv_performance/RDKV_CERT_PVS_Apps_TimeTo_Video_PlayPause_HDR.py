@@ -113,7 +113,7 @@ if expectedResult in result.upper():
     conf_file, status = get_configfile_name(obj);
     result, logging_method = getDeviceConfigKeyValue(conf_file,"LOGGING_METHOD")
     setDeviceConfigFile(conf_file)
-    videoURL  = MediaValidationVariables.video_src_url_mp4_hevc_hdr
+    videoURL  = MediaValidationVariables.video_src_url_hevc_hdr
     videoURL_type = "mp4"
     setURLArgument("execID",str(obj.execID))
     setURLArgument("execDevId",str(obj.execDevId))

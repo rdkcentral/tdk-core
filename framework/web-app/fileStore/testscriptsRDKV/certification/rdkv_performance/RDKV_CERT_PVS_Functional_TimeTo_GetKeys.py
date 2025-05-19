@@ -206,7 +206,8 @@ if expectedResult in result.upper():
                                 output = output[output.find('\n'):]
                                 if "KeyCode" in output:
                                     print("\n Keycode logs are present in wpelogs")
-                                    end_get_key_time = output.split('\n')[1].split(' ')[2]
+                                    log_line = output.split('\n')[1]
+                                    end_get_key_time = getTimeStampFromString(log_line)
                                     if result in expectedResult and end_get_key_time != {}:
                                         print("\n key codes are received successfully \n")
                                         print("end time",end_get_key_time)

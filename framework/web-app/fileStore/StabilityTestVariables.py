@@ -174,7 +174,7 @@ lifecycle_max_count = 1000
 #Video player app URL, sample URL: http://<TM-IP>:8080/rdk-test-tool/fileStore/lightning-apps/tdkunifiedplayer/build/index.html?player=VIDEO
 lightning_video_test_app_url = ""
 
-#Use video stream URL of minimum 10 hour duration or a live HLS video URL
+#Use video stream URL of minimum 10 hour duration
 video_src_url_hls = ""
 
 #Webinspect port for LightningApp plugin

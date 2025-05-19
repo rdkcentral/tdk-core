@@ -141,7 +141,7 @@ if expectedResult in result.upper():
                 result = tdkTestObj.getResult()
                 output = tdkTestObj.getResultDetails()
                 services_list = output.replace(command,"")
-                if services_count < 10:
+                if services_count == 0:
                     print("The list of failed services are: {}".format(services_list))
                     tdkTestObj.setResultStatus("SUCCESS")
                 else:

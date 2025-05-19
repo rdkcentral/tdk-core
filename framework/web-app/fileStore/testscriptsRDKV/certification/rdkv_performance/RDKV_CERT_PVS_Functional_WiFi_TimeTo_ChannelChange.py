@@ -254,7 +254,7 @@ if expectedResult in result.upper():
                             print(output)
                             if "Playing" in output and expectedResult in result:
                                 print("Playing logs are present in wpelogs")
-                                playing_time = output.split('\n')[1].split(' ')[2]
+                                playing_time = getTimeStampFromString(output)
                                 if (tuning_time < playing_time):
                                     print("\n Not able to play the content after tuning the channel".format(max_channel_change_count))
                                     tdkTestObj.setResultStatus("FAILURE")

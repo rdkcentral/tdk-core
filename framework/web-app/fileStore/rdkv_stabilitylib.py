@@ -268,6 +268,29 @@ def compare_images(images_list):
         status = "DIFFERENT"
     return status
 
+#-----------------------------------------------------------------
+#Write time data to a file
+#-----------------------------------------------------------------
+def write_time_data(Data,time_taken,filename):
+    method=Data.split('"method":')[-1].strip()
+    ifpresent=False
+    if os.path.isfile(filename):
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+        with open(filename, 'w') as f:
+            for i in range(len(lines)):
+                if method in lines[i]:
+                    time_data = lines[i].strip() + f', {time_taken}\n'
+                    f.write(time_data)
+                    ifpresent=True
+                else:
+                    f.write(lines[i])
+
+    if not ifpresent:
+        time_data=f"{method}:{time_taken}\n"
+        with open(filename, 'a+') as f:
+            f.write(time_data)
+
 #-------------------------------------------------------------------
 #SET DEFAULT NETWORK INTERFACE OF THE DEVICE
 #-------------------------------------------------------------------

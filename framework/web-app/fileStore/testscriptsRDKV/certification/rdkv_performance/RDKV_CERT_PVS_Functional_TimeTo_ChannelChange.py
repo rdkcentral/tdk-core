@@ -228,7 +228,7 @@ if expectedResult in result.upper():
                     print(output)
                     if "Tuning to channel" in output and expectedResult in result:
                         print("Tuning logs are present in wpelogs")
-                        tuning_time = output.split('\n')[1].split(' ')[2]
+                        tuning_time = getTimeStampFromString(output)
                         if (current_system_time < tuning_time):
                             print("checking for playing log")
                             command = 'cat /opt/logs/wpeframework.log | grep -nr Playing | head -n1'

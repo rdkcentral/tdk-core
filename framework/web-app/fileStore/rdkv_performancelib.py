@@ -27,6 +27,9 @@ from selenium import webdriver
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.common import exceptions
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import StaleElementReferenceException
 from SSHUtility import *
 import SSHUtility
@@ -152,6 +155,10 @@ def execute_step(Data,IsPerformanceStressTest="NO"):
             #Whether to check the API response time
             conf_file,result_conf = getConfigFileName(libObj.realpath)
             perf_status, IsPerformanceSelected = getDeviceConfigKeyValue(conf_file, "RDKV_CERT_PERFORMANCE")
+            if IsPerformanceStressTest == "True":
+                time_taken = round(response.elapsed.total_seconds() * 1000, 3)
+                print ("Time Taken for",Data,"is :", time_taken, "ms")
+                return time_taken
             if IsPerformanceStressTest == "YES" or IsPerformanceSelected == "true":
                 time_taken = round(response.elapsed.total_seconds() * 1000, 3)
                 print ("Time Taken for",Data,"is :", time_taken, "ms")
@@ -210,7 +217,7 @@ def rdkservice_getAllPluginStatus():
 #------------------------------------------------------------------
 def rdkservice_getMaxResponseTime(method):
     data = '"method": "'+method+'"'
-    result = execute_step(data,"YES")
+    result = execute_step(data,"True")
     return result
 #------------------------------------------------------------------
 #SET PLUGIN STATUS
@@ -298,6 +305,7 @@ def openChromeBrowser(url):
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('--headless')
         chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument("window-size=1920x1080")
         driver = webdriver.Chrome(chrome_options=chrome_options) #Opening Chrome
         driver.get(url);
     except Exception as error:
@@ -565,6 +573,29 @@ def getTimeStampFromString(log_string):
     return timestamp[:-len(milliseconds)] + milliseconds
   else:
     return None
+
+#-----------------------------------------------------------------
+#Write time data to a file
+#-----------------------------------------------------------------
+def write_time_data(Data,time_taken,filename):
+    method=Data.split('"method":')[-1].strip()
+    ifpresent=False
+    if os.path.isfile(filename):
+        with open(filename, 'r') as f:
+            lines = f.readlines()
+        with open(filename, 'w') as f:
+            for i in range(len(lines)):
+                if method in lines[i]:
+                    time_data = lines[i].strip() + f', {time_taken}\n'
+                    f.write(time_data)
+                    ifpresent=True
+                else:
+                    f.write(lines[i])
+
+    if not ifpresent:
+        time_data=f"{method}:{time_taken}\n"
+        with open(filename, 'a+') as f:
+            f.write(time_data)
 
 #-------------------------------------------------------------------
 #GET THE TIME IN MILLISEC FROM THE STRING
@@ -1304,6 +1335,21 @@ def getDataAndWriteInFile(Value,obj):
         data = data + "\n"
         print(data)
         open_write_logfile(libObj,filename,obj.execName,data)
+
+#---------------------------------------------------------------------------------------
+# To handle the format change in output from wpelogs
+#---------------------------------------------------------------------------------------
+def parse_value_to_float(raw_value):
+    try:
+        return float(raw_value.strip())
+    except ValueError:
+        pass
+    formatted_result = (raw_value.lower().replace('milliseconds', '').replace('ms', '').strip())
+    try:
+        return float(formatted_result)
+    except ValueError:
+        raise ValueError(f"Cannot convert value to float: '{raw_value}'")
+
 #---------------------------------------------------------------------------------------
 # PVS Execution Summary
 #---------------------------------------------------------------------------------------
@@ -1316,10 +1362,12 @@ def getSummary(Summ_list,obj = False):
     for key in Summ_list:
         print(key)
         value = key.split(':')[1]
-        if 'ms' in value:
-            value = value.split('m')[0]
-        if float(value) < 0:
-            print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
+        try:
+            numeric_value = parse_value_to_float(value)
+            if numeric_value < 0:
+                print("Check if VM and DUT time is synchronized OR Check if any previous steps got failed.")
+        except ValueError as e:
+            print(e)
 
 #Function to test using RESTAPI
 def testusingRestAPI(obj):
