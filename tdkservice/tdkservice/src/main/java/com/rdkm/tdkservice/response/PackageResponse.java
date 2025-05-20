@@ -22,20 +22,21 @@ package com.rdkm.tdkservice.response;
 import lombok.Data;
 
 /**
- * The CreatePackageResponse class represents the response received after creating a package.
- * It contains the status of the package creation and any associated logs.
+ * The CreatePackageResponse class represents the response received after
+ * creating a package. It contains the status of the package creation and any
+ * associated logs.
  * 
  */
 @Data
-public class CreatePackageResponse {
-	/**
-	 * The status of the package creation.
-	 */
-	private String status;
-
+public class PackageResponse {
 	/**
 	 * The logs generated during the package creation.
 	 */
 	private String logs;
+
+	/*
+	 * Status code
+	 */
+	private int statusCode;
 
 }

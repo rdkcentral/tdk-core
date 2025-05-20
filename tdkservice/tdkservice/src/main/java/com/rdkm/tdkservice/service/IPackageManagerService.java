@@ -23,7 +23,7 @@ import java.util.List;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import com.rdkm.tdkservice.response.CreatePackageResponse;
+import com.rdkm.tdkservice.response.PackageResponse;
 
 /**
  * Interface for managing packages on a device.
@@ -37,7 +37,7 @@ public interface IPackageManagerService {
 	 * @param device the device for which the package is being created
 	 * @return a response containing details about the created package
 	 */
-	CreatePackageResponse createPackage(String type, String device);
+	PackageResponse createPackage(String type, String device);
 
 	/**
 	 * Retrieves a list of available packages for the given device.
@@ -45,7 +45,7 @@ public interface IPackageManagerService {
 	 * @param device the device for which to retrieve available packages
 	 * @return a list of available package names
 	 */
-	List<String> getAvailablePackages(String device);
+	List<String> getAvailablePackages(String type, String device);
 
 	/**
 	 * Uploads a package file to the specified device.
@@ -54,7 +54,7 @@ public interface IPackageManagerService {
 	 * @param device     the device to which the package file is being uploaded
 	 * @return true if the upload was successful, false otherwise
 	 */
-	boolean uploadPackage(MultipartFile uploadFile, String device);
+	boolean uploadPackage(String type, MultipartFile uploadFile, String device);
 
 	/**
 	 * Installs a package on the specified device.
@@ -63,6 +63,15 @@ public interface IPackageManagerService {
 	 * @param packageName the name of the package to install
 	 * @return a string indicating the result of the installation
 	 */
-	String installPackage(String device, String packageName);
+	PackageResponse installPackage(String type, String device, String packageName);
+
+	/**
+	 * Installs a generic package on the specified device.
+	 *
+	 * @param device      the device on which to install the package
+	 * @param packageName the name of the package to install
+	 * @return a string indicating the result of the installation
+	 */
+	boolean uploadGenericPackage(String type, MultipartFile uploadFile, String device);
 
 }

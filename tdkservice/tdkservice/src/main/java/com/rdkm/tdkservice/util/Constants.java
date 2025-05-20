@@ -571,4 +571,9 @@ public class Constants {
 	// TM URL
 	public static final String TM_URL_EXEC_KEY_CONFIG_FILE = "tmURL_exec";
 
+	// VTS package
+	public static final String VTS = "VTS";
+	// TDK package
+	public static final String TDK = "TDK";
+
 }

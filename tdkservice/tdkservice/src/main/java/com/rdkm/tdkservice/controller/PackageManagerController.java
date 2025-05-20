@@ -24,7 +24,6 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,8 +34,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.rdkm.tdkservice.response.CreatePackageResponse;
+import com.rdkm.tdkservice.exception.TDKServiceException;
+import com.rdkm.tdkservice.response.DataResponse;
+import com.rdkm.tdkservice.response.PackageResponse;
+import com.rdkm.tdkservice.response.Response;
 import com.rdkm.tdkservice.service.IPackageManagerService;
+import com.rdkm.tdkservice.util.ResponseUtils;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -68,15 +71,22 @@ public class PackageManagerController {
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@PostMapping("/createPackageAPI")
-	public ResponseEntity<?> createPackageAPI(@RequestParam String type, @RequestParam String device) {
+	public ResponseEntity<DataResponse> createPackageAPI(@RequestParam String type, @RequestParam String device) {
 		LOGGER.info("createPackageAPI method is called");
-		CreatePackageResponse response = packageManagerService.createPackage(type, device);
+		PackageResponse response = packageManagerService.createPackage(type, device);
 		if (response != null) {
-			LOGGER.info("Package created successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(response);
+			if (response.getStatusCode() == 200) {
+				LOGGER.info("Package created successfully");
+				return ResponseUtils.getSuccessDataResponse("Package created successfully", response);
+			} else {
+				LOGGER.error("Package creation failed: {}", response.getLogs());
+				// Return 503 Service Unavailable with the error message from response
+				return ResponseUtils.getNotFoundDataConfigResponse("Package creation failed", response);
+			}
 		} else {
 			LOGGER.error("Package creation failed");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Package creation failed");
+			throw new TDKServiceException("Error while package creation");
+
 		}
 
 	}
@@ -92,15 +102,15 @@ public class PackageManagerController {
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@GetMapping("/getAvailablePackages")
-	public ResponseEntity<?> getAvailablePackages(@RequestParam String device) {
+	public ResponseEntity<DataResponse> getAvailablePackages(@RequestParam String type, @RequestParam String device) {
 		LOGGER.info("getAvailablePackages method is called");
-		List<String> availablePackages = packageManagerService.getAvailablePackages(device);
+		List<String> availablePackages = packageManagerService.getAvailablePackages(type, device);
 		if (availablePackages != null) {
 			LOGGER.info("Available packages are: {}", availablePackages);
-			return ResponseEntity.status(HttpStatus.OK).body(availablePackages);
+			return ResponseUtils.getSuccessDataResponse(availablePackages);
 		} else {
 			LOGGER.error("No available packages");
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No available packages");
+			return ResponseUtils.getSuccessDataResponse("No Packages available", availablePackages);
 		}
 
 	}
@@ -116,15 +126,16 @@ public class PackageManagerController {
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	@PostMapping("/uploadPackage")
-	public ResponseEntity<String> uploadPackage(@RequestParam MultipartFile uploadFile, @RequestParam String device) {
+	public ResponseEntity<Response> uploadPackage(@RequestParam String type, @RequestParam MultipartFile uploadFile,
+			@RequestParam String device) {
 		LOGGER.info("uploadPackage method is called");
-		boolean status = packageManagerService.uploadPackage(uploadFile, device);
+		boolean status = packageManagerService.uploadPackage(type, uploadFile, device);
 		if (status) {
 			LOGGER.info("Package uploaded successfully");
-			return ResponseEntity.status(HttpStatus.OK).body("Package uploaded successfully");
+			return ResponseUtils.getSuccessResponse("Package uploaded successfully");
 		} else {
 			LOGGER.error("Package upload failed");
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Package upload failed");
+			throw new TDKServiceException("Error while uploading package");
 		}
 	}
 
@@ -139,18 +150,48 @@ public class PackageManagerController {
 	@ApiResponse(responseCode = "200", description = "Package Installed Successfully")
 	@ApiResponse(responseCode = "400", description = "Bad Request")
 	@ApiResponse(responseCode = "500", description = "Internal Server Error")
-	@GetMapping("/installPackage")
-	public ResponseEntity<String> installPackage(@RequestParam String device, @RequestParam String packageName) {
+	@PostMapping("/installPackage")
+	public ResponseEntity<DataResponse> installPackage(@RequestParam String type, @RequestParam String device,
+			@RequestParam String packageName) {
 		LOGGER.info("installPackage method is called");
-		String log = packageManagerService.installPackage(device, packageName);
-		if (log != null) {
-			LOGGER.info("Package installed successfully");
-			return ResponseEntity.status(HttpStatus.OK).body(log);
+		PackageResponse response = packageManagerService.installPackage(type, device, packageName);
+		if (response != null) {
+			if (response.getStatusCode() == 200) {
+				LOGGER.info("Package installed successfully");
+				return ResponseUtils.getSuccessDataResponse("Package installed successfully", response);
+			} else {
+				LOGGER.error("Package installation failed");
+				// Return 503 Service Unavailable with the error message from response
+				return ResponseUtils.getNotFoundDataConfigResponse("Package installation failed", response);
+			}
 		} else {
 			LOGGER.error("Package installation failed");
-			return ResponseEntity.status(HttpStatus.OK).body("Package installation failed");
-
+			throw new TDKServiceException("Error while package installation");
 		}
+	}
 
+	/**
+	 * This method is used to upload the generic package.
+	 * 
+	 * @param type       -TDK,VTS
+	 * @param uploadFile -file to upload
+	 * @return ResponseEntity<String> -success or failure message
+	 */
+	@Operation(summary = "Upload Generic Package API")
+	@ApiResponse(responseCode = "201", description = "Generic Package Uploaded Successfully")
+	@ApiResponse(responseCode = "400", description = "Bad Request")
+	@ApiResponse(responseCode = "500", description = "Internal Server Error")
+	@PostMapping("/uploadGenericPackage")
+	public ResponseEntity<Response> uploadGenericPackage(@RequestParam String type,
+			@RequestParam MultipartFile uploadFile, @RequestParam String device) {
+		LOGGER.info("uploadGenericPackage method is called");
+		boolean status = packageManagerService.uploadGenericPackage(type ,uploadFile, device);
+		if (status) {
+			LOGGER.info("Generic Package uploaded successfully");
+			return ResponseUtils.getSuccessResponse("Generic Package uploaded successfully");
+		} else {
+			LOGGER.error("Generic Package upload failed");
+			throw new TDKServiceException("Error while uploading Generic package");
+		}
 	}
 }
