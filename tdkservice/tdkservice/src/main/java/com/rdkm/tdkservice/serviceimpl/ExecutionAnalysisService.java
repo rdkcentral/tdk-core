@@ -65,7 +65,9 @@ import com.rdkm.tdkservice.model.ExecutionDevice;
 import com.rdkm.tdkservice.model.ExecutionResult;
 import com.rdkm.tdkservice.model.ExecutionResultAnalysis;
 import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.PreCondition;
 import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.TestStep;
 import com.rdkm.tdkservice.repository.ExecutionDeviceRepository;
 import com.rdkm.tdkservice.repository.ExecutionRepository;
 import com.rdkm.tdkservice.repository.ExecutionResultAnalysisRepository;
@@ -486,12 +488,28 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 		int count = countRerunExecutions(execution.getName(), executionNames);
 		description.append(script.getName()).append(" failed in execution: ").append(execution.getName())
 				.append("\n\n");
-		description.append("*Description*:  < PROVIDE ISSUE OVERVIEW >\n\n").append("*PREREQUISITES* : \n\n")
-				.append(script.getPrerequisites()).append("\n\n").append("*TEST STEPS* :\n\n")
-				.append(script.getAutomationApproach()).append("\n\n")
-				.append("*Actual Result* :  < ENTER ACTUAL RESULTS >\n\n").append("*Expected Result* :\n\n")
-				.append(script.getExpectedOutput()).append("\n\n").append("*Image Details*:\n\n").append(imageName)
-				.append("\n\n").append("*Rerun status* :\n");
+		List<PreCondition> preConditionList = script.getPreConditions();
+		if (null != preConditionList && !preConditionList.isEmpty()) {
+			description.append("*Preconditions* : \n\n");
+			for (PreCondition preCondition : preConditionList) {
+				description.append(preCondition.getPreConditionDescription()).append("\n");
+			}
+			description.append("\n");
+		}
+
+		List<TestStep> testStep = script.getTestSteps();
+		if (null != testStep && !testStep.isEmpty()) {
+			description.append("*Test Steps* : \n\n");
+			description.append("|Step Name|Step Description|Expected Result|\n");
+			for (TestStep step : testStep) {
+				description.append("|" + step.getStepName()).append("|").append(step.getStepDescription()).append("|")
+						.append(step.getExpectedResult() + "|\n");
+			}
+			description.append("\n");
+		}
+		description.append("*Actual Result* :  < ENTER ACTUAL RESULTS >\n\n");
+
+		description.append("*Image Details*:\n\n").append(imageName).append("\n\n").append("*Rerun status* :\n");
 
 		if (count > 0) {
 			description.append(count).append(" reruns of the execution was performed for this result");
@@ -775,8 +793,25 @@ public class ExecutionAnalysisService implements IExecutionAnalysisService {
 			return null;
 		}
 		StringBuilder stepsToReproduce = new StringBuilder();
-		stepsToReproduce.append("Test Steps :\n\n").append("PREREQUISITES : \n\n").append(script.getPrerequisites())
-				.append("\n\n").append("TEST STEPS :\n\n").append(script.getAutomationApproach()).append("\n\n");
+		List<PreCondition> preConditionList = script.getPreConditions();
+		if (null != preConditionList && !preConditionList.isEmpty()) {
+			stepsToReproduce.append("*Preconditions* : \n\n");
+			for (PreCondition preCondition : preConditionList) {
+				stepsToReproduce.append(preCondition.getPreConditionDescription()).append("\n");
+			}
+			stepsToReproduce.append("\n");
+		}
+
+		stepsToReproduce.append("*Test Steps* : \n\n");
+		List<TestStep> testStep = script.getTestSteps();
+		if (null != testStep && !testStep.isEmpty()) {
+
+			for (TestStep step : testStep) {
+				stepsToReproduce.append(step.getStepName()).append(" - ").append(step.getStepDescription())
+						.append("\n");
+			}
+			stepsToReproduce.append("\n");
+		}
 		return stepsToReproduce.toString();
 
 	}

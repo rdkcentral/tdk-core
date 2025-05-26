@@ -94,54 +94,26 @@ public class ScriptDTO {
 	private String objective;
 
 	/**
-	 * Type of the test case ,say POSITIVE,NEGATIVE,
-	 */
-	private String testType;
-
-	/**
-	 * API or interface used
-	 */
-	private String apiOrInterfaceUsed;
-
-	/**
-	 * Input parameters
-	 */
-	private String inputParameters;
-
-	/**
 	 * Prerequisites for the testcase
 	 */
-	private String prerequisites;
+	private List<PreConditionDTO> preConditions;
 
 	/**
 	 * Automation Approach or steps
 	 */
-	private String automationApproach;
-
-	/**
-	 * Expected output of the test case
-	 */
-	private String expectedOutput;
+	private List<TestStepDTO> testSteps;
 
 	/**
 	 * Priority of the test case
 	 */
 	private String priority;
 
-	/**
-	 * Test stub information
-	 */
-	private String testStubInterface;
 
 	/**
 	 * Release version of the test
 	 */
 	private String releaseVersion;
 
-	/**
-	 * Any specific remarks regarding the script
-	 */
-	private String remarks;
 
 	/**
 	 * The script content

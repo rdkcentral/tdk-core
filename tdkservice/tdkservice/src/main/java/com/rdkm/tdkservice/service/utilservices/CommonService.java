@@ -34,12 +34,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.poi.ss.usermodel.BorderStyle;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.CellStyle;
 import org.apache.poi.ss.usermodel.Font;
+import org.apache.poi.ss.usermodel.IndexedColors;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.util.CellRangeAddress;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -56,7 +59,9 @@ import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.Device;
 import com.rdkm.tdkservice.model.DeviceType;
+import com.rdkm.tdkservice.model.PreCondition;
 import com.rdkm.tdkservice.model.Script;
+import com.rdkm.tdkservice.model.TestStep;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
@@ -186,82 +191,50 @@ public class CommonService {
 	 */
 	public ByteArrayInputStream createExcelFromTestCasesDetailsInScript(List<Script> scripts, String sheetName) {
 		LOGGER.info("Creating excel from test cases for sheet");
-		String[] headers = { "Test Script", "Test Case ID", "Test Objective", "Test Type", "Supported device Type",
-				"Test Prerequisites", "RDK Interface", "Input Parameters", "Automation Approach", "Expected Output",
-				"Priority", "Test Stub Interface", "Skipped", "Skip remarks", "Update Release Version", "Remarks" };
-		try {
-			Workbook workBook = new XSSFWorkbook();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
+		String[] headers = { "Test Case ID", "Test Script", "Test Objective", "PreCondition", "Step No", "Step Name",
+				"Step Description", "Expected Output", "Device Model", "Estimated Duration", "Priority",
+				"Release Version" };
 
+		try (Workbook workBook = new XSSFWorkbook(); ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 			Sheet sheet = workBook.createSheet(sheetName);
 
-			// Create header row
-			Row headerRow = sheet.createRow(0);
-			CellStyle boldStyle = workBook.createCellStyle();
-			Font boldFont = workBook.createFont();
-			boldFont.setFontName("Arial");
-			boldFont.setFontHeightInPoints((short) 10);
-			boldFont.setBold(true);
-			boldStyle.setFont(boldFont);
+			// Create header row with bold style
+			CellStyle boldStyle = createBoldStyle(workBook);
+			createHeaderRow(sheet, headers, boldStyle);
 
-			for (int col = 0; col < headers.length; col++) {
-				Cell cell = headerRow.createCell(col);
-				cell.setCellValue(headers[col]);
-				cell.setCellStyle(boldStyle);
-			}
+			// Create border styles
+			CellStyle borderStyle = createBorderStyle(workBook);
 
-			// Set the data row with Arial font size 10
-			CellStyle dataStyle = workBook.createCellStyle();
-			Font dataFont = workBook.createFont();
-			dataFont.setFontName("Arial");
-			dataFont.setFontHeightInPoints((short) 10);
-			dataStyle.setFont(dataFont);
+			int rowNum = 1; // Start after header
 
-			int rowNum = 1; // Start after the header row
 			for (Script script : scripts) {
+				int startRow = rowNum;
+
+				// Write script data
 				Row dataRow = sheet.createRow(rowNum++);
+				writeScriptData(script, dataRow);
 
-				dataRow.createCell(0).setCellValue(script.getName());
-				dataRow.createCell(1).setCellValue(script.getTestId());
-				dataRow.createCell(2).setCellValue(script.getObjective());
-				dataRow.createCell(3).setCellValue(script.getTestType().toString());
-				if (script.getDeviceTypes() == null) {
-					dataRow.createCell(4).setCellValue("");
-				} else {
-					dataRow.createCell(4).setCellValue(Utils.convertListToCommaSeparatedString(
-							this.getDeviceTypesAsStringList(script.getDeviceTypes())));
-				}
-				dataRow.createCell(5).setCellValue(script.getPrerequisites());
-				dataRow.createCell(6).setCellValue(script.getApiOrInterfaceUsed());
-				dataRow.createCell(7).setCellValue(script.getInputParameters());
-				dataRow.createCell(8).setCellValue(script.getAutomationApproach());
-				dataRow.createCell(9).setCellValue(script.getExpectedOutput());
-				dataRow.createCell(10).setCellValue(script.getPriority());
-				dataRow.createCell(11).setCellValue(script.getTestStubInterface());
-				if (script.isSkipExecution()) {
-					dataRow.createCell(12).setCellValue("Yes");
-					dataRow.createCell(13).setCellValue(script.getSkipRemarks());
-				} else {
-					dataRow.createCell(12).setCellValue("No");
-					dataRow.createCell(13).setCellValue("N/A");
+				// Handle preconditions
+				writePreConditions(script.getPreConditions(), dataRow);
 
-				}
-				dataRow.createCell(14).setCellValue(script.getReleaseVersion());
-				dataRow.createCell(15).setCellValue(script.getRemarks());
-				// Apply the data style (Arial, size 10) to each cell in the row
-				for (int i = 0; i < headers.length; i++) {
-					dataRow.getCell(i).setCellStyle(dataStyle);
-				}
+				// Write test steps
+				List<TestStep> testSteps = script.getTestSteps();
+				rowNum = writeTestSteps(sheet, testSteps, startRow, borderStyle);
+
+				int endRow = rowNum - 1;
+
+				// Merge cells for script data and apply borders
+
+				mergeAndApplyBorders(sheet, startRow, endRow, borderStyle);
+
 			}
 
-			// Auto size the columns to fit the content
+			// Auto-size columns
 			for (int i = 0; i < headers.length; i++) {
 				sheet.autoSizeColumn(i);
 			}
 
 			workBook.write(out);
-			workBook.close();
-
 			return new ByteArrayInputStream(out.toByteArray());
 		} catch (Exception e) {
 			LOGGER.error("Error creating excel from test cases: " + e.getMessage());
@@ -269,6 +242,202 @@ public class CommonService {
 		}
 	}
 
+	/**
+	 * Create a bold style for the header cells.
+	 *
+	 * @param workBook the workbook
+	 * @return the cell style
+	 */
+	private CellStyle createBoldStyle(Workbook workBook) {
+		CellStyle boldStyle = workBook.createCellStyle();
+		Font boldFont = workBook.createFont();
+		boldFont.setFontName("Arial");
+		boldFont.setFontHeightInPoints((short) 10);
+		boldFont.setBold(true);
+		boldStyle.setFont(boldFont);
+		return boldStyle;
+	}
+
+	/**
+	 * Create border style for the cells.
+	 *
+	 * @param workBook the workbook
+	 * @return the cell style
+	 */
+	private CellStyle createBorderStyle(Workbook workBook) {
+		CellStyle borderStyle = workBook.createCellStyle();
+		borderStyle.setBorderTop(BorderStyle.THIN);
+		borderStyle.setBorderBottom(BorderStyle.THIN);
+		borderStyle.setBorderLeft(BorderStyle.THIN);
+		borderStyle.setBorderRight(BorderStyle.THIN);
+		borderStyle.setTopBorderColor(IndexedColors.BLACK.getIndex());
+		borderStyle.setBottomBorderColor(IndexedColors.BLACK.getIndex());
+		borderStyle.setLeftBorderColor(IndexedColors.BLACK.getIndex());
+		borderStyle.setRightBorderColor(IndexedColors.BLACK.getIndex());
+		Font dataFont = workBook.createFont();
+		dataFont.setFontName("Arial");
+		dataFont.setFontHeightInPoints((short) 10);
+		borderStyle.setFont(dataFont);
+		return borderStyle;
+	}
+
+	/**
+	 * Create header row in the sheet.
+	 *
+	 * @param sheet     the sheet
+	 * @param headers   the headers
+	 * @param boldStyle the bold style
+	 */
+	private void createHeaderRow(Sheet sheet, String[] headers, CellStyle boldStyle) {
+		Row headerRow = sheet.createRow(0);
+		for (int col = 0; col < headers.length; col++) {
+			Cell cell = headerRow.createCell(col);
+			cell.setCellValue(headers[col]);
+			cell.setCellStyle(boldStyle);
+		}
+	}
+
+	/**
+	 * Write script data to the sheet.
+	 *
+	 * @param script  the script
+	 * @param dataRow the data row
+	 */
+	private void writeScriptData(Script script, Row dataRow) {
+		dataRow.createCell(0).setCellValue(script.getTestId());
+		dataRow.createCell(1).setCellValue(script.getName());
+		dataRow.createCell(2).setCellValue(script.getObjective());
+		dataRow.createCell(8).setCellValue(
+				Utils.convertListToCommaSeparatedString(this.getDeviceTypesAsStringList(script.getDeviceTypes())));
+		dataRow.createCell(9).setCellValue(script.getExecutionTimeOut());
+		dataRow.createCell(10).setCellValue(script.getPriority());
+		dataRow.createCell(11).setCellValue(script.getReleaseVersion());
+
+	}
+
+	/**
+	 * Write preconditions to the sheet.
+	 *
+	 * @param preConditions the preconditions
+	 * @param dataRow       the data row
+	 */
+	private void writePreConditions(List<PreCondition> preConditions, Row dataRow) {
+		StringBuilder stringBuilder = new StringBuilder();
+		int i = 1;
+		for (PreCondition preCondition : preConditions) {
+			stringBuilder.append(i).append(". ").append(preCondition.getPreConditionDescription()).append("\n");
+			i++;
+		}
+		dataRow.createCell(3).setCellValue(stringBuilder.toString());
+
+	}
+
+	/**
+	 * Write test steps to the sheet.
+	 *
+	 * @param sheet       the sheet
+	 * @param testSteps   the test steps
+	 * @param rowNum      the starting row number
+	 * @param borderStyle the border style
+	 * @return the updated row number
+	 */
+	private int writeTestSteps(Sheet sheet, List<TestStep> testSteps, int rowNum, CellStyle borderStyle) {
+		int testStepNo = 1;
+		for (TestStep step : testSteps) {
+			Row row = sheet.getRow(rowNum);
+			if (row == null) {
+				row = sheet.createRow(rowNum);
+			}
+			row.createCell(4).setCellValue(testStepNo++);
+			row.createCell(5).setCellValue(step.getStepName());
+			row.createCell(6).setCellValue(step.getStepDescription());
+			row.createCell(7).setCellValue(step.getExpectedResult());
+
+			for (int col = 4; col <= 7; col++) {
+				Cell cell = row.getCell(col);
+				if (cell == null) {
+					cell = row.createCell(col);
+				}
+
+				cell.setCellStyle(borderStyle);
+			}
+			rowNum++;
+		}
+		return rowNum;
+	}
+
+	/**
+	 * Merge cells and apply borders to the merged cells.
+	 *
+	 * @param sheet       the sheet
+	 * @param startRow    the start row
+	 * @param endRow      the end row
+	 * @param borderStyle the border style
+	 */
+	private void mergeAndApplyBorders(Sheet sheet, int startRow, int endRow, CellStyle borderStyle) {
+		for (int col = 0; col < 4; col++) {
+			if (startRow == endRow) {
+				// Apply border style directly to the single row
+				Row currentRow = sheet.getRow(startRow);
+				if (currentRow == null) {
+					currentRow = sheet.createRow(startRow);
+				}
+				Cell cell = currentRow.getCell(col);
+				if (cell == null) {
+					cell = currentRow.createCell(col);
+				}
+
+				cell.setCellStyle(borderStyle);
+			} else {
+				// Merge cells and apply border style
+				sheet.addMergedRegion(new CellRangeAddress(startRow, endRow, col, col));
+				applyBorderToMergedRegion(sheet, startRow, endRow, col, borderStyle);
+			}
+		}
+		for (int col = 8; col < 12; col++) {
+			if (startRow == endRow) {
+				// Apply border style directly to the single row
+				Row currentRow = sheet.getRow(startRow);
+				if (currentRow == null) {
+					currentRow = sheet.createRow(startRow);
+				}
+				Cell cell = currentRow.getCell(col);
+				if (cell == null) {
+					cell = currentRow.createCell(col);
+				}
+
+				cell.setCellStyle(borderStyle);
+			} else {
+				// Merge cells and apply border style
+				sheet.addMergedRegion(new CellRangeAddress(startRow, endRow, col, col));
+				applyBorderToMergedRegion(sheet, startRow, endRow, col, borderStyle);
+			}
+		}
+	}
+
+	/**
+	 * Apply border style to merged region cells.
+	 *
+	 * @param sheet       the sheet
+	 * @param startRow    the start row
+	 * @param endRow      the end row
+	 * @param col         the column index
+	 * @param borderStyle the border style
+	 */
+	private void applyBorderToMergedRegion(Sheet sheet, int startRow, int endRow, int col, CellStyle borderStyle) {
+		for (int row = startRow; row <= endRow; row++) {
+			Row currentRow = sheet.getRow(row);
+			if (currentRow == null) {
+				currentRow = sheet.createRow(row);
+			}
+			Cell cell = currentRow.getCell(col);
+			if (cell == null) {
+				cell = currentRow.createCell(col);
+			}
+			// cell.setCellStyle(dataStyle);
+			cell.setCellStyle(borderStyle);
+		}
+	}
 	/**
 	 * Get the list of deviceTypes as list of Stringbased on the deviceTypes name
 	 * 

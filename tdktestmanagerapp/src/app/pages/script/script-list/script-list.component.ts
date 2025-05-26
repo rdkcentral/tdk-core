@@ -141,6 +141,8 @@ export class ScriptListComponent {
         onEditClick: this.editScript.bind(this),
         onDeleteClick: this.deleteScript.bind(this),
         onDownloadZip: this.downloadScriptZip.bind(this),
+        onDownloadMd: this.downloadMdFile.bind(this), // <-- Add this line
+
         selectedRowCount: () => this.selectedRowCount,
       })
     }
@@ -874,6 +876,33 @@ export class ScriptListComponent {
         window.URL.revokeObjectURL(url);
       })
   }
+
+  /**
+   * Downloads a Markdown file for the specified script.
+   *
+   * @param params - The parameters containing the script name.
+   * @param params.name - The name of the script for which to download the Markdown file.
+   *
+   * This method calls the `downloadMdFile` service method with the provided script name,
+   * subscribes to the resulting blob, and creates a downloadable Markdown file.
+   * The file is named using the script name with an `.md` extension.
+   */
+  downloadMdFile(downloadData: any) {
+  this.scriptservice.downloadMdFile(downloadData.name).subscribe(blob => {
+    const mdBlob = new Blob([blob], { type: 'text/markdown' });
+    const url = window.URL.createObjectURL(mdBlob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${downloadData.name}.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  });
+}
+
+
+
   /**
    * Downloads an XML file for the specified module.
    *

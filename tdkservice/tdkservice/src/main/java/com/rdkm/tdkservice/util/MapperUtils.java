@@ -465,27 +465,47 @@ public class MapperUtils {
 
 		script.setTestId(scriptCreateDTO.getTestId());
 		script.setObjective(scriptCreateDTO.getObjective());
-		script.setTestType(TestType.valueOf(scriptCreateDTO.getTestType()));
-		script.setApiOrInterfaceUsed(scriptCreateDTO.getApiOrInterfaceUsed());
-		script.setInputParameters(scriptCreateDTO.getInputParameters());
-		script.setAutomationApproach(scriptCreateDTO.getAutomationApproach());
-		script.setExpectedOutput(scriptCreateDTO.getExpectedOutput());
+		List<PreCondition> preConditionList = new ArrayList<>();
+		for (String preCondition : scriptCreateDTO.getPreConditions()) {
+			PreCondition preConditionObj = new PreCondition();
+			preConditionObj.setPreConditionDescription(preCondition);
+			preConditionObj.setScript(script);
+			preConditionList.add(preConditionObj);
+
+		}
+		script.setPreConditions(preConditionList);
+		List<TestStep> testSteps = new ArrayList<>();
+
+		for (TestStepCreateDTO testStep : scriptCreateDTO.getTestSteps()) {
+			TestStep testStepObj = new TestStep();
+			testStepObj.setStepName(testStep.getStepName());
+			testStepObj.setStepDescription(testStep.getStepDescription());
+			testStepObj.setExpectedResult(testStep.getExpectedResult());
+			testStepObj.setScript(script);
+			testSteps.add(testStepObj);
+		}
+		script.setTestSteps(testSteps);
+
 		script.setPriority(scriptCreateDTO.getPriority());
-		script.setTestStubInterface(scriptCreateDTO.getTestStubInterface());
 		script.setReleaseVersion(scriptCreateDTO.getReleaseVersion());
-		script.setPrerequisites(scriptCreateDTO.getPrerequisites());
-		script.setRemarks(scriptCreateDTO.getRemarks());
-		LOGGER.info("Converting ScriptDTO to ScriptEntity:" + script.toString());
+
+		
 		return script;
 	}
 
+	/*
+	 * Support method to script update operation
+	 * 
+	 * @param scriptUpdateDTO ScriptDTO
+	 * @param script Script
+	 * @return script Script
+	 */
 	public static Script updateScript(Script script, ScriptDTO scriptUpdateDTO) {
 		LOGGER.info("Updating the script entity with the properties available in the script update DTO");
 
 		if (!Utils.isEmpty(scriptUpdateDTO.getSynopsis())) {
 			script.setSynopsis(scriptUpdateDTO.getSynopsis());
 		}
-
 		script.setExecutionTimeOut(scriptUpdateDTO.getExecutionTimeOut());
 		script.setLongDuration(scriptUpdateDTO.isLongDuration());
 		script.setSkipExecution(scriptUpdateDTO.isSkipExecution());
@@ -502,33 +522,11 @@ public class MapperUtils {
 		if (!Utils.isEmpty(scriptUpdateDTO.getObjective())) {
 			script.setObjective(scriptUpdateDTO.getObjective());
 		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getTestType())) {
-			script.setTestType(TestType.valueOf(scriptUpdateDTO.getTestType()));
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getApiOrInterfaceUsed())) {
-			script.setApiOrInterfaceUsed(scriptUpdateDTO.getApiOrInterfaceUsed());
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getInputParameters())) {
-			script.setInputParameters(scriptUpdateDTO.getInputParameters());
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getPrerequisites())) {
-			script.setPrerequisites(scriptUpdateDTO.getPrerequisites());
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getAutomationApproach())) {
-			script.setAutomationApproach(scriptUpdateDTO.getAutomationApproach());
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getExpectedOutput())) {
-			script.setExpectedOutput(scriptUpdateDTO.getExpectedOutput());
-		}
+
 		if (!Utils.isEmpty(scriptUpdateDTO.getPriority())) {
 			script.setPriority(scriptUpdateDTO.getPriority());
 		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getTestStubInterface())) {
-			script.setTestStubInterface(scriptUpdateDTO.getTestStubInterface());
-		}
-		if (!Utils.isEmpty(scriptUpdateDTO.getRemarks())) {
-			script.setRemarks(scriptUpdateDTO.getRemarks());
-		}
+
 		if (!Utils.isEmpty(scriptUpdateDTO.getReleaseVersion())) {
 			script.setReleaseVersion(scriptUpdateDTO.getReleaseVersion());
 		}
@@ -577,16 +575,29 @@ public class MapperUtils {
 		scriptDTO.setSkipRemarks(script.getSkipRemarks());
 		scriptDTO.setTestId(script.getTestId());
 		scriptDTO.setObjective(script.getObjective());
-		scriptDTO.setTestType(script.getTestType().name());
-		scriptDTO.setApiOrInterfaceUsed(script.getApiOrInterfaceUsed());
-		scriptDTO.setInputParameters(script.getInputParameters());
-		scriptDTO.setAutomationApproach(script.getAutomationApproach());
-		scriptDTO.setExpectedOutput(script.getExpectedOutput());
+
+		List<PreConditionDTO> preConditionList = new ArrayList<>();
+		for (PreCondition preCondition : script.getPreConditions()) {
+			PreConditionDTO preConditionObj = new PreConditionDTO();
+			preConditionObj.setPreConditionId(preCondition.getId());
+			preConditionObj.setPreConditionDetails(preCondition.getPreConditionDescription());
+			preConditionList.add(preConditionObj);
+		}
+		scriptDTO.setPreConditions(preConditionList);
+		List<TestStepDTO> testSteps = new ArrayList<>();
+		for (TestStep testStep : script.getTestSteps()) {
+			TestStepDTO testStepObj = new TestStepDTO();
+			testStepObj.setTestStepId(testStep.getId());
+			testStepObj.setStepName(testStep.getStepName());
+			testStepObj.setStepDescription(testStep.getStepDescription());
+			testStepObj.setExpectedResult(testStep.getExpectedResult());
+			testSteps.add(testStepObj);
+		}
+		scriptDTO.setTestSteps(testSteps);
 		scriptDTO.setPriority(script.getPriority());
-		scriptDTO.setTestStubInterface(script.getTestStubInterface());
+
 		scriptDTO.setReleaseVersion(script.getReleaseVersion());
-		scriptDTO.setPrerequisites(script.getPrerequisites());
-		scriptDTO.setRemarks(script.getRemarks());
+
 		LOGGER.info("Converted the script entity to script DTO:" + scriptDTO.toString());
 		return scriptDTO;
 

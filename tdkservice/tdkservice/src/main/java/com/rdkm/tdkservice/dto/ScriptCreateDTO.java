@@ -22,7 +22,9 @@ package com.rdkm.tdkservice.dto;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Data;
 
 /**
@@ -91,40 +93,18 @@ public class ScriptCreateDTO {
 	@NotBlank(message = "Objective is required")
 	private String objective;
 
-	/**
-	 * Type of the test case ,say POSITIVE,NEGATIVE,
-	 */
-	@NotBlank(message = "Type is required")
-	private String testType;
-
-	/**
-	 * API or interface used
-	 */
-	@NotBlank(message = "API or interface used is required")
-	private String apiOrInterfaceUsed;
-
-	/**
-	 * Input parameters
-	 */
-	@NotBlank(message = "Input parameters are required")
-	private String inputParameters;
 
 	/**
 	 * Prerequisites for the testcase
 	 */
-	private String prerequisites;
+	@NotEmpty(message = "Preconditions are required")
+	private List<String> preConditions;
 
 	/**
 	 * Automation Approach or steps
 	 */
-	@NotBlank(message = "Automation approach is required")
-	private String automationApproach;
-
-	/**
-	 * Expected output of the test case
-	 */
-	@NotBlank(message = "Expected output is required")
-	private String expectedOutput;
+	@Valid
+	private List<TestStepCreateDTO> testSteps;
 
 	/**
 	 * Priority of the test case
@@ -133,18 +113,8 @@ public class ScriptCreateDTO {
 	private String priority;
 
 	/**
-	 * Test stub information
-	 */
-	@NotBlank(message = "Test stub interface is required")
-	private String testStubInterface;
-
-	/**
 	 * Release version of the test
 	 */
 	private String releaseVersion;
 
-	/**
-	 * Any specific remarks regarding the script
-	 */
-	private String remarks;
 }

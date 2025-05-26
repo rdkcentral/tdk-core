@@ -133,6 +133,14 @@ export class ScriptsService {
     return this.http.get(`${this.config.apiUrl}api/v1/script/downloadScriptDataZip?scriptName=${name}`, { headers, responseType: 'blob' })
   }
 
+   downloadMdFile(name:string):Observable<any>{
+    const headers = new HttpHeaders({
+      'Authorization': this.authService.getApiToken()
+    });
+    
+    return this.http.get(`${this.config.apiUrl}api/v1/script/downloadmdfilebyname?scriptName=${name}`, { headers, responseType: 'blob' })
+  }
+
   findTestSuitebyCategory(category:string):Observable<any>{
     const headers = new HttpHeaders({
       'Authorization': this.authService.getApiToken()

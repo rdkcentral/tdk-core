@@ -20,12 +20,12 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, FormArray, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MONACO_PATH, MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
 import { Router } from '@angular/router';
-import {MatStepperIntl} from '@angular/material/stepper';
+import { MatStepperIntl } from '@angular/material/stepper';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ModulesService } from '../../../services/modules.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -35,8 +35,8 @@ import { ScriptsService } from '../../../services/scripts.service';
 @Component({
   selector: 'app-create-scripts',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,
-    NgMultiSelectDropDownModule,MonacoEditorModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, MaterialModule, FormsModule,
+    NgMultiSelectDropDownModule, MonacoEditorModule],
   templateUrl: './create-scripts.component.html',
   styleUrl: './create-scripts.component.css',
   providers: [
@@ -45,44 +45,44 @@ import { ScriptsService } from '../../../services/scripts.service';
 })
 export class CreateScriptsComponent {
 
-  firstFormGroup!:FormGroup;
-  secondFormGroup!:FormGroup;
-  thirdFormGroup!:FormGroup;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
   configureName!: string;
-  allDeviceType:any;
-  selectedDeviceCategory : string = 'RDKV';
-  allsocVendors!:any[]
+  allDeviceType: any;
+  selectedDeviceCategory: string = 'RDKV';
+  allsocVendors!: any[]
   deviceTypeSettings = {};
-  sampleFile:string = '';
+  sampleFile: string = '';
   editorOptions = { theme: 'vs-dark', language: 'python' };
-  selectedCategoryName! : string ;
+  selectedCategoryName!: string;
   private _matStepperIntl = inject(MatStepperIntl);
   optionalLabelText!: string;
   newtestDialogRef!: MatDialogRef<any>;
   @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
   isLinear = true;
-  allModules:any;
-  allPrimitiveTest:any[]=[];
-  userGroupName:any;
-  deviceNameArr: any[]=[]
-  defaultPrimitive:any;
-  changePriorityValue!:string;
-  longDurationValue!:boolean;
-  skipExecutionValue! :boolean;
-  selectedCategory! : string;
+  allModules: any;
+  allPrimitiveTest: any[] = [];
+  userGroupName: any;
+  deviceNameArr: any[] = []
+  defaultPrimitive: any;
+  changePriorityValue!: string;
+  longDurationValue!: boolean;
+  skipExecutionValue!: boolean;
+  selectedCategory!: string;
 
 
-  constructor(private router: Router, private fb : FormBuilder,
-    public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
-    private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
+  constructor(private router: Router, private fb: FormBuilder,
+    public dialog: MatDialog, private modulesService: ModulesService, private deviceTypeService: DevicetypeService,
+    private primitiveTestService: PrimitiveTestService, private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
     this.userGroupName = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
-   }
+  }
   /**
    * Initialize the component and forms
-   */ 
+   */
   ngOnInit(): void {
-   let category = localStorage.getItem('category') || '';
-   this.selectedCategory = category?category:'RDKV';
+    let category = localStorage.getItem('category') || '';
+    this.selectedCategory = category ? category : 'RDKV';
     this.deviceTypeSettings = {
       singleSelection: false,
       idField: 'deviceTypeId',
@@ -93,11 +93,11 @@ export class CreateScriptsComponent {
       allowSearchFilter: false,
     };
     const selectedCategory = localStorage.getItem('category');
-    if(selectedCategory === 'RDKB'){
+    if (selectedCategory === 'RDKB') {
       this.selectedCategoryName = 'Broadband';
-    }else if(selectedCategory === 'RDKC'){
+    } else if (selectedCategory === 'RDKC') {
       this.selectedCategoryName = 'Camera';
-    }else{
+    } else {
       this.selectedCategoryName = 'Video';
     }
     this.getAllModules();
@@ -105,8 +105,8 @@ export class CreateScriptsComponent {
 
     this.firstFormGroup = this.fb.group({
       scriptname: ['', [Validators.required, this.noSpacesValidator]],
-      module:['',Validators.required],
-      primitiveTest: [{value:this.defaultPrimitive, disabled: true}],
+      module: ['', Validators.required],
+      primitiveTest: [{ value: this.defaultPrimitive, disabled: true }],
       devicetype: ['', Validators.required],
       executiontimeout: ['', Validators.required],
       longdurationtest: [''],
@@ -116,26 +116,24 @@ export class CreateScriptsComponent {
     this.secondFormGroup = this.fb.group({
       testcaseID: ['', Validators.required],
       testObjective: ['', Validators.required],
-      inputParameters: ['', Validators.required],
-      automationApproach: ['', Validators.required],
-      priority: ['',Validators.required],
-      testStub:['',Validators.required],
-      testType: ['',Validators.required],
-      rdkInterface: ['', Validators.required],
-      expectedOutput: ['',Validators.required],
-      testPreRequisites: [''],
-      remarks: [''],
-      releaseVersion:[''],
+      priority: ['', Validators.required],
+      steps: this.fb.array([], [Validators.required]),
+      releaseVersion: ['', Validators.required],
+      preconditions: this.fb.array([], [Validators.required]),
     });
+
+    this.addPrecondition();
+    this.addStep();
     this.thirdFormGroup = this.fb.group({
-      pythonEditor: [ this.sampleFile, Validators.required],
+      pythonEditor: [this.sampleFile, Validators.required],
     });
+
     this.firstFormGroup.get('module')?.valueChanges.subscribe(value => {
-      if(value){
+      if (value) {
         this.getAllPrimitiveTest(value);
         this.firstFormGroup.get('primitiveTest')?.enable();
 
-      }else{
+      } else {
         this.allPrimitiveTest = [];
         this.firstFormGroup.get('primitiveTest')?.disable();
       }
@@ -144,7 +142,7 @@ export class CreateScriptsComponent {
   /**
    * Get the controls of the register form.
    * @returns The controls of the register form.
-   */  
+   */
   get f() { return this.firstFormGroup.controls; }
   /**
      * This method is no space is allow.
@@ -153,7 +151,7 @@ export class CreateScriptsComponent {
     const value = control.value ? control.value.toString() : '';
     return value.trimStart().length !== value.length ? { noLeadingSpaces: true } : null;
   }
-  
+
   onInput(event: Event): void {
     const inputElement = event.target as HTMLTextAreaElement;
     const value = inputElement.value;
@@ -182,66 +180,72 @@ export class CreateScriptsComponent {
       this.secondFormGroup.get('testObjective')?.setValue(value.trimStart(), { emitEvent: false });
     }
   }
-  onInputParameters(event: Event): void {
-    const inputElement = event.target as HTMLTextAreaElement;
-    const value = inputElement.value;
-    if (value.startsWith(' ')) {
-      this.secondFormGroup.get('inputParameters')?.setValue(value.trimStart(), { emitEvent: false });
-    }
+
+
+  // Getter for easy access to the steps FormArray
+  get steps(): FormArray {
+    return this.secondFormGroup.get('steps') as FormArray;
   }
-  onAutomationApproach(event: Event): void {
-    const inputElement = event.target as HTMLTextAreaElement;
-    const value = inputElement.value;
-    if (value.startsWith(' ')) {
-      this.secondFormGroup.get('automationApproach')?.setValue(value.trimStart(), { emitEvent: false });
-    }
+
+
+  //Getter for easy access to the preconditions FormArray
+  get preconditions(): FormArray {
+    return this.secondFormGroup.get('preconditions') as FormArray;
   }
-  onTestStub(event: Event): void {
-    const inputElement = event.target as HTMLTextAreaElement;
-    const value = inputElement.value;
-    if (value.startsWith(' ')) {
-      this.secondFormGroup.get('testStub')?.setValue(value.trimStart(), { emitEvent: false });
-    }
+
+
+  // Method to add a new precondition to the FormArray
+  addPrecondition(): void {
+    this.preconditions.push(this.fb.group({
+      precondition: ['', Validators.required]
+    }));
   }
-  onInterface(event: Event): void {
-    const inputElement = event.target as HTMLTextAreaElement;
-    const value = inputElement.value;
-    if (value.startsWith(' ')) {
-      this.secondFormGroup.get('rdkInterface')?.setValue(value.trimStart(), { emitEvent: false });
-    }
+
+
+  // Method to remove a precondition from the FormArray
+  removePrecondition(index: number): void {
+    this.preconditions.removeAt(index);
   }
-  onExpectedOutput(event: Event): void {
-    const inputElement = event.target as HTMLTextAreaElement;
-    const value = inputElement.value;
-    if (value.startsWith(' ')) {
-      this.secondFormGroup.get('expectedOutput')?.setValue(value.trimStart(), { emitEvent: false });
-    }
+
+  // Method to add a new step to the FormArray
+  addStep(): void {
+    this.steps.push(this.fb.group({
+      stepName: ['', Validators.required],
+      stepDescription: ['', Validators.required],
+      expectedResult: ['', Validators.required]
+    }));
   }
+
+  // Method to remove a step from the FormArray
+  removeStep(index: number): void {
+    this.steps.removeAt(index);
+  }
+
   /**
    * Method to get all modules
-   */   
-  getAllModules(): void{
-    this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res=>{
+   */
+  getAllModules(): void {
+    this.modulesService.findallbyCategory(this.selectedCategory).subscribe(res => {
       this.allModules = res.data;
     })
   }
 
-getSelectedModule(event: any):void{
+  getSelectedModule(event: any): void {
     this.allPrimitiveTest = [];
     let selectedValue = event.target.value;
-    if(!selectedValue){
+    if (!selectedValue) {
       this.firstFormGroup.get('primitiveTest')?.disable();
-    }else{
+    } else {
       this.getAllPrimitiveTest(selectedValue);
     }
   }
   /**
    * Method to get primitive test based on module select
-   */ 
-getAllPrimitiveTest(value: any): void{
+   */
+  getAllPrimitiveTest(value: any): void {
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
-        this.allPrimitiveTest = res.data; 
+        this.allPrimitiveTest = res.data;
         for (let i = 0; i < this.allPrimitiveTest.length; i++) {
           this.defaultPrimitive = this.allPrimitiveTest[0].primitiveTestName;
           this.getCode();
@@ -254,149 +258,147 @@ getAllPrimitiveTest(value: any): void{
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
           verticalPosition: 'top'
-      })
-    }
-  })
-}
-  /**
-   * onChange primitive test 
-   */ 
-onChangePrimitive(event:any):void{
-  let primitiveValue = event.target.value;
-  this.defaultPrimitive = primitiveValue;
-  this.getCode();
-}
-  /**
-   * Method to get longDuration value
-   */ 
-longDuration(event:any):void{
-  this.longDurationValue = event.target.checked;
-}
-  /**
-   * Method to get skipExecution value
-   */ 
-skipExecution(event:any):void{
-  this.skipExecutionValue = event.target.checked;
-}
-  /**
-   * Method to get priority value 
-   */ 
-changePriority(event:any):void{
-  const priorityValue = event.target.value;
-  this.changePriorityValue = priorityValue;
-}
-  /**
-   * Method to get pycode value from monaco editor 
-   */ 
-getCode():void{
-  let temp = this.defaultPrimitive;
-  if(temp){
-    this.scriptservice.scriptTemplate(temp).subscribe(res=>{
-      this.sampleFile = res;
+        })
+      }
     })
   }
-}
+  /**
+   * onChange primitive test 
+   */
+  onChangePrimitive(event: any): void {
+    let primitiveValue = event.target.value;
+    this.defaultPrimitive = primitiveValue;
+    this.getCode();
+  }
+  /**
+   * Method to get longDuration value
+   */
+  longDuration(event: any): void {
+    this.longDurationValue = event.target.checked;
+  }
+  /**
+   * Method to get skipExecution value
+   */
+  skipExecution(event: any): void {
+    this.skipExecutionValue = event.target.checked;
+  }
+  /**
+   * Method to get priority value 
+   */
+  changePriority(event: any): void {
+    const priorityValue = event.target.value;
+    this.changePriorityValue = priorityValue;
+  }
+  /**
+   * Method to get pycode value from monaco editor 
+   */
+  getCode(): void {
+    let temp = this.defaultPrimitive;
+    if (temp) {
+      this.scriptservice.scriptTemplate(temp).subscribe(res => {
+        this.sampleFile = res;
+      })
+    }
+  }
   /**
    * Method to get all device type
-   */ 
-getAlldeviceType(): void{
-    this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res=>{
+   */
+  getAlldeviceType(): void {
+    this.deviceTypeService.getfindallbycategory(this.selectedCategory).subscribe(res => {
       this.allDeviceType = res.data
     })
   }
   /**
    * Method to select device type
-   */   
-  onItemSelect(item:any):void{
+   */
+  onItemSelect(item: any): void {
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
   }
   /**
    * Method to deselect device type
-   */  
-  onDeSelect(item:any):void{
+   */
+  onDeSelect(item: any): void {
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
   }
   /**
    * Method to selectall device type
-   */  
-  onSelectAll(items: any[]):void{
-   let devices = this.allDeviceType.filter(
-    (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
-   );
-   this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName)
+   */
+  onSelectAll(items: any[]): void {
+    let devices = this.allDeviceType.filter(
+      (item: any) => !this.deviceNameArr.find((selected) => selected.deviceTypeId === item.deviceTypeId)
+    );
+    this.deviceNameArr = devices.map((item: any) => item.deviceTypeName)
   }
   /**
    * Method to deselectall device type
-   */   
-  onDeSelectAll(item:any):void{
-    this.deviceNameArr=[];
+   */
+  onDeSelectAll(item: any): void {
+    this.deviceNameArr = [];
   }
-// You can also change editor options dynamically if needed
-  onCodeChange(value: string) :void{
+  // You can also change editor options dynamically if needed
+  onCodeChange(value: string): void {
     let val = value;
   }
 
-  updateOptionalLabel() :void{
+  updateOptionalLabel(): void {
     this._matStepperIntl.optionalLabel = this.optionalLabelText;
     this._matStepperIntl.changes.next();
   }
   /**
    * Submission for create script
-   */     
-  onSubmit():void{
-      const scriptCreateData = {
-        name: this.firstFormGroup.value.scriptname,
-        synopsis : this.firstFormGroup.value.synopsis,
-        executionTimeOut : this.firstFormGroup.value.executiontimeout,
-        primitiveTestName: this.defaultPrimitive,
-        deviceTypes: this.deviceNameArr,
-        skipExecution:this.firstFormGroup.value.skipexecution,
-        longDuration:this.firstFormGroup.value.longdurationtest,
-        testId: this.secondFormGroup.value.testcaseID,
-        objective:this.secondFormGroup.value.testObjective,
-        testType:this.secondFormGroup.value.testType ,
-        apiOrInterfaceUsed:this.secondFormGroup.value.rdkInterface,
-        inputParameters:this.secondFormGroup.value.inputParameters,
-        prerequisites:this.secondFormGroup.value.testPreRequisites,
-        automationApproach:this.secondFormGroup.value.automationApproach,
-        expectedOutput:this.secondFormGroup.value.expectedOutput,
-        priority:this.changePriorityValue,
-        testStubInterface:this.secondFormGroup.value.testStub,
-        releaseVersion:this.secondFormGroup.value.releaseVersion,
-        remarks:this.secondFormGroup.value.remarks,
-        userGroup:this.userGroupName.userGroupName,
-      };
-      const pythonContent = this.thirdFormGroup.value.pythonEditor;
-      const filename = `${this.firstFormGroup.value.scriptname}.py`;
-      const scriptFile = new File([pythonContent],filename,{type: 'text/x-python'});
-      this.scriptservice.createScript(scriptCreateData,scriptFile).subscribe({
-        next: (res) => {
-          this._snakebar.open(res.message, '', {
-            duration: 2000,
-            panelClass: ['success-msg'],
-            verticalPosition: 'top'
-          })
-          setTimeout(() => {
-            this.router.navigate(["/script"]);
-          }, 1000);
-        },
-        error: (err) => {         
-          this._snakebar.open(err.message, '', {
-            duration: 2000,
-            panelClass: ['err-msg'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
+   */
+  onSubmit(): void {
+
+    const preconditionsArray = this.secondFormGroup.value.preconditions.map((p: any) => p.precondition);
+
+    const scriptCreateData = {
+      name: this.firstFormGroup.value.scriptname,
+      synopsis: this.firstFormGroup.value.synopsis,
+      executionTimeOut: this.firstFormGroup.value.executiontimeout,
+      primitiveTestName: this.defaultPrimitive,
+      deviceTypes: this.deviceNameArr,
+      skipExecution: this.firstFormGroup.value.skipexecution,
+      longDuration: this.firstFormGroup.value.longdurationtest,
+      testId: this.secondFormGroup.value.testcaseID,
+      objective: this.secondFormGroup.value.testObjective,
+
+      priority: this.changePriorityValue,
+      releaseVersion: this.secondFormGroup.value.releaseVersion,
+      testSteps: this.secondFormGroup.value.steps,
+      preConditions: preconditionsArray,
+      userGroup: this.userGroupName.userGroupName,
+    };
+    const pythonContent = this.thirdFormGroup.value.pythonEditor;
+    const filename = `${this.firstFormGroup.value.scriptname}.py`;
+    const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
+    this.scriptservice.createScript(scriptCreateData, scriptFile).subscribe({
+      next: (res) => {
+        this._snakebar.open(res.message, '', {
+          duration: 2000,
+          panelClass: ['success-msg'],
+          verticalPosition: 'top'
+        })
+        setTimeout(() => {
+          this.router.navigate(["/script"]);
+        }, 1000);
+      },
+      error: (err) => {
+        this._snakebar.open(err.message, '', {
+          duration: 2000,
+          panelClass: ['err-msg'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
         })
       }
     })
   }
   /**
    * Navigate to script page
-   */ 
-  goBack():void{
+   */
+  goBack(): void {
     localStorage.removeItem('category');
     this.router.navigate(["/script"]);
   }

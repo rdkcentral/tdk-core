@@ -419,4 +419,54 @@ public class ScriptController {
 					"No scripts found for category: " + category + "and isThunderEnabled: " + isThunderEnabled, null);
 		}
 	}
+	
+	/**
+	 * This method is used to download the markdown file for a given script name.
+	 *
+	 * @param scriptName - the name of the script
+	 * @return ResponseEntity - the response entity containing the markdown file
+	 * @throws IOException - if an error occurs while reading the file
+	 */
+	@Operation(summary = "Download Markdown File", description = "Download the markdown file for a given script name")
+	@ApiResponse(responseCode = "200", description = "Markdown file downloaded successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Error in downloading markdown file")
+	@GetMapping("/downloadmdfilebyname")
+	public ResponseEntity<?> downloadMarkdown(@RequestParam String scriptName) throws IOException {
+		LOGGER.info("Received request to download markdown file for scriptName: {}", scriptName);
+		ByteArrayInputStream mdFile = scriptService.createMarkdownFile(scriptName);
+		if (mdFile == null || mdFile.available() == 0) {
+			LOGGER.error("Markdown file not found for scriptName: {}", scriptName);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading markdown file");
+		}
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + scriptName + ".md")
+				.contentType(MediaType.parseMediaType("text/markdown")).body((new InputStreamResource(mdFile)));
+	}
+
+	/**
+	 * This method is used to download the markdown file for a given script ID.
+	 *
+	 * @param scriptId - the UUID of the script
+	 * @return ResponseEntity - the response entity containing the markdown file
+	 * @throws IOException - if an error occurs while reading the file
+	 */
+	@Operation(summary = "Download Markdown File by Script ID", description = "Download the markdown file for a given script ID")
+	@ApiResponse(responseCode = "200", description = "Markdown file downloaded successfully")
+	@ApiResponse(responseCode = "400", description = "Bad request")
+	@ApiResponse(responseCode = "500", description = "Error in downloading markdown file")
+	@GetMapping("/downloadmdfilebyid")
+	public ResponseEntity<?> downloadMarkdownById(@RequestParam UUID scriptId) throws IOException {
+		LOGGER.info("Received request to download markdown file for scriptId: {}", scriptId);
+
+		ByteArrayInputStream mdFile = scriptService.createMarkdownFilebyScriptId(scriptId);
+		if (mdFile == null || mdFile.available() == 0) {
+			LOGGER.error("Markdown file not found for scriptId: {}", scriptId);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in downloading markdown file");
+		}
+
+		return ResponseEntity.ok().header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + scriptId + ".md")
+				.contentType(MediaType.parseMediaType("text/markdown")).body((new InputStreamResource(mdFile)));
+	}
+
 }

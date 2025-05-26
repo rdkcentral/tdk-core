@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.enums.TestType;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -37,6 +36,7 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -131,45 +131,22 @@ public class Script extends BaseEntity {
 	/**
 	 * Objective of the test case
 	 */
-	@Column(nullable = false,columnDefinition = "TEXT")
+	@Column(nullable = false, columnDefinition = "TEXT")
 	private String objective;
-
-	/**
-	 * Type of the test case ,say POSITIVE,NEGATIVE,
-	 */
-	@Enumerated(EnumType.STRING)
-	@Column(nullable = false)
-	private TestType testType;
-
-	/**
-	 * API or interface used
-	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String apiOrInterfaceUsed;
-
-	/**
-	 * Input parameters
-	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String inputParameters;
 
 	/**
 	 * Prerequisites for the testcase
 	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String prerequisites;
+	@OneToMany(mappedBy = "script",cascade = CascadeType.ALL,orphanRemoval = true)
+	@OrderBy("createdDate ASC")
+	private List<PreCondition> preConditions;
 
 	/**
 	 * Automation Approach or steps
 	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String automationApproach;
-
-	/**
-	 * Expected output of the test case
-	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String expectedOutput;
+	@OneToMany(mappedBy = "script",cascade = CascadeType.ALL,orphanRemoval = true)
+	@OrderBy("createdDate ASC")
+	private List<TestStep> testSteps;
 
 	/**
 	 * Priority of the test case
@@ -178,21 +155,9 @@ public class Script extends BaseEntity {
 	private String priority;
 
 	/**
-	 * Test stub information
-	 */
-	@Column(nullable = false, columnDefinition = "TEXT")
-	private String testStubInterface;
-
-	/**
 	 * Release version of the test
 	 */
 	private String releaseVersion;
-
-	/**
-	 * Any specific remarks regarding the script
-	 */
-	@Column( columnDefinition = "TEXT")
-	private String remarks;
 
 	/**
 	 * The list of script group of the script.

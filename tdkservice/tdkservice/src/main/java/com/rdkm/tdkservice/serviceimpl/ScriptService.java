@@ -64,14 +64,16 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.rdkm.tdkservice.config.AppConfig;
+import com.rdkm.tdkservice.dto.PreConditionDTO;
 import com.rdkm.tdkservice.dto.ScriptCreateDTO;
 import com.rdkm.tdkservice.dto.ScriptDTO;
 import com.rdkm.tdkservice.dto.ScriptDetailsResponse;
 import com.rdkm.tdkservice.dto.ScriptListDTO;
 import com.rdkm.tdkservice.dto.ScriptModuleDTO;
+import com.rdkm.tdkservice.dto.TestStepCreateDTO;
+import com.rdkm.tdkservice.dto.TestStepDTO;
 import com.rdkm.tdkservice.dto.TestSuiteCreateDTO;
 import com.rdkm.tdkservice.enums.Category;
-import com.rdkm.tdkservice.enums.TestType;
 import com.rdkm.tdkservice.exception.DeleteFailedException;
 import com.rdkm.tdkservice.exception.MandatoryFieldException;
 import com.rdkm.tdkservice.exception.ResourceAlreadyExistsException;
@@ -80,16 +82,20 @@ import com.rdkm.tdkservice.exception.TDKServiceException;
 import com.rdkm.tdkservice.exception.UserInputException;
 import com.rdkm.tdkservice.model.DeviceType;
 import com.rdkm.tdkservice.model.Module;
+import com.rdkm.tdkservice.model.PreCondition;
 import com.rdkm.tdkservice.model.PrimitiveTest;
 import com.rdkm.tdkservice.model.Script;
 import com.rdkm.tdkservice.model.ScriptTestSuite;
+import com.rdkm.tdkservice.model.TestStep;
 import com.rdkm.tdkservice.model.TestSuite;
 import com.rdkm.tdkservice.model.UserGroup;
 import com.rdkm.tdkservice.repository.DeviceTypeRepository;
 import com.rdkm.tdkservice.repository.ModuleRepository;
+import com.rdkm.tdkservice.repository.PreConditionRepository;
 import com.rdkm.tdkservice.repository.PrimitiveTestRepository;
 import com.rdkm.tdkservice.repository.ScriptRepository;
 import com.rdkm.tdkservice.repository.ScriptTestSuiteRepository;
+import com.rdkm.tdkservice.repository.TestStepRepository;
 import com.rdkm.tdkservice.repository.TestSuiteRepository;
 import com.rdkm.tdkservice.repository.UserGroupRepository;
 import com.rdkm.tdkservice.service.IScriptService;
@@ -134,6 +140,12 @@ public class ScriptService implements IScriptService {
 
 	@Autowired
 	ScriptTestSuiteRepository scriptTestSuiteRepository;
+
+	@Autowired
+	private PreConditionRepository preConditionRepository;
+
+	@Autowired
+	private TestStepRepository testStepRepository;
 
 	@Autowired
 	CommonService commonService;
@@ -276,6 +288,20 @@ public class ScriptService implements IScriptService {
 			}
 		}
 
+		// Update the primitive test in the script entity
+		if (scriptUpdateDTO.getPreConditions() != null && !scriptUpdateDTO.getPreConditions().isEmpty()) {
+			this.updatePreConditions(script, scriptUpdateDTO.getPreConditions());
+		} else {
+			LOGGER.info("No preconditions to update for the script: " + script.getName());
+		}
+
+		// Update the test steps
+		if (scriptUpdateDTO.getTestSteps() != null && !scriptUpdateDTO.getTestSteps().isEmpty()) {
+			updateTestSteps(script, scriptUpdateDTO.getTestSteps());
+		} else {
+			LOGGER.info("No test steps to update for the script: " + script.getName());
+		}
+
 		// Primitive test and thus the module is not editable or changable. So there
 		// won't be any change in scriptlocation, primitive test and thus module. If the
 		// script file is changed, then the script is saved in the same location
@@ -294,6 +320,107 @@ public class ScriptService implements IScriptService {
 
 		Script updatedScript = scriptRepository.save(script);
 		return (null != updatedScript);
+	}
+
+	/**
+	 * This method is used to update the test steps in the script.
+	 * 
+	 * @param script       - the script
+	 * @param testStepDTOs - the list of test step DTOs
+	 */
+	private void updateTestSteps(Script script, List<TestStepDTO> testStepDTOs) {
+
+		// Get the list of existing test steps for the script
+		List<TestStep> existingTestSteps = script.getTestSteps();
+
+		// Extract the IDs of the test steps from the update request
+		List<UUID> updatedTestStepIds = testStepDTOs.stream().map(TestStepDTO::getTestStepId).filter(id -> id != null)
+				.collect(Collectors.toList());
+
+		List<TestStep> testStepsToBeRemoved = new ArrayList<>();
+
+		// Iterates through the list of existing test steps and identifies the test
+		// steps that need to be removed. A test step is marked for removal if its ID is
+		// not
+		// present in the list of updated test step IDs.
+		for (TestStep existingTestStep : existingTestSteps) {
+			if (!updatedTestStepIds.contains(existingTestStep.getId())) {
+				testStepsToBeRemoved.add(existingTestStep);
+			}
+		}
+
+		if (!testStepsToBeRemoved.isEmpty()) {
+			script.getTestSteps().removeAll(testStepsToBeRemoved);
+			LOGGER.info("Test steps to be removed: " + testStepsToBeRemoved.size());
+		} else {
+			LOGGER.info("No test steps to be removed");
+		}
+
+		for (TestStepDTO testStepDTO : testStepDTOs) {
+			if (testStepDTO.getTestStepId() != null) {
+				// Update existing test step logic
+				TestStep testStep = testStepRepository.findById(testStepDTO.getTestStepId()).orElseThrow(
+						() -> new ResourceNotFoundException("TestStep", testStepDTO.getTestStepId().toString()));
+				testStep.setStepName(testStepDTO.getStepName());
+				testStep.setStepDescription(testStepDTO.getStepDescription());
+				testStep.setExpectedResult(testStepDTO.getExpectedResult());
+				testStepRepository.save(testStep);
+			} else {
+				// Add new test step logic
+				TestStep newTestStep = new TestStep();
+				newTestStep.setStepName(testStepDTO.getStepName());
+				newTestStep.setStepDescription(testStepDTO.getStepDescription());
+				newTestStep.setExpectedResult(testStepDTO.getExpectedResult());
+				newTestStep.setScript(script);
+				script.getTestSteps().add(newTestStep);
+			}
+		}
+	}
+
+	/**
+	 * This method is used to update the preconditions in the script.
+	 * 
+	 * @param script           - the script
+	 * @param preConditionDTOs - the list of precondition DTOs
+	 */
+	private void updatePreConditions(Script script, List<PreConditionDTO> preConditionDTOs) {
+		// Get the list of existing preconditions for the script
+		List<PreCondition> existingPreConditions = script.getPreConditions();
+
+		// Extract the IDs of the preconditions from the update request
+		List<UUID> updatedPreConditionIds = preConditionDTOs.stream().map(PreConditionDTO::getPreConditionId)
+				.filter(id -> id != null).collect(Collectors.toList());
+
+		List<PreCondition> preConditionsToBeRemoved = new ArrayList<>();
+
+		// Delete preconditions that are not in the update request
+		for (PreCondition existingPreCondition : existingPreConditions) {
+			if (!updatedPreConditionIds.contains(existingPreCondition.getId())) {
+				preConditionsToBeRemoved.add(existingPreCondition);
+			}
+		}
+
+		if (!preConditionsToBeRemoved.isEmpty()) {
+			LOGGER.info("Preconditions to be removed: " + preConditionsToBeRemoved.size());
+			script.getPreConditions().removeAll(preConditionsToBeRemoved);
+		} else {
+			LOGGER.info("No preconditions removed");
+		}
+
+		List<PreConditionDTO> dto = preConditionDTOs;
+		for (PreConditionDTO preCondition : dto) {
+			if (!(preCondition.getPreConditionId() == null)) {
+				PreCondition preConditionObj = preConditionRepository.findById(preCondition.getPreConditionId())
+						.orElse(null);
+				preConditionObj.setPreConditionDescription(preCondition.getPreConditionDetails());
+
+			} else {
+				PreCondition preConditionObj = new PreCondition();
+				preConditionObj.setPreConditionDescription(preCondition.getPreConditionDetails());
+				preConditionObj.setScript(script);
+				script.getPreConditions().add(preConditionObj);
+			}
+		}
 	}
 
 	/**
@@ -766,7 +893,6 @@ public class ScriptService implements IScriptService {
 			}
 			createElement(doc, rootElement, "test_case_id", testCase.getTestId());
 			createElement(doc, rootElement, "test_objective", testCase.getObjective());
-			createElement(doc, rootElement, "test_type", testCase.getTestType().toString());
 
 			// Create <box_types> element and add <box_type> child elements
 			Element deviceTypesElement = doc.createElement("device_types");
@@ -776,15 +902,23 @@ public class ScriptService implements IScriptService {
 			for (DeviceType deviceType : testCase.getDeviceTypes()) {
 				createElement(doc, deviceTypesElement, "device_type", deviceType.getName());
 			}
-			createElement(doc, rootElement, "pre_requisite", testCase.getPrerequisites());
-			createElement(doc, rootElement, "api_or_interface_used", testCase.getApiOrInterfaceUsed());
-			createElement(doc, rootElement, "input_parameters", testCase.getInputParameters());
-			createElement(doc, rootElement, "automation_approach", testCase.getAutomationApproach());
-			createElement(doc, rootElement, "expected_output", testCase.getExpectedOutput());
+			Element preConditionElement = doc.createElement("pre_conditions");
+			rootElement.appendChild(preConditionElement);
+			for (PreCondition preCondition : testCase.getPreConditions()) {
+				createElement(doc, rootElement, "pre_condition", preCondition.getPreConditionDescription());
+			}
+			Element testStepElements = doc.createElement("test_steps");
+			rootElement.appendChild(testStepElements);
+			for (TestStep testStep : testCase.getTestSteps()) {
+				Element testStepElement = doc.createElement("test_step");
+				testStepElements.appendChild(testStepElement);
+				createElement(doc, testStepElement, "step_name", testStep.getStepName());
+				createElement(doc, testStepElement, "step_description", testStep.getStepDescription());
+				createElement(doc, testStepElement, "expected_result", testStep.getExpectedResult());
+			}
+
 			createElement(doc, rootElement, "priority", testCase.getPriority());
-			createElement(doc, rootElement, "test_stub_interface", testCase.getTestStubInterface());
 			createElement(doc, rootElement, "release_version", testCase.getReleaseVersion());
-			createElement(doc, rootElement, "remarks", testCase.getRemarks());
 
 			// Convert the document to a String
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -811,7 +945,7 @@ public class ScriptService implements IScriptService {
 	 * 
 	 * @param file - the ZIP file
 	 * @return true if the ZIP file is uploaded successfully, false otherwise
-	 * @throws IOException 
+	 * @throws IOException
 	 */
 
 	@Override
@@ -927,17 +1061,28 @@ public class ScriptService implements IScriptService {
 					testCase.setSynopsis(getElementValue(element, "synopsis"));
 					testCase.setTestId(getElementValue(element, "test_case_id"));
 					testCase.setObjective(getElementValue(element, "test_objective"));
-					TestType testType = TestType.valueOf(getElementValue(element, "test_type"));
-					testCase.setTestType(testType.toString());
-					testCase.setPrerequisites(getElementValue(element, "pre_requisite"));
-					testCase.setApiOrInterfaceUsed(getElementValue(element, "api_or_interface_used"));
-					testCase.setInputParameters(getElementValue(element, "input_parameters"));
-					testCase.setAutomationApproach(getElementValue(element, "automation_approach"));
-					testCase.setExpectedOutput(getElementValue(element, "expected_output"));
+
+					List<String> preConditionList = new ArrayList<>();
+					NodeList preConditions = element.getElementsByTagName("pre_condition");
+					for (int j = 0; j < preConditions.getLength(); j++) {
+						preConditionList.add(preConditions.item(j).getTextContent());
+					}
+					testCase.setPreConditions(preConditionList);
+
+					List<TestStepCreateDTO> testSteps = new ArrayList<>();
+					NodeList testStepsNodes = element.getElementsByTagName("test_step");
+					for (int j = 0; j < testStepsNodes.getLength(); j++) {
+						Element testStepElement = (Element) testStepsNodes.item(j);
+						TestStepCreateDTO testStep = new TestStepCreateDTO();
+						testStep.setStepName(getElementValue(testStepElement, "step_name"));
+						testStep.setStepDescription(getElementValue(testStepElement, "step_description"));
+						testStep.setExpectedResult(getElementValue(testStepElement, "expected_result"));
+						testSteps.add(testStep);
+					}
+					testCase.setTestSteps(testSteps);
+
 					testCase.setPriority(getElementValue(element, "priority"));
-					testCase.setTestStubInterface(getElementValue(element, "test_stub_interface"));
 					testCase.setReleaseVersion(getElementValue(element, "release_version"));
-					testCase.setRemarks(getElementValue(element, "remarks"));
 
 					// Handle box_types
 					List<String> deviceType = new ArrayList<>();
@@ -1192,5 +1337,92 @@ public class ScriptService implements IScriptService {
 			return null;
 		}
 		return script.getModule();
+	}
+
+	/**
+	 * This method is used to create a markdown file for the given script name
+	 * 
+	 * @param scriptNme - the script name
+	 * @return - the markdown file
+	 */
+
+	@Override
+	public ByteArrayInputStream createMarkdownFile(String scriptNme) {
+		Script testCase = scriptRepository.findByName(scriptNme);
+		return generateMarkdownFile(testCase);
+	}
+
+	/**
+	 * This method is used to create a markdown file for the given script ID
+	 * 
+	 * @param scriptId - the script ID
+	 * @return - the markdown file
+	 */
+	@Override
+	public ByteArrayInputStream createMarkdownFilebyScriptId(UUID scriptId) {
+		Script testCase = scriptRepository.findById(scriptId)
+				.orElseThrow(() -> new ResourceNotFoundException("Script not found with id: ", scriptId.toString()));
+		return generateMarkdownFile(testCase);
+	}
+
+	/**
+	 * This method is used to generate a markdown file for the given script
+	 * 
+	 * @param script - the script
+	 * @return - the markdown file
+	 */
+	private ByteArrayInputStream generateMarkdownFile(Script script) {
+
+		LOGGER.info("Generating markdown file for script: {}", script.getName());
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		StringBuilder writer = new StringBuilder();
+		writer.append("## TestCase ID\n").append(script.getTestId()).append("\n").append("## TestCase Name\n")
+				.append(script.getName()).append("\n").append("<a name=\"head.TOC\"></a>\n## Table Of Contents\n")
+				.append("- [Objective](#head.Objective)\n").append("- [Precondition](#head.Precondition)\n")
+				.append("- [Test Steps](#head.TestSteps)\n").append("- [Test Attributes](#head.Attributes)\n\n")
+				.append("<a name=\"head.Objective\"></a>\n## Objective\n").append(script.getObjective()).append("\n\n")
+				.append("<a name=\"head.Precondition\"></a>\n## Preconditions\n")
+				.append("|#|Conditions|\n|-|----------|\n");
+
+		List<PreCondition> preConditions = script.getPreConditions();
+		for (int i = 0; i < preConditions.size(); i++) {
+			writer.append("|").append(i + 1).append("|").append(preConditions.get(i).getPreConditionDescription())
+					.append("|\n");
+		}
+
+		writer.append("\n<a name=\"head.TestSteps\"></a>\n## Test Steps\n\n").append(
+				"|#|StepName | Step Description| Expected Result|\n|-|---------|-----------------|----------------|\n");
+
+		List<TestStep> testSteps = script.getTestSteps();
+		for (int i = 0; i < testSteps.size(); i++) {
+			TestStep step = testSteps.get(i);
+			writer.append("| ").append(i + 1).append(" | ").append(step.getStepName()).append(" | ")
+					.append(step.getStepDescription()).append(" | ").append(step.getExpectedResult()).append(" |\n");
+		}
+
+		writer.append("\n<a name=\"head.Attributes\"></a>\n## Test Attributes\n\n").append("**Supported Models** : ");
+		List<DeviceType> deviceTypes = script.getDeviceTypes();
+		for (int i = 0; i < deviceTypes.size(); i++) {
+			writer.append(deviceTypes.get(i).getName());
+			if (i < deviceTypes.size() - 1) {
+				writer.append(", ");
+			}
+		}
+
+		writer.append("\n\n**Estimated duration** : ").append(script.getExecutionTimeOut())
+				.append("\n\n**Priority** : ").append(script.getPriority()).append("\n\n**Release Version** : ")
+				.append(script.getReleaseVersion())
+				.append("<div align=\"right\"><sup>[Go To Top](#head.TOC)</sup></div>\n");
+
+		try {
+			// Write the content to the output stream
+			out.write(writer.toString().getBytes(StandardCharsets.UTF_8));
+			out.flush();
+		} catch (IOException e) {
+			LOGGER.error("Error generating markdown file: " + e.getMessage());
+			throw new TDKServiceException("Error generating markdown file: " + e.getMessage());
+		}
+		return new ByteArrayInputStream(out.toByteArray());
 	}
 }

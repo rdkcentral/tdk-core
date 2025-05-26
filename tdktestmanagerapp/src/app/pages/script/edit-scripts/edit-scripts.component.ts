@@ -20,7 +20,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { Component, inject, TemplateRef, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, FormsModule, FormArray, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { NgMultiSelectDropDownModule } from 'ng-multiselect-dropdown';
 import { MonacoEditorModule } from '@materia-ui/ngx-monaco-editor';
@@ -33,49 +33,49 @@ import { ScriptsService } from '../../../services/scripts.service';
 import { DevicetypeService } from '../../../services/devicetype.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatStepper, MatStepperIntl } from '@angular/material/stepper';
-import { Validators } from 'ngx-editor';
+
 import { distinctUntilChanged } from 'rxjs';
 
 @Component({
   selector: 'app-edit-scripts',
   standalone: true,
-  imports: [CommonModule,HttpClientModule,ReactiveFormsModule,MaterialModule,FormsModule,
-    NgMultiSelectDropDownModule,MonacoEditorModule],
+  imports: [CommonModule, HttpClientModule, ReactiveFormsModule, MaterialModule, FormsModule,
+    NgMultiSelectDropDownModule, MonacoEditorModule],
   templateUrl: './edit-scripts.component.html',
   styleUrl: './edit-scripts.component.css'
 })
 export class EditScriptsComponent {
-  firstFormGroup!:FormGroup;
-  secondFormGroup!:FormGroup;
-  thirdFormGroup!:FormGroup;
-  allDeviceType:any;
-  selectedDeviceCategory : string = 'RDKV';
-  allsocVendors!:any[]
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
+  allDeviceType: any;
+  selectedDeviceCategory: string = 'RDKV';
+  allsocVendors!: any[]
   deviceTypeSettings = {};
-  code:string='';
+  code: string = '';
   editorOptions = { theme: 'vs-dark', language: 'python' };
-  selectedCategoryName! : string ;
+  selectedCategoryName!: string;
   private _matStepperIntl = inject(MatStepperIntl);
   optionalLabelText!: string;
   newtestDialogRef!: MatDialogRef<any>;
   @ViewChild('newtestCaseTemplate', { static: true }) newtestCaseTemplate!: TemplateRef<any>;
   @ViewChild('stepper', { static: true }) stepper!: MatStepper;
   isLinear = true;
-  allModules:any;
-  allPrimitiveTest:any[]=[];
-  loggedinUser:any;
-  deviceNameArr: any[]=[]
-  defaultPrimitive:any;
-  changePriorityValue!:string;
-  scriptDeatilsObj:any;
+  allModules: any;
+  allPrimitiveTest: any[] = [];
+  loggedinUser: any;
+  deviceNameArr: any[] = []
+  defaultPrimitive: any;
+  changePriorityValue!: string;
+  scriptDeatilsObj: any;
   RDKFlavor: any;
 
-  constructor(private authservice : AuthService,private router: Router, private fb : FormBuilder,
-    public dialog:MatDialog, private modulesService:ModulesService, private deviceTypeService:DevicetypeService,
-    private primitiveTestService: PrimitiveTestService,private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
+  constructor(private authservice: AuthService, private router: Router, private fb: FormBuilder,
+    public dialog: MatDialog, private modulesService: ModulesService, private deviceTypeService: DevicetypeService,
+    private primitiveTestService: PrimitiveTestService, private scriptservice: ScriptsService, private _snakebar: MatSnackBar,) {
     this.loggedinUser = JSON.parse(localStorage.getItem('loggedinUser') || '{}');
-  
-   }
+
+  }
   ngOnInit(): void {
     this.scriptDeatilsObj = JSON.parse(localStorage.getItem('scriptDetails') || '{}');
     this.deviceTypeSettings = {
@@ -89,14 +89,14 @@ export class EditScriptsComponent {
     };
     const selectedCategory = localStorage.getItem('category');
     this.RDKFlavor = selectedCategory;
-    if(selectedCategory === 'RDKB'){
+    if (selectedCategory === 'RDKB') {
       this.selectedCategoryName = 'Broadband';
-    }else{
+    } else {
       this.selectedCategoryName = 'Video';
     }
     this.getAllModules();
     this.getAlldeviceType();
-    this.allDeviceType = this.scriptDeatilsObj.deviceTypes.map((deviceType: string) => ({ deviceTypeId: deviceType, deviceTypeName: deviceType }));
+    this.deviceNameArr = this.scriptDeatilsObj.deviceTypes;
     this.getAllPrimitiveTest(this.scriptDeatilsObj.moduleName);
     this.code = this.scriptDeatilsObj.scriptContent;
     this.initializeForm();
@@ -108,8 +108,8 @@ export class EditScriptsComponent {
       scriptname: ['', [Validators.required, this.noSpacesValidator]],
       module: [{ value: '', disabled: true }],
       primitiveTest: [{ value: '', disabled: true }],
-      devicetype: [[], [Validators.required,this.mindeviceValidator(1)]],
-      executiontimeout: ['', [Validators.required,this.onlyNumbersValidator]],
+      devicetype: [[], [Validators.required, this.mindeviceValidator(1)]],
+      executiontimeout: ['', [Validators.required, this.onlyNumbersValidator]],
       longdurationtest: [''],
       skipexecution: [''],
       synopsis: ['', [Validators.required, this.noSpacesValidator]]
@@ -118,15 +118,9 @@ export class EditScriptsComponent {
     this.secondFormGroup = this.fb.group({
       testcaseID: ['', [Validators.required, this.noSpacesValidator]],
       testObjective: ['', [Validators.required, this.noSpacesValidator]],
-      inputParameters: ['', [Validators.required, this.noSpacesValidator]],
-      automationApproach: ['', [Validators.required, this.noSpacesValidator]],
       priority: ['', [Validators.required]],
-      testStub: ['', [Validators.required, this.noSpacesValidator]],
-      testType: ['', [Validators.required]],
-      rdkInterface: ['', [Validators.required, this.noSpacesValidator]],
-      expectedOutput: ['', [Validators.required, this.noSpacesValidator]],
-      testPreRequisites: [''],
-      remarks: [''],
+      preconditions: this.fb.array([], [Validators.required]), 
+      steps: this.fb.array([], [Validators.required]),         
       releaseVersion: ['']
     });
 
@@ -150,17 +144,26 @@ export class EditScriptsComponent {
       this.secondFormGroup.patchValue({
         testcaseID: this.scriptDeatilsObj.testId,
         testObjective: this.scriptDeatilsObj.objective,
-        inputParameters: this.scriptDeatilsObj.inputParameters,
-        automationApproach: this.scriptDeatilsObj.automationApproach,
         priority: this.scriptDeatilsObj.priority,
-        testStub: this.scriptDeatilsObj.testStubInterface,
-        testType: this.scriptDeatilsObj.testType,
-        rdkInterface: this.scriptDeatilsObj.testStubInterface,
-        expectedOutput: this.scriptDeatilsObj.expectedOutput,
-        testPreRequisites: this.scriptDeatilsObj.prerequisites,
-        remarks: this.scriptDeatilsObj.remarks,
         releaseVersion: this.scriptDeatilsObj.releaseVersion
+
       });
+
+      this.preconditions.clear();
+      if (this.scriptDeatilsObj.preConditions && Array.isArray(this.scriptDeatilsObj.preConditions)) {
+        this.scriptDeatilsObj.preConditions.forEach((pre: any) => this.addPrecondition(pre));
+      } else {
+        this.addPrecondition(); // Add an empty one if none exist
+      }
+
+
+      this.steps.clear();
+      if (this.scriptDeatilsObj.testSteps && Array.isArray(this.scriptDeatilsObj.testSteps)) {
+        this.scriptDeatilsObj.testSteps.forEach((step: any) => this.addStep(step));
+      } else {
+        this.addStep(); // Add an empty one if none exist
+      }
+
 
       this.thirdFormGroup.patchValue({
         pythonEditor: this.scriptDeatilsObj.scriptContent
@@ -171,13 +174,13 @@ export class EditScriptsComponent {
         this.markFormFieldsTouched(this.secondFormGroup);
         this.markFormFieldsTouched(this.thirdFormGroup);
       });
-      const selectedDeviceTypes = this.allDeviceType.length > 0 ? this.allDeviceType.map((device:any) => device.deviceTypeId) : [];
-      this.firstFormGroup.patchValue({ devicetype: selectedDeviceTypes }, { emitEvent: false });
+
       setTimeout(() => {
         this.updateDeviceTypeValidity();
       });
     }
   }
+
 
   setUpValidation() {
     this.firstFormGroup.valueChanges.pipe(distinctUntilChanged()).subscribe(() => {
@@ -201,6 +204,54 @@ export class EditScriptsComponent {
     });
   }
 
+
+
+  //Getter for easy access to the preconditions FormArray
+  get preconditions(): FormArray {
+    return this.secondFormGroup.get('preconditions') as FormArray;
+  }
+
+  // Method to add a new precondition to the FormArray
+  addPrecondition(pre?: any): void {
+    this.preconditions.push(this.fb.group({
+      preConditionId: [pre?.preConditionId || ''],
+      preConditionDetails: [pre?.preConditionDetails || '', Validators.required]
+    }));
+  }
+
+  // Method to remove a precondition from the FormArray
+  removePrecondition(index: number): void {
+    this.preconditions.removeAt(index);
+  }
+
+
+  // Getter for easy access to the steps FormArray
+  get steps(): FormArray {
+    return this.secondFormGroup.get('steps') as FormArray;
+  }
+
+
+
+
+  // Method to add a new step to the FormArray
+  addStep(step?: any): void {
+    this.steps.push(this.fb.group({
+      testStepId: [step?.testStepId || ''],
+      stepName: [step?.stepName || '', Validators.required],
+      stepDescription: [step?.stepDescription || '', Validators.required],
+      expectedResult: [step?.expectedResult || '', Validators.required]
+    }));
+  }
+
+
+  // Method to remove a step from the FormArray
+  removeStep(index: number): void {
+    this.steps.removeAt(index);
+  }
+
+
+
+
   goToNext(stepIndex: number) {
     if (stepIndex === 1 && this.firstFormGroup.valid) {
       this.stepper.next();
@@ -212,150 +263,117 @@ export class EditScriptsComponent {
   /**
      * Get the controls of the register form.
      * @returns The controls of the register form.
-  */  
-    get f() { return this.firstFormGroup.controls; }
+  */
+  get f() { return this.firstFormGroup.controls; }
   /**
        * This method is no space is allow.
   */
-    noSpacesValidator(control: AbstractControl): ValidationErrors | null {
-      if (!control.value) {
-        return { required: true };
+  noSpacesValidator(control: AbstractControl): ValidationErrors | null {
+    if (!control.value) {
+      return { required: true };
+    }
+    return control.value.startsWith(' ') ? { noLeadingSpaces: true } : null;
+
+  }
+  mindeviceValidator(min: number): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (!control.value || control.value.length < min) {
+        return { minSelection: true };
       }
-      return control.value.startsWith(' ') ? { noLeadingSpaces: true } : null;
-    
+      return null;
+    };
+  }
+  onlyNumbersValidator(control: AbstractControl): ValidationErrors | null {
+    const value = control.value ? control.value.toString().trim() : '';
+    if (!value) {
+      return { required: true };
     }
-    mindeviceValidator(min: number): ValidatorFn {
-      return (control: AbstractControl): ValidationErrors | null => {
-        if (!control.value || control.value.length < min) {
-          return { minSelection: true };
-        }
-        return null;
-      };
+    return /^[0-9]+$/.test(value) ? null : { onlyNumbers: true };
+  }
+  onNumberInput(event: Event): void {
+    const inputElement = event.target as HTMLInputElement;
+    let value = inputElement.value.replace(/\D/g, '');
+    const control = this.firstFormGroup.get('executiontimeout');
+    control?.setValue(value, { emitEvent: true });
+    control?.updateValueAndValidity();
+  }
+  onInput(event: Event): void {
+    const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
+    const value = inputElement.value;
+    const trimmedValue = value.replace(/^\s+/, '');
+    this.firstFormGroup.get('synopsis')?.setValue(trimmedValue, { emitEvent: false });
+  }
+  onScritName(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
     }
-    onlyNumbersValidator(control: AbstractControl): ValidationErrors | null {
-      const value = control.value ? control.value.toString().trim() : '';
-      if (!value) {
-        return { required: true };
-      }
-      return /^[0-9]+$/.test(value) ? null : { onlyNumbers: true };
+  }
+  onTestcaseID(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
     }
-    onNumberInput(event: Event): void {
-      const inputElement = event.target as HTMLInputElement;
-      let value = inputElement.value.replace(/\D/g, '');
-      const control = this.firstFormGroup.get('executiontimeout');
-      control?.setValue(value, { emitEvent: true });
-      control?.updateValueAndValidity();
+  }
+  onTestObjective(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const value = inputElement.value;
+    if (value.startsWith(' ')) {
+      this.secondFormGroup.get('testObjective')?.setValue(value.trimStart(), { emitEvent: false });
     }
-    onInput(event: Event): void {
-      const inputElement = event.target as HTMLInputElement | HTMLTextAreaElement;
-      const value = inputElement.value;
-      const trimmedValue = value.replace(/^\s+/, '');
-      this.firstFormGroup.get('synopsis')?.setValue(trimmedValue, { emitEvent: false });
-    }
-    onScritName(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.firstFormGroup.get('scriptname')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onTestcaseID(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('testcaseID')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onTestObjective(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('testObjective')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onInputParameters(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('inputParameters')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onAutomationApproach(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('automationApproach')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onTestStub(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('testStub')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onInterface(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('rdkInterface')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-    onExpectedOutput(event: Event): void {
-      const inputElement = event.target as HTMLTextAreaElement;
-      const value = inputElement.value;
-      if (value.startsWith(' ')) {
-        this.secondFormGroup.get('expectedOutput')?.setValue(value.trimStart(), { emitEvent: false });
-      }
-    }
-  getAllModules(): void{
-    this.modulesService.findallbyCategory(this.RDKFlavor).subscribe(res=>{
-      this.allModules = res.data; 
+  }
+
+  getAllModules(): void {
+    this.modulesService.findallbyCategory(this.RDKFlavor).subscribe(res => {
+      this.allModules = res.data;
     })
   }
 
-changeModule(event:any): void {
-  let moduleName = event.target.value;
-  this.getAllPrimitiveTest(moduleName);
-}
-getAllPrimitiveTest(value: any): void{
+  changeModule(event: any): void {
+    let moduleName = event.target.value;
+    this.getAllPrimitiveTest(moduleName);
+  }
+
+  getAllPrimitiveTest(value: any): void {
     this.primitiveTestService.getParameterNames(value).subscribe({
       next: (res) => {
         this.allPrimitiveTest = res.data;
       },
-      error: (err) => {       
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
           verticalPosition: 'top'
-      })
-    }
-  })
-}
-onChangePrimitive(event:any): void {
-  let primitiveValue = event.target.value;
-  this.defaultPrimitive = primitiveValue;
-}
-changePriority(event:any): void {
-  const priorityValue = event.target.value;
-  this.changePriorityValue = priorityValue;
-}
+        })
+      }
+    })
+  }
+  onChangePrimitive(event: any): void {
+    let primitiveValue = event.target.value;
+    this.defaultPrimitive = primitiveValue;
+  }
+  changePriority(event: any): void {
+    const priorityValue = event.target.value;
+    this.changePriorityValue = priorityValue;
+  }
 
-  getAlldeviceType(): void{
-    this.deviceTypeService.getfindallbycategory(this.RDKFlavor).subscribe(res=>{
+  getAlldeviceType(): void {
+    this.deviceTypeService.getfindallbycategory(this.RDKFlavor).subscribe(res => {
       this.allDeviceType = res.data
     })
   }
 
-  onItemSelect(item:any): void {
+  onItemSelect(item: any): void {
     if (!this.deviceNameArr.some(selectedItem => selectedItem.deviceTypeName === item.deviceTypeName)) {
       this.deviceNameArr.push(item.deviceTypeName);
     }
     this.updateDeviceTypeValidity();
   }
 
-  onDeSelect(item:any): void {
+  onDeSelect(item: any): void {
     let filterDevice = this.deviceNameArr.filter(name => name != item.deviceTypeName);
     this.deviceNameArr = filterDevice;
     this.updateDeviceTypeValidity();
@@ -363,13 +381,13 @@ changePriority(event:any): void {
 
   onSelectAll(items: any[]): void {
     let devices = this.allDeviceType.filter(
-      (item:any)=> !this.deviceNameArr.find((selected)=>selected.deviceTypeId === item.deviceTypeId)
-     );
-     this.deviceNameArr = devices.map((item:any)=>item.deviceTypeName);
-     this.updateDeviceTypeValidity();
+      (item: any) => !this.deviceNameArr.find((selected) => selected.deviceTypeId === item.deviceTypeId)
+    );
+    this.deviceNameArr = devices.map((item: any) => item.deviceTypeName);
+    this.updateDeviceTypeValidity();
   }
-  onDeSelectAll(item:any): void {
-    this.deviceNameArr=[];
+  onDeSelectAll(item: any): void {
+    this.deviceNameArr = [];
     this.firstFormGroup.get('devicetype')?.setValue([]);
     this.updateDeviceTypeValidity();
   }
@@ -386,7 +404,7 @@ changePriority(event:any): void {
   }
   /**
    * navigate to script page
-  */ 
+  */
   back(): void {
     this.router.navigate(["/script"]);
     localStorage.removeItem('scriptCategory');
@@ -395,35 +413,42 @@ changePriority(event:any): void {
   }
   /**
    * Submission for customSuite update
-  */   
+  */
   onSubmit(): void {
+
+    const preConditionsArray = this.preconditions.value.map((p: any) => ({
+      preConditionId: p.preConditionId,
+      preConditionDetails: p.preConditionDetails
+    }));
+
+    const testStepsArray = this.steps.value.map((s: any) => ({
+      testStepId: s.testStepId,
+      stepName: s.stepName,
+      stepDescription: s.stepDescription,
+      expectedResult: s.expectedResult
+    }));
+
     const scriptUpdateData = {
-      id:this.scriptDeatilsObj.id,
+      id: this.scriptDeatilsObj.id,
       name: this.firstFormGroup.value.scriptname,
-      synopsis : this.firstFormGroup.value.synopsis,
-      executionTimeOut : this.firstFormGroup.value.executiontimeout,
-      primitiveTestName: this.defaultPrimitive?this.defaultPrimitive:this.scriptDeatilsObj.primitiveTestName,
+      synopsis: this.firstFormGroup.value.synopsis,
+      executionTimeOut: this.firstFormGroup.value.executiontimeout,
+      primitiveTestName: this.defaultPrimitive ? this.defaultPrimitive : this.scriptDeatilsObj.primitiveTestName,
       deviceTypes: this.deviceNameArr,
-      skipExecution:this.firstFormGroup.value.skipexecution,
-      longDuration:this.firstFormGroup.value.longdurationtest,
+      skipExecution: this.firstFormGroup.value.skipexecution,
+      longDuration: this.firstFormGroup.value.longdurationtest,
       testId: this.secondFormGroup.value.testcaseID,
-      objective:this.secondFormGroup.value.testObjective,
-      testType:this.secondFormGroup.value.testType ,
-      apiOrInterfaceUsed:this.secondFormGroup.value.rdkInterface,
-      inputParameters:this.secondFormGroup.value.inputParameters,
-      prerequisites:this.secondFormGroup.value.testPreRequisites,
-      automationApproach:this.secondFormGroup.value.automationApproach,
-      expectedOutput:this.secondFormGroup.value.expectedOutput,
-      priority:this.changePriorityValue?this.changePriorityValue:this.scriptDeatilsObj.priority,
-      testStubInterface:this.secondFormGroup.value.testStub,
-      releaseVersion:this.secondFormGroup.value.releaseVersion,
-      remarks:this.secondFormGroup.value.remarks,
-      userGroup:this.loggedinUser.userGroupName,
+      objective: this.secondFormGroup.value.testObjective,
+      priority: this.changePriorityValue ? this.changePriorityValue : this.scriptDeatilsObj.priority,
+      preConditions: preConditionsArray,
+      releaseVersion: this.secondFormGroup.value.releaseVersion,
+      userGroup: this.loggedinUser.userGroupName,
+      testSteps: testStepsArray,
     };
     const pythonContent = this.thirdFormGroup.value.pythonEditor;
     const filename = `${this.firstFormGroup.value.scriptname}.py`;
-    const scriptFile = new File([pythonContent],filename,{type: 'text/x-python'});
-    this.scriptservice.updateScript(scriptUpdateData,scriptFile).subscribe({
+    const scriptFile = new File([pythonContent], filename, { type: 'text/x-python' });
+    this.scriptservice.updateScript(scriptUpdateData, scriptFile).subscribe({
       next: (res) => {
         this._snakebar.open(res.message, '', {
           duration: 2000,
@@ -434,25 +459,25 @@ changePriority(event:any): void {
           this.router.navigate(["/script"]);
         }, 1000);
       },
-      error: (err) => {       
+      error: (err) => {
         this._snakebar.open(err.message, '', {
           duration: 2000,
           panelClass: ['err-msg'],
           horizontalPosition: 'end',
           verticalPosition: 'top'
-      })
-    }
-  })
+        })
+      }
+    })
 
-}
+  }
   /**
    * Navigate to script page
-  */ 
-goBack(): void {
-  localStorage.removeItem('scriptDetails');
-  localStorage.removeItem('category');
-  this.router.navigate(["/script"]);
-}
+  */
+  goBack(): void {
+    localStorage.removeItem('scriptDetails');
+    localStorage.removeItem('category');
+    this.router.navigate(["/script"]);
+  }
 
 
 }

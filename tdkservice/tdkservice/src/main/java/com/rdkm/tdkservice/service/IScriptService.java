@@ -163,4 +163,20 @@ public interface IScriptService {
 	 * @return - the module - the module entity
 	 */
 	Module getModuleByScriptName(String scriptName);
+	
+	/**
+	 * This method is used to get the script details by script name.
+	 * 
+	 * @param scriptName - the script name
+	 * @return - the md file
+	 */
+	ByteArrayInputStream createMarkdownFile(String scriptNme);
+
+	/**
+	 * This method is used to get the script details by script id.
+	 * 
+	 * @param scriptId - the script id
+	 * @return - the md file
+	 */
+	ByteArrayInputStream createMarkdownFilebyScriptId(UUID scriptId);
 }

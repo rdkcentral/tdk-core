@@ -18,20 +18,20 @@ http://www.apache.org/licenses/LICENSE-2.0
 * limitations under the License.
 */
 import { Component, OnInit } from '@angular/core';
-import {ICellRendererParams} from "ag-grid-community";
+import { ICellRendererParams } from "ag-grid-community";
 import { MaterialModule } from '../../../../material/material.module';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
-interface customcellRenderparams extends ICellRendererParams{
-  selectedRowCount:()=> number;
-  lastSelectedNodeId:string;
+interface customcellRenderparams extends ICellRendererParams {
+  selectedRowCount: () => number;
+  lastSelectedNodeId: string;
 }
 
 @Component({
   selector: 'app-button',
   standalone: true,
-  imports: [MaterialModule,CommonModule],
+  imports: [MaterialModule, CommonModule],
   template: `
     <!-- <button [disabled]="isButtonDisabled()" class="btn btn-primary btn-sm delete-btn" (click)="onEditClick($event)"><mat-icon class="delete-icon">edit</mat-icon></button> -->
     <button   class="btn  btn-sm delete-btn" (click)="onEditClick($event)" matTooltip="{{textforedit}}"><mat-icon class="extra-icon edit">edit</mat-icon></button>
@@ -44,10 +44,12 @@ interface customcellRenderparams extends ICellRendererParams{
     &nbsp;
     <button *ngIf="downloadSriptZip" class="btn  btn-sm delete-btn" (click)="onDownloadZip($event)" matTooltip="Download Zip" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
     &nbsp;
+    <button *ngIf="downloadScriptMd" class="btn  btn-sm delete-btn" (click)="onDownloadMd($event)" matTooltip="Download MD" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
+    &nbsp;
     <button *ngIf="downloadConfigShow" class="btn  btn-sm delete-btn download-config" (click)="onDownloadClick($event)" matTooltip="Download Config File" ><i class="bi bi-cloud-arrow-down-fill extra-icon download"></i></button>
 
-  `,  
-  styles:[
+  `,
+  styles: [
     `.delete-btn{
         border: none;
         padding: 0px;
@@ -77,54 +79,56 @@ interface customcellRenderparams extends ICellRendererParams{
     `
   ]
 })
-export class ButtonComponent implements OnInit{
-  params:any
-  selectedRowCount :number = 0;
-  lastSelectedNodeId:string ='';
+export class ButtonComponent implements OnInit {
+  params: any
+  selectedRowCount: number = 0;
+  lastSelectedNodeId: string = '';
   currentNodeId: string | undefined;
   downloadShowHide = false
   viewShowHide = true;
-  textforedit!:string;
+  textforedit!: string;
   downloadSriptZip = false;
+  downloadScriptMd = false;
   deleteShowHide = true;
-  downloadConfigShow =  false;
+  downloadConfigShow = false;
 
-  agInit(params:customcellRenderparams): void {
+  agInit(params: customcellRenderparams): void {
     this.params = params;
     this.selectedRowCount = params.selectedRowCount();
     this.lastSelectedNodeId = params.lastSelectedNodeId;
     this.currentNodeId = params.node.id
-    
+
   }
   constructor(private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    if(this.route.snapshot.url[0].path === 'devices'){
+    if (this.route.snapshot.url[0].path === 'devices') {
       this.downloadShowHide = true;
       this.textforedit = 'Edit/View';
-    }else{
+    } else {
       this.downloadShowHide = false;
       this.textforedit = 'Edit/View';
     }
-    if(this.route.snapshot.url[0].path === 'script'){
+    if (this.route.snapshot.url[0].path === 'script') {
       this.downloadSriptZip = true;
-    }else{
+      this.downloadScriptMd = true;
+    } else {
       this.downloadSriptZip = false;
     }
-    if(this.route.snapshot.url[1]){
-      if(this.route.snapshot.url[1].path === 'list-devicetype' ||
-      this.route.snapshot.url[1].path === 'list-oem' ||
-      this.route.snapshot.url[1].path === 'list-soc' ||
-      this.route.snapshot.url[1].path === 'create-group' ||
-      this.route.snapshot.url[1].path === 'user-management' ||
-      this.route.snapshot.url[1].path === 'list-primitivetest' ){
+    if (this.route.snapshot.url[1]) {
+      if (this.route.snapshot.url[1].path === 'list-devicetype' ||
+        this.route.snapshot.url[1].path === 'list-oem' ||
+        this.route.snapshot.url[1].path === 'list-soc' ||
+        this.route.snapshot.url[1].path === 'create-group' ||
+        this.route.snapshot.url[1].path === 'user-management' ||
+        this.route.snapshot.url[1].path === 'list-primitivetest') {
         this.viewShowHide = false;
         this.textforedit = 'Edit/View';
-      }else{
+      } else {
         this.viewShowHide = true;
         this.textforedit = 'Edit/View';
       }
-      if(this.route.snapshot.url[1].path === 'list-rdk-certifications'){
+      if (this.route.snapshot.url[1].path === 'list-rdk-certifications') {
         this.deleteShowHide = true;
         this.viewShowHide = false;
         this.downloadConfigShow = true;
@@ -135,7 +139,7 @@ export class ButtonComponent implements OnInit{
   }
   //** Condition for disable edit and delete button to own user */
   isButtonDisabled(): boolean {
-    return !( this.selectedRowCount === 1 && this.lastSelectedNodeId === this.currentNodeId);
+    return !(this.selectedRowCount === 1 && this.lastSelectedNodeId === this.currentNodeId);
   }
 
   refresh(params: customcellRenderparams): boolean {
@@ -145,30 +149,38 @@ export class ButtonComponent implements OnInit{
     return true;
   }
 
-  onEditClick($event:any) {
+  onEditClick($event: any) {
     if (this.params.onEditClick instanceof Function) {
       this.params.onEditClick(this.params.node.data);
     }
   }
-  onDeleteClick($event:any){
+  onDeleteClick($event: any) {
     if (this.params.onDeleteClick instanceof Function) {
       this.params.onDeleteClick(this.params.node.data);
     }
-    
+
   }
-  onViewClick($event:any){
+  onViewClick($event: any) {
     if (this.params.onViewClick instanceof Function) {
       this.params.onViewClick(this.params.node.data);
     }
   }
-  onDownloadClick($event:any){
+  onDownloadClick($event: any) {
     if (this.params.onDownloadClick instanceof Function) {
       this.params.onDownloadClick(this.params.node.data);
     }
   }
-  onDownloadZip($event:any){
+  onDownloadZip($event: any) {
     if (this.params.onDownloadZip instanceof Function) {
       this.params.onDownloadZip(this.params.node.data);
     }
   }
+
+  onDownloadMd(data: any) {
+    if (this.params.onDownloadMd) {
+      this.params.onDownloadMd(this.params.node.data);
+    }
+  }
+
+
 }
