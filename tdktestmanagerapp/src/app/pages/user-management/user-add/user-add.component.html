@@ -71,7 +71,23 @@ limitations under the License.
                                         </div>
                                     </div>
                                 </div>
-                                /
+                                <div class="row mb-3">
+                                    <label for="categoryname" class="col-md-3 col-form-label">Category<span
+                                            style="color:red; margin-left: 0.75em;">*</span></label>
+                                    <div class="col-md-8">
+                                        <select class="form-select" aria-label="Default select example" id="categoryname"
+                                            formControlName="categoryname">
+                                            <option value="" default>Select</option>
+                                            <option value="RDKV">Video</option>
+                                            <option value="RDKB">Broadband</option>
+                                        </select>
+                                        <div *ngIf="userFormSubmitted && userForm.controls['categoryname']?.errors"
+                                            class="text-danger">
+                                            <small *ngIf="userForm.controls['categoryname']?.errors?.['required']">Please
+                                                select category.</small>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- 
                                 User Group Name is not planned in the current version of the application.
                                 <div class="row mb-3">

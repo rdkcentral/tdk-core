@@ -14,111 +14,347 @@ limitations under the License.
 -->
 
 <div class="container">
-    <div class="row mt-2">
-      <div class="col-md-12">
-        <h1 class="view-title">Package Manager</h1>
-        <div class="ticket-sec mt-2">
-          <mat-tab-group
-            animationDuration="0ms"
-            mat-align-tabs="start"
-            (selectedTabChange)="onTabClick($event)"
-          >
-            <mat-tab label="TDK">
-                <div class="col-md-12 mt-3">
-                     <span class="package-title">
-                     <span class="sub-titel">{{selectedPackage}}</span>  Package installation for <span class="sub-titel">{{data}}</span>
-                    </span>
+  <div class="row mt-2">
+    <div class="col-md-12">
+      <h1 class="view-title">Package Manager</h1>
+      <div class="ticket-sec mt-2">
+        <mat-tab-group
+          animationDuration="0ms"
+          mat-align-tabs="start"
+          (selectedTabChange)="onTabClick($event)"
+        >
+          <mat-tab label="TDK">
+            <div class="col-md-12 mt-3">
+              <span class="package-title">
+                <span class="sub-titel">{{ selectedPackage }}</span> Package
+                installation for <span class="sub-titel">{{ data }}</span>
+              </span>
 
-                     <div class="execution-drop mt-3">
-                        <button type="button" class="download-btn  execution-select" >
-                            Create Package
-                        </button>
-                        <button type="button" class="download-btn  execution-select" >
-                            Upload Package
-                        </button>
-                    </div>
-                    <div class="title-sec mt-2">
-                        <span class="select-title">Select the <span class="sub-titel">{{selectedPackage}}</span> package for installation</span>
-                    </div>
-                    <div class="execution-result mt-2">
-                      <div *ngFor="let package of packageNames; let i = index" class="check-sec">
-                        <input 
-                          type="checkbox" 
-                          [id]="'chk' + i" 
-                          [value]="package" 
-                          [(ngModel)]="selectedPackages[package]"
-                          (change)="onCheckboxChange(package, $event)">
-                        <label [for]="'chk' + i" class="label-check">{{selectedPackage}}-{{ package }}</label>
-                      </div>
-                      
-                      <ul>
-                        <li *ngFor="let name of selectedList">{{ name }}</li>
-                      </ul>
-            
-                    </div>
+              <div class="execution-drop mt-3">
+                <button
+                  type="button"
+                  class="download-btn execution-select"
+                  (click)="onCreatePackage()"
+                >
+                  Create Package
+                </button>
 
-                    <div class="logsection">
-                        <span>Installation logs</span>
-                    </div>
-                    <div class="execution-result mb-3">
-            
-                    </div>
+                <button
+                  type="button"
+                  class="download-btn execution-select"
+                  (click)="onInstallPackage()"
+                  [disabled]="isLoading || !selectedPackageName"
+                >
+                  Install Package
+                </button>
+
+                <button
+                  type="button"
+                  class="download-btn execution-select dropdown-toggle"
+                  id="uploadDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  matTooltip="Upload Package File"
+                >
+                  Upload Package
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      (click)="openUploadModal('generic', $event)"
+                      data-bs-dismiss="dropdown"
+                    >
+                      Upload Generic Package
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      (click)="openUploadModal('package', $event)"
+                      data-bs-dismiss="dropdown"
+                    >
+                      Upload Package
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="title-sec mt-2" *ngIf="!selectedPackageName">
+                <span class="sub-titel" style="margin: 8px;"
+                  > Select the
+                  <span class="sub-titel">{{ selectedPackage }}</span> package
+                  for installation</span
+                >
+              </div>
+              <!-- Display the selected package name -->
+              <div class="title-sec mt-2" *ngIf="selectedPackageName">
+                <span class="sub-titel" style="margin: 8px;"
+                  > Selected package name:
+                  <span class="sub-titel">{{ selectedPackageName }}</span></span
+                >
+              </div>
+              <div class="execution-result mt-2">
+                <div *ngIf="dispMessage" class="display-message">
+                  {{ dispMessage }}
                 </div>
-            </mat-tab>
-            <mat-tab label="VTS" >
-              <div class="col-md-12 mt-3">
-                <span class="package-title">
-                    <span class="sub-titel">{{selectedPackage}}</span>  Package installation for <span class="sub-titel">{{data}}</span>
-                </span>
-                    <div class="execution-drop mt-3">
-                        <button type="button" class="download-btn  execution-select" >
-                            Create Package
-                        </button>
-                        <button type="button" class="download-btn  execution-select" >
-                            Upload Package
-                        </button>
-                    </div>
-                    <div class="title-sec mt-2">
-                        <span class="select-title">Select the <span class="sub-titel">{{selectedPackage}}</span> package for installation</span>
-                    </div>
-                    <div class="execution-result mt-2">
-                      <div *ngFor="let package of packageNames; let i = index" class="check-sec">
-                        <input 
-                          type="checkbox" 
-                          [id]="'chk' + i" 
-                          [value]="package" 
-                          [(ngModel)]="selectedPackages[package]"
-                          (change)="onCheckboxChange(package, $event)">
-                        <label [for]="'chk' + i" class="label-check">{{selectedPackage}}-{{ package }}</label>
-                      </div>
-                      
-                      <ul>
-                        <li *ngFor="let name of selectedList">{{ name }}</li>
-                      </ul>
-                    </div>
+                <div
+                  *ngFor="let package of packageNames; let i = index"
+                  class="check-sec"
+                >
+                  <input
+                    type="radio"
+                    [id]="'chk' + i"
+                    [value]="package"
+                    name="packageSelection"
+                    (change)="onPackageSelect(package)"
+                  />
+                  <!-- [(ngModel)]="selectedPackages[package]"
+                          (change)="onCheckboxChange(package, $event)"> -->
+                  <label [for]="'chk' + i" class="label-check">{{
+                    package
+                  }}</label>
+                </div>
 
-                    <div class="logsection ">
-                        <span>Installation logs</span>
-                    </div>
-                    <div class="execution-result mb-3">
-            
-                    </div>
+                <!-- <ul>
+                        <li *ngFor="let name of selectedList">{{ name }}</li>
+                      </ul> -->
               </div>
 
-            </mat-tab>
-          </mat-tab-group>
-          <div class="row mt-2">
-            <div class="col-md-12 text-end btns-grp">
-                <button type="button" class="close-btn install-btn" >
-                    Install
-                </button>
+              <div class="logsection">
+                <span class ="sub-titel">Package Creation/Installation logs</span>
+              </div>
+              <div class="execution-result mb-3">
+                <div *ngIf="isLoading" class="loading-message">
+                  {{ loadingMessage }}
+                </div>
+                <div class="row loader-row" *ngIf="showLoader">
+                  <app-loader></app-loader>
+                </div>
+                <pre class="logs-content">{{ createlogs }}</pre>
+              </div>
               <button class="close-btn" type="button" (click)="close()">
                 Close
               </button>
+            </div>  
+          </mat-tab>
+          <mat-tab label="VTS">
+            <div class="col-md-12 mt-3">
+              <span class="package-title">
+                <span class="sub-titel">{{ selectedPackage }}</span> Package
+                installation for <span class="sub-titel">{{ data }}</span>
+              </span>
+              <div class="execution-drop mt-3">
+                <button
+                  type="button"
+                  class="download-btn execution-select"
+                  (click)="onCreatePackage()"
+                >
+                  Create Package
+                </button>
+                <!-- <button type="button" class="download-btn execution-select">
+                  Upload Package
+                </button> -->
+
+                <button
+                  type="button"
+                  class="download-btn execution-select"
+                  (click)="onInstallPackage()"
+                  [disabled]="isLoading || !selectedPackageName"
+                >
+                  Install Package
+                </button>
+
+
+                <button
+                  type="button"
+                  class="download-btn execution-select dropdown-toggle"
+                  id="uploadDropdown"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  matTooltip="Upload Package File"
+                >
+                  Upload Package
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="uploadDropdown">
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      (click)="openUploadModal('generic', $event)"
+                      data-bs-dismiss="dropdown"
+                    >
+                      Upload Generic Package
+                    </a>
+                  </li>
+                  <li>
+                    <a
+                      class="dropdown-item"
+                      href="#"
+                      (click)="openUploadModal('package', $event)"
+                      data-bs-dismiss="dropdown"
+                    >
+                      Upload Package
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="title-sec mt-2" *ngIf="!selectedPackageName">
+                <span class="sub-titel" style="margin: 8px;"
+                  >Select the
+                  <span class="sub-titel">{{ selectedPackage }}</span> package
+                  for installation</span
+                >
+              </div>
+              <!-- Display the selected package name -->
+              <div class="title-sec mt-2" *ngIf="selectedPackageName">
+                <span class="sub-titel" style="margin: 8px;"
+                  >Selected package name:
+                  <span class="sub-titel">{{ selectedPackageName }}</span></span
+                >
+              </div>
+              <div class="execution-result mt-2">
+                <div *ngIf="dispMessage" class="display-message">
+                  {{ dispMessage }}
+                </div>
+                <div
+                  *ngFor="let package of packageNames; let i = index"
+                  class="check-sec"
+                >
+                  <input
+                    type="radio"
+                    [id]="'chk' + i"
+                    [value]="package"
+                    name="packageSelection"
+                    (change)="onPackageSelect(package)"
+                  />
+                  <!-- (change)="onCheckboxChange(package, $event)"> -->
+                  <label [for]="'chk' + i" class="label-check">{{
+                    package
+                  }}</label>
+                </div>
+
+                <!-- <ul>
+                        <li *ngFor="let name of selectedList">{{ name }}</li>
+                      </ul> -->
+              </div>
+
+              <div class="logsection">
+                <span class ="sub-titel">Package Creation/Installation logs</span>
+              </div>
+              <div class="execution-result mb-3">
+                <div *ngIf="isLoading" class="loading-message">
+                  {{ loadingMessage }}
+                </div>
+                <div class="row loader-row" *ngIf="showLoader">
+                  <app-loader></app-loader>
+                </div>
+                <pre class="logs-content">{{ createlogs }}</pre>
+              </div>
+              
             </div>
+            <button class="close-btn" type="button" (click)="close()">
+              Close
+            </button>
+          </mat-tab>
+        </mat-tab-group>
+        <!-- <div class="row mt-2">
+          <div class="col-md-12 text-end btns-grp">
+            <button
+              type="button"
+              class="close-btn install-btn"
+              (click)="onInstallPackage()"
+              [disabled]="isLoading"
+            >
+              Install
+            </button>
+            <button class="close-btn" type="button" (click)="close()">
+              Close
+            </button>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
-  
+</div>
+
+<!-- Modal Start-->
+<div
+  class="modal fade"
+  #packageUploadModal
+  id="packageUploadModal"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="packageUploadModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog custom-modal">
+    <div class="modal-content">
+      <form [formGroup]="uploadPackageForm" (ngSubmit)="uploadPackageSubmit()">
+        <div class="modal-header modaltitle">
+          <h1 class="modal-title custom-title" id="packageUploadModalLabel">
+            {{ modalHeading }}
+          </h1>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <div class="container mt-4">
+            
+            <div class="row mb-3">
+              <label for="uploadfile" class="col-md-4 col-form-label"
+                >Select the Package file<span
+                  style="color: red; margin-left: 0.75em"
+                  >*</span
+                ></label
+              >
+              <div class="col-md-8">
+                <input
+                  class="form-control form-control-sm"
+                  id="uploadfile"
+                  type="file"
+                  formControlName="uploadPackage"
+                  (change)="onFileChange($event)"
+                  #fileInput
+                />
+                <div *ngIf="uploadFormSubmitted && uploadPackageForm.controls['file']?.invalid" class="text-danger">
+                  <small>Please select a file to upload.</small>
+                </div>
+                <small *ngIf="uploadFileError" class="errorupload">{{
+                  uploadFileError
+                }}</small>
+                
+              </div>
+              
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <div *ngIf="isLoading" >
+            <p class="upload-message">Package Upload is in progress...</p>
+          </div>
+          <button
+            type="button"
+            class="download-btn modal-btns"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
+          <button
+            type="submit"
+            class="download-btn modal-btns"
+            [disabled]="isLoading"
+          >
+            Upload
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

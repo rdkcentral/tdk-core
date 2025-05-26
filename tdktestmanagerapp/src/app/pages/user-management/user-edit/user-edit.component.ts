@@ -61,7 +61,8 @@ export class UserEditComponent implements OnInit {
       userDisplayName: [this.user.userDisplayName],
       userpassword: [''],
       usergroupname: [this.user.userGroupName],
-      rolename: [this.user.userRoleName]
+      rolename: [this.user.userRoleName],
+      categoryname:[this.user.userCategory]
     })
 
     this.usermanageserice.getGroupName().subscribe(res => {
@@ -103,7 +104,7 @@ export class UserEditComponent implements OnInit {
         userGroupName: this.editUserForm.value.usergroupname,
         userRoleName: this.editUserForm.value.rolename,
         userDisplayName: this.editUserForm.value.userDisplayName,
-        userCategory: this.user.userCategory
+        userCategory: this.editUserForm.value.categoryname
       }
       this.usermanageserice.updateUser(obj).subscribe({
         next: (res) => {

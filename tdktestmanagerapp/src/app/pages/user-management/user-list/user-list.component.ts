@@ -124,6 +124,33 @@ export class UserListComponent implements OnInit {
       } as IMultiFilterParams,
     },
     {
+      headerName: 'Category',
+      field: 'userCategory',
+      filter: 'agMultiColumnFilter',
+      flex: 2,
+      valueFormatter: (params) => {
+        if (params.value === 'RDKV') {
+          return 'Video';
+        } else if (params.value === 'RDKB') {
+          return 'Broadband';
+        }
+        return params.value; // Default to the original value if no match
+      },
+      filterParams: {
+        filters: [
+          {
+            filter: 'agTextColumnFilter',
+            display: 'accordion',
+            title: 'Expand Me for Text Filters',
+          },
+          {
+            filter: 'agSetColumnFilter',
+            display: 'accordion',
+          },
+        ],
+      } as IMultiFilterParams,
+    },
+    {
       headerName: 'Action',
       field: '', sortable: false,
       cellRenderer: ButtonComponent,

@@ -68,7 +68,7 @@ export class UserAddComponent implements OnInit {
       retypepassword: new FormControl<string | null>('', { validators: Validators.required }),
       usergroupname: new FormControl<string | null>(''),
       rolename: new FormControl<string | null>('', { validators: Validators.required }),
-
+      categoryname: new FormControl<string | null>('', { validators: Validators.required })
     }, <AbstractControlOptions>{ validators: this.passwordMatchValidator('userpassword', 'retypepassword') });
 
     this.usermanageserice.getGroupName().subscribe(res => {
@@ -176,7 +176,7 @@ export class UserAddComponent implements OnInit {
         userGroupName: this.userForm.value.usergroupname,
         userRoleName: this.userForm.value.rolename,
         userDisplayName: this.userForm.value.displayname,
-        userCategory: this.loggedInUser.userCategory
+        userCategory: this.userForm.value.categoryname
       }
       this.usermanageserice.createUser(obj).subscribe({
         next: (res) => {
